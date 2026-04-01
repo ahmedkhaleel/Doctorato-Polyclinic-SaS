@@ -5,7 +5,7 @@ import { useLocale } from '@/Composables/useLocale';
 import { useSettings } from '@/Composables/useSettings';
 import { toEnglishNumbers } from '@/Composables/useArabicNumbers';
 import { usePage, Link } from '@inertiajs/vue3';
-import { computed, ref, watch } from 'vue';
+import { computed, ref, watch, onMounted, onUnmounted } from 'vue';
 import SeoHead from '@/Components/Frontend/SeoHead.vue';
 import DoctorDatePicker from '@/Components/DoctorDatePicker.vue';
 import PromoCodeInput from '@/Components/PromoCodeInput.vue';
@@ -39,6 +39,66 @@ const hasMultipleModules = computed(() => activeModules.value.length > 1);
 
 // Selected department/module
 const selectedModule = ref('');
+
+const countryCodes = [
+    { code: '+20', flag: '🇪🇬', name: 'Egypt', nameAr: 'مصر' },
+    { code: '+966', flag: '🇸🇦', name: 'Saudi Arabia', nameAr: 'السعودية' },
+    { code: '+971', flag: '🇦🇪', name: 'UAE', nameAr: 'الإمارات' },
+    { code: '+965', flag: '🇰🇼', name: 'Kuwait', nameAr: 'الكويت' },
+    { code: '+974', flag: '🇶🇦', name: 'Qatar', nameAr: 'قطر' },
+    { code: '+973', flag: '🇧🇭', name: 'Bahrain', nameAr: 'البحرين' },
+    { code: '+968', flag: '🇴🇲', name: 'Oman', nameAr: 'عُمان' },
+    { code: '+962', flag: '🇯🇴', name: 'Jordan', nameAr: 'الأردن' },
+    { code: '+961', flag: '🇱🇧', name: 'Lebanon', nameAr: 'لبنان' },
+    { code: '+964', flag: '🇮🇶', name: 'Iraq', nameAr: 'العراق' },
+    { code: '+218', flag: '🇱🇾', name: 'Libya', nameAr: 'ليبيا' },
+    { code: '+216', flag: '🇹🇳', name: 'Tunisia', nameAr: 'تونس' },
+    { code: '+213', flag: '🇩🇿', name: 'Algeria', nameAr: 'الجزائر' },
+    { code: '+212', flag: '🇲🇦', name: 'Morocco', nameAr: 'المغرب' },
+    { code: '+249', flag: '🇸🇩', name: 'Sudan', nameAr: 'السودان' },
+    { code: '+967', flag: '🇾🇪', name: 'Yemen', nameAr: 'اليمن' },
+    { code: '+1', flag: '🇺🇸', name: 'USA', nameAr: 'أمريكا' },
+    { code: '+44', flag: '🇬🇧', name: 'UK', nameAr: 'بريطانيا' },
+    { code: '+49', flag: '🇩🇪', name: 'Germany', nameAr: 'ألمانيا' },
+    { code: '+33', flag: '🇫🇷', name: 'France', nameAr: 'فرنسا' },
+    { code: '+39', flag: '🇮🇹', name: 'Italy', nameAr: 'إيطاليا' },
+    { code: '+90', flag: '🇹🇷', name: 'Turkey', nameAr: 'تركيا' },
+];
+
+const selectedCountryCode = ref('+20');
+const phoneNumber = ref('');
+const showCountryDropdown = ref(false);
+const countrySearch = ref('');
+
+const filteredCountries = computed(() => {
+    if (!countrySearch.value) return countryCodes;
+    const q = countrySearch.value.toLowerCase();
+    return countryCodes.filter(c =>
+        c.name.toLowerCase().includes(q) || c.nameAr.includes(q) || c.code.includes(q)
+    );
+});
+
+const selectedCountry = computed(() => countryCodes.find(c => c.code === selectedCountryCode.value) || countryCodes[0]);
+
+function selectCountry(c) {
+    selectedCountryCode.value = c.code;
+    showCountryDropdown.value = false;
+    countrySearch.value = '';
+    syncPhone();
+}
+
+function syncPhone() {
+    phoneNumber.value = toEnglishNumbers(phoneNumber.value).replace(/[^\d]/g, '');
+    form.phone = selectedCountryCode.value + phoneNumber.value;
+}
+
+// Close country dropdown on outside click
+function handleCountryClickOutside(e) {
+    if (!e.target.closest('.loc-country-dd')) {
+        showCountryDropdown.value = false;
+        countrySearch.value = '';
+    }
+}
 
 const form = useForm({
     full_name: '',
@@ -213,12 +273,15 @@ function formatTime12h(time24) {
 }
 
 function normalizePhone() {
-    form.phone = toEnglishNumbers(form.phone);
+    syncPhone();
 }
 
 function selectBookingType(type) {
     form.booking_type = type;
 }
+
+onMounted(() => document.addEventListener('click', handleCountryClickOutside));
+onUnmounted(() => document.removeEventListener('click', handleCountryClickOutside));
 
 // Auto-select module if only one is active
 if (activeModules.value.length === 1) {
@@ -463,21 +526,75 @@ function submit() {
                                             </p>
                                         </div>
 
-                                        <!-- Phone -->
+                                        <!-- Phone with Country Code -->
                                         <div>
                                             <label for="phone" class="block text-sm font-semibold text-[#3A3A3A] mb-2">
                                                 {{ t('phone_number') }} <span class="text-red-500">*</span>
                                             </label>
-                                            <input
-                                                id="phone"
-                                                v-model="form.phone"
-                                                @input="normalizePhone"
-                                                type="tel"
-                                                :placeholder="t('phone_placeholder')"
-                                                class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-[#3A3A3A] placeholder-gray-400 transition-all duration-200 focus:ring-2 focus:ring-[var(--brand-primary)]/30 focus:border-[var(--brand-primary)] outline-none form-input-animated"
-                                                :class="{ 'border-red-400 focus:ring-red-300 focus:border-red-400': form.errors.phone }"
-                                                required
-                                            />
+                                            <div class="relative flex loc-country-dd" dir="ltr">
+                                                <!-- Country Code Selector -->
+                                                <button
+                                                    type="button"
+                                                    @click="showCountryDropdown = !showCountryDropdown"
+                                                    class="flex items-center gap-1.5 px-3 py-3 border border-gray-300 rounded-s-lg bg-gray-50 hover:bg-gray-100 transition-colors flex-shrink-0"
+                                                    :class="{ 'border-red-400': form.errors.phone, 'border-e-0': true }"
+                                                >
+                                                    <span class="text-lg leading-none">{{ selectedCountry.flag }}</span>
+                                                    <span class="text-sm text-gray-700 font-medium">{{ selectedCountry.code }}</span>
+                                                    <svg class="w-3.5 h-3.5 text-gray-400 transition-transform" :class="{ 'rotate-180': showCountryDropdown }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                                    </svg>
+                                                </button>
+
+                                                <!-- Phone Input -->
+                                                <input
+                                                    id="phone"
+                                                    v-model="phoneNumber"
+                                                    @input="normalizePhone"
+                                                    type="tel"
+                                                    :placeholder="t('phone_placeholder')"
+                                                    class="w-full px-4 py-3 border border-gray-300 rounded-e-lg bg-white text-[#3A3A3A] placeholder-gray-400 transition-all duration-200 focus:ring-2 focus:ring-[var(--brand-primary)]/30 focus:border-[var(--brand-primary)] outline-none form-input-animated"
+                                                    :class="{ 'border-red-400 focus:ring-red-300 focus:border-red-400': form.errors.phone }"
+                                                    required
+                                                />
+
+                                                <!-- Country Dropdown -->
+                                                <Transition
+                                                    enter-active-class="transition duration-150 ease-out"
+                                                    enter-from-class="opacity-0 -translate-y-1"
+                                                    enter-to-class="opacity-100 translate-y-0"
+                                                    leave-active-class="transition duration-100 ease-in"
+                                                    leave-from-class="opacity-100 translate-y-0"
+                                                    leave-to-class="opacity-0 -translate-y-1"
+                                                >
+                                                    <div v-if="showCountryDropdown" class="absolute top-full start-0 mt-1 w-72 bg-white border border-gray-200 rounded-xl shadow-xl z-50 overflow-hidden">
+                                                        <!-- Search -->
+                                                        <div class="p-2 border-b border-gray-100">
+                                                            <input
+                                                                v-model="countrySearch"
+                                                                type="text"
+                                                                :placeholder="locale === 'ar' ? 'ابحث عن دولة...' : 'Search country...'"
+                                                                class="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg bg-gray-50 outline-none focus:border-[var(--brand-primary)] focus:ring-1 focus:ring-[var(--brand-primary)]/30"
+                                                            />
+                                                        </div>
+                                                        <!-- List -->
+                                                        <div class="max-h-52 overflow-y-auto">
+                                                            <button
+                                                                v-for="c in filteredCountries"
+                                                                :key="c.code"
+                                                                type="button"
+                                                                @click="selectCountry(c)"
+                                                                class="w-full flex items-center gap-3 px-3 py-2.5 text-sm hover:bg-gray-50 transition-colors"
+                                                                :class="{ 'bg-[var(--brand-primary)]/5 font-medium': c.code === selectedCountryCode }"
+                                                            >
+                                                                <span class="text-lg leading-none">{{ c.flag }}</span>
+                                                                <span class="text-gray-800">{{ locale === 'ar' ? c.nameAr : c.name }}</span>
+                                                                <span class="ms-auto text-gray-400 text-xs font-mono">{{ c.code }}</span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </Transition>
+                                            </div>
                                             <p v-if="form.errors.phone" class="mt-1.5 text-sm text-red-500">
                                                 {{ form.errors.phone }}
                                             </p>
