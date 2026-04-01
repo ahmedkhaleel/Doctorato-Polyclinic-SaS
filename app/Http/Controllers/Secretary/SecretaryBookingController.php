@@ -127,6 +127,8 @@ class SecretaryBookingController extends BaseSecretaryController
     {
         $booking->load([
             'patient',
+            'service',
+            'doctor',
             'bookingServices.service',
             'bookingServices.doctor',
             'bookingServices.appointments.doctor',

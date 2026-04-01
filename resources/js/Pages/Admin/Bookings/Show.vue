@@ -177,13 +177,13 @@ const defaultConsultationFee = computed(() => {
 const confirmForm = useForm({
     patient_id: '',
     services: [{
-        service_id: '',
-        doctor_id: '',
+        service_id: props.booking.service_id || '',
+        doctor_id: props.booking.doctor_id || '',
         sessions_count: 1,
-        unit_price: isConsultationBooking.value ? defaultConsultationFee.value : 0,
+        unit_price: isConsultationBooking.value ? defaultConsultationFee.value : (props.booking.service?.price || 0),
         discount_per_session: 0,
     }],
-    appointments: [{ service_index: 0, doctor_id: '', appointment_date: '', start_time: '', session_number: 1 }],
+    appointments: [{ service_index: 0, doctor_id: props.booking.doctor_id || '', appointment_date: props.booking.preferred_date || '', start_time: '', session_number: 1 }],
     notes: props.booking.notes || '',
 });
 
@@ -778,6 +778,54 @@ function submitEditServices() {
                             <p class="text-xs text-yellow-700">{{ $t('a_no_linked_patient') }}</p>
                         </div>
                     </template>
+                </div>
+
+                <!-- Booking Request Details (Service, Doctor, Preferred Date/Time from website booking) -->
+                <div v-if="booking.service || booking.doctor || booking.preferred_date || booking.preferred_time" class="bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl shadow-sm border border-[#C4A265]/20 p-6">
+                    <div class="flex items-center gap-2 mb-4">
+                        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-[#C4A265] to-[#A68B52] flex items-center justify-center flex-shrink-0">
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
+                        </div>
+                        <h3 class="text-sm font-bold text-gray-800">{{ $t('a_booking_request_details') }}</h3>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div v-if="booking.service">
+                            <p class="text-xs text-gray-400 mb-1">{{ $t('a_requested_service') }}</p>
+                            <div class="flex items-center gap-2">
+                                <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-emerald-50 text-emerald-600">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                                </span>
+                                <span class="text-sm font-semibold text-gray-800">{{ booking.service.name_en || booking.service.name_ar }}</span>
+                            </div>
+                        </div>
+                        <div v-if="booking.doctor">
+                            <p class="text-xs text-gray-400 mb-1">{{ $t('a_requested_doctor') }}</p>
+                            <div class="flex items-center gap-2">
+                                <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-blue-50 text-blue-600">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                                </span>
+                                <span class="text-sm font-semibold text-gray-800">{{ booking.doctor.name_en || booking.doctor.name_ar }}</span>
+                            </div>
+                        </div>
+                        <div v-if="booking.preferred_date">
+                            <p class="text-xs text-gray-400 mb-1">{{ $t('a_preferred_date') }}</p>
+                            <div class="flex items-center gap-2">
+                                <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-amber-50 text-amber-600">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                                </span>
+                                <span class="text-sm font-semibold text-gray-800">{{ formatDate(booking.preferred_date) }}</span>
+                            </div>
+                        </div>
+                        <div v-if="booking.preferred_time">
+                            <p class="text-xs text-gray-400 mb-1">{{ $t('a_preferred_time') }}</p>
+                            <div class="flex items-center gap-2">
+                                <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-purple-50 text-purple-600">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                </span>
+                                <span class="text-sm font-semibold text-gray-800">{{ formatTime(booking.preferred_time) }}</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Promo Code Badge -->
