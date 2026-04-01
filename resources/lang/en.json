@@ -230,6 +230,7 @@
     "dermatology_consultation_desc": "Skin examination and diagnosis",
     "cosmetic_consultation_desc": "Specialized cosmetic consultation",
     "book_service_desc": "Book a treatment or cosmetic session",
+    "service_desc": "Book a treatment or cosmetic session",
     "dental_consultation": "Dental Consultation",
     "dental_consultation_desc": "Dental examination and diagnosis",
     "dental_service": "Book a Dental Service",

@@ -230,6 +230,7 @@
     "dermatology_consultation_desc": "فحص وتشخيص الأمراض الجلدية",
     "cosmetic_consultation_desc": "استشارة تجميلية متخصصة",
     "book_service_desc": "حجز جلسة علاجية أو تجميلية",
+    "service_desc": "حجز جلسة علاجية أو تجميلية",
     "dental_consultation": "كشف أسنان",
     "dental_consultation_desc": "فحص وتشخيص مشاكل الأسنان",
     "dental_service": "حجز خدمة أسنان",
