@@ -23,18 +23,20 @@ class BookingController extends Controller
     public function create(): Response
     {
         $serviceCategories = ServiceCategory::whereHas('services', function ($q) {
-            $q->where('status', 'active')->where('bookable', true);
+            $q->where('status', 'active')->where('bookable', true)->whereIn('module', ['derma', 'dental']);
         })->with(['services' => function ($q) {
-            $q->where('status', 'active')->where('bookable', true)->orderBy('display_order');
+            $q->where('status', 'active')->where('bookable', true)->whereIn('module', ['derma', 'dental'])->orderBy('display_order');
         }])
             ->orderBy('display_order')
             ->get();
 
         $services = Service::active()->bookable()
+            ->whereIn('module', ['derma', 'dental'])
             ->orderBy('display_order')
             ->get();
 
         $doctors = Doctor::active()
+            ->whereIn('module', ['derma', 'dental'])
             ->orderBy('display_order')
             ->get();
 
