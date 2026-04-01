@@ -43,7 +43,7 @@ class BookingController extends Controller
         $doctorSchedules = DoctorSchedule::active()
             ->get(['doctor_id', 'day_of_week', 'start_time', 'end_time']);
 
-        $activeModules = ModuleManager::getActiveModules();
+        $activeModules = collect(ModuleManager::getActiveModules())->only(['derma', 'dental'])->all();
 
         return Inertia::render('Frontend/Booking', [
             'serviceCategories' => $serviceCategories,
