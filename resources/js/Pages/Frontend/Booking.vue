@@ -272,6 +272,19 @@ function formatTime12h(time24) {
     return `${hour12}:${m} ${period}`;
 }
 
+const emailError = ref('');
+
+function validateEmail() {
+    if (!form.email) {
+        emailError.value = '';
+        return;
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    emailError.value = emailRegex.test(form.email)
+        ? ''
+        : (locale.value === 'ar' ? 'يرجى إدخال بريد إلكتروني صحيح' : 'Please enter a valid email address');
+}
+
 function normalizePhone() {
     syncPhone();
 }
@@ -289,6 +302,9 @@ if (activeModules.value.length === 1) {
 }
 
 function submit() {
+    validateEmail();
+    if (emailError.value) return;
+
     form.post(localizedRoute('/booking'), {
         preserveScroll: true,
         onSuccess: () => {
@@ -610,12 +626,16 @@ function submit() {
                                         <input
                                             id="email"
                                             v-model="form.email"
+                                            @blur="validateEmail"
                                             type="email"
                                             :placeholder="t('email_placeholder')"
                                             class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-[#3A3A3A] placeholder-gray-400 transition-all duration-200 focus:ring-2 focus:ring-[var(--brand-primary)]/30 focus:border-[var(--brand-primary)] outline-none form-input-animated"
-                                            :class="{ 'border-red-400 focus:ring-red-300 focus:border-red-400': form.errors.email }"
+                                            :class="{ 'border-red-400 focus:ring-red-300 focus:border-red-400': form.errors.email || emailError }"
                                         />
-                                        <p v-if="form.errors.email" class="mt-1.5 text-sm text-red-500">
+                                        <p v-if="emailError" class="mt-1.5 text-sm text-red-500">
+                                            {{ emailError }}
+                                        </p>
+                                        <p v-else-if="form.errors.email" class="mt-1.5 text-sm text-red-500">
                                             {{ form.errors.email }}
                                         </p>
                                     </div>
