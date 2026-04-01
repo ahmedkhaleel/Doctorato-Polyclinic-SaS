@@ -1,0 +1,289 @@
+<script setup>
+import { computed, onMounted } from 'vue';
+import { Link , usePage } from '@inertiajs/vue3';
+import SecretaryLayout from '@/Layouts/SecretaryLayout.vue';
+import { useCurrency } from '@/Composables/useCurrency.js';
+
+defineOptions({ layout: SecretaryLayout });
+
+const page = usePage();
+const isRtl = computed(() => (page.props.dir || 'rtl') === 'rtl');
+
+const props = defineProps({
+    invoice: Object,
+    payment: Object,
+    allPayments: Array,
+});
+
+const { formatCurrency, currencyCode } = useCurrency();
+
+function formatDate(date) {
+    if (!date) return '-';
+    return new Date(date).toLocaleDateString('en-GB');
+}
+
+function formatDateTime(date) {
+    if (!date) return '-';
+    return new Date(date).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+}
+
+const totalPaidBefore = computed(() => {
+    if (!props.allPayments || !props.payment) return 0;
+    return props.allPayments
+        .filter(p => new Date(p.created_at) < new Date(props.payment.created_at) || (new Date(p.created_at).getTime() === new Date(props.payment.created_at).getTime() && p.id < props.payment.id))
+        .reduce((sum, p) => sum + Number(p.amount || 0), 0);
+});
+
+const totalPaidAfter = computed(() => {
+    return totalPaidBefore.value + Number(props.payment?.amount || 0);
+});
+
+const invoiceTotal = computed(() => Number(props.invoice?.total || 0));
+
+const remainingAfterThis = computed(() => {
+    return Math.max(0, invoiceTotal.value - totalPaidAfter.value);
+});
+
+const paymentIndex = computed(() => {
+    if (!props.allPayments || !props.payment) return 1;
+    const idx = props.allPayments.findIndex(p => p.id === props.payment.id);
+    return idx >= 0 ? idx + 1 : 1;
+});
+
+function handlePrint() {
+    window.print();
+}
+
+onMounted(() => {
+    setTimeout(() => window.print(), 500);
+});
+</script>
+
+<template>
+    <div>
+        <!-- Top Bar (Screen Only) -->
+        <div class="screen-only flex items-center justify-between mb-6">
+            <Link
+                :href="`/secretary/invoices/${invoice.id}`"
+                class="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 transition-colors"
+            >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+                {{ isRtl ? 'العودة للفاتورة' : 'Back to Invoice' }}
+            </Link>
+            <button
+                @click="handlePrint"
+                class="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-teal-500 to-cyan-500 text-white rounded-xl text-sm font-semibold hover:from-teal-600 hover:to-cyan-600 transition-all duration-300 shadow-sm"
+            >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                </svg>
+                {{ isRtl ? 'طباعة الإيصال' : 'Print Receipt' }}
+            </button>
+        </div>
+
+        <!-- Receipt Content -->
+        <div class="receipt-container mx-auto max-w-[800px] bg-white rounded-2xl shadow-sm border border-gray-100/80 print:shadow-none print:border-0 print:rounded-none">
+            <div class="p-8 print:p-0">
+
+                <!-- Header -->
+                <div class="text-center mb-8 pb-6 border-b border-gray-200">
+                    <img src="/images/logo.png" alt="AURA Derma Clinic" class="mx-auto h-20 mb-3 object-contain" />
+                    <h1 class="text-xl font-bold text-gray-900 tracking-wide">AURA Derma Clinic</h1>
+                    <div class="mt-4 pt-3 border-t border-gray-100">
+                        <h2 class="text-lg font-bold text-gray-800">{{ isRtl ? 'إيصال الدفع' : 'Payment Receipt' }}</h2>
+                        <p class="text-xs text-gray-400 mt-1">
+                            Payment {{ paymentIndex }} of {{ allPayments?.length || 1 }}
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Invoice & Patient Info -->
+                <div class="grid grid-cols-2 gap-6 mb-8">
+                    <div class="space-y-2">
+                        <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Receipt Details</h3>
+                        <div class="flex items-baseline gap-2">
+                            <span class="text-xs text-gray-500">Invoice #:</span>
+                            <span class="text-sm font-semibold font-mono text-teal-600">{{ invoice.invoice_number }}</span>
+                        </div>
+                        <div class="flex items-baseline gap-2">
+                            <span class="text-xs text-gray-500">Invoice Date:</span>
+                            <span class="text-sm font-medium text-gray-800">{{ formatDate(invoice.invoice_date || invoice.created_at) }}</span>
+                        </div>
+                        <div class="flex items-baseline gap-2">
+                            <span class="text-xs text-gray-500">Payment Date:</span>
+                            <span class="text-sm font-medium text-gray-800">{{ formatDate(payment.payment_date) }}</span>
+                        </div>
+                        <div class="flex items-baseline gap-2">
+                            <span class="text-xs text-gray-500">Receipt Date:</span>
+                            <span class="text-sm font-medium text-gray-800">{{ formatDateTime(payment.created_at) }}</span>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Patient Info</h3>
+                        <div class="flex items-baseline gap-2">
+                            <span class="text-xs text-gray-500">Name:</span>
+                            <span class="text-sm font-semibold text-gray-800">{{ invoice.patient?.full_name }}</span>
+                        </div>
+                        <div class="flex items-baseline gap-2">
+                            <span class="text-xs text-gray-500">Phone:</span>
+                            <span class="text-sm font-medium text-gray-700">{{ invoice.patient?.phone }}</span>
+                        </div>
+                        <div v-if="invoice.patient?.file_number" class="flex items-baseline gap-2">
+                            <span class="text-xs text-gray-500">File #:</span>
+                            <span class="text-sm font-semibold font-mono text-teal-600">{{ invoice.patient.file_number }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- This Payment (Highlighted) -->
+                <div class="mb-8 border-2 border-teal-300 rounded-xl overflow-hidden">
+                    <div class="px-6 py-4 bg-teal-50/60">
+                        <h3 class="text-sm font-bold text-teal-800">{{ isRtl ? 'تفاصيل الدفع' : 'Payment Details' }}</h3>
+                    </div>
+                    <div class="px-6 py-5">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-xs text-gray-400 mb-1">Amount Paid</p>
+                                <p class="text-2xl font-bold text-emerald-600">{{ formatCurrency(payment.amount) }}</p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-400 mb-1">{{ isRtl ? 'طريقة الدفع' : 'Payment Method' }}</p>
+                                <p class="text-sm font-semibold text-gray-800">
+                                    {{ payment.payment_method?.name_en || '-' }}
+                                </p>
+                            </div>
+                            <div v-if="payment.reference_number">
+                                <p class="text-xs text-gray-400 mb-1">Reference #</p>
+                                <p class="text-sm font-mono font-medium text-gray-700">{{ payment.reference_number }}</p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-400 mb-1">Received By</p>
+                                <p class="text-sm font-medium text-gray-700">{{ payment.receiver?.name || '-' }}</p>
+                            </div>
+                            <div v-if="payment.notes" class="col-span-2">
+                                <p class="text-xs text-gray-400 mb-1">{{ isRtl ? 'ملاحظات' : 'Notes' }}</p>
+                                <p class="text-sm text-gray-600">{{ payment.notes }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Invoice Items Table -->
+                <div class="mb-8">
+                    <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Invoice Items</h3>
+                    <table class="w-full text-sm border border-gray-200">
+                        <thead>
+                            <tr class="bg-gray-50">
+                                <th class="px-4 py-2.5 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-600 border-b border-gray-200">Description</th>
+                                <th class="px-4 py-2.5 text-center text-xs font-semibold text-gray-600 border-b border-gray-200">Qty</th>
+                                <th class="px-4 py-2.5 ltr:text-right rtl:text-left text-xs font-semibold text-gray-600 border-b border-gray-200">Unit Price</th>
+                                <th class="px-4 py-2.5 ltr:text-right rtl:text-left text-xs font-semibold text-gray-600 border-b border-gray-200">{{ isRtl ? 'الإجمالي' : 'Total' }}</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            <tr v-for="(item, index) in invoice.items" :key="index">
+                                <td class="px-4 py-2.5">
+                                    <div class="font-medium text-gray-800">{{ item.description_en || item.description_ar }}</div>
+                                </td>
+                                <td class="px-4 py-2.5 text-center text-gray-600">{{ item.quantity }}</td>
+                                <td class="px-4 py-2.5 ltr:text-right rtl:text-left text-gray-600">{{ formatCurrency(item.unit_price) }}</td>
+                                <td class="px-4 py-2.5 ltr:text-right rtl:text-left font-semibold text-gray-800">{{ formatCurrency(item.total) }}</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr v-if="invoice.discount_amount > 0" class="border-t border-gray-200">
+                                <td colspan="3" class="px-4 py-2 ltr:text-right rtl:text-left text-sm text-gray-500">{{ isRtl ? 'الخصم' : 'Discount' }}</td>
+                                <td class="px-4 py-2 ltr:text-right rtl:text-left text-sm text-red-600">-{{ formatCurrency(invoice.discount_amount) }}</td>
+                            </tr>
+                            <tr class="bg-gray-50 border-t-2 border-gray-300">
+                                <td colspan="3" class="px-4 py-3 ltr:text-right rtl:text-left text-sm font-bold text-gray-700">Invoice Total</td>
+                                <td class="px-4 py-3 ltr:text-right rtl:text-left text-sm font-bold text-teal-600">{{ formatCurrency(invoiceTotal) }}</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <!-- All Payments History -->
+                <div class="mb-8">
+                    <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">{{ isRtl ? 'سجل المدفوعات' : 'Payment History' }}</h3>
+                    <div class="border border-gray-200 rounded-lg overflow-hidden">
+                        <table v-if="allPayments && allPayments.length > 0" class="w-full text-sm">
+                            <thead>
+                                <tr class="bg-gray-50">
+                                    <th class="px-4 py-2.5 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-600 border-b border-gray-200">#</th>
+                                    <th class="px-4 py-2.5 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-600 border-b border-gray-200">{{ isRtl ? 'التاريخ' : 'Date' }}</th>
+                                    <th class="px-4 py-2.5 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-600 border-b border-gray-200">{{ isRtl ? 'الطريقة' : 'Method' }}</th>
+                                    <th class="px-4 py-2.5 ltr:text-right rtl:text-left text-xs font-semibold text-gray-600 border-b border-gray-200">{{ isRtl ? 'المبلغ' : 'Amount' }}</th>
+                                    <th class="px-4 py-2.5 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-600 border-b border-gray-200">Ref #</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                                <tr v-for="(p, idx) in allPayments" :key="p.id" :class="p.id === payment.id ? 'bg-teal-50/60' : ''">
+                                    <td class="px-4 py-2.5 text-gray-500 text-xs font-medium">
+                                        {{ idx + 1 }}
+                                        <span v-if="p.id === payment.id" class="ltr:ml-1 rtl:mr-1 inline-flex px-1.5 py-0.5 rounded text-[10px] font-bold text-white bg-teal-500">Current</span>
+                                    </td>
+                                    <td class="px-4 py-2.5 text-gray-600">{{ formatDate(p.payment_date) }}</td>
+                                    <td class="px-4 py-2.5 text-gray-600">{{ p.payment_method?.name_en || '-' }}</td>
+                                    <td class="px-4 py-2.5 ltr:text-right rtl:text-left font-semibold" :class="p.id === payment.id ? 'text-emerald-700' : 'text-emerald-600'">{{ formatCurrency(p.amount) }}</td>
+                                    <td class="px-4 py-2.5 text-gray-500 font-mono text-xs">{{ p.reference_number || '-' }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- Financial Summary -->
+                        <div class="bg-gray-50 border-t border-gray-200 px-4 py-4">
+                            <div class="grid grid-cols-2 gap-3 max-w-md ltr:ml-auto rtl:mr-auto">
+                                <div class="flex justify-between col-span-2 text-sm">
+                                    <span class="text-gray-500">Invoice Total</span>
+                                    <span class="font-bold text-gray-800">{{ formatCurrency(invoiceTotal) }}</span>
+                                </div>
+                                <div class="flex justify-between col-span-2 text-sm">
+                                    <span class="text-gray-500">Paid Before This</span>
+                                    <span class="font-medium text-gray-600">{{ formatCurrency(totalPaidBefore) }}</span>
+                                </div>
+                                <div class="flex justify-between col-span-2 text-sm border-t border-gray-200 pt-2 text-teal-700">
+                                    <span class="font-bold">This Payment</span>
+                                    <span class="font-bold text-emerald-600">{{ formatCurrency(payment.amount) }}</span>
+                                </div>
+                                <div class="flex justify-between col-span-2 text-sm">
+                                    <span class="font-bold text-gray-700">Total Paid</span>
+                                    <span class="font-bold text-emerald-600">{{ formatCurrency(totalPaidAfter) }}</span>
+                                </div>
+                                <div class="flex justify-between col-span-2 text-sm border-t border-gray-200 pt-2">
+                                    <span class="font-bold text-gray-700">Remaining Balance</span>
+                                    <span class="font-bold" :class="remainingAfterThis > 0 ? 'text-red-600' : 'text-emerald-600'">{{ formatCurrency(remainingAfterThis) }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="text-center border-t border-gray-200 pt-6 mt-8">
+                    <p class="text-xs text-gray-400">This is an electronic document and does not require a signature</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<style>
+.screen-only { display: flex; }
+.print-only { display: none; }
+
+@media print {
+    .screen-only { display: none !important; }
+    .print-only { display: block !important; }
+    @page { size: A4; margin: 15mm; }
+    nav, header, aside, footer, [data-sidebar], [data-header], [data-navigation] { display: none !important; }
+    body { margin: 0 !important; padding: 0 !important; background: white !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    main, [data-content], .main-content { margin: 0 !important; padding: 0 !important; max-width: 100% !important; width: 100% !important; }
+    .receipt-container { box-shadow: none !important; border: none !important; border-radius: 0 !important; max-width: 100% !important; margin: 0 !important; }
+    table { border-collapse: collapse; }
+    th, td { border-color: #d1d5db !important; }
+    .bg-gray-50, .bg-teal-50\/60, thead tr { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+</style>

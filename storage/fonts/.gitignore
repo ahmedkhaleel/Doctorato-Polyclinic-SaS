@@ -1,0 +1,6 @@
+*.ufm.json
+*.afm.json
+installed-fonts.json
+!Amiri-Regular.ttf
+!Amiri-Bold.ttf
+!.gitignore

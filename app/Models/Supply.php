@@ -1,0 +1,64 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use App\Traits\LogsActivity;
+
+class Supply extends Model
+{
+    use HasFactory, LogsActivity;
+
+    protected $fillable = [
+        'supply_category_id', 'name_ar', 'name_en', 'sku', 'barcode', 'category', 'unit',
+        'quantity', 'min_quantity', 'purchase_price', 'supplier',
+        'image', 'expiry_date', 'batch_number', 'description', 'is_active',
+    ];
+
+    protected $casts = [
+        'quantity' => 'decimal:2',
+        'min_quantity' => 'decimal:2',
+        'purchase_price' => 'decimal:2',
+        'is_active' => 'boolean',
+        'expiry_date' => 'date',
+    ];
+
+    protected $appends = ['is_low_stock'];
+
+    public function supplyCategory()
+    {
+        return $this->belongsTo(SupplyCategory::class);
+    }
+
+    public function supplierRecord()
+    {
+        return $this->belongsTo(Supplier::class, 'supplier_id');
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(SupplyTransaction::class);
+    }
+
+    public function serviceSupplies()
+    {
+        return $this->hasMany(ServiceSupply::class);
+    }
+
+    protected function isLowStock(): Attribute
+    {
+        return Attribute::get(fn () => $this->quantity <= $this->min_quantity);
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    public function scopeLowStock($query)
+    {
+        return $query->whereColumn('quantity', '<=', 'min_quantity');
+    }
+}

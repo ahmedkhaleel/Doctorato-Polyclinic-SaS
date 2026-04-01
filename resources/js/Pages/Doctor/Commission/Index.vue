@@ -1,0 +1,398 @@
+<script setup>
+import { ref, watch, onMounted, computed } from 'vue';
+import { Link, router, usePage } from '@inertiajs/vue3';
+import DoctorLayout from '@/Layouts/DoctorLayout.vue';
+import { useCurrency } from '@/Composables/useCurrency.js';
+
+defineOptions({ layout: DoctorLayout });
+
+const page = usePage();
+const locale = computed(() => page.props.locale || 'ar');
+const isRtl = computed(() => (page.props.dir || 'rtl') === 'rtl');
+
+const { formatCurrency, currencyCode } = useCurrency();
+
+const props = defineProps({
+    summary: Object,
+    payoutSummary: Object,
+    recentPayouts: Array,
+    monthlyTrend: Array,
+    visits: Object,
+    commissionInfo: Object,
+    filters: Object,
+});
+
+const mounted = ref(false);
+const dateFrom = ref(props.filters?.date_from || '');
+const dateTo = ref(props.filters?.date_to || '');
+
+onMounted(() => {
+    setTimeout(() => { mounted.value = true; }, 50);
+    animateCounters();
+});
+
+// Animated counters
+const animatedValues = ref({ thisMonth: 0, lastMonth: 0, total: 0 });
+
+function animateCounters() {
+    const targets = {
+        thisMonth: props.summary?.this_month || 0,
+        lastMonth: props.summary?.last_month || 0,
+        total: props.summary?.total || 0,
+    };
+    const duration = 1200;
+    const start = performance.now();
+    function step(now) {
+        const elapsed = now - start;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        animatedValues.value.thisMonth = Math.round(targets.thisMonth * eased);
+        animatedValues.value.lastMonth = Math.round(targets.lastMonth * eased);
+        animatedValues.value.total = Math.round(targets.total * eased);
+        if (progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+}
+
+function applyFilter() {
+    router.get('/doctor/commission', {
+        date_from: dateFrom.value || undefined,
+        date_to: dateTo.value || undefined,
+    }, { preserveState: true, replace: true });
+}
+
+function clearFilter() {
+    dateFrom.value = '';
+    dateTo.value = '';
+    router.get('/doctor/commission', {}, { preserveState: true, replace: true });
+}
+
+const maxTrend = Math.max(...(props.monthlyTrend?.map(d => d.value) || [1]), 1);
+const showRates = ref(false);
+
+const payoutStatusConfig = computed(() => ({
+    draft: { label: isRtl.value ? 'مسودة' : 'Draft', bg: 'bg-gray-50', text: 'text-gray-600', border: 'border-gray-200', dot: 'bg-gray-400' },
+    confirmed: { label: isRtl.value ? 'قيد الانتظار' : 'Pending', bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200', dot: 'bg-amber-400' },
+    paid: { label: isRtl.value ? 'مدفوع' : 'Paid', bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200', dot: 'bg-emerald-500' },
+    cancelled: { label: isRtl.value ? 'ملغي' : 'Cancelled', bg: 'bg-red-50', text: 'text-red-600', border: 'border-red-200', dot: 'bg-red-400' },
+}));
+
+function formatDate(d) {
+    if (!d) return '-';
+    return new Date(d).toLocaleDateString('en-GB');
+}
+</script>
+
+<template>
+    <div class="space-y-6">
+        <!-- Hero Header -->
+        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6 sm:p-8"
+            :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
+            style="transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1)"
+        >
+            <div class="absolute top-0 right-0 w-72 h-72 bg-[#C4A265]/15 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl"></div>
+            <div class="absolute bottom-0 left-0 w-48 h-48 bg-emerald-500/10 rounded-full translate-y-1/2 -translate-x-1/4 blur-2xl"></div>
+
+            <div class="relative z-10">
+                <div class="mb-6">
+                    <p class="text-[#C4A265] text-xs font-semibold tracking-wider uppercase mb-1">{{ isRtl ? 'الأرباح' : 'Earnings' }}</p>
+                    <h1 class="text-2xl sm:text-3xl font-bold text-white">{{ $t('a_commission') }}</h1>
+                    <p class="text-gray-400 text-sm mt-1">{{ isRtl ? 'تتبع أرباحك ومدفوعاتك' : 'Track your earnings and payouts' }}</p>
+                </div>
+
+                <!-- Stats in Hero -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div class="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10"
+                        :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
+                        style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.1s"
+                    >
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-lg bg-[#C4A265]/20 flex items-center justify-center">
+                                <svg class="w-5 h-5 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            </div>
+                            <div>
+                                <p class="text-2xl font-bold text-[#C4A265]">{{ formatCurrency(animatedValues.thisMonth) }}</p>
+                                <p class="text-xs text-gray-400">{{ isRtl ? 'هذا الشهر' : 'This Month' }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10"
+                        :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
+                        style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.15s"
+                    >
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center">
+                                <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
+                            </div>
+                            <div>
+                                <p class="text-2xl font-bold text-white">{{ formatCurrency(animatedValues.lastMonth) }}</p>
+                                <p class="text-xs text-gray-400">{{ isRtl ? 'الشهر الماضي' : 'Last Month' }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10"
+                        :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
+                        style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.2s"
+                    >
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-lg bg-emerald-500/20 flex items-center justify-center">
+                                <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+                            </div>
+                            <div>
+                                <p class="text-2xl font-bold text-emerald-400">{{ formatCurrency(animatedValues.total) }}</p>
+                                <p class="text-xs text-gray-400">{{ isRtl ? 'إجمالي الأرباح' : 'Total Earned' }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payout Status Cards -->
+        <div v-if="payoutSummary" class="grid grid-cols-2 lg:grid-cols-4 gap-3"
+            :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
+            style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.25s"
+        >
+            <div class="bg-white rounded-xl border border-emerald-100 p-4 hover:shadow-sm transition-all">
+                <div class="flex items-center gap-2 mb-1.5">
+                    <div class="w-7 h-7 rounded-lg bg-emerald-50 flex items-center justify-center">
+                        <svg class="w-3.5 h-3.5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    </div>
+                    <span class="text-[10px] uppercase tracking-wider font-semibold text-emerald-600">{{ isRtl ? 'إجمالي المدفوع' : 'Total Paid' }}</span>
+                </div>
+                <p class="text-lg font-bold text-emerald-700">{{ formatCurrency(payoutSummary.total_paid) }}</p>
+            </div>
+            <div class="bg-white rounded-xl border border-amber-100 p-4 hover:shadow-sm transition-all">
+                <div class="flex items-center gap-2 mb-1.5">
+                    <div class="w-7 h-7 rounded-lg bg-amber-50 flex items-center justify-center">
+                        <svg class="w-3.5 h-3.5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    </div>
+                    <span class="text-[10px] uppercase tracking-wider font-semibold text-amber-600">{{ isRtl ? 'قيد الانتظار' : 'Pending' }}</span>
+                </div>
+                <p class="text-lg font-bold text-amber-700">{{ formatCurrency(payoutSummary.total_pending) }}</p>
+            </div>
+            <div class="bg-white rounded-xl border border-gray-200 p-4 hover:shadow-sm transition-all">
+                <div class="flex items-center gap-2 mb-1.5">
+                    <div class="w-7 h-7 rounded-lg bg-gray-50 flex items-center justify-center">
+                        <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                    </div>
+                    <span class="text-[10px] uppercase tracking-wider font-semibold text-gray-500">{{ isRtl ? 'مسودة' : 'In Draft' }}</span>
+                </div>
+                <p class="text-lg font-bold text-gray-600">{{ formatCurrency(payoutSummary.total_draft) }}</p>
+            </div>
+            <div class="bg-white rounded-xl border border-rose-100 p-4 hover:shadow-sm transition-all">
+                <div class="flex items-center gap-2 mb-1.5">
+                    <div class="w-7 h-7 rounded-lg bg-rose-50 flex items-center justify-center">
+                        <svg class="w-3.5 h-3.5 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    </div>
+                    <span class="text-[10px] uppercase tracking-wider font-semibold text-rose-500">{{ isRtl ? 'غير مدفوع' : 'Unpaid' }}</span>
+                </div>
+                <p class="text-lg font-bold text-rose-600">{{ formatCurrency(payoutSummary.total_unpaid) }}</p>
+            </div>
+        </div>
+
+        <div class="grid lg:grid-cols-3 gap-6">
+            <!-- Main Column -->
+            <div class="lg:col-span-2 space-y-6">
+                <!-- Recent Payouts -->
+                <div v-if="recentPayouts?.length > 0" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden"
+                    :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
+                    style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.3s"
+                >
+                    <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 rounded-lg bg-[#C4A265]/10 flex items-center justify-center">
+                                <svg class="w-4 h-4 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+                            </div>
+                            <h2 class="text-sm font-bold text-gray-800">{{ isRtl ? 'المدفوعات الأخيرة' : 'Recent Payouts' }}</h2>
+                        </div>
+                    </div>
+                    <div class="divide-y divide-gray-100/80">
+                        <Link v-for="(payout, index) in recentPayouts" :key="payout.id"
+                            :href="`/doctor/commission/payouts/${payout.id}`"
+                            class="group flex items-center justify-between px-6 py-4 hover:bg-gray-50/60 transition-all duration-200"
+                            :class="mounted ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4'"
+                            :style="{ transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)', transitionDelay: `${0.35 + index * 0.04}s` }"
+                        >
+                            <div class="flex items-center gap-3">
+                                <div class="w-9 h-9 rounded-lg flex items-center justify-center border"
+                                    :class="[payoutStatusConfig[payout.status]?.bg, payoutStatusConfig[payout.status]?.border]">
+                                    <svg v-if="payout.status === 'paid'" class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                                    <svg v-else-if="payout.status === 'confirmed'" class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                    <svg v-else class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-semibold text-gray-800 group-hover:text-gray-900 transition-colors">{{ payout.payout_number }}</p>
+                                    <p class="text-xs text-gray-400">{{ formatDate(payout.period_start) }} – {{ formatDate(payout.period_end) }}</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div class="text-right">
+                                    <p class="text-sm font-bold text-[#C4A265]">{{ formatCurrency(payout.net_amount) }}</p>
+                                    <span class="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full border"
+                                        :class="[payoutStatusConfig[payout.status]?.bg, payoutStatusConfig[payout.status]?.text, payoutStatusConfig[payout.status]?.border]"
+                                    >
+                                        <span class="w-1 h-1 rounded-full" :class="payoutStatusConfig[payout.status]?.dot"></span>
+                                        {{ payoutStatusConfig[payout.status]?.label }}
+                                    </span>
+                                </div>
+                                <svg class="w-4 h-4 text-gray-300 group-hover:text-[#C4A265] group-hover:translate-x-0.5 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                            </div>
+                        </Link>
+                    </div>
+                </div>
+
+                <!-- Commission Details Table with Filter -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden"
+                    :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
+                    style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.35s"
+                >
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between px-6 py-4 border-b border-gray-100 gap-3">
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
+                                <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
+                            </div>
+                            <h2 class="text-sm font-bold text-gray-800">{{ isRtl ? 'تفاصيل العمولة' : 'Commission Details' }}</h2>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <input v-model="dateFrom" type="date" :max="dateTo || undefined" class="text-xs border border-gray-200 rounded-lg px-2.5 py-1.5 bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265]" />
+                            <input v-model="dateTo" type="date" :min="dateFrom || undefined" class="text-xs border border-gray-200 rounded-lg px-2.5 py-1.5 bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265]" />
+                            <button @click="applyFilter" class="px-3 py-1.5 text-xs font-semibold text-white bg-[#C4A265] hover:bg-[#A68B52] rounded-lg transition-colors">{{ isRtl ? 'فلتر' : 'Filter' }}</button>
+                            <button v-if="dateFrom || dateTo" @click="clearFilter" class="px-3 py-1.5 text-xs font-medium text-gray-500 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">{{ isRtl ? 'مسح' : 'Clear' }}</button>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead>
+                                <tr class="bg-gray-50/80">
+                                    <th class="ltr:text-left rtl:text-right px-6 py-3 text-[10px] font-semibold text-gray-400 uppercase">{{ isRtl ? 'المريض' : 'Patient' }}</th>
+                                    <th class="ltr:text-left rtl:text-right px-6 py-3 text-[10px] font-semibold text-gray-400 uppercase">{{ isRtl ? 'الخدمة' : 'Service' }}</th>
+                                    <th class="ltr:text-left rtl:text-right px-6 py-3 text-[10px] font-semibold text-gray-400 uppercase">{{ isRtl ? 'التاريخ' : 'Date' }}</th>
+                                    <th class="ltr:text-right rtl:text-left px-6 py-3 text-[10px] font-semibold text-gray-400 uppercase">{{ isRtl ? 'النسبة' : 'Rate' }}</th>
+                                    <th class="ltr:text-right rtl:text-left px-6 py-3 text-[10px] font-semibold text-gray-400 uppercase">{{ isRtl ? 'العمولة' : 'Commission' }}</th>
+                                    <th class="text-center px-6 py-3 text-[10px] font-semibold text-gray-400 uppercase">{{ isRtl ? 'الدفعة' : 'Payout' }}</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                                <tr v-for="visit in visits.data" :key="visit.id" class="hover:bg-gray-50/50 transition-colors">
+                                    <td class="px-6 py-3 font-semibold text-gray-800">{{ visit.patient?.full_name }}</td>
+                                    <td class="px-6 py-3 text-gray-500">{{ visit.service?.name_en || '-' }}</td>
+                                    <td class="px-6 py-3 text-gray-500">{{ visit.visit_date }}</td>
+                                    <td class="px-6 py-3 text-right">
+                                        <span class="font-semibold" :class="visit.commission_rate != commissionInfo?.default_rate ? 'text-[#C4A265]' : 'text-gray-500'">
+                                            {{ visit.commission_rate }}%
+                                        </span>
+                                        <span v-if="visit.commission_rate != commissionInfo?.default_rate" class="text-[9px] text-[#C4A265] block">{{ isRtl ? 'مخصص' : 'custom' }}</span>
+                                    </td>
+                                    <td class="px-6 py-3 text-right font-bold text-[#C4A265]">{{ formatCurrency(visit.commission_amount) }}</td>
+                                    <td class="px-6 py-3 text-center">
+                                        <Link v-if="visit.payout_status === 'paid'" :href="`/doctor/commission/payouts/${visit.payout_id}`"
+                                            class="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 transition-colors">
+                                            <span class="w-1 h-1 rounded-full bg-emerald-500"></span> {{ isRtl ? 'مدفوع' : 'Paid' }}
+                                        </Link>
+                                        <Link v-else-if="visit.payout_status === 'confirmed'" :href="`/doctor/commission/payouts/${visit.payout_id}`"
+                                            class="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100 transition-colors">
+                                            <span class="w-1 h-1 rounded-full bg-amber-400"></span> {{ isRtl ? 'قيد الانتظار' : 'Pending' }}
+                                        </Link>
+                                        <span v-else-if="visit.payout_status === 'draft'" class="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-gray-50 text-gray-500 border border-gray-200">
+                                            <span class="w-1 h-1 rounded-full bg-gray-400"></span> {{ isRtl ? 'مسودة' : 'Draft' }}
+                                        </span>
+                                        <span v-else class="text-[10px] text-gray-300">&mdash;</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div v-if="visits.data?.length === 0" class="py-16 text-center">
+                        <div class="w-16 h-16 mx-auto bg-gray-50 rounded-2xl flex items-center justify-center mb-3 border border-gray-100">
+                            <svg class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        </div>
+                        <p class="text-sm text-gray-400">{{ isRtl ? 'لا توجد سجلات عمولة لهذه الفترة' : 'No commission records for this period' }}</p>
+                    </div>
+
+                    <div v-if="visits.links?.length > 3" class="flex items-center justify-center gap-1 px-6 py-4 border-t border-gray-100 bg-gray-50/50">
+                        <template v-for="link in visits.links" :key="link.label">
+                            <Link v-if="link.url" :href="link.url" class="px-3 py-1.5 rounded-lg text-xs font-medium transition-colors" :class="link.active ? 'bg-[#C4A265] text-white' : 'text-gray-500 hover:bg-gray-100'" v-html="link.label" preserve-state />
+                            <span v-else class="px-3 py-1.5 text-xs text-gray-300" v-html="link.label" />
+                        </template>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="space-y-6">
+                <!-- Commission Trend -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden"
+                    :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
+                    style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.3s"
+                >
+                    <div class="px-5 py-4 border-b border-gray-100 flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-lg bg-purple-50 flex items-center justify-center">
+                            <svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
+                        </div>
+                        <h3 class="text-sm font-bold text-gray-800">{{ isRtl ? 'الاتجاه (6 أشهر)' : 'Trend (6 months)' }}</h3>
+                    </div>
+                    <div class="p-5">
+                        <div class="flex items-end gap-2 h-28">
+                            <div v-for="(item, i) in monthlyTrend" :key="item.label" class="flex-1 flex flex-col items-center gap-1">
+                                <span class="text-[10px] font-medium text-gray-500 tabular-nums">{{ item.value?.toLocaleString() }}</span>
+                                <div class="w-full rounded-t-lg bg-gradient-to-t from-[#C4A265] to-[#D4B87A] transition-all duration-700 ease-out"
+                                    :style="{ height: mounted ? Math.max(4, (item.value / maxTrend) * 80) + 'px' : '4px', transitionDelay: `${0.4 + i * 0.08}s` }"
+                                ></div>
+                                <span class="text-[10px] text-gray-400">{{ item.label }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Commission Rates -->
+                <div v-if="commissionInfo" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden"
+                    :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
+                    style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.35s"
+                >
+                    <div class="px-5 py-4 cursor-pointer hover:bg-gray-50/50 transition-colors flex items-center justify-between" @click="showRates = !showRates">
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 rounded-lg bg-[#C4A265]/10 flex items-center justify-center">
+                                <svg class="w-4 h-4 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-bold text-gray-800">{{ isRtl ? 'نسبي' : 'My Rates' }}</h3>
+                                <p class="text-[10px] text-gray-400">{{ isRtl ? 'الافتراضي:' : 'Default:' }} <span class="font-bold text-[#C4A265]">{{ commissionInfo.default_rate }}%</span></p>
+                            </div>
+                        </div>
+                        <svg class="w-4 h-4 text-gray-400 transition-transform duration-200" :class="{ 'rotate-180': showRates }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                    </div>
+
+                    <Transition enter-active-class="transition duration-200 ease-out" enter-from-class="opacity-0" enter-to-class="opacity-100" leave-active-class="transition duration-150 ease-in" leave-from-class="opacity-100" leave-to-class="opacity-0">
+                        <div v-if="showRates" class="px-5 pb-5 space-y-1.5">
+                            <div class="bg-blue-50/50 rounded-lg p-3 mb-3">
+                                <p class="text-[10px] text-blue-700 leading-relaxed">
+                                    <strong>{{ isRtl ? 'كيف تعمل:' : 'How it works:' }}</strong> {{ isRtl ? `نسبة مخصصة لخدمة معينة، أو النسبة الافتراضية (${commissionInfo.default_rate}%). العمولة = (الفاتورة - تكلفة التوريد) × النسبة%.` : `Custom rate for specific service, or default rate (${commissionInfo.default_rate}%). Commission = (Invoice - Supply Cost) x Rate%.` }}
+                                </p>
+                            </div>
+                            <div class="flex items-center justify-between py-2 px-3 bg-gray-50 rounded-lg">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-gray-400"></span>
+                                    <span class="text-xs text-gray-600">{{ isRtl ? 'النسبة الافتراضية' : 'Default Rate' }}</span>
+                                </div>
+                                <span class="text-xs font-bold text-gray-800">{{ commissionInfo.default_rate }}%</span>
+                            </div>
+                            <div v-for="(sr, idx) in commissionInfo.service_rates" :key="idx"
+                                class="flex items-center justify-between py-2 px-3 rounded-lg"
+                                :class="idx % 2 === 0 ? 'bg-[#C4A265]/5' : ''">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-[#C4A265]"></span>
+                                    <span class="text-xs text-gray-700">{{ sr.service_name }}</span>
+                                </div>
+                                <span class="text-xs font-bold text-[#C4A265]">{{ sr.rate }}%</span>
+                            </div>
+                            <p v-if="!commissionInfo.service_rates?.length" class="text-[10px] text-gray-400 text-center py-2">{{ isRtl ? 'لا توجد نسب مخصصة. النسبة الافتراضية تنطبق على الكل.' : 'No custom rates. Default rate applies to all.' }}</p>
+                        </div>
+                    </Transition>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
