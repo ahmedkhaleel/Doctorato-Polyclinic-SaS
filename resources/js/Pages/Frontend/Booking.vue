@@ -274,6 +274,64 @@ function formatTime12h(time24) {
 
 const emailError = ref('');
 
+// Service searchable dropdown
+const showServiceDropdown = ref(false);
+const serviceSearch = ref('');
+const selectedServiceName = computed(() => {
+    if (!form.service_id) return '';
+    const s = moduleServices.value.find(s => s.id == form.service_id);
+    return s ? localized(s, 'name') : '';
+});
+const searchedServices = computed(() => {
+    const base = filteredServices.value;
+    if (!serviceSearch.value) return base;
+    const q = serviceSearch.value.toLowerCase();
+    return base.filter(s =>
+        (s.name_ar && s.name_ar.includes(serviceSearch.value)) ||
+        (s.name_en && s.name_en.toLowerCase().includes(q))
+    );
+});
+function selectService(s) {
+    form.service_id = s.id;
+    showServiceDropdown.value = false;
+    serviceSearch.value = '';
+}
+function handleServiceClickOutside(e) {
+    if (!e.target.closest('.loc-service-dd')) {
+        showServiceDropdown.value = false;
+        serviceSearch.value = '';
+    }
+}
+
+// Doctor searchable dropdown
+const showDoctorDropdown = ref(false);
+const doctorSearch = ref('');
+const selectedDoctorName = computed(() => {
+    if (!form.doctor_id) return '';
+    const d = moduleDoctors.value.find(d => d.id == form.doctor_id);
+    return d ? localized(d, 'name') : '';
+});
+const searchedDoctors = computed(() => {
+    const base = moduleDoctors.value;
+    if (!doctorSearch.value) return base;
+    const q = doctorSearch.value.toLowerCase();
+    return base.filter(d =>
+        (d.name_ar && d.name_ar.includes(doctorSearch.value)) ||
+        (d.name_en && d.name_en.toLowerCase().includes(q))
+    );
+});
+function selectDoctor(d) {
+    form.doctor_id = d.id;
+    showDoctorDropdown.value = false;
+    doctorSearch.value = '';
+}
+function handleDoctorClickOutside(e) {
+    if (!e.target.closest('.loc-doctor-dd')) {
+        showDoctorDropdown.value = false;
+        doctorSearch.value = '';
+    }
+}
+
 function validateEmail() {
     if (!form.email) {
         emailError.value = '';
@@ -293,8 +351,16 @@ function selectBookingType(type) {
     form.booking_type = type;
 }
 
-onMounted(() => document.addEventListener('click', handleCountryClickOutside));
-onUnmounted(() => document.removeEventListener('click', handleCountryClickOutside));
+onMounted(() => {
+    document.addEventListener('click', handleCountryClickOutside);
+    document.addEventListener('click', handleServiceClickOutside);
+    document.addEventListener('click', handleDoctorClickOutside);
+});
+onUnmounted(() => {
+    document.removeEventListener('click', handleCountryClickOutside);
+    document.removeEventListener('click', handleServiceClickOutside);
+    document.removeEventListener('click', handleDoctorClickOutside);
+});
 
 // Auto-select module if only one is active
 if (activeModules.value.length === 1) {
@@ -673,69 +739,178 @@ function submit() {
                                             </div>
                                         </div>
 
-                                        <!-- Service Dropdown with optgroup -->
-                                        <div>
-                                            <label for="service_id" class="block text-sm font-semibold text-[#3A3A3A] mb-2">
+                                        <!-- Service Searchable Dropdown -->
+                                        <div class="relative loc-service-dd">
+                                            <label class="block text-sm font-semibold text-[#3A3A3A] mb-2">
                                                 {{ t('service') }} <span class="text-red-500">*</span>
                                             </label>
-                                            <select
-                                                id="service_id"
-                                                v-model="form.service_id"
-                                                class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-[#3A3A3A] transition-all duration-200 focus:ring-2 focus:ring-[var(--brand-primary)]/30 focus:border-[var(--brand-primary)] outline-none appearance-none form-input-animated"
-                                                :class="{ 'border-red-400 focus:ring-red-300 focus:border-red-400': form.errors.service_id }"
+                                            <button
+                                                type="button"
+                                                @click="showServiceDropdown = !showServiceDropdown"
+                                                class="w-full flex items-center justify-between px-4 py-3 border border-gray-300 rounded-lg bg-white text-start transition-all duration-200 focus:ring-2 focus:ring-[var(--brand-primary)]/30 focus:border-[var(--brand-primary)] outline-none"
+                                                :class="{ 'border-red-400': form.errors.service_id, 'border-[var(--brand-primary)] ring-2 ring-[var(--brand-primary)]/30': showServiceDropdown }"
                                             >
-                                                <option value="">{{ t('select_service') }}</option>
-                                                <!-- If category selected, show flat list -->
-                                                <template v-if="selectedCategoryId">
-                                                    <option
-                                                        v-for="service in filteredServices"
-                                                        :key="service.id"
-                                                        :value="service.id"
-                                                    >
-                                                        {{ localized(service, 'name') }}
-                                                    </option>
-                                                </template>
-                                                <!-- If no category, show grouped by category -->
-                                                <template v-else>
-                                                    <template v-for="cat in filteredServiceCategories" :key="cat.id">
-                                                        <optgroup v-if="cat.services && cat.services.length > 0" :label="localized(cat, 'name')">
-                                                            <option
-                                                                v-for="service in cat.services"
+                                                <span :class="selectedServiceName ? 'text-[#3A3A3A]' : 'text-gray-400'">
+                                                    {{ selectedServiceName || t('select_service') }}
+                                                </span>
+                                                <svg class="w-4 h-4 text-gray-400 transition-transform flex-shrink-0" :class="{ 'rotate-180': showServiceDropdown }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                                </svg>
+                                            </button>
+
+                                            <Transition
+                                                enter-active-class="transition duration-150 ease-out"
+                                                enter-from-class="opacity-0 -translate-y-1"
+                                                enter-to-class="opacity-100 translate-y-0"
+                                                leave-active-class="transition duration-100 ease-in"
+                                                leave-from-class="opacity-100 translate-y-0"
+                                                leave-to-class="opacity-0 -translate-y-1"
+                                            >
+                                                <div v-if="showServiceDropdown" class="absolute top-full start-0 end-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-xl z-50 overflow-hidden">
+                                                    <!-- Search -->
+                                                    <div class="p-2.5 border-b border-gray-100">
+                                                        <div class="relative">
+                                                            <svg class="absolute start-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                                            </svg>
+                                                            <input
+                                                                v-model="serviceSearch"
+                                                                type="text"
+                                                                :placeholder="locale === 'ar' ? 'ابحث عن خدمة...' : 'Search service...'"
+                                                                class="w-full ps-9 pe-3 py-2.5 text-sm border border-gray-200 rounded-lg bg-gray-50 outline-none focus:border-[var(--brand-primary)] focus:ring-1 focus:ring-[var(--brand-primary)]/30"
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                    <!-- List -->
+                                                    <div class="max-h-60 overflow-y-auto">
+                                                        <!-- Grouped by category when no category filter -->
+                                                        <template v-if="!selectedCategoryId && !serviceSearch">
+                                                            <template v-for="cat in filteredServiceCategories" :key="cat.id">
+                                                                <div v-if="cat.services && cat.services.length > 0">
+                                                                    <div class="px-3 py-1.5 text-xs font-bold text-gray-400 uppercase tracking-wider bg-gray-50 sticky top-0">
+                                                                        {{ localized(cat, 'name') }}
+                                                                    </div>
+                                                                    <button
+                                                                        v-for="service in cat.services"
+                                                                        :key="service.id"
+                                                                        type="button"
+                                                                        @click="selectService(service)"
+                                                                        class="w-full flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-[var(--brand-primary)]/5 transition-colors"
+                                                                        :class="{ 'bg-[var(--brand-primary)]/10 text-[var(--brand-primary)] font-medium': form.service_id == service.id }"
+                                                                    >
+                                                                        <svg v-if="form.service_id == service.id" class="w-4 h-4 text-[var(--brand-primary)] flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                                                        </svg>
+                                                                        <span>{{ localized(service, 'name') }}</span>
+                                                                        <span v-if="service.price" class="ms-auto text-xs text-gray-400">{{ service.price }} {{ locale === 'ar' ? 'ج.م' : 'EGP' }}</span>
+                                                                    </button>
+                                                                </div>
+                                                            </template>
+                                                        </template>
+                                                        <!-- Flat list when searching or category selected -->
+                                                        <template v-else>
+                                                            <button
+                                                                v-for="service in searchedServices"
                                                                 :key="service.id"
-                                                                :value="service.id"
+                                                                type="button"
+                                                                @click="selectService(service)"
+                                                                class="w-full flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-[var(--brand-primary)]/5 transition-colors"
+                                                                :class="{ 'bg-[var(--brand-primary)]/10 text-[var(--brand-primary)] font-medium': form.service_id == service.id }"
                                                             >
-                                                                {{ localized(service, 'name') }}
-                                                            </option>
-                                                        </optgroup>
-                                                    </template>
-                                                </template>
-                                            </select>
+                                                                <svg v-if="form.service_id == service.id" class="w-4 h-4 text-[var(--brand-primary)] flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                                                </svg>
+                                                                <span>{{ localized(service, 'name') }}</span>
+                                                                <span v-if="service.price" class="ms-auto text-xs text-gray-400">{{ service.price }} {{ locale === 'ar' ? 'ج.م' : 'EGP' }}</span>
+                                                            </button>
+                                                        </template>
+                                                        <!-- Empty state -->
+                                                        <div v-if="searchedServices.length === 0 && serviceSearch" class="px-4 py-6 text-center text-sm text-gray-400">
+                                                            {{ locale === 'ar' ? 'لا توجد نتائج' : 'No results found' }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </Transition>
                                             <p v-if="form.errors.service_id" class="mt-1.5 text-sm text-red-500">
                                                 {{ form.errors.service_id }}
                                             </p>
                                         </div>
                                     </div>
 
-                                    <!-- Doctor Selection -->
-                                    <div>
-                                        <label for="doctor_id" class="block text-sm font-semibold text-[#3A3A3A] mb-2">
+                                    <!-- Doctor Searchable Dropdown -->
+                                    <div class="relative loc-doctor-dd">
+                                        <label class="block text-sm font-semibold text-[#3A3A3A] mb-2">
                                             {{ t('doctor') }}
                                         </label>
-                                        <select
-                                            id="doctor_id"
-                                            v-model="form.doctor_id"
-                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-[#3A3A3A] transition-all duration-200 focus:ring-2 focus:ring-[var(--brand-primary)]/30 focus:border-[var(--brand-primary)] outline-none appearance-none form-input-animated"
-                                            :class="{ 'border-red-400 focus:ring-red-300 focus:border-red-400': form.errors.doctor_id }"
+                                        <button
+                                            type="button"
+                                            @click="showDoctorDropdown = !showDoctorDropdown"
+                                            class="w-full flex items-center justify-between px-4 py-3 border border-gray-300 rounded-lg bg-white text-start transition-all duration-200 focus:ring-2 focus:ring-[var(--brand-primary)]/30 focus:border-[var(--brand-primary)] outline-none"
+                                            :class="{ 'border-red-400': form.errors.doctor_id, 'border-[var(--brand-primary)] ring-2 ring-[var(--brand-primary)]/30': showDoctorDropdown }"
                                         >
-                                            <option value="">{{ t('select_doctor') }}</option>
-                                            <option
-                                                v-for="doctor in moduleDoctors"
-                                                :key="doctor.id"
-                                                :value="doctor.id"
-                                            >
-                                                {{ localized(doctor, 'name') }}
-                                            </option>
-                                        </select>
+                                            <span :class="selectedDoctorName ? 'text-[#3A3A3A]' : 'text-gray-400'">
+                                                {{ selectedDoctorName || t('select_doctor') }}
+                                            </span>
+                                            <svg class="w-4 h-4 text-gray-400 transition-transform flex-shrink-0" :class="{ 'rotate-180': showDoctorDropdown }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                            </svg>
+                                        </button>
+
+                                        <Transition
+                                            enter-active-class="transition duration-150 ease-out"
+                                            enter-from-class="opacity-0 -translate-y-1"
+                                            enter-to-class="opacity-100 translate-y-0"
+                                            leave-active-class="transition duration-100 ease-in"
+                                            leave-from-class="opacity-100 translate-y-0"
+                                            leave-to-class="opacity-0 -translate-y-1"
+                                        >
+                                            <div v-if="showDoctorDropdown" class="absolute top-full start-0 end-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-xl z-50 overflow-hidden">
+                                                <!-- Search -->
+                                                <div class="p-2.5 border-b border-gray-100">
+                                                    <div class="relative">
+                                                        <svg class="absolute start-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                                        </svg>
+                                                        <input
+                                                            v-model="doctorSearch"
+                                                            type="text"
+                                                            :placeholder="locale === 'ar' ? 'ابحث عن طبيب...' : 'Search doctor...'"
+                                                            class="w-full ps-9 pe-3 py-2.5 text-sm border border-gray-200 rounded-lg bg-gray-50 outline-none focus:border-[var(--brand-primary)] focus:ring-1 focus:ring-[var(--brand-primary)]/30"
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <!-- List -->
+                                                <div class="max-h-60 overflow-y-auto">
+                                                    <button
+                                                        v-for="doctor in searchedDoctors"
+                                                        :key="doctor.id"
+                                                        type="button"
+                                                        @click="selectDoctor(doctor)"
+                                                        class="w-full flex items-center gap-3 px-4 py-3 text-sm hover:bg-[var(--brand-primary)]/5 transition-colors"
+                                                        :class="{ 'bg-[var(--brand-primary)]/10 text-[var(--brand-primary)] font-medium': form.doctor_id == doctor.id }"
+                                                    >
+                                                        <!-- Doctor avatar -->
+                                                        <div class="w-9 h-9 rounded-full bg-gray-100 flex-shrink-0 overflow-hidden flex items-center justify-center">
+                                                            <img v-if="doctor.photo_url" :src="doctor.photo_url" :alt="localized(doctor, 'name')" class="w-full h-full object-cover" />
+                                                            <svg v-else class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                                                            </svg>
+                                                        </div>
+                                                        <div>
+                                                            <p class="font-medium text-start">{{ localized(doctor, 'name') }}</p>
+                                                            <p v-if="doctor.specialization_ar || doctor.specialization_en" class="text-xs text-gray-400 text-start">{{ localized(doctor, 'specialization') }}</p>
+                                                        </div>
+                                                        <svg v-if="form.doctor_id == doctor.id" class="w-4 h-4 text-[var(--brand-primary)] ms-auto flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                                        </svg>
+                                                    </button>
+                                                    <!-- Empty state -->
+                                                    <div v-if="searchedDoctors.length === 0 && doctorSearch" class="px-4 py-6 text-center text-sm text-gray-400">
+                                                        {{ locale === 'ar' ? 'لا توجد نتائج' : 'No results found' }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </Transition>
                                         <p v-if="form.errors.doctor_id" class="mt-1.5 text-sm text-red-500">
                                             {{ form.errors.doctor_id }}
                                         </p>
