@@ -3,6 +3,7 @@ import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
 import { Link, router, useForm, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import QuickAddPatientModal from '@/Components/QuickAddPatientModal.vue';
+import DoctorDatePicker from '@/Components/DoctorDatePicker.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
 import { useCurrency } from '@/Composables/useCurrency.js';
 
@@ -342,6 +343,12 @@ function removeConfirmAppointment(index) {
 /* Time slots */
 const timeSlots = ref({});
 const loadingSlots = ref({});
+
+function onApptDateChange(apptIdx, newDate) {
+    confirmForm.appointments[apptIdx].appointment_date = newDate;
+    confirmForm.appointments[apptIdx].start_time = '';
+    fetchTimeSlots(apptIdx);
+}
 
 async function fetchTimeSlots(apptIndex) {
     const appt = confirmForm.appointments[apptIndex];
@@ -1798,7 +1805,7 @@ function submitEditServices() {
                                                         </div>
                                                         <div class="max-h-48 overflow-y-auto">
                                                             <button v-for="d in filteredDoctorsList('appt-doc-' + apptIdx)" :key="d.id" type="button"
-                                                                @click="appt.doctor_id = d.id; fetchTimeSlots(apptIdx); openDropdown = null"
+                                                                @click="appt.doctor_id = d.id; appt.start_time = ''; fetchTimeSlots(apptIdx); openDropdown = null"
                                                                 class="w-full flex items-center gap-2 px-3 py-2 text-sm text-start hover:bg-amber-50 transition"
                                                                 :class="appt.doctor_id == d.id ? 'bg-amber-50/60 font-semibold' : ''">
                                                                 <span class="w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0">{{ (d.name_en || d.name_ar || '?').charAt(0) }}</span>
@@ -1811,18 +1818,36 @@ function submitEditServices() {
                                             </div>
                                             <div>
                                                 <label class="block text-xs text-gray-500 mb-1">{{ $t('a_date') }} <span class="text-red-500">*</span></label>
-                                                <input v-model="appt.appointment_date" type="date" @change="fetchTimeSlots(apptIdx)" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                                <DoctorDatePicker
+                                                    :model-value="appt.appointment_date"
+                                                    @update:model-value="onApptDateChange(apptIdx, $event)"
+                                                    :doctor-id="appt.doctor_id"
+                                                    :doctor-schedules="doctorSchedules"
+                                                    :popover="true"
+                                                    :disabled="!appt.doctor_id"
+                                                />
                                             </div>
                                             <div>
                                                 <label class="block text-xs text-gray-500 mb-1">{{ $t('a_time_slot') }}</label>
-                                                <div v-if="loadingSlots[apptIdx]" class="text-xs text-gray-400 py-2">{{ $t('a_loading_slots') }}</div>
-                                                <select v-else-if="timeSlots[apptIdx]?.length" v-model="appt.start_time" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent bg-white">
-                                                    <option value="">{{ $t('a_select_time') }}</option>
-                                                    <option v-for="slot in timeSlots[apptIdx]" :key="slot.start || slot" :value="slot.start || slot">
-                                                        {{ formatTime(slot.start || slot) }} {{ slot.end ? '- ' + formatTime(slot.end) : '' }}
-                                                    </option>
-                                                </select>
-                                                <input v-else v-model="appt.start_time" type="time" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                                <div v-if="loadingSlots[apptIdx]" class="flex items-center gap-2 py-2.5">
+                                                    <svg class="animate-spin w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"/></svg>
+                                                    <span class="text-xs text-gray-400">{{ $t('a_loading_slots') }}</span>
+                                                </div>
+                                                <div v-else-if="timeSlots[apptIdx]?.length" class="flex flex-wrap gap-1.5">
+                                                    <button v-for="slot in timeSlots[apptIdx]" :key="slot.start || slot" type="button"
+                                                        @click="appt.start_time = slot.start || slot"
+                                                        class="px-2.5 py-1.5 text-xs font-medium rounded-lg border transition-all duration-150"
+                                                        :class="appt.start_time === (slot.start || slot)
+                                                            ? 'text-white border-transparent shadow-sm'
+                                                            : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300 hover:bg-gray-50'"
+                                                        :style="appt.start_time === (slot.start || slot) ? 'background-color: #C4A265; border-color: #C4A265;' : ''">
+                                                        {{ slot.start_12h || formatTime(slot.start || slot) }}
+                                                    </button>
+                                                </div>
+                                                <div v-else-if="appt.appointment_date && appt.doctor_id" class="text-xs text-gray-400 py-2">
+                                                    <input v-model="appt.start_time" type="time" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                                </div>
+                                                <p v-else class="text-xs text-gray-400 py-2">{{ $t('a_select_doctor_and_date') }}</p>
                                             </div>
                                             <div>
                                                 <label class="block text-xs text-gray-500 mb-1">{{ $t('a_session') }} #</label>
