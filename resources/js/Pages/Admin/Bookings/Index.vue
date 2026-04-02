@@ -22,11 +22,13 @@ const dateTo = ref(props.filters?.date_to || '');
 const moduleFilter = ref(props.filters?.module || '');
 
 const modules = computed(() => page.props.modules || {});
+/* ── Only show MEDICAL modules that are ENABLED (not HR, inventory, insurance) ── */
+const medicalModuleSlugs = ['derma', 'dental'];
 const activeModules = computed(() => {
     const mods = [];
     if (modules.value) {
         Object.values(modules.value).forEach(m => {
-            if (m.enabled) mods.push(m);
+            if (m.enabled && medicalModuleSlugs.includes(m.slug)) mods.push(m);
         });
     }
     return mods;
