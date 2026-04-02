@@ -239,6 +239,28 @@ function filteredDoctorsList(key) {
     );
 }
 
+/* ── Status Dropdown Options ──────────────────────────── */
+const statusOptions = [
+    { value: 'unconfirmed', color: 'bg-yellow-400', bg: 'bg-yellow-50 text-yellow-700' },
+    { value: 'confirmed', color: 'bg-blue-400', bg: 'bg-blue-50 text-blue-700' },
+    { value: 'in_progress', color: 'bg-purple-400', bg: 'bg-purple-50 text-purple-700' },
+    { value: 'completed', color: 'bg-emerald-400', bg: 'bg-emerald-50 text-emerald-700' },
+    { value: 'cancelled', color: 'bg-red-400', bg: 'bg-red-50 text-red-700' },
+];
+
+function getStatusOption(val) {
+    return statusOptions.find(o => o.value === val) || statusOptions[0];
+}
+
+function filteredStatusOptions(key) {
+    const q = (dropdownSearches.value[key] || '').toLowerCase();
+    if (!q) return statusOptions;
+    return statusOptions.filter(o => {
+        const label = o.value.replace(/_/g, ' ');
+        return label.includes(q);
+    });
+}
+
 /* Click-outside handler for all dropdowns */
 function handleClickOutside(e) {
     if (!e.target.closest('.patient-search-wrapper')) {
@@ -1895,13 +1917,32 @@ function submitEditServices() {
                     <form @submit.prevent="updateStatus" class="space-y-4">
                         <div>
                             <label class="block text-xs text-gray-500 mb-1.5">{{ $t('a_status') }}</label>
-                            <select v-model="statusForm.status" class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent">
-                                <option value="unconfirmed">{{ $t('a_unconfirmed') }}</option>
-                                <option value="confirmed">{{ $t('a_confirmed') }}</option>
-                                <option value="in_progress">{{ $t('a_in_progress') }}</option>
-                                <option value="completed">{{ $t('a_completed') }}</option>
-                                <option value="cancelled">{{ $t('a_cancelled') }}</option>
-                            </select>
+                            <div class="relative ss-dropdown">
+                                <button type="button" @click.stop="toggleDropdown('status')"
+                                    class="w-full flex items-center justify-between px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm hover:border-gray-300 focus:ring-2 focus:ring-amber-200 focus:border-amber-400 transition">
+                                    <span class="flex items-center gap-2">
+                                        <span class="w-2.5 h-2.5 rounded-full" :class="getStatusOption(statusForm.status).color"></span>
+                                        <span class="font-medium text-gray-700">{{ $t('a_' + statusForm.status) }}</span>
+                                    </span>
+                                    <svg class="w-4 h-4 text-gray-400 transition-transform" :class="openDropdown === 'status' ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                                </button>
+                                <div v-if="openDropdown === 'status'" class="absolute z-40 left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-xl overflow-hidden">
+                                    <div class="p-2 border-b border-gray-100">
+                                        <input v-model="dropdownSearches['status']" type="text" :placeholder="locale === 'ar' ? 'بحث...' : 'Search...'" class="w-full px-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-amber-200 focus:border-amber-300" @click.stop />
+                                    </div>
+                                    <div class="max-h-48 overflow-y-auto">
+                                        <button v-for="opt in filteredStatusOptions('status')" :key="opt.value" type="button"
+                                            @click="statusForm.status = opt.value; openDropdown = null"
+                                            class="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm hover:bg-gray-50 transition text-start"
+                                            :class="statusForm.status === opt.value ? 'bg-amber-50' : ''">
+                                            <span class="w-2.5 h-2.5 rounded-full flex-shrink-0" :class="opt.color"></span>
+                                            <span class="flex-1" :class="statusForm.status === opt.value ? 'font-semibold text-amber-700' : 'text-gray-700'">{{ $t('a_' + opt.value) }}</span>
+                                            <svg v-if="statusForm.status === opt.value" class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" /></svg>
+                                        </button>
+                                        <div v-if="filteredStatusOptions('status').length === 0" class="px-4 py-3 text-sm text-gray-400 text-center">{{ locale === 'ar' ? 'لا توجد نتائج' : 'No results' }}</div>
+                                    </div>
+                                </div>
+                            </div>
                             <p v-if="statusForm.errors.status" class="mt-1 text-xs text-red-600">{{ statusForm.errors.status }}</p>
                         </div>
                         <div>
