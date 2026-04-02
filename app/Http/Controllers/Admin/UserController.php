@@ -67,7 +67,10 @@ class UserController extends Controller
                 'name' => $role->name,
                 'display_name_en' => $role->display_name_en,
                 'display_name_ar' => $role->display_name_ar,
+                'permissions' => $role->permissions ?? [],
+                'is_system' => $role->is_system,
             ]),
+            'permissionModules' => config('permissions.modules'),
         ]);
     }
 
