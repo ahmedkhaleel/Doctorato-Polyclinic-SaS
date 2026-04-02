@@ -109,6 +109,93 @@ Route::get('/api/debug-notifications', function () {
     }
 });
 
+// ─── Debug: Test Notification Center Logic (temporary) ──
+Route::get('/api/debug-notif-logic', function () {
+    $steps = [];
+
+    // Step 1: Check auth
+    $steps['step1_auth'] = auth()->check() ? 'logged in as ' . auth()->user()->name : 'NOT logged in (this is the issue if 500 only when logged in)';
+
+    if (!auth()->check()) {
+        return response()->json($steps);
+    }
+
+    $user = auth()->user();
+
+    // Step 2: Test notifications relationship
+    try {
+        $count = $user->notifications()->count();
+        $steps['step2_notifications_count'] = $count;
+    } catch (\Throwable $e) {
+        $steps['step2_error'] = $e->getMessage();
+    }
+
+    // Step 3: Test unread notifications
+    try {
+        $unread = $user->unreadNotifications()->count();
+        $steps['step3_unread_count'] = $unread;
+    } catch (\Throwable $e) {
+        $steps['step3_error'] = $e->getMessage();
+    }
+
+    // Step 4: Test paginate
+    try {
+        $paginated = $user->notifications()->latest()->paginate(30);
+        $steps['step4_paginate'] = 'OK - ' . $paginated->total() . ' items';
+    } catch (\Throwable $e) {
+        $steps['step4_error'] = $e->getMessage();
+    }
+
+    // Step 5: Test through/map
+    try {
+        $mapped = $user->notifications()->latest()->paginate(30)->through(function ($n) {
+            $data = is_array($n->data) ? $n->data : [];
+            return [
+                'id' => $n->id,
+                'type' => $data['type'] ?? 'general',
+                'read_at' => $n->read_at?->toIso8601String(),
+                'created_at' => $n->created_at->toIso8601String(),
+            ];
+        });
+        $steps['step5_map'] = 'OK - mapped ' . count($mapped->items()) . ' items';
+    } catch (\Throwable $e) {
+        $steps['step5_error'] = $e->getMessage() . ' at ' . $e->getFile() . ':' . $e->getLine();
+    }
+
+    // Step 6: Test Booking query
+    try {
+        $bookings = \App\Models\Booking::where('is_read', false)->latest()->limit(50)->get();
+        $steps['step6_bookings'] = 'OK - ' . $bookings->count() . ' unread';
+    } catch (\Throwable $e) {
+        $steps['step6_error'] = $e->getMessage();
+    }
+
+    // Step 7: Test ContactMessage query
+    try {
+        $messages = \App\Models\ContactMessage::where('is_read', false)->latest()->limit(50)->get();
+        $steps['step7_messages'] = 'OK - ' . $messages->count() . ' unread';
+    } catch (\Throwable $e) {
+        $steps['step7_error'] = $e->getMessage();
+    }
+
+    // Step 8: Test Inertia render (just check it doesn't throw)
+    try {
+        $response = \Inertia\Inertia::render('Admin/Notifications/Index', [
+            'notifications' => new \Illuminate\Pagination\LengthAwarePaginator([], 0, 30),
+            'bookingNotifications' => [],
+            'messageNotifications' => [],
+            'stats' => ['total' => 0, 'unread' => 0, 'unread_bookings' => 0, 'unread_messages' => 0, 'today' => 0],
+            'types' => [],
+            'filters' => [],
+        ]);
+        $steps['step8_inertia'] = 'OK - Inertia response created';
+    } catch (\Throwable $e) {
+        $steps['step8_error'] = $e->getMessage() . ' at ' . $e->getFile() . ':' . $e->getLine();
+    }
+
+    return response()->json($steps);
+})->middleware(['web', 'admin.auth']);
+
 // ─── Public API Routes (Time Slots) ──────────────────
 Route::get('/api/time-slots', [TimeSlotController::class, 'available'])->name('api.time-slots')->middleware('throttle:60,1');
 Route::get('/api/available-dates', [TimeSlotController::class, 'availableDates'])->name('api.available-dates')->middleware('throttle:60,1');
