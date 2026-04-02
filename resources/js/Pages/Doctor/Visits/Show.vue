@@ -628,7 +628,7 @@ function bpClassification(sys, dia) {
                                                     'bg-blue-50 text-blue-700 border border-blue-200': t.status === 'in_progress',
                                                     'bg-amber-50 text-amber-700 border border-amber-200': t.status === 'planned',
                                                     'bg-gray-50 text-gray-500 border border-gray-200': t.status === 'cancelled',
-                                                }">{{ t.status }}</span>
+                                                }">{{ isRtl ? ({ completed: 'مكتمل', in_progress: 'جاري', planned: 'مخطط', cancelled: 'ملغي' }[t.status] || t.status) : ({ completed: 'Completed', in_progress: 'In Progress', planned: 'Planned', cancelled: 'Cancelled' }[t.status] || t.status) }}</span>
                                             </td>
                                         </tr>
                                     </tbody>

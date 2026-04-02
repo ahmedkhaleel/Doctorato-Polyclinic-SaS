@@ -361,7 +361,7 @@ const activeTab = ref('visits');
                                 <p class="text-sm font-medium text-gray-800">{{ t.treatment_type }}</p>
                                 <p class="text-xs text-gray-400">{{ t.created_at ? new Date(t.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : '' }}</p>
                             </div>
-                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full" :class="t.status === 'completed' ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600'">{{ t.status }}</span>
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full" :class="t.status === 'completed' ? 'bg-emerald-50 text-emerald-600' : t.status === 'cancelled' ? 'bg-gray-50 text-gray-500' : 'bg-amber-50 text-amber-600'">{{ isRtl ? ({ completed: 'مكتمل', planned: 'مخطط', in_progress: 'جاري', cancelled: 'ملغي' }[t.status] || t.status) : t.status }}</span>
                         </div>
                     </div>
                 </div>

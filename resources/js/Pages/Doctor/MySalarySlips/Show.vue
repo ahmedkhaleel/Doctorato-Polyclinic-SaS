@@ -16,10 +16,8 @@ const props = defineProps({
     slip: Object,
 });
 
-const monthNames = [
-    '', 'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December',
-];
+const monthNamesEn = ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const monthNamesAr = ['', 'يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
 
 function formatDate(dateStr) {
     if (!dateStr) return '-';
@@ -31,27 +29,28 @@ function formatDate(dateStr) {
 }
 
 function periodLabel() {
-    const month = monthNames[props.slip?.month] || props.slip?.month;
+    const names = isRtl.value ? monthNamesAr : monthNamesEn;
+    const month = names[props.slip?.month] || props.slip?.month;
     return `${month} ${props.slip?.year}`;
 }
 
 const earnings = [
-    { label: 'Basic Salary', key: 'basic_salary' },
-    { label: 'Housing Allowance', key: 'housing_allowance' },
-    { label: 'Transport Allowance', key: 'transport_allowance' },
-    { label: 'Other Allowances', key: 'other_allowances' },
-    { label: 'Overtime', key: 'overtime_amount' },
-    { label: 'Bonus', key: 'bonus' },
-    { label: 'Commission', key: 'commission_amount' },
+    { label: 'Basic Salary', labelAr: 'الراتب الأساسي', key: 'basic_salary' },
+    { label: 'Housing Allowance', labelAr: 'بدل السكن', key: 'housing_allowance' },
+    { label: 'Transport Allowance', labelAr: 'بدل النقل', key: 'transport_allowance' },
+    { label: 'Other Allowances', labelAr: 'بدلات أخرى', key: 'other_allowances' },
+    { label: 'Overtime', labelAr: 'العمل الإضافي', key: 'overtime_amount' },
+    { label: 'Bonus', labelAr: 'المكافأة', key: 'bonus' },
+    { label: 'Commission', labelAr: 'العمولة', key: 'commission_amount' },
 ];
 
 const deductions = [
-    { label: 'Insurance', key: 'insurance_deduction' },
-    { label: 'Tax', key: 'tax_deduction' },
-    { label: 'Absence', key: 'absence_deduction' },
-    { label: 'Advance', key: 'advance_deduction' },
-    { label: 'Penalty', key: 'penalty_deduction' },
-    { label: 'Other Deductions', key: 'other_deductions' },
+    { label: 'Insurance', labelAr: 'التأمين', key: 'insurance_deduction' },
+    { label: 'Tax', labelAr: 'الضريبة', key: 'tax_deduction' },
+    { label: 'Absence', labelAr: 'خصم الغياب', key: 'absence_deduction' },
+    { label: 'Advance', labelAr: 'خصم السلفة', key: 'advance_deduction' },
+    { label: 'Penalty', labelAr: 'خصم الجزاء', key: 'penalty_deduction' },
+    { label: 'Other Deductions', labelAr: 'خصومات أخرى', key: 'other_deductions' },
 ];
 
 function handlePrint() {
@@ -94,11 +93,12 @@ function handlePrint() {
                     <h2 class="text-lg font-bold text-gray-900">{{ slip?.employee?.user?.name || '-' }}</h2>
                     <div class="flex items-center gap-3 mt-0.5">
                         <span class="text-sm text-gray-500">{{ slip?.employee?.user?.email }}</span>
-                        <span v-if="slip?.employee?.department?.name_en" class="text-xs text-[#4f46e5] font-medium bg-[#4f46e5]/5 px-2.5 py-0.5 rounded-full">{{ slip.employee.department.name_en }}</span>
+                        <span v-if="slip?.employee?.department" class="text-xs text-[#4f46e5] font-medium bg-[#4f46e5]/5 px-2.5 py-0.5 rounded-full">{{ isRtl ? (slip.employee.department.name_ar || slip.employee.department.name_en) : slip.employee.department.name_en }}</span>
                     </div>
                 </div>
             </div>
             <div v-if="slip?.payment_method || slip?.paid_at" class="mt-4 pt-4 border-t border-gray-100 flex flex-wrap gap-6 text-sm">
+
                 <div v-if="slip.paid_at">
                     <span class="text-gray-400 text-xs">{{ isRtl ? 'تاريخ الدفع' : 'Paid On' }}</span>
                     <p class="font-medium text-gray-700">{{ formatDate(slip.paid_at) }}</p>
@@ -122,7 +122,7 @@ function handlePrint() {
                 </div>
                 <div class="divide-y divide-gray-50">
                     <div v-for="item in earnings" :key="item.key" class="flex items-center justify-between px-6 py-3">
-                        <span class="text-sm text-gray-600">{{ item.label }}</span>
+                        <span class="text-sm text-gray-600">{{ isRtl ? item.labelAr : item.label }}</span>
                         <span class="text-sm font-medium text-gray-800 tabular-nums">{{ formatCurrency(slip?.[item.key]) }}</span>
                     </div>
                 </div>
@@ -142,7 +142,7 @@ function handlePrint() {
                 </div>
                 <div class="divide-y divide-gray-50">
                     <div v-for="item in deductions" :key="item.key" class="flex items-center justify-between px-6 py-3">
-                        <span class="text-sm text-gray-600">{{ item.label }}</span>
+                        <span class="text-sm text-gray-600">{{ isRtl ? item.labelAr : item.label }}</span>
                         <span class="text-sm font-medium text-gray-800 tabular-nums">{{ formatCurrency(slip?.[item.key]) }}</span>
                     </div>
                 </div>
@@ -166,9 +166,9 @@ function handlePrint() {
                     </div>
                 </div>
                 <div class="text-right hidden sm:block">
-                    <p class="text-sm text-white/60">Earnings</p>
+                    <p class="text-sm text-white/60">{{ isRtl ? 'المكاسب' : 'Earnings' }}</p>
                     <p class="text-sm font-semibold text-white/90">{{ formatCurrency(slip?.total_earnings) }}</p>
-                    <p class="text-sm text-white/60 mt-1">Deductions</p>
+                    <p class="text-sm text-white/60 mt-1">{{ isRtl ? 'الخصومات' : 'Deductions' }}</p>
                     <p class="text-sm font-semibold text-white/90">- {{ formatCurrency(slip?.total_deductions) }}</p>
                 </div>
             </div>
