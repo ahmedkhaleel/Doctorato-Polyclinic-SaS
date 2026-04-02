@@ -115,7 +115,7 @@ function toggleActive(bundle) {
                  :class="{ 'idx-item--visible': isVisible('header') }">
                 <div>
                     <h1 class="text-2xl font-bold text-gray-900 tracking-tight">{{ $t('a_bundle_packages') }}</h1>
-                    <p class="text-sm text-gray-400 mt-1">Manage your service packages and pricing bundles</p>
+                    <p class="text-sm text-gray-400 mt-1">{{ isRtl ? 'إدارة حزم الخدمات وباقات الأسعار' : 'Manage your service packages and pricing bundles' }}</p>
                 </div>
                 <div class="flex items-center gap-3">
                     <Link v-if="can('bookings.create')"
@@ -123,21 +123,21 @@ function toggleActive(bundle) {
                           class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 border-2 hover:shadow-md active:scale-[0.97]"
                           style="border-color: #C4A265; color: #C4A265;">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                        Book Service
+                        {{ isRtl ? 'حجز خدمة' : 'Book Service' }}
                     </Link>
                     <Link v-if="can('package_bundle_bookings.create')"
                           href="/admin/package-bundle-bookings/create"
                           class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 border-2 hover:shadow-md active:scale-[0.97]"
                           style="border-color: #C4A265; color: #C4A265;">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
-                        Book Package
+                        {{ isRtl ? 'حجز باقة' : 'Book Package' }}
                     </Link>
                     <Link v-if="can('package_bundles.create')"
                           href="/admin/package-bundles/create"
                           class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-white text-sm font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-[#C4A265]/25 active:scale-[0.97]"
                           style="background: linear-gradient(135deg, #C4A265, #D4B87A);">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
-                        New Bundle
+                        {{ isRtl ? 'باقة جديدة' : 'New Bundle' }}
                     </Link>
                 </div>
             </div>
@@ -153,7 +153,7 @@ function toggleActive(bundle) {
                             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
                         </div>
                         <div>
-                            <p class="text-xs text-gray-400 font-medium">Total</p>
+                            <p class="text-xs text-gray-400 font-medium">{{ isRtl ? 'الإجمالي' : 'Total' }}</p>
                             <p class="text-lg font-extrabold text-gray-800">{{ totalBundles }}</p>
                         </div>
                     </div>
@@ -165,7 +165,7 @@ function toggleActive(bundle) {
                             <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                         </div>
                         <div>
-                            <p class="text-xs text-gray-400 font-medium">Active</p>
+                            <p class="text-xs text-gray-400 font-medium">{{ isRtl ? 'نشطة' : 'Active' }}</p>
                             <p class="text-lg font-extrabold text-emerald-600">{{ activeBundles }}</p>
                         </div>
                     </div>
@@ -177,7 +177,7 @@ function toggleActive(bundle) {
                             <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
                         </div>
                         <div>
-                            <p class="text-xs text-gray-400 font-medium">Bookings</p>
+                            <p class="text-xs text-gray-400 font-medium">{{ isRtl ? 'الحجوزات' : 'Bookings' }}</p>
                             <p class="text-lg font-extrabold text-blue-600">{{ totalBookings }}</p>
                         </div>
                     </div>
@@ -189,7 +189,7 @@ function toggleActive(bundle) {
                             <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                         </div>
                         <div>
-                            <p class="text-xs text-gray-400 font-medium">Combined Value</p>
+                            <p class="text-xs text-gray-400 font-medium">{{ isRtl ? 'القيمة الإجمالية' : 'Combined Value' }}</p>
                             <p class="text-lg font-extrabold text-purple-600 tabular-nums">{{ formatCurrency(totalRevenue) }}</p>
                         </div>
                     </div>
@@ -204,7 +204,7 @@ function toggleActive(bundle) {
                         <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                             <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                         </div>
-                        <input v-model="search" type="text" placeholder="Search bundles by name..."
+                        <input v-model="search" type="text" :placeholder="isRtl ? 'ابحث عن الباقات بالاسم...' : 'Search bundles by name...'"
                                class="w-full pl-11 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all duration-200 placeholder-gray-400" />
                     </div>
                     <select v-if="activeModules.length > 1" v-model="moduleFilter"
@@ -220,7 +220,7 @@ function toggleActive(bundle) {
                     </select>
                     <div v-if="search || statusFilter || moduleFilter" class="flex items-center gap-1.5 px-3 py-1.5 bg-[#C4A265]/10 rounded-lg">
                         <div class="w-1.5 h-1.5 rounded-full bg-[#C4A265] animate-pulse"></div>
-                        <span class="text-xs font-semibold text-[#C4A265]">Filtered</span>
+                        <span class="text-xs font-semibold text-[#C4A265]">{{ isRtl ? 'مُصفّى' : 'Filtered' }}</span>
                     </div>
                 </div>
             </div>
@@ -311,12 +311,12 @@ function toggleActive(bundle) {
                                                 ? 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100 shadow-sm shadow-emerald-100'
                                                 : 'bg-gray-50 text-gray-500 border-gray-200 hover:bg-gray-100'">
                                         <span class="w-1.5 h-1.5 rounded-full" :class="bundle.is_active ? 'bg-emerald-500 animate-pulse' : 'bg-gray-400'"></span>
-                                        {{ bundle.is_active ? 'Active' : 'Inactive' }}
+                                        {{ bundle.is_active ? (isRtl ? 'نشطة' : 'Active') : (isRtl ? 'غير نشطة' : 'Inactive') }}
                                     </button>
                                     <span v-else class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border"
                                           :class="bundle.is_active ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-gray-50 text-gray-500 border-gray-200'">
                                         <span class="w-1.5 h-1.5 rounded-full" :class="bundle.is_active ? 'bg-emerald-500' : 'bg-gray-400'"></span>
-                                        {{ bundle.is_active ? 'Active' : 'Inactive' }}
+                                        {{ bundle.is_active ? (isRtl ? 'نشطة' : 'Active') : (isRtl ? 'غير نشطة' : 'Inactive') }}
                                     </span>
                                 </td>
 
@@ -356,7 +356,7 @@ function toggleActive(bundle) {
                                         <svg class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
                                     </div>
                                     <p class="text-sm font-medium text-gray-400">{{ $t('a_no_bundles_found') }}</p>
-                                    <p class="text-xs text-gray-300 mt-1">Try adjusting your search or filters</p>
+                                    <p class="text-xs text-gray-300 mt-1">{{ isRtl ? 'حاول تعديل البحث أو عوامل التصفية' : 'Try adjusting your search or filters' }}</p>
                                 </td>
                             </tr>
                         </tbody>
@@ -367,9 +367,16 @@ function toggleActive(bundle) {
                 <div v-if="bundles.links && bundles.links.length > 3"
                      class="px-6 py-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-3">
                     <p class="text-xs text-gray-400 font-medium">
-                        Showing <span class="font-semibold text-gray-600">{{ bundles.from }}</span> to
-                        <span class="font-semibold text-gray-600">{{ bundles.to }}</span> of
-                        <span class="font-semibold text-gray-600">{{ bundles.total }}</span> results
+                        <template v-if="isRtl">
+                            عرض <span class="font-semibold text-gray-600">{{ bundles.from }}</span> إلى
+                            <span class="font-semibold text-gray-600">{{ bundles.to }}</span> من
+                            <span class="font-semibold text-gray-600">{{ bundles.total }}</span> نتيجة
+                        </template>
+                        <template v-else>
+                            Showing <span class="font-semibold text-gray-600">{{ bundles.from }}</span> to
+                            <span class="font-semibold text-gray-600">{{ bundles.to }}</span> of
+                            <span class="font-semibold text-gray-600">{{ bundles.total }}</span> results
+                        </template>
                     </p>
                     <nav class="flex space-x-1 rtl:space-x-reverse">
                         <template v-for="link in bundles.links" :key="link.label">
@@ -388,8 +395,8 @@ function toggleActive(bundle) {
         <ConfirmModal
             :show="showDeleteModal"
             :title="$t('a_delete_bundle')"
-            message="Are you sure you want to delete this package bundle? This action cannot be undone."
-            confirm-text="Delete"
+            :message="isRtl ? 'هل أنت متأكد من حذف هذه الباقة؟ لا يمكن التراجع عن هذا الإجراء.' : 'Are you sure you want to delete this package bundle? This action cannot be undone.'"
+            :confirm-text="isRtl ? 'حذف' : 'Delete'"
             confirm-color="red"
             @confirm="executeDelete"
             @cancel="showDeleteModal = false"
