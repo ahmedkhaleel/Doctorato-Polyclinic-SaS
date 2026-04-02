@@ -50,7 +50,7 @@ class DoctorTreatmentPlanConsentController extends BaseDoctorController
             \App\Jobs\SendNotificationJob::dispatch($treatmentPlan->patient->user, new ConsentRequestNotification($consent, 'request'), 'consent_request');
         }
 
-        return redirect()->back()->with('success', 'تم إرسال طلب الموافقة بنجاح');
+        return redirect()->back()->with('success', $this->msg('Consent request sent successfully.', 'تم إرسال طلب الموافقة بنجاح.'));
     }
 
     /**

@@ -136,6 +136,6 @@ class DoctorPatientController extends BaseDoctorController
 
         \App\Services\AuditLogger::log('updated_doctor_notes', $patient);
 
-        return redirect()->back()->with('success', 'Notes updated.');
+        return redirect()->back()->with('success', $this->msg('Notes updated.', 'تم تحديث الملاحظات.'));
     }
 }

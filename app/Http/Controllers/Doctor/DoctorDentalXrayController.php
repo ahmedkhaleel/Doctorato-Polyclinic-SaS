@@ -53,7 +53,7 @@ class DoctorDentalXrayController extends BaseDoctorController
 
         DentalXray::create($data);
 
-        return redirect()->back()->with('success', 'X-ray uploaded successfully.');
+        return redirect()->back()->with('success', $this->msg('X-ray uploaded successfully.', 'تم رفع الأشعة بنجاح.'));
     }
 
     public function patientXrays(Request $request, Patient $patient): Response

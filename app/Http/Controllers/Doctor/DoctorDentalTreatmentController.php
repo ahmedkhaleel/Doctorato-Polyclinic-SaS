@@ -81,7 +81,7 @@ class DoctorDentalTreatmentController extends BaseDoctorController
 
         $this->treatmentService->createTreatment($data);
 
-        return redirect()->back()->with('success', 'Treatment added successfully.');
+        return redirect()->back()->with('success', $this->msg('Treatment added successfully.', 'تم إضافة العلاج بنجاح.'));
     }
 
     public function update(UpdateDentalTreatmentRequest $request, DentalTreatment $treatment)
@@ -92,6 +92,6 @@ class DoctorDentalTreatmentController extends BaseDoctorController
 
         $this->treatmentService->updateTreatment($treatment, $request->validated());
 
-        return redirect()->back()->with('success', 'Treatment updated successfully.');
+        return redirect()->back()->with('success', $this->msg('Treatment updated successfully.', 'تم تحديث العلاج بنجاح.'));
     }
 }

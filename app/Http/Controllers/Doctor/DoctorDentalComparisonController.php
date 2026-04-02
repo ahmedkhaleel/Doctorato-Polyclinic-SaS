@@ -60,7 +60,7 @@ class DoctorDentalComparisonController extends BaseDoctorController
         $comparison = DentalComparison::create($data);
         AuditLogger::log('created', $comparison);
 
-        return redirect()->back()->with('success', 'تم إنشاء المقارنة بنجاح');
+        return redirect()->back()->with('success', $this->msg('Comparison created successfully.', 'تم إنشاء المقارنة بنجاح.'));
     }
 
     public function show(Request $request, DentalComparison $comparison): Response

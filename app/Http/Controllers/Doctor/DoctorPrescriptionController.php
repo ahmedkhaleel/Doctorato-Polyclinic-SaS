@@ -105,7 +105,7 @@ class DoctorPrescriptionController extends BaseDoctorController
             $prescription->items()->create($item);
         }
 
-        return redirect()->back()->with('success', 'Prescription created successfully.');
+        return redirect()->back()->with('success', $this->msg('Prescription created successfully.', 'تم إنشاء الوصفة بنجاح.'));
     }
 
     public function update(Request $request, Prescription $prescription): RedirectResponse
@@ -136,7 +136,7 @@ class DoctorPrescriptionController extends BaseDoctorController
             }
         });
 
-        return redirect()->back()->with('success', 'Prescription updated successfully.');
+        return redirect()->back()->with('success', $this->msg('Prescription updated successfully.', 'تم تحديث الوصفة بنجاح.'));
     }
 
     public function destroy(Request $request, Prescription $prescription): RedirectResponse
@@ -148,7 +148,7 @@ class DoctorPrescriptionController extends BaseDoctorController
         $prescription->items()->delete();
         $prescription->delete();
 
-        return redirect()->back()->with('success', 'Prescription deleted successfully.');
+        return redirect()->back()->with('success', $this->msg('Prescription deleted successfully.', 'تم حذف الوصفة بنجاح.'));
     }
 
     public function duplicate(Request $request, Prescription $prescription): RedirectResponse
@@ -177,7 +177,7 @@ class DoctorPrescriptionController extends BaseDoctorController
 
         AuditLogger::log('duplicated', $new, ['duplicated_from' => $prescription->id]);
 
-        return redirect()->back()->with('success', 'Prescription duplicated successfully.');
+        return redirect()->back()->with('success', $this->msg('Prescription duplicated successfully.', 'تم نسخ الوصفة بنجاح.'));
     }
 
     public function downloadPdf(Request $request, Prescription $prescription): HttpResponse
@@ -292,6 +292,6 @@ class DoctorPrescriptionController extends BaseDoctorController
             $data['dental_treatment_id'] ?? null
         );
 
-        return redirect()->back()->with('success', 'Prescription created from template.');
+        return redirect()->back()->with('success', $this->msg('Prescription created from template.', 'تم إنشاء الوصفة من القالب.'));
     }
 }

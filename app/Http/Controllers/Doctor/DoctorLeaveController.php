@@ -40,6 +40,6 @@ class DoctorLeaveController extends BaseDoctorController
 
         AuditLogger::log('created', $leave);
 
-        return back()->with('success', 'Leave request submitted.');
+        return back()->with('success', $this->msg('Leave request submitted.', 'تم تقديم طلب الإجازة.'));
     }
 }

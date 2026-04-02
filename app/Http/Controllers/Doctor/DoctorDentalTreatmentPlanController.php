@@ -124,7 +124,7 @@ class DoctorDentalTreatmentPlanController extends BaseDoctorController
         AuditLogger::log('created', $plan);
 
         return redirect()->route('doctor.dental.treatment-plans.show', $plan)
-            ->with('success', 'Treatment plan created successfully.');
+            ->with('success', $this->msg('Treatment plan created successfully.', 'تم إنشاء خطة العلاج بنجاح.'));
     }
 
     public function update(UpdateDentalTreatmentPlanRequest $request, DentalTreatmentPlan $treatmentPlan)
@@ -137,7 +137,7 @@ class DoctorDentalTreatmentPlanController extends BaseDoctorController
 
         // Enforce consent before starting treatment
         if (isset($data['status']) && $data['status'] === 'in_progress' && !$treatmentPlan->hasSignedConsent()) {
-            return redirect()->back()->with('error', 'لا يمكن بدء الخطة بدون موافقة المريض الموقعة / Cannot start plan without signed patient consent');
+            return redirect()->back()->with('error', $this->msg('Cannot start plan without signed patient consent.', 'لا يمكن بدء الخطة بدون موافقة المريض الموقعة.'));
         }
 
         if (isset($data['status']) && $data['status'] === 'completed') {
@@ -164,6 +164,6 @@ class DoctorDentalTreatmentPlanController extends BaseDoctorController
             Notification::send($recipients, new DentalTreatmentPlanStatusNotification($treatmentPlan, $oldStatus, $data['status']));
         }
 
-        return redirect()->back()->with('success', 'Treatment plan updated.');
+        return redirect()->back()->with('success', $this->msg('Treatment plan updated.', 'تم تحديث خطة العلاج.'));
     }
 }

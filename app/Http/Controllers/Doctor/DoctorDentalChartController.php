@@ -125,7 +125,7 @@ class DoctorDentalChartController extends BaseDoctorController
 
         AuditLogger::log($chart->wasRecentlyCreated ? 'created' : 'updated', $chart);
 
-        return redirect()->back()->with('success', 'Tooth updated successfully.');
+        return redirect()->back()->with('success', $this->msg('Tooth updated successfully.', 'تم تحديث السن بنجاح.'));
     }
 
     public function initializeChart(Request $request, Patient $patient)
@@ -158,6 +158,6 @@ class DoctorDentalChartController extends BaseDoctorController
             ], "Initialized {$label} dental chart for patient \"{$patient->full_name}\" (" . count($records) . ' teeth)');
         }
 
-        return redirect()->back()->with('success', 'Dental chart initialized.');
+        return redirect()->back()->with('success', $this->msg('Dental chart initialized.', 'تم تهيئة خريطة الأسنان.'));
     }
 }

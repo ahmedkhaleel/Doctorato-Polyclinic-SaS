@@ -138,7 +138,7 @@ class DoctorVisitController extends BaseDoctorController
 
         AuditLogger::log('started', $visit);
 
-        return redirect()->back()->with('success', 'Visit started.');
+        return redirect()->back()->with('success', $this->msg('Visit started.', 'تم بدء الزيارة.'));
     }
 
     public function complete(Request $request, Visit $visit): RedirectResponse
@@ -149,9 +149,11 @@ class DoctorVisitController extends BaseDoctorController
 
         AuditLogger::log('completed', $visit);
 
-        $message = 'Visit completed.';
+        $message = app()->getLocale() === 'ar' ? 'تم إكمال الزيارة.' : 'Visit completed.';
         if ($results['invoice']) {
-            $message .= ' Invoice #'.$results['invoice']->invoice_number.' generated.';
+            $message .= app()->getLocale() === 'ar'
+                ? ' فاتورة رقم #'.$results['invoice']->invoice_number.' تم إنشاؤها.'
+                : ' Invoice #'.$results['invoice']->invoice_number.' generated.';
         }
 
         return redirect()->back()->with('success', $message);
@@ -162,7 +164,7 @@ class DoctorVisitController extends BaseDoctorController
         $this->authorizeDoctor($request, $visit);
 
         if (! in_array($visit->status, ['waiting', 'in_progress'])) {
-            return redirect()->back()->with('error', 'Only waiting or in-progress visits can be cancelled.');
+            return redirect()->back()->with('error', $this->msg('Only waiting or in-progress visits can be cancelled.', 'يمكن إلغاء الزيارات في حالة الانتظار أو قيد التنفيذ فقط.'));
         }
 
         $visit->update([
@@ -172,7 +174,7 @@ class DoctorVisitController extends BaseDoctorController
 
         AuditLogger::log('cancelled', $visit);
 
-        return redirect()->back()->with('success', 'Visit cancelled.');
+        return redirect()->back()->with('success', $this->msg('Visit cancelled.', 'تم إلغاء الزيارة.'));
     }
 
     public function updateDiagnosis(Request $request, Visit $visit): RedirectResponse
@@ -188,7 +190,7 @@ class DoctorVisitController extends BaseDoctorController
 
         AuditLogger::log('updated_diagnosis', $visit);
 
-        return redirect()->back()->with('success', 'Diagnosis updated.');
+        return redirect()->back()->with('success', $this->msg('Diagnosis updated.', 'تم تحديث التشخيص.'));
     }
 
     public function uploadPhoto(Request $request, Visit $visit): RedirectResponse
@@ -217,6 +219,6 @@ class DoctorVisitController extends BaseDoctorController
             'photo_type' => $request->input('type', 'during'),
         ]);
 
-        return redirect()->back()->with('success', 'Photo uploaded.');
+        return redirect()->back()->with('success', $this->msg('Photo uploaded.', 'تم رفع الصورة.'));
     }
 }

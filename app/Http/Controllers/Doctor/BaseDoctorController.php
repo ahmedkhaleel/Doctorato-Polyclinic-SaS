@@ -33,4 +33,12 @@ abstract class BaseDoctorController extends Controller
             abort(403, 'This record does not belong to you.');
         }
     }
+
+    /**
+     * Return a localized flash message based on the current locale.
+     */
+    protected function msg(string $en, string $ar): string
+    {
+        return app()->getLocale() === 'ar' ? $ar : $en;
+    }
 }

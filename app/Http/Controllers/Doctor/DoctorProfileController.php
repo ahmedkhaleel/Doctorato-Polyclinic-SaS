@@ -49,7 +49,7 @@ class DoctorProfileController extends BaseDoctorController
 
         $doctor->update($updateData);
 
-        return redirect()->back()->with('success', 'Profile updated successfully.');
+        return redirect()->back()->with('success', $this->msg('Profile updated successfully.', 'تم تحديث الملف الشخصي بنجاح.'));
     }
 
     public function updatePassword(Request $request): RedirectResponse
@@ -73,6 +73,6 @@ class DoctorProfileController extends BaseDoctorController
 
         AuditLogger::log('password_changed', $user);
 
-        return redirect()->back()->with('success', 'Password changed successfully.');
+        return redirect()->back()->with('success', $this->msg('Password changed successfully.', 'تم تغيير كلمة المرور بنجاح.'));
     }
 }
