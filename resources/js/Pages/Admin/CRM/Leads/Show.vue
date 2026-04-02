@@ -88,7 +88,7 @@ function submitComplete(fuId) {
 }
 
 function missFollowUp(fuId) {
-    if (confirm('Mark this follow-up as missed?')) {
+    if (confirm(isRtl.value ? 'هل تريد تحديد هذه المتابعة كفائتة؟' : 'Mark this follow-up as missed?')) {
         router.post(`/admin/follow-ups/${fuId}/miss`, {}, { preserveScroll: true });
     }
 }
@@ -350,11 +350,17 @@ const channelIcons = {
     sms: 'M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z',
 };
 
-const statusLabels = {
-    new: 'New', contacted: 'Contacted', qualified: 'Qualified',
-    appointment_booked: 'Appt. Booked', consultation_done: 'Consultation',
-    negotiation: 'Negotiation', converted: 'Converted', lost: 'Lost', dormant: 'Dormant',
-};
+const statusLabels = computed(() => ({
+    new: isRtl.value ? 'جديد' : 'New',
+    contacted: isRtl.value ? 'تم التواصل' : 'Contacted',
+    qualified: isRtl.value ? 'مؤهل' : 'Qualified',
+    appointment_booked: isRtl.value ? 'تم الحجز' : 'Appt. Booked',
+    consultation_done: isRtl.value ? 'تم الاستشارة' : 'Consultation',
+    negotiation: isRtl.value ? 'تفاوض' : 'Negotiation',
+    converted: isRtl.value ? 'تم التحويل' : 'Converted',
+    lost: isRtl.value ? 'خسارة' : 'Lost',
+    dormant: isRtl.value ? 'خامل' : 'Dormant',
+}));
 const statusColors = {
     new: 'bg-blue-100 text-blue-700 ring-blue-600/10',
     contacted: 'bg-indigo-100 text-indigo-700 ring-indigo-600/10',
@@ -366,7 +372,7 @@ const statusColors = {
     lost: 'bg-red-100 text-red-700 ring-red-600/10',
     dormant: 'bg-gray-100 text-gray-600 ring-gray-500/10',
 };
-const priorityLabels = { 1: 'Hot', 2: 'Warm', 3: 'Cold' };
+const priorityLabels = computed(() => ({ 1: isRtl.value ? 'ساخن' : 'Hot', 2: isRtl.value ? 'دافئ' : 'Warm', 3: isRtl.value ? 'بارد' : 'Cold' }));
 const priorityColors = { 1: 'bg-red-100 text-red-700', 2: 'bg-amber-100 text-amber-700', 3: 'bg-blue-100 text-blue-700' };
 const priorityDotColors = { 1: '#ef4444', 2: '#f59e0b', 3: '#3b82f6' };
 
@@ -435,10 +441,10 @@ function formatDateTime(date) {
 function timeAgo(date) {
     if (!date) return '';
     const diff = Math.floor((new Date() - new Date(date)) / 1000);
-    if (diff < 60) return 'just now';
-    if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
-    if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
-    return Math.floor(diff / 86400) + 'd ago';
+    if (diff < 60) return isRtl.value ? 'الآن' : 'just now';
+    if (diff < 3600) return Math.floor(diff / 60) + (isRtl.value ? ' د' : 'm ago');
+    if (diff < 86400) return Math.floor(diff / 3600) + (isRtl.value ? ' س' : 'h ago');
+    return Math.floor(diff / 86400) + (isRtl.value ? ' ي' : 'd ago');
 }
 
 function getInitials(name) {
@@ -449,18 +455,18 @@ function getInitials(name) {
 const pipelineStatuses = ['new', 'contacted', 'qualified', 'appointment_booked', 'consultation_done', 'negotiation'];
 const currentStepIndex = pipelineStatuses.indexOf(props.lead.status);
 
-const activityTypes = [
-    { value: 'note', label: 'Note', icon: activityTypeIcons.note },
-    { value: 'call', label: 'Call', icon: activityTypeIcons.call },
+const activityTypes = computed(() => [
+    { value: 'note', label: isRtl.value ? 'ملاحظة' : 'Note', icon: activityTypeIcons.note },
+    { value: 'call', label: isRtl.value ? 'مكالمة' : 'Call', icon: activityTypeIcons.call },
     { value: 'whatsapp', label: 'WhatsApp', icon: activityTypeIcons.whatsapp },
-    { value: 'email', label: 'Email', icon: activityTypeIcons.email },
+    { value: 'email', label: isRtl.value ? 'بريد' : 'Email', icon: activityTypeIcons.email },
     { value: 'sms', label: 'SMS', icon: activityTypeIcons.sms },
-    { value: 'meeting', label: 'Meeting', icon: activityTypeIcons.meeting },
-];
+    { value: 'meeting', label: isRtl.value ? 'اجتماع' : 'Meeting', icon: activityTypeIcons.meeting },
+]);
 </script>
 
 <template>
-    <AdminLayout :title="`Lead: ${lead.full_name}`">
+    <AdminLayout :title="`${$t('a_lead')}: ${lead.full_name}`">
         <div class="space-y-6 pb-8">
 
             <!-- ===================== HEADER CARD ===================== -->
@@ -497,7 +503,7 @@ const activityTypes = [
                                 <div class="flex items-center gap-2 mt-2 text-sm text-gray-500 flex-wrap">
                                     <span v-if="lead.source" class="inline-flex items-center gap-1.5">
                                         <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
-                                        {{ lead.source?.name_en || 'Unknown source' }}
+                                        {{ (isRtl ? lead.source?.name_ar : lead.source?.name_en) || $t('a_unknown_source') }}
                                     </span>
                                     <span v-if="lead.campaign" class="text-gray-300">|</span>
                                     <span v-if="lead.campaign" class="inline-flex items-center gap-1.5">
@@ -507,7 +513,7 @@ const activityTypes = [
                                     <span v-if="lead.assigned_user" class="text-gray-300">|</span>
                                     <span v-if="lead.assigned_user" class="inline-flex items-center gap-1.5">
                                         <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
-                                        Assigned to <span class="font-medium text-gray-700">{{ lead.assigned_user.name }}</span>
+                                        {{ $t('a_assigned_to') }} <span class="font-medium text-gray-700">{{ lead.assigned_user.name }}</span>
                                     </span>
                                 </div>
                             </div>
@@ -536,7 +542,7 @@ const activityTypes = [
                                 </div>
                                 <div class="ltr:text-left rtl:text-right">
                                     <p class="text-[10px] uppercase tracking-widest text-gray-400 font-semibold">{{ $t('a_lead_score') }}</p>
-                                    <p class="text-xs font-medium text-gray-500">out of 100</p>
+                                    <p class="text-xs font-medium text-gray-500">{{ $t('a_out_of_100') }}</p>
                                 </div>
                             </div>
 
@@ -547,14 +553,14 @@ const activityTypes = [
                                     class="inline-flex items-center px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 shadow-sm bg-green-600 hover:bg-green-700 hover:shadow-md hover:-translate-y-0.5 text-white"
                                 >
                                     <svg class="w-4 h-4 ltr:mr-2 rtl:ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
-                                    Quick Send
+                                    {{ $t('a_quick_send') }}
                                 </button>
                                 <button v-if="can('leads.convert') && lead.status !== 'converted' && lead.status !== 'lost'"
                                     @click="openConvertModal"
                                     class="inline-flex items-center px-4 py-2.5 rounded-xl text-white text-sm font-medium transition-all duration-200 shadow-sm bg-emerald-600 hover:bg-emerald-700 hover:shadow-md hover:-translate-y-0.5"
                                 >
                                     <svg class="w-4 h-4 ltr:mr-2 rtl:ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                    Convert to Patient
+                                    {{ $t('a_convert_to_patient') }}
                                 </button>
                                 <Link v-if="can('leads.update')" :href="`/admin/leads/${lead.id}/edit`"
                                     class="inline-flex items-center px-4 py-2.5 rounded-xl text-white text-sm font-medium transition-all duration-200 shadow-sm hover:shadow-md hover:-translate-y-0.5"
@@ -632,7 +638,7 @@ const activityTypes = [
                                 </div>
                                 <!-- Language -->
                                 <div>
-                                    <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Language</label>
+                                    <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">{{ $t('a_language') }}</label>
                                     <div class="flex gap-1.5 bg-gray-100 p-1 rounded-xl">
                                         <button type="button" @click="quickSendForm.language = 'en'"
                                             :class="quickSendForm.language === 'en' ? 'bg-white text-[#C4A265] shadow-sm' : 'text-gray-500 hover:text-gray-700'"
@@ -656,7 +662,7 @@ const activityTypes = [
                                     :class="quickSendForm.channel === 'whatsapp' ? 'bg-green-600 hover:bg-green-700' : quickSendForm.channel === 'sms' ? 'bg-purple-600 hover:bg-purple-700' : 'bg-blue-600 hover:bg-blue-700'"
                                 >
                                     <svg class="w-4 h-4 ltr:mr-2 rtl:ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg>
-                                    {{ quickSendForm.channel === 'whatsapp' ? 'Send via WhatsApp' : quickSendForm.channel === 'sms' ? 'Log SMS' : 'Log Email' }}
+                                    {{ quickSendForm.channel === 'whatsapp' ? $t('a_send_via_whatsapp') : quickSendForm.channel === 'sms' ? $t('a_log_sms') : $t('a_log_email') }}
                                 </button>
                             </div>
                         </form>
@@ -709,12 +715,12 @@ const activityTypes = [
                     </div>
                     <div class="flex-1 min-w-0">
                         <p class="text-sm font-bold text-green-800">{{ $t('a_lead_converted_patient') }}</p>
-                        <p class="text-xs text-green-600 mt-0.5">Patient: {{ lead.patient.full_name }} ({{ lead.patient.file_number }})</p>
+                        <p class="text-xs text-green-600 mt-0.5">{{ $t('a_patient') }}: {{ lead.patient.full_name }} ({{ lead.patient.file_number }})</p>
                     </div>
                     <Link :href="`/admin/patients/${lead.patient.id}`"
                         class="px-5 py-2.5 text-sm font-medium text-white rounded-xl hover:shadow-md transition-all duration-200 shrink-0"
                         style="background: linear-gradient(135deg, #059669, #10b981);">
-                        View Patient
+                        {{ $t('a_view_patient') }}
                     </Link>
                 </div>
             </transition>
@@ -727,8 +733,8 @@ const activityTypes = [
                     </div>
                     <div>
                         <p class="text-sm font-bold text-red-800">{{ $t('a_lead_marked_lost') }}</p>
-                        <p class="text-xs text-red-600 mt-0.5">{{ lead.loss_reason || 'No reason provided' }}</p>
-                        <p class="text-xs text-red-400 mt-0.5">Lost on {{ formatDate(lead.lost_at) }}</p>
+                        <p class="text-xs text-red-600 mt-0.5">{{ lead.loss_reason || $t('a_no_reason_provided') }}</p>
+                        <p class="text-xs text-red-400 mt-0.5">{{ $t('a_lost_on') }} {{ formatDate(lead.lost_at) }}</p>
                     </div>
                 </div>
             </div>
@@ -748,7 +754,7 @@ const activityTypes = [
                         <div class="p-6">
                             <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4 flex items-center gap-2">
                                 <svg class="w-4 h-4 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" /></svg>
-                                Move to Stage
+                                {{ $t('a_move_to_stage') }}
                             </h3>
                             <div class="flex flex-wrap gap-2">
                                 <button v-for="s in ['new','contacted','qualified','appointment_booked','consultation_done','negotiation','lost']" :key="s"
@@ -779,7 +785,7 @@ const activityTypes = [
                             >
                                 <span class="flex items-center gap-2">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                    Activity Timeline
+                                    {{ $t('a_activity_timeline') }}
                                     <span v-if="activities?.length" class="text-[10px] px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">{{ activities.length }}</span>
                                 </span>
                             </button>
@@ -789,7 +795,7 @@ const activityTypes = [
                             >
                                 <span class="flex items-center gap-2">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                                    Follow-ups
+                                    {{ $t('a_follow_ups') }}
                                     <span v-if="followUps?.length" class="text-[10px] px-2 py-0.5 rounded-full bg-[#C4A265]/10 text-[#C4A265] font-bold">{{ followUps.length }}</span>
                                 </span>
                             </button>
@@ -801,7 +807,7 @@ const activityTypes = [
                             <form @submit.prevent="submitActivity" class="bg-gradient-to-br from-gray-50 to-gray-100/30 rounded-2xl p-5 space-y-4 border border-gray-100">
                                 <p class="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-2">
                                     <svg class="w-4 h-4 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
-                                    Log Activity
+                                    {{ $t('a_log_activity') }}
                                 </p>
                                 <!-- Type selector as tabs -->
                                 <div class="flex flex-wrap gap-1.5">
@@ -822,9 +828,9 @@ const activityTypes = [
                                         </div>
                                         <select v-model="activityForm.direction"
                                             class="w-full pl-10 pr-4 text-sm border border-gray-200 rounded-xl py-2.5 bg-white focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all duration-200">
-                                            <option value="">Direction</option>
-                                            <option value="inbound">Inbound</option>
-                                            <option value="outbound">Outbound</option>
+                                            <option value="">{{ $t('a_direction') }}</option>
+                                            <option value="inbound">{{ $t('a_inbound') }}</option>
+                                            <option value="outbound">{{ $t('a_outbound') }}</option>
                                         </select>
                                     </div>
                                     <div v-if="activityForm.type === 'call'" class="relative">
@@ -833,13 +839,13 @@ const activityTypes = [
                                         </div>
                                         <select v-model="activityForm.outcome"
                                             class="w-full pl-10 pr-4 text-sm border border-gray-200 rounded-xl py-2.5 bg-white focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all duration-200">
-                                            <option value="">Outcome</option>
-                                            <option value="successful">Successful</option>
-                                            <option value="no_answer">No Answer</option>
-                                            <option value="busy">Busy</option>
-                                            <option value="voicemail">Voicemail</option>
-                                            <option value="callback_requested">Callback Requested</option>
-                                            <option value="not_interested">Not Interested</option>
+                                            <option value="">{{ $t('a_outcome') }}</option>
+                                            <option value="successful">{{ $t('a_successful') }}</option>
+                                            <option value="no_answer">{{ $t('a_no_answer') }}</option>
+                                            <option value="busy">{{ $t('a_busy') }}</option>
+                                            <option value="voicemail">{{ $t('a_voicemail') }}</option>
+                                            <option value="callback_requested">{{ $t('a_callback_requested') }}</option>
+                                            <option value="not_interested">{{ $t('a_not_interested') }}</option>
                                         </select>
                                     </div>
                                 </div>
@@ -847,14 +853,14 @@ const activityTypes = [
                                     <div class="absolute top-3 left-4 pointer-events-none">
                                         <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="activityTypeIcons.note" /></svg>
                                     </div>
-                                    <textarea v-model="activityForm.description" rows="2" placeholder="What happened? Add notes..."
+                                    <textarea v-model="activityForm.description" rows="2" :placeholder="$t('a_what_happened_placeholder')"
                                         class="w-full text-sm border border-gray-200 rounded-xl py-3 pl-10 pr-4 resize-none bg-white focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all duration-200 placeholder:text-gray-400"></textarea>
                                 </div>
                                 <div class="flex justify-end">
                                     <button type="submit" :disabled="activityForm.processing"
                                         class="px-6 py-2.5 text-xs font-semibold text-white rounded-xl transition-all duration-200 shadow-sm hover:shadow-md hover:-translate-y-0.5 disabled:opacity-50"
                                         style="background: linear-gradient(135deg, #C4A265, #D4B87A);">
-                                        Log Activity
+                                        {{ $t('a_log_activity') }}
                                     </button>
                                 </div>
                             </form>
@@ -906,14 +912,14 @@ const activityTypes = [
                             <div class="flex justify-between items-center">
                                 <p class="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-2">
                                     <svg class="w-4 h-4 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                                    Scheduled Follow-ups
+                                    {{ $t('a_scheduled_follow_ups') }}
                                 </p>
                                 <button @click="showFollowUpForm = !showFollowUpForm"
                                     class="inline-flex items-center gap-2 text-xs font-semibold px-4 py-2.5 rounded-xl transition-all duration-200 shadow-sm hover:shadow-md hover:-translate-y-0.5 text-white"
                                     style="background: linear-gradient(135deg, #C4A265, #D4B87A);">
                                     <svg v-if="!showFollowUpForm" class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
                                     <svg v-else class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-                                    {{ showFollowUpForm ? 'Cancel' : 'Schedule Follow-up' }}
+                                    {{ showFollowUpForm ? $t('a_cancel') : $t('a_schedule_follow_up') }}
                                 </button>
                             </div>
 
@@ -931,8 +937,8 @@ const activityTypes = [
                                                 <option value="whatsapp">{{ $t('a_whatsapp') }}</option>
                                                 <option value="email">{{ $t('a_email') }}</option>
                                                 <option value="sms">{{ $t('a_sms') }}</option>
-                                                <option value="meeting">Meeting</option>
-                                                <option value="other">Other</option>
+                                                <option value="meeting">{{ $t('a_meeting') }}</option>
+                                                <option value="other">{{ $t('a_other') }}</option>
                                             </select>
                                         </div>
                                         <div class="relative">
@@ -950,14 +956,14 @@ const activityTypes = [
                                                 v-model="assigneeSearch"
                                                 @focus="showAssigneeDropdown = true"
                                                 @blur="setTimeout(() => showAssigneeDropdown = false, 200)"
-                                                placeholder="Search assignee..."
+                                                :placeholder="$t('a_search_assignee')"
                                                 class="w-full pl-10 pr-4 text-sm border border-gray-200 rounded-xl py-2.5 bg-white focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all"
                                             />
                                             <div v-if="showAssigneeDropdown && filteredAssigneeOptions.length" class="absolute z-20 mt-1 w-full bg-white border border-gray-200 rounded-xl shadow-lg max-h-48 overflow-y-auto">
                                                 <button type="button"
                                                     @mousedown.prevent="followUpForm.assigned_to = ''; assigneeSearch = ''; showAssigneeDropdown = false"
                                                     class="w-full text-left px-4 py-2.5 text-sm text-gray-400 hover:bg-gray-50 transition-colors">
-                                                    Assign to me
+                                                    {{ $t('a_assign_to_me') }}
                                                 </button>
                                                 <button type="button" v-for="u in filteredAssigneeOptions" :key="u.id"
                                                     @mousedown.prevent="selectAssignee(u)"
@@ -972,14 +978,14 @@ const activityTypes = [
                                         <div class="absolute top-3 left-4 pointer-events-none">
                                             <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="activityTypeIcons.note" /></svg>
                                         </div>
-                                        <textarea v-model="followUpForm.notes" rows="2" placeholder="Follow-up notes..."
+                                        <textarea v-model="followUpForm.notes" rows="2" :placeholder="$t('a_follow_up_notes_placeholder')"
                                             class="w-full text-sm border border-gray-200 rounded-xl py-3 pl-10 pr-4 resize-none bg-white focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all placeholder:text-gray-400"></textarea>
                                     </div>
                                     <div class="flex justify-end">
                                         <button type="submit" :disabled="followUpForm.processing"
                                             class="px-6 py-2.5 text-xs font-semibold text-white rounded-xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all disabled:opacity-50"
                                             style="background: linear-gradient(135deg, #C4A265, #D4B87A);">
-                                            Schedule
+                                            {{ $t('a_schedule') }}
                                         </button>
                                     </div>
                                 </form>
@@ -1013,7 +1019,7 @@ const activityTypes = [
                                                         'bg-gray-100 text-gray-600 ring-gray-500/10': fu.status === 'cancelled' || fu.status === 'rescheduled',
                                                     }"
                                                 >{{ fu.status }}</span>
-                                                <span v-if="fu.status === 'pending' && new Date(fu.scheduled_at) < new Date()" class="text-[10px] px-2.5 py-0.5 rounded-full bg-red-100 text-red-700 font-semibold ring-1 ring-inset ring-red-600/10 animate-pulse">Overdue</span>
+                                                <span v-if="fu.status === 'pending' && new Date(fu.scheduled_at) < new Date()" class="text-[10px] px-2.5 py-0.5 rounded-full bg-red-100 text-red-700 font-semibold ring-1 ring-inset ring-red-600/10 animate-pulse">{{ $t('a_overdue') }}</span>
                                             </div>
                                             <p class="text-xs text-gray-500 mt-1.5 flex items-center gap-1.5">
                                                 <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
@@ -1022,7 +1028,7 @@ const activityTypes = [
                                             <p v-if="fu.notes" class="text-xs text-gray-400 mt-1.5 leading-relaxed">{{ fu.notes }}</p>
                                             <p v-if="fu.result" class="text-xs text-green-600 mt-1.5 font-medium flex items-center gap-1">
                                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4" /></svg>
-                                                Result: {{ fu.result }}
+                                                {{ $t('a_result') }}: {{ fu.result }}
                                             </p>
                                         </div>
                                         <div class="flex items-center gap-2">
@@ -1032,13 +1038,13 @@ const activityTypes = [
                                             </span>
                                             <!-- Action buttons for pending -->
                                             <template v-if="fu.status === 'pending' && can('leads.update')">
-                                                <button @click="openComplete(fu)" title="Mark Complete" class="p-2 rounded-xl text-green-500 hover:bg-green-50 hover:shadow-sm transition-all duration-200">
+                                                <button @click="openComplete(fu)" :title="$t('a_mark_complete')" class="p-2 rounded-xl text-green-500 hover:bg-green-50 hover:shadow-sm transition-all duration-200">
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
                                                 </button>
-                                                <button @click="missFollowUp(fu.id)" title="Mark Missed" class="p-2 rounded-xl text-red-500 hover:bg-red-50 hover:shadow-sm transition-all duration-200">
+                                                <button @click="missFollowUp(fu.id)" :title="$t('a_mark_missed')" class="p-2 rounded-xl text-red-500 hover:bg-red-50 hover:shadow-sm transition-all duration-200">
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                                                 </button>
-                                                <button @click="openReschedule(fu)" title="Reschedule" class="p-2 rounded-xl text-amber-500 hover:bg-amber-50 hover:shadow-sm transition-all duration-200">
+                                                <button @click="openReschedule(fu)" :title="$t('a_reschedule')" class="p-2 rounded-xl text-amber-500 hover:bg-amber-50 hover:shadow-sm transition-all duration-200">
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                                                 </button>
                                             </template>
@@ -1050,16 +1056,16 @@ const activityTypes = [
                                         <div v-if="completingFollowUp === fu.id" class="mt-4 pt-4 border-t border-gray-100">
                                             <form @submit.prevent="submitComplete(fu.id)" class="flex items-end gap-3">
                                                 <div class="flex-1">
-                                                    <label class="text-xs font-medium text-gray-500 mb-1.5 block">Result / Notes (optional)</label>
+                                                    <label class="text-xs font-medium text-gray-500 mb-1.5 block">{{ $t('a_result_notes_optional') }}</label>
                                                     <div class="relative">
                                                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                                             <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4" /></svg>
                                                         </div>
-                                                        <input v-model="completeForm.result" type="text" placeholder="e.g. Client agreed to come for consultation"
+                                                        <input v-model="completeForm.result" type="text" :placeholder="$t('a_complete_result_placeholder')"
                                                             class="w-full pl-10 pr-4 text-sm border border-gray-200 rounded-xl py-2.5 focus:ring-2 focus:ring-green-300 focus:border-green-400 transition-all" />
                                                     </div>
                                                 </div>
-                                                <button type="submit" :disabled="completeForm.processing" class="px-5 py-2.5 text-xs font-semibold text-white bg-green-600 rounded-xl hover:bg-green-700 hover:-translate-y-0.5 transition-all shadow-sm">Done</button>
+                                                <button type="submit" :disabled="completeForm.processing" class="px-5 py-2.5 text-xs font-semibold text-white bg-green-600 rounded-xl hover:bg-green-700 hover:-translate-y-0.5 transition-all shadow-sm">{{ $t('a_done') }}</button>
                                                 <button type="button" @click="completingFollowUp = null" class="px-4 py-2.5 text-xs text-gray-500 hover:text-gray-700 rounded-xl hover:bg-gray-100 transition-all">{{ $t('a_cancel') }}</button>
                                             </form>
                                         </div>
@@ -1070,7 +1076,7 @@ const activityTypes = [
                                         <div v-if="reschedulingFollowUp === fu.id" class="mt-4 pt-4 border-t border-gray-100">
                                             <form @submit.prevent="submitReschedule(fu.id)" class="flex items-end gap-3">
                                                 <div class="flex-1">
-                                                    <label class="text-xs font-medium text-gray-500 mb-1.5 block">New date & time</label>
+                                                    <label class="text-xs font-medium text-gray-500 mb-1.5 block">{{ $t('a_new_date_time') }}</label>
                                                     <div class="relative">
                                                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                                             <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
@@ -1079,7 +1085,7 @@ const activityTypes = [
                                                             class="w-full pl-10 pr-4 text-sm border border-gray-200 rounded-xl py-2.5 focus:ring-2 focus:ring-amber-300 focus:border-amber-400 transition-all" />
                                                     </div>
                                                 </div>
-                                                <button type="submit" :disabled="rescheduleForm.processing || !rescheduleForm.scheduled_at" class="px-5 py-2.5 text-xs font-semibold text-white bg-amber-500 rounded-xl hover:bg-amber-600 hover:-translate-y-0.5 transition-all shadow-sm">Reschedule</button>
+                                                <button type="submit" :disabled="rescheduleForm.processing || !rescheduleForm.scheduled_at" class="px-5 py-2.5 text-xs font-semibold text-white bg-amber-500 rounded-xl hover:bg-amber-600 hover:-translate-y-0.5 transition-all shadow-sm">{{ $t('a_reschedule') }}</button>
                                                 <button type="button" @click="reschedulingFollowUp = null" class="px-4 py-2.5 text-xs text-gray-500 hover:text-gray-700 rounded-xl hover:bg-gray-100 transition-all">{{ $t('a_cancel') }}</button>
                                             </form>
                                         </div>
@@ -1089,8 +1095,8 @@ const activityTypes = [
                                     <div class="w-20 h-20 mx-auto rounded-2xl bg-gray-50 flex items-center justify-center mb-4 border border-gray-100">
                                         <svg class="w-10 h-10 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                                     </div>
-                                    <p class="text-sm font-medium text-gray-400">No follow-ups scheduled</p>
-                                    <p class="text-xs text-gray-300 mt-1">Schedule a follow-up to stay on track</p>
+                                    <p class="text-sm font-medium text-gray-400">{{ $t('a_no_follow_ups_scheduled') }}</p>
+                                    <p class="text-xs text-gray-300 mt-1">{{ $t('a_schedule_follow_up_hint') }}</p>
                                 </div>
                             </div>
                         </div>
@@ -1113,7 +1119,7 @@ const activityTypes = [
                             </div>
                             <div class="flex-1 min-w-0">
                                 <p class="text-xs font-bold text-amber-800">{{ $t('a_late_hour_warning') }}</p>
-                                <p class="text-[11px] text-amber-700 mt-0.5">It's currently outside business hours (9 PM - 8 AM). Consider scheduling a follow-up for tomorrow instead of calling now.</p>
+                                <p class="text-[11px] text-amber-700 mt-0.5">{{ $t('a_late_hour_description') }}</p>
                             </div>
                             <button @click="lateHourDismissed = true" class="p-1 rounded-lg text-amber-400 hover:text-amber-600 hover:bg-amber-100 transition-colors shrink-0">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
@@ -1130,21 +1136,21 @@ const activityTypes = [
                         <div class="p-5">
                             <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4 flex items-center gap-2">
                                 <svg class="w-4 h-4 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-                                Quick Actions
+                                {{ $t('a_quick_actions') }}
                             </h3>
                             <div class="grid grid-cols-2 gap-2.5">
                                 <a :href="`tel:${lead.phone}`" class="flex items-center justify-center gap-2 px-4 py-3.5 text-xs font-semibold rounded-xl border hover:shadow-sm hover:-translate-y-0.5 transition-all duration-200"
                                     :class="isLateHour && !lateHourDismissed ? 'text-gray-400 bg-gray-50 border-gray-200' : 'text-green-700 bg-green-50 border-green-100 hover:bg-green-100'">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
-                                    Call
+                                    {{ $t('a_call') }}
                                 </a>
                                 <a :href="`https://wa.me/${lead.phone.replace(/[^0-9]/g, '')}`" target="_blank" class="flex items-center justify-center gap-2 px-4 py-3.5 text-xs font-semibold text-emerald-700 bg-emerald-50 rounded-xl border border-emerald-100 hover:bg-emerald-100 hover:shadow-sm hover:-translate-y-0.5 transition-all duration-200">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
-                                    WhatsApp
+                                    {{ $t('a_whatsapp') }}
                                 </a>
                                 <a v-if="lead.email" :href="`mailto:${lead.email}`" class="flex items-center justify-center gap-2 px-4 py-3.5 text-xs font-semibold text-blue-700 bg-blue-50 rounded-xl border border-blue-100 hover:bg-blue-100 hover:shadow-sm hover:-translate-y-0.5 transition-all duration-200 col-span-2">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
-                                    Email
+                                    {{ $t('a_email') }}
                                 </a>
                             </div>
                         </div>
@@ -1159,7 +1165,7 @@ const activityTypes = [
                         <div class="p-5">
                             <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4 flex items-center gap-2">
                                 <svg class="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>
-                                Smart Contact
+                                {{ $t('a_smart_contact') }}
                             </h3>
 
                             <div class="space-y-3">
@@ -1202,11 +1208,11 @@ const activityTypes = [
                                 <div class="grid grid-cols-2 gap-2 pt-2 border-t border-gray-100">
                                     <div class="text-center p-2 rounded-lg bg-gray-50">
                                         <p class="text-lg font-bold text-gray-800">{{ smartContact.total_attempts }}</p>
-                                        <p class="text-[9px] text-gray-400 font-semibold uppercase">Attempts</p>
+                                        <p class="text-[9px] text-gray-400 font-semibold uppercase">{{ $t('a_attempts') }}</p>
                                     </div>
                                     <div class="text-center p-2 rounded-lg bg-green-50">
                                         <p class="text-lg font-bold text-green-700">{{ smartContact.successful_attempts }}</p>
-                                        <p class="text-[9px] text-green-500 font-semibold uppercase">Successful</p>
+                                        <p class="text-[9px] text-green-500 font-semibold uppercase">{{ $t('a_successful') }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -1222,7 +1228,7 @@ const activityTypes = [
                         <div class="p-5">
                             <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4 flex items-center gap-2">
                                 <svg class="w-4 h-4 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
-                                Contact Information
+                                {{ $t('a_contact_information') }}
                             </h3>
                             <div class="space-y-3.5">
                                 <div class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-gray-50 transition-all duration-200 -mx-2.5">
@@ -1240,7 +1246,7 @@ const activityTypes = [
                                         <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
                                     </div>
                                     <div class="flex-1 min-w-0">
-                                        <p class="text-[10px] text-gray-400 font-medium uppercase tracking-wider">Phone 2</p>
+                                        <p class="text-[10px] text-gray-400 font-medium uppercase tracking-wider">{{ $t('a_phone2') }}</p>
                                         <a :href="`tel:${lead.phone2}`" class="text-sm font-medium text-gray-800 hover:text-[#C4A265] transition-colors">{{ lead.phone2 }}</a>
                                     </div>
                                 </div>
@@ -1259,7 +1265,7 @@ const activityTypes = [
                                         <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                                     </div>
                                     <div class="flex-1 min-w-0">
-                                        <p class="text-[10px] text-gray-400 font-medium uppercase tracking-wider">Gender</p>
+                                        <p class="text-[10px] text-gray-400 font-medium uppercase tracking-wider">{{ $t('a_gender') }}</p>
                                         <p class="text-sm font-medium text-gray-800 capitalize">{{ lead.gender || '--' }}</p>
                                     </div>
                                 </div>
@@ -1268,7 +1274,7 @@ const activityTypes = [
                                         <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                                     </div>
                                     <div class="flex-1 min-w-0">
-                                        <p class="text-[10px] text-gray-400 font-medium uppercase tracking-wider">City</p>
+                                        <p class="text-[10px] text-gray-400 font-medium uppercase tracking-wider">{{ $t('a_city') }}</p>
                                         <p class="text-sm font-medium text-gray-800">{{ lead.city || '--' }}</p>
                                     </div>
                                 </div>
@@ -1277,7 +1283,7 @@ const activityTypes = [
                                         <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                     </div>
                                     <div class="flex-1 min-w-0">
-                                        <p class="text-[10px] text-gray-400 font-medium uppercase tracking-wider">Nationality</p>
+                                        <p class="text-[10px] text-gray-400 font-medium uppercase tracking-wider">{{ $t('a_nationality') }}</p>
                                         <p class="text-sm font-medium text-gray-800">{{ lead.nationality || '--' }}</p>
                                     </div>
                                 </div>
@@ -1294,16 +1300,16 @@ const activityTypes = [
                         <div class="p-5">
                             <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4 flex items-center gap-2">
                                 <svg class="w-4 h-4 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
-                                Lead Details
+                                {{ $t('a_lead_details') }}
                             </h3>
                             <div class="space-y-0">
                                 <div class="flex justify-between items-center py-3 border-b border-gray-50">
-                                    <span class="text-sm text-gray-500">Source</span>
-                                    <span v-if="lead.source" class="text-xs px-2.5 py-1 rounded-full font-medium" :style="{ backgroundColor: lead.source.color + '18', color: lead.source.color }">{{ lead.source.name_en }}</span>
+                                    <span class="text-sm text-gray-500">{{ $t('a_source') }}</span>
+                                    <span v-if="lead.source" class="text-xs px-2.5 py-1 rounded-full font-medium" :style="{ backgroundColor: lead.source.color + '18', color: lead.source.color }">{{ isRtl ? lead.source.name_ar : lead.source.name_en }}</span>
                                     <span v-else class="text-sm text-gray-300">--</span>
                                 </div>
                                 <div class="flex justify-between items-center py-3 border-b border-gray-50">
-                                    <span class="text-sm text-gray-500">Campaign</span>
+                                    <span class="text-sm text-gray-500">{{ $t('a_campaign') }}</span>
                                     <span class="text-sm font-medium text-gray-800">{{ lead.campaign?.name || '--' }}</span>
                                 </div>
                                 <div class="flex justify-between items-center py-3 border-b border-gray-50">
@@ -1312,7 +1318,7 @@ const activityTypes = [
                                         <span class="w-5 h-5 rounded-full flex items-center justify-center text-[8px] font-bold text-white" style="background: linear-gradient(135deg, #C4A265, #D4B87A);">{{ getInitials(lead.assigned_user.name) }}</span>
                                         {{ lead.assigned_user.name }}
                                     </span>
-                                    <span v-else class="text-sm text-gray-300">Unassigned</span>
+                                    <span v-else class="text-sm text-gray-300">{{ $t('a_unassigned') }}</span>
                                 </div>
                                 <div class="flex justify-between items-center py-3 border-b border-gray-50">
                                     <span class="text-sm text-gray-500">{{ $t('a_created_by') }}</span>
@@ -1324,10 +1330,10 @@ const activityTypes = [
                                 </div>
                                 <div class="flex justify-between items-center py-3 border-b border-gray-50">
                                     <span class="text-sm text-gray-500">{{ $t('a_last_contact') }}</span>
-                                    <span class="text-sm font-medium text-gray-800">{{ lead.last_contacted_at ? formatDate(lead.last_contacted_at) : 'Never' }}</span>
+                                    <span class="text-sm font-medium text-gray-800">{{ lead.last_contacted_at ? formatDate(lead.last_contacted_at) : $t('a_never') }}</span>
                                 </div>
                                 <div class="flex justify-between items-center py-3">
-                                    <span class="text-sm text-gray-500">Follow-ups</span>
+                                    <span class="text-sm text-gray-500">{{ $t('a_follow_ups') }}</span>
                                     <span class="text-sm font-bold px-2.5 py-0.5 rounded-full bg-[#C4A265]/10 text-[#C4A265]">{{ lead.follow_up_count }}</span>
                                 </div>
                             </div>
@@ -1343,7 +1349,7 @@ const activityTypes = [
                         <div class="p-5">
                             <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 flex items-center gap-2">
                                 <svg class="w-4 h-4 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
-                                Lead Score Breakdown
+                                {{ $t('a_lead_score_breakdown') }}
                             </h3>
                             <div class="space-y-3">
                                 <div class="flex items-center justify-between text-xs text-gray-500">
@@ -1356,9 +1362,9 @@ const activityTypes = [
                                     </div>
                                 </div>
                                 <div class="flex justify-between text-[10px] text-gray-400">
-                                    <span>Cold</span>
-                                    <span>Warm</span>
-                                    <span>Hot</span>
+                                    <span>{{ $t('a_cold') }}</span>
+                                    <span>{{ $t('a_warm') }}</span>
+                                    <span>{{ $t('a_hot') }}</span>
                                 </div>
                             </div>
                         </div>
@@ -1373,7 +1379,7 @@ const activityTypes = [
                         <div class="p-5">
                             <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 flex items-center gap-2">
                                 <svg class="w-4 h-4 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="activityTypeIcons.note" /></svg>
-                                Notes
+                                {{ $t('a_notes') }}
                             </h3>
                             <div class="bg-gradient-to-br from-gray-50 to-gray-100/30 rounded-xl p-4 border border-gray-100">
                                 <p class="text-sm text-gray-600 whitespace-pre-wrap leading-relaxed">{{ lead.notes }}</p>
@@ -1390,13 +1396,13 @@ const activityTypes = [
                         <div class="p-5">
                             <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 flex items-center gap-2">
                                 <svg class="w-4 h-4 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
-                                Interested Services
+                                {{ $t('a_interested_services') }}
                             </h3>
                             <div class="flex flex-wrap gap-2">
                                 <span v-for="sid in lead.interested_services" :key="sid"
                                     class="text-xs px-3 py-1.5 rounded-full border border-[#C4A265]/30 text-[#C4A265] bg-[#C4A265]/5 font-medium hover:bg-[#C4A265]/10 transition-colors duration-200"
                                 >
-                                    {{ services?.find(s => s.id === sid)?.name_en || `Service #${sid}` }}
+                                    {{ (isRtl ? services?.find(s => s.id === sid)?.name_ar : services?.find(s => s.id === sid)?.name_en) || `Service #${sid}` }}
                                 </span>
                             </div>
                         </div>
@@ -1421,7 +1427,7 @@ const activityTypes = [
                                     </div>
                                     <div>
                                         <h3 class="text-lg font-bold text-gray-800">{{ $t('a_mark_as_lost') }}</h3>
-                                        <p class="text-sm text-gray-500">Please provide a reason for losing this lead.</p>
+                                        <p class="text-sm text-gray-500">{{ $t('a_loss_reason_prompt') }}</p>
                                     </div>
                                 </div>
                                 <div class="relative">
@@ -1430,7 +1436,7 @@ const activityTypes = [
                                     </div>
                                     <textarea v-model="statusForm.loss_reason" rows="3"
                                         class="w-full text-sm border border-gray-200 rounded-xl py-3 pl-10 pr-4 resize-none focus:ring-2 focus:ring-red-300 focus:border-red-400 transition-all placeholder:text-gray-400"
-                                        placeholder="Reason for loss..."></textarea>
+                                        :placeholder="$t('a_loss_reason_placeholder')"></textarea>
                                 </div>
                                 <div class="flex justify-end gap-3 mt-5">
                                     <button @click="showStatusModal = false" class="px-5 py-2.5 text-sm text-gray-600 hover:text-gray-800 transition-all rounded-xl hover:bg-gray-100 font-medium">{{ $t('a_cancel') }}</button>
@@ -1465,10 +1471,10 @@ const activityTypes = [
                                 <div class="bg-emerald-50 rounded-xl p-4 mb-5 border border-emerald-100">
                                     <p class="text-xs font-semibold text-emerald-700 uppercase tracking-wider mb-2">{{ $t('a_new_patient_record') }}</p>
                                     <div class="grid grid-cols-2 gap-2 text-xs text-emerald-800">
-                                        <div><span class="text-emerald-500">Name:</span> {{ lead.full_name }}</div>
-                                        <div><span class="text-emerald-500">Phone:</span> {{ lead.phone }}</div>
-                                        <div v-if="lead.email"><span class="text-emerald-500">Email:</span> {{ lead.email }}</div>
-                                        <div v-if="lead.gender"><span class="text-emerald-500">Gender:</span> {{ lead.gender }}</div>
+                                        <div><span class="text-emerald-500">{{ $t('a_full_name') }}:</span> {{ lead.full_name }}</div>
+                                        <div><span class="text-emerald-500">{{ $t('a_phone') }}:</span> {{ lead.phone }}</div>
+                                        <div v-if="lead.email"><span class="text-emerald-500">{{ $t('a_email') }}:</span> {{ lead.email }}</div>
+                                        <div v-if="lead.gender"><span class="text-emerald-500">{{ $t('a_gender') }}:</span> {{ lead.gender }}</div>
                                     </div>
                                 </div>
 
@@ -1495,28 +1501,28 @@ const activityTypes = [
 
                                             <!-- Department Selection -->
                                             <div class="mb-4">
-                                                <label class="text-xs font-medium text-gray-600 mb-2 block">{{ isRtl ? 'القسم' : 'Department' }}</label>
+                                                <label class="text-xs font-medium text-gray-600 mb-2 block">{{ $t('a_department') }}</label>
                                                 <div class="grid grid-cols-2 gap-2">
                                                     <button type="button" @click="selectedDepartment = 'derma'"
                                                         class="flex items-center gap-2 px-4 py-3 rounded-xl border-2 text-sm font-medium transition-all"
                                                         :class="selectedDepartment === 'derma' ? 'border-emerald-500 bg-emerald-50 text-emerald-700' : 'border-gray-200 bg-gray-50 text-gray-600 hover:border-gray-300'">
                                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
-                                                        {{ isRtl ? 'جلدية وتجميل' : 'Dermatology' }}
+                                                        {{ $t('a_dermatology') }}
                                                     </button>
                                                     <button type="button" @click="selectedDepartment = 'dental'"
                                                         class="flex items-center gap-2 px-4 py-3 rounded-xl border-2 text-sm font-medium transition-all"
                                                         :class="selectedDepartment === 'dental' ? 'border-emerald-500 bg-emerald-50 text-emerald-700' : 'border-gray-200 bg-gray-50 text-gray-600 hover:border-gray-300'">
                                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                                        {{ isRtl ? 'أسنان' : 'Dental' }}
+                                                        {{ $t('a_dental') }}
                                                     </button>
                                                 </div>
                                             </div>
 
                                             <!-- Service (shown after department selected) -->
                                             <div v-if="selectedDepartment" class="mb-3">
-                                                <label class="text-xs font-medium text-gray-600 mb-1 block">{{ isRtl ? 'الخدمة' : 'Service' }}</label>
+                                                <label class="text-xs font-medium text-gray-600 mb-1 block">{{ $t('a_service') }}</label>
                                                 <select v-model="convertForm.service_id" class="w-full text-sm border border-gray-200 rounded-xl px-3 py-2.5 focus:ring-2 focus:ring-emerald-300 focus:border-emerald-400 bg-gray-50 focus:bg-white transition-all">
-                                                    <option value="">{{ isRtl ? '...اختر الخدمة' : 'Select service...' }}</option>
+                                                    <option value="">{{ $t('a_select_service') }}</option>
                                                     <option v-for="s in filteredServices" :key="s.id" :value="s.id">{{ isRtl ? s.name_ar : s.name_en }}</option>
                                                 </select>
                                                 <p v-if="convertForm.errors.service_id" class="text-xs text-red-500 mt-1">{{ convertForm.errors.service_id }}</p>
@@ -1524,25 +1530,25 @@ const activityTypes = [
 
                                             <!-- Doctor (shown after department selected) -->
                                             <div v-if="selectedDepartment" class="mb-3">
-                                                <label class="text-xs font-medium text-gray-600 mb-1 block">{{ isRtl ? 'الطبيب' : 'Doctor' }}</label>
+                                                <label class="text-xs font-medium text-gray-600 mb-1 block">{{ $t('a_doctor') }}</label>
                                                 <select v-model="convertForm.doctor_id" class="w-full text-sm border border-gray-200 rounded-xl px-3 py-2.5 focus:ring-2 focus:ring-emerald-300 focus:border-emerald-400 bg-gray-50 focus:bg-white transition-all">
-                                                    <option value="">{{ isRtl ? '...اختر الطبيب' : 'Select doctor...' }}</option>
+                                                    <option value="">{{ $t('a_select_doctor') }}</option>
                                                     <option v-for="d in filteredDoctors" :key="d.id" :value="d.id">{{ isRtl ? (d.name_ar || d.name) : (d.name_en || d.name) }}</option>
                                                 </select>
                                             </div>
 
                                             <!-- Available Dates -->
                                             <div class="mb-3">
-                                                <label class="text-xs font-medium text-gray-600 mb-1.5 block">{{ isRtl ? 'الأيام المتاحة' : 'Available Dates' }}</label>
+                                                <label class="text-xs font-medium text-gray-600 mb-1.5 block">{{ $t('a_available_dates') }}</label>
                                                 <div v-if="!convertForm.doctor_id" class="text-xs text-gray-400 bg-gray-50 rounded-xl p-4 text-center border border-dashed border-gray-200">
-                                                    {{ isRtl ? 'اختر طبيب لعرض الأيام المتاحة' : 'Select a doctor to see available dates' }}
+                                                    {{ $t('a_select_doctor_for_dates') }}
                                                 </div>
                                                 <div v-else-if="datesLoading" class="flex items-center justify-center gap-2 py-4 text-xs text-gray-400">
                                                     <svg class="w-4 h-4 animate-spin text-emerald-500" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
-                                                    {{ isRtl ? 'جاري تحميل الأيام...' : 'Loading available dates...' }}
+                                                    {{ $t('a_loading_dates') }}
                                                 </div>
                                                 <div v-else-if="availableDates.length === 0" class="text-xs text-amber-600 bg-amber-50 rounded-xl p-4 text-center border border-amber-200">
-                                                    {{ isRtl ? 'لا توجد أيام متاحة لهذا الطبيب' : 'No available dates for this doctor' }}
+                                                    {{ $t('a_no_available_dates') }}
                                                 </div>
                                                 <div v-else class="grid grid-cols-3 sm:grid-cols-4 gap-2 max-h-52 overflow-y-auto">
                                                     <button v-for="d in availableDates" :key="d" type="button"
@@ -1561,10 +1567,10 @@ const activityTypes = [
 
                                             <!-- Available Time Slots -->
                                             <div v-if="convertForm.appointment_date" class="mb-3">
-                                                <label class="text-xs font-medium text-gray-600 mb-1.5 block">{{ isRtl ? 'المواعيد المتاحة' : 'Available Time Slots' }}</label>
+                                                <label class="text-xs font-medium text-gray-600 mb-1.5 block">{{ $t('a_available_time_slots') }}</label>
                                                 <div v-if="slotsLoading" class="flex items-center justify-center gap-2 py-4 text-xs text-gray-400">
                                                     <svg class="w-4 h-4 animate-spin text-emerald-500" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
-                                                    {{ isRtl ? 'جاري تحميل المواعيد...' : 'Loading available slots...' }}
+                                                    {{ $t('a_loading_slots') }}
                                                 </div>
                                                 <div v-else-if="slotsError" class="text-xs text-amber-600 bg-amber-50 rounded-xl p-4 text-center border border-amber-200">
                                                     {{ slotsError }}
@@ -1581,15 +1587,15 @@ const activityTypes = [
                                                     </button>
                                                 </div>
                                                 <p v-if="convertForm.start_time" class="text-xs text-emerald-600 font-medium mt-2">
-                                                    {{ isRtl ? 'تم الاختيار:' : 'Selected:' }} {{ availableSlots.find(s => s.start === convertForm.start_time)?.start_12h }} — {{ availableSlots.find(s => s.start === convertForm.start_time)?.end_12h }}
+                                                    {{ $t('a_selected') }}: {{ availableSlots.find(s => s.start === convertForm.start_time)?.start_12h }} — {{ availableSlots.find(s => s.start === convertForm.start_time)?.end_12h }}
                                                 </p>
                                                 <p v-if="convertForm.errors.start_time" class="text-xs text-red-500 mt-1">{{ convertForm.errors.start_time }}</p>
                                             </div>
 
                                             <!-- Notes -->
                                             <div>
-                                                <label class="text-xs font-medium text-gray-600 mb-1 block">Notes (optional)</label>
-                                                <textarea v-model="convertForm.booking_notes" rows="2" placeholder="Booking notes..."
+                                                <label class="text-xs font-medium text-gray-600 mb-1 block">{{ $t('a_notes_optional') }}</label>
+                                                <textarea v-model="convertForm.booking_notes" rows="2" :placeholder="$t('a_booking_notes_placeholder')"
                                                     class="w-full text-sm border border-gray-200 rounded-xl px-3 py-2.5 focus:ring-2 focus:ring-emerald-300 focus:border-emerald-400 bg-gray-50 focus:bg-white transition-all resize-none"></textarea>
                                             </div>
                                         </div>
@@ -1608,9 +1614,9 @@ const activityTypes = [
                                     >
                                         <span v-if="convertForm.processing" class="flex items-center gap-2">
                                             <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
-                                            Converting...
+                                            {{ $t('a_converting') }}
                                         </span>
-                                        <span v-else>{{ convertForm.create_booking ? 'Convert & Book' : 'Convert to Patient' }}</span>
+                                        <span v-else>{{ convertForm.create_booking ? $t('a_convert_and_book') : $t('a_convert_to_patient') }}</span>
                                     </button>
                                 </div>
                             </div>
