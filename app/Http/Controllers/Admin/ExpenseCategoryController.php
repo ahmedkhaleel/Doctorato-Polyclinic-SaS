@@ -14,7 +14,7 @@ class ExpenseCategoryController extends Controller
 {
     public function index(Request $request): Response
     {
-        $categories = ExpenseCategory::withCount('expenses')
+        $categories = ExpenseCategory::withCount(['expenses', 'expenseItems'])
             ->orderBy('sort_order')
             ->get();
 
