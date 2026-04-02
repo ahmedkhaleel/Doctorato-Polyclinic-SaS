@@ -33,10 +33,43 @@ Route::get('/api/debug-notifications', function () {
         $checks['contact_messages_is_read'] = \Illuminate\Support\Facades\Schema::hasColumn('contact_messages', 'is_read');
         $checks['php_version'] = PHP_VERSION;
         $checks['laravel_version'] = app()->version();
+        $checks['db_driver'] = config('database.default');
+        $checks['db_version'] = \DB::select('SELECT VERSION() as v')[0]->v ?? 'unknown';
 
         if ($checks['notifications_table']) {
             $checks['notifications_count'] = \DB::table('notifications')->count();
             $checks['notifications_columns'] = \Illuminate\Support\Facades\Schema::getColumnListing('notifications');
+
+            // Test JSON_EXTRACT query (same as controller uses)
+            try {
+                $jsonTest = \DB::table('notifications')
+                    ->selectRaw("JSON_UNQUOTE(JSON_EXTRACT(data, '$.type')) as ntype, COUNT(*) as cnt")
+                    ->groupByRaw("JSON_UNQUOTE(JSON_EXTRACT(data, '$.type'))")
+                    ->pluck('cnt', 'ntype')
+                    ->toArray();
+                $checks['json_extract_works'] = true;
+                $checks['json_extract_result'] = $jsonTest;
+            } catch (\Throwable $e) {
+                $checks['json_extract_works'] = false;
+                $checks['json_extract_error'] = $e->getMessage();
+            }
+
+            // Test sample notification data
+            try {
+                $sample = \DB::table('notifications')->first();
+                if ($sample) {
+                    $checks['sample_notification'] = [
+                        'id' => $sample->id,
+                        'type' => $sample->type,
+                        'notifiable_type' => $sample->notifiable_type,
+                        'data_type' => gettype($sample->data),
+                        'data_preview' => mb_substr((string)$sample->data, 0, 200),
+                        'read_at' => $sample->read_at,
+                    ];
+                }
+            } catch (\Throwable $e) {
+                $checks['sample_error'] = $e->getMessage();
+            }
         }
 
         if ($checks['bookings_is_read']) {
@@ -46,11 +79,26 @@ Route::get('/api/debug-notifications', function () {
         // Check if user auth works
         $checks['auth_user'] = auth()->check() ? auth()->user()->name : 'not logged in';
 
+        // Test Inertia rendering (simulate controller)
+        try {
+            $checks['inertia_test'] = 'Inertia class exists: ' . class_exists(\Inertia\Inertia::class);
+        } catch (\Throwable $e) {
+            $checks['inertia_error'] = $e->getMessage();
+        }
+
         // Check vue page file
         $checks['vue_file_exists'] = file_exists(resource_path('js/Pages/Admin/Notifications/Index.vue'));
 
         // Check latest migration
         $checks['last_migration'] = \DB::table('migrations')->orderBy('id', 'desc')->value('migration');
+
+        // Check User model has Notifiable trait
+        try {
+            $userModel = new \App\Models\User();
+            $checks['user_has_notifiable'] = method_exists($userModel, 'notifications');
+        } catch (\Throwable $e) {
+            $checks['user_model_error'] = $e->getMessage();
+        }
 
         return response()->json($checks);
     } catch (\Throwable $e) {

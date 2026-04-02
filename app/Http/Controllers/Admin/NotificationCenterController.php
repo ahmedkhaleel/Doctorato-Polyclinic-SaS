@@ -69,7 +69,9 @@ class NotificationCenterController extends Controller
 
             if ($type) {
                 $query->where(function ($q) use ($type) {
-                    $q->whereRaw("JSON_EXTRACT(data, '$.type') = ?", [$type]);
+                    // Use LIKE for broader DB compatibility (MySQL + MariaDB)
+                    $q->where('data', 'like', '%"type":"' . $type . '"%')
+                      ->orWhere('data', 'like', "%\"type\": \"$type\"%");
                 });
             }
 
@@ -162,14 +164,22 @@ class NotificationCenterController extends Controller
             'today' => $notificationsTableExists ? $user->notifications()->whereDate('created_at', today())->count() : 0,
         ];
 
-        // Type breakdown for filter chips
+        // Type breakdown for filter chips (PHP-based for DB compatibility)
         $types = [];
         if ($notificationsTableExists && $user->notifications()->count() > 0) {
-            $types = $user->notifications()
-                ->selectRaw("JSON_UNQUOTE(JSON_EXTRACT(data, '$.type')) as ntype, COUNT(*) as cnt")
-                ->groupByRaw("JSON_UNQUOTE(JSON_EXTRACT(data, '$.type'))")
-                ->pluck('cnt', 'ntype')
-                ->toArray();
+            try {
+                $allNotifs = $user->notifications()->pluck('data');
+                $typeCounts = [];
+                foreach ($allNotifs as $data) {
+                    $d = is_array($data) ? $data : (is_string($data) ? json_decode($data, true) : []);
+                    $t = $d['type'] ?? 'general';
+                    $typeCounts[$t] = ($typeCounts[$t] ?? 0) + 1;
+                }
+                $types = $typeCounts;
+            } catch (\Throwable $e) {
+                Log::warning('Failed to compute notification types: ' . $e->getMessage());
+                $types = [];
+            }
         }
 
         return Inertia::render('Admin/Notifications/Index', [
