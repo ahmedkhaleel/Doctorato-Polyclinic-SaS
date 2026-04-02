@@ -173,8 +173,8 @@ function exportBookings() {
                 </div>
             </div>
 
-            <!-- Module Tabs -->
-            <div v-if="activeModules.length > 1" class="bg-white rounded-lg shadow-sm p-1.5 flex gap-1 flex-wrap">
+            <!-- Module Tabs — always show when at least 1 medical module is active -->
+            <div v-if="activeModules.length >= 1" class="bg-white rounded-lg shadow-sm p-1.5 flex gap-1 flex-wrap">
                 <button
                     @click="moduleFilter = ''"
                     class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200"
