@@ -16,6 +16,10 @@ git pull origin main
 echo "📦 Installing dependencies..."
 composer install --optimize-autoloader --no-dev 2>/dev/null || echo "⚠️  Composer not available, skipping..."
 
+# Run database migrations
+echo "🗃️  Running migrations..."
+php artisan migrate --force
+
 # Clear and rebuild caches
 echo "🔧 Clearing caches..."
 php artisan config:clear

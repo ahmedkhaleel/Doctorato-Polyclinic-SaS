@@ -64,23 +64,38 @@ class HandleInertiaRequests extends Middleware
             ],
             'settings' => fn () => $this->getSettings(),
             'modules' => fn () => ModuleManager::getForFrontend(),
-            'notifications' => fn () => $request->user() ? [
-                'unread_bookings' => Booking::where('is_read', false)->count(),
-                'unread_messages' => ContactMessage::where('is_read', false)->count(),
-                'unread_system' => $request->user()->unreadNotifications()->count(),
-            ] : null,
-            'doctor_notifications' => fn () => ($isDoctorRoute && $request->user())
-                ? [
-                    'unread_count' => $request->user()->unreadNotifications()->count(),
-                ]
-                : null,
-            'secretary_notifications' => fn () => ($isSecretaryRoute && $request->user())
-                ? [
-                    'unread_bookings' => Booking::where('is_read', false)->count(),
-                    'unread_messages' => ContactMessage::where('is_read', false)->count(),
-                    'unread_dental' => $request->user()->unreadNotifications()->count(),
-                ]
-                : null,
+            'notifications' => function () use ($request) {
+                if (!$request->user()) return null;
+                try {
+                    return [
+                        'unread_bookings' => Booking::where('is_read', false)->count(),
+                        'unread_messages' => ContactMessage::where('is_read', false)->count(),
+                        'unread_system' => $request->user()->unreadNotifications()->count(),
+                    ];
+                } catch (\Throwable) {
+                    return ['unread_bookings' => 0, 'unread_messages' => 0, 'unread_system' => 0];
+                }
+            },
+            'doctor_notifications' => function () use ($isDoctorRoute, $request) {
+                if (!$isDoctorRoute || !$request->user()) return null;
+                try {
+                    return ['unread_count' => $request->user()->unreadNotifications()->count()];
+                } catch (\Throwable) {
+                    return ['unread_count' => 0];
+                }
+            },
+            'secretary_notifications' => function () use ($isSecretaryRoute, $request) {
+                if (!$isSecretaryRoute || !$request->user()) return null;
+                try {
+                    return [
+                        'unread_bookings' => Booking::where('is_read', false)->count(),
+                        'unread_messages' => ContactMessage::where('is_read', false)->count(),
+                        'unread_dental' => $request->user()->unreadNotifications()->count(),
+                    ];
+                } catch (\Throwable) {
+                    return ['unread_bookings' => 0, 'unread_messages' => 0, 'unread_dental' => 0];
+                }
+            },
             'chat_notifications' => fn () => $request->user() ? [
                 'unread_count' => Message::where('receiver_id', $request->user()->id)
                     ->whereNull('read_at')->count(),

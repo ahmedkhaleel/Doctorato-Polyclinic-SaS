@@ -8,6 +8,7 @@ use App\Models\ContactMessage;
 use App\Services\AuditLogger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -20,92 +21,126 @@ class NotificationCenterController extends Controller
         $type = $request->input('type');
         $search = $request->input('search');
 
+        $notificationsTableExists = Schema::hasTable('notifications');
+        $bookingsHasIsRead = Schema::hasColumn('bookings', 'is_read');
+        $messagesHasIsRead = Schema::hasColumn('contact_messages', 'is_read');
+
         // Database notifications (paginated)
-        $query = $user->notifications()->latest();
+        $mapped = null;
+        if ($notificationsTableExists) {
+            $query = $user->notifications()->latest();
 
-        if ($filter === 'unread') {
-            $query->whereNull('read_at');
-        } elseif ($filter === 'read') {
-            $query->whereNotNull('read_at');
-        }
+            if ($filter === 'unread') {
+                $query->whereNull('read_at');
+            } elseif ($filter === 'read') {
+                $query->whereNotNull('read_at');
+            }
 
-        if ($type) {
-            $query->where(function ($q) use ($type) {
-                $q->whereRaw("JSON_EXTRACT(data, '$.type') = ?", [$type]);
+            if ($type) {
+                $query->where(function ($q) use ($type) {
+                    $q->whereRaw("JSON_EXTRACT(data, '$.type') = ?", [$type]);
+                });
+            }
+
+            if ($search) {
+                $query->where('data', 'like', "%{$search}%");
+            }
+
+            $notifications = $query->paginate(30)->withQueryString();
+
+            $mapped = $notifications->through(function ($notification) {
+                try {
+                    $data = is_array($notification->data) ? $notification->data : [];
+                    $notifType = $data['type'] ?? 'general';
+
+                    return [
+                        'id' => $notification->id,
+                        'type' => $notifType,
+                        'title' => $this->getTitle($data, $notifType),
+                        'message' => $data['message'] ?? $data['subtitle'] ?? '',
+                        'url' => $this->getUrl($data, $notifType),
+                        'priority' => $data['priority'] ?? 'normal',
+                        'read_at' => $notification->read_at?->toIso8601String(),
+                        'created_at' => $notification->created_at->toIso8601String(),
+                        'time_ago' => $notification->created_at->diffForHumans(),
+                    ];
+                } catch (\Throwable $e) {
+                    return [
+                        'id' => $notification->id,
+                        'type' => 'general',
+                        'title' => 'Notification',
+                        'message' => '',
+                        'url' => '/admin',
+                        'priority' => 'normal',
+                        'read_at' => $notification->read_at?->toIso8601String(),
+                        'created_at' => $notification->created_at?->toIso8601String() ?? now()->toIso8601String(),
+                        'time_ago' => $notification->created_at?->diffForHumans() ?? '',
+                    ];
+                }
             });
+        } else {
+            // Return empty paginator if table doesn't exist
+            $mapped = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 30);
         }
 
-        if ($search) {
-            $query->where('data', 'like', "%{$search}%");
+        // Unread bookings
+        $unreadBookings = collect();
+        if ($bookingsHasIsRead) {
+            $unreadBookings = Booking::where('is_read', false)
+                ->latest()
+                ->limit(50)
+                ->get()
+                ->map(fn (Booking $b) => [
+                    'id' => 'booking_' . $b->id,
+                    'type' => 'booking',
+                    'title' => $b->full_name,
+                    'message' => $b->service?->name_en ?? $b->phone,
+                    'url' => "/admin/bookings/{$b->id}",
+                    'priority' => 'normal',
+                    'read_at' => null,
+                    'created_at' => $b->created_at->toIso8601String(),
+                    'time_ago' => $b->created_at->diffForHumans(),
+                ]);
         }
 
-        $notifications = $query->paginate(30)->withQueryString();
-
-        $mapped = $notifications->through(function ($notification) {
-            $data = $notification->data;
-            $notifType = $data['type'] ?? 'general';
-
-            return [
-                'id' => $notification->id,
-                'type' => $notifType,
-                'title' => $this->getTitle($data, $notifType),
-                'message' => $data['message'] ?? $data['subtitle'] ?? '',
-                'url' => $this->getUrl($data, $notifType),
-                'priority' => $data['priority'] ?? 'normal',
-                'read_at' => $notification->read_at?->toIso8601String(),
-                'created_at' => $notification->created_at->toIso8601String(),
-                'time_ago' => $notification->created_at->diffForHumans(),
-            ];
-        });
-
-        // Unread bookings & messages
-        $unreadBookings = Booking::where('is_read', false)
-            ->latest()
-            ->limit(50)
-            ->get()
-            ->map(fn (Booking $b) => [
-                'id' => 'booking_' . $b->id,
-                'type' => 'booking',
-                'title' => $b->full_name,
-                'message' => $b->service?->name_en ?? $b->phone,
-                'url' => "/admin/bookings/{$b->id}",
-                'priority' => 'normal',
-                'read_at' => null,
-                'created_at' => $b->created_at->toIso8601String(),
-                'time_ago' => $b->created_at->diffForHumans(),
-            ]);
-
-        $unreadMessages = ContactMessage::where('is_read', false)
-            ->latest()
-            ->limit(50)
-            ->get()
-            ->map(fn (ContactMessage $m) => [
-                'id' => 'message_' . $m->id,
-                'type' => 'message',
-                'title' => $m->name,
-                'message' => $m->subject ?: mb_substr($m->message, 0, 80),
-                'url' => "/admin/contact-messages/{$m->id}",
-                'priority' => 'normal',
-                'read_at' => null,
-                'created_at' => $m->created_at->toIso8601String(),
-                'time_ago' => $m->created_at->diffForHumans(),
-            ]);
+        // Unread messages
+        $unreadMessages = collect();
+        if ($messagesHasIsRead) {
+            $unreadMessages = ContactMessage::where('is_read', false)
+                ->latest()
+                ->limit(50)
+                ->get()
+                ->map(fn (ContactMessage $m) => [
+                    'id' => 'message_' . $m->id,
+                    'type' => 'message',
+                    'title' => $m->name,
+                    'message' => $m->subject ?: mb_substr($m->message, 0, 80),
+                    'url' => "/admin/contact-messages/{$m->id}",
+                    'priority' => 'normal',
+                    'read_at' => null,
+                    'created_at' => $m->created_at->toIso8601String(),
+                    'time_ago' => $m->created_at->diffForHumans(),
+                ]);
+        }
 
         // Stats
         $stats = [
-            'total' => $user->notifications()->count(),
-            'unread' => $user->unreadNotifications()->count(),
-            'unread_bookings' => Booking::where('is_read', false)->count(),
-            'unread_messages' => ContactMessage::where('is_read', false)->count(),
-            'today' => $user->notifications()->whereDate('created_at', today())->count(),
+            'total' => $notificationsTableExists ? $user->notifications()->count() : 0,
+            'unread' => $notificationsTableExists ? $user->unreadNotifications()->count() : 0,
+            'unread_bookings' => $bookingsHasIsRead ? Booking::where('is_read', false)->count() : 0,
+            'unread_messages' => $messagesHasIsRead ? ContactMessage::where('is_read', false)->count() : 0,
+            'today' => $notificationsTableExists ? $user->notifications()->whereDate('created_at', today())->count() : 0,
         ];
 
         // Type breakdown for filter chips
-        $types = $user->notifications()
-            ->selectRaw("JSON_UNQUOTE(JSON_EXTRACT(data, '$.type')) as ntype, COUNT(*) as cnt")
-            ->groupByRaw("JSON_UNQUOTE(JSON_EXTRACT(data, '$.type'))")
-            ->pluck('cnt', 'ntype')
-            ->toArray();
+        $types = [];
+        if ($notificationsTableExists && $user->notifications()->count() > 0) {
+            $types = $user->notifications()
+                ->selectRaw("JSON_UNQUOTE(JSON_EXTRACT(data, '$.type')) as ntype, COUNT(*) as cnt")
+                ->groupByRaw("JSON_UNQUOTE(JSON_EXTRACT(data, '$.type'))")
+                ->pluck('cnt', 'ntype')
+                ->toArray();
+        }
 
         return Inertia::render('Admin/Notifications/Index', [
             'notifications' => $mapped,
@@ -119,23 +154,33 @@ class NotificationCenterController extends Controller
 
     public function markRead(Request $request, string $id): RedirectResponse
     {
-        $request->user()->notifications()->where('id', $id)->update(['read_at' => now()]);
+        if (Schema::hasTable('notifications')) {
+            $request->user()->notifications()->where('id', $id)->update(['read_at' => now()]);
+        }
 
         return back();
     }
 
     public function markAllRead(Request $request): RedirectResponse
     {
-        $request->user()->unreadNotifications->markAsRead();
-        Booking::where('is_read', false)->update(['is_read' => true]);
-        ContactMessage::where('is_read', false)->update(['is_read' => true]);
+        if (Schema::hasTable('notifications')) {
+            $request->user()->unreadNotifications->markAsRead();
+        }
+        if (Schema::hasColumn('bookings', 'is_read')) {
+            Booking::where('is_read', false)->update(['is_read' => true]);
+        }
+        if (Schema::hasColumn('contact_messages', 'is_read')) {
+            ContactMessage::where('is_read', false)->update(['is_read' => true]);
+        }
 
         return back()->with('success', 'All notifications marked as read.');
     }
 
     public function destroy(Request $request, string $id): RedirectResponse
     {
-        $request->user()->notifications()->where('id', $id)->delete();
+        if (Schema::hasTable('notifications')) {
+            $request->user()->notifications()->where('id', $id)->delete();
+        }
 
         AuditLogger::log('deleted', null, ['notification_id' => $id], 'Deleted a notification');
 
@@ -144,6 +189,10 @@ class NotificationCenterController extends Controller
 
     public function destroyAll(Request $request): RedirectResponse
     {
+        if (!Schema::hasTable('notifications')) {
+            return back();
+        }
+
         $readFilter = $request->input('only_read', false);
 
         if ($readFilter) {
