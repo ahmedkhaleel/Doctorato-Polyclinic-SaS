@@ -24,6 +24,43 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// ─── Debug Route (temporary) ──────────────────────────
+Route::get('/api/debug-notifications', function () {
+    try {
+        $checks = [];
+        $checks['notifications_table'] = \Illuminate\Support\Facades\Schema::hasTable('notifications');
+        $checks['bookings_is_read'] = \Illuminate\Support\Facades\Schema::hasColumn('bookings', 'is_read');
+        $checks['contact_messages_is_read'] = \Illuminate\Support\Facades\Schema::hasColumn('contact_messages', 'is_read');
+        $checks['php_version'] = PHP_VERSION;
+        $checks['laravel_version'] = app()->version();
+
+        if ($checks['notifications_table']) {
+            $checks['notifications_count'] = \DB::table('notifications')->count();
+            $checks['notifications_columns'] = \Illuminate\Support\Facades\Schema::getColumnListing('notifications');
+        }
+
+        if ($checks['bookings_is_read']) {
+            $checks['unread_bookings'] = \DB::table('bookings')->where('is_read', false)->count();
+        }
+
+        // Check if user auth works
+        $checks['auth_user'] = auth()->check() ? auth()->user()->name : 'not logged in';
+
+        // Check vue page file
+        $checks['vue_file_exists'] = file_exists(resource_path('js/Pages/Admin/Notifications/Index.vue'));
+
+        // Check latest migration
+        $checks['last_migration'] = \DB::table('migrations')->orderBy('id', 'desc')->value('migration');
+
+        return response()->json($checks);
+    } catch (\Throwable $e) {
+        return response()->json([
+            'error' => $e->getMessage(),
+            'file' => $e->getFile() . ':' . $e->getLine(),
+        ], 500);
+    }
+});
+
 // ─── Public API Routes (Time Slots) ──────────────────
 Route::get('/api/time-slots', [TimeSlotController::class, 'available'])->name('api.time-slots')->middleware('throttle:60,1');
 Route::get('/api/available-dates', [TimeSlotController::class, 'availableDates'])->name('api.available-dates')->middleware('throttle:60,1');

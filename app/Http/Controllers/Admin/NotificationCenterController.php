@@ -8,6 +8,7 @@ use App\Models\ContactMessage;
 use App\Services\AuditLogger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -16,8 +17,38 @@ class NotificationCenterController extends Controller
 {
     public function index(Request $request): Response
     {
+        try {
+            return $this->buildIndex($request);
+        } catch (\Throwable $e) {
+            Log::error('NotificationCenter index error: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            // Return empty page instead of 500
+            return Inertia::render('Admin/Notifications/Index', [
+                'notifications' => new \Illuminate\Pagination\LengthAwarePaginator([], 0, 30),
+                'bookingNotifications' => collect(),
+                'messageNotifications' => collect(),
+                'stats' => [
+                    'total' => 0,
+                    'unread' => 0,
+                    'unread_bookings' => 0,
+                    'unread_messages' => 0,
+                    'today' => 0,
+                ],
+                'types' => [],
+                'filters' => $request->only(['filter', 'type', 'search']),
+                'debugError' => config('app.debug') ? $e->getMessage() : null,
+            ]);
+        }
+    }
+
+    protected function buildIndex(Request $request): Response
+    {
         $user = $request->user();
-        $filter = $request->input('filter', 'all'); // all, unread, read
+        $filter = $request->input('filter', 'all');
         $type = $request->input('type');
         $search = $request->input('search');
 
@@ -79,7 +110,6 @@ class NotificationCenterController extends Controller
                 }
             });
         } else {
-            // Return empty paginator if table doesn't exist
             $mapped = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 30);
         }
 
