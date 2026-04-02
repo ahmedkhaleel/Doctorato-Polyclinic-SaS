@@ -1,10 +1,17 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { Link, router, useForm, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import SearchableSelect from '@/Components/Admin/SearchableSelect.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
 import { useCurrency } from '@/Composables/useCurrency.js';
+
+const headerLoaded = ref(false);
+const cardsLoaded = ref(false);
+onMounted(() => {
+    setTimeout(() => headerLoaded.value = true, 50);
+    setTimeout(() => cardsLoaded.value = true, 200);
+});
 
 const { can } = usePermissions();
 const { formatCurrency } = useCurrency();
@@ -213,123 +220,223 @@ const dentalRiskFlags = computed(() => props.dentalData?.riskFlags || []);
 <template>
     <AdminLayout :title="`Patient: ${patient.full_name}`">
         <div class="space-y-6">
-            <!-- Header -->
-            <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-4">
-                    <div v-if="patient.photo" class="w-16 h-16 rounded-full overflow-hidden flex-shrink-0">
-                        <img :src="patient.photo.startsWith('http') ? patient.photo : `/storage/${patient.photo}`" class="w-full h-full object-cover" />
-                    </div>
-                    <div v-else class="w-16 h-16 rounded-full flex items-center justify-center text-white text-xl font-bold flex-shrink-0" style="background-color: #C4A265;">
-                        {{ patient.full_name?.charAt(0) }}
-                    </div>
-                    <div>
-                        <h1 class="text-2xl font-bold text-gray-800">{{ patient.full_name }}</h1>
-                        <p class="text-sm font-mono" style="color: #C4A265;">{{ patient.file_number }}</p>
-                    </div>
+            <!-- ═══════ Hero Header Card ═══════ -->
+            <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 shadow-xl transition-all duration-700"
+                :class="headerLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'">
+                <!-- Decorative Elements -->
+                <div class="absolute inset-0 opacity-10">
+                    <div class="absolute -top-20 -end-20 w-64 h-64 rounded-full" style="background: radial-gradient(circle, #C4A265, transparent 70%);"></div>
+                    <div class="absolute -bottom-10 -start-10 w-48 h-48 rounded-full" style="background: radial-gradient(circle, #C4A265, transparent 70%);"></div>
                 </div>
-                <div class="flex space-x-3">
-                    <Link
-                        v-if="can('patients.update')"
-                        :href="`/admin/patients/${patient.id}/edit`"
-                        class="inline-flex items-center px-4 py-2 rounded-lg text-white text-sm font-medium transition"
-                        style="background-color: #C4A265;"
-                    >
-                        {{ $t('a_edit_patient') }}
-                    </Link>
-                    <Link
-                        :href="`/admin/patients/${patient.id}/timeline`"
-                        class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border border-gray-200 text-sm font-medium text-gray-600 hover:bg-gray-50 transition"
-                    >
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                        {{ isRtl ? 'السجل الزمني' : 'Timeline' }}
-                    </Link>
-                    <Link
-                        v-if="can('visits.create')"
-                        href="/admin/bookings/create"
-                        class="inline-flex items-center px-4 py-2 rounded-lg border text-sm font-medium transition"
-                        style="border-color: #C4A265; color: #C4A265;"
-                    >
-                        {{ $t('a_new_booking') }}
-                    </Link>
+
+                <div class="relative p-6 sm:p-8">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-6">
+                        <!-- Avatar -->
+                        <div class="relative group">
+                            <div class="absolute -inset-1 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 opacity-60 blur group-hover:opacity-80 transition-opacity duration-300"></div>
+                            <div v-if="patient.photo" class="relative w-20 h-20 rounded-2xl overflow-hidden ring-2 ring-white/20">
+                                <img :src="patient.photo.startsWith('http') ? patient.photo : `/storage/${patient.photo}`" class="w-full h-full object-cover" />
+                            </div>
+                            <div v-else class="relative w-20 h-20 rounded-2xl flex items-center justify-center text-2xl font-bold text-white ring-2 ring-white/20" style="background: linear-gradient(135deg, #C4A265, #A68B52);">
+                                {{ patient.full_name?.charAt(0) }}
+                            </div>
+                            <div class="absolute -bottom-1 -end-1 w-6 h-6 rounded-full flex items-center justify-center text-[10px]"
+                                :class="patient.is_active ? 'bg-emerald-500 text-white' : 'bg-gray-500 text-white'">
+                                <svg v-if="patient.is_active" class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
+                                <svg v-else class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+                            </div>
+                        </div>
+
+                        <!-- Info -->
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center gap-3 mb-1.5">
+                                <h1 class="text-2xl sm:text-3xl font-bold text-white tracking-tight truncate">{{ patient.full_name }}</h1>
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider"
+                                    :class="patient.is_active ? 'bg-emerald-500/20 text-emerald-300 ring-1 ring-emerald-500/30' : 'bg-gray-500/20 text-gray-400 ring-1 ring-gray-500/30'">
+                                    {{ patient.is_active ? $t('a_active') : $t('a_inactive') }}
+                                </span>
+                            </div>
+                            <div class="flex items-center gap-4 text-sm text-white/50">
+                                <span class="font-mono font-semibold text-amber-400/80">{{ patient.file_number }}</span>
+                                <span v-if="patient.phone" class="flex items-center gap-1">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
+                                    {{ patient.phone }}
+                                </span>
+                                <span v-if="patient.gender" class="flex items-center gap-1">
+                                    {{ patient.gender === 'male' ? '♂' : '♀' }} {{ patient.gender === 'male' ? $t('a_male') : $t('a_female') }}
+                                </span>
+                                <span v-if="patient.age">{{ patient.age }} {{ isRtl ? 'سنة' : 'yrs' }}</span>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="flex items-center gap-2 flex-shrink-0">
+                            <Link
+                                :href="`/admin/patients/${patient.id}/timeline`"
+                                class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-sm font-semibold text-white/80 hover:text-white bg-white/10 hover:bg-white/15 backdrop-blur-sm border border-white/10 transition-all duration-200"
+                            >
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                {{ isRtl ? 'السجل الزمني' : 'Timeline' }}
+                            </Link>
+                            <Link
+                                v-if="can('patients.update')"
+                                :href="`/admin/patients/${patient.id}/edit`"
+                                class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-sm font-semibold text-white/80 hover:text-white bg-white/10 hover:bg-white/15 backdrop-blur-sm border border-white/10 transition-all duration-200"
+                            >
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                                {{ $t('a_edit_patient') }}
+                            </Link>
+                            <Link
+                                v-if="can('visits.create')"
+                                :href="`/admin/bookings/create?patient_id=${patient.id}`"
+                                class="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-sm font-bold text-gray-900 shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all duration-200"
+                                style="background: linear-gradient(135deg, #C4A265, #D4B275);"
+                            >
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                                {{ $t('a_new_booking') }}
+                            </Link>
+                        </div>
+                    </div>
+
+                    <!-- Quick Stats Bar -->
+                    <div v-if="financialSummary" class="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3">
+                        <div class="bg-white/5 backdrop-blur-sm rounded-xl px-4 py-3 border border-white/10 hover:bg-white/10 transition-all duration-200">
+                            <p class="text-[10px] font-semibold text-white/40 uppercase tracking-wider">{{ $t('a_total_visits') }}</p>
+                            <p class="text-xl font-bold text-white mt-0.5">{{ financialSummary.total_visits }}</p>
+                        </div>
+                        <div class="bg-white/5 backdrop-blur-sm rounded-xl px-4 py-3 border border-white/10 hover:bg-white/10 transition-all duration-200">
+                            <p class="text-[10px] font-semibold text-white/40 uppercase tracking-wider">{{ $t('a_total_invoiced') }}</p>
+                            <p class="text-xl font-bold text-amber-400 mt-0.5">{{ formatCurrency(financialSummary.total_invoiced) }}</p>
+                        </div>
+                        <div class="bg-white/5 backdrop-blur-sm rounded-xl px-4 py-3 border border-white/10 hover:bg-white/10 transition-all duration-200">
+                            <p class="text-[10px] font-semibold text-white/40 uppercase tracking-wider">{{ $t('a_total_paid') }}</p>
+                            <p class="text-xl font-bold text-emerald-400 mt-0.5">{{ formatCurrency(financialSummary.total_paid) }}</p>
+                        </div>
+                        <div class="bg-white/5 backdrop-blur-sm rounded-xl px-4 py-3 border border-white/10 hover:bg-white/10 transition-all duration-200">
+                            <p class="text-[10px] font-semibold text-white/40 uppercase tracking-wider">{{ $t('a_outstanding') }}</p>
+                            <p class="text-xl font-bold mt-0.5" :class="financialSummary.outstanding_balance > 0 ? 'text-red-400' : 'text-emerald-400'">{{ formatCurrency(financialSummary.outstanding_balance) }}</p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Tabs -->
-            <div class="bg-white rounded-lg shadow-sm">
-                <div class="border-b border-gray-200">
-                    <nav class="flex -mb-px overflow-x-auto">
+            <!-- ═══════ Tab Navigation ═══════ -->
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 transition-all duration-500"
+                :class="cardsLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'">
+                <div class="px-4 pt-4 pb-0">
+                    <nav class="flex gap-1 overflow-x-auto pb-0 -mb-px">
                         <button
                             v-for="tab in tabs"
                             :key="tab.id"
                             @click="activeTab = tab.id"
-                            class="px-6 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition"
-                            :class="activeTab === tab.id ? 'border-current text-[#C4A265]' : 'border-transparent text-gray-500 hover:text-gray-700'"
-                            :style="activeTab === tab.id ? 'color: #C4A265;' : ''"
+                            class="relative px-5 py-3 text-sm font-semibold whitespace-nowrap rounded-t-xl transition-all duration-200"
+                            :class="activeTab === tab.id
+                                ? 'text-[#C4A265] bg-amber-50/50 border border-gray-200 border-b-white -mb-px z-10'
+                                : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50 border border-transparent'"
                         >
                             {{ tab.key ? $t(tab.key) : tab.label }}
+                            <span v-if="activeTab === tab.id" class="absolute bottom-0 inset-x-4 h-0.5 rounded-full" style="background-color: #C4A265;"></span>
                         </button>
                     </nav>
                 </div>
 
+                <div class="border-t border-gray-200"></div>
+
                 <div class="p-6">
                     <!-- Overview Tab -->
                     <div v-if="activeTab === 'overview'" class="space-y-6">
-                        <!-- Financial Summary Cards -->
-                        <div v-if="financialSummary" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-                            <div class="text-center p-4 bg-gray-50 rounded-xl border border-gray-100">
-                                <p class="text-[11px] text-gray-500 uppercase tracking-wider mb-1 font-medium">{{ $t('a_total_invoiced') }}</p>
-                                <p class="text-lg font-bold text-gray-800">{{ formatCurrency(financialSummary.total_invoiced) }}</p>
-                            </div>
-                            <div class="text-center p-4 bg-green-50 rounded-xl border border-green-100">
-                                <p class="text-[11px] text-gray-500 uppercase tracking-wider mb-1 font-medium">{{ $t('a_total_paid') }}</p>
-                                <p class="text-lg font-bold text-green-700">{{ formatCurrency(financialSummary.total_paid) }}</p>
-                            </div>
-                            <div class="text-center p-4 rounded-xl border" :class="financialSummary.outstanding_balance > 0 ? 'bg-red-50 border-red-100' : 'bg-green-50 border-green-100'">
-                                <p class="text-[11px] text-gray-500 uppercase tracking-wider mb-1 font-medium">{{ $t('a_outstanding') }}</p>
-                                <p class="text-lg font-bold" :class="financialSummary.outstanding_balance > 0 ? 'text-red-600' : 'text-green-700'">{{ formatCurrency(financialSummary.outstanding_balance) }}</p>
-                            </div>
-                            <div class="text-center p-4 rounded-xl border border-gray-100" style="background-color: rgba(196, 162, 101, 0.08);">
-                                <p class="text-[11px] text-gray-500 uppercase tracking-wider mb-1 font-medium">{{ $t('a_total_visits') }}</p>
-                                <p class="text-lg font-bold" style="color: #C4A265;">{{ financialSummary.total_visits }}</p>
-                            </div>
-                            <div class="text-center p-4 bg-blue-50 rounded-xl border border-blue-100">
-                                <p class="text-[11px] text-gray-500 uppercase tracking-wider mb-1 font-medium">{{ $t('a_completed') }}</p>
-                                <p class="text-lg font-bold text-blue-700">{{ financialSummary.completed_visits }}</p>
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="space-y-4">
-                                <h3 class="text-lg font-semibold text-gray-700">{{ $t('a_personal_info') }}</h3>
-                                <dl class="space-y-2">
-                                    <div class="flex justify-between text-sm"><dt class="text-gray-500">{{ $t('a_phone') }}</dt><dd class="text-gray-900">{{ patient.phone }}</dd></div>
-                                    <div v-if="patient.phone2" class="flex justify-between text-sm"><dt class="text-gray-500">{{ $t('a_phone2') }}</dt><dd class="text-gray-900">{{ patient.phone2 }}</dd></div>
-                                    <div v-if="patient.email" class="flex justify-between text-sm"><dt class="text-gray-500">{{ $t('a_email') }}</dt><dd class="text-gray-900">{{ patient.email }}</dd></div>
-                                    <div class="flex justify-between text-sm"><dt class="text-gray-500">{{ $t('a_gender') }}</dt><dd class="text-gray-900">{{ patient.gender === 'male' ? $t('a_male') : $t('a_female') }}</dd></div>
-                                    <div v-if="patient.date_of_birth" class="flex justify-between text-sm"><dt class="text-gray-500">{{ $t('a_date_of_birth') }}</dt><dd class="text-gray-900">{{ formatDate(patient.date_of_birth) }} ({{ patient.age }} yrs)</dd></div>
-                                    <div v-if="patient.nationality" class="flex justify-between text-sm"><dt class="text-gray-500">{{ $t('a_nationality') }}</dt><dd class="text-gray-900">{{ patient.nationality }}</dd></div>
-                                    <div v-if="patient.address" class="flex justify-between text-sm"><dt class="text-gray-500">{{ $t('a_address') }}</dt><dd class="text-gray-900">{{ patient.address }}</dd></div>
-                                    <div v-if="patient.occupation" class="flex justify-between text-sm"><dt class="text-gray-500">{{ $t('a_occupation') }}</dt><dd class="text-gray-900">{{ patient.occupation }}</dd></div>
-                                </dl>
-                            </div>
-                            <div class="space-y-4">
-                                <h3 class="text-lg font-semibold text-gray-700">{{ $t('a_clinic_info') }}</h3>
-                                <dl class="space-y-2">
-                                    <div class="flex justify-between text-sm"><dt class="text-gray-500">{{ $t('a_referral') }}</dt><dd class="text-gray-900">{{ referralLabels[patient.referral_source] || '-' }}</dd></div>
-                                    <div v-if="patient.referred_by" class="flex justify-between text-sm"><dt class="text-gray-500">{{ $t('a_referred_by') }}</dt><dd class="text-gray-900">{{ patient.referred_by }}</dd></div>
-                                    <div class="flex justify-between text-sm"><dt class="text-gray-500">{{ $t('a_total_visits') }}</dt><dd class="text-gray-900">{{ patient.visits?.length || 0 }}</dd></div>
-                                    <div class="flex justify-between text-sm"><dt class="text-gray-500">{{ $t('a_status') }}</dt>
-                                        <dd>
-                                            <span :class="patient.is_active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full">
-                                                {{ patient.is_active ? $t('a_active') : $t('a_inactive') }}
-                                            </span>
-                                        </dd>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <!-- Personal Info Card -->
+                            <div class="bg-gradient-to-br from-gray-50 to-white rounded-2xl border border-gray-100 overflow-hidden">
+                                <div class="px-5 py-3.5 border-b border-gray-100 flex items-center gap-2">
+                                    <div class="w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center">
+                                        <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                                    </div>
+                                    <h3 class="text-sm font-bold text-gray-800">{{ $t('a_personal_info') }}</h3>
+                                </div>
+                                <dl class="p-5 space-y-3">
+                                    <div class="flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-50 transition-colors">
+                                        <dt class="text-xs font-medium text-gray-500 flex items-center gap-2">
+                                            <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                                            {{ $t('a_phone') }}
+                                        </dt>
+                                        <dd class="text-sm font-semibold text-gray-800" dir="ltr">{{ patient.phone }}</dd>
+                                    </div>
+                                    <div v-if="patient.phone2" class="flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-50 transition-colors">
+                                        <dt class="text-xs font-medium text-gray-500">{{ $t('a_phone2') }}</dt>
+                                        <dd class="text-sm font-semibold text-gray-800" dir="ltr">{{ patient.phone2 }}</dd>
+                                    </div>
+                                    <div v-if="patient.email" class="flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-50 transition-colors">
+                                        <dt class="text-xs font-medium text-gray-500 flex items-center gap-2">
+                                            <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                                            {{ $t('a_email') }}
+                                        </dt>
+                                        <dd class="text-sm font-semibold text-gray-800">{{ patient.email }}</dd>
+                                    </div>
+                                    <div class="flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-50 transition-colors">
+                                        <dt class="text-xs font-medium text-gray-500">{{ $t('a_gender') }}</dt>
+                                        <dd class="text-sm font-semibold text-gray-800">{{ patient.gender === 'male' ? $t('a_male') : $t('a_female') }}</dd>
+                                    </div>
+                                    <div v-if="patient.date_of_birth" class="flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-50 transition-colors">
+                                        <dt class="text-xs font-medium text-gray-500 flex items-center gap-2">
+                                            <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                            {{ $t('a_date_of_birth') }}
+                                        </dt>
+                                        <dd class="text-sm font-semibold text-gray-800">{{ formatDate(patient.date_of_birth) }} <span class="text-xs text-gray-400 font-normal">({{ patient.age }} {{ isRtl ? 'سنة' : 'yrs' }})</span></dd>
+                                    </div>
+                                    <div v-if="patient.nationality" class="flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-50 transition-colors">
+                                        <dt class="text-xs font-medium text-gray-500">{{ $t('a_nationality') }}</dt>
+                                        <dd class="text-sm font-semibold text-gray-800">{{ patient.nationality }}</dd>
+                                    </div>
+                                    <div v-if="patient.address" class="flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-50 transition-colors">
+                                        <dt class="text-xs font-medium text-gray-500">{{ $t('a_address') }}</dt>
+                                        <dd class="text-sm font-semibold text-gray-800">{{ patient.address }}</dd>
+                                    </div>
+                                    <div v-if="patient.occupation" class="flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-50 transition-colors">
+                                        <dt class="text-xs font-medium text-gray-500">{{ $t('a_occupation') }}</dt>
+                                        <dd class="text-sm font-semibold text-gray-800">{{ patient.occupation }}</dd>
                                     </div>
                                 </dl>
+                            </div>
 
-                                <div v-if="patient.medical_notes" class="mt-4">
-                                    <h3 class="text-lg font-semibold text-gray-700 mb-2">{{ $t('a_medical_notes') }}</h3>
-                                    <p class="text-sm text-gray-600 bg-yellow-50 p-3 rounded-lg whitespace-pre-wrap">{{ patient.medical_notes }}</p>
+                            <!-- Clinic Info Card -->
+                            <div class="space-y-5">
+                                <div class="bg-gradient-to-br from-gray-50 to-white rounded-2xl border border-gray-100 overflow-hidden">
+                                    <div class="px-5 py-3.5 border-b border-gray-100 flex items-center gap-2">
+                                        <div class="w-7 h-7 rounded-lg flex items-center justify-center" style="background: rgba(196,162,101,0.1);">
+                                            <svg class="w-4 h-4" style="color: #C4A265;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                                        </div>
+                                        <h3 class="text-sm font-bold text-gray-800">{{ $t('a_clinic_info') }}</h3>
+                                    </div>
+                                    <dl class="p-5 space-y-3">
+                                        <div class="flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-50 transition-colors">
+                                            <dt class="text-xs font-medium text-gray-500">{{ $t('a_referral') }}</dt>
+                                            <dd class="text-sm font-semibold text-gray-800">{{ referralLabels[patient.referral_source] || '-' }}</dd>
+                                        </div>
+                                        <div v-if="patient.referred_by" class="flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-50 transition-colors">
+                                            <dt class="text-xs font-medium text-gray-500">{{ $t('a_referred_by') }}</dt>
+                                            <dd class="text-sm font-semibold text-gray-800">{{ patient.referred_by }}</dd>
+                                        </div>
+                                        <div class="flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-50 transition-colors">
+                                            <dt class="text-xs font-medium text-gray-500">{{ $t('a_total_visits') }}</dt>
+                                            <dd class="text-sm font-bold" style="color: #C4A265;">{{ patient.visits?.length || 0 }}</dd>
+                                        </div>
+                                        <div class="flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-50 transition-colors">
+                                            <dt class="text-xs font-medium text-gray-500">{{ $t('a_completed') }}</dt>
+                                            <dd class="text-sm font-bold text-emerald-600">{{ financialSummary?.completed_visits || 0 }}</dd>
+                                        </div>
+                                    </dl>
+                                </div>
+
+                                <!-- Medical Notes -->
+                                <div v-if="patient.medical_notes" class="rounded-2xl border-2 border-amber-100 overflow-hidden">
+                                    <div class="px-5 py-3 bg-amber-50 border-b border-amber-100 flex items-center gap-2">
+                                        <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
+                                        <h3 class="text-sm font-bold text-amber-800">{{ $t('a_medical_notes') }}</h3>
+                                    </div>
+                                    <div class="p-5 bg-amber-50/30">
+                                        <p class="text-sm text-gray-700 whitespace-pre-wrap leading-relaxed">{{ patient.medical_notes }}</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -337,37 +444,52 @@ const dentalRiskFlags = computed(() => props.dentalData?.riskFlags || []);
 
                     <!-- Visits Tab -->
                     <div v-if="activeTab === 'visits'">
-                        <table v-if="patient.visits?.length" class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">{{ $t('a_date') }}</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">{{ $t('a_type') }}</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">{{ $t('a_doctor') }}</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">{{ $t('a_service') }}</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">{{ $t('a_status') }}</th>
-                                    <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">{{ $t('a_actions') }}</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-200">
-                                <tr v-for="visit in patient.visits" :key="visit.id" class="hover:bg-gray-50">
-                                    <td class="px-4 py-3 text-sm">
-                                        <Link v-if="can('visits.view')" :href="`/admin/visits/${visit.id}`" class="font-medium hover:underline" style="color: #C4A265;">{{ formatDate(visit.visit_date) }}</Link>
-                                        <span v-else class="text-gray-900">{{ formatDate(visit.visit_date) }}</span>
-                                    </td>
-                                    <td class="px-4 py-3 text-sm text-gray-500 capitalize">{{ visit.visit_type }}</td>
-                                    <td class="px-4 py-3 text-sm">
-                                        <Link v-if="visit.doctor && can('doctors.view')" :href="`/admin/doctors/${visit.doctor.id}`" class="hover:underline" style="color: #C4A265;">{{ $localized(visit.doctor, 'name') }}</Link>
-                                        <span v-else class="text-gray-500">{{ visit.doctor ? $localized(visit.doctor, 'name') : '-' }}</span>
-                                    </td>
-                                    <td class="px-4 py-3 text-sm text-gray-500">{{ visit.service ? $localized(visit.service, 'name') : '-' }}</td>
-                                    <td class="px-4 py-3"><span :class="statusColors[visit.status]" class="px-2 text-xs leading-5 font-semibold rounded-full">{{ visit.status }}</span></td>
-                                    <td class="px-4 py-3 text-right">
-                                        <Link v-if="can('visits.view')" :href="`/admin/visits/${visit.id}`" class="text-sm font-medium hover:underline" style="color: #C4A265;">{{ $t('a_view') }}</Link>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <p v-else class="text-sm text-gray-500 text-center py-8">{{ $t('a_no_visits_yet') }}</p>
+                        <div v-if="patient.visits?.length" class="space-y-3">
+                            <div v-for="visit in patient.visits" :key="visit.id"
+                                class="group relative bg-white rounded-xl border border-gray-100 p-4 hover:border-gray-200 hover:shadow-md transition-all duration-200">
+                                <div class="flex items-center gap-4">
+                                    <!-- Date Circle -->
+                                    <div class="flex-shrink-0 w-14 h-14 rounded-xl flex flex-col items-center justify-center border border-gray-100"
+                                        :class="visit.status === 'completed' ? 'bg-emerald-50' : visit.status === 'cancelled' ? 'bg-red-50' : 'bg-amber-50'">
+                                        <span class="text-lg font-bold leading-none" :class="visit.status === 'completed' ? 'text-emerald-600' : visit.status === 'cancelled' ? 'text-red-500' : 'text-amber-600'">
+                                            {{ visit.visit_date ? new Date(visit.visit_date).getDate() : '-' }}
+                                        </span>
+                                        <span class="text-[9px] font-semibold text-gray-400 uppercase">
+                                            {{ visit.visit_date ? new Date(visit.visit_date).toLocaleDateString('en', { month: 'short' }) : '' }}
+                                        </span>
+                                    </div>
+
+                                    <!-- Visit Info -->
+                                    <div class="flex-1 min-w-0">
+                                        <div class="flex items-center gap-2 mb-1">
+                                            <span class="text-sm font-bold text-gray-800">{{ visit.service ? $localized(visit.service, 'name') : (visit.visit_type || '-') }}</span>
+                                            <span :class="statusColors[visit.status]" class="px-2 py-0.5 text-[10px] font-semibold rounded-full capitalize">{{ visit.status }}</span>
+                                        </div>
+                                        <div class="flex items-center gap-3 text-xs text-gray-500">
+                                            <span v-if="visit.doctor" class="flex items-center gap-1">
+                                                <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                                                {{ $localized(visit.doctor, 'name') }}
+                                            </span>
+                                            <span class="capitalize text-gray-400">{{ visit.visit_type }}</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Action -->
+                                    <Link v-if="can('visits.view')" :href="`/admin/visits/${visit.id}`"
+                                        class="flex-shrink-0 inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-semibold transition-all duration-200 opacity-70 group-hover:opacity-100"
+                                        style="color: #C4A265; background: rgba(196,162,101,0.08);">
+                                        {{ $t('a_view') }}
+                                        <svg class="w-3 h-3 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                                    </Link>
+                                </div>
+                            </div>
+                        </div>
+                        <div v-else class="text-center py-12">
+                            <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gray-50 flex items-center justify-center">
+                                <svg class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                            </div>
+                            <p class="text-sm text-gray-400 font-medium">{{ $t('a_no_visits_yet') }}</p>
+                        </div>
                     </div>
 
                     <!-- Packages Tab -->

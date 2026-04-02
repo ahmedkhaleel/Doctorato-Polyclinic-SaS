@@ -48,6 +48,17 @@ const patientSearch = ref('');
 const showPatientDropdown = ref(false);
 const selectedPatient = ref(null);
 
+// Auto-select patient from query param (e.g. from patient profile)
+const urlParams = new URLSearchParams(window.location.search);
+const preselectedPatientId = urlParams.get('patient_id');
+if (preselectedPatientId && props.patients) {
+    const found = props.patients.find(p => p.id == preselectedPatientId);
+    if (found) {
+        selectedPatient.value = found;
+        patientSearch.value = found.full_name;
+    }
+}
+
 // Step 2 - Services
 const serviceRows = reactive([createServiceRow()]);
 
