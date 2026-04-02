@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
 import { Link, router, useForm, usePage } from '@inertiajs/vue3';
 import SecretaryLayout from '@/Layouts/SecretaryLayout.vue';
 import QuickAddPatientModal from '@/Components/QuickAddPatientModal.vue';
@@ -187,6 +187,19 @@ const confirmForm = useForm({
 const patientSearch = ref('');
 const showPatientDropdown = ref(false);
 const selectedPatient = ref(null);
+
+/* Click-outside handler for patient dropdown */
+function handlePatientClickOutside(e) {
+    if (!e.target.closest('.patient-search-wrapper')) {
+        showPatientDropdown.value = false;
+    }
+}
+onMounted(() => {
+    document.addEventListener('click', handlePatientClickOutside);
+});
+onUnmounted(() => {
+    document.removeEventListener('click', handlePatientClickOutside);
+});
 
 /* Quick Add Patient Modal */
 const showNewPatientModal = ref(false);
@@ -1264,11 +1277,11 @@ function submitReschedule() {
                                         </button>
                                     </div>
                                     <!-- Search input -->
-                                    <div v-else class="relative">
+                                    <div v-else class="relative patient-search-wrapper">
                                         <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                                         <input v-model="patientSearch" type="text" placeholder="Search by name, phone, or file number..."
                                             class="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500 transition"
-                                            @focus="showPatientDropdown = true" @blur="setTimeout(() => showPatientDropdown = false, 200)" />
+                                            @focus="showPatientDropdown = true" />
                                         <div v-if="showPatientDropdown && filteredPatients.length > 0" class="absolute z-30 left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-lg max-h-48 overflow-y-auto">
                                             <button v-for="p in filteredPatients" :key="p.id" type="button" @click="selectPatient(p)"
                                                 class="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-teal-50 transition ltr:text-left rtl:ltr:text-right rtl:text-left border-b border-gray-50 last:border-b-0">
