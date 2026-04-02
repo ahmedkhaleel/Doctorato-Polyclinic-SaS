@@ -599,12 +599,12 @@ const todayProgress = computed(() => {
                                         {{ isRtl ? 'إكمال' : 'Complete' }}
                                     </button>
                                     <button v-if="visit.status === 'waiting' || visit.status === 'in_progress'" @click="showConfirmCancel = visit"
-                                        class="p-1.5 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all" title="Cancel Visit"
+                                        class="p-1.5 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all" :title="isRtl ? 'إلغاء الزيارة' : 'Cancel Visit'"
                                     >
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                                     </button>
                                     <Link :href="`/doctor/visits/${visit.id}`"
-                                        class="p-1.5 text-gray-300 group-hover:text-[#C4A265] hover:bg-[#C4A265]/5 rounded-lg transition-all" title="View Details"
+                                        class="p-1.5 text-gray-300 group-hover:text-[#C4A265] hover:bg-[#C4A265]/5 rounded-lg transition-all" :title="isRtl ? 'عرض التفاصيل' : 'View Details'"
                                     >
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
                                     </Link>
