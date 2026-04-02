@@ -116,11 +116,11 @@ function submit() {
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-medium text-gray-500 mb-1">Patient <span class="text-red-500">*</span></label>
-                        <SearchableSelect v-model="form.patient_id" :options="patientOptions" placeholder="Select Patient" searchPlaceholder="Search patients..." :error="form.errors.patient_id" />
+                        <SearchableSelect v-model="form.patient_id" :options="patientOptions" :placeholder="isRtl ? 'اختر المريض' : 'Select Patient'" :searchPlaceholder="isRtl ? 'بحث عن مريض...' : 'Search patients...'" :error="form.errors.patient_id" />
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-gray-500 mb-1">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
-                        <input v-model="form.notes" type="text" placeholder="Optional notes" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500" />
+                        <input v-model="form.notes" type="text" :placeholder="isRtl ? 'ملاحظات اختيارية' : 'Optional notes'" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500" />
                     </div>
                 </div>
             </div>
@@ -151,7 +151,7 @@ function submit() {
                         <tbody>
                             <tr v-for="(item, index) in form.items" :key="index" class="border-t border-gray-100">
                                 <td class="py-2 px-2">
-                                    <input v-model="item.description_en" @blur="prefillFromService(index)" type="text" placeholder="Service / Product" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500" />
+                                    <input v-model="item.description_en" @blur="prefillFromService(index)" type="text" :placeholder="isRtl ? 'الخدمة / المنتج' : 'Service / Product'" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500" />
                                     <p v-if="form.errors[`items.${index}.description_ar`]" class="mt-1 text-xs text-red-600">{{ form.errors[`items.${index}.description_ar`] }}</p>
                                 </td>
                                 <td class="py-2 px-2">
@@ -187,7 +187,7 @@ function submit() {
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6">
                     <h2 class="text-sm font-bold text-gray-800 mb-4 border-b border-gray-100 pb-2">Discount Code</h2>
                     <div v-if="!form.discount_code_id" class="flex gap-2">
-                        <input v-model="discountCodeInput" type="text" placeholder="Enter discount code" class="flex-1 px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500" />
+                        <input v-model="discountCodeInput" type="text" :placeholder="isRtl ? 'أدخل رمز الخصم' : 'Enter discount code'" class="flex-1 px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500" />
                         <button type="button" @click="applyDiscountCode" :disabled="!discountCodeInput" class="px-4 py-2.5 bg-teal-500 text-white rounded-xl text-sm font-semibold hover:bg-teal-600 transition disabled:opacity-50">{{ isRtl ? 'تطبيق' : 'Apply' }}</button>
                     </div>
                     <div v-else class="flex items-center justify-between bg-emerald-50 p-3 rounded-xl">

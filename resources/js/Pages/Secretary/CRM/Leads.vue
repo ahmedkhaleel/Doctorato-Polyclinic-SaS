@@ -79,13 +79,13 @@ const hasActiveFilters = () => search.value || statusFilter.value;
 </script>
 
 <template>
-    <SecretaryLayout title="My Leads">
+    <SecretaryLayout :title="isRtl ? 'عملائي' : 'My Leads'">
         <div class="space-y-6">
             <!-- Header -->
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
                     <h1 class="text-2xl font-bold text-gray-800">{{ isRtl ? 'العملاء المحتملين' : 'My Leads' }}</h1>
-                    <p class="text-sm text-gray-500 mt-1">All leads assigned to you</p>
+                    <p class="text-sm text-gray-500 mt-1">{{ isRtl ? 'جميع العملاء المحتملين المعينين لك' : 'All leads assigned to you' }}</p>
                 </div>
                 <Link href="/secretary/crm" class="inline-flex items-center px-4 py-2 rounded-lg text-white text-sm font-medium transition shadow-sm" style="background-color: #0d9488;">
                     <svg class="w-4 h-4 ltr:mr-1.5 rtl:ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
@@ -98,7 +98,7 @@ const hasActiveFilters = () => search.value || statusFilter.value;
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                     <div class="relative md:col-span-2">
                         <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                        <input v-model="search" type="text" placeholder="Search by name, phone, email..."
+                        <input v-model="search" type="text" :placeholder="isRtl ? 'بحث بالاسم، الهاتف، البريد...' : 'Search by name, phone, email...'"
                             class="w-full pl-10 pr-4 py-2.5 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500 transition" />
                     </div>
                     <select v-model="statusFilter" class="text-sm border border-gray-200 rounded-lg py-2.5 px-3 focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500">
@@ -108,7 +108,7 @@ const hasActiveFilters = () => search.value || statusFilter.value;
                 </div>
                 <div class="flex items-center justify-between mt-3" v-if="hasActiveFilters()">
                     <span class="text-xs text-gray-500">{{ leads.total }} results</span>
-                    <button @click="clearFilters" class="text-xs text-red-500 hover:underline">Clear all filters</button>
+                    <button @click="clearFilters" class="text-xs text-red-500 hover:underline">{{ isRtl ? 'مسح الفلاتر' : 'Clear all filters' }}</button>
                 </div>
             </div>
 
@@ -118,14 +118,14 @@ const hasActiveFilters = () => search.value || statusFilter.value;
                     <table class="w-full text-sm">
                         <thead>
                             <tr class="ltr:text-left rtl:ltr:text-right rtl:text-left text-xs text-gray-400 uppercase border-b border-gray-100 bg-gray-50/50">
-                                <th class="px-5 py-3 font-medium">Lead</th>
-                                <th class="px-5 py-3 font-medium">Contact</th>
+                                <th class="px-5 py-3 font-medium">{{ isRtl ? 'العميل' : 'Lead' }}</th>
+                                <th class="px-5 py-3 font-medium">{{ isRtl ? 'التواصل' : 'Contact' }}</th>
                                 <th class="px-5 py-3 font-medium">{{ isRtl ? 'المصدر' : 'Source' }}</th>
-                                <th class="px-5 py-3 font-medium text-center">Priority</th>
+                                <th class="px-5 py-3 font-medium text-center">{{ isRtl ? 'الأولوية' : 'Priority' }}</th>
                                 <th class="px-5 py-3 font-medium text-center">{{ isRtl ? 'الحالة' : 'Status' }}</th>
-                                <th class="px-5 py-3 font-medium text-center">Score</th>
+                                <th class="px-5 py-3 font-medium text-center">{{ isRtl ? 'النقاط' : 'Score' }}</th>
                                 <th class="px-5 py-3 font-medium">Next Follow-up</th>
-                                <th class="px-5 py-3 font-medium">Created</th>
+                                <th class="px-5 py-3 font-medium">{{ isRtl ? 'تاريخ الإنشاء' : 'Created' }}</th>
                                 <th class="px-5 py-3 font-medium"></th>
                             </tr>
                         </thead>
@@ -188,7 +188,7 @@ const hasActiveFilters = () => search.value || statusFilter.value;
                 <!-- Empty State -->
                 <div v-if="!leads.data?.length" class="px-6 py-16 text-center">
                     <svg class="w-12 h-12 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-                    <p class="text-gray-500 text-sm">No leads found</p>
+                    <p class="text-gray-500 text-sm">{{ isRtl ? 'لا توجد عملاء محتملين' : 'No leads found' }}</p>
                 </div>
 
                 <!-- Pagination -->

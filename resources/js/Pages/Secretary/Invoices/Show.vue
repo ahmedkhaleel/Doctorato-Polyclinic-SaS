@@ -160,15 +160,15 @@ function submitPayment() {
                             </div>
                             <div>
                                 <label class="block text-xs font-medium text-gray-500 mb-1">Reference #</label>
-                                <input v-model="paymentForm.reference_number" type="text" placeholder="Receipt / Transaction #" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500" />
+                                <input v-model="paymentForm.reference_number" type="text" :placeholder="isRtl ? 'رقم الإيصال / المعاملة' : 'Receipt / Transaction #'" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500" />
                             </div>
                             <div>
                                 <label class="block text-xs font-medium text-gray-500 mb-1">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
-                                <input v-model="paymentForm.notes" type="text" placeholder="Optional notes" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500" />
+                                <input v-model="paymentForm.notes" type="text" :placeholder="isRtl ? 'ملاحظات اختيارية' : 'Optional notes'" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500" />
                             </div>
                             <div class="flex items-end gap-2">
                                 <button type="submit" :disabled="paymentForm.processing" class="px-4 py-2.5 bg-teal-500 text-white rounded-xl text-sm font-semibold hover:bg-teal-600 transition disabled:opacity-50">
-                                    {{ paymentForm.processing ? 'Saving...' : 'Save Payment' }}
+                                    {{ paymentForm.processing ? (isRtl ? 'جاري الحفظ...' : 'Saving...') : (isRtl ? 'حفظ الدفعة' : 'Save Payment') }}
                                 </button>
                                 <button type="button" @click="showPaymentForm = false" class="px-4 py-2.5 border border-gray-200 text-gray-600 rounded-xl text-sm font-medium hover:bg-gray-50 transition">{{ isRtl ? 'إلغاء' : 'Cancel' }}</button>
                             </div>
@@ -197,7 +197,7 @@ function submitPayment() {
                                     <a :href="`/secretary/invoices/${invoice.id}/payments/${payment.id}/receipt`"
                                        target="_blank"
                                        class="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold rounded-lg border border-teal-300 text-teal-600 transition-all hover:bg-teal-50"
-                                       title="Print payment receipt">
+                                       :title="isRtl ? 'طباعة إيصال الدفع' : 'Print payment receipt'">
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" /></svg>
                                         {{ isRtl ? 'طباعة' : 'Print' }}
                                     </a>

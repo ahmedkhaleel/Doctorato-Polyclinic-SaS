@@ -149,7 +149,7 @@ function formatSelectedDate(dateStr) {
             </div>
             <div class="bg-white rounded-xl p-3 border border-gray-100 shadow-sm text-center">
                 <p class="text-lg font-bold text-blue-500">{{ stats?.pending_bookings || 0 }}</p>
-                <p class="text-[10px] text-gray-500 uppercase tracking-wide">Pending</p>
+                <p class="text-[10px] text-gray-500 uppercase tracking-wide">{{ isRtl ? 'معلق' : 'Pending' }}</p>
             </div>
             <div class="bg-white rounded-xl p-3 border border-gray-100 shadow-sm text-center">
                 <p class="text-lg font-bold text-emerald-500">{{ stats?.confirmed_bookings || 0 }}</p>

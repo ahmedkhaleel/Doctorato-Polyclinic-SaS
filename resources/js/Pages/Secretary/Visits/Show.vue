@@ -118,7 +118,7 @@ function cancelVisit() {
                         {{ statusLabels[visit.status] || visit.status }}
                     </span>
                 </div>
-                <p class="text-sm text-gray-500 ml-8">Visit #{{ visit.id }} &middot; {{ formatDate(visit.visit_date) }}</p>
+                <p class="text-sm text-gray-500 ml-8">{{ isRtl ? 'زيارة' : 'Visit' }} #{{ visit.id }} &middot; {{ formatDate(visit.visit_date) }}</p>
             </div>
 
             <!-- Action Buttons -->
@@ -195,7 +195,7 @@ function cancelVisit() {
                             </div>
 
                             <div>
-                                <dt class="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Visit Type</dt>
+                                <dt class="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">{{ isRtl ? 'نوع الزيارة' : 'Visit Type' }}</dt>
                                 <dd>
                                     <span
                                         :class="visitTypeBadgeColors[visit.visit_type] || 'bg-gray-100 text-gray-600'"
@@ -207,7 +207,7 @@ function cancelVisit() {
                             </div>
 
                             <div>
-                                <dt class="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Visit Date</dt>
+                                <dt class="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">{{ isRtl ? 'تاريخ الزيارة' : 'Visit Date' }}</dt>
                                 <dd class="text-sm text-gray-900">{{ formatDate(visit.visit_date) }}</dd>
                             </div>
 
@@ -225,17 +225,17 @@ function cancelVisit() {
                             </div>
 
                             <div v-if="visit.session_number">
-                                <dt class="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Session Number</dt>
+                                <dt class="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">{{ isRtl ? 'رقم الجلسة' : 'Session Number' }}</dt>
                                 <dd class="text-sm text-gray-900">Session #{{ visit.session_number }}</dd>
                             </div>
 
                             <div>
-                                <dt class="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Created At</dt>
+                                <dt class="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">{{ isRtl ? 'تاريخ الإنشاء' : 'Created At' }}</dt>
                                 <dd class="text-sm text-gray-500">{{ formatDateTime(visit.created_at) }}</dd>
                             </div>
 
                             <div v-if="visit.updated_at !== visit.created_at">
-                                <dt class="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Last Updated</dt>
+                                <dt class="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">{{ isRtl ? 'آخر تحديث' : 'Last Updated' }}</dt>
                                 <dd class="text-sm text-gray-500">{{ formatDateTime(visit.updated_at) }}</dd>
                             </div>
                         </dl>
@@ -259,7 +259,7 @@ function cancelVisit() {
                         <div v-for="prescription in visit.prescriptions" :key="prescription.id" class="p-5">
                             <div class="flex items-start justify-between gap-4">
                                 <div class="flex-1">
-                                    <h3 class="text-sm font-medium text-gray-900 mb-1">Prescription #{{ prescription.id }}</h3>
+                                    <h3 class="text-sm font-medium text-gray-900 mb-1">{{ isRtl ? 'وصفة' : 'Prescription' }} #{{ prescription.id }}</h3>
                                     <p v-if="prescription.notes" class="text-sm text-gray-600">{{ prescription.notes }}</p>
                                     <div v-if="prescription.items && prescription.items.length" class="mt-3 space-y-1.5">
                                         <div v-for="item in prescription.items" :key="item.id" class="flex items-center gap-2 text-sm">
@@ -382,7 +382,7 @@ function cancelVisit() {
                             </div>
                             <div>
                                 <p class="text-sm font-semibold text-gray-900">{{ visit.patient?.full_name || '-' }}</p>
-                                <p v-if="visit.patient?.file_number" class="text-xs text-teal-600 font-mono">File #{{ visit.patient.file_number }}</p>
+                                <p v-if="visit.patient?.file_number" class="text-xs text-teal-600 font-mono">{{ isRtl ? 'ملف' : 'File' }} #{{ visit.patient.file_number }}</p>
                             </div>
                         </div>
                         <div class="space-y-3">
@@ -420,11 +420,11 @@ function cancelVisit() {
                     </div>
                     <div class="p-6 space-y-3">
                         <div class="flex items-center justify-between text-sm">
-                            <span class="text-gray-500">Invoice #</span>
+                            <span class="text-gray-500">{{ isRtl ? 'فاتورة #' : 'Invoice #' }}</span>
                             <span class="font-mono font-medium text-gray-900">{{ visit.invoice.invoice_number || visit.invoice.id }}</span>
                         </div>
                         <div v-if="visit.invoice.subtotal != null" class="flex items-center justify-between text-sm">
-                            <span class="text-gray-500">Subtotal</span>
+                            <span class="text-gray-500">{{ isRtl ? 'المجموع الفرعي' : 'Subtotal' }}</span>
                             <span class="text-gray-700">{{ Number(visit.invoice.subtotal).toFixed(2) }}</span>
                         </div>
                         <div v-if="visit.invoice.discount_amount != null && visit.invoice.discount_amount > 0" class="flex items-center justify-between text-sm">
@@ -453,7 +453,7 @@ function cancelVisit() {
 
                 <!-- Linked Booking -->
                 <div v-if="visit.booking" class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                    <h3 class="text-sm font-semibold text-gray-700 mb-3">Linked Booking</h3>
+                    <h3 class="text-sm font-semibold text-gray-700 mb-3">{{ isRtl ? 'الحجز المرتبط' : 'Linked Booking' }}</h3>
                     <Link :href="`/secretary/bookings/${visit.booking.id}`" class="block p-3 rounded-lg border border-teal-200 bg-teal-50/50 hover:border-teal-300 transition group">
                         <div class="flex items-center justify-between">
                             <p class="text-sm font-semibold text-gray-900 group-hover:text-teal-600">{{ visit.booking.booking_number || `#${visit.booking.id}` }}</p>
@@ -475,7 +475,7 @@ function cancelVisit() {
 
                 <!-- Quick Actions -->
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                    <h3 class="text-sm font-semibold text-gray-700 mb-3">Quick Actions</h3>
+                    <h3 class="text-sm font-semibold text-gray-700 mb-3">{{ isRtl ? 'إجراءات سريعة' : 'Quick Actions' }}</h3>
                     <div class="space-y-2">
                         <Link
                             href="/secretary/visits"

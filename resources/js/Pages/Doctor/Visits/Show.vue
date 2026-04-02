@@ -205,6 +205,16 @@ function bpClassification(sys, dia) {
     if (sys >= 120 && dia < 80) return { label: isRtl.value ? 'مرتفع' : 'Elevated', color: 'text-yellow-600 bg-yellow-50' };
     return { label: isRtl.value ? 'طبيعي' : 'Normal', color: 'text-green-600 bg-green-50' };
 }
+
+function formatDate(date) {
+    if (!date) return '-';
+    const d = new Date(date);
+    const today = new Date();
+    const yesterday = new Date(today); yesterday.setDate(yesterday.getDate() - 1);
+    if (d.toDateString() === today.toDateString()) return isRtl.value ? 'اليوم' : 'Today';
+    if (d.toDateString() === yesterday.toDateString()) return isRtl.value ? 'أمس' : 'Yesterday';
+    return d.toLocaleDateString(isRtl.value ? 'ar-EG' : 'en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+}
 </script>
 
 <template>
@@ -238,10 +248,10 @@ function bpClassification(sys, dia) {
                         <div class="flex items-center gap-3 text-sm text-gray-400">
                             <span class="flex items-center gap-1">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                                {{ visit.visit_date }}
+                                {{ formatDate(visit.visit_date) }}
                             </span>
                             <span class="text-gray-600">&middot;</span>
-                            <span>{{ visit.service?.name_en || visit.visit_type }}</span>
+                            <span>{{ (isRtl ? (visit.service?.name_ar || visit.service?.name_en) : visit.service?.name_en) || visit.visit_type }}</span>
                         </div>
                     </div>
 
@@ -915,10 +925,10 @@ function bpClassification(sys, dia) {
                         <h3 class="text-sm font-bold text-gray-800">{{ isRtl ? 'تفاصيل الزيارة' : 'Visit Details' }}</h3>
                     </div>
                     <div class="p-6 space-y-3 text-sm">
-                        <div class="flex justify-between"><span class="text-gray-500">{{ isRtl ? 'النوع' : 'Type' }}</span><span class="text-gray-800 capitalize">{{ visit.visit_type }}</span></div>
-                        <div class="flex justify-between"><span class="text-gray-500">{{ isRtl ? 'الخدمة' : 'Service' }}</span><span class="text-gray-800">{{ visit.service?.name_en || '-' }}</span></div>
-                        <div v-if="visit.started_at" class="flex justify-between"><span class="text-gray-500">{{ isRtl ? 'بدأت' : 'Started' }}</span><span class="text-gray-800">{{ visit.started_at }}</span></div>
-                        <div v-if="visit.completed_at" class="flex justify-between"><span class="text-gray-500">{{ isRtl ? 'اكتملت' : 'Completed' }}</span><span class="text-gray-800">{{ visit.completed_at }}</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">{{ isRtl ? 'النوع' : 'Type' }}</span><span class="text-gray-800 capitalize">{{ isRtl ? ({ consultation: 'استشارة', session: 'جلسة', follow_up: 'متابعة' }[visit.visit_type] || visit.visit_type) : visit.visit_type }}</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">{{ isRtl ? 'الخدمة' : 'Service' }}</span><span class="text-gray-800">{{ (isRtl ? (visit.service?.name_ar || visit.service?.name_en) : visit.service?.name_en) || '-' }}</span></div>
+                        <div v-if="visit.started_at" class="flex justify-between"><span class="text-gray-500">{{ isRtl ? 'بدأت' : 'Started' }}</span><span class="text-gray-800">{{ new Date(visit.started_at).toLocaleTimeString(isRtl ? 'ar-EG' : 'en-GB', { hour: '2-digit', minute: '2-digit' }) }}</span></div>
+                        <div v-if="visit.completed_at" class="flex justify-between"><span class="text-gray-500">{{ isRtl ? 'اكتملت' : 'Completed' }}</span><span class="text-gray-800">{{ new Date(visit.completed_at).toLocaleTimeString(isRtl ? 'ar-EG' : 'en-GB', { hour: '2-digit', minute: '2-digit' }) }}</span></div>
                         <div v-if="visit.commission_amount" class="flex justify-between border-t border-gray-100 pt-3 mt-3">
                             <span class="text-gray-500">{{ isRtl ? 'العمولة' : 'Commission' }}</span>
                             <span class="font-bold text-[#C4A265] text-base">{{ formatCurrency(visit.commission_amount) }}</span>
@@ -970,7 +980,7 @@ function bpClassification(sys, dia) {
                             </div>
                             <div class="bg-gray-50 rounded-xl p-3 mb-5">
                                 <p class="text-sm text-gray-600">Patient: <strong>{{ visit.patient?.full_name }}</strong></p>
-                                <p class="text-sm text-gray-600">Service: <strong>{{ visit.service?.name_en || visit.visit_type }}</strong></p>
+                                <p class="text-sm text-gray-600">{{ isRtl ? 'الخدمة' : 'Service' }}: <strong>{{ (isRtl ? (visit.service?.name_ar || visit.service?.name_en) : visit.service?.name_en) || visit.visit_type }}</strong></p>
                             </div>
                             <div class="flex justify-end gap-2">
                                 <button @click="showConfirmComplete = false" class="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors">{{ isRtl ? 'إلغاء' : 'Cancel' }}</button>

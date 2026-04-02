@@ -128,14 +128,14 @@ function getDoctorName(doctorId) {
         <div class="grid lg:grid-cols-3 gap-6 mb-6">
             <!-- Contact & Personal -->
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6">
-                <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Contact Details</h3>
+                <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">{{ isRtl ? 'معلومات الاتصال' : 'Contact Details' }}</h3>
                 <div class="space-y-3 text-sm">
                     <div class="flex justify-between">
                         <span class="text-gray-500">{{ isRtl ? 'الهاتف' : 'Phone' }}</span>
                         <span class="font-medium text-gray-800">{{ patient.phone || '-' }}</span>
                     </div>
                     <div v-if="patient.phone2" class="flex justify-between">
-                        <span class="text-gray-500">Phone 2</span>
+                        <span class="text-gray-500">{{ isRtl ? 'الهاتف 2' : 'Phone 2' }}</span>
                         <span class="font-medium text-gray-800">{{ patient.phone2 }}</span>
                     </div>
                     <div class="flex justify-between">
@@ -151,7 +151,7 @@ function getDoctorName(doctorId) {
 
             <!-- Personal Details -->
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6">
-                <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Personal Details</h3>
+                <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">{{ isRtl ? 'البيانات الشخصية' : 'Personal Details' }}</h3>
                 <div class="space-y-3 text-sm">
                     <div class="flex justify-between">
                         <span class="text-gray-500">{{ isRtl ? 'الجنس' : 'Gender' }}</span>
@@ -170,11 +170,11 @@ function getDoctorName(doctorId) {
                         <span class="font-medium text-gray-800">{{ patient.occupation || '-' }}</span>
                     </div>
                     <div class="flex justify-between">
-                        <span class="text-gray-500">Referral</span>
+                        <span class="text-gray-500">{{ isRtl ? 'الإحالة' : 'Referral' }}</span>
                         <span class="font-medium text-gray-800">{{ referralLabels[patient.referral_source] || '-' }}</span>
                     </div>
                     <div v-if="patient.referred_by" class="flex justify-between">
-                        <span class="text-gray-500">Referred By</span>
+                        <span class="text-gray-500">{{ isRtl ? 'مُحال من' : 'Referred By' }}</span>
                         <span class="font-medium text-gray-800">{{ patient.referred_by }}</span>
                     </div>
                 </div>
@@ -184,7 +184,7 @@ function getDoctorName(doctorId) {
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6">
                 <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">{{ isRtl ? 'ملاحظات طبية' : 'Medical Notes' }}</h3>
                 <p v-if="patient.medical_notes" class="text-sm text-gray-700 whitespace-pre-wrap leading-relaxed">{{ patient.medical_notes }}</p>
-                <p v-else class="text-sm text-gray-400 italic">No medical notes recorded</p>
+                <p v-else class="text-sm text-gray-400 italic">{{ isRtl ? 'لا توجد ملاحظات طبية' : 'No medical notes recorded' }}</p>
             </div>
         </div>
 
@@ -233,18 +233,18 @@ function getDoctorName(doctorId) {
 
         <!-- Financial Summary -->
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6 mb-6">
-            <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Financial Summary</h3>
+            <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">{{ isRtl ? 'الملخص المالي' : 'Financial Summary' }}</h3>
             <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
                 <div class="text-center p-4 bg-gray-50 rounded-xl">
-                    <p class="text-[10px] text-gray-500 uppercase tracking-wider font-semibold mb-1">Total Invoiced</p>
+                    <p class="text-[10px] text-gray-500 uppercase tracking-wider font-semibold mb-1">{{ isRtl ? 'إجمالي الفواتير' : 'Total Invoiced' }}</p>
                     <p class="text-lg font-bold text-gray-800">{{ formatCurrency(financialSummary?.total_invoiced) }}</p>
                 </div>
                 <div class="text-center p-4 bg-emerald-50 rounded-xl">
-                    <p class="text-[10px] text-emerald-600 uppercase tracking-wider font-semibold mb-1">Total Paid</p>
+                    <p class="text-[10px] text-emerald-600 uppercase tracking-wider font-semibold mb-1">{{ isRtl ? 'إجمالي المدفوع' : 'Total Paid' }}</p>
                     <p class="text-lg font-bold text-emerald-700">{{ formatCurrency(financialSummary?.total_paid) }}</p>
                 </div>
                 <div class="text-center p-4 rounded-xl" :class="Number(financialSummary?.outstanding || 0) > 0 ? 'bg-red-50' : 'bg-gray-50'">
-                    <p class="text-[10px] uppercase tracking-wider font-semibold mb-1" :class="Number(financialSummary?.outstanding || 0) > 0 ? 'text-red-600' : 'text-gray-500'">Outstanding</p>
+                    <p class="text-[10px] uppercase tracking-wider font-semibold mb-1" :class="Number(financialSummary?.outstanding || 0) > 0 ? 'text-red-600' : 'text-gray-500'">{{ isRtl ? 'المتبقي' : 'Outstanding' }}</p>
                     <p class="text-lg font-bold" :class="Number(financialSummary?.outstanding || 0) > 0 ? 'text-red-600' : 'text-gray-800'">{{ formatCurrency(financialSummary?.outstanding) }}</p>
                 </div>
                 <div class="text-center p-4 bg-teal-50 rounded-xl">
@@ -316,7 +316,7 @@ function getDoctorName(doctorId) {
                     <div class="w-12 h-12 rounded-xl bg-gray-50 flex items-center justify-center mx-auto mb-3">
                         <svg class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
                     </div>
-                    <p class="text-sm text-gray-400">No visits recorded</p>
+                    <p class="text-sm text-gray-400">{{ isRtl ? 'لا توجد زيارات' : 'No visits recorded' }}</p>
                 </div>
             </div>
 
@@ -346,7 +346,7 @@ function getDoctorName(doctorId) {
                         <!-- Progress Bar -->
                         <div class="px-4 pt-3 pb-1">
                             <div class="flex items-center justify-between text-xs mb-1.5">
-                                <span class="text-gray-500">Progress</span>
+                                <span class="text-gray-500">{{ isRtl ? 'التقدم' : 'Progress' }}</span>
                                 <span class="font-semibold text-teal-600">{{ bundleProgress(booking) }}%</span>
                             </div>
                             <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
@@ -365,7 +365,7 @@ function getDoctorName(doctorId) {
                                 <span class="font-semibold text-emerald-700">{{ formatCurrency(booking.total_paid) }}</span>
                             </div>
                             <div>
-                                <span class="text-gray-400 text-xs block">Remaining</span>
+                                <span class="text-gray-400 text-xs block">{{ isRtl ? 'المتبقي' : 'Remaining' }}</span>
                                 <span class="font-semibold" :class="Number(booking.balance_due) > 0 ? 'text-red-600' : 'text-gray-500'">{{ formatCurrency(booking.balance_due) }}</span>
                             </div>
                         </div>
@@ -373,7 +373,7 @@ function getDoctorName(doctorId) {
                         <!-- Services Breakdown -->
                         <div class="border-t border-gray-100">
                             <div class="px-4 py-2.5 bg-gray-50/50">
-                                <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Services</span>
+                                <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">{{ isRtl ? 'الخدمات' : 'Services' }}</span>
                             </div>
                             <div class="divide-y divide-gray-50">
                                 <div v-for="bs in booking.bundle_services" :key="bs.id" class="px-4 py-3 flex items-center justify-between gap-4">
@@ -411,9 +411,9 @@ function getDoctorName(doctorId) {
 
                         <!-- Dates Footer -->
                         <div class="px-4 py-2.5 bg-gray-50/50 border-t border-gray-100 flex items-center gap-6 text-xs text-gray-400">
-                            <span v-if="booking.started_at">Started: {{ formatDate(booking.started_at) }}</span>
-                            <span v-if="booking.completed_at">Completed: {{ formatDate(booking.completed_at) }}</span>
-                            <span v-if="!booking.started_at && !booking.completed_at">Created: {{ formatDate(booking.created_at) }}</span>
+                            <span v-if="booking.started_at">{{ isRtl ? 'بدأ:' : 'Started:' }} {{ formatDate(booking.started_at) }}</span>
+                            <span v-if="booking.completed_at">{{ isRtl ? 'اكتمل:' : 'Completed:' }} {{ formatDate(booking.completed_at) }}</span>
+                            <span v-if="!booking.started_at && !booking.completed_at">{{ isRtl ? 'أنشئ:' : 'Created:' }} {{ formatDate(booking.created_at) }}</span>
                         </div>
                     </div>
                 </div>
@@ -421,7 +421,7 @@ function getDoctorName(doctorId) {
                     <div class="w-12 h-12 rounded-xl bg-gray-50 flex items-center justify-center mx-auto mb-3">
                         <svg class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
                     </div>
-                    <p class="text-sm text-gray-400">No package bundles yet</p>
+                    <p class="text-sm text-gray-400">{{ isRtl ? 'لا توجد باقات بعد' : 'No package bundles yet' }}</p>
                 </div>
             </div>
 
@@ -431,7 +431,7 @@ function getDoctorName(doctorId) {
                     <table class="w-full text-sm">
                         <thead>
                             <tr class="bg-gray-50/80 rounded-lg">
-                                <th class="ltr:text-left rtl:ltr:text-right rtl:text-left px-4 py-2.5 text-xs font-semibold text-gray-500 uppercase">Invoice #</th>
+                                <th class="ltr:text-left rtl:ltr:text-right rtl:text-left px-4 py-2.5 text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'فاتورة #' : 'Invoice #' }}</th>
                                 <th class="ltr:text-left rtl:ltr:text-right rtl:text-left px-4 py-2.5 text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'التاريخ' : 'Date' }}</th>
                                 <th class="ltr:text-left rtl:ltr:text-right rtl:text-left px-4 py-2.5 text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'المبلغ' : 'Amount' }}</th>
                                 <th class="ltr:text-left rtl:ltr:text-right rtl:text-left px-4 py-2.5 text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'المدفوع' : 'Paid' }}</th>
@@ -461,7 +461,7 @@ function getDoctorName(doctorId) {
                     <div class="w-12 h-12 rounded-xl bg-gray-50 flex items-center justify-center mx-auto mb-3">
                         <svg class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z" /></svg>
                     </div>
-                    <p class="text-sm text-gray-400">No invoices found</p>
+                    <p class="text-sm text-gray-400">{{ isRtl ? 'لا توجد فواتير' : 'No invoices found' }}</p>
                 </div>
             </div>
 
@@ -473,8 +473,8 @@ function getDoctorName(doctorId) {
                             <tr class="bg-gray-50/80 rounded-lg">
                                 <th class="ltr:text-left rtl:ltr:text-right rtl:text-left px-4 py-2.5 text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'التاريخ' : 'Date' }}</th>
                                 <th class="ltr:text-left rtl:ltr:text-right rtl:text-left px-4 py-2.5 text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'الطبيب' : 'Doctor' }}</th>
-                                <th class="ltr:text-left rtl:ltr:text-right rtl:text-left px-4 py-2.5 text-xs font-semibold text-gray-500 uppercase">Diagnosis</th>
-                                <th class="ltr:text-left rtl:ltr:text-right rtl:text-left px-4 py-2.5 text-xs font-semibold text-gray-500 uppercase">Medications</th>
+                                <th class="ltr:text-left rtl:ltr:text-right rtl:text-left px-4 py-2.5 text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'التشخيص' : 'Diagnosis' }}</th>
+                                <th class="ltr:text-left rtl:ltr:text-right rtl:text-left px-4 py-2.5 text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'الأدوية' : 'Medications' }}</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100">
@@ -500,7 +500,7 @@ function getDoctorName(doctorId) {
                     <div class="w-12 h-12 rounded-xl bg-gray-50 flex items-center justify-center mx-auto mb-3">
                         <svg class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.5 12.75l6-6a4.243 4.243 0 016.01 6.01l-6 6a4.243 4.243 0 01-6.01-6.01zM12 9l-3 3" /></svg>
                     </div>
-                    <p class="text-sm text-gray-400">No prescriptions found</p>
+                    <p class="text-sm text-gray-400">{{ isRtl ? 'لا توجد وصفات طبية' : 'No prescriptions found' }}</p>
                 </div>
             </div>
         </div>

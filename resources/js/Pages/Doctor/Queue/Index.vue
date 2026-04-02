@@ -279,7 +279,7 @@ const todayProgress = computed(() => {
             <div class="relative z-10">
                 <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
                     <div>
-                        <p class="text-[#C4A265] text-xs font-semibold tracking-wider uppercase mb-1">{{ greeting }} Queue</p>
+                        <p class="text-[#C4A265] text-xs font-semibold tracking-wider uppercase mb-1">{{ greeting }}</p>
                         <h1 class="text-2xl sm:text-3xl font-bold text-white">{{ $t('a_today_queue') }}</h1>
                         <p class="text-gray-400 text-sm mt-1">{{ timeDisplay }}</p>
                     </div>
@@ -394,7 +394,7 @@ const todayProgress = computed(() => {
                             <span class="text-xs text-gray-500">{{ getVisitTypeLabel(currentInProgress) }}</span>
                             <template v-if="currentInProgress.service">
                                 <span class="text-gray-300">&middot;</span>
-                                <span class="text-xs text-gray-500">{{ currentInProgress.service?.name_en }}</span>
+                                <span class="text-xs text-gray-500">{{ isRtl ? (currentInProgress.service?.name_ar || currentInProgress.service?.name_en) : currentInProgress.service?.name_en }}</span>
                             </template>
                         </div>
                     </div>
@@ -542,7 +542,7 @@ const todayProgress = computed(() => {
                                         </template>
                                         <template v-if="visit.service">
                                             <span class="text-gray-200">&middot;</span>
-                                            <span class="text-xs text-gray-500">{{ visit.service.name_en }}</span>
+                                            <span class="text-xs text-gray-500">{{ isRtl ? (visit.service.name_ar || visit.service.name_en) : visit.service.name_en }}</span>
                                         </template>
                                         <template v-if="activeView !== 'today'">
                                             <span class="text-gray-200">&middot;</span>

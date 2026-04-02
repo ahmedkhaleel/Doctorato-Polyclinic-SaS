@@ -106,13 +106,13 @@ onMounted(() => {
                 <!-- Booking & Patient Info -->
                 <div class="grid grid-cols-2 gap-6 mb-8">
                     <div class="space-y-2">
-                        <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Receipt Details</h3>
+                        <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">{{ isRtl ? 'تفاصيل الإيصال' : 'Receipt Details' }}</h3>
                         <div class="flex items-baseline gap-2">
                             <span class="text-xs text-gray-500">Booking #:</span>
                             <span class="text-sm font-semibold font-mono text-teal-600">{{ booking.booking_number }}</span>
                         </div>
                         <div v-if="booking.invoice?.invoice_number" class="flex items-baseline gap-2">
-                            <span class="text-xs text-gray-500">Invoice #:</span>
+                            <span class="text-xs text-gray-500">{{ isRtl ? 'فاتورة #:' : 'Invoice #:' }}</span>
                             <span class="text-sm font-semibold font-mono text-gray-700">{{ booking.invoice.invoice_number }}</span>
                         </div>
                         <div class="flex items-baseline gap-2">
@@ -125,7 +125,7 @@ onMounted(() => {
                         </div>
                     </div>
                     <div class="space-y-2">
-                        <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Patient Info</h3>
+                        <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">{{ isRtl ? 'معلومات المريض' : 'Patient Info' }}</h3>
                         <div class="flex items-baseline gap-2">
                             <span class="text-xs text-gray-500">Name:</span>
                             <span class="text-sm font-semibold text-gray-800">{{ booking.patient?.full_name }}</span>
@@ -135,7 +135,7 @@ onMounted(() => {
                             <span class="text-sm font-medium text-gray-700">{{ booking.patient?.phone }}</span>
                         </div>
                         <div v-if="booking.patient?.file_number" class="flex items-baseline gap-2">
-                            <span class="text-xs text-gray-500">File #:</span>
+                            <span class="text-xs text-gray-500">{{ isRtl ? 'ملف #:' : 'File #:' }}</span>
                             <span class="text-sm font-semibold font-mono text-teal-600">{{ booking.patient.file_number }}</span>
                         </div>
                     </div>
@@ -149,7 +149,7 @@ onMounted(() => {
                     <div class="px-6 py-5">
                         <div class="grid grid-cols-2 gap-4">
                             <div>
-                                <p class="text-xs text-gray-400 mb-1">Amount Paid</p>
+                                <p class="text-xs text-gray-400 mb-1">{{ isRtl ? 'المبلغ المدفوع' : 'Amount Paid' }}</p>
                                 <p class="text-2xl font-bold text-emerald-600">{{ formatCurrency(payment.amount) }}</p>
                             </div>
                             <div>
@@ -163,7 +163,7 @@ onMounted(() => {
                                 <p class="text-sm font-mono font-medium text-gray-700">{{ payment.reference_number }}</p>
                             </div>
                             <div>
-                                <p class="text-xs text-gray-400 mb-1">Received By</p>
+                                <p class="text-xs text-gray-400 mb-1">{{ isRtl ? 'المستلم' : 'Received By' }}</p>
                                 <p class="text-sm font-medium text-gray-700">{{ payment.receiver?.name || '-' }}</p>
                             </div>
                             <div v-if="payment.notes" class="col-span-2">
@@ -176,13 +176,13 @@ onMounted(() => {
 
                 <!-- Services Table -->
                 <div class="mb-8">
-                    <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Services</h3>
+                    <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">{{ isRtl ? 'الخدمات' : 'Services' }}</h3>
                     <table class="w-full text-sm border border-gray-200">
                         <thead>
                             <tr class="bg-gray-50">
                                 <th class="px-4 py-2.5 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-600 border-b border-gray-200">{{ isRtl ? 'الخدمة' : 'Service' }}</th>
-                                <th class="px-4 py-2.5 text-center text-xs font-semibold text-gray-600 border-b border-gray-200">Sessions</th>
-                                <th class="px-4 py-2.5 ltr:text-right rtl:text-left text-xs font-semibold text-gray-600 border-b border-gray-200">Unit Price</th>
+                                <th class="px-4 py-2.5 text-center text-xs font-semibold text-gray-600 border-b border-gray-200">{{ isRtl ? 'الجلسات' : 'Sessions' }}</th>
+                                <th class="px-4 py-2.5 ltr:text-right rtl:text-left text-xs font-semibold text-gray-600 border-b border-gray-200">{{ isRtl ? 'سعر الوحدة' : 'Unit Price' }}</th>
                                 <th class="px-4 py-2.5 ltr:text-right rtl:text-left text-xs font-semibold text-gray-600 border-b border-gray-200">{{ isRtl ? 'الإجمالي' : 'Total' }}</th>
                             </tr>
                         </thead>
@@ -198,7 +198,7 @@ onMounted(() => {
                         </tbody>
                         <tfoot>
                             <tr class="bg-gray-50 border-t-2 border-gray-300">
-                                <td colspan="3" class="px-4 py-3 ltr:text-right rtl:text-left text-sm font-bold text-gray-700">Invoice Total</td>
+                                <td colspan="3" class="px-4 py-3 ltr:text-right rtl:text-left text-sm font-bold text-gray-700">{{ isRtl ? 'إجمالي الفاتورة' : 'Invoice Total' }}</td>
                                 <td class="px-4 py-3 ltr:text-right rtl:text-left text-sm font-bold text-teal-600">{{ formatCurrency(invoiceTotal) }}</td>
                             </tr>
                         </tfoot>
@@ -225,7 +225,7 @@ onMounted(() => {
                                     <td class="px-4 py-2.5 text-gray-500 text-xs font-medium">
                                         {{ idx + 1 }}
                                         <span v-if="p.id === payment.id" class="ltr:ml-1 rtl:mr-1 inline-flex px-1.5 py-0.5 rounded text-[10px] font-bold text-white bg-teal-500">
-                                            Current
+                                            {{ isRtl ? 'الحالي' : 'Current' }}
                                         </span>
                                     </td>
                                     <td class="px-4 py-2.5 text-gray-600">{{ formatDate(p.payment_date) }}</td>
@@ -244,23 +244,23 @@ onMounted(() => {
                         <div class="bg-gray-50 border-t border-gray-200 px-4 py-4">
                             <div class="grid grid-cols-2 gap-3 max-w-md ltr:ml-auto rtl:mr-auto">
                                 <div class="flex justify-between col-span-2 text-sm">
-                                    <span class="text-gray-500">Invoice Total</span>
+                                    <span class="text-gray-500">{{ isRtl ? 'إجمالي الفاتورة' : 'Invoice Total' }}</span>
                                     <span class="font-bold text-gray-800">{{ formatCurrency(invoiceTotal) }}</span>
                                 </div>
                                 <div class="flex justify-between col-span-2 text-sm">
-                                    <span class="text-gray-500">Paid Before This</span>
+                                    <span class="text-gray-500">{{ isRtl ? 'المدفوع سابقاً' : 'Paid Before This' }}</span>
                                     <span class="font-medium text-gray-600">{{ formatCurrency(totalPaidBefore) }}</span>
                                 </div>
                                 <div class="flex justify-between col-span-2 text-sm border-t border-gray-200 pt-2 text-teal-700">
-                                    <span class="font-bold">This Payment</span>
+                                    <span class="font-bold">{{ isRtl ? 'هذه الدفعة' : 'This Payment' }}</span>
                                     <span class="font-bold text-emerald-600">{{ formatCurrency(payment.amount) }}</span>
                                 </div>
                                 <div class="flex justify-between col-span-2 text-sm">
-                                    <span class="font-bold text-gray-700">Total Paid</span>
+                                    <span class="font-bold text-gray-700">{{ isRtl ? 'إجمالي المدفوع' : 'Total Paid' }}</span>
                                     <span class="font-bold text-emerald-600">{{ formatCurrency(totalPaidAfter) }}</span>
                                 </div>
                                 <div class="flex justify-between col-span-2 text-sm border-t border-gray-200 pt-2">
-                                    <span class="font-bold text-gray-700">Remaining Balance</span>
+                                    <span class="font-bold text-gray-700">{{ isRtl ? 'المبلغ المتبقي' : 'Remaining Balance' }}</span>
                                     <span class="font-bold" :class="remainingAfterThis > 0 ? 'text-red-600' : 'text-emerald-600'">
                                         {{ formatCurrency(remainingAfterThis) }}
                                     </span>
@@ -272,7 +272,7 @@ onMounted(() => {
 
                 <!-- Footer -->
                 <div class="text-center border-t border-gray-200 pt-6 mt-8">
-                    <p class="text-xs text-gray-400">This is an electronic document and does not require a signature</p>
+                    <p class="text-xs text-gray-400">{{ isRtl ? 'هذا مستند إلكتروني ولا يحتاج لتوقيع' : 'This is an electronic document and does not require a signature' }}</p>
                 </div>
 
             </div>

@@ -328,7 +328,7 @@ function toggleSection(key) {
                     </svg>
                 </Link>
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-800">Bundle Booking</h1>
+                    <h1 class="text-2xl font-bold text-gray-800">{{ isRtl ? 'حجز الباقة' : 'Bundle Booking' }}</h1>
                     <span class="text-sm font-mono" style="color: #0d9488;">{{ b.booking_number }}</span>
                 </div>
             </div>
@@ -364,7 +364,7 @@ function toggleSection(key) {
                 </span>
             </div>
             <div class="bg-white rounded-lg shadow-sm p-5">
-                <div class="text-xs font-medium text-gray-400 uppercase mb-2">Progress</div>
+                <div class="text-xs font-medium text-gray-400 uppercase mb-2">{{ isRtl ? 'التقدم' : 'Progress' }}</div>
                 <div class="flex items-center gap-3">
                     <div class="flex-1 bg-gray-200 rounded-full h-2.5">
                         <div class="h-2.5 rounded-full transition-all" :style="`width: ${b.progress_percentage}%; background-color: #0d9488;`"></div>
@@ -373,15 +373,15 @@ function toggleSection(key) {
                 </div>
             </div>
             <div class="bg-white rounded-lg shadow-sm p-5">
-                <div class="text-xs font-medium text-gray-400 uppercase mb-2">Total Price</div>
+                <div class="text-xs font-medium text-gray-400 uppercase mb-2">{{ isRtl ? 'السعر الإجمالي' : 'Total Price' }}</div>
                 <div class="text-xl font-bold" style="color: #0d9488;">{{ formatCurrency(b.total_price) }}</div>
             </div>
             <div class="bg-white rounded-lg shadow-sm p-5">
-                <div class="text-xs font-medium text-gray-400 uppercase mb-2">Balance Due</div>
+                <div class="text-xs font-medium text-gray-400 uppercase mb-2">{{ isRtl ? 'المبلغ المتبقي' : 'Balance Due' }}</div>
                 <div class="text-xl font-bold" :class="Number(b.balance_due) > 0 ? 'text-red-600' : 'text-green-600'">
                     {{ Number(b.balance_due) > 0 ? formatCurrency(b.balance_due) : 'Paid' }}
                 </div>
-                <div class="text-xs text-gray-400 mt-1">Paid: {{ formatCurrency(b.total_paid) }}</div>
+                <div class="text-xs text-gray-400 mt-1">{{ isRtl ? 'المدفوع:' : 'Paid:' }} {{ formatCurrency(b.total_paid) }}</div>
             </div>
         </div>
 
@@ -394,24 +394,24 @@ function toggleSection(key) {
                     <div>
                         <div class="font-semibold text-gray-900 text-lg">{{ b.patient?.full_name }}</div>
                         <div class="text-sm text-gray-500">{{ b.patient?.phone }}</div>
-                        <div v-if="b.patient?.file_number" class="text-xs font-mono mt-0.5" style="color: #0d9488;">File #{{ b.patient.file_number }}</div>
+                        <div v-if="b.patient?.file_number" class="text-xs font-mono mt-0.5" style="color: #0d9488;">{{ isRtl ? 'ملف' : 'File' }} #{{ b.patient.file_number }}</div>
                     </div>
                 </div>
             </div>
             <div class="bg-white rounded-lg shadow-sm p-6">
                 <h3 class="text-xs font-semibold text-gray-400 uppercase mb-4">{{ isRtl ? 'تفاصيل الحجز' : 'Booking Details' }}</h3>
                 <div class="grid grid-cols-2 gap-3 text-sm">
-                    <div><span class="text-gray-400">Bundle</span><div class="font-medium text-gray-900">{{ b.package_bundle?.name_en }}</div></div>
+                    <div><span class="text-gray-400">{{ isRtl ? 'الباقة' : 'Bundle' }}</span><div class="font-medium text-gray-900">{{ b.package_bundle?.name_en }}</div></div>
                     <div><span class="text-gray-400">{{ isRtl ? 'المصدر' : 'Source' }}</span><div class="font-medium text-gray-900 capitalize">{{ b.source }}</div></div>
-                    <div><span class="text-gray-400">Created</span><div class="font-medium text-gray-900">{{ formatDateTime(b.created_at) }}</div></div>
-                    <div v-if="b.started_at"><span class="text-gray-400">Started</span><div class="font-medium text-gray-900">{{ formatDateTime(b.started_at) }}</div></div>
+                    <div><span class="text-gray-400">{{ isRtl ? 'تاريخ الإنشاء' : 'Created' }}</span><div class="font-medium text-gray-900">{{ formatDateTime(b.created_at) }}</div></div>
+                    <div v-if="b.started_at"><span class="text-gray-400">{{ isRtl ? 'بدأ' : 'Started' }}</span><div class="font-medium text-gray-900">{{ formatDateTime(b.started_at) }}</div></div>
                     <div v-if="b.completed_at"><span class="text-gray-400">{{ isRtl ? 'مكتمل' : 'Completed' }}</span><div class="font-medium text-green-600">{{ formatDateTime(b.completed_at) }}</div></div>
                 </div>
                 <div v-if="b.promo_code" class="mt-4 pt-3 border-t border-teal-100 flex items-center gap-2">
                     <svg class="w-4 h-4 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" /></svg>
-                    <span class="text-xs font-semibold text-teal-700 uppercase tracking-wider">Promo Code:</span>
+                    <span class="text-xs font-semibold text-teal-700 uppercase tracking-wider">{{ isRtl ? 'رمز العرض:' : 'Promo Code:' }}</span>
                     <span class="font-bold font-mono tracking-wider text-sm text-gray-900">{{ b.promo_code }}</span>
-                    <span v-if="b.invoice?.discount_code_id" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-100 text-emerald-700">Applied</span>
+                    <span v-if="b.invoice?.discount_code_id" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-100 text-emerald-700">{{ isRtl ? 'مُطبّق' : 'Applied' }}</span>
                 </div>
                 <div v-if="b.notes" class="mt-4 pt-3 border-t border-gray-100">
                     <span class="text-xs text-gray-400">{{ isRtl ? 'ملاحظات' : 'Notes' }}</span>
@@ -423,7 +423,7 @@ function toggleSection(key) {
         <!-- Services Progress -->
         <div class="bg-white rounded-lg shadow-sm overflow-hidden">
             <button @click="toggleSection('services')" class="w-full flex items-center justify-between p-5 ltr:text-left rtl:ltr:text-right rtl:text-left hover:bg-gray-50 transition">
-                <h3 class="text-lg font-semibold text-gray-800">Services Progress</h3>
+                <h3 class="text-lg font-semibold text-gray-800">{{ isRtl ? 'تقدم الخدمات' : 'Services Progress' }}</h3>
                 <svg class="w-5 h-5 text-gray-400 transition-transform" :class="expandedSections.services ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
             </button>
             <div v-show="expandedSections.services" class="px-5 pb-5 space-y-4">
@@ -433,7 +433,7 @@ function toggleSection(key) {
                     <div class="flex items-start justify-between mb-3">
                         <div>
                             <div class="font-medium text-gray-900">{{ bs.service?.name_en }}</div>
-                            <div class="text-sm text-gray-500 mt-0.5">Doctor: <span class="font-medium">{{ bs.doctor?.name_en || '-' }}</span></div>
+                            <div class="text-sm text-gray-500 mt-0.5">{{ isRtl ? 'الطبيب:' : 'Doctor:' }} <span class="font-medium">{{ bs.doctor?.name_en || '-' }}</span></div>
                         </div>
                         <div class="flex items-center gap-3">
                             <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold border" :class="serviceStatusColors[bs.status] || 'bg-gray-50 text-gray-700 border-gray-200'">{{ bs.status?.replace(/_/g, ' ') }}</span>
@@ -453,7 +453,7 @@ function toggleSection(key) {
         <!-- Appointments Schedule -->
         <div v-if="hasAppointments" class="bg-white rounded-lg shadow-sm overflow-hidden">
             <button @click="toggleSection('appointments')" class="w-full flex items-center justify-between p-5 ltr:text-left rtl:ltr:text-right rtl:text-left hover:bg-gray-50 transition">
-                <h3 class="text-lg font-semibold text-gray-800">Appointments Schedule ({{ b.appointments?.length || 0 }})</h3>
+                <h3 class="text-lg font-semibold text-gray-800">{{ isRtl ? 'جدول المواعيد' : 'Appointments Schedule' }} ({{ b.appointments?.length || 0 }})</h3>
                 <svg class="w-5 h-5 text-gray-400 transition-transform" :class="expandedSections.appointments ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                 </svg>
@@ -464,7 +464,7 @@ function toggleSection(key) {
                         <thead>
                             <tr class="border-b border-gray-200">
                                 <th class="px-3 py-2.5 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase">{{ isRtl ? 'الخدمة' : 'Service' }}</th>
-                                <th class="px-3 py-2.5 text-center text-xs font-medium text-gray-500 uppercase">Session</th>
+                                <th class="px-3 py-2.5 text-center text-xs font-medium text-gray-500 uppercase">{{ isRtl ? 'الجلسة' : 'Session' }}</th>
                                 <th class="px-3 py-2.5 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase">{{ isRtl ? 'الطبيب' : 'Doctor' }}</th>
                                 <th class="px-3 py-2.5 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase">{{ isRtl ? 'التاريخ' : 'Date' }}</th>
                                 <th class="px-3 py-2.5 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase">{{ isRtl ? 'الوقت' : 'Time' }}</th>
@@ -520,7 +520,7 @@ function toggleSection(key) {
         <!-- Visits -->
         <div class="bg-white rounded-lg shadow-sm overflow-hidden">
             <button @click="toggleSection('visits')" class="w-full flex items-center justify-between p-5 ltr:text-left rtl:ltr:text-right rtl:text-left hover:bg-gray-50 transition">
-                <h3 class="text-lg font-semibold text-gray-800">Visits ({{ b.visits?.length || 0 }})</h3>
+                <h3 class="text-lg font-semibold text-gray-800">{{ isRtl ? 'الزيارات' : 'Visits' }} ({{ b.visits?.length || 0 }})</h3>
                 <svg class="w-5 h-5 text-gray-400 transition-transform" :class="expandedSections.visits ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
             </button>
             <div v-show="expandedSections.visits" class="px-5 pb-5">
@@ -528,7 +528,7 @@ function toggleSection(key) {
                     <table class="min-w-full text-sm">
                         <thead><tr class="border-b border-gray-200">
                             <th class="px-3 py-2.5 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase">{{ isRtl ? 'الخدمة' : 'Service' }}</th>
-                            <th class="px-3 py-2.5 text-center text-xs font-medium text-gray-500 uppercase">Session #</th>
+                            <th class="px-3 py-2.5 text-center text-xs font-medium text-gray-500 uppercase">{{ isRtl ? 'جلسة #' : 'Session #' }}</th>
                             <th class="px-3 py-2.5 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase">{{ isRtl ? 'الطبيب' : 'Doctor' }}</th>
                             <th class="px-3 py-2.5 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase">{{ isRtl ? 'التاريخ' : 'Date' }}</th>
                             <th class="px-3 py-2.5 text-center text-xs font-medium text-gray-500 uppercase">{{ isRtl ? 'الحالة' : 'Status' }}</th>
@@ -553,7 +553,7 @@ function toggleSection(key) {
         <!-- Payments -->
         <div class="bg-white rounded-lg shadow-sm overflow-hidden">
             <button @click="toggleSection('payments')" class="w-full flex items-center justify-between p-5 ltr:text-left rtl:ltr:text-right rtl:text-left hover:bg-gray-50 transition">
-                <h3 class="text-lg font-semibold text-gray-800">Payments ({{ payments.length }})</h3>
+                <h3 class="text-lg font-semibold text-gray-800">{{ isRtl ? 'المدفوعات' : 'Payments' }} ({{ payments.length }})</h3>
                 <svg class="w-5 h-5 text-gray-400 transition-transform" :class="expandedSections.payments ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
             </button>
             <div v-show="expandedSections.payments" class="px-5 pb-5">
@@ -562,7 +562,7 @@ function toggleSection(key) {
                         <th class="px-3 py-2.5 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase">{{ isRtl ? 'التاريخ' : 'Date' }}</th>
                         <th class="px-3 py-2.5 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase">{{ isRtl ? 'الطريقة' : 'Method' }}</th>
                         <th class="px-3 py-2.5 ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase">{{ isRtl ? 'المبلغ' : 'Amount' }}</th>
-                        <th class="px-3 py-2.5 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase">Reference</th>
+                        <th class="px-3 py-2.5 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase">{{ isRtl ? 'المرجع' : 'Reference' }}</th>
                     </tr></thead>
                     <tbody class="divide-y divide-gray-100">
                         <tr v-for="payment in payments" :key="payment.id" class="hover:bg-gray-50">
@@ -573,12 +573,12 @@ function toggleSection(key) {
                         </tr>
                     </tbody>
                 </table>
-                <div v-else class="text-center py-6 text-sm text-gray-500">No payments recorded yet.</div>
+                <div v-else class="text-center py-6 text-sm text-gray-500">{{ isRtl ? 'لم يتم تسجيل مدفوعات بعد.' : 'No payments recorded yet.' }}</div>
                 <div class="mt-4 border-t border-gray-200 pt-4">
                     <div class="max-w-xs ltr:ml-auto rtl:mr-auto space-y-2 text-sm">
                         <div class="flex justify-between"><span class="text-gray-500">{{ isRtl ? 'الإجمالي' : 'Total' }}</span><span class="font-bold" style="color: #0d9488;">{{ formatCurrency(invoice?.total) }}</span></div>
                         <div class="flex justify-between"><span class="text-gray-500">{{ isRtl ? 'المدفوع' : 'Paid' }}</span><span class="font-bold text-green-600">{{ formatCurrency(totalPaid) }}</span></div>
-                        <div class="flex justify-between border-t pt-2"><span class="font-bold text-gray-700">Balance Due</span><span class="font-bold" :class="remainingBalance > 0 ? 'text-red-600' : 'text-green-600'">{{ formatCurrency(remainingBalance) }}</span></div>
+                        <div class="flex justify-between border-t pt-2"><span class="font-bold text-gray-700">{{ isRtl ? 'المبلغ المتبقي' : 'Balance Due' }}</span><span class="font-bold" :class="remainingBalance > 0 ? 'text-red-600' : 'text-green-600'">{{ formatCurrency(remainingBalance) }}</span></div>
                     </div>
                 </div>
             </div>
@@ -596,31 +596,31 @@ function toggleSection(key) {
                 </div>
                 <form @submit.prevent="submitPayment" class="space-y-4">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Payment Method *</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'طريقة الدفع *' : 'Payment Method *' }}</label>
                         <select v-model="paymentForm.payment_method_id" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-teal-200">
-                            <option :value="null" disabled>Select method</option>
+                            <option :value="null" disabled>{{ isRtl ? 'اختر الطريقة' : 'Select method' }}</option>
                             <option v-for="pm in paymentMethods" :key="pm.id" :value="pm.id">{{ pm.name_en }}</option>
                         </select>
                         <p v-if="paymentForm.errors.payment_method_id" class="text-red-500 text-xs mt-1">{{ paymentForm.errors.payment_method_id }}</p>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Amount ({{ currencyCode }}) *</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'المبلغ' : 'Amount' }} ({{ currencyCode }}) *</label>
                         <input v-model="paymentForm.amount" type="number" step="0.01" min="0.01" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-teal-200" />
                         <p v-if="paymentForm.errors.amount" class="text-red-500 text-xs mt-1">{{ paymentForm.errors.amount }}</p>
                         <p v-if="remainingBalance > 0" class="text-xs text-gray-400 mt-1">Remaining: {{ formatCurrency(remainingBalance) }}</p>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Reference Number</label>
-                        <input v-model="paymentForm.reference_number" type="text" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-teal-200" placeholder="Optional" />
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'رقم المرجع' : 'Reference Number' }}</label>
+                        <input v-model="paymentForm.reference_number" type="text" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-teal-200" :placeholder="isRtl ? 'اختياري' : 'Optional'" />
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
-                        <textarea v-model="paymentForm.notes" rows="2" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-teal-200 resize-none" placeholder="Optional"></textarea>
+                        <textarea v-model="paymentForm.notes" rows="2" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-teal-200 resize-none" :placeholder="isRtl ? 'اختياري' : 'Optional'"></textarea>
                     </div>
                     <div class="flex gap-3 pt-2">
                         <button type="button" @click="showPaymentModal = false" class="flex-1 px-4 py-2.5 rounded-lg text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 transition">{{ isRtl ? 'إلغاء' : 'Cancel' }}</button>
                         <button type="submit" :disabled="paymentForm.processing" class="flex-1 px-4 py-2.5 rounded-lg text-sm font-medium text-white transition disabled:opacity-50" style="background-color: #0d9488;">
-                            {{ paymentForm.processing ? 'Processing...' : 'Record Payment' }}
+                            {{ paymentForm.processing ? (isRtl ? 'جاري...' : 'Processing...') : (isRtl ? 'تسجيل الدفعة' : 'Record Payment') }}
                         </button>
                     </div>
                 </form>
@@ -634,7 +634,7 @@ function toggleSection(key) {
             <div class="fixed inset-0 bg-black/40" @click="showRescheduleModal = false"></div>
             <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6 z-10 max-h-[90vh] overflow-y-auto">
                 <div class="flex items-center justify-between mb-6">
-                    <h3 class="text-lg font-semibold text-gray-800">Reschedule Appointment</h3>
+                    <h3 class="text-lg font-semibold text-gray-800">{{ isRtl ? 'إعادة جدولة الموعد' : 'Reschedule Appointment' }}</h3>
                     <button @click="showRescheduleModal = false" class="p-1 text-gray-400 hover:text-gray-600 transition">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                     </button>
@@ -670,7 +670,7 @@ function toggleSection(key) {
                         Loading available slots...
                     </div>
                     <div v-else-if="rescheduleForm.date && rescheduleForm.availableSlots.length > 0">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Available Time Slots</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">{{ isRtl ? 'المواعيد المتاحة' : 'Available Time Slots' }}</label>
                         <div class="flex flex-wrap gap-2">
                             <button v-for="slot in rescheduleForm.availableSlots" :key="slot.start"
                                     @click="selectRescheduleSlot(slot)" type="button"
@@ -704,32 +704,32 @@ function toggleSection(key) {
             <div class="fixed inset-0 bg-black/40" @click="showRetouchModal = false"></div>
             <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6 z-10 max-h-[90vh] overflow-y-auto">
                 <div class="flex items-center justify-between mb-6">
-                    <h3 class="text-lg font-semibold text-gray-800">Add Retouch Session</h3>
+                    <h3 class="text-lg font-semibold text-gray-800">{{ isRtl ? 'إضافة جلسة ريتوش' : 'Add Retouch Session' }}</h3>
                     <button @click="showRetouchModal = false" class="p-1 text-gray-400 hover:text-gray-600 transition">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                     </button>
                 </div>
                 <div class="space-y-4">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Service *</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'الخدمة *' : 'Service *' }}</label>
                         <select v-model="retouchForm.package_bundle_booking_service_id"
                                 class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-teal-200 focus:border-transparent">
-                            <option :value="null" disabled>Select service</option>
+                            <option :value="null" disabled>{{ isRtl ? 'اختر الخدمة' : 'Select service' }}</option>
                             <option v-for="bs in b.bundle_services" :key="bs.id" :value="bs.id">
                                 {{ bs.service?.name_en }} ({{ bs.completed_sessions }}/{{ bs.sessions_count }} sessions)
                             </option>
                         </select>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Doctor *</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'الطبيب *' : 'Doctor *' }}</label>
                         <select v-model="retouchForm.doctor_id" @change="retouchForm.date = ''; retouchForm.availableSlots = []; retouchForm.start_time = ''; retouchForm.end_time = '';"
                                 class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-teal-200 focus:border-transparent">
-                            <option :value="null" disabled>Select doctor</option>
+                            <option :value="null" disabled>{{ isRtl ? 'اختر الطبيب' : 'Select doctor' }}</option>
                             <option v-for="doc in doctors" :key="doc.id" :value="doc.id">{{ doc.name_en }}</option>
                         </select>
                     </div>
                     <div v-if="retouchForm.doctor_id">
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Date *</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'التاريخ *' : 'Date *' }}</label>
                         <DoctorDatePicker
                             v-model="retouchForm.date"
                             :doctor-id="retouchForm.doctor_id"
@@ -751,7 +751,7 @@ function toggleSection(key) {
                         Loading available slots...
                     </div>
                     <div v-else-if="retouchForm.date && retouchForm.availableSlots.length > 0">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Available Time Slots</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">{{ isRtl ? 'المواعيد المتاحة' : 'Available Time Slots' }}</label>
                         <div class="flex flex-wrap gap-2">
                             <button v-for="slot in retouchForm.availableSlots" :key="slot.start"
                                     @click="selectRetouchSlot(slot)" type="button"

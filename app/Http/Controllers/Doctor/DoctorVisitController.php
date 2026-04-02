@@ -20,7 +20,7 @@ class DoctorVisitController extends BaseDoctorController
     {
         $doctorId = $this->doctorId($request);
 
-        $query = Visit::with(['patient:id,full_name,file_number,phone', 'service:id,name_en'])
+        $query = Visit::with(['patient:id,full_name,file_number,phone', 'service:id,name_en,name_ar'])
             ->where('doctor_id', $doctorId);
 
         // Validate filter inputs

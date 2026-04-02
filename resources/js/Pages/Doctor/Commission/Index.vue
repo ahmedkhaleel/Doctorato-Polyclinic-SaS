@@ -79,7 +79,12 @@ const payoutStatusConfig = computed(() => ({
 
 function formatDate(d) {
     if (!d) return '-';
-    return new Date(d).toLocaleDateString('en-GB');
+    const date = new Date(d);
+    const today = new Date();
+    const yesterday = new Date(today); yesterday.setDate(yesterday.getDate() - 1);
+    if (date.toDateString() === today.toDateString()) return isRtl.value ? 'اليوم' : 'Today';
+    if (date.toDateString() === yesterday.toDateString()) return isRtl.value ? 'أمس' : 'Yesterday';
+    return date.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
 }
 </script>
 
@@ -277,8 +282,8 @@ function formatDate(d) {
                             <tbody class="divide-y divide-gray-100">
                                 <tr v-for="visit in visits.data" :key="visit.id" class="hover:bg-gray-50/50 transition-colors">
                                     <td class="px-6 py-3 font-semibold text-gray-800">{{ visit.patient?.full_name }}</td>
-                                    <td class="px-6 py-3 text-gray-500">{{ visit.service?.name_en || '-' }}</td>
-                                    <td class="px-6 py-3 text-gray-500">{{ visit.visit_date }}</td>
+                                    <td class="px-6 py-3 text-gray-500">{{ (isRtl ? (visit.service?.name_ar || visit.service?.name_en) : visit.service?.name_en) || '-' }}</td>
+                                    <td class="px-6 py-3 text-gray-500">{{ formatDate(visit.visit_date) }}</td>
                                     <td class="px-6 py-3 text-right">
                                         <span class="font-semibold" :class="visit.commission_rate != commissionInfo?.default_rate ? 'text-[#C4A265]' : 'text-gray-500'">
                                             {{ visit.commission_rate }}%

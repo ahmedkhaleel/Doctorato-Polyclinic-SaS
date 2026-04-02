@@ -68,15 +68,15 @@ function getProgress(booking) {
         </div>
 
         <div class="bg-white rounded-lg shadow-sm p-4 flex flex-wrap gap-3">
-            <input v-model="search" type="text" placeholder="Search by booking number, patient..."
+            <input v-model="search" type="text" :placeholder="isRtl ? 'بحث برقم الحجز، المريض...' : 'Search by booking number, patient...'"
                    class="w-full sm:w-80 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-teal-200 focus:border-transparent" />
             <select v-model="statusFilter" class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-teal-200 focus:border-transparent">
                 <option value="">{{ isRtl ? 'جميع الحالات' : 'All Status' }}</option>
-                <option value="pending">Pending</option>
+                <option value="pending">{{ isRtl ? 'معلق' : 'Pending' }}</option>
                 <option value="confirmed">{{ isRtl ? 'مؤكد' : 'Confirmed' }}</option>
                 <option value="in_progress">{{ isRtl ? 'جاري' : 'In Progress' }}</option>
                 <option value="completed">{{ isRtl ? 'مكتمل' : 'Completed' }}</option>
-                <option value="cancelled">Cancelled</option>
+                <option value="cancelled">{{ isRtl ? 'ملغي' : 'Cancelled' }}</option>
             </select>
         </div>
 
@@ -87,9 +87,9 @@ function getProgress(booking) {
                         <tr>
                             <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ isRtl ? 'حجز' : 'Booking' }}</th>
                             <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ isRtl ? 'المريض' : 'Patient' }}</th>
-                            <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bundle</th>
-                            <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
-                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Progress</th>
+                            <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ isRtl ? 'الباقة' : 'Bundle' }}</th>
+                            <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ isRtl ? 'السعر' : 'Price' }}</th>
+                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">{{ isRtl ? 'التقدم' : 'Progress' }}</th>
                             <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">{{ isRtl ? 'الحالة' : 'Status' }}</th>
                             <th class="px-6 py-3 ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ isRtl ? 'إجراءات' : 'Actions' }}</th>
                         </tr>
@@ -127,7 +127,7 @@ function getProgress(booking) {
                             <td class="px-6 py-4 whitespace-nowrap ltr:text-right rtl:text-left text-sm">
                                 <Link :href="`/secretary/bundle-bookings/${b.id}`"
                                       class="p-2 rounded-lg text-gray-400 hover:text-teal-600 hover:bg-teal-50 transition-all duration-200 inline-block"
-                                      title="View">
+                                      :title="isRtl ? 'عرض' : 'View'">
                                     <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
@@ -136,14 +136,14 @@ function getProgress(booking) {
                             </td>
                         </tr>
                         <tr v-if="!bookings.data || bookings.data.length === 0">
-                            <td colspan="7" class="px-6 py-8 text-center text-sm text-gray-500">No bundle bookings found.</td>
+                            <td colspan="7" class="px-6 py-8 text-center text-sm text-gray-500">{{ isRtl ? 'لا توجد حجوزات باقات' : 'No bundle bookings found.' }}</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
             <div v-if="bookings.links && bookings.links.length > 3" class="px-6 py-3 border-t border-gray-200 flex items-center justify-between">
-                <p class="text-sm text-gray-500">Showing {{ bookings.from }} to {{ bookings.to }} of {{ bookings.total }} results</p>
+                <p class="text-sm text-gray-500">{{ isRtl ? 'عرض' : 'Showing' }} {{ bookings.from }} {{ isRtl ? 'إلى' : 'to' }} {{ bookings.to }} {{ isRtl ? 'من' : 'of' }} {{ bookings.total }} {{ isRtl ? 'نتيجة' : 'results' }}</p>
                 <nav class="flex space-x-1">
                     <template v-for="link in bookings.links" :key="link.label">
                         <Link v-if="link.url" :href="link.url" v-html="link.label"

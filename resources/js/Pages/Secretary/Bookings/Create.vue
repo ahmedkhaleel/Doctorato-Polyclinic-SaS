@@ -529,7 +529,7 @@ const stepLabels = computed(() => [
             </Link>
             <div>
                 <h1 class="text-2xl font-bold text-gray-900">{{ isRtl ? 'حجز جديد' : 'New Booking' }}</h1>
-                <p class="text-sm text-gray-500 mt-1">Create a booking with services and appointments</p>
+                <p class="text-sm text-gray-500 mt-1">{{ isRtl ? 'إنشاء حجز بالخدمات والمواعيد' : 'Create a booking with services and appointments' }}</p>
             </div>
         </div>
 
@@ -687,7 +687,7 @@ const stepLabels = computed(() => [
                                 @focus="showPatientDropdown = true"
                                 @blur="setTimeout(() => showPatientDropdown = false, 200)"
                                 type="text"
-                                placeholder="Search by name, phone, or file number..."
+                                :placeholder="isRtl ? 'بحث بالاسم، الهاتف، أو رقم الملف...' : 'Search by name, phone, or file number...'"
                                 class="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500"
                             />
                             <button
@@ -725,7 +725,7 @@ const stepLabels = computed(() => [
                             v-if="showPatientDropdown && patientSearch && !filteredPatients.length"
                             class="absolute z-30 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg p-4 text-center"
                         >
-                            <p class="text-sm text-gray-400">No patients found</p>
+                            <p class="text-sm text-gray-400">{{ isRtl ? 'لم يتم العثور على مرضى' : 'No patients found' }}</p>
                         </div>
                     </div>
 
@@ -828,7 +828,7 @@ const stepLabels = computed(() => [
                                 <input
                                     v-model="serviceRows[0].notes"
                                     type="text"
-                                    placeholder="Consultation notes..."
+                                    :placeholder="isRtl ? 'ملاحظات الاستشارة...' : 'Consultation notes...'"
                                     class="w-full px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500"
                                 />
                             </div>
@@ -958,7 +958,7 @@ const stepLabels = computed(() => [
                                     <input
                                         v-model="row.notes"
                                         type="text"
-                                        placeholder="Service-specific notes..."
+                                        :placeholder="isRtl ? 'ملاحظات خاصة بالخدمة...' : 'Service-specific notes...'"
                                         class="w-full px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500"
                                     />
                                 </div>
@@ -1191,7 +1191,7 @@ const stepLabels = computed(() => [
                         <textarea
                             v-model="notes"
                             rows="3"
-                            placeholder="Optional booking notes..."
+                            :placeholder="isRtl ? 'ملاحظات اختيارية للحجز...' : 'Optional booking notes...'"
                             class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500"
                         ></textarea>
                     </div>

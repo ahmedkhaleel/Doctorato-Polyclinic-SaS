@@ -896,7 +896,7 @@ function submitReschedule() {
                                                                         <button v-else-if="canCheckIn(appt)" @click="checkInAppointment(appt)" :disabled="checkingIn[appt.id]" class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold text-white transition-all" :class="checkingIn[appt.id] ? 'bg-gray-300' : 'bg-teal-500 hover:bg-teal-600'">
                                                                             {{ checkingIn[appt.id] ? '...' : 'Check In' }}
                                                                         </button>
-                                                                        <button v-if="canReschedule(appt)" @click="openRescheduleModal(appt)" class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium text-gray-400 hover:text-teal-600 hover:bg-teal-50 border border-gray-200 hover:border-teal-300 transition-all" title="Edit">
+                                                                        <button v-if="canReschedule(appt)" @click="openRescheduleModal(appt)" class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium text-gray-400 hover:text-teal-600 hover:bg-teal-50 border border-gray-200 hover:border-teal-300 transition-all" :title="isRtl ? 'تعديل' : 'Edit'">
                                                                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
                                                                             {{ isRtl ? 'تعديل' : 'Edit' }}
                                                                         </button>
@@ -1046,7 +1046,7 @@ function submitReschedule() {
                                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                                 {{ checkingIn[appt.id] ? 'Checking in...' : 'Check In' }}
                                             </button>
-                                            <button v-if="canReschedule(appt)" @click="openRescheduleModal(appt)" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium text-gray-500 hover:text-teal-600 hover:bg-teal-50 border border-gray-200 hover:border-teal-300 transition-all" title="Reschedule">
+                                            <button v-if="canReschedule(appt)" @click="openRescheduleModal(appt)" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium text-gray-500 hover:text-teal-600 hover:bg-teal-50 border border-gray-200 hover:border-teal-300 transition-all" :title="isRtl ? 'إعادة جدولة' : 'Reschedule'">
                                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
                                                 {{ isRtl ? 'تعديل' : 'Edit' }}
                                             </button>
@@ -1163,7 +1163,7 @@ function submitReschedule() {
                                     <a :href="`/secretary/bookings/${booking.id}/payments/${payment.id}/receipt`"
                                        target="_blank"
                                        class="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold rounded-lg border border-teal-300 text-teal-600 transition-all hover:bg-teal-50"
-                                       title="Print payment receipt">
+                                       :title="isRtl ? 'طباعة إيصال الدفع' : 'Print payment receipt'">
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" /></svg>
                                         {{ isRtl ? 'طباعة' : 'Print' }}
                                     </a>
@@ -1200,16 +1200,16 @@ function submitReschedule() {
                             </div>
                             <div>
                                 <label class="block text-xs font-medium text-gray-500 mb-1.5">Reference #</label>
-                                <input v-model="paymentForm.reference_number" type="text" placeholder="Receipt / Transaction #" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500" />
+                                <input v-model="paymentForm.reference_number" type="text" :placeholder="isRtl ? 'رقم الإيصال / المعاملة' : 'Receipt / Transaction #'" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500" />
                             </div>
                             <div>
                                 <label class="block text-xs font-medium text-gray-500 mb-1.5">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
-                                <input v-model="paymentForm.notes" type="text" placeholder="Optional notes" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500" />
+                                <input v-model="paymentForm.notes" type="text" :placeholder="isRtl ? 'ملاحظات اختيارية' : 'Optional notes'" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500" />
                             </div>
                         </div>
                         <div class="flex items-center gap-3 mt-5">
                             <button type="submit" :disabled="paymentForm.processing" class="px-5 py-2.5 bg-gradient-to-r from-teal-500 to-cyan-500 text-white rounded-xl text-sm font-semibold hover:from-teal-600 hover:to-cyan-600 transition-all disabled:opacity-50 shadow-sm">
-                                {{ paymentForm.processing ? 'Processing...' : 'Record Payment' }}
+                                {{ paymentForm.processing ? (isRtl ? 'جاري...' : 'Processing...') : (isRtl ? 'تسجيل الدفعة' : 'Record Payment') }}
                             </button>
                             <button type="button" @click="showPaymentForm = false" class="px-5 py-2.5 border border-gray-200 text-gray-600 rounded-xl text-sm font-medium hover:bg-gray-50 transition">
                                 {{ isRtl ? 'إلغاء' : 'Cancel' }}
@@ -1279,7 +1279,7 @@ function submitReschedule() {
                                     <!-- Search input -->
                                     <div v-else class="relative patient-search-wrapper">
                                         <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                                        <input v-model="patientSearch" type="text" placeholder="Search by name, phone, or file number..."
+                                        <input v-model="patientSearch" type="text" :placeholder="isRtl ? 'بحث بالاسم، الهاتف، أو رقم الملف...' : 'Search by name, phone, or file number...'"
                                             class="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500 transition"
                                             @focus="showPatientDropdown = true" />
                                         <div v-if="showPatientDropdown && filteredPatients.length > 0" class="absolute z-30 left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-lg max-h-48 overflow-y-auto">
@@ -1469,7 +1469,7 @@ function submitReschedule() {
                             <!-- Notes -->
                             <div>
                                 <label class="block text-xs font-medium text-gray-500 mb-1.5">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
-                                <textarea v-model="confirmForm.notes" rows="2" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500" placeholder="Optional notes..."></textarea>
+                                <textarea v-model="confirmForm.notes" rows="2" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500" :placeholder="isRtl ? 'ملاحظات اختيارية...' : 'Optional notes...'"></textarea>
                             </div>
 
                             <!-- Submit -->
@@ -1509,7 +1509,7 @@ function submitReschedule() {
                         </div>
                         <div>
                             <label class="block text-xs text-gray-500 mb-1.5">Admin Notes</label>
-                            <textarea v-model="statusForm.admin_notes" rows="3" class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500" placeholder="Internal notes..."></textarea>
+                            <textarea v-model="statusForm.admin_notes" rows="3" class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500" :placeholder="isRtl ? 'ملاحظات داخلية...' : 'Internal notes...'"></textarea>
                         </div>
                         <button type="submit" :disabled="statusForm.processing" class="w-full py-2.5 px-4 rounded-xl text-white font-semibold text-sm bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-600 hover:to-cyan-600 transition-all duration-300 disabled:opacity-50 shadow-sm">
                             {{ statusForm.processing ? 'Updating...' : 'Update Status' }}
@@ -1603,7 +1603,7 @@ function submitReschedule() {
                                 <a :href="consent.file_url" target="_blank" class="text-xs font-medium text-gray-700 truncate block hover:underline">{{ consent.original_name }}</a>
                                 <p class="text-[10px] text-gray-400 mt-0.5">{{ consent.uploader?.name || 'Unknown' }} &middot; {{ formatDate(consent.created_at) }}</p>
                             </div>
-                            <button type="button" @click="deleteConsent(consent.id)" class="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-500 transition p-1" title="Delete">
+                            <button type="button" @click="deleteConsent(consent.id)" class="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-500 transition p-1" :title="isRtl ? 'حذف' : 'Delete'">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                             </button>
                         </div>
@@ -1749,7 +1749,7 @@ function submitReschedule() {
                         <button @click="submitReschedule" :disabled="rescheduleForm.processing || !rescheduleForm.start_time || !rescheduleForm.doctor_id || !rescheduleForm.appointment_date"
                             class="px-5 py-2 rounded-xl text-sm font-semibold text-white shadow-sm transition-all disabled:opacity-40 disabled:cursor-not-allowed"
                             :class="rescheduleForm.processing ? 'bg-gray-400' : 'bg-teal-600 hover:bg-teal-700 active:scale-95'">
-                            {{ rescheduleForm.processing ? 'Saving...' : 'Save Changes' }}
+                            {{ rescheduleForm.processing ? (isRtl ? 'جاري الحفظ...' : 'Saving...') : (isRtl ? 'حفظ التغييرات' : 'Save Changes') }}
                         </button>
                     </div>
                 </div>

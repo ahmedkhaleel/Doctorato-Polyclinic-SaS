@@ -55,7 +55,7 @@ class DoctorPatientController extends BaseDoctorController
         $patient->load([
             'visits' => function ($q) use ($doctorId) {
                 $q->where('doctor_id', $doctorId)
-                    ->with(['service:id,name_en', 'prescriptions.items', 'photos'])
+                    ->with(['service:id,name_en,name_ar', 'prescriptions.items', 'photos'])
                     ->latest('visit_date');
             },
         ]);

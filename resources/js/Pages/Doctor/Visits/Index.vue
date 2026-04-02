@@ -164,7 +164,7 @@ function formatDate(date) {
                             <span v-if="visit.patient?.file_number" class="flex-shrink-0 font-mono text-[10px] text-gray-400">{{ visit.patient.file_number }}</span>
                         </div>
                         <div class="flex items-center gap-1.5 mt-0.5">
-                            <span class="text-xs text-gray-500">{{ visit.service?.name_en || visit.visit_type }}</span>
+                            <span class="text-xs text-gray-500">{{ (isRtl ? (visit.service?.name_ar || visit.service?.name_en) : visit.service?.name_en) || (isRtl ? ({ consultation: 'استشارة', session: 'جلسة', follow_up: 'متابعة' }[visit.visit_type] || visit.visit_type) : visit.visit_type) }}</span>
                             <span class="text-gray-200">&middot;</span>
                             <span class="text-xs text-gray-400 flex items-center gap-1">
                                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>

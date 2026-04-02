@@ -27,7 +27,7 @@ function switchLocale() {
 const modules = computed(() => page.props.modules || {});
 const doctor = computed(() => page.props.auth?.doctor);
 const userName = computed(() => doctor.value?.name_en || page.props.auth?.user?.name || 'Doctor');
-const specialty = computed(() => doctor.value?.specialization_en || 'Doctor');
+const specialty = computed(() => isRtl.value ? (doctor.value?.specialization_ar || doctor.value?.specialization_en || 'طبيب') : (doctor.value?.specialization_en || 'Doctor'));
 const currentUrl = computed(() => page.url);
 
 /* ── Grouped Navigation ─────────────────────────────────── */
@@ -84,9 +84,17 @@ const navGroups = computed(() => [
     },
 ]);
 
+const doctorModule = computed(() => doctor.value?.module || 'derma');
+
 const filteredGroups = computed(() =>
     navGroups.value.filter(g => {
-        if (g.moduleKey) return modules.value[g.moduleKey]?.enabled === true;
+        if (g.moduleKey) {
+            // Module must be enabled system-wide
+            if (modules.value[g.moduleKey]?.enabled !== true) return false;
+            // Dental section only for dental doctors
+            if (g.moduleKey === 'dental' && doctorModule.value !== 'dental') return false;
+            return true;
+        }
         return true;
     }).filter(g => g.items.length > 0)
 );

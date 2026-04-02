@@ -25,13 +25,13 @@ const form = useForm({
 });
 
 const referralOptions = [
-    { value: 'walk_in', label: 'Walk-in' },
-    { value: 'social_media', label: 'Social Media' },
-    { value: 'google', label: 'Google' },
-    { value: 'friend', label: 'Friend' },
-    { value: 'doctor', label: 'Doctor' },
-    { value: 'advertisement', label: 'Advertisement' },
-    { value: 'other', label: 'Other' },
+    { value: 'walk_in', label: isRtl.value ? 'حضور مباشر' : 'Walk-in' },
+    { value: 'social_media', label: isRtl.value ? 'وسائل التواصل' : 'Social Media' },
+    { value: 'google', label: isRtl.value ? 'جوجل' : 'Google' },
+    { value: 'friend', label: isRtl.value ? 'صديق' : 'Friend' },
+    { value: 'doctor', label: isRtl.value ? 'طبيب' : 'Doctor' },
+    { value: 'advertisement', label: isRtl.value ? 'إعلان' : 'Advertisement' },
+    { value: 'other', label: isRtl.value ? 'أخرى' : 'Other' },
 ];
 
 function submit() {
@@ -47,10 +47,10 @@ function submit() {
         <div class="mb-6">
             <Link href="/secretary/patients" class="inline-flex items-center gap-1 text-xs text-teal-600 hover:text-teal-800 font-medium mb-2 transition-colors">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
-                Back to Patients
+                {{ isRtl ? 'العودة للمرضى' : 'Back to Patients' }}
             </Link>
-            <h1 class="text-2xl font-bold text-gray-900">Add New Patient</h1>
-            <p class="text-sm text-gray-500 mt-1">Fill in the patient information below</p>
+            <h1 class="text-2xl font-bold text-gray-900">{{ isRtl ? 'إضافة مريض جديد' : 'Add New Patient' }}</h1>
+            <p class="text-sm text-gray-500 mt-1">{{ isRtl ? 'أكمل بيانات المريض أدناه' : 'Fill in the patient information below' }}</p>
         </div>
 
         <form @submit.prevent="submit" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -67,34 +67,34 @@ function submit() {
 
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1.5">Full Name <span class="text-red-500">*</span></label>
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ isRtl ? 'الاسم الكامل' : 'Full Name' }} <span class="text-red-500">*</span></label>
                             <input
                                 v-model="form.full_name"
                                 type="text"
                                 class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500 focus:bg-white transition"
-                                placeholder="Enter patient full name"
+                                :placeholder="isRtl ? 'أدخل اسم المريض الكامل' : 'Enter patient full name'"
                             />
                             <p v-if="form.errors.full_name" class="mt-1.5 text-xs text-red-600">{{ form.errors.full_name }}</p>
                         </div>
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1.5">Phone <span class="text-red-500">*</span></label>
+                                <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ isRtl ? 'الهاتف' : 'Phone' }} <span class="text-red-500">*</span></label>
                                 <input
                                     v-model="form.phone"
                                     type="text"
                                     class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500 focus:bg-white transition"
-                                    placeholder="Primary phone"
+                                    :placeholder="isRtl ? 'الهاتف الرئيسي' : 'Primary phone'"
                                 />
                                 <p v-if="form.errors.phone" class="mt-1.5 text-xs text-red-600">{{ form.errors.phone }}</p>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1.5">Phone 2</label>
+                                <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ isRtl ? 'الهاتف 2' : 'Phone 2' }}</label>
                                 <input
                                     v-model="form.phone2"
                                     type="text"
                                     class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500 focus:bg-white transition"
-                                    placeholder="Secondary phone (optional)"
+                                    :placeholder="isRtl ? 'الهاتف الثانوي (اختياري)' : 'Secondary phone (optional)'"
                                 />
                             </div>
                         </div>
@@ -106,7 +106,7 @@ function submit() {
                                     v-model="form.email"
                                     type="email"
                                     class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500 focus:bg-white transition"
-                                    placeholder="Email address"
+                                    :placeholder="isRtl ? 'البريد الإلكتروني' : 'Email address'"
                                 />
                                 <p v-if="form.errors.email" class="mt-1.5 text-xs text-red-600">{{ form.errors.email }}</p>
                             </div>
@@ -122,13 +122,13 @@ function submit() {
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1.5">Gender <span class="text-red-500">*</span></label>
+                                <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ isRtl ? 'الجنس' : 'Gender' }} <span class="text-red-500">*</span></label>
                                 <select
                                     v-model="form.gender"
                                     class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500 focus:bg-white transition"
                                 >
-                                    <option value="female">Female</option>
-                                    <option value="male">Male</option>
+                                    <option value="female">{{ isRtl ? 'أنثى' : 'Female' }}</option>
+                                    <option value="male">{{ isRtl ? 'ذكر' : 'Male' }}</option>
                                 </select>
                             </div>
                             <div>
@@ -137,7 +137,7 @@ function submit() {
                                     v-model="form.nationality"
                                     type="text"
                                     class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500 focus:bg-white transition"
-                                    placeholder="Nationality"
+                                    :placeholder="isRtl ? 'الجنسية' : 'Nationality'"
                                 />
                             </div>
                         </div>
@@ -149,7 +149,7 @@ function submit() {
                                     v-model="form.address"
                                     type="text"
                                     class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500 focus:bg-white transition"
-                                    placeholder="Patient address"
+                                    :placeholder="isRtl ? 'عنوان المريض' : 'Patient address'"
                                 />
                             </div>
                             <div>
@@ -158,7 +158,7 @@ function submit() {
                                     v-model="form.occupation"
                                     type="text"
                                     class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500 focus:bg-white transition"
-                                    placeholder="Patient occupation"
+                                    :placeholder="isRtl ? 'مهنة المريض' : 'Patient occupation'"
                                 />
                             </div>
                         </div>
@@ -177,7 +177,7 @@ function submit() {
                         v-model="form.medical_notes"
                         rows="4"
                         class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500 focus:bg-white transition resize-none"
-                        placeholder="Allergies, chronic conditions, current medications, etc."
+                        :placeholder="isRtl ? 'الحساسية، الأمراض المزمنة، الأدوية الحالية...' : 'Allergies, chronic conditions, current medications, etc.'"
                     ></textarea>
                 </div>
             </div>
@@ -190,7 +190,7 @@ function submit() {
                         <div class="w-9 h-9 rounded-xl bg-cyan-50 flex items-center justify-center">
                             <svg class="w-5 h-5 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
                         </div>
-                        <h2 class="text-base font-bold text-gray-800">Referral</h2>
+                        <h2 class="text-base font-bold text-gray-800">{{ isRtl ? 'الإحالة' : 'Referral' }}</h2>
                     </div>
 
                     <div class="space-y-4">
@@ -205,12 +205,12 @@ function submit() {
                         </div>
 
                         <div v-if="form.referral_source === 'friend' || form.referral_source === 'doctor'">
-                            <label class="block text-sm font-medium text-gray-700 mb-1.5">Referred By</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ isRtl ? 'مُحال من' : 'Referred By' }}</label>
                             <input
                                 v-model="form.referred_by"
                                 type="text"
                                 class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500 focus:bg-white transition"
-                                placeholder="Name of referrer"
+                                :placeholder="isRtl ? 'اسم المُحيل' : 'Name of referrer'"
                             />
                         </div>
                     </div>
@@ -222,7 +222,7 @@ function submit() {
                         <div class="w-9 h-9 rounded-xl bg-purple-50 flex items-center justify-center">
                             <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                         </div>
-                        <h2 class="text-base font-bold text-gray-800">Photo</h2>
+                        <h2 class="text-base font-bold text-gray-800">{{ isRtl ? 'الصورة' : 'Photo' }}</h2>
                     </div>
                     <input
                         type="file"
@@ -241,7 +241,7 @@ function submit() {
                 >
                     <span v-if="form.processing" class="inline-flex items-center gap-2">
                         <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" /><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
-                        Saving...
+                        {{ isRtl ? 'جاري الحفظ...' : 'Saving...' }}
                     </span>
                     <span v-else>{{ isRtl ? 'إنشاء مريض' : 'Create Patient' }}</span>
                 </button>

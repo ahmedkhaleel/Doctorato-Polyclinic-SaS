@@ -53,6 +53,8 @@ class HandleInertiaRequests extends Middleware
                         'name_en' => $request->user()->doctor->name_en,
                         'name_ar' => $request->user()->doctor->name_ar,
                         'specialization_en' => $request->user()->doctor->specialization_en,
+                        'specialization_ar' => $request->user()->doctor->specialization_ar,
+                        'module' => $request->user()->doctor->module,
                         'photo_url' => $request->user()->doctor->photo_url,
                     ]
                     : null,

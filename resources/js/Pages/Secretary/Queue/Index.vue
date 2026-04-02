@@ -241,7 +241,7 @@ function refreshQueue() {
                 <button
                     @click="refreshQueue"
                     class="inline-flex items-center px-4 py-2.5 rounded-lg border border-gray-200 text-sm font-medium text-gray-600 hover:bg-gray-50 transition"
-                    title="Refresh queue"
+                    :title="isRtl ? 'تحديث الطابور' : 'Refresh queue'"
                 >
                     <svg class="w-4 h-4 ltr:mr-1.5 rtl:ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -489,7 +489,7 @@ function refreshQueue() {
                                             v-if="visit.status === 'waiting'"
                                             @click="startVisit(visit.id)"
                                             class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 transition"
-                                            title="Start visit"
+                                            :title="isRtl ? 'بدء الزيارة' : 'Start visit'"
                                         >
                                             <svg class="w-3.5 h-3.5 ltr:mr-1 rtl:ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
@@ -501,7 +501,7 @@ function refreshQueue() {
                                             v-if="visit.status === 'in_progress'"
                                             @click="completeVisit(visit.id)"
                                             class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-medium text-green-700 bg-green-50 hover:bg-green-100 border border-green-200 transition"
-                                            title="Complete visit"
+                                            :title="isRtl ? 'إنهاء الزيارة' : 'Complete visit'"
                                         >
                                             <svg class="w-3.5 h-3.5 ltr:mr-1 rtl:ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
@@ -513,7 +513,7 @@ function refreshQueue() {
                                         <Link
                                             :href="`/secretary/visits/${visit.id}`"
                                             class="inline-flex items-center p-1.5 rounded-lg text-gray-400 hover:text-teal-600 hover:bg-teal-50 transition"
-                                            title="View details"
+                                            :title="isRtl ? 'عرض التفاصيل' : 'View details'"
                                         >
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />

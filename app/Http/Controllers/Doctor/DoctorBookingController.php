@@ -58,7 +58,9 @@ class DoctorBookingController extends BaseDoctorController
                 ->where('status', '!=', 'no_show')
                 ->first();
 
-            $booking->doctor_service_name = $doctorService?->service?->name_en ?? '-';
+            $booking->doctor_service_name = app()->getLocale() === 'ar'
+                ? ($doctorService?->service?->name_ar ?? $doctorService?->service?->name_en ?? '-')
+                : ($doctorService?->service?->name_en ?? '-');
             $booking->doctor_sessions_count = $doctorService?->sessions_count ?? 0;
             $booking->doctor_completed_sessions = $doctorService?->completed_sessions ?? 0;
             $booking->next_appointment_date = $nextAppointment?->appointment_date?->format('Y-m-d');

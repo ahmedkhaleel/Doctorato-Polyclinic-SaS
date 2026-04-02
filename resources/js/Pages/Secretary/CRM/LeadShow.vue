@@ -254,7 +254,7 @@ const allowedStatuses = ['contacted', 'qualified', 'appointment_booked', 'consul
             <!-- Quick Send Panel -->
             <div v-if="showQuickSend" class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
                 <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wider">Quick Send Message</h3>
+                    <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wider">{{ isRtl ? 'إرسال رسالة سريعة' : 'Quick Send Message' }}</h3>
                     <button @click="showQuickSend = false" class="text-gray-400 hover:text-gray-600 transition">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                     </button>
@@ -263,7 +263,7 @@ const allowedStatuses = ['contacted', 'qualified', 'appointment_booked', 'consul
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <!-- Channel -->
                         <div>
-                            <label class="block text-xs font-medium text-gray-500 mb-1.5">Channel</label>
+                            <label class="block text-xs font-medium text-gray-500 mb-1.5">{{ isRtl ? 'القناة' : 'Channel' }}</label>
                             <div class="flex gap-2">
                                 <button type="button" @click="quickSendForm.channel = 'whatsapp'"
                                     :class="quickSendForm.channel === 'whatsapp' ? 'bg-green-100 text-green-700 border-green-300' : 'bg-gray-50 text-gray-500 border-gray-200'"
@@ -284,15 +284,15 @@ const allowedStatuses = ['contacted', 'qualified', 'appointment_booked', 'consul
                         </div>
                         <!-- Template -->
                         <div>
-                            <label class="block text-xs font-medium text-gray-500 mb-1.5">Template</label>
+                            <label class="block text-xs font-medium text-gray-500 mb-1.5">{{ isRtl ? 'القالب' : 'Template' }}</label>
                             <select v-model="quickSendForm.template_id" class="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500">
-                                <option value="">Select template...</option>
+                                <option value="">{{ isRtl ? 'اختر قالب...' : 'Select template...' }}</option>
                                 <option v-for="t in filteredTemplates" :key="t.id" :value="t.id">{{ t.name }}</option>
                             </select>
                         </div>
                         <!-- Language -->
                         <div>
-                            <label class="block text-xs font-medium text-gray-500 mb-1.5">Language</label>
+                            <label class="block text-xs font-medium text-gray-500 mb-1.5">{{ isRtl ? 'اللغة' : 'Language' }}</label>
                             <div class="flex gap-2">
                                 <button type="button" @click="quickSendForm.language = 'en'"
                                     :class="quickSendForm.language === 'en' ? 'bg-teal-100 text-teal-700 border-teal-300' : 'bg-gray-50 text-gray-500 border-gray-200'"
@@ -348,14 +348,14 @@ const allowedStatuses = ['contacted', 'qualified', 'appointment_booked', 'consul
             <div v-if="lead.status === 'converted' && lead.patient" class="bg-green-50 border border-green-200 rounded-xl p-5 flex items-center gap-4">
                 <svg class="w-8 h-8 text-green-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 <div>
-                    <p class="text-sm font-semibold text-green-800">Lead Converted to Patient</p>
+                    <p class="text-sm font-semibold text-green-800">{{ isRtl ? 'تم تحويل العميل إلى مريض' : 'Lead Converted to Patient' }}</p>
                     <p class="text-xs text-green-600 mt-0.5">Patient: {{ lead.patient.full_name }} ({{ lead.patient.file_number }})</p>
                 </div>
             </div>
 
             <!-- Lost Info -->
             <div v-if="lead.status === 'lost'" class="bg-red-50 border border-red-200 rounded-xl p-5">
-                <p class="text-sm font-semibold text-red-800">Lead Lost</p>
+                <p class="text-sm font-semibold text-red-800">{{ isRtl ? 'عميل مفقود' : 'Lead Lost' }}</p>
                 <p class="text-xs text-red-600 mt-0.5">{{ lead.loss_reason || 'No reason provided' }}</p>
                 <p class="text-xs text-red-400 mt-0.5">Lost on {{ formatDate(lead.lost_at) }}</p>
             </div>
@@ -366,7 +366,7 @@ const allowedStatuses = ['contacted', 'qualified', 'appointment_booked', 'consul
                 <div class="lg:col-span-2 space-y-6">
                     <!-- Quick Status Actions -->
                     <div v-if="lead.status !== 'converted' && lead.status !== 'lost'" class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
-                        <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Move to Stage</h3>
+                        <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">{{ isRtl ? 'نقل إلى مرحلة' : 'Move to Stage' }}</h3>
                         <div class="flex flex-wrap gap-2">
                             <button v-for="s in allowedStatuses" :key="s"
                                 @click="changeStatus(s)"
@@ -383,7 +383,7 @@ const allowedStatuses = ['contacted', 'qualified', 'appointment_booked', 'consul
                             <button @click="activeTab = 'activity'"
                                 :class="activeTab === 'activity' ? 'border-teal-600 text-teal-600' : 'border-transparent text-gray-500 hover:text-gray-700'"
                                 class="py-3 text-sm font-medium border-b-2 transition"
-                            >Activity Timeline</button>
+                            >{{ isRtl ? 'سجل الأنشطة' : 'Activity Timeline' }}</button>
                             <button @click="activeTab = 'followups'"
                                 :class="activeTab === 'followups' ? 'border-teal-600 text-teal-600' : 'border-transparent text-gray-500 hover:text-gray-700'"
                                 class="py-3 text-sm font-medium border-b-2 transition"
@@ -399,31 +399,31 @@ const allowedStatuses = ['contacted', 'qualified', 'appointment_booked', 'consul
                             <form @submit.prevent="submitActivity" class="bg-gray-50/80 rounded-lg p-4 space-y-3">
                                 <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
                                     <select v-model="activityForm.type" class="text-sm border border-gray-200 rounded-lg py-2 px-3">
-                                        <option value="note">Note</option>
-                                        <option value="call">Call</option>
+                                        <option value="note">{{ isRtl ? 'ملاحظة' : 'Note' }}</option>
+                                        <option value="call">{{ isRtl ? 'مكالمة' : 'Call' }}</option>
                                         <option value="whatsapp">WhatsApp</option>
                                         <option value="email">{{ isRtl ? 'البريد' : 'Email' }}</option>
                                         <option value="sms">SMS</option>
-                                        <option value="meeting">Meeting</option>
+                                        <option value="meeting">{{ isRtl ? 'اجتماع' : 'Meeting' }}</option>
                                     </select>
                                     <select v-if="['call','whatsapp','email','sms'].includes(activityForm.type)" v-model="activityForm.direction" class="text-sm border border-gray-200 rounded-lg py-2 px-3">
-                                        <option value="">Direction</option>
-                                        <option value="inbound">Inbound</option>
-                                        <option value="outbound">Outbound</option>
+                                        <option value="">{{ isRtl ? 'الاتجاه' : 'Direction' }}</option>
+                                        <option value="inbound">{{ isRtl ? 'وارد' : 'Inbound' }}</option>
+                                        <option value="outbound">{{ isRtl ? 'صادر' : 'Outbound' }}</option>
                                     </select>
                                     <select v-if="activityForm.type === 'call'" v-model="activityForm.outcome" class="text-sm border border-gray-200 rounded-lg py-2 px-3">
-                                        <option value="">Outcome</option>
-                                        <option value="successful">Successful</option>
-                                        <option value="no_answer">No Answer</option>
-                                        <option value="busy">Busy</option>
-                                        <option value="voicemail">Voicemail</option>
-                                        <option value="callback_requested">Callback Requested</option>
-                                        <option value="not_interested">Not Interested</option>
+                                        <option value="">{{ isRtl ? 'النتيجة' : 'Outcome' }}</option>
+                                        <option value="successful">{{ isRtl ? 'ناجح' : 'Successful' }}</option>
+                                        <option value="no_answer">{{ isRtl ? 'لا رد' : 'No Answer' }}</option>
+                                        <option value="busy">{{ isRtl ? 'مشغول' : 'Busy' }}</option>
+                                        <option value="voicemail">{{ isRtl ? 'بريد صوتي' : 'Voicemail' }}</option>
+                                        <option value="callback_requested">{{ isRtl ? 'طلب معاودة الاتصال' : 'Callback Requested' }}</option>
+                                        <option value="not_interested">{{ isRtl ? 'غير مهتم' : 'Not Interested' }}</option>
                                     </select>
                                 </div>
-                                <textarea v-model="activityForm.description" rows="2" placeholder="What happened? Add notes..." class="w-full text-sm border border-gray-200 rounded-lg py-2 px-3 resize-none focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500"></textarea>
+                                <textarea v-model="activityForm.description" rows="2" :placeholder="isRtl ? 'ماذا حدث؟ أضف ملاحظات...' : 'What happened? Add notes...'" class="w-full text-sm border border-gray-200 rounded-lg py-2 px-3 resize-none focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500"></textarea>
                                 <div class="flex justify-end">
-                                    <button type="submit" :disabled="activityForm.processing" class="px-4 py-2 text-xs font-medium text-white rounded-lg transition" style="background-color: #0d9488;">Log Activity</button>
+                                    <button type="submit" :disabled="activityForm.processing" class="px-4 py-2 text-xs font-medium text-white rounded-lg transition" style="background-color: #0d9488;">{{ isRtl ? 'تسجيل نشاط' : 'Log Activity' }}</button>
                                 </div>
                             </form>
 
@@ -448,7 +448,7 @@ const allowedStatuses = ['contacted', 'qualified', 'appointment_booked', 'consul
                                         </div>
                                     </div>
                                 </div>
-                                <div v-if="!activities?.length" class="py-8 text-center text-sm text-gray-400">No activity recorded yet</div>
+                                <div v-if="!activities?.length" class="py-8 text-center text-sm text-gray-400">{{ isRtl ? 'لم يتم تسجيل أنشطة بعد' : 'No activity recorded yet' }}</div>
                             </div>
                         </div>
 
@@ -463,18 +463,18 @@ const allowedStatuses = ['contacted', 'qualified', 'appointment_booked', 'consul
                             <form v-if="showFollowUpForm" @submit.prevent="submitFollowUp" class="bg-gray-50/80 rounded-lg p-4 space-y-3">
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                                     <select v-model="followUpForm.type" class="text-sm border border-gray-200 rounded-lg py-2 px-3">
-                                        <option value="call">Call</option>
+                                        <option value="call">{{ isRtl ? 'مكالمة' : 'Call' }}</option>
                                         <option value="whatsapp">WhatsApp</option>
                                         <option value="email">{{ isRtl ? 'البريد' : 'Email' }}</option>
                                         <option value="sms">SMS</option>
-                                        <option value="meeting">Meeting</option>
-                                        <option value="other">Other</option>
+                                        <option value="meeting">{{ isRtl ? 'اجتماع' : 'Meeting' }}</option>
+                                        <option value="other">{{ isRtl ? 'أخرى' : 'Other' }}</option>
                                     </select>
                                     <input v-model="followUpForm.scheduled_at" type="datetime-local" class="text-sm border border-gray-200 rounded-lg py-2 px-3" />
                                 </div>
-                                <textarea v-model="followUpForm.notes" rows="2" placeholder="Follow-up notes..." class="w-full text-sm border border-gray-200 rounded-lg py-2 px-3 resize-none"></textarea>
+                                <textarea v-model="followUpForm.notes" rows="2" :placeholder="isRtl ? 'ملاحظات المتابعة...' : 'Follow-up notes...'" class="w-full text-sm border border-gray-200 rounded-lg py-2 px-3 resize-none"></textarea>
                                 <div class="flex justify-end">
-                                    <button type="submit" :disabled="followUpForm.processing" class="px-4 py-2 text-xs font-medium text-white rounded-lg" style="background-color: #0d9488;">Schedule</button>
+                                    <button type="submit" :disabled="followUpForm.processing" class="px-4 py-2 text-xs font-medium text-white rounded-lg" style="background-color: #0d9488;">{{ isRtl ? 'جدولة' : 'Schedule' }}</button>
                                 </div>
                             </form>
 
@@ -511,10 +511,10 @@ const allowedStatuses = ['contacted', 'qualified', 'appointment_booked', 'consul
                                         <div class="flex items-center gap-1">
                                             <!-- Action buttons for pending follow-ups -->
                                             <template v-if="fu.status === 'pending'">
-                                                <button @click="openComplete(fu)" title="Mark Complete" class="p-1.5 rounded-lg text-green-500 hover:bg-green-50 transition">
+                                                <button @click="openComplete(fu)" :title="isRtl ? 'تحديد كمكتمل' : 'Mark Complete'" class="p-1.5 rounded-lg text-green-500 hover:bg-green-50 transition">
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
                                                 </button>
-                                                <button @click="missFollowUp(fu.id)" title="Mark Missed" class="p-1.5 rounded-lg text-red-500 hover:bg-red-50 transition">
+                                                <button @click="missFollowUp(fu.id)" :title="isRtl ? 'تحديد كفائت' : 'Mark Missed'" class="p-1.5 rounded-lg text-red-500 hover:bg-red-50 transition">
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                                                 </button>
                                             </template>
@@ -528,12 +528,12 @@ const allowedStatuses = ['contacted', 'qualified', 'appointment_booked', 'consul
                                                 <label class="text-xs text-gray-500 mb-1 block">Result / Notes (optional)</label>
                                                 <input v-model="completeForm.result" type="text" placeholder="e.g. Client agreed to come for consultation" class="w-full text-sm border border-gray-200 rounded-lg py-2 px-3 focus:ring-2 focus:ring-green-300 focus:border-green-400" />
                                             </div>
-                                            <button type="submit" :disabled="completeForm.processing" class="px-3 py-2 text-xs font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition">Done</button>
+                                            <button type="submit" :disabled="completeForm.processing" class="px-3 py-2 text-xs font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition">{{ isRtl ? 'تم' : 'Done' }}</button>
                                             <button type="button" @click="completingFollowUp = null" class="px-3 py-2 text-xs text-gray-500">{{ isRtl ? 'إلغاء' : 'Cancel' }}</button>
                                         </form>
                                     </div>
                                 </div>
-                                <div v-if="!followUps?.length" class="py-8 text-center text-sm text-gray-400">No follow-ups scheduled</div>
+                                <div v-if="!followUps?.length" class="py-8 text-center text-sm text-gray-400">{{ isRtl ? 'لا توجد متابعات مجدولة' : 'No follow-ups scheduled' }}</div>
                             </div>
                         </div>
                     </div>
@@ -543,7 +543,7 @@ const allowedStatuses = ['contacted', 'qualified', 'appointment_booked', 'consul
                 <div class="space-y-6">
                     <!-- Quick Actions (Contact) -->
                     <div v-if="lead.phone && lead.status !== 'converted'" class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
-                        <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Quick Actions</h3>
+                        <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">{{ isRtl ? 'إجراءات سريعة' : 'Quick Actions' }}</h3>
                         <div class="grid grid-cols-2 gap-2">
                             <a :href="`tel:${lead.phone}`" class="flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-medium text-green-700 bg-green-50 rounded-lg border border-green-100 hover:bg-green-100 transition">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
@@ -562,7 +562,7 @@ const allowedStatuses = ['contacted', 'qualified', 'appointment_booked', 'consul
 
                     <!-- Contact Info -->
                     <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
-                        <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">Contact Information</h3>
+                        <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">{{ isRtl ? 'معلومات الاتصال' : 'Contact Information' }}</h3>
                         <div class="space-y-3">
                             <div class="flex justify-between">
                                 <span class="text-sm text-gray-500">{{ isRtl ? 'الهاتف' : 'Phone' }}</span>
@@ -570,7 +570,7 @@ const allowedStatuses = ['contacted', 'qualified', 'appointment_booked', 'consul
                                 <span v-else class="text-sm text-gray-400">-</span>
                             </div>
                             <div v-if="lead.phone2" class="flex justify-between">
-                                <span class="text-sm text-gray-500">Phone 2</span>
+                                <span class="text-sm text-gray-500">{{ isRtl ? 'الهاتف 2' : 'Phone 2' }}</span>
                                 <a :href="`tel:${lead.phone2}`" class="text-sm font-medium text-gray-800 hover:underline">{{ lead.phone2 }}</a>
                             </div>
                             <div class="flex justify-between">
@@ -583,7 +583,7 @@ const allowedStatuses = ['contacted', 'qualified', 'appointment_booked', 'consul
                                 <span class="text-sm font-medium text-gray-800 capitalize">{{ lead.gender || '-' }}</span>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-sm text-gray-500">City</span>
+                                <span class="text-sm text-gray-500">{{ isRtl ? 'المدينة' : 'City' }}</span>
                                 <span class="text-sm font-medium text-gray-800">{{ lead.city || '-' }}</span>
                             </div>
                             <div class="flex justify-between">
@@ -603,15 +603,15 @@ const allowedStatuses = ['contacted', 'qualified', 'appointment_booked', 'consul
                                 <span v-else class="text-sm text-gray-400">-</span>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-sm text-gray-500">Campaign</span>
+                                <span class="text-sm text-gray-500">{{ isRtl ? 'الحملة' : 'Campaign' }}</span>
                                 <span class="text-sm font-medium text-gray-800">{{ lead.campaign?.name || '-' }}</span>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-sm text-gray-500">Created</span>
+                                <span class="text-sm text-gray-500">{{ isRtl ? 'تاريخ الإنشاء' : 'Created' }}</span>
                                 <span class="text-sm font-medium text-gray-800">{{ formatDate(lead.created_at) }}</span>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-sm text-gray-500">Last Contact</span>
+                                <span class="text-sm text-gray-500">{{ isRtl ? 'آخر تواصل' : 'Last Contact' }}</span>
                                 <span class="text-sm font-medium text-gray-800">{{ lead.last_contacted_at ? formatDate(lead.last_contacted_at) : 'Never' }}</span>
                             </div>
                             <div class="flex justify-between">

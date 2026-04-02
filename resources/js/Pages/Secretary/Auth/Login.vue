@@ -66,7 +66,7 @@ function submit() {
                             required
                             class="w-full px-4 py-3 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white placeholder-white/30 focus:ring-2 focus:ring-teal-500/50 focus:border-teal-500/50 text-sm transition-all duration-200"
                             :class="form.errors.password ? 'border-red-500/50' : ''"
-                            placeholder="Enter your password"
+                            :placeholder="isRtl ? 'أدخل كلمة المرور' : 'Enter your password'"
                         />
                         <p v-if="form.errors.password" class="mt-1.5 text-sm text-red-400">{{ form.errors.password }}</p>
                     </div>

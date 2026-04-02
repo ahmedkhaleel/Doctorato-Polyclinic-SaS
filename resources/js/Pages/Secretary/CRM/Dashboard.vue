@@ -45,13 +45,13 @@ function missFollowUp(fuId) {
 </script>
 
 <template>
-    <SecretaryLayout title="My Leads">
+    <SecretaryLayout :title="isRtl ? 'عملائي' : 'My Leads'">
         <div class="space-y-6">
             <!-- Header -->
             <div class="flex items-center justify-between">
                 <div>
                     <h1 class="text-2xl font-bold text-gray-800">{{ isRtl ? 'العملاء المحتملين' : 'My Leads' }}</h1>
-                    <p class="text-sm text-gray-500 mt-1">Manage leads assigned to you</p>
+                    <p class="text-sm text-gray-500 mt-1">{{ isRtl ? 'إدارة العملاء المحتملين المعينين لك' : 'Manage leads assigned to you' }}</p>
                 </div>
                 <Link href="/secretary/crm/leads" class="inline-flex items-center px-4 py-2 rounded-lg text-white text-sm font-medium transition shadow-sm" style="background-color: #0d9488;">
                     View All Leads
@@ -61,11 +61,11 @@ function missFollowUp(fuId) {
             <!-- Stats -->
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div class="bg-white rounded-xl shadow-sm p-5 border border-gray-100">
-                    <p class="text-xs font-medium text-gray-500 uppercase tracking-wider">My Active Leads</p>
+                    <p class="text-xs font-medium text-gray-500 uppercase tracking-wider">{{ isRtl ? 'عملائي النشطين' : 'My Active Leads' }}</p>
                     <p class="text-2xl font-bold text-gray-800 mt-2">{{ stats.my_leads }}</p>
                 </div>
                 <div class="bg-white rounded-xl shadow-sm p-5 border border-gray-100">
-                    <p class="text-xs font-medium text-gray-500 uppercase tracking-wider">New Leads</p>
+                    <p class="text-xs font-medium text-gray-500 uppercase tracking-wider">{{ isRtl ? 'عملاء جدد' : 'New Leads' }}</p>
                     <p class="text-2xl font-bold text-blue-600 mt-2">{{ stats.new_leads }}</p>
                 </div>
                 <div class="bg-white rounded-xl shadow-sm p-5 border border-gray-100">
@@ -73,7 +73,7 @@ function missFollowUp(fuId) {
                     <p class="text-2xl font-bold text-gray-800 mt-2">{{ stats.today_follow_ups }}</p>
                 </div>
                 <div class="bg-white rounded-xl shadow-sm p-5 border border-gray-100">
-                    <p class="text-xs font-medium text-gray-500 uppercase tracking-wider">Overdue</p>
+                    <p class="text-xs font-medium text-gray-500 uppercase tracking-wider">{{ isRtl ? 'متأخرة' : 'Overdue' }}</p>
                     <p class="text-2xl font-bold" :class="stats.overdue_follow_ups > 0 ? 'text-red-600' : 'text-gray-800'">{{ stats.overdue_follow_ups }}</p>
                 </div>
             </div>
@@ -97,15 +97,15 @@ function missFollowUp(fuId) {
                                 </div>
                             </div>
                             <div class="flex items-center gap-1">
-                                <button @click="completeFollowUp(fu.id)" title="Complete" class="p-1 rounded text-green-500 hover:bg-green-50 transition">
+                                <button @click="completeFollowUp(fu.id)" :title="isRtl ? 'مكتمل' : 'Complete'" class="p-1 rounded text-green-500 hover:bg-green-50 transition">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
                                 </button>
-                                <button @click="missFollowUp(fu.id)" title="Missed" class="p-1 rounded text-red-500 hover:bg-red-50 transition">
+                                <button @click="missFollowUp(fu.id)" :title="isRtl ? 'فائت' : 'Missed'" class="p-1 rounded text-red-500 hover:bg-red-50 transition">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                                 </button>
                             </div>
                         </div>
-                        <div v-if="!todayFollowUps?.length" class="px-6 py-8 text-sm text-gray-400 text-center">No follow-ups today</div>
+                        <div v-if="!todayFollowUps?.length" class="px-6 py-8 text-sm text-gray-400 text-center">{{ isRtl ? 'لا توجد متابعات اليوم' : 'No follow-ups today' }}</div>
                     </div>
                 </div>
 
@@ -124,10 +124,10 @@ function missFollowUp(fuId) {
                                 <span class="text-xs text-red-500">Due {{ formatDate(fu.scheduled_at) }}</span>
                             </div>
                             <div class="flex items-center gap-1">
-                                <button @click="completeFollowUp(fu.id)" title="Complete" class="p-1 rounded text-green-500 hover:bg-green-50 transition">
+                                <button @click="completeFollowUp(fu.id)" :title="isRtl ? 'مكتمل' : 'Complete'" class="p-1 rounded text-green-500 hover:bg-green-50 transition">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
                                 </button>
-                                <button @click="missFollowUp(fu.id)" title="Missed" class="p-1 rounded text-red-500 hover:bg-red-50 transition">
+                                <button @click="missFollowUp(fu.id)" :title="isRtl ? 'فائت' : 'Missed'" class="p-1 rounded text-red-500 hover:bg-red-50 transition">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                                 </button>
                             </div>
@@ -138,7 +138,7 @@ function missFollowUp(fuId) {
                 <!-- Recent Leads -->
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100" :class="overdueFollowUps?.length ? '' : ''">
                     <div class="px-6 py-4 border-b border-gray-100">
-                        <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wider">My Recent Leads</h3>
+                        <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wider">{{ isRtl ? 'عملائي الأخيرين' : 'My Recent Leads' }}</h3>
                     </div>
                     <div class="divide-y divide-gray-50">
                         <Link v-for="lead in recentLeads" :key="lead.id" :href="`/secretary/crm/leads/${lead.id}`"
@@ -152,7 +152,7 @@ function missFollowUp(fuId) {
                                 {{ statusLabels[lead.status] || lead.status }}
                             </span>
                         </Link>
-                        <div v-if="!recentLeads?.length" class="px-6 py-8 text-sm text-gray-400 text-center">No leads assigned to you yet</div>
+                        <div v-if="!recentLeads?.length" class="px-6 py-8 text-sm text-gray-400 text-center">{{ isRtl ? 'لم يتم تعيين عملاء لك بعد' : 'No leads assigned to you yet' }}</div>
                     </div>
                 </div>
             </div>

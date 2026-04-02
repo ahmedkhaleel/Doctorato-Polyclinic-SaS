@@ -40,7 +40,7 @@ function formatDate(date) {
 
         <!-- Search -->
         <div class="flex flex-wrap items-center gap-3 mb-6">
-            <input v-model="search" type="text" placeholder="Search by patient or doctor..." class="px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500 w-72" />
+            <input v-model="search" type="text" :placeholder="isRtl ? 'بحث بالمريض أو الطبيب...' : 'Search by patient or doctor...'" class="px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500 w-72" />
         </div>
 
         <!-- Table -->
@@ -78,7 +78,7 @@ function formatDate(date) {
             </table>
 
             <div v-if="prescriptions.data?.length === 0" class="py-12 text-center">
-                <p class="text-sm text-gray-400">No prescriptions found</p>
+                <p class="text-sm text-gray-400">{{ isRtl ? 'لا توجد وصفات طبية' : 'No prescriptions found' }}</p>
             </div>
 
             <div v-if="prescriptions.links?.length > 3" class="flex items-center justify-center gap-1 px-6 py-4 border-t border-gray-100">

@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, watch } from 'vue';
+import { computed, ref, watch, onMounted } from 'vue';
 import { Link, router, usePage } from '@inertiajs/vue3';
 import SecretaryLayout from '@/Layouts/SecretaryLayout.vue';
 
@@ -45,34 +45,41 @@ function applyFilters() {
     }, { preserveState: true, replace: true });
 }
 
-const statusColors = {
-    unconfirmed: 'bg-yellow-50 text-yellow-700 border-yellow-200',
-    confirmed: 'bg-blue-50 text-blue-700 border-blue-200',
-    in_progress: 'bg-indigo-50 text-indigo-700 border-indigo-200',
-    completed: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-    cancelled: 'bg-red-50 text-red-700 border-red-200',
-    // Legacy statuses
-    new: 'bg-yellow-50 text-yellow-700 border-yellow-200',
-    pending: 'bg-yellow-50 text-yellow-700 border-yellow-200',
-    contacted: 'bg-sky-50 text-sky-700 border-sky-200',
+const statusConfig = {
+    unconfirmed:  { label: 'Unconfirmed', labelAr: 'غير مؤكد',   bg: 'bg-amber-50',   text: 'text-amber-700',   dot: 'bg-amber-500',   border: 'border-amber-200' },
+    confirmed:    { label: 'Confirmed',   labelAr: 'مؤكد',       bg: 'bg-blue-50',    text: 'text-blue-700',    dot: 'bg-blue-500',    border: 'border-blue-200' },
+    in_progress:  { label: 'In Progress', labelAr: 'جاري',       bg: 'bg-indigo-50',  text: 'text-indigo-700',  dot: 'bg-indigo-500',  border: 'border-indigo-200' },
+    completed:    { label: 'Completed',   labelAr: 'مكتمل',      bg: 'bg-emerald-50', text: 'text-emerald-700', dot: 'bg-emerald-500', border: 'border-emerald-200' },
+    cancelled:    { label: 'Cancelled',   labelAr: 'ملغي',       bg: 'bg-red-50',     text: 'text-red-700',     dot: 'bg-red-500',     border: 'border-red-200' },
+    new:          { label: 'New',         labelAr: 'جديد',       bg: 'bg-yellow-50',  text: 'text-yellow-700',  dot: 'bg-yellow-500',  border: 'border-yellow-200' },
+    pending:      { label: 'Pending',     labelAr: 'معلق',       bg: 'bg-yellow-50',  text: 'text-yellow-700',  dot: 'bg-yellow-500',  border: 'border-yellow-200' },
+    contacted:    { label: 'Contacted',   labelAr: 'تم التواصل', bg: 'bg-sky-50',     text: 'text-sky-700',     dot: 'bg-sky-500',     border: 'border-sky-200' },
 };
 
-const statusLabels = {
-    unconfirmed: 'Unconfirmed',
-    confirmed: 'Confirmed',
-    in_progress: 'In Progress',
-    completed: 'Completed',
-    cancelled: 'Cancelled',
-    new: isRtl.value ? 'جديد' : 'New',
-    pending: 'Pending',
-    contacted: isRtl.value ? 'تم التواصل' : 'Contacted',
+function getStatus(s) {
+    return statusConfig[s] || { label: s, labelAr: s, bg: 'bg-gray-50', text: 'text-gray-700', dot: 'bg-gray-500', border: 'border-gray-200' };
+}
+
+const sourceConfig = {
+    website:   { label: 'Website',   labelAr: 'الموقع',    bg: 'bg-blue-50',  text: 'text-blue-600' },
+    secretary: { label: 'Secretary', labelAr: 'السكرتارية', bg: 'bg-teal-50',  text: 'text-teal-600' },
+    admin:     { label: 'Admin',     labelAr: 'الإدارة',    bg: 'bg-amber-50', text: 'text-amber-600' },
 };
 
-const sourceColors = {
-    website: 'bg-blue-50 text-blue-600 border-blue-200',
-    secretary: 'bg-teal-50 text-teal-600 border-teal-200',
-    admin: 'bg-amber-50 text-amber-600 border-amber-200',
+function getSource(s) {
+    return sourceConfig[s] || { label: s, labelAr: s, bg: 'bg-gray-50', text: 'text-gray-600' };
+}
+
+const invoiceStatusConfig = {
+    unpaid:  { label: 'Unpaid',  labelAr: 'غير مدفوع',      bg: 'bg-red-50',     text: 'text-red-600' },
+    partial: { label: 'Partial', labelAr: 'مدفوع جزئياً',   bg: 'bg-amber-50',   text: 'text-amber-600' },
+    paid:    { label: 'Paid',    labelAr: 'مدفوع',          bg: 'bg-emerald-50', text: 'text-emerald-600' },
 };
+
+function getInvoiceStatus(booking) {
+    if (!booking.invoice) return null;
+    return invoiceStatusConfig[booking.invoice.status] || { label: booking.invoice.status, labelAr: booking.invoice.status, bg: 'bg-gray-50', text: 'text-gray-600' };
+}
 
 function getPatientName(booking) {
     return booking.patient?.full_name || booking.full_name || '-';
@@ -84,147 +91,173 @@ function getPatientPhone(booking) {
 
 function getServicesText(booking) {
     if (booking.booking_services?.length > 0) {
-        return booking.booking_services.map(bs => bs.service?.name_en || bs.service?.name_ar).join(', ');
+        return booking.booking_services.map(bs => isRtl.value ? (bs.service?.name_ar || bs.service?.name_en) : (bs.service?.name_en || bs.service?.name_ar)).join(', ');
     }
     return '-';
 }
 
-function getInvoiceStatus(booking) {
-    if (!booking.invoice) return null;
-    return booking.invoice.status;
-}
-
-const invoiceStatusColors = {
-    unpaid: 'bg-red-50 text-red-600 border-red-200',
-    partial: 'bg-amber-50 text-amber-600 border-amber-200',
-    paid: 'bg-emerald-50 text-emerald-600 border-emerald-200',
-};
+const headerLoaded = ref(false);
+const cardsLoaded = ref(false);
+onMounted(() => {
+    setTimeout(() => { headerLoaded.value = true; }, 50);
+    setTimeout(() => { cardsLoaded.value = true; }, 200);
+});
 </script>
 
 <template>
     <div>
-        <div class="flex items-center justify-between mb-6">
-            <div>
-                <h1 class="text-2xl font-bold text-gray-900">{{ isRtl ? 'الحجوزات' : 'Bookings' }}</h1>
-                <p class="text-sm text-gray-500 mt-1">Manage all bookings and appointments</p>
+        <!-- ═══ HERO HEADER ═══ -->
+        <div class="relative -mx-4 sm:-mx-6 lg:-mx-8 -mt-4 sm:-mt-6 mb-8 px-4 sm:px-6 lg:px-8 pt-8 pb-10 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 overflow-hidden transition-all duration-700" :class="headerLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'">
+            <div class="absolute inset-0 opacity-10" style="background: radial-gradient(circle at 30% 50%, #0d9488 0%, transparent 60%)"></div>
+            <div class="relative z-10">
+                <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+                    <div>
+                        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-sm mb-3">
+                            <span class="w-2 h-2 rounded-full bg-[#0d9488] animate-pulse"></span>
+                            <span class="text-xs font-semibold text-gray-300">{{ isRtl ? 'إدارة الحجوزات' : 'Booking Management' }}</span>
+                        </div>
+                        <h1 class="text-2xl sm:text-3xl font-bold text-white">{{ isRtl ? 'الحجوزات' : 'Bookings' }}</h1>
+                        <p class="text-sm text-gray-400 mt-1.5">{{ isRtl ? 'إدارة جميع الحجوزات والمواعيد' : 'Manage all bookings and appointments' }}</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <Link href="/secretary/bundle-bookings/create" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-white bg-white/10 hover:bg-white/20 border border-white/20 transition-all">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
+                            {{ isRtl ? 'حجز باقة' : 'Book Package' }}
+                        </Link>
+                        <Link href="/secretary/bookings/create" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-[#0d9488] hover:bg-[#0b8278] transition-all shadow-lg shadow-[#0d9488]/20">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+                            {{ isRtl ? 'حجز جديد' : 'New Booking' }}
+                        </Link>
+                    </div>
+                </div>
+
+                <!-- Module Tabs in Hero -->
+                <div v-if="activeModules.length > 1" class="flex gap-2 flex-wrap mt-5">
+                    <button
+                        @click="moduleFilter = ''"
+                        class="px-4 py-2 rounded-xl text-sm font-medium transition-all"
+                        :class="moduleFilter === '' ? 'bg-white/20 text-white' : 'text-gray-400 hover:text-white hover:bg-white/10'"
+                    >
+                        {{ isRtl ? 'الكل' : 'All' }}
+                    </button>
+                    <button
+                        v-for="mod in activeModules"
+                        :key="mod.slug"
+                        @click="moduleFilter = mod.slug"
+                        class="px-4 py-2 rounded-xl text-sm font-medium transition-all flex items-center gap-1.5"
+                        :class="moduleFilter === mod.slug ? 'bg-white/20 text-white' : 'text-gray-400 hover:text-white hover:bg-white/10'"
+                    >
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="mod.icon" /></svg>
+                        <span>{{ isRtl ? mod.name_ar : mod.name_en }}</span>
+                    </button>
+                </div>
+
+                <!-- Filters in Hero -->
+                <div class="flex flex-wrap items-center gap-3 mt-4">
+                    <div class="relative flex-1 min-w-[220px] max-w-sm">
+                        <svg class="absolute left-3 rtl:left-auto rtl:right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                        <input
+                            v-model="search"
+                            type="text"
+                            :placeholder="isRtl ? 'بحث بالاسم، الهاتف، رقم الحجز...' : 'Search by name, phone, booking #...'"
+                            class="w-full ltr:pl-10 ltr:pr-4 rtl:pr-10 rtl:pl-4 py-2.5 bg-white/10 border border-white/20 rounded-xl text-sm text-white placeholder-gray-400 focus:ring-2 focus:ring-[#0d9488]/50 focus:border-[#0d9488] transition"
+                        />
+                    </div>
+                    <select v-model="status" class="px-3 py-2.5 bg-white/10 border border-white/20 rounded-xl text-sm text-white focus:ring-2 focus:ring-[#0d9488]/50 focus:border-[#0d9488] [&>option]:text-gray-900">
+                        <option value="">{{ isRtl ? 'جميع الحالات' : 'All Statuses' }}</option>
+                        <option value="unconfirmed">{{ isRtl ? 'غير مؤكد' : 'Unconfirmed' }}</option>
+                        <option value="confirmed">{{ isRtl ? 'مؤكد' : 'Confirmed' }}</option>
+                        <option value="in_progress">{{ isRtl ? 'جاري' : 'In Progress' }}</option>
+                        <option value="completed">{{ isRtl ? 'مكتمل' : 'Completed' }}</option>
+                        <option value="cancelled">{{ isRtl ? 'ملغي' : 'Cancelled' }}</option>
+                    </select>
+                    <select v-model="source" class="px-3 py-2.5 bg-white/10 border border-white/20 rounded-xl text-sm text-white focus:ring-2 focus:ring-[#0d9488]/50 focus:border-[#0d9488] [&>option]:text-gray-900">
+                        <option value="">{{ isRtl ? 'جميع المصادر' : 'All Sources' }}</option>
+                        <option value="website">{{ isRtl ? 'الموقع' : 'Website' }}</option>
+                        <option value="secretary">{{ isRtl ? 'السكرتارية' : 'Secretary' }}</option>
+                        <option value="admin">{{ isRtl ? 'الإدارة' : 'Admin' }}</option>
+                    </select>
+                </div>
             </div>
-            <div class="flex items-center gap-3">
-                <Link href="/secretary/bundle-bookings/create" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm border-2 border-teal-500 text-teal-600 hover:bg-teal-50 transition-all duration-300">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
-                    Book Package
-                </Link>
-                <Link href="/secretary/bookings/create" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-white font-semibold text-sm bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-600 hover:to-cyan-600 transition-all duration-300 shadow-sm">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
-                    {{ isRtl ? 'حجز جديد' : 'New Booking' }}
-                </Link>
-            </div>
         </div>
 
-        <!-- Module Tabs -->
-        <div v-if="activeModules.length > 1" class="bg-white rounded-lg shadow-sm p-1.5 flex gap-1 flex-wrap mb-4">
-            <button
-                @click="moduleFilter = ''"
-                class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200"
-                :class="moduleFilter === '' ? 'bg-gray-800 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100'"
+        <!-- ═══ BOOKING CARDS ═══ -->
+        <div class="space-y-3 transition-all duration-500" :class="cardsLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'">
+            <div
+                v-for="booking in bookings.data"
+                :key="booking.id"
+                class="bg-white rounded-2xl shadow-sm border border-gray-100/80 hover:shadow-md transition-all duration-300 overflow-hidden"
             >
-                {{ isRtl ? 'الكل' : 'All' }}
-            </button>
-            <button
-                v-for="mod in activeModules"
-                :key="mod.slug"
-                @click="moduleFilter = mod.slug"
-                class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-1.5"
-                :class="moduleFilter === mod.slug ? 'text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100'"
-                :style="moduleFilter === mod.slug ? { backgroundColor: mod.color } : {}"
-            >
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="mod.icon" /></svg>
-                <span>{{ isRtl ? mod.name_ar : mod.name_en }}</span>
-            </button>
-        </div>
-
-        <!-- Filters -->
-        <div class="flex flex-wrap items-center gap-3 mb-6">
-            <input v-model="search" type="text" placeholder="Search by name, phone, booking #, file #..." class="px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500 w-72" />
-            <select v-model="status" class="px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500">
-                <option value="">{{ isRtl ? 'جميع الحالات' : 'All Statuses' }}</option>
-                <option value="unconfirmed">Unconfirmed</option>
-                <option value="confirmed">{{ isRtl ? 'مؤكد' : 'Confirmed' }}</option>
-                <option value="in_progress">{{ isRtl ? 'جاري' : 'In Progress' }}</option>
-                <option value="completed">{{ isRtl ? 'مكتمل' : 'Completed' }}</option>
-                <option value="cancelled">Cancelled</option>
-            </select>
-            <select v-model="source" class="px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500">
-                <option value="">{{ isRtl ? 'جميع المصادر' : 'All Sources' }}</option>
-                <option value="website">Website</option>
-                <option value="secretary">Secretary</option>
-                <option value="admin">Admin</option>
-            </select>
-        </div>
-
-        <!-- Table -->
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
-            <table class="w-full text-sm">
-                <thead>
-                    <tr class="bg-gray-50/80">
-                        <th class="ltr:text-left rtl:ltr:text-right rtl:text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Booking #</th>
-                        <th class="ltr:text-left rtl:ltr:text-right rtl:text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'المريض' : 'Patient' }}</th>
-                        <th class="ltr:text-left rtl:ltr:text-right rtl:text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'الهاتف' : 'Phone' }}</th>
-                        <th class="ltr:text-left rtl:ltr:text-right rtl:text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Services</th>
-                        <th class="ltr:text-left rtl:ltr:text-right rtl:text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'المصدر' : 'Source' }}</th>
-                        <th class="ltr:text-left rtl:ltr:text-right rtl:text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'الحالة' : 'Status' }}</th>
-                        <th class="ltr:text-left rtl:ltr:text-right rtl:text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'الفاتورة' : 'Invoice' }}</th>
-                        <th class="ltr:text-right rtl:text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'إجراءات' : 'Actions' }}</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-100">
-                    <tr v-for="booking in bookings.data" :key="booking.id" class="hover:bg-gray-50/50 transition-colors">
-                        <td class="px-6 py-3">
-                            <div class="flex items-center gap-1.5">
-                                <svg v-if="booking.module === 'dental'" class="w-3.5 h-3.5 text-cyan-500 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24" title="Dental"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342" /></svg>
-                                <span class="font-mono text-xs text-gray-600">{{ booking.booking_number || `#${booking.id}` }}</span>
+                <div class="flex flex-col sm:flex-row sm:items-center gap-4 p-4 sm:p-5">
+                    <!-- Status Dot & Patient -->
+                    <div class="flex items-center gap-4 flex-1 min-w-0">
+                        <div :class="[getStatus(booking.status).bg, getStatus(booking.status).border]" class="w-12 h-12 rounded-xl border flex items-center justify-center flex-shrink-0">
+                            <span :class="getStatus(booking.status).dot" class="w-3 h-3 rounded-full"></span>
+                        </div>
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-2">
+                                <p class="font-bold text-gray-900 text-[15px]">{{ getPatientName(booking) }}</p>
+                                <span class="text-xs font-mono text-[#0d9488] font-semibold">{{ booking.booking_number || `#${booking.id}` }}</span>
                             </div>
-                        </td>
-                        <td class="px-6 py-3 font-semibold text-gray-800">{{ getPatientName(booking) }}</td>
-                        <td class="px-6 py-3 text-gray-500" dir="ltr">{{ getPatientPhone(booking) }}</td>
-                        <td class="px-6 py-3 text-gray-500">
-                            <span class="max-w-[200px] truncate block">{{ getServicesText(booking) }}</span>
-                            <span v-if="booking.booking_services_count > 0" class="text-xs text-gray-400">({{ booking.booking_services_count }} services)</span>
-                        </td>
-                        <td class="px-6 py-3">
-                            <span v-if="booking.source" class="inline-flex px-2 py-0.5 rounded-full text-xs font-medium border" :class="sourceColors[booking.source] || 'bg-gray-50 text-gray-500'">
-                                {{ booking.source }}
-                            </span>
-                            <span v-else class="text-xs text-gray-400">-</span>
-                        </td>
-                        <td class="px-6 py-3">
-                            <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold border" :class="statusColors[booking.status] || 'bg-gray-50 text-gray-600 border-gray-200'">
-                                {{ statusLabels[booking.status] || booking.status }}
-                            </span>
-                        </td>
-                        <td class="px-6 py-3">
-                            <span v-if="getInvoiceStatus(booking)" class="inline-flex px-2 py-0.5 rounded-full text-xs font-medium border" :class="invoiceStatusColors[getInvoiceStatus(booking)] || 'bg-gray-50 text-gray-500'">
-                                {{ getInvoiceStatus(booking) }}
-                            </span>
-                            <span v-else class="text-xs text-gray-400">-</span>
-                        </td>
-                        <td class="px-6 py-3 ltr:text-right rtl:text-left">
-                            <Link :href="`/secretary/bookings/${booking.id}`" class="text-teal-600 hover:text-teal-800 text-xs font-semibold">{{ isRtl ? 'عرض' : 'View' }}</Link>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                            <div class="flex items-center gap-2 mt-1 flex-wrap">
+                                <span :class="[getStatus(booking.status).bg, getStatus(booking.status).text]" class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold">
+                                    {{ isRtl ? getStatus(booking.status).labelAr : getStatus(booking.status).label }}
+                                </span>
+                                <span v-if="booking.source" :class="[getSource(booking.source).bg, getSource(booking.source).text]" class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold">
+                                    {{ isRtl ? getSource(booking.source).labelAr : getSource(booking.source).label }}
+                                </span>
+                                <span v-if="getInvoiceStatus(booking)" :class="[getInvoiceStatus(booking).bg, getInvoiceStatus(booking).text]" class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold">
+                                    {{ isRtl ? getInvoiceStatus(booking).labelAr : getInvoiceStatus(booking).label }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
 
-            <div v-if="bookings.data?.length === 0" class="py-12 text-center">
-                <svg class="w-12 h-12 text-gray-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                <p class="text-sm text-gray-400">No bookings found</p>
+                    <!-- Details -->
+                    <div class="flex items-center gap-5 sm:gap-6">
+                        <div class="text-center">
+                            <p class="text-[10px] text-gray-400 font-semibold uppercase">{{ isRtl ? 'الهاتف' : 'Phone' }}</p>
+                            <p class="text-xs font-medium text-gray-700 mt-0.5 dir-ltr">{{ getPatientPhone(booking) }}</p>
+                        </div>
+                        <div class="text-center max-w-[150px]">
+                            <p class="text-[10px] text-gray-400 font-semibold uppercase">{{ isRtl ? 'الخدمات' : 'Services' }}</p>
+                            <p class="text-xs font-medium text-gray-700 mt-0.5 truncate">{{ getServicesText(booking) }}</p>
+                            <span v-if="booking.booking_services_count > 1" class="text-[10px] text-gray-400">({{ booking.booking_services_count }} {{ isRtl ? 'خدمات' : 'services' }})</span>
+                        </div>
+                    </div>
+
+                    <!-- Action -->
+                    <Link
+                        :href="`/secretary/bookings/${booking.id}`"
+                        class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-[#0d9488] bg-[#0d9488]/5 hover:bg-[#0d9488]/10 rounded-xl transition-colors flex-shrink-0"
+                    >
+                        {{ isRtl ? 'عرض التفاصيل' : 'View Details' }}
+                        <svg class="w-3.5 h-3.5 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                    </Link>
+                </div>
             </div>
+        </div>
 
-            <div v-if="bookings.links?.length > 3" class="flex items-center justify-center gap-1 px-6 py-4 border-t border-gray-100">
+        <!-- Empty State -->
+        <div v-if="bookings.data?.length === 0" class="py-16 text-center">
+            <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-teal-50 flex items-center justify-center">
+                <svg class="w-8 h-8 text-teal-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+            </div>
+            <p class="text-sm font-semibold text-gray-500">{{ isRtl ? 'لا توجد حجوزات' : 'No bookings found' }}</p>
+            <p class="text-xs text-gray-400 mt-1">{{ isRtl ? 'جرب تغيير الفلاتر أو أنشئ حجز جديد' : 'Try adjusting your filters or create a new booking' }}</p>
+        </div>
+
+        <!-- Pagination -->
+        <div v-if="bookings.links?.length > 3" class="flex flex-col sm:flex-row items-center justify-between gap-3 mt-6">
+            <p class="text-xs text-gray-500">
+                {{ isRtl ? 'عرض' : 'Showing' }} <span class="font-semibold">{{ bookings.from }}</span> {{ isRtl ? 'إلى' : 'to' }} <span class="font-semibold">{{ bookings.to }}</span> {{ isRtl ? 'من' : 'of' }} <span class="font-semibold">{{ bookings.total }}</span> {{ isRtl ? 'نتيجة' : 'results' }}
+            </p>
+            <nav class="flex items-center gap-1">
                 <template v-for="link in bookings.links" :key="link.label">
-                    <Link v-if="link.url" :href="link.url" class="px-3 py-1.5 rounded-lg text-xs font-medium transition-colors" :class="link.active ? 'bg-teal-500 text-white' : 'text-gray-500 hover:bg-gray-100'" v-html="link.label" preserve-state />
+                    <Link v-if="link.url" :href="link.url" class="px-3 py-1.5 rounded-lg text-xs font-medium transition-colors" :class="link.active ? 'bg-[#0d9488] text-white shadow-sm' : 'text-gray-500 hover:bg-white hover:shadow-sm'" v-html="link.label" preserve-state />
                     <span v-else class="px-3 py-1.5 text-xs text-gray-300" v-html="link.label" />
                 </template>
-            </div>
+            </nav>
         </div>
     </div>
 </template>

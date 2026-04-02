@@ -81,7 +81,7 @@ class DoctorDashboardController extends BaseDoctorController
         }
 
         // ─── Today Queue ──────────────────────────────────────
-        $todayQueue = Visit::with(['patient:id,full_name,file_number,phone', 'service:id,name_en'])
+        $todayQueue = Visit::with(['patient:id,full_name,file_number,phone', 'service:id,name_en,name_ar'])
             ->where('doctor_id', $doctorId)
             ->whereDate('visit_date', today())
             ->whereIn('status', ['waiting', 'in_progress'])
@@ -92,7 +92,7 @@ class DoctorDashboardController extends BaseDoctorController
         // ─── Recent Completed Visits (with commission info) ────
         $recentVisits = Visit::with([
                 'patient:id,full_name',
-                'service:id,name_en,price,price_after_discount',
+                'service:id,name_en,name_ar,price,price_after_discount',
                 'invoice:id,visit_id,total,status',
                 'booking.invoice:id,booking_id,total,status',
                 'booking.bookingServices:id,booking_id,service_id,unit_price,discount_per_session,sessions_count',
@@ -127,7 +127,7 @@ class DoctorDashboardController extends BaseDoctorController
             });
 
         // ─── Upcoming Bookings ────────────────────────────────
-        $upcomingBookings = Booking::with('service:id,name_en')
+        $upcomingBookings = Booking::with('service:id,name_en,name_ar')
             ->where('doctor_id', $doctorId)
             ->where('status', 'confirmed')
             ->where('preferred_date', '>=', today())

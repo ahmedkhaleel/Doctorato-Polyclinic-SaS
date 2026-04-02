@@ -93,7 +93,7 @@ class DoctorCommissionController extends BaseDoctorController
         }
 
         // ─── Detailed Commission Visits ───────────────────────
-        $query = Visit::with(['patient:id,full_name', 'service:id,name_en'])
+        $query = Visit::with(['patient:id,full_name', 'service:id,name_en,name_ar'])
             ->where('doctor_id', $doctorId)
             ->where('status', 'completed')
             ->whereNotNull('commission_amount')
@@ -177,7 +177,7 @@ class DoctorCommissionController extends BaseDoctorController
         $payout->load([
             'doctor:id,name_en,name_ar,default_commission_percentage',
             'visits.patient:id,full_name',
-            'visits.service:id,name_en',
+            'visits.service:id,name_en,name_ar',
             'paidByUser:id,name',
         ]);
 
@@ -204,7 +204,7 @@ class DoctorCommissionController extends BaseDoctorController
         $payout->load([
             'doctor:id,name_en,name_ar',
             'visits.patient:id,full_name',
-            'visits.service:id,name_en',
+            'visits.service:id,name_en,name_ar',
             'paidByUser:id,name',
         ]);
 

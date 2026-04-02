@@ -314,7 +314,7 @@ function submit() {
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                 </svg>
             </Link>
-            <h1 class="text-2xl font-bold text-gray-800">New Bundle Booking</h1>
+            <h1 class="text-2xl font-bold text-gray-800">{{ isRtl ? 'حجز باقة جديد' : 'New Bundle Booking' }}</h1>
         </div>
 
         <!-- Step Indicator -->
@@ -368,7 +368,7 @@ function submit() {
                         @focus="showPatientDropdown = true"
                         @blur="setTimeout(() => showPatientDropdown = false, 200)"
                         type="text"
-                        placeholder="Search patient by name, phone, or file number..."
+                        :placeholder="isRtl ? 'بحث عن مريض بالاسم، الهاتف، أو رقم الملف...' : 'Search patient by name, phone, or file number...'"
                         class="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-teal-200 focus:border-transparent"
                     />
                     <div v-if="showPatientDropdown && filteredPatients.length > 0"
@@ -387,7 +387,7 @@ function submit() {
                     </div>
                     <div v-if="showPatientDropdown && filteredPatients.length === 0 && patientSearch"
                          class="absolute z-20 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg p-4 text-center">
-                        <p class="text-sm text-gray-400">No patients found</p>
+                        <p class="text-sm text-gray-400">{{ isRtl ? 'لم يتم العثور على مرضى' : 'No patients found' }}</p>
                         <button
                             type="button"
                             @mousedown.prevent="showNewPatientModal = true"
@@ -416,7 +416,7 @@ function submit() {
 
             <!-- Bundle Selection -->
             <div class="bg-white rounded-lg shadow-sm p-6">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4">Select Package Bundle</h3>
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">{{ isRtl ? 'اختر الباقة' : 'Select Package Bundle' }}</h3>
 
                 <div v-if="bundles.length === 0" class="text-center py-8 text-gray-500 text-sm">
                     No active bundles available. Please create a package bundle first.
@@ -453,7 +453,7 @@ function submit() {
                 <p v-if="errors.package_bundle_id" class="text-red-500 text-xs mt-2">{{ errors.package_bundle_id }}</p>
 
                 <div v-if="selectedBundle" class="mt-6 border-t border-gray-200 pt-4">
-                    <h4 class="text-sm font-semibold text-gray-700 mb-3">Included Services</h4>
+                    <h4 class="text-sm font-semibold text-gray-700 mb-3">{{ isRtl ? 'الخدمات المضمنة' : 'Included Services' }}</h4>
                     <div class="space-y-2">
                         <div v-for="bs in bundleServices" :key="bs.id"
                              class="flex items-center justify-between p-3 bg-gray-50 rounded-lg text-sm">
@@ -474,8 +474,8 @@ function submit() {
         <!-- Step 2: Assign Doctors per Service -->
         <div v-show="currentStep === 2" class="space-y-6">
             <div class="bg-white rounded-lg shadow-sm p-6">
-                <h3 class="text-lg font-semibold text-gray-800 mb-2">Assign Doctors</h3>
-                <p class="text-sm text-gray-500 mb-6">Assign a doctor for each service in the bundle.</p>
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">{{ isRtl ? 'تعيين الأطباء' : 'Assign Doctors' }}</h3>
+                <p class="text-sm text-gray-500 mb-6">{{ isRtl ? 'عيّن طبيباً لكل خدمة في الباقة.' : 'Assign a doctor for each service in the bundle.' }}</p>
 
                 <div class="space-y-4">
                     <div v-for="(sa, index) in serviceAssignments" :key="sa.package_bundle_service_id"
@@ -529,7 +529,7 @@ function submit() {
                          class="p-4 border border-gray-200 rounded-xl"
                          :class="apt.start_time ? 'border-teal-300/50 bg-teal-50/30' : ''">
                         <div class="flex items-center justify-between mb-3">
-                            <span class="text-sm font-semibold text-gray-700">Session {{ aIndex + 1 }}</span>
+                            <span class="text-sm font-semibold text-gray-700">{{ isRtl ? 'جلسة' : 'Session' }} {{ aIndex + 1 }}</span>
                             <span v-if="apt.start_time && apt.date" class="text-xs font-medium px-2.5 py-1 rounded-full text-white" style="background-color: #0d9488;">
                                 {{ apt.date }} | {{ apt.start_time }} - {{ apt.end_time }}
                             </span>
@@ -575,7 +575,7 @@ function submit() {
 
                         <!-- Available time slots -->
                         <div v-else-if="apt.date && apt.availableSlots.length > 0" class="mt-2">
-                            <label class="block text-xs font-medium text-gray-500 mb-2">Available Time Slots</label>
+                            <label class="block text-xs font-medium text-gray-500 mb-2">{{ isRtl ? 'المواعيد المتاحة' : 'Available Time Slots' }}</label>
                             <div class="flex flex-wrap gap-2">
                                 <button v-for="slot in apt.availableSlots" :key="slot.start"
                                         @click="selectSlot(sIndex, aIndex, slot)"
@@ -603,7 +603,7 @@ function submit() {
         <!-- Step 4: Review & Confirm -->
         <div v-show="currentStep === 4" class="space-y-6">
             <div class="bg-white rounded-lg shadow-sm p-6">
-                <h3 class="text-lg font-semibold text-gray-800 mb-6">Review & Confirm</h3>
+                <h3 class="text-lg font-semibold text-gray-800 mb-6">{{ isRtl ? 'مراجعة وتأكيد' : 'Review & Confirm' }}</h3>
 
                 <!-- Patient Summary -->
                 <div class="mb-6 p-4 bg-gray-50 rounded-xl">
@@ -621,7 +621,7 @@ function submit() {
 
                 <!-- Bundle Summary -->
                 <div class="mb-6 p-4 bg-gray-50 rounded-xl">
-                    <h4 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Bundle</h4>
+                    <h4 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">{{ isRtl ? 'الباقة' : 'Bundle' }}</h4>
                     <div class="flex items-center justify-between">
                         <div>
                             <div class="font-semibold text-gray-900">{{ selectedBundle?.name_en }}</div>
@@ -629,14 +629,14 @@ function submit() {
                         </div>
                         <div class="ltr:text-right rtl:text-left">
                             <div class="text-lg font-bold" style="color: #0d9488;">{{ formatCurrency(selectedBundle?.total_price) }}</div>
-                            <div v-if="Number(selectedBundle?.savings) > 0" class="text-xs text-green-600">You save {{ formatCurrency(selectedBundle?.savings) }}</div>
+                            <div v-if="Number(selectedBundle?.savings) > 0" class="text-xs text-green-600">{{ isRtl ? 'توفر' : 'You save' }} {{ formatCurrency(selectedBundle?.savings) }}</div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Services, Doctors & Appointments Summary -->
                 <div class="mb-6">
-                    <h4 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Appointments Schedule</h4>
+                    <h4 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">{{ isRtl ? 'جدول المواعيد' : 'Appointments Schedule' }}</h4>
                     <div class="space-y-4">
                         <div v-for="(sa, sIndex) in serviceAssignments" :key="sa.package_bundle_service_id"
                              class="border border-gray-200 rounded-xl overflow-hidden">
@@ -651,7 +651,7 @@ function submit() {
                                 <div v-for="(apt, aIndex) in (appointmentData[sIndex] || [])" :key="aIndex"
                                      class="px-4 py-2.5 flex items-center justify-between text-sm">
                                     <div class="flex items-center gap-3">
-                                        <span class="text-xs font-medium text-gray-400 w-16">Session {{ aIndex + 1 }}</span>
+                                        <span class="text-xs font-medium text-gray-400 w-16">{{ isRtl ? 'جلسة' : 'Session' }} {{ aIndex + 1 }}</span>
                                         <span class="text-gray-800">{{ apt.date }}</span>
                                     </div>
                                     <div class="flex items-center gap-3">
@@ -666,8 +666,8 @@ function submit() {
 
                 <!-- Notes -->
                 <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Notes (optional)</label>
-                    <textarea v-model="notes" rows="3" placeholder="Any additional notes..."
+                    <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'ملاحظات (اختياري)' : 'Notes (optional)' }}</label>
+                    <textarea v-model="notes" rows="3" :placeholder="isRtl ? 'ملاحظات إضافية...' : 'Any additional notes...'"
                               class="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-teal-200 focus:border-transparent resize-none"></textarea>
                     <p v-if="errors.notes" class="text-red-500 text-xs mt-1">{{ errors.notes }}</p>
                 </div>
@@ -684,7 +684,7 @@ function submit() {
 
                 <!-- General Errors -->
                 <div v-if="Object.keys(errors).length > 0" class="bg-red-50 border border-red-200 rounded-lg p-4 text-sm text-red-700">
-                    <p class="font-semibold mb-1">Please fix the following errors:</p>
+                    <p class="font-semibold mb-1">{{ isRtl ? 'يرجى إصلاح الأخطاء التالية:' : 'Please fix the following errors:' }}</p>
                     <ul class="list-disc list-inside space-y-1">
                         <li v-for="(err, key) in errors" :key="key">{{ err }}</li>
                     </ul>
