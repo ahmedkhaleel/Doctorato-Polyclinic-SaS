@@ -47,18 +47,18 @@ function applyFilters() {
 }
 
 const statusConfig = {
-    waiting: { label: 'Waiting', bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200', dot: 'bg-amber-400' },
-    in_progress: { label: 'In Progress', bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200', dot: 'bg-blue-500' },
-    completed: { label: 'Completed', bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200', dot: 'bg-emerald-500' },
-    cancelled: { label: 'Cancelled', bg: 'bg-gray-50', text: 'text-gray-500', border: 'border-gray-200', dot: 'bg-gray-400' },
+    waiting: { label: 'Waiting', labelAr: 'في الانتظار', bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200', dot: 'bg-amber-400' },
+    in_progress: { label: 'In Progress', labelAr: 'قيد التنفيذ', bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200', dot: 'bg-blue-500' },
+    completed: { label: 'Completed', labelAr: 'مكتمل', bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200', dot: 'bg-emerald-500' },
+    cancelled: { label: 'Cancelled', labelAr: 'ملغي', bg: 'bg-gray-50', text: 'text-gray-500', border: 'border-gray-200', dot: 'bg-gray-400' },
 };
 
 const statusTabs = computed(() => [
-    { key: '', label: 'All', active: status.value === '' },
-    { key: 'waiting', label: 'Waiting', active: status.value === 'waiting' },
-    { key: 'in_progress', label: 'In Progress', active: status.value === 'in_progress' },
-    { key: 'completed', label: 'Completed', active: status.value === 'completed' },
-    { key: 'cancelled', label: 'Cancelled', active: status.value === 'cancelled' },
+    { key: '', label: isRtl.value ? 'الكل' : 'All', active: status.value === '' },
+    { key: 'waiting', label: isRtl.value ? 'في الانتظار' : 'Waiting', active: status.value === 'waiting' },
+    { key: 'in_progress', label: isRtl.value ? 'قيد التنفيذ' : 'In Progress', active: status.value === 'in_progress' },
+    { key: 'completed', label: isRtl.value ? 'مكتمل' : 'Completed', active: status.value === 'completed' },
+    { key: 'cancelled', label: isRtl.value ? 'ملغي' : 'Cancelled', active: status.value === 'cancelled' },
 ]);
 
 function formatDate(date) {
@@ -66,8 +66,8 @@ function formatDate(date) {
     const d = new Date(date);
     const today = new Date();
     const yesterday = new Date(today); yesterday.setDate(yesterday.getDate() - 1);
-    if (d.toDateString() === today.toDateString()) return 'Today';
-    if (d.toDateString() === yesterday.toDateString()) return 'Yesterday';
+    if (d.toDateString() === today.toDateString()) return isRtl.value ? 'اليوم' : 'Today';
+    if (d.toDateString() === yesterday.toDateString()) return isRtl.value ? 'أمس' : 'Yesterday';
     return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
 }
 </script>
@@ -179,7 +179,7 @@ function formatDate(date) {
                             :class="[statusConfig[visit.status]?.bg, statusConfig[visit.status]?.text, statusConfig[visit.status]?.border]"
                         >
                             <span class="w-1.5 h-1.5 rounded-full" :class="statusConfig[visit.status]?.dot"></span>
-                            {{ statusConfig[visit.status]?.label }}
+                            {{ isRtl ? statusConfig[visit.status]?.labelAr : statusConfig[visit.status]?.label }}
                         </span>
                         <svg class="w-4 h-4 text-gray-300 group-hover:text-[#C4A265] group-hover:translate-x-0.5 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
                     </div>
