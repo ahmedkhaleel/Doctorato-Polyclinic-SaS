@@ -21,7 +21,7 @@ function t(key) {
 
 function switchLocale() {
     const newLocale = locale.value === 'ar' ? 'en' : 'ar';
-    router.post('/admin/switch-locale', { locale: newLocale }, { preserveState: false });
+    router.post('/doctor/switch-locale', { locale: newLocale }, { preserveState: false });
 }
 
 const modules = computed(() => page.props.modules || {});
@@ -60,6 +60,7 @@ const navGroups = computed(() => [
             { label: isRtl.value ? 'العلاجات' : 'Treatments',        href: '/doctor/dental/treatments',      icon: 'pill' },
             { label: isRtl.value ? 'الأشعة' : 'X-rays',             href: '/doctor/dental/xrays',           icon: 'camera' },
             { label: isRtl.value ? 'المتابعات' : 'Follow-ups',      href: '/doctor/dental/followups',       icon: 'clock' },
+            { label: isRtl.value ? 'مقارنات قبل/بعد' : 'Comparisons', href: '/doctor/dental/comparisons',    icon: 'camera' },
         ],
     },
     {

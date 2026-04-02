@@ -39,6 +39,13 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('doctor.logout')
 // Protected doctor routes (requires authentication + active doctor)
 Route::middleware('doctor.auth')->group(function () {
 
+    // ─── Locale Switching ────────────────────────────────────
+    Route::post('/switch-locale', function (\Illuminate\Http\Request $request) {
+        $locale = $request->input('locale', 'ar');
+        session()->put('admin_locale', in_array($locale, ['ar', 'en']) ? $locale : 'ar');
+        return redirect()->back();
+    })->name('doctor.switchLocale');
+
     // ─── Dashboard ──────────────────────────────────────────
     Route::get('/', [DoctorDashboardController::class, 'index'])->name('doctor.dashboard');
 

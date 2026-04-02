@@ -6,6 +6,7 @@ use App\Services\AuditLogger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\Password;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -26,15 +27,27 @@ class DoctorProfileController extends BaseDoctorController
     {
         $doctor = $this->doctor($request);
 
-        $data = $request->validate([
+        $request->validate([
             'phone' => 'nullable|string|max:20',
             'email' => 'nullable|email|max:255',
             'bio_en' => 'nullable|string|max:2000',
             'bio_ar' => 'nullable|string|max:2000',
             'clinic_notes' => 'nullable|string|max:2000',
+            'photo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
-        $doctor->update($data);
+        $updateData = $request->only(['phone', 'email', 'bio_en', 'bio_ar', 'clinic_notes']);
+
+        // Handle photo upload
+        if ($request->hasFile('photo')) {
+            // Delete old photo if exists
+            if ($doctor->photo && Storage::disk('public')->exists($doctor->photo)) {
+                Storage::disk('public')->delete($doctor->photo);
+            }
+            $updateData['photo'] = $request->file('photo')->store('doctors', 'public');
+        }
+
+        $doctor->update($updateData);
 
         return redirect()->back()->with('success', 'Profile updated successfully.');
     }
