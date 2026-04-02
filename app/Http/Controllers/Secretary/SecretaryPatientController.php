@@ -86,7 +86,7 @@ class SecretaryPatientController extends BaseSecretaryController
 
         \App\Events\PatientRegistered::dispatch($patient, 'secretary');
 
-        return redirect()->route('secretary.patients.index')->with('success', 'Patient created successfully.');
+        return redirect()->route('secretary.patients.index')->with('success', $this->msg('Patient created successfully.', 'تم إنشاء المريض بنجاح.'));
     }
 
     public function show(Patient $patient): Response
@@ -196,7 +196,7 @@ class SecretaryPatientController extends BaseSecretaryController
 
         AuditLogger::log('updated', $patient);
 
-        return redirect()->route('secretary.patients.index')->with('success', 'Patient updated successfully.');
+        return redirect()->route('secretary.patients.index')->with('success', $this->msg('Patient updated successfully.', 'تم تحديث بيانات المريض بنجاح.'));
     }
 
     /**

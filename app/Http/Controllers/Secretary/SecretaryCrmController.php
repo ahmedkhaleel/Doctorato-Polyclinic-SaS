@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Secretary;
 
-use App\Http\Controllers\Controller;
 use App\Models\Lead;
 use App\Models\LeadActivity;
 use App\Models\LeadFollowUp;
@@ -14,7 +13,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class SecretaryCrmController extends Controller
+class SecretaryCrmController extends BaseSecretaryController
 {
     /**
      * CRM Dashboard for secretary -- shows their assigned leads + follow-ups.
@@ -161,7 +160,7 @@ class SecretaryCrmController extends Controller
             LeadScoringRule::applyToLead($lead, 'whatsapp_replied');
         }
 
-        return back()->with('success', 'Activity logged.');
+        return back()->with('success', $this->msg('Activity logged.', 'تم تسجيل النشاط.'));
     }
 
     /**
@@ -194,7 +193,7 @@ class SecretaryCrmController extends Controller
             'performed_by' => auth()->id(),
         ]);
 
-        return back()->with('success', 'Follow-up scheduled.');
+        return back()->with('success', $this->msg('Follow-up scheduled.', 'تم جدولة المتابعة.'));
     }
 
     /**
@@ -220,7 +219,7 @@ class SecretaryCrmController extends Controller
 
         LeadScoringRule::applyToLead($followUp->lead, 'follow_up_completed');
 
-        return back()->with('success', 'Follow-up completed.');
+        return back()->with('success', $this->msg('Follow-up completed.', 'تم إكمال المتابعة.'));
     }
 
     /**
@@ -243,7 +242,7 @@ class SecretaryCrmController extends Controller
 
         LeadScoringRule::applyToLead($followUp->lead, 'follow_up_missed');
 
-        return back()->with('success', 'Follow-up marked as missed.');
+        return back()->with('success', $this->msg('Follow-up marked as missed.', 'تم تسجيل المتابعة كفائتة.'));
     }
 
     /**
@@ -264,7 +263,7 @@ class SecretaryCrmController extends Controller
 
         LeadActivity::logStatusChange($lead, $oldStatus, $data['status']);
 
-        return back()->with('success', 'Lead status updated.');
+        return back()->with('success', $this->msg('Lead status updated.', 'تم تحديث حالة العميل المحتمل.'));
     }
 
     /**

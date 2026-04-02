@@ -15,4 +15,12 @@ abstract class BaseSecretaryController extends Controller
     {
         return $request->user();
     }
+
+    /**
+     * Return a bilingual flash message based on current locale.
+     */
+    protected function msg(string $en, string $ar): string
+    {
+        return app()->getLocale() === 'ar' ? $ar : $en;
+    }
 }

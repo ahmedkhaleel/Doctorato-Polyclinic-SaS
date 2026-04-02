@@ -75,7 +75,10 @@ class SecretaryPackageBundleBookingController extends BaseSecretaryController
         $result = $this->workflowService->createFromSecretary($data, auth()->id());
 
         return redirect()->route('secretary.bundle-bookings.show', $result['bundleBooking']->id)
-            ->with('success', 'Package bundle booking created. Booking #' . $result['bundleBooking']->booking_number);
+            ->with('success', $this->msg(
+                'Package bundle booking created. Booking #' . $result['bundleBooking']->booking_number,
+                'تم إنشاء حجز الباقة. رقم الحجز #' . $result['bundleBooking']->booking_number,
+            ));
     }
 
     public function show(PackageBundleBooking $bundleBooking): Response
@@ -112,7 +115,7 @@ class SecretaryPackageBundleBookingController extends BaseSecretaryController
 
         $this->workflowService->processPayment($bundleBooking, $data, auth()->id());
 
-        return redirect()->back()->with('success', 'Payment processed successfully.');
+        return redirect()->back()->with('success', $this->msg('Payment processed successfully.', 'تم معالجة الدفعة بنجاح.'));
     }
 
     public function checkInAppointment(Request $request, PackageBundleBooking $bundleBooking, PackageBundleBookingAppointment $appointment): RedirectResponse
@@ -124,7 +127,7 @@ class SecretaryPackageBundleBookingController extends BaseSecretaryController
         try {
             $this->workflowService->checkInAppointment($appointment, $request->user()->id);
 
-            return redirect()->back()->with('success', 'Patient checked in successfully. Visit created.');
+            return redirect()->back()->with('success', $this->msg('Patient checked in successfully. Visit created.', 'تم تسجيل دخول المريض بنجاح. تم إنشاء الزيارة.'));
         } catch (\RuntimeException $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
@@ -146,7 +149,7 @@ class SecretaryPackageBundleBookingController extends BaseSecretaryController
         try {
             $this->workflowService->rescheduleAppointment($appointment, $data);
 
-            return redirect()->back()->with('success', 'Appointment rescheduled successfully.');
+            return redirect()->back()->with('success', $this->msg('Appointment rescheduled successfully.', 'تم إعادة جدولة الموعد بنجاح.'));
         } catch (\RuntimeException $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
@@ -165,7 +168,7 @@ class SecretaryPackageBundleBookingController extends BaseSecretaryController
         try {
             $this->workflowService->addRetouchSession($bundleBooking, $data, auth()->id());
 
-            return redirect()->back()->with('success', 'Retouch session added successfully.');
+            return redirect()->back()->with('success', $this->msg('Retouch session added successfully.', 'تم إضافة جلسة المتابعة بنجاح.'));
         } catch (\RuntimeException $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }

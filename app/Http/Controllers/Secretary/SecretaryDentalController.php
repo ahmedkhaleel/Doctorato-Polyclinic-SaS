@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Secretary;
 
-use App\Http\Controllers\Controller;
 use App\Models\DentalChart;
 use App\Models\DentalLabOrder;
 use App\Models\DentalScheduledFollowup;
@@ -17,7 +16,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class SecretaryDentalController extends Controller
+class SecretaryDentalController extends BaseSecretaryController
 {
     /**
      * Treatment Plans list (read-only for scheduling & patient info).
@@ -122,7 +121,7 @@ class SecretaryDentalController extends Controller
         // Auto-add lab charge to invoice
         app(DentalInvoiceService::class)->addLabOrderToInvoice($labOrder);
 
-        return redirect()->back()->with('success', 'Lab order marked as received.');
+        return redirect()->back()->with('success', $this->msg('Lab order marked as received.', 'تم تسجيل طلب المختبر كمستلم.'));
     }
 
     /**

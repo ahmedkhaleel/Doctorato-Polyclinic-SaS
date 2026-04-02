@@ -49,7 +49,7 @@ class AuthController extends Controller
                 $request->session()->regenerateToken();
 
                 return redirect()->route('secretary.login')
-                    ->with('error', 'Your account has been deactivated.');
+                    ->with('error', app()->getLocale() === 'ar' ? 'تم تعطيل حسابك.' : 'Your account has been deactivated.');
             }
 
             // Check user role is secretary
@@ -59,7 +59,7 @@ class AuthController extends Controller
                 $request->session()->regenerateToken();
 
                 return redirect()->route('secretary.login')
-                    ->with('error', 'You do not have access to the secretary panel.');
+                    ->with('error', app()->getLocale() === 'ar' ? 'ليس لديك صلاحية الوصول إلى لوحة السكرتارية.' : 'You do not have access to the secretary panel.');
             }
 
             AuditLogger::authEvent('login', $request->input('email'), 'secretary');

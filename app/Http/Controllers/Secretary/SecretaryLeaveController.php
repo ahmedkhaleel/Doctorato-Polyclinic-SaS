@@ -40,6 +40,6 @@ class SecretaryLeaveController extends BaseSecretaryController
 
         AuditLogger::log('created', $leave);
 
-        return back()->with('success', 'Leave request submitted.');
+        return back()->with('success', $this->msg('Leave request submitted.', 'تم إرسال طلب الإجازة.'));
     }
 }

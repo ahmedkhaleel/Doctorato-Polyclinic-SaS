@@ -27,7 +27,7 @@ class SecretaryProfileController extends BaseSecretaryController
 
         $request->user()->update($data);
 
-        return redirect()->back()->with('success', 'Profile updated successfully.');
+        return redirect()->back()->with('success', $this->msg('Profile updated successfully.', 'تم تحديث الملف الشخصي بنجاح.'));
     }
 
     public function updatePassword(Request $request): RedirectResponse
@@ -41,6 +41,6 @@ class SecretaryProfileController extends BaseSecretaryController
             'password' => Hash::make($request->input('password')),
         ]);
 
-        return redirect()->back()->with('success', 'Password updated successfully.');
+        return redirect()->back()->with('success', $this->msg('Password updated successfully.', 'تم تحديث كلمة المرور بنجاح.'));
     }
 }

@@ -120,7 +120,7 @@ class SecretaryBookingController extends BaseSecretaryController
         LeadService::linkBookingToLead($result['booking']);
 
         return redirect()->route('secretary.bookings.show', $result['booking']->id)
-            ->with('success', 'Booking created successfully.');
+            ->with('success', $this->msg('Booking created successfully.', 'تم إنشاء الحجز بنجاح.'));
     }
 
     public function show(Booking $booking): Response
@@ -217,7 +217,7 @@ class SecretaryBookingController extends BaseSecretaryController
         $newStatus = $data['status'];
 
         if ($newStatus !== $currentStatus && !in_array($newStatus, $allowedTransitions[$currentStatus] ?? [])) {
-            return redirect()->back()->with('error', "Cannot change status from '{$currentStatus}' to '{$newStatus}'.");
+            return redirect()->back()->with('error', $this->msg("Cannot change status from '{$currentStatus}' to '{$newStatus}'.", "لا يمكن تغيير الحالة من '{$currentStatus}' إلى '{$newStatus}'."));
         }
 
         $data['is_read'] = true;
@@ -225,13 +225,13 @@ class SecretaryBookingController extends BaseSecretaryController
 
         AuditLogger::log('updated_status', $booking);
 
-        return redirect()->back()->with('success', 'Booking status updated.');
+        return redirect()->back()->with('success', $this->msg('Booking status updated.', 'تم تحديث حالة الحجز.'));
     }
 
     public function confirm(Request $request, Booking $booking): RedirectResponse
     {
         if ($booking->status !== 'unconfirmed') {
-            return redirect()->back()->with('error', 'This booking is already confirmed.');
+            return redirect()->back()->with('error', $this->msg('This booking is already confirmed.', 'هذا الحجز مؤكد بالفعل.'));
         }
 
         $bookingType = $booking->booking_type ?? $request->input('booking_type', 'service');
@@ -257,7 +257,7 @@ class SecretaryBookingController extends BaseSecretaryController
 
         AuditLogger::log('confirmed', $booking);
 
-        return redirect()->back()->with('success', 'Booking confirmed successfully.');
+        return redirect()->back()->with('success', $this->msg('Booking confirmed successfully.', 'تم تأكيد الحجز بنجاح.'));
     }
 
     public function processPayment(Request $request, Booking $booking): RedirectResponse
@@ -276,10 +276,13 @@ class SecretaryBookingController extends BaseSecretaryController
             'visits_created' => count($result['visits_created']),
         ]);
 
-        return redirect()->back()->with('success', 'Payment recorded successfully.' .
-            (count($result['visits_created']) > 0
-                ? ' ' . count($result['visits_created']) . ' visit(s) created for today\'s appointments.'
-                : ''));
+        $visitCount = count($result['visits_created']);
+        $successMsg = $this->msg(
+            'Payment recorded successfully.' . ($visitCount > 0 ? " {$visitCount} visit(s) created for today's appointments." : ''),
+            'تم تسجيل الدفعة بنجاح.' . ($visitCount > 0 ? " تم إنشاء {$visitCount} زيارة(زيارات) لمواعيد اليوم." : ''),
+        );
+
+        return redirect()->back()->with('success', $successMsg);
     }
 
     public function addRetouchSession(Request $request, Booking $booking): RedirectResponse
@@ -298,7 +301,7 @@ class SecretaryBookingController extends BaseSecretaryController
             'appointment_date' => $data['appointment_date'],
         ]);
 
-        return redirect()->back()->with('success', 'Retouch session added successfully.');
+        return redirect()->back()->with('success', $this->msg('Retouch session added successfully.', 'تم إضافة جلسة المتابعة بنجاح.'));
     }
 
     public function uploadConsent(Request $request, Booking $booking): RedirectResponse
@@ -323,7 +326,7 @@ class SecretaryBookingController extends BaseSecretaryController
             'count' => count($request->file('consents')),
         ]);
 
-        return redirect()->back()->with('success', 'Consent document(s) uploaded successfully.');
+        return redirect()->back()->with('success', $this->msg('Consent document(s) uploaded successfully.', 'تم رفع مستند(ات) الموافقة بنجاح.'));
     }
 
     public function deleteConsent(Request $request, Booking $booking, BookingConsent $consent): RedirectResponse
@@ -339,7 +342,7 @@ class SecretaryBookingController extends BaseSecretaryController
             'file' => $consent->original_name,
         ]);
 
-        return redirect()->back()->with('success', 'Consent document deleted.');
+        return redirect()->back()->with('success', $this->msg('Consent document deleted.', 'تم حذف مستند الموافقة.'));
     }
 
     public function checkInAppointment(Request $request, Booking $booking, BookingAppointment $appointment): RedirectResponse
@@ -356,7 +359,7 @@ class SecretaryBookingController extends BaseSecretaryController
                 'visit_id' => $visit->id,
             ]);
 
-            return redirect()->back()->with('success', 'Patient checked in successfully. Visit created.');
+            return redirect()->back()->with('success', $this->msg('Patient checked in successfully. Visit created.', 'تم تسجيل دخول المريض بنجاح. تم إنشاء الزيارة.'));
         } catch (\RuntimeException $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
@@ -385,7 +388,7 @@ class SecretaryBookingController extends BaseSecretaryController
                 'new_doctor' => $data['doctor_id'],
             ]);
 
-            return redirect()->back()->with('success', 'Appointment rescheduled successfully.');
+            return redirect()->back()->with('success', $this->msg('Appointment rescheduled successfully.', 'تم إعادة جدولة الموعد بنجاح.'));
         } catch (\RuntimeException $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }

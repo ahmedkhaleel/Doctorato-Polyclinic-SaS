@@ -97,7 +97,7 @@ class SecretaryVisitController extends BaseSecretaryController
 
         AuditLogger::log('started', $visit);
 
-        return redirect()->back()->with('success', 'Visit started.');
+        return redirect()->back()->with('success', $this->msg('Visit started.', 'تم بدء الزيارة.'));
     }
 
     public function complete(Visit $visit): RedirectResponse
@@ -106,10 +106,11 @@ class SecretaryVisitController extends BaseSecretaryController
 
         AuditLogger::log('completed', $visit);
 
-        $message = 'Visit completed.';
-        if ($results['invoice']) {
-            $message .= ' Invoice #' . $results['invoice']->invoice_number . ' generated.';
-        }
+        $invoiceNum = $results['invoice'] ? $results['invoice']->invoice_number : null;
+        $message = $this->msg(
+            'Visit completed.' . ($invoiceNum ? " Invoice #{$invoiceNum} generated." : ''),
+            'تم إكمال الزيارة.' . ($invoiceNum ? " تم إنشاء الفاتورة #{$invoiceNum}." : ''),
+        );
 
         return redirect()->back()->with('success', $message);
     }
@@ -120,6 +121,6 @@ class SecretaryVisitController extends BaseSecretaryController
 
         AuditLogger::log('cancelled', $visit);
 
-        return redirect()->back()->with('success', 'Visit cancelled.');
+        return redirect()->back()->with('success', $this->msg('Visit cancelled.', 'تم إلغاء الزيارة.'));
     }
 }

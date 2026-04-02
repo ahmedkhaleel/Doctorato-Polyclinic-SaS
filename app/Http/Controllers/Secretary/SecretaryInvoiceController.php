@@ -129,7 +129,7 @@ class SecretaryInvoiceController extends BaseSecretaryController
 
         AuditLogger::log('created', $invoice);
 
-        return redirect()->route('secretary.invoices.show', $invoice)->with('success', 'Invoice created successfully.');
+        return redirect()->route('secretary.invoices.show', $invoice)->with('success', $this->msg('Invoice created successfully.', 'تم إنشاء الفاتورة بنجاح.'));
     }
 
     public function show(Invoice $invoice): Response

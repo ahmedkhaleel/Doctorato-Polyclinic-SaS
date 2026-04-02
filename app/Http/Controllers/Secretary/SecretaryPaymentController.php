@@ -90,6 +90,6 @@ class SecretaryPaymentController extends BaseSecretaryController
             \Illuminate\Support\Facades\Log::warning('CRM payment event failed', ['payment_id' => $payment->id, 'error' => $e->getMessage()]);
         }
 
-        return redirect()->back()->with('success', 'Payment recorded successfully.');
+        return redirect()->back()->with('success', $this->msg('Payment recorded successfully.', 'تم تسجيل الدفعة بنجاح.'));
     }
 }
