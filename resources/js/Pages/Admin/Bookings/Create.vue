@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, computed, watch, nextTick } from 'vue';
+import { ref, reactive, computed, watch, nextTick, onMounted, onUnmounted } from 'vue';
 import { Link, router, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import QuickAddPatientModal from '@/Components/QuickAddPatientModal.vue';
@@ -514,6 +514,86 @@ const stepLabels = computed(() => [
     page.props.translations?.['a_set_appointments'] || 'Set Appointments',
     page.props.translations?.['a_confirm'] || 'Confirm',
 ]);
+
+/* ------------------------------------------------------------------ */
+/*  Searchable Dropdown System                                         */
+/* ------------------------------------------------------------------ */
+
+const openDropdown = ref(null);
+const ddSearch = reactive({});
+
+function toggleDropdown(key) {
+    if (openDropdown.value === key) {
+        openDropdown.value = null;
+    } else {
+        openDropdown.value = key;
+        ddSearch[key] = '';
+        nextTick(() => {
+            const el = document.querySelector(`.bk-dd-search-${key}`);
+            if (el) el.focus();
+        });
+    }
+}
+
+function closeDropdown() {
+    openDropdown.value = null;
+}
+
+function handleClickOutside(e) {
+    if (!e.target.closest('.bk-dd')) {
+        openDropdown.value = null;
+    }
+}
+
+onMounted(() => document.addEventListener('click', handleClickOutside));
+onUnmounted(() => document.removeEventListener('click', handleClickOutside));
+
+/* Filtered doctors for search */
+function searchedDoctors(key) {
+    const q = (ddSearch[key] || '').toLowerCase();
+    if (!q) return filteredDoctors.value;
+    return filteredDoctors.value.filter(d =>
+        (d.name_en || '').toLowerCase().includes(q) ||
+        (d.name_ar || '').toLowerCase().includes(q)
+    );
+}
+
+/* Filtered services for search (flat) */
+function searchedServices(key) {
+    const q = (ddSearch[key] || '').toLowerCase();
+    if (!q) return filteredServices.value;
+    return filteredServices.value.filter(s =>
+        (s.name_en || '').toLowerCase().includes(q) ||
+        (s.name_ar || '').toLowerCase().includes(q)
+    );
+}
+
+/* Filtered service categories for search */
+function searchedServiceCategories(key) {
+    const q = (ddSearch[key] || '').toLowerCase();
+    if (!q) return filteredServiceCategories.value;
+    return filteredServiceCategories.value.map(cat => ({
+        ...cat,
+        services: (cat.services || []).filter(s =>
+            (s.name_en || '').toLowerCase().includes(q) ||
+            (s.name_ar || '').toLowerCase().includes(q) ||
+            (cat.name_en || '').toLowerCase().includes(q) ||
+            (cat.name_ar || '').toLowerCase().includes(q)
+        )
+    })).filter(cat => cat.services.length > 0);
+}
+
+function getDoctorLabel(id) {
+    const d = getDoctor(id);
+    if (!d) return '';
+    return isRtl.value ? (d.name_ar || d.name_en) : (d.name_en || d.name_ar);
+}
+
+function getServiceLabel(id) {
+    const s = getService(id);
+    if (!s) return '';
+    return isRtl.value ? (s.name_ar || s.name_en) : (s.name_en || s.name_ar);
+}
 </script>
 
 <template>
@@ -792,17 +872,37 @@ const stepLabels = computed(() => [
 
                             <div class="p-4 bg-gray-50/50 border border-gray-100 rounded-xl">
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                    <!-- Doctor Select -->
-                                    <div>
+                                    <!-- Doctor Select (searchable) -->
+                                    <div class="relative bk-dd">
                                         <label class="block text-xs font-medium text-gray-500 mb-1">{{ $t('a_doctor') }} <span class="text-red-500">*</span></label>
-                                        <select
-                                            v-model="serviceRows[0].doctor_id"
-                                            @change="onConsultationDoctorChange(0)"
-                                            class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
-                                        >
-                                            <option value="">{{ $t('a_select_doctor') }}</option>
-                                            <option v-for="d in filteredDoctors" :key="d.id" :value="d.id">{{ d.name_en || d.name_ar }}</option>
-                                        </select>
+                                        <button type="button" @click.stop="toggleDropdown('cons_doc')"
+                                            class="w-full flex items-center justify-between px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm transition-all"
+                                            :class="openDropdown === 'cons_doc' ? 'ring-2 ring-yellow-200 border-transparent' : 'hover:border-gray-300'">
+                                            <span :class="serviceRows[0].doctor_id ? 'text-gray-800' : 'text-gray-400'">
+                                                {{ serviceRows[0].doctor_id ? getDoctorLabel(serviceRows[0].doctor_id) : $t('a_select_doctor') }}
+                                            </span>
+                                            <svg class="w-4 h-4 text-gray-400 transition-transform" :class="openDropdown === 'cons_doc' ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                                        </button>
+                                        <Transition enter-active-class="transition duration-150" enter-from-class="opacity-0 -translate-y-1" enter-to-class="opacity-100 translate-y-0" leave-active-class="transition duration-100" leave-from-class="opacity-100" leave-to-class="opacity-0">
+                                            <div v-if="openDropdown === 'cons_doc'" class="absolute z-40 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden">
+                                                <div class="p-2 border-b border-gray-100">
+                                                    <input type="text" v-model="ddSearch['cons_doc']" class="bk-dd-search-cons_doc w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-yellow-200 focus:border-transparent" :placeholder="isRtl ? 'بحث عن طبيب...' : 'Search doctor...'" />
+                                                </div>
+                                                <div class="max-h-48 overflow-y-auto">
+                                                    <button v-for="d in searchedDoctors('cons_doc')" :key="d.id" type="button"
+                                                        @click="serviceRows[0].doctor_id = d.id; onConsultationDoctorChange(0); closeDropdown()"
+                                                        class="w-full flex items-center justify-between px-4 py-2.5 text-sm text-start hover:bg-amber-50 transition-colors"
+                                                        :class="serviceRows[0].doctor_id == d.id ? 'bg-amber-50/70 font-semibold text-amber-700' : 'text-gray-700'">
+                                                        <div class="flex items-center gap-2">
+                                                            <div class="w-7 h-7 rounded-lg bg-gradient-to-r from-amber-400 to-amber-300 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">{{ (d.name_en || d.name_ar || '?').charAt(0) }}</div>
+                                                            <span>{{ isRtl ? (d.name_ar || d.name_en) : (d.name_en || d.name_ar) }}</span>
+                                                        </div>
+                                                        <svg v-if="serviceRows[0].doctor_id == d.id" class="w-4 h-4 text-amber-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
+                                                    </button>
+                                                    <div v-if="searchedDoctors('cons_doc').length === 0" class="px-4 py-3 text-sm text-gray-400 text-center">{{ isRtl ? 'لا توجد نتائج' : 'No results' }}</div>
+                                                </div>
+                                            </div>
+                                        </Transition>
                                     </div>
 
                                     <!-- Consultation Fee -->
@@ -885,42 +985,87 @@ const stepLabels = computed(() => [
                                     </div>
 
                                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                        <!-- Service Select -->
-                                        <div>
+                                        <!-- Service Select (searchable) -->
+                                        <div class="relative bk-dd">
                                             <label class="block text-xs font-medium text-gray-500 mb-1">{{ $t('a_service') }} <span class="text-red-500">*</span></label>
-                                            <select
-                                                v-model="row.service_id"
-                                                @change="onServiceChange(index)"
-                                                class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
-                                            >
-                                                <option value="">{{ $t('a_select_service') }}</option>
-                                                <template v-if="filteredServiceCategories && filteredServiceCategories.length">
-                                                    <template v-for="cat in filteredServiceCategories" :key="cat.id">
-                                                        <optgroup v-if="cat.services && cat.services.length" :label="cat.name_en || cat.name_ar">
-                                                            <option v-for="s in cat.services" :key="s.id" :value="s.id">
-                                                                {{ s.name_en || s.name_ar }} -- {{ formatCurrency(s.price_after_discount || s.price) }}
-                                                            </option>
-                                                        </optgroup>
-                                                    </template>
-                                                </template>
-                                                <template v-else>
-                                                    <option v-for="s in filteredServices" :key="s.id" :value="s.id">
-                                                        {{ s.name_en || s.name_ar }} -- {{ formatCurrency(s.price_after_discount || s.price) }}
-                                                    </option>
-                                                </template>
-                                            </select>
+                                            <button type="button" @click.stop="toggleDropdown('svc_' + index)"
+                                                class="w-full flex items-center justify-between px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm transition-all"
+                                                :class="openDropdown === 'svc_' + index ? 'ring-2 ring-yellow-200 border-transparent' : 'hover:border-gray-300'">
+                                                <span class="truncate" :class="row.service_id ? 'text-gray-800' : 'text-gray-400'">
+                                                    {{ row.service_id ? getServiceLabel(row.service_id) : $t('a_select_service') }}
+                                                </span>
+                                                <svg class="w-4 h-4 text-gray-400 flex-shrink-0 transition-transform" :class="openDropdown === 'svc_' + index ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                                            </button>
+                                            <Transition enter-active-class="transition duration-150" enter-from-class="opacity-0 -translate-y-1" enter-to-class="opacity-100 translate-y-0" leave-active-class="transition duration-100" leave-from-class="opacity-100" leave-to-class="opacity-0">
+                                                <div v-if="openDropdown === 'svc_' + index" class="absolute z-40 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden">
+                                                    <div class="p-2 border-b border-gray-100">
+                                                        <input type="text" v-model="ddSearch['svc_' + index]" :class="'bk-dd-search-svc_' + index" class="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-yellow-200 focus:border-transparent" :placeholder="isRtl ? 'بحث عن خدمة...' : 'Search service...'" />
+                                                    </div>
+                                                    <div class="max-h-56 overflow-y-auto">
+                                                        <template v-if="searchedServiceCategories('svc_' + index).length">
+                                                            <template v-for="cat in searchedServiceCategories('svc_' + index)" :key="cat.id">
+                                                                <div class="px-3 py-1.5 text-[10px] font-bold text-gray-400 uppercase tracking-wider bg-gray-50 sticky top-0">{{ isRtl ? (cat.name_ar || cat.name_en) : (cat.name_en || cat.name_ar) }}</div>
+                                                                <button v-for="s in cat.services" :key="s.id" type="button"
+                                                                    @click="row.service_id = s.id; onServiceChange(index); closeDropdown()"
+                                                                    class="w-full flex items-center justify-between px-4 py-2.5 text-sm text-start hover:bg-amber-50 transition-colors"
+                                                                    :class="row.service_id == s.id ? 'bg-amber-50/70 font-semibold text-amber-700' : 'text-gray-700'">
+                                                                    <span class="truncate">{{ isRtl ? (s.name_ar || s.name_en) : (s.name_en || s.name_ar) }}</span>
+                                                                    <div class="flex items-center gap-2 flex-shrink-0">
+                                                                        <span class="text-xs text-gray-400">{{ formatCurrency(s.price_after_discount || s.price) }}</span>
+                                                                        <svg v-if="row.service_id == s.id" class="w-4 h-4 text-amber-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
+                                                                    </div>
+                                                                </button>
+                                                            </template>
+                                                        </template>
+                                                        <template v-else-if="searchedServices('svc_' + index).length">
+                                                            <button v-for="s in searchedServices('svc_' + index)" :key="s.id" type="button"
+                                                                @click="row.service_id = s.id; onServiceChange(index); closeDropdown()"
+                                                                class="w-full flex items-center justify-between px-4 py-2.5 text-sm text-start hover:bg-amber-50 transition-colors"
+                                                                :class="row.service_id == s.id ? 'bg-amber-50/70 font-semibold text-amber-700' : 'text-gray-700'">
+                                                                <span class="truncate">{{ isRtl ? (s.name_ar || s.name_en) : (s.name_en || s.name_ar) }}</span>
+                                                                <div class="flex items-center gap-2 flex-shrink-0">
+                                                                    <span class="text-xs text-gray-400">{{ formatCurrency(s.price_after_discount || s.price) }}</span>
+                                                                    <svg v-if="row.service_id == s.id" class="w-4 h-4 text-amber-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
+                                                                </div>
+                                                            </button>
+                                                        </template>
+                                                        <div v-else class="px-4 py-3 text-sm text-gray-400 text-center">{{ isRtl ? 'لا توجد نتائج' : 'No results' }}</div>
+                                                    </div>
+                                                </div>
+                                            </Transition>
                                         </div>
 
-                                        <!-- Doctor Select -->
-                                        <div>
+                                        <!-- Doctor Select (searchable) -->
+                                        <div class="relative bk-dd">
                                             <label class="block text-xs font-medium text-gray-500 mb-1">{{ $t('a_doctor') }} <span class="text-red-500">*</span></label>
-                                            <select
-                                                v-model="row.doctor_id"
-                                                class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
-                                            >
-                                                <option value="">{{ $t('a_select_doctor') }}</option>
-                                                <option v-for="d in filteredDoctors" :key="d.id" :value="d.id">{{ d.name_en || d.name_ar }}</option>
-                                            </select>
+                                            <button type="button" @click.stop="toggleDropdown('doc_' + index)"
+                                                class="w-full flex items-center justify-between px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm transition-all"
+                                                :class="openDropdown === 'doc_' + index ? 'ring-2 ring-yellow-200 border-transparent' : 'hover:border-gray-300'">
+                                                <span :class="row.doctor_id ? 'text-gray-800' : 'text-gray-400'">
+                                                    {{ row.doctor_id ? getDoctorLabel(row.doctor_id) : $t('a_select_doctor') }}
+                                                </span>
+                                                <svg class="w-4 h-4 text-gray-400 transition-transform" :class="openDropdown === 'doc_' + index ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                                            </button>
+                                            <Transition enter-active-class="transition duration-150" enter-from-class="opacity-0 -translate-y-1" enter-to-class="opacity-100 translate-y-0" leave-active-class="transition duration-100" leave-from-class="opacity-100" leave-to-class="opacity-0">
+                                                <div v-if="openDropdown === 'doc_' + index" class="absolute z-40 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden">
+                                                    <div class="p-2 border-b border-gray-100">
+                                                        <input type="text" v-model="ddSearch['doc_' + index]" :class="'bk-dd-search-doc_' + index" class="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-yellow-200 focus:border-transparent" :placeholder="isRtl ? 'بحث عن طبيب...' : 'Search doctor...'" />
+                                                    </div>
+                                                    <div class="max-h-48 overflow-y-auto">
+                                                        <button v-for="d in searchedDoctors('doc_' + index)" :key="d.id" type="button"
+                                                            @click="row.doctor_id = d.id; closeDropdown()"
+                                                            class="w-full flex items-center justify-between px-4 py-2.5 text-sm text-start hover:bg-amber-50 transition-colors"
+                                                            :class="row.doctor_id == d.id ? 'bg-amber-50/70 font-semibold text-amber-700' : 'text-gray-700'">
+                                                            <div class="flex items-center gap-2">
+                                                                <div class="w-7 h-7 rounded-lg bg-gradient-to-r from-amber-400 to-amber-300 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">{{ (d.name_en || d.name_ar || '?').charAt(0) }}</div>
+                                                                <span>{{ isRtl ? (d.name_ar || d.name_en) : (d.name_en || d.name_ar) }}</span>
+                                                            </div>
+                                                            <svg v-if="row.doctor_id == d.id" class="w-4 h-4 text-amber-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
+                                                        </button>
+                                                        <div v-if="searchedDoctors('doc_' + index).length === 0" class="px-4 py-3 text-sm text-gray-400 text-center">{{ isRtl ? 'لا توجد نتائج' : 'No results' }}</div>
+                                                    </div>
+                                                </div>
+                                            </Transition>
                                         </div>
 
                                         <!-- Sessions Count -->
@@ -1024,17 +1169,37 @@ const stepLabels = computed(() => [
                                     </div>
 
                                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                                        <!-- Doctor override -->
-                                        <div>
+                                        <!-- Doctor override (searchable) -->
+                                        <div class="relative bk-dd">
                                             <label class="block text-xs font-medium text-gray-500 mb-1">{{ $t('a_doctor') }}</label>
-                                            <select
-                                                v-model="apt.doctor_id"
-                                                @change="onAppointmentDoctorChange(sIndex, aIndex)"
-                                                class="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
-                                            >
-                                                <option value="">{{ $t('a_select_doctor') }}</option>
-                                                <option v-for="d in filteredDoctors" :key="d.id" :value="d.id">{{ d.name_en || d.name_ar }}</option>
-                                            </select>
+                                            <button type="button" @click.stop="toggleDropdown('apt_doc_' + sIndex + '_' + aIndex)"
+                                                class="w-full flex items-center justify-between px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm transition-all"
+                                                :class="openDropdown === 'apt_doc_' + sIndex + '_' + aIndex ? 'ring-2 ring-yellow-200 border-transparent' : 'hover:border-gray-300'">
+                                                <span :class="apt.doctor_id ? 'text-gray-800' : 'text-gray-400'">
+                                                    {{ apt.doctor_id ? getDoctorLabel(apt.doctor_id) : $t('a_select_doctor') }}
+                                                </span>
+                                                <svg class="w-4 h-4 text-gray-400 transition-transform" :class="openDropdown === 'apt_doc_' + sIndex + '_' + aIndex ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                                            </button>
+                                            <Transition enter-active-class="transition duration-150" enter-from-class="opacity-0 -translate-y-1" enter-to-class="opacity-100 translate-y-0" leave-active-class="transition duration-100" leave-from-class="opacity-100" leave-to-class="opacity-0">
+                                                <div v-if="openDropdown === 'apt_doc_' + sIndex + '_' + aIndex" class="absolute z-40 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden">
+                                                    <div class="p-2 border-b border-gray-100">
+                                                        <input type="text" v-model="ddSearch['apt_doc_' + sIndex + '_' + aIndex]" :class="'bk-dd-search-apt_doc_' + sIndex + '_' + aIndex" class="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-yellow-200 focus:border-transparent" :placeholder="isRtl ? 'بحث عن طبيب...' : 'Search doctor...'" />
+                                                    </div>
+                                                    <div class="max-h-48 overflow-y-auto">
+                                                        <button v-for="d in searchedDoctors('apt_doc_' + sIndex + '_' + aIndex)" :key="d.id" type="button"
+                                                            @click="apt.doctor_id = d.id; onAppointmentDoctorChange(sIndex, aIndex); closeDropdown()"
+                                                            class="w-full flex items-center justify-between px-4 py-2.5 text-sm text-start hover:bg-amber-50 transition-colors"
+                                                            :class="apt.doctor_id == d.id ? 'bg-amber-50/70 font-semibold text-amber-700' : 'text-gray-700'">
+                                                            <div class="flex items-center gap-2">
+                                                                <div class="w-7 h-7 rounded-lg bg-gradient-to-r from-amber-400 to-amber-300 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">{{ (d.name_en || d.name_ar || '?').charAt(0) }}</div>
+                                                                <span>{{ isRtl ? (d.name_ar || d.name_en) : (d.name_en || d.name_ar) }}</span>
+                                                            </div>
+                                                            <svg v-if="apt.doctor_id == d.id" class="w-4 h-4 text-amber-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
+                                                        </button>
+                                                        <div v-if="searchedDoctors('apt_doc_' + sIndex + '_' + aIndex).length === 0" class="px-4 py-3 text-sm text-gray-400 text-center">{{ isRtl ? 'لا توجد نتائج' : 'No results' }}</div>
+                                                    </div>
+                                                </div>
+                                            </Transition>
                                         </div>
 
                                         <!-- Date (Doctor Availability Calendar) -->
