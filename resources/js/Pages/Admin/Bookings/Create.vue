@@ -100,6 +100,13 @@ function getDoctor(id) {
 }
 
 
+/* ── Module availability ── */
+const modules = computed(() => page.props.modules || {});
+const isDentalEnabled = computed(() => {
+    const dental = Object.values(modules.value).find(m => m.slug === 'dental');
+    return dental?.enabled ?? false;
+});
+
 const isConsultation = computed(() =>
     bookingType.value === 'dermatology_consultation' || bookingType.value === 'cosmetic_consultation' || bookingType.value === 'dental_consultation'
 );
@@ -529,7 +536,7 @@ const stepLabels = computed(() => [
             <div class="mb-6">
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-5 max-w-4xl mx-auto">
                     <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">{{ $t('a_booking_type') }}</h3>
-                    <div class="grid grid-cols-5 gap-3">
+                    <div class="grid gap-3" :class="isDentalEnabled ? 'grid-cols-5' : 'grid-cols-3'">
                         <button
                             type="button"
                             @click="bookingType = 'dermatology_consultation'"
@@ -567,6 +574,7 @@ const stepLabels = computed(() => [
                             <p class="text-sm font-semibold text-gray-800">{{ $t('a_book_service') }}</p>
                         </button>
                         <button
+                            v-if="isDentalEnabled"
                             type="button"
                             @click="bookingType = 'dental_consultation'"
                             :class="[
@@ -579,6 +587,7 @@ const stepLabels = computed(() => [
                             <p class="text-sm font-semibold text-gray-800">{{ $t('a_dental_consultation') }}</p>
                         </button>
                         <button
+                            v-if="isDentalEnabled"
                             type="button"
                             @click="bookingType = 'dental_service'"
                             :class="[
