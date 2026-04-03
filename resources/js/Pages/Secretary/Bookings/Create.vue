@@ -98,6 +98,10 @@ function getDoctor(id) {
 
 const { formatCurrency, currencyCode } = useCurrency();
 
+const modules = computed(() => page.props.modules || {});
+const isDermaEnabled = computed(() => modules.value.derma?.enabled !== false);
+const isDentalEnabled = computed(() => modules.value.dental?.enabled === true);
+
 const isConsultation = computed(() =>
     bookingType.value === 'dermatology_consultation' || bookingType.value === 'cosmetic_consultation' || bookingType.value === 'dental_consultation'
 );
@@ -536,67 +540,71 @@ const stepLabels = computed(() => [
         <!-- Booking Type Selector -->
             <div class="mb-6">
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-5 max-w-4xl mx-auto">
-                    <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">Booking Type</h3>
-                    <div class="grid grid-cols-5 gap-3">
+                    <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">{{ isRtl ? 'نوع الحجز' : 'Booking Type' }}</h3>
+                    <div class="flex flex-wrap gap-3">
                         <button
+                            v-if="isDermaEnabled"
                             type="button"
                             @click="bookingType = 'dermatology_consultation'"
                             :class="[
-                                'p-3 rounded-xl border-2 transition-all ltr:text-left rtl:ltr:text-right rtl:text-left',
+                                'p-3 rounded-xl border-2 transition-all text-start flex-1 min-w-[140px]',
                                 bookingType === 'dermatology_consultation'
                                     ? 'border-teal-500 bg-teal-50/50'
                                     : 'border-gray-200 hover:border-gray-300'
                             ]"
                         >
-                            <p class="text-sm font-semibold text-gray-800">Dermatology Consultation</p>
+                            <p class="text-sm font-semibold text-gray-800">{{ isRtl ? 'استشارة جلدية' : 'Dermatology Consultation' }}</p>
                         </button>
                         <button
+                            v-if="isDermaEnabled"
                             type="button"
                             @click="bookingType = 'cosmetic_consultation'"
                             :class="[
-                                'p-3 rounded-xl border-2 transition-all ltr:text-left rtl:ltr:text-right rtl:text-left',
+                                'p-3 rounded-xl border-2 transition-all text-start flex-1 min-w-[140px]',
                                 bookingType === 'cosmetic_consultation'
                                     ? 'border-teal-500 bg-teal-50/50'
                                     : 'border-gray-200 hover:border-gray-300'
                             ]"
                         >
-                            <p class="text-sm font-semibold text-gray-800">Cosmetic Consultation</p>
+                            <p class="text-sm font-semibold text-gray-800">{{ isRtl ? 'استشارة تجميلية' : 'Cosmetic Consultation' }}</p>
                         </button>
                         <button
                             type="button"
                             @click="bookingType = 'service'"
                             :class="[
-                                'p-3 rounded-xl border-2 transition-all ltr:text-left rtl:ltr:text-right rtl:text-left',
+                                'p-3 rounded-xl border-2 transition-all text-start flex-1 min-w-[140px]',
                                 bookingType === 'service'
                                     ? 'border-teal-500 bg-teal-50/50'
                                     : 'border-gray-200 hover:border-gray-300'
                             ]"
                         >
-                            <p class="text-sm font-semibold text-gray-800">Book Service</p>
+                            <p class="text-sm font-semibold text-gray-800">{{ isRtl ? 'حجز خدمة' : 'Book Service' }}</p>
                         </button>
                         <button
+                            v-if="isDentalEnabled"
                             type="button"
                             @click="bookingType = 'dental_consultation'"
                             :class="[
-                                'p-3 rounded-xl border-2 transition-all ltr:text-left rtl:ltr:text-right rtl:text-left',
+                                'p-3 rounded-xl border-2 transition-all text-start flex-1 min-w-[140px]',
                                 bookingType === 'dental_consultation'
                                     ? 'border-cyan-500 bg-cyan-50/50'
                                     : 'border-gray-200 hover:border-gray-300'
                             ]"
                         >
-                            <p class="text-sm font-semibold text-gray-800">Dental Consultation</p>
+                            <p class="text-sm font-semibold text-gray-800">{{ isRtl ? 'استشارة أسنان' : 'Dental Consultation' }}</p>
                         </button>
                         <button
+                            v-if="isDentalEnabled"
                             type="button"
                             @click="bookingType = 'dental_service'"
                             :class="[
-                                'p-3 rounded-xl border-2 transition-all ltr:text-left rtl:ltr:text-right rtl:text-left',
+                                'p-3 rounded-xl border-2 transition-all text-start flex-1 min-w-[140px]',
                                 bookingType === 'dental_service'
                                     ? 'border-cyan-500 bg-cyan-50/50'
                                     : 'border-gray-200 hover:border-gray-300'
                             ]"
                         >
-                            <p class="text-sm font-semibold text-gray-800">Dental Service</p>
+                            <p class="text-sm font-semibold text-gray-800">{{ isRtl ? 'خدمة أسنان' : 'Dental Service' }}</p>
                         </button>
                     </div>
                 </div>
