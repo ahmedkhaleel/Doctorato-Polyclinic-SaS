@@ -1186,10 +1186,10 @@ function submitReschedule() {
                     <form @submit.prevent="submitPayment" class="p-6">
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-xs font-medium text-gray-500 mb-1.5">Payment Method <span class="text-red-500">*</span></label>
+                                <label class="block text-xs font-medium text-gray-500 mb-1.5">{{ isRtl ? 'طريقة الدفع' : 'Payment Method' }} <span class="text-red-500">*</span></label>
                                 <select v-model="paymentForm.payment_method_id" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500 bg-white">
-                                    <option value="">Select Method</option>
-                                    <option v-for="method in paymentMethods" :key="method.id" :value="method.id">{{ method.name_en }}</option>
+                                    <option value="">{{ isRtl ? 'اختر طريقة الدفع' : 'Select Method' }}</option>
+                                    <option v-for="method in paymentMethods" :key="method.id" :value="method.id">{{ isRtl ? (method.name_ar || method.name_en) : method.name_en }}</option>
                                 </select>
                                 <p v-if="paymentForm.errors.payment_method_id" class="mt-1 text-xs text-red-600">{{ paymentForm.errors.payment_method_id }}</p>
                             </div>
