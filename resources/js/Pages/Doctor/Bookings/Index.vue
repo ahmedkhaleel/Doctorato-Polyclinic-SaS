@@ -17,6 +17,9 @@ const activeModules = computed(() => {
 
 const props = defineProps({
     bookings: Object,
+    bundleBookings: Object,
+    bookingsCount: { type: Number, default: 0 },
+    bundleCount: { type: Number, default: 0 },
     filters: Object,
 });
 
@@ -28,6 +31,8 @@ onMounted(() => {
     setTimeout(() => cardsLoaded.value = true, 200);
 });
 
+// ── Tab & Filters ──────────────────────────────────────
+const activeTab = ref(props.filters?.tab || 'bookings');
 const search = ref(props.filters?.search || '');
 const status = ref(props.filters?.status || '');
 const moduleFilter = ref(props.filters?.module || '');
@@ -40,8 +45,17 @@ watch(search, () => {
 watch(status, () => applyFilters());
 watch(moduleFilter, () => applyFilters());
 
+function switchTab(tab) {
+    activeTab.value = tab;
+    search.value = '';
+    status.value = '';
+    moduleFilter.value = '';
+    router.get('/doctor/bookings', { tab }, { preserveState: false });
+}
+
 function applyFilters() {
     router.get('/doctor/bookings', {
+        tab: activeTab.value,
         search: search.value || undefined,
         status: status.value || undefined,
         module: moduleFilter.value || undefined,
@@ -53,6 +67,7 @@ const statusConfig = {
     in_progress: { label: 'In Progress', labelAr: 'قيد التنفيذ', bg: 'bg-indigo-50', text: 'text-indigo-700', dot: 'bg-indigo-500', border: 'border-indigo-200' },
     completed: { label: 'Completed', labelAr: 'مكتمل', bg: 'bg-emerald-50', text: 'text-emerald-700', dot: 'bg-emerald-500', border: 'border-emerald-200' },
     cancelled: { label: 'Cancelled', labelAr: 'ملغي', bg: 'bg-red-50', text: 'text-red-700', dot: 'bg-red-500', border: 'border-red-200' },
+    pending: { label: 'Pending', labelAr: 'معلق', bg: 'bg-amber-50', text: 'text-amber-700', dot: 'bg-amber-500', border: 'border-amber-200' },
 };
 
 function formatTime(time) {
@@ -75,9 +90,25 @@ function sessionsPercent(completed, total) {
 }
 
 const bookingsList = computed(() => props.bookings?.data || []);
-const totalBookings = computed(() => bookingsList.value.length);
+const bundleList = computed(() => props.bundleBookings?.data || []);
+
+// Stats for bookings tab
+const totalBookings = computed(() => props.bookingsCount || 0);
 const inProgressCount = computed(() => bookingsList.value.filter(b => b.status === 'in_progress').length);
 const completedCount = computed(() => bookingsList.value.filter(b => b.status === 'completed').length);
+
+// Active pagination
+const activePagination = computed(() => {
+    return activeTab.value === 'bookings' ? props.bookings : props.bundleBookings;
+});
+
+// Bundle status options
+const bundleStatuses = [
+    { value: 'pending', label: 'Pending', labelAr: 'معلق' },
+    { value: 'in_progress', label: 'In Progress', labelAr: 'قيد التنفيذ' },
+    { value: 'completed', label: 'Completed', labelAr: 'مكتمل' },
+    { value: 'cancelled', label: 'Cancelled', labelAr: 'ملغي' },
+];
 </script>
 
 <template>
@@ -97,28 +128,59 @@ const completedCount = computed(() => bookingsList.value.filter(b => b.status ==
                     </div>
                     <div>
                         <h1 class="text-2xl font-bold text-white">{{ $t('a_bookings') }}</h1>
-                        <p class="text-sm text-gray-400 mt-0.5">{{ isRtl ? 'الحجوزات المسندة إليك' : 'Bookings assigned to you' }}</p>
+                        <p class="text-sm text-gray-400 mt-0.5">{{ isRtl ? 'الحجوزات والباقات المسندة إليك' : 'Bookings & packages assigned to you' }}</p>
                     </div>
                 </div>
 
-                <!-- Stats + Filters -->
-                <div class="flex flex-col sm:flex-row sm:items-end gap-4 mt-6">
-                    <div class="flex gap-3 flex-1">
-                        <div class="bg-white/5 backdrop-blur-sm rounded-xl px-4 py-3 border border-white/10 flex-1">
-                            <p class="text-xs text-gray-400">{{ isRtl ? 'الإجمالي' : 'Total' }}</p>
-                            <p class="text-lg font-bold text-white mt-0.5">{{ totalBookings }}</p>
-                        </div>
-                        <div class="bg-white/5 backdrop-blur-sm rounded-xl px-4 py-3 border border-white/10 flex-1">
-                            <p class="text-xs text-gray-400">{{ isRtl ? 'قيد التنفيذ' : 'In Progress' }}</p>
-                            <p class="text-lg font-bold text-indigo-400 mt-0.5">{{ inProgressCount }}</p>
-                        </div>
-                        <div class="bg-white/5 backdrop-blur-sm rounded-xl px-4 py-3 border border-white/10 flex-1">
-                            <p class="text-xs text-gray-400">{{ isRtl ? 'مكتمل' : 'Completed' }}</p>
-                            <p class="text-lg font-bold text-emerald-400 mt-0.5">{{ completedCount }}</p>
-                        </div>
+                <!-- Stats -->
+                <div class="flex gap-3 mt-6">
+                    <div class="bg-white/5 backdrop-blur-sm rounded-xl px-4 py-3 border border-white/10 flex-1">
+                        <p class="text-xs text-gray-400">{{ isRtl ? 'الحجوزات' : 'Bookings' }}</p>
+                        <p class="text-lg font-bold text-white mt-0.5">{{ bookingsCount }}</p>
+                    </div>
+                    <div class="bg-white/5 backdrop-blur-sm rounded-xl px-4 py-3 border border-white/10 flex-1">
+                        <p class="text-xs text-gray-400">{{ isRtl ? 'الباقات' : 'Packages' }}</p>
+                        <p class="text-lg font-bold text-purple-400 mt-0.5">{{ bundleCount }}</p>
+                    </div>
+                    <div class="bg-white/5 backdrop-blur-sm rounded-xl px-4 py-3 border border-white/10 flex-1">
+                        <p class="text-xs text-gray-400">{{ isRtl ? 'الإجمالي' : 'Total' }}</p>
+                        <p class="text-lg font-bold text-[#C4A265] mt-0.5">{{ bookingsCount + bundleCount }}</p>
                     </div>
                 </div>
             </div>
+        </div>
+
+        <!-- Tabs -->
+        <div
+            class="flex gap-2 transition-all duration-700"
+            :class="cardsLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'"
+        >
+            <button
+                @click="switchTab('bookings')"
+                class="inline-flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold transition-all duration-200 border"
+                :class="activeTab === 'bookings'
+                    ? 'bg-[#C4A265] text-white border-[#C4A265] shadow-md shadow-[#C4A265]/20'
+                    : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300 hover:shadow-sm'"
+            >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                {{ isRtl ? 'الحجوزات' : 'Bookings' }}
+                <span class="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 text-[10px] font-bold rounded-full"
+                    :class="activeTab === 'bookings' ? 'bg-white/20 text-white' : 'bg-gray-100 text-gray-500'"
+                >{{ bookingsCount }}</span>
+            </button>
+            <button
+                @click="switchTab('packages')"
+                class="inline-flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold transition-all duration-200 border"
+                :class="activeTab === 'packages'
+                    ? 'bg-[#C4A265] text-white border-[#C4A265] shadow-md shadow-[#C4A265]/20'
+                    : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300 hover:shadow-sm'"
+            >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
+                {{ isRtl ? 'الباقات' : 'Packages' }}
+                <span class="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 text-[10px] font-bold rounded-full"
+                    :class="activeTab === 'packages' ? 'bg-white/20 text-white' : 'bg-gray-100 text-gray-500'"
+                >{{ bundleCount }}</span>
+            </button>
         </div>
 
         <!-- Filters Bar -->
@@ -128,23 +190,32 @@ const completedCount = computed(() => bookingsList.value.filter(b => b.status ==
         >
             <div class="relative flex-1 min-w-[240px]">
                 <svg class="absolute start-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                <input v-model="search" type="text" :placeholder="isRtl ? 'بحث بالاسم، الهاتف، رقم الحجز...' : 'Search name, phone, booking #...'" class="w-full ps-10 pe-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition" />
+                <input v-model="search" type="text"
+                    :placeholder="activeTab === 'bookings'
+                        ? (isRtl ? 'بحث بالاسم، الهاتف، رقم الحجز...' : 'Search name, phone, booking #...')
+                        : (isRtl ? 'بحث بالاسم، الهاتف، اسم الباقة...' : 'Search name, phone, package...')"
+                    class="w-full ps-10 pe-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition" />
             </div>
-            <select v-if="activeModules.length > 1" v-model="moduleFilter" class="px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]">
+            <select v-if="activeTab === 'bookings' && activeModules.length > 1" v-model="moduleFilter" class="px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]">
                 <option value="">{{ isRtl ? 'كل الأقسام' : 'All Departments' }}</option>
                 <option v-for="mod in activeModules" :key="mod.slug" :value="mod.slug">{{ mod.name }}</option>
             </select>
             <select v-model="status" class="px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]">
                 <option value="">{{ isRtl ? 'جميع الحالات' : 'All Statuses' }}</option>
-                <option value="confirmed">{{ isRtl ? 'مؤكد' : 'Confirmed' }}</option>
-                <option value="in_progress">{{ isRtl ? 'قيد التنفيذ' : 'In Progress' }}</option>
-                <option value="completed">{{ isRtl ? 'مكتمل' : 'Completed' }}</option>
-                <option value="cancelled">{{ isRtl ? 'ملغي' : 'Cancelled' }}</option>
+                <template v-if="activeTab === 'bookings'">
+                    <option value="confirmed">{{ isRtl ? 'مؤكد' : 'Confirmed' }}</option>
+                    <option value="in_progress">{{ isRtl ? 'قيد التنفيذ' : 'In Progress' }}</option>
+                    <option value="completed">{{ isRtl ? 'مكتمل' : 'Completed' }}</option>
+                    <option value="cancelled">{{ isRtl ? 'ملغي' : 'Cancelled' }}</option>
+                </template>
+                <template v-else>
+                    <option v-for="s in bundleStatuses" :key="s.value" :value="s.value">{{ isRtl ? s.labelAr : s.label }}</option>
+                </template>
             </select>
         </div>
 
-        <!-- Booking Cards -->
-        <div
+        <!-- ═══════════ BOOKINGS TAB ═══════════ -->
+        <div v-if="activeTab === 'bookings'"
             class="transition-all duration-700"
             :class="cardsLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'"
         >
@@ -216,14 +287,108 @@ const completedCount = computed(() => bookingsList.value.filter(b => b.status ==
                 <p class="text-sm font-medium text-gray-500">{{ isRtl ? 'لا توجد حجوزات' : 'No bookings found' }}</p>
                 <p class="text-xs text-gray-400 mt-1">{{ isRtl ? 'الحجوزات المؤكدة فقط تظهر هنا' : 'Only confirmed bookings appear here' }}</p>
             </div>
+        </div>
 
-            <!-- Pagination -->
-            <div v-if="bookings.links?.length > 3" class="flex items-center justify-center gap-1 mt-4">
-                <template v-for="link in bookings.links" :key="link.label">
-                    <Link v-if="link.url" :href="link.url" class="px-3 py-1.5 rounded-lg text-xs font-medium transition-colors" :class="link.active ? 'bg-[#C4A265] text-white' : 'text-gray-500 hover:bg-gray-100 bg-white border border-gray-200'" v-html="link.label" preserve-state />
-                    <span v-else class="px-3 py-1.5 text-xs text-gray-300" v-html="link.label" />
-                </template>
+        <!-- ═══════════ PACKAGES TAB ═══════════ -->
+        <div v-if="activeTab === 'packages'"
+            class="transition-all duration-700"
+            :class="cardsLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'"
+        >
+            <div v-if="bundleList.length" class="space-y-3">
+                <div
+                    v-for="bb in bundleList"
+                    :key="bb.id"
+                    class="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 overflow-hidden"
+                >
+                    <div class="p-5">
+                        <!-- Top Row: Booking Number + Patient + Status -->
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+                            <div class="flex items-center gap-3 flex-1 min-w-0">
+                                <div class="w-11 h-11 rounded-xl bg-purple-50 flex items-center justify-center flex-shrink-0">
+                                    <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
+                                </div>
+                                <div class="min-w-0">
+                                    <p class="text-sm font-bold text-gray-800 truncate">{{ bb.patient_name }}</p>
+                                    <p class="text-xs text-gray-400">{{ bb.patient_phone }}</p>
+                                </div>
+                            </div>
+
+                            <!-- Bundle Name -->
+                            <div class="flex-1 min-w-0">
+                                <p class="text-[10px] font-semibold text-gray-400 uppercase">{{ isRtl ? 'الباقة' : 'Package' }}</p>
+                                <p class="text-sm font-semibold text-purple-700 truncate mt-0.5">{{ bb.bundle_name }}</p>
+                                <p class="text-[10px] font-mono text-gray-400 mt-0.5">{{ bb.booking_number }}</p>
+                            </div>
+
+                            <!-- Overall Progress -->
+                            <div class="sm:w-28">
+                                <p class="text-[10px] font-semibold text-gray-400 uppercase">{{ isRtl ? 'التقدم الكلي' : 'Progress' }}</p>
+                                <div class="flex items-center gap-2 mt-1">
+                                    <span class="text-sm font-bold text-gray-700 tabular-nums">{{ sessionsText(bb.doctor_completed_sessions, bb.doctor_total_sessions) }}</span>
+                                    <span class="text-[10px] text-gray-400">({{ bb.progress_percent }}%)</span>
+                                </div>
+                                <div class="w-full h-1.5 bg-gray-100 rounded-full mt-1.5 overflow-hidden">
+                                    <div class="h-full bg-purple-500 rounded-full transition-all duration-500" :style="{ width: bb.progress_percent + '%' }"></div>
+                                </div>
+                            </div>
+
+                            <!-- Status -->
+                            <div class="flex items-center">
+                                <span v-if="statusConfig[bb.status]"
+                                    class="inline-flex items-center gap-1.5 text-[11px] font-semibold px-3 py-1.5 rounded-lg border"
+                                    :class="[statusConfig[bb.status].bg, statusConfig[bb.status].text, statusConfig[bb.status].border]"
+                                >
+                                    <span class="w-1.5 h-1.5 rounded-full" :class="statusConfig[bb.status].dot"></span>
+                                    {{ isRtl ? statusConfig[bb.status].labelAr : statusConfig[bb.status].label }}
+                                </span>
+                                <span v-else class="text-xs text-gray-400">{{ bb.status }}</span>
+                            </div>
+                        </div>
+
+                        <!-- Services Breakdown -->
+                        <div v-if="bb.doctor_services?.length" class="mt-4 pt-3 border-t border-gray-100">
+                            <p class="text-[10px] font-semibold text-gray-400 uppercase mb-2">{{ isRtl ? 'خدماتك في هذه الباقة' : 'Your services in this package' }}</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                                <div v-for="(svc, i) in bb.doctor_services" :key="i"
+                                    class="flex items-center gap-3 bg-gray-50 rounded-lg px-3 py-2"
+                                >
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-xs font-medium text-gray-700 truncate">{{ svc.name }}</p>
+                                    </div>
+                                    <div class="flex items-center gap-1.5 flex-shrink-0">
+                                        <span class="text-xs font-bold tabular-nums"
+                                            :class="svc.completed_sessions >= svc.sessions_count ? 'text-emerald-600' : 'text-gray-600'"
+                                        >{{ svc.completed_sessions }}/{{ svc.sessions_count }}</span>
+                                        <div class="w-12 h-1 bg-gray-200 rounded-full overflow-hidden">
+                                            <div class="h-full rounded-full transition-all duration-500"
+                                                :class="svc.completed_sessions >= svc.sessions_count ? 'bg-emerald-500' : 'bg-purple-400'"
+                                                :style="{ width: sessionsPercent(svc.completed_sessions, svc.sessions_count) + '%' }"
+                                            ></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+
+            <!-- Empty State -->
+            <div v-else class="text-center py-16 bg-white rounded-xl border border-gray-100">
+                <div class="w-16 h-16 mx-auto bg-purple-50 rounded-full flex items-center justify-center mb-4">
+                    <svg class="w-8 h-8 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
+                </div>
+                <p class="text-sm font-medium text-gray-500">{{ isRtl ? 'لا توجد حجوزات باقات' : 'No package bookings found' }}</p>
+                <p class="text-xs text-gray-400 mt-1">{{ isRtl ? 'حجوزات الباقات المسندة إليك ستظهر هنا' : 'Package bookings assigned to you will appear here' }}</p>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <div v-if="activePagination?.links?.length > 3" class="flex items-center justify-center gap-1 mt-4">
+            <template v-for="link in activePagination.links" :key="link.label">
+                <Link v-if="link.url" :href="link.url" class="px-3 py-1.5 rounded-lg text-xs font-medium transition-colors" :class="link.active ? 'bg-[#C4A265] text-white' : 'text-gray-500 hover:bg-gray-100 bg-white border border-gray-200'" v-html="link.label" preserve-state />
+                <span v-else class="px-3 py-1.5 text-xs text-gray-300" v-html="link.label" />
+            </template>
         </div>
     </div>
 </template>
