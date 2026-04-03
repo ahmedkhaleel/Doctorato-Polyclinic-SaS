@@ -73,24 +73,9 @@ function formatDateTime(date) {
 }
 
 /* ── Actions ────────────────────────────────────────────── */
-function startVisit() {
-    if (window.confirm('Start this visit? The status will change to In Progress.')) {
-        router.post(`/secretary/visits/${props.visit.id}/start`, {}, {
-            preserveScroll: true,
-        });
-    }
-}
-
-function completeVisit() {
-    if (window.confirm('Mark this visit as completed?')) {
-        router.post(`/secretary/visits/${props.visit.id}/complete`, {}, {
-            preserveScroll: true,
-        });
-    }
-}
-
 function cancelVisit() {
-    if (window.confirm('Are you sure you want to cancel this visit? This action may not be reversible.')) {
+    const msg = isRtl.value ? 'هل أنت متأكد من إلغاء هذه الزيارة؟' : 'Are you sure you want to cancel this visit?';
+    if (window.confirm(msg)) {
         router.post(`/secretary/visits/${props.visit.id}/cancel`, {}, {
             preserveScroll: true,
         });
@@ -121,31 +106,8 @@ function cancelVisit() {
                 <p class="text-sm text-gray-500 ml-8">{{ isRtl ? 'زيارة' : 'Visit' }} #{{ visit.id }} &middot; {{ formatDate(visit.visit_date) }}</p>
             </div>
 
-            <!-- Action Buttons -->
+            <!-- Action Buttons (Secretary can only cancel) -->
             <div class="flex items-center gap-2 ml-8 sm:ml-0">
-                <button
-                    v-if="visit.status === 'waiting'"
-                    @click="startVisit"
-                    class="inline-flex items-center px-4 py-2 rounded-lg text-white text-sm font-medium transition-all duration-200 shadow-sm hover:shadow-md bg-blue-500 hover:bg-blue-600"
-                >
-                    <svg class="w-4 h-4 ltr:mr-1.5 rtl:ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    Start Visit
-                </button>
-
-                <button
-                    v-if="visit.status === 'in_progress'"
-                    @click="completeVisit"
-                    class="inline-flex items-center px-4 py-2 rounded-lg text-white text-sm font-medium transition-all duration-200 shadow-sm hover:shadow-md bg-green-500 hover:bg-green-600"
-                >
-                    <svg class="w-4 h-4 ltr:mr-1.5 rtl:ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    {{ isRtl ? 'إتمام' : 'Complete' }}
-                </button>
-
                 <button
                     v-if="visit.status === 'waiting' || visit.status === 'in_progress'"
                     @click="cancelVisit"
@@ -154,7 +116,7 @@ function cancelVisit() {
                     <svg class="w-4 h-4 ltr:mr-1.5 rtl:ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    Cancel Visit
+                    {{ isRtl ? 'إلغاء الزيارة' : 'Cancel Visit' }}
                 </button>
             </div>
         </div>
