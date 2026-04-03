@@ -17,6 +17,15 @@ const props = defineProps({
 
 const { formatCurrency, currencyCode } = useCurrency();
 
+// Helper for bilingual text
+const t = (ar, en) => isRtl.value ? ar : en;
+
+// Helper for bilingual names
+const localeName = (obj, fallback = '-') => {
+    if (!obj) return fallback;
+    return isRtl.value ? (obj.name_ar || obj.name_en || fallback) : (obj.name_en || obj.name_ar || fallback);
+};
+
 function formatDate(date) {
     if (!date) return '-';
     return new Date(date).toLocaleDateString('en-GB');
@@ -70,7 +79,7 @@ onMounted(() => {
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                 </svg>
-                Back to Booking
+                {{ t('العودة للحجز', 'Back to Booking') }}
             </Link>
             <button
                 @click="handlePrint"
@@ -79,12 +88,12 @@ onMounted(() => {
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
                 </svg>
-                Print Receipt
+                {{ t('طباعة الإيصال', 'Print Receipt') }}
             </button>
         </div>
 
         <!-- Receipt Content -->
-        <div class="receipt-container mx-auto max-w-[800px] bg-white rounded-2xl shadow-sm border border-gray-100/80 print:shadow-none print:border-0 print:rounded-none" dir="ltr">
+        <div class="receipt-container mx-auto max-w-[800px] bg-white rounded-2xl shadow-sm border border-gray-100/80 print:shadow-none print:border-0 print:rounded-none" :dir="isRtl ? 'rtl' : 'ltr'">
             <div class="p-8 print:p-0">
 
                 <!-- Header -->
@@ -94,11 +103,11 @@ onMounted(() => {
                         alt="AURA Derma Clinic"
                         class="mx-auto h-20 mb-3 object-contain"
                     />
-                    <h1 class="text-xl font-bold text-gray-900 tracking-wide">AURA Derma Clinic</h1>
+                    <h1 class="text-xl font-bold text-gray-900 tracking-wide">{{ t('عيادة أورا ديرما', 'AURA Derma Clinic') }}</h1>
                     <div class="mt-4 pt-3 border-t border-gray-100">
-                        <h2 class="text-lg font-bold text-gray-800">Payment Receipt</h2>
+                        <h2 class="text-lg font-bold text-gray-800">{{ t('إيصال الدفع', 'Payment Receipt') }}</h2>
                         <p class="text-xs text-gray-400 mt-1">
-                            Payment {{ paymentIndex }} of {{ allPayments?.length || 1 }}
+                            {{ t(`الدفعة ${paymentIndex} من ${allPayments?.length || 1}`, `Payment ${paymentIndex} of ${allPayments?.length || 1}`) }}
                         </p>
                     </div>
                 </div>
@@ -106,36 +115,36 @@ onMounted(() => {
                 <!-- Booking & Patient Info -->
                 <div class="grid grid-cols-2 gap-6 mb-8">
                     <div class="space-y-2">
-                        <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Receipt Details</h3>
+                        <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">{{ t('تفاصيل الإيصال', 'Receipt Details') }}</h3>
                         <div class="flex items-baseline gap-2">
-                            <span class="text-xs text-gray-500">Booking #:</span>
+                            <span class="text-xs text-gray-500">{{ t('رقم الحجز:', 'Booking #:') }}</span>
                             <span class="text-sm font-semibold font-mono text-teal-600">{{ booking.booking_number }}</span>
                         </div>
                         <div v-if="booking.invoice?.invoice_number" class="flex items-baseline gap-2">
-                            <span class="text-xs text-gray-500">Invoice #:</span>
+                            <span class="text-xs text-gray-500">{{ t('رقم الفاتورة:', 'Invoice #:') }}</span>
                             <span class="text-sm font-semibold font-mono text-gray-700">{{ booking.invoice.invoice_number }}</span>
                         </div>
                         <div class="flex items-baseline gap-2">
-                            <span class="text-xs text-gray-500">Payment Date:</span>
+                            <span class="text-xs text-gray-500">{{ t('تاريخ الدفع:', 'Payment Date:') }}</span>
                             <span class="text-sm font-medium text-gray-800">{{ formatDate(payment.payment_date) }}</span>
                         </div>
                         <div class="flex items-baseline gap-2">
-                            <span class="text-xs text-gray-500">Receipt Date:</span>
+                            <span class="text-xs text-gray-500">{{ t('تاريخ الإيصال:', 'Receipt Date:') }}</span>
                             <span class="text-sm font-medium text-gray-800">{{ formatDateTime(payment.created_at) }}</span>
                         </div>
                     </div>
                     <div class="space-y-2">
-                        <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Patient Info</h3>
+                        <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">{{ t('معلومات المريض', 'Patient Info') }}</h3>
                         <div class="flex items-baseline gap-2">
-                            <span class="text-xs text-gray-500">Name:</span>
+                            <span class="text-xs text-gray-500">{{ t('الاسم:', 'Name:') }}</span>
                             <span class="text-sm font-semibold text-gray-800">{{ booking.patient?.full_name }}</span>
                         </div>
                         <div class="flex items-baseline gap-2">
-                            <span class="text-xs text-gray-500">Phone:</span>
-                            <span class="text-sm font-medium text-gray-700">{{ booking.patient?.phone }}</span>
+                            <span class="text-xs text-gray-500">{{ t('الهاتف:', 'Phone:') }}</span>
+                            <span class="text-sm font-medium text-gray-700" dir="ltr">{{ booking.patient?.phone }}</span>
                         </div>
                         <div v-if="booking.patient?.file_number" class="flex items-baseline gap-2">
-                            <span class="text-xs text-gray-500">File #:</span>
+                            <span class="text-xs text-gray-500">{{ t('رقم الملف:', 'File #:') }}</span>
                             <span class="text-sm font-semibold font-mono text-teal-600">{{ booking.patient.file_number }}</span>
                         </div>
                     </div>
@@ -144,30 +153,30 @@ onMounted(() => {
                 <!-- This Payment (Highlighted) -->
                 <div class="mb-8 border-2 border-teal-300 rounded-xl overflow-hidden">
                     <div class="px-6 py-4 bg-teal-50/60">
-                        <h3 class="text-sm font-bold text-teal-800">Payment Details</h3>
+                        <h3 class="text-sm font-bold text-teal-800">{{ t('تفاصيل الدفع', 'Payment Details') }}</h3>
                     </div>
                     <div class="px-6 py-5">
                         <div class="grid grid-cols-2 gap-4">
                             <div>
-                                <p class="text-xs text-gray-400 mb-1">Amount Paid</p>
+                                <p class="text-xs text-gray-400 mb-1">{{ t('المبلغ المدفوع', 'Amount Paid') }}</p>
                                 <p class="text-2xl font-bold text-emerald-600">{{ formatCurrency(payment.amount) }}</p>
                             </div>
                             <div>
-                                <p class="text-xs text-gray-400 mb-1">Payment Method</p>
+                                <p class="text-xs text-gray-400 mb-1">{{ t('طريقة الدفع', 'Payment Method') }}</p>
                                 <p class="text-sm font-semibold text-gray-800">
-                                    {{ payment.payment_method?.name_en || payment.paymentMethod?.name_en || '-' }}
+                                    {{ localeName(payment.payment_method || payment.paymentMethod) }}
                                 </p>
                             </div>
                             <div v-if="payment.reference_number">
-                                <p class="text-xs text-gray-400 mb-1">Reference #</p>
+                                <p class="text-xs text-gray-400 mb-1">{{ t('رقم المرجع', 'Reference #') }}</p>
                                 <p class="text-sm font-mono font-medium text-gray-700">{{ payment.reference_number }}</p>
                             </div>
                             <div>
-                                <p class="text-xs text-gray-400 mb-1">Received By</p>
+                                <p class="text-xs text-gray-400 mb-1">{{ t('المستلم', 'Received By') }}</p>
                                 <p class="text-sm font-medium text-gray-700">{{ payment.receiver?.name || '-' }}</p>
                             </div>
                             <div v-if="payment.notes" class="col-span-2">
-                                <p class="text-xs text-gray-400 mb-1">Notes</p>
+                                <p class="text-xs text-gray-400 mb-1">{{ t('ملاحظات', 'Notes') }}</p>
                                 <p class="text-sm text-gray-600">{{ payment.notes }}</p>
                             </div>
                         </div>
@@ -176,30 +185,30 @@ onMounted(() => {
 
                 <!-- Services Table -->
                 <div class="mb-8">
-                    <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Services</h3>
+                    <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">{{ t('الخدمات', 'Services') }}</h3>
                     <table class="w-full text-sm border border-gray-200">
                         <thead>
                             <tr class="bg-gray-50">
-                                <th class="px-4 py-2.5 text-left text-xs font-semibold text-gray-600 border-b border-gray-200">Service</th>
-                                <th class="px-4 py-2.5 text-center text-xs font-semibold text-gray-600 border-b border-gray-200">Sessions</th>
-                                <th class="px-4 py-2.5 text-right text-xs font-semibold text-gray-600 border-b border-gray-200">Unit Price</th>
-                                <th class="px-4 py-2.5 text-right text-xs font-semibold text-gray-600 border-b border-gray-200">Total</th>
+                                <th class="px-4 py-2.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-600 border-b border-gray-200">{{ t('الخدمة', 'Service') }}</th>
+                                <th class="px-4 py-2.5 text-center text-xs font-semibold text-gray-600 border-b border-gray-200">{{ t('الجلسات', 'Sessions') }}</th>
+                                <th class="px-4 py-2.5 ltr:text-right rtl:text-left text-xs font-semibold text-gray-600 border-b border-gray-200">{{ t('سعر الوحدة', 'Unit Price') }}</th>
+                                <th class="px-4 py-2.5 ltr:text-right rtl:text-left text-xs font-semibold text-gray-600 border-b border-gray-200">{{ t('الإجمالي', 'Total') }}</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100">
                             <tr v-for="(bs, index) in booking.booking_services" :key="index" class="hover:bg-gray-50/50 print:hover:bg-transparent">
                                 <td class="px-4 py-2.5">
-                                    <div class="font-medium text-gray-800">{{ bs.service?.name_en || bs.service?.name_ar }}</div>
+                                    <div class="font-medium text-gray-800">{{ isRtl ? (bs.service?.name_ar || bs.service?.name_en) : (bs.service?.name_en || bs.service?.name_ar) }}</div>
                                 </td>
                                 <td class="px-4 py-2.5 text-center text-gray-600">{{ bs.sessions_count }}</td>
-                                <td class="px-4 py-2.5 text-right text-gray-600">{{ formatCurrency(bs.unit_price) }}</td>
-                                <td class="px-4 py-2.5 text-right font-semibold text-gray-800">{{ formatCurrency(bs.total_price) }}</td>
+                                <td class="px-4 py-2.5 ltr:text-right rtl:text-left text-gray-600">{{ formatCurrency(bs.unit_price) }}</td>
+                                <td class="px-4 py-2.5 ltr:text-right rtl:text-left font-semibold text-gray-800">{{ formatCurrency(bs.total_price) }}</td>
                             </tr>
                         </tbody>
                         <tfoot>
                             <tr class="bg-gray-50 border-t-2 border-gray-300">
-                                <td colspan="3" class="px-4 py-3 text-right text-sm font-bold text-gray-700">Invoice Total</td>
-                                <td class="px-4 py-3 text-right text-sm font-bold text-teal-600">{{ formatCurrency(invoiceTotal) }}</td>
+                                <td colspan="3" class="px-4 py-3 ltr:text-right rtl:text-left text-sm font-bold text-gray-700">{{ t('إجمالي الفاتورة', 'Invoice Total') }}</td>
+                                <td class="px-4 py-3 ltr:text-right rtl:text-left text-sm font-bold text-teal-600">{{ formatCurrency(invoiceTotal) }}</td>
                             </tr>
                         </tfoot>
                     </table>
@@ -207,16 +216,16 @@ onMounted(() => {
 
                 <!-- All Payments History for this Invoice -->
                 <div class="mb-8">
-                    <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Payment History</h3>
+                    <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">{{ t('سجل المدفوعات', 'Payment History') }}</h3>
                     <div class="border border-gray-200 rounded-lg overflow-hidden">
                         <table v-if="allPayments && allPayments.length > 0" class="w-full text-sm">
                             <thead>
                                 <tr class="bg-gray-50">
-                                    <th class="px-4 py-2.5 text-left text-xs font-semibold text-gray-600 border-b border-gray-200">#</th>
-                                    <th class="px-4 py-2.5 text-left text-xs font-semibold text-gray-600 border-b border-gray-200">Date</th>
-                                    <th class="px-4 py-2.5 text-left text-xs font-semibold text-gray-600 border-b border-gray-200">Method</th>
-                                    <th class="px-4 py-2.5 text-right text-xs font-semibold text-gray-600 border-b border-gray-200">Amount</th>
-                                    <th class="px-4 py-2.5 text-left text-xs font-semibold text-gray-600 border-b border-gray-200">Ref #</th>
+                                    <th class="px-4 py-2.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-600 border-b border-gray-200">#</th>
+                                    <th class="px-4 py-2.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-600 border-b border-gray-200">{{ t('التاريخ', 'Date') }}</th>
+                                    <th class="px-4 py-2.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-600 border-b border-gray-200">{{ t('الطريقة', 'Method') }}</th>
+                                    <th class="px-4 py-2.5 ltr:text-right rtl:text-left text-xs font-semibold text-gray-600 border-b border-gray-200">{{ t('المبلغ', 'Amount') }}</th>
+                                    <th class="px-4 py-2.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-600 border-b border-gray-200">{{ t('المرجع', 'Ref #') }}</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100">
@@ -224,15 +233,15 @@ onMounted(() => {
                                     :class="p.id === payment.id ? 'bg-teal-50/60' : ''">
                                     <td class="px-4 py-2.5 text-gray-500 text-xs font-medium">
                                         {{ idx + 1 }}
-                                        <span v-if="p.id === payment.id" class="ml-1 inline-flex px-1.5 py-0.5 rounded text-[10px] font-bold text-white bg-teal-500">
-                                            Current
+                                        <span v-if="p.id === payment.id" class="ltr:ml-1 rtl:mr-1 inline-flex px-1.5 py-0.5 rounded text-[10px] font-bold text-white bg-teal-500">
+                                            {{ t('الحالي', 'Current') }}
                                         </span>
                                     </td>
                                     <td class="px-4 py-2.5 text-gray-600">{{ formatDate(p.payment_date) }}</td>
                                     <td class="px-4 py-2.5 text-gray-600">
-                                        <span>{{ p.payment_method?.name_en || p.paymentMethod?.name_en || '-' }}</span>
+                                        <span>{{ localeName(p.payment_method || p.paymentMethod) }}</span>
                                     </td>
-                                    <td class="px-4 py-2.5 text-right font-semibold" :class="p.id === payment.id ? 'text-emerald-700' : 'text-emerald-600'">
+                                    <td class="px-4 py-2.5 ltr:text-right rtl:text-left font-semibold" :class="p.id === payment.id ? 'text-emerald-700' : 'text-emerald-600'">
                                         {{ formatCurrency(p.amount) }}
                                     </td>
                                     <td class="px-4 py-2.5 text-gray-500 font-mono text-xs">{{ p.reference_number || '-' }}</td>
@@ -242,25 +251,25 @@ onMounted(() => {
 
                         <!-- Financial Summary -->
                         <div class="bg-gray-50 border-t border-gray-200 px-4 py-4">
-                            <div class="grid grid-cols-2 gap-3 max-w-md ml-auto">
+                            <div class="grid grid-cols-2 gap-3 max-w-md ltr:ml-auto rtl:mr-auto">
                                 <div class="flex justify-between col-span-2 text-sm">
-                                    <span class="text-gray-500">Invoice Total</span>
+                                    <span class="text-gray-500">{{ t('إجمالي الفاتورة', 'Invoice Total') }}</span>
                                     <span class="font-bold text-gray-800">{{ formatCurrency(invoiceTotal) }}</span>
                                 </div>
                                 <div class="flex justify-between col-span-2 text-sm">
-                                    <span class="text-gray-500">Paid Before This</span>
+                                    <span class="text-gray-500">{{ t('المدفوع سابقاً', 'Paid Before This') }}</span>
                                     <span class="font-medium text-gray-600">{{ formatCurrency(totalPaidBefore) }}</span>
                                 </div>
                                 <div class="flex justify-between col-span-2 text-sm border-t border-gray-200 pt-2 text-teal-700">
-                                    <span class="font-bold">This Payment</span>
+                                    <span class="font-bold">{{ t('هذه الدفعة', 'This Payment') }}</span>
                                     <span class="font-bold text-emerald-600">{{ formatCurrency(payment.amount) }}</span>
                                 </div>
                                 <div class="flex justify-between col-span-2 text-sm">
-                                    <span class="font-bold text-gray-700">Total Paid</span>
+                                    <span class="font-bold text-gray-700">{{ t('إجمالي المدفوع', 'Total Paid') }}</span>
                                     <span class="font-bold text-emerald-600">{{ formatCurrency(totalPaidAfter) }}</span>
                                 </div>
                                 <div class="flex justify-between col-span-2 text-sm border-t border-gray-200 pt-2">
-                                    <span class="font-bold text-gray-700">Remaining Balance</span>
+                                    <span class="font-bold text-gray-700">{{ t('المبلغ المتبقي', 'Remaining Balance') }}</span>
                                     <span class="font-bold" :class="remainingAfterThis > 0 ? 'text-red-600' : 'text-emerald-600'">
                                         {{ formatCurrency(remainingAfterThis) }}
                                     </span>
@@ -272,7 +281,7 @@ onMounted(() => {
 
                 <!-- Footer -->
                 <div class="text-center border-t border-gray-200 pt-6 mt-8">
-                    <p class="text-xs text-gray-400">This is an electronic document and does not require a signature</p>
+                    <p class="text-xs text-gray-400">{{ t('هذا مستند إلكتروني ولا يحتاج لتوقيع', 'This is an electronic document and does not require a signature') }}</p>
                 </div>
 
             </div>
