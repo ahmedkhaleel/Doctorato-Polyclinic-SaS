@@ -20,7 +20,7 @@ const isRtl = computed(() => dir.value === 'rtl');
 
 function switchLocale() {
     const newLocale = locale.value === 'ar' ? 'en' : 'ar';
-    router.post('/admin/switch-locale', { locale: newLocale }, { preserveState: false });
+    router.post('/secretary/switch-locale', { locale: newLocale }, { preserveState: false });
 }
 
 /* ── Grouped Navigation ─────────────────────────────────── */

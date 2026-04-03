@@ -39,6 +39,13 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('secretary.logou
 // Protected secretary routes (requires authentication + secretary role)
 Route::middleware('secretary.auth')->group(function () {
 
+    // ─── Locale Switch ─────────────────────────────────────
+    Route::post('/switch-locale', function (\Illuminate\Http\Request $request) {
+        $locale = $request->input('locale', 'ar');
+        session()->put('admin_locale', in_array($locale, ['ar', 'en']) ? $locale : 'ar');
+        return redirect()->back();
+    })->name('secretary.switchLocale');
+
     // ─── Dashboard ──────────────────────────────────────────
     Route::get('/', [SecretaryDashboardController::class, 'index'])->name('secretary.dashboard');
 
