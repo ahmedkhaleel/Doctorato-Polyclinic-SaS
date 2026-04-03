@@ -19,10 +19,13 @@ const source = ref(props.filters?.source || '');
 const moduleFilter = ref(props.filters?.module || '');
 
 const modules = computed(() => page.props.modules || {});
+const clinicalSlugs = ['derma', 'dental'];
 const activeModules = computed(() => {
     const mods = [];
     if (modules.value) {
-        Object.values(modules.value).forEach(m => { if (m.enabled) mods.push(m); });
+        Object.values(modules.value).forEach(m => {
+            if (m.enabled && clinicalSlugs.includes(m.slug)) mods.push(m);
+        });
     }
     return mods;
 });

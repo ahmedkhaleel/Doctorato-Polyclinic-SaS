@@ -9,9 +9,10 @@ const page = usePage();
 const locale = computed(() => page.props.locale || 'ar');
 const isRtl = computed(() => (page.props.dir || 'rtl') === 'rtl');
 const modules = computed(() => page.props.modules || {});
+const clinicalSlugs = ['derma', 'dental'];
 const activeModules = computed(() => {
     return Object.entries(modules.value)
-        .filter(([, m]) => m.is_enabled !== false)
+        .filter(([slug, m]) => m.is_enabled !== false && clinicalSlugs.includes(slug))
         .map(([slug, m]) => ({ slug, name: isRtl.value ? m.name_ar : m.name_en }));
 });
 

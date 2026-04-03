@@ -12,9 +12,10 @@ const isRtl = computed(() => (page.props.dir || 'rtl') === 'rtl');
 const props = defineProps({ invoices: Object, filters: Object });
 
 const modules = computed(() => page.props.modules || {});
+const clinicalSlugs = ['derma', 'dental'];
 const activeModules = computed(() => {
     return Object.entries(modules.value)
-        .filter(([, m]) => m.is_enabled !== false)
+        .filter(([slug, m]) => m.is_enabled !== false && clinicalSlugs.includes(slug))
         .map(([slug, m]) => ({ slug, name: isRtl.value ? m.name_ar : m.name_en }));
 });
 
