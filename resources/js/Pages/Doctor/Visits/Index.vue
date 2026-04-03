@@ -162,9 +162,17 @@ function formatDate(date) {
                         <div class="flex items-center gap-2">
                             <p class="text-sm font-semibold text-gray-800 truncate group-hover:text-gray-900 transition-colors">{{ visit.patient?.full_name }}</p>
                             <span v-if="visit.patient?.file_number" class="flex-shrink-0 font-mono text-[10px] text-gray-400">{{ visit.patient.file_number }}</span>
+                            <span v-if="visit.package_bundle_booking_id" class="flex-shrink-0 inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-bold bg-purple-50 text-purple-600 border border-purple-200">
+                                <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
+                                {{ isRtl ? 'باقة' : 'PKG' }}
+                            </span>
                         </div>
-                        <div class="flex items-center gap-1.5 mt-0.5">
+                        <div class="flex items-center gap-1.5 mt-0.5 flex-wrap">
                             <span class="text-xs text-gray-500">{{ (isRtl ? (visit.service?.name_ar || visit.service?.name_en) : visit.service?.name_en) || (isRtl ? ({ consultation: 'استشارة', session: 'جلسة', follow_up: 'متابعة' }[visit.visit_type] || visit.visit_type) : visit.visit_type) }}</span>
+                            <template v-if="visit.package_bundle_booking?.package_bundle">
+                                <span class="text-gray-200">&middot;</span>
+                                <span class="text-xs text-purple-500 font-medium truncate">{{ isRtl ? (visit.package_bundle_booking.package_bundle.name_ar || visit.package_bundle_booking.package_bundle.name_en) : (visit.package_bundle_booking.package_bundle.name_en || visit.package_bundle_booking.package_bundle.name_ar) }}</span>
+                            </template>
                             <span class="text-gray-200">&middot;</span>
                             <span class="text-xs text-gray-400 flex items-center gap-1">
                                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
