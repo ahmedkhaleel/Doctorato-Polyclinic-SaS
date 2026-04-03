@@ -43,7 +43,12 @@ Route::middleware('secretary.auth')->group(function () {
     Route::post('/switch-locale', function (\Illuminate\Http\Request $request) {
         $locale = $request->input('locale', 'ar');
         session()->put('admin_locale', in_array($locale, ['ar', 'en']) ? $locale : 'ar');
-        return redirect()->back();
+        $previous = url()->previous();
+        // Ensure redirect stays within secretary portal
+        if (! str_contains($previous, '/secretary')) {
+            return redirect('/secretary');
+        }
+        return redirect($previous);
     })->name('secretary.switchLocale');
 
     // ─── Dashboard ──────────────────────────────────────────
