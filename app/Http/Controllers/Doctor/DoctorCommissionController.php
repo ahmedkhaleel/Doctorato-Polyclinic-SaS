@@ -170,7 +170,7 @@ class DoctorCommissionController extends BaseDoctorController
         $doctor = $this->doctor($request);
 
         // Ensure the payout belongs to this doctor
-        if ($payout->doctor_id !== $doctor->id) {
+        if ((int) $payout->doctor_id !== (int) $doctor->id) {
             abort(403, 'This payout does not belong to you.');
         }
 
@@ -193,7 +193,7 @@ class DoctorCommissionController extends BaseDoctorController
     {
         $doctor = $this->doctor($request);
 
-        if ($payout->doctor_id !== $doctor->id) {
+        if ((int) $payout->doctor_id !== (int) $doctor->id) {
             abort(403, 'This payout does not belong to you.');
         }
 

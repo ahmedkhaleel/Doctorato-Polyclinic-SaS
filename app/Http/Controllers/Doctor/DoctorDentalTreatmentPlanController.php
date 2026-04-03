@@ -60,7 +60,7 @@ class DoctorDentalTreatmentPlanController extends BaseDoctorController
 
     public function show(Request $request, DentalTreatmentPlan $treatmentPlan): Response
     {
-        if ($treatmentPlan->doctor_id !== $this->doctorId($request)) {
+        if ((int) $treatmentPlan->doctor_id !== (int) $this->doctorId($request)) {
             abort(403);
         }
 
@@ -129,7 +129,7 @@ class DoctorDentalTreatmentPlanController extends BaseDoctorController
 
     public function update(UpdateDentalTreatmentPlanRequest $request, DentalTreatmentPlan $treatmentPlan)
     {
-        if ($treatmentPlan->doctor_id !== $this->doctorId($request)) {
+        if ((int) $treatmentPlan->doctor_id !== (int) $this->doctorId($request)) {
             abort(403);
         }
 

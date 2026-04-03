@@ -18,7 +18,7 @@ class DoctorTreatmentPlanConsentController extends BaseDoctorController
      */
     public function send(SendConsentRequest $request, DentalTreatmentPlan $treatmentPlan)
     {
-        if ($treatmentPlan->doctor_id !== $this->doctorId($request)) {
+        if ((int) $treatmentPlan->doctor_id !== (int) $this->doctorId($request)) {
             abort(403);
         }
 
@@ -58,7 +58,7 @@ class DoctorTreatmentPlanConsentController extends BaseDoctorController
      */
     public function downloadPdf(Request $request, TreatmentPlanConsent $consent)
     {
-        if ($consent->treatmentPlan->doctor_id !== $this->doctorId($request)) {
+        if ((int) $consent->treatmentPlan->doctor_id !== (int) $this->doctorId($request)) {
             abort(403);
         }
 

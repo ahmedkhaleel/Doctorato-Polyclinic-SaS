@@ -86,7 +86,7 @@ class DoctorDentalTreatmentController extends BaseDoctorController
 
     public function update(UpdateDentalTreatmentRequest $request, DentalTreatment $treatment)
     {
-        if ($treatment->doctor_id !== $this->doctorId($request)) {
+        if ((int) $treatment->doctor_id !== (int) $this->doctorId($request)) {
             abort(403);
         }
 

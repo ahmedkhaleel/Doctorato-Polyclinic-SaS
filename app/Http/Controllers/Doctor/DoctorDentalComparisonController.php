@@ -65,7 +65,7 @@ class DoctorDentalComparisonController extends BaseDoctorController
 
     public function show(Request $request, DentalComparison $comparison): Response
     {
-        if ($comparison->doctor_id !== $this->doctorId($request)) {
+        if ((int) $comparison->doctor_id !== (int) $this->doctorId($request)) {
             abort(403);
         }
 

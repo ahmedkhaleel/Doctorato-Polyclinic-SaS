@@ -29,7 +29,7 @@ abstract class BaseDoctorController extends Controller
      */
     protected function authorizeDoctor(Request $request, $model): void
     {
-        if ($model->doctor_id !== $this->doctorId($request)) {
+        if ((int) $model->doctor_id !== (int) $this->doctorId($request)) {
             abort(403, 'This record does not belong to you.');
         }
     }

@@ -97,6 +97,31 @@ class PackageBundleSeeder extends Seeder
         ];
 
         $this->attachServices($laserBundle, $laserServices, $findService);
+
+        // ── 4. Anti-Aging & Glow Package ──────────────────────────────
+        $antiAgingBundle = PackageBundle::updateOrCreate(
+            ['name_en' => 'Anti-Aging & Glow Package'],
+            [
+                'name_ar'        => 'باقة مكافحة الشيخوخة والنضارة',
+                'name_en'        => 'Anti-Aging & Glow Package',
+                'description_ar' => 'باقة شاملة لمكافحة علامات تقدم السن واستعادة نضارة البشرة. تتضمن جلسات البروفايلو والهيدرافيشل والبلازما مع حقن النضارة للحصول على بشرة مشدودة ومتوهجة.',
+                'description_en' => 'A comprehensive anti-aging and radiance package. Includes Profhilo, HydraFacial, PRP, and Glow Injections for firm, glowing, youthful skin.',
+                'original_price' => 15500.00,
+                'total_price'    => 11000.00,
+                'is_active'      => true,
+                'image'          => null,
+                'display_order'  => 4,
+            ]
+        );
+
+        $antiAgingServices = [
+            ['partial' => 'Profhilo',          'sessions' => 2, 'discount' => 20, 'price' => 5200],  // 6500×2=13000 → 20% off
+            ['partial' => 'HydraFacial',       'sessions' => 3, 'discount' => 30, 'price' => 1050],  // 1500×3=4500 → ~30% off
+            ['partial' => 'PRP',               'sessions' => 2, 'discount' => 25, 'price' => 2250],  // 1500×2=3000 → 25% off
+            ['partial' => 'Glow Injections',   'sessions' => 2, 'discount' => 35, 'price' => 2500],  // 2000×2=4000 → ~35% off
+        ];
+
+        $this->attachServices($antiAgingBundle, $antiAgingServices, $findService);
     }
 
     /**

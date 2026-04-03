@@ -279,7 +279,7 @@ class DoctorPrescriptionController extends BaseDoctorController
         // If visit_id provided, verify it belongs to this doctor
         if (!empty($data['visit_id'])) {
             $visit = Visit::findOrFail($data['visit_id']);
-            if ($visit->doctor_id !== $doctor->id) {
+            if ((int) $visit->doctor_id !== (int) $doctor->id) {
                 abort(403, 'This visit does not belong to you.');
             }
         }
