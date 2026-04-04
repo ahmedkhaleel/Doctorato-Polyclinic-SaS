@@ -697,7 +697,7 @@ const severityStyles = {
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-gray-50 text-gray-600 capitalize">
-                                    {{ payment.method || payment.payment_method || '-' }}
+                                    {{ isRtl ? (payment.payment_method?.name_ar || payment.payment_method?.name_en || payment.method || '-') : (payment.payment_method?.name_en || payment.payment_method?.name_ar || payment.method || '-') }}
                                 </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-emerald-600 ltr:text-right rtl:text-left">
