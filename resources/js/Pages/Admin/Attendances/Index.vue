@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, computed, onMounted } from 'vue';
+import { ref, watch, computed, onMounted, onBeforeUnmount, nextTick } from 'vue';
 import { Link, router, useForm, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
@@ -91,6 +91,75 @@ function deleteAttendance(id) {
         router.delete(`/admin/attendances/${id}`, { preserveScroll: true });
     }
 }
+
+/* ── Custom Employee Picker ── */
+const formPickerOpen = ref(false);
+const formPickerSearch = ref('');
+const formPickerRef = ref(null);
+const formSearchRef = ref(null);
+
+const filterPickerOpen = ref(false);
+const filterPickerSearch = ref('');
+const filterPickerRef = ref(null);
+const filterSearchRef = ref(null);
+
+const avatarColors = [
+    'from-rose-400 to-pink-500', 'from-violet-400 to-purple-500', 'from-blue-400 to-indigo-500',
+    'from-cyan-400 to-teal-500', 'from-emerald-400 to-green-500', 'from-amber-400 to-orange-500',
+    'from-red-400 to-rose-500', 'from-fuchsia-400 to-pink-500', 'from-sky-400 to-blue-500',
+    'from-lime-400 to-emerald-500',
+];
+function getUserColor(id) { return avatarColors[(id || 0) % avatarColors.length]; }
+function getUserInitials(name) {
+    if (!name) return '?';
+    const parts = name.trim().split(/\s+/);
+    return parts.length > 1 ? (parts[0][0] + parts[1][0]).toUpperCase() : name.slice(0, 2).toUpperCase();
+}
+
+const formFilteredUsers = computed(() => {
+    const q = formPickerSearch.value.toLowerCase();
+    if (!q) return props.users || [];
+    return (props.users || []).filter(u => u.name?.toLowerCase().includes(q));
+});
+
+const filterFilteredUsers = computed(() => {
+    const q = filterPickerSearch.value.toLowerCase();
+    if (!q) return props.users || [];
+    return (props.users || []).filter(u => u.name?.toLowerCase().includes(q));
+});
+
+const selectedFormUser = computed(() => (props.users || []).find(u => u.id == form.user_id));
+const selectedFilterUser = computed(() => (props.users || []).find(u => u.id == employeeFilter.value));
+
+function selectFormUser(user) {
+    form.user_id = user.id;
+    formPickerOpen.value = false;
+    formPickerSearch.value = '';
+}
+
+function selectFilterUser(user) {
+    employeeFilter.value = user ? user.id : '';
+    filterPickerOpen.value = false;
+    filterPickerSearch.value = '';
+}
+
+function toggleFormPicker() {
+    if (editingId.value) return;
+    formPickerOpen.value = !formPickerOpen.value;
+    if (formPickerOpen.value) nextTick(() => formSearchRef.value?.focus());
+}
+
+function toggleFilterPicker() {
+    filterPickerOpen.value = !filterPickerOpen.value;
+    if (filterPickerOpen.value) nextTick(() => filterSearchRef.value?.focus());
+}
+
+function handleClickOutside(e) {
+    if (formPickerRef.value && !formPickerRef.value.contains(e.target)) formPickerOpen.value = false;
+    if (filterPickerRef.value && !filterPickerRef.value.contains(e.target)) filterPickerOpen.value = false;
+}
+onMounted(() => document.addEventListener('click', handleClickOutside));
+onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside));
 
 /* ── Configs ── */
 const statusConfig = {
@@ -242,24 +311,83 @@ onMounted(() => { setTimeout(() => mounted.value = true, 50); });
                     <!-- Form Body -->
                     <form @submit.prevent="submitAttendance" class="p-6">
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                            <!-- Employee -->
-                            <div>
+                            <!-- Employee (Custom Picker) -->
+                            <div ref="formPickerRef" class="relative">
                                 <label class="block text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">
                                     {{ $t('a_employee') }} <span class="text-red-400">*</span>
                                 </label>
-                                <div class="relative">
-                                    <select
-                                        v-model="form.user_id"
-                                        :disabled="!!editingId"
-                                        class="w-full appearance-none bg-gray-50/80 border border-gray-200 rounded-xl px-4 py-2.5 pe-10 text-sm text-gray-700 font-medium focus:bg-white focus:ring-2 focus:ring-amber-200/50 focus:border-amber-300 transition-all duration-200 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
-                                    >
-                                        <option value="">{{ isRtl ? '-- اختر الموظف --' : '-- Select Employee --' }}</option>
-                                        <option v-for="user in users" :key="user.id" :value="user.id">{{ user.name }}</option>
-                                    </select>
-                                    <div class="pointer-events-none absolute inset-y-0 end-0 flex items-center pe-3">
-                                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                                <button
+                                    type="button"
+                                    @click="toggleFormPicker"
+                                    class="w-full flex items-center gap-3 bg-gray-50/80 border border-gray-200 rounded-xl px-3 py-2 text-start text-sm transition-all duration-200 cursor-pointer"
+                                    :class="[
+                                        formPickerOpen ? 'ring-2 ring-amber-200/50 border-amber-300 bg-white shadow-md' : 'hover:border-gray-300 hover:bg-white',
+                                        editingId ? 'opacity-60 cursor-not-allowed' : ''
+                                    ]"
+                                >
+                                    <template v-if="selectedFormUser">
+                                        <div :class="['w-8 h-8 rounded-lg bg-gradient-to-br flex-shrink-0 flex items-center justify-center text-white text-[11px] font-bold shadow-sm', getUserColor(selectedFormUser.id)]">
+                                            {{ getUserInitials(selectedFormUser.name) }}
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <p class="text-sm font-semibold text-gray-800 truncate">{{ selectedFormUser.name }}</p>
+                                        </div>
+                                    </template>
+                                    <template v-else>
+                                        <div class="w-8 h-8 rounded-lg bg-gray-100 flex-shrink-0 flex items-center justify-center">
+                                            <svg class="w-4 h-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                                        </div>
+                                        <span class="text-sm text-gray-400 font-medium">{{ isRtl ? 'اختر الموظف...' : 'Select employee...' }}</span>
+                                    </template>
+                                    <svg class="w-4 h-4 text-gray-400 flex-shrink-0 transition-transform duration-200 ms-auto" :class="formPickerOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                                </button>
+
+                                <!-- Dropdown -->
+                                <transition
+                                    enter-active-class="transition duration-200 ease-out"
+                                    leave-active-class="transition duration-150 ease-in"
+                                    enter-from-class="opacity-0 scale-95 -translate-y-2"
+                                    enter-to-class="opacity-100 scale-100 translate-y-0"
+                                    leave-from-class="opacity-100 scale-100 translate-y-0"
+                                    leave-to-class="opacity-0 scale-95 -translate-y-2"
+                                >
+                                    <div v-if="formPickerOpen" class="absolute z-50 mt-2 w-full bg-white rounded-xl border border-gray-200 shadow-xl overflow-hidden">
+                                        <!-- Search -->
+                                        <div class="p-2.5 border-b border-gray-100">
+                                            <div class="relative">
+                                                <svg class="w-4 h-4 text-gray-300 absolute start-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                                                <input
+                                                    ref="formSearchRef"
+                                                    v-model="formPickerSearch"
+                                                    type="text"
+                                                    :placeholder="isRtl ? 'ابحث عن موظف...' : 'Search employee...'"
+                                                    class="w-full bg-gray-50 border-0 rounded-lg ps-9 pe-3 py-2 text-sm text-gray-700 placeholder:text-gray-300 focus:ring-2 focus:ring-amber-200/50 focus:bg-white transition-all duration-150"
+                                                />
+                                            </div>
+                                        </div>
+                                        <!-- User List -->
+                                        <div class="max-h-52 overflow-y-auto overscroll-contain">
+                                            <button
+                                                v-for="user in formFilteredUsers"
+                                                :key="user.id"
+                                                type="button"
+                                                @click="selectFormUser(user)"
+                                                class="w-full flex items-center gap-3 px-3 py-2.5 text-start transition-all duration-150 hover:bg-amber-50/60"
+                                                :class="form.user_id == user.id ? 'bg-amber-50/80' : ''"
+                                            >
+                                                <div :class="['w-8 h-8 rounded-lg bg-gradient-to-br flex-shrink-0 flex items-center justify-center text-white text-[11px] font-bold shadow-sm transition-transform duration-200 hover:scale-110', getUserColor(user.id)]">
+                                                    {{ getUserInitials(user.name) }}
+                                                </div>
+                                                <span class="text-sm font-medium text-gray-700 truncate flex-1">{{ user.name }}</span>
+                                                <svg v-if="form.user_id == user.id" class="w-4 h-4 text-amber-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
+                                            </button>
+                                            <div v-if="formFilteredUsers.length === 0" class="px-4 py-6 text-center">
+                                                <svg class="w-8 h-8 text-gray-200 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v2m22-4h.01M12 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                                                <p class="text-xs text-gray-400">{{ isRtl ? 'لا توجد نتائج' : 'No results found' }}</p>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
+                                </transition>
                                 <p v-if="form.errors.user_id" class="mt-1.5 text-xs text-red-500 font-medium">{{ form.errors.user_id }}</p>
                             </div>
 
@@ -412,21 +540,89 @@ onMounted(() => { setTimeout(() => mounted.value = true, 50); });
                     <span class="text-sm font-semibold text-gray-600">{{ isRtl ? 'تصفية النتائج' : 'Filter Results' }}</span>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <!-- Employee -->
-                    <div>
+                    <!-- Employee (Custom Picker) -->
+                    <div ref="filterPickerRef" class="relative">
                         <label class="block text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">{{ $t('a_employee') }}</label>
-                        <div class="relative">
-                            <select
-                                v-model="employeeFilter"
-                                class="w-full appearance-none bg-gray-50/80 border border-gray-200 rounded-xl px-4 py-2.5 pe-10 text-sm text-gray-700 font-medium focus:bg-white focus:ring-2 focus:ring-amber-200/50 focus:border-amber-300 transition-all duration-200 cursor-pointer"
-                            >
-                                <option value="">{{ $t('a_all_employees') }}</option>
-                                <option v-for="user in users" :key="user.id" :value="user.id">{{ user.name }}</option>
-                            </select>
-                            <div class="pointer-events-none absolute inset-y-0 end-0 flex items-center pe-3">
-                                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                        <button
+                            type="button"
+                            @click="toggleFilterPicker"
+                            class="w-full flex items-center gap-3 bg-gray-50/80 border border-gray-200 rounded-xl px-3 py-2 text-start text-sm transition-all duration-200 cursor-pointer"
+                            :class="filterPickerOpen ? 'ring-2 ring-amber-200/50 border-amber-300 bg-white shadow-md' : 'hover:border-gray-300 hover:bg-white'"
+                        >
+                            <template v-if="selectedFilterUser">
+                                <div :class="['w-7 h-7 rounded-lg bg-gradient-to-br flex-shrink-0 flex items-center justify-center text-white text-[10px] font-bold shadow-sm', getUserColor(selectedFilterUser.id)]">
+                                    {{ getUserInitials(selectedFilterUser.name) }}
+                                </div>
+                                <span class="text-sm font-semibold text-gray-800 truncate flex-1">{{ selectedFilterUser.name }}</span>
+                                <button type="button" @click.stop="selectFilterUser(null)" class="p-0.5 rounded-md hover:bg-gray-100 transition-colors">
+                                    <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                                </button>
+                            </template>
+                            <template v-else>
+                                <div class="w-7 h-7 rounded-lg bg-gray-100 flex-shrink-0 flex items-center justify-center">
+                                    <svg class="w-3.5 h-3.5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                                </div>
+                                <span class="text-sm text-gray-400 font-medium flex-1">{{ $t('a_all_employees') }}</span>
+                            </template>
+                            <svg class="w-4 h-4 text-gray-400 flex-shrink-0 transition-transform duration-200 ms-auto" :class="filterPickerOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                        </button>
+
+                        <!-- Dropdown -->
+                        <transition
+                            enter-active-class="transition duration-200 ease-out"
+                            leave-active-class="transition duration-150 ease-in"
+                            enter-from-class="opacity-0 scale-95 -translate-y-2"
+                            enter-to-class="opacity-100 scale-100 translate-y-0"
+                            leave-from-class="opacity-100 scale-100 translate-y-0"
+                            leave-to-class="opacity-0 scale-95 -translate-y-2"
+                        >
+                            <div v-if="filterPickerOpen" class="absolute z-50 mt-2 w-full bg-white rounded-xl border border-gray-200 shadow-xl overflow-hidden">
+                                <div class="p-2.5 border-b border-gray-100">
+                                    <div class="relative">
+                                        <svg class="w-4 h-4 text-gray-300 absolute start-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                                        <input
+                                            ref="filterSearchRef"
+                                            v-model="filterPickerSearch"
+                                            type="text"
+                                            :placeholder="isRtl ? 'ابحث عن موظف...' : 'Search employee...'"
+                                            class="w-full bg-gray-50 border-0 rounded-lg ps-9 pe-3 py-2 text-sm text-gray-700 placeholder:text-gray-300 focus:ring-2 focus:ring-amber-200/50 focus:bg-white transition-all duration-150"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="max-h-52 overflow-y-auto overscroll-contain">
+                                    <!-- All employees option -->
+                                    <button
+                                        type="button"
+                                        @click="selectFilterUser(null)"
+                                        class="w-full flex items-center gap-3 px-3 py-2.5 text-start transition-all duration-150 hover:bg-gray-50"
+                                        :class="!employeeFilter ? 'bg-amber-50/80' : ''"
+                                    >
+                                        <div class="w-7 h-7 rounded-lg bg-gray-100 flex-shrink-0 flex items-center justify-center">
+                                            <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                                        </div>
+                                        <span class="text-sm font-medium text-gray-500">{{ $t('a_all_employees') }}</span>
+                                        <svg v-if="!employeeFilter" class="w-4 h-4 text-amber-500 flex-shrink-0 ms-auto" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
+                                    </button>
+                                    <button
+                                        v-for="user in filterFilteredUsers"
+                                        :key="user.id"
+                                        type="button"
+                                        @click="selectFilterUser(user)"
+                                        class="w-full flex items-center gap-3 px-3 py-2.5 text-start transition-all duration-150 hover:bg-amber-50/60"
+                                        :class="employeeFilter == user.id ? 'bg-amber-50/80' : ''"
+                                    >
+                                        <div :class="['w-7 h-7 rounded-lg bg-gradient-to-br flex-shrink-0 flex items-center justify-center text-white text-[10px] font-bold shadow-sm transition-transform duration-200 hover:scale-110', getUserColor(user.id)]">
+                                            {{ getUserInitials(user.name) }}
+                                        </div>
+                                        <span class="text-sm font-medium text-gray-700 truncate flex-1">{{ user.name }}</span>
+                                        <svg v-if="employeeFilter == user.id" class="w-4 h-4 text-amber-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
+                                    </button>
+                                    <div v-if="filterFilteredUsers.length === 0" class="px-4 py-6 text-center">
+                                        <p class="text-xs text-gray-400">{{ isRtl ? 'لا توجد نتائج' : 'No results found' }}</p>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                        </transition>
                     </div>
                     <!-- Status -->
                     <div>
