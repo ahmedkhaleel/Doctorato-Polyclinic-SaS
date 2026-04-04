@@ -58,6 +58,10 @@ class AttendanceController extends Controller
             'notes' => 'nullable|string',
         ]);
 
+        // Clean up nullable fields
+        $data['overtime_hours'] = $data['overtime_hours'] ?? 0;
+        $data['notes'] = $data['notes'] ?? '';
+
         // Remove null location fields to avoid issues if migration not run yet
         foreach (['check_in_lat', 'check_in_lng', 'check_out_lat', 'check_out_lng'] as $field) {
             if (!isset($data[$field]) || $data[$field] === null) {
@@ -85,6 +89,10 @@ class AttendanceController extends Controller
             'overtime_hours' => 'nullable|numeric|min:0',
             'notes' => 'nullable|string',
         ]);
+
+        // Clean up nullable fields
+        $data['overtime_hours'] = $data['overtime_hours'] ?? 0;
+        $data['notes'] = $data['notes'] ?? '';
 
         // Remove null location fields to avoid issues if migration not run yet
         foreach (['check_in_lat', 'check_in_lng', 'check_out_lat', 'check_out_lng'] as $field) {
