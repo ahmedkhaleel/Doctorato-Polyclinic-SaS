@@ -685,10 +685,10 @@ const severityStyles = {
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center gap-3">
                                     <div class="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-600 text-xs font-bold flex-shrink-0">
-                                        {{ (payment.patient?.name || payment.patient?.full_name || payment.invoice?.patient?.name || '?').charAt(0).toUpperCase() }}
+                                        {{ (payment.invoice?.patient?.full_name || payment.patient?.full_name || '?').charAt(0).toUpperCase() }}
                                     </div>
                                     <span class="text-sm font-semibold text-gray-900">
-                                        {{ payment.patient?.name || payment.patient?.full_name || payment.invoice?.patient?.name || '-' }}
+                                        {{ payment.invoice?.patient?.full_name || payment.patient?.full_name || '-' }}
                                     </span>
                                 </div>
                             </td>
