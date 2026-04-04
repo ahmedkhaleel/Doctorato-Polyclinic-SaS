@@ -47,11 +47,127 @@ const form = useForm({
     user_id: '',
     date: new Date().toISOString().slice(0, 10),
     check_in: '',
+    check_in_lat: null,
+    check_in_lng: null,
     check_out: '',
+    check_out_lat: null,
+    check_out_lng: null,
     status: 'present',
     overtime_hours: '',
     notes: '',
 });
+
+/* ── GPS Location ── */
+const gettingCheckInLoc = ref(false);
+const gettingCheckOutLoc = ref(false);
+const checkInLocOk = ref(false);
+const checkOutLocOk = ref(false);
+const locError = ref('');
+
+function captureLocation(type) {
+    if (!navigator.geolocation) {
+        locError.value = isRtl.value ? 'المتصفح لا يدعم تحديد الموقع' : 'Geolocation not supported';
+        return;
+    }
+    locError.value = '';
+    if (type === 'in') { gettingCheckInLoc.value = true; checkInLocOk.value = false; }
+    else { gettingCheckOutLoc.value = true; checkOutLocOk.value = false; }
+
+    navigator.geolocation.getCurrentPosition(
+        (pos) => {
+            if (type === 'in') {
+                form.check_in_lat = pos.coords.latitude;
+                form.check_in_lng = pos.coords.longitude;
+                gettingCheckInLoc.value = false;
+                checkInLocOk.value = true;
+            } else {
+                form.check_out_lat = pos.coords.latitude;
+                form.check_out_lng = pos.coords.longitude;
+                gettingCheckOutLoc.value = false;
+                checkOutLocOk.value = true;
+            }
+        },
+        (err) => {
+            locError.value = isRtl.value ? 'فشل تحديد الموقع — تأكد من السماح بالوصول' : 'Location failed — check permissions';
+            if (type === 'in') gettingCheckInLoc.value = false;
+            else gettingCheckOutLoc.value = false;
+        },
+        { enableHighAccuracy: true, timeout: 10000 }
+    );
+}
+
+/* ── Map Modal ── */
+const mapModal = ref(false);
+const mapRecord = ref(null);
+const mapContainerRef = ref(null);
+let leafletMap = null;
+let leafletLoaded = false;
+
+function loadLeaflet() {
+    return new Promise((resolve) => {
+        if (leafletLoaded) return resolve();
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+        document.head.appendChild(link);
+        const script = document.createElement('script');
+        script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+        script.onload = () => { leafletLoaded = true; resolve(); };
+        document.head.appendChild(script);
+    });
+}
+
+async function openMap(record) {
+    mapRecord.value = record;
+    mapModal.value = true;
+    await loadLeaflet();
+    await nextTick();
+    setTimeout(() => initMap(record), 100);
+}
+
+function initMap(record) {
+    if (!mapContainerRef.value || !window.L) return;
+    if (leafletMap) { leafletMap.remove(); leafletMap = null; }
+
+    const hasIn = record.check_in_lat && record.check_in_lng;
+    const hasOut = record.check_out_lat && record.check_out_lng;
+    const center = hasIn ? [record.check_in_lat, record.check_in_lng] : hasOut ? [record.check_out_lat, record.check_out_lng] : [24.7136, 46.6753];
+
+    leafletMap = window.L.map(mapContainerRef.value).setView(center, 15);
+    window.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap'
+    }).addTo(leafletMap);
+
+    const greenIcon = window.L.divIcon({ className: '', html: '<div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#10b981,#059669);border:3px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center"><svg width="14" height="14" fill="white" viewBox="0 0 24 24"><path d="M11 16l-4-4m0 0l4-4m-4 4h14"/></svg></div>', iconSize: [28, 28], iconAnchor: [14, 14] });
+    const redIcon = window.L.divIcon({ className: '', html: '<div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#ef4444,#dc2626);border:3px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center"><svg width="14" height="14" fill="white" viewBox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7"/></svg></div>', iconSize: [28, 28], iconAnchor: [14, 14] });
+
+    const bounds = [];
+    if (hasIn) {
+        window.L.marker([record.check_in_lat, record.check_in_lng], { icon: greenIcon })
+            .addTo(leafletMap)
+            .bindPopup(`<b>${isRtl.value ? 'موقع الحضور' : 'Check-in Location'}</b><br>${formatTime(record.check_in)}`);
+        bounds.push([record.check_in_lat, record.check_in_lng]);
+    }
+    if (hasOut) {
+        window.L.marker([record.check_out_lat, record.check_out_lng], { icon: redIcon })
+            .addTo(leafletMap)
+            .bindPopup(`<b>${isRtl.value ? 'موقع الانصراف' : 'Check-out Location'}</b><br>${formatTime(record.check_out)}`);
+        bounds.push([record.check_out_lat, record.check_out_lng]);
+    }
+    if (bounds.length === 2) {
+        leafletMap.fitBounds(bounds, { padding: [50, 50] });
+        window.L.polyline(bounds, { color: '#C4A265', weight: 3, dashArray: '8,8', opacity: 0.7 }).addTo(leafletMap);
+    }
+}
+
+function closeMap() {
+    mapModal.value = false;
+    if (leafletMap) { leafletMap.remove(); leafletMap = null; }
+}
+
+function hasLocation(record) {
+    return (record.check_in_lat && record.check_in_lng) || (record.check_out_lat && record.check_out_lng);
+}
 
 function submitAttendance() {
     if (editingId.value) {
@@ -72,16 +188,25 @@ function editRecord(record) {
     form.user_id = record.user_id;
     form.date = record.date?.slice(0, 10) || '';
     form.check_in = record.check_in?.slice(0, 5) || '';
+    form.check_in_lat = record.check_in_lat;
+    form.check_in_lng = record.check_in_lng;
     form.check_out = record.check_out?.slice(0, 5) || '';
+    form.check_out_lat = record.check_out_lat;
+    form.check_out_lng = record.check_out_lng;
     form.status = record.status;
     form.overtime_hours = record.overtime_hours || '';
     form.notes = record.notes || '';
+    checkInLocOk.value = !!(record.check_in_lat && record.check_in_lng);
+    checkOutLocOk.value = !!(record.check_out_lat && record.check_out_lng);
     showForm.value = true;
 }
 
 function cancelForm() {
     showForm.value = false;
     editingId.value = null;
+    checkInLocOk.value = false;
+    checkOutLocOk.value = false;
+    locError.value = '';
     form.reset();
 }
 
@@ -430,40 +555,84 @@ onMounted(() => { setTimeout(() => mounted.value = true, 50); });
                                 <p v-if="form.errors.status" class="mt-1.5 text-xs text-red-500 font-medium">{{ form.errors.status }}</p>
                             </div>
 
-                            <!-- Check In -->
+                            <!-- Check In + Location -->
                             <div>
                                 <label class="block text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">
                                     {{ $t('a_check_in') }}
                                 </label>
-                                <div class="relative">
-                                    <div class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3">
-                                        <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" /></svg>
+                                <div class="flex gap-2">
+                                    <div class="relative flex-1">
+                                        <div class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3">
+                                            <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" /></svg>
+                                        </div>
+                                        <input
+                                            v-model="form.check_in"
+                                            type="time"
+                                            class="w-full bg-gray-50/80 border border-gray-200 rounded-xl ps-10 pe-4 py-2.5 text-sm text-gray-700 font-medium focus:bg-white focus:ring-2 focus:ring-emerald-200/50 focus:border-emerald-300 transition-all duration-200"
+                                        />
                                     </div>
-                                    <input
-                                        v-model="form.check_in"
-                                        type="time"
-                                        class="w-full bg-gray-50/80 border border-gray-200 rounded-xl ps-10 pe-4 py-2.5 text-sm text-gray-700 font-medium focus:bg-white focus:ring-2 focus:ring-emerald-200/50 focus:border-emerald-300 transition-all duration-200"
-                                    />
+                                    <button
+                                        type="button"
+                                        @click="captureLocation('in')"
+                                        :disabled="gettingCheckInLoc"
+                                        class="flex-shrink-0 w-10 h-10 rounded-xl border-2 flex items-center justify-center transition-all duration-300"
+                                        :class="checkInLocOk ? 'border-emerald-300 bg-emerald-50 text-emerald-600' : gettingCheckInLoc ? 'border-amber-300 bg-amber-50 text-amber-500' : 'border-gray-200 bg-gray-50 text-gray-400 hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-500'"
+                                        :title="isRtl ? 'التقاط موقع الحضور' : 'Capture check-in location'"
+                                    >
+                                        <svg v-if="gettingCheckInLoc" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+                                        <svg v-else-if="checkInLocOk" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
+                                        <svg v-else class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                                    </button>
                                 </div>
+                                <p v-if="checkInLocOk" class="mt-1 text-[10px] text-emerald-500 font-medium flex items-center gap-1">
+                                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" /></svg>
+                                    {{ isRtl ? 'تم التقاط الموقع' : 'Location captured' }}
+                                </p>
                                 <p v-if="form.errors.check_in" class="mt-1.5 text-xs text-red-500 font-medium">{{ form.errors.check_in }}</p>
                             </div>
 
-                            <!-- Check Out -->
+                            <!-- Check Out + Location -->
                             <div>
                                 <label class="block text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">
                                     {{ $t('a_check_out') }}
                                 </label>
-                                <div class="relative">
-                                    <div class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3">
-                                        <svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+                                <div class="flex gap-2">
+                                    <div class="relative flex-1">
+                                        <div class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3">
+                                            <svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+                                        </div>
+                                        <input
+                                            v-model="form.check_out"
+                                            type="time"
+                                            class="w-full bg-gray-50/80 border border-gray-200 rounded-xl ps-10 pe-4 py-2.5 text-sm text-gray-700 font-medium focus:bg-white focus:ring-2 focus:ring-red-200/50 focus:border-red-300 transition-all duration-200"
+                                        />
                                     </div>
-                                    <input
-                                        v-model="form.check_out"
-                                        type="time"
-                                        class="w-full bg-gray-50/80 border border-gray-200 rounded-xl ps-10 pe-4 py-2.5 text-sm text-gray-700 font-medium focus:bg-white focus:ring-2 focus:ring-red-200/50 focus:border-red-300 transition-all duration-200"
-                                    />
+                                    <button
+                                        type="button"
+                                        @click="captureLocation('out')"
+                                        :disabled="gettingCheckOutLoc"
+                                        class="flex-shrink-0 w-10 h-10 rounded-xl border-2 flex items-center justify-center transition-all duration-300"
+                                        :class="checkOutLocOk ? 'border-red-300 bg-red-50 text-red-500' : gettingCheckOutLoc ? 'border-amber-300 bg-amber-50 text-amber-500' : 'border-gray-200 bg-gray-50 text-gray-400 hover:border-red-300 hover:bg-red-50 hover:text-red-500'"
+                                        :title="isRtl ? 'التقاط موقع الانصراف' : 'Capture check-out location'"
+                                    >
+                                        <svg v-if="gettingCheckOutLoc" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+                                        <svg v-else-if="checkOutLocOk" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
+                                        <svg v-else class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                                    </button>
                                 </div>
+                                <p v-if="checkOutLocOk" class="mt-1 text-[10px] text-red-400 font-medium flex items-center gap-1">
+                                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" /></svg>
+                                    {{ isRtl ? 'تم التقاط الموقع' : 'Location captured' }}
+                                </p>
                                 <p v-if="form.errors.check_out" class="mt-1.5 text-xs text-red-500 font-medium">{{ form.errors.check_out }}</p>
+                            </div>
+
+                            <!-- Location Error -->
+                            <div v-if="locError" class="sm:col-span-2 lg:col-span-3">
+                                <p class="text-xs text-red-500 font-medium flex items-center gap-1.5 bg-red-50 rounded-lg px-3 py-2">
+                                    <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" /></svg>
+                                    {{ locError }}
+                                </p>
                             </div>
 
                             <!-- Overtime -->
@@ -758,6 +927,15 @@ onMounted(() => { setTimeout(() => mounted.value = true, 50); });
                                 <!-- Actions -->
                                 <div class="flex items-center gap-1.5 lg:w-auto flex-shrink-0">
                                     <button
+                                        v-if="hasLocation(record)"
+                                        @click="openMap(record)"
+                                        class="p-2 rounded-xl text-blue-400 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200 relative"
+                                        :title="isRtl ? 'عرض الموقع على الخريطة' : 'View on map'"
+                                    >
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                                        <span class="absolute -top-0.5 -end-0.5 w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
+                                    </button>
+                                    <button
                                         v-if="can('attendances.update')"
                                         @click="editRecord(record)"
                                         class="p-2 rounded-xl text-gray-400 hover:text-amber-600 hover:bg-amber-50 transition-all duration-200"
@@ -831,5 +1009,67 @@ onMounted(() => { setTimeout(() => mounted.value = true, 50); });
                 </nav>
             </div>
         </div>
+
+        <!-- ═══════════ MAP MODAL ═══════════ -->
+        <teleport to="body">
+            <transition
+                enter-active-class="transition duration-300 ease-out"
+                leave-active-class="transition duration-200 ease-in"
+                enter-from-class="opacity-0"
+                enter-to-class="opacity-100"
+                leave-from-class="opacity-100"
+                leave-to-class="opacity-0"
+            >
+                <div v-if="mapModal" class="fixed inset-0 z-[9999] flex items-center justify-center p-4" @click.self="closeMap">
+                    <!-- Backdrop -->
+                    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" />
+
+                    <!-- Modal -->
+                    <div class="relative w-full max-w-2xl bg-white rounded-2xl shadow-2xl overflow-hidden animate-[modalIn_0.3s_ease-out]">
+                        <!-- Header -->
+                        <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                                </div>
+                                <div>
+                                    <h3 class="text-base font-bold text-gray-900">{{ isRtl ? 'موقع الحضور والانصراف' : 'Attendance Location' }}</h3>
+                                    <p class="text-xs text-gray-400">{{ mapRecord?.user?.name }} - {{ formatDate(mapRecord?.date) }}</p>
+                                </div>
+                            </div>
+                            <button @click="closeMap" class="p-2 rounded-xl text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-all duration-200">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                            </button>
+                        </div>
+
+                        <!-- Map -->
+                        <div ref="mapContainerRef" class="w-full h-[400px]" />
+
+                        <!-- Legend -->
+                        <div class="px-6 py-3 border-t border-gray-100 flex flex-wrap items-center gap-4">
+                            <div v-if="mapRecord?.check_in_lat" class="flex items-center gap-2">
+                                <div class="w-4 h-4 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 border-2 border-white shadow" />
+                                <span class="text-xs font-medium text-gray-600">{{ isRtl ? 'الحضور' : 'Check-in' }} {{ formatTime(mapRecord?.check_in) }}</span>
+                            </div>
+                            <div v-if="mapRecord?.check_out_lat" class="flex items-center gap-2">
+                                <div class="w-4 h-4 rounded-full bg-gradient-to-br from-red-500 to-red-600 border-2 border-white shadow" />
+                                <span class="text-xs font-medium text-gray-600">{{ isRtl ? 'الانصراف' : 'Check-out' }} {{ formatTime(mapRecord?.check_out) }}</span>
+                            </div>
+                            <div v-if="mapRecord?.check_in_lat && mapRecord?.check_out_lat" class="flex items-center gap-2">
+                                <div class="w-4 h-0.5 bg-[#C4A265] border-dashed" style="border-top: 2px dashed #C4A265; width: 16px;" />
+                                <span class="text-xs font-medium text-gray-600">{{ isRtl ? 'المسار' : 'Path' }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </transition>
+        </teleport>
     </AdminLayout>
 </template>
+
+<style>
+@keyframes modalIn {
+    from { opacity: 0; transform: scale(0.95) translateY(10px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+</style>

@@ -48,7 +48,11 @@ class AttendanceController extends Controller
             'user_id' => 'required|exists:users,id',
             'date' => 'required|date',
             'check_in' => 'nullable|date_format:H:i',
+            'check_in_lat' => 'nullable|numeric|between:-90,90',
+            'check_in_lng' => 'nullable|numeric|between:-180,180',
             'check_out' => 'nullable|date_format:H:i|after:check_in',
+            'check_out_lat' => 'nullable|numeric|between:-90,90',
+            'check_out_lng' => 'nullable|numeric|between:-180,180',
             'status' => 'required|in:present,absent,late,leave',
             'overtime_hours' => 'nullable|numeric|min:0',
             'notes' => 'nullable|string',
@@ -65,7 +69,11 @@ class AttendanceController extends Controller
     {
         $data = $request->validate([
             'check_in' => 'nullable|date_format:H:i',
+            'check_in_lat' => 'nullable|numeric|between:-90,90',
+            'check_in_lng' => 'nullable|numeric|between:-180,180',
             'check_out' => 'nullable|date_format:H:i|after:check_in',
+            'check_out_lat' => 'nullable|numeric|between:-90,90',
+            'check_out_lng' => 'nullable|numeric|between:-180,180',
             'status' => 'required|in:present,absent,late,leave',
             'overtime_hours' => 'nullable|numeric|min:0',
             'notes' => 'nullable|string',

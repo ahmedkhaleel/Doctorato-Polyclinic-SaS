@@ -3,8 +3,8 @@
   "configurations": [
     {
       "name": "laravel",
-      "runtimeExecutable": "bash",
-      "runtimeArgs": ["-c", "echo 'Proxy to already-running server'; exec tail -f /dev/null"],
+      "runtimeExecutable": "/tmp/aura-serve.sh",
+      "runtimeArgs": [],
       "port": 8000
     }
   ]
