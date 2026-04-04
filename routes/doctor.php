@@ -102,6 +102,8 @@ Route::middleware('doctor.auth')->group(function () {
     // ─── HR Module (Attendance, Leaves, Salary) ─────────────────
     Route::middleware('module:hr')->group(function () {
         Route::get('/my-attendance', [DoctorAttendanceController::class, 'index'])->name('doctor.my-attendance.index');
+        Route::post('/my-attendance/check-in', [DoctorAttendanceController::class, 'checkIn'])->name('doctor.my-attendance.check-in');
+        Route::post('/my-attendance/check-out', [DoctorAttendanceController::class, 'checkOut'])->name('doctor.my-attendance.check-out');
         Route::get('/my-leaves', [DoctorLeaveController::class, 'index'])->name('doctor.my-leaves.index');
         Route::post('/my-leaves', [DoctorLeaveController::class, 'store'])->name('doctor.my-leaves.store');
         Route::get('/my-salary-slips', [DoctorSalarySlipController::class, 'index'])->name('doctor.my-salary-slips.index');

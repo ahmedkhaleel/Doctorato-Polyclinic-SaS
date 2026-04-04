@@ -132,6 +132,8 @@ Route::middleware('secretary.auth')->group(function () {
     // ─── HR Module (Attendance, Leaves, Salary) ─────────────────
     Route::middleware('module:hr')->group(function () {
         Route::get('/my-attendance', [SecretaryAttendanceController::class, 'index'])->name('secretary.my-attendance.index');
+        Route::post('/my-attendance/check-in', [SecretaryAttendanceController::class, 'checkIn'])->name('secretary.my-attendance.check-in');
+        Route::post('/my-attendance/check-out', [SecretaryAttendanceController::class, 'checkOut'])->name('secretary.my-attendance.check-out');
         Route::get('/my-leaves', [SecretaryLeaveController::class, 'index'])->name('secretary.my-leaves.index');
         Route::post('/my-leaves', [SecretaryLeaveController::class, 'store'])->name('secretary.my-leaves.store');
         Route::get('/my-salary-slips', [SecretarySalarySlipController::class, 'index'])->name('secretary.my-salary-slips.index');
