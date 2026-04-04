@@ -34,6 +34,8 @@ const props = defineProps({
     allPatients: Array,
     payoutSummary: Object,
     recentPayouts: Array,
+    attendanceRecords: Array,
+    attendanceSummary: Object,
 });
 
 const activeTab = ref('overview');
@@ -46,6 +48,7 @@ const tabs = [
     { id: 'finance', label: 'Commission & Finance', key: 'a_commission_finance' },
     { id: 'schedule', label: 'Schedule & Leaves', key: 'a_schedule_leaves' },
     { id: 'bookings', label: 'Bookings', key: 'a_bookings' },
+    { id: 'attendance', label: 'Attendance', key: 'a_attendance' },
 ];
 
 const dayNames = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
@@ -897,6 +900,121 @@ const visitTypeDistribution = computed(() => {
                                     </tr>
                                 </tbody>
                             </table>
+                        </div>
+                    </div>
+
+                    <!-- ==================== ATTENDANCE TAB ==================== -->
+                    <div v-if="activeTab === 'attendance'">
+                        <!-- Summary Cards -->
+                        <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-6">
+                            <div class="bg-emerald-50 rounded-xl p-4 border border-emerald-100">
+                                <p class="text-[10px] font-semibold text-emerald-500 uppercase tracking-wider">{{ isRtl ? 'حاضر' : 'Present' }}</p>
+                                <p class="text-2xl font-bold text-emerald-700 mt-1">{{ attendanceSummary?.present ?? 0 }}</p>
+                            </div>
+                            <div class="bg-red-50 rounded-xl p-4 border border-red-100">
+                                <p class="text-[10px] font-semibold text-red-500 uppercase tracking-wider">{{ isRtl ? 'غائب' : 'Absent' }}</p>
+                                <p class="text-2xl font-bold text-red-700 mt-1">{{ attendanceSummary?.absent ?? 0 }}</p>
+                            </div>
+                            <div class="bg-amber-50 rounded-xl p-4 border border-amber-100">
+                                <p class="text-[10px] font-semibold text-amber-500 uppercase tracking-wider">{{ isRtl ? 'متأخر' : 'Late' }}</p>
+                                <p class="text-2xl font-bold text-amber-700 mt-1">{{ attendanceSummary?.late ?? 0 }}</p>
+                            </div>
+                            <div class="bg-blue-50 rounded-xl p-4 border border-blue-100">
+                                <p class="text-[10px] font-semibold text-blue-500 uppercase tracking-wider">{{ isRtl ? 'إجازة' : 'Leave' }}</p>
+                                <p class="text-2xl font-bold text-blue-700 mt-1">{{ attendanceSummary?.leave ?? 0 }}</p>
+                            </div>
+                            <div class="bg-purple-50 rounded-xl p-4 border border-purple-100">
+                                <p class="text-[10px] font-semibold text-purple-500 uppercase tracking-wider">{{ isRtl ? 'إضافي' : 'Overtime' }}</p>
+                                <p class="text-2xl font-bold text-purple-700 mt-1">{{ attendanceSummary?.overtime_hours ?? 0 }}<span class="text-xs font-normal text-purple-400">h</span></p>
+                            </div>
+                        </div>
+
+                        <!-- Records Table -->
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-4 py-3 text-start text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'التاريخ' : 'Date' }}</th>
+                                        <th class="px-4 py-3 text-start text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'الحالة' : 'Status' }}</th>
+                                        <th class="px-4 py-3 text-start text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'حضور' : 'Check In' }}</th>
+                                        <th class="px-4 py-3 text-start text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'انصراف' : 'Check Out' }}</th>
+                                        <th class="px-4 py-3 text-start text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'موقع' : 'GPS' }}</th>
+                                        <th class="px-4 py-3 text-start text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'ملاحظات' : 'Notes' }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-100">
+                                    <tr v-for="record in attendanceRecords" :key="record.id" class="hover:bg-gray-50 transition-colors">
+                                        <td class="px-4 py-3">
+                                            <span class="text-sm font-medium text-gray-900">{{ record.date ? new Date(record.date).toLocaleDateString(isRtl ? 'ar-EG' : 'en-GB', { weekday: 'short', day: '2-digit', month: 'short' }) : '-' }}</span>
+                                        </td>
+                                        <td class="px-4 py-3">
+                                            <span class="inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1 rounded-full"
+                                                :class="{
+                                                    'bg-emerald-50 text-emerald-700': record.status === 'present',
+                                                    'bg-red-50 text-red-700': record.status === 'absent',
+                                                    'bg-amber-50 text-amber-700': record.status === 'late',
+                                                    'bg-blue-50 text-blue-700': record.status === 'leave',
+                                                }">
+                                                <span class="w-1.5 h-1.5 rounded-full"
+                                                    :class="{
+                                                        'bg-emerald-500': record.status === 'present',
+                                                        'bg-red-500': record.status === 'absent',
+                                                        'bg-amber-500': record.status === 'late',
+                                                        'bg-blue-500': record.status === 'leave',
+                                                    }"></span>
+                                                {{ record.status === 'present' ? (isRtl ? 'حاضر' : 'Present') :
+                                                   record.status === 'absent' ? (isRtl ? 'غائب' : 'Absent') :
+                                                   record.status === 'late' ? (isRtl ? 'متأخر' : 'Late') :
+                                                   record.status === 'leave' ? (isRtl ? 'إجازة' : 'Leave') : record.status }}
+                                            </span>
+                                        </td>
+                                        <td class="px-4 py-3">
+                                            <span v-if="record.check_in" class="text-sm font-mono font-semibold text-gray-700">{{ record.check_in?.substring(0, 5) }}</span>
+                                            <span v-else class="text-sm text-gray-300">--:--</span>
+                                        </td>
+                                        <td class="px-4 py-3">
+                                            <span v-if="record.check_out" class="text-sm font-mono font-semibold text-gray-700">{{ record.check_out?.substring(0, 5) }}</span>
+                                            <span v-else class="text-sm text-gray-300">--:--</span>
+                                        </td>
+                                        <td class="px-4 py-3">
+                                            <div class="flex items-center gap-1">
+                                                <span v-if="record.check_in_lat" class="inline-flex items-center gap-0.5 text-[9px] text-emerald-500 font-medium bg-emerald-50 px-1.5 py-0.5 rounded">
+                                                    <svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" /></svg>
+                                                    {{ isRtl ? 'دخول' : 'In' }}
+                                                </span>
+                                                <span v-if="record.check_out_lat" class="inline-flex items-center gap-0.5 text-[9px] text-red-400 font-medium bg-red-50 px-1.5 py-0.5 rounded">
+                                                    <svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" /></svg>
+                                                    {{ isRtl ? 'خروج' : 'Out' }}
+                                                </span>
+                                                <span v-if="!record.check_in_lat && !record.check_out_lat" class="text-xs text-gray-300">-</span>
+                                            </div>
+                                        </td>
+                                        <td class="px-4 py-3">
+                                            <span v-if="record.notes" class="text-xs text-gray-500 max-w-[150px] truncate block">{{ record.notes }}</span>
+                                            <span v-else class="text-xs text-gray-300">-</span>
+                                        </td>
+                                    </tr>
+                                    <tr v-if="!attendanceRecords || attendanceRecords.length === 0">
+                                        <td colspan="6" class="px-4 py-12 text-center">
+                                            <div class="flex flex-col items-center">
+                                                <div class="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center mb-3">
+                                                    <svg class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
+                                                </div>
+                                                <p class="text-sm text-gray-500">{{ isRtl ? 'لا توجد سجلات حضور' : 'No attendance records found' }}</p>
+                                                <p class="text-xs text-gray-400 mt-1">{{ isRtl ? 'سجلات آخر 3 أشهر' : 'Last 3 months records' }}</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Link to full attendance page -->
+                        <div class="mt-4 text-center">
+                            <Link href="/admin/attendances" class="inline-flex items-center gap-2 text-sm font-medium hover:underline" style="color: #C4A265;">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
+                                {{ isRtl ? 'عرض كل سجلات الحضور' : 'View all attendance records' }}
+                            </Link>
                         </div>
                     </div>
                 </div>

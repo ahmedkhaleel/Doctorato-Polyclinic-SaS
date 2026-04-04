@@ -16,6 +16,7 @@ use App\Models\Setting;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Visit;
+use App\Models\Attendance;
 use App\Services\AuditLogger;
 use App\Http\Requests\StoreDoctorRequest;
 use App\Http\Requests\UpdateDoctorRequest;
@@ -317,6 +318,22 @@ class DoctorController extends Controller
             ->take(5)
             ->get();
 
+        // Attendance Records (last 3 months)
+        $attendanceRecords = $doctor->user_id
+            ? Attendance::where('user_id', $doctor->user_id)
+                ->where('date', '>=', now()->subMonths(3)->startOfMonth())
+                ->orderByDesc('date')
+                ->get()
+            : collect();
+
+        $attendanceSummary = [
+            'present' => $attendanceRecords->where('status', 'present')->count(),
+            'absent' => $attendanceRecords->where('status', 'absent')->count(),
+            'late' => $attendanceRecords->where('status', 'late')->count(),
+            'leave' => $attendanceRecords->where('status', 'leave')->count(),
+            'overtime_hours' => round((float) $attendanceRecords->sum('overtime_hours'), 1),
+        ];
+
         return Inertia::render('Admin/Doctors/Show', [
             'doctor' => $doctor,
             'performanceStats' => $performanceStats,
@@ -332,6 +349,8 @@ class DoctorController extends Controller
             'allPatients' => $allPatients,
             'payoutSummary' => $payoutSummary,
             'recentPayouts' => $recentPayouts,
+            'attendanceRecords' => $attendanceRecords,
+            'attendanceSummary' => $attendanceSummary,
         ]);
     }
 
