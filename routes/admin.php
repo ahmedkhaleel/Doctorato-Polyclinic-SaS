@@ -463,6 +463,7 @@ Route::middleware('admin.auth')->group(function () {
         Route::get('/attendances', [AttendanceController::class, 'index'])->name('admin.attendances.index')->middleware('permission:attendances.view');
         Route::post('/attendances', [AttendanceController::class, 'store'])->name('admin.attendances.store')->middleware('permission:attendances.create');
         Route::put('/attendances/{attendance}', [AttendanceController::class, 'update'])->name('admin.attendances.update')->middleware('permission:attendances.update');
+        Route::delete('/attendances/{attendance}', [AttendanceController::class, 'destroy'])->name('admin.attendances.destroy')->middleware('permission:attendances.delete');
 
         // Leaves
         Route::get('/leaves', [LeaveController::class, 'index'])->name('admin.leaves.index')->middleware('permission:leaves.view');

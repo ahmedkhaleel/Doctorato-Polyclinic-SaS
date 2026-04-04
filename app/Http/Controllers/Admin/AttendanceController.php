@@ -69,11 +69,23 @@ class AttendanceController extends Controller
             }
         }
 
+        // Check if attendance already exists for this user on this date — update it instead
+        $existing = Attendance::where('user_id', $data['user_id'])
+            ->whereDate('date', $data['date'])
+            ->first();
+
+        if ($existing) {
+            $updateData = collect($data)->except(['user_id', 'date'])->toArray();
+            $existing->update($updateData);
+            AuditLogger::log('updated', $existing);
+            return redirect()->back()->with('success', 'تم تحديث سجل الحضور الموجود بنجاح / Existing attendance updated successfully.');
+        }
+
         $attendance = Attendance::create($data);
 
         AuditLogger::log('created', $attendance);
 
-        return redirect()->back()->with('success', 'Attendance recorded successfully.');
+        return redirect()->back()->with('success', 'تم تسجيل الحضور بنجاح / Attendance recorded successfully.');
     }
 
     public function update(Request $request, Attendance $attendance): RedirectResponse
@@ -106,5 +118,14 @@ class AttendanceController extends Controller
         AuditLogger::log('updated', $attendance);
 
         return redirect()->back()->with('success', 'Attendance updated successfully.');
+    }
+
+    public function destroy(Attendance $attendance): RedirectResponse
+    {
+        AuditLogger::log('deleted', $attendance);
+
+        $attendance->delete();
+
+        return redirect()->back()->with('success', 'تم حذف سجل الحضور بنجاح / Attendance deleted successfully.');
     }
 }
