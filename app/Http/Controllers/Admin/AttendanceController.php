@@ -35,7 +35,7 @@ class AttendanceController extends Controller
 
         $attendances = $query->latest('date')->paginate(15)->withQueryString();
 
-        return Inertia::render('Admin/Attendance/Index', [
+        return Inertia::render('Admin/Attendances/Index', [
             'attendances' => $attendances,
             'filters' => $request->only(['user_id', 'status', 'date_from', 'date_to']),
             'users' => User::active()->select('id', 'name')->get(),
