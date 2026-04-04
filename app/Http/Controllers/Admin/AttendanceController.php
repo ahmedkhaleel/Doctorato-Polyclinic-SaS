@@ -48,15 +48,22 @@ class AttendanceController extends Controller
             'user_id' => 'required|exists:users,id',
             'date' => 'required|date',
             'check_in' => 'nullable|date_format:H:i',
-            'check_in_lat' => 'nullable|numeric|between:-90,90',
-            'check_in_lng' => 'nullable|numeric|between:-180,180',
-            'check_out' => 'nullable|date_format:H:i|after:check_in',
-            'check_out_lat' => 'nullable|numeric|between:-90,90',
-            'check_out_lng' => 'nullable|numeric|between:-180,180',
+            'check_in_lat' => 'nullable|numeric',
+            'check_in_lng' => 'nullable|numeric',
+            'check_out' => 'nullable|date_format:H:i',
+            'check_out_lat' => 'nullable|numeric',
+            'check_out_lng' => 'nullable|numeric',
             'status' => 'required|in:present,absent,late,leave',
             'overtime_hours' => 'nullable|numeric|min:0',
             'notes' => 'nullable|string',
         ]);
+
+        // Remove null location fields to avoid issues if migration not run yet
+        foreach (['check_in_lat', 'check_in_lng', 'check_out_lat', 'check_out_lng'] as $field) {
+            if (!isset($data[$field]) || $data[$field] === null) {
+                unset($data[$field]);
+            }
+        }
 
         $attendance = Attendance::create($data);
 
@@ -69,15 +76,22 @@ class AttendanceController extends Controller
     {
         $data = $request->validate([
             'check_in' => 'nullable|date_format:H:i',
-            'check_in_lat' => 'nullable|numeric|between:-90,90',
-            'check_in_lng' => 'nullable|numeric|between:-180,180',
-            'check_out' => 'nullable|date_format:H:i|after:check_in',
-            'check_out_lat' => 'nullable|numeric|between:-90,90',
-            'check_out_lng' => 'nullable|numeric|between:-180,180',
+            'check_in_lat' => 'nullable|numeric',
+            'check_in_lng' => 'nullable|numeric',
+            'check_out' => 'nullable|date_format:H:i',
+            'check_out_lat' => 'nullable|numeric',
+            'check_out_lng' => 'nullable|numeric',
             'status' => 'required|in:present,absent,late,leave',
             'overtime_hours' => 'nullable|numeric|min:0',
             'notes' => 'nullable|string',
         ]);
+
+        // Remove null location fields to avoid issues if migration not run yet
+        foreach (['check_in_lat', 'check_in_lng', 'check_out_lat', 'check_out_lng'] as $field) {
+            if (!isset($data[$field]) || $data[$field] === null) {
+                unset($data[$field]);
+            }
+        }
 
         $attendance->update($data);
 
