@@ -14,6 +14,7 @@ const props = defineProps({
     attendances: Object,
     users: Array,
     filters: Object,
+    todayRecords: Object,
 });
 
 /* ── Filters ── */
@@ -335,9 +336,91 @@ const stats = computed(() => {
     };
 });
 
+/* ── Quick Check-In/Out ── */
+const quickPanel = ref(true);
+const quickBusy = ref({});
+const quickLocStatus = ref('');
+
+function getTodayRecord(userId) {
+    return props.todayRecords?.[userId] || null;
+}
+
+function userCheckedIn(userId) {
+    return !!getTodayRecord(userId)?.check_in;
+}
+
+function userCheckedOut(userId) {
+    return !!getTodayRecord(userId)?.check_out;
+}
+
+function quickCheckIn(userId) {
+    quickBusy.value[userId] = 'in';
+    quickLocStatus.value = isRtl.value ? 'جاري تحديد الموقع...' : 'Getting location...';
+
+    getQuickLocation((lat, lng) => {
+        router.post('/admin/attendances/quick-check-in', { user_id: userId, lat, lng }, {
+            preserveScroll: true,
+            onFinish: () => { delete quickBusy.value[userId]; quickLocStatus.value = ''; },
+        });
+    }, () => {
+        router.post('/admin/attendances/quick-check-in', { user_id: userId, lat: null, lng: null }, {
+            preserveScroll: true,
+            onFinish: () => { delete quickBusy.value[userId]; quickLocStatus.value = ''; },
+        });
+    });
+}
+
+function quickCheckOut(userId) {
+    quickBusy.value[userId] = 'out';
+    quickLocStatus.value = isRtl.value ? 'جاري تحديد الموقع...' : 'Getting location...';
+
+    getQuickLocation((lat, lng) => {
+        router.post('/admin/attendances/quick-check-out', { user_id: userId, lat, lng }, {
+            preserveScroll: true,
+            onFinish: () => { delete quickBusy.value[userId]; quickLocStatus.value = ''; },
+        });
+    }, () => {
+        router.post('/admin/attendances/quick-check-out', { user_id: userId, lat: null, lng: null }, {
+            preserveScroll: true,
+            onFinish: () => { delete quickBusy.value[userId]; quickLocStatus.value = ''; },
+        });
+    });
+}
+
+function getQuickLocation(onSuccess, onFail) {
+    if (!navigator.geolocation) { onFail(); return; }
+    navigator.geolocation.getCurrentPosition(
+        (pos) => onSuccess(pos.coords.latitude, pos.coords.longitude),
+        () => onFail(),
+        { enableHighAccuracy: true, timeout: 8000 }
+    );
+}
+
+function formatTimeShort(t) {
+    if (!t) return '';
+    const parts = t.split(':');
+    let h = parseInt(parts[0]); const m = parts[1];
+    const ampm = h >= 12 ? (isRtl.value ? 'م' : 'PM') : (isRtl.value ? 'ص' : 'AM');
+    h = h % 12 || 12;
+    return `${h}:${m} ${ampm}`;
+}
+
+/* ── Live Clock ── */
+const liveTime = ref('');
+const liveDate = ref('');
+function updateLiveClock() {
+    const now = new Date();
+    liveTime.value = now.toLocaleTimeString(isRtl.value ? 'ar-EG' : 'en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
+    liveDate.value = now.toLocaleDateString(isRtl.value ? 'ar-EG' : 'en-GB', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+}
+updateLiveClock();
+
 /* ── Animation ── */
 const mounted = ref(false);
-onMounted(() => { setTimeout(() => mounted.value = true, 50); });
+onMounted(() => {
+    setTimeout(() => mounted.value = true, 50);
+    setInterval(updateLiveClock, 1000);
+});
 </script>
 
 <template>
@@ -404,6 +487,146 @@ onMounted(() => { setTimeout(() => mounted.value = true, 50); });
                     </div>
                     <p class="text-2xl font-bold" :class="stat.color === 'gray' ? 'text-gray-900' : `text-${stat.color}-600`">{{ stat.value }}</p>
                 </div>
+            </div>
+
+            <!-- ═══════════ QUICK CHECK-IN/OUT PANEL ═══════════ -->
+            <div
+                v-if="can('attendances.create')"
+                class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden transition-all duration-700"
+                :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
+            >
+                <!-- Panel Header -->
+                <div class="px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-sm">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            </div>
+                            <div>
+                                <h2 class="text-base font-bold text-gray-900">{{ isRtl ? 'تسجيل سريع' : 'Quick Check-In/Out' }}</h2>
+                                <p class="text-xs text-gray-400">{{ isRtl ? 'سجّل حضور وانصراف الموظفين بضغطة زر' : 'One-tap attendance for all employees' }}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="text-end hidden sm:block">
+                                <p class="text-xs text-gray-400">{{ liveDate }}</p>
+                                <p class="text-lg font-bold text-gray-800 tabular-nums" dir="ltr">{{ liveTime }}</p>
+                            </div>
+                            <button @click="quickPanel = !quickPanel" class="p-2 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-all">
+                                <svg class="w-5 h-5 transition-transform duration-300" :class="quickPanel ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Employee Grid -->
+                <transition
+                    enter-active-class="transition-all duration-400 ease-out"
+                    leave-active-class="transition-all duration-300 ease-in"
+                    enter-from-class="opacity-0 max-h-0"
+                    enter-to-class="opacity-100 max-h-[800px]"
+                    leave-from-class="opacity-100 max-h-[800px]"
+                    leave-to-class="opacity-0 max-h-0"
+                >
+                    <div v-if="quickPanel" class="overflow-hidden">
+                        <!-- Flash Message -->
+                        <div v-if="$page.props.flash?.success" class="mx-6 mt-4 text-xs text-emerald-600 font-semibold bg-emerald-50 rounded-xl px-4 py-2.5 flex items-center gap-2">
+                            <svg class="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
+                            {{ $page.props.flash.success }}
+                        </div>
+                        <div v-if="$page.props.flash?.error" class="mx-6 mt-4 text-xs text-red-600 font-semibold bg-red-50 rounded-xl px-4 py-2.5">
+                            {{ $page.props.flash.error }}
+                        </div>
+
+                        <div class="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                            <div
+                                v-for="user in users"
+                                :key="user.id"
+                                class="flex items-center gap-3 p-3 rounded-xl border transition-all duration-300 hover:shadow-md"
+                                :class="userCheckedOut(user.id)
+                                    ? 'bg-gray-50 border-gray-200'
+                                    : userCheckedIn(user.id)
+                                        ? 'bg-emerald-50/50 border-emerald-200'
+                                        : 'bg-white border-gray-100 hover:border-gray-200'"
+                            >
+                                <!-- Avatar -->
+                                <div :class="['w-10 h-10 rounded-xl bg-gradient-to-br flex-shrink-0 flex items-center justify-center text-white text-xs font-bold shadow-sm', getUserColor(user.id)]">
+                                    {{ getUserInitials(user.name) }}
+                                </div>
+
+                                <!-- Info -->
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-semibold text-gray-800 truncate">{{ user.name }}</p>
+                                    <div class="flex items-center gap-2 mt-0.5">
+                                        <template v-if="userCheckedIn(user.id)">
+                                            <span class="inline-flex items-center gap-1 text-[10px] font-medium text-emerald-600">
+                                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14" /></svg>
+                                                {{ formatTimeShort(getTodayRecord(user.id)?.check_in) }}
+                                            </span>
+                                        </template>
+                                        <template v-if="userCheckedOut(user.id)">
+                                            <span class="inline-flex items-center gap-1 text-[10px] font-medium text-red-500">
+                                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7" /></svg>
+                                                {{ formatTimeShort(getTodayRecord(user.id)?.check_out) }}
+                                            </span>
+                                        </template>
+                                        <template v-if="getTodayRecord(user.id)?.check_in_lat">
+                                            <span class="text-[9px] text-emerald-400">
+                                                <svg class="w-2.5 h-2.5 inline" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" /></svg>
+                                            </span>
+                                        </template>
+                                        <span v-if="!userCheckedIn(user.id)" class="text-[10px] text-gray-400">{{ isRtl ? 'لم يسجل بعد' : 'Not checked in' }}</span>
+                                    </div>
+                                </div>
+
+                                <!-- Action Buttons -->
+                                <div class="flex items-center gap-1.5 flex-shrink-0">
+                                    <!-- Check In -->
+                                    <button
+                                        v-if="!userCheckedIn(user.id)"
+                                        @click="quickCheckIn(user.id)"
+                                        :disabled="!!quickBusy[user.id]"
+                                        class="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-300 flex items-center gap-1.5"
+                                        :class="quickBusy[user.id] === 'in'
+                                            ? 'bg-emerald-100 text-emerald-500 cursor-wait'
+                                            : 'bg-emerald-500 text-white hover:bg-emerald-600 hover:shadow-md active:scale-95'"
+                                    >
+                                        <svg v-if="quickBusy[user.id] === 'in'" class="w-3.5 h-3.5 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+                                        <svg v-else class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14" /></svg>
+                                        {{ isRtl ? 'حضور' : 'In' }}
+                                    </button>
+
+                                    <!-- Checked In Badge -->
+                                    <span v-else-if="!userCheckedOut(user.id)" class="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-emerald-100 text-emerald-700 text-[10px] font-bold">
+                                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
+                                        {{ isRtl ? 'حاضر' : 'In' }}
+                                    </span>
+
+                                    <!-- Check Out -->
+                                    <button
+                                        v-if="userCheckedIn(user.id) && !userCheckedOut(user.id)"
+                                        @click="quickCheckOut(user.id)"
+                                        :disabled="!!quickBusy[user.id]"
+                                        class="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-300 flex items-center gap-1.5"
+                                        :class="quickBusy[user.id] === 'out'
+                                            ? 'bg-red-100 text-red-400 cursor-wait'
+                                            : 'bg-red-500 text-white hover:bg-red-600 hover:shadow-md active:scale-95'"
+                                    >
+                                        <svg v-if="quickBusy[user.id] === 'out'" class="w-3.5 h-3.5 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+                                        <svg v-else class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7" /></svg>
+                                        {{ isRtl ? 'انصراف' : 'Out' }}
+                                    </button>
+
+                                    <!-- All Done -->
+                                    <span v-if="userCheckedOut(user.id)" class="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-gray-100 text-gray-500 text-[10px] font-bold">
+                                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
+                                        {{ isRtl ? 'مكتمل' : 'Done' }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </transition>
             </div>
 
             <!-- ═══════════ MARK ATTENDANCE FORM ═══════════ -->

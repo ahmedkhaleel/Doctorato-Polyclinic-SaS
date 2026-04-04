@@ -35,10 +35,16 @@ class AttendanceController extends Controller
 
         $attendances = $query->latest('date')->paginate(15)->withQueryString();
 
+        // Today's attendance for all users (for quick check-in/out panel)
+        $todayRecords = Attendance::whereDate('date', now()->toDateString())
+            ->get()
+            ->keyBy('user_id');
+
         return Inertia::render('Admin/Attendances/Index', [
             'attendances' => $attendances,
             'filters' => $request->only(['user_id', 'status', 'date_from', 'date_to']),
             'users' => User::active()->select('id', 'name')->get(),
+            'todayRecords' => $todayRecords,
         ]);
     }
 
@@ -118,6 +124,67 @@ class AttendanceController extends Controller
         AuditLogger::log('updated', $attendance);
 
         return redirect()->back()->with('success', 'Attendance updated successfully.');
+    }
+
+    public function quickCheckIn(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'lat' => 'nullable|numeric',
+            'lng' => 'nullable|numeric',
+        ]);
+
+        $now = now();
+        $attendance = Attendance::firstOrNew([
+            'user_id' => $data['user_id'],
+            'date' => $now->toDateString(),
+        ]);
+
+        $attendance->check_in = $now->format('H:i');
+        $attendance->status = $now->format('H:i') > '09:00' ? 'late' : 'present';
+        $attendance->overtime_hours = $attendance->overtime_hours ?? 0;
+        $attendance->notes = $attendance->notes ?? '';
+
+        if (!empty($data['lat']) && !empty($data['lng'])) {
+            $attendance->check_in_lat = $data['lat'];
+            $attendance->check_in_lng = $data['lng'];
+        }
+
+        $attendance->save();
+        AuditLogger::log($attendance->wasRecentlyCreated ? 'created' : 'updated', $attendance);
+
+        $userName = User::find($data['user_id'])->name ?? '';
+        return redirect()->back()->with('success', "تم تسجيل حضور {$userName} بنجاح");
+    }
+
+    public function quickCheckOut(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'lat' => 'nullable|numeric',
+            'lng' => 'nullable|numeric',
+        ]);
+
+        $attendance = Attendance::where('user_id', $data['user_id'])
+            ->whereDate('date', now()->toDateString())
+            ->first();
+
+        if (!$attendance) {
+            return redirect()->back()->with('error', 'لا يوجد تسجيل حضور لهذا الموظف اليوم');
+        }
+
+        $attendance->check_out = now()->format('H:i');
+
+        if (!empty($data['lat']) && !empty($data['lng'])) {
+            $attendance->check_out_lat = $data['lat'];
+            $attendance->check_out_lng = $data['lng'];
+        }
+
+        $attendance->save();
+        AuditLogger::log('updated', $attendance);
+
+        $userName = User::find($data['user_id'])->name ?? '';
+        return redirect()->back()->with('success', "تم تسجيل انصراف {$userName} بنجاح");
     }
 
     public function destroy(Attendance $attendance): RedirectResponse
