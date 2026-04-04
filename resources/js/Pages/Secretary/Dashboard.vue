@@ -666,14 +666,21 @@ const severityStyles = {
                 </Link>
             </div>
             <div class="overflow-x-auto">
-                <table v-if="recentPayments && recentPayments.length > 0" class="min-w-full">
+                <table v-if="recentPayments && recentPayments.length > 0" class="min-w-full table-fixed">
+                    <colgroup>
+                        <col class="w-[35%]" />
+                        <col class="w-[15%]" />
+                        <col class="w-[15%]" />
+                        <col class="w-[17%]" />
+                        <col class="w-[18%]" />
+                    </colgroup>
                     <thead>
                         <tr class="bg-gray-50/50">
-                            <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'المريض' : 'Patient' }}</th>
-                            <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'الفاتورة' : 'Invoice' }}</th>
-                            <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'الطريقة' : 'Method' }}</th>
-                            <th class="px-6 py-3 ltr:text-right rtl:text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'المبلغ' : 'Amount' }}</th>
-                            <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'الوقت' : 'Time' }}</th>
+                            <th class="px-5 py-3 text-start text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'المريض' : 'Patient' }}</th>
+                            <th class="px-5 py-3 text-start text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'الفاتورة' : 'Invoice' }}</th>
+                            <th class="px-5 py-3 text-start text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'الطريقة' : 'Method' }}</th>
+                            <th class="px-5 py-3 text-start text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'المبلغ' : 'Amount' }}</th>
+                            <th class="px-5 py-3 text-start text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'الوقت' : 'Time' }}</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
@@ -682,28 +689,28 @@ const severityStyles = {
                             :key="payment.id"
                             class="hover:bg-gray-50/50 transition-colors duration-150"
                         >
-                            <td class="px-6 py-4 whitespace-nowrap">
+                            <td class="px-5 py-4 whitespace-nowrap">
                                 <div class="flex items-center gap-3">
                                     <div class="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-600 text-xs font-bold flex-shrink-0">
                                         {{ (payment.invoice?.patient?.full_name || payment.patient?.full_name || '?').charAt(0).toUpperCase() }}
                                     </div>
-                                    <span class="text-sm font-semibold text-gray-900">
+                                    <span class="text-sm font-semibold text-gray-900 truncate">
                                         {{ payment.invoice?.patient?.full_name || payment.patient?.full_name || '-' }}
                                     </span>
                                 </div>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-mono">
+                            <td class="px-5 py-4 whitespace-nowrap text-sm text-gray-500 font-mono">
                                 #{{ payment.invoice_id || payment.invoice?.id || '-' }}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
+                            <td class="px-5 py-4 whitespace-nowrap">
                                 <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-gray-50 text-gray-600 capitalize">
                                     {{ isRtl ? (payment.payment_method?.name_ar || payment.payment_method?.name_en || payment.method || '-') : (payment.payment_method?.name_en || payment.payment_method?.name_ar || payment.method || '-') }}
                                 </span>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-emerald-600 ltr:text-right rtl:text-left">
+                            <td class="px-5 py-4 whitespace-nowrap text-sm font-bold text-emerald-600">
                                 {{ formatCurrency(payment.amount) }}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+                            <td class="px-5 py-4 whitespace-nowrap text-sm text-gray-400">
                                 {{ formatTime(payment.created_at) }}
                             </td>
                         </tr>
