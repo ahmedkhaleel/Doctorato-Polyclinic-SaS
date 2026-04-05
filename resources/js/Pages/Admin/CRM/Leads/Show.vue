@@ -376,6 +376,23 @@ const priorityLabels = computed(() => ({ 1: isRtl.value ? 'ساخن' : 'Hot', 2:
 const priorityColors = { 1: 'bg-red-100 text-red-700', 2: 'bg-amber-100 text-amber-700', 3: 'bg-blue-100 text-blue-700' };
 const priorityDotColors = { 1: '#ef4444', 2: '#f59e0b', 3: '#3b82f6' };
 
+// Only show enabled medical departments (derma/dental) in convert modal
+const enabledDepartments = computed(() => {
+    const allModules = page.props.modules || {};
+    const deptIcons = {
+        derma: 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z',
+        dental: 'M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z',
+    };
+    return ['derma', 'dental']
+        .filter(slug => allModules[slug]?.enabled || allModules[slug]?.is_core)
+        .map(slug => ({
+            slug,
+            name_en: allModules[slug]?.name_en || slug,
+            name_ar: allModules[slug]?.name_ar || slug,
+            icon: deptIcons[slug] || allModules[slug]?.icon,
+        }));
+});
+
 const activityTypeIcons = {
     note: 'M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z',
     call: 'M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z',
@@ -1648,18 +1665,12 @@ function translateDescription(desc) {
                                             <!-- Department Selection -->
                                             <div class="mb-4">
                                                 <label class="text-xs font-medium text-gray-600 mb-2 block">{{ $t('a_department') }}</label>
-                                                <div class="grid grid-cols-2 gap-2">
-                                                    <button type="button" @click="selectedDepartment = 'derma'"
+                                                <div class="grid gap-2" :class="enabledDepartments.length > 1 ? 'grid-cols-2' : 'grid-cols-1'">
+                                                    <button v-for="dept in enabledDepartments" :key="dept.slug" type="button" @click="selectedDepartment = dept.slug"
                                                         class="flex items-center gap-2 px-4 py-3 rounded-xl border-2 text-sm font-medium transition-all"
-                                                        :class="selectedDepartment === 'derma' ? 'border-emerald-500 bg-emerald-50 text-emerald-700' : 'border-gray-200 bg-gray-50 text-gray-600 hover:border-gray-300'">
-                                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
-                                                        {{ $t('a_dermatology') }}
-                                                    </button>
-                                                    <button type="button" @click="selectedDepartment = 'dental'"
-                                                        class="flex items-center gap-2 px-4 py-3 rounded-xl border-2 text-sm font-medium transition-all"
-                                                        :class="selectedDepartment === 'dental' ? 'border-emerald-500 bg-emerald-50 text-emerald-700' : 'border-gray-200 bg-gray-50 text-gray-600 hover:border-gray-300'">
-                                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                                        {{ $t('a_dental') }}
+                                                        :class="selectedDepartment === dept.slug ? 'border-emerald-500 bg-emerald-50 text-emerald-700' : 'border-gray-200 bg-gray-50 text-gray-600 hover:border-gray-300'">
+                                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="dept.icon"/></svg>
+                                                        {{ isRtl ? dept.name_ar : dept.name_en }}
                                                     </button>
                                                 </div>
                                             </div>
