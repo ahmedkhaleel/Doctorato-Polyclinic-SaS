@@ -53,13 +53,13 @@ onUnmounted(() => {
 
 <template>
     <header
-        class="fixed top-0 left-0 right-0 z-40 transition-all duration-300"
-        :class="isScrolled ? 'shadow-lg backdrop-blur-md bg-white/95' : 'brand-header-bg'"
+        class="fixed top-0 left-0 right-0 z-40 transition-all duration-300 bg-white"
+        :class="isScrolled ? 'shadow-lg' : 'shadow-sm'"
     >
         <!-- Top Bar -->
         <div
-            class="hidden lg:block transition-all duration-300 border-b border-white/10"
-            :class="isScrolled ? 'bg-gray-800 py-1' : 'py-2'"
+            class="hidden lg:block transition-all duration-300 border-b border-white/10 brand-header-bg"
+            :class="isScrolled ? 'py-1' : 'py-2'"
         >
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between text-sm">
                 <!-- Contact Info -->
@@ -121,8 +121,7 @@ onUnmounted(() => {
                         v-for="item in navItems"
                         :key="item.route"
                         :href="item.route"
-                        class="hover-underline px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200 hover:text-[var(--brand-primary)]"
-                        :class="isScrolled ? 'text-gray-700 hover:bg-[var(--brand-primary)]/5' : 'text-gray-100 hover:text-white hover:bg-white/10'"
+                        class="hover-underline px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200 text-gray-700 hover:text-[var(--brand-primary)] hover:bg-[var(--brand-primary)]/5"
                     >
                         {{ item.label }}
                     </Link>
@@ -133,7 +132,7 @@ onUnmounted(() => {
                     <a
                         :href="`/${locale}/patient/login`"
                         class="hidden sm:inline-flex items-center gap-1.5 px-4 py-2.5 border-2 text-sm font-semibold rounded-full transition-all duration-300"
-                        :class="isScrolled ? 'border-[var(--brand-primary)] text-[var(--brand-primary)] hover:bg-[var(--brand-primary)] hover:text-white' : 'border-gray-300 text-gray-100 hover:bg-white hover:text-gray-800'"
+                        :class="'border-[var(--brand-primary)] text-[var(--brand-primary)] hover:bg-[var(--brand-primary)] hover:text-white'"
                     >
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -150,8 +149,7 @@ onUnmounted(() => {
                     <!-- Mobile Menu Button -->
                     <button
                         @click="toggleMobileMenu"
-                        class="lg:hidden p-2 rounded-md hover:text-[var(--brand-primary)] transition-colors relative z-50"
-                        :class="isScrolled ? 'text-gray-700 hover:bg-gray-100' : 'text-gray-100 hover:text-white hover:bg-white/10'"
+                        class="lg:hidden p-2 rounded-md text-gray-700 hover:text-[var(--brand-primary)] hover:bg-gray-100 transition-colors relative z-50"
                         :aria-label="t('menu')"
                     >
                         <svg v-if="!mobileMenuOpen" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
