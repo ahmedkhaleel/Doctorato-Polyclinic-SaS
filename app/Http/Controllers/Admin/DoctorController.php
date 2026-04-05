@@ -53,7 +53,7 @@ class DoctorController extends Controller
         return Inertia::render('Admin/Doctors/Index', [
             'doctors' => $doctors,
             'filters' => $request->only(['search', 'module']),
-            'modules' => collect(ModuleManager::getForFrontend())->only(['derma', 'dental'])->all(),
+            'modules' => collect(ModuleManager::getActiveModules())->only(['derma', 'dental'])->all(),
         ]);
     }
 
@@ -70,7 +70,7 @@ class DoctorController extends Controller
                 'dental_consultant_fee' => Setting::get('dental_consultant_fee', 0),
                 'dental_specialist_fee' => Setting::get('dental_specialist_fee', 0),
             ],
-            'modules' => collect(ModuleManager::getForFrontend())->only(['derma', 'dental'])->all(),
+            'modules' => collect(ModuleManager::getActiveModules())->only(['derma', 'dental'])->all(),
         ]);
     }
 
@@ -370,7 +370,7 @@ class DoctorController extends Controller
                 'dental_consultant_fee' => Setting::get('dental_consultant_fee', 0),
                 'dental_specialist_fee' => Setting::get('dental_specialist_fee', 0),
             ],
-            'modules' => collect(ModuleManager::getForFrontend())->only(['derma', 'dental'])->all(),
+            'modules' => collect(ModuleManager::getActiveModules())->only(['derma', 'dental'])->all(),
         ]);
     }
 
