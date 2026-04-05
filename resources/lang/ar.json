@@ -660,6 +660,7 @@
     "a_lead": "عميل محتمل",
     "a_lead_details": "بيانات العميل المحتمل",
     "a_lead_score": "تقييم العميل",
+    "a_lead_status": "حالة العميل المحتمل",
     "a_lead_source": "مصدر العميل",
     "a_convert_to_patient": "تحويل إلى مريض",
     "a_follow_ups": "المتابعات",

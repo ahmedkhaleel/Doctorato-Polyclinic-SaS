@@ -44,11 +44,17 @@ function toggleService(id) {
     else form.interested_services.push(id);
 }
 
-const statusLabels = {
-    new: 'New', contacted: 'Contacted', qualified: 'Qualified',
-    appointment_booked: 'Appt. Booked', consultation_done: 'Consultation',
-    negotiation: 'Negotiation', converted: 'Converted', lost: 'Lost', dormant: 'Dormant',
-};
+const statusLabels = computed(() => ({
+    new: isRtl.value ? 'جديد' : 'New',
+    contacted: isRtl.value ? 'تم التواصل' : 'Contacted',
+    qualified: isRtl.value ? 'مؤهل' : 'Qualified',
+    appointment_booked: isRtl.value ? 'تم الحجز' : 'Appt. Booked',
+    consultation_done: isRtl.value ? 'تم الاستشارة' : 'Consultation',
+    negotiation: isRtl.value ? 'تفاوض' : 'Negotiation',
+    converted: isRtl.value ? 'تم التحويل' : 'Converted',
+    lost: isRtl.value ? 'خسارة' : 'Lost',
+    dormant: isRtl.value ? 'خامل' : 'Dormant',
+}));
 
 const statusColors = {
     new: { bg: 'bg-sky-50', border: 'border-sky-400', ring: 'ring-sky-100', text: 'text-sky-700', dot: 'bg-sky-500' },
@@ -70,12 +76,12 @@ const filteredSources = computed(() => {
     if (!props.sources) return [];
     if (!sourceSearchText.value) return props.sources;
     const q = sourceSearchText.value.toLowerCase();
-    return props.sources.filter(s => s.name_en.toLowerCase().includes(q));
+    return props.sources.filter(s => (s.name_en || '').toLowerCase().includes(q) || (s.name_ar || '').toLowerCase().includes(q));
 });
 const selectedSourceLabel = computed(() => {
     if (!form.lead_source_id) return '';
     const found = props.sources?.find(s => s.id === form.lead_source_id);
-    return found ? found.name_en : '';
+    return found ? (isRtl.value ? found.name_ar || found.name_en : found.name_en) : '';
 });
 function selectSource(s) {
     form.lead_source_id = s.id;
@@ -199,7 +205,7 @@ const notesLength = computed(() => form.notes.length);
                         <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-[#C4A265]/10">
                             <svg class="w-4 h-4 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                         </span>
-                        Lead Status
+                        {{ $t('a_lead_status') }}
                     </h3>
                     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
                         <label
@@ -236,13 +242,13 @@ const notesLength = computed(() => form.notes.length);
                             <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-red-100">
                                 <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
                             </span>
-                            Loss Reason
+                            {{ $t('a_loss_reason') }}
                         </h3>
                         <textarea
                             v-model="form.loss_reason"
                             rows="3"
                             class="w-full px-4 py-3 text-sm border border-red-200 rounded-xl bg-white/70 focus:bg-white focus:ring-2 focus:ring-red-200 focus:border-red-400 transition-all duration-200 resize-none"
-                            placeholder="Why was this lead lost? This information helps improve future conversion rates..."
+                            :placeholder="isRtl ? 'لماذا تم فقدان هذا العميل؟ هذه المعلومات تساعد في تحسين معدلات التحويل...' : 'Why was this lead lost? This information helps improve future conversion rates...'"
                         ></textarea>
                     </div>
                 </Transition>
@@ -256,7 +262,7 @@ const notesLength = computed(() => form.notes.length);
                         <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-[#C4A265]/10">
                             <svg class="w-4 h-4 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                         </span>
-                        Contact Information
+                        {{ $t('a_contact_information') }}
                     </h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                         <!-- Full Name -->
@@ -266,7 +272,7 @@ const notesLength = computed(() => form.notes.length);
                                 <div class="absolute inset-y-0 ltr:left-0 rtl:right-0 flex items-center ltr:pl-3.5 rtl:pr-3.5 pointer-events-none">
                                     <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                                 </div>
-                                <input v-model="form.full_name" type="text" class="w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-3 text-sm border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all duration-200" placeholder="Enter full name" />
+                                <input v-model="form.full_name" type="text" class="w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-3 text-sm border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all duration-200" :placeholder="isRtl ? 'أدخل الاسم الكامل' : 'Enter full name'" />
                             </div>
                             <p v-if="form.errors.full_name" class="text-xs text-red-500 mt-1.5">{{ form.errors.full_name }}</p>
                         </div>
@@ -283,12 +289,12 @@ const notesLength = computed(() => form.notes.length);
                         </div>
                         <!-- Phone 2 -->
                         <div>
-                            <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Phone 2</label>
+                            <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">{{ $t('a_phone2') }}</label>
                             <div class="relative">
                                 <div class="absolute inset-y-0 ltr:left-0 rtl:right-0 flex items-center ltr:pl-3.5 rtl:pr-3.5 pointer-events-none">
                                     <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
                                 </div>
-                                <input v-model="form.phone2" type="text" class="w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-3 text-sm border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all duration-200" placeholder="Alternative phone" />
+                                <input v-model="form.phone2" type="text" class="w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-3 text-sm border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all duration-200" :placeholder="isRtl ? 'هاتف بديل' : 'Alternative phone'" />
                             </div>
                         </div>
                         <!-- Email -->
@@ -336,7 +342,7 @@ const notesLength = computed(() => form.notes.length);
                                 <div class="absolute inset-y-0 ltr:left-0 rtl:right-0 flex items-center ltr:pl-3.5 rtl:pr-3.5 pointer-events-none">
                                     <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                                 </div>
-                                <input v-model="form.city" type="text" class="w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-3 text-sm border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all duration-200" placeholder="City" />
+                                <input v-model="form.city" type="text" class="w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-3 text-sm border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all duration-200" :placeholder="isRtl ? 'المدينة' : 'City'" />
                             </div>
                         </div>
                         <!-- Nationality -->
@@ -346,7 +352,7 @@ const notesLength = computed(() => form.notes.length);
                                 <div class="absolute inset-y-0 ltr:left-0 rtl:right-0 flex items-center ltr:pl-3.5 rtl:pr-3.5 pointer-events-none">
                                     <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                 </div>
-                                <input v-model="form.nationality" type="text" class="w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-3 text-sm border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all duration-200" placeholder="Nationality" />
+                                <input v-model="form.nationality" type="text" class="w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-3 text-sm border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all duration-200" :placeholder="isRtl ? 'الجنسية' : 'Nationality'" />
                             </div>
                         </div>
                     </div>
@@ -361,7 +367,7 @@ const notesLength = computed(() => form.notes.length);
                         <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-[#C4A265]/10">
                             <svg class="w-4 h-4 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z" /></svg>
                         </span>
-                        Lead Details
+                        {{ $t('a_lead_details') }}
                     </h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                         <!-- Source - Searchable Select -->
@@ -383,7 +389,7 @@ const notesLength = computed(() => form.notes.length);
                                         @focus="sourceSearchOpen = true"
                                         type="text"
                                         class="w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-3 text-sm border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all duration-200"
-                                        placeholder="Search source..."
+                                        :placeholder="isRtl ? 'بحث عن المصدر...' : 'Search source...'"
                                     />
                                 </div>
                                 <Transition
@@ -401,7 +407,7 @@ const notesLength = computed(() => form.notes.length);
                                             :key="s.id"
                                             @mousedown.prevent="selectSource(s)"
                                             class="w-full ltr:text-left rtl:text-right px-4 py-2.5 text-sm hover:bg-[#C4A265]/5 hover:text-[#C4A265] transition-colors"
-                                        >{{ s.name_en }}</button>
+                                        >{{ isRtl ? s.name_ar || s.name_en : s.name_en }}</button>
                                         <div v-if="!filteredSources.length" class="px-4 py-3 text-xs text-gray-400">{{ $t('a_no_sources_found') }}</div>
                                     </div>
                                 </Transition>
@@ -427,7 +433,7 @@ const notesLength = computed(() => form.notes.length);
                                         @focus="campaignSearchOpen = true"
                                         type="text"
                                         class="w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-3 text-sm border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all duration-200"
-                                        placeholder="Search campaign..."
+                                        :placeholder="isRtl ? 'بحث عن الحملة...' : 'Search campaign...'"
                                     />
                                 </div>
                                 <Transition
@@ -471,7 +477,7 @@ const notesLength = computed(() => form.notes.length);
                                         @focus="assigneeSearchOpen = true"
                                         type="text"
                                         class="w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-3 text-sm border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all duration-200"
-                                        placeholder="Search assignee..."
+                                        :placeholder="isRtl ? 'بحث عن المسؤول...' : 'Search assignee...'"
                                     />
                                 </div>
                                 <Transition
@@ -502,9 +508,9 @@ const notesLength = computed(() => form.notes.length);
                             <div class="grid grid-cols-3 gap-3">
                                 <label
                                     v-for="(config, val) in {
-                                        '1': { label: 'Hot', color: 'red', icon: 'M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z' },
-                                        '2': { label: 'Warm', color: 'amber', icon: 'M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z' },
-                                        '3': { label: 'Cold', color: 'blue', icon: 'M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z' }
+                                        '1': { label: isRtl ? 'ساخن' : 'Hot', color: 'red', icon: 'M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z' },
+                                        '2': { label: isRtl ? 'دافئ' : 'Warm', color: 'amber', icon: 'M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z' },
+                                        '3': { label: isRtl ? 'بارد' : 'Cold', color: 'blue', icon: 'M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z' }
                                     }"
                                     :key="val"
                                     :class="[
@@ -536,8 +542,8 @@ const notesLength = computed(() => form.notes.length);
                         <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-[#C4A265]/10">
                             <svg class="w-4 h-4 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>
                         </span>
-                        Interested Services
-                        <span v-if="form.interested_services.length" class="ml-auto text-xs font-medium text-[#C4A265] bg-[#C4A265]/10 px-2.5 py-1 rounded-full">{{ form.interested_services.length }} selected</span>
+                        {{ $t('a_interested_services') }}
+                        <span v-if="form.interested_services.length" class="ml-auto text-xs font-medium text-[#C4A265] bg-[#C4A265]/10 px-2.5 py-1 rounded-full">{{ form.interested_services.length }} {{ isRtl ? 'محدد' : 'selected' }}</span>
                     </h3>
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                         <button
@@ -556,7 +562,7 @@ const notesLength = computed(() => form.notes.length);
                             >
                                 <svg v-if="form.interested_services.includes(service.id)" class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg>
                             </div>
-                            <span class="text-sm font-medium" :class="form.interested_services.includes(service.id) ? 'text-[#C4A265]' : 'text-gray-600'">{{ service.name_en }}</span>
+                            <span class="text-sm font-medium" :class="form.interested_services.includes(service.id) ? 'text-[#C4A265]' : 'text-gray-600'">{{ isRtl ? service.name_ar || service.name_en : service.name_en }}</span>
                         </button>
                     </div>
                 </div>
@@ -570,14 +576,14 @@ const notesLength = computed(() => form.notes.length);
                         <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-[#C4A265]/10">
                             <svg class="w-4 h-4 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
                         </span>
-                        Notes
+                        {{ $t('a_notes') }}
                     </h3>
                     <textarea
                         v-model="form.notes"
                         rows="5"
                         :maxlength="notesMaxLength"
                         class="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all duration-200 resize-none"
-                        placeholder="Any additional notes about this lead..."
+                        :placeholder="isRtl ? 'أي ملاحظات إضافية عن هذا العميل المحتمل...' : 'Any additional notes about this lead...'"
                     ></textarea>
                     <div class="flex justify-end mt-2">
                         <span class="text-xs" :class="notesLength > notesMaxLength * 0.9 ? 'text-amber-500' : 'text-gray-400'">{{ notesLength }} / {{ notesMaxLength }}</span>
@@ -591,7 +597,7 @@ const notesLength = computed(() => form.notes.length);
             <div class="backdrop-blur-xl bg-white/80 border-t border-gray-200 shadow-[0_-4px_20px_rgba(0,0,0,0.06)]">
                 <div class="flex items-center justify-between px-6 lg:px-8 py-4 max-w-screen-2xl mx-auto">
                     <div class="flex items-center gap-3">
-                        <span class="text-sm text-gray-500">Editing:</span>
+                        <span class="text-sm text-gray-500">{{ isRtl ? 'تعديل:' : 'Editing:' }}</span>
                         <span class="text-sm font-semibold text-gray-800">{{ lead.full_name }}</span>
                         <span
                             class="text-[10px] px-2 py-0.5 rounded-full font-medium capitalize"
