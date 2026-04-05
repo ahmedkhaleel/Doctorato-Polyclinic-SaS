@@ -61,7 +61,7 @@ class DoctorController extends Controller
     {
         return Inertia::render('Admin/Doctors/Create', [
             'users' => User::select('id', 'name', 'email')->orderBy('name')->get(),
-            'services' => Service::with('category:id,name_en')->select('id', 'name_en', 'name_ar', 'category_id')->active()->bookable()->orderBy('name_en')->get(),
+            'services' => Service::with('category:id,name_en')->select('id', 'name_en', 'name_ar', 'category_id', 'module')->active()->bookable()->orderBy('name_en')->get(),
             'pricingSettings' => [
                 'dermatology_consultant_fee' => Setting::get('dermatology_consultant_fee', 0),
                 'dermatology_specialist_fee' => Setting::get('dermatology_specialist_fee', 0),
@@ -361,7 +361,7 @@ class DoctorController extends Controller
         return Inertia::render('Admin/Doctors/Edit', [
             'doctor' => $doctor,
             'users' => User::select('id', 'name', 'email')->orderBy('name')->get(),
-            'services' => Service::with('category:id,name_en')->select('id', 'name_en', 'name_ar', 'category_id')->active()->bookable()->orderBy('name_en')->get(),
+            'services' => Service::with('category:id,name_en')->select('id', 'name_en', 'name_ar', 'category_id', 'module')->active()->bookable()->orderBy('name_en')->get(),
             'pricingSettings' => [
                 'dermatology_consultant_fee' => Setting::get('dermatology_consultant_fee', 0),
                 'dermatology_specialist_fee' => Setting::get('dermatology_specialist_fee', 0),
