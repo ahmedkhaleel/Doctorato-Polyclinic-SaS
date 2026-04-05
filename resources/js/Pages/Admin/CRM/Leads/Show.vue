@@ -524,6 +524,91 @@ const activityTypeLabels = computed(() => ({
     visit_completed: isRtl.value ? 'زيارة مكتملة' : 'Visit Completed',
     payment_received: isRtl.value ? 'دفعة مستلمة' : 'Payment Received',
 }));
+
+// Translate system-generated activity subjects & descriptions from DB
+function translateSubject(act) {
+    if (!isRtl.value) return act.subject || activityTypeLabels.value[act.type] || act.type?.replace(/_/g, ' ');
+    const s = act.subject || '';
+
+    // Status change: "Status changed from X to Y"
+    const statusMatch = s.match(/^Status changed from (\w+) to (\w+)$/);
+    if (statusMatch) {
+        const from = statusLabels.value[statusMatch[1]] || statusMatch[1];
+        const to = statusLabels.value[statusMatch[2]] || statusMatch[2];
+        return `تم تغيير الحالة من ${from} إلى ${to}`;
+    }
+
+    // Known static subjects
+    const subjectMap = {
+        'Visit completed': 'تمت الزيارة',
+        'Visit cancelled / no-show': 'إلغاء الزيارة / لم يحضر',
+        'Payment received': 'تم استلام دفعة',
+        'Lead auto-created from website booking': 'تم إنشاء العميل تلقائياً من حجز الموقع',
+        'Lead auto-created from website contact form': 'تم إنشاء العميل تلقائياً من نموذج التواصل',
+        'Lead created': 'تم إنشاء العميل المحتمل',
+        'Lead reassigned': 'تم إعادة تعيين العميل',
+        'Lead converted to patient': 'تم تحويل العميل إلى مريض',
+        'Lead merged': 'تم دمج العميل المحتمل',
+        'New contact form submission': 'نموذج تواصل جديد',
+        'Website booking submitted': 'تم تقديم حجز من الموقع',
+        'Booking created': 'تم إنشاء حجز',
+    };
+    if (subjectMap[s]) return subjectMap[s];
+
+    // Follow-up patterns
+    const fuScheduled = s.match(/^Follow-up scheduled: (.+?) at (.+)$/);
+    if (fuScheduled) return `تم جدولة متابعة: ${followUpTypeLabels.value[fuScheduled[1]] || fuScheduled[1]}`;
+    const fuCompleted = s.match(/^Follow-up completed: (.+)$/);
+    if (fuCompleted) return `تم إكمال متابعة: ${followUpTypeLabels.value[fuCompleted[1]] || fuCompleted[1]}`;
+    const fuMissed = s.match(/^Follow-up missed: (.+)$/);
+    if (fuMissed) return `متابعة فائتة: ${followUpTypeLabels.value[fuMissed[1]] || fuMissed[1]}`;
+    const fuRescheduled = s.match(/^Follow-up rescheduled to (.+)$/);
+    if (fuRescheduled) return `تم إعادة جدولة المتابعة إلى ${fuRescheduled[1]}`;
+
+    // Auto-assign
+    if (s.startsWith('Auto-assigned via rule:')) return `تعيين تلقائي عبر قاعدة: ${s.replace('Auto-assigned via rule: ', '')}`;
+    if (s.startsWith('Auto-enrolled in sequence:')) return `تسجيل تلقائي في تسلسل: ${s.replace('Auto-enrolled in sequence: ', '')}`;
+
+    // Auto messages
+    if (s === 'Auto WhatsApp (Sequence)') return 'واتساب تلقائي (تسلسل)';
+    if (s === 'Auto Email (Sequence)') return 'بريد تلقائي (تسلسل)';
+    if (s === 'Auto SMS (Sequence)') return 'رسالة نصية تلقائية (تسلسل)';
+    if (s.startsWith('Sequence step executed:')) return `تنفيذ خطوة تسلسل: ${s.replace('Sequence step executed: ', '')}`;
+    if (s === 'Dormant lead detected') return 'تم اكتشاف عميل خامل';
+
+    // Fallback to type label
+    return activityTypeLabels.value[act.type] || s || act.type?.replace(/_/g, ' ');
+}
+
+function translateDescription(desc) {
+    if (!isRtl.value || !desc) return desc;
+
+    // "Completed: ServiceName"
+    const completedMatch = desc.match(/^Completed: (.+)$/);
+    if (completedMatch) return `مكتمل: ${completedMatch[1]}`;
+
+    // Known descriptions
+    const descMap = {
+        'Visit completed at the clinic': 'تمت الزيارة في العيادة',
+        'Booked via website booking form': 'تم الحجز عبر نموذج الموقع',
+        'Service interest via website booking form': 'اهتمام بخدمة عبر نموذج حجز الموقع',
+        'Patient did not attend or visit was cancelled.': 'لم يحضر المريض أو تم إلغاء الزيارة.',
+    };
+    if (descMap[desc]) return descMap[desc];
+
+    // Amount pattern
+    const amountMatch = desc.match(/^Amount: (.+)$/);
+    if (amountMatch) return `المبلغ: ${amountMatch[1]}`;
+
+    // Subject/Message pattern from contact form
+    const subjMsgMatch = desc.match(/^Subject: (.+)\nMessage: (.+)$/s);
+    if (subjMsgMatch) return `الموضوع: ${subjMsgMatch[1]}\nالرسالة: ${subjMsgMatch[2]}`;
+
+    // Merged description
+    if (desc.startsWith('Merged with lead #')) return desc.replace(/Merged with lead #(\d+) \((.+)\)\. Data absorbed into this lead\./, 'تم الدمج مع العميل #$1 ($2). تم استيعاب البيانات.');
+
+    return desc;
+}
 </script>
 
 <template>
@@ -942,11 +1027,11 @@ const activityTypeLabels = computed(() => ({
                                         <div class="flex-1 min-w-0 pt-1">
                                             <div class="flex items-center justify-between gap-2">
                                                 <p class="text-sm font-semibold text-gray-800">
-                                                    {{ act.subject || activityTypeLabels[act.type] || act.type.replace(/_/g, ' ') }}
+                                                    {{ translateSubject(act) }}
                                                 </p>
                                                 <span class="text-[10px] text-gray-400 whitespace-nowrap bg-gray-100 px-2.5 py-0.5 rounded-full font-medium">{{ timeAgo(act.created_at) }}</span>
                                             </div>
-                                            <p v-if="act.description" class="text-xs text-gray-500 mt-1 leading-relaxed line-clamp-2">{{ act.description }}</p>
+                                            <p v-if="act.description" class="text-xs text-gray-500 mt-1 leading-relaxed line-clamp-2">{{ translateDescription(act.description) }}</p>
                                             <div class="flex items-center gap-2 mt-2 flex-wrap">
                                                 <span v-if="act.direction" class="text-[10px] px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-medium">{{ directionLabels[act.direction] || act.direction }}</span>
                                                 <span v-if="act.outcome" class="text-[10px] px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-medium">{{ outcomeLabels[act.outcome] || act.outcome?.replace(/_/g, ' ') }}</span>
