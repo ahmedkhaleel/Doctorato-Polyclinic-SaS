@@ -463,6 +463,67 @@ const activityTypes = computed(() => [
     { value: 'sms', label: 'SMS', icon: activityTypeIcons.sms },
     { value: 'meeting', label: isRtl.value ? 'اجتماع' : 'Meeting', icon: activityTypeIcons.meeting },
 ]);
+
+// Translation maps for raw DB values
+const directionLabels = computed(() => ({
+    inbound: isRtl.value ? 'وارد' : 'Inbound',
+    outbound: isRtl.value ? 'صادر' : 'Outbound',
+}));
+
+const outcomeLabels = computed(() => ({
+    successful: isRtl.value ? 'ناجح' : 'Successful',
+    no_answer: isRtl.value ? 'لا إجابة' : 'No Answer',
+    busy: isRtl.value ? 'مشغول' : 'Busy',
+    voicemail: isRtl.value ? 'بريد صوتي' : 'Voicemail',
+    callback_requested: isRtl.value ? 'طلب معاودة الاتصال' : 'Callback Requested',
+    not_interested: isRtl.value ? 'غير مهتم' : 'Not Interested',
+}));
+
+const followUpTypeLabels = computed(() => ({
+    call: isRtl.value ? 'مكالمة' : 'Call',
+    whatsapp: 'WhatsApp',
+    email: isRtl.value ? 'بريد إلكتروني' : 'Email',
+    sms: 'SMS',
+    meeting: isRtl.value ? 'اجتماع' : 'Meeting',
+    other: isRtl.value ? 'أخرى' : 'Other',
+}));
+
+const followUpStatusLabels = computed(() => ({
+    pending: isRtl.value ? 'معلّق' : 'Pending',
+    completed: isRtl.value ? 'مكتمل' : 'Completed',
+    missed: isRtl.value ? 'فائت' : 'Missed',
+    cancelled: isRtl.value ? 'ملغي' : 'Cancelled',
+    rescheduled: isRtl.value ? 'أعيد جدولته' : 'Rescheduled',
+}));
+
+const channelLabels = computed(() => ({
+    call: isRtl.value ? 'مكالمة' : 'Call',
+    whatsapp: 'WhatsApp',
+    email: isRtl.value ? 'بريد إلكتروني' : 'Email',
+    sms: 'SMS',
+}));
+
+const genderLabels = computed(() => ({
+    male: isRtl.value ? 'ذكر' : 'Male',
+    female: isRtl.value ? 'أنثى' : 'Female',
+}));
+
+const activityTypeLabels = computed(() => ({
+    note: isRtl.value ? 'ملاحظة' : 'Note',
+    call: isRtl.value ? 'مكالمة' : 'Call',
+    whatsapp: 'WhatsApp',
+    email: isRtl.value ? 'بريد' : 'Email',
+    sms: 'SMS',
+    meeting: isRtl.value ? 'اجتماع' : 'Meeting',
+    status_change: isRtl.value ? 'تغيير حالة' : 'Status Change',
+    assignment: isRtl.value ? 'تعيين' : 'Assignment',
+    system: isRtl.value ? 'نظام' : 'System',
+    follow_up_scheduled: isRtl.value ? 'جدولة متابعة' : 'Follow-up Scheduled',
+    follow_up_completed: isRtl.value ? 'متابعة مكتملة' : 'Follow-up Completed',
+    booking_created: isRtl.value ? 'إنشاء حجز' : 'Booking Created',
+    visit_completed: isRtl.value ? 'زيارة مكتملة' : 'Visit Completed',
+    payment_received: isRtl.value ? 'دفعة مستلمة' : 'Payment Received',
+}));
 </script>
 
 <template>
@@ -881,14 +942,14 @@ const activityTypes = computed(() => [
                                         <div class="flex-1 min-w-0 pt-1">
                                             <div class="flex items-center justify-between gap-2">
                                                 <p class="text-sm font-semibold text-gray-800">
-                                                    {{ act.subject || act.type.replace(/_/g, ' ') }}
+                                                    {{ act.subject || activityTypeLabels[act.type] || act.type.replace(/_/g, ' ') }}
                                                 </p>
                                                 <span class="text-[10px] text-gray-400 whitespace-nowrap bg-gray-100 px-2.5 py-0.5 rounded-full font-medium">{{ timeAgo(act.created_at) }}</span>
                                             </div>
                                             <p v-if="act.description" class="text-xs text-gray-500 mt-1 leading-relaxed line-clamp-2">{{ act.description }}</p>
                                             <div class="flex items-center gap-2 mt-2 flex-wrap">
-                                                <span v-if="act.direction" class="text-[10px] px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 capitalize font-medium">{{ act.direction }}</span>
-                                                <span v-if="act.outcome" class="text-[10px] px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 capitalize font-medium">{{ act.outcome?.replace(/_/g, ' ') }}</span>
+                                                <span v-if="act.direction" class="text-[10px] px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-medium">{{ directionLabels[act.direction] || act.direction }}</span>
+                                                <span v-if="act.outcome" class="text-[10px] px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-medium">{{ outcomeLabels[act.outcome] || act.outcome?.replace(/_/g, ' ') }}</span>
                                                 <span v-if="act.performer" class="text-[10px] text-gray-400 flex items-center gap-1">
                                                     <span class="w-4 h-4 rounded-full flex items-center justify-center text-[7px] font-bold text-white" style="background: linear-gradient(135deg, #C4A265, #D4B87A);">{{ getInitials(act.performer.name) }}</span>
                                                     {{ act.performer.name }}
@@ -1010,15 +1071,15 @@ const activityTypes = computed(() => [
                                         </div>
                                         <div class="flex-1 min-w-0">
                                             <div class="flex items-center gap-2 flex-wrap">
-                                                <span class="text-sm font-bold text-gray-800 capitalize">{{ fu.type }}</span>
-                                                <span class="text-[10px] px-2.5 py-0.5 rounded-full capitalize font-semibold ring-1 ring-inset"
+                                                <span class="text-sm font-bold text-gray-800">{{ followUpTypeLabels[fu.type] || fu.type }}</span>
+                                                <span class="text-[10px] px-2.5 py-0.5 rounded-full font-semibold ring-1 ring-inset"
                                                     :class="{
                                                         'bg-amber-100 text-amber-700 ring-amber-600/10': fu.status === 'pending',
                                                         'bg-green-100 text-green-700 ring-green-600/10': fu.status === 'completed',
                                                         'bg-red-100 text-red-700 ring-red-600/10': fu.status === 'missed',
                                                         'bg-gray-100 text-gray-600 ring-gray-500/10': fu.status === 'cancelled' || fu.status === 'rescheduled',
                                                     }"
-                                                >{{ fu.status }}</span>
+                                                >{{ followUpStatusLabels[fu.status] || fu.status }}</span>
                                                 <span v-if="fu.status === 'pending' && new Date(fu.scheduled_at) < new Date()" class="text-[10px] px-2.5 py-0.5 rounded-full bg-red-100 text-red-700 font-semibold ring-1 ring-inset ring-red-600/10 animate-pulse">{{ $t('a_overdue') }}</span>
                                             </div>
                                             <p class="text-xs text-gray-500 mt-1.5 flex items-center gap-1.5">
@@ -1200,7 +1261,7 @@ const activityTypes = computed(() => [
                                     </div>
                                     <div>
                                         <p class="text-[10px] text-gray-400 font-medium">{{ $t('a_preferred_channel') }}</p>
-                                        <p class="text-xs font-semibold text-gray-700 capitalize">{{ smartContact.preferred_channel }}</p>
+                                        <p class="text-xs font-semibold text-gray-700">{{ channelLabels[smartContact.preferred_channel] || smartContact.preferred_channel }}</p>
                                     </div>
                                 </div>
 
@@ -1266,7 +1327,7 @@ const activityTypes = computed(() => [
                                     </div>
                                     <div class="flex-1 min-w-0">
                                         <p class="text-[10px] text-gray-400 font-medium uppercase tracking-wider">{{ $t('a_gender') }}</p>
-                                        <p class="text-sm font-medium text-gray-800 capitalize">{{ lead.gender || '--' }}</p>
+                                        <p class="text-sm font-medium text-gray-800">{{ genderLabels[lead.gender] || lead.gender || '--' }}</p>
                                     </div>
                                 </div>
                                 <div class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-gray-50 transition-all duration-200 -mx-2.5">
