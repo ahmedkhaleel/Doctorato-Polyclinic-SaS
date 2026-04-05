@@ -7,6 +7,10 @@ defineOptions({ layout: SecretaryLayout });
 
 const page = usePage();
 const isRtl = computed(() => (page.props.dir || 'rtl') === 'rtl');
+const isDentalEnabled = computed(() => {
+    const modules = page.props.modules || {};
+    return modules.dental?.enabled || modules.dental?.is_core;
+});
 
 const props = defineProps({
     visitsByDoctor: Object,
@@ -261,8 +265,8 @@ function refreshQueue() {
             </div>
         </div>
 
-        <!-- Module Filter -->
-        <div class="flex items-center gap-2 flex-wrap">
+        <!-- Module Filter (only show if both modules are enabled) -->
+        <div v-if="isDentalEnabled" class="flex items-center gap-2 flex-wrap">
             <span class="text-xs font-medium text-gray-500 ltr:mr-1 rtl:ml-1">{{ isRtl ? 'القسم:' : 'Module:' }}</span>
             <button
                 @click="moduleFilter = 'all'"
