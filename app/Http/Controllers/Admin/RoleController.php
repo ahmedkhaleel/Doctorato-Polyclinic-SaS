@@ -25,6 +25,7 @@ class RoleController extends Controller
     {
         return Inertia::render('Admin/Roles/Create', [
             'availablePermissions' => config('permissions.modules'),
+            'permissionGroups' => config('permissions.groups'),
         ]);
     }
 
@@ -58,6 +59,7 @@ class RoleController extends Controller
         return Inertia::render('Admin/Roles/Edit', [
             'role' => $role,
             'availablePermissions' => config('permissions.modules'),
+            'permissionGroups' => config('permissions.groups'),
         ]);
     }
 
