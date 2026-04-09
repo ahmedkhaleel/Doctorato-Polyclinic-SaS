@@ -140,6 +140,63 @@ class RoleSeeder extends Seeder
             ]
         );
 
+        // Administrative Manager - view-only access to all secretary & admin data
+        Role::updateOrCreate(
+            ['name' => 'admin_manager'],
+            [
+                'display_name_en' => 'Administrative Manager',
+                'display_name_ar' => 'المدير الإداري',
+                'permissions' => [
+                    // Patients & Clinic
+                    'patients.view',
+                    'visits.view',
+                    'bookings.view',
+                    'prescriptions.view',
+                    'medications.view',
+                    // Finance
+                    'invoices.view',
+                    'payments.view',
+                    'expenses.view',
+                    'discount_codes.view',
+                    'doctor_payouts.view',
+                    'package_bundles.view',
+                    'package_bundle_bookings.view',
+                    // HR
+                    'departments.view',
+                    'employees.view',
+                    'shifts.view',
+                    'attendances.view',
+                    'leaves.view',
+                    'salary_slips.view',
+                    'advances.view',
+                    'penalties.view',
+                    // Content
+                    'services.view',
+                    'service_categories.view',
+                    'doctors.view',
+                    'gallery.view',
+                    'testimonials.view',
+                    'faqs.view',
+                    'pages.view',
+                    'posts.view',
+                    'post_categories.view',
+                    'tags.view',
+                    // CRM
+                    'leads.view',
+                    'lead_sources.view',
+                    'crm_campaigns.view',
+                    'communication_templates.view',
+                    'marketer_commissions.view',
+                    // Other
+                    'contact_messages.view',
+                    'reports.view',
+                    'users.view',
+                    'roles.view',
+                    'settings.view',
+                ],
+            ]
+        );
+
         // Webmaster - website content management (separate panel)
         Role::updateOrCreate(
             ['name' => 'webmaster'],
