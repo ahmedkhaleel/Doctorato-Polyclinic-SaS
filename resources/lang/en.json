@@ -978,6 +978,8 @@
     "a_friday": "Friday",
     "a_login_title": "Admin Login",
     "a_login_email": "Email Address",
+    "a_login_username_or_email": "Username or Email",
+    "a_login_username_or_email_placeholder": "Enter username or email",
     "a_login_password": "Password",
     "a_login_remember": "Remember Me",
     "a_login_button": "Sign In",

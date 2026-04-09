@@ -108,6 +108,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/login', [AuthController::class, 'showLogin'])->name('admin.login');
 Route::post('/login', [AuthController::class, 'login'])->name('admin.authenticate')->middleware('throttle:5,1');
 Route::post('/logout', [AuthController::class, 'logout'])->name('admin.logout');
+Route::post('/switch-locale-public', [AuthController::class, 'switchLocale'])->name('admin.switchLocalePublic');
 
 // Protected admin routes (requires authentication + active account)
 Route::middleware('admin.auth')->group(function () {

@@ -98,4 +98,12 @@ class AuthController extends Controller
 
         return redirect()->route('admin.login');
     }
+
+    public function switchLocale(Request $request): RedirectResponse
+    {
+        $locale = $request->input('locale', 'ar');
+        session()->put('admin_locale', in_array($locale, ['ar', 'en']) ? $locale : 'ar');
+
+        return redirect()->back();
+    }
 }

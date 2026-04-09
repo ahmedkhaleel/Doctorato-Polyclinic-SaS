@@ -978,6 +978,8 @@
     "a_friday": "الجمعة",
     "a_login_title": "تسجيل دخول الإدارة",
     "a_login_email": "البريد الإلكتروني",
+    "a_login_username_or_email": "اسم المستخدم أو البريد الإلكتروني",
+    "a_login_username_or_email_placeholder": "أدخل اسم المستخدم أو البريد الإلكتروني",
     "a_login_password": "كلمة المرور",
     "a_login_remember": "تذكرني",
     "a_login_button": "تسجيل الدخول",
