@@ -600,6 +600,8 @@
     "a_new_patient": "مريض جديد",
     "a_edit_patient": "تعديل بيانات المريض",
     "a_full_name": "الاسم الكامل",
+    "a_username": "اسم المستخدم",
+    "a_enter_username": "أدخل اسم المستخدم",
     "a_date_of_birth": "تاريخ الميلاد",
     "a_age": "العمر",
     "a_gender": "الجنس",

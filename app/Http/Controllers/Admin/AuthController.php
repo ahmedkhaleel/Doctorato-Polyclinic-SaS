@@ -26,19 +26,26 @@ class AuthController extends Controller
 
     public function login(Request $request): RedirectResponse
     {
-        $credentials = $request->validate([
-            'email' => 'required|email',
+        $request->validate([
+            'login' => 'required|string',
             'password' => 'required|string',
         ]);
 
-        $key = Str::lower($request->input('email')).'|'.$request->ip();
+        $login = $request->input('login');
+        $field = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+        $credentials = [
+            $field => $login,
+            'password' => $request->input('password'),
+        ];
+
+        $key = Str::lower($login).'|'.$request->ip();
 
         if (RateLimiter::tooManyAttempts($key, 5)) {
             $seconds = RateLimiter::availableIn($key);
 
             return back()->withErrors([
-                'email' => "Too many login attempts. Please try again in {$seconds} seconds.",
-            ])->onlyInput('email');
+                'login' => "Too many login attempts. Please try again in {$seconds} seconds.",
+            ])->onlyInput('login');
         }
 
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
@@ -66,18 +73,18 @@ class AuthController extends Controller
                     ->with('error', 'You do not have access to the admin panel. Please use your designated panel.');
             }
 
-            AuditLogger::authEvent('login', $request->input('email'), 'admin');
+            AuditLogger::authEvent('login', $login, 'admin');
 
             return redirect()->intended(route('admin.dashboard'));
         }
 
         RateLimiter::hit($key, 60);
 
-        AuditLogger::authEvent('failed_login', $request->input('email'), 'admin');
+        AuditLogger::authEvent('failed_login', $login, 'admin');
 
         return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ])->onlyInput('email');
+            'login' => 'The provided credentials do not match our records.',
+        ])->onlyInput('login');
     }
 
     public function logout(Request $request): RedirectResponse

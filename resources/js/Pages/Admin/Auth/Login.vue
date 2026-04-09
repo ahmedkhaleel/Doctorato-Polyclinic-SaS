@@ -7,7 +7,7 @@ const locale = computed(() => page.props.locale || 'ar');
 const isRtl = computed(() => (page.props.dir || 'rtl') === 'rtl');
 
 const form = useForm({
-    email: '',
+    login: '',
     password: '',
     remember: false,
 });
@@ -31,28 +31,35 @@ function submit() {
 
             <!-- Login Card -->
             <div class="bg-white rounded-lg shadow-xl p-8">
-                <h2 class="text-xl font-semibold text-gray-800 mb-6 text-center">{{ $t('a_login_title') }}</h2>
+                <h2 class="text-xl font-semibold text-gray-800 mb-1 text-center">Admin Login</h2>
+                <p class="text-sm text-gray-500 mb-6 text-center">تسجيل دخول الإدارة</p>
 
                 <form @submit.prevent="submit" class="space-y-5">
-                    <!-- Email -->
+                    <!-- Username / Email -->
                     <div>
-                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_login_email') }}</label>
+                        <label for="login" class="block text-sm font-medium text-gray-700 mb-1">
+                            Username or Email
+                            <span class="text-gray-400 font-normal">/ اسم المستخدم أو البريد الإلكتروني</span>
+                        </label>
                         <input
-                            id="email"
-                            v-model="form.email"
-                            type="email"
+                            id="login"
+                            v-model="form.login"
+                            type="text"
                             required
                             autofocus
                             class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent text-sm transition"
-                            :class="form.errors.email ? 'border-red-500 focus:ring-red-200' : 'focus:ring-yellow-200'"
-                            placeholder="admin@aura-derma.com"
+                            :class="form.errors.login ? 'border-red-500 focus:ring-red-200' : 'focus:ring-yellow-200'"
+                            placeholder="admin@aura-derma.com or username"
                         />
-                        <p v-if="form.errors.email" class="mt-1 text-sm text-red-600">{{ form.errors.email }}</p>
+                        <p v-if="form.errors.login" class="mt-1 text-sm text-red-600">{{ form.errors.login }}</p>
                     </div>
 
                     <!-- Password -->
                     <div>
-                        <label for="password" class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_login_password') }}</label>
+                        <label for="password" class="block text-sm font-medium text-gray-700 mb-1">
+                            Password
+                            <span class="text-gray-400 font-normal">/ كلمة المرور</span>
+                        </label>
                         <input
                             id="password"
                             v-model="form.password"
@@ -60,7 +67,7 @@ function submit() {
                             required
                             class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent text-sm transition"
                             :class="form.errors.password ? 'border-red-500 focus:ring-red-200' : 'focus:ring-yellow-200'"
-                            :placeholder="$t('a_enter_password')"
+                            placeholder="Enter your password / أدخل كلمة المرور"
                         />
                         <p v-if="form.errors.password" class="mt-1 text-sm text-red-600">{{ form.errors.password }}</p>
                     </div>
@@ -74,7 +81,7 @@ function submit() {
                             class="h-4 w-4 rounded border-gray-300 focus:ring-2"
                             style="color: #C4A265;"
                         />
-                        <label for="remember" class="ml-2 text-sm text-gray-600">{{ $t('a_login_remember') }}</label>
+                        <label for="remember" class="ml-2 text-sm text-gray-600">Remember Me / تذكرني</label>
                     </div>
 
                     <!-- Submit -->
@@ -86,8 +93,8 @@ function submit() {
                         @mouseover="$event.target.style.backgroundColor='#A68B52'"
                         @mouseleave="$event.target.style.backgroundColor='#C4A265'"
                     >
-                        <span v-if="form.processing">{{ $t('a_signing_in') }}</span>
-                        <span v-else>{{ $t('a_login_button') }}</span>
+                        <span v-if="form.processing">Signing in... / جارٍ تسجيل الدخول...</span>
+                        <span v-else>Sign In / تسجيل الدخول</span>
                     </button>
 
                     <!-- General error -->
