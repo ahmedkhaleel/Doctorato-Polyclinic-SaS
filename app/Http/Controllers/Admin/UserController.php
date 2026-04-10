@@ -52,11 +52,21 @@ class UserController extends Controller
             'is_active' => 'boolean',
         ]);
 
+        $plainPassword = $data['password'];
         $user = User::create($data);
 
         AuditLogger::log('created', $user);
 
-        return redirect()->route('admin.users.index')->with('success', 'User created successfully.');
+        return redirect()->route('admin.users.index')->with([
+            'success' => 'User created successfully.',
+            'credentials' => [
+                'name' => $user->name,
+                'username' => $user->username,
+                'email' => $user->email,
+                'password' => $plainPassword,
+                'login_url' => url('/admin/login'),
+            ],
+        ]);
     }
 
     public function edit(User $user): Response
@@ -86,6 +96,8 @@ class UserController extends Controller
             'is_active' => 'boolean',
         ]);
 
+        $plainPassword = $data['password'] ?? null;
+
         if (empty($data['password'])) {
             unset($data['password']);
         }
@@ -94,7 +106,21 @@ class UserController extends Controller
 
         AuditLogger::log('updated', $user);
 
-        return redirect()->route('admin.users.index')->with('success', 'User updated successfully.');
+        $flashData = ['success' => 'User updated successfully.'];
+
+        // Flash updated credentials if password was changed or email/username updated
+        $updatedCredentials = [
+            'name' => $user->name,
+            'username' => $user->username,
+            'email' => $user->email,
+            'login_url' => url('/admin/login'),
+        ];
+        if ($plainPassword) {
+            $updatedCredentials['password'] = $plainPassword;
+        }
+        $flashData['credentials'] = $updatedCredentials;
+
+        return redirect()->route('admin.users.index')->with($flashData);
     }
 
     public function destroy(User $user): RedirectResponse

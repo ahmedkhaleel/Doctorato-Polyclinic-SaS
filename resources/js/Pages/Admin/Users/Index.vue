@@ -85,7 +85,38 @@ function getAvatarGradient(id) {
     return avatarGradients[(id - 1) % avatarGradients.length];
 }
 
-onMounted(() => { setTimeout(() => { mounted.value = true; }, 50); });
+/* ── Credentials Popup ────────────────────────────── */
+const showCredentials = ref(false);
+const credentials = ref(null);
+const copiedField = ref('');
+
+onMounted(() => {
+    setTimeout(() => { mounted.value = true; }, 50);
+
+    // Check for flashed credentials
+    const flash = page.props.flash;
+    if (flash?.credentials) {
+        credentials.value = flash.credentials;
+        showCredentials.value = true;
+    }
+});
+
+function copyToClipboard(text, field) {
+    navigator.clipboard.writeText(text).then(() => {
+        copiedField.value = field;
+        setTimeout(() => { copiedField.value = ''; }, 2000);
+    });
+}
+
+function copyAllCredentials() {
+    if (!credentials.value) return;
+    const lines = [];
+    lines.push(`Login URL: ${credentials.value.login_url}`);
+    if (credentials.value.username) lines.push(`Username: ${credentials.value.username}`);
+    lines.push(`Email: ${credentials.value.email}`);
+    if (credentials.value.password) lines.push(`Password: ${credentials.value.password}`);
+    copyToClipboard(lines.join('\n'), 'all');
+}
 </script>
 
 <template>
@@ -365,6 +396,137 @@ onMounted(() => { setTimeout(() => { mounted.value = true; }, 50); });
                 </nav>
             </div>
         </div>
+
+        <!-- ============ CREDENTIALS POPUP ============ -->
+        <Teleport to="body">
+            <Transition
+                enter-active-class="transition duration-300 ease-out"
+                enter-from-class="opacity-0"
+                enter-to-class="opacity-100"
+                leave-active-class="transition duration-200 ease-in"
+                leave-from-class="opacity-100"
+                leave-to-class="opacity-0"
+            >
+                <div v-if="showCredentials && credentials" class="fixed inset-0 z-[9999] flex items-center justify-center p-4" @click.self="showCredentials = false">
+                    <div class="fixed inset-0 bg-black/50 backdrop-blur-sm"></div>
+                    <Transition
+                        enter-active-class="transition duration-300 ease-out"
+                        enter-from-class="opacity-0 scale-95 translate-y-4"
+                        enter-to-class="opacity-100 scale-100 translate-y-0"
+                        leave-active-class="transition duration-200 ease-in"
+                        leave-from-class="opacity-100 scale-100 translate-y-0"
+                        leave-to-class="opacity-0 scale-95 translate-y-4"
+                    >
+                        <div v-if="showCredentials" class="relative bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden" @click.stop>
+                            <!-- Header -->
+                            <div class="bg-gradient-to-br from-emerald-500 to-teal-600 px-6 py-5 text-white relative overflow-hidden">
+                                <div class="absolute inset-0 opacity-10">
+                                    <svg class="w-full h-full" viewBox="0 0 400 200"><defs><pattern id="credDots" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="15" cy="15" r="1.5" fill="white" /></pattern></defs><rect fill="url(#credDots)" width="400" height="200" /></svg>
+                                </div>
+                                <div class="relative flex items-center gap-3">
+                                    <div class="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-lg font-bold">{{ credentials.password ? (isRtl ? 'بيانات الدخول' : 'Login Credentials') : (isRtl ? 'بيانات المستخدم المحدثة' : 'Updated User Info') }}</h3>
+                                        <p class="text-sm text-white/80">{{ credentials.name }}</p>
+                                    </div>
+                                </div>
+                                <button @click="showCredentials = false" class="absolute top-4 end-4 w-8 h-8 rounded-xl bg-white/20 hover:bg-white/30 flex items-center justify-center transition">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                                </button>
+                            </div>
+
+                            <!-- Credential Fields -->
+                            <div class="p-6 space-y-3">
+                                <!-- Login URL -->
+                                <div class="group flex items-center gap-3 p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer" @click="copyToClipboard(credentials.login_url, 'url')">
+                                    <div class="w-9 h-9 rounded-lg bg-blue-100 flex items-center justify-center flex-shrink-0">
+                                        <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">{{ isRtl ? 'رابط الدخول' : 'Login URL' }}</p>
+                                        <p class="text-sm font-mono text-gray-800 truncate" dir="ltr">{{ credentials.login_url }}</p>
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        <span v-if="copiedField === 'url'" class="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">{{ isRtl ? 'تم النسخ' : 'Copied!' }}</span>
+                                        <svg v-else class="w-4 h-4 text-gray-400 group-hover:text-[#C4A265] transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                                    </div>
+                                </div>
+
+                                <!-- Username -->
+                                <div v-if="credentials.username" class="group flex items-center gap-3 p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer" @click="copyToClipboard(credentials.username, 'username')">
+                                    <div class="w-9 h-9 rounded-lg bg-purple-100 flex items-center justify-center flex-shrink-0">
+                                        <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">{{ isRtl ? 'اسم المستخدم' : 'Username' }}</p>
+                                        <p class="text-sm font-semibold text-gray-800" dir="ltr">{{ credentials.username }}</p>
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        <span v-if="copiedField === 'username'" class="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">{{ isRtl ? 'تم النسخ' : 'Copied!' }}</span>
+                                        <svg v-else class="w-4 h-4 text-gray-400 group-hover:text-[#C4A265] transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                                    </div>
+                                </div>
+
+                                <!-- Email -->
+                                <div class="group flex items-center gap-3 p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer" @click="copyToClipboard(credentials.email, 'email')">
+                                    <div class="w-9 h-9 rounded-lg bg-amber-100 flex items-center justify-center flex-shrink-0">
+                                        <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">{{ isRtl ? 'البريد الإلكتروني' : 'Email' }}</p>
+                                        <p class="text-sm font-semibold text-gray-800" dir="ltr">{{ credentials.email }}</p>
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        <span v-if="copiedField === 'email'" class="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">{{ isRtl ? 'تم النسخ' : 'Copied!' }}</span>
+                                        <svg v-else class="w-4 h-4 text-gray-400 group-hover:text-[#C4A265] transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                                    </div>
+                                </div>
+
+                                <!-- Password -->
+                                <div v-if="credentials.password" class="group flex items-center gap-3 p-3 rounded-xl bg-red-50/50 hover:bg-red-50 border border-red-100 transition-colors cursor-pointer" @click="copyToClipboard(credentials.password, 'password')">
+                                    <div class="w-9 h-9 rounded-lg bg-red-100 flex items-center justify-center flex-shrink-0">
+                                        <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" /></svg>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-[10px] font-semibold text-red-400 uppercase tracking-wider">{{ isRtl ? 'كلمة المرور' : 'Password' }}</p>
+                                        <p class="text-sm font-bold text-red-700 font-mono" dir="ltr">{{ credentials.password }}</p>
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        <span v-if="copiedField === 'password'" class="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">{{ isRtl ? 'تم النسخ' : 'Copied!' }}</span>
+                                        <svg v-else class="w-4 h-4 text-gray-400 group-hover:text-red-500 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                                    </div>
+                                </div>
+
+                                <!-- Warning -->
+                                <div v-if="credentials.password" class="flex items-start gap-2 p-3 rounded-xl bg-amber-50 border border-amber-100">
+                                    <svg class="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" /></svg>
+                                    <p class="text-[11px] text-amber-700 leading-relaxed">
+                                        {{ isRtl ? 'احفظ هذه البيانات في مكان آمن. لن تتمكن من رؤية كلمة المرور مرة أخرى.' : 'Save these credentials securely. You won\'t be able to see the password again.' }}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Footer -->
+                            <div class="px-6 pb-5 flex gap-3">
+                                <button @click="copyAllCredentials"
+                                    class="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-white transition-all duration-200 hover:shadow-lg"
+                                    style="background: linear-gradient(135deg, #C4A265, #a8884f);">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                                    {{ copiedField === 'all' ? (isRtl ? 'تم نسخ الكل!' : 'All Copied!') : (isRtl ? 'نسخ الكل' : 'Copy All') }}
+                                </button>
+                                <button @click="showCredentials = false"
+                                    class="px-5 py-2.5 rounded-xl text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 transition-colors">
+                                    {{ isRtl ? 'إغلاق' : 'Close' }}
+                                </button>
+                            </div>
+                        </div>
+                    </Transition>
+                </div>
+            </Transition>
+        </Teleport>
+
     </AdminLayout>
 </template>
 

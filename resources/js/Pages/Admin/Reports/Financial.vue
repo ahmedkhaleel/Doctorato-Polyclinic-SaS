@@ -29,9 +29,11 @@ const dateFrom = ref(props.filters?.date_from || '');
 const dateTo = ref(props.filters?.date_to || '');
 const moduleFilter = ref(props.filters?.module || '');
 
+// Only show medical modules (derma, dental) - not hr, inventory, insurance
+const medicalSlugs = ['derma', 'dental'];
 const activeModules = computed(() => {
     if (!props.modules) return [];
-    return Object.values(props.modules).filter(m => m.enabled);
+    return Object.values(props.modules).filter(m => m.enabled && medicalSlugs.includes(m.slug));
 });
 
 function applyFilters() {
