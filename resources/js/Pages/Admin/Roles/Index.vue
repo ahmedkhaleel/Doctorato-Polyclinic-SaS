@@ -35,7 +35,7 @@ const filteredRoles = computed(() => {
 const systemRoles = computed(() => filteredRoles.value.filter(r => r.is_system));
 const customRoles = computed(() => filteredRoles.value.filter(r => !r.is_system));
 
-const totalUsers = computed(() => (props.roles || []).reduce((s, r) => s + (r.users_count || 0), 0));
+const totalUsers = computed(() => (props.roles || []).reduce((s, r) => s + (parseInt(r.users_count) || 0), 0));
 const totalPerms = computed(() => {
     const custom = (props.roles || []).filter(r => !r.is_system);
     if (!custom.length) return 0;
