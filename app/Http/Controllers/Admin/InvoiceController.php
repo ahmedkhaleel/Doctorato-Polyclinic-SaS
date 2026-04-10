@@ -65,7 +65,10 @@ class InvoiceController extends Controller
             'patients' => Patient::where('is_active', true)->select('id', 'full_name', 'phone', 'file_number')
                 ->with(['activeInsurance' => fn ($q) => $q->with(['company:id,name_ar,name_en', 'plan:id,name_ar,name_en,coverage_percentage,copay_amount'])])
                 ->get(),
-            'services' => Service::active()->select('id', 'name_ar', 'name_en', 'price', 'price_after_discount', 'module')->get(),
+            'services' => Service::active()
+                ->whereIn('module', ['derma', 'dental'])
+                ->select('id', 'name_ar', 'name_en', 'price', 'price_after_discount', 'module')
+                ->get(),
         ]);
     }
 
