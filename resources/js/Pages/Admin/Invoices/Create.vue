@@ -29,7 +29,7 @@ const medicalSlugs = ['derma', 'dental'];
 const selectedModule = ref('');
 const activeModules = computed(() => {
     return Object.entries(modules.value)
-        .filter(([slug, m]) => medicalSlugs.includes(slug) && m.is_enabled !== false)
+        .filter(([slug, m]) => medicalSlugs.includes(slug) && m.enabled === true)
         .map(([slug, m]) => ({
             slug,
             name: isRtl.value ? m.name_ar : m.name_en,

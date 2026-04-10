@@ -8,6 +8,7 @@ use App\Models\Invoice;
 use App\Models\InvoiceItem;
 use App\Models\Patient;
 use App\Models\Payment;
+use App\Services\ModuleManager;
 use App\Models\PaymentMethod;
 use App\Models\Service;
 use App\Services\AuditLogger;
@@ -66,7 +67,7 @@ class InvoiceController extends Controller
                 ->with(['activeInsurance' => fn ($q) => $q->with(['company:id,name_ar,name_en', 'plan:id,name_ar,name_en,coverage_percentage,copay_amount'])])
                 ->get(),
             'services' => Service::active()
-                ->whereIn('module', ['derma', 'dental'])
+                ->whereIn('module', collect(['derma', 'dental'])->filter(fn ($slug) => ModuleManager::isEnabled($slug))->values()->toArray())
                 ->select('id', 'name_ar', 'name_en', 'price', 'price_after_discount', 'module')
                 ->get(),
         ]);
