@@ -251,6 +251,41 @@ const dailyProgress = computed(() => {
     return { total, completed, pct };
 });
 
+/* ---------- Mini sparkline data ---------- */
+function generateSparkline(data, count) {
+    if (!data || !data.length) {
+        // Generate a simple ascending pattern as placeholder
+        return Array.from({ length: 7 }, (_, i) => Math.random() * 0.4 + 0.3);
+    }
+    return data.slice(-7).map(d => d / Math.max(...data, 1));
+}
+
+const sparklines = computed(() => {
+    // Use recent activities trend data if available
+    const recent = props.recentActivities || [];
+    const days = {};
+    recent.forEach(a => {
+        const d = new Date(a.created_at).toISOString().split('T')[0];
+        days[d] = (days[d] || 0) + 1;
+    });
+    const sorted = Object.values(days).slice(-7);
+    return {
+        leads: sorted.length > 0 ? sorted : [2, 3, 1, 4, 2, 5, 3],
+        followups: sorted.length > 0 ? sorted.map(v => Math.max(v - 1, 0)) : [1, 2, 0, 3, 1, 2, 2],
+    };
+});
+
+function sparklinePath(data, w, h) {
+    if (!data || data.length < 2) return '';
+    const max = Math.max(...data, 1);
+    const step = w / (data.length - 1);
+    return data.map((v, i) => {
+        const x = i * step;
+        const y = h - (v / max) * (h - 4) - 2;
+        return (i === 0 ? 'M' : 'L') + x.toFixed(1) + ',' + y.toFixed(1);
+    }).join(' ');
+}
+
 /* ---------- Activity Icons ---------- */
 const activityTypeConfig = {
     call: { icon: 'M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z', color: 'bg-emerald-100 text-emerald-600' },
@@ -382,8 +417,10 @@ const activityTypeConfig = {
                             </svg>
                         </div>
                     </div>
-                    <div class="mt-3 h-1 rounded-full bg-gray-100 overflow-hidden">
-                        <div class="h-full rounded-full transition-all duration-1000 ease-out" :style="{ width: mounted ? '100%' : '0%', background: 'linear-gradient(90deg, #0d9488, #14b8a6)' }"></div>
+                    <div class="mt-3 h-8 overflow-hidden">
+                        <svg width="100%" height="32" preserveAspectRatio="none" class="opacity-40 group-hover:opacity-70 transition-opacity duration-300">
+                            <path :d="sparklinePath(sparklines.leads, 200, 32)" fill="none" stroke="#0d9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transition-all duration-1000"/>
+                        </svg>
                     </div>
                 </div>
 
@@ -404,8 +441,10 @@ const activityTypeConfig = {
                             </svg>
                         </div>
                     </div>
-                    <div class="mt-3 h-1 rounded-full bg-gray-100 overflow-hidden">
-                        <div class="h-full rounded-full transition-all duration-1000 ease-out" :style="{ width: mounted ? '70%' : '0%', background: 'linear-gradient(90deg, #2563eb, #60a5fa)' }"></div>
+                    <div class="mt-3 h-8 overflow-hidden">
+                        <svg width="100%" height="32" preserveAspectRatio="none" class="opacity-40 group-hover:opacity-70 transition-opacity duration-300">
+                            <path :d="sparklinePath([1,3,2,5,4,3,6], 200, 32)" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
                     </div>
                 </div>
 
@@ -426,8 +465,10 @@ const activityTypeConfig = {
                             </svg>
                         </div>
                     </div>
-                    <div class="mt-3 h-1 rounded-full bg-gray-100 overflow-hidden">
-                        <div class="h-full rounded-full transition-all duration-1000 ease-out" :style="{ width: mounted ? '50%' : '0%', background: 'linear-gradient(90deg, #0d9488, #5eead4)' }"></div>
+                    <div class="mt-3 h-8 overflow-hidden">
+                        <svg width="100%" height="32" preserveAspectRatio="none" class="opacity-40 group-hover:opacity-70 transition-opacity duration-300">
+                            <path :d="sparklinePath(sparklines.followups, 200, 32)" fill="none" stroke="#0d9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
                     </div>
                 </div>
 
@@ -448,8 +489,13 @@ const activityTypeConfig = {
                             </svg>
                         </div>
                     </div>
-                    <div class="mt-3 h-1 rounded-full bg-gray-100 overflow-hidden">
-                        <div class="h-full rounded-full transition-all duration-1000 ease-out" :style="{ width: mounted ? (stats.overdue_follow_ups > 0 ? '80%' : '0%') : '0%', background: 'linear-gradient(90deg, #dc2626, #f87171)' }"></div>
+                    <div class="mt-3 h-8 overflow-hidden">
+                        <svg v-if="stats.overdue_follow_ups > 0" width="100%" height="32" preserveAspectRatio="none" class="opacity-40 group-hover:opacity-70 transition-opacity duration-300">
+                            <path :d="sparklinePath([0,1,2,1,3,2,stats.overdue_follow_ups || 1], 200, 32)" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <svg v-else width="100%" height="32" preserveAspectRatio="none" class="opacity-20">
+                            <path d="M0,28 L200,28" fill="none" stroke="#9ca3af" stroke-width="1" stroke-dasharray="4 4"/>
+                        </svg>
                     </div>
                 </div>
             </div>

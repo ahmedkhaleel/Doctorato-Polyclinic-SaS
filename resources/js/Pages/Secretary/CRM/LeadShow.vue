@@ -420,6 +420,34 @@ const scoreAngle = computed(() => {
     return ((props.lead.score || 0) / 100) * 283;
 });
 
+/* ---------- Score breakdown ---------- */
+const showScoreBreakdown = ref(false);
+const scoreBreakdown = computed(() => {
+    const lead = props.lead;
+    const acts = props.activities || [];
+    const fups = props.followUps || [];
+    const factors = [];
+    // Has phone
+    factors.push({ en: 'Phone provided', ar: '\u0631\u0642\u0645 \u0627\u0644\u0647\u0627\u062A\u0641', pts: lead.phone ? 10 : 0, max: 10 });
+    // Has email
+    factors.push({ en: 'Email provided', ar: '\u0627\u0644\u0628\u0631\u064A\u062F \u0627\u0644\u0625\u0644\u0643\u062A\u0631\u0648\u0646\u064A', pts: lead.email ? 5 : 0, max: 5 });
+    // Activity count (up to 30 pts)
+    const actPts = Math.min(acts.length * 3, 30);
+    factors.push({ en: 'Activities (' + acts.length + ')', ar: '\u0627\u0644\u0646\u0634\u0627\u0637\u0627\u062A (' + acts.length + ')', pts: actPts, max: 30 });
+    // Follow-ups completed
+    const completedFU = fups.filter(f => f.status === 'completed').length;
+    const fuPts = Math.min(completedFU * 5, 20);
+    factors.push({ en: 'Follow-ups done (' + completedFU + ')', ar: '\u0645\u062A\u0627\u0628\u0639\u0627\u062A \u0645\u0643\u062A\u0645\u0644\u0629 (' + completedFU + ')', pts: fuPts, max: 20 });
+    // Pipeline progress
+    const pIdx = pipelineStatuses.indexOf(lead.status);
+    const pipePts = pIdx >= 0 ? Math.min((pIdx + 1) * 5, 25) : 0;
+    factors.push({ en: 'Pipeline stage', ar: '\u0645\u0631\u062D\u0644\u0629 \u0627\u0644\u0642\u0645\u0639', pts: pipePts, max: 25 });
+    // Priority bonus
+    const prioPts = lead.priority === 1 ? 10 : lead.priority === 2 ? 5 : 0;
+    factors.push({ en: 'Priority bonus', ar: '\u0645\u0643\u0627\u0641\u0623\u0629 \u0627\u0644\u0623\u0648\u0644\u0648\u064A\u0629', pts: prioPts, max: 10 });
+    return factors;
+});
+
 // Grouped activities by date
 const groupedActivities = computed(() => {
     if (!props.activities?.length) return [];
@@ -772,6 +800,52 @@ function whatsappUrl(phone) {
                         <div class="text-xs font-medium text-gray-500 group-hover:text-teal-700 transition-colors">{{ isRtl ? 'طباعة الملف' : 'Print Profile' }}</div>
                     </button>
                 </div>
+            </div>
+
+            <!-- Engagement Score Breakdown -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-3">
+                <button @click="showScoreBreakdown = !showScoreBreakdown"
+                    :class="['w-full bg-white rounded-xl border border-gray-100 shadow-sm p-3 flex items-center justify-between hover:border-teal-200 transition-all duration-300 group', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4']"
+                    :style="{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)', transitionDelay: '200ms' }">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-lg bg-teal-50 flex items-center justify-center flex-shrink-0">
+                            <svg class="w-[18px] h-[18px] text-teal-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
+                        </div>
+                        <div class="text-start">
+                            <span class="text-sm font-semibold text-gray-700 group-hover:text-teal-700 transition-colors">{{ isRtl ? '\u062A\u0641\u0627\u0635\u064A\u0644 \u0627\u0644\u0646\u0642\u0627\u0637' : 'Score Breakdown' }}</span>
+                            <span class="text-xs text-gray-400 block">{{ isRtl ? '\u0643\u064A\u0641 \u062A\u0645 \u062D\u0633\u0627\u0628 \u0646\u0642\u0627\u0637 \u0627\u0644\u0639\u0645\u064A\u0644' : 'How this lead score was calculated' }}</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-lg font-bold text-teal-700">{{ lead.score || 0 }}</span>
+                        <svg :class="['w-4 h-4 text-gray-400 transition-transform duration-300', showScoreBreakdown ? 'rotate-180' : '']" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                    </div>
+                </button>
+                <Transition
+                    enter-active-class="transition-all duration-300 ease-out"
+                    enter-from-class="opacity-0 -translate-y-2 max-h-0"
+                    enter-to-class="opacity-100 translate-y-0 max-h-96"
+                    leave-active-class="transition-all duration-200 ease-in"
+                    leave-from-class="opacity-100 max-h-96"
+                    leave-to-class="opacity-0 max-h-0"
+                >
+                    <div v-if="showScoreBreakdown" class="bg-white rounded-b-xl border border-t-0 border-gray-100 shadow-sm p-4 -mt-1 overflow-hidden">
+                        <div class="space-y-2.5">
+                            <div v-for="factor in scoreBreakdown" :key="factor.en" class="flex items-center gap-3">
+                                <span class="text-xs text-gray-500 w-36 truncate">{{ isRtl ? factor.ar : factor.en }}</span>
+                                <div class="flex-1 h-4 bg-gray-50 rounded-full overflow-hidden">
+                                    <div class="h-full rounded-full transition-all duration-700 ease-out"
+                                         :style="{ width: (factor.pts / factor.max * 100) + '%', background: factor.pts >= factor.max ? '#10b981' : factor.pts > 0 ? '#0d9488' : '#e5e7eb' }"></div>
+                                </div>
+                                <span :class="['text-xs font-bold tabular-nums w-14 text-end', factor.pts > 0 ? 'text-teal-700' : 'text-gray-300']">{{ factor.pts }}/{{ factor.max }}</span>
+                            </div>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-gray-100 flex items-center justify-between">
+                            <span class="text-xs text-gray-400">{{ isRtl ? '\u0627\u0644\u0646\u0642\u0627\u0637 \u0627\u0644\u0641\u0639\u0644\u064A\u0629 \u0642\u062F \u062A\u062E\u062A\u0644\u0641 \u0628\u0646\u0627\u0621 \u0639\u0644\u0649 \u0627\u0644\u062E\u0648\u0627\u0631\u0632\u0645\u064A\u0629' : 'Actual score may vary based on algorithm' }}</span>
+                            <span class="text-sm font-bold text-teal-700">{{ scoreBreakdown.reduce((s, f) => s + f.pts, 0) }} {{ isRtl ? '\u0646\u0642\u0637\u0629 \u062A\u0642\u0631\u064A\u0628\u064A\u0629' : 'pts est.' }}</span>
+                        </div>
+                    </div>
+                </Transition>
             </div>
 
             <!-- Main Content: 2-col layout -->

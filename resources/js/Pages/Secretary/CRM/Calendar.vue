@@ -519,7 +519,7 @@ function snoozeFollowUp(fuId, key) {
         <div class="grid grid-cols-7 divide-x divide-gray-100">
             <div v-for="(wd, idx) in weekDays" :key="wd.date"
                  @click="selectDay(wd.date)"
-                 :class="['min-h-[350px] cursor-pointer transition-all duration-150 hover:bg-teal-50/30',
+                 :class="['group min-h-[350px] cursor-pointer transition-all duration-150 hover:bg-teal-50/30',
                     wd.isToday ? 'bg-teal-50/40' : '',
                     selectedDate === wd.date ? 'bg-teal-50/60' : '']">
 
@@ -552,8 +552,16 @@ function snoozeFollowUp(fuId, key) {
                         <div class="font-medium text-gray-800 truncate">{{ fu.lead_name }}</div>
                         <div class="flex items-center gap-1 mt-1 text-[10px] text-gray-400">
                             <span>{{ isRtl ? typeConfig[fu.type]?.ar : typeConfig[fu.type]?.en }}</span>
-                            <span v-if="fu.is_overdue" class="text-red-500 font-semibold">{{ isRtl ? 'متأخر' : 'Overdue' }}</span>
+                            <span v-if="fu.is_overdue" class="text-red-500 font-semibold">{{ isRtl ? '\u0645\u062A\u0623\u062E\u0631' : 'Overdue' }}</span>
                         </div>
+                        <!-- Inline quick-complete button -->
+                        <button v-if="fu.status === 'pending'"
+                            @click.stop="completeFollowUp(fu.id)"
+                            class="mt-1.5 w-full flex items-center justify-center gap-1 px-2 py-1 rounded-md text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 transition-all duration-200 opacity-0 group-hover:opacity-100"
+                            :title="isRtl ? '\u0625\u0643\u0645\u0627\u0644' : 'Complete'">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                            {{ isRtl ? '\u0625\u0643\u0645\u0627\u0644' : 'Done' }}
+                        </button>
                     </div>
 
                     <div v-if="getFilteredFollowUpsForDay(wd.date).length === 0"

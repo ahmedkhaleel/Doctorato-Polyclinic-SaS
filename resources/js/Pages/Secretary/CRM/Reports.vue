@@ -140,10 +140,31 @@ function exportCSV() {
 }
 
 const priorityLabels = {
-    1: { en: 'Hot', ar: 'ساخن', color: '#dc2626' },
-    2: { en: 'Warm', ar: 'دافئ', color: '#d97706' },
-    3: { en: 'Cold', ar: 'بارد', color: '#2563eb' },
+    1: { en: 'Hot', ar: '\u0633\u0627\u062E\u0646', color: '#dc2626' },
+    2: { en: 'Warm', ar: '\u062F\u0627\u0641\u0626', color: '#d97706' },
+    3: { en: 'Cold', ar: '\u0628\u0627\u0631\u062F', color: '#2563eb' },
 };
+
+/* ---------- Channel performance breakdown ---------- */
+const channelBreakdown = computed(() => {
+    const trend = props.activityTrend || [];
+    const channels = [
+        { key: 'call', en: 'Calls', ar: '\u0645\u0643\u0627\u0644\u0645\u0627\u062A', color: '#10b981', icon: 'M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z' },
+        { key: 'whatsapp', en: 'WhatsApp', ar: '\u0648\u0627\u062A\u0633\u0627\u0628', color: '#25d366', icon: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z' },
+        { key: 'email', en: 'Email', ar: '\u0628\u0631\u064A\u062F', color: '#3b82f6', icon: 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z' },
+        { key: 'sms', en: 'SMS', ar: '\u0631\u0633\u0627\u0626\u0644', color: '#8b5cf6', icon: 'M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z' },
+        { key: 'meeting', en: 'Meetings', ar: '\u0627\u062C\u062A\u0645\u0627\u0639\u0627\u062A', color: '#f59e0b', icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z' },
+    ];
+    // Sum from activity trend (activities are total count per day)
+    const totalActs = trend.reduce((sum, d) => sum + (d.activities || 0), 0);
+    // Distribute proportionally based on source performance or equal split
+    return channels.map(ch => {
+        const count = trend.reduce((sum, d) => sum + (d[ch.key] || 0), 0);
+        return { ...ch, count, pct: totalActs > 0 ? Math.round((count / totalActs) * 100) : 0 };
+    });
+});
+
+const channelMax = computed(() => Math.max(...channelBreakdown.value.map(c => c.count), 1));
 </script>
 
 <template>
@@ -349,6 +370,38 @@ const priorityLabels = {
                     <text v-if="idx % labelStep === 0" :x="idx * 28 + 14" y="188" text-anchor="middle" class="fill-slate-400" style="font-size: 9px">{{ isRtl ? day.label_ar : day.label }}</text>
                 </g>
             </svg>
+        </div>
+    </div>
+
+    <!-- Channel Performance Breakdown -->
+    <div :class="['bg-white rounded-2xl shadow-sm border border-slate-100 p-5 mb-6 transition-all duration-700', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6']"
+         :style="{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)', transitionDelay: '420ms' }">
+        <h3 class="text-sm font-semibold text-slate-800 mb-4 flex items-center gap-2">
+            <svg class="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+            {{ isRtl ? '\u0623\u062F\u0627\u0621 \u0642\u0646\u0648\u0627\u062A \u0627\u0644\u062A\u0648\u0627\u0635\u0644' : 'Communication Channel Performance' }}
+        </h3>
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-4">
+            <div v-for="ch in channelBreakdown" :key="ch.key"
+                 class="bg-slate-50 rounded-xl p-3 border border-slate-100 text-center hover:border-slate-200 transition-all duration-200 hover:shadow-sm">
+                <div class="w-9 h-9 mx-auto rounded-lg flex items-center justify-center mb-2" :style="{ backgroundColor: ch.color + '18' }">
+                    <svg class="w-4 h-4" :style="{ color: ch.color }" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" :d="ch.icon"/></svg>
+                </div>
+                <p class="text-lg font-bold text-slate-800">{{ ch.count }}</p>
+                <p class="text-xs text-slate-500 mt-0.5">{{ isRtl ? ch.ar : ch.en }}</p>
+            </div>
+        </div>
+        <!-- Horizontal bar comparison -->
+        <div class="space-y-2.5">
+            <div v-for="ch in channelBreakdown" :key="ch.key + '-bar'" class="flex items-center gap-3">
+                <span class="text-xs font-medium text-slate-500 w-20 truncate">{{ isRtl ? ch.ar : ch.en }}</span>
+                <div class="flex-1 h-5 bg-slate-50 rounded-lg overflow-hidden relative">
+                    <div class="h-full rounded-lg transition-all duration-1000 ease-out flex items-center justify-end px-2"
+                         :style="{ width: mounted ? Math.max((ch.count / channelMax) * 100, 3) + '%' : '0%', backgroundColor: ch.color }">
+                        <span v-if="ch.count > 0" class="text-[10px] font-bold text-white">{{ ch.pct }}%</span>
+                    </div>
+                </div>
+                <span class="text-xs font-semibold text-slate-700 w-8 text-center tabular-nums">{{ ch.count }}</span>
+            </div>
         </div>
     </div>
 

@@ -76,6 +76,30 @@ const priorityOptions = [
     { value: 2, label: { en: 'Warm', ar: '\u062F\u0627\u0641\u0626' }, icon: 'warm', color: 'bg-amber-100 text-amber-700 border-amber-300 ring-amber-400' },
     { value: 3, label: { en: 'Cold', ar: '\u0628\u0627\u0631\u062F' }, icon: 'cold', color: 'bg-blue-100 text-blue-700 border-blue-300 ring-blue-400' },
 ];
+
+/* ---------- Form progress indicator ---------- */
+const formSections = [
+    { key: 'contact', en: 'Contact', ar: '\u0627\u0644\u0627\u062A\u0635\u0627\u0644', check: () => !!form.full_name && !!form.phone },
+    { key: 'personal', en: 'Personal', ar: '\u0627\u0644\u0634\u062E\u0635\u064A\u0629', check: () => !!form.gender || !!form.date_of_birth || !!form.city },
+    { key: 'details', en: 'Details', ar: '\u0627\u0644\u062A\u0641\u0627\u0635\u064A\u0644', check: () => !!form.lead_source_id || !!form.priority },
+    { key: 'notes', en: 'Notes', ar: '\u0645\u0644\u0627\u062D\u0638\u0627\u062A', check: () => !!form.notes },
+];
+
+const formProgress = computed(() => {
+    const filled = formSections.filter(s => s.check()).length;
+    return Math.round((filled / formSections.length) * 100);
+});
+
+/* ---------- Phone validation ---------- */
+const phoneValidation = computed(() => {
+    const phone = form.phone.trim();
+    if (!phone) return null;
+    const clean = phone.replace(/[\s\-\(\)]/g, '');
+    if (!/^\+?\d{7,15}$/.test(clean)) return { valid: false, en: 'Invalid phone format', ar: '\u0635\u064A\u063A\u0629 \u0647\u0627\u062A\u0641 \u063A\u064A\u0631 \u0635\u062D\u064A\u062D\u0629' };
+    if (clean.startsWith('+971') && clean.length !== 13) return { valid: false, en: 'UAE number should be +971XXXXXXXXX', ar: '\u0631\u0642\u0645 \u0627\u0644\u0625\u0645\u0627\u0631\u0627\u062A \u064A\u062C\u0628 \u0623\u0646 \u064A\u0643\u0648\u0646 +971XXXXXXXXX' };
+    if (clean.startsWith('+966') && clean.length !== 13) return { valid: false, en: 'KSA number should be +966XXXXXXXXX', ar: '\u0631\u0642\u0645 \u0627\u0644\u0633\u0639\u0648\u062F\u064A\u0629 \u064A\u062C\u0628 \u0623\u0646 \u064A\u0643\u0648\u0646 +966XXXXXXXXX' };
+    return { valid: true, en: 'Valid phone number', ar: '\u0631\u0642\u0645 \u0647\u0627\u062A\u0641 \u0635\u062D\u064A\u062D' };
+});
 </script>
 
 <template>
@@ -119,6 +143,34 @@ const priorityOptions = [
         </div>
     </div>
 
+    <!-- Form Progress Indicator -->
+    <div :class="['bg-white rounded-2xl shadow-sm border border-slate-100 p-5 mb-6 transition-all duration-700', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4']"
+         :style="{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)', transitionDelay: '80ms', direction: isRtl ? 'rtl' : 'ltr' }">
+        <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                <span class="text-sm font-semibold text-slate-700">{{ isRtl ? '\u0627\u0643\u062A\u0645\u0627\u0644 \u0627\u0644\u0646\u0645\u0648\u0630\u062C' : 'Form Completion' }}</span>
+            </div>
+            <span :class="['text-sm font-bold tabular-nums', formProgress >= 75 ? 'text-emerald-600' : formProgress >= 50 ? 'text-teal-600' : 'text-slate-400']">{{ formProgress }}%</span>
+        </div>
+        <div class="h-2 bg-slate-100 rounded-full overflow-hidden mb-3">
+            <div class="h-full rounded-full transition-all duration-700 ease-out"
+                 :style="{ width: formProgress + '%', background: formProgress >= 75 ? 'linear-gradient(90deg, #10b981, #059669)' : formProgress >= 50 ? 'linear-gradient(90deg, #0d9488, #14b8a6)' : 'linear-gradient(90deg, #94a3b8, #cbd5e1)' }"></div>
+        </div>
+        <div class="flex items-center gap-1">
+            <div v-for="(section, idx) in formSections" :key="section.key"
+                 class="flex items-center gap-1">
+                <div :class="['flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium transition-all duration-300',
+                     section.check() ? 'bg-teal-50 text-teal-700' : 'bg-slate-50 text-slate-400']">
+                    <svg v-if="section.check()" class="w-3.5 h-3.5 text-teal-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                    <div v-else class="w-3.5 h-3.5 rounded-full border-2 border-slate-300"></div>
+                    {{ isRtl ? section.ar : section.en }}
+                </div>
+                <svg v-if="idx < formSections.length - 1" class="w-3 h-3 text-slate-300 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" :d="isRtl ? 'M15 19l-7-7 7-7' : 'M9 5l7 7-7 7'"/></svg>
+            </div>
+        </div>
+    </div>
+
     <form @submit.prevent="submit" :style="{ direction: isRtl ? 'rtl' : 'ltr' }">
 
         <!-- Section 1: Contact Info -->
@@ -150,6 +202,16 @@ const priorityOptions = [
                            :class="['w-full rounded-xl border px-4 py-3 text-sm transition-all duration-200 focus:ring-2 focus:ring-teal-400/40 focus:border-teal-400 outline-none', form.errors.phone ? 'border-red-300 bg-red-50' : 'border-slate-200 bg-slate-50/50 hover:border-slate-300']"
                            placeholder="+971 XX XXX XXXX" />
                     <p v-if="form.errors.phone" class="mt-1 text-xs text-red-500">{{ form.errors.phone }}</p>
+                    <!-- Phone Validation Hint -->
+                    <div v-if="phoneValidation && !form.errors.phone && !checkingDuplicate" class="mt-1.5 flex items-center gap-1.5">
+                        <svg v-if="phoneValidation.valid" class="w-3.5 h-3.5 text-emerald-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                        <svg v-else class="w-3.5 h-3.5 text-amber-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
+                        <span :class="['text-xs', phoneValidation.valid ? 'text-emerald-600' : 'text-amber-600']">{{ isRtl ? phoneValidation.ar : phoneValidation.en }}</span>
+                    </div>
+                    <div v-if="checkingDuplicate" class="mt-1.5 flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5 text-slate-400 animate-spin" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+                        <span class="text-xs text-slate-400">{{ isRtl ? '\u062C\u0627\u0631\u064A \u0627\u0644\u062A\u062D\u0642\u0642...' : 'Checking...' }}</span>
+                    </div>
                     <!-- Duplicate Warning -->
                     <div v-if="duplicateWarning" class="mt-2 bg-amber-50 border border-amber-200 rounded-lg p-3 flex items-start gap-2">
                         <svg class="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
