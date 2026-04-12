@@ -166,6 +166,17 @@ onBeforeUnmount(() => {
     sortableInstances.forEach(s => s.destroy());
 });
 
+/* ── Collapse/Expand stages ────────────────────────────── */
+const collapsedStages = ref({});
+
+function toggleCollapse(status) {
+    collapsedStages.value = { ...collapsedStages.value, [status]: !collapsedStages.value[status] };
+}
+
+function isCollapsed(status) {
+    return !!collapsedStages.value[status];
+}
+
 /* ── Helpers ────────────────────────────────────────────── */
 function timeAgo(date) {
     if (!date) return '';
@@ -227,20 +238,31 @@ function timeAgo(date) {
     <div :class="['flex gap-4 overflow-x-auto pb-4 transition-all duration-700 delay-150', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6']"
          :style="{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }">
 
-        <div v-for="status in statuses" :key="status" class="flex-shrink-0 w-[280px]">
+        <div v-for="status in statuses" :key="status" :class="['flex-shrink-0 transition-all duration-300', isCollapsed(status) ? 'w-[52px]' : 'w-[280px]']">
             <!-- Column header -->
-            <div :class="['rounded-t-xl bg-gradient-to-r p-3 flex items-center justify-between', statusConfig[status].gradient]">
-                <div class="flex items-center gap-2">
-                    <svg class="w-4 h-4 text-white/80" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" :d="statusConfig[status].icon"/></svg>
-                    <span class="text-sm font-semibold text-white">{{ isRtl ? statusConfig[status].ar : statusConfig[status].en }}</span>
+            <div :class="['rounded-t-xl bg-gradient-to-r p-3 flex items-center justify-between cursor-pointer select-none', statusConfig[status].gradient]"
+                 @click="toggleCollapse(status)">
+                <div class="flex items-center gap-2 min-w-0">
+                    <svg :class="['w-4 h-4 text-white/80 transition-transform duration-200 flex-shrink-0', isCollapsed(status) ? 'rotate-90' : '']" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" :d="statusConfig[status].icon"/></svg>
+                    <span v-if="!isCollapsed(status)" class="text-sm font-semibold text-white truncate">{{ isRtl ? statusConfig[status].ar : statusConfig[status].en }}</span>
                 </div>
-                <span class="bg-white/20 backdrop-blur text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">
+                <span class="bg-white/20 backdrop-blur text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0">
                     {{ filteredLeads(localColumns[status]).length }}
                 </span>
             </div>
 
+            <!-- Collapsed vertical label -->
+            <div v-if="isCollapsed(status)"
+                 :class="['rounded-b-xl border-x border-b min-h-[400px] flex items-center justify-center cursor-pointer', statusConfig[status].bg, statusConfig[status].border]"
+                 @click="toggleCollapse(status)">
+                <span class="text-xs font-semibold text-gray-400 writing-mode-vertical whitespace-nowrap" style="writing-mode: vertical-rl; text-orientation: mixed;">
+                    {{ isRtl ? statusConfig[status].ar : statusConfig[status].en }}
+                </span>
+            </div>
+
             <!-- Column body / drop zone -->
-            <div :data-status="status"
+            <div v-if="!isCollapsed(status)"
+                 :data-status="status"
                  :class="['min-h-[400px] rounded-b-xl border-x border-b p-2 space-y-2', statusConfig[status].bg, statusConfig[status].border]">
 
                 <!-- Lead cards -->

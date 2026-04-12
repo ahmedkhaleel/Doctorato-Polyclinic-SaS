@@ -334,6 +334,42 @@ function snoozeFollowUp(fuId, key) {
     });
 }
 
+// Quick note templates
+const quickNoteTemplates = [
+    { en: 'Called, no answer', ar: 'اتصلت، لا رد' },
+    { en: 'Left voicemail', ar: 'تركت رسالة صوتية' },
+    { en: 'Interested, will follow up', ar: 'مهتم، سيتم المتابعة' },
+    { en: 'Requested callback', ar: 'طلب معاودة الاتصال' },
+    { en: 'Sent price list', ar: 'تم إرسال قائمة الأسعار' },
+    { en: 'Booked appointment', ar: 'تم حجز موعد' },
+    { en: 'Not interested', ar: 'غير مهتم' },
+    { en: 'Number not working', ar: 'الرقم لا يعمل' },
+];
+
+function useQuickNote(template) {
+    activityForm.description = isRtl.value ? template.ar : template.en;
+}
+
+// Activity filter
+const activitySearchQuery = ref('');
+const activityTypeFilter = ref('all');
+
+const filteredGroupedActivities = computed(() => {
+    if (!groupedActivities.value?.length) return [];
+    const q = activitySearchQuery.value.trim().toLowerCase();
+    const typeF = activityTypeFilter.value;
+
+    return groupedActivities.value.map(group => {
+        let items = group.items;
+        if (typeF !== 'all') items = items.filter(a => a.type === typeF);
+        if (q) items = items.filter(a =>
+            (a.subject || '').toLowerCase().includes(q) ||
+            (a.description || '').toLowerCase().includes(q)
+        );
+        return { ...group, items };
+    }).filter(g => g.items.length > 0);
+});
+
 const lossReasons = [
     { en: 'Price too high', ar: 'السعر مرتفع' },
     { en: 'Chose competitor', ar: 'اختار منافس' },
@@ -811,6 +847,14 @@ function whatsappUrl(phone) {
                                                 class="w-full rounded-lg border-gray-300 text-sm focus:ring-teal-500 focus:border-teal-500 resize-none"
                                                 :placeholder="isRtl ? 'أضف وصفاً...' : 'Add description...'"
                                             ></textarea>
+                                            <!-- Quick note templates -->
+                                            <div class="flex flex-wrap gap-1.5 mt-2">
+                                                <button v-for="qn in quickNoteTemplates" :key="qn.en"
+                                                    type="button" @click="useQuickNote(qn)"
+                                                    class="text-[11px] px-2.5 py-1 rounded-lg border border-gray-200 text-gray-500 hover:border-teal-300 hover:text-teal-600 hover:bg-teal-50 transition-all">
+                                                    {{ isRtl ? qn.ar : qn.en }}
+                                                </button>
+                                            </div>
                                         </div>
                                         <div class="mb-3">
                                             <label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'النتيجة' : 'Outcome' }}</label>
@@ -838,9 +882,30 @@ function whatsappUrl(phone) {
                                         </div>
                                     </form>
 
+                                    <!-- Activity Timeline Filter -->
+                                    <div v-if="groupedActivities.length > 0" class="flex items-center gap-2 mb-4 flex-wrap">
+                                        <div class="relative flex-1 min-w-[140px]">
+                                            <svg class="w-3.5 h-3.5 text-gray-400 absolute top-1/2 -translate-y-1/2 pointer-events-none" :class="isRtl ? 'right-2.5' : 'left-2.5'" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="m21 21-4.35-4.35"/></svg>
+                                            <input v-model="activitySearchQuery" type="text"
+                                                :placeholder="isRtl ? 'بحث في النشاطات...' : 'Search activities...'"
+                                                class="w-full rounded-lg border-gray-200 text-xs py-2 focus:ring-teal-500 focus:border-teal-500"
+                                                :class="isRtl ? 'pr-8 pl-2' : 'pl-8 pr-2'"/>
+                                        </div>
+                                        <select v-model="activityTypeFilter" class="text-xs rounded-lg border-gray-200 py-2 px-2.5 focus:ring-teal-500 focus:border-teal-500">
+                                            <option value="all">{{ isRtl ? 'كل الأنواع' : 'All types' }}</option>
+                                            <option v-for="at in activityTypes" :key="at.value" :value="at.value">{{ isRtl ? at.label.ar : at.label.en }}</option>
+                                            <option value="status_change">{{ isRtl ? 'تغيير حالة' : 'Status change' }}</option>
+                                        </select>
+                                        <button v-if="activitySearchQuery || activityTypeFilter !== 'all'"
+                                            @click="activitySearchQuery = ''; activityTypeFilter = 'all'"
+                                            class="text-[11px] text-red-500 hover:text-red-700 underline">
+                                            {{ isRtl ? 'مسح' : 'Clear' }}
+                                        </button>
+                                    </div>
+
                                     <!-- Activity Timeline (grouped by date) -->
-                                    <div v-if="groupedActivities.length > 0" class="space-y-5">
-                                        <div v-for="group in groupedActivities" :key="group.date">
+                                    <div v-if="filteredGroupedActivities.length > 0" class="space-y-5">
+                                        <div v-for="group in filteredGroupedActivities" :key="group.date">
                                             <!-- Date Header -->
                                             <div class="flex items-center gap-3 mb-3">
                                                 <div class="h-px flex-1 bg-gray-200"></div>
@@ -887,7 +952,14 @@ function whatsappUrl(phone) {
                                             </div>
                                         </div>
                                     </div>
-                                    <div v-else class="text-center py-10 text-gray-400">
+                                    <!-- No filtered results -->
+                                    <div v-else-if="groupedActivities.length > 0 && filteredGroupedActivities.length === 0" class="text-center py-8 text-gray-400">
+                                        <svg class="w-10 h-10 mx-auto mb-2 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                                        <p class="text-sm">{{ isRtl ? 'لا توجد نتائج للبحث' : 'No matching activities' }}</p>
+                                        <button @click="activitySearchQuery = ''; activityTypeFilter = 'all'" class="mt-2 text-xs text-teal-600 hover:underline">{{ isRtl ? 'مسح الفلتر' : 'Clear filter' }}</button>
+                                    </div>
+                                    <!-- No activities at all -->
+                                    <div v-else-if="!groupedActivities.length" class="text-center py-10 text-gray-400">
                                         <svg class="w-12 h-12 mx-auto mb-3 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                         </svg>

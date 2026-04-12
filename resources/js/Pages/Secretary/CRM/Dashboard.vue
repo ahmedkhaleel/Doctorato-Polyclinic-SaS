@@ -869,9 +869,11 @@ const activityTypeConfig = {
                     </div>
 
                     <div class="space-y-2.5">
-                        <div v-for="(stage, idx) in funnelStatuses" :key="stage.key" class="flex items-center gap-3">
-                            <span class="text-[11px] font-medium text-gray-500 w-16 truncate">{{ isRtl ? stage.ar : stage.en }}</span>
-                            <div class="flex-1 h-5 bg-gray-50 rounded-lg overflow-hidden relative">
+                        <Link v-for="(stage, idx) in funnelStatuses" :key="stage.key"
+                              :href="'/secretary/crm/leads?status=' + stage.key"
+                              class="flex items-center gap-3 group cursor-pointer">
+                            <span class="text-[11px] font-medium text-gray-500 w-16 truncate group-hover:text-teal-600 transition-colors">{{ isRtl ? stage.ar : stage.en }}</span>
+                            <div class="flex-1 h-5 bg-gray-50 rounded-lg overflow-hidden relative group-hover:bg-gray-100 transition-colors">
                                 <div class="h-full rounded-lg transition-all duration-1000 ease-out flex items-center justify-end px-2"
                                      :style="{
                                          width: mounted ? Math.max(((statusDistribution?.[stage.key] || 0) / funnelMax) * 100, 3) + '%' : '0%',
@@ -881,7 +883,8 @@ const activityTypeConfig = {
                                     <span v-if="(statusDistribution?.[stage.key] || 0) > 0" class="text-[10px] font-bold text-white">{{ statusDistribution?.[stage.key] || 0 }}</span>
                                 </div>
                             </div>
-                        </div>
+                            <svg class="w-3 h-3 text-gray-300 group-hover:text-teal-500 transition-colors opacity-0 group-hover:opacity-100 flex-shrink-0" :class="isRtl ? 'rotate-180' : ''" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                        </Link>
                     </div>
 
                     <Link href="/secretary/crm/pipeline" class="mt-4 flex items-center justify-center gap-2 text-xs font-medium text-teal-600 hover:text-teal-700 transition-colors">
@@ -953,6 +956,21 @@ const activityTypeConfig = {
                         </div>
                         <p class="text-sm text-gray-500">{{ activityFilter !== 'all' ? (isRtl ? 'لا توجد نشاطات من هذا النوع' : 'No activities of this type') : (isRtl ? 'لا توجد نشاطات بعد' : 'No recent activities') }}</p>
                         <button v-if="activityFilter !== 'all'" @click="activityFilter = 'all'" class="mt-2 text-xs text-teal-600 hover:underline">{{ isRtl ? 'عرض الكل' : 'Show all' }}</button>
+                        <div v-if="activityFilter === 'all' && (todayFollowUps?.length || overdueFollowUps?.length)" class="mt-4 flex flex-col items-center gap-2">
+                            <p class="text-xs text-gray-400">{{ isRtl ? 'إجراءات مقترحة:' : 'Suggested actions:' }}</p>
+                            <div class="flex items-center gap-2">
+                                <Link v-if="overdueFollowUps?.length" href="/secretary/crm/calendar"
+                                    class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 transition-colors">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                    {{ isRtl ? 'متابعات متأخرة' : 'Overdue follow-ups' }} ({{ overdueFollowUps.length }})
+                                </Link>
+                                <Link v-if="todayFollowUps?.length" href="/secretary/crm/calendar"
+                                    class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-teal-50 text-teal-600 rounded-lg text-xs font-medium hover:bg-teal-100 transition-colors">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                    {{ isRtl ? 'متابعات اليوم' : "Today's follow-ups" }} ({{ todayFollowUps.length }})
+                                </Link>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

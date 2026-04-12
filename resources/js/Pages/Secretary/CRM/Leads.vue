@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, watch, onMounted } from 'vue';
+import { computed, ref, watch, onMounted, onBeforeUnmount } from 'vue';
 import { Link, router, usePage } from '@inertiajs/vue3';
 import SecretaryLayout from '@/Layouts/SecretaryLayout.vue';
 
@@ -15,7 +15,12 @@ const props = defineProps({
 /* ── View / Animation State ── */
 const viewMode = ref('grid');
 const mounted = ref(false);
-onMounted(() => { setTimeout(() => { mounted.value = true; }, 50); });
+const inlineStatusOpen = ref(null);
+onMounted(() => {
+    setTimeout(() => { mounted.value = true; }, 50);
+    document.addEventListener('click', () => { inlineStatusOpen.value = null; });
+});
+onBeforeUnmount(() => { document.removeEventListener('click', () => {}); });
 
 /* ── Filters ── */
 const search = ref(props.filters?.search || '');
@@ -286,6 +291,21 @@ function exportLeadsCSV() {
     link.download = `leads-export-${new Date().toISOString().split('T')[0]}.csv`;
     link.click();
     URL.revokeObjectURL(url);
+}
+
+/* ── Inline status change ── */
+const inlineStatusOptions = ['new', 'contacted', 'qualified', 'appointment_booked', 'consultation_done', 'negotiation'];
+
+function toggleInlineStatus(leadId) {
+    inlineStatusOpen.value = inlineStatusOpen.value === leadId ? null : leadId;
+}
+
+function changeLeadStatus(leadId, newStatus) {
+    inlineStatusOpen.value = null;
+    router.post(`/secretary/crm/leads/${leadId}/status`, { status: newStatus }, {
+        preserveScroll: true,
+        preserveState: true,
+    });
 }
 
 /* ── Quick View ── */
@@ -676,12 +696,29 @@ const activeFilterPills = computed(() => {
 
                     <!-- Badges Row -->
                     <div class="flex flex-wrap items-center gap-2 mb-4">
-                        <!-- Status Badge -->
-                        <span class="inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1 rounded-full"
-                              :style="{ backgroundColor: statusColors[lead.status]?.bg, color: statusColors[lead.status]?.text }">
-                            <span class="w-1.5 h-1.5 rounded-full" :style="{ backgroundColor: statusColors[lead.status]?.dot }"></span>
-                            {{ statusLabels[lead.status] || lead.status }}
-                        </span>
+                        <!-- Status Badge (clickable) -->
+                        <div class="relative">
+                            <button @click.stop="toggleInlineStatus(lead.id)"
+                                class="inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1 rounded-full cursor-pointer hover:ring-2 hover:ring-offset-1 hover:ring-teal-300 transition-all"
+                                :style="{ backgroundColor: statusColors[lead.status]?.bg, color: statusColors[lead.status]?.text }">
+                                <span class="w-1.5 h-1.5 rounded-full" :style="{ backgroundColor: statusColors[lead.status]?.dot }"></span>
+                                {{ statusLabels[lead.status] || lead.status }}
+                                <svg class="w-2.5 h-2.5 opacity-50" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                            </button>
+                            <Transition enter-active-class="transition-all duration-150 ease-out" enter-from-class="opacity-0 scale-95 -translate-y-1" enter-to-class="opacity-100 scale-100 translate-y-0" leave-active-class="transition-all duration-100 ease-in" leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-95">
+                                <div v-if="inlineStatusOpen === lead.id"
+                                     class="absolute z-30 top-full mt-1 bg-white rounded-xl shadow-xl border border-gray-100 py-1.5 min-w-[160px]"
+                                     :class="isRtl ? 'right-0' : 'left-0'">
+                                    <button v-for="st in inlineStatusOptions" :key="st" @click.stop="changeLeadStatus(lead.id, st)"
+                                        :class="['w-full flex items-center gap-2 px-3 py-1.5 text-xs text-start hover:bg-gray-50 transition-colors',
+                                            lead.status === st ? 'font-bold' : '']">
+                                        <span class="w-2 h-2 rounded-full flex-shrink-0" :style="{ backgroundColor: statusColors[st]?.dot }"></span>
+                                        {{ statusLabels[st] || st }}
+                                        <svg v-if="lead.status === st" class="w-3 h-3 text-teal-500 ms-auto" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                    </button>
+                                </div>
+                            </Transition>
+                        </div>
 
                         <!-- Priority Badge -->
                         <span v-if="lead.priority && priorityConfig[lead.priority]"
@@ -816,13 +853,30 @@ const activeFilterPills = computed(() => {
                             {{ priorityConfig[lead.priority].label }}
                                     </span>
                                 </td>
-                                <!-- Status -->
+                                <!-- Status (clickable inline change) -->
                                 <td class="px-5 py-3.5 text-center">
-                                    <span class="inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1 rounded-full whitespace-nowrap"
-                                          :style="{ backgroundColor: statusColors[lead.status]?.bg, color: statusColors[lead.status]?.text }">
-                                        <span class="w-1.5 h-1.5 rounded-full" :style="{ backgroundColor: statusColors[lead.status]?.dot }"></span>
-                                        {{ statusLabels[lead.status] || lead.status }}
-                                    </span>
+                                    <div class="relative inline-block">
+                                        <button @click.stop="toggleInlineStatus(lead.id)"
+                                            class="inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1 rounded-full whitespace-nowrap cursor-pointer hover:ring-2 hover:ring-offset-1 hover:ring-teal-300 transition-all"
+                                            :style="{ backgroundColor: statusColors[lead.status]?.bg, color: statusColors[lead.status]?.text }">
+                                            <span class="w-1.5 h-1.5 rounded-full" :style="{ backgroundColor: statusColors[lead.status]?.dot }"></span>
+                                            {{ statusLabels[lead.status] || lead.status }}
+                                            <svg class="w-2.5 h-2.5 opacity-50" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                                        </button>
+                                        <Transition enter-active-class="transition-all duration-150 ease-out" enter-from-class="opacity-0 scale-95 -translate-y-1" enter-to-class="opacity-100 scale-100 translate-y-0" leave-active-class="transition-all duration-100 ease-in" leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-95">
+                                            <div v-if="inlineStatusOpen === lead.id"
+                                                 class="absolute z-30 top-full mt-1 bg-white rounded-xl shadow-xl border border-gray-100 py-1.5 min-w-[160px]"
+                                                 :class="isRtl ? 'right-0' : 'left-0'">
+                                                <button v-for="st in inlineStatusOptions" :key="st" @click.stop="changeLeadStatus(lead.id, st)"
+                                                    :class="['w-full flex items-center gap-2 px-3 py-1.5 text-xs text-start hover:bg-gray-50 transition-colors',
+                                                        lead.status === st ? 'font-bold' : '']">
+                                                    <span class="w-2 h-2 rounded-full flex-shrink-0" :style="{ backgroundColor: statusColors[st]?.dot }"></span>
+                                                    {{ statusLabels[st] || st }}
+                                                    <svg v-if="lead.status === st" class="w-3 h-3 text-teal-500 ms-auto" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                                </button>
+                                            </div>
+                                        </Transition>
+                                    </div>
                                 </td>
                                 <!-- Score -->
                                 <td class="px-5 py-3.5 text-center">
