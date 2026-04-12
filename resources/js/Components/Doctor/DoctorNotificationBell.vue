@@ -47,6 +47,7 @@ async function fetchNotifications() {
                 'Accept': 'application/json',
                 'X-Requested-With': 'XMLHttpRequest',
             },
+            credentials: 'same-origin',
         });
         if (res.ok) {
             const data = await res.json();
@@ -80,6 +81,7 @@ function goTo(item) {
             'X-Requested-With': 'XMLHttpRequest',
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '',
         },
+        credentials: 'same-origin',
     }).then(() => {
         // Decrease live count
         if (liveCount.value > 0) liveCount.value--;
@@ -98,6 +100,7 @@ async function markAllRead() {
                 'X-Requested-With': 'XMLHttpRequest',
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '',
             },
+            credentials: 'same-origin',
         });
         if (res.ok) {
             items.value = [];

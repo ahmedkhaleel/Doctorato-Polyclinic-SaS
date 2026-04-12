@@ -111,8 +111,16 @@ function checkNotifications() {
             'Accept': 'application/json',
             'X-Requested-With': 'XMLHttpRequest',
         },
+        credentials: 'same-origin',
     })
-    .then(res => res.ok ? res.json() : null)
+    .then(res => {
+        // If redirected to login page or unauthorized, stop polling silently
+        if (res.redirected || res.status === 401 || res.status === 419) {
+            if (pollInterval) { clearInterval(pollInterval); pollInterval = null; }
+            return null;
+        }
+        return res.ok ? res.json() : null;
+    })
     .then(data => {
         if (!data || data.unread_count === undefined) return;
 
@@ -172,6 +180,7 @@ onMounted(() => {
     // Fetch initial items to know what we've already seen
     fetch('/doctor/notifications', {
         headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+        credentials: 'same-origin',
     })
     .then(res => res.ok ? res.json() : null)
     .then(data => {
