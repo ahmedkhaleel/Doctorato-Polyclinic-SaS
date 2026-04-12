@@ -7,6 +7,9 @@ use App\Models\LeadActivity;
 use App\Models\LeadFollowUp;
 use App\Models\LeadScoringRule;
 use App\Models\CommunicationTemplate;
+use App\Models\LeadSource;
+use App\Models\CrmCampaign;
+use App\Models\Service;
 use App\Services\CommunicationService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -124,6 +127,118 @@ class SecretaryCrmController extends BaseSecretaryController
             'followUps' => $followUps,
             'templates' => $templates,
         ]);
+    }
+
+    /**
+     * Show form to create a new lead.
+     */
+    public function create(): Response
+    {
+        $sources = LeadSource::active()->ordered()->get(['id', 'name_en', 'name_ar', 'icon', 'color']);
+        $campaigns = CrmCampaign::where('status', 'active')->get(['id', 'name']);
+        $services = Service::where('status', 'active')->get(['id', 'name_en', 'name_ar']);
+
+        return Inertia::render('Secretary/CRM/LeadForm', [
+            'sources' => $sources,
+            'campaigns' => $campaigns,
+            'services' => $services,
+            'lead' => null,
+        ]);
+    }
+
+    /**
+     * Store a new lead created by the secretary.
+     */
+    public function store(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'full_name' => 'required|string|max:255',
+            'phone' => 'required|string|max:20',
+            'phone2' => 'nullable|string|max:20',
+            'email' => 'nullable|email|max:255',
+            'gender' => 'nullable|in:male,female',
+            'date_of_birth' => 'nullable|date',
+            'city' => 'nullable|string|max:100',
+            'nationality' => 'nullable|string|max:100',
+            'lead_source_id' => 'nullable|exists:lead_sources,id',
+            'campaign_id' => 'nullable|exists:crm_campaigns,id',
+            'priority' => 'required|in:1,2,3',
+            'interested_services' => 'nullable|array',
+            'notes' => 'nullable|string',
+        ]);
+
+        $data['status'] = 'new';
+        $data['created_by'] = auth()->id();
+        $data['assigned_to'] = auth()->id();
+        $data['assigned_at'] = now();
+        $data['score'] = 0;
+
+        $lead = Lead::create($data);
+
+        // Apply initial scoring
+        LeadScoringRule::applyToLead($lead, 'lead_created');
+
+        LeadActivity::create([
+            'lead_id' => $lead->id,
+            'type' => 'system',
+            'subject' => 'Lead created by secretary',
+            'performed_by' => auth()->id(),
+        ]);
+
+        return redirect()->route('secretary.crm.show', $lead)
+            ->with('success', $this->msg('Lead created successfully.', 'تم إنشاء العميل المحتمل بنجاح.'));
+    }
+
+    /**
+     * Show form to edit a lead.
+     */
+    public function edit(Lead $lead): Response
+    {
+        if ($lead->assigned_to !== auth()->id()) {
+            abort(403);
+        }
+
+        $sources = LeadSource::active()->ordered()->get(['id', 'name_en', 'name_ar', 'icon', 'color']);
+        $campaigns = CrmCampaign::where('status', 'active')->get(['id', 'name']);
+        $services = Service::where('status', 'active')->get(['id', 'name_en', 'name_ar']);
+
+        return Inertia::render('Secretary/CRM/LeadForm', [
+            'sources' => $sources,
+            'campaigns' => $campaigns,
+            'services' => $services,
+            'lead' => $lead,
+        ]);
+    }
+
+    /**
+     * Update an existing lead.
+     */
+    public function update(Request $request, Lead $lead): RedirectResponse
+    {
+        if ($lead->assigned_to !== auth()->id()) {
+            abort(403);
+        }
+
+        $data = $request->validate([
+            'full_name' => 'required|string|max:255',
+            'phone' => 'required|string|max:20',
+            'phone2' => 'nullable|string|max:20',
+            'email' => 'nullable|email|max:255',
+            'gender' => 'nullable|in:male,female',
+            'date_of_birth' => 'nullable|date',
+            'city' => 'nullable|string|max:100',
+            'nationality' => 'nullable|string|max:100',
+            'lead_source_id' => 'nullable|exists:lead_sources,id',
+            'campaign_id' => 'nullable|exists:crm_campaigns,id',
+            'priority' => 'required|in:1,2,3',
+            'interested_services' => 'nullable|array',
+            'notes' => 'nullable|string',
+        ]);
+
+        $lead->update($data);
+
+        return redirect()->route('secretary.crm.show', $lead)
+            ->with('success', $this->msg('Lead updated successfully.', 'تم تحديث بيانات العميل بنجاح.'));
     }
 
     /**

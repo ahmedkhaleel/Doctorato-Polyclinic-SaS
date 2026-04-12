@@ -207,6 +207,12 @@ const activeFilterPills = computed(() => {
                             <span class="text-2xl font-bold text-white">{{ leads.total || 0 }}</span>
                             <span class="text-teal-100 text-xs block">{{ isRtl ? 'عميل محتمل' : 'Total Leads' }}</span>
                         </div>
+                        <!-- Add New Lead button -->
+                        <Link href="/secretary/crm/leads/create"
+                              class="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-teal-600 to-emerald-500 text-white rounded-xl text-sm font-semibold shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 border border-white/20">
+                            <span>➕</span>
+                            <span>{{ isRtl ? 'عميل جديد' : 'New Lead' }}</span>
+                        </Link>
                     </div>
                 </div>
             </div>
