@@ -126,6 +126,33 @@ class DoctorVisitController extends BaseDoctorController
             $extra['latestVitals'] = $latestVitals;
             $extra['vitalsAlerts'] = $latestVitals ? $latestVitals->getAlerts() : [];
 
+            // Vitals history for trend charts (last 10 readings, oldest first)
+            $extra['vitalsHistory'] = $visit->patient->vitals()
+                ->orderByDesc('recorded_at')
+                ->limit(10)
+                ->get()
+                ->reverse()
+                ->values()
+                ->map(fn ($v) => [
+                    'id' => $v->id,
+                    'visit_id' => $v->visit_id,
+                    'date' => $v->recorded_at?->format('Y-m-d'),
+                    'time' => $v->recorded_at?->format('H:i'),
+                    'date_label' => $v->recorded_at?->format('d/m'),
+                    'bp_sys' => $v->blood_pressure_systolic ? (float) $v->blood_pressure_systolic : null,
+                    'bp_dia' => $v->blood_pressure_diastolic ? (float) $v->blood_pressure_diastolic : null,
+                    'hr' => $v->heart_rate ? (float) $v->heart_rate : null,
+                    'temp' => $v->temperature ? (float) $v->temperature : null,
+                    'spo2' => $v->oxygen_saturation ? (float) $v->oxygen_saturation : null,
+                    'rr' => $v->respiratory_rate ? (float) $v->respiratory_rate : null,
+                    'weight' => $v->weight ? (float) $v->weight : null,
+                    'height' => $v->height ? (float) $v->height : null,
+                    'bmi' => $v->bmi ? (float) $v->bmi : null,
+                    'sugar' => $v->blood_sugar ? (float) $v->blood_sugar : null,
+                    'pain' => $v->pain_level,
+                    'is_current' => $v->visit_id === $visit->id,
+                ]);
+
             // Active insurance — already eager-loaded with patient above
             $extra['activeInsurance'] = $visit->patient->activeInsurance;
         }
