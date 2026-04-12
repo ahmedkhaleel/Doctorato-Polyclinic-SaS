@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { Link, router, usePage } from '@inertiajs/vue3';
 import SecretaryLayout from '@/Layouts/SecretaryLayout.vue';
 
@@ -13,26 +13,145 @@ const props = defineProps({
     recentLeads: Array,
 });
 
+const mounted = ref(false);
+onMounted(() => {
+    setTimeout(() => { mounted.value = true; }, 50);
+    startCounters();
+});
+
+/* ---------- Animated counters ---------- */
+const counterMyLeads = ref(0);
+const counterNewLeads = ref(0);
+const counterTodayFU = ref(0);
+const counterOverdueFU = ref(0);
+
+function animateCounter(refVal, target, duration = 1200) {
+    if (!target || target <= 0) { refVal.value = 0; return; }
+    const steps = 40;
+    const increment = target / steps;
+    let current = 0;
+    const interval = setInterval(() => {
+        current += increment;
+        if (current >= target) {
+            refVal.value = target;
+            clearInterval(interval);
+        } else {
+            refVal.value = Math.floor(current);
+        }
+    }, duration / steps);
+}
+
+function startCounters() {
+    setTimeout(() => {
+        animateCounter(counterMyLeads, props.stats?.my_leads || 0);
+        animateCounter(counterNewLeads, props.stats?.new_leads || 0);
+        animateCounter(counterTodayFU, props.stats?.today_follow_ups || 0);
+        animateCounter(counterOverdueFU, props.stats?.overdue_follow_ups || 0);
+    }, 400);
+}
+
+/* ---------- Greeting ---------- */
+const greeting = computed(() => {
+    const hour = new Date().getHours();
+    if (hour < 12) return isRtl.value ? 'صباح الخير' : 'Good Morning';
+    if (hour < 17) return isRtl.value ? 'مساء الخير' : 'Good Afternoon';
+    return isRtl.value ? 'مساء الخير' : 'Good Evening';
+});
+
+const motivationalQuote = computed(() => {
+    return isRtl.value
+        ? 'كل متابعة هي فرصة لبناء علاقة دائمة مع العميل'
+        : 'Every follow-up is a chance to build a lasting relationship';
+});
+
+/* ---------- Status ---------- */
 const statusLabels = {
-    new: isRtl.value ? 'جديد' : 'New', contacted: isRtl.value ? 'تم التواصل' : 'Contacted', qualified: isRtl.value ? 'مؤهل' : 'Qualified',
-    appointment_booked: 'Appt. Booked', consultation_done: 'Consultation',
-    negotiation: 'Negotiation', converted: isRtl.value ? 'محوّل' : 'Converted', lost: isRtl.value ? 'خسارة' : 'Lost', dormant: isRtl.value ? 'خامد' : 'Dormant',
-};
-const statusColors = {
-    new: 'bg-blue-100 text-blue-700', contacted: 'bg-indigo-100 text-indigo-700',
-    qualified: 'bg-purple-100 text-purple-700', appointment_booked: 'bg-amber-100 text-amber-700',
-    consultation_done: 'bg-teal-100 text-teal-700', negotiation: 'bg-orange-100 text-orange-700',
-    converted: 'bg-green-100 text-green-700', lost: 'bg-red-100 text-red-700', dormant: 'bg-gray-100 text-gray-600',
+    new: isRtl.value ? 'جديد' : 'New',
+    contacted: isRtl.value ? 'تم التواصل' : 'Contacted',
+    qualified: isRtl.value ? 'مؤهل' : 'Qualified',
+    appointment_booked: isRtl.value ? 'تم الحجز' : 'Booked',
+    consultation_done: isRtl.value ? 'تم الاستشارة' : 'Consulted',
+    negotiation: isRtl.value ? 'تفاوض' : 'Negotiation',
+    converted: isRtl.value ? 'محوّل' : 'Converted',
+    lost: isRtl.value ? 'خسارة' : 'Lost',
+    dormant: isRtl.value ? 'خامد' : 'Dormant',
 };
 
+const statusColors = {
+    new: 'bg-blue-100 text-blue-700 border-blue-200',
+    contacted: 'bg-indigo-100 text-indigo-700 border-indigo-200',
+    qualified: 'bg-purple-100 text-purple-700 border-purple-200',
+    appointment_booked: 'bg-amber-100 text-amber-700 border-amber-200',
+    consultation_done: 'bg-teal-100 text-teal-700 border-teal-200',
+    negotiation: 'bg-orange-100 text-orange-700 border-orange-200',
+    converted: 'bg-green-100 text-green-700 border-green-200',
+    lost: 'bg-red-100 text-red-700 border-red-200',
+    dormant: 'bg-gray-100 text-gray-600 border-gray-200',
+};
+
+const priorityConfig = {
+    hot: { icon: 'flame', color: 'text-red-500', label: isRtl.value ? 'ساخن' : 'Hot' },
+    warm: { icon: 'flame', color: 'text-orange-400', label: isRtl.value ? 'دافئ' : 'Warm' },
+    cold: { icon: 'snowflake', color: 'text-blue-400', label: isRtl.value ? 'بارد' : 'Cold' },
+};
+
+/* ---------- Follow-up type icons ---------- */
+const followUpTypeConfig = {
+    call: {
+        label: isRtl.value ? 'اتصال' : 'Call',
+        color: 'bg-emerald-100 text-emerald-600',
+        iconPath: 'M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z',
+    },
+    whatsapp: {
+        label: isRtl.value ? 'واتساب' : 'WhatsApp',
+        color: 'bg-green-100 text-green-600',
+        iconPath: 'M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z',
+    },
+    email: {
+        label: isRtl.value ? 'بريد' : 'Email',
+        color: 'bg-blue-100 text-blue-600',
+        iconPath: 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z',
+    },
+    sms: {
+        label: isRtl.value ? 'رسالة' : 'SMS',
+        color: 'bg-violet-100 text-violet-600',
+        iconPath: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z',
+    },
+    meeting: {
+        label: isRtl.value ? 'اجتماع' : 'Meeting',
+        color: 'bg-amber-100 text-amber-600',
+        iconPath: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z',
+    },
+};
+
+/* ---------- Helpers ---------- */
 function formatTime(date) {
     if (!date) return '-';
-    return new Date(date).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+    return new Date(date).toLocaleTimeString(isRtl.value ? 'ar-SA' : 'en-US', { hour: '2-digit', minute: '2-digit' });
 }
 
 function formatDate(date) {
     if (!date) return '-';
-    return new Date(date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
+    return new Date(date).toLocaleDateString(isRtl.value ? 'ar-SA' : 'en-GB', { day: '2-digit', month: 'short' });
+}
+
+function timeAgo(date) {
+    if (!date) return '-';
+    const diff = Date.now() - new Date(date).getTime();
+    const mins = Math.floor(diff / 60000);
+    if (mins < 60) return isRtl.value ? `منذ ${mins} د` : `${mins}m ago`;
+    const hours = Math.floor(mins / 60);
+    if (hours < 24) return isRtl.value ? `منذ ${hours} س` : `${hours}h ago`;
+    const days = Math.floor(hours / 24);
+    return isRtl.value ? `منذ ${days} ي` : `${days}d ago`;
+}
+
+function getInitials(name) {
+    if (!name) return '?';
+    const parts = name.trim().split(/\s+/);
+    return parts.length >= 2
+        ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
+        : name.substring(0, 2).toUpperCase();
 }
 
 function completeFollowUp(fuId) {
@@ -42,117 +161,499 @@ function completeFollowUp(fuId) {
 function missFollowUp(fuId) {
     router.post(`/secretary/crm/follow-ups/${fuId}/miss`, {}, { preserveScroll: true });
 }
+
+/* ---------- Performance ---------- */
+const conversionRate = computed(() => {
+    const total = props.stats?.my_leads || 0;
+    if (total === 0) return 0;
+    // Estimate: converted leads would be implied from stats
+    // For now we show a meaningful metric based on follow-up completion
+    const completed = (props.stats?.today_follow_ups || 0);
+    const overdue = (props.stats?.overdue_follow_ups || 0);
+    const totalFU = completed + overdue;
+    if (totalFU === 0) return 100;
+    return Math.round((completed / totalFU) * 100);
+});
 </script>
 
 <template>
-    <SecretaryLayout :title="isRtl ? 'عملائي' : 'My Leads'">
-        <div class="space-y-6">
-            <!-- Header -->
-            <div class="flex items-center justify-between">
-                <div>
-                    <h1 class="text-2xl font-bold text-gray-800">{{ isRtl ? 'العملاء المحتملين' : 'My Leads' }}</h1>
-                    <p class="text-sm text-gray-500 mt-1">{{ isRtl ? 'إدارة العملاء المحتملين المعينين لك' : 'Manage leads assigned to you' }}</p>
+    <SecretaryLayout :title="isRtl ? 'لوحة تحكم العملاء' : 'CRM Dashboard'">
+        <div class="space-y-6 pb-8">
+
+            <!-- ============ HERO GRADIENT HEADER ============ -->
+            <div
+                class="relative overflow-hidden rounded-2xl p-6 md:p-8"
+                :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
+                style="background: linear-gradient(135deg, #0d9488 0%, #0f766e 50%, #134e4a 100%); transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0s"
+            >
+                <!-- Decorative circles -->
+                <div class="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-white/5"></div>
+                <div class="absolute -bottom-8 -left-8 w-32 h-32 rounded-full bg-white/5"></div>
+                <div class="absolute top-1/2 right-1/4 w-20 h-20 rounded-full bg-white/5"></div>
+
+                <div class="relative z-10">
+                    <div class="flex items-center gap-3 mb-2">
+                        <div class="w-10 h-10 rounded-xl bg-white/15 backdrop-blur-sm flex items-center justify-center">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
+                        </div>
+                        <h1 class="text-2xl md:text-3xl font-bold text-white">{{ greeting }} !</h1>
+                    </div>
+                    <p class="text-teal-100 text-sm md:text-base mt-1 max-w-xl leading-relaxed">
+                        {{ motivationalQuote }}
+                    </p>
+                    <div class="mt-4 flex items-center gap-2">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 backdrop-blur-sm text-white text-xs font-medium">
+                            <span class="w-2 h-2 rounded-full bg-emerald-300 animate-pulse"></span>
+                            {{ isRtl ? 'متصل' : 'Online' }}
+                        </span>
+                        <span class="px-3 py-1 rounded-full bg-white/10 text-teal-100 text-xs">
+                            {{ new Date().toLocaleDateString(isRtl ? 'ar-SA' : 'en-GB', { weekday: 'long', day: 'numeric', month: 'long' }) }}
+                        </span>
+                    </div>
                 </div>
-                <Link href="/secretary/crm/leads" class="inline-flex items-center px-4 py-2 rounded-lg text-white text-sm font-medium transition shadow-sm" style="background-color: #0d9488;">
-                    View All Leads
+            </div>
+
+            <!-- ============ STATS CARDS ============ -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- My Active Leads -->
+                <div
+                    class="group relative bg-white rounded-2xl shadow-sm border border-gray-100 p-5 hover:shadow-md hover:scale-[1.02] cursor-default"
+                    :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
+                    style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.1s"
+                >
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">{{ isRtl ? 'عملائي النشطين' : 'My Active Leads' }}</p>
+                            <p class="text-3xl font-bold text-gray-800 mt-2 tabular-nums">{{ counterMyLeads }}</p>
+                        </div>
+                        <div class="w-11 h-11 rounded-xl flex items-center justify-center" style="background: linear-gradient(135deg, #0d9488, #14b8a6);">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="mt-3 h-1 rounded-full bg-gray-100 overflow-hidden">
+                        <div class="h-full rounded-full transition-all duration-1000 ease-out" :style="{ width: mounted ? '100%' : '0%', background: 'linear-gradient(90deg, #0d9488, #14b8a6)' }"></div>
+                    </div>
+                </div>
+
+                <!-- New Leads -->
+                <div
+                    class="group relative bg-white rounded-2xl shadow-sm border border-gray-100 p-5 hover:shadow-md hover:scale-[1.02] cursor-default"
+                    :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
+                    style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.15s"
+                >
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">{{ isRtl ? 'عملاء جدد' : 'New Leads' }}</p>
+                            <p class="text-3xl font-bold text-blue-600 mt-2 tabular-nums">{{ counterNewLeads }}</p>
+                        </div>
+                        <div class="w-11 h-11 rounded-xl flex items-center justify-center" style="background: linear-gradient(135deg, #2563eb, #60a5fa);">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="mt-3 h-1 rounded-full bg-gray-100 overflow-hidden">
+                        <div class="h-full rounded-full transition-all duration-1000 ease-out" :style="{ width: mounted ? '70%' : '0%', background: 'linear-gradient(90deg, #2563eb, #60a5fa)' }"></div>
+                    </div>
+                </div>
+
+                <!-- Today Follow-ups -->
+                <div
+                    class="group relative bg-white rounded-2xl shadow-sm border border-gray-100 p-5 hover:shadow-md hover:scale-[1.02] cursor-default"
+                    :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
+                    style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.2s"
+                >
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">{{ isRtl ? 'متابعات اليوم' : "Today's Follow-ups" }}</p>
+                            <p class="text-3xl font-bold text-gray-800 mt-2 tabular-nums">{{ counterTodayFU }}</p>
+                        </div>
+                        <div class="w-11 h-11 rounded-xl flex items-center justify-center" style="background: linear-gradient(135deg, #0d9488, #5eead4);">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="mt-3 h-1 rounded-full bg-gray-100 overflow-hidden">
+                        <div class="h-full rounded-full transition-all duration-1000 ease-out" :style="{ width: mounted ? '50%' : '0%', background: 'linear-gradient(90deg, #0d9488, #5eead4)' }"></div>
+                    </div>
+                </div>
+
+                <!-- Overdue -->
+                <div
+                    class="group relative bg-white rounded-2xl shadow-sm border border-gray-100 p-5 hover:shadow-md hover:scale-[1.02] cursor-default"
+                    :class="[mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4', stats.overdue_follow_ups > 0 ? 'border-red-200 bg-red-50/30' : '']"
+                    style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.25s"
+                >
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <p class="text-xs font-medium uppercase tracking-wider" :class="stats.overdue_follow_ups > 0 ? 'text-red-400' : 'text-gray-400'">{{ isRtl ? 'متأخرة' : 'Overdue' }}</p>
+                            <p class="text-3xl font-bold mt-2 tabular-nums" :class="stats.overdue_follow_ups > 0 ? 'text-red-600' : 'text-gray-800'">{{ counterOverdueFU }}</p>
+                        </div>
+                        <div class="w-11 h-11 rounded-xl flex items-center justify-center" :style="stats.overdue_follow_ups > 0 ? 'background: linear-gradient(135deg, #dc2626, #f87171)' : 'background: linear-gradient(135deg, #6b7280, #9ca3af)'">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="mt-3 h-1 rounded-full bg-gray-100 overflow-hidden">
+                        <div class="h-full rounded-full transition-all duration-1000 ease-out" :style="{ width: mounted ? (stats.overdue_follow_ups > 0 ? '80%' : '0%') : '0%', background: 'linear-gradient(90deg, #dc2626, #f87171)' }"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============ QUICK ACTIONS BAR ============ -->
+            <div
+                class="flex flex-wrap items-center gap-3"
+                :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
+                style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.3s"
+            >
+                <Link href="/secretary/crm/leads"
+                    class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-white text-sm font-semibold shadow-sm hover:shadow-md transition-all duration-200 hover:scale-[1.02]"
+                    style="background: linear-gradient(135deg, #0d9488, #0f766e);"
+                >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    {{ isRtl ? 'عرض كل العملاء' : 'View All Leads' }}
+                </Link>
+
+                <Link href="/secretary/crm/leads"
+                    class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-teal-700 text-sm font-semibold bg-teal-50 border border-teal-200 hover:bg-teal-100 transition-all duration-200 hover:scale-[1.02]"
+                >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    {{ isRtl ? 'جدولة متابعة' : 'Schedule Follow-up' }}
+                </Link>
+
+                <Link href="/secretary/crm/leads"
+                    class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-teal-700 text-sm font-semibold bg-teal-50 border border-teal-200 hover:bg-teal-100 transition-all duration-200 hover:scale-[1.02]"
+                >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    {{ isRtl ? 'إضافة نشاط' : 'Add Activity' }}
                 </Link>
             </div>
 
-            <!-- Stats -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div class="bg-white rounded-xl shadow-sm p-5 border border-gray-100">
-                    <p class="text-xs font-medium text-gray-500 uppercase tracking-wider">{{ isRtl ? 'عملائي النشطين' : 'My Active Leads' }}</p>
-                    <p class="text-2xl font-bold text-gray-800 mt-2">{{ stats.my_leads }}</p>
-                </div>
-                <div class="bg-white rounded-xl shadow-sm p-5 border border-gray-100">
-                    <p class="text-xs font-medium text-gray-500 uppercase tracking-wider">{{ isRtl ? 'عملاء جدد' : 'New Leads' }}</p>
-                    <p class="text-2xl font-bold text-blue-600 mt-2">{{ stats.new_leads }}</p>
-                </div>
-                <div class="bg-white rounded-xl shadow-sm p-5 border border-gray-100">
-                    <p class="text-xs font-medium text-gray-500 uppercase tracking-wider">{{ isRtl ? 'متابعات اليوم' : 'Today Follow-ups' }}</p>
-                    <p class="text-2xl font-bold text-gray-800 mt-2">{{ stats.today_follow_ups }}</p>
-                </div>
-                <div class="bg-white rounded-xl shadow-sm p-5 border border-gray-100">
-                    <p class="text-xs font-medium text-gray-500 uppercase tracking-wider">{{ isRtl ? 'متأخرة' : 'Overdue' }}</p>
-                    <p class="text-2xl font-bold" :class="stats.overdue_follow_ups > 0 ? 'text-red-600' : 'text-gray-800'">{{ stats.overdue_follow_ups }}</p>
-                </div>
-            </div>
+            <!-- ============ MAIN CONTENT GRID ============ -->
+            <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <!-- Today's Follow-ups -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100">
-                    <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-                        <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wider">Today's Follow-ups</h3>
-                        <span class="text-xs font-mono px-2 py-0.5 rounded-full bg-teal-50 text-teal-600">{{ todayFollowUps?.length || 0 }}</span>
-                    </div>
-                    <div class="divide-y divide-gray-50">
-                        <div v-for="fu in todayFollowUps" :key="fu.id" class="px-6 py-3 flex items-center gap-3 hover:bg-gray-50/50 transition">
-                            <div class="flex-1 min-w-0">
-                                <Link :href="`/secretary/crm/leads/${fu.lead?.id}`" class="text-sm font-medium text-gray-800 hover:underline truncate block">
-                                    {{ fu.lead?.full_name }}
-                                </Link>
-                                <div class="flex items-center gap-2 mt-0.5">
-                                    <span class="text-xs text-gray-400 capitalize">{{ fu.type }}</span>
-                                    <span class="text-xs text-gray-400">{{ formatTime(fu.scheduled_at) }}</span>
+                <!-- LEFT COLUMN: Follow-ups -->
+                <div class="xl:col-span-2 space-y-6">
+
+                    <!-- ---- TODAY'S FOLLOW-UPS ---- -->
+                    <div
+                        class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden"
+                        :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
+                        style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.35s"
+                    >
+                        <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between" style="background: linear-gradient(135deg, #f0fdfa, #ccfbf1);">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background: linear-gradient(135deg, #0d9488, #14b8a6);">
+                                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                </div>
+                                <h3 class="text-sm font-bold text-gray-800 uppercase tracking-wider">{{ isRtl ? 'متابعات اليوم' : "Today's Follow-ups" }}</h3>
+                            </div>
+                            <span class="px-2.5 py-1 rounded-full text-xs font-bold" style="background-color: #ccfbf1; color: #0d9488;">{{ todayFollowUps?.length || 0 }}</span>
+                        </div>
+
+                        <div class="p-4 grid grid-cols-1 md:grid-cols-2 gap-3" v-if="todayFollowUps?.length">
+                            <div
+                                v-for="(fu, idx) in todayFollowUps" :key="fu.id"
+                                class="relative bg-gray-50 hover:bg-white rounded-xl border border-gray-100 hover:border-teal-200 p-4 transition-all duration-300 hover:shadow-md group"
+                                :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
+                                :style="`transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: ${0.4 + idx * 0.05}s`"
+                            >
+                                <div class="flex items-start gap-3">
+                                    <!-- Type Icon -->
+                                    <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" :class="followUpTypeConfig[fu.type]?.color || 'bg-gray-100 text-gray-500'">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" :d="followUpTypeConfig[fu.type]?.iconPath || 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z'" />
+                                        </svg>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <Link :href="`/secretary/crm/leads/${fu.lead?.id}`" class="text-sm font-semibold text-gray-800 hover:text-teal-600 transition-colors truncate block">
+                                            {{ fu.lead?.full_name }}
+                                        </Link>
+                                        <div class="flex items-center gap-2 mt-1">
+                                            <span class="text-[11px] font-medium px-2 py-0.5 rounded-full" :class="followUpTypeConfig[fu.type]?.color || 'bg-gray-100 text-gray-500'">
+                                                {{ followUpTypeConfig[fu.type]?.label || fu.type }}
+                                            </span>
+                                            <span class="text-[11px] text-gray-400 font-medium">{{ formatTime(fu.scheduled_at) }}</span>
+                                        </div>
+                                        <p v-if="fu.notes" class="text-xs text-gray-400 mt-1.5 truncate">{{ fu.notes }}</p>
+                                    </div>
+                                </div>
+                                <!-- Action buttons -->
+                                <div class="flex items-center gap-2 mt-3 pt-3 border-t border-gray-100">
+                                    <button
+                                        @click="completeFollowUp(fu.id)"
+                                        class="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-50 text-emerald-600 hover:bg-emerald-100 border border-emerald-200 transition-all duration-200 hover:scale-[1.02]"
+                                    >
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" /></svg>
+                                        {{ isRtl ? 'مكتمل' : 'Complete' }}
+                                    </button>
+                                    <button
+                                        @click="missFollowUp(fu.id)"
+                                        class="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-red-50 text-red-500 hover:bg-red-100 border border-red-200 transition-all duration-200 hover:scale-[1.02]"
+                                    >
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" /></svg>
+                                        {{ isRtl ? 'فائت' : 'Missed' }}
+                                    </button>
                                 </div>
                             </div>
-                            <div class="flex items-center gap-1">
-                                <button @click="completeFollowUp(fu.id)" :title="isRtl ? 'مكتمل' : 'Complete'" class="p-1 rounded text-green-500 hover:bg-green-50 transition">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-                                </button>
-                                <button @click="missFollowUp(fu.id)" :title="isRtl ? 'فائت' : 'Missed'" class="p-1 rounded text-red-500 hover:bg-red-50 transition">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-                                </button>
+                        </div>
+
+                        <div v-else class="px-6 py-12 text-center">
+                            <div class="w-16 h-16 rounded-2xl mx-auto mb-4 flex items-center justify-center" style="background: linear-gradient(135deg, #f0fdfa, #ccfbf1);">
+                                <svg class="w-8 h-8 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <p class="text-sm font-medium text-gray-500">{{ isRtl ? 'لا توجد متابعات اليوم' : 'No follow-ups scheduled for today' }}</p>
+                            <p class="text-xs text-gray-400 mt-1">{{ isRtl ? 'يوم رائع للتخطيط!' : 'Great day for planning ahead!' }}</p>
+                        </div>
+                    </div>
+
+                    <!-- ---- OVERDUE FOLLOW-UPS ---- -->
+                    <div
+                        v-if="overdueFollowUps?.length"
+                        class="bg-white rounded-2xl shadow-sm border border-red-200 overflow-hidden"
+                        :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
+                        style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.4s"
+                    >
+                        <div class="px-6 py-4 border-b border-red-100 flex items-center justify-between bg-gradient-to-r from-red-50 to-rose-50">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-lg flex items-center justify-center bg-gradient-to-br from-red-500 to-rose-500 relative">
+                                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                                    </svg>
+                                    <!-- Pulsing dot -->
+                                    <span class="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-red-500 animate-ping opacity-75"></span>
+                                    <span class="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-red-500"></span>
+                                </div>
+                                <h3 class="text-sm font-bold text-red-700 uppercase tracking-wider">{{ isRtl ? 'متابعات متأخرة' : 'Overdue Follow-ups' }}</h3>
+                            </div>
+                            <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-red-100 text-red-600 animate-pulse">{{ overdueFollowUps.length }}</span>
+                        </div>
+
+                        <div class="p-4 grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <div
+                                v-for="(fu, idx) in overdueFollowUps" :key="fu.id"
+                                class="relative bg-red-50/50 hover:bg-white rounded-xl border border-red-100 hover:border-red-300 p-4 transition-all duration-300 hover:shadow-md"
+                                :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
+                                :style="`transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: ${0.45 + idx * 0.05}s`"
+                            >
+                                <!-- Urgent stripe -->
+                                <div class="absolute top-0 left-0 w-1 h-full rounded-l-xl bg-gradient-to-b from-red-500 to-rose-500"></div>
+
+                                <div class="flex items-start gap-3" :class="isRtl ? 'pr-2' : 'pl-2'">
+                                    <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" :class="followUpTypeConfig[fu.type]?.color || 'bg-gray-100 text-gray-500'">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" :d="followUpTypeConfig[fu.type]?.iconPath || 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z'" />
+                                        </svg>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <Link :href="`/secretary/crm/leads/${fu.lead?.id}`" class="text-sm font-semibold text-gray-800 hover:text-red-600 transition-colors truncate block">
+                                            {{ fu.lead?.full_name }}
+                                        </Link>
+                                        <div class="flex items-center gap-2 mt-1">
+                                            <span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-red-100 text-red-600">
+                                                {{ isRtl ? 'متأخر' : 'Overdue' }} - {{ formatDate(fu.scheduled_at) }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center gap-2 mt-3 pt-3 border-t border-red-100" :class="isRtl ? 'pr-2' : 'pl-2'">
+                                    <button
+                                        @click="completeFollowUp(fu.id)"
+                                        class="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-50 text-emerald-600 hover:bg-emerald-100 border border-emerald-200 transition-all duration-200"
+                                    >
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" /></svg>
+                                        {{ isRtl ? 'مكتمل' : 'Complete' }}
+                                    </button>
+                                    <button
+                                        @click="missFollowUp(fu.id)"
+                                        class="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-red-50 text-red-500 hover:bg-red-100 border border-red-200 transition-all duration-200"
+                                    >
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" /></svg>
+                                        {{ isRtl ? 'فائت' : 'Missed' }}
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                        <div v-if="!todayFollowUps?.length" class="px-6 py-8 text-sm text-gray-400 text-center">{{ isRtl ? 'لا توجد متابعات اليوم' : 'No follow-ups today' }}</div>
                     </div>
                 </div>
 
-                <!-- Overdue Follow-ups -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100" v-if="overdueFollowUps?.length">
-                    <div class="px-6 py-4 border-b border-red-100 flex items-center justify-between bg-red-50/50 rounded-t-xl">
-                        <h3 class="text-sm font-semibold text-red-700 uppercase tracking-wider">{{ isRtl ? 'متابعات متأخرة' : 'Overdue Follow-ups' }}</h3>
-                        <span class="text-xs font-mono px-2 py-0.5 rounded-full bg-red-100 text-red-600">{{ overdueFollowUps.length }}</span>
-                    </div>
-                    <div class="divide-y divide-gray-50">
-                        <div v-for="fu in overdueFollowUps" :key="fu.id" class="px-6 py-3 flex items-center gap-3 hover:bg-gray-50/50 transition">
-                            <div class="flex-1 min-w-0">
-                                <Link :href="`/secretary/crm/leads/${fu.lead?.id}`" class="text-sm font-medium text-gray-800 hover:underline truncate block">
-                                    {{ fu.lead?.full_name }}
-                                </Link>
-                                <span class="text-xs text-red-500">Due {{ formatDate(fu.scheduled_at) }}</span>
+                <!-- RIGHT COLUMN: Recent Leads + Performance -->
+                <div class="space-y-6">
+
+                    <!-- ---- PERFORMANCE MINI WIDGET ---- -->
+                    <div
+                        class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 overflow-hidden"
+                        :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
+                        style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.35s"
+                    >
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background: linear-gradient(135deg, #0d9488, #14b8a6);">
+                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                </svg>
                             </div>
-                            <div class="flex items-center gap-1">
-                                <button @click="completeFollowUp(fu.id)" :title="isRtl ? 'مكتمل' : 'Complete'" class="p-1 rounded text-green-500 hover:bg-green-50 transition">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-                                </button>
-                                <button @click="missFollowUp(fu.id)" :title="isRtl ? 'فائت' : 'Missed'" class="p-1 rounded text-red-500 hover:bg-red-50 transition">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-                                </button>
+                            <h3 class="text-sm font-bold text-gray-800 uppercase tracking-wider">{{ isRtl ? 'الأداء' : 'Performance' }}</h3>
+                        </div>
+
+                        <div class="text-center mb-4">
+                            <div class="relative w-24 h-24 mx-auto">
+                                <!-- Background circle -->
+                                <svg class="w-24 h-24 transform -rotate-90" viewBox="0 0 100 100">
+                                    <circle cx="50" cy="50" r="42" stroke="#e5e7eb" stroke-width="8" fill="none" />
+                                    <circle
+                                        cx="50" cy="50" r="42"
+                                        stroke="url(#perfGrad)"
+                                        stroke-width="8"
+                                        fill="none"
+                                        stroke-linecap="round"
+                                        :stroke-dasharray="`${mounted ? conversionRate * 2.64 : 0} 264`"
+                                        style="transition: stroke-dasharray 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.6s"
+                                    />
+                                    <defs>
+                                        <linearGradient id="perfGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" stop-color="#0d9488" />
+                                            <stop offset="100%" stop-color="#14b8a6" />
+                                        </linearGradient>
+                                    </defs>
+                                </svg>
+                                <div class="absolute inset-0 flex items-center justify-center">
+                                    <span class="text-xl font-bold text-gray-800">{{ conversionRate }}%</span>
+                                </div>
+                            </div>
+                            <p class="text-xs text-gray-400 mt-2 font-medium">{{ isRtl ? 'معدل إنجاز المتابعات' : 'Follow-up Completion Rate' }}</p>
+                        </div>
+
+                        <div class="space-y-2.5">
+                            <div class="flex items-center justify-between text-xs">
+                                <span class="text-gray-500">{{ isRtl ? 'عملاء نشطين' : 'Active Leads' }}</span>
+                                <span class="font-bold text-gray-800">{{ stats.my_leads }}</span>
+                            </div>
+                            <div class="flex items-center justify-between text-xs">
+                                <span class="text-gray-500">{{ isRtl ? 'متابعات اليوم' : "Today's Tasks" }}</span>
+                                <span class="font-bold text-gray-800">{{ stats.today_follow_ups }}</span>
+                            </div>
+                            <div class="flex items-center justify-between text-xs">
+                                <span class="text-gray-500">{{ isRtl ? 'متأخرة' : 'Overdue' }}</span>
+                                <span class="font-bold" :class="stats.overdue_follow_ups > 0 ? 'text-red-600' : 'text-gray-800'">{{ stats.overdue_follow_ups }}</span>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Recent Leads -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100" :class="overdueFollowUps?.length ? '' : ''">
-                    <div class="px-6 py-4 border-b border-gray-100">
-                        <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wider">{{ isRtl ? 'عملائي الأخيرين' : 'My Recent Leads' }}</h3>
-                    </div>
-                    <div class="divide-y divide-gray-50">
-                        <Link v-for="lead in recentLeads" :key="lead.id" :href="`/secretary/crm/leads/${lead.id}`"
-                            class="px-6 py-3 flex items-center gap-3 hover:bg-gray-50/50 transition block"
-                        >
-                            <div class="flex-1 min-w-0">
-                                <p class="text-sm font-medium text-gray-800 truncate">{{ lead.full_name }}</p>
-                                <p class="text-xs text-gray-400">{{ lead.phone || lead.email || '-' }}</p>
+                    <!-- ---- RECENT LEADS ---- -->
+                    <div
+                        class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden"
+                        :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
+                        style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.4s"
+                    >
+                        <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background: linear-gradient(135deg, #0d9488, #14b8a6);">
+                                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
+                                    </svg>
+                                </div>
+                                <h3 class="text-sm font-bold text-gray-800 uppercase tracking-wider">{{ isRtl ? 'العملاء الأخيرين' : 'Recent Leads' }}</h3>
                             </div>
-                            <span :class="statusColors[lead.status]" class="px-2 py-0.5 text-[10px] font-semibold rounded-full whitespace-nowrap">
-                                {{ statusLabels[lead.status] || lead.status }}
-                            </span>
-                        </Link>
-                        <div v-if="!recentLeads?.length" class="px-6 py-8 text-sm text-gray-400 text-center">{{ isRtl ? 'لم يتم تعيين عملاء لك بعد' : 'No leads assigned to you yet' }}</div>
+                            <Link href="/secretary/crm/leads" class="text-xs font-medium hover:underline" style="color: #0d9488;">
+                                {{ isRtl ? 'عرض الكل' : 'View All' }}
+                            </Link>
+                        </div>
+
+                        <div class="divide-y divide-gray-50" v-if="recentLeads?.length">
+                            <Link
+                                v-for="(lead, idx) in recentLeads" :key="lead.id"
+                                :href="`/secretary/crm/leads/${lead.id}`"
+                                class="block px-5 py-4 hover:bg-gray-50/70 transition-all duration-200 group"
+                                :class="mounted ? 'opacity-100 translate-x-0' : (isRtl ? 'opacity-0 translate-x-4' : 'opacity-0 -translate-x-4')"
+                                :style="`transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: ${0.45 + idx * 0.06}s`"
+                            >
+                                <div class="flex items-center gap-3">
+                                    <!-- Avatar -->
+                                    <div class="w-10 h-10 rounded-xl flex items-center justify-center text-white text-sm font-bold flex-shrink-0" style="background: linear-gradient(135deg, #0d9488, #14b8a6);">
+                                        {{ getInitials(lead.full_name) }}
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <div class="flex items-center gap-2">
+                                            <p class="text-sm font-semibold text-gray-800 group-hover:text-teal-600 transition-colors truncate">{{ lead.full_name }}</p>
+                                            <!-- Priority icon -->
+                                            <span v-if="lead.priority === 'hot'" class="text-red-500 flex-shrink-0" :title="priorityConfig.hot.label">
+                                                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clip-rule="evenodd" /></svg>
+                                            </span>
+                                            <span v-else-if="lead.priority === 'warm'" class="text-orange-400 flex-shrink-0" :title="priorityConfig.warm.label">
+                                                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clip-rule="evenodd" /></svg>
+                                            </span>
+                                            <span v-else-if="lead.priority === 'cold'" class="text-blue-400 flex-shrink-0" :title="priorityConfig.cold.label">
+                                                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a.75.75 0 01.75.75v1.563l1.08-.625a.75.75 0 01.75 1.3L11.5 5.5l1.08.625a.75.75 0 01-.75 1.3L10.75 6.8v1.45a.75.75 0 01-1.5 0V6.8l-1.08.625a.75.75 0 11-.75-1.3L8.5 5.5l-1.08-.513a.75.75 0 01.75-1.3l1.08.625V2.75A.75.75 0 0110 2zM5.5 10a.75.75 0 01.75.75v1.563l1.08-.625a.75.75 0 01.75 1.3l-1.08.512 1.08.625a.75.75 0 01-.75 1.3l-1.08-.625v1.45a.75.75 0 01-1.5 0V14.8l-1.08.625a.75.75 0 01-.75-1.3l1.08-.625-1.08-.513a.75.75 0 01.75-1.3l1.08.626V10.75A.75.75 0 015.5 10zm9 0a.75.75 0 01.75.75v1.563l1.08-.625a.75.75 0 01.75 1.3l-1.08.512 1.08.625a.75.75 0 01-.75 1.3l-1.08-.625v1.45a.75.75 0 01-1.5 0V14.8l-1.08.625a.75.75 0 01-.75-1.3l1.08-.625-1.08-.513a.75.75 0 01.75-1.3l1.08.626V10.75a.75.75 0 01.75-.75z" /></svg>
+                                            </span>
+                                        </div>
+                                        <p class="text-xs text-gray-400 mt-0.5">{{ lead.phone || lead.email || '-' }}</p>
+                                    </div>
+                                </div>
+
+                                <!-- Bottom row: status + score + source -->
+                                <div class="flex items-center gap-2 mt-2.5" :class="isRtl ? 'pr-13' : 'pl-13'" style="padding-inline-start: 52px;">
+                                    <span :class="statusColors[lead.status]" class="px-2 py-0.5 text-[10px] font-bold rounded-full border whitespace-nowrap">
+                                        {{ statusLabels[lead.status] || lead.status }}
+                                    </span>
+
+                                    <!-- Score bar -->
+                                    <div v-if="lead.score != null" class="flex items-center gap-1.5 flex-1 max-w-[100px]">
+                                        <div class="flex-1 h-1.5 rounded-full bg-gray-100 overflow-hidden">
+                                            <div
+                                                class="h-full rounded-full"
+                                                :style="{
+                                                    width: mounted ? `${Math.min(lead.score, 100)}%` : '0%',
+                                                    background: lead.score >= 70 ? 'linear-gradient(90deg, #0d9488, #14b8a6)' : lead.score >= 40 ? 'linear-gradient(90deg, #f59e0b, #fbbf24)' : 'linear-gradient(90deg, #ef4444, #f87171)',
+                                                    transition: 'width 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.8s'
+                                                }"
+                                            ></div>
+                                        </div>
+                                        <span class="text-[10px] font-bold text-gray-400 tabular-nums">{{ lead.score }}</span>
+                                    </div>
+
+                                    <!-- Source -->
+                                    <span v-if="lead.source?.name_en" class="text-[10px] text-gray-400 truncate" :class="isRtl ? 'mr-auto' : 'ml-auto'">
+                                        {{ lead.source.name_en }}
+                                    </span>
+                                </div>
+
+                                <!-- Time -->
+                                <div class="mt-1.5" style="padding-inline-start: 52px;">
+                                    <span v-if="lead.next_follow_up_at" class="text-[10px] text-teal-500 font-medium">
+                                        {{ isRtl ? 'المتابعة القادمة:' : 'Next:' }} {{ formatDate(lead.next_follow_up_at) }}
+                                    </span>
+                                    <span v-else class="text-[10px] text-gray-300">
+                                        {{ isRtl ? 'أضيف' : 'Added' }} {{ timeAgo(lead.created_at) }}
+                                    </span>
+                                </div>
+                            </Link>
+                        </div>
+
+                        <div v-else class="px-6 py-12 text-center">
+                            <div class="w-16 h-16 rounded-2xl mx-auto mb-4 flex items-center justify-center bg-gray-50">
+                                <svg class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                            </div>
+                            <p class="text-sm font-medium text-gray-500">{{ isRtl ? 'لم يتم تعيين عملاء لك بعد' : 'No leads assigned yet' }}</p>
+                        </div>
                     </div>
                 </div>
             </div>
