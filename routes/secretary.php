@@ -159,6 +159,7 @@ Route::middleware('secretary.auth')->group(function () {
     Route::post('/crm/follow-ups/{followUp}/reschedule', [SecretaryCrmController::class, 'rescheduleFollowUp'])->name('secretary.crm.rescheduleFollowUp');
     Route::get('/crm/check-duplicate', [SecretaryCrmController::class, 'checkDuplicate'])->name('secretary.crm.checkDuplicate');
     Route::get('/crm/performance', [SecretaryCrmController::class, 'performance'])->name('secretary.crm.performance');
+    Route::get('/crm/calendar', [SecretaryCrmController::class, 'calendar'])->name('secretary.crm.calendar');
 
     // ─── Dental Module ────────────────────────────────────────
     Route::prefix('dental')->middleware('module:dental')->group(function () {

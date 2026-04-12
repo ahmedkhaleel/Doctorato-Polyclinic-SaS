@@ -568,6 +568,71 @@ class SecretaryCrmController extends BaseSecretaryController
     }
 
     /**
+     * Calendar view for follow-ups.
+     */
+    public function calendar(Request $request): Response
+    {
+        $userId = auth()->id();
+
+        // Default to current month
+        $month = (int) $request->input('month', now()->month);
+        $year = (int) $request->input('year', now()->year);
+
+        $startDate = \Carbon\Carbon::create($year, $month, 1)->startOfDay();
+        $endDate = $startDate->copy()->endOfMonth()->endOfDay();
+
+        // Get follow-ups for the month (include a week before/after for calendar edges)
+        $calendarStart = $startDate->copy()->startOfWeek(\Carbon\Carbon::SATURDAY);
+        $calendarEnd = $endDate->copy()->endOfWeek(\Carbon\Carbon::FRIDAY);
+
+        $followUps = LeadFollowUp::with(['lead:id,full_name,phone,status,priority'])
+            ->forUser($userId)
+            ->whereBetween('scheduled_at', [$calendarStart, $calendarEnd])
+            ->orderBy('scheduled_at')
+            ->get()
+            ->map(function ($fu) {
+                return [
+                    'id' => $fu->id,
+                    'lead_id' => $fu->lead_id,
+                    'lead_name' => $fu->lead?->full_name ?? '-',
+                    'lead_phone' => $fu->lead?->phone ?? '-',
+                    'lead_status' => $fu->lead?->status ?? '-',
+                    'lead_priority' => $fu->lead?->priority ?? 3,
+                    'type' => $fu->type,
+                    'status' => $fu->status,
+                    'scheduled_at' => $fu->scheduled_at->toIso8601String(),
+                    'scheduled_date' => $fu->scheduled_at->format('Y-m-d'),
+                    'scheduled_time' => $fu->scheduled_at->format('H:i'),
+                    'notes' => $fu->notes,
+                    'result' => $fu->result,
+                    'is_overdue' => $fu->is_overdue,
+                ];
+            });
+
+        // Stats for the header
+        $monthStats = [
+            'total' => LeadFollowUp::forUser($userId)
+                ->whereBetween('scheduled_at', [$startDate, $endDate])->count(),
+            'pending' => LeadFollowUp::forUser($userId)->pending()
+                ->whereBetween('scheduled_at', [$startDate, $endDate])->count(),
+            'completed' => LeadFollowUp::forUser($userId)
+                ->where('status', 'completed')
+                ->whereBetween('scheduled_at', [$startDate, $endDate])->count(),
+            'missed' => LeadFollowUp::forUser($userId)
+                ->where('status', 'missed')
+                ->whereBetween('scheduled_at', [$startDate, $endDate])->count(),
+            'overdue' => LeadFollowUp::forUser($userId)->overdue()->count(),
+        ];
+
+        return Inertia::render('Secretary/CRM/Calendar', [
+            'followUps' => $followUps,
+            'monthStats' => $monthStats,
+            'currentMonth' => $month,
+            'currentYear' => $year,
+        ]);
+    }
+
+    /**
      * Performance report page.
      */
     public function performance(): Response

@@ -1,0 +1,470 @@
+<script setup>
+import { ref, computed, onMounted } from 'vue';
+import { Link, router, usePage } from '@inertiajs/vue3';
+import SecretaryLayout from '@/Layouts/SecretaryLayout.vue';
+
+const page = usePage();
+const isRtl = computed(() => (page.props.dir || 'rtl') === 'rtl');
+
+const props = defineProps({
+    followUps: Array,
+    monthStats: Object,
+    currentMonth: Number,
+    currentYear: Number,
+});
+
+const mounted = ref(false);
+onMounted(() => { setTimeout(() => { mounted.value = true; }, 50); });
+
+/* ── Calendar Data ─────────────────────────────────────── */
+const monthNames = {
+    en: ['January','February','March','April','May','June','July','August','September','October','November','December'],
+    ar: ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'],
+};
+
+const dayNames = {
+    en: ['Sat','Sun','Mon','Tue','Wed','Thu','Fri'],
+    ar: ['سبت','أحد','إثنين','ثلاثاء','أربعاء','خميس','جمعة'],
+};
+
+const currentMonthName = computed(() => {
+    const lang = isRtl.value ? 'ar' : 'en';
+    return monthNames[lang][props.currentMonth - 1];
+});
+
+/* ── Build calendar grid ─────────────────────────────── */
+const calendarDays = computed(() => {
+    const year = props.currentYear;
+    const month = props.currentMonth - 1; // JS months are 0-indexed
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+
+    // Saturday = 6, but we want Saturday as first column
+    // getDay(): 0=Sun, 1=Mon, ..., 5=Fri, 6=Sat
+    const startOffset = (firstDay.getDay() + 1) % 7; // Convert so Sat=0
+
+    const days = [];
+
+    // Previous month's trailing days
+    const prevMonthLastDay = new Date(year, month, 0).getDate();
+    for (let i = startOffset - 1; i >= 0; i--) {
+        const d = prevMonthLastDay - i;
+        const prevMonth = month === 0 ? 12 : month;
+        const prevYear = month === 0 ? year - 1 : year;
+        const dateStr = `${prevYear}-${String(prevMonth).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+        days.push({ day: d, date: dateStr, isCurrentMonth: false, isToday: false });
+    }
+
+    // Current month days
+    const today = new Date();
+    const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+
+    for (let d = 1; d <= lastDay.getDate(); d++) {
+        const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+        days.push({ day: d, date: dateStr, isCurrentMonth: true, isToday: dateStr === todayStr });
+    }
+
+    // Next month's leading days to fill the grid
+    const remaining = 42 - days.length; // 6 rows x 7 columns
+    for (let d = 1; d <= remaining; d++) {
+        const nextMonth = month + 2 > 12 ? 1 : month + 2;
+        const nextYear = month + 2 > 12 ? year + 1 : year;
+        const dateStr = `${nextYear}-${String(nextMonth).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+        days.push({ day: d, date: dateStr, isCurrentMonth: false, isToday: false });
+    }
+
+    return days;
+});
+
+/* ── Follow-ups grouped by date ──────────────────────── */
+const followUpsByDate = computed(() => {
+    const map = {};
+    (props.followUps || []).forEach(fu => {
+        if (!map[fu.scheduled_date]) map[fu.scheduled_date] = [];
+        map[fu.scheduled_date].push(fu);
+    });
+    return map;
+});
+
+function getFollowUpsForDay(dateStr) {
+    return followUpsByDate.value[dateStr] || [];
+}
+
+/* ── Selected day detail ─────────────────────────────── */
+const selectedDate = ref(null);
+const showDetail = ref(false);
+
+function selectDay(dateStr) {
+    selectedDate.value = dateStr;
+    showDetail.value = true;
+}
+
+function closeDetail() {
+    showDetail.value = false;
+    selectedDate.value = null;
+}
+
+const selectedFollowUps = computed(() => {
+    if (!selectedDate.value) return [];
+    return getFollowUpsForDay(selectedDate.value);
+});
+
+const selectedDateFormatted = computed(() => {
+    if (!selectedDate.value) return '';
+    const d = new Date(selectedDate.value + 'T00:00:00');
+    const dayNum = d.getDate();
+    const monthIdx = d.getMonth();
+    const lang = isRtl.value ? 'ar' : 'en';
+    return `${dayNum} ${monthNames[lang][monthIdx]} ${d.getFullYear()}`;
+});
+
+/* ── Navigation ──────────────────────────────────────── */
+function goToMonth(month, year) {
+    router.get('/secretary/crm/calendar', { month, year }, { preserveState: true, preserveScroll: true });
+}
+
+function prevMonth() {
+    let m = props.currentMonth - 1;
+    let y = props.currentYear;
+    if (m < 1) { m = 12; y--; }
+    goToMonth(m, y);
+}
+
+function nextMonth() {
+    let m = props.currentMonth + 1;
+    let y = props.currentYear;
+    if (m > 12) { m = 1; y++; }
+    goToMonth(m, y);
+}
+
+function goToday() {
+    const now = new Date();
+    goToMonth(now.getMonth() + 1, now.getFullYear());
+}
+
+/* ── Filter ──────────────────────────────────────────── */
+const activeFilter = ref('all');
+const filterOptions = [
+    { key: 'all', en: 'All', ar: 'الكل' },
+    { key: 'pending', en: 'Pending', ar: 'معلق' },
+    { key: 'completed', en: 'Completed', ar: 'مكتمل' },
+    { key: 'missed', en: 'Missed', ar: 'فائت' },
+    { key: 'overdue', en: 'Overdue', ar: 'متأخر' },
+];
+
+function getFilteredFollowUpsForDay(dateStr) {
+    const fups = getFollowUpsForDay(dateStr);
+    if (activeFilter.value === 'all') return fups;
+    if (activeFilter.value === 'overdue') return fups.filter(f => f.is_overdue);
+    return fups.filter(f => f.status === activeFilter.value);
+}
+
+/* ── Visual helpers ──────────────────────────────────── */
+const typeConfig = {
+    call:     { en: 'Call',     ar: 'مكالمة',   color: 'bg-blue-500',   lightBg: 'bg-blue-50 text-blue-700 border-blue-200' },
+    whatsapp: { en: 'WhatsApp', ar: 'واتساب',   color: 'bg-green-500',  lightBg: 'bg-green-50 text-green-700 border-green-200' },
+    email:    { en: 'Email',    ar: 'بريد',      color: 'bg-purple-500', lightBg: 'bg-purple-50 text-purple-700 border-purple-200' },
+    sms:      { en: 'SMS',      ar: 'رسالة',     color: 'bg-cyan-500',   lightBg: 'bg-cyan-50 text-cyan-700 border-cyan-200' },
+    meeting:  { en: 'Meeting',  ar: 'اجتماع',    color: 'bg-amber-500',  lightBg: 'bg-amber-50 text-amber-700 border-amber-200' },
+    other:    { en: 'Other',    ar: 'أخرى',      color: 'bg-gray-500',   lightBg: 'bg-gray-50 text-gray-700 border-gray-200' },
+};
+
+const statusConfig = {
+    pending:     { en: 'Pending',     ar: 'معلق',      color: 'text-amber-600 bg-amber-50 border-amber-200' },
+    completed:   { en: 'Completed',   ar: 'مكتمل',     color: 'text-green-600 bg-green-50 border-green-200' },
+    missed:      { en: 'Missed',      ar: 'فائت',       color: 'text-red-600 bg-red-50 border-red-200' },
+    rescheduled: { en: 'Rescheduled', ar: 'مُعاد جدولته', color: 'text-blue-600 bg-blue-50 border-blue-200' },
+};
+
+const priorityConfig = {
+    1: { en: 'Hot',  ar: 'ساخن',  color: 'text-red-500' },
+    2: { en: 'Warm', ar: 'دافئ',  color: 'text-amber-500' },
+    3: { en: 'Cold', ar: 'بارد',  color: 'text-blue-400' },
+};
+
+function getTypeDots(fups) {
+    const types = new Set(fups.map(f => f.type));
+    return [...types].slice(0, 4);
+}
+</script>
+
+<template>
+<SecretaryLayout :title="isRtl ? 'تقويم المتابعات' : 'Follow-ups Calendar'">
+<div class="min-h-screen bg-gradient-to-br from-slate-50 via-teal-50/20 to-slate-50 p-4 md:p-6" :dir="isRtl ? 'rtl' : 'ltr'">
+
+    <!-- Header -->
+    <div :class="['relative overflow-hidden rounded-2xl bg-gradient-to-r from-teal-600 via-teal-500 to-emerald-500 p-6 md:p-8 mb-6 shadow-xl transition-all duration-700', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4']"
+         :style="{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }">
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute -top-10 -right-10 w-40 h-40 bg-white rounded-full"></div>
+            <div class="absolute -bottom-8 -left-8 w-32 h-32 bg-white rounded-full"></div>
+        </div>
+        <div class="relative flex items-center justify-between flex-wrap gap-4">
+            <div class="flex items-center gap-4">
+                <div class="w-14 h-14 bg-white/20 backdrop-blur rounded-xl flex items-center justify-center">
+                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 14h.01M12 14h.01M16 14h.01M8 17h.01M12 17h.01"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold text-white">{{ isRtl ? 'تقويم المتابعات' : 'Follow-ups Calendar' }}</h1>
+                    <p class="text-teal-100 mt-1 text-sm">{{ isRtl ? 'تتبع جميع المتابعات المجدولة' : 'Track all your scheduled follow-ups' }}</p>
+                </div>
+            </div>
+            <!-- Quick stats -->
+            <div class="flex gap-3">
+                <div class="bg-white/15 backdrop-blur rounded-xl px-4 py-2 text-center">
+                    <div class="text-2xl font-bold text-white">{{ monthStats?.total || 0 }}</div>
+                    <div class="text-xs text-teal-100">{{ isRtl ? 'الإجمالي' : 'Total' }}</div>
+                </div>
+                <div class="bg-white/15 backdrop-blur rounded-xl px-4 py-2 text-center">
+                    <div class="text-2xl font-bold text-white">{{ monthStats?.pending || 0 }}</div>
+                    <div class="text-xs text-teal-100">{{ isRtl ? 'معلق' : 'Pending' }}</div>
+                </div>
+                <div class="bg-white/15 backdrop-blur rounded-xl px-4 py-2 text-center">
+                    <div class="text-2xl font-bold text-white">{{ monthStats?.completed || 0 }}</div>
+                    <div class="text-xs text-teal-100">{{ isRtl ? 'مكتمل' : 'Done' }}</div>
+                </div>
+                <div v-if="monthStats?.overdue > 0" class="bg-red-500/30 backdrop-blur rounded-xl px-4 py-2 text-center">
+                    <div class="text-2xl font-bold text-white">{{ monthStats.overdue }}</div>
+                    <div class="text-xs text-red-100">{{ isRtl ? 'متأخر' : 'Overdue' }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Calendar Controls -->
+    <div :class="['bg-white rounded-2xl shadow-sm border border-gray-100 p-4 mb-4 transition-all duration-700 delay-100', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4']"
+         :style="{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }">
+        <div class="flex items-center justify-between flex-wrap gap-3">
+            <!-- Month navigation -->
+            <div class="flex items-center gap-3">
+                <button @click="prevMonth" class="w-9 h-9 rounded-lg bg-gray-50 hover:bg-teal-50 border border-gray-200 hover:border-teal-300 flex items-center justify-center transition-all duration-200 group">
+                    <svg :class="['w-4 h-4 text-gray-500 group-hover:text-teal-600 transition-colors', isRtl ? 'rotate-180' : '']" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+                </button>
+                <h2 class="text-lg font-semibold text-gray-800 min-w-[180px] text-center">
+                    {{ currentMonthName }} {{ currentYear }}
+                </h2>
+                <button @click="nextMonth" class="w-9 h-9 rounded-lg bg-gray-50 hover:bg-teal-50 border border-gray-200 hover:border-teal-300 flex items-center justify-center transition-all duration-200 group">
+                    <svg :class="['w-4 h-4 text-gray-500 group-hover:text-teal-600 transition-colors', isRtl ? 'rotate-180' : '']" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                </button>
+                <button @click="goToday" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-teal-50 text-teal-700 border border-teal-200 hover:bg-teal-100 transition-all duration-200">
+                    {{ isRtl ? 'اليوم' : 'Today' }}
+                </button>
+            </div>
+
+            <!-- Filter pills -->
+            <div class="flex items-center gap-1.5 flex-wrap">
+                <button v-for="opt in filterOptions" :key="opt.key"
+                    @click="activeFilter = opt.key"
+                    :class="['px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 border',
+                        activeFilter === opt.key
+                            ? 'bg-teal-500 text-white border-teal-500 shadow-sm'
+                            : 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100']">
+                    {{ isRtl ? opt.ar : opt.en }}
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Calendar Grid -->
+    <div :class="['bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-700 delay-200', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4']"
+         :style="{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }">
+
+        <!-- Day headers -->
+        <div class="grid grid-cols-7 bg-gray-50 border-b border-gray-100">
+            <div v-for="(day, idx) in (isRtl ? dayNames.ar : dayNames.en)" :key="idx"
+                 :class="['py-3 text-center text-xs font-semibold uppercase tracking-wider',
+                    idx === 6 ? 'text-red-400' : 'text-gray-500']">
+                {{ day }}
+            </div>
+        </div>
+
+        <!-- Calendar cells -->
+        <div class="grid grid-cols-7">
+            <div v-for="(cell, idx) in calendarDays" :key="idx"
+                 @click="selectDay(cell.date)"
+                 :class="['relative min-h-[90px] md:min-h-[110px] border-b border-r border-gray-50 p-1.5 cursor-pointer transition-all duration-150 hover:bg-teal-50/40 group',
+                    !cell.isCurrentMonth ? 'bg-gray-50/50' : '',
+                    cell.isToday ? 'bg-teal-50/60 ring-1 ring-inset ring-teal-200' : '',
+                    selectedDate === cell.date ? 'bg-teal-50 ring-2 ring-inset ring-teal-400' : '']">
+
+                <!-- Day number -->
+                <div class="flex items-center justify-between mb-1">
+                    <span :class="['text-sm font-medium leading-none',
+                        cell.isToday ? 'w-7 h-7 rounded-full bg-teal-500 text-white flex items-center justify-center text-xs font-bold' : '',
+                        !cell.isCurrentMonth ? 'text-gray-300' : 'text-gray-700']">
+                        {{ cell.day }}
+                    </span>
+                    <span v-if="getFilteredFollowUpsForDay(cell.date).length > 0" class="text-[10px] font-bold text-teal-600 bg-teal-100 rounded-full w-5 h-5 flex items-center justify-center">
+                        {{ getFilteredFollowUpsForDay(cell.date).length }}
+                    </span>
+                </div>
+
+                <!-- Follow-up dots / mini cards -->
+                <div class="space-y-0.5 overflow-hidden" style="max-height: 70px;">
+                    <div v-for="fu in getFilteredFollowUpsForDay(cell.date).slice(0, 3)" :key="fu.id"
+                         :class="['flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium border truncate transition-all duration-150',
+                            fu.is_overdue ? 'bg-red-50 text-red-600 border-red-200 animate-pulse' :
+                            fu.status === 'completed' ? 'bg-green-50 text-green-600 border-green-200' :
+                            fu.status === 'missed' ? 'bg-red-50 text-red-500 border-red-200' :
+                            typeConfig[fu.type]?.lightBg || 'bg-gray-50 text-gray-600 border-gray-200']">
+                        <span :class="['w-1.5 h-1.5 rounded-full flex-shrink-0', typeConfig[fu.type]?.color || 'bg-gray-400']"></span>
+                        <span class="truncate">{{ fu.scheduled_time }} {{ fu.lead_name }}</span>
+                    </div>
+                    <div v-if="getFilteredFollowUpsForDay(cell.date).length > 3"
+                         class="text-[9px] text-gray-400 font-medium px-1.5">
+                        +{{ getFilteredFollowUpsForDay(cell.date).length - 3 }} {{ isRtl ? 'أخرى' : 'more' }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Type Legend -->
+    <div :class="['mt-4 bg-white rounded-2xl shadow-sm border border-gray-100 p-4 transition-all duration-700 delay-300', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4']"
+         :style="{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }">
+        <div class="flex items-center flex-wrap gap-4">
+            <span class="text-xs font-medium text-gray-400 uppercase tracking-wider">{{ isRtl ? 'الأنواع' : 'Types' }}</span>
+            <div v-for="(cfg, key) in typeConfig" :key="key" class="flex items-center gap-1.5">
+                <span :class="['w-2.5 h-2.5 rounded-full', cfg.color]"></span>
+                <span class="text-xs text-gray-600">{{ isRtl ? cfg.ar : cfg.en }}</span>
+            </div>
+            <span class="mx-2 text-gray-200">|</span>
+            <span class="text-xs font-medium text-gray-400 uppercase tracking-wider">{{ isRtl ? 'الحالة' : 'Status' }}</span>
+            <div v-for="(cfg, key) in statusConfig" :key="key" class="flex items-center gap-1.5">
+                <span :class="['w-2.5 h-2.5 rounded-sm border', cfg.color]"></span>
+                <span class="text-xs text-gray-600">{{ isRtl ? cfg.ar : cfg.en }}</span>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Day Detail Slide Panel -->
+<Teleport to="body">
+    <Transition
+        enter-active-class="transition-all duration-300 ease-out"
+        enter-from-class="opacity-0"
+        enter-to-class="opacity-100"
+        leave-active-class="transition-all duration-200 ease-in"
+        leave-from-class="opacity-100"
+        leave-to-class="opacity-0">
+        <div v-if="showDetail" class="fixed inset-0 z-50 flex" :dir="isRtl ? 'rtl' : 'ltr'">
+
+            <!-- Backdrop -->
+            <div class="absolute inset-0 bg-black/30 backdrop-blur-sm" @click="closeDetail"></div>
+
+            <!-- Panel -->
+            <Transition
+                enter-active-class="transition-transform duration-300 ease-out"
+                :enter-from-class="isRtl ? '-translate-x-full' : 'translate-x-full'"
+                enter-to-class="translate-x-0"
+                leave-active-class="transition-transform duration-200 ease-in"
+                leave-from-class="translate-x-0"
+                :leave-to-class="isRtl ? '-translate-x-full' : 'translate-x-full'">
+                <div v-if="showDetail"
+                     :class="['relative w-full max-w-md bg-white shadow-2xl overflow-y-auto',
+                        isRtl ? 'rounded-r-2xl' : 'rounded-l-2xl ms-auto']">
+
+                    <!-- Panel Header -->
+                    <div class="sticky top-0 bg-gradient-to-r from-teal-500 to-emerald-500 p-5 z-10">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-lg font-bold text-white">{{ selectedDateFormatted }}</h3>
+                                <p class="text-teal-100 text-sm mt-0.5">
+                                    {{ selectedFollowUps.length }} {{ isRtl ? 'متابعة' : 'follow-up(s)' }}
+                                </p>
+                            </div>
+                            <button @click="closeDetail" class="w-8 h-8 rounded-lg bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Follow-ups list -->
+                    <div class="p-4 space-y-3">
+                        <div v-if="selectedFollowUps.length === 0" class="text-center py-12">
+                            <svg class="w-16 h-16 text-gray-200 mx-auto mb-3" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/>
+                            </svg>
+                            <p class="text-gray-400 text-sm">{{ isRtl ? 'لا توجد متابعات في هذا اليوم' : 'No follow-ups on this day' }}</p>
+                        </div>
+
+                        <div v-for="fu in selectedFollowUps" :key="fu.id"
+                             :class="['rounded-xl border p-4 transition-all duration-200 hover:shadow-md',
+                                fu.is_overdue ? 'border-red-200 bg-red-50/50' :
+                                fu.status === 'completed' ? 'border-green-200 bg-green-50/30' :
+                                fu.status === 'missed' ? 'border-red-200 bg-red-50/30' :
+                                'border-gray-150 bg-white']">
+
+                            <!-- Top row: time + type + status -->
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="flex items-center gap-2">
+                                    <div :class="['w-8 h-8 rounded-lg flex items-center justify-center', typeConfig[fu.type]?.color || 'bg-gray-500']">
+                                        <!-- Type icons -->
+                                        <svg v-if="fu.type === 'call'" class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                                        <svg v-else-if="fu.type === 'whatsapp'" class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.611.611l4.458-1.495A11.944 11.944 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.387 0-4.594-.83-6.326-2.216l-.44-.362-3.108 1.042 1.042-3.108-.362-.44A9.956 9.956 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+                                        <svg v-else-if="fu.type === 'email'" class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                                        <svg v-else-if="fu.type === 'sms'" class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+                                        <svg v-else-if="fu.type === 'meeting'" class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                        <svg v-else class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+                                    </div>
+                                    <div>
+                                        <span class="text-sm font-semibold text-gray-800">{{ fu.scheduled_time }}</span>
+                                        <span class="text-xs text-gray-400 mx-1">-</span>
+                                        <span class="text-xs text-gray-500">{{ isRtl ? typeConfig[fu.type]?.ar : typeConfig[fu.type]?.en }}</span>
+                                    </div>
+                                </div>
+                                <span :class="['text-[10px] font-medium px-2 py-0.5 rounded-full border',
+                                    fu.is_overdue ? 'text-red-600 bg-red-50 border-red-200' :
+                                    statusConfig[fu.status]?.color || 'text-gray-500 bg-gray-50 border-gray-200']">
+                                    {{ fu.is_overdue ? (isRtl ? 'متأخر' : 'Overdue') : (isRtl ? statusConfig[fu.status]?.ar : statusConfig[fu.status]?.en) }}
+                                </span>
+                            </div>
+
+                            <!-- Lead info -->
+                            <Link :href="`/secretary/crm/leads/${fu.lead_id}`"
+                                  class="flex items-center gap-3 p-2.5 rounded-lg bg-gray-50 hover:bg-teal-50 transition-colors group mb-2">
+                                <div class="w-9 h-9 rounded-full bg-gradient-to-br from-teal-400 to-emerald-500 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                                    {{ fu.lead_name?.charAt(0)?.toUpperCase() || '?' }}
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <div class="text-sm font-medium text-gray-800 group-hover:text-teal-700 truncate transition-colors">{{ fu.lead_name }}</div>
+                                    <div class="text-xs text-gray-400 flex items-center gap-1.5">
+                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                                        {{ fu.lead_phone }}
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-1">
+                                    <svg :class="['w-3.5 h-3.5', priorityConfig[fu.lead_priority]?.color || 'text-gray-400']" fill="currentColor" viewBox="0 0 24 24">
+                                        <path v-if="fu.lead_priority === 1" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15v-4H7l5-7v4h4l-5 7z"/>
+                                        <path v-else-if="fu.lead_priority === 2" d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 18a8 8 0 110-16 8 8 0 010 16zm-1-5h2v2h-2v-2zm0-8h2v6h-2V7z"/>
+                                        <path v-else d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                                    </svg>
+                                    <svg class="w-4 h-4 text-gray-300 group-hover:text-teal-500 transition-colors" :class="isRtl ? 'rotate-180' : ''" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                                </div>
+                            </Link>
+
+                            <!-- Notes -->
+                            <div v-if="fu.notes" class="text-xs text-gray-500 leading-relaxed px-1">
+                                <svg class="w-3 h-3 inline-block text-gray-400 me-1 -mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/></svg>
+                                {{ fu.notes }}
+                            </div>
+
+                            <!-- Result -->
+                            <div v-if="fu.result" class="mt-2 text-xs text-green-600 bg-green-50 rounded-lg p-2 border border-green-100">
+                                <svg class="w-3 h-3 inline-block me-1 -mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                {{ fu.result }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </Transition>
+        </div>
+    </Transition>
+</Teleport>
+
+</SecretaryLayout>
+</template>

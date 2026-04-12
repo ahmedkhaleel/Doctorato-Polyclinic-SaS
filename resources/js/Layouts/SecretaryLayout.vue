@@ -55,6 +55,7 @@ const navGroups = [
         items: [
             { labelEn: 'CRM Dashboard',   labelAr: 'لوحة CRM',         href: '/secretary/crm',          icon: 'users' },
             { labelEn: 'My Leads',        labelAr: 'العملاء المحتملين', href: '/secretary/crm/leads',    icon: 'userList' },
+            { labelEn: 'Calendar',        labelAr: 'التقويم',          href: '/secretary/crm/calendar',     icon: 'calendarView' },
             { labelEn: 'Performance',     labelAr: 'الأداء',           href: '/secretary/crm/performance', icon: 'barChart' },
         ],
     },
