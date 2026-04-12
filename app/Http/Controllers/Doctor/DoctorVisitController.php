@@ -234,37 +234,44 @@ class DoctorVisitController extends BaseDoctorController
     {
         $validated = $request->validate([
             'visit_id' => 'nullable|exists:visits,id',
-            'blood_pressure_systolic' => 'nullable|numeric|min:50|max:300',
-            'blood_pressure_diastolic' => 'nullable|numeric|min:30|max:200',
+            'bp_systolic' => 'nullable|numeric|min:50|max:300',
+            'bp_diastolic' => 'nullable|numeric|min:30|max:200',
             'heart_rate' => 'nullable|numeric|min:30|max:250',
             'temperature' => 'nullable|numeric|min:34|max:43',
             'respiratory_rate' => 'nullable|numeric|min:5|max:60',
-            'oxygen_saturation' => 'nullable|numeric|min:50|max:100',
+            'spo2' => 'nullable|numeric|min:50|max:100',
             'weight' => 'nullable|numeric|min:1|max:500',
             'height' => 'nullable|numeric|min:30|max:300',
             'blood_sugar' => 'nullable|numeric|min:20|max:800',
-            'blood_sugar_type' => 'nullable|in:fasting,random,post_meal',
             'pain_level' => 'nullable|integer|min:0|max:10',
-            'pain_location' => 'nullable|string|max:255',
-            'notes' => 'nullable|string|max:1000',
-            'source' => 'nullable|in:manual,device,pre_visit',
         ]);
 
-        $validated['patient_id'] = $patient->id;
-        $validated['recorded_by'] = auth()->id();
-        $validated['recorded_at'] = now();
+        // Map form field names to database column names
+        $data = [
+            'patient_id' => $patient->id,
+            'visit_id' => $validated['visit_id'] ?? null,
+            'blood_pressure_systolic' => $validated['bp_systolic'] ?? null,
+            'blood_pressure_diastolic' => $validated['bp_diastolic'] ?? null,
+            'heart_rate' => $validated['heart_rate'] ?? null,
+            'temperature' => $validated['temperature'] ?? null,
+            'respiratory_rate' => $validated['respiratory_rate'] ?? null,
+            'oxygen_saturation' => $validated['spo2'] ?? null,
+            'weight' => $validated['weight'] ?? null,
+            'height' => $validated['height'] ?? null,
+            'blood_sugar' => $validated['blood_sugar'] ?? null,
+            'pain_level' => $validated['pain_level'] ?? null,
+            'recorded_by' => auth()->id(),
+            'recorded_at' => now(),
+            'source' => 'manual',
+        ];
 
-        $vital = \App\Models\PatientVital::create($validated);
+        $vital = \App\Models\PatientVital::create($data);
 
         AuditLogger::log('vitals_recorded', $vital, [
             'patient_id' => $patient->id,
-            'visit_id' => $validated['visit_id'] ?? null,
+            'visit_id' => $data['visit_id'],
         ]);
 
-        return response()->json([
-            'vital' => $vital->fresh(['recorder:id,name']),
-            'alerts' => $vital->getAlerts(),
-            'message' => 'Vitals recorded successfully',
-        ]);
+        return redirect()->back()->with('success', $this->msg('Vitals recorded successfully.', 'تم تسجيل العلامات الحيوية بنجاح.'));
     }
 }
