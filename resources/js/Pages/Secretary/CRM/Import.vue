@@ -191,6 +191,14 @@ const mappingStats = computed(() => {
     return { mappedRequired, totalRequired: required.length, mappedOptional, totalOptional: optional.length, totalMapped, quality };
 });
 
+/* ── Duplicate handling strategy ───────────────────────── */
+const duplicateStrategy = ref('skip');
+const duplicateStrategies = [
+    { key: 'skip', en: 'Skip duplicates', ar: 'تخطي المكرر', desc_en: 'Existing leads with same phone will be skipped', desc_ar: 'سيتم تخطي العملاء الموجودين بنفس رقم الهاتف' },
+    { key: 'update', en: 'Update existing', ar: 'تحديث الموجود', desc_en: 'Update existing lead data with new values', desc_ar: 'تحديث بيانات العميل الموجود بالقيم الجديدة' },
+    { key: 'create', en: 'Create as new', ar: 'إنشاء جديد', desc_en: 'Create new leads even if phone exists', desc_ar: 'إنشاء عملاء جدد حتى لو كان الرقم موجود' },
+];
+
 /* ── Data quality preview ──────────────────────────────── */
 const dataQualityIssues = computed(() => {
     if (!preview.value.length || !columnMap.value.phone) return [];
@@ -228,6 +236,7 @@ function startImport() {
 
     const formData = new FormData();
     formData.append('file', file.value);
+    formData.append('duplicate_strategy', duplicateStrategy.value);
 
     // Append column_map as individual fields
     Object.keys(columnMap.value).forEach(key => {
@@ -587,6 +596,33 @@ function startImport() {
                     <svg class="w-4 h-4 text-teal-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
                     <span class="text-gray-800 font-medium">{{ columnMap[field.key] }}</span>
                 </div>
+            </div>
+        </div>
+
+        <!-- Duplicate Handling Strategy -->
+        <div class="rounded-xl border border-gray-100 p-4 mb-8">
+            <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 flex items-center gap-2">
+                <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"/></svg>
+                {{ isRtl ? 'التعامل مع الأرقام المكررة' : 'Duplicate Phone Handling' }}
+            </h4>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <button v-for="strat in duplicateStrategies" :key="strat.key"
+                    @click="duplicateStrategy = strat.key"
+                    :class="['rounded-xl border-2 p-3 text-start transition-all duration-200',
+                        duplicateStrategy === strat.key
+                            ? 'border-teal-500 bg-teal-50 shadow-sm'
+                            : 'border-gray-100 hover:border-gray-200 bg-white']">
+                    <div class="flex items-center gap-2 mb-1">
+                        <div :class="['w-4 h-4 rounded-full border-2 flex items-center justify-center flex-shrink-0',
+                            duplicateStrategy === strat.key ? 'border-teal-500' : 'border-gray-300']">
+                            <div v-if="duplicateStrategy === strat.key" class="w-2 h-2 rounded-full bg-teal-500"></div>
+                        </div>
+                        <span class="text-sm font-semibold" :class="duplicateStrategy === strat.key ? 'text-teal-700' : 'text-gray-700'">
+                            {{ isRtl ? strat.ar : strat.en }}
+                        </span>
+                    </div>
+                    <p class="text-[11px] text-gray-400 ms-6">{{ isRtl ? strat.desc_ar : strat.desc_en }}</p>
+                </button>
             </div>
         </div>
 

@@ -177,6 +177,25 @@ function isCollapsed(status) {
     return !!collapsedStages.value[status];
 }
 
+/* ── Hover preview ─────────────────────────────────────── */
+const hoveredLead = ref(null);
+const hoverPos = ref({ x: 0, y: 0 });
+let hoverTimeout = null;
+
+function onCardEnter(lead, event) {
+    clearTimeout(hoverTimeout);
+    hoverTimeout = setTimeout(() => {
+        hoveredLead.value = lead;
+        const rect = event.currentTarget.getBoundingClientRect();
+        hoverPos.value = { x: rect.left + rect.width / 2, y: rect.top };
+    }, 400);
+}
+
+function onCardLeave() {
+    clearTimeout(hoverTimeout);
+    hoveredLead.value = null;
+}
+
 /* ── Helpers ────────────────────────────────────────────── */
 function timeAgo(date) {
     if (!date) return '';
@@ -184,6 +203,11 @@ function timeAgo(date) {
     if (diff < 3600) return Math.floor(diff / 60) + (isRtl.value ? ' د' : 'm');
     if (diff < 86400) return Math.floor(diff / 3600) + (isRtl.value ? ' س' : 'h');
     return Math.floor(diff / 86400) + (isRtl.value ? ' ي' : 'd');
+}
+
+function formatFullDate(date) {
+    if (!date) return '-';
+    return new Date(date).toLocaleDateString(isRtl.value ? 'ar-SA' : 'en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 </script>
 
@@ -268,6 +292,8 @@ function timeAgo(date) {
                 <!-- Lead cards -->
                 <div v-for="lead in filteredLeads(localColumns[status])" :key="lead.id"
                      :data-lead-id="lead.id"
+                     @mouseenter="onCardEnter(lead, $event)"
+                     @mouseleave="onCardLeave"
                      :class="['bg-white rounded-xl border shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer group border-s-[3px]',
                         priorityConfig[lead.priority]?.borderL || 'border-s-gray-300']">
 
@@ -335,6 +361,65 @@ function timeAgo(date) {
             </div>
         </div>
     </div>
+
+    <!-- Hover Preview Card -->
+    <Teleport to="body">
+        <Transition
+            enter-active-class="transition-all duration-200 ease-out"
+            enter-from-class="opacity-0 scale-95 translate-y-2"
+            enter-to-class="opacity-100 scale-100 translate-y-0"
+            leave-active-class="transition-all duration-150 ease-in"
+            leave-from-class="opacity-100 scale-100"
+            leave-to-class="opacity-0 scale-95">
+            <div v-if="hoveredLead"
+                 class="fixed z-[9998] w-72 bg-white rounded-xl shadow-2xl border border-gray-200 p-4 pointer-events-none"
+                 :style="{ top: Math.max(8, hoverPos.y - 220) + 'px', left: Math.min(hoverPos.x - 144, window.innerWidth - 300) + 'px' }">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-500 to-emerald-500 flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+                        {{ hoveredLead.full_name ? hoveredLead.full_name.substring(0,1).toUpperCase() : '?' }}
+                    </div>
+                    <div class="min-w-0">
+                        <p class="text-sm font-bold text-gray-800 truncate">{{ hoveredLead.full_name }}</p>
+                        <p class="text-xs text-gray-400" dir="ltr">{{ hoveredLead.phone }}</p>
+                    </div>
+                </div>
+                <div class="space-y-2 text-xs">
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-400">{{ isRtl ? 'المصدر' : 'Source' }}</span>
+                        <span class="font-medium text-gray-700">{{ (isRtl ? hoveredLead.source?.name_ar : hoveredLead.source?.name_en) || '-' }}</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-400">{{ isRtl ? 'النقاط' : 'Score' }}</span>
+                        <div class="flex items-center gap-1">
+                            <svg v-if="hoveredLead.score > 0" class="w-3 h-3 text-amber-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            <span class="font-medium text-gray-700">{{ hoveredLead.score || 0 }}</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-400">{{ isRtl ? 'آخر تواصل' : 'Last Contact' }}</span>
+                        <span class="font-medium text-gray-700">{{ hoveredLead.last_contacted_at ? timeAgo(hoveredLead.last_contacted_at) : (isRtl ? 'لا يوجد' : 'None') }}</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-400">{{ isRtl ? 'المتابعة القادمة' : 'Next Follow-up' }}</span>
+                        <span class="font-medium" :class="hoveredLead.next_follow_up_at && new Date(hoveredLead.next_follow_up_at) < new Date() ? 'text-red-500' : 'text-gray-700'">
+                            {{ hoveredLead.next_follow_up_at ? formatFullDate(hoveredLead.next_follow_up_at) : '-' }}
+                        </span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-400">{{ isRtl ? 'في المرحلة' : 'In Stage' }}</span>
+                        <span class="font-medium text-amber-600">{{ daysInStage(hoveredLead) }} {{ isRtl ? 'يوم' : 'days' }}</span>
+                    </div>
+                    <div v-if="hoveredLead.email" class="flex items-center justify-between">
+                        <span class="text-gray-400">{{ isRtl ? 'البريد' : 'Email' }}</span>
+                        <span class="font-medium text-gray-700 truncate max-w-[140px]">{{ hoveredLead.email }}</span>
+                    </div>
+                </div>
+                <div class="mt-3 pt-2 border-t border-gray-100 text-center">
+                    <span class="text-[10px] text-gray-300">{{ isRtl ? 'انقر لعرض التفاصيل' : 'Click to view details' }}</span>
+                </div>
+            </div>
+        </Transition>
+    </Teleport>
 
     <!-- Toast Notification -->
     <Teleport to="body">

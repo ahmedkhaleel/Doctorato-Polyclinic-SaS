@@ -260,10 +260,16 @@ function duplicateTemplate(template) {
                         </div>
                     </div>
                 </div>
-                <span class="text-xs text-slate-400 flex items-center gap-1 flex-shrink-0">
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-                    {{ template.usage_count }}
-                </span>
+                <div class="flex flex-col items-end gap-1 flex-shrink-0">
+                    <span :class="['inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full border',
+                        (template.usage_count || 0) >= 20 ? 'bg-teal-50 text-teal-700 border-teal-200' :
+                        (template.usage_count || 0) >= 5 ? 'bg-blue-50 text-blue-600 border-blue-200' :
+                        'bg-slate-50 text-slate-400 border-slate-200']">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+                        {{ template.usage_count || 0 }} {{ isRtl ? 'مرة' : 'sent' }}
+                    </span>
+                    <span v-if="(template.usage_count || 0) >= 20" class="text-[9px] text-teal-500 font-medium">{{ isRtl ? 'الأكثر استخداما' : 'Popular' }}</span>
+                </div>
             </div>
 
             <!-- Body Preview -->

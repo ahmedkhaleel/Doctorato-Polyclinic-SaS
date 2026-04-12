@@ -18,7 +18,7 @@ const mounted = ref(false);
 const inlineStatusOpen = ref(null);
 onMounted(() => {
     setTimeout(() => { mounted.value = true; }, 50);
-    document.addEventListener('click', () => { inlineStatusOpen.value = null; });
+    document.addEventListener('click', () => { inlineStatusOpen.value = null; showColumnMenu.value = false; });
 });
 onBeforeUnmount(() => { document.removeEventListener('click', () => {}); });
 
@@ -308,6 +308,32 @@ function changeLeadStatus(leadId, newStatus) {
     });
 }
 
+/* ── Column visibility ── */
+const showColumnMenu = ref(false);
+const visibleColumns = ref(JSON.parse(localStorage.getItem('crm_leads_columns') || '{}'));
+
+const tableColumns = [
+    { key: 'phone', en: 'Phone', ar: 'الهاتف', default: true },
+    { key: 'email', en: 'Email', ar: 'البريد', default: false },
+    { key: 'status', en: 'Status', ar: 'الحالة', default: true },
+    { key: 'priority', en: 'Priority', ar: 'الأولوية', default: true },
+    { key: 'source', en: 'Source', ar: 'المصدر', default: true },
+    { key: 'score', en: 'Score', ar: 'النقاط', default: true },
+    { key: 'city', en: 'City', ar: 'المدينة', default: false },
+    { key: 'next_follow_up', en: 'Next Follow-up', ar: 'المتابعة القادمة', default: true },
+    { key: 'created_at', en: 'Created', ar: 'تاريخ الإنشاء', default: false },
+];
+
+function isColumnVisible(key) {
+    if (visibleColumns.value[key] !== undefined) return visibleColumns.value[key];
+    return tableColumns.find(c => c.key === key)?.default ?? true;
+}
+
+function toggleColumn(key) {
+    visibleColumns.value = { ...visibleColumns.value, [key]: !isColumnVisible(key) };
+    localStorage.setItem('crm_leads_columns', JSON.stringify(visibleColumns.value));
+}
+
 /* ── Quick View ── */
 const quickViewLead = ref(null);
 const quickViewOpen = ref(false);
@@ -526,6 +552,31 @@ const activeFilterPills = computed(() => {
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 10h16M4 14h16M4 18h16"/>
                                 </svg>
                             </button>
+                        </div>
+                        <!-- Column Visibility Toggle (table view only) -->
+                        <div v-if="viewMode === 'table'" class="relative">
+                            <button @click.stop="showColumnMenu = !showColumnMenu"
+                                class="p-2 rounded-lg bg-gray-100 text-gray-500 hover:text-teal-600 hover:bg-teal-50 transition-all duration-200"
+                                :title="isRtl ? 'إظهار/إخفاء الأعمدة' : 'Show/hide columns'">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                            </button>
+                            <Transition
+                                enter-active-class="transition-all duration-200 ease-out"
+                                enter-from-class="opacity-0 scale-95"
+                                enter-to-class="opacity-100 scale-100"
+                                leave-active-class="transition-all duration-150 ease-in"
+                                leave-from-class="opacity-100 scale-100"
+                                leave-to-class="opacity-0 scale-95">
+                                <div v-if="showColumnMenu" class="absolute top-full mt-1 end-0 w-52 bg-white rounded-xl shadow-xl border border-gray-200 py-2 z-30">
+                                    <p class="px-3 pb-2 text-[10px] font-bold text-gray-400 uppercase tracking-wider border-b border-gray-100">{{ isRtl ? 'الأعمدة المرئية' : 'Visible Columns' }}</p>
+                                    <label v-for="col in tableColumns" :key="col.key"
+                                        class="flex items-center gap-2.5 px-3 py-1.5 hover:bg-gray-50 cursor-pointer transition-colors">
+                                        <input type="checkbox" :checked="isColumnVisible(col.key)" @change="toggleColumn(col.key)"
+                                            class="w-3.5 h-3.5 rounded border-gray-300 text-teal-600 focus:ring-teal-500 transition" />
+                                        <span class="text-xs text-gray-700">{{ isRtl ? col.ar : col.en }}</span>
+                                    </label>
+                                </div>
+                            </Transition>
                         </div>
                     </div>
                 </div>
@@ -798,13 +849,13 @@ const activeFilterPills = computed(() => {
                                     <input type="checkbox" v-model="selectAll" @change="toggleSelectAll" class="w-4 h-4 rounded border-gray-300 text-teal-500 focus:ring-teal-400" />
                                 </th>
                                 <th class="px-5 py-3.5 font-semibold ltr:text-left rtl:text-right">{{ isRtl ? 'العميل' : 'Lead' }}</th>
-                                <th class="px-5 py-3.5 font-semibold ltr:text-left rtl:text-right">{{ isRtl ? 'التواصل' : 'Contact' }}</th>
-                                <th class="px-5 py-3.5 font-semibold ltr:text-left rtl:text-right">{{ isRtl ? 'المصدر' : 'Source' }}</th>
-                                <th class="px-5 py-3.5 font-semibold text-center">{{ isRtl ? 'الأولوية' : 'Priority' }}</th>
-                                <th class="px-5 py-3.5 font-semibold text-center">{{ isRtl ? 'الحالة' : 'Status' }}</th>
-                                <th class="px-5 py-3.5 font-semibold text-center">{{ isRtl ? 'النقاط' : 'Score' }}</th>
-                                <th class="px-5 py-3.5 font-semibold ltr:text-left rtl:text-right">{{ isRtl ? 'المتابعة القادمة' : 'Next Follow-up' }}</th>
-                                <th class="px-5 py-3.5 font-semibold ltr:text-left rtl:text-right">{{ isRtl ? 'تاريخ الإنشاء' : 'Created' }}</th>
+                                <th v-if="isColumnVisible('phone')" class="px-5 py-3.5 font-semibold ltr:text-left rtl:text-right">{{ isRtl ? 'التواصل' : 'Contact' }}</th>
+                                <th v-if="isColumnVisible('source')" class="px-5 py-3.5 font-semibold ltr:text-left rtl:text-right">{{ isRtl ? 'المصدر' : 'Source' }}</th>
+                                <th v-if="isColumnVisible('priority')" class="px-5 py-3.5 font-semibold text-center">{{ isRtl ? 'الأولوية' : 'Priority' }}</th>
+                                <th v-if="isColumnVisible('status')" class="px-5 py-3.5 font-semibold text-center">{{ isRtl ? 'الحالة' : 'Status' }}</th>
+                                <th v-if="isColumnVisible('score')" class="px-5 py-3.5 font-semibold text-center">{{ isRtl ? 'النقاط' : 'Score' }}</th>
+                                <th v-if="isColumnVisible('next_follow_up')" class="px-5 py-3.5 font-semibold ltr:text-left rtl:text-right">{{ isRtl ? 'المتابعة القادمة' : 'Next Follow-up' }}</th>
+                                <th v-if="isColumnVisible('created_at')" class="px-5 py-3.5 font-semibold ltr:text-left rtl:text-right">{{ isRtl ? 'تاريخ الإنشاء' : 'Created' }}</th>
                                 <th class="px-5 py-3.5 font-semibold text-center">{{ isRtl ? 'إجراءات' : 'Actions' }}</th>
                             </tr>
                         </thead>
@@ -831,12 +882,12 @@ const activeFilterPills = computed(() => {
                                     </div>
                                 </td>
                                 <!-- Contact -->
-                                <td class="px-5 py-3.5">
+                                <td v-if="isColumnVisible('phone')" class="px-5 py-3.5">
                                     <p class="text-gray-700 text-sm">{{ lead.phone || '-' }}</p>
-                                    <p v-if="lead.email" class="text-[11px] text-gray-400 mt-0.5 truncate max-w-[180px]">{{ lead.email }}</p>
+                                    <p v-if="isColumnVisible('email') && lead.email" class="text-[11px] text-gray-400 mt-0.5 truncate max-w-[180px]">{{ lead.email }}</p>
                                 </td>
                                 <!-- Source -->
-                                <td class="px-5 py-3.5">
+                                <td v-if="isColumnVisible('source')" class="px-5 py-3.5">
                                     <span v-if="lead.source"
                                         class="inline-flex items-center gap-1 text-[11px] font-medium px-2.5 py-1 rounded-full"
                                         :style="{ backgroundColor: lead.source.color + '15', color: lead.source.color }">
@@ -845,7 +896,7 @@ const activeFilterPills = computed(() => {
                                     <span v-else class="text-gray-400 text-xs">-</span>
                                 </td>
                                 <!-- Priority -->
-                                <td class="px-5 py-3.5 text-center">
+                                <td v-if="isColumnVisible('priority')" class="px-5 py-3.5 text-center">
                                     <span v-if="lead.priority && priorityConfig[lead.priority]"
                                         class="inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1 rounded-full border"
                                         :style="{ backgroundColor: priorityConfig[lead.priority].bg, color: priorityConfig[lead.priority].text, borderColor: priorityConfig[lead.priority].border }">
@@ -854,7 +905,7 @@ const activeFilterPills = computed(() => {
                                     </span>
                                 </td>
                                 <!-- Status (clickable inline change) -->
-                                <td class="px-5 py-3.5 text-center">
+                                <td v-if="isColumnVisible('status')" class="px-5 py-3.5 text-center">
                                     <div class="relative inline-block">
                                         <button @click.stop="toggleInlineStatus(lead.id)"
                                             class="inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1 rounded-full whitespace-nowrap cursor-pointer hover:ring-2 hover:ring-offset-1 hover:ring-teal-300 transition-all"
@@ -879,7 +930,7 @@ const activeFilterPills = computed(() => {
                                     </div>
                                 </td>
                                 <!-- Score -->
-                                <td class="px-5 py-3.5 text-center">
+                                <td v-if="isColumnVisible('score')" class="px-5 py-3.5 text-center">
                                     <div class="inline-flex items-center gap-1.5">
                                         <div class="relative w-8 h-8">
                                             <svg class="w-8 h-8 -rotate-90" viewBox="0 0 36 36">
@@ -900,7 +951,7 @@ const activeFilterPills = computed(() => {
                                     </div>
                                 </td>
                                 <!-- Next Follow-up -->
-                                <td class="px-5 py-3.5">
+                                <td v-if="isColumnVisible('next_follow_up')" class="px-5 py-3.5">
                                     <div v-if="lead.next_follow_up_at" class="flex items-center gap-1.5"
                                          :class="isOverdue(lead.next_follow_up_at) ? 'text-red-500' : 'text-gray-500'">
                                         <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -916,7 +967,7 @@ const activeFilterPills = computed(() => {
                                     <span v-else class="text-xs text-gray-400">-</span>
                                 </td>
                                 <!-- Created -->
-                                <td class="px-5 py-3.5">
+                                <td v-if="isColumnVisible('created_at')" class="px-5 py-3.5">
                                     <span class="text-xs text-gray-400">{{ timeAgo(lead.created_at) }}</span>
                                 </td>
                                 <!-- Actions -->

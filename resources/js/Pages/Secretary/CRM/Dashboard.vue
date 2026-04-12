@@ -243,6 +243,14 @@ function snoozeFollowUp(fuId, key) {
     snoozeOpenId.value = null;
 }
 
+/* ---------- Daily progress tracker ---------- */
+const dailyProgress = computed(() => {
+    const total = (props.todayFollowUps?.length || 0) + (props.overdueFollowUps?.length || 0);
+    const completed = props.todayActivityCount || 0;
+    const pct = total > 0 ? Math.min(Math.round((completed / total) * 100), 100) : (completed > 0 ? 100 : 0);
+    return { total, completed, pct };
+});
+
 /* ---------- Activity Icons ---------- */
 const activityTypeConfig = {
     call: { icon: 'M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z', color: 'bg-emerald-100 text-emerald-600' },
@@ -443,6 +451,37 @@ const activityTypeConfig = {
                     <div class="mt-3 h-1 rounded-full bg-gray-100 overflow-hidden">
                         <div class="h-full rounded-full transition-all duration-1000 ease-out" :style="{ width: mounted ? (stats.overdue_follow_ups > 0 ? '80%' : '0%') : '0%', background: 'linear-gradient(90deg, #dc2626, #f87171)' }"></div>
                     </div>
+                </div>
+            </div>
+
+            <!-- ============ DAILY PROGRESS TRACKER ============ -->
+            <div
+                class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 overflow-hidden"
+                :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
+                style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.28s"
+            >
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-8 h-8 rounded-lg flex items-center justify-center" :style="dailyProgress.pct >= 100 ? 'background: linear-gradient(135deg, #10b981, #34d399)' : 'background: linear-gradient(135deg, #0d9488, #14b8a6)'">
+                            <svg v-if="dailyProgress.pct >= 100" class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                            <svg v-else class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-bold text-gray-800">{{ isRtl ? 'تقدم اليوم' : "Today's Progress" }}</h3>
+                            <p class="text-[11px] text-gray-400">
+                                {{ dailyProgress.completed }} {{ isRtl ? 'نشاط مكتمل' : 'activities completed' }}
+                                <span v-if="dailyProgress.total > 0"> / {{ dailyProgress.total }} {{ isRtl ? 'مهمة' : 'tasks' }}</span>
+                            </p>
+                        </div>
+                    </div>
+                    <span class="text-lg font-bold" :class="dailyProgress.pct >= 100 ? 'text-emerald-600' : dailyProgress.pct >= 50 ? 'text-teal-600' : 'text-gray-500'">{{ dailyProgress.pct }}%</span>
+                </div>
+                <div class="w-full h-2.5 bg-gray-100 rounded-full overflow-hidden">
+                    <div class="h-full rounded-full transition-all duration-1500 ease-out"
+                         :style="{ width: mounted ? dailyProgress.pct + '%' : '0%', background: dailyProgress.pct >= 100 ? 'linear-gradient(90deg, #10b981, #34d399)' : dailyProgress.pct >= 50 ? 'linear-gradient(90deg, #0d9488, #14b8a6)' : 'linear-gradient(90deg, #f59e0b, #fbbf24)', transitionDelay: '0.5s' }"></div>
+                </div>
+                <div v-if="dailyProgress.pct >= 100" class="mt-2 text-center">
+                    <span class="text-xs font-medium text-emerald-600">{{ isRtl ? 'عمل رائع! أنجزت كل مهام اليوم' : 'Great job! All tasks completed for today' }}</span>
                 </div>
             </div>
 
