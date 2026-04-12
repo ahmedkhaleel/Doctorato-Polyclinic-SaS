@@ -50,9 +50,9 @@ function toggleService(id) {
 }
 
 const priorityOptions = [
-    { value: 1, label: { en: 'Hot', ar: '\u0633\u0627\u062E\u0646' }, emoji: '\uD83D\uDD25', color: 'bg-red-100 text-red-700 border-red-300 ring-red-400' },
-    { value: 2, label: { en: 'Warm', ar: '\u062F\u0627\u0641\u0626' }, emoji: '\u2600\uFE0F', color: 'bg-amber-100 text-amber-700 border-amber-300 ring-amber-400' },
-    { value: 3, label: { en: 'Cold', ar: '\u0628\u0627\u0631\u062F' }, emoji: '\u2744\uFE0F', color: 'bg-blue-100 text-blue-700 border-blue-300 ring-blue-400' },
+    { value: 1, label: { en: 'Hot', ar: '\u0633\u0627\u062E\u0646' }, icon: 'hot', color: 'bg-red-100 text-red-700 border-red-300 ring-red-400' },
+    { value: 2, label: { en: 'Warm', ar: '\u062F\u0627\u0641\u0626' }, icon: 'warm', color: 'bg-amber-100 text-amber-700 border-amber-300 ring-amber-400' },
+    { value: 3, label: { en: 'Cold', ar: '\u0628\u0627\u0631\u062F' }, icon: 'cold', color: 'bg-blue-100 text-blue-700 border-blue-300 ring-blue-400' },
 ];
 </script>
 
@@ -82,8 +82,9 @@ const priorityOptions = [
             <div class="absolute -bottom-8 -left-8 w-32 h-32 bg-white rounded-full"></div>
         </div>
         <div class="relative flex items-center gap-4" :style="{ direction: isRtl ? 'rtl' : 'ltr' }">
-            <div class="w-14 h-14 bg-white/20 backdrop-blur rounded-xl flex items-center justify-center text-2xl">
-                {{ isEdit ? '\u270F\uFE0F' : '\u2795' }}
+            <div class="w-14 h-14 bg-white/20 backdrop-blur rounded-xl flex items-center justify-center">
+                <svg v-if="isEdit" class="w-7 h-7 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l2.651 2.651M19.513 7.138L8.768 17.883a2 2 0 01-.87.513l-3.898 1.3 1.3-3.898a2 2 0 01.513-.87L16.558 4.183a1.879 1.879 0 012.955 2.955z"/></svg>
+                <svg v-else class="w-7 h-7 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
             </div>
             <div>
                 <h1 class="text-2xl font-bold text-white">
@@ -102,7 +103,9 @@ const priorityOptions = [
         <div :class="['bg-white rounded-2xl shadow-sm border border-slate-100 p-6 mb-6 transition-all duration-700', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6']"
              :style="{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)', transitionDelay: '100ms' }">
             <div class="flex items-center gap-3 mb-5">
-                <div class="w-10 h-10 bg-teal-100 rounded-xl flex items-center justify-center text-lg">📞</div>
+                <div class="w-10 h-10 bg-teal-100 rounded-xl flex items-center justify-center">
+                    <svg class="w-5 h-5 text-teal-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                </div>
                 <h2 class="text-lg font-bold text-slate-800">{{ isRtl ? '\u0645\u0639\u0644\u0648\u0645\u0627\u062A \u0627\u0644\u0627\u062A\u0635\u0627\u0644' : 'Contact Information' }}</h2>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -153,7 +156,9 @@ const priorityOptions = [
         <div :class="['bg-white rounded-2xl shadow-sm border border-slate-100 p-6 mb-6 transition-all duration-700', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6']"
              :style="{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)', transitionDelay: '200ms' }">
             <div class="flex items-center gap-3 mb-5">
-                <div class="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center text-lg">👤</div>
+                <div class="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+                    <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                </div>
                 <h2 class="text-lg font-bold text-slate-800">{{ isRtl ? '\u0627\u0644\u0645\u0639\u0644\u0648\u0645\u0627\u062A \u0627\u0644\u0634\u062E\u0635\u064A\u0629' : 'Personal Information' }}</h2>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -163,11 +168,11 @@ const priorityOptions = [
                     <div class="flex gap-3">
                         <button type="button" @click="form.gender = 'male'"
                                 :class="['flex-1 py-3 rounded-xl border text-sm font-medium transition-all duration-200', form.gender === 'male' ? 'bg-teal-50 border-teal-400 text-teal-700 ring-2 ring-teal-400/30' : 'border-slate-200 text-slate-500 hover:border-slate-300']">
-                            🧑 {{ isRtl ? '\u0630\u0643\u0631' : 'Male' }}
+                            {{ isRtl ? '\u0630\u0643\u0631' : 'Male' }}
                         </button>
                         <button type="button" @click="form.gender = 'female'"
                                 :class="['flex-1 py-3 rounded-xl border text-sm font-medium transition-all duration-200', form.gender === 'female' ? 'bg-pink-50 border-pink-400 text-pink-700 ring-2 ring-pink-400/30' : 'border-slate-200 text-slate-500 hover:border-slate-300']">
-                            👩 {{ isRtl ? '\u0623\u0646\u062B\u0649' : 'Female' }}
+                            {{ isRtl ? '\u0623\u0646\u062B\u0649' : 'Female' }}
                         </button>
                     </div>
                 </div>
@@ -198,7 +203,9 @@ const priorityOptions = [
         <div :class="['bg-white rounded-2xl shadow-sm border border-slate-100 p-6 mb-6 transition-all duration-700', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6']"
              :style="{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)', transitionDelay: '300ms' }">
             <div class="flex items-center gap-3 mb-5">
-                <div class="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center text-lg">🎯</div>
+                <div class="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
+                    <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                </div>
                 <h2 class="text-lg font-bold text-slate-800">{{ isRtl ? '\u062A\u0641\u0627\u0635\u064A\u0644 \u0627\u0644\u0639\u0645\u064A\u0644 \u0627\u0644\u0645\u062D\u062A\u0645\u0644' : 'Lead Details' }}</h2>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
@@ -231,7 +238,9 @@ const priorityOptions = [
                     <button v-for="p in priorityOptions" :key="p.value" type="button"
                             @click="form.priority = p.value"
                             :class="['flex-1 py-3 px-4 rounded-xl border-2 text-sm font-semibold transition-all duration-300', form.priority === p.value ? p.color + ' ring-2 shadow-sm scale-[1.02]' : 'border-slate-200 text-slate-400 hover:border-slate-300']">
-                        <span class="text-lg">{{ p.emoji }}</span>
+                        <svg v-if="p.icon === 'hot'" class="w-5 h-5 mx-auto" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"/><path stroke-linecap="round" stroke-linejoin="round" d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z"/></svg>
+                        <svg v-else-if="p.icon === 'warm'" class="w-5 h-5 mx-auto" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                        <svg v-else class="w-5 h-5 mx-auto" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
                         <span class="block mt-0.5">{{ isRtl ? p.label.ar : p.label.en }}</span>
                     </button>
                 </div>
@@ -244,7 +253,7 @@ const priorityOptions = [
                     <button v-for="svc in services" :key="svc.id" type="button"
                             @click="toggleService(svc.id)"
                             :class="['py-2.5 px-3 rounded-xl border text-xs font-medium transition-all duration-200', form.interested_services.includes(svc.id) ? 'bg-teal-50 border-teal-400 text-teal-700 ring-1 ring-teal-300' : 'border-slate-200 text-slate-500 hover:border-slate-300 hover:bg-slate-50']">
-                        <span v-if="form.interested_services.includes(svc.id)" class="inline-block mr-1">✓</span>
+                        <svg v-if="form.interested_services.includes(svc.id)" class="inline-block w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                         {{ isRtl ? svc.name_ar : svc.name_en }}
                     </button>
                 </div>
@@ -255,7 +264,9 @@ const priorityOptions = [
         <div :class="['bg-white rounded-2xl shadow-sm border border-slate-100 p-6 mb-6 transition-all duration-700', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6']"
              :style="{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)', transitionDelay: '400ms' }">
             <div class="flex items-center gap-3 mb-5">
-                <div class="w-10 h-10 bg-sky-100 rounded-xl flex items-center justify-center text-lg">📝</div>
+                <div class="w-10 h-10 bg-sky-100 rounded-xl flex items-center justify-center">
+                    <svg class="w-5 h-5 text-sky-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                </div>
                 <h2 class="text-lg font-bold text-slate-800">{{ isRtl ? '\u0645\u0644\u0627\u062D\u0638\u0627\u062A' : 'Notes' }}</h2>
             </div>
             <textarea v-model="form.notes" rows="4"
@@ -276,7 +287,7 @@ const priorityOptions = [
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"/>
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
                 </svg>
-                <span v-if="!form.processing">{{ isEdit ? (isRtl ? '💾 \u062D\u0641\u0638 \u0627\u0644\u062A\u0639\u062F\u064A\u0644\u0627\u062A' : '💾 Save Changes') : (isRtl ? '✨ \u0625\u0646\u0634\u0627\u0621 \u0627\u0644\u0639\u0645\u064A\u0644' : '✨ Create Lead') }}</span>
+                <span v-if="!form.processing">{{ isEdit ? (isRtl ? '\u062D\u0641\u0638 \u0627\u0644\u062A\u0639\u062F\u064A\u0644\u0627\u062A' : 'Save Changes') : (isRtl ? '\u0625\u0646\u0634\u0627\u0621 \u0627\u0644\u0639\u0645\u064A\u0644' : 'Create Lead') }}</span>
                 <span v-else>{{ isRtl ? '\u062C\u0627\u0631\u064A \u0627\u0644\u062D\u0641\u0638...' : 'Saving...' }}</span>
             </button>
         </div>
