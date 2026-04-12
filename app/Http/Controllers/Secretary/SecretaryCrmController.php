@@ -771,11 +771,18 @@ class SecretaryCrmController extends BaseSecretaryController
             'overdue' => LeadFollowUp::forUser($userId)->overdue()->count(),
         ];
 
+        // Active leads for quick-add
+        $activeLeads = Lead::assignedTo($userId)
+            ->whereNotIn('status', ['converted', 'lost'])
+            ->orderBy('full_name')
+            ->get(['id', 'full_name', 'phone']);
+
         return Inertia::render('Secretary/CRM/Calendar', [
             'followUps' => $followUps,
             'monthStats' => $monthStats,
             'currentMonth' => $month,
             'currentYear' => $year,
+            'activeLeads' => $activeLeads,
         ]);
     }
 

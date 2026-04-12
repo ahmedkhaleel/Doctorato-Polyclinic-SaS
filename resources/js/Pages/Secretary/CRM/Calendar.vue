@@ -11,6 +11,7 @@ const props = defineProps({
     monthStats: Object,
     currentMonth: Number,
     currentYear: Number,
+    activeLeads: Array,
 });
 
 const mounted = ref(false);
@@ -261,6 +262,47 @@ function missFollowUp(fuId) {
 }
 
 /* ── Snooze from calendar ───────────────────────────── */
+/* ── Quick-add follow-up ─────────────────────────────── */
+const showQuickAdd = ref(false);
+const quickAddDate = ref('');
+const quickAddType = ref('call');
+const quickAddLeadId = ref('');
+const quickAddNotes = ref('');
+const quickAddTime = ref('09:00');
+const quickAddSaving = ref(false);
+
+function openQuickAdd(dateStr) {
+    quickAddDate.value = dateStr;
+    quickAddType.value = 'call';
+    quickAddLeadId.value = '';
+    quickAddNotes.value = '';
+    quickAddTime.value = '09:00';
+    showQuickAdd.value = true;
+}
+
+function submitQuickAdd() {
+    if (!quickAddLeadId.value || !quickAddDate.value) return;
+    quickAddSaving.value = true;
+    router.post(`/secretary/crm/leads/${quickAddLeadId.value}/follow-up`, {
+        type: quickAddType.value,
+        scheduled_at: quickAddDate.value + 'T' + quickAddTime.value,
+        notes: quickAddNotes.value,
+    }, {
+        preserveScroll: true,
+        preserveState: true,
+        onFinish: () => {
+            quickAddSaving.value = false;
+            showQuickAdd.value = false;
+        },
+    });
+}
+
+/* ── Calendar summary stats ─────────────────────────── */
+const totalFollowUps = computed(() => (props.followUps || []).length);
+const pendingCount = computed(() => (props.followUps || []).filter(f => f.status === 'pending').length);
+const overdueCount = computed(() => (props.followUps || []).filter(f => f.is_overdue).length);
+const completedCount = computed(() => (props.followUps || []).filter(f => f.status === 'completed').length);
+
 function snoozeFollowUp(fuId, key) {
     let scheduledAt;
     const now = new Date();
@@ -380,6 +422,21 @@ function snoozeFollowUp(fuId, key) {
                     </button>
                 </div>
             </div>
+        </div>
+        <!-- Type legend + quick add -->
+        <div class="flex items-center justify-between mt-3 pt-3 border-t border-gray-100 flex-wrap gap-2">
+            <div class="flex items-center gap-3 flex-wrap">
+                <span class="text-[10px] text-gray-400 uppercase font-semibold">{{ isRtl ? 'الأنواع:' : 'Types:' }}</span>
+                <div v-for="(cfg, key) in typeConfig" :key="key" class="flex items-center gap-1">
+                    <span :class="['w-2 h-2 rounded-full', cfg.color]"></span>
+                    <span class="text-[11px] text-gray-500">{{ isRtl ? cfg.ar : cfg.en }}</span>
+                </div>
+            </div>
+            <button @click="openQuickAdd(new Date().toISOString().split('T')[0])"
+                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-teal-50 text-teal-700 border border-teal-200 hover:bg-teal-100 transition-all">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+                {{ isRtl ? 'متابعة جديدة' : 'New Follow-up' }}
+            </button>
         </div>
     </div>
 
@@ -681,6 +738,61 @@ function snoozeFollowUp(fuId, key) {
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </Transition>
+        </div>
+    </Transition>
+</Teleport>
+
+<!-- Quick Add Follow-up Modal -->
+<Teleport to="body">
+    <Transition enter-active-class="transition duration-300 ease-out" enter-from-class="opacity-0" enter-to-class="opacity-100" leave-active-class="transition duration-200 ease-in" leave-from-class="opacity-100" leave-to-class="opacity-0">
+        <div v-if="showQuickAdd" class="fixed inset-0 z-50 flex items-center justify-center p-4" :dir="isRtl ? 'rtl' : 'ltr'">
+            <div class="fixed inset-0 bg-black/40 backdrop-blur-sm" @click="showQuickAdd = false"></div>
+            <Transition enter-active-class="transition duration-300 ease-out" enter-from-class="opacity-0 scale-95 translate-y-4" enter-to-class="opacity-100 scale-100 translate-y-0" leave-active-class="transition duration-200 ease-in" leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-95">
+                <div v-if="showQuickAdd" class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md">
+                    <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+                        <h3 class="font-semibold text-gray-800">{{ isRtl ? 'إضافة متابعة سريعة' : 'Quick Add Follow-up' }}</h3>
+                        <button @click="showQuickAdd = false" class="w-8 h-8 rounded-lg bg-gray-100 hover:bg-gray-200 flex items-center justify-center"><svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12"/></svg></button>
+                    </div>
+                    <div class="p-6 space-y-4">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'العميل' : 'Lead' }} *</label>
+                            <select v-model="quickAddLeadId" class="w-full rounded-xl border-gray-200 text-sm focus:ring-teal-500 focus:border-teal-500">
+                                <option value="">{{ isRtl ? '-- اختر عميل --' : '-- Select lead --' }}</option>
+                                <option v-for="lead in activeLeads" :key="lead.id" :value="lead.id">{{ lead.full_name }} - {{ lead.phone }}</option>
+                            </select>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'النوع' : 'Type' }}</label>
+                                <select v-model="quickAddType" class="w-full rounded-xl border-gray-200 text-sm focus:ring-teal-500 focus:border-teal-500">
+                                    <option v-for="(cfg, key) in typeConfig" :key="key" :value="key">{{ isRtl ? cfg.ar : cfg.en }}</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'الوقت' : 'Time' }}</label>
+                                <input v-model="quickAddTime" type="time" class="w-full rounded-xl border-gray-200 text-sm focus:ring-teal-500 focus:border-teal-500"/>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'التاريخ' : 'Date' }}</label>
+                            <input v-model="quickAddDate" type="date" class="w-full rounded-xl border-gray-200 text-sm focus:ring-teal-500 focus:border-teal-500"/>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
+                            <input v-model="quickAddNotes" type="text" class="w-full rounded-xl border-gray-200 text-sm focus:ring-teal-500 focus:border-teal-500" :placeholder="isRtl ? 'اختياري...' : 'Optional...'"/>
+                        </div>
+                        <div class="flex gap-3 pt-2">
+                            <button @click="submitQuickAdd" :disabled="!quickAddLeadId || quickAddSaving"
+                                :class="['flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all',
+                                    !quickAddLeadId || quickAddSaving ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-teal-600 hover:bg-teal-700 text-white shadow-lg shadow-teal-200']">
+                                <svg v-if="quickAddSaving" class="w-4 h-4 animate-spin inline me-1" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+                                {{ quickAddSaving ? (isRtl ? 'جاري الحفظ...' : 'Saving...') : (isRtl ? 'إضافة متابعة' : 'Add Follow-up') }}
+                            </button>
+                            <button @click="showQuickAdd = false" class="px-5 py-2.5 rounded-xl text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 transition-colors">{{ isRtl ? 'إلغاء' : 'Cancel' }}</button>
                         </div>
                     </div>
                 </div>
