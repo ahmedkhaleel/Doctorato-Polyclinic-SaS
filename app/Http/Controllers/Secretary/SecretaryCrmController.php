@@ -760,6 +760,10 @@ class SecretaryCrmController extends BaseSecretaryController
         $now = now();
         $startOfMonth = $now->copy()->startOfMonth();
         $startOfWeek = $now->copy()->startOfWeek();
+        $startOfLastWeek = $now->copy()->subWeek()->startOfWeek();
+        $endOfLastWeek = $now->copy()->subWeek()->endOfWeek();
+        $startOfLastMonth = $now->copy()->subMonth()->startOfMonth();
+        $endOfLastMonth = $now->copy()->subMonth()->endOfMonth();
 
         // Monthly stats
         $monthlyStats = [
@@ -803,29 +807,38 @@ class SecretaryCrmController extends BaseSecretaryController
                 ->count(),
         ];
 
-        // Weekly stats
+        // Weekly stats (this week + last week for comparison)
         $weeklyStats = [
-            'calls' => LeadActivity::where('performed_by', $userId)
-                ->where('type', 'call')
-                ->where('created_at', '>=', $startOfWeek)
-                ->count(),
             'total_activities' => LeadActivity::where('performed_by', $userId)
-                ->where('created_at', '>=', $startOfWeek)
-                ->count(),
+                ->where('created_at', '>=', $startOfWeek)->count(),
+            'calls' => LeadActivity::where('performed_by', $userId)
+                ->where('type', 'call')->where('created_at', '>=', $startOfWeek)->count(),
             'follow_ups_completed' => LeadFollowUp::forUser($userId)
-                ->where('status', 'completed')
-                ->where('completed_at', '>=', $startOfWeek)
-                ->count(),
+                ->where('status', 'completed')->where('completed_at', '>=', $startOfWeek)->count(),
+            'leads_converted' => Lead::assignedTo($userId)
+                ->where('status', 'converted')->where('converted_at', '>=', $startOfWeek)->count(),
         ];
 
-        // Daily activity for the last 7 days (for chart)
+        $lastWeekStats = [
+            'total_activities' => LeadActivity::where('performed_by', $userId)
+                ->whereBetween('created_at', [$startOfLastWeek, $endOfLastWeek])->count(),
+            'calls' => LeadActivity::where('performed_by', $userId)
+                ->where('type', 'call')->whereBetween('created_at', [$startOfLastWeek, $endOfLastWeek])->count(),
+            'follow_ups_completed' => LeadFollowUp::forUser($userId)
+                ->where('status', 'completed')->whereBetween('completed_at', [$startOfLastWeek, $endOfLastWeek])->count(),
+            'leads_converted' => Lead::assignedTo($userId)
+                ->where('status', 'converted')->whereBetween('converted_at', [$startOfLastWeek, $endOfLastWeek])->count(),
+        ];
+
+        // Daily activity for the last 14 days
         $dailyActivity = [];
-        for ($i = 6; $i >= 0; $i--) {
+        for ($i = 13; $i >= 0; $i--) {
             $day = $now->copy()->subDays($i);
             $dailyActivity[] = [
                 'date' => $day->format('Y-m-d'),
                 'label' => $day->format('D'),
                 'label_ar' => $day->locale('ar')->dayName,
+                'day_num' => $day->format('d'),
                 'count' => LeadActivity::where('performed_by', $userId)
                     ->whereDate('created_at', $day->format('Y-m-d'))
                     ->count(),
@@ -845,12 +858,70 @@ class SecretaryCrmController extends BaseSecretaryController
         $totalConverted = Lead::assignedTo($userId)->where('status', 'converted')->count();
         $conversionRate = $totalAssigned > 0 ? round(($totalConverted / $totalAssigned) * 100, 1) : 0;
 
+        // Average response time (hours) - time between lead creation and first activity
+        $avgResponseTime = DB::table('leads')
+            ->join('lead_activities', function ($join) use ($userId) {
+                $join->on('leads.id', '=', 'lead_activities.lead_id')
+                     ->where('lead_activities.performed_by', $userId);
+            })
+            ->where('leads.assigned_to', $userId)
+            ->where('leads.created_at', '>=', $startOfMonth)
+            ->selectRaw('AVG(TIMESTAMPDIFF(HOUR, leads.created_at, lead_activities.created_at)) as avg_hours')
+            ->value('avg_hours');
+        $avgResponseTime = $avgResponseTime ? round($avgResponseTime, 1) : null;
+
+        // Activity streak (consecutive days with at least 1 activity, going backwards from today)
+        $streak = 0;
+        for ($i = 0; $i < 60; $i++) {
+            $day = $now->copy()->subDays($i)->format('Y-m-d');
+            $hasActivity = LeadActivity::where('performed_by', $userId)
+                ->whereDate('created_at', $day)
+                ->exists();
+            if ($hasActivity) {
+                $streak++;
+            } else {
+                break;
+            }
+        }
+
+        // Overdue follow-ups count
+        $overdueFollowUps = LeadFollowUp::forUser($userId)
+            ->where('status', 'pending')
+            ->where('scheduled_at', '<', $now)
+            ->count();
+
+        // Today's pending follow-ups
+        $todayFollowUps = LeadFollowUp::forUser($userId)
+            ->where('status', 'pending')
+            ->whereDate('scheduled_at', $now->toDateString())
+            ->count();
+
+        // Source performance (top 5)
+        $sourcePerformance = DB::table('leads')
+            ->join('lead_sources', 'leads.lead_source_id', '=', 'lead_sources.id')
+            ->where('leads.assigned_to', $userId)
+            ->selectRaw('lead_sources.name_en, lead_sources.name_ar, lead_sources.color, COUNT(*) as total, SUM(CASE WHEN leads.status = "converted" THEN 1 ELSE 0 END) as converted')
+            ->groupBy('lead_sources.id', 'lead_sources.name_en', 'lead_sources.name_ar', 'lead_sources.color')
+            ->orderByDesc('total')
+            ->limit(5)
+            ->get()
+            ->map(function ($s) {
+                $s->rate = $s->total > 0 ? round(($s->converted / $s->total) * 100, 1) : 0;
+                return $s;
+            });
+
         return Inertia::render('Secretary/CRM/Performance', [
             'monthlyStats' => $monthlyStats,
             'weeklyStats' => $weeklyStats,
+            'lastWeekStats' => $lastWeekStats,
             'dailyActivity' => $dailyActivity,
             'statusDistribution' => $statusDistribution,
             'conversionRate' => $conversionRate,
+            'avgResponseTime' => $avgResponseTime,
+            'streak' => $streak,
+            'overdueFollowUps' => $overdueFollowUps,
+            'todayFollowUps' => $todayFollowUps,
+            'sourcePerformance' => $sourcePerformance,
         ]);
     }
 
