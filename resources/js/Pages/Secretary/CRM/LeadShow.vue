@@ -60,9 +60,12 @@ const statusColors = {
 };
 
 const priorityDisplay = {
-    hot: { emoji: '🔥', color: 'bg-red-100 text-red-700', label: { en: 'Hot', ar: 'ساخن' } },
-    warm: { emoji: '☀️', color: 'bg-amber-100 text-amber-700', label: { en: 'Warm', ar: 'دافئ' } },
-    cold: { emoji: '❄️', color: 'bg-blue-100 text-blue-700', label: { en: 'Cold', ar: 'بارد' } },
+    1: { color: 'bg-red-100 text-red-700', label: { en: 'Hot', ar: 'ساخن' }, icon: 'M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z' },
+    2: { color: 'bg-amber-100 text-amber-700', label: { en: 'Warm', ar: 'دافئ' }, icon: 'M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z' },
+    3: { color: 'bg-blue-100 text-blue-700', label: { en: 'Cold', ar: 'بارد' }, icon: 'M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z' },
+    hot: { color: 'bg-red-100 text-red-700', label: { en: 'Hot', ar: 'ساخن' }, icon: 'M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z' },
+    warm: { color: 'bg-amber-100 text-amber-700', label: { en: 'Warm', ar: 'دافئ' }, icon: 'M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z' },
+    cold: { color: 'bg-blue-100 text-blue-700', label: { en: 'Cold', ar: 'بارد' }, icon: 'M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z' },
 };
 
 // Status form
@@ -228,11 +231,76 @@ const previewMessage = computed(() => {
 });
 
 function submitQuickSend() {
-    quickSendForm.post(`/secretary/crm/leads/${props.lead.id}/send-message`, {
+    quickSendForm.post(`/secretary/crm/leads/${props.lead.id}/quick-send`, {
         preserveScroll: true,
         onSuccess: () => quickSendForm.reset(),
     });
 }
+
+// Convert to Patient
+const showConvertModal = ref(false);
+const convertForm = useForm({
+    patient_id: '',
+    booking_notes: '',
+});
+
+function submitConvert() {
+    convertForm.post(`/secretary/crm/leads/${props.lead.id}/convert`, {
+        preserveScroll: true,
+        onSuccess: () => {
+            showConvertModal.value = false;
+            convertForm.reset();
+        },
+    });
+}
+
+// Mark as Lost
+const showLostModal = ref(false);
+const lostForm = useForm({
+    loss_reason: '',
+});
+
+function submitLost() {
+    lostForm.post(`/secretary/crm/leads/${props.lead.id}/lost`, {
+        preserveScroll: true,
+        onSuccess: () => {
+            showLostModal.value = false;
+            lostForm.reset();
+        },
+    });
+}
+
+// Reschedule Follow-up
+const reschedulingFollowUp = ref(null);
+const rescheduleForm = useForm({
+    scheduled_at: '',
+    notes: '',
+});
+
+function openReschedule(fu) {
+    reschedulingFollowUp.value = fu.id;
+    rescheduleForm.scheduled_at = '';
+    rescheduleForm.notes = fu.notes || '';
+}
+
+function submitReschedule(fuId) {
+    rescheduleForm.post(`/secretary/crm/follow-ups/${fuId}/reschedule`, {
+        preserveScroll: true,
+        onSuccess: () => {
+            reschedulingFollowUp.value = null;
+            rescheduleForm.reset();
+        },
+    });
+}
+
+const lossReasons = [
+    { en: 'Price too high', ar: 'السعر مرتفع' },
+    { en: 'Chose competitor', ar: 'اختار منافس' },
+    { en: 'Not interested anymore', ar: 'لم يعد مهتماً' },
+    { en: 'Cannot be reached', ar: 'لا يمكن الوصول إليه' },
+    { en: 'Wrong contact info', ar: 'معلومات اتصال خاطئة' },
+    { en: 'Other', ar: 'سبب آخر' },
+];
 
 // Helpers
 function timeAgo(dateStr) {
@@ -344,7 +412,7 @@ const scoreAngle = computed(() => {
                                             class="px-2.5 py-0.5 rounded-full text-xs font-semibold"
                                             :class="priorityDisplay[lead.priority].color"
                                         >
-                                            {{ priorityDisplay[lead.priority].emoji }}
+                                                <svg class="w-3.5 h-3.5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="priorityDisplay[lead.priority].icon"/></svg>
                                             {{ isRtl ? priorityDisplay[lead.priority].label.ar : priorityDisplay[lead.priority].label.en }}
                                         </span>
                                     </div>
@@ -410,6 +478,24 @@ const scoreAngle = computed(() => {
                                     :title="isRtl ? 'رسالة نصية' : 'SMS'"
                                 >
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+                                </button>
+                                <button
+                                    v-if="!['converted', 'lost'].includes(lead.status)"
+                                    @click="showConvertModal = true"
+                                    class="h-11 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition-all duration-200 hover:-translate-y-0.5 text-sm font-medium"
+                                    :title="isRtl ? 'تحويل لمريض' : 'Convert to Patient'"
+                                >
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                                    <span class="hidden sm:inline">{{ isRtl ? 'تحويل لمريض' : 'Convert' }}</span>
+                                </button>
+                                <button
+                                    v-if="!['converted', 'lost'].includes(lead.status)"
+                                    @click="showLostModal = true"
+                                    class="h-11 px-4 rounded-xl bg-red-500/80 hover:bg-red-500 text-white flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition-all duration-200 hover:-translate-y-0.5 text-sm font-medium"
+                                    :title="isRtl ? 'تسجيل خسارة' : 'Mark as Lost'"
+                                >
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>
+                                    <span class="hidden sm:inline">{{ isRtl ? 'خسارة' : 'Lost' }}</span>
                                 </button>
                             </div>
                         </div>
@@ -715,6 +801,12 @@ const scoreAngle = computed(() => {
                                                     >
                                                         {{ isRtl ? 'فائت' : 'Miss' }}
                                                     </button>
+                                                    <button
+                                                        @click="openReschedule(fu)"
+                                                        class="px-2.5 py-1.5 bg-blue-50 text-blue-700 text-xs font-medium rounded-lg hover:bg-blue-100 transition-colors border border-blue-200"
+                                                    >
+                                                        {{ isRtl ? 'إعادة جدولة' : 'Reschedule' }}
+                                                    </button>
                                                 </div>
                                             </div>
 
@@ -749,6 +841,50 @@ const scoreAngle = computed(() => {
                                                         >
                                                             {{ isRtl ? 'إلغاء' : 'Cancel' }}
                                                         </button>
+                                                    </form>
+                                                </div>
+                                            </Transition>
+
+                                            <!-- Reschedule form inline -->
+                                            <Transition
+                                                enter-active-class="transition-all duration-200 ease-out"
+                                                enter-from-class="opacity-0 scale-95"
+                                                enter-to-class="opacity-100 scale-100"
+                                                leave-active-class="transition-all duration-150 ease-in"
+                                                leave-from-class="opacity-100 scale-100"
+                                                leave-to-class="opacity-0 scale-95"
+                                            >
+                                                <div v-if="reschedulingFollowUp === fu.id" class="mt-3 pt-3 border-t border-gray-100">
+                                                    <form @submit.prevent="submitReschedule(fu.id)" class="space-y-2">
+                                                        <div class="flex gap-2">
+                                                            <input
+                                                                v-model="rescheduleForm.scheduled_at"
+                                                                type="datetime-local"
+                                                                class="flex-1 rounded-lg border-gray-300 text-sm focus:ring-teal-500 focus:border-teal-500"
+                                                            />
+                                                        </div>
+                                                        <input
+                                                            v-model="rescheduleForm.notes"
+                                                            type="text"
+                                                            class="w-full rounded-lg border-gray-300 text-sm focus:ring-teal-500 focus:border-teal-500"
+                                                            :placeholder="isRtl ? 'ملاحظات...' : 'Notes...'"
+                                                        />
+                                                        <div class="flex gap-2 justify-end">
+                                                            <button
+                                                                type="button"
+                                                                @click="reschedulingFollowUp = null"
+                                                                class="px-3 py-1.5 text-xs text-gray-500 hover:text-gray-700 transition-colors"
+                                                            >
+                                                                {{ isRtl ? 'إلغاء' : 'Cancel' }}
+                                                            </button>
+                                                            <button
+                                                                type="submit"
+                                                                :disabled="rescheduleForm.processing || !rescheduleForm.scheduled_at"
+                                                                class="px-4 py-1.5 bg-blue-600 text-white text-xs font-medium rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
+                                                            >
+                                                                {{ isRtl ? 'إعادة جدولة' : 'Reschedule' }}
+                                                            </button>
+                                                        </div>
                                                     </form>
                                                 </div>
                                             </Transition>
@@ -1028,5 +1164,150 @@ const scoreAngle = computed(() => {
                 </div>
             </div>
         </div>
+        <!-- Convert to Patient Modal -->
+        <Teleport to="body">
+            <Transition
+                enter-active-class="transition-all duration-300 ease-out"
+                enter-from-class="opacity-0"
+                enter-to-class="opacity-100"
+                leave-active-class="transition-all duration-200 ease-in"
+                leave-from-class="opacity-100"
+                leave-to-class="opacity-0"
+            >
+                <div v-if="showConvertModal" class="fixed inset-0 z-50 flex items-center justify-center p-4" :dir="isRtl ? 'rtl' : 'ltr'">
+                    <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" @click="showConvertModal = false"></div>
+                    <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 transform transition-all duration-300">
+                        <div class="flex items-center gap-3 mb-5">
+                            <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center">
+                                <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-900">{{ isRtl ? 'تحويل إلى مريض' : 'Convert to Patient' }}</h3>
+                                <p class="text-sm text-gray-500">{{ isRtl ? 'سيتم إنشاء ملف مريض جديد' : 'A new patient file will be created' }}</p>
+                            </div>
+                        </div>
+
+                        <form @submit.prevent="submitConvert" class="space-y-4">
+                            <div class="bg-gray-50 rounded-xl p-4 border border-gray-100">
+                                <div class="space-y-2 text-sm">
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-500">{{ isRtl ? 'الاسم' : 'Name' }}</span>
+                                        <span class="font-medium text-gray-800">{{ lead.full_name }}</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-500">{{ isRtl ? 'الهاتف' : 'Phone' }}</span>
+                                        <span class="font-medium text-gray-800" dir="ltr">{{ lead.phone }}</span>
+                                    </div>
+                                    <div v-if="lead.email" class="flex justify-between">
+                                        <span class="text-gray-500">{{ isRtl ? 'البريد' : 'Email' }}</span>
+                                        <span class="font-medium text-gray-800">{{ lead.email }}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
+                                <textarea
+                                    v-model="convertForm.booking_notes"
+                                    rows="3"
+                                    class="w-full rounded-xl border-gray-300 text-sm focus:ring-teal-500 focus:border-teal-500 resize-none"
+                                    :placeholder="isRtl ? 'ملاحظات إضافية عن التحويل...' : 'Additional conversion notes...'"
+                                ></textarea>
+                            </div>
+
+                            <div class="flex gap-3 pt-2">
+                                <button
+                                    type="button"
+                                    @click="showConvertModal = false"
+                                    class="flex-1 px-4 py-2.5 border border-gray-200 text-gray-600 text-sm font-medium rounded-xl hover:bg-gray-50 transition-colors"
+                                >
+                                    {{ isRtl ? 'إلغاء' : 'Cancel' }}
+                                </button>
+                                <button
+                                    type="submit"
+                                    :disabled="convertForm.processing"
+                                    class="flex-1 px-4 py-2.5 bg-emerald-600 text-white text-sm font-semibold rounded-xl hover:bg-emerald-700 disabled:opacity-50 transition-all duration-200 flex items-center justify-center gap-2"
+                                >
+                                    <svg v-if="convertForm.processing" class="animate-spin w-4 h-4" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+                                    {{ convertForm.processing ? (isRtl ? 'جارٍ التحويل...' : 'Converting...') : (isRtl ? 'تحويل لمريض' : 'Convert to Patient') }}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </Transition>
+        </Teleport>
+
+        <!-- Mark as Lost Modal -->
+        <Teleport to="body">
+            <Transition
+                enter-active-class="transition-all duration-300 ease-out"
+                enter-from-class="opacity-0"
+                enter-to-class="opacity-100"
+                leave-active-class="transition-all duration-200 ease-in"
+                leave-from-class="opacity-100"
+                leave-to-class="opacity-0"
+            >
+                <div v-if="showLostModal" class="fixed inset-0 z-50 flex items-center justify-center p-4" :dir="isRtl ? 'rtl' : 'ltr'">
+                    <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" @click="showLostModal = false"></div>
+                    <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 transform transition-all duration-300">
+                        <div class="flex items-center gap-3 mb-5">
+                            <div class="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center">
+                                <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-900">{{ isRtl ? 'تسجيل خسارة العميل' : 'Mark Lead as Lost' }}</h3>
+                                <p class="text-sm text-gray-500">{{ lead.full_name }}</p>
+                            </div>
+                        </div>
+
+                        <form @submit.prevent="submitLost" class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">{{ isRtl ? 'سبب الخسارة' : 'Reason for Loss' }}</label>
+                                <div class="grid grid-cols-2 gap-2 mb-3">
+                                    <button
+                                        v-for="reason in lossReasons"
+                                        :key="reason.en"
+                                        type="button"
+                                        @click="lostForm.loss_reason = isRtl ? reason.ar : reason.en"
+                                        class="px-3 py-2 rounded-xl border text-xs font-medium transition-all duration-200"
+                                        :class="lostForm.loss_reason === (isRtl ? reason.ar : reason.en)
+                                            ? 'border-red-400 bg-red-50 text-red-700'
+                                            : 'border-gray-200 text-gray-500 hover:border-gray-300'"
+                                    >
+                                        {{ isRtl ? reason.ar : reason.en }}
+                                    </button>
+                                </div>
+                                <textarea
+                                    v-model="lostForm.loss_reason"
+                                    rows="2"
+                                    class="w-full rounded-xl border-gray-300 text-sm focus:ring-red-400 focus:border-red-400 resize-none"
+                                    :placeholder="isRtl ? 'أو اكتب سبباً آخر...' : 'Or type a custom reason...'"
+                                ></textarea>
+                                <p v-if="lostForm.errors.loss_reason" class="mt-1 text-xs text-red-500">{{ lostForm.errors.loss_reason }}</p>
+                            </div>
+
+                            <div class="flex gap-3 pt-2">
+                                <button
+                                    type="button"
+                                    @click="showLostModal = false"
+                                    class="flex-1 px-4 py-2.5 border border-gray-200 text-gray-600 text-sm font-medium rounded-xl hover:bg-gray-50 transition-colors"
+                                >
+                                    {{ isRtl ? 'إلغاء' : 'Cancel' }}
+                                </button>
+                                <button
+                                    type="submit"
+                                    :disabled="lostForm.processing || !lostForm.loss_reason"
+                                    class="flex-1 px-4 py-2.5 bg-red-600 text-white text-sm font-semibold rounded-xl hover:bg-red-700 disabled:opacity-50 transition-all duration-200 flex items-center justify-center gap-2"
+                                >
+                                    <svg v-if="lostForm.processing" class="animate-spin w-4 h-4" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+                                    {{ lostForm.processing ? (isRtl ? 'جارٍ الحفظ...' : 'Saving...') : (isRtl ? 'تسجيل الخسارة' : 'Mark as Lost') }}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </Transition>
+        </Teleport>
     </SecretaryLayout>
 </template>

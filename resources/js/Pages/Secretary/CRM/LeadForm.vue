@@ -40,6 +40,28 @@ function submit() {
     form.post(url);
 }
 
+const duplicateWarning = ref(null);
+const checkingDuplicate = ref(false);
+
+async function checkDuplicate() {
+    const phone = form.phone.trim();
+    if (!phone || phone.length < 7) {
+        duplicateWarning.value = null;
+        return;
+    }
+    checkingDuplicate.value = true;
+    try {
+        const res = await fetch(`/secretary/crm/check-duplicate?phone=${encodeURIComponent(phone)}`, {
+            credentials: 'same-origin',
+        });
+        const data = await res.json();
+        duplicateWarning.value = data.exists ? data.lead : null;
+    } catch (e) {
+        duplicateWarning.value = null;
+    }
+    checkingDuplicate.value = false;
+}
+
 function toggleService(id) {
     const idx = form.interested_services.indexOf(id);
     if (idx > -1) {
@@ -124,10 +146,21 @@ const priorityOptions = [
                     <label class="block text-sm font-semibold text-slate-600 mb-1.5">
                         {{ isRtl ? '\u0631\u0642\u0645 \u0627\u0644\u0647\u0627\u062A\u0641' : 'Phone Number' }} <span class="text-red-500">*</span>
                     </label>
-                    <input v-model="form.phone" type="tel" dir="ltr"
+                    <input v-model="form.phone" type="tel" dir="ltr" @blur="checkDuplicate"
                            :class="['w-full rounded-xl border px-4 py-3 text-sm transition-all duration-200 focus:ring-2 focus:ring-teal-400/40 focus:border-teal-400 outline-none', form.errors.phone ? 'border-red-300 bg-red-50' : 'border-slate-200 bg-slate-50/50 hover:border-slate-300']"
                            placeholder="+971 XX XXX XXXX" />
                     <p v-if="form.errors.phone" class="mt-1 text-xs text-red-500">{{ form.errors.phone }}</p>
+                    <!-- Duplicate Warning -->
+                    <div v-if="duplicateWarning" class="mt-2 bg-amber-50 border border-amber-200 rounded-lg p-3 flex items-start gap-2">
+                        <svg class="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
+                        <div class="text-sm">
+                            <p class="font-medium text-amber-800">{{ isRtl ? 'تحذير: هذا الرقم موجود مسبقاً!' : 'Warning: This phone already exists!' }}</p>
+                            <p class="text-amber-600 mt-0.5">{{ duplicateWarning.full_name }} - {{ duplicateWarning.status }}</p>
+                            <Link v-if="duplicateWarning.is_mine" :href="`/secretary/crm/leads/${duplicateWarning.id}`" class="text-teal-600 hover:underline text-xs mt-1 inline-block">
+                                {{ isRtl ? 'عرض العميل' : 'View Lead' }}
+                            </Link>
+                        </div>
+                    </div>
                 </div>
                 <!-- Phone 2 -->
                 <div>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Secretary;
 
 use App\Models\Lead;
+use App\Models\Patient;
 use App\Models\LeadActivity;
 use App\Models\LeadFollowUp;
 use App\Models\LeadScoringRule;
@@ -416,5 +417,256 @@ class SecretaryCrmController extends BaseSecretaryController
         }
 
         return back()->with($flash);
+    }
+
+    /**
+     * Convert a lead to a patient.
+     */
+    public function convertToPatient(Request $request, Lead $lead): RedirectResponse
+    {
+        if ($lead->assigned_to !== auth()->id()) {
+            abort(403);
+        }
+
+        $data = $request->validate([
+            'patient_id' => 'nullable|exists:patients,id',
+            'booking_notes' => 'nullable|string|max:500',
+        ]);
+
+        // If no existing patient provided, create a new one
+        if (empty($data['patient_id'])) {
+            $patient = Patient::create([
+                'full_name' => $lead->full_name,
+                'phone' => $lead->phone,
+                'phone2' => $lead->phone2,
+                'email' => $lead->email,
+                'gender' => $lead->gender,
+                'date_of_birth' => $lead->date_of_birth,
+                'city' => $lead->city,
+                'nationality' => $lead->nationality,
+                'notes' => $data['booking_notes'] ?? null,
+            ]);
+        } else {
+            $patient = Patient::findOrFail($data['patient_id']);
+        }
+
+        $lead->convertToPatient($patient);
+
+        LeadActivity::create([
+            'lead_id' => $lead->id,
+            'type' => 'system',
+            'subject' => 'Lead converted to patient',
+            'description' => 'Patient file #' . ($patient->file_number ?? $patient->id),
+            'performed_by' => auth()->id(),
+        ]);
+
+        return back()->with('success', $this->msg(
+            'Lead successfully converted to patient!',
+            'تم تحويل العميل المحتمل إلى مريض بنجاح!'
+        ));
+    }
+
+    /**
+     * Mark a lead as lost.
+     */
+    public function markAsLost(Request $request, Lead $lead): RedirectResponse
+    {
+        if ($lead->assigned_to !== auth()->id()) {
+            abort(403);
+        }
+
+        $data = $request->validate([
+            'loss_reason' => 'required|string|max:500',
+        ]);
+
+        $oldStatus = $lead->status;
+        $lead->markAsLost($data['loss_reason']);
+
+        LeadActivity::logStatusChange($lead, $oldStatus, 'lost');
+
+        LeadActivity::create([
+            'lead_id' => $lead->id,
+            'type' => 'system',
+            'subject' => 'Lead marked as lost',
+            'description' => $data['loss_reason'],
+            'performed_by' => auth()->id(),
+        ]);
+
+        return back()->with('success', $this->msg(
+            'Lead marked as lost.',
+            'تم تسجيل العميل كخسارة.'
+        ));
+    }
+
+    /**
+     * Reschedule a follow-up.
+     */
+    public function rescheduleFollowUp(Request $request, LeadFollowUp $followUp): RedirectResponse
+    {
+        if ($followUp->assigned_to !== auth()->id()) {
+            abort(403);
+        }
+
+        $data = $request->validate([
+            'scheduled_at' => 'required|date|after:now',
+            'notes' => 'nullable|string|max:500',
+        ]);
+
+        $followUp->reschedule(new \DateTime($data['scheduled_at']));
+
+        // Update new follow-up notes if provided
+        if (!empty($data['notes'])) {
+            $newFollowUp = LeadFollowUp::where('lead_id', $followUp->lead_id)
+                ->where('status', 'pending')
+                ->latest()
+                ->first();
+            if ($newFollowUp) {
+                $newFollowUp->update(['notes' => $data['notes']]);
+            }
+        }
+
+        // Update lead next follow-up
+        $followUp->lead->update(['next_follow_up_at' => $data['scheduled_at']]);
+
+        LeadActivity::create([
+            'lead_id' => $followUp->lead_id,
+            'type' => 'follow_up_scheduled',
+            'subject' => 'Follow-up rescheduled',
+            'performed_by' => auth()->id(),
+        ]);
+
+        return back()->with('success', $this->msg(
+            'Follow-up rescheduled successfully.',
+            'تم إعادة جدولة المتابعة بنجاح.'
+        ));
+    }
+
+    /**
+     * Check for duplicate leads by phone number (AJAX).
+     */
+    public function checkDuplicate(Request $request)
+    {
+        $phone = $request->input('phone');
+        if (!$phone) {
+            return response()->json(['exists' => false]);
+        }
+
+        $existing = Lead::where('phone', $phone)
+            ->orWhere('phone2', $phone)
+            ->first(['id', 'full_name', 'phone', 'status', 'assigned_to']);
+
+        return response()->json([
+            'exists' => !!$existing,
+            'lead' => $existing ? [
+                'id' => $existing->id,
+                'full_name' => $existing->full_name,
+                'phone' => $existing->phone,
+                'status' => $existing->status,
+                'is_mine' => $existing->assigned_to === auth()->id(),
+            ] : null,
+        ]);
+    }
+
+    /**
+     * Performance report page.
+     */
+    public function performance(): Response
+    {
+        $userId = auth()->id();
+        $now = now();
+        $startOfMonth = $now->copy()->startOfMonth();
+        $startOfWeek = $now->copy()->startOfWeek();
+
+        // Monthly stats
+        $monthlyStats = [
+            'calls' => LeadActivity::where('performed_by', $userId)
+                ->where('type', 'call')
+                ->where('created_at', '>=', $startOfMonth)
+                ->count(),
+            'whatsapp' => LeadActivity::where('performed_by', $userId)
+                ->where('type', 'whatsapp')
+                ->where('created_at', '>=', $startOfMonth)
+                ->count(),
+            'emails' => LeadActivity::where('performed_by', $userId)
+                ->where('type', 'email')
+                ->where('created_at', '>=', $startOfMonth)
+                ->count(),
+            'meetings' => LeadActivity::where('performed_by', $userId)
+                ->where('type', 'meeting')
+                ->where('created_at', '>=', $startOfMonth)
+                ->count(),
+            'total_activities' => LeadActivity::where('performed_by', $userId)
+                ->where('created_at', '>=', $startOfMonth)
+                ->count(),
+            'follow_ups_completed' => LeadFollowUp::forUser($userId)
+                ->where('status', 'completed')
+                ->where('completed_at', '>=', $startOfMonth)
+                ->count(),
+            'follow_ups_missed' => LeadFollowUp::forUser($userId)
+                ->where('status', 'missed')
+                ->where('updated_at', '>=', $startOfMonth)
+                ->count(),
+            'leads_created' => Lead::where('created_by', $userId)
+                ->where('created_at', '>=', $startOfMonth)
+                ->count(),
+            'leads_converted' => Lead::assignedTo($userId)
+                ->where('status', 'converted')
+                ->where('converted_at', '>=', $startOfMonth)
+                ->count(),
+            'leads_lost' => Lead::assignedTo($userId)
+                ->where('status', 'lost')
+                ->where('lost_at', '>=', $startOfMonth)
+                ->count(),
+        ];
+
+        // Weekly stats
+        $weeklyStats = [
+            'calls' => LeadActivity::where('performed_by', $userId)
+                ->where('type', 'call')
+                ->where('created_at', '>=', $startOfWeek)
+                ->count(),
+            'total_activities' => LeadActivity::where('performed_by', $userId)
+                ->where('created_at', '>=', $startOfWeek)
+                ->count(),
+            'follow_ups_completed' => LeadFollowUp::forUser($userId)
+                ->where('status', 'completed')
+                ->where('completed_at', '>=', $startOfWeek)
+                ->count(),
+        ];
+
+        // Daily activity for the last 7 days (for chart)
+        $dailyActivity = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $day = $now->copy()->subDays($i);
+            $dailyActivity[] = [
+                'date' => $day->format('Y-m-d'),
+                'label' => $day->format('D'),
+                'label_ar' => $day->locale('ar')->dayName,
+                'count' => LeadActivity::where('performed_by', $userId)
+                    ->whereDate('created_at', $day->format('Y-m-d'))
+                    ->count(),
+            ];
+        }
+
+        // Status distribution of my active leads
+        $statusDistribution = Lead::assignedTo($userId)
+            ->whereNotIn('status', ['converted', 'lost'])
+            ->selectRaw('status, count(*) as count')
+            ->groupBy('status')
+            ->pluck('count', 'status')
+            ->toArray();
+
+        // Conversion rate
+        $totalAssigned = Lead::assignedTo($userId)->count();
+        $totalConverted = Lead::assignedTo($userId)->where('status', 'converted')->count();
+        $conversionRate = $totalAssigned > 0 ? round(($totalConverted / $totalAssigned) * 100, 1) : 0;
+
+        return Inertia::render('Secretary/CRM/Performance', [
+            'monthlyStats' => $monthlyStats,
+            'weeklyStats' => $weeklyStats,
+            'dailyActivity' => $dailyActivity,
+            'statusDistribution' => $statusDistribution,
+            'conversionRate' => $conversionRate,
+        ]);
     }
 }
