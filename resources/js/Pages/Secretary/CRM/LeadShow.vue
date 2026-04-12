@@ -422,6 +422,58 @@ const activityStats = computed(() => {
     };
 });
 
+// Quick stats
+const leadAge = computed(() => {
+    if (!props.lead.created_at) return 0;
+    return Math.floor((Date.now() - new Date(props.lead.created_at).getTime()) / 86400000);
+});
+
+const pendingFollowUps = computed(() => {
+    return (props.followUps || []).filter(f => f.status === 'pending').length;
+});
+
+const completedFollowUps = computed(() => {
+    return (props.followUps || []).filter(f => f.status === 'completed').length;
+});
+
+// Print lead profile
+function printLeadProfile() {
+    const lead = props.lead;
+    const statusText = isRtl.value ? (statusLabels[lead.status]?.ar || lead.status) : (statusLabels[lead.status]?.en || lead.status);
+    const prioObj = priorityDisplay[lead.priority];
+    const prioText = prioObj ? (isRtl.value ? prioObj.label.ar : prioObj.label.en) : '-';
+    const printFrame = document.createElement('iframe');
+    printFrame.style.display = 'none';
+    document.body.appendChild(printFrame);
+    const doc = printFrame.contentDocument || printFrame.contentWindow.document;
+    doc.open();
+    const activitiesRows = (props.activities || []).slice(0, 20).map(a => {
+        const tr = `<tr><td style="padding:6px 10px;border-bottom:1px solid #eee;font-size:13px">${(a.type || '').replace(/</g, '&lt;')}</td><td style="padding:6px 10px;border-bottom:1px solid #eee;font-size:13px">${(a.subject || '-').replace(/</g, '&lt;')}</td><td style="padding:6px 10px;border-bottom:1px solid #eee;font-size:13px">${formatDateTime(a.created_at)}</td></tr>`;
+        return tr;
+    }).join('');
+    const html = [
+        '<!DOCTYPE html><html dir="' + (isRtl.value ? 'rtl' : 'ltr') + '"><head><title>' + (lead.full_name || '').replace(/</g, '&lt;') + '</title>',
+        '<style>body{font-family:system-ui,sans-serif;padding:30px;color:#333}table{width:100%;border-collapse:collapse}th{background:#0d9488;color:white;text-align:start;padding:8px 10px;font-size:13px}.ig{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:20px 0}.ii{padding:10px;background:#f9fafb;border-radius:8px;border:1px solid #e5e7eb}.il{font-size:11px;color:#6b7280;text-transform:uppercase}.iv{font-size:15px;font-weight:600;margin-top:2px}h1{color:#0d9488;margin:0}</style></head><body>',
+        '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px"><div><h1>' + (lead.full_name || '').replace(/</g, '&lt;') + '</h1>',
+        '<p style="color:#6b7280;margin:4px 0">' + statusText + ' | ' + prioText + ' | Score: ' + (lead.score || 0) + '</p></div>',
+        '<div style="font-size:12px;color:#9ca3af">Aura Derma Clinic CRM</div></div>',
+        '<div class="ig"><div class="ii"><div class="il">Phone</div><div class="iv">' + (lead.phone || '-') + '</div></div>',
+        '<div class="ii"><div class="il">Email</div><div class="iv">' + (lead.email || '-').replace(/</g, '&lt;') + '</div></div>',
+        '<div class="ii"><div class="il">City</div><div class="iv">' + (lead.city || '-').replace(/</g, '&lt;') + '</div></div>',
+        '<div class="ii"><div class="il">Source</div><div class="iv">' + ((lead.source?.name_en || lead.source?.name_ar || '-')).replace(/</g, '&lt;') + '</div></div></div>',
+        '<h3 style="margin-top:20px;color:#0d9488">' + (isRtl.value ? 'آخر النشاطات' : 'Recent Activities') + '</h3>',
+        '<table><thead><tr><th>' + (isRtl.value ? 'النوع' : 'Type') + '</th><th>' + (isRtl.value ? 'الموضوع' : 'Subject') + '</th><th>' + (isRtl.value ? 'التاريخ' : 'Date') + '</th></tr></thead>',
+        '<tbody>' + (activitiesRows || '<tr><td colspan="3" style="padding:20px;text-align:center;color:#9ca3af">-</td></tr>') + '</tbody></table>',
+        '</body></html>',
+    ].join('');
+    doc.write(html);
+    doc.close();
+    setTimeout(() => {
+        printFrame.contentWindow.print();
+        setTimeout(() => document.body.removeChild(printFrame), 1000);
+    }, 300);
+}
+
 // Copy phone
 const phoneCopied = ref(false);
 function copyPhone() {
@@ -632,6 +684,57 @@ function whatsappUrl(phone) {
                             </template>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- Quick Stats Strip -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
+                <div :class="['grid grid-cols-2 md:grid-cols-5 gap-3 transition-all duration-700 delay-150', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4']"
+                     :style="{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }">
+                    <div class="bg-white rounded-xl border border-gray-100 p-3 flex items-center gap-3 shadow-sm">
+                        <div class="w-9 h-9 rounded-lg bg-teal-50 flex items-center justify-center flex-shrink-0">
+                            <svg class="w-4.5 h-4.5 text-teal-600" style="width:18px;height:18px" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        </div>
+                        <div>
+                            <div class="text-lg font-bold text-gray-800">{{ leadAge }}</div>
+                            <div class="text-[10px] text-gray-400 font-medium uppercase">{{ isRtl ? 'يوم في النظام' : 'Days in CRM' }}</div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-xl border border-gray-100 p-3 flex items-center gap-3 shadow-sm">
+                        <div class="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
+                            <svg class="w-4.5 h-4.5 text-blue-600" style="width:18px;height:18px" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/></svg>
+                        </div>
+                        <div>
+                            <div class="text-lg font-bold text-gray-800">{{ activityStats.total }}</div>
+                            <div class="text-[10px] text-gray-400 font-medium uppercase">{{ isRtl ? 'نشاط' : 'Activities' }}</div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-xl border border-gray-100 p-3 flex items-center gap-3 shadow-sm">
+                        <div class="w-9 h-9 rounded-lg bg-amber-50 flex items-center justify-center flex-shrink-0">
+                            <svg class="w-4.5 h-4.5 text-amber-600" style="width:18px;height:18px" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                        </div>
+                        <div>
+                            <div class="text-lg font-bold text-gray-800">{{ pendingFollowUps }}</div>
+                            <div class="text-[10px] text-gray-400 font-medium uppercase">{{ isRtl ? 'متابعة معلقة' : 'Pending F/U' }}</div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-xl border border-gray-100 p-3 flex items-center gap-3 shadow-sm">
+                        <div class="w-9 h-9 rounded-lg bg-green-50 flex items-center justify-center flex-shrink-0">
+                            <svg class="w-4.5 h-4.5 text-green-600" style="width:18px;height:18px" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        </div>
+                        <div>
+                            <div class="text-lg font-bold text-gray-800">{{ completedFollowUps }}</div>
+                            <div class="text-[10px] text-gray-400 font-medium uppercase">{{ isRtl ? 'متابعة مكتملة' : 'Completed F/U' }}</div>
+                        </div>
+                    </div>
+                    <!-- Print button -->
+                    <button @click="printLeadProfile"
+                        class="bg-white rounded-xl border border-gray-100 p-3 flex items-center gap-3 shadow-sm hover:bg-gray-50 hover:border-teal-200 transition-all duration-200 group cursor-pointer">
+                        <div class="w-9 h-9 rounded-lg bg-gray-50 group-hover:bg-teal-50 flex items-center justify-center flex-shrink-0 transition-colors">
+                            <svg class="w-4.5 h-4.5 text-gray-400 group-hover:text-teal-600 transition-colors" style="width:18px;height:18px" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+                        </div>
+                        <div class="text-xs font-medium text-gray-500 group-hover:text-teal-700 transition-colors">{{ isRtl ? 'طباعة الملف' : 'Print Profile' }}</div>
+                    </button>
                 </div>
             </div>
 

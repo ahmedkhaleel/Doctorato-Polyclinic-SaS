@@ -240,6 +240,21 @@ function clearSelection() {
     selectAll.value = false;
 }
 
+function bulkUpdatePriority(priority) {
+    if (!selectedLeads.value.length) return;
+    if (!confirm(isRtl.value ? `تغيير أولوية ${selectedLeads.value.length} عميل؟` : `Update priority of ${selectedLeads.value.length} leads?`)) return;
+    router.post('/secretary/crm/leads/bulk-priority', {
+        lead_ids: selectedLeads.value,
+        priority: priority,
+    }, {
+        preserveScroll: true,
+        onSuccess: () => {
+            selectedLeads.value = [];
+            selectAll.value = false;
+        },
+    });
+}
+
 /* ── Export CSV ── */
 function exportLeadsCSV() {
     const data = props.leads?.data || [];
@@ -585,11 +600,16 @@ const activeFilterPills = computed(() => {
                         <button @click="clearSelection" class="text-xs text-teal-600 hover:text-teal-800 underline ms-2">{{ isRtl ? 'إلغاء التحديد' : 'Clear' }}</button>
                     </div>
                     <div class="flex items-center gap-2 flex-wrap">
-                        <span class="text-xs text-teal-600 font-medium">{{ isRtl ? 'تغيير الحالة:' : 'Change status:' }}</span>
+                        <span class="text-xs text-teal-600 font-medium">{{ isRtl ? 'تغيير الحالة:' : 'Status:' }}</span>
                         <button @click="bulkUpdateStatus('contacted')" class="px-2.5 py-1 rounded-lg text-[11px] font-medium bg-indigo-100 text-indigo-700 hover:bg-indigo-200 transition-colors">{{ isRtl ? 'تم التواصل' : 'Contacted' }}</button>
                         <button @click="bulkUpdateStatus('qualified')" class="px-2.5 py-1 rounded-lg text-[11px] font-medium bg-purple-100 text-purple-700 hover:bg-purple-200 transition-colors">{{ isRtl ? 'مؤهل' : 'Qualified' }}</button>
                         <button @click="bulkUpdateStatus('appointment_booked')" class="px-2.5 py-1 rounded-lg text-[11px] font-medium bg-amber-100 text-amber-700 hover:bg-amber-200 transition-colors">{{ isRtl ? 'تم الحجز' : 'Booked' }}</button>
                         <button @click="bulkUpdateStatus('negotiation')" class="px-2.5 py-1 rounded-lg text-[11px] font-medium bg-orange-100 text-orange-700 hover:bg-orange-200 transition-colors">{{ isRtl ? 'تفاوض' : 'Negotiation' }}</button>
+                        <span class="w-px h-5 bg-teal-200 mx-1"></span>
+                        <span class="text-xs text-teal-600 font-medium">{{ isRtl ? 'الأولوية:' : 'Priority:' }}</span>
+                        <button @click="bulkUpdatePriority(1)" class="px-2.5 py-1 rounded-lg text-[11px] font-medium bg-red-100 text-red-700 hover:bg-red-200 transition-colors">{{ isRtl ? 'ساخن' : 'Hot' }}</button>
+                        <button @click="bulkUpdatePriority(2)" class="px-2.5 py-1 rounded-lg text-[11px] font-medium bg-amber-100 text-amber-700 hover:bg-amber-200 transition-colors">{{ isRtl ? 'دافئ' : 'Warm' }}</button>
+                        <button @click="bulkUpdatePriority(3)" class="px-2.5 py-1 rounded-lg text-[11px] font-medium bg-blue-100 text-blue-700 hover:bg-blue-200 transition-colors">{{ isRtl ? 'بارد' : 'Cold' }}</button>
                     </div>
                 </div>
             </Transition>

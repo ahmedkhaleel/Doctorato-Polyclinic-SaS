@@ -181,6 +181,34 @@ class SecretaryCrmController extends BaseSecretaryController
     }
 
     /**
+     * Bulk update priority for selected leads.
+     */
+    public function bulkUpdatePriority(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'lead_ids' => 'required|array|min:1',
+            'lead_ids.*' => 'integer|exists:leads,id',
+            'priority' => 'required|in:1,2,3',
+        ]);
+
+        $userId = auth()->id();
+        $updated = 0;
+
+        foreach ($data['lead_ids'] as $leadId) {
+            $lead = Lead::where('id', $leadId)->where('assigned_to', $userId)->first();
+            if ($lead && $lead->priority != $data['priority']) {
+                $lead->update(['priority' => $data['priority']]);
+                $updated++;
+            }
+        }
+
+        return back()->with('success', $this->msg(
+            "{$updated} leads priority updated successfully.",
+            "تم تحديث أولوية {$updated} عميل بنجاح."
+        ));
+    }
+
+    /**
      * Quick view lead data (AJAX).
      */
     public function quickView(Lead $lead)
@@ -1152,6 +1180,35 @@ class SecretaryCrmController extends BaseSecretaryController
             'leads' => $myLeads,
             'filters' => $request->only(['channel', 'category', 'search']),
         ]);
+    }
+
+    /**
+     * Duplicate a communication template.
+     */
+    public function duplicateTemplate(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            '_duplicate' => 'required|integer|exists:communication_templates,id',
+            'name' => 'required|string|max:255',
+        ]);
+
+        $original = CommunicationTemplate::findOrFail($data['_duplicate']);
+
+        CommunicationTemplate::create([
+            'name' => $data['name'],
+            'channel' => $original->channel,
+            'category' => $original->category,
+            'body_ar' => $original->body_ar,
+            'body_en' => $original->body_en,
+            'variables' => $original->variables,
+            'is_active' => true,
+            'usage_count' => 0,
+        ]);
+
+        return back()->with('success', $this->msg(
+            'Template duplicated successfully.',
+            'تم تكرار القالب بنجاح.'
+        ));
     }
 
     /**

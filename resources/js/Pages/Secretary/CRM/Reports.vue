@@ -21,15 +21,37 @@ onMounted(() => { setTimeout(() => { mounted.value = true; }, 50); });
 
 /* ---------- Period filter ---------- */
 const selectedPeriod = ref(props.period || '30');
+const showCustomRange = ref(false);
+const customFrom = ref('');
+const customTo = ref('');
+
 function changePeriod() {
+    if (selectedPeriod.value === 'custom') {
+        showCustomRange.value = true;
+        return;
+    }
+    showCustomRange.value = false;
     router.get('/secretary/crm/reports', { period: selectedPeriod.value }, { preserveState: true, replace: true });
 }
+
+function applyCustomRange() {
+    if (!customFrom.value || !customTo.value) return;
+    router.get('/secretary/crm/reports', {
+        period: 'custom',
+        date_from: customFrom.value,
+        date_to: customTo.value,
+    }, { preserveState: true, replace: true });
+}
+
+/* ---------- Comparison toggle ---------- */
+const showComparison = ref(true);
 
 const periodLabels = {
     '7': { en: 'Last 7 Days', ar: 'آخر 7 أيام' },
     '30': { en: 'Last 30 Days', ar: 'آخر 30 يوم' },
     '90': { en: 'Last 90 Days', ar: 'آخر 90 يوم' },
     'year': { en: 'This Year', ar: 'هذه السنة' },
+    'custom': { en: 'Custom Range', ar: 'فترة مخصصة' },
 };
 
 /* ---------- Funnel ---------- */
@@ -145,12 +167,19 @@ const priorityLabels = {
                     <p class="text-teal-100 mt-1 text-sm">{{ isRtl ? 'تحليلات متقدمة لأداء المبيعات' : 'Advanced sales performance analytics' }}</p>
                 </div>
             </div>
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-3 flex-wrap">
                 <!-- Period Selector -->
                 <select v-model="selectedPeriod" @change="changePeriod"
                         class="bg-white/20 backdrop-blur text-white border border-white/30 rounded-xl py-2.5 px-4 text-sm focus:ring-2 focus:ring-white/50 [&>option]:text-slate-800">
                     <option v-for="(label, key) in periodLabels" :key="key" :value="key">{{ isRtl ? label.ar : label.en }}</option>
                 </select>
+                <!-- Comparison toggle -->
+                <button @click="showComparison = !showComparison"
+                    :class="['inline-flex items-center gap-1.5 backdrop-blur border rounded-xl py-2.5 px-4 text-sm font-medium transition-all duration-200',
+                        showComparison ? 'bg-white/30 text-white border-white/40' : 'bg-white/10 text-white/70 border-white/20 hover:bg-white/20']">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                    {{ isRtl ? 'مقارنة' : 'Compare' }}
+                </button>
                 <!-- Export CSV -->
                 <button @click="exportCSV"
                         class="inline-flex items-center gap-2 bg-white/20 backdrop-blur hover:bg-white/30 text-white border border-white/30 rounded-xl py-2.5 px-4 text-sm font-medium transition-all duration-200">
@@ -159,6 +188,27 @@ const priorityLabels = {
                 </button>
             </div>
         </div>
+        <!-- Custom date range -->
+        <Transition enter-active-class="transition-all duration-200" enter-from-class="opacity-0 -translate-y-2" enter-to-class="opacity-100 translate-y-0" leave-active-class="transition-all duration-150" leave-from-class="opacity-100" leave-to-class="opacity-0">
+            <div v-if="showCustomRange" class="mt-4 flex items-center gap-3 flex-wrap">
+                <div class="flex items-center gap-2">
+                    <label class="text-xs text-teal-100">{{ isRtl ? 'من' : 'From' }}</label>
+                    <input v-model="customFrom" type="date" class="bg-white/20 backdrop-blur text-white border border-white/30 rounded-lg py-1.5 px-3 text-sm focus:ring-2 focus:ring-white/50 [color-scheme:dark]">
+                </div>
+                <div class="flex items-center gap-2">
+                    <label class="text-xs text-teal-100">{{ isRtl ? 'إلى' : 'To' }}</label>
+                    <input v-model="customTo" type="date" class="bg-white/20 backdrop-blur text-white border border-white/30 rounded-lg py-1.5 px-3 text-sm focus:ring-2 focus:ring-white/50 [color-scheme:dark]">
+                </div>
+                <button @click="applyCustomRange" :disabled="!customFrom || !customTo"
+                    :class="['px-4 py-1.5 rounded-lg text-sm font-medium transition-all duration-200',
+                        customFrom && customTo ? 'bg-white text-teal-700 hover:bg-teal-50 shadow-sm' : 'bg-white/20 text-white/50 cursor-not-allowed']">
+                    {{ isRtl ? 'تطبيق' : 'Apply' }}
+                </button>
+                <button @click="showCustomRange = false; selectedPeriod = '30'; changePeriod()" class="text-xs text-teal-200 hover:text-white transition-colors underline">
+                    {{ isRtl ? 'إلغاء' : 'Cancel' }}
+                </button>
+            </div>
+        </Transition>
     </div>
 
     <!-- Period Comparison Cards -->
@@ -181,7 +231,7 @@ const priorityLabels = {
                     </div>
                 </div>
                 <!-- Change indicator -->
-                <div v-if="comparison?.[item.key]" class="text-right">
+                <div v-if="showComparison && comparison?.[item.key]" class="text-right">
                     <div :class="['flex items-center gap-1 text-sm font-semibold', getChange(comparison[item.key].current, comparison[item.key].previous) >= 0 ? 'text-emerald-600' : 'text-red-500']">
                         <svg v-if="getChange(comparison[item.key].current, comparison[item.key].previous) >= 0" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 11l5-5m0 0l5 5m-5-5v12"/></svg>
                         <svg v-else class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 13l-5 5m0 0l-5-5m5 5V6"/></svg>

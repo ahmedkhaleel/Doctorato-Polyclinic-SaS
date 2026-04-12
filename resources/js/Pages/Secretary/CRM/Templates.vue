@@ -164,6 +164,19 @@ function copyBody(template) {
         setTimeout(() => { copiedId.value = null; }, 2000);
     });
 }
+
+/* ---------- Duplicate template ---------- */
+const duplicating = ref(null);
+function duplicateTemplate(template) {
+    duplicating.value = template.id;
+    router.post('/secretary/crm/templates/duplicate', {
+        _duplicate: template.id,
+        name: template.name + (isRtl.value ? ' (نسخة)' : ' (Copy)'),
+    }, {
+        preserveScroll: true,
+        onFinish: () => { duplicating.value = null; },
+    });
+}
 </script>
 
 <template>
@@ -281,6 +294,12 @@ function copyBody(template) {
                     <svg v-if="copiedId !== template.id" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
                     <svg v-else class="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                     {{ copiedId === template.id ? (isRtl ? 'تم النسخ' : 'Copied') : (isRtl ? 'نسخ' : 'Copy') }}
+                </button>
+                <button @click="duplicateTemplate(template)" :disabled="duplicating === template.id"
+                        class="flex items-center justify-center bg-slate-100 hover:bg-slate-200 text-slate-600 text-sm font-medium py-2.5 px-3 rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        :title="isRtl ? 'تكرار القالب' : 'Duplicate template'">
+                    <svg v-if="duplicating !== template.id" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"/></svg>
+                    <svg v-else class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
                 </button>
             </div>
         </div>

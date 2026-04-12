@@ -144,6 +144,7 @@ Route::middleware('secretary.auth')->group(function () {
     Route::get('/crm', [SecretaryCrmController::class, 'dashboard'])->name('secretary.crm.dashboard');
     Route::get('/crm/leads', [SecretaryCrmController::class, 'leads'])->name('secretary.crm.leads');
     Route::post('/crm/leads/bulk-status', [SecretaryCrmController::class, 'bulkUpdateStatus'])->name('secretary.crm.bulkStatus');
+    Route::post('/crm/leads/bulk-priority', [SecretaryCrmController::class, 'bulkUpdatePriority'])->name('secretary.crm.bulkPriority');
     Route::get('/crm/leads/create', [SecretaryCrmController::class, 'create'])->name('secretary.crm.create');
     Route::post('/crm/leads', [SecretaryCrmController::class, 'store'])->name('secretary.crm.store');
     Route::get('/crm/leads/{lead}/edit', [SecretaryCrmController::class, 'edit'])->name('secretary.crm.edit');
@@ -169,6 +170,7 @@ Route::middleware('secretary.auth')->group(function () {
     Route::post('/crm/import/process', [SecretaryCrmController::class, 'importProcess'])->name('secretary.crm.importProcess');
     Route::get('/crm/import/template', [SecretaryCrmController::class, 'importTemplate'])->name('secretary.crm.importTemplate');
     Route::get('/crm/templates', [SecretaryCrmController::class, 'templates'])->name('secretary.crm.templates');
+    Route::post('/crm/templates/duplicate', [SecretaryCrmController::class, 'duplicateTemplate'])->name('secretary.crm.duplicateTemplate');
     Route::post('/crm/templates/preview', [SecretaryCrmController::class, 'templatePreview'])->name('secretary.crm.templatePreview');
     Route::get('/crm/reports', [SecretaryCrmController::class, 'reports'])->name('secretary.crm.reports');
 
