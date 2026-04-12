@@ -56,6 +56,7 @@ const navGroups = [
             { labelEn: 'CRM Dashboard',   labelAr: 'لوحة CRM',         href: '/secretary/crm',          icon: 'users' },
             { labelEn: 'My Leads',        labelAr: 'العملاء المحتملين', href: '/secretary/crm/leads',    icon: 'userList' },
             { labelEn: 'Calendar',        labelAr: 'التقويم',          href: '/secretary/crm/calendar',     icon: 'calendarView' },
+            { labelEn: 'Import Leads',   labelAr: 'استيراد عملاء',    href: '/secretary/crm/import',      icon: 'upload' },
             { labelEn: 'Performance',     labelAr: 'الأداء',           href: '/secretary/crm/performance', icon: 'barChart' },
         ],
     },
@@ -260,6 +261,8 @@ function logout()        { router.post('/secretary/logout'); }
                         <svg v-else-if="item.icon === 'userList'" class="w-[16px] h-[16px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" /></svg>
                         <!-- Bar Chart (Performance) -->
                         <svg v-else-if="item.icon === 'barChart'" class="w-[16px] h-[16px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
+                        <!-- Upload -->
+                        <svg v-else-if="item.icon === 'upload'" class="w-[16px] h-[16px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
                         <!-- Chat -->
                         <svg v-else-if="item.icon === 'chat'" class="w-[16px] h-[16px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
                         <!-- User (Profile) -->

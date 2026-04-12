@@ -11,11 +11,13 @@ use App\Models\CommunicationTemplate;
 use App\Models\LeadSource;
 use App\Models\CrmCampaign;
 use App\Models\Service;
+use App\Imports\LeadsImport;
 use App\Services\CommunicationService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SecretaryCrmController extends BaseSecretaryController
 {
@@ -732,6 +734,110 @@ class SecretaryCrmController extends BaseSecretaryController
             'dailyActivity' => $dailyActivity,
             'statusDistribution' => $statusDistribution,
             'conversionRate' => $conversionRate,
+        ]);
+    }
+
+    /**
+     * Show the bulk import page.
+     */
+    public function importPage(): Response
+    {
+        return Inertia::render('Secretary/CRM/Import');
+    }
+
+    /**
+     * Preview uploaded Excel/CSV file (returns headers + first rows).
+     */
+    public function importPreview(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|file|mimes:xlsx,xls,csv|max:5120', // max 5MB
+        ]);
+
+        try {
+            $file = $request->file('file');
+            $data = Excel::toArray(new class implements \Maatwebsite\Excel\Concerns\WithHeadingRow {}, $file);
+
+            if (empty($data) || empty($data[0])) {
+                return response()->json(['error' => 'Empty file or no data found.'], 422);
+            }
+
+            $rows = $data[0];
+            $headers = !empty($rows) ? array_keys($rows[0]) : [];
+            $preview = array_slice($rows, 0, 5); // First 5 rows for preview
+
+            return response()->json([
+                'headers' => $headers,
+                'preview' => $preview,
+                'total_rows' => count($rows),
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 422);
+        }
+    }
+
+    /**
+     * Process the bulk import.
+     */
+    public function importProcess(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'file' => 'required|file|mimes:xlsx,xls,csv|max:5120',
+            'column_map' => 'required|array',
+            'column_map.full_name' => 'required|string',
+            'column_map.phone' => 'required|string',
+        ]);
+
+        $columnMap = $request->input('column_map', []);
+
+        $import = new LeadsImport(auth()->id(), $columnMap);
+
+        try {
+            Excel::import($import, $request->file('file'));
+        } catch (\Exception $e) {
+            return back()->with('error', $this->msg(
+                'Import failed: ' . $e->getMessage(),
+                'فشل الاستيراد: ' . $e->getMessage()
+            ));
+        }
+
+        $imported = $import->getImported();
+        $skipped = $import->getSkipped();
+        $errors = $import->getErrors();
+
+        // Store errors in session for display
+        if (!empty($errors)) {
+            session()->flash('import_errors', $errors);
+        }
+
+        return redirect()->route('secretary.crm.leads')
+            ->with('success', $this->msg(
+                "Import completed: {$imported} leads imported, {$skipped} skipped.",
+                "اكتمل الاستيراد: {$imported} عميل تم استيرادهم، {$skipped} تم تخطيهم."
+            ));
+    }
+
+    /**
+     * Download a sample import template.
+     */
+    public function importTemplate()
+    {
+        $headers = ['full_name', 'phone', 'phone2', 'email', 'gender', 'date_of_birth', 'city', 'nationality', 'priority', 'notes'];
+
+        $callback = function () use ($headers) {
+            $file = fopen('php://output', 'w');
+            // BOM for Excel UTF-8
+            fprintf($file, chr(0xEF) . chr(0xBB) . chr(0xBF));
+            fputcsv($file, $headers);
+            // Sample row
+            fputcsv($file, ['Ahmed Mohammed', '+966501234567', '', 'ahmed@email.com', 'male', '1990-01-15', 'Riyadh', 'Saudi', 'hot', 'Interested in laser treatment']);
+            fputcsv($file, ['Sara Ali', '+966509876543', '', 'sara@email.com', 'female', '1985-06-20', 'Jeddah', 'Saudi', 'warm', '']);
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, [
+            'Content-Type' => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => 'attachment; filename="leads_import_template.csv"',
         ]);
     }
 }
