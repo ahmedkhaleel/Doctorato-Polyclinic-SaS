@@ -143,11 +143,13 @@ Route::middleware('secretary.auth')->group(function () {
     // ─── CRM / Leads ──────────────────────────────────────────
     Route::get('/crm', [SecretaryCrmController::class, 'dashboard'])->name('secretary.crm.dashboard');
     Route::get('/crm/leads', [SecretaryCrmController::class, 'leads'])->name('secretary.crm.leads');
+    Route::post('/crm/leads/bulk-status', [SecretaryCrmController::class, 'bulkUpdateStatus'])->name('secretary.crm.bulkStatus');
     Route::get('/crm/leads/create', [SecretaryCrmController::class, 'create'])->name('secretary.crm.create');
     Route::post('/crm/leads', [SecretaryCrmController::class, 'store'])->name('secretary.crm.store');
     Route::get('/crm/leads/{lead}/edit', [SecretaryCrmController::class, 'edit'])->name('secretary.crm.edit');
     Route::post('/crm/leads/{lead}', [SecretaryCrmController::class, 'update'])->name('secretary.crm.update');
     Route::get('/crm/leads/{lead}', [SecretaryCrmController::class, 'show'])->name('secretary.crm.show');
+    Route::get('/crm/leads/{lead}/quick-view', [SecretaryCrmController::class, 'quickView'])->name('secretary.crm.quickView');
     Route::post('/crm/leads/{lead}/activity', [SecretaryCrmController::class, 'logActivity'])->name('secretary.crm.logActivity');
     Route::post('/crm/leads/{lead}/follow-up', [SecretaryCrmController::class, 'scheduleFollowUp'])->name('secretary.crm.scheduleFollowUp');
     Route::post('/crm/leads/{lead}/status', [SecretaryCrmController::class, 'updateStatus'])->name('secretary.crm.updateStatus');

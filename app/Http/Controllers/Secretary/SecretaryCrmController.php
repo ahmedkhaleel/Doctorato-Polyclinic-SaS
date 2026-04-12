@@ -91,6 +91,63 @@ class SecretaryCrmController extends BaseSecretaryController
     }
 
     /**
+     * Bulk update status for multiple leads.
+     */
+    public function bulkUpdateStatus(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'lead_ids' => 'required|array|min:1',
+            'lead_ids.*' => 'integer|exists:leads,id',
+            'status' => 'required|in:new,contacted,qualified,appointment_booked,consultation_done,negotiation',
+        ]);
+
+        $userId = auth()->id();
+        $updated = 0;
+
+        foreach ($data['lead_ids'] as $leadId) {
+            $lead = Lead::where('id', $leadId)->where('assigned_to', $userId)->first();
+            if ($lead && $lead->status !== $data['status']) {
+                $oldStatus = $lead->status;
+                $lead->update(['status' => $data['status']]);
+                LeadActivity::logStatusChange($lead, $oldStatus, $data['status']);
+                $updated++;
+            }
+        }
+
+        return back()->with('success', $this->msg(
+            "{$updated} leads updated successfully.",
+            "تم تحديث {$updated} عميل بنجاح."
+        ));
+    }
+
+    /**
+     * Quick view lead data (AJAX).
+     */
+    public function quickView(Lead $lead)
+    {
+        if ($lead->assigned_to !== auth()->id()) {
+            abort(403);
+        }
+
+        $activities = LeadActivity::where('lead_id', $lead->id)
+            ->with('performer:id,name')
+            ->latest()
+            ->limit(10)
+            ->get();
+
+        $followUps = LeadFollowUp::where('lead_id', $lead->id)
+            ->where('status', 'pending')
+            ->orderBy('scheduled_at')
+            ->limit(5)
+            ->get();
+
+        return response()->json([
+            'activities' => $activities,
+            'followUps' => $followUps,
+        ]);
+    }
+
+    /**
      * Show a single lead detail.
      */
     public function show(Lead $lead): Response
