@@ -840,4 +840,93 @@ class SecretaryCrmController extends BaseSecretaryController
             'Content-Disposition' => 'attachment; filename="leads_import_template.csv"',
         ]);
     }
+
+    /**
+     * Pipeline / Kanban view of leads.
+     */
+    public function pipeline(): Response
+    {
+        $userId = auth()->id();
+
+        $statuses = ['new', 'contacted', 'qualified', 'appointment_booked', 'consultation_done', 'negotiation'];
+
+        $columns = [];
+        foreach ($statuses as $status) {
+            $columns[$status] = Lead::with(['source:id,name_en,name_ar,icon,color'])
+                ->assignedTo($userId)
+                ->where('status', $status)
+                ->orderByDesc('priority')
+                ->orderByDesc('updated_at')
+                ->get(['id', 'full_name', 'phone', 'email', 'status', 'priority', 'score', 'lead_source_id', 'next_follow_up_at', 'last_contacted_at', 'created_at', 'updated_at'])
+                ->toArray();
+        }
+
+        return Inertia::render('Secretary/CRM/Pipeline', [
+            'columns' => $columns,
+        ]);
+    }
+
+    /**
+     * Export leads as CSV.
+     */
+    public function export(Request $request)
+    {
+        $userId = auth()->id();
+
+        $query = Lead::with(['source:id,name_en'])
+            ->assignedTo($userId);
+
+        if ($status = $request->input('status')) {
+            $query->where('status', $status);
+        }
+
+        if ($priority = $request->input('priority')) {
+            $query->where('priority', $priority);
+        }
+
+        $leads = $query->orderByDesc('created_at')->get();
+
+        $callback = function () use ($leads) {
+            $file = fopen('php://output', 'w');
+            // BOM for UTF-8
+            fprintf($file, chr(0xEF) . chr(0xBB) . chr(0xBF));
+
+            fputcsv($file, [
+                'ID', 'Full Name', 'Phone', 'Phone 2', 'Email', 'Gender',
+                'City', 'Nationality', 'Status', 'Priority', 'Score',
+                'Source', 'Last Contacted', 'Next Follow-up', 'Created At',
+            ]);
+
+            $priorityMap = [1 => 'Hot', 2 => 'Warm', 3 => 'Cold'];
+
+            foreach ($leads as $lead) {
+                fputcsv($file, [
+                    $lead->id,
+                    $lead->full_name,
+                    $lead->phone,
+                    $lead->phone2,
+                    $lead->email,
+                    $lead->gender,
+                    $lead->city,
+                    $lead->nationality,
+                    $lead->status,
+                    $priorityMap[$lead->priority] ?? 'Cold',
+                    $lead->score,
+                    $lead->source?->name_en ?? '-',
+                    $lead->last_contacted_at ? $lead->last_contacted_at->format('Y-m-d H:i') : '-',
+                    $lead->next_follow_up_at ? $lead->next_follow_up_at->format('Y-m-d H:i') : '-',
+                    $lead->created_at->format('Y-m-d H:i'),
+                ]);
+            }
+
+            fclose($file);
+        };
+
+        $filename = 'my_leads_' . now()->format('Y-m-d') . '.csv';
+
+        return response()->stream($callback, 200, [
+            'Content-Type' => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => "attachment; filename=\"{$filename}\"",
+        ]);
+    }
 }

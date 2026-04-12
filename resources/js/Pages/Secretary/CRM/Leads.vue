@@ -207,12 +207,24 @@ const activeFilterPills = computed(() => {
                             <span class="text-2xl font-bold text-white">{{ leads.total || 0 }}</span>
                             <span class="text-teal-100 text-xs block">{{ isRtl ? 'عميل محتمل' : 'Total Leads' }}</span>
                         </div>
-                        <!-- Add New Lead button -->
-                        <Link href="/secretary/crm/leads/create"
-                              class="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-teal-600 to-emerald-500 text-white rounded-xl text-sm font-semibold shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 border border-white/20">
-                            <span>➕</span>
-                            <span>{{ isRtl ? 'عميل جديد' : 'New Lead' }}</span>
-                        </Link>
+                        <!-- Action buttons -->
+                        <div class="flex items-center gap-2">
+                            <a :href="`/secretary/crm/export${statusFilter ? '?status=' + statusFilter : ''}${priorityFilter ? (statusFilter ? '&' : '?') + 'priority=' + priorityFilter : ''}`"
+                               class="inline-flex items-center gap-1.5 px-3 py-2 bg-white/15 hover:bg-white/25 backdrop-blur text-white rounded-lg text-xs font-medium transition-all duration-200 border border-white/20">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                {{ isRtl ? 'تصدير' : 'Export' }}
+                            </a>
+                            <Link href="/secretary/crm/pipeline"
+                                  class="inline-flex items-center gap-1.5 px-3 py-2 bg-white/15 hover:bg-white/25 backdrop-blur text-white rounded-lg text-xs font-medium transition-all duration-200 border border-white/20">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"/></svg>
+                                {{ isRtl ? 'أنابيب' : 'Pipeline' }}
+                            </Link>
+                            <Link href="/secretary/crm/leads/create"
+                                  class="inline-flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-teal-600 to-emerald-500 text-white rounded-lg text-sm font-semibold shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 border border-white/20">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+                                {{ isRtl ? 'عميل جديد' : 'New Lead' }}
+                            </Link>
+                        </div>
                     </div>
                 </div>
             </div>

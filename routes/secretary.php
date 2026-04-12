@@ -160,6 +160,8 @@ Route::middleware('secretary.auth')->group(function () {
     Route::get('/crm/check-duplicate', [SecretaryCrmController::class, 'checkDuplicate'])->name('secretary.crm.checkDuplicate');
     Route::get('/crm/performance', [SecretaryCrmController::class, 'performance'])->name('secretary.crm.performance');
     Route::get('/crm/calendar', [SecretaryCrmController::class, 'calendar'])->name('secretary.crm.calendar');
+    Route::get('/crm/pipeline', [SecretaryCrmController::class, 'pipeline'])->name('secretary.crm.pipeline');
+    Route::get('/crm/export', [SecretaryCrmController::class, 'export'])->name('secretary.crm.export');
     Route::get('/crm/import', [SecretaryCrmController::class, 'importPage'])->name('secretary.crm.import');
     Route::post('/crm/import/preview', [SecretaryCrmController::class, 'importPreview'])->name('secretary.crm.importPreview');
     Route::post('/crm/import/process', [SecretaryCrmController::class, 'importProcess'])->name('secretary.crm.importProcess');
