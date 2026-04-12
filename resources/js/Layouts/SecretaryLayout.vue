@@ -139,6 +139,21 @@ watchEffect(() => {
     openGroups.value = newSet;
 });
 
+/* ── CRM Overdue Badge ──────────────────────────────────── */
+const crmOverdueCount = computed(() => {
+    return page.props.secretary_notifications?.crm_overdue_count || 0;
+});
+
+function navBadge(item) {
+    // Show overdue count badge on key CRM items
+    if (crmOverdueCount.value > 0) {
+        if (item.href === '/secretary/crm' || item.href === '/secretary/crm/leads' || item.href === '/secretary/crm/calendar') {
+            return crmOverdueCount.value;
+        }
+    }
+    return 0;
+}
+
 function toggleSidebar() { sidebarOpen.value = !sidebarOpen.value; }
 function closeSidebar()  { sidebarOpen.value = false; }
 function logout()        { router.post('/secretary/logout'); }
@@ -278,8 +293,15 @@ function logout()        { router.post('/secretary/logout'); }
                         <svg v-else-if="item.icon === 'user'" class="w-[16px] h-[16px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                             </div>
                             <span>{{ navLabel(item) }}</span>
+                            <!-- Overdue badge -->
+                            <span
+                                v-if="navBadge(item) > 0"
+                                class="ltr:ml-auto rtl:mr-auto min-w-[20px] h-5 px-1.5 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center animate-pulse"
+                            >
+                                {{ navBadge(item) > 99 ? '99+' : navBadge(item) }}
+                            </span>
                             <!-- Active indicator dot -->
-                            <span v-if="isActive(item.href)" class="ltr:ml-auto rtl:mr-auto w-1.5 h-1.5 rounded-full bg-teal-400"></span>
+                            <span v-else-if="isActive(item.href)" class="ltr:ml-auto rtl:mr-auto w-1.5 h-1.5 rounded-full bg-teal-400"></span>
                         </Link>
                     </div>
                     </div>

@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Models\Booking;
 use App\Models\ContactMessage;
+use App\Models\LeadFollowUp;
 use App\Models\Message;
 use App\Models\Setting;
 use App\Services\ModuleManager;
@@ -94,9 +95,12 @@ class HandleInertiaRequests extends Middleware
                         'unread_bookings' => Booking::where('is_read', false)->count(),
                         'unread_messages' => ContactMessage::where('is_read', false)->count(),
                         'unread_dental' => $request->user()->unreadNotifications()->count(),
+                        'crm_overdue_count' => LeadFollowUp::overdue()
+                            ->forUser($request->user()->id)
+                            ->count(),
                     ];
                 } catch (\Throwable) {
-                    return ['unread_bookings' => 0, 'unread_messages' => 0, 'unread_dental' => 0];
+                    return ['unread_bookings' => 0, 'unread_messages' => 0, 'unread_dental' => 0, 'crm_overdue_count' => 0];
                 }
             },
             'chat_notifications' => fn () => $request->user() ? [

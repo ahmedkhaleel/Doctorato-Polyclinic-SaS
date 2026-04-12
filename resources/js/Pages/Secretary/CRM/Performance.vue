@@ -62,6 +62,63 @@ const responseTimeAngle = computed(() => {
     return Math.min((t / max) * 264, 264);
 });
 
+// Achievement badges
+const achievements = computed(() => {
+    const badges = [];
+    const m = props.monthlyStats || {};
+    const w = props.weeklyStats || {};
+    const s = props.streak || 0;
+
+    if (s >= 7) badges.push({ icon: 'M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z', en: `${s}-Day Streak`, ar: `سلسلة ${s} يوم`, color: 'bg-amber-100 text-amber-700 border-amber-200' });
+    if ((props.conversionRate || 0) >= 20) badges.push({ icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z', en: 'High Converter', ar: 'محوّل متميز', color: 'bg-emerald-100 text-emerald-700 border-emerald-200' });
+    if ((props.avgResponseTime || 99) <= 2) badges.push({ icon: 'M13 10V3L4 14h7v7l9-11h-7z', en: 'Speed Demon', ar: 'سرعة البرق', color: 'bg-blue-100 text-blue-700 border-blue-200' });
+    if ((m.total_activities || 0) >= 50) badges.push({ icon: 'M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z', en: 'Super Active', ar: 'نشاط خارق', color: 'bg-purple-100 text-purple-700 border-purple-200' });
+    if ((m.follow_ups_completed || 0) > 0 && (m.follow_ups_missed || 0) === 0) badges.push({ icon: 'M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z', en: 'Zero Missed', ar: 'صفر فائت', color: 'bg-teal-100 text-teal-700 border-teal-200' });
+
+    return badges;
+});
+
+// Export CSV
+function exportPerformanceCSV() {
+    const m = props.monthlyStats || {};
+    const w = props.weeklyStats || {};
+    let csv = 'Metric,Value\n';
+    csv += `Conversion Rate,${props.conversionRate || 0}%\n`;
+    csv += `Avg Response Time,${props.avgResponseTime || '-'} hrs\n`;
+    csv += `Streak,${props.streak || 0} days\n`;
+    csv += `Today Follow-ups,${props.todayFollowUps || 0}\n`;
+    csv += `Overdue Follow-ups,${props.overdueFollowUps || 0}\n`;
+    csv += `\nWeekly Stats\n`;
+    csv += `Activities,${w.total_activities || 0}\n`;
+    csv += `Conversions,${w.leads_converted || 0}\n`;
+    csv += `\nMonthly Stats\n`;
+    csv += `Calls,${m.calls || 0}\n`;
+    csv += `WhatsApp,${m.whatsapp || 0}\n`;
+    csv += `Emails,${m.emails || 0}\n`;
+    csv += `Meetings,${m.meetings || 0}\n`;
+    csv += `Follow-ups Completed,${m.follow_ups_completed || 0}\n`;
+    csv += `Follow-ups Missed,${m.follow_ups_missed || 0}\n`;
+    csv += `Leads Created,${m.leads_created || 0}\n`;
+    csv += `Leads Converted,${m.leads_converted || 0}\n`;
+    csv += `Leads Lost,${m.leads_lost || 0}\n`;
+
+    if (props.sourcePerformance?.length) {
+        csv += `\nSource Performance\n`;
+        csv += `Source,Total,Converted,Rate\n`;
+        props.sourcePerformance.forEach(s => {
+            csv += `${s.name_en},${s.total},${s.converted},${s.rate}%\n`;
+        });
+    }
+
+    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `my-performance-${new Date().toISOString().split('T')[0]}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+}
+
 // Streak message
 const streakMessage = computed(() => {
     const s = props.streak || 0;
@@ -117,9 +174,33 @@ const streakMessage = computed(() => {
                     <span class="text-2xl font-bold text-white">{{ overdueFollowUps }}</span>
                     <span class="text-red-100 text-[10px] block mt-0.5">{{ isRtl ? 'متأخرة' : 'Overdue' }}</span>
                 </div>
+
+                <!-- Export -->
+                <button @click="exportPerformanceCSV"
+                        class="bg-white/15 backdrop-blur-sm rounded-xl px-4 py-2.5 border border-white/20 flex items-center gap-2 text-white text-xs font-medium hover:bg-white/25 transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                    {{ isRtl ? 'تصدير' : 'Export' }}
+                </button>
             </div>
         </div>
     </div>
+
+    <!-- ═══ ACHIEVEMENTS ═══ -->
+    <Transition
+        enter-active-class="transition-all duration-500 ease-out"
+        enter-from-class="opacity-0 scale-95"
+        enter-to-class="opacity-100 scale-100">
+        <div v-if="achievements.length > 0"
+             :class="['flex flex-wrap items-center gap-2 mb-6 transition-all duration-700', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4']"
+             :style="{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)', transitionDelay: '80ms' }">
+            <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider me-1">{{ isRtl ? 'الإنجازات' : 'Achievements' }}</span>
+            <div v-for="(badge, idx) in achievements" :key="idx"
+                 :class="['inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border', badge.color]">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" :d="badge.icon"/></svg>
+                {{ isRtl ? badge.ar : badge.en }}
+            </div>
+        </div>
+    </Transition>
 
     <!-- ═══ TOP ROW: Conversion Rate + Response Time + Week Comparison ═══ -->
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">

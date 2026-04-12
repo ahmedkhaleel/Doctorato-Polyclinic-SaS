@@ -213,6 +213,64 @@ const activityTypeConfig = {
     <SecretaryLayout :title="isRtl ? 'لوحة تحكم العملاء' : 'CRM Dashboard'">
         <div class="space-y-6 pb-8">
 
+            <!-- ============ OVERDUE ALERT BANNER ============ -->
+            <Transition
+                enter-active-class="transition-all duration-500 ease-out"
+                enter-from-class="opacity-0 -translate-y-4 scale-95"
+                enter-to-class="opacity-100 translate-y-0 scale-100"
+            >
+                <div
+                    v-if="overdueFollowUps?.length > 0"
+                    class="relative overflow-hidden rounded-2xl border border-red-200 shadow-sm"
+                    :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'"
+                    style="transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1)"
+                >
+                    <!-- Animated gradient background -->
+                    <div class="absolute inset-0 bg-gradient-to-r from-red-50 via-rose-50 to-red-50"></div>
+                    <!-- Pulsing left accent -->
+                    <div class="absolute inset-y-0 start-0 w-1.5 bg-gradient-to-b from-red-500 to-rose-500"></div>
+
+                    <div class="relative px-5 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3" :class="isRtl ? 'pr-7' : 'pl-7'">
+                        <div class="flex items-center gap-3">
+                            <!-- Warning icon with pulse -->
+                            <div class="relative flex-shrink-0">
+                                <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-red-500 to-rose-500 flex items-center justify-center shadow-lg shadow-red-200">
+                                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                                    </svg>
+                                </div>
+                                <span class="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-red-500 animate-ping opacity-50"></span>
+                                <span class="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-red-500"></span>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-bold text-red-800">
+                                    {{ isRtl ? 'لديك متابعات متأخرة!' : 'You have overdue follow-ups!' }}
+                                </h3>
+                                <p class="text-xs text-red-600 mt-0.5">
+                                    {{ overdueFollowUps.length }} {{ isRtl ? 'متابعة بحاجة لاهتمامك الفوري' : 'follow-up(s) need your immediate attention' }}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 flex-shrink-0">
+                            <Link
+                                href="/secretary/crm/calendar"
+                                class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-white text-red-700 border border-red-200 hover:bg-red-50 shadow-sm transition-all duration-200 hover:scale-[1.02]"
+                            >
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                {{ isRtl ? 'التقويم' : 'Calendar' }}
+                            </Link>
+                            <Link
+                                href="/secretary/crm/leads?overdue=1"
+                                class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-gradient-to-r from-red-500 to-rose-500 text-white shadow-sm shadow-red-200 hover:shadow-md transition-all duration-200 hover:scale-[1.02]"
+                            >
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+                                {{ isRtl ? 'عرض المتأخرة' : 'View Overdue' }}
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+            </Transition>
+
             <!-- ============ HERO GRADIENT HEADER ============ -->
             <div
                 class="relative overflow-hidden rounded-2xl p-6 md:p-8"

@@ -180,6 +180,48 @@ const canImport = computed(() => {
     return columnMap.value.full_name && columnMap.value.phone;
 });
 
+/* ── Mapping quality stats ─────────────────────────────── */
+const mappingStats = computed(() => {
+    const required = fields.filter(f => f.required);
+    const optional = fields.filter(f => !f.required);
+    const mappedRequired = required.filter(f => !!columnMap.value[f.key]).length;
+    const mappedOptional = optional.filter(f => !!columnMap.value[f.key]).length;
+    const totalMapped = mappedRequired + mappedOptional;
+    const quality = totalMapped === 0 ? 0 : Math.round((totalMapped / fields.length) * 100);
+    return { mappedRequired, totalRequired: required.length, mappedOptional, totalOptional: optional.length, totalMapped, quality };
+});
+
+/* ── Data quality preview ──────────────────────────────── */
+const dataQualityIssues = computed(() => {
+    if (!preview.value.length || !columnMap.value.phone) return [];
+    const issues = [];
+    const phoneCol = columnMap.value.phone;
+    const nameCol = columnMap.value.full_name;
+    const emailCol = columnMap.value.email;
+    const phones = new Set();
+
+    preview.value.forEach((row, idx) => {
+        const phone = row[phoneCol];
+        const name = nameCol ? row[nameCol] : '';
+        const email = emailCol ? row[emailCol] : '';
+
+        if (!phone || String(phone).trim().length < 5) {
+            issues.push({ row: idx + 1, type: 'error', msg: isRtl.value ? `صف ${idx + 1}: رقم هاتف ناقص` : `Row ${idx + 1}: Missing/short phone` });
+        }
+        if (phone && phones.has(String(phone).trim())) {
+            issues.push({ row: idx + 1, type: 'warning', msg: isRtl.value ? `صف ${idx + 1}: رقم مكرر "${phone}"` : `Row ${idx + 1}: Duplicate phone "${phone}"` });
+        }
+        if (phone) phones.add(String(phone).trim());
+        if (!name || String(name).trim().length < 2) {
+            issues.push({ row: idx + 1, type: 'error', msg: isRtl.value ? `صف ${idx + 1}: اسم ناقص` : `Row ${idx + 1}: Missing name` });
+        }
+        if (email && !String(email).includes('@')) {
+            issues.push({ row: idx + 1, type: 'warning', msg: isRtl.value ? `صف ${idx + 1}: بريد غير صالح` : `Row ${idx + 1}: Invalid email format` });
+        }
+    });
+    return issues;
+});
+
 function startImport() {
     if (!canImport.value || !file.value) return;
     isImporting.value = true;
@@ -382,9 +424,36 @@ function startImport() {
         </div>
 
         <!-- Column mapping -->
-        <h3 class="text-sm font-semibold text-gray-700 mb-4">
+        <h3 class="text-sm font-semibold text-gray-700 mb-3">
             {{ isRtl ? 'ربط أعمدة الملف بحقول النظام' : 'Map file columns to system fields' }}
         </h3>
+
+        <!-- Mapping quality bar -->
+        <div class="mb-4 p-3 rounded-xl border transition-all duration-300"
+             :class="mappingStats.quality >= 80 ? 'border-emerald-200 bg-emerald-50/40' :
+                      mappingStats.quality >= 50 ? 'border-amber-200 bg-amber-50/40' :
+                      'border-red-200 bg-red-50/40'">
+            <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-2">
+                    <svg v-if="mappingStats.quality >= 80" class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <svg v-else-if="mappingStats.quality >= 50" class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/></svg>
+                    <svg v-else class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/></svg>
+                    <span class="text-xs font-semibold"
+                          :class="mappingStats.quality >= 80 ? 'text-emerald-700' : mappingStats.quality >= 50 ? 'text-amber-700' : 'text-red-700'">
+                        {{ isRtl ? 'جودة الربط' : 'Mapping Quality' }}: {{ mappingStats.quality }}%
+                    </span>
+                </div>
+                <div class="flex items-center gap-3 text-[11px] text-gray-500">
+                    <span>{{ isRtl ? 'مطلوب' : 'Required' }}: {{ mappingStats.mappedRequired }}/{{ mappingStats.totalRequired }}</span>
+                    <span>{{ isRtl ? 'اختياري' : 'Optional' }}: {{ mappingStats.mappedOptional }}/{{ mappingStats.totalOptional }}</span>
+                </div>
+            </div>
+            <div class="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+                <div class="h-full rounded-full transition-all duration-500"
+                     :class="mappingStats.quality >= 80 ? 'bg-emerald-500' : mappingStats.quality >= 50 ? 'bg-amber-500' : 'bg-red-500'"
+                     :style="{ width: mappingStats.quality + '%' }"></div>
+            </div>
+        </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div v-for="field in fields" :key="field.key"
@@ -435,6 +504,30 @@ function startImport() {
                 </table>
             </div>
         </div>
+
+        <!-- Data quality issues -->
+        <Transition enter-active-class="transition-all duration-300" enter-from-class="opacity-0 -translate-y-2" enter-to-class="opacity-100 translate-y-0">
+        <div v-if="dataQualityIssues.length > 0" class="mt-4 rounded-xl border border-amber-200 bg-amber-50/50 p-4">
+            <div class="flex items-center gap-2 mb-3">
+                <svg class="w-4 h-4 text-amber-600 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/></svg>
+                <span class="text-xs font-semibold text-amber-700">
+                    {{ isRtl ? `تم اكتشاف ${dataQualityIssues.length} مشكلة في البيانات` : `${dataQualityIssues.length} data quality issue(s) detected` }}
+                </span>
+            </div>
+            <div class="max-h-32 overflow-y-auto space-y-1.5 custom-scrollbar">
+                <div v-for="(issue, idx) in dataQualityIssues" :key="idx"
+                     class="flex items-center gap-2 text-[11px] px-2 py-1 rounded-lg"
+                     :class="issue.type === 'error' ? 'bg-red-100/60 text-red-700' : 'bg-amber-100/60 text-amber-700'">
+                    <svg v-if="issue.type === 'error'" class="w-3 h-3 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/></svg>
+                    <svg v-else class="w-3 h-3 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/></svg>
+                    {{ issue.msg }}
+                </div>
+            </div>
+            <p class="mt-2 text-[10px] text-amber-500">
+                {{ isRtl ? 'هذه المشاكل في المعاينة فقط. الصفوف المعيبة سيتم تخطيها أثناء الاستيراد.' : 'These issues are from the preview only. Problematic rows will be skipped during import.' }}
+            </p>
+        </div>
+        </Transition>
 
         <!-- Actions -->
         <div class="mt-6 flex items-center justify-between">

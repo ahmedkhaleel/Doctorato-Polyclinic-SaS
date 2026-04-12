@@ -77,6 +77,46 @@ const statusLabels = {
     negotiation: { en: 'Negotiation', ar: 'تفاوض' },
 };
 
+/* ---------- Export CSV ---------- */
+function exportCSV() {
+    // Build CSV from funnel + source + top leads
+    let csv = 'Report Type,Item,Value\n';
+
+    // Funnel data
+    Object.entries(props.funnel || {}).forEach(([status, count]) => {
+        const label = funnelConfig[status]?.en || status;
+        csv += `Funnel,${label},${count}\n`;
+    });
+
+    // Source performance
+    (props.sourcePerformance || []).forEach(s => {
+        csv += `Source,${s.name_en},${s.total} leads / ${s.converted} converted / ${s.conversion_rate}% rate\n`;
+    });
+
+    // Top leads
+    (props.topLeads || []).forEach((lead, i) => {
+        csv += `Top Lead #${i+1},${lead.full_name},Score: ${lead.score}\n`;
+    });
+
+    // Comparison
+    if (props.comparison) {
+        Object.entries(props.comparison).forEach(([key, val]) => {
+            csv += `Comparison,${key},Current: ${val.current} / Previous: ${val.previous}\n`;
+        });
+    }
+
+    csv += `\nAvg Response Time,,${props.avgResponseHours}h\n`;
+    csv += `Period,,${selectedPeriod.value} days\n`;
+
+    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `crm-report-${selectedPeriod.value}d-${new Date().toISOString().split('T')[0]}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+}
+
 const priorityLabels = {
     1: { en: 'Hot', ar: 'ساخن', color: '#dc2626' },
     2: { en: 'Warm', ar: 'دافئ', color: '#d97706' },
@@ -105,11 +145,19 @@ const priorityLabels = {
                     <p class="text-teal-100 mt-1 text-sm">{{ isRtl ? 'تحليلات متقدمة لأداء المبيعات' : 'Advanced sales performance analytics' }}</p>
                 </div>
             </div>
-            <!-- Period Selector -->
-            <select v-model="selectedPeriod" @change="changePeriod"
-                    class="bg-white/20 backdrop-blur text-white border border-white/30 rounded-xl py-2.5 px-4 text-sm focus:ring-2 focus:ring-white/50 [&>option]:text-slate-800">
-                <option v-for="(label, key) in periodLabels" :key="key" :value="key">{{ isRtl ? label.ar : label.en }}</option>
-            </select>
+            <div class="flex items-center gap-3">
+                <!-- Period Selector -->
+                <select v-model="selectedPeriod" @change="changePeriod"
+                        class="bg-white/20 backdrop-blur text-white border border-white/30 rounded-xl py-2.5 px-4 text-sm focus:ring-2 focus:ring-white/50 [&>option]:text-slate-800">
+                    <option v-for="(label, key) in periodLabels" :key="key" :value="key">{{ isRtl ? label.ar : label.en }}</option>
+                </select>
+                <!-- Export CSV -->
+                <button @click="exportCSV"
+                        class="inline-flex items-center gap-2 bg-white/20 backdrop-blur hover:bg-white/30 text-white border border-white/30 rounded-xl py-2.5 px-4 text-sm font-medium transition-all duration-200">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                    {{ isRtl ? 'تصدير' : 'Export' }}
+                </button>
+            </div>
         </div>
     </div>
 

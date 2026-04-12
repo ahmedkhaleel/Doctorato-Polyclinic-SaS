@@ -240,6 +240,39 @@ function clearSelection() {
     selectAll.value = false;
 }
 
+/* ── Export CSV ── */
+function exportLeadsCSV() {
+    const data = props.leads?.data || [];
+    if (!data.length) return;
+
+    const headers = ['Name', 'Phone', 'Email', 'Status', 'Priority', 'Source', 'Score', 'City', 'Next Follow-up', 'Created'];
+    let csv = headers.join(',') + '\n';
+
+    data.forEach(l => {
+        const row = [
+            `"${(l.full_name || '').replace(/"/g, '""')}"`,
+            `"${l.phone || ''}"`,
+            `"${l.email || ''}"`,
+            l.status || '',
+            l.priority || '',
+            `"${(l.source?.name_en || '').replace(/"/g, '""')}"`,
+            l.score || 0,
+            `"${(l.city || '').replace(/"/g, '""')}"`,
+            l.next_follow_up_at || '',
+            l.created_at ? new Date(l.created_at).toISOString().split('T')[0] : '',
+        ];
+        csv += row.join(',') + '\n';
+    });
+
+    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `leads-export-${new Date().toISOString().split('T')[0]}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+}
+
 /* ── Quick View ── */
 const quickViewLead = ref(null);
 const quickViewOpen = ref(false);
@@ -343,11 +376,11 @@ const activeFilterPills = computed(() => {
                         </div>
                         <!-- Action buttons -->
                         <div class="flex items-center gap-2">
-                            <a :href="`/secretary/crm/export${statusFilter ? '?status=' + statusFilter : ''}${priorityFilter ? (statusFilter ? '&' : '?') + 'priority=' + priorityFilter : ''}`"
+                            <button @click="exportLeadsCSV"
                                class="inline-flex items-center gap-1.5 px-3 py-2 bg-white/15 hover:bg-white/25 backdrop-blur text-white rounded-lg text-xs font-medium transition-all duration-200 border border-white/20">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                                {{ isRtl ? 'تصدير' : 'Export' }}
-                            </a>
+                                {{ isRtl ? 'تصدير CSV' : 'Export CSV' }}
+                            </button>
                             <Link href="/secretary/crm/pipeline"
                                   class="inline-flex items-center gap-1.5 px-3 py-2 bg-white/15 hover:bg-white/25 backdrop-blur text-white rounded-lg text-xs font-medium transition-all duration-200 border border-white/20">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"/></svg>

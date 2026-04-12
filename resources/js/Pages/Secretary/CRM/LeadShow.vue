@@ -293,6 +293,47 @@ function submitReschedule(fuId) {
     });
 }
 
+// Snooze follow-up
+const snoozeOpen = ref(null);
+const snoozeOptions = [
+    { key: '1h', en: '1 Hour', ar: 'ساعة واحدة' },
+    { key: 'tomorrow', en: 'Tomorrow 9 AM', ar: 'غداً 9 صباحاً' },
+    { key: '1w', en: '1 Week', ar: 'أسبوع واحد' },
+];
+
+function toggleSnooze(fuId) {
+    snoozeOpen.value = snoozeOpen.value === fuId ? null : fuId;
+}
+
+function snoozeFollowUp(fuId, key) {
+    let scheduledAt;
+    const now = new Date();
+    if (key === '1h') {
+        scheduledAt = new Date(now.getTime() + 60 * 60 * 1000);
+    } else if (key === 'tomorrow') {
+        scheduledAt = new Date(now);
+        scheduledAt.setDate(scheduledAt.getDate() + 1);
+        scheduledAt.setHours(9, 0, 0, 0);
+    } else if (key === '1w') {
+        scheduledAt = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+        scheduledAt.setHours(9, 0, 0, 0);
+    }
+
+    const isoStr = scheduledAt.getFullYear() + '-' +
+        String(scheduledAt.getMonth() + 1).padStart(2, '0') + '-' +
+        String(scheduledAt.getDate()).padStart(2, '0') + 'T' +
+        String(scheduledAt.getHours()).padStart(2, '0') + ':' +
+        String(scheduledAt.getMinutes()).padStart(2, '0');
+
+    router.post(`/secretary/crm/follow-ups/${fuId}/reschedule`, {
+        scheduled_at: isoStr,
+        notes: isRtl.value ? 'تم التأجيل' : 'Snoozed',
+    }, {
+        preserveScroll: true,
+        onSuccess: () => { snoozeOpen.value = null; },
+    });
+}
+
 const lossReasons = [
     { en: 'Price too high', ar: 'السعر مرتفع' },
     { en: 'Chose competitor', ar: 'اختار منافس' },
@@ -874,6 +915,40 @@ function whatsappUrl(phone) {
                                                     >
                                                         {{ isRtl ? 'إعادة جدولة' : 'Reschedule' }}
                                                     </button>
+                                                    <!-- Snooze dropdown -->
+                                                    <div class="relative">
+                                                        <button
+                                                            @click="toggleSnooze(fu.id)"
+                                                            class="px-2.5 py-1.5 bg-purple-50 text-purple-700 text-xs font-medium rounded-lg hover:bg-purple-100 transition-colors border border-purple-200 flex items-center gap-1"
+                                                        >
+                                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                                            {{ isRtl ? 'تأجيل' : 'Snooze' }}
+                                                        </button>
+                                                        <Transition
+                                                            enter-active-class="transition-all duration-200 ease-out"
+                                                            enter-from-class="opacity-0 scale-95 -translate-y-1"
+                                                            enter-to-class="opacity-100 scale-100 translate-y-0"
+                                                            leave-active-class="transition-all duration-150 ease-in"
+                                                            leave-from-class="opacity-100 scale-100"
+                                                            leave-to-class="opacity-0 scale-95"
+                                                        >
+                                                            <div
+                                                                v-if="snoozeOpen === fu.id"
+                                                                class="absolute top-full mt-1 z-20 bg-white rounded-xl shadow-xl border border-gray-200 py-1 min-w-[140px]"
+                                                                :class="isRtl ? 'right-0' : 'left-0'"
+                                                            >
+                                                                <button
+                                                                    v-for="opt in snoozeOptions"
+                                                                    :key="opt.key"
+                                                                    @click="snoozeFollowUp(fu.id, opt.key)"
+                                                                    class="w-full text-start px-3 py-2 text-xs text-gray-700 hover:bg-purple-50 hover:text-purple-700 transition-colors flex items-center gap-2"
+                                                                >
+                                                                    <svg class="w-3.5 h-3.5 text-purple-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                                                    {{ isRtl ? opt.ar : opt.en }}
+                                                                </button>
+                                                            </div>
+                                                        </Transition>
+                                                    </div>
                                                 </div>
                                             </div>
 

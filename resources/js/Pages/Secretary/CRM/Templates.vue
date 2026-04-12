@@ -149,6 +149,12 @@ function sendTemplate() {
     });
 }
 
+/* ---------- Expand body preview ---------- */
+const expandedId = ref(null);
+function toggleExpand(id) {
+    expandedId.value = expandedId.value === id ? null : id;
+}
+
 /* ---------- Copy to clipboard ---------- */
 const copiedId = ref(null);
 function copyBody(template) {
@@ -249,9 +255,13 @@ function copyBody(template) {
 
             <!-- Body Preview -->
             <div class="px-5 pb-3">
-                <div class="bg-slate-50 rounded-xl p-3 text-sm text-slate-600 leading-relaxed max-h-24 overflow-hidden relative">
+                <div @click="toggleExpand(template.id)"
+                     class="bg-slate-50 rounded-xl p-3 text-sm text-slate-600 leading-relaxed relative cursor-pointer hover:bg-slate-100 transition-colors"
+                     :class="expandedId !== template.id ? 'max-h-24 overflow-hidden' : ''">
                     {{ isRtl ? template.body_ar : template.body_en }}
-                    <div class="absolute bottom-0 inset-x-0 h-6 bg-gradient-to-t from-slate-50 to-transparent"></div>
+                    <div v-if="expandedId !== template.id" class="absolute bottom-0 inset-x-0 h-8 bg-gradient-to-t from-slate-50 to-transparent flex items-end justify-center pb-1">
+                        <span class="text-[10px] text-teal-600 font-medium">{{ isRtl ? 'اضغط لعرض الكل' : 'Click to expand' }}</span>
+                    </div>
                 </div>
                 <!-- Variables -->
                 <div v-if="template.variables && template.variables.length" class="flex flex-wrap gap-1.5 mt-2">

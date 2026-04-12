@@ -24,6 +24,17 @@ watch(() => props.columns, (val) => {
 }, { immediate: true, deep: true });
 
 const mounted = ref(false);
+
+/* ── Toast Notification ───────────────────────────────── */
+const toast = ref({ show: false, message: '', type: 'success' });
+let toastTimer = null;
+
+function showToast(message, type = 'success') {
+    if (toastTimer) clearTimeout(toastTimer);
+    toast.value = { show: true, message, type };
+    toastTimer = setTimeout(() => { toast.value.show = false; }, 3000);
+}
+
 onMounted(() => {
     setTimeout(() => { mounted.value = true; }, 50);
     nextTick(() => initDragAndDrop());
@@ -97,15 +108,30 @@ function initDragAndDrop() {
                 }
 
                 // Send to server (POST because ModSecurity blocks PATCH)
+                const toLabel = isRtl.value ? statusConfig[toStatus]?.ar : statusConfig[toStatus]?.en;
                 router.post(`/secretary/crm/leads/${leadId}/status`, { status: toStatus }, {
                     preserveScroll: true,
                     preserveState: true,
+                    onSuccess: () => {
+                        showToast(
+                            isRtl.value
+                                ? `تم نقل العميل إلى "${toLabel}" بنجاح`
+                                : `Lead moved to "${toLabel}" successfully`,
+                            'success'
+                        );
+                    },
                     onError: () => {
                         // Revert
                         if (lead) {
                             localColumns.value[toStatus] = localColumns.value[toStatus].filter(l => l.id != leadId);
                             localColumns.value[fromStatus].push(lead);
                         }
+                        showToast(
+                            isRtl.value
+                                ? 'حدث خطأ أثناء نقل العميل. تم التراجع.'
+                                : 'Error moving lead. Changes reverted.',
+                            'error'
+                        );
                     },
                 });
             },
@@ -254,6 +280,38 @@ function timeAgo(date) {
             </div>
         </div>
     </div>
+
+    <!-- Toast Notification -->
+    <Teleport to="body">
+        <Transition
+            enter-active-class="transition-all duration-400 ease-out"
+            enter-from-class="opacity-0 translate-y-4 scale-95"
+            enter-to-class="opacity-100 translate-y-0 scale-100"
+            leave-active-class="transition-all duration-300 ease-in"
+            leave-from-class="opacity-100 translate-y-0 scale-100"
+            leave-to-class="opacity-0 -translate-y-2 scale-95"
+        >
+            <div
+                v-if="toast.show"
+                class="fixed top-6 left-1/2 -translate-x-1/2 z-[9999] flex items-center gap-3 px-5 py-3 rounded-xl shadow-2xl border backdrop-blur-sm"
+                :class="toast.type === 'success'
+                    ? 'bg-white/95 border-teal-200 text-teal-800'
+                    : 'bg-white/95 border-red-200 text-red-800'"
+            >
+                <div
+                    class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
+                    :class="toast.type === 'success' ? 'bg-teal-100' : 'bg-red-100'"
+                >
+                    <svg v-if="toast.type === 'success'" class="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                    <svg v-else class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                </div>
+                <span class="text-sm font-medium">{{ toast.message }}</span>
+                <button @click="toast.show = false" class="ms-2 text-gray-400 hover:text-gray-600 transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+        </Transition>
+    </Teleport>
 
 </div>
 </SecretaryLayout>

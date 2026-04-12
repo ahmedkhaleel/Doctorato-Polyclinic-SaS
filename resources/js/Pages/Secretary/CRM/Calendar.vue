@@ -186,6 +186,46 @@ function getTypeDots(fups) {
     const types = new Set(fups.map(f => f.type));
     return [...types].slice(0, 4);
 }
+
+/* ── Quick Actions on follow-ups ────────────────────── */
+function completeFollowUp(fuId) {
+    router.post(`/secretary/crm/follow-ups/${fuId}/complete`, { result: '' }, {
+        preserveScroll: true,
+        preserveState: true,
+    });
+}
+
+function missFollowUp(fuId) {
+    router.post(`/secretary/crm/follow-ups/${fuId}/miss`, {}, {
+        preserveScroll: true,
+        preserveState: true,
+    });
+}
+
+/* ── Snooze from calendar ───────────────────────────── */
+function snoozeFollowUp(fuId, key) {
+    let scheduledAt;
+    const now = new Date();
+    if (key === '1h') {
+        scheduledAt = new Date(now.getTime() + 60 * 60 * 1000);
+    } else if (key === 'tomorrow') {
+        scheduledAt = new Date(now);
+        scheduledAt.setDate(scheduledAt.getDate() + 1);
+        scheduledAt.setHours(9, 0, 0, 0);
+    } else if (key === '1w') {
+        scheduledAt = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+        scheduledAt.setHours(9, 0, 0, 0);
+    }
+    const isoStr = scheduledAt.getFullYear() + '-' +
+        String(scheduledAt.getMonth() + 1).padStart(2, '0') + '-' +
+        String(scheduledAt.getDate()).padStart(2, '0') + 'T' +
+        String(scheduledAt.getHours()).padStart(2, '0') + ':' +
+        String(scheduledAt.getMinutes()).padStart(2, '0');
+    router.post(`/secretary/crm/follow-ups/${fuId}/reschedule`, {
+        scheduled_at: isoStr,
+        notes: isRtl.value ? 'تم التأجيل' : 'Snoozed',
+    }, { preserveScroll: true, preserveState: true });
+}
 </script>
 
 <template>
@@ -457,6 +497,42 @@ function getTypeDots(fups) {
                             <div v-if="fu.result" class="mt-2 text-xs text-green-600 bg-green-50 rounded-lg p-2 border border-green-100">
                                 <svg class="w-3 h-3 inline-block me-1 -mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                                 {{ fu.result }}
+                            </div>
+
+                            <!-- Quick Actions for pending -->
+                            <div v-if="fu.status === 'pending'" class="mt-3 pt-3 border-t border-gray-100 flex items-center gap-2">
+                                <button
+                                    @click="completeFollowUp(fu.id)"
+                                    class="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200 transition-all duration-200"
+                                >
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                    {{ isRtl ? 'مكتمل' : 'Complete' }}
+                                </button>
+                                <button
+                                    @click="missFollowUp(fu.id)"
+                                    class="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-red-50 text-red-600 hover:bg-red-100 border border-red-200 transition-all duration-200"
+                                >
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                                    {{ isRtl ? 'فائت' : 'Missed' }}
+                                </button>
+                                <!-- Snooze dropdown -->
+                                <div class="relative group/snooze">
+                                    <button class="inline-flex items-center justify-center gap-1 px-3 py-2 rounded-lg text-xs font-semibold bg-purple-50 text-purple-700 hover:bg-purple-100 border border-purple-200 transition-all duration-200">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                    </button>
+                                    <div class="absolute bottom-full mb-1 z-30 bg-white rounded-xl shadow-xl border border-gray-200 py-1 min-w-[130px] opacity-0 invisible group-hover/snooze:opacity-100 group-hover/snooze:visible transition-all duration-200"
+                                         :class="isRtl ? 'right-0' : 'left-0'">
+                                        <button @click="snoozeFollowUp(fu.id, '1h')" class="w-full text-start px-3 py-2 text-xs text-gray-700 hover:bg-purple-50 hover:text-purple-700 transition-colors">
+                                            {{ isRtl ? 'ساعة واحدة' : '1 Hour' }}
+                                        </button>
+                                        <button @click="snoozeFollowUp(fu.id, 'tomorrow')" class="w-full text-start px-3 py-2 text-xs text-gray-700 hover:bg-purple-50 hover:text-purple-700 transition-colors">
+                                            {{ isRtl ? 'غداً 9 ص' : 'Tomorrow 9 AM' }}
+                                        </button>
+                                        <button @click="snoozeFollowUp(fu.id, '1w')" class="w-full text-start px-3 py-2 text-xs text-gray-700 hover:bg-purple-50 hover:text-purple-700 transition-colors">
+                                            {{ isRtl ? 'أسبوع' : '1 Week' }}
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
