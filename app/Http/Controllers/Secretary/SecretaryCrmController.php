@@ -102,7 +102,7 @@ class SecretaryCrmController extends BaseSecretaryController
     {
         $userId = auth()->id();
 
-        $query = Lead::with(['source:id,name_en,icon,color', 'campaign:id,name'])
+        $query = Lead::with(['source:id,name_en,name_ar,icon,color', 'campaign:id,name'])
             ->assignedTo($userId);
 
         if ($search = $request->input('search')) {
@@ -113,11 +113,40 @@ class SecretaryCrmController extends BaseSecretaryController
             $query->where('status', $status);
         }
 
-        $leads = $query->latest()->paginate(20)->withQueryString();
+        if ($priority = $request->input('priority')) {
+            $query->where('priority', $priority);
+        }
+
+        if ($source = $request->input('source')) {
+            $query->where('lead_source_id', $source);
+        }
+
+        if ($dateFrom = $request->input('date_from')) {
+            $query->whereDate('created_at', '>=', $dateFrom);
+        }
+
+        if ($dateTo = $request->input('date_to')) {
+            $query->whereDate('created_at', '<=', $dateTo);
+        }
+
+        // Sort
+        $sortField = $request->input('sort', 'created_at');
+        $sortDir = $request->input('dir', 'desc');
+        $allowedSorts = ['created_at', 'full_name', 'score', 'priority', 'next_follow_up_at'];
+        if (in_array($sortField, $allowedSorts) && in_array($sortDir, ['asc', 'desc'])) {
+            $query->orderBy($sortField, $sortDir);
+        } else {
+            $query->latest();
+        }
+
+        $leads = $query->paginate(20)->withQueryString();
+
+        $sources = LeadSource::active()->ordered()->get(['id', 'name_en', 'name_ar', 'color']);
 
         return Inertia::render('Secretary/CRM/Leads', [
             'leads' => $leads,
-            'filters' => $request->only(['search', 'status']),
+            'sources' => $sources,
+            'filters' => $request->only(['search', 'status', 'priority', 'source', 'date_from', 'date_to', 'sort', 'dir']),
         ]);
     }
 

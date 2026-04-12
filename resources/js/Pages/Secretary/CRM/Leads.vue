@@ -9,6 +9,7 @@ const isRtl = computed(() => (page.props.dir || 'rtl') === 'rtl');
 const props = defineProps({
     leads: Object,
     filters: Object,
+    sources: Array,
 });
 
 /* ── View / Animation State ── */
@@ -20,6 +21,12 @@ onMounted(() => { setTimeout(() => { mounted.value = true; }, 50); });
 const search = ref(props.filters?.search || '');
 const statusFilter = ref(props.filters?.status || '');
 const priorityFilter = ref(props.filters?.priority || '');
+const sourceFilter = ref(props.filters?.source || '');
+const dateFrom = ref(props.filters?.date_from || '');
+const dateTo = ref(props.filters?.date_to || '');
+const sortField = ref(props.filters?.sort || 'created_at');
+const sortDir = ref(props.filters?.dir || 'desc');
+const showAdvancedFilters = ref(false);
 
 let searchTimeout = null;
 
@@ -28,6 +35,11 @@ function applyFilters() {
         search: search.value || undefined,
         status: statusFilter.value || undefined,
         priority: priorityFilter.value || undefined,
+        source: sourceFilter.value || undefined,
+        date_from: dateFrom.value || undefined,
+        date_to: dateTo.value || undefined,
+        sort: sortField.value !== 'created_at' ? sortField.value : undefined,
+        dir: sortDir.value !== 'desc' ? sortDir.value : undefined,
     }, { preserveState: true, replace: true });
 }
 
@@ -38,11 +50,29 @@ watch(search, () => {
 
 watch(statusFilter, applyFilters);
 watch(priorityFilter, applyFilters);
+watch(sourceFilter, applyFilters);
+watch(dateFrom, applyFilters);
+watch(dateTo, applyFilters);
+
+function changeSort(field) {
+    if (sortField.value === field) {
+        sortDir.value = sortDir.value === 'asc' ? 'desc' : 'asc';
+    } else {
+        sortField.value = field;
+        sortDir.value = field === 'full_name' ? 'asc' : 'desc';
+    }
+    applyFilters();
+}
 
 function clearFilters() {
     search.value = '';
     statusFilter.value = '';
     priorityFilter.value = '';
+    sourceFilter.value = '';
+    dateFrom.value = '';
+    dateTo.value = '';
+    sortField.value = 'created_at';
+    sortDir.value = 'desc';
     router.get('/secretary/crm/leads', {}, { preserveState: true, replace: true });
 }
 
@@ -50,10 +80,21 @@ function removeFilter(key) {
     if (key === 'search') search.value = '';
     if (key === 'status') statusFilter.value = '';
     if (key === 'priority') priorityFilter.value = '';
+    if (key === 'source') sourceFilter.value = '';
+    if (key === 'date_from') dateFrom.value = '';
+    if (key === 'date_to') dateTo.value = '';
     applyFilters();
 }
 
-const hasActiveFilters = computed(() => !!(search.value || statusFilter.value || priorityFilter.value));
+const hasActiveFilters = computed(() => !!(search.value || statusFilter.value || priorityFilter.value || sourceFilter.value || dateFrom.value || dateTo.value));
+
+const advancedFilterCount = computed(() => {
+    let c = 0;
+    if (sourceFilter.value) c++;
+    if (dateFrom.value) c++;
+    if (dateTo.value) c++;
+    return c;
+});
 
 /* ── Status ── */
 const statusLabels = computed(() => ({
@@ -246,6 +287,16 @@ const activeFilterPills = computed(() => {
         const p = priorityConfig.value[priorityFilter.value];
         pills.push({ key: 'priority', label: p ? p.label : priorityFilter.value });
     }
+    if (sourceFilter.value) {
+        const s = (props.sources || []).find(s => s.id == sourceFilter.value);
+        pills.push({ key: 'source', label: s ? (isRtl.value ? s.name_ar : s.name_en) : sourceFilter.value });
+    }
+    if (dateFrom.value) {
+        pills.push({ key: 'date_from', label: (isRtl.value ? 'من: ' : 'From: ') + dateFrom.value });
+    }
+    if (dateTo.value) {
+        pills.push({ key: 'date_to', label: (isRtl.value ? 'إلى: ' : 'To: ') + dateTo.value });
+    }
     return pills;
 });
 </script>
@@ -357,24 +408,107 @@ const activeFilterPills = computed(() => {
                         </div>
                     </div>
 
-                    <!-- View Toggle -->
-                    <div class="flex items-center bg-gray-100 rounded-xl p-1 gap-0.5">
-                        <button @click="viewMode = 'grid'"
-                            :class="viewMode === 'grid' ? 'bg-white shadow-sm text-teal-600' : 'text-gray-500 hover:text-gray-700'"
-                            class="p-2 rounded-lg transition-all duration-200">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
+                    <!-- Advanced Filters Toggle + View Toggle -->
+                    <div class="flex items-center gap-2">
+                        <button @click="showAdvancedFilters = !showAdvancedFilters"
+                            class="relative inline-flex items-center gap-1.5 px-3 py-2.5 text-sm border rounded-xl transition-all duration-200"
+                            :class="showAdvancedFilters || advancedFilterCount > 0
+                                ? 'border-teal-300 bg-teal-50 text-teal-700'
+                                : 'border-gray-200 bg-gray-50 text-gray-600 hover:border-gray-300'">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
                             </svg>
+                            <span class="hidden sm:inline">{{ isRtl ? 'متقدم' : 'More' }}</span>
+                            <span v-if="advancedFilterCount > 0"
+                                class="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-teal-500 text-white text-[10px] font-bold flex items-center justify-center">
+                                {{ advancedFilterCount }}
+                            </span>
                         </button>
-                        <button @click="viewMode = 'table'"
-                            :class="viewMode === 'table' ? 'bg-white shadow-sm text-teal-600' : 'text-gray-500 hover:text-gray-700'"
-                            class="p-2 rounded-lg transition-all duration-200">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 10h16M4 14h16M4 18h16"/>
-                            </svg>
-                        </button>
+
+                        <!-- Sort Dropdown -->
+                        <div class="relative min-w-[140px]">
+                            <select @change="changeSort($event.target.value)" :value="sortField"
+                                class="w-full appearance-none text-sm border border-gray-200 rounded-xl py-2.5 ltr:pl-4 rtl:pr-4 ltr:pr-10 rtl:pl-10 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all duration-200 bg-gray-50 focus:bg-white cursor-pointer">
+                                <option value="created_at">{{ isRtl ? 'الأحدث' : 'Newest' }}</option>
+                                <option value="full_name">{{ isRtl ? 'الاسم' : 'Name' }}</option>
+                                <option value="score">{{ isRtl ? 'النقاط' : 'Score' }}</option>
+                                <option value="priority">{{ isRtl ? 'الأولوية' : 'Priority' }}</option>
+                                <option value="next_follow_up_at">{{ isRtl ? 'المتابعة' : 'Follow-up' }}</option>
+                            </select>
+                            <div class="absolute inset-y-0 ltr:right-0 rtl:left-0 ltr:pr-3 rtl:pl-3 flex items-center pointer-events-none">
+                                <svg class="w-4 h-4 text-gray-400 transition-transform duration-200" :class="sortDir === 'asc' ? 'rotate-180' : ''" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!-- View Toggle -->
+                        <div class="flex items-center bg-gray-100 rounded-xl p-1 gap-0.5">
+                            <button @click="viewMode = 'grid'"
+                                :class="viewMode === 'grid' ? 'bg-white shadow-sm text-teal-600' : 'text-gray-500 hover:text-gray-700'"
+                                class="p-2 rounded-lg transition-all duration-200">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
+                                </svg>
+                            </button>
+                            <button @click="viewMode = 'table'"
+                                :class="viewMode === 'table' ? 'bg-white shadow-sm text-teal-600' : 'text-gray-500 hover:text-gray-700'"
+                                class="p-2 rounded-lg transition-all duration-200">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 10h16M4 14h16M4 18h16"/>
+                                </svg>
+                            </button>
+                        </div>
                     </div>
                 </div>
+
+                <!-- Advanced Filters Panel -->
+                <Transition
+                    enter-active-class="transition-all duration-300 ease-out"
+                    enter-from-class="opacity-0 max-h-0"
+                    enter-to-class="opacity-100 max-h-40"
+                    leave-active-class="transition-all duration-200 ease-in"
+                    leave-from-class="opacity-100 max-h-40"
+                    leave-to-class="opacity-0 max-h-0">
+                    <div v-if="showAdvancedFilters" class="overflow-hidden mt-3 pt-3 border-t border-gray-100">
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <!-- Source Filter -->
+                            <div class="relative flex-1">
+                                <label class="block text-[11px] font-medium text-gray-500 mb-1 uppercase tracking-wider">
+                                    {{ isRtl ? 'المصدر' : 'Source' }}
+                                </label>
+                                <select v-model="sourceFilter"
+                                    class="w-full appearance-none text-sm border border-gray-200 rounded-xl py-2.5 ltr:pl-4 rtl:pr-4 ltr:pr-10 rtl:pl-10 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all duration-200 bg-gray-50 focus:bg-white cursor-pointer">
+                                    <option value="">{{ isRtl ? 'جميع المصادر' : 'All Sources' }}</option>
+                                    <option v-for="src in sources" :key="src.id" :value="src.id">
+                                        {{ isRtl ? src.name_ar : src.name_en }}
+                                    </option>
+                                </select>
+                                <div class="absolute bottom-0 inset-y-auto ltr:right-0 rtl:left-0 ltr:pr-3 rtl:pl-3 h-[42px] flex items-center pointer-events-none">
+                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <!-- Date From -->
+                            <div class="flex-1">
+                                <label class="block text-[11px] font-medium text-gray-500 mb-1 uppercase tracking-wider">
+                                    {{ isRtl ? 'من تاريخ' : 'Date From' }}
+                                </label>
+                                <input v-model="dateFrom" type="date"
+                                    class="w-full text-sm border border-gray-200 rounded-xl py-2.5 px-4 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all duration-200 bg-gray-50 focus:bg-white" />
+                            </div>
+                            <!-- Date To -->
+                            <div class="flex-1">
+                                <label class="block text-[11px] font-medium text-gray-500 mb-1 uppercase tracking-wider">
+                                    {{ isRtl ? 'إلى تاريخ' : 'Date To' }}
+                                </label>
+                                <input v-model="dateTo" type="date"
+                                    class="w-full text-sm border border-gray-200 rounded-xl py-2.5 px-4 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all duration-200 bg-gray-50 focus:bg-white" />
+                            </div>
+                        </div>
+                    </div>
+                </Transition>
 
                 <!-- Active Filter Pills -->
                 <div v-if="hasActiveFilters" class="flex flex-wrap items-center gap-2 mt-3 pt-3 border-t border-gray-100">

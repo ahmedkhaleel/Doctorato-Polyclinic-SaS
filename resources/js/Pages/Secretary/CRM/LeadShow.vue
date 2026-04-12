@@ -342,6 +342,61 @@ const currentPipelineIndex = computed(() => {
 const scoreAngle = computed(() => {
     return ((props.lead.score || 0) / 100) * 283;
 });
+
+// Grouped activities by date
+const groupedActivities = computed(() => {
+    if (!props.activities?.length) return [];
+    const groups = {};
+    props.activities.forEach(act => {
+        const d = new Date(act.created_at);
+        const key = d.toISOString().split('T')[0];
+        if (!groups[key]) {
+            groups[key] = { date: key, label: formatDateLabel(key), items: [] };
+        }
+        groups[key].items.push(act);
+    });
+    return Object.values(groups);
+});
+
+function formatDateLabel(dateStr) {
+    const d = new Date(dateStr + 'T00:00:00');
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const diff = Math.floor((today - d) / 86400000);
+    if (diff === 0) return isRtl.value ? 'اليوم' : 'Today';
+    if (diff === 1) return isRtl.value ? 'أمس' : 'Yesterday';
+    if (diff < 7) return isRtl.value ? `منذ ${diff} أيام` : `${diff} days ago`;
+    return d.toLocaleDateString(isRtl.value ? 'ar-SA' : 'en-US', { month: 'short', day: 'numeric', year: d.getFullYear() !== today.getFullYear() ? 'numeric' : undefined });
+}
+
+// Activity summary stats
+const activityStats = computed(() => {
+    if (!props.activities?.length) return { total: 0, calls: 0, whatsapp: 0, emails: 0 };
+    const acts = props.activities;
+    return {
+        total: acts.length,
+        calls: acts.filter(a => a.type === 'call').length,
+        whatsapp: acts.filter(a => a.type === 'whatsapp').length,
+        emails: acts.filter(a => a.type === 'email').length,
+    };
+});
+
+// Copy phone
+const phoneCopied = ref(false);
+function copyPhone() {
+    if (!props.lead.phone) return;
+    navigator.clipboard.writeText(props.lead.phone).then(() => {
+        phoneCopied.value = true;
+        setTimeout(() => { phoneCopied.value = false; }, 2000);
+    });
+}
+
+// WhatsApp link
+function whatsappUrl(phone) {
+    if (!phone) return '#';
+    const clean = phone.replace(/[^0-9+]/g, '');
+    return `https://wa.me/${clean.replace('+', '')}`;
+}
 </script>
 
 <template>
@@ -639,39 +694,51 @@ const scoreAngle = computed(() => {
                                         </div>
                                     </form>
 
-                                    <!-- Activity Timeline -->
-                                    <div v-if="activities && activities.length > 0" class="relative">
-                                        <div class="absolute top-0 bottom-0 w-px bg-gray-200" :class="isRtl ? 'right-5' : 'left-5'"></div>
-                                        <div
-                                            v-for="(act, idx) in activities"
-                                            :key="act.id"
-                                            class="relative flex gap-4 pb-5 last:pb-0"
-                                            :class="isRtl ? 'flex-row-reverse' : ''"
-                                        >
-                                            <!-- Icon -->
-                                            <div
-                                                class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 z-10"
-                                                :class="activityTypeColors[act.type] || 'text-gray-500 bg-gray-100'"
-                                            >
-                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="getActivityIcon(act.type)"/>
-                                                </svg>
+                                    <!-- Activity Timeline (grouped by date) -->
+                                    <div v-if="groupedActivities.length > 0" class="space-y-5">
+                                        <div v-for="group in groupedActivities" :key="group.date">
+                                            <!-- Date Header -->
+                                            <div class="flex items-center gap-3 mb-3">
+                                                <div class="h-px flex-1 bg-gray-200"></div>
+                                                <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider whitespace-nowrap px-2">{{ group.label }}</span>
+                                                <div class="h-px flex-1 bg-gray-200"></div>
                                             </div>
-                                            <!-- Content -->
-                                            <div class="flex-1 bg-white rounded-xl border border-gray-100 p-3.5 hover:shadow-sm transition-shadow">
-                                                <div class="flex items-start justify-between gap-2 mb-1">
-                                                    <div>
-                                                        <span class="text-sm font-semibold text-gray-800">{{ act.subject || act.type }}</span>
-                                                        <span v-if="act.direction" class="text-xs text-gray-400 mx-1.5">
-                                                            {{ act.direction === 'inbound' ? (isRtl ? '← وارد' : '← Inbound') : (isRtl ? '→ صادر' : '→ Outbound') }}
-                                                        </span>
+
+                                            <!-- Activities in this group -->
+                                            <div class="relative">
+                                                <div class="absolute top-0 bottom-0 w-px bg-gray-200" :class="isRtl ? 'right-5' : 'left-5'"></div>
+                                                <div
+                                                    v-for="act in group.items"
+                                                    :key="act.id"
+                                                    class="relative flex gap-4 pb-4 last:pb-0"
+                                                    :class="isRtl ? 'flex-row-reverse' : ''"
+                                                >
+                                                    <!-- Icon -->
+                                                    <div
+                                                        class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 z-10"
+                                                        :class="activityTypeColors[act.type] || 'text-gray-500 bg-gray-100'"
+                                                    >
+                                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="getActivityIcon(act.type)"/>
+                                                        </svg>
                                                     </div>
-                                                    <span class="text-xs text-gray-400 whitespace-nowrap">{{ timeAgo(act.created_at) }}</span>
-                                                </div>
-                                                <p v-if="act.description" class="text-sm text-gray-600 mb-1.5">{{ act.description }}</p>
-                                                <div class="flex items-center gap-3 text-xs text-gray-400">
-                                                    <span v-if="act.outcome" class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">{{ act.outcome }}</span>
-                                                    <span v-if="act.performer?.name">{{ act.performer.name }}</span>
+                                                    <!-- Content -->
+                                                    <div class="flex-1 bg-white rounded-xl border border-gray-100 p-3.5 hover:shadow-sm transition-shadow">
+                                                        <div class="flex items-start justify-between gap-2 mb-1">
+                                                            <div>
+                                                                <span class="text-sm font-semibold text-gray-800">{{ act.subject || act.type }}</span>
+                                                                <span v-if="act.direction" class="text-xs text-gray-400 mx-1.5">
+                                                                    {{ act.direction === 'inbound' ? (isRtl ? '← وارد' : '← Inbound') : (isRtl ? '→ صادر' : '→ Outbound') }}
+                                                                </span>
+                                                            </div>
+                                                            <span class="text-xs text-gray-400 whitespace-nowrap">{{ timeAgo(act.created_at) }}</span>
+                                                        </div>
+                                                        <p v-if="act.description" class="text-sm text-gray-600 mb-1.5">{{ act.description }}</p>
+                                                        <div class="flex items-center gap-3 text-xs text-gray-400">
+                                                            <span v-if="act.outcome" class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">{{ act.outcome }}</span>
+                                                            <span v-if="act.performer?.name">{{ act.performer.name }}</span>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -1017,6 +1084,64 @@ const scoreAngle = computed(() => {
                         class="lg:w-1/3 space-y-5 transition-all duration-700 delay-300 ease-out"
                         :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'"
                     >
+                        <!-- Quick Contact Actions -->
+                        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-5">
+                            <h3 class="text-sm font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                                <svg class="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                                {{ isRtl ? 'تواصل سريع' : 'Quick Contact' }}
+                            </h3>
+                            <div class="grid grid-cols-2 gap-2">
+                                <a v-if="lead.phone" :href="whatsappUrl(lead.phone)" target="_blank"
+                                   class="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-emerald-50 text-emerald-700 hover:bg-emerald-100 transition-colors border border-emerald-200 text-sm font-medium">
+                                    <svg class="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.832-1.438A9.955 9.955 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2z"/></svg>
+                                    {{ isRtl ? 'واتساب' : 'WhatsApp' }}
+                                </a>
+                                <a v-if="lead.phone" :href="'tel:' + lead.phone"
+                                   class="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-green-50 text-green-700 hover:bg-green-100 transition-colors border border-green-200 text-sm font-medium">
+                                    <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                                    {{ isRtl ? 'اتصال' : 'Call' }}
+                                </a>
+                                <a v-if="lead.email" :href="'mailto:' + lead.email"
+                                   class="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-blue-50 text-blue-700 hover:bg-blue-100 transition-colors border border-blue-200 text-sm font-medium">
+                                    <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                                    {{ isRtl ? 'بريد' : 'Email' }}
+                                </a>
+                                <button v-if="lead.phone" @click="copyPhone"
+                                    class="flex items-center gap-2 px-3 py-2.5 rounded-xl transition-colors border text-sm font-medium"
+                                    :class="phoneCopied ? 'bg-teal-50 text-teal-700 border-teal-200' : 'bg-gray-50 text-gray-600 hover:bg-gray-100 border-gray-200'">
+                                    <svg v-if="!phoneCopied" class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
+                                    <svg v-else class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                    {{ phoneCopied ? (isRtl ? 'تم النسخ' : 'Copied') : (isRtl ? 'نسخ الهاتف' : 'Copy Phone') }}
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Activity Summary -->
+                        <div v-if="activityStats.total > 0" class="bg-white rounded-2xl shadow-sm border border-gray-200 p-5">
+                            <h3 class="text-sm font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                                <svg class="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                                {{ isRtl ? 'ملخص النشاطات' : 'Activity Summary' }}
+                            </h3>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div class="bg-gray-50 rounded-xl p-3 text-center">
+                                    <div class="text-xl font-bold text-gray-800">{{ activityStats.total }}</div>
+                                    <div class="text-[10px] text-gray-400 mt-0.5">{{ isRtl ? 'إجمالي' : 'Total' }}</div>
+                                </div>
+                                <div class="bg-green-50 rounded-xl p-3 text-center">
+                                    <div class="text-xl font-bold text-green-700">{{ activityStats.calls }}</div>
+                                    <div class="text-[10px] text-green-500 mt-0.5">{{ isRtl ? 'مكالمات' : 'Calls' }}</div>
+                                </div>
+                                <div class="bg-emerald-50 rounded-xl p-3 text-center">
+                                    <div class="text-xl font-bold text-emerald-700">{{ activityStats.whatsapp }}</div>
+                                    <div class="text-[10px] text-emerald-500 mt-0.5">{{ isRtl ? 'واتساب' : 'WhatsApp' }}</div>
+                                </div>
+                                <div class="bg-blue-50 rounded-xl p-3 text-center">
+                                    <div class="text-xl font-bold text-blue-700">{{ activityStats.emails }}</div>
+                                    <div class="text-[10px] text-blue-500 mt-0.5">{{ isRtl ? 'بريد' : 'Emails' }}</div>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Lead Info Card -->
                         <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-5">
                             <h3 class="text-sm font-semibold text-gray-800 mb-4 flex items-center gap-2">
