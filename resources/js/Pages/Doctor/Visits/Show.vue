@@ -188,10 +188,47 @@ const vitalsForm = useForm({
 });
 
 function submitVitals() {
-    vitalsForm.post(`/doctor/patients/${props.visit.patient_id}/vitals`, {
-        preserveScroll: true,
-        onSuccess: () => { showVitalsForm.value = false; },
-    });
+    vitalsForm.clearErrors();
+    vitalsForm.processing = true;
+
+    fetch(`/doctor/patients/${props.visit.patient_id}/vitals`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '',
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify({
+            visit_id: vitalsForm.visit_id,
+            bp_systolic: vitalsForm.bp_systolic || null,
+            bp_diastolic: vitalsForm.bp_diastolic || null,
+            heart_rate: vitalsForm.heart_rate || null,
+            temperature: vitalsForm.temperature || null,
+            respiratory_rate: vitalsForm.respiratory_rate || null,
+            spo2: vitalsForm.spo2 || null,
+            weight: vitalsForm.weight || null,
+            height: vitalsForm.height || null,
+            blood_sugar: vitalsForm.blood_sugar || null,
+            pain_level: vitalsForm.pain_level ?? null,
+        }),
+    })
+    .then(res => {
+        if (res.ok) {
+            showVitalsForm.value = false;
+            // Reload page to get updated vitals data
+            router.reload({ preserveScroll: true });
+        } else {
+            return res.json().then(data => {
+                if (data.errors) {
+                    Object.keys(data.errors).forEach(k => vitalsForm.setError(k, data.errors[k][0]));
+                }
+            }).catch(() => {});
+        }
+    })
+    .catch(() => {})
+    .finally(() => { vitalsForm.processing = false; });
 }
 
 const hasVitalsAlerts = computed(() => (props.vitalsAlerts || []).length > 0);

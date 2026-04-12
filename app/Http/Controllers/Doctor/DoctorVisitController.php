@@ -275,6 +275,10 @@ class DoctorVisitController extends BaseDoctorController
             'visit_id' => $data['visit_id'],
         ]);
 
-        return redirect()->back()->with('success', $this->msg('Vitals recorded successfully.', 'تم تسجيل العلامات الحيوية بنجاح.'));
+        return response()->json([
+            'message' => 'Vitals recorded successfully',
+            'vital' => $vital,
+            'alerts' => $vital->getAlerts(),
+        ]);
     }
 }
