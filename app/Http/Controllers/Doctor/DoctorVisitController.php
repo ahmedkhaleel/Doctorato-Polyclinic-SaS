@@ -226,4 +226,45 @@ class DoctorVisitController extends BaseDoctorController
 
         return redirect()->back()->with('success', $this->msg('Photo uploaded.', 'تم رفع الصورة.'));
     }
+
+    /**
+     * Store vital signs for a patient (from doctor panel).
+     */
+    public function storeVitals(Request $request, \App\Models\Patient $patient)
+    {
+        $validated = $request->validate([
+            'visit_id' => 'nullable|exists:visits,id',
+            'blood_pressure_systolic' => 'nullable|numeric|min:50|max:300',
+            'blood_pressure_diastolic' => 'nullable|numeric|min:30|max:200',
+            'heart_rate' => 'nullable|numeric|min:30|max:250',
+            'temperature' => 'nullable|numeric|min:34|max:43',
+            'respiratory_rate' => 'nullable|numeric|min:5|max:60',
+            'oxygen_saturation' => 'nullable|numeric|min:50|max:100',
+            'weight' => 'nullable|numeric|min:1|max:500',
+            'height' => 'nullable|numeric|min:30|max:300',
+            'blood_sugar' => 'nullable|numeric|min:20|max:800',
+            'blood_sugar_type' => 'nullable|in:fasting,random,post_meal',
+            'pain_level' => 'nullable|integer|min:0|max:10',
+            'pain_location' => 'nullable|string|max:255',
+            'notes' => 'nullable|string|max:1000',
+            'source' => 'nullable|in:manual,device,pre_visit',
+        ]);
+
+        $validated['patient_id'] = $patient->id;
+        $validated['recorded_by'] = auth()->id();
+        $validated['recorded_at'] = now();
+
+        $vital = \App\Models\PatientVital::create($validated);
+
+        AuditLogger::log('vitals_recorded', $vital, [
+            'patient_id' => $patient->id,
+            'visit_id' => $validated['visit_id'] ?? null,
+        ]);
+
+        return response()->json([
+            'vital' => $vital->fresh(['recorder:id,name']),
+            'alerts' => $vital->getAlerts(),
+            'message' => 'Vitals recorded successfully',
+        ]);
+    }
 }

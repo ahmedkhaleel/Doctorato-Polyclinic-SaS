@@ -188,7 +188,7 @@ const vitalsForm = useForm({
 });
 
 function submitVitals() {
-    vitalsForm.post(`/admin/patients/${props.visit.patient_id}/vitals`, {
+    vitalsForm.post(`/doctor/patients/${props.visit.patient_id}/vitals`, {
         preserveScroll: true,
         onSuccess: () => { showVitalsForm.value = false; },
     });
