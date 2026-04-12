@@ -232,8 +232,11 @@ class DoctorVisitController extends BaseDoctorController
      */
     public function storeVitals(Request $request, \App\Models\Patient $patient)
     {
-        $validated = $request->validate([
-            'visit_id' => 'nullable|exists:visits,id',
+        // Convert empty strings to null before validation
+        $input = collect($request->all())->map(fn ($v) => $v === '' ? null : $v)->toArray();
+        $request->merge($input);
+
+        $request->validate([
             'bp_systolic' => 'nullable|numeric|min:50|max:300',
             'bp_diastolic' => 'nullable|numeric|min:30|max:200',
             'heart_rate' => 'nullable|numeric|min:30|max:250',
@@ -249,17 +252,17 @@ class DoctorVisitController extends BaseDoctorController
         // Map form field names to database column names
         $data = [
             'patient_id' => $patient->id,
-            'visit_id' => $validated['visit_id'] ?? null,
-            'blood_pressure_systolic' => $validated['bp_systolic'] ?? null,
-            'blood_pressure_diastolic' => $validated['bp_diastolic'] ?? null,
-            'heart_rate' => $validated['heart_rate'] ?? null,
-            'temperature' => $validated['temperature'] ?? null,
-            'respiratory_rate' => $validated['respiratory_rate'] ?? null,
-            'oxygen_saturation' => $validated['spo2'] ?? null,
-            'weight' => $validated['weight'] ?? null,
-            'height' => $validated['height'] ?? null,
-            'blood_sugar' => $validated['blood_sugar'] ?? null,
-            'pain_level' => $validated['pain_level'] ?? null,
+            'visit_id' => $request->input('visit_id') ?: null,
+            'blood_pressure_systolic' => $request->input('bp_systolic'),
+            'blood_pressure_diastolic' => $request->input('bp_diastolic'),
+            'heart_rate' => $request->input('heart_rate'),
+            'temperature' => $request->input('temperature'),
+            'respiratory_rate' => $request->input('respiratory_rate'),
+            'oxygen_saturation' => $request->input('spo2'),
+            'weight' => $request->input('weight'),
+            'height' => $request->input('height'),
+            'blood_sugar' => $request->input('blood_sugar'),
+            'pain_level' => $request->input('pain_level'),
             'recorded_by' => auth()->id(),
             'recorded_at' => now(),
             'source' => 'manual',
