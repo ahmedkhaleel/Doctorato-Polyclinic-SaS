@@ -64,13 +64,33 @@ const totalLeads = computed(() => {
 
 /* ── Filter ─────────────────────────────────────────────── */
 const filterPriority = ref('');
+const searchQuery = ref('');
 
 function filteredLeads(leads) {
     if (!leads) return [];
+    let result = leads;
     if (filterPriority.value) {
-        return leads.filter(l => l.priority == filterPriority.value);
+        result = result.filter(l => l.priority == filterPriority.value);
     }
-    return leads;
+    if (searchQuery.value.trim()) {
+        const q = searchQuery.value.trim().toLowerCase();
+        result = result.filter(l =>
+            (l.full_name || '').toLowerCase().includes(q) ||
+            (l.phone || '').includes(q)
+        );
+    }
+    return result;
+}
+
+/* ── Stale-in-stage helper ─────────────────────────────── */
+function daysInStage(lead) {
+    if (!lead.status_changed_at && !lead.created_at) return 0;
+    const ref = lead.status_changed_at || lead.created_at;
+    return Math.floor((Date.now() - new Date(ref).getTime()) / 86400000);
+}
+
+function isStale(lead) {
+    return daysInStage(lead) >= 7;
 }
 
 /* ── Drag and Drop ──────────────────────────────────────── */
@@ -175,6 +195,13 @@ function timeAgo(date) {
                 </div>
             </div>
             <div class="flex items-center gap-2">
+                <!-- Search -->
+                <div class="relative">
+                    <svg class="w-3.5 h-3.5 text-gray-400 absolute top-1/2 -translate-y-1/2 start-2.5 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    <input v-model="searchQuery" type="text"
+                        :placeholder="isRtl ? 'بحث...' : 'Search...'"
+                        class="text-xs rounded-lg border border-gray-200 bg-white ps-8 pe-3 py-2 text-gray-600 outline-none focus:ring-2 focus:ring-teal-200 transition-all w-36 focus:w-48 placeholder:text-gray-400">
+                </div>
                 <!-- Priority filter -->
                 <select v-model="filterPriority" class="text-xs rounded-lg border border-gray-200 bg-white px-3 py-2 text-gray-600 outline-none focus:ring-2 focus:ring-teal-200 transition-all">
                     <option value="">{{ isRtl ? 'كل الأولويات' : 'All Priorities' }}</option>
@@ -252,6 +279,12 @@ function timeAgo(date) {
                                 <svg class="w-3 h-3 text-amber-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
                                 <span class="text-[10px] font-bold text-amber-600">{{ lead.score }}</span>
                             </div>
+                        </div>
+
+                        <!-- Stale warning -->
+                        <div v-if="isStale(lead)" class="mt-1.5 flex items-center gap-1 text-[10px] text-amber-600 bg-amber-50 rounded-md px-2 py-1 border border-amber-200/60">
+                            <svg class="w-3 h-3 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/></svg>
+                            {{ daysInStage(lead) }}{{ isRtl ? ' يوم في هذه المرحلة' : 'd in stage' }}
                         </div>
 
                         <!-- Footer: last contact + next follow-up -->

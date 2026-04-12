@@ -194,6 +194,55 @@ const totalFunnelLeads = computed(() => {
     return Object.values(props.statusDistribution || {}).reduce((a, b) => a + b, 0);
 });
 
+/* ---------- Activity feed filter ---------- */
+const activityFilter = ref('all');
+const activityFilterOptions = [
+    { key: 'all', en: 'All', ar: 'الكل' },
+    { key: 'call', en: 'Calls', ar: 'مكالمات' },
+    { key: 'whatsapp', en: 'WhatsApp', ar: 'واتساب' },
+    { key: 'email', en: 'Emails', ar: 'بريد' },
+    { key: 'meeting', en: 'Meetings', ar: 'اجتماعات' },
+    { key: 'note', en: 'Notes', ar: 'ملاحظات' },
+];
+
+const filteredActivities = computed(() => {
+    if (!props.recentActivities?.length) return [];
+    if (activityFilter.value === 'all') return props.recentActivities;
+    return props.recentActivities.filter(a => a.type === activityFilter.value);
+});
+
+/* ---------- Dashboard snooze ---------- */
+const snoozeOpenId = ref(null);
+
+function toggleSnooze(fuId) {
+    snoozeOpenId.value = snoozeOpenId.value === fuId ? null : fuId;
+}
+
+function snoozeFollowUp(fuId, key) {
+    let scheduledAt;
+    const now = new Date();
+    if (key === '1h') {
+        scheduledAt = new Date(now.getTime() + 60 * 60 * 1000);
+    } else if (key === 'tomorrow') {
+        scheduledAt = new Date(now);
+        scheduledAt.setDate(scheduledAt.getDate() + 1);
+        scheduledAt.setHours(9, 0, 0, 0);
+    } else if (key === '1w') {
+        scheduledAt = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+        scheduledAt.setHours(9, 0, 0, 0);
+    }
+    const isoStr = scheduledAt.getFullYear() + '-' +
+        String(scheduledAt.getMonth() + 1).padStart(2, '0') + '-' +
+        String(scheduledAt.getDate()).padStart(2, '0') + 'T' +
+        String(scheduledAt.getHours()).padStart(2, '0') + ':' +
+        String(scheduledAt.getMinutes()).padStart(2, '0');
+    router.post(`/secretary/crm/follow-ups/${fuId}/reschedule`, {
+        scheduled_at: isoStr,
+        notes: isRtl.value ? 'تم التأجيل' : 'Snoozed',
+    }, { preserveScroll: true });
+    snoozeOpenId.value = null;
+}
+
 /* ---------- Activity Icons ---------- */
 const activityTypeConfig = {
     call: { icon: 'M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z', color: 'bg-emerald-100 text-emerald-600' },
@@ -517,6 +566,20 @@ const activityTypeConfig = {
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" /></svg>
                                         {{ isRtl ? 'فائت' : 'Missed' }}
                                     </button>
+                                    <!-- Snooze -->
+                                    <div class="relative">
+                                        <button @click="toggleSnooze(fu.id)"
+                                            class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-xs font-semibold bg-purple-50 text-purple-500 hover:bg-purple-100 border border-purple-200 transition-all duration-200">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                        </button>
+                                        <Transition enter-active-class="transition-all duration-200" enter-from-class="opacity-0 scale-95" enter-to-class="opacity-100 scale-100" leave-active-class="transition-all duration-150" leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-95">
+                                            <div v-if="snoozeOpenId === fu.id" class="absolute bottom-full mb-1 end-0 w-40 bg-white rounded-xl shadow-xl border border-gray-200 py-1.5 z-20">
+                                                <button @click="snoozeFollowUp(fu.id, '1h')" class="w-full text-start px-3 py-1.5 text-xs text-gray-700 hover:bg-purple-50 transition-colors">{{ isRtl ? 'ساعة واحدة' : '1 Hour' }}</button>
+                                                <button @click="snoozeFollowUp(fu.id, 'tomorrow')" class="w-full text-start px-3 py-1.5 text-xs text-gray-700 hover:bg-purple-50 transition-colors">{{ isRtl ? 'غدا 9 صباحا' : 'Tomorrow 9 AM' }}</button>
+                                                <button @click="snoozeFollowUp(fu.id, '1w')" class="w-full text-start px-3 py-1.5 text-xs text-gray-700 hover:bg-purple-50 transition-colors">{{ isRtl ? 'اسبوع واحد' : '1 Week' }}</button>
+                                            </div>
+                                        </Transition>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -597,6 +660,20 @@ const activityTypeConfig = {
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" /></svg>
                                         {{ isRtl ? 'فائت' : 'Missed' }}
                                     </button>
+                                    <!-- Snooze -->
+                                    <div class="relative">
+                                        <button @click="toggleSnooze(fu.id)"
+                                            class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-xs font-semibold bg-purple-50 text-purple-500 hover:bg-purple-100 border border-purple-200 transition-all duration-200">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                        </button>
+                                        <Transition enter-active-class="transition-all duration-200" enter-from-class="opacity-0 scale-95" enter-to-class="opacity-100 scale-100" leave-active-class="transition-all duration-150" leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-95">
+                                            <div v-if="snoozeOpenId === fu.id" class="absolute bottom-full mb-1 end-0 w-40 bg-white rounded-xl shadow-xl border border-gray-200 py-1.5 z-20">
+                                                <button @click="snoozeFollowUp(fu.id, '1h')" class="w-full text-start px-3 py-1.5 text-xs text-gray-700 hover:bg-purple-50 transition-colors">{{ isRtl ? 'ساعة واحدة' : '1 Hour' }}</button>
+                                                <button @click="snoozeFollowUp(fu.id, 'tomorrow')" class="w-full text-start px-3 py-1.5 text-xs text-gray-700 hover:bg-purple-50 transition-colors">{{ isRtl ? 'غدا 9 صباحا' : 'Tomorrow 9 AM' }}</button>
+                                                <button @click="snoozeFollowUp(fu.id, '1w')" class="w-full text-start px-3 py-1.5 text-xs text-gray-700 hover:bg-purple-50 transition-colors">{{ isRtl ? 'اسبوع واحد' : '1 Week' }}</button>
+                                            </div>
+                                        </Transition>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -819,20 +896,33 @@ const activityTypeConfig = {
                     :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
                     style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.55s"
                 >
-                    <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
-                        <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background: linear-gradient(135deg, #0d9488, #14b8a6);">
-                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
+                    <div class="px-5 py-4 border-b border-gray-100">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background: linear-gradient(135deg, #0d9488, #14b8a6);">
+                                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <h3 class="text-sm font-bold text-gray-800 uppercase tracking-wider">{{ isRtl ? 'آخر النشاطات' : 'Recent Activity' }}</h3>
                             </div>
-                            <h3 class="text-sm font-bold text-gray-800 uppercase tracking-wider">{{ isRtl ? 'آخر النشاطات' : 'Recent Activity' }}</h3>
+                            <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-teal-50 text-teal-600">{{ todayActivityCount || 0 }} {{ isRtl ? 'اليوم' : 'today' }}</span>
                         </div>
-                        <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-teal-50 text-teal-600">{{ todayActivityCount || 0 }} {{ isRtl ? 'اليوم' : 'today' }}</span>
+                        <!-- Filter tabs -->
+                        <div class="flex items-center gap-1 flex-wrap">
+                            <button v-for="opt in activityFilterOptions" :key="opt.key"
+                                @click="activityFilter = opt.key"
+                                :class="['px-2.5 py-1 rounded-lg text-[11px] font-medium transition-all duration-200',
+                                    activityFilter === opt.key
+                                        ? 'bg-teal-500 text-white shadow-sm'
+                                        : 'bg-gray-50 text-gray-500 hover:bg-gray-100']">
+                                {{ isRtl ? opt.ar : opt.en }}
+                            </button>
+                        </div>
                     </div>
 
-                    <div v-if="recentActivities?.length" class="divide-y divide-gray-50 max-h-72 overflow-y-auto">
-                        <div v-for="(act, idx) in recentActivities" :key="act.id"
+                    <div v-if="filteredActivities.length" class="divide-y divide-gray-50 max-h-72 overflow-y-auto">
+                        <div v-for="(act, idx) in filteredActivities" :key="act.id"
                              class="px-5 py-3 flex items-start gap-3 hover:bg-gray-50/50 transition-colors"
                              :class="mounted ? 'opacity-100' : 'opacity-0'"
                              :style="`transition: opacity 0.5s ease ${0.6 + idx * 0.05}s`">
@@ -861,7 +951,8 @@ const activityTypeConfig = {
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                         </div>
-                        <p class="text-sm text-gray-500">{{ isRtl ? 'لا توجد نشاطات بعد' : 'No recent activities' }}</p>
+                        <p class="text-sm text-gray-500">{{ activityFilter !== 'all' ? (isRtl ? 'لا توجد نشاطات من هذا النوع' : 'No activities of this type') : (isRtl ? 'لا توجد نشاطات بعد' : 'No recent activities') }}</p>
+                        <button v-if="activityFilter !== 'all'" @click="activityFilter = 'all'" class="mt-2 text-xs text-teal-600 hover:underline">{{ isRtl ? 'عرض الكل' : 'Show all' }}</button>
                     </div>
                 </div>
             </div>

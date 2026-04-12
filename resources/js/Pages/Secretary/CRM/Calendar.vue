@@ -90,6 +90,64 @@ function getFollowUpsForDay(dateStr) {
     return followUpsByDate.value[dateStr] || [];
 }
 
+/* ── View mode (month / week) ────────────────────────── */
+const viewMode = ref('month'); // 'month' | 'week'
+const currentWeekStart = ref(null);
+
+function initWeek() {
+    const today = new Date();
+    // Find the Saturday of the current week
+    const day = today.getDay(); // 0=Sun...6=Sat
+    const diff = (day + 1) % 7; // days since Saturday
+    const sat = new Date(today);
+    sat.setDate(sat.getDate() - diff);
+    currentWeekStart.value = sat;
+}
+initWeek();
+
+const weekDays = computed(() => {
+    if (!currentWeekStart.value) return [];
+    const days = [];
+    const today = new Date();
+    const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+    for (let i = 0; i < 7; i++) {
+        const d = new Date(currentWeekStart.value);
+        d.setDate(d.getDate() + i);
+        const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        days.push({
+            day: d.getDate(),
+            date: dateStr,
+            isToday: dateStr === todayStr,
+            dayName: d.toLocaleDateString(isRtl.value ? 'ar-SA' : 'en-US', { weekday: 'short' }),
+            monthName: d.toLocaleDateString(isRtl.value ? 'ar-SA' : 'en-US', { month: 'short' }),
+        });
+    }
+    return days;
+});
+
+function prevWeek() {
+    const d = new Date(currentWeekStart.value);
+    d.setDate(d.getDate() - 7);
+    currentWeekStart.value = d;
+}
+
+function nextWeek() {
+    const d = new Date(currentWeekStart.value);
+    d.setDate(d.getDate() + 7);
+    currentWeekStart.value = d;
+}
+
+function goTodayWeek() {
+    initWeek();
+}
+
+const weekRangeLabel = computed(() => {
+    if (!weekDays.value.length) return '';
+    const first = weekDays.value[0];
+    const last = weekDays.value[6];
+    return `${first.day} ${first.monthName} - ${last.day} ${last.monthName}`;
+});
+
 /* ── Selected day detail ─────────────────────────────── */
 const selectedDate = ref(null);
 const showDetail = ref(false);
@@ -294,22 +352,40 @@ function snoozeFollowUp(fuId, key) {
                 </button>
             </div>
 
-            <!-- Filter pills -->
-            <div class="flex items-center gap-1.5 flex-wrap">
-                <button v-for="opt in filterOptions" :key="opt.key"
-                    @click="activeFilter = opt.key"
-                    :class="['px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 border',
-                        activeFilter === opt.key
-                            ? 'bg-teal-500 text-white border-teal-500 shadow-sm'
-                            : 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100']">
-                    {{ isRtl ? opt.ar : opt.en }}
-                </button>
+            <div class="flex items-center gap-3 flex-wrap">
+                <!-- View toggle -->
+                <div class="flex items-center bg-gray-100 rounded-lg p-0.5">
+                    <button @click="viewMode = 'month'"
+                        :class="['px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-200',
+                            viewMode === 'month' ? 'bg-white text-teal-700 shadow-sm' : 'text-gray-500 hover:text-gray-700']">
+                        <svg class="w-3.5 h-3.5 inline-block me-1 -mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v16a1 1 0 01-1 1H4a1 1 0 01-1-1V4z"/><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M10 3v18"/></svg>
+                        {{ isRtl ? 'شهر' : 'Month' }}
+                    </button>
+                    <button @click="viewMode = 'week'"
+                        :class="['px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-200',
+                            viewMode === 'week' ? 'bg-white text-teal-700 shadow-sm' : 'text-gray-500 hover:text-gray-700']">
+                        <svg class="w-3.5 h-3.5 inline-block me-1 -mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                        {{ isRtl ? 'اسبوع' : 'Week' }}
+                    </button>
+                </div>
+                <!-- Filter pills -->
+                <div class="flex items-center gap-1.5 flex-wrap">
+                    <button v-for="opt in filterOptions" :key="opt.key"
+                        @click="activeFilter = opt.key"
+                        :class="['px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 border',
+                            activeFilter === opt.key
+                                ? 'bg-teal-500 text-white border-teal-500 shadow-sm'
+                                : 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100']">
+                        {{ isRtl ? opt.ar : opt.en }}
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Calendar Grid -->
-    <div :class="['bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-700 delay-200', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4']"
+    <!-- ========== MONTH VIEW ========== -->
+    <div v-if="viewMode === 'month'"
+         :class="['bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-700 delay-200', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4']"
          :style="{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }">
 
         <!-- Day headers -->
@@ -356,6 +432,77 @@ function snoozeFollowUp(fuId, key) {
                     <div v-if="getFilteredFollowUpsForDay(cell.date).length > 3"
                          class="text-[9px] text-gray-400 font-medium px-1.5">
                         +{{ getFilteredFollowUpsForDay(cell.date).length - 3 }} {{ isRtl ? 'أخرى' : 'more' }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== WEEK VIEW ========== -->
+    <div v-if="viewMode === 'week'"
+         :class="['bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-500', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4']">
+
+        <!-- Week navigation -->
+        <div class="px-4 py-3 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <button @click="prevWeek" class="w-8 h-8 rounded-lg bg-white hover:bg-teal-50 border border-gray-200 hover:border-teal-300 flex items-center justify-center transition-all">
+                    <svg :class="['w-4 h-4 text-gray-500', isRtl ? 'rotate-180' : '']" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+                </button>
+                <span class="text-sm font-semibold text-gray-800 min-w-[180px] text-center">{{ weekRangeLabel }}</span>
+                <button @click="nextWeek" class="w-8 h-8 rounded-lg bg-white hover:bg-teal-50 border border-gray-200 hover:border-teal-300 flex items-center justify-center transition-all">
+                    <svg :class="['w-4 h-4 text-gray-500', isRtl ? 'rotate-180' : '']" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                </button>
+                <button @click="goTodayWeek" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-teal-50 text-teal-700 border border-teal-200 hover:bg-teal-100 transition-all">
+                    {{ isRtl ? 'اليوم' : 'Today' }}
+                </button>
+            </div>
+        </div>
+
+        <!-- Week columns -->
+        <div class="grid grid-cols-7 divide-x divide-gray-100">
+            <div v-for="(wd, idx) in weekDays" :key="wd.date"
+                 @click="selectDay(wd.date)"
+                 :class="['min-h-[350px] cursor-pointer transition-all duration-150 hover:bg-teal-50/30',
+                    wd.isToday ? 'bg-teal-50/40' : '',
+                    selectedDate === wd.date ? 'bg-teal-50/60' : '']">
+
+                <!-- Day header -->
+                <div class="px-2 py-3 text-center border-b border-gray-100 sticky top-0 bg-white/95 backdrop-blur-sm">
+                    <div class="text-[11px] font-medium text-gray-400 uppercase">{{ wd.dayName }}</div>
+                    <div :class="['text-lg font-bold mt-0.5',
+                        wd.isToday ? 'w-8 h-8 rounded-full bg-teal-500 text-white flex items-center justify-center mx-auto text-sm' : 'text-gray-800']">
+                        {{ wd.day }}
+                    </div>
+                    <div v-if="getFilteredFollowUpsForDay(wd.date).length > 0"
+                         class="mt-1 text-[10px] font-bold text-teal-600">
+                        {{ getFilteredFollowUpsForDay(wd.date).length }} {{ isRtl ? 'متابعة' : 'items' }}
+                    </div>
+                </div>
+
+                <!-- Follow-ups for the day -->
+                <div class="p-1.5 space-y-1.5">
+                    <div v-for="fu in getFilteredFollowUpsForDay(wd.date)" :key="fu.id"
+                         @click.stop="selectDay(wd.date)"
+                         :class="['p-2 rounded-lg border text-[11px] transition-all duration-200 hover:shadow-sm',
+                            fu.is_overdue ? 'bg-red-50 border-red-200' :
+                            fu.status === 'completed' ? 'bg-green-50 border-green-200' :
+                            fu.status === 'missed' ? 'bg-red-50/60 border-red-200' :
+                            'bg-white border-gray-150 hover:border-teal-200']">
+                        <div class="flex items-center gap-1.5 mb-1">
+                            <span :class="['w-2 h-2 rounded-full flex-shrink-0', typeConfig[fu.type]?.color || 'bg-gray-400']"></span>
+                            <span class="font-semibold text-gray-700">{{ fu.scheduled_time }}</span>
+                        </div>
+                        <div class="font-medium text-gray-800 truncate">{{ fu.lead_name }}</div>
+                        <div class="flex items-center gap-1 mt-1 text-[10px] text-gray-400">
+                            <span>{{ isRtl ? typeConfig[fu.type]?.ar : typeConfig[fu.type]?.en }}</span>
+                            <span v-if="fu.is_overdue" class="text-red-500 font-semibold">{{ isRtl ? 'متأخر' : 'Overdue' }}</span>
+                        </div>
+                    </div>
+
+                    <div v-if="getFilteredFollowUpsForDay(wd.date).length === 0"
+                         class="text-center py-8 text-gray-300">
+                        <svg class="w-6 h-6 mx-auto mb-1" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>
+                        <span class="text-[10px]">-</span>
                     </div>
                 </div>
             </div>
