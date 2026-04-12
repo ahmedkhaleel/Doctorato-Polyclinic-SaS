@@ -58,11 +58,40 @@ class SecretaryCrmController extends BaseSecretaryController
             ->limit(10)
             ->get();
 
+        // Status distribution for mini funnel
+        $statusDistribution = Lead::assignedTo($userId)
+            ->whereNotIn('status', ['converted', 'lost'])
+            ->selectRaw('status, count(*) as count')
+            ->groupBy('status')
+            ->pluck('count', 'status')
+            ->toArray();
+
+        // Recent activities (last 10)
+        $recentActivities = LeadActivity::with(['lead:id,full_name'])
+            ->where('performed_by', $userId)
+            ->latest()
+            ->limit(10)
+            ->get(['id', 'lead_id', 'type', 'subject', 'created_at']);
+
+        // Today's activity count
+        $todayActivityCount = LeadActivity::where('performed_by', $userId)
+            ->whereDate('created_at', now()->toDateString())
+            ->count();
+
+        // Conversion stats
+        $totalAssigned = Lead::assignedTo($userId)->count();
+        $totalConverted = Lead::assignedTo($userId)->where('status', 'converted')->count();
+        $conversionRate = $totalAssigned > 0 ? round(($totalConverted / $totalAssigned) * 100, 1) : 0;
+
         return Inertia::render('Secretary/CRM/Dashboard', [
             'stats' => $stats,
             'todayFollowUps' => $todayFollowUps,
             'overdueFollowUps' => $overdueFollowUps,
             'recentLeads' => $recentLeads,
+            'statusDistribution' => $statusDistribution,
+            'recentActivities' => $recentActivities,
+            'todayActivityCount' => $todayActivityCount,
+            'conversionRate' => $conversionRate,
         ]);
     }
 

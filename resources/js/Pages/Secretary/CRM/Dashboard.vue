@@ -11,6 +11,10 @@ const props = defineProps({
     todayFollowUps: Array,
     overdueFollowUps: Array,
     recentLeads: Array,
+    statusDistribution: Object,
+    recentActivities: Array,
+    todayActivityCount: Number,
+    conversionRate: Number,
 });
 
 const mounted = ref(false);
@@ -163,17 +167,46 @@ function missFollowUp(fuId) {
 }
 
 /* ---------- Performance ---------- */
-const conversionRate = computed(() => {
-    const total = props.stats?.my_leads || 0;
-    if (total === 0) return 0;
-    // Estimate: converted leads would be implied from stats
-    // For now we show a meaningful metric based on follow-up completion
+const followUpRate = computed(() => {
     const completed = (props.stats?.today_follow_ups || 0);
     const overdue = (props.stats?.overdue_follow_ups || 0);
     const totalFU = completed + overdue;
     if (totalFU === 0) return 100;
     return Math.round((completed / totalFU) * 100);
 });
+
+/* ---------- Funnel ---------- */
+const funnelStatuses = [
+    { key: 'new', en: 'New', ar: 'جديد', color: '#3b82f6' },
+    { key: 'contacted', en: 'Contacted', ar: 'تم التواصل', color: '#06b6d4' },
+    { key: 'qualified', en: 'Qualified', ar: 'مؤهل', color: '#8b5cf6' },
+    { key: 'appointment_booked', en: 'Booked', ar: 'تم الحجز', color: '#f59e0b' },
+    { key: 'consultation_done', en: 'Consulted', ar: 'تم الاستشارة', color: '#0d9488' },
+    { key: 'negotiation', en: 'Negotiation', ar: 'تفاوض', color: '#f97316' },
+];
+
+const funnelMax = computed(() => {
+    const vals = funnelStatuses.map(s => (props.statusDistribution || {})[s.key] || 0);
+    return Math.max(...vals, 1);
+});
+
+const totalFunnelLeads = computed(() => {
+    return Object.values(props.statusDistribution || {}).reduce((a, b) => a + b, 0);
+});
+
+/* ---------- Activity Icons ---------- */
+const activityTypeConfig = {
+    call: { icon: 'M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z', color: 'bg-emerald-100 text-emerald-600' },
+    whatsapp: { icon: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z', color: 'bg-green-100 text-green-600' },
+    email: { icon: 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z', color: 'bg-blue-100 text-blue-600' },
+    sms: { icon: 'M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z', color: 'bg-violet-100 text-violet-600' },
+    meeting: { icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z', color: 'bg-amber-100 text-amber-600' },
+    note: { icon: 'M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z', color: 'bg-slate-100 text-slate-600' },
+    status_change: { icon: 'M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15', color: 'bg-indigo-100 text-indigo-600' },
+    follow_up_scheduled: { icon: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z', color: 'bg-teal-100 text-teal-600' },
+    follow_up_completed: { icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z', color: 'bg-emerald-100 text-emerald-600' },
+    system: { icon: 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z', color: 'bg-gray-100 text-gray-500' },
+};
 </script>
 
 <template>
@@ -322,22 +355,40 @@ const conversionRate = computed(() => {
                     {{ isRtl ? 'عرض كل العملاء' : 'View All Leads' }}
                 </Link>
 
-                <Link href="/secretary/crm/leads"
+                <Link href="/secretary/crm/calendar"
                     class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-teal-700 text-sm font-semibold bg-teal-50 border border-teal-200 hover:bg-teal-100 transition-all duration-200 hover:scale-[1.02]"
                 >
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
-                    {{ isRtl ? 'جدولة متابعة' : 'Schedule Follow-up' }}
+                    {{ isRtl ? 'التقويم' : 'Calendar' }}
                 </Link>
 
-                <Link href="/secretary/crm/leads"
+                <Link href="/secretary/crm/pipeline"
                     class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-teal-700 text-sm font-semibold bg-teal-50 border border-teal-200 hover:bg-teal-100 transition-all duration-200 hover:scale-[1.02]"
                 >
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7" />
                     </svg>
-                    {{ isRtl ? 'إضافة نشاط' : 'Add Activity' }}
+                    {{ isRtl ? 'خط الأنابيب' : 'Pipeline' }}
+                </Link>
+
+                <Link href="/secretary/crm/templates"
+                    class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-teal-700 text-sm font-semibold bg-teal-50 border border-teal-200 hover:bg-teal-100 transition-all duration-200 hover:scale-[1.02]"
+                >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 12h10" />
+                    </svg>
+                    {{ isRtl ? 'القوالب' : 'Templates' }}
+                </Link>
+
+                <Link href="/secretary/crm/leads/create"
+                    class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-teal-700 text-sm font-semibold bg-teal-50 border border-teal-200 hover:bg-teal-100 transition-all duration-200 hover:scale-[1.02]"
+                >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                    </svg>
+                    {{ isRtl ? 'عميل جديد' : 'New Lead' }}
                 </Link>
             </div>
 
@@ -514,7 +565,6 @@ const conversionRate = computed(() => {
 
                         <div class="text-center mb-4">
                             <div class="relative w-24 h-24 mx-auto">
-                                <!-- Background circle -->
                                 <svg class="w-24 h-24 transform -rotate-90" viewBox="0 0 100 100">
                                     <circle cx="50" cy="50" r="42" stroke="#e5e7eb" stroke-width="8" fill="none" />
                                     <circle
@@ -523,7 +573,7 @@ const conversionRate = computed(() => {
                                         stroke-width="8"
                                         fill="none"
                                         stroke-linecap="round"
-                                        :stroke-dasharray="`${mounted ? conversionRate * 2.64 : 0} 264`"
+                                        :stroke-dasharray="`${mounted ? (conversionRate || 0) * 2.64 : 0} 264`"
                                         style="transition: stroke-dasharray 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.6s"
                                     />
                                     <defs>
@@ -534,10 +584,10 @@ const conversionRate = computed(() => {
                                     </defs>
                                 </svg>
                                 <div class="absolute inset-0 flex items-center justify-center">
-                                    <span class="text-xl font-bold text-gray-800">{{ conversionRate }}%</span>
+                                    <span class="text-xl font-bold text-gray-800">{{ conversionRate || 0 }}%</span>
                                 </div>
                             </div>
-                            <p class="text-xs text-gray-400 mt-2 font-medium">{{ isRtl ? 'معدل إنجاز المتابعات' : 'Follow-up Completion Rate' }}</p>
+                            <p class="text-xs text-gray-400 mt-2 font-medium">{{ isRtl ? 'معدل التحويل' : 'Conversion Rate' }}</p>
                         </div>
 
                         <div class="space-y-2.5">
@@ -546,14 +596,18 @@ const conversionRate = computed(() => {
                                 <span class="font-bold text-gray-800">{{ stats.my_leads }}</span>
                             </div>
                             <div class="flex items-center justify-between text-xs">
-                                <span class="text-gray-500">{{ isRtl ? 'متابعات اليوم' : "Today's Tasks" }}</span>
-                                <span class="font-bold text-gray-800">{{ stats.today_follow_ups }}</span>
+                                <span class="text-gray-500">{{ isRtl ? 'نشاطات اليوم' : "Today's Activities" }}</span>
+                                <span class="font-bold text-teal-600">{{ todayActivityCount || 0 }}</span>
                             </div>
                             <div class="flex items-center justify-between text-xs">
                                 <span class="text-gray-500">{{ isRtl ? 'متأخرة' : 'Overdue' }}</span>
                                 <span class="font-bold" :class="stats.overdue_follow_ups > 0 ? 'text-red-600' : 'text-gray-800'">{{ stats.overdue_follow_ups }}</span>
                             </div>
                         </div>
+
+                        <Link href="/secretary/crm/reports" class="mt-4 block text-center text-xs font-medium text-teal-600 hover:text-teal-700 hover:underline transition-colors">
+                            {{ isRtl ? 'عرض التقارير الكاملة' : 'View Full Reports' }}
+                        </Link>
                     </div>
 
                     <!-- ---- RECENT LEADS ---- -->
@@ -654,6 +708,102 @@ const conversionRate = computed(() => {
                             </div>
                             <p class="text-sm font-medium text-gray-500">{{ isRtl ? 'لم يتم تعيين عملاء لك بعد' : 'No leads assigned yet' }}</p>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============ FUNNEL + ACTIVITY FEED ============ -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+                <!-- Mini Conversion Funnel -->
+                <div
+                    class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 overflow-hidden"
+                    :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
+                    style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.5s"
+                >
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background: linear-gradient(135deg, #0d9488, #14b8a6);">
+                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                                </svg>
+                            </div>
+                            <h3 class="text-sm font-bold text-gray-800 uppercase tracking-wider">{{ isRtl ? 'قمع التحويل' : 'Lead Funnel' }}</h3>
+                        </div>
+                        <span class="text-xs text-gray-400">{{ totalFunnelLeads }} {{ isRtl ? 'عميل نشط' : 'active' }}</span>
+                    </div>
+
+                    <div class="space-y-2.5">
+                        <div v-for="(stage, idx) in funnelStatuses" :key="stage.key" class="flex items-center gap-3">
+                            <span class="text-[11px] font-medium text-gray-500 w-16 truncate">{{ isRtl ? stage.ar : stage.en }}</span>
+                            <div class="flex-1 h-5 bg-gray-50 rounded-lg overflow-hidden relative">
+                                <div class="h-full rounded-lg transition-all duration-1000 ease-out flex items-center justify-end px-2"
+                                     :style="{
+                                         width: mounted ? Math.max(((statusDistribution?.[stage.key] || 0) / funnelMax) * 100, 3) + '%' : '0%',
+                                         background: stage.color,
+                                         transitionDelay: (0.6 + idx * 0.1) + 's'
+                                     }">
+                                    <span v-if="(statusDistribution?.[stage.key] || 0) > 0" class="text-[10px] font-bold text-white">{{ statusDistribution?.[stage.key] || 0 }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <Link href="/secretary/crm/pipeline" class="mt-4 flex items-center justify-center gap-2 text-xs font-medium text-teal-600 hover:text-teal-700 transition-colors">
+                        {{ isRtl ? 'عرض خط الأنابيب الكامل' : 'View Full Pipeline' }}
+                        <svg class="w-3.5 h-3.5" :class="isRtl ? 'rotate-180' : ''" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                    </Link>
+                </div>
+
+                <!-- Recent Activity Feed -->
+                <div
+                    class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden"
+                    :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
+                    style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.55s"
+                >
+                    <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background: linear-gradient(135deg, #0d9488, #14b8a6);">
+                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <h3 class="text-sm font-bold text-gray-800 uppercase tracking-wider">{{ isRtl ? 'آخر النشاطات' : 'Recent Activity' }}</h3>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-teal-50 text-teal-600">{{ todayActivityCount || 0 }} {{ isRtl ? 'اليوم' : 'today' }}</span>
+                    </div>
+
+                    <div v-if="recentActivities?.length" class="divide-y divide-gray-50 max-h-72 overflow-y-auto">
+                        <div v-for="(act, idx) in recentActivities" :key="act.id"
+                             class="px-5 py-3 flex items-start gap-3 hover:bg-gray-50/50 transition-colors"
+                             :class="mounted ? 'opacity-100' : 'opacity-0'"
+                             :style="`transition: opacity 0.5s ease ${0.6 + idx * 0.05}s`">
+                            <!-- Icon -->
+                            <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5"
+                                 :class="activityTypeConfig[act.type]?.color || 'bg-gray-100 text-gray-500'">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" :d="activityTypeConfig[act.type]?.icon || activityTypeConfig.system.icon" />
+                                </svg>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm text-gray-700 truncate">{{ act.subject }}</p>
+                                <div class="flex items-center gap-2 mt-0.5">
+                                    <Link v-if="act.lead" :href="`/secretary/crm/leads/${act.lead_id}`" class="text-[11px] text-teal-600 hover:underline font-medium truncate">
+                                        {{ act.lead?.full_name }}
+                                    </Link>
+                                    <span class="text-[11px] text-gray-400">{{ timeAgo(act.created_at) }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div v-else class="px-5 py-10 text-center">
+                        <div class="w-12 h-12 rounded-xl mx-auto mb-3 flex items-center justify-center bg-gray-50">
+                            <svg class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <p class="text-sm text-gray-500">{{ isRtl ? 'لا توجد نشاطات بعد' : 'No recent activities' }}</p>
                     </div>
                 </div>
             </div>
