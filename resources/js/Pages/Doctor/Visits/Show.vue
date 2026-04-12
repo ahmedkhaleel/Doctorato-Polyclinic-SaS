@@ -187,9 +187,24 @@ const vitalsForm = useForm({
     pain_level: '',
 });
 
+const vitalsSuccess = ref('');
+const vitalsError = ref('');
+
+function toNum(v) {
+    if (v === '' || v === null || v === undefined) return null;
+    const n = Number(v);
+    return isNaN(n) ? null : n;
+}
+
 function submitVitals() {
     vitalsForm.clearErrors();
+    vitalsSuccess.value = '';
+    vitalsError.value = '';
     vitalsForm.processing = true;
+
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content
+        || document.cookie.match(/XSRF-TOKEN=([^;]+)/)?.[1]
+        || '';
 
     fetch(`/doctor/patients/${props.visit.patient_id}/vitals`, {
         method: 'POST',
@@ -197,37 +212,48 @@ function submitVitals() {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
             'X-Requested-With': 'XMLHttpRequest',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '',
+            'X-CSRF-TOKEN': csrfToken,
         },
         credentials: 'same-origin',
         body: JSON.stringify({
             visit_id: vitalsForm.visit_id,
-            bp_systolic: vitalsForm.bp_systolic || null,
-            bp_diastolic: vitalsForm.bp_diastolic || null,
-            heart_rate: vitalsForm.heart_rate || null,
-            temperature: vitalsForm.temperature || null,
-            respiratory_rate: vitalsForm.respiratory_rate || null,
-            spo2: vitalsForm.spo2 || null,
-            weight: vitalsForm.weight || null,
-            height: vitalsForm.height || null,
-            blood_sugar: vitalsForm.blood_sugar || null,
-            pain_level: vitalsForm.pain_level ?? null,
+            bp_systolic: toNum(vitalsForm.bp_systolic),
+            bp_diastolic: toNum(vitalsForm.bp_diastolic),
+            heart_rate: toNum(vitalsForm.heart_rate),
+            temperature: toNum(vitalsForm.temperature),
+            respiratory_rate: toNum(vitalsForm.respiratory_rate),
+            spo2: toNum(vitalsForm.spo2),
+            weight: toNum(vitalsForm.weight),
+            height: toNum(vitalsForm.height),
+            blood_sugar: toNum(vitalsForm.blood_sugar),
+            pain_level: toNum(vitalsForm.pain_level),
         }),
     })
     .then(res => {
         if (res.ok) {
-            showVitalsForm.value = false;
-            // Reload page to get updated vitals data
-            router.reload({ preserveScroll: true });
-        } else {
+            return res.json().then(() => {
+                vitalsSuccess.value = isRtl.value ? 'تم حفظ العلامات الحيوية بنجاح' : 'Vitals saved successfully';
+                showVitalsForm.value = false;
+                vitalsForm.reset();
+                router.reload({ preserveScroll: true });
+            });
+        } else if (res.status === 422) {
             return res.json().then(data => {
                 if (data.errors) {
                     Object.keys(data.errors).forEach(k => vitalsForm.setError(k, data.errors[k][0]));
                 }
-            }).catch(() => {});
+                vitalsError.value = data.message || (isRtl.value ? 'يرجى تصحيح الأخطاء' : 'Please fix the errors');
+            });
+        } else if (res.status === 419) {
+            vitalsError.value = isRtl.value ? 'انتهت صلاحية الجلسة، يرجى تحديث الصفحة' : 'Session expired, please refresh the page';
+        } else {
+            vitalsError.value = isRtl.value ? 'حدث خطأ، حاول مرة أخرى' : 'An error occurred, please try again';
         }
     })
-    .catch(() => {})
+    .catch(err => {
+        console.error('Vitals save error:', err);
+        vitalsError.value = isRtl.value ? 'خطأ في الاتصال، حاول مرة أخرى' : 'Connection error, please try again';
+    })
     .finally(() => { vitalsForm.processing = false; });
 }
 
@@ -864,62 +890,84 @@ function formatDate(date) {
 
                         <!-- Quick Record Form -->
                         <Transition enter-active-class="transition-all duration-300" enter-from-class="opacity-0 -translate-y-2" enter-to-class="opacity-100 translate-y-0">
+                            <!-- Success Message -->
+                            <div v-if="vitalsSuccess" class="mb-2 px-3 py-2 bg-emerald-50 border border-emerald-200 rounded-lg text-xs text-emerald-700 flex items-center gap-2">
+                                <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                {{ vitalsSuccess }}
+                            </div>
+
                             <form v-if="showVitalsForm" @submit.prevent="submitVitals" class="space-y-2.5">
+                                <!-- Error Message -->
+                                <div v-if="vitalsError" class="px-3 py-2 bg-red-50 border border-red-200 rounded-lg text-xs text-red-700 flex items-center gap-2">
+                                    <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                    {{ vitalsError }}
+                                </div>
+
                                 <div class="grid grid-cols-2 gap-2">
                                     <div>
                                         <label class="text-[10px] text-gray-500 block mb-0.5">{{ isRtl ? 'انقباضي' : 'Systolic' }}</label>
-                                        <input v-model.number="vitalsForm.bp_systolic" type="number" placeholder="120" class="w-full px-2 py-1.5 border border-gray-200 rounded-lg text-xs focus:ring-1 focus:ring-[#C4A265] focus:border-[#C4A265]" />
+                                        <input v-model="vitalsForm.bp_systolic" type="number" placeholder="120" class="w-full px-2 py-1.5 border rounded-lg text-xs focus:ring-1 focus:ring-[#C4A265] focus:border-[#C4A265]" :class="vitalsForm.errors.bp_systolic ? 'border-red-400 bg-red-50' : 'border-gray-200'" />
+                                        <p v-if="vitalsForm.errors.bp_systolic" class="text-[10px] text-red-500 mt-0.5">{{ vitalsForm.errors.bp_systolic }}</p>
                                     </div>
                                     <div>
                                         <label class="text-[10px] text-gray-500 block mb-0.5">{{ isRtl ? 'انبساطي' : 'Diastolic' }}</label>
-                                        <input v-model.number="vitalsForm.bp_diastolic" type="number" placeholder="80" class="w-full px-2 py-1.5 border border-gray-200 rounded-lg text-xs focus:ring-1 focus:ring-[#C4A265] focus:border-[#C4A265]" />
+                                        <input v-model="vitalsForm.bp_diastolic" type="number" placeholder="80" class="w-full px-2 py-1.5 border rounded-lg text-xs focus:ring-1 focus:ring-[#C4A265] focus:border-[#C4A265]" :class="vitalsForm.errors.bp_diastolic ? 'border-red-400 bg-red-50' : 'border-gray-200'" />
+                                        <p v-if="vitalsForm.errors.bp_diastolic" class="text-[10px] text-red-500 mt-0.5">{{ vitalsForm.errors.bp_diastolic }}</p>
                                     </div>
                                 </div>
                                 <div class="grid grid-cols-2 gap-2">
                                     <div>
                                         <label class="text-[10px] text-gray-500 block mb-0.5">{{ isRtl ? 'النبض' : 'Heart Rate' }}</label>
-                                        <input v-model.number="vitalsForm.heart_rate" type="number" placeholder="72" class="w-full px-2 py-1.5 border border-gray-200 rounded-lg text-xs focus:ring-1 focus:ring-[#C4A265] focus:border-[#C4A265]" />
+                                        <input v-model="vitalsForm.heart_rate" type="number" placeholder="72" class="w-full px-2 py-1.5 border rounded-lg text-xs focus:ring-1 focus:ring-[#C4A265] focus:border-[#C4A265]" :class="vitalsForm.errors.heart_rate ? 'border-red-400 bg-red-50' : 'border-gray-200'" />
+                                        <p v-if="vitalsForm.errors.heart_rate" class="text-[10px] text-red-500 mt-0.5">{{ vitalsForm.errors.heart_rate }}</p>
                                     </div>
                                     <div>
                                         <label class="text-[10px] text-gray-500 block mb-0.5">{{ isRtl ? 'الحرارة' : 'Temp °C' }}</label>
-                                        <input v-model.number="vitalsForm.temperature" type="number" step="0.1" placeholder="37.0" class="w-full px-2 py-1.5 border border-gray-200 rounded-lg text-xs focus:ring-1 focus:ring-[#C4A265] focus:border-[#C4A265]" />
+                                        <input v-model="vitalsForm.temperature" type="number" step="0.1" placeholder="37.0" class="w-full px-2 py-1.5 border rounded-lg text-xs focus:ring-1 focus:ring-[#C4A265] focus:border-[#C4A265]" :class="vitalsForm.errors.temperature ? 'border-red-400 bg-red-50' : 'border-gray-200'" />
+                                        <p v-if="vitalsForm.errors.temperature" class="text-[10px] text-red-500 mt-0.5">{{ vitalsForm.errors.temperature }}</p>
                                     </div>
                                 </div>
                                 <div class="grid grid-cols-2 gap-2">
                                     <div>
                                         <label class="text-[10px] text-gray-500 block mb-0.5">SpO2 %</label>
-                                        <input v-model.number="vitalsForm.spo2" type="number" placeholder="98" class="w-full px-2 py-1.5 border border-gray-200 rounded-lg text-xs focus:ring-1 focus:ring-[#C4A265] focus:border-[#C4A265]" />
+                                        <input v-model="vitalsForm.spo2" type="number" placeholder="98" class="w-full px-2 py-1.5 border rounded-lg text-xs focus:ring-1 focus:ring-[#C4A265] focus:border-[#C4A265]" :class="vitalsForm.errors.spo2 ? 'border-red-400 bg-red-50' : 'border-gray-200'" />
+                                        <p v-if="vitalsForm.errors.spo2" class="text-[10px] text-red-500 mt-0.5">{{ vitalsForm.errors.spo2 }}</p>
                                     </div>
                                     <div>
                                         <label class="text-[10px] text-gray-500 block mb-0.5">{{ isRtl ? 'التنفس' : 'Resp. Rate' }}</label>
-                                        <input v-model.number="vitalsForm.respiratory_rate" type="number" placeholder="16" class="w-full px-2 py-1.5 border border-gray-200 rounded-lg text-xs focus:ring-1 focus:ring-[#C4A265] focus:border-[#C4A265]" />
+                                        <input v-model="vitalsForm.respiratory_rate" type="number" placeholder="16" class="w-full px-2 py-1.5 border rounded-lg text-xs focus:ring-1 focus:ring-[#C4A265] focus:border-[#C4A265]" :class="vitalsForm.errors.respiratory_rate ? 'border-red-400 bg-red-50' : 'border-gray-200'" />
+                                        <p v-if="vitalsForm.errors.respiratory_rate" class="text-[10px] text-red-500 mt-0.5">{{ vitalsForm.errors.respiratory_rate }}</p>
                                     </div>
                                 </div>
                                 <div class="grid grid-cols-2 gap-2">
                                     <div>
                                         <label class="text-[10px] text-gray-500 block mb-0.5">{{ isRtl ? 'الوزن kg' : 'Weight kg' }}</label>
-                                        <input v-model.number="vitalsForm.weight" type="number" step="0.1" placeholder="70" class="w-full px-2 py-1.5 border border-gray-200 rounded-lg text-xs focus:ring-1 focus:ring-[#C4A265] focus:border-[#C4A265]" />
+                                        <input v-model="vitalsForm.weight" type="number" step="0.1" placeholder="70" class="w-full px-2 py-1.5 border rounded-lg text-xs focus:ring-1 focus:ring-[#C4A265] focus:border-[#C4A265]" :class="vitalsForm.errors.weight ? 'border-red-400 bg-red-50' : 'border-gray-200'" />
+                                        <p v-if="vitalsForm.errors.weight" class="text-[10px] text-red-500 mt-0.5">{{ vitalsForm.errors.weight }}</p>
                                     </div>
                                     <div>
                                         <label class="text-[10px] text-gray-500 block mb-0.5">{{ isRtl ? 'الطول cm' : 'Height cm' }}</label>
-                                        <input v-model.number="vitalsForm.height" type="number" placeholder="170" class="w-full px-2 py-1.5 border border-gray-200 rounded-lg text-xs focus:ring-1 focus:ring-[#C4A265] focus:border-[#C4A265]" />
+                                        <input v-model="vitalsForm.height" type="number" placeholder="170" class="w-full px-2 py-1.5 border rounded-lg text-xs focus:ring-1 focus:ring-[#C4A265] focus:border-[#C4A265]" :class="vitalsForm.errors.height ? 'border-red-400 bg-red-50' : 'border-gray-200'" />
+                                        <p v-if="vitalsForm.errors.height" class="text-[10px] text-red-500 mt-0.5">{{ vitalsForm.errors.height }}</p>
                                     </div>
                                 </div>
                                 <div class="grid grid-cols-2 gap-2">
                                     <div>
                                         <label class="text-[10px] text-gray-500 block mb-0.5">{{ isRtl ? 'السكر mg/dL' : 'Sugar mg/dL' }}</label>
-                                        <input v-model.number="vitalsForm.blood_sugar" type="number" placeholder="100" class="w-full px-2 py-1.5 border border-gray-200 rounded-lg text-xs focus:ring-1 focus:ring-[#C4A265] focus:border-[#C4A265]" />
+                                        <input v-model="vitalsForm.blood_sugar" type="number" placeholder="100" class="w-full px-2 py-1.5 border rounded-lg text-xs focus:ring-1 focus:ring-[#C4A265] focus:border-[#C4A265]" :class="vitalsForm.errors.blood_sugar ? 'border-red-400 bg-red-50' : 'border-gray-200'" />
+                                        <p v-if="vitalsForm.errors.blood_sugar" class="text-[10px] text-red-500 mt-0.5">{{ vitalsForm.errors.blood_sugar }}</p>
                                     </div>
                                     <div>
                                         <label class="text-[10px] text-gray-500 block mb-0.5">{{ isRtl ? 'الألم 0-10' : 'Pain 0-10' }}</label>
-                                        <input v-model.number="vitalsForm.pain_level" type="number" min="0" max="10" placeholder="0" class="w-full px-2 py-1.5 border border-gray-200 rounded-lg text-xs focus:ring-1 focus:ring-[#C4A265] focus:border-[#C4A265]" />
+                                        <input v-model="vitalsForm.pain_level" type="number" min="0" max="10" placeholder="0" class="w-full px-2 py-1.5 border rounded-lg text-xs focus:ring-1 focus:ring-[#C4A265] focus:border-[#C4A265]" :class="vitalsForm.errors.pain_level ? 'border-red-400 bg-red-50' : 'border-gray-200'" />
+                                        <p v-if="vitalsForm.errors.pain_level" class="text-[10px] text-red-500 mt-0.5">{{ vitalsForm.errors.pain_level }}</p>
                                     </div>
                                 </div>
                                 <div class="flex gap-2 pt-1">
                                     <button type="submit" :disabled="vitalsForm.processing" class="flex-1 px-3 py-2 text-xs font-semibold text-white bg-[#C4A265] hover:bg-[#A68B52] rounded-lg transition-colors disabled:opacity-50">
                                         {{ vitalsForm.processing ? '...' : (isRtl ? 'حفظ' : 'Save') }}
                                     </button>
-                                    <button type="button" @click="showVitalsForm = false" class="px-3 py-2 text-xs font-medium text-gray-500 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">
+                                    <button type="button" @click="showVitalsForm = false; vitalsError = ''" class="px-3 py-2 text-xs font-medium text-gray-500 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">
                                         {{ isRtl ? 'إلغاء' : 'Cancel' }}
                                     </button>
                                 </div>
