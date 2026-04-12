@@ -18,6 +18,8 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class SecretaryCrmController extends BaseSecretaryController
 {
@@ -984,6 +986,204 @@ class SecretaryCrmController extends BaseSecretaryController
         return response()->stream($callback, 200, [
             'Content-Type' => 'text/csv; charset=UTF-8',
             'Content-Disposition' => "attachment; filename=\"{$filename}\"",
+        ]);
+    }
+
+    /**
+     * Communication Templates page — browse & use templates.
+     */
+    public function templates(Request $request): Response
+    {
+        $query = CommunicationTemplate::active();
+
+        if ($channel = $request->input('channel')) {
+            $query->forChannel($channel);
+        }
+        if ($category = $request->input('category')) {
+            $query->forCategory($category);
+        }
+        if ($search = $request->input('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('body_en', 'like', "%{$search}%")
+                  ->orWhere('body_ar', 'like', "%{$search}%");
+            });
+        }
+
+        $templates = $query->orderByDesc('usage_count')->get();
+
+        // Get active leads for "send to" selection
+        $myLeads = Lead::assignedTo(auth()->id())
+            ->whereNotIn('status', ['converted', 'lost'])
+            ->orderBy('full_name')
+            ->get(['id', 'full_name', 'phone', 'email', 'status']);
+
+        return Inertia::render('Secretary/CRM/Templates', [
+            'templates' => $templates,
+            'leads' => $myLeads,
+            'filters' => $request->only(['channel', 'category', 'search']),
+        ]);
+    }
+
+    /**
+     * Preview a rendered template with lead data (AJAX).
+     */
+    public function templatePreview(Request $request)
+    {
+        $data = $request->validate([
+            'template_id' => 'required|exists:communication_templates,id',
+            'lead_id' => 'required|exists:leads,id',
+            'language' => 'required|in:en,ar',
+        ]);
+
+        $template = CommunicationTemplate::findOrFail($data['template_id']);
+        $lead = Lead::findOrFail($data['lead_id']);
+
+        if ($lead->assigned_to !== auth()->id()) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
+        $variables = [
+            'name' => $lead->full_name,
+            'first_name' => explode(' ', $lead->full_name)[0] ?? $lead->full_name,
+            'phone' => $lead->phone,
+            'email' => $lead->email ?? '',
+            'clinic_name' => config('app.name', 'Aura Derma Clinic'),
+            'status' => $lead->status,
+        ];
+
+        $rendered = $template->renderBody($data['language'], $variables);
+
+        return response()->json([
+            'rendered' => $rendered,
+            'subject' => $template->subject,
+            'channel' => $template->channel,
+        ]);
+    }
+
+    /**
+     * CRM Reports — advanced analytics.
+     */
+    public function reports(Request $request): Response
+    {
+        $userId = auth()->id();
+        $now = Carbon::now();
+
+        // Period: default last 30 days
+        $period = $request->input('period', '30');
+        $startDate = match ($period) {
+            '7' => $now->copy()->subDays(7)->startOfDay(),
+            '30' => $now->copy()->subDays(30)->startOfDay(),
+            '90' => $now->copy()->subDays(90)->startOfDay(),
+            'year' => $now->copy()->startOfYear(),
+            default => $now->copy()->subDays(30)->startOfDay(),
+        };
+
+        // ── Conversion Funnel ──
+        $funnel = [];
+        $funnelStatuses = ['new', 'contacted', 'qualified', 'appointment_booked', 'consultation_done', 'negotiation', 'converted'];
+        foreach ($funnelStatuses as $status) {
+            $q = Lead::assignedTo($userId)->where('created_at', '>=', $startDate);
+            // For converted/lost, check if they ever reached this status
+            if ($status === 'converted') {
+                $funnel[$status] = (clone $q)->where('status', 'converted')->count();
+            } else {
+                // Count leads currently at OR past this status
+                $statusOrder = array_search($status, $funnelStatuses);
+                $validStatuses = array_slice($funnelStatuses, $statusOrder);
+                $validStatuses[] = 'lost'; // Include lost from any stage
+                $funnel[$status] = (clone $q)->whereIn('status', $validStatuses)->count();
+            }
+        }
+
+        // ── Source Performance ──
+        $sourcePerformance = Lead::assignedTo($userId)
+            ->where('leads.created_at', '>=', $startDate)
+            ->join('lead_sources', 'leads.lead_source_id', '=', 'lead_sources.id')
+            ->selectRaw('lead_sources.name_en, lead_sources.name_ar, lead_sources.color, lead_sources.icon,
+                          count(*) as total,
+                          sum(case when leads.status = "converted" then 1 else 0 end) as converted,
+                          sum(case when leads.status = "lost" then 1 else 0 end) as lost,
+                          avg(leads.score) as avg_score')
+            ->groupBy('lead_sources.id', 'lead_sources.name_en', 'lead_sources.name_ar', 'lead_sources.color', 'lead_sources.icon')
+            ->orderByDesc('total')
+            ->get()
+            ->map(fn ($s) => [
+                'name_en' => $s->name_en,
+                'name_ar' => $s->name_ar,
+                'color' => $s->color,
+                'icon' => $s->icon,
+                'total' => $s->total,
+                'converted' => (int) $s->converted,
+                'lost' => (int) $s->lost,
+                'avg_score' => round($s->avg_score ?? 0),
+                'conversion_rate' => $s->total > 0 ? round(($s->converted / $s->total) * 100, 1) : 0,
+            ]);
+
+        // ── Activity Trend (daily for period) ──
+        $activityDays = min((int) $period === 0 ? 30 : (int) $period, 90);
+        $activityTrend = [];
+        for ($i = $activityDays - 1; $i >= 0; $i--) {
+            $day = $now->copy()->subDays($i);
+            $activityTrend[] = [
+                'date' => $day->format('Y-m-d'),
+                'label' => $day->format('M d'),
+                'label_ar' => $day->locale('ar')->format('d M'),
+                'activities' => LeadActivity::where('performed_by', $userId)
+                    ->whereDate('created_at', $day->format('Y-m-d'))
+                    ->count(),
+                'follow_ups' => LeadFollowUp::forUser($userId)
+                    ->where('status', 'completed')
+                    ->whereDate('completed_at', $day->format('Y-m-d'))
+                    ->count(),
+            ];
+        }
+
+        // ── Response Time (avg hours from lead creation to first contact) ──
+        $avgResponseHours = Lead::assignedTo($userId)
+            ->where('created_at', '>=', $startDate)
+            ->whereNotNull('last_contacted_at')
+            ->selectRaw('AVG(TIMESTAMPDIFF(HOUR, created_at, last_contacted_at)) as avg_hours')
+            ->value('avg_hours');
+
+        // ── Top leads by score ──
+        $topLeads = Lead::assignedTo($userId)
+            ->whereNotIn('status', ['converted', 'lost'])
+            ->orderByDesc('score')
+            ->limit(10)
+            ->get(['id', 'full_name', 'phone', 'status', 'priority', 'score', 'next_follow_up_at']);
+
+        // ── Period comparison ──
+        $prevStart = $startDate->copy()->subDays($activityDays);
+        $currentActivities = LeadActivity::where('performed_by', $userId)
+            ->where('created_at', '>=', $startDate)->count();
+        $prevActivities = LeadActivity::where('performed_by', $userId)
+            ->whereBetween('created_at', [$prevStart, $startDate])->count();
+
+        $currentConverted = Lead::assignedTo($userId)->where('status', 'converted')
+            ->where('converted_at', '>=', $startDate)->count();
+        $prevConverted = Lead::assignedTo($userId)->where('status', 'converted')
+            ->whereBetween('converted_at', [$prevStart, $startDate])->count();
+
+        $currentLeads = Lead::assignedTo($userId)
+            ->where('created_at', '>=', $startDate)->count();
+        $prevLeads = Lead::assignedTo($userId)
+            ->whereBetween('created_at', [$prevStart, $startDate])->count();
+
+        $comparison = [
+            'activities' => ['current' => $currentActivities, 'previous' => $prevActivities],
+            'converted' => ['current' => $currentConverted, 'previous' => $prevConverted],
+            'new_leads' => ['current' => $currentLeads, 'previous' => $prevLeads],
+        ];
+
+        return Inertia::render('Secretary/CRM/Reports', [
+            'funnel' => $funnel,
+            'sourcePerformance' => $sourcePerformance,
+            'activityTrend' => $activityTrend,
+            'avgResponseHours' => round($avgResponseHours ?? 0, 1),
+            'topLeads' => $topLeads,
+            'comparison' => $comparison,
+            'period' => $period,
         ]);
     }
 }

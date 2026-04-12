@@ -168,6 +168,9 @@ Route::middleware('secretary.auth')->group(function () {
     Route::post('/crm/import/preview', [SecretaryCrmController::class, 'importPreview'])->name('secretary.crm.importPreview');
     Route::post('/crm/import/process', [SecretaryCrmController::class, 'importProcess'])->name('secretary.crm.importProcess');
     Route::get('/crm/import/template', [SecretaryCrmController::class, 'importTemplate'])->name('secretary.crm.importTemplate');
+    Route::get('/crm/templates', [SecretaryCrmController::class, 'templates'])->name('secretary.crm.templates');
+    Route::post('/crm/templates/preview', [SecretaryCrmController::class, 'templatePreview'])->name('secretary.crm.templatePreview');
+    Route::get('/crm/reports', [SecretaryCrmController::class, 'reports'])->name('secretary.crm.reports');
 
     // ─── Dental Module ────────────────────────────────────────
     Route::prefix('dental')->middleware('module:dental')->group(function () {
