@@ -486,6 +486,26 @@ const activityStats = computed(() => {
     };
 });
 
+/* ---------- Activity type mini-summary ---------- */
+const activityTypeSummary = computed(() => {
+    const acts = props.activities || [];
+    if (!acts.length) return [];
+    const types = [
+        { key: 'call', en: 'Calls', ar: '\u0645\u0643\u0627\u0644\u0645\u0627\u062A', color: 'bg-green-100 text-green-700', iconColor: 'text-green-500' },
+        { key: 'whatsapp', en: 'WhatsApp', ar: '\u0648\u0627\u062A\u0633\u0627\u0628', color: 'bg-emerald-100 text-emerald-700', iconColor: 'text-emerald-500' },
+        { key: 'email', en: 'Email', ar: '\u0628\u0631\u064A\u062F', color: 'bg-blue-100 text-blue-700', iconColor: 'text-blue-500' },
+        { key: 'sms', en: 'SMS', ar: '\u0631\u0633\u0627\u0626\u0644', color: 'bg-cyan-100 text-cyan-700', iconColor: 'text-cyan-500' },
+        { key: 'meeting', en: 'Meetings', ar: '\u0627\u062C\u062A\u0645\u0627\u0639\u0627\u062A', color: 'bg-amber-100 text-amber-700', iconColor: 'text-amber-500' },
+        { key: 'note', en: 'Notes', ar: '\u0645\u0644\u0627\u062D\u0638\u0627\u062A', color: 'bg-gray-100 text-gray-700', iconColor: 'text-gray-500' },
+    ];
+    return types.map(t => ({ ...t, count: acts.filter(a => a.type === t.key).length })).filter(t => t.count > 0);
+});
+
+function isRecentActivity(act) {
+    if (!act.created_at) return false;
+    return (Date.now() - new Date(act.created_at).getTime()) < 86400000;
+}
+
 // Quick stats
 const leadAge = computed(() => {
     if (!props.lead.created_at) return 0;
@@ -977,6 +997,19 @@ function whatsappUrl(phone) {
                                         </button>
                                     </div>
 
+                                    <!-- Activity Type Mini-Summary Bar -->
+                                    <div v-if="activityTypeSummary.length > 0" class="flex flex-wrap gap-2 mb-4">
+                                        <div v-for="ts in activityTypeSummary" :key="ts.key"
+                                             :class="['inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold', ts.color]">
+                                            <span class="text-sm font-bold">{{ ts.count }}</span>
+                                            <span>{{ isRtl ? ts.ar : ts.en }}</span>
+                                        </div>
+                                        <div class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-teal-50 text-teal-700">
+                                            <span class="text-sm font-bold">{{ (activities || []).length }}</span>
+                                            <span>{{ isRtl ? '\u0625\u062C\u0645\u0627\u0644\u064A' : 'Total' }}</span>
+                                        </div>
+                                    </div>
+
                                     <!-- Activity Timeline (grouped by date) -->
                                     <div v-if="filteredGroupedActivities.length > 0" class="space-y-5">
                                         <div v-for="group in filteredGroupedActivities" :key="group.date">
@@ -1006,7 +1039,8 @@ function whatsappUrl(phone) {
                                                         </svg>
                                                     </div>
                                                     <!-- Content -->
-                                                    <div class="flex-1 bg-white rounded-xl border border-gray-100 p-3.5 hover:shadow-sm transition-shadow">
+                                                    <div :class="['flex-1 rounded-xl border p-3.5 hover:shadow-sm transition-shadow',
+                                                        isRecentActivity(act) ? 'bg-teal-50/40 border-teal-200/60 ring-1 ring-teal-100' : 'bg-white border-gray-100']">
                                                         <div class="flex items-start justify-between gap-2 mb-1">
                                                             <div>
                                                                 <span class="text-sm font-semibold text-gray-800">{{ act.subject || act.type }}</span>
@@ -1014,7 +1048,10 @@ function whatsappUrl(phone) {
                                                                     {{ act.direction === 'inbound' ? (isRtl ? '← وارد' : '← Inbound') : (isRtl ? '→ صادر' : '→ Outbound') }}
                                                                 </span>
                                                             </div>
-                                                            <span class="text-xs text-gray-400 whitespace-nowrap">{{ timeAgo(act.created_at) }}</span>
+                                                            <div class="flex items-center gap-1.5 flex-shrink-0">
+                                                                <span v-if="isRecentActivity(act)" class="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-teal-500 text-white animate-pulse">{{ isRtl ? '\u062C\u062F\u064A\u062F' : 'NEW' }}</span>
+                                                                <span class="text-xs text-gray-400 whitespace-nowrap">{{ timeAgo(act.created_at) }}</span>
+                                                            </div>
                                                         </div>
                                                         <p v-if="act.description" class="text-sm text-gray-600 mb-1.5">{{ act.description }}</p>
                                                         <div class="flex items-center gap-3 text-xs text-gray-400">

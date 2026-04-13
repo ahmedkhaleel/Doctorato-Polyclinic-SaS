@@ -165,6 +165,11 @@ const channelBreakdown = computed(() => {
 });
 
 const channelMax = computed(() => Math.max(...channelBreakdown.value.map(c => c.count), 1));
+
+/* ── Print report ── */
+function printReport() {
+    window.print();
+}
 </script>
 
 <template>
@@ -201,11 +206,17 @@ const channelMax = computed(() => Math.max(...channelBreakdown.value.map(c => c.
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
                     {{ isRtl ? 'مقارنة' : 'Compare' }}
                 </button>
+                <!-- Print Report -->
+                <button @click="printReport"
+                        class="inline-flex items-center gap-2 bg-white/20 backdrop-blur hover:bg-white/30 text-white border border-white/30 rounded-xl py-2.5 px-4 text-sm font-medium transition-all duration-200 print:hidden">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+                    {{ isRtl ? '\u0637\u0628\u0627\u0639\u0629' : 'Print' }}
+                </button>
                 <!-- Export CSV -->
                 <button @click="exportCSV"
-                        class="inline-flex items-center gap-2 bg-white/20 backdrop-blur hover:bg-white/30 text-white border border-white/30 rounded-xl py-2.5 px-4 text-sm font-medium transition-all duration-200">
+                        class="inline-flex items-center gap-2 bg-white/20 backdrop-blur hover:bg-white/30 text-white border border-white/30 rounded-xl py-2.5 px-4 text-sm font-medium transition-all duration-200 print:hidden">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                    {{ isRtl ? 'تصدير' : 'Export' }}
+                    {{ isRtl ? '\u062A\u0635\u062F\u064A\u0631' : 'Export' }}
                 </button>
             </div>
         </div>
@@ -488,6 +499,32 @@ const channelMax = computed(() => Math.max(...channelBreakdown.value.map(c => c.
         </div>
     </div>
 
+    <!-- Print Header (only visible when printing) -->
+    <div class="hidden print:block print:mb-6">
+        <div class="flex items-center justify-between border-b-2 border-teal-500 pb-3 mb-4">
+            <div>
+                <h1 class="text-xl font-bold text-gray-900">{{ isRtl ? '\u062A\u0642\u0631\u064A\u0631 CRM' : 'CRM Report' }}</h1>
+                <p class="text-sm text-gray-500 mt-0.5">{{ isRtl ? '\u0627\u0644\u0641\u062A\u0631\u0629: ' : 'Period: ' }}{{ isRtl ? (periodLabels[selectedPeriod]?.ar || selectedPeriod) : (periodLabels[selectedPeriod]?.en || selectedPeriod) }}</p>
+            </div>
+            <div class="text-right">
+                <p class="text-xs text-gray-400">{{ new Date().toLocaleDateString(isRtl ? 'ar-SA' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' }) }}</p>
+                <p class="text-xs text-gray-400">Aura Derma Clinic</p>
+            </div>
+        </div>
+    </div>
+
 </div>
 </SecretaryLayout>
 </template>
+
+<style>
+@media print {
+    nav, aside, .sidebar { display: none !important; }
+    [data-print-hide] { display: none !important; }
+    [data-print-show] { display: block !important; }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .min-h-screen { min-height: auto !important; padding: 0 !important; }
+    .shadow-sm, .shadow-md, .shadow-xl, .shadow-lg, .shadow-2xl { box-shadow: none !important; }
+    .grid > div { break-inside: avoid; page-break-inside: avoid; }
+}
+</style>

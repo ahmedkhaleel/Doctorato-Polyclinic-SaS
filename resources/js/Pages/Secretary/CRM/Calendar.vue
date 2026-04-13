@@ -476,15 +476,33 @@ function snoozeFollowUp(fuId, key) {
                 </div>
 
                 <!-- Follow-up dots / mini cards -->
-                <div class="space-y-0.5 overflow-hidden" style="max-height: 70px;">
+                <div class="space-y-0.5 overflow-hidden" style="max-height: 85px;">
                     <div v-for="fu in getFilteredFollowUpsForDay(cell.date).slice(0, 3)" :key="fu.id"
-                         :class="['flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium border truncate transition-all duration-150',
+                         class="group/card relative"
+                         @click.stop>
+                        <div :class="['flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium border truncate transition-all duration-150',
                             fu.is_overdue ? 'bg-red-50 text-red-600 border-red-200 animate-pulse' :
                             fu.status === 'completed' ? 'bg-green-50 text-green-600 border-green-200' :
                             fu.status === 'missed' ? 'bg-red-50 text-red-500 border-red-200' :
                             typeConfig[fu.type]?.lightBg || 'bg-gray-50 text-gray-600 border-gray-200']">
-                        <span :class="['w-1.5 h-1.5 rounded-full flex-shrink-0', typeConfig[fu.type]?.color || 'bg-gray-400']"></span>
-                        <span class="truncate">{{ fu.scheduled_time }} {{ fu.lead_name }}</span>
+                            <span :class="['w-1.5 h-1.5 rounded-full flex-shrink-0', typeConfig[fu.type]?.color || 'bg-gray-400']"></span>
+                            <span class="truncate">{{ fu.scheduled_time }} {{ fu.lead_name }}</span>
+                        </div>
+                        <!-- Quick action buttons on hover -->
+                        <div v-if="fu.status === 'pending'"
+                             class="absolute -top-1 z-20 flex items-center gap-0.5 opacity-0 group-hover/card:opacity-100 transition-all duration-150"
+                             :class="isRtl ? 'left-0' : 'right-0'">
+                            <button @click.stop="completeFollowUp(fu.id)"
+                                    class="w-4 h-4 rounded-full bg-green-500 text-white flex items-center justify-center hover:bg-green-600 shadow-sm"
+                                    :title="isRtl ? '\u0625\u0643\u0645\u0627\u0644' : 'Complete'">
+                                <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                            </button>
+                            <button @click.stop="missFollowUp(fu.id)"
+                                    class="w-4 h-4 rounded-full bg-red-500 text-white flex items-center justify-center hover:bg-red-600 shadow-sm"
+                                    :title="isRtl ? '\u0641\u0627\u0626\u062A' : 'Miss'">
+                                <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                            </button>
+                        </div>
                     </div>
                     <div v-if="getFilteredFollowUpsForDay(cell.date).length > 3"
                          class="text-[9px] text-gray-400 font-medium px-1.5">

@@ -368,6 +368,44 @@ function closeQuickView() {
     setTimeout(() => { quickViewLead.value = null; }, 300);
 }
 
+/* ── Quick view actions ── */
+const quickViewNote = ref('');
+const quickViewSavingNote = ref(false);
+const quickViewStatusChanging = ref(false);
+
+function quickViewChangeStatus(newStatus) {
+    if (!quickViewLead.value || quickViewStatusChanging.value) return;
+    quickViewStatusChanging.value = true;
+    router.post(`/secretary/crm/leads/${quickViewLead.value.id}/status`, {
+        status: newStatus,
+    }, {
+        preserveScroll: true,
+        preserveState: true,
+        onSuccess: () => {
+            if (quickViewLead.value) quickViewLead.value.status = newStatus;
+        },
+        onFinish: () => { quickViewStatusChanging.value = false; },
+    });
+}
+
+function quickViewAddNote() {
+    if (!quickViewLead.value || !quickViewNote.value.trim() || quickViewSavingNote.value) return;
+    quickViewSavingNote.value = true;
+    router.post(`/secretary/crm/leads/${quickViewLead.value.id}/activity`, {
+        type: 'note',
+        description: quickViewNote.value.trim(),
+    }, {
+        preserveScroll: true,
+        preserveState: true,
+        onSuccess: () => {
+            quickViewNote.value = '';
+            // Refresh quick view data
+            openQuickView(quickViewLead.value);
+        },
+        onFinish: () => { quickViewSavingNote.value = false; },
+    });
+}
+
 /* ── Keyboard shortcuts ── */
 function handleKeyboard(e) {
     // Don't fire if user is typing in an input
@@ -1181,16 +1219,50 @@ const activeFilterPills = computed(() => {
                             <div class="flex gap-2">
                                 <a :href="phoneLink(quickViewLead.phone)" class="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg bg-teal-50 text-teal-700 text-xs font-medium hover:bg-teal-100 transition-colors">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
-                                    {{ isRtl ? 'اتصال' : 'Call' }}
+                                    {{ isRtl ? '\u0627\u062A\u0635\u0627\u0644' : 'Call' }}
                                 </a>
                                 <a :href="whatsappLink(quickViewLead.phone)" target="_blank" class="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg bg-green-50 text-green-700 text-xs font-medium hover:bg-green-100 transition-colors">
                                     <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>
-                                    {{ isRtl ? 'واتساب' : 'WhatsApp' }}
+                                    {{ isRtl ? '\u0648\u0627\u062A\u0633\u0627\u0628' : 'WhatsApp' }}
                                 </a>
                                 <Link :href="`/secretary/crm/leads/${quickViewLead.id}`" class="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg bg-gray-50 text-gray-700 text-xs font-medium hover:bg-gray-100 transition-colors">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
-                                    {{ isRtl ? 'التفاصيل' : 'Details' }}
+                                    {{ isRtl ? '\u0627\u0644\u062A\u0641\u0627\u0635\u064A\u0644' : 'Details' }}
                                 </Link>
+                            </div>
+
+                            <!-- Quick Status Change -->
+                            <div>
+                                <h4 class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">{{ isRtl ? '\u062A\u063A\u064A\u064A\u0631 \u0627\u0644\u062D\u0627\u0644\u0629' : 'Change Status' }}</h4>
+                                <div class="flex flex-wrap gap-1">
+                                    <button v-for="opt in inlineStatusOptions" :key="opt.value"
+                                        @click="quickViewChangeStatus(opt.value)"
+                                        :disabled="quickViewStatusChanging || quickViewLead.status === opt.value"
+                                        :class="['px-2 py-1 rounded-md text-[10px] font-medium border transition-all duration-150',
+                                            quickViewLead.status === opt.value
+                                                ? 'border-teal-300 bg-teal-50 text-teal-700 ring-1 ring-teal-200'
+                                                : 'border-gray-200 bg-white text-gray-600 hover:border-teal-200 hover:bg-teal-50 hover:text-teal-700',
+                                            quickViewStatusChanging ? 'opacity-50 cursor-not-allowed' : '']">
+                                        {{ isRtl ? opt.ar : opt.en }}
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Quick Note -->
+                            <div>
+                                <h4 class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">{{ isRtl ? '\u0645\u0644\u0627\u062D\u0638\u0629 \u0633\u0631\u064A\u0639\u0629' : 'Quick Note' }}</h4>
+                                <form @submit.prevent="quickViewAddNote" class="flex gap-1.5">
+                                    <input v-model="quickViewNote" type="text"
+                                        class="flex-1 rounded-lg border-gray-200 text-xs py-1.5 px-2.5 focus:ring-teal-500 focus:border-teal-500"
+                                        :placeholder="isRtl ? '\u0627\u0643\u062A\u0628 \u0645\u0644\u0627\u062D\u0638\u0629...' : 'Type a note...'" />
+                                    <button type="submit"
+                                        :disabled="!quickViewNote.trim() || quickViewSavingNote"
+                                        class="px-3 py-1.5 bg-teal-600 text-white text-xs font-medium rounded-lg hover:bg-teal-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-1">
+                                        <svg v-if="quickViewSavingNote" class="w-3 h-3 animate-spin" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+                                        <svg v-else class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+                                        {{ isRtl ? '\u0625\u0636\u0627\u0641\u0629' : 'Add' }}
+                                    </button>
+                                </form>
                             </div>
 
                             <!-- Loading -->
