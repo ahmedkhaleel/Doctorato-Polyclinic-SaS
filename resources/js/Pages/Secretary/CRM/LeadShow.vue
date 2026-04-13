@@ -729,8 +729,84 @@ function handleLeadShowKey(e) {
     if (e.key === 'Escape') {
         if (showScoreBreakdown.value) { showScoreBreakdown.value = false; return; }
         if (showPriorityPicker.value) { showPriorityPicker.value = false; return; }
+        // Close any open custom selects
+        actTypeOpen.value = false;
+        actOutcomeOpen.value = false;
+        actFilterOpen.value = false;
+        fuTypeOpen.value = false;
+        commTemplateOpen.value = false;
     }
 }
+
+/* ── Custom Searchable Select State ──────────────────── */
+// Activity Type dropdown
+const actTypeOpen = ref(false);
+const actTypeRef = ref(null);
+
+// Activity Outcome dropdown
+const actOutcomeOpen = ref(false);
+const actOutcomeRef = ref(null);
+const outcomeOptions = [
+    { value: '', label: { en: '-- Select --', ar: '-- اختر --' }, color: '' },
+    { value: 'answered', label: { en: 'Answered', ar: 'تم الرد' }, color: 'bg-green-100 text-green-700' },
+    { value: 'no_answer', label: { en: 'No Answer', ar: 'لا رد' }, color: 'bg-red-100 text-red-700' },
+    { value: 'busy', label: { en: 'Busy', ar: 'مشغول' }, color: 'bg-amber-100 text-amber-700' },
+    { value: 'voicemail', label: { en: 'Voicemail', ar: 'بريد صوتي' }, color: 'bg-purple-100 text-purple-700' },
+    { value: 'interested', label: { en: 'Interested', ar: 'مهتم' }, color: 'bg-teal-100 text-teal-700' },
+    { value: 'not_interested', label: { en: 'Not Interested', ar: 'غير مهتم' }, color: 'bg-gray-100 text-gray-700' },
+    { value: 'callback', label: { en: 'Callback', ar: 'إعادة اتصال' }, color: 'bg-blue-100 text-blue-700' },
+];
+
+// Activity Filter dropdown
+const actFilterOpen = ref(false);
+const actFilterRef = ref(null);
+const actFilterOptions = computed(() => {
+    const base = [{ value: 'all', label: { en: 'All types', ar: 'كل الأنواع' } }];
+    const types = activityTypes.map(at => ({ value: at.value, label: at.label }));
+    types.push({ value: 'status_change', label: { en: 'Status change', ar: 'تغيير حالة' } });
+    return [...base, ...types];
+});
+
+// Follow-up Type dropdown
+const fuTypeOpen = ref(false);
+const fuTypeRef = ref(null);
+const fuTypeOptions = [
+    { value: 'call', label: { en: 'Call', ar: 'مكالمة' }, icon: 'M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z', color: 'text-green-600 bg-green-100' },
+    { value: 'whatsapp', label: { en: 'WhatsApp', ar: 'واتساب' }, icon: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z', color: 'text-emerald-600 bg-emerald-100' },
+    { value: 'email', label: { en: 'Email', ar: 'بريد' }, icon: 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z', color: 'text-blue-600 bg-blue-100' },
+    { value: 'sms', label: { en: 'SMS', ar: 'رسالة' }, icon: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z', color: 'text-purple-600 bg-purple-100' },
+    { value: 'meeting', label: { en: 'Meeting', ar: 'اجتماع' }, icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z', color: 'text-amber-600 bg-amber-100' },
+];
+
+// Communication Template dropdown
+const commTemplateOpen = ref(false);
+const commTemplateRef = ref(null);
+const commTemplateSearch = ref('');
+const filteredSearchTemplates = computed(() => {
+    const list = filteredTemplates.value || [];
+    if (!commTemplateSearch.value.trim()) return list;
+    const q = commTemplateSearch.value.trim().toLowerCase();
+    return list.filter(t => t.name.toLowerCase().includes(q) || (t.category || '').toLowerCase().includes(q));
+});
+
+// Close custom selects on outside click
+function handleCustomSelectClick(e) {
+    if (actTypeRef.value && !actTypeRef.value.contains(e.target)) actTypeOpen.value = false;
+    if (actOutcomeRef.value && !actOutcomeRef.value.contains(e.target)) actOutcomeOpen.value = false;
+    if (actFilterRef.value && !actFilterRef.value.contains(e.target)) actFilterOpen.value = false;
+    if (fuTypeRef.value && !fuTypeRef.value.contains(e.target)) fuTypeOpen.value = false;
+    if (commTemplateRef.value && !commTemplateRef.value.contains(e.target)) commTemplateOpen.value = false;
+}
+onMounted(() => document.addEventListener('mousedown', handleCustomSelectClick));
+onBeforeUnmount(() => document.removeEventListener('mousedown', handleCustomSelectClick));
+
+/* ── Tab indicator position ──────────────────── */
+const tabIndicatorStyle = computed(() => {
+    const tabs = ['activity', 'followups', 'communication'];
+    const idx = tabs.indexOf(activeTab.value);
+    const pct = (idx / tabs.length) * 100;
+    return { transform: `translateX(${isRtl.value ? -pct : pct}%)`, width: `${100 / tabs.length}%` };
+});
 </script>
 
 <template>
@@ -1194,80 +1270,124 @@ function handleLeadShowKey(e) {
                     >
                         <!-- Tabs -->
                         <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-                            <div class="flex border-b border-gray-200">
-                                <button
-                                    v-for="tab in [
-                                        { key: 'activity', en: 'Activities', ar: 'النشاطات', icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' },
-                                        { key: 'followups', en: 'Follow-ups', ar: 'المتابعات', icon: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z' },
-                                        { key: 'communication', en: 'Communication', ar: 'التواصل', icon: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z' },
-                                    ]"
-                                    :key="tab.key"
-                                    @click="switchTab(tab.key)"
-                                    class="flex-1 flex items-center justify-center gap-2 px-4 py-3.5 text-sm font-medium transition-all duration-200 border-b-2 -mb-px"
-                                    :class="activeTab === tab.key
-                                        ? 'text-teal-700 border-teal-500 bg-teal-50/50'
-                                        : 'text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300'"
-                                >
-                                    <svg class="w-4.5 h-4.5" style="width:18px;height:18px" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="tab.icon"/>
-                                    </svg>
-                                    {{ isRtl ? tab.ar : tab.en }}
-                                </button>
+                            <!-- Tab Header with Animated Indicator -->
+                            <div class="relative">
+                                <div class="flex relative z-10">
+                                    <button
+                                        v-for="tab in [
+                                            { key: 'activity', en: 'Activities', ar: 'النشاطات', icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z', count: (activities || []).length },
+                                            { key: 'followups', en: 'Follow-ups', ar: 'المتابعات', icon: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z', count: pendingFollowUps },
+                                            { key: 'communication', en: 'Communication', ar: 'التواصل', icon: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z', count: 0 },
+                                        ]"
+                                        :key="tab.key"
+                                        @click="switchTab(tab.key)"
+                                        class="flex-1 flex items-center justify-center gap-2 px-4 py-4 text-sm font-semibold transition-all duration-300 relative group"
+                                        :class="activeTab === tab.key
+                                            ? 'text-teal-700'
+                                            : 'text-gray-400 hover:text-gray-600'"
+                                    >
+                                        <div class="flex items-center gap-2 transition-transform duration-300"
+                                             :class="activeTab === tab.key ? 'scale-105' : 'group-hover:scale-105'">
+                                            <svg class="w-[18px] h-[18px] transition-all duration-300"
+                                                 :class="activeTab === tab.key ? 'text-teal-600' : 'text-gray-400 group-hover:text-gray-500'"
+                                                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="tab.icon"/>
+                                            </svg>
+                                            <span>{{ isRtl ? tab.ar : tab.en }}</span>
+                                        </div>
+                                        <!-- Badge count -->
+                                        <span v-if="tab.count > 0"
+                                              class="min-w-[18px] h-[18px] rounded-full text-[10px] font-bold flex items-center justify-center px-1 transition-all duration-300"
+                                              :class="activeTab === tab.key ? 'bg-teal-600 text-white' : 'bg-gray-200 text-gray-500'">
+                                            {{ tab.count > 99 ? '99+' : tab.count }}
+                                        </span>
+                                    </button>
+                                </div>
+                                <!-- Animated sliding indicator -->
+                                <div class="absolute bottom-0 h-[3px] bg-gradient-to-r from-teal-500 to-teal-400 rounded-t-full transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                                     :style="tabIndicatorStyle"></div>
+                                <div class="absolute bottom-0 left-0 right-0 h-px bg-gray-200"></div>
                             </div>
 
                             <!-- Tab Content with animation -->
-                            <div class="transition-all duration-200" :class="tabTransition ? 'opacity-0 translate-y-2' : 'opacity-100 translate-y-0'">
+                            <div class="transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]" :class="tabTransition ? 'opacity-0 translate-y-3 scale-[0.99]' : 'opacity-100 translate-y-0 scale-100'">
 
                                 <!-- ACTIVITY TAB -->
                                 <div v-if="activeTab === 'activity'" class="p-5">
                                     <!-- Activity Log Form -->
-                                    <form @submit.prevent="submitActivity" class="bg-gray-50 rounded-xl p-4 mb-6 border border-gray-100">
-                                        <h3 class="text-sm font-semibold text-gray-700 mb-3">
-                                            {{ isRtl ? 'تسجيل نشاط جديد' : 'Log New Activity' }}
-                                        </h3>
-                                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
-                                            <div>
-                                                <label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'النوع' : 'Type' }}</label>
-                                                <select v-model="activityForm.type" class="w-full rounded-lg border-gray-300 text-sm focus:ring-teal-500 focus:border-teal-500">
-                                                    <option v-for="at in activityTypes" :key="at.value" :value="at.value">
-                                                        {{ isRtl ? at.label.ar : at.label.en }}
-                                                    </option>
-                                                </select>
+                                    <form @submit.prevent="submitActivity" class="bg-gradient-to-br from-gray-50 to-slate-50 rounded-2xl p-5 mb-6 border border-gray-100/80 shadow-sm">
+                                        <div class="flex items-center gap-2.5 mb-4">
+                                            <div class="w-8 h-8 rounded-lg bg-teal-100 flex items-center justify-center">
+                                                <svg class="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
                                             </div>
+                                            <h3 class="text-sm font-bold text-gray-800">
+                                                {{ isRtl ? 'تسجيل نشاط جديد' : 'Log New Activity' }}
+                                            </h3>
+                                        </div>
+                                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                                            <!-- Activity Type - Icon Buttons -->
                                             <div>
-                                                <label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'الاتجاه' : 'Direction' }}</label>
-                                                <div class="flex gap-3 mt-1.5">
-                                                    <label class="flex items-center gap-1.5 text-sm text-gray-600 cursor-pointer">
-                                                        <input type="radio" v-model="activityForm.direction" value="outbound" class="text-teal-600 focus:ring-teal-500"/>
+                                                <label class="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wider">{{ isRtl ? 'النوع' : 'Type' }}</label>
+                                                <div class="grid grid-cols-3 gap-1.5">
+                                                    <button v-for="at in activityTypes" :key="at.value" type="button"
+                                                            @click="activityForm.type = at.value"
+                                                            :class="['flex flex-col items-center gap-1 py-2.5 px-1.5 rounded-xl border-2 text-[10px] font-semibold transition-all duration-200',
+                                                                activityForm.type === at.value
+                                                                    ? 'border-teal-400 bg-teal-50 text-teal-700 shadow-sm scale-[1.02]'
+                                                                    : 'border-gray-200 text-gray-400 hover:border-gray-300 hover:text-gray-500 bg-white']">
+                                                        <div class="w-7 h-7 rounded-lg flex items-center justify-center transition-colors duration-200"
+                                                             :class="activityForm.type === at.value ? (activityTypeColors[at.value] || 'bg-teal-100 text-teal-600') : 'bg-gray-100 text-gray-400'">
+                                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" :d="getActivityIcon(at.value)"/></svg>
+                                                        </div>
+                                                        <span>{{ isRtl ? at.label.ar : at.label.en }}</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <!-- Direction - Toggle Buttons -->
+                                            <div>
+                                                <label class="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wider">{{ isRtl ? 'الاتجاه' : 'Direction' }}</label>
+                                                <div class="flex gap-2">
+                                                    <button type="button" @click="activityForm.direction = 'outbound'"
+                                                            :class="['flex-1 flex items-center justify-center gap-2 py-3 rounded-xl border-2 text-sm font-medium transition-all duration-200',
+                                                                activityForm.direction === 'outbound'
+                                                                    ? 'border-teal-400 bg-teal-50 text-teal-700 shadow-sm'
+                                                                    : 'border-gray-200 text-gray-400 hover:border-gray-300 bg-white']">
+                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                                                         {{ isRtl ? 'صادر' : 'Outbound' }}
-                                                    </label>
-                                                    <label class="flex items-center gap-1.5 text-sm text-gray-600 cursor-pointer">
-                                                        <input type="radio" v-model="activityForm.direction" value="inbound" class="text-teal-600 focus:ring-teal-500"/>
+                                                    </button>
+                                                    <button type="button" @click="activityForm.direction = 'inbound'"
+                                                            :class="['flex-1 flex items-center justify-center gap-2 py-3 rounded-xl border-2 text-sm font-medium transition-all duration-200',
+                                                                activityForm.direction === 'inbound'
+                                                                    ? 'border-blue-400 bg-blue-50 text-blue-700 shadow-sm'
+                                                                    : 'border-gray-200 text-gray-400 hover:border-gray-300 bg-white']">
+                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 16l-4-4m0 0l4-4m-4 4h18"/></svg>
                                                         {{ isRtl ? 'وارد' : 'Inbound' }}
-                                                    </label>
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="mb-3">
-                                            <label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'الوصف' : 'Description' }}</label>
+                                        <!-- Description -->
+                                        <div class="mb-4">
+                                            <label class="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wider">{{ isRtl ? 'الوصف' : 'Description' }}</label>
                                             <textarea
                                                 v-model="activityForm.description"
                                                 rows="2"
                                                 data-activity-desc
-                                                class="w-full rounded-lg border-gray-300 text-sm focus:ring-teal-500 focus:border-teal-500 resize-none"
+                                                class="w-full rounded-xl border-gray-200 bg-white text-sm focus:ring-2 focus:ring-teal-400/30 focus:border-teal-400 resize-none transition-all duration-200 placeholder:text-gray-300"
                                                 :placeholder="isRtl ? 'أضف وصفاً...' : 'Add description...'"
                                             ></textarea>
-                                            <!-- Quick note templates -->
-                                            <div class="flex flex-wrap gap-1.5 mt-2">
-                                                <div v-for="qn in quickNoteTemplates" :key="qn.en" class="inline-flex items-center rounded-lg border border-gray-200 hover:border-teal-300 hover:bg-teal-50 transition-all group/qn">
+                                            <!-- Quick note templates - pill style -->
+                                            <div class="flex flex-wrap gap-1.5 mt-2.5">
+                                                <div v-for="qn in quickNoteTemplates" :key="qn.en"
+                                                     class="inline-flex items-center rounded-full border border-gray-200 hover:border-teal-300 hover:bg-teal-50 transition-all duration-200 group/qn overflow-hidden">
                                                     <button type="button" @click="useQuickNote(qn)"
-                                                        class="text-[11px] px-2 py-1 text-gray-500 group-hover/qn:text-teal-600 transition-colors"
+                                                        class="text-[11px] px-2.5 py-1.5 text-gray-500 group-hover/qn:text-teal-600 transition-colors font-medium"
                                                         :title="isRtl ? 'انقر للتعبئة' : 'Click to fill'">
                                                         {{ isRtl ? qn.ar : qn.en }}
                                                     </button>
                                                     <button type="button" @click="quickLogNote(qn)"
                                                         :disabled="quickLogSaving === (isRtl ? qn.ar : qn.en)"
-                                                        class="px-1.5 py-1 border-s border-gray-200 text-gray-300 hover:text-teal-600 transition-colors"
+                                                        class="px-2 py-1.5 border-s border-gray-200 text-gray-300 hover:text-teal-600 hover:bg-teal-50 transition-all"
                                                         :title="isRtl ? 'حفظ فوري' : 'Quick log'">
                                                         <svg v-if="quickLogSaving === (isRtl ? qn.ar : qn.en)" class="w-3 h-3 animate-spin text-teal-500" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" class="opacity-25"/><path fill="currentColor" class="opacity-75" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
                                                         <svg v-else class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
@@ -1275,25 +1395,45 @@ function handleLeadShowKey(e) {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="mb-3">
-                                            <label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'النتيجة' : 'Outcome' }}</label>
-                                            <select v-model="activityForm.outcome" class="w-full rounded-lg border-gray-300 text-sm focus:ring-teal-500 focus:border-teal-500">
-                                                <option value="">{{ isRtl ? '-- اختر --' : '-- Select --' }}</option>
-                                                <option value="answered">{{ isRtl ? 'تم الرد' : 'Answered' }}</option>
-                                                <option value="no_answer">{{ isRtl ? 'لا رد' : 'No Answer' }}</option>
-                                                <option value="busy">{{ isRtl ? 'مشغول' : 'Busy' }}</option>
-                                                <option value="voicemail">{{ isRtl ? 'بريد صوتي' : 'Voicemail' }}</option>
-                                                <option value="interested">{{ isRtl ? 'مهتم' : 'Interested' }}</option>
-                                                <option value="not_interested">{{ isRtl ? 'غير مهتم' : 'Not Interested' }}</option>
-                                                <option value="callback">{{ isRtl ? 'إعادة اتصال' : 'Callback' }}</option>
-                                            </select>
+                                        <!-- Outcome - Custom visual select -->
+                                        <div class="mb-4" ref="actOutcomeRef">
+                                            <label class="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wider">{{ isRtl ? 'النتيجة' : 'Outcome' }}</label>
+                                            <div class="relative">
+                                                <button type="button" @click="actOutcomeOpen = !actOutcomeOpen"
+                                                        :class="['w-full rounded-xl border bg-white hover:border-gray-300 px-4 py-2.5 text-sm transition-all duration-200 focus:ring-2 focus:ring-teal-400/30 focus:border-teal-400 outline-none flex items-center justify-between',
+                                                            actOutcomeOpen ? 'border-teal-400 ring-2 ring-teal-400/30' : 'border-gray-200']">
+                                                    <span v-if="activityForm.outcome" class="flex items-center gap-2">
+                                                        <span class="w-2 h-2 rounded-full" :class="(outcomeOptions.find(o => o.value === activityForm.outcome)?.color || '').split(' ')[0]"></span>
+                                                        {{ isRtl ? (outcomeOptions.find(o => o.value === activityForm.outcome)?.label.ar || '') : (outcomeOptions.find(o => o.value === activityForm.outcome)?.label.en || '') }}
+                                                    </span>
+                                                    <span v-else class="text-gray-400">{{ isRtl ? '-- اختر النتيجة --' : '-- Select Outcome --' }}</span>
+                                                    <svg :class="['w-4 h-4 text-gray-400 transition-transform duration-200', actOutcomeOpen ? 'rotate-180' : '']" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                                                </button>
+                                                <Transition enter-active-class="transition duration-200 ease-out" enter-from-class="opacity-0 -translate-y-2 scale-95" enter-to-class="opacity-100 translate-y-0 scale-100"
+                                                            leave-active-class="transition duration-150 ease-in" leave-from-class="opacity-100 translate-y-0 scale-100" leave-to-class="opacity-0 -translate-y-2 scale-95">
+                                                    <div v-if="actOutcomeOpen" class="absolute z-50 mt-1.5 w-full bg-white rounded-xl border border-gray-200 shadow-xl shadow-gray-200/50 overflow-hidden">
+                                                        <div class="max-h-52 overflow-y-auto overscroll-contain py-1">
+                                                            <button v-for="opt in outcomeOptions" :key="opt.value" type="button"
+                                                                    @click="activityForm.outcome = opt.value; actOutcomeOpen = false"
+                                                                    :class="['w-full text-start px-4 py-2.5 text-sm transition-colors duration-100 flex items-center gap-3',
+                                                                        activityForm.outcome === opt.value ? 'bg-teal-50 text-teal-700 font-medium' : 'text-gray-600 hover:bg-gray-50']">
+                                                                <span v-if="opt.color" class="w-2.5 h-2.5 rounded-full flex-shrink-0" :class="opt.color.split(' ')[0]"></span>
+                                                                <span>{{ isRtl ? opt.label.ar : opt.label.en }}</span>
+                                                                <svg v-if="activityForm.outcome === opt.value" class="w-4 h-4 text-teal-500 flex-shrink-0 ms-auto" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </Transition>
+                                            </div>
                                         </div>
                                         <div class="flex justify-end">
                                             <button
                                                 type="submit"
                                                 :disabled="activityForm.processing || !activityForm.description"
-                                                class="px-5 py-2 bg-teal-600 text-white text-sm font-medium rounded-lg hover:bg-teal-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                                class="px-6 py-2.5 bg-gradient-to-r from-teal-600 to-teal-500 text-white text-sm font-semibold rounded-xl hover:from-teal-700 hover:to-teal-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-sm hover:shadow-md flex items-center gap-2"
                                             >
+                                                <svg v-if="activityForm.processing" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" class="opacity-25"/><path fill="currentColor" class="opacity-75" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+                                                <svg v-else class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                                                 {{ activityForm.processing
                                                     ? (isRtl ? 'جارٍ الحفظ...' : 'Saving...')
                                                     : (isRtl ? 'حفظ النشاط' : 'Save Activity') }}
@@ -1304,20 +1444,41 @@ function handleLeadShowKey(e) {
                                     <!-- Activity Timeline Filter -->
                                     <div v-if="groupedActivities.length > 0" class="flex items-center gap-2 mb-4 flex-wrap">
                                         <div class="relative flex-1 min-w-[140px]">
-                                            <svg class="w-3.5 h-3.5 text-gray-400 absolute top-1/2 -translate-y-1/2 pointer-events-none" :class="isRtl ? 'right-2.5' : 'left-2.5'" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="m21 21-4.35-4.35"/></svg>
+                                            <svg class="w-3.5 h-3.5 text-gray-400 absolute top-1/2 -translate-y-1/2 pointer-events-none" :class="isRtl ? 'right-3' : 'left-3'" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="m21 21-4.35-4.35"/></svg>
                                             <input v-model="activitySearchQuery" type="text"
                                                 :placeholder="isRtl ? 'بحث في النشاطات...' : 'Search activities...'"
-                                                class="w-full rounded-lg border-gray-200 text-xs py-2 focus:ring-teal-500 focus:border-teal-500"
-                                                :class="isRtl ? 'pr-8 pl-2' : 'pl-8 pr-2'"/>
+                                                class="w-full rounded-xl border-gray-200 bg-white text-xs py-2.5 focus:ring-2 focus:ring-teal-400/30 focus:border-teal-400 transition-all duration-200"
+                                                :class="isRtl ? 'pr-9 pl-3' : 'pl-9 pr-3'"/>
                                         </div>
-                                        <select v-model="activityTypeFilter" class="text-xs rounded-lg border-gray-200 py-2 px-2.5 focus:ring-teal-500 focus:border-teal-500">
-                                            <option value="all">{{ isRtl ? 'كل الأنواع' : 'All types' }}</option>
-                                            <option v-for="at in activityTypes" :key="at.value" :value="at.value">{{ isRtl ? at.label.ar : at.label.en }}</option>
-                                            <option value="status_change">{{ isRtl ? 'تغيير حالة' : 'Status change' }}</option>
-                                        </select>
+                                        <!-- Type Filter - Custom Dropdown -->
+                                        <div ref="actFilterRef" class="relative">
+                                            <button type="button" @click="actFilterOpen = !actFilterOpen"
+                                                    :class="['flex items-center gap-1.5 px-3 py-2.5 rounded-xl border text-xs font-medium transition-all duration-200',
+                                                        actFilterOpen ? 'border-teal-400 bg-teal-50 text-teal-700 ring-2 ring-teal-400/30' : (activityTypeFilter !== 'all' ? 'border-teal-300 bg-teal-50 text-teal-700' : 'border-gray-200 text-gray-500 hover:border-gray-300 bg-white')]">
+                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
+                                                {{ isRtl ? (actFilterOptions.find(o => o.value === activityTypeFilter)?.label.ar || 'كل الأنواع') : (actFilterOptions.find(o => o.value === activityTypeFilter)?.label.en || 'All types') }}
+                                                <svg :class="['w-3 h-3 transition-transform duration-200', actFilterOpen ? 'rotate-180' : '']" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                                            </button>
+                                            <Transition enter-active-class="transition duration-200 ease-out" enter-from-class="opacity-0 -translate-y-2 scale-95" enter-to-class="opacity-100 translate-y-0 scale-100"
+                                                        leave-active-class="transition duration-150 ease-in" leave-from-class="opacity-100 translate-y-0 scale-100" leave-to-class="opacity-0 -translate-y-2 scale-95">
+                                                <div v-if="actFilterOpen" class="absolute z-50 mt-1.5 bg-white rounded-xl border border-gray-200 shadow-xl shadow-gray-200/50 overflow-hidden min-w-[160px]"
+                                                     :class="isRtl ? 'right-0' : 'left-0'">
+                                                    <div class="max-h-52 overflow-y-auto overscroll-contain py-1">
+                                                        <button v-for="opt in actFilterOptions" :key="opt.value" type="button"
+                                                                @click="activityTypeFilter = opt.value; actFilterOpen = false"
+                                                                :class="['w-full text-start px-3.5 py-2 text-xs transition-colors duration-100 flex items-center gap-2',
+                                                                    activityTypeFilter === opt.value ? 'bg-teal-50 text-teal-700 font-semibold' : 'text-gray-600 hover:bg-gray-50']">
+                                                            <span>{{ isRtl ? opt.label.ar : opt.label.en }}</span>
+                                                            <svg v-if="activityTypeFilter === opt.value" class="w-3.5 h-3.5 text-teal-500 flex-shrink-0 ms-auto" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </Transition>
+                                        </div>
                                         <button v-if="activitySearchQuery || activityTypeFilter !== 'all'"
                                             @click="activitySearchQuery = ''; activityTypeFilter = 'all'"
-                                            class="text-[11px] text-red-500 hover:text-red-700 underline">
+                                            class="text-[11px] text-red-500 hover:text-red-700 transition-colors flex items-center gap-1">
+                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
                                             {{ isRtl ? 'مسح' : 'Clear' }}
                                         </button>
                                     </div>
@@ -1428,46 +1589,55 @@ function handleLeadShowKey(e) {
                                         leave-from-class="opacity-100 translate-y-0"
                                         leave-to-class="opacity-0 -translate-y-3"
                                     >
-                                        <form v-if="showFollowUpForm" @submit.prevent="submitFollowUp" class="bg-teal-50 rounded-xl p-4 mb-5 border border-teal-100">
-                                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+                                        <form v-if="showFollowUpForm" @submit.prevent="submitFollowUp" class="bg-gradient-to-br from-teal-50 to-emerald-50/50 rounded-2xl p-5 mb-5 border border-teal-100/80 shadow-sm">
+                                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                                                <!-- Follow-up Type - Icon Select -->
                                                 <div>
-                                                    <label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'النوع' : 'Type' }}</label>
-                                                    <select v-model="followUpForm.type" class="w-full rounded-lg border-gray-300 text-sm focus:ring-teal-500 focus:border-teal-500">
-                                                        <option value="call">{{ isRtl ? 'مكالمة' : 'Call' }}</option>
-                                                        <option value="whatsapp">{{ isRtl ? 'واتساب' : 'WhatsApp' }}</option>
-                                                        <option value="email">{{ isRtl ? 'بريد' : 'Email' }}</option>
-                                                        <option value="sms">{{ isRtl ? 'رسالة' : 'SMS' }}</option>
-                                                        <option value="meeting">{{ isRtl ? 'اجتماع' : 'Meeting' }}</option>
-                                                    </select>
+                                                    <label class="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wider">{{ isRtl ? 'النوع' : 'Type' }}</label>
+                                                    <div class="flex flex-wrap gap-1.5">
+                                                        <button v-for="ft in fuTypeOptions" :key="ft.value" type="button"
+                                                                @click="followUpForm.type = ft.value"
+                                                                :class="['flex items-center gap-1.5 px-3 py-2 rounded-xl border-2 text-xs font-semibold transition-all duration-200',
+                                                                    followUpForm.type === ft.value
+                                                                        ? 'border-teal-400 bg-white text-teal-700 shadow-sm'
+                                                                        : 'border-gray-200 text-gray-400 hover:border-gray-300 bg-white/60']">
+                                                            <div class="w-5 h-5 rounded flex items-center justify-center"
+                                                                 :class="followUpForm.type === ft.value ? ft.color : 'bg-gray-100 text-gray-400'">
+                                                                <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" :d="ft.icon"/></svg>
+                                                            </div>
+                                                            {{ isRtl ? ft.label.ar : ft.label.en }}
+                                                        </button>
+                                                    </div>
                                                 </div>
                                                 <div>
-                                                    <label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'الموعد' : 'Scheduled At' }}</label>
+                                                    <label class="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wider">{{ isRtl ? 'الموعد' : 'Scheduled At' }}</label>
                                                     <input
                                                         type="datetime-local"
                                                         v-model="followUpForm.scheduled_at"
-                                                        class="w-full rounded-lg border-gray-300 text-sm focus:ring-teal-500 focus:border-teal-500"
+                                                        class="w-full rounded-xl border-gray-200 bg-white text-sm focus:ring-2 focus:ring-teal-400/30 focus:border-teal-400 transition-all duration-200"
                                                     />
                                                 </div>
                                             </div>
-                                            <div class="mb-3">
-                                                <label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
+                                            <div class="mb-4">
+                                                <label class="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wider">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
                                                 <textarea
                                                     v-model="followUpForm.notes"
                                                     rows="2"
-                                                    class="w-full rounded-lg border-gray-300 text-sm focus:ring-teal-500 focus:border-teal-500 resize-none"
+                                                    class="w-full rounded-xl border-gray-200 bg-white text-sm focus:ring-2 focus:ring-teal-400/30 focus:border-teal-400 resize-none transition-all duration-200 placeholder:text-gray-300"
                                                     :placeholder="isRtl ? 'ملاحظات اختيارية...' : 'Optional notes...'"
                                                 ></textarea>
                                             </div>
                                             <div class="flex justify-end gap-2">
-                                                <button type="button" @click="showFollowUpForm = false" class="px-4 py-1.5 text-sm text-gray-600 hover:text-gray-800 transition-colors">
+                                                <button type="button" @click="showFollowUpForm = false" class="px-4 py-2 text-sm text-gray-500 hover:text-gray-700 rounded-xl hover:bg-gray-100 transition-all duration-200">
                                                     {{ isRtl ? 'إلغاء' : 'Cancel' }}
                                                 </button>
                                                 <button
                                                     type="submit"
                                                     :disabled="followUpForm.processing || !followUpForm.scheduled_at"
-                                                    class="px-5 py-1.5 bg-teal-600 text-white text-sm font-medium rounded-lg hover:bg-teal-700 disabled:opacity-50 transition-colors"
+                                                    class="px-6 py-2 bg-gradient-to-r from-teal-600 to-teal-500 text-white text-sm font-semibold rounded-xl hover:from-teal-700 hover:to-teal-600 disabled:opacity-50 transition-all duration-200 shadow-sm flex items-center gap-2"
                                                 >
-                                                    {{ followUpForm.processing ? (isRtl ? 'جارٍ الحفظ...' : 'Saving...') : (isRtl ? 'حفظ' : 'Save') }}
+                                                    <svg v-if="followUpForm.processing" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" class="opacity-25"/><path fill="currentColor" class="opacity-75" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+                                                    {{ followUpForm.processing ? (isRtl ? 'جارٍ الحفظ...' : 'Saving...') : (isRtl ? 'حفظ المتابعة' : 'Save Follow-up') }}
                                                 </button>
                                             </div>
                                         </form>
@@ -1704,19 +1874,46 @@ function handleLeadShowKey(e) {
                                             </div>
                                         </div>
 
-                                        <!-- Template Selector -->
-                                        <div>
-                                            <label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'القالب' : 'Template' }}</label>
-                                            <select
-                                                v-model="quickSendForm.template_id"
-                                                class="w-full rounded-lg border-gray-300 text-sm focus:ring-teal-500 focus:border-teal-500"
-                                            >
-                                                <option value="">{{ isRtl ? '-- اختر قالب --' : '-- Select Template --' }}</option>
-                                                <option v-for="tmpl in filteredTemplates" :key="tmpl.id" :value="tmpl.id">
-                                                    {{ tmpl.name }}
-                                                    <template v-if="tmpl.category"> ({{ tmpl.category }})</template>
-                                                </option>
-                                            </select>
+                                        <!-- Template Selector - Searchable -->
+                                        <div ref="commTemplateRef" class="relative">
+                                            <label class="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wider">{{ isRtl ? 'القالب' : 'Template' }}</label>
+                                            <button type="button" @click="commTemplateOpen = !commTemplateOpen; commTemplateSearch = ''; if (commTemplateOpen) $nextTick(() => { commTemplateRef?.querySelector?.('input')?.focus(); })"
+                                                    :class="['w-full rounded-xl border bg-white hover:border-gray-300 px-4 py-2.5 text-sm transition-all duration-200 focus:ring-2 focus:ring-teal-400/30 focus:border-teal-400 outline-none flex items-center justify-between',
+                                                        commTemplateOpen ? 'border-teal-400 ring-2 ring-teal-400/30' : 'border-gray-200']">
+                                                <span :class="quickSendForm.template_id ? 'text-gray-800' : 'text-gray-400'">
+                                                    {{ quickSendForm.template_id ? ((filteredTemplates || []).find(t => t.id == quickSendForm.template_id)?.name || '') : (isRtl ? '-- اختر قالب --' : '-- Select Template --') }}
+                                                </span>
+                                                <svg :class="['w-4 h-4 text-gray-400 transition-transform duration-200', commTemplateOpen ? 'rotate-180' : '']" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                                            </button>
+                                            <Transition enter-active-class="transition duration-200 ease-out" enter-from-class="opacity-0 -translate-y-2 scale-95" enter-to-class="opacity-100 translate-y-0 scale-100"
+                                                        leave-active-class="transition duration-150 ease-in" leave-from-class="opacity-100 translate-y-0 scale-100" leave-to-class="opacity-0 -translate-y-2 scale-95">
+                                                <div v-if="commTemplateOpen" class="absolute z-50 mt-1.5 w-full bg-white rounded-xl border border-gray-200 shadow-xl shadow-gray-200/50 overflow-hidden">
+                                                    <div class="p-2 border-b border-gray-100">
+                                                        <div class="relative">
+                                                            <svg class="w-4 h-4 text-gray-400 absolute top-1/2 -translate-y-1/2 pointer-events-none" :class="isRtl ? 'right-3' : 'left-3'" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="m21 21-4.35-4.35"/></svg>
+                                                            <input v-model="commTemplateSearch" type="text"
+                                                                   :placeholder="isRtl ? 'ابحث عن القالب...' : 'Search templates...'"
+                                                                   class="w-full rounded-lg border border-gray-200 text-sm py-2.5 outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-400/30"
+                                                                   :class="isRtl ? 'pr-9 pl-3' : 'pl-9 pr-3'" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="max-h-52 overflow-y-auto overscroll-contain">
+                                                        <button v-for="tmpl in filteredSearchTemplates" :key="tmpl.id" type="button"
+                                                                @click="quickSendForm.template_id = tmpl.id; commTemplateOpen = false"
+                                                                :class="['w-full text-start px-4 py-2.5 text-sm transition-colors duration-100 flex items-center justify-between',
+                                                                    quickSendForm.template_id == tmpl.id ? 'bg-teal-50 text-teal-700 font-medium' : 'text-gray-600 hover:bg-gray-50']">
+                                                            <div class="min-w-0">
+                                                                <div class="truncate">{{ tmpl.name }}</div>
+                                                                <div v-if="tmpl.category" class="text-[10px] text-gray-400 mt-0.5">{{ tmpl.category }}</div>
+                                                            </div>
+                                                            <svg v-if="quickSendForm.template_id == tmpl.id" class="w-4 h-4 text-teal-500 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                                        </button>
+                                                        <div v-if="filteredSearchTemplates.length === 0" class="px-4 py-6 text-center text-xs text-gray-400">
+                                                            {{ isRtl ? 'لا توجد قوالب' : 'No templates found' }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </Transition>
                                         </div>
 
                                         <!-- Message Preview -->
