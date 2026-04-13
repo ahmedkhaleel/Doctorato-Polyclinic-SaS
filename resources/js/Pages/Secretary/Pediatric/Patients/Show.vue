@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref, onMounted } from 'vue';
-import { Link, usePage } from '@inertiajs/vue3';
+import { Link, usePage, router } from '@inertiajs/vue3';
 import SecretaryLayout from '@/Layouts/SecretaryLayout.vue';
 
 defineOptions({ layout: SecretaryLayout });
@@ -10,6 +10,7 @@ const isRtl = computed(() => (page.props.dir || 'rtl') === 'rtl');
 
 const props = defineProps({
     patient: Object,
+    familyHistory: { type: Array, default: () => [] },
 });
 
 const activeTab = ref('info');
@@ -78,6 +79,35 @@ const complicationLabels = computed(() => ({
     nicu: isRtl.value ? 'حضانة' : 'NICU',
     none: isRtl.value ? 'لا يوجد' : 'None',
 }));
+
+// Family history form
+const showFamilyForm = ref(false);
+const familyForm = ref({ condition: '', relation: '', notes: '' });
+const familySaving = ref(false);
+const familyDeleting = ref(null);
+
+function submitFamilyHistory() {
+    familySaving.value = true;
+    router.post(`/secretary/pediatric/patients/${props.patient.id}/family-history`, familyForm.value, {
+        preserveScroll: true,
+        onSuccess: () => {
+            familyForm.value = { condition: '', relation: '', notes: '' };
+            showFamilyForm.value = false;
+            familySaving.value = false;
+        },
+        onError: () => { familySaving.value = false; },
+    });
+}
+
+function deleteFamilyHistory(id) {
+    const msg = isRtl.value ? 'هل أنت متأكد من حذف هذا السجل؟' : 'Are you sure you want to delete this record?';
+    if (!confirm(msg)) return;
+    familyDeleting.value = id;
+    router.post(`/secretary/pediatric/family-history/${id}/delete`, {}, {
+        preserveScroll: true,
+        onFinish: () => { familyDeleting.value = null; },
+    });
+}
 
 const headerLoaded = ref(false);
 const contentLoaded = ref(false);
@@ -155,6 +185,7 @@ onMounted(() => {
                     v-for="tab in [
                         { id: 'info', label: isRtl ? 'المعلومات' : 'Information' },
                         { id: 'birth', label: isRtl ? 'تاريخ الولادة' : 'Birth History' },
+                        { id: 'family', label: isRtl ? 'التاريخ العائلي' : 'Family History' },
                         { id: 'visits', label: isRtl ? 'الزيارات' : 'Visits' },
                     ]"
                     :key="tab.id"
@@ -333,18 +364,24 @@ onMounted(() => {
                     </div>
                 </div>
 
-                <!-- Family History -->
-                <div v-if="patient.family_history && patient.family_history.length" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
-                    <div class="px-5 py-4 border-b border-gray-100 bg-gradient-to-r from-amber-50/50 to-transparent">
+                <!-- Family History Quick Summary (full management in Family History tab) -->
+                <div v-if="familyHistory && familyHistory.length" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
+                    <div class="px-5 py-4 border-b border-gray-100 bg-gradient-to-r from-amber-50/50 to-transparent flex items-center justify-between">
                         <h3 class="font-bold text-gray-900 flex items-center gap-2">
                             <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
                             {{ isRtl ? 'التاريخ العائلي' : 'Family History' }}
                         </h3>
+                        <button
+                            @click="activeTab = 'family'"
+                            class="text-xs font-semibold text-[#0d9488] hover:text-[#0f766e] transition-colors"
+                        >
+                            {{ isRtl ? 'عرض الكل' : 'View All' }}
+                        </button>
                     </div>
                     <div class="p-5 space-y-3">
                         <div
-                            v-for="(item, idx) in patient.family_history"
-                            :key="idx"
+                            v-for="(item, idx) in familyHistory"
+                            :key="item.id"
                             class="flex items-start gap-3 p-3 rounded-xl bg-gray-50/80"
                         >
                             <div class="w-8 h-8 rounded-lg bg-amber-50 flex items-center justify-center flex-shrink-0 mt-0.5">
@@ -359,6 +396,145 @@ onMounted(() => {
                                 </div>
                                 <p v-if="item.details" class="text-xs text-gray-500 mt-1">{{ item.details }}</p>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: Family History -->
+            <div v-show="activeTab === 'family'" class="space-y-6">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
+                    <div class="px-5 py-4 border-b border-gray-100 bg-gradient-to-r from-[#0d9488]/5 to-transparent flex items-center justify-between">
+                        <h3 class="font-bold text-gray-900 flex items-center gap-2">
+                            <svg class="w-5 h-5 text-[#0d9488]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+                            {{ isRtl ? 'التاريخ العائلي' : 'Family History' }}
+                        </h3>
+                        <button
+                            v-if="!showFamilyForm"
+                            @click="showFamilyForm = true"
+                            class="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold text-white bg-[#0d9488] hover:bg-[#0f766e] rounded-xl transition-all shadow-sm"
+                        >
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+                            {{ isRtl ? 'إضافة' : 'Add' }}
+                        </button>
+                    </div>
+
+                    <!-- Inline Add Form -->
+                    <transition
+                        enter-active-class="transition-all duration-300 ease-out"
+                        enter-from-class="opacity-0 -translate-y-2 max-h-0"
+                        enter-to-class="opacity-100 translate-y-0 max-h-96"
+                        leave-active-class="transition-all duration-200 ease-in"
+                        leave-from-class="opacity-100 translate-y-0 max-h-96"
+                        leave-to-class="opacity-0 -translate-y-2 max-h-0"
+                    >
+                        <div v-if="showFamilyForm" class="px-5 py-4 bg-[#0d9488]/5 border-b border-[#0d9488]/10">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-[10px] text-gray-500 font-semibold uppercase mb-1">{{ isRtl ? 'الحالة / المرض' : 'Condition' }} *</label>
+                                    <input
+                                        v-model="familyForm.condition"
+                                        type="text"
+                                        :placeholder="isRtl ? 'مثال: السكري' : 'e.g. Diabetes'"
+                                        class="w-full px-3 py-2 text-sm rounded-xl border border-gray-200 focus:border-[#0d9488] focus:ring-2 focus:ring-[#0d9488]/20 outline-none transition-all"
+                                    />
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] text-gray-500 font-semibold uppercase mb-1">{{ isRtl ? 'صلة القرابة' : 'Relation' }} *</label>
+                                    <input
+                                        v-model="familyForm.relation"
+                                        type="text"
+                                        :placeholder="isRtl ? 'مثال: الأب' : 'e.g. Father'"
+                                        class="w-full px-3 py-2 text-sm rounded-xl border border-gray-200 focus:border-[#0d9488] focus:ring-2 focus:ring-[#0d9488]/20 outline-none transition-all"
+                                    />
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                <label class="block text-[10px] text-gray-500 font-semibold uppercase mb-1">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
+                                <textarea
+                                    v-model="familyForm.notes"
+                                    rows="2"
+                                    :placeholder="isRtl ? 'ملاحظات إضافية (اختياري)' : 'Additional notes (optional)'"
+                                    class="w-full px-3 py-2 text-sm rounded-xl border border-gray-200 focus:border-[#0d9488] focus:ring-2 focus:ring-[#0d9488]/20 outline-none transition-all resize-none"
+                                ></textarea>
+                            </div>
+                            <div class="flex items-center gap-2 mt-3">
+                                <button
+                                    @click="submitFamilyHistory"
+                                    :disabled="familySaving || !familyForm.condition || !familyForm.relation"
+                                    class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-[#0d9488] hover:bg-[#0f766e] disabled:opacity-50 disabled:cursor-not-allowed rounded-xl transition-all shadow-sm"
+                                >
+                                    <svg v-if="familySaving" class="w-3.5 h-3.5 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+                                    {{ isRtl ? 'حفظ' : 'Save' }}
+                                </button>
+                                <button
+                                    @click="showFamilyForm = false; familyForm = { condition: '', relation: '', notes: '' }"
+                                    class="inline-flex items-center px-4 py-2 text-xs font-semibold text-gray-600 bg-white hover:bg-gray-50 rounded-xl border border-gray-200 transition-all"
+                                >
+                                    {{ isRtl ? 'إلغاء' : 'Cancel' }}
+                                </button>
+                            </div>
+                        </div>
+                    </transition>
+
+                    <!-- Records List -->
+                    <div class="p-5">
+                        <div v-if="familyHistory && familyHistory.length" class="space-y-3">
+                            <transition-group
+                                enter-active-class="transition-all duration-300 ease-out"
+                                enter-from-class="opacity-0 translate-y-2"
+                                enter-to-class="opacity-100 translate-y-0"
+                                leave-active-class="transition-all duration-200 ease-in"
+                                leave-from-class="opacity-100 translate-y-0"
+                                leave-to-class="opacity-0 translate-y-2"
+                            >
+                                <div
+                                    v-for="(item, idx) in familyHistory"
+                                    :key="item.id"
+                                    class="flex items-start gap-3 p-3 rounded-xl bg-gray-50/80 hover:bg-gray-100/80 transition-colors group"
+                                >
+                                    <div class="w-8 h-8 rounded-lg bg-[#0d9488]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                        <span class="text-xs font-bold text-[#0d9488]">{{ idx + 1 }}</span>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm font-semibold text-gray-800">{{ item.condition }}</p>
+                                        <div v-if="item.affected_members?.length" class="flex flex-wrap gap-1.5 mt-1.5">
+                                            <span
+                                                v-for="member in item.affected_members"
+                                                :key="member"
+                                                class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-[#0d9488]/10 text-[#0d9488]"
+                                            >
+                                                {{ member }}
+                                            </span>
+                                        </div>
+                                        <p v-if="item.details" class="text-xs text-gray-500 mt-1">{{ item.details }}</p>
+                                    </div>
+                                    <button
+                                        @click="deleteFamilyHistory(item.id)"
+                                        :disabled="familyDeleting === item.id"
+                                        class="flex-shrink-0 opacity-0 group-hover:opacity-100 p-1.5 rounded-lg text-red-400 hover:text-red-600 hover:bg-red-50 transition-all"
+                                        :title="isRtl ? 'حذف' : 'Delete'"
+                                    >
+                                        <svg v-if="familyDeleting === item.id" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+                                        <svg v-else class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                                    </button>
+                                </div>
+                            </transition-group>
+                        </div>
+
+                        <!-- Empty State -->
+                        <div v-else class="py-10 text-center">
+                            <div class="w-14 h-14 mx-auto mb-3 rounded-2xl bg-gray-50 flex items-center justify-center">
+                                <svg class="w-7 h-7 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+                            </div>
+                            <p class="text-sm font-semibold text-gray-500">{{ isRtl ? 'لا يوجد تاريخ عائلي مسجل' : 'No family history recorded' }}</p>
+                            <button
+                                @click="showFamilyForm = true"
+                                class="inline-flex items-center gap-1.5 mt-3 px-4 py-2 text-sm font-semibold text-[#0d9488] bg-[#0d9488]/5 hover:bg-[#0d9488]/10 rounded-xl transition-colors"
+                            >
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+                                {{ isRtl ? 'إضافة تاريخ عائلي' : 'Add Family History' }}
+                            </button>
                         </div>
                     </div>
                 </div>

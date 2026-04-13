@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, watch, onMounted } from 'vue';
+import { computed, ref, watch, onMounted, nextTick } from 'vue';
 import { Link, router, usePage } from '@inertiajs/vue3';
 import SecretaryLayout from '@/Layouts/SecretaryLayout.vue';
 
@@ -33,12 +33,61 @@ watch(search, () => {
 
 watch(statusFilter, () => applyFilters());
 
+// ─── Status Update Logic ────────────────────────────────────
+const editingId = ref(null);
+const editForm = ref({ status: '', given_date: '', notes: '' });
+const submitting = ref(false);
+
+const statusOptions = [
+    { value: 'scheduled', labelAr: 'مجدول', labelEn: 'Scheduled' },
+    { value: 'given', labelAr: 'تم إعطاؤه', labelEn: 'Given' },
+    { value: 'missed', labelAr: 'فائت', labelEn: 'Missed' },
+    { value: 'postponed', labelAr: 'مؤجل', labelEn: 'Postponed' },
+    { value: 'contraindicated', labelAr: 'موانع', labelEn: 'Contraindicated' },
+];
+
+function openStatusEdit(vaccination) {
+    editingId.value = vaccination.id;
+    editForm.value = {
+        status: vaccination.status,
+        given_date: vaccination.given_date || '',
+        notes: vaccination.notes || '',
+    };
+}
+
+function cancelEdit() {
+    editingId.value = null;
+    editForm.value = { status: '', given_date: '', notes: '' };
+}
+
+function submitStatusUpdate(vaccinationId) {
+    submitting.value = true;
+    router.post(`/secretary/pediatric/vaccinations/${vaccinationId}/status`, {
+        status: editForm.value.status,
+        given_date: editForm.value.status === 'given' ? editForm.value.given_date : null,
+        notes: editForm.value.notes || null,
+    }, {
+        preserveState: true,
+        preserveScroll: true,
+        onSuccess: () => {
+            editingId.value = null;
+            editForm.value = { status: '', given_date: '', notes: '' };
+        },
+        onFinish: () => {
+            submitting.value = false;
+        },
+    });
+}
+
+// ─── Status Colors & Labels ─────────────────────────────────
 const vaccinationStatusColors = {
     given: 'bg-emerald-50 text-emerald-700 border-emerald-200',
     overdue: 'bg-red-50 text-red-700 border-red-200',
     upcoming: 'bg-blue-50 text-blue-700 border-blue-200',
-    scheduled: 'bg-amber-50 text-amber-700 border-amber-200',
-    missed: 'bg-gray-50 text-gray-500 border-gray-200',
+    scheduled: 'bg-blue-50 text-blue-700 border-blue-200',
+    missed: 'bg-red-50 text-red-600 border-red-200',
+    postponed: 'bg-amber-50 text-amber-700 border-amber-200',
+    contraindicated: 'bg-gray-100 text-gray-500 border-gray-200',
 };
 
 const vaccinationStatusLabels = computed(() => ({
@@ -47,6 +96,8 @@ const vaccinationStatusLabels = computed(() => ({
     upcoming: isRtl.value ? 'قادم' : 'Upcoming',
     scheduled: isRtl.value ? 'مجدول' : 'Scheduled',
     missed: isRtl.value ? 'فائت' : 'Missed',
+    postponed: isRtl.value ? 'مؤجل' : 'Postponed',
+    contraindicated: isRtl.value ? 'موانع' : 'Contraindicated',
 }));
 
 const statCards = computed(() => [
@@ -154,6 +205,8 @@ onMounted(() => {
                         <option value="upcoming">{{ isRtl ? 'قادم' : 'Upcoming' }}</option>
                         <option value="scheduled">{{ isRtl ? 'مجدول' : 'Scheduled' }}</option>
                         <option value="missed">{{ isRtl ? 'فائت' : 'Missed' }}</option>
+                        <option value="postponed">{{ isRtl ? 'مؤجل' : 'Postponed' }}</option>
+                        <option value="contraindicated">{{ isRtl ? 'موانع' : 'Contraindicated' }}</option>
                     </select>
                 </div>
             </div>
@@ -185,6 +238,12 @@ onMounted(() => {
             </div>
         </div>
 
+        <!-- Success Flash -->
+        <div v-if="page.props.flash?.success" class="mb-4 p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm font-medium flex items-center gap-2">
+            <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+            {{ page.props.flash.success }}
+        </div>
+
         <!-- VACCINATION LIST -->
         <div class="space-y-3 transition-all duration-500" :class="cardsLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'">
             <div
@@ -192,9 +251,11 @@ onMounted(() => {
                 :key="vaccination.id"
                 class="bg-white rounded-2xl shadow-sm border border-gray-100/80 hover:shadow-md transition-all duration-300 overflow-hidden"
                 :class="{
-                    'border-l-4 ltr:border-l-4 rtl:border-r-4 ltr:border-l-red-400 rtl:border-r-red-400': vaccination.status === 'overdue',
-                    'border-l-4 ltr:border-l-4 rtl:border-r-4 ltr:border-l-emerald-400 rtl:border-r-emerald-400': vaccination.status === 'given',
-                    'border-l-4 ltr:border-l-4 rtl:border-r-4 ltr:border-l-blue-400 rtl:border-r-blue-400': vaccination.status === 'upcoming',
+                    'ltr:border-l-4 rtl:border-r-4 ltr:border-l-red-400 rtl:border-r-red-400': vaccination.status === 'overdue' || vaccination.status === 'missed',
+                    'ltr:border-l-4 rtl:border-r-4 ltr:border-l-emerald-400 rtl:border-r-emerald-400': vaccination.status === 'given',
+                    'ltr:border-l-4 rtl:border-r-4 ltr:border-l-blue-400 rtl:border-r-blue-400': vaccination.status === 'upcoming' || vaccination.status === 'scheduled',
+                    'ltr:border-l-4 rtl:border-r-4 ltr:border-l-amber-400 rtl:border-r-amber-400': vaccination.status === 'postponed',
+                    'ltr:border-l-4 rtl:border-r-4 ltr:border-l-gray-300 rtl:border-r-gray-300': vaccination.status === 'contraindicated',
                 }"
                 :style="{ transitionDelay: `${idx * 40}ms` }"
             >
@@ -205,15 +266,16 @@ onMounted(() => {
                             class="w-11 h-11 rounded-xl flex-shrink-0 flex items-center justify-center"
                             :class="{
                                 'bg-emerald-100 text-emerald-600': vaccination.status === 'given',
-                                'bg-red-100 text-red-600': vaccination.status === 'overdue',
-                                'bg-blue-100 text-blue-600': vaccination.status === 'upcoming',
-                                'bg-amber-100 text-amber-600': vaccination.status === 'scheduled',
-                                'bg-gray-100 text-gray-500': vaccination.status === 'missed',
+                                'bg-red-100 text-red-600': vaccination.status === 'overdue' || vaccination.status === 'missed',
+                                'bg-blue-100 text-blue-600': vaccination.status === 'upcoming' || vaccination.status === 'scheduled',
+                                'bg-amber-100 text-amber-600': vaccination.status === 'postponed',
+                                'bg-gray-100 text-gray-500': vaccination.status === 'contraindicated',
                             }"
                         >
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path v-if="vaccination.status === 'given'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                <path v-else-if="vaccination.status === 'overdue'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                <path v-else-if="vaccination.status === 'overdue' || vaccination.status === 'missed'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                <path v-else-if="vaccination.status === 'contraindicated'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
                                 <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                         </div>
@@ -259,13 +321,90 @@ onMounted(() => {
                         <p class="text-sm font-semibold text-emerald-600 mt-0.5">{{ formatDate(vaccination.given_date) }}</p>
                     </div>
 
-                    <!-- Status Badge -->
-                    <span
-                        class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold border self-start sm:self-center"
+                    <!-- Status Badge (clickable to edit) -->
+                    <button
+                        v-if="editingId !== vaccination.id"
+                        @click="openStatusEdit(vaccination)"
+                        class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold border self-start sm:self-center cursor-pointer hover:ring-2 hover:ring-offset-1 hover:ring-[#0d9488]/30 transition-all group"
                         :class="vaccinationStatusColors[vaccination.status] || 'bg-gray-50 text-gray-500 border-gray-200'"
+                        :title="isRtl ? 'انقر لتغيير الحالة' : 'Click to change status'"
                     >
                         {{ vaccinationStatusLabels[vaccination.status] || vaccination.status }}
-                    </span>
+                        <svg class="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                    </button>
+                </div>
+
+                <!-- Inline Status Edit Panel -->
+                <div
+                    v-if="editingId === vaccination.id"
+                    class="border-t border-gray-100 bg-gray-50/50 p-4 sm:p-5"
+                >
+                    <div class="flex flex-col sm:flex-row sm:items-end gap-3 sm:gap-4">
+                        <!-- Status Select -->
+                        <div class="flex-1 min-w-0 max-w-[200px]">
+                            <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1.5">
+                                {{ isRtl ? 'الحالة' : 'Status' }}
+                            </label>
+                            <select
+                                v-model="editForm.status"
+                                class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#0d9488]/40 focus:border-[#0d9488] transition bg-white"
+                            >
+                                <option
+                                    v-for="opt in statusOptions"
+                                    :key="opt.value"
+                                    :value="opt.value"
+                                >
+                                    {{ isRtl ? opt.labelAr : opt.labelEn }}
+                                </option>
+                            </select>
+                        </div>
+
+                        <!-- Given Date (shown only when status = given) -->
+                        <div v-if="editForm.status === 'given'" class="flex-1 min-w-0 max-w-[200px]">
+                            <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1.5">
+                                {{ isRtl ? 'تاريخ الإعطاء' : 'Given Date' }}
+                            </label>
+                            <input
+                                v-model="editForm.given_date"
+                                type="date"
+                                class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#0d9488]/40 focus:border-[#0d9488] transition bg-white"
+                            />
+                        </div>
+
+                        <!-- Notes -->
+                        <div class="flex-1 min-w-0">
+                            <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1.5">
+                                {{ isRtl ? 'ملاحظات' : 'Notes' }}
+                            </label>
+                            <input
+                                v-model="editForm.notes"
+                                type="text"
+                                :placeholder="isRtl ? 'ملاحظات اختيارية...' : 'Optional notes...'"
+                                maxlength="500"
+                                class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#0d9488]/40 focus:border-[#0d9488] transition bg-white placeholder-gray-300"
+                            />
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="flex items-center gap-2 flex-shrink-0">
+                            <button
+                                @click="submitStatusUpdate(vaccination.id)"
+                                :disabled="submitting"
+                                class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-white bg-[#0d9488] hover:bg-[#0d9488]/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-sm"
+                            >
+                                <svg v-if="submitting" class="w-3.5 h-3.5 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" /><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
+                                <svg v-else class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                                {{ isRtl ? 'حفظ' : 'Save' }}
+                            </button>
+                            <button
+                                @click="cancelEdit"
+                                :disabled="submitting"
+                                class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-gray-600 bg-white border border-gray-200 hover:bg-gray-50 disabled:opacity-50 transition-all"
+                            >
+                                {{ isRtl ? 'إلغاء' : 'Cancel' }}
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

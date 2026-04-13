@@ -26,6 +26,8 @@ const props = defineProps({
     followupWindowDays: { type: Number, default: 15 },
     dentalConsultantFee: { type: Number, default: 0 },
     dentalSpecialistFee: { type: Number, default: 0 },
+    pediatricConsultantFee: { type: Number, default: 0 },
+    pediatricSpecialistFee: { type: Number, default: 0 },
 });
 
 /* ------------------------------------------------------------------ */
@@ -101,25 +103,38 @@ const { formatCurrency, currencyCode } = useCurrency();
 const modules = computed(() => page.props.modules || {});
 const isDermaEnabled = computed(() => modules.value.derma?.enabled !== false);
 const isDentalEnabled = computed(() => modules.value.dental?.enabled === true);
+const isPediatricEnabled = computed(() => modules.value.pediatric?.enabled === true);
 
 const isConsultation = computed(() =>
-    bookingType.value === 'dermatology_consultation' || bookingType.value === 'cosmetic_consultation' || bookingType.value === 'dental_consultation'
+    bookingType.value === 'dermatology_consultation' || bookingType.value === 'cosmetic_consultation' || bookingType.value === 'dental_consultation' || bookingType.value === 'pediatric_consultation'
 );
 
 const isDental = computed(() =>
     bookingType.value === 'dental_consultation' || bookingType.value === 'dental_service'
 );
 
+const isPediatric = computed(() =>
+    bookingType.value === 'pediatric_consultation' || bookingType.value === 'pediatric_service'
+);
+
+const currentModule = computed(() => {
+    if (isDental.value) return 'dental';
+    if (isPediatric.value) return 'pediatric';
+    return 'derma';
+});
+
 const filteredServices = computed(() => {
     if (isDental.value) return (props.services || []).filter(s => s.module === 'dental');
+    if (isPediatric.value) return (props.services || []).filter(s => s.module === 'pediatric');
     return (props.services || []).filter(s => !s.module || s.module === 'derma');
 });
 
 const filteredServiceCategories = computed(() => {
-    if (isDental.value) {
+    const mod = currentModule.value;
+    if (mod === 'dental' || mod === 'pediatric') {
         return (props.serviceCategories || []).map(cat => ({
             ...cat,
-            services: (cat.services || []).filter(s => s.module === 'dental')
+            services: (cat.services || []).filter(s => s.module === mod)
         })).filter(cat => cat.services.length > 0);
     }
     return (props.serviceCategories || []).map(cat => ({
@@ -130,6 +145,7 @@ const filteredServiceCategories = computed(() => {
 
 const filteredDoctors = computed(() => {
     if (isDental.value) return (props.doctors || []).filter(d => d.module === 'dental');
+    if (isPediatric.value) return (props.doctors || []).filter(d => d.module === 'pediatric');
     return (props.doctors || []).filter(d => !d.module || d.module === 'derma');
 });
 
@@ -148,6 +164,11 @@ function getConsultationFeeForDoctor(doctorId) {
         if (doctor?.doctor_type === 'consultant') return props.dentalConsultantFee || 0;
         if (doctor?.doctor_type === 'specialist') return props.dentalSpecialistFee || 0;
         return props.dentalConsultantFee || 0;
+    }
+    if (bookingType.value === 'pediatric_consultation') {
+        if (doctor?.doctor_type === 'consultant') return props.pediatricConsultantFee || 0;
+        if (doctor?.doctor_type === 'specialist') return props.pediatricSpecialistFee || 0;
+        return props.pediatricConsultantFee || 0;
     }
     return 0;
 }
@@ -179,6 +200,14 @@ watch(bookingType, (newType) => {
         serviceRows[0].service_id = '';
         serviceRows[0].unit_price = props.dentalConsultantFee || 0;
     } else if (newType === 'dental_service') {
+        serviceRows[0].sessions_count = 1;
+        serviceRows[0].service_id = '';
+        serviceRows[0].unit_price = 0;
+    } else if (newType === 'pediatric_consultation') {
+        serviceRows[0].sessions_count = 1;
+        serviceRows[0].service_id = '';
+        serviceRows[0].unit_price = props.pediatricConsultantFee || 0;
+    } else if (newType === 'pediatric_service') {
         serviceRows[0].sessions_count = 1;
         serviceRows[0].service_id = '';
         serviceRows[0].unit_price = 0;
@@ -606,6 +635,32 @@ const stepLabels = computed(() => [
                         >
                             <p class="text-sm font-semibold text-gray-800">{{ isRtl ? 'خدمة أسنان' : 'Dental Service' }}</p>
                         </button>
+                        <button
+                            v-if="isPediatricEnabled"
+                            type="button"
+                            @click="bookingType = 'pediatric_consultation'"
+                            :class="[
+                                'p-3 rounded-xl border-2 transition-all text-start flex-1 min-w-[140px]',
+                                bookingType === 'pediatric_consultation'
+                                    ? 'border-green-500 bg-green-50/50'
+                                    : 'border-gray-200 hover:border-gray-300'
+                            ]"
+                        >
+                            <p class="text-sm font-semibold text-gray-800">{{ isRtl ? 'استشارة أطفال' : 'Pediatric Consultation' }}</p>
+                        </button>
+                        <button
+                            v-if="isPediatricEnabled"
+                            type="button"
+                            @click="bookingType = 'pediatric_service'"
+                            :class="[
+                                'p-3 rounded-xl border-2 transition-all text-start flex-1 min-w-[140px]',
+                                bookingType === 'pediatric_service'
+                                    ? 'border-green-500 bg-green-50/50'
+                                    : 'border-gray-200 hover:border-gray-300'
+                            ]"
+                        >
+                            <p class="text-sm font-semibold text-gray-800">{{ isRtl ? 'خدمة أطفال' : 'Pediatric Service' }}</p>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -777,7 +832,7 @@ const stepLabels = computed(() => [
                     <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6">
                         <div class="border-b border-gray-100 pb-2 mb-4">
                             <h2 class="text-sm font-bold text-gray-800">
-                                {{ bookingType === 'dermatology_consultation' ? 'Dermatology Consultation' : bookingType === 'dental_consultation' ? 'Dental Consultation' : 'Cosmetic Consultation' }}
+                                {{ bookingType === 'dermatology_consultation' ? 'Dermatology Consultation' : bookingType === 'dental_consultation' ? 'Dental Consultation' : bookingType === 'pediatric_consultation' ? 'Pediatric Consultation' : 'Cosmetic Consultation' }}
                             </h2>
                             <p class="text-xs text-gray-400 mt-1">Select the doctor and confirm the consultation fee</p>
                         </div>
@@ -994,7 +1049,7 @@ const stepLabels = computed(() => [
                     >
                         <h2 class="text-sm font-bold text-gray-800 mb-1">
                             {{ isConsultation
-                                ? (bookingType === 'dermatology_consultation' ? 'Dermatology Consultation' : bookingType === 'dental_consultation' ? 'Dental Consultation' : 'Cosmetic Consultation')
+                                ? (bookingType === 'dermatology_consultation' ? 'Dermatology Consultation' : bookingType === 'dental_consultation' ? 'Dental Consultation' : bookingType === 'pediatric_consultation' ? 'Pediatric Consultation' : 'Cosmetic Consultation')
                                 : (getService(row.service_id)?.name_en || getService(row.service_id)?.name_ar || 'Service ' + (sIndex + 1))
                             }}
                         </h2>
@@ -1141,7 +1196,7 @@ const stepLabels = computed(() => [
                                     <div>
                                         <p class="text-sm font-semibold text-gray-800">
                                             {{ isConsultation
-                                                ? (bookingType === 'dermatology_consultation' ? 'Dermatology Consultation' : bookingType === 'dental_consultation' ? 'Dental Consultation' : 'Cosmetic Consultation')
+                                                ? (bookingType === 'dermatology_consultation' ? 'Dermatology Consultation' : bookingType === 'dental_consultation' ? 'Dental Consultation' : bookingType === 'pediatric_consultation' ? 'Pediatric Consultation' : 'Cosmetic Consultation')
                                                 : (getService(row.service_id)?.name_en || getService(row.service_id)?.name_ar || '-')
                                             }}
                                         </p>

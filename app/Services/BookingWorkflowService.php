@@ -36,6 +36,8 @@ class BookingWorkflowService
         $module = $data['module'] ?? 'derma';
         if (in_array($data['booking_type'] ?? '', ['dental_consultation', 'dental_service'])) {
             $module = 'dental';
+        } elseif (in_array($data['booking_type'] ?? '', ['pediatric_consultation', 'pediatric_service'])) {
+            $module = 'pediatric';
         }
 
         $booking = Booking::create([
@@ -752,20 +754,23 @@ class BookingWorkflowService
         if (in_array($data['booking_type'] ?? '', ['dental_consultation', 'dental_service'])) {
             return 'dental';
         }
+        if (in_array($data['booking_type'] ?? '', ['pediatric_consultation', 'pediatric_service'])) {
+            return 'pediatric';
+        }
 
         // Check first service's doctor module
         $firstService = $data['services'][0] ?? null;
         if ($firstService) {
             if (! empty($firstService['doctor_id'])) {
                 $doctor = \App\Models\Doctor::find($firstService['doctor_id']);
-                if ($doctor && $doctor->module === 'dental') {
-                    return 'dental';
+                if ($doctor && in_array($doctor->module, ['dental', 'pediatric'])) {
+                    return $doctor->module;
                 }
             }
             if (! empty($firstService['service_id'])) {
                 $service = \App\Models\Service::find($firstService['service_id']);
-                if ($service && $service->module === 'dental') {
-                    return 'dental';
+                if ($service && in_array($service->module, ['dental', 'pediatric'])) {
+                    return $service->module;
                 }
             }
         }

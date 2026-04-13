@@ -41,4 +41,17 @@ class SecretaryPediatricVaccinationController extends Controller
             'filters' => ['search' => $search, 'status' => $status],
         ]);
     }
+
+    public function updateStatus(Request $request, PediatricVaccination $vaccination)
+    {
+        $validated = $request->validate([
+            'status' => 'required|in:scheduled,given,missed,postponed,contraindicated',
+            'given_date' => 'nullable|date',
+            'notes' => 'nullable|string|max:500',
+        ]);
+
+        $vaccination->update($validated);
+
+        return redirect()->back()->with('success', 'Vaccination status updated');
+    }
 }

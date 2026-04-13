@@ -200,11 +200,14 @@ Route::middleware('secretary.auth')->group(function () {
         Route::get('/patients/{patient}', [\App\Http\Controllers\Secretary\SecretaryPediatricPatientController::class, 'show'])->name('secretary.pediatric.patients.show');
         Route::get('/patients/{patient}/edit', [\App\Http\Controllers\Secretary\SecretaryPediatricPatientController::class, 'edit'])->name('secretary.pediatric.patients.edit');
         Route::post('/patients/{patient}/update', [\App\Http\Controllers\Secretary\SecretaryPediatricPatientController::class, 'update'])->name('secretary.pediatric.patients.update');
+        Route::post('/patients/{patient}/family-history', [\App\Http\Controllers\Secretary\SecretaryPediatricPatientController::class, 'storeFamilyHistory'])->name('secretary.pediatric.patients.familyHistory.store');
+        Route::post('/family-history/{familyHistory}/delete', [\App\Http\Controllers\Secretary\SecretaryPediatricPatientController::class, 'destroyFamilyHistory'])->name('secretary.pediatric.patients.familyHistory.destroy');
 
         Route::get('/visits', [\App\Http\Controllers\Secretary\SecretaryPediatricVisitController::class, 'index'])->name('secretary.pediatric.visits.index');
         Route::get('/visits/{visit}', [\App\Http\Controllers\Secretary\SecretaryPediatricVisitController::class, 'show'])->name('secretary.pediatric.visits.show');
 
         Route::get('/vaccinations', [\App\Http\Controllers\Secretary\SecretaryPediatricVaccinationController::class, 'index'])->name('secretary.pediatric.vaccinations.index');
+        Route::post('/vaccinations/{vaccination}/status', [\App\Http\Controllers\Secretary\SecretaryPediatricVaccinationController::class, 'updateStatus'])->name('secretary.pediatric.vaccinations.updateStatus');
     });
 
     // ─── Profile ────────────────────────────────────────────

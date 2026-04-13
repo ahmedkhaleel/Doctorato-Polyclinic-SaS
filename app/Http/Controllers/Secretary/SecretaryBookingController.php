@@ -100,6 +100,8 @@ class SecretaryBookingController extends BaseSecretaryController
             'followupWindowDays' => (int) Setting::get('followup_window_days', 15),
             'dentalConsultantFee' => (float) Setting::get('dental_consultant_fee', 0),
             'dentalSpecialistFee' => (float) Setting::get('dental_specialist_fee', 0),
+            'pediatricConsultantFee' => (float) Setting::get('pediatric_consultant_fee', 0),
+            'pediatricSpecialistFee' => (float) Setting::get('pediatric_specialist_fee', 0),
         ]);
     }
 

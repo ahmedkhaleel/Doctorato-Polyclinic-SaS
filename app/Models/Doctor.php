@@ -73,6 +73,11 @@ class Doctor extends Model
         return $query->where('module', 'derma');
     }
 
+    public function scopePediatric($query)
+    {
+        return $query->where('module', 'pediatric');
+    }
+
     // ─── Clinic Relationships ───────────────────────────
 
     public function user()

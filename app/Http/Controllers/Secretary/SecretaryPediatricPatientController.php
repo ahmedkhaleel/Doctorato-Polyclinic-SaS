@@ -113,9 +113,37 @@ class SecretaryPediatricPatientController extends Controller
             'visits' => fn($q) => $q->where('module', 'pediatric')->with('doctor:id,name_en,name_ar')->orderByDesc('visit_date')->limit(10),
         ]);
 
+        $familyHistory = PediatricFamilyHistory::where('patient_id', $patient->id)->get();
+
         return Inertia::render('Secretary/Pediatric/Patients/Show', [
             'patient' => $patient,
+            'familyHistory' => $familyHistory,
         ]);
+    }
+
+    public function storeFamilyHistory(Request $request, Patient $patient)
+    {
+        $validated = $request->validate([
+            'condition' => 'required|string|max:255',
+            'relation' => 'required|string|max:255',
+            'notes' => 'nullable|string|max:500',
+        ]);
+
+        PediatricFamilyHistory::create([
+            'patient_id' => $patient->id,
+            'condition' => $validated['condition'],
+            'affected_members' => [$validated['relation']],
+            'details' => $validated['notes'],
+        ]);
+
+        return redirect()->back()->with('success', 'Family history added');
+    }
+
+    public function destroyFamilyHistory(Request $request, PediatricFamilyHistory $familyHistory)
+    {
+        $familyHistory->delete();
+
+        return redirect()->back()->with('success', 'Family history removed');
     }
 
     public function edit(Patient $patient)
