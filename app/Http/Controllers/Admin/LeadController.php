@@ -390,6 +390,11 @@ class LeadController extends Controller
             $updateData['lost_at'] = now();
         }
 
+        // Track first contact time (SLA)
+        if ($oldStatus === 'new' && $data['status'] !== 'new' && !$lead->first_contacted_at) {
+            $updateData['first_contacted_at'] = now();
+        }
+
         $lead->update($updateData);
 
         LeadActivity::logStatusChange($lead, $oldStatus, $data['status']);

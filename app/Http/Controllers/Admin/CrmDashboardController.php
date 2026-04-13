@@ -56,6 +56,7 @@ class CrmDashboardController extends Controller
             }])
             ->get()
             ->map(fn ($s) => [
+                'id' => $s->id,
                 'name' => $s->name_en,
                 'color' => $s->color,
                 'icon' => $s->icon,
@@ -147,6 +148,36 @@ class CrmDashboardController extends Controller
             ->pluck('count', 'module')
             ->toArray();
 
+        // ── SLA Metrics (avg response time from creation to first contact) ──
+        $avgResponseMinutes = Lead::whereNotNull('first_contacted_at')
+            ->where('created_at', '>=', $startDate)
+            ->selectRaw('AVG(TIMESTAMPDIFF(MINUTE, created_at, first_contacted_at)) as avg_minutes')
+            ->value('avg_minutes');
+        $slaMetrics = [
+            'avg_response_minutes' => $avgResponseMinutes ? round($avgResponseMinutes) : null,
+            'avg_response_display' => $this->formatMinutes($avgResponseMinutes),
+            'awaiting_contact' => Lead::where('status', 'new')->whereNull('first_contacted_at')->count(),
+            'within_1h' => Lead::whereNotNull('first_contacted_at')
+                ->where('created_at', '>=', $startDate)
+                ->whereRaw('TIMESTAMPDIFF(MINUTE, created_at, first_contacted_at) <= 60')
+                ->count(),
+            'total_contacted' => Lead::whereNotNull('first_contacted_at')->where('created_at', '>=', $startDate)->count(),
+        ];
+
+        // ── Stale Leads (no activity for 7+ days, still in pipeline) ──
+        $staleLeads = Lead::inPipeline()
+            ->where(function ($q) {
+                $q->where('updated_at', '<', now()->subDays(7))
+                  ->orWhere(function ($q2) {
+                      $q2->whereNull('last_contacted_at')
+                          ->where('created_at', '<', now()->subDays(3));
+                  });
+            })
+            ->with(['assignedUser:id,name', 'source:id,name_en,color'])
+            ->orderBy('updated_at')
+            ->limit(10)
+            ->get(['id', 'full_name', 'phone', 'status', 'priority', 'assigned_to', 'lead_source_id', 'updated_at', 'last_contacted_at', 'created_at']);
+
         // ── Weekly Comparison ──
         $thisWeekStart = Carbon::now()->startOfWeek();
         $lastWeekStart = Carbon::now()->subWeek()->startOfWeek();
@@ -177,8 +208,18 @@ class CrmDashboardController extends Controller
             'teamPerformance' => $teamPerformance,
             'moduleDistribution' => $moduleDistribution,
             'weeklyComparison' => $weeklyComparison,
+            'slaMetrics' => $slaMetrics,
+            'staleLeads' => $staleLeads,
             'period' => $period,
         ]);
+    }
+
+    private function formatMinutes(?float $minutes): string
+    {
+        if ($minutes === null || $minutes === 0.0) return '-';
+        if ($minutes < 60) return round($minutes) . 'm';
+        if ($minutes < 1440) return round($minutes / 60, 1) . 'h';
+        return round($minutes / 1440, 1) . 'd';
     }
 
     private function calculateConversionRate(Carbon $startDate): float

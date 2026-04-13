@@ -20,6 +20,8 @@ const props = defineProps({
     teamPerformance: Array,
     moduleDistribution: Object,
     weeklyComparison: Object,
+    slaMetrics: Object,
+    staleLeads: Array,
     period: String,
 });
 
@@ -216,11 +218,11 @@ function missFollowUp(fuId) {
                 </div>
             </div>
 
-            <!-- Key Metrics -->
+            <!-- Key Metrics (clickable drill-down) -->
             <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
                 <!-- Total Leads -->
-                <div
-                    class="card-entrance group bg-white rounded-2xl shadow-sm hover:shadow-md p-6 border border-gray-100 transition-all duration-300 hover:-translate-y-1 cursor-default"
+                <Link href="/admin/leads"
+                    class="card-entrance group bg-white rounded-2xl shadow-sm hover:shadow-md p-6 border border-gray-100 transition-all duration-300 hover:-translate-y-1 cursor-pointer block"
                     :class="{ 'card-entrance-active': mounted }"
                     :style="{ transitionDelay: '80ms' }"
                 >
@@ -238,11 +240,11 @@ function missFollowUp(fuId) {
                         </span>
                         <span class="text-xs text-gray-400">this period</span>
                     </div>
-                </div>
+                </Link>
 
                 <!-- Converted -->
-                <div
-                    class="card-entrance group bg-white rounded-2xl shadow-sm hover:shadow-md p-6 border border-gray-100 transition-all duration-300 hover:-translate-y-1 cursor-default"
+                <Link href="/admin/leads?status=converted"
+                    class="card-entrance group bg-white rounded-2xl shadow-sm hover:shadow-md p-6 border border-gray-100 transition-all duration-300 hover:-translate-y-1 cursor-pointer block"
                     :class="{ 'card-entrance-active': mounted }"
                     :style="{ transitionDelay: '160ms' }"
                 >
@@ -259,7 +261,7 @@ function missFollowUp(fuId) {
                         </span>
                         <span class="text-xs text-gray-400">conversion rate</span>
                     </div>
-                </div>
+                </Link>
 
                 <!-- Today Follow-ups -->
                 <div
@@ -286,21 +288,27 @@ function missFollowUp(fuId) {
                     </div>
                 </div>
 
-                <!-- Avg Score -->
+                <!-- SLA: Avg Response Time -->
                 <div
                     class="card-entrance group bg-white rounded-2xl shadow-sm hover:shadow-md p-6 border border-gray-100 transition-all duration-300 hover:-translate-y-1 cursor-default"
                     :class="{ 'card-entrance-active': mounted }"
                     :style="{ transitionDelay: '320ms' }"
                 >
                     <div class="flex items-center justify-between mb-4">
-                        <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Avg. Score</p>
+                        <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'سرعة الاستجابة' : 'Avg. Response' }}</p>
                         <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center shadow-md shadow-purple-200/50 group-hover:scale-110 transition-transform duration-300">
-                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg>
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                         </div>
                     </div>
-                    <p class="text-3xl font-bold text-gray-800 tracking-tight">{{ metrics.avg_score }}</p>
+                    <p class="text-3xl font-bold text-gray-800 tracking-tight">{{ slaMetrics?.avg_response_display || '-' }}</p>
                     <div class="flex items-center gap-1.5 mt-2">
-                        <span class="text-xs text-gray-400">{{ $t('a_pipeline_average') }}</span>
+                        <span v-if="slaMetrics?.awaiting_contact > 0" class="inline-flex items-center gap-0.5 text-xs font-medium text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded-md">
+                            {{ slaMetrics.awaiting_contact }} {{ isRtl ? 'بانتظار التواصل' : 'awaiting contact' }}
+                        </span>
+                        <span v-else-if="slaMetrics?.total_contacted > 0" class="inline-flex items-center gap-0.5 text-xs font-medium text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded-md">
+                            {{ slaMetrics.within_1h }}/{{ slaMetrics.total_contacted }} {{ isRtl ? 'خلال ساعة' : 'within 1h' }}
+                        </span>
+                        <span v-else class="text-xs text-gray-400">{{ isRtl ? 'لا بيانات بعد' : 'No data yet' }}</span>
                     </div>
                 </div>
             </div>
@@ -392,7 +400,10 @@ function missFollowUp(fuId) {
                         <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider">{{ isRtl ? 'توزيع الاقسام' : 'Module Split' }}</h3>
                     </div>
                     <div class="space-y-5">
-                        <div v-for="(mod, key) in { derma: { label: isRtl ? 'جلدية' : 'Derma', color: 'from-teal-400 to-teal-600', bg: 'bg-teal-100', text: 'text-teal-700' }, dental: { label: isRtl ? 'اسنان' : 'Dental', color: 'from-sky-400 to-sky-600', bg: 'bg-sky-100', text: 'text-sky-700' } }" :key="key">
+                        <Link v-for="(mod, key) in { derma: { label: isRtl ? 'جلدية' : 'Derma', color: 'from-teal-400 to-teal-600', bg: 'bg-teal-100', text: 'text-teal-700' }, dental: { label: isRtl ? 'اسنان' : 'Dental', color: 'from-sky-400 to-sky-600', bg: 'bg-sky-100', text: 'text-sky-700' } }" :key="key"
+                            :href="`/admin/leads?module=${key}`"
+                            class="block hover:bg-gray-50/50 -mx-2 px-2 py-1 rounded-lg transition-colors"
+                        >
                             <div class="flex items-center justify-between mb-2">
                                 <div class="flex items-center gap-2">
                                     <span class="w-3 h-3 rounded-full bg-gradient-to-br" :class="mod.color"></span>
@@ -412,7 +423,7 @@ function missFollowUp(fuId) {
                                     :style="{ width: mounted ? (moduleTotal > 0 ? Math.max(((moduleDistribution?.[key] || 0) / moduleTotal) * 100, (moduleDistribution?.[key] || 0) > 0 ? 5 : 0) : 0) + '%' : '0%' }"
                                 ></div>
                             </div>
-                        </div>
+                        </Link>
                     </div>
                     <div class="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between">
                         <span class="text-xs font-medium text-gray-500">{{ isRtl ? 'اجمالي في المسار' : 'Total Active' }}</span>
@@ -442,9 +453,12 @@ function missFollowUp(fuId) {
                         </Link>
                     </div>
                     <div class="space-y-4">
-                        <div v-for="(count, status) in pipelineStats" :key="status" class="group">
+                        <Link v-for="(count, status) in pipelineStats" :key="status"
+                            :href="`/admin/leads?status=${status}`"
+                            class="group block"
+                        >
                             <div class="flex items-center justify-between mb-1.5">
-                                <span class="text-xs font-medium text-gray-600">{{ statusLabels[status] || status }}</span>
+                                <span class="text-xs font-medium text-gray-600 group-hover:text-[#C4A265] transition-colors">{{ statusLabels[status] || status }}</span>
                                 <div class="flex items-center gap-2">
                                     <span class="text-xs font-bold text-gray-800">{{ count }}</span>
                                     <span class="text-[10px] text-gray-400 font-medium">{{ pipelineTotal > 0 ? Math.round((count / pipelineTotal) * 100) : 0 }}%</span>
@@ -457,7 +471,7 @@ function missFollowUp(fuId) {
                                     :style="{ width: pipelineTotal > 0 ? Math.max((count / pipelineTotal) * 100, count > 0 ? 6 : 0) + '%' : '0%' }"
                                 ></div>
                             </div>
-                        </div>
+                        </Link>
                     </div>
                     <!-- Pipeline totals bar -->
                     <div class="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between">
@@ -479,11 +493,11 @@ function missFollowUp(fuId) {
                         <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider">{{ $t('a_leads_by_source') }}</h3>
                     </div>
                     <div class="space-y-4">
-                        <div v-for="(source, index) in leadsBySource" :key="source.name" class="group">
+                        <div v-for="(source, index) in leadsBySource" :key="source.name" class="group cursor-pointer" @click="router.get('/admin/leads', { source_id: source.id || '' })">
                             <div class="flex items-center justify-between mb-1.5">
                                 <div class="flex items-center gap-2.5">
                                     <div class="w-3 h-3 rounded-full shadow-sm" :style="{ backgroundColor: source.color }"></div>
-                                    <span class="text-sm font-medium text-gray-600">{{ source.name }}</span>
+                                    <span class="text-sm font-medium text-gray-600 group-hover:text-[#C4A265] transition-colors">{{ source.name }}</span>
                                 </div>
                                 <div class="flex items-center gap-2">
                                     <span class="text-sm font-bold text-gray-800">{{ source.total }}</span>
@@ -705,6 +719,46 @@ function missFollowUp(fuId) {
                     </table>
                 </div>
             </div>
+            <!-- Stale Leads Alert -->
+            <div
+                class="card-entrance bg-white rounded-2xl shadow-sm hover:shadow-md border border-amber-200 transition-all duration-300 overflow-hidden"
+                :class="{ 'card-entrance-active': mounted }"
+                :style="{ transitionDelay: '780ms' }"
+                v-if="staleLeads?.length"
+            >
+                <div class="px-6 py-4 border-b border-amber-100 flex items-center justify-between bg-gradient-to-r from-amber-50/80 to-transparent">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center">
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.27 16.5c-.77.833.192 2.5 1.732 2.5z" /></svg>
+                        </div>
+                        <h3 class="text-sm font-bold text-amber-700 uppercase tracking-wider">{{ isRtl ? 'عملاء بدون متابعة' : 'Stale Leads' }}</h3>
+                    </div>
+                    <span class="text-xs font-bold px-2.5 py-1 rounded-full bg-amber-100 text-amber-700">{{ staleLeads.length }}</span>
+                </div>
+                <div class="divide-y divide-gray-50">
+                    <Link v-for="lead in staleLeads" :key="lead.id"
+                        :href="`/admin/leads/${lead.id}`"
+                        class="px-6 py-3.5 flex items-center gap-4 hover:bg-amber-50/40 transition-colors duration-200 block group"
+                    >
+                        <div class="w-9 h-9 rounded-full bg-gradient-to-br from-amber-300 to-amber-500 flex items-center justify-center flex-shrink-0">
+                            <span class="text-[10px] font-bold text-white">{{ getInitials(lead.full_name) }}</span>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-semibold text-gray-800 truncate group-hover:text-amber-700 transition-colors">{{ lead.full_name }}</p>
+                            <div class="flex items-center gap-2 mt-0.5">
+                                <span class="text-xs text-gray-400">{{ lead.phone || '-' }}</span>
+                                <span class="text-[10px] text-gray-300">|</span>
+                                <span :class="leadStatusColors[lead.status]" class="px-1.5 py-0.5 text-[9px] font-bold rounded-full uppercase">{{ statusLabels[lead.status] || lead.status }}</span>
+                            </div>
+                        </div>
+                        <div class="text-right flex-shrink-0">
+                            <p class="text-xs font-semibold text-amber-600">{{ timeAgo(lead.updated_at) }}</p>
+                            <p class="text-[10px] text-gray-400 mt-0.5">{{ lead.assigned_user?.name || (isRtl ? 'غير مخصص' : 'Unassigned') }}</p>
+                        </div>
+                    </Link>
+                </div>
+            </div>
+
             <!-- Team Performance Leaderboard -->
             <div
                 class="card-entrance bg-white rounded-2xl shadow-sm hover:shadow-md border border-gray-100 transition-all duration-300 overflow-hidden"
@@ -739,8 +793,9 @@ function missFollowUp(fuId) {
                         </thead>
                         <tbody class="divide-y divide-gray-50">
                             <tr v-for="(member, idx) in teamPerformance" :key="member.id"
-                                class="hover:bg-gray-50/70 transition-colors duration-150"
+                                class="hover:bg-gray-50/70 transition-colors duration-150 cursor-pointer"
                                 :class="idx % 2 === 1 ? 'bg-gray-50/30' : ''"
+                                @click="router.get('/admin/leads', { assigned_to: member.id })"
                             >
                                 <td class="px-6 py-4">
                                     <div class="flex items-center gap-3">
