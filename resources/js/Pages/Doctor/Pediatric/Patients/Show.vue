@@ -242,6 +242,36 @@ function submitChronic() {
     });
 }
 
+// ── Delete & Toggle Actions ──
+function deleteGrowthRecord(record) {
+    const msg = isRtl.value ? 'هل أنت متأكد من حذف هذا القياس؟' : 'Are you sure you want to delete this growth record?';
+    if (confirm(msg)) {
+        router.post(`/doctor/pediatric/patients/${props.patient.id}/growth/${record.id}/delete`, {}, { preserveScroll: true });
+    }
+}
+
+function toggleAllergy(allergy) {
+    router.post(`/doctor/pediatric/patients/${props.patient.id}/allergy/${allergy.id}/toggle`, {}, { preserveScroll: true });
+}
+
+function deleteAllergy(allergy) {
+    const msg = isRtl.value ? 'هل أنت متأكد من حذف هذه الحساسية؟' : 'Are you sure you want to delete this allergy?';
+    if (confirm(msg)) {
+        router.post(`/doctor/pediatric/patients/${props.patient.id}/allergy/${allergy.id}/delete`, {}, { preserveScroll: true });
+    }
+}
+
+function toggleChronicCondition(condition) {
+    router.post(`/doctor/pediatric/patients/${props.patient.id}/chronic-condition/${condition.id}/toggle`, {}, { preserveScroll: true });
+}
+
+function deleteChronicCondition(condition) {
+    const msg = isRtl.value ? 'هل أنت متأكد من حذف هذه الحالة المزمنة؟' : 'Are you sure you want to delete this chronic condition?';
+    if (confirm(msg)) {
+        router.post(`/doctor/pediatric/patients/${props.patient.id}/chronic-condition/${condition.id}/delete`, {}, { preserveScroll: true });
+    }
+}
+
 // ── Nutrition Form ──
 const showNutritionForm = ref(false);
 const nutritionForm = useForm({
@@ -481,6 +511,26 @@ const bmi = computed(() => {
         >
             <!-- ──────── OVERVIEW TAB ──────── -->
             <div v-if="activeTab === 'overview'" class="space-y-5">
+                <!-- PDF Export Buttons -->
+                <div class="flex flex-wrap gap-2">
+                    <a
+                        :href="`/doctor/pediatric/patients/${patient.id}/vaccination-card`"
+                        target="_blank"
+                        class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium border border-teal-500 text-teal-600 dark:text-teal-400 dark:border-teal-500/50 rounded-lg hover:bg-teal-50 dark:hover:bg-teal-900/20 transition-colors duration-200"
+                    >
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                        {{ isRtl ? 'بطاقة التطعيمات PDF' : 'Vaccination Card PDF' }}
+                    </a>
+                    <a
+                        :href="`/doctor/pediatric/patients/${patient.id}/growth-report`"
+                        target="_blank"
+                        class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium border border-emerald-500 text-emerald-600 dark:text-emerald-400 dark:border-emerald-500/50 rounded-lg hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors duration-200"
+                    >
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                        {{ isRtl ? 'تقرير النمو PDF' : 'Growth Report PDF' }}
+                    </a>
+                </div>
+
                 <!-- Quick Stats -->
                 <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
                     <div class="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700 shadow-sm">
@@ -660,6 +710,7 @@ const bmi = computed(() => {
                                     <th class="px-4 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400 text-start">{{ isRtl ? 'الطول' : 'Height' }}</th>
                                     <th class="px-4 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400 text-start">{{ isRtl ? 'محيط الرأس' : 'Head Circ.' }}</th>
                                     <th class="px-4 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400 text-start">{{ isRtl ? 'ملاحظات' : 'Notes' }}</th>
+                                    <th class="px-4 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400 text-center w-16"></th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
@@ -686,6 +737,15 @@ const bmi = computed(() => {
                                         <span v-if="record.hc_percentile" class="inline-block w-2 h-2 rounded-full mx-1" :class="record.hc_percentile >= 15 && record.hc_percentile <= 85 ? 'bg-emerald-500' : record.hc_percentile >= 5 && record.hc_percentile <= 95 ? 'bg-amber-500' : 'bg-red-500'"></span>
                                     </td>
                                     <td class="px-4 py-3 text-gray-500 dark:text-gray-400 text-xs max-w-[200px] truncate">{{ record.notes || '--' }}</td>
+                                    <td class="px-4 py-3 text-center">
+                                        <button
+                                            @click="deleteGrowthRecord(record)"
+                                            class="p-1.5 text-gray-300 hover:text-red-500 dark:text-gray-600 dark:hover:text-red-400 transition-colors duration-200 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20"
+                                            :title="isRtl ? 'حذف' : 'Delete'"
+                                        >
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                                        </button>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -1016,10 +1076,30 @@ const bmi = computed(() => {
                                 </p>
                                 <p v-if="allergy.notes" class="text-xs text-gray-400 mt-0.5">{{ allergy.notes }}</p>
                             </div>
-                            <span
-                                class="flex-shrink-0 w-2 h-2 rounded-full mt-2"
-                                :class="allergy.status === 'active' || !allergy.status ? 'bg-red-500' : 'bg-gray-300'"
-                            ></span>
+                            <div class="flex items-center gap-1.5 flex-shrink-0">
+                                <!-- Toggle Active/Inactive -->
+                                <button
+                                    @click="toggleAllergy(allergy)"
+                                    class="p-1.5 rounded-lg transition-all duration-200"
+                                    :class="allergy.status === 'active' || !allergy.status
+                                        ? 'bg-emerald-50 text-emerald-600 hover:bg-emerald-100 dark:bg-emerald-900/20 dark:text-emerald-400 dark:hover:bg-emerald-900/40'
+                                        : 'bg-gray-100 text-gray-400 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-500 dark:hover:bg-gray-600'"
+                                    :title="allergy.status === 'active' || !allergy.status ? (isRtl ? 'تعطيل' : 'Deactivate') : (isRtl ? 'تفعيل' : 'Activate')"
+                                >
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path v-if="allergy.status === 'active' || !allergy.status" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                        <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                                    </svg>
+                                </button>
+                                <!-- Delete -->
+                                <button
+                                    @click="deleteAllergy(allergy)"
+                                    class="p-1.5 text-gray-300 hover:text-red-500 dark:text-gray-600 dark:hover:text-red-400 transition-colors duration-200 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20"
+                                    :title="isRtl ? 'حذف' : 'Delete'"
+                                >
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1143,10 +1223,30 @@ const bmi = computed(() => {
                                     {{ isRtl ? 'منذ:' : 'Since:' }} {{ condition.since || condition.diagnosed_date }}
                                 </p>
                             </div>
-                            <span
-                                class="flex-shrink-0 w-2 h-2 rounded-full mt-2"
-                                :class="condition.status === 'active' || !condition.status ? 'bg-amber-500' : 'bg-gray-300'"
-                            ></span>
+                            <div class="flex items-center gap-1.5 flex-shrink-0">
+                                <!-- Toggle Active/Inactive -->
+                                <button
+                                    @click="toggleChronicCondition(condition)"
+                                    class="p-1.5 rounded-lg transition-all duration-200"
+                                    :class="condition.status === 'active' || !condition.status
+                                        ? 'bg-emerald-50 text-emerald-600 hover:bg-emerald-100 dark:bg-emerald-900/20 dark:text-emerald-400 dark:hover:bg-emerald-900/40'
+                                        : 'bg-gray-100 text-gray-400 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-500 dark:hover:bg-gray-600'"
+                                    :title="condition.status === 'active' || !condition.status ? (isRtl ? 'تعطيل' : 'Deactivate') : (isRtl ? 'تفعيل' : 'Activate')"
+                                >
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path v-if="condition.status === 'active' || !condition.status" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                        <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                                    </svg>
+                                </button>
+                                <!-- Delete -->
+                                <button
+                                    @click="deleteChronicCondition(condition)"
+                                    class="p-1.5 text-gray-300 hover:text-red-500 dark:text-gray-600 dark:hover:text-red-400 transition-colors duration-200 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20"
+                                    :title="isRtl ? 'حذف' : 'Delete'"
+                                >
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>

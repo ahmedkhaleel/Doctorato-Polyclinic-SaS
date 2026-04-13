@@ -374,4 +374,54 @@ class DoctorPediatricPatientController extends BaseDoctorController
 
         return redirect()->back()->with('success', $this->msg('Screening test recorded', 'تم تسجيل نتيجة الفحص'));
     }
+
+    /**
+     * Toggle allergy active/inactive.
+     */
+    public function toggleAllergy(Request $request, Patient $patient, PediatricAllergy $allergy)
+    {
+        if ((int) $allergy->patient_id !== (int) $patient->id) abort(403);
+        $allergy->update(['is_active' => !$allergy->is_active]);
+        return redirect()->back()->with('success', $this->msg('Allergy status updated', 'تم تحديث حالة الحساسية'));
+    }
+
+    /**
+     * Delete allergy.
+     */
+    public function destroyAllergy(Request $request, Patient $patient, PediatricAllergy $allergy)
+    {
+        if ((int) $allergy->patient_id !== (int) $patient->id) abort(403);
+        $allergy->delete();
+        return redirect()->back()->with('success', $this->msg('Allergy removed', 'تم حذف الحساسية'));
+    }
+
+    /**
+     * Toggle chronic condition active/inactive.
+     */
+    public function toggleChronicCondition(Request $request, Patient $patient, PediatricChronicCondition $condition)
+    {
+        if ((int) $condition->patient_id !== (int) $patient->id) abort(403);
+        $condition->update(['is_active' => !$condition->is_active]);
+        return redirect()->back()->with('success', $this->msg('Condition status updated', 'تم تحديث حالة المرض'));
+    }
+
+    /**
+     * Delete chronic condition.
+     */
+    public function destroyChronicCondition(Request $request, Patient $patient, PediatricChronicCondition $condition)
+    {
+        if ((int) $condition->patient_id !== (int) $patient->id) abort(403);
+        $condition->delete();
+        return redirect()->back()->with('success', $this->msg('Condition removed', 'تم حذف المرض المزمن'));
+    }
+
+    /**
+     * Delete growth record.
+     */
+    public function destroyGrowth(Request $request, Patient $patient, PediatricGrowthRecord $record)
+    {
+        if ((int) $record->patient_id !== (int) $patient->id) abort(403);
+        $record->delete();
+        return redirect()->back()->with('success', $this->msg('Growth record removed', 'تم حذف قياسات النمو'));
+    }
 }

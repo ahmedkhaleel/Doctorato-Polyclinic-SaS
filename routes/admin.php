@@ -770,6 +770,7 @@ Route::middleware('admin.auth')->group(function () {
         Route::get('/', [\App\Http\Controllers\Admin\AdminPediatricController::class, 'dashboard'])->name('admin.pediatric.dashboard');
         Route::get('/patients', [\App\Http\Controllers\Admin\AdminPediatricController::class, 'patients'])->name('admin.pediatric.patients');
         Route::get('/vaccinations', [\App\Http\Controllers\Admin\AdminPediatricController::class, 'vaccinations'])->name('admin.pediatric.vaccinations');
+        Route::get('/visits', [\App\Http\Controllers\Admin\AdminPediatricController::class, 'visits'])->name('admin.pediatric.visits');
         Route::get('/growth', [\App\Http\Controllers\Admin\AdminPediatricController::class, 'growth'])->name('admin.pediatric.growth');
     });
 

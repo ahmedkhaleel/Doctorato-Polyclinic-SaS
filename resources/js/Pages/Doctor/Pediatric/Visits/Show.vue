@@ -49,6 +49,64 @@ const lightboxPhoto = ref(null);
 function openLightbox(photo) { lightboxPhoto.value = photo; lightboxOpen.value = true; }
 function closeLightbox() { lightboxOpen.value = false; lightboxPhoto.value = null; }
 
+// ─── Photo Upload ───────────────────────────────
+const photoFiles = ref([]);
+const photoPreviews = ref([]);
+const uploading = ref(false);
+const dragOver = ref(false);
+
+const canUploadPhotos = computed(() => props.visit?.status === 'waiting' || props.visit?.status === 'in_progress');
+
+function onPhotosSelected(e) {
+    addFiles(e.target.files);
+    e.target.value = '';
+}
+
+function onDrop(e) {
+    dragOver.value = false;
+    if (e.dataTransfer?.files) addFiles(e.dataTransfer.files);
+}
+
+function addFiles(fileList) {
+    const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
+    const maxSize = 10 * 1024 * 1024; // 10MB
+    for (const file of fileList) {
+        if (!validTypes.includes(file.type)) continue;
+        if (file.size > maxSize) continue;
+        photoFiles.value.push(file);
+        photoPreviews.value.push(URL.createObjectURL(file));
+    }
+}
+
+function removePhoto(index) {
+    URL.revokeObjectURL(photoPreviews.value[index]);
+    photoFiles.value.splice(index, 1);
+    photoPreviews.value.splice(index, 1);
+}
+
+function formatFileSize(bytes) {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+}
+
+function uploadPhotos() {
+    if (!photoFiles.value.length) return;
+    uploading.value = true;
+    const formData = new FormData();
+    photoFiles.value.forEach(f => formData.append('photos[]', f));
+    router.post(`/doctor/visits/${props.visit.id}/photos`, formData, {
+        forceFormData: true,
+        preserveScroll: true,
+        onFinish: () => {
+            uploading.value = false;
+            photoPreviews.value.forEach(url => URL.revokeObjectURL(url));
+            photoFiles.value = [];
+            photoPreviews.value = [];
+        },
+    });
+}
+
 // Helpers
 const patient = computed(() => props.visit?.patient || {});
 const prescriptions = computed(() => props.visit?.prescriptions || []);
@@ -473,7 +531,7 @@ function severityColor(severity) {
         </div>
 
         <!-- Photos Section -->
-        <div v-if="photos.length > 0"
+        <div v-if="photos.length > 0 || canUploadPhotos"
             class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden"
             :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
             style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.3s"
@@ -481,17 +539,19 @@ function severityColor(severity) {
             <div class="px-4 sm:px-6 py-4 border-b border-gray-100">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-2">
-                        <div class="w-8 h-8 rounded-lg bg-indigo-100 flex items-center justify-center">
-                            <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                        <div class="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center">
+                            <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                         </div>
                         <h3 class="text-sm font-semibold text-gray-800">{{ isRtl ? 'صور الزيارة' : 'Visit Photos' }}</h3>
                     </div>
-                    <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-indigo-50 text-indigo-600 border border-indigo-200">
+                    <span v-if="photos.length" class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-50 text-emerald-600 border border-emerald-200">
                         {{ photos.length }}
                     </span>
                 </div>
             </div>
-            <div class="px-4 sm:px-6 py-5">
+
+            <!-- Existing Photos Grid -->
+            <div v-if="photos.length > 0" class="px-4 sm:px-6 py-5">
                 <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
                     <div v-for="(photo, idx) in photos" :key="photo.id || idx"
                         @click="openLightbox(photo)"
@@ -510,6 +570,78 @@ function severityColor(severity) {
                                 <p v-if="photo.caption" class="text-[10px] text-white mt-0.5 truncate">{{ photo.caption }}</p>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Photo Upload Section (only when visit is editable) -->
+            <div v-if="canUploadPhotos" class="px-4 sm:px-6 py-5" :class="photos.length > 0 ? 'border-t border-gray-100' : ''">
+                <!-- Drag & Drop Zone -->
+                <div
+                    class="relative border-2 border-dashed rounded-xl p-6 text-center transition-all duration-200 cursor-pointer"
+                    :class="dragOver ? 'border-emerald-400 bg-emerald-50/50' : 'border-gray-200 hover:border-emerald-300 hover:bg-emerald-50/30'"
+                    @dragover.prevent="dragOver = true"
+                    @dragleave.prevent="dragOver = false"
+                    @drop.prevent="onDrop"
+                    @click="$refs.photoInput.click()"
+                >
+                    <input ref="photoInput" type="file" multiple accept="image/jpeg,image/png,image/webp" class="hidden" @change="onPhotosSelected" />
+                    <div class="flex flex-col items-center gap-2">
+                        <div class="w-12 h-12 rounded-xl flex items-center justify-center transition-colors"
+                            :class="dragOver ? 'bg-emerald-100' : 'bg-gray-100'"
+                        >
+                            <svg class="w-6 h-6 transition-colors" :class="dragOver ? 'text-emerald-500' : 'text-gray-400'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-700">
+                                {{ isRtl ? 'اسحب الصور هنا أو انقر للاختيار' : 'Drag photos here or click to select' }}
+                            </p>
+                            <p class="text-xs text-gray-400 mt-1">
+                                {{ isRtl ? 'JPG, PNG, WebP - حد أقصى 10 ميجابايت لكل صورة' : 'JPG, PNG, WebP - Max 10MB per photo' }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Photo Previews -->
+                <div v-if="photoFiles.length > 0" class="mt-4 space-y-4">
+                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+                        <div v-for="(preview, idx) in photoPreviews" :key="idx"
+                            class="group relative aspect-square rounded-xl overflow-hidden border border-emerald-200 bg-emerald-50/30"
+                        >
+                            <img :src="preview" alt="Preview" class="w-full h-full object-cover" />
+                            <!-- Remove button -->
+                            <button @click.stop="removePhoto(idx)"
+                                class="absolute top-1.5 bg-red-500 hover:bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center shadow-sm transition-all opacity-0 group-hover:opacity-100"
+                                :class="isRtl ? 'left-1.5' : 'right-1.5'"
+                            >
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                            </button>
+                            <!-- File size badge -->
+                            <div class="absolute bottom-1.5 px-1.5 py-0.5 bg-black/50 text-white text-[9px] font-medium rounded backdrop-blur-sm"
+                                :class="isRtl ? 'right-1.5' : 'left-1.5'"
+                            >
+                                {{ formatFileSize(photoFiles[idx].size) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Upload Button -->
+                    <div class="flex items-center justify-between">
+                        <p class="text-xs text-gray-500">
+                            {{ isRtl ? `${photoFiles.length} صورة محددة` : `${photoFiles.length} photo(s) selected` }}
+                        </p>
+                        <button @click="uploadPhotos"
+                            :disabled="uploading"
+                            class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white rounded-xl transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
+                            :class="uploading ? 'bg-gray-400' : 'bg-emerald-500 hover:bg-emerald-600 shadow-emerald-200'"
+                        >
+                            <svg v-if="uploading" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+                            <svg v-else class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+                            {{ uploading ? (isRtl ? 'جاري الرفع...' : 'Uploading...') : (isRtl ? 'رفع الصور' : 'Upload Photos') }}
+                        </button>
                     </div>
                 </div>
             </div>

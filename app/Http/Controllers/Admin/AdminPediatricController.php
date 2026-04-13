@@ -246,6 +246,51 @@ class AdminPediatricController extends Controller
     }
 
     /**
+     * Visits overview
+     */
+    public function visits(Request $request)
+    {
+        $search = $request->input('search');
+        $status = $request->input('status');
+        $dateFrom = $request->input('date_from');
+        $dateTo = $request->input('date_to');
+
+        $visits = Visit::where('module', 'pediatric')
+            ->with(['patient:id,full_name,date_of_birth,gender,file_number,guardian_name', 'doctor:id,name_en,name_ar'])
+            ->when($search, function ($q) use ($search) {
+                $q->where(function ($sq) use ($search) {
+                    $sq->whereHas('patient', function ($pq) use ($search) {
+                        $pq->where('full_name', 'like', "%{$search}%")
+                           ->orWhere('file_number', 'like', "%{$search}%")
+                           ->orWhere('guardian_name', 'like', "%{$search}%");
+                    })->orWhereHas('doctor', function ($dq) use ($search) {
+                        $dq->where('name_en', 'like', "%{$search}%")
+                           ->orWhere('name_ar', 'like', "%{$search}%");
+                    });
+                });
+            })
+            ->when($status, fn($q) => $q->where('status', $status))
+            ->when($dateFrom, fn($q) => $q->whereDate('visit_date', '>=', $dateFrom))
+            ->when($dateTo, fn($q) => $q->whereDate('visit_date', '<=', $dateTo))
+            ->orderByDesc('visit_date')
+            ->paginate(25)
+            ->withQueryString();
+
+        $stats = [
+            'total' => Visit::where('module', 'pediatric')->count(),
+            'today' => Visit::where('module', 'pediatric')->whereDate('visit_date', today())->count(),
+            'completed' => Visit::where('module', 'pediatric')->where('status', 'completed')->count(),
+            'waiting' => Visit::where('module', 'pediatric')->whereDate('visit_date', today())->where('status', 'waiting')->count(),
+        ];
+
+        return Inertia::render('Admin/Pediatric/Visits', [
+            'visits' => $visits,
+            'stats' => $stats,
+            'filters' => ['search' => $search, 'status' => $status, 'date_from' => $dateFrom, 'date_to' => $dateTo],
+        ]);
+    }
+
+    /**
      * Growth monitoring overview
      */
     public function growth(Request $request)

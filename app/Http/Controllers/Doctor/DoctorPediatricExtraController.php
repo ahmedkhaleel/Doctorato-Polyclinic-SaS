@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Doctor;
 
 use App\Models\Patient;
+use App\Models\PediatricGrowthRecord;
+use App\Models\PediatricVaccination;
 use App\Models\Prescription;
 use App\Models\Visit;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -98,5 +101,53 @@ class DoctorPediatricExtraController extends BaseDoctorController
         return Inertia::render('Doctor/Pediatric/Reports/Index', [
             'patients' => $patients,
         ]);
+    }
+
+    /**
+     * Generate vaccination card PDF for a patient.
+     */
+    public function vaccinationCardPdf(Request $request, Patient $patient)
+    {
+        $vaccinations = PediatricVaccination::where('patient_id', $patient->id)
+            ->orderBy('scheduled_date')
+            ->get();
+
+        $ageMonths = $patient->date_of_birth ? $patient->date_of_birth->diffInMonths(now()) : null;
+
+        $pdf = Pdf::loadView('pdf.pediatric-vaccination-card', [
+            'patient' => $patient,
+            'vaccinations' => $vaccinations,
+            'ageMonths' => $ageMonths,
+            'clinicName' => \App\Models\Setting::get('clinic_name', 'Aura Derma Clinic'),
+            'clinicPhone' => \App\Models\Setting::get('clinic_phone', ''),
+        ]);
+        $pdf->setPaper('A4', 'landscape');
+
+        $filename = 'VaccinationCard-' . ($patient->file_number ?? $patient->id) . '.pdf';
+        return $pdf->stream($filename);
+    }
+
+    /**
+     * Generate growth report PDF for a patient.
+     */
+    public function growthReportPdf(Request $request, Patient $patient)
+    {
+        $growthRecords = PediatricGrowthRecord::where('patient_id', $patient->id)
+            ->orderBy('measurement_date')
+            ->get();
+
+        $ageMonths = $patient->date_of_birth ? $patient->date_of_birth->diffInMonths(now()) : null;
+
+        $pdf = Pdf::loadView('pdf.pediatric-growth-report', [
+            'patient' => $patient,
+            'growthRecords' => $growthRecords,
+            'ageMonths' => $ageMonths,
+            'clinicName' => \App\Models\Setting::get('clinic_name', 'Aura Derma Clinic'),
+            'clinicPhone' => \App\Models\Setting::get('clinic_phone', ''),
+        ]);
+        $pdf->setPaper('A4');
+
+        $filename = 'GrowthReport-' . ($patient->file_number ?? $patient->id) . '.pdf';
+        return $pdf->stream($filename);
     }
 }

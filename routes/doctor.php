@@ -182,6 +182,7 @@ Route::middleware('doctor.auth')->group(function () {
 
         // Growth Records
         Route::post('/patients/{patient}/growth', [DoctorPediatricPatientController::class, 'storeGrowth'])->name('doctor.pediatric.patients.growth.store');
+        Route::post('/patients/{patient}/growth/{record}/delete', [DoctorPediatricPatientController::class, 'destroyGrowth'])->name('doctor.pediatric.patients.growth.destroy');
 
         // Vaccinations
         Route::post('/patients/{patient}/vaccination', [DoctorPediatricPatientController::class, 'storeVaccination'])->name('doctor.pediatric.patients.vaccination.store');
@@ -192,9 +193,13 @@ Route::middleware('doctor.auth')->group(function () {
 
         // Allergies
         Route::post('/patients/{patient}/allergy', [DoctorPediatricPatientController::class, 'storeAllergy'])->name('doctor.pediatric.patients.allergy.store');
+        Route::post('/patients/{patient}/allergy/{allergy}/toggle', [DoctorPediatricPatientController::class, 'toggleAllergy'])->name('doctor.pediatric.patients.allergy.toggle');
+        Route::post('/patients/{patient}/allergy/{allergy}/delete', [DoctorPediatricPatientController::class, 'destroyAllergy'])->name('doctor.pediatric.patients.allergy.destroy');
 
         // Chronic Conditions
         Route::post('/patients/{patient}/chronic-condition', [DoctorPediatricPatientController::class, 'storeChronicCondition'])->name('doctor.pediatric.patients.chronic.store');
+        Route::post('/patients/{patient}/chronic-condition/{condition}/toggle', [DoctorPediatricPatientController::class, 'toggleChronicCondition'])->name('doctor.pediatric.patients.chronic.toggle');
+        Route::post('/patients/{patient}/chronic-condition/{condition}/delete', [DoctorPediatricPatientController::class, 'destroyChronicCondition'])->name('doctor.pediatric.patients.chronic.destroy');
 
         // Nutrition
         Route::post('/patients/{patient}/nutrition', [DoctorPediatricPatientController::class, 'storeNutrition'])->name('doctor.pediatric.patients.nutrition.store');
@@ -214,6 +219,10 @@ Route::middleware('doctor.auth')->group(function () {
 
         // Reports
         Route::get('/reports', [DoctorPediatricExtraController::class, 'reports'])->name('doctor.pediatric.reports.index');
+
+        // PDF Exports
+        Route::get('/patients/{patient}/vaccination-card', [DoctorPediatricExtraController::class, 'vaccinationCardPdf'])->name('doctor.pediatric.patients.vaccinationCard');
+        Route::get('/patients/{patient}/growth-report', [DoctorPediatricExtraController::class, 'growthReportPdf'])->name('doctor.pediatric.patients.growthReport');
     });
 
     // ─── Exports ────────────────────────────────────────────
