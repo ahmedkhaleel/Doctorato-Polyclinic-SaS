@@ -4,6 +4,7 @@ import DoctorLayout from '@/Layouts/DoctorLayout.vue';
 import { ref, computed, onMounted } from 'vue';
 import { useCurrency } from '@/Composables/useCurrency.js';
 import SkeletonLoader from '@/Components/Doctor/SkeletonLoader.vue';
+import { getStatusConfig } from '@/Constants/visitStatus';
 
 defineOptions({ layout: DoctorLayout });
 
@@ -101,12 +102,7 @@ function getChange(current, previous) {
 const visitChange = computed(() => getChange(props.monthly?.total_visits, props.prevMonthly?.total_visits));
 const commissionChange = computed(() => getChange(props.monthly?.total_commission, props.prevMonthly?.total_commission));
 
-const statusConfig = computed(() => ({
-    waiting: { label: isRtl.value ? 'انتظار' : 'Waiting', bg: 'bg-amber-50', text: 'text-amber-600', dot: 'bg-amber-400', ring: 'ring-amber-400/20' },
-    in_progress: { label: isRtl.value ? 'جاري' : 'In Progress', bg: 'bg-blue-50', text: 'text-blue-600', dot: 'bg-blue-500', ring: 'ring-blue-400/20' },
-    completed: { label: isRtl.value ? 'مكتمل' : 'Completed', bg: 'bg-emerald-50', text: 'text-emerald-600', dot: 'bg-emerald-500', ring: 'ring-emerald-400/20' },
-    cancelled: { label: isRtl.value ? 'ملغي' : 'Cancelled', bg: 'bg-gray-100', text: 'text-gray-500', dot: 'bg-gray-400', ring: 'ring-gray-400/20' },
-}));
+const statusConfig = computed(() => getStatusConfig(isRtl.value));
 
 // Current time for timeline
 const currentTimeString = computed(() => {

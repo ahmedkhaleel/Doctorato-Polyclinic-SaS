@@ -4,6 +4,9 @@ import { Link, router, usePage } from '@inertiajs/vue3';
 import DoctorLayout from '@/Layouts/DoctorLayout.vue';
 import SearchableSelect from '@/Components/Doctor/SearchableSelect.vue';
 import SkeletonLoader from '@/Components/Doctor/SkeletonLoader.vue';
+import ConfirmModal from '@/Components/Doctor/ConfirmModal.vue';
+import SwipeActions from '@/Components/Doctor/SwipeActions.vue';
+import { getStatusConfig, getStatusSelectOptions } from '@/Constants/visitStatus';
 
 defineOptions({ layout: DoctorLayout });
 
@@ -85,12 +88,7 @@ function animateCounters() {
     requestAnimationFrame(step);
 }
 
-const statusConfig = computed(() => ({
-    waiting: { label: isRtl.value ? 'انتظار' : 'Waiting', bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200', dot: 'bg-amber-400' },
-    in_progress: { label: isRtl.value ? 'جاري' : 'In Progress', bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200', dot: 'bg-blue-500' },
-    completed: { label: isRtl.value ? 'مكتمل' : 'Completed', bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200', dot: 'bg-emerald-500' },
-    cancelled: { label: isRtl.value ? 'ملغي' : 'Cancelled', bg: 'bg-gray-50', text: 'text-gray-500', border: 'border-gray-200', dot: 'bg-gray-400' },
-}));
+const statusConfig = computed(() => getStatusConfig(isRtl.value));
 
 const visitTypeLabels = computed(() => isRtl.value
     ? { consultation: 'استشارة', session: 'جلسة', follow_up: 'متابعة' }
@@ -207,18 +205,53 @@ function formatTime(time) {
 const showConfirmStart = ref(null);
 const showConfirmComplete = ref(null);
 const showConfirmCancel = ref(null);
+const actionProcessing = ref(false);
 
 function startVisit(visit) {
-    router.post(`/doctor/visits/${visit.id}/start`, {}, { preserveScroll: true });
-    showConfirmStart.value = null;
+    actionProcessing.value = true;
+    router.post(`/doctor/visits/${visit.id}/start`, {}, {
+        preserveScroll: true,
+        onFinish: () => { actionProcessing.value = false; showConfirmStart.value = null; },
+    });
 }
 function completeVisit(visit) {
-    router.post(`/doctor/visits/${visit.id}/complete`, {}, { preserveScroll: true });
-    showConfirmComplete.value = null;
+    actionProcessing.value = true;
+    router.post(`/doctor/visits/${visit.id}/complete`, {}, {
+        preserveScroll: true,
+        onFinish: () => { actionProcessing.value = false; showConfirmComplete.value = null; },
+    });
 }
 function cancelVisit(visit) {
-    router.post(`/doctor/visits/${visit.id}/cancel`, {}, { preserveScroll: true });
-    showConfirmCancel.value = null;
+    actionProcessing.value = true;
+    router.post(`/doctor/visits/${visit.id}/cancel`, {}, {
+        preserveScroll: true,
+        onFinish: () => { actionProcessing.value = false; showConfirmCancel.value = null; },
+    });
+}
+
+// ─── Swipe Actions (mobile) ─────────────────────────────
+function getSwipeLeftActions(visit) {
+    const actions = [];
+    if (visit.status === 'waiting') {
+        actions.push({ key: 'start', label: isRtl.value ? 'بدء' : 'Start', icon: 'M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z', color: 'bg-gradient-to-b from-blue-500 to-blue-600' });
+    }
+    if (visit.status === 'in_progress') {
+        actions.push({ key: 'complete', label: isRtl.value ? 'إكمال' : 'Done', icon: 'M5 13l4 4L19 7', color: 'bg-gradient-to-b from-emerald-500 to-emerald-600' });
+    }
+    return actions;
+}
+
+function getSwipeRightActions(visit) {
+    if (visit.status === 'waiting' || visit.status === 'in_progress') {
+        return [{ key: 'cancel', label: isRtl.value ? 'إلغاء' : 'Cancel', icon: 'M6 18L18 6M6 6l12 12', color: 'bg-gradient-to-b from-red-500 to-red-600' }];
+    }
+    return [];
+}
+
+function handleSwipeAction(visit, actionKey) {
+    if (actionKey === 'start') showConfirmStart.value = visit;
+    else if (actionKey === 'complete') showConfirmComplete.value = visit;
+    else if (actionKey === 'cancel') showConfirmCancel.value = visit;
 }
 
 // Computed
@@ -452,13 +485,7 @@ const todayProgress = computed(() => {
                     <div class="w-40">
                         <SearchableSelect
                             v-model="statusFilter"
-                            :options="[
-                                { value: '', label: isRtl ? 'كل الحالات' : 'All Statuses' },
-                                { value: 'waiting', label: isRtl ? 'انتظار' : 'Waiting', color: '#f59e0b' },
-                                { value: 'in_progress', label: isRtl ? 'جاري' : 'In Progress', color: '#3b82f6' },
-                                { value: 'completed', label: isRtl ? 'مكتمل' : 'Completed', color: '#10b981' },
-                                { value: 'cancelled', label: isRtl ? 'ملغي' : 'Cancelled', color: '#6b7280' },
-                            ]"
+                            :options="getStatusSelectOptions(isRtl)"
                             :placeholder="isRtl ? 'كل الحالات' : 'All Statuses'"
                             :search-placeholder="isRtl ? 'بحث...' : 'Search...'"
                             size="sm"
@@ -493,8 +520,21 @@ const todayProgress = computed(() => {
 
             <!-- Visits List -->
             <div class="mt-3">
+                <!-- Mobile swipe hint (shown once) -->
+                <div v-if="visits.data?.length > 0 && activeView === 'today'" class="sm:hidden px-5 py-2 flex items-center gap-2 text-[10px] text-gray-400 bg-gray-50/50 border-b border-gray-100">
+                    <svg class="w-3.5 h-3.5 animate-swipe-hint" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" /></svg>
+                    {{ isRtl ? 'اسحب يمين/يسار للإجراءات السريعة' : 'Swipe left/right for quick actions' }}
+                </div>
                 <div v-if="visits.data?.length > 0" class="divide-y divide-gray-100/80">
-                    <div v-for="(visit, index) in visits.data" :key="visit.id"
+                    <SwipeActions
+                        v-for="(visit, index) in visits.data"
+                        :key="visit.id"
+                        :left-actions="getSwipeLeftActions(visit)"
+                        :right-actions="getSwipeRightActions(visit)"
+                        :disabled="visit.status === 'completed' || visit.status === 'cancelled'"
+                        @action="handleSwipeAction(visit, $event)"
+                    >
+                    <div
                         class="group px-5 py-4 hover:bg-gray-50/60 transition-all duration-200 cursor-pointer"
                         :class="mounted ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4'"
                         :style="{ transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)', transitionDelay: `${0.45 + index * 0.03}s` }"
@@ -623,6 +663,7 @@ const todayProgress = computed(() => {
                             </div>
                         </div>
                     </div>
+                    </SwipeActions>
                 </div>
 
                 <!-- Empty State -->
@@ -674,90 +715,47 @@ const todayProgress = computed(() => {
             </div>
         </div>
 
-        <!-- ═══ CONFIRMATION MODALS ═══ -->
+        <!-- ═══ CONFIRMATION MODALS (using shared ConfirmModal component) ═══ -->
 
-        <!-- Start Visit Modal -->
-        <Teleport to="body">
-            <Transition enter-active-class="transition-all duration-200" enter-from-class="opacity-0" enter-to-class="opacity-100" leave-active-class="transition-all duration-150" leave-from-class="opacity-100" leave-to-class="opacity-0">
-                <div v-if="showConfirmStart" class="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm" @click.self="showConfirmStart = null">
-                    <Transition enter-active-class="transition-all duration-200" enter-from-class="opacity-0 scale-95" enter-to-class="opacity-100 scale-100" leave-active-class="transition-all duration-150" leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-95" appear>
-                        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6">
-                            <div class="flex items-center gap-3 mb-4">
-                                <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center border border-blue-100">
-                                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /></svg>
-                                </div>
-                                <div>
-                                    <h3 class="text-lg font-bold text-gray-900">{{ isRtl ? 'بدء الزيارة؟' : 'Start Visit?' }}</h3>
-                                    <p class="text-sm text-gray-500">{{ showConfirmStart?.patient?.full_name }}</p>
-                                </div>
-                            </div>
-                            <p class="text-xs text-gray-400 mb-5">{{ isRtl ? 'سيتم نقل المريض من قائمة الانتظار إلى قيد التنفيذ.' : 'The patient will be moved from the waiting queue to in-progress.' }}</p>
-                            <div class="flex justify-end gap-2">
-                                <button @click="showConfirmStart = null" class="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors">{{ isRtl ? 'إلغاء' : 'Cancel' }}</button>
-                                <button @click="startVisit(showConfirmStart)" class="px-5 py-2 text-sm font-semibold text-white bg-blue-500 hover:bg-blue-600 rounded-xl transition-colors shadow-sm shadow-blue-200">{{ isRtl ? 'بدء الزيارة' : 'Start Visit' }}</button>
-                            </div>
-                        </div>
-                    </Transition>
-                </div>
-            </Transition>
-        </Teleport>
+        <!-- Start Visit -->
+        <ConfirmModal
+            :show="!!showConfirmStart"
+            type="info"
+            :title="isRtl ? 'بدء الزيارة؟' : 'Start Visit?'"
+            :message="(showConfirmStart?.patient?.full_name || '') + ' — ' + (isRtl ? 'سيتم نقل المريض من قائمة الانتظار إلى قيد التنفيذ.' : 'The patient will be moved from the waiting queue to in-progress.')"
+            :confirm-text="isRtl ? 'بدء الزيارة' : 'Start Visit'"
+            :cancel-text="isRtl ? 'إلغاء' : 'Cancel'"
+            :processing="actionProcessing"
+            icon="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
+            @confirm="startVisit(showConfirmStart)"
+            @cancel="showConfirmStart = null"
+        />
 
-        <!-- Complete Visit Modal -->
-        <Teleport to="body">
-            <Transition enter-active-class="transition-all duration-200" enter-from-class="opacity-0" enter-to-class="opacity-100" leave-active-class="transition-all duration-150" leave-from-class="opacity-100" leave-to-class="opacity-0">
-                <div v-if="showConfirmComplete" class="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm" @click.self="showConfirmComplete = null">
-                    <Transition enter-active-class="transition-all duration-200" enter-from-class="opacity-0 scale-95" enter-to-class="opacity-100 scale-100" leave-active-class="transition-all duration-150" leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-95" appear>
-                        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6">
-                            <div class="flex items-center gap-3 mb-4">
-                                <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center border border-emerald-100">
-                                    <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                </div>
-                                <div>
-                                    <h3 class="text-lg font-bold text-gray-900">{{ isRtl ? 'إكمال الزيارة؟' : 'Complete Visit?' }}</h3>
-                                    <p class="text-sm text-gray-500">{{ showConfirmComplete?.patient?.full_name }}</p>
-                                </div>
-                            </div>
-                            <div class="bg-gray-50 rounded-xl p-3 mb-5">
-                                <div class="flex items-center gap-2 text-xs text-gray-500">
-                                    <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                    {{ isRtl ? 'سيتم إنهاء الزيارة وحساب عمولتك.' : 'This will finalize the visit and calculate your commission.' }}
-                                </div>
-                            </div>
-                            <div class="flex justify-end gap-2">
-                                <button @click="showConfirmComplete = null" class="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors">{{ isRtl ? 'إلغاء' : 'Cancel' }}</button>
-                                <button @click="completeVisit(showConfirmComplete)" class="px-5 py-2 text-sm font-semibold text-white bg-emerald-500 hover:bg-emerald-600 rounded-xl transition-colors shadow-sm shadow-emerald-200">{{ isRtl ? 'إكمال' : 'Complete' }}</button>
-                            </div>
-                        </div>
-                    </Transition>
-                </div>
-            </Transition>
-        </Teleport>
+        <!-- Complete Visit -->
+        <ConfirmModal
+            :show="!!showConfirmComplete"
+            type="success"
+            :title="isRtl ? 'إكمال الزيارة؟' : 'Complete Visit?'"
+            :message="(showConfirmComplete?.patient?.full_name || '') + ' — ' + (isRtl ? 'سيتم إنهاء الزيارة وحساب عمولتك.' : 'This will finalize the visit and calculate your commission.')"
+            :confirm-text="isRtl ? 'إكمال' : 'Complete'"
+            :cancel-text="isRtl ? 'إلغاء' : 'Cancel'"
+            :processing="actionProcessing"
+            @confirm="completeVisit(showConfirmComplete)"
+            @cancel="showConfirmComplete = null"
+        />
 
-        <!-- Cancel Visit Modal -->
-        <Teleport to="body">
-            <Transition enter-active-class="transition-all duration-200" enter-from-class="opacity-0" enter-to-class="opacity-100" leave-active-class="transition-all duration-150" leave-from-class="opacity-100" leave-to-class="opacity-0">
-                <div v-if="showConfirmCancel" class="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm" @click.self="showConfirmCancel = null">
-                    <Transition enter-active-class="transition-all duration-200" enter-from-class="opacity-0 scale-95" enter-to-class="opacity-100 scale-100" leave-active-class="transition-all duration-150" leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-95" appear>
-                        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6">
-                            <div class="flex items-center gap-3 mb-4">
-                                <div class="w-12 h-12 rounded-xl bg-red-50 flex items-center justify-center border border-red-100">
-                                    <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
-                                </div>
-                                <div>
-                                    <h3 class="text-lg font-bold text-gray-900">{{ isRtl ? 'إلغاء الزيارة؟' : 'Cancel Visit?' }}</h3>
-                                    <p class="text-sm text-gray-500">{{ showConfirmCancel?.patient?.full_name }}</p>
-                                </div>
-                            </div>
-                            <p class="text-xs text-gray-400 mb-5">{{ isRtl ? 'سيتم إلغاء الزيارة. للتراجع، تواصل مع المسؤول.' : 'This action will cancel the visit. If you need to reverse this, contact the admin.' }}</p>
-                            <div class="flex justify-end gap-2">
-                                <button @click="showConfirmCancel = null" class="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors">{{ isRtl ? 'رجوع' : 'Go Back' }}</button>
-                                <button @click="cancelVisit(showConfirmCancel)" class="px-5 py-2 text-sm font-semibold text-white bg-red-500 hover:bg-red-600 rounded-xl transition-colors shadow-sm shadow-red-200">{{ isRtl ? 'إلغاء الزيارة' : 'Cancel Visit' }}</button>
-                            </div>
-                        </div>
-                    </Transition>
-                </div>
-            </Transition>
-        </Teleport>
+        <!-- Cancel Visit -->
+        <ConfirmModal
+            :show="!!showConfirmCancel"
+            type="danger"
+            :title="isRtl ? 'إلغاء الزيارة؟' : 'Cancel Visit?'"
+            :message="(showConfirmCancel?.patient?.full_name || '') + ' — ' + (isRtl ? 'سيتم إلغاء الزيارة. للتراجع، تواصل مع المسؤول.' : 'This action will cancel the visit. Contact admin to reverse.')"
+            :confirm-text="isRtl ? 'إلغاء الزيارة' : 'Cancel Visit'"
+            :cancel-text="isRtl ? 'رجوع' : 'Go Back'"
+            :processing="actionProcessing"
+            @confirm="cancelVisit(showConfirmCancel)"
+            @cancel="showConfirmCancel = null"
+        />
     </div>
 </template>
 
@@ -768,5 +766,13 @@ const todayProgress = computed(() => {
 @keyframes pulse-dot {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.3; }
+}
+.animate-swipe-hint {
+    animation: swipe-hint 2s ease-in-out infinite;
+}
+@keyframes swipe-hint {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    75% { transform: translateX(4px); }
 }
 </style>
