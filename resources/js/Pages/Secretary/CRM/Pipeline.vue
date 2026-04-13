@@ -233,6 +233,23 @@ const columnStats = computed(() => {
     return stats;
 });
 
+/* ── Pipeline-wide priority breakdown ─────────────────── */
+const priorityBreakdown = computed(() => {
+    const all = Object.values(localColumns.value || {}).flat();
+    const total = all.length || 1;
+    const hot = all.filter(l => l.priority == 1).length;
+    const warm = all.filter(l => l.priority == 2).length;
+    const cold = all.filter(l => l.priority == 3).length;
+    const none = all.length - hot - warm - cold;
+    return {
+        hot, warm, cold, none, total: all.length,
+        hotPct: Math.round((hot / total) * 100),
+        warmPct: Math.round((warm / total) * 100),
+        coldPct: Math.round((cold / total) * 100),
+        nonePct: Math.round((none / total) * 100),
+    };
+});
+
 /* ── Helpers ────────────────────────────────────────────── */
 function timeAgo(date) {
     if (!date) return '';
@@ -365,6 +382,43 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handlePipelineKe
                     <svg class="w-4 h-4 text-gray-300" :class="isRtl ? 'rotate-180' : ''" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
                 </div>
             </template>
+        </div>
+    </div>
+
+    <!-- Priority Breakdown Bar -->
+    <div v-if="priorityBreakdown.total > 0"
+         :class="['bg-white rounded-xl shadow-sm border border-gray-100 px-4 py-2.5 mb-4 transition-all duration-700', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4']"
+         :style="{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)', transitionDelay: '130ms' }">
+        <div class="flex items-center gap-4">
+            <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider flex-shrink-0">{{ isRtl ? 'الأولويات' : 'Priorities' }}</span>
+            <!-- Stacked bar -->
+            <div class="flex-1 h-2.5 rounded-full bg-gray-100 overflow-hidden flex">
+                <div v-if="priorityBreakdown.hot" class="h-full bg-gradient-to-r from-red-500 to-rose-400 transition-all duration-1000 ease-out" :style="{ width: mounted ? priorityBreakdown.hotPct + '%' : '0%' }"></div>
+                <div v-if="priorityBreakdown.warm" class="h-full bg-gradient-to-r from-amber-400 to-yellow-300 transition-all duration-1000 ease-out" :style="{ width: mounted ? priorityBreakdown.warmPct + '%' : '0%', transitionDelay: '100ms' }"></div>
+                <div v-if="priorityBreakdown.cold" class="h-full bg-gradient-to-r from-blue-400 to-sky-300 transition-all duration-1000 ease-out" :style="{ width: mounted ? priorityBreakdown.coldPct + '%' : '0%', transitionDelay: '200ms' }"></div>
+                <div v-if="priorityBreakdown.none" class="h-full bg-gray-200 transition-all duration-1000 ease-out" :style="{ width: mounted ? priorityBreakdown.nonePct + '%' : '0%', transitionDelay: '300ms' }"></div>
+            </div>
+            <!-- Legend -->
+            <div class="flex items-center gap-3 flex-shrink-0">
+                <button v-if="priorityBreakdown.hot" @click="filterPriority = filterPriority === '1' ? '' : '1'"
+                    class="flex items-center gap-1 text-[10px] font-semibold transition-all px-1.5 py-0.5 rounded-md"
+                    :class="filterPriority === '1' ? 'bg-red-100 text-red-700 ring-1 ring-red-300' : 'text-gray-500 hover:text-red-600'">
+                    <span class="w-2 h-2 rounded-full bg-red-500"></span>
+                    {{ priorityBreakdown.hot }}
+                </button>
+                <button v-if="priorityBreakdown.warm" @click="filterPriority = filterPriority === '2' ? '' : '2'"
+                    class="flex items-center gap-1 text-[10px] font-semibold transition-all px-1.5 py-0.5 rounded-md"
+                    :class="filterPriority === '2' ? 'bg-amber-100 text-amber-700 ring-1 ring-amber-300' : 'text-gray-500 hover:text-amber-600'">
+                    <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+                    {{ priorityBreakdown.warm }}
+                </button>
+                <button v-if="priorityBreakdown.cold" @click="filterPriority = filterPriority === '3' ? '' : '3'"
+                    class="flex items-center gap-1 text-[10px] font-semibold transition-all px-1.5 py-0.5 rounded-md"
+                    :class="filterPriority === '3' ? 'bg-blue-100 text-blue-700 ring-1 ring-blue-300' : 'text-gray-500 hover:text-blue-600'">
+                    <span class="w-2 h-2 rounded-full bg-blue-400"></span>
+                    {{ priorityBreakdown.cold }}
+                </button>
+            </div>
         </div>
     </div>
 

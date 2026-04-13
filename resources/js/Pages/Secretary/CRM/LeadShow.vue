@@ -19,6 +19,30 @@ onMounted(() => {
     setTimeout(() => { mounted.value = true; }, 50);
 });
 
+/* ── Prev/Next lead navigation ────────────────────── */
+const prevLeadId = ref(null);
+const nextLeadId = ref(null);
+const leadListPosition = ref('');
+
+(() => {
+    try {
+        const stored = JSON.parse(localStorage.getItem('crm_lead_list') || '[]');
+        if (!stored.length) return;
+        const currentIdx = stored.indexOf(props.lead.id);
+        if (currentIdx === -1) return;
+        if (currentIdx > 0) prevLeadId.value = stored[currentIdx - 1];
+        if (currentIdx < stored.length - 1) nextLeadId.value = stored[currentIdx + 1];
+        leadListPosition.value = `${currentIdx + 1} / ${stored.length}`;
+    } catch {}
+})();
+
+function goToPrevLead() {
+    if (prevLeadId.value) router.get(`/secretary/crm/leads/${prevLeadId.value}`);
+}
+function goToNextLead() {
+    if (nextLeadId.value) router.get(`/secretary/crm/leads/${nextLeadId.value}`);
+}
+
 // Tabs — persisted to localStorage
 const savedTab = (() => { try { return localStorage.getItem('crm_leadshow_tab'); } catch { return null; } })();
 const activeTab = ref(savedTab || 'activity');
@@ -657,6 +681,12 @@ function handleLeadShowKey(e) {
         if (e.key === 'Backspace') return; // only B, not backspace
         e.preventDefault(); router.get('/secretary/crm/leads');
     }
+    if (e.key === 'ArrowLeft' && !isRtl.value || e.key === 'ArrowRight' && isRtl.value) {
+        if (prevLeadId.value) { e.preventDefault(); goToPrevLead(); }
+    }
+    if (e.key === 'ArrowRight' && !isRtl.value || e.key === 'ArrowLeft' && isRtl.value) {
+        if (nextLeadId.value) { e.preventDefault(); goToNextLead(); }
+    }
     if (e.key === 'Escape') {
         if (showScoreBreakdown.value) { showScoreBreakdown.value = false; return; }
         if (showPriorityPicker.value) { showPriorityPicker.value = false; return; }
@@ -731,17 +761,35 @@ function handleLeadShowKey(e) {
                     <div class="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/4"></div>
 
                     <div class="max-w-7xl mx-auto relative z-10">
-                        <!-- Back button -->
+                        <!-- Back button + Prev/Next nav -->
                         <div class="flex items-center justify-between mb-6">
-                            <Link
-                                href="/secretary/crm/leads"
-                                class="inline-flex items-center gap-1.5 text-teal-100 hover:text-white text-sm transition-colors"
-                            >
-                                <svg class="w-4 h-4" :class="isRtl ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-                                </svg>
-                                {{ isRtl ? 'العودة للعملاء المحتملين' : 'Back to Leads' }}
-                            </Link>
+                            <div class="flex items-center gap-3">
+                                <Link
+                                    href="/secretary/crm/leads"
+                                    class="inline-flex items-center gap-1.5 text-teal-100 hover:text-white text-sm transition-colors"
+                                >
+                                    <svg class="w-4 h-4" :class="isRtl ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                                    </svg>
+                                    {{ isRtl ? 'العودة للعملاء المحتملين' : 'Back to Leads' }}
+                                </Link>
+                                <!-- Prev/Next lead navigation -->
+                                <div v-if="prevLeadId || nextLeadId" class="hidden sm:flex items-center gap-1 ms-2 ps-3 border-s border-teal-500/30">
+                                    <button @click="goToPrevLead" :disabled="!prevLeadId"
+                                        class="w-7 h-7 rounded-lg flex items-center justify-center transition-all"
+                                        :class="prevLeadId ? 'bg-white/10 hover:bg-white/20 text-teal-100 hover:text-white' : 'bg-white/5 text-teal-500/30 cursor-not-allowed'"
+                                        :title="isRtl ? 'العميل السابق' : 'Previous lead'">
+                                        <svg class="w-3.5 h-3.5" :class="isRtl ? 'rotate-180' : ''" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+                                    </button>
+                                    <span v-if="leadListPosition" class="text-[10px] text-teal-300/60 font-mono tabular-nums px-1">{{ leadListPosition }}</span>
+                                    <button @click="goToNextLead" :disabled="!nextLeadId"
+                                        class="w-7 h-7 rounded-lg flex items-center justify-center transition-all"
+                                        :class="nextLeadId ? 'bg-white/10 hover:bg-white/20 text-teal-100 hover:text-white' : 'bg-white/5 text-teal-500/30 cursor-not-allowed'"
+                                        :title="isRtl ? 'العميل التالي' : 'Next lead'">
+                                        <svg class="w-3.5 h-3.5" :class="isRtl ? '' : 'rotate-180'" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+                                    </button>
+                                </div>
+                            </div>
                             <!-- Keyboard hints -->
                             <div class="hidden lg:flex items-center gap-2 text-teal-200/50 text-[10px]">
                                 <span class="flex items-center gap-1"><kbd class="px-1 py-0.5 bg-white/10 rounded text-[9px] font-mono">A</kbd> {{ isRtl ? 'نشاط' : 'Activity' }}</span>

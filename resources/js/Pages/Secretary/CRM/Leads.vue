@@ -20,6 +20,11 @@ const inlineStatusOpen = ref(null);
 onMounted(() => {
     setTimeout(() => { mounted.value = true; }, 50);
     document.addEventListener('click', () => { inlineStatusOpen.value = null; showColumnMenu.value = false; });
+    // Store lead IDs for prev/next navigation in LeadShow
+    try {
+        const ids = (props.leads?.data || []).map(l => l.id);
+        if (ids.length) localStorage.setItem('crm_lead_list', JSON.stringify(ids));
+    } catch {}
 });
 onBeforeUnmount(() => { document.removeEventListener('click', () => {}); });
 
@@ -1183,30 +1188,76 @@ const activeFilterPills = computed(() => {
 
             <!-- ═══════════════ EMPTY STATE ═══════════════ -->
             <div v-if="!leads.data?.length"
-                 class="bg-white rounded-2xl shadow-sm border border-gray-100 px-8 py-20 text-center"
+                 class="bg-white rounded-2xl shadow-sm border border-gray-100 px-8 py-16 text-center"
                  :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
                  style="transition: all 0.5s ease;">
-                <div class="w-20 h-20 mx-auto mb-6 rounded-full flex items-center justify-center" style="background: linear-gradient(135deg, #ccfbf1, #99f6e4);">
-                    <svg class="w-10 h-10 text-teal-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                <!-- Different icon based on filter vs no data -->
+                <div class="w-20 h-20 mx-auto mb-6 rounded-full flex items-center justify-center"
+                     :style="hasActiveFilters ? 'background: linear-gradient(135deg, #fef3c7, #fde68a)' : 'background: linear-gradient(135deg, #ccfbf1, #99f6e4)'">
+                    <svg v-if="hasActiveFilters" class="w-10 h-10 text-amber-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/>
+                    </svg>
+                    <svg v-else class="w-10 h-10 text-teal-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z"/>
                     </svg>
                 </div>
                 <h3 class="text-lg font-semibold text-gray-700 mb-2">
-                    {{ isRtl ? 'لا توجد عملاء محتملين' : 'No leads found' }}
+                    {{ hasActiveFilters
+                        ? (isRtl ? 'لا توجد نتائج مطابقة' : 'No matching results')
+                        : (isRtl ? 'ابدأ ببناء قاعدة عملائك' : 'Start building your leads') }}
                 </h3>
                 <p class="text-sm text-gray-400 max-w-md mx-auto mb-6">
-                    {{ isRtl
-                        ? 'لم يتم العثور على أي عملاء محتملين بناءً على الفلاتر الحالية. حاول تعديل معايير البحث.'
-                        : 'No leads match your current filters. Try adjusting your search criteria or clearing filters.' }}
+                    {{ hasActiveFilters
+                        ? (isRtl ? 'جرّب تعديل الفلاتر أو البحث بكلمات مختلفة' : 'Try adjusting your filters or searching with different keywords')
+                        : (isRtl ? 'أضف عميلك المحتمل الأول أو استورد قائمة جاهزة' : 'Add your first lead or import an existing list') }}
                 </p>
-                <button v-if="hasActiveFilters" @click="clearFilters"
-                    class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-white text-sm font-medium transition-all duration-200 hover:shadow-lg"
-                    style="background-color: #0d9488;">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
-                    </svg>
-                    {{ isRtl ? 'مسح جميع الفلاتر' : 'Clear all filters' }}
-                </button>
+
+                <!-- Suggestions when filters active -->
+                <div v-if="hasActiveFilters" class="max-w-sm mx-auto mb-6 space-y-2">
+                    <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">{{ isRtl ? 'اقتراحات' : 'Suggestions' }}</p>
+                    <button v-if="search" @click="search = ''"
+                        class="w-full flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-gray-50 hover:bg-amber-50 border border-gray-150 hover:border-amber-200 text-xs text-gray-600 transition-all duration-200 text-start">
+                        <svg class="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                        {{ isRtl ? 'مسح البحث عن' : 'Clear search for' }} "<span class="font-semibold text-gray-800">{{ search }}</span>"
+                    </button>
+                    <button v-if="statusFilter" @click="statusFilter = ''"
+                        class="w-full flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-gray-50 hover:bg-amber-50 border border-gray-150 hover:border-amber-200 text-xs text-gray-600 transition-all duration-200 text-start">
+                        <svg class="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
+                        {{ isRtl ? 'إزالة فلتر الحالة' : 'Remove status filter' }}: <span class="font-semibold text-gray-800">{{ statusLabels[statusFilter] || statusFilter }}</span>
+                    </button>
+                    <button v-if="priorityFilter" @click="priorityFilter = ''"
+                        class="w-full flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-gray-50 hover:bg-amber-50 border border-gray-150 hover:border-amber-200 text-xs text-gray-600 transition-all duration-200 text-start">
+                        <svg class="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
+                        {{ isRtl ? 'إزالة فلتر الأولوية' : 'Remove priority filter' }}
+                    </button>
+                </div>
+
+                <!-- Action buttons -->
+                <div class="flex items-center justify-center gap-3 flex-wrap">
+                    <button v-if="hasActiveFilters" @click="clearFilters"
+                        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-white text-sm font-medium transition-all duration-200 hover:shadow-lg hover:scale-[1.02]"
+                        style="background-color: #0d9488;">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                        {{ isRtl ? 'مسح جميع الفلاتر' : 'Clear all filters' }}
+                    </button>
+                    <Link v-if="!hasActiveFilters" href="/secretary/crm/leads/create"
+                        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-white text-sm font-medium transition-all duration-200 hover:shadow-lg hover:scale-[1.02]"
+                        style="background-color: #0d9488;">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
+                        </svg>
+                        {{ isRtl ? 'إضافة عميل جديد' : 'Add New Lead' }}
+                    </Link>
+                    <Link v-if="!hasActiveFilters" href="/secretary/crm/import"
+                        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-teal-700 text-sm font-medium bg-teal-50 border border-teal-200 hover:bg-teal-100 transition-all duration-200 hover:scale-[1.02]">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/>
+                        </svg>
+                        {{ isRtl ? 'استيراد ملف CSV' : 'Import CSV' }}
+                    </Link>
+                </div>
             </div>
 
             <!-- ═══════════════ PAGINATION ═══════════════ -->

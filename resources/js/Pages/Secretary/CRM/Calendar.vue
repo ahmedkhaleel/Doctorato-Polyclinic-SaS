@@ -157,6 +157,13 @@ const selectedDate = ref(null);
 const showDetail = ref(false);
 
 function selectDay(dateStr) {
+    // If day has no follow-ups and is current/future, open quick-add instead
+    const dayFUs = getFollowUpsForDay(dateStr);
+    const isCurrentOrFuture = new Date(dateStr + 'T23:59:59') >= new Date(new Date().setHours(0,0,0,0));
+    if (dayFUs.length === 0 && isCurrentOrFuture) {
+        openQuickAdd(dateStr);
+        return;
+    }
     selectedDate.value = dateStr;
     showDetail.value = true;
 }
@@ -608,6 +615,14 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handleCalendarKe
                     <div v-if="getFilteredFollowUpsForDay(cell.date).length > 3"
                          class="text-[9px] text-gray-400 font-medium px-1.5">
                         +{{ getFilteredFollowUpsForDay(cell.date).length - 3 }} {{ isRtl ? 'أخرى' : 'more' }}
+                    </div>
+                    <!-- Empty day hint for current/future days -->
+                    <div v-if="cell.isCurrentMonth && getFilteredFollowUpsForDay(cell.date).length === 0"
+                         class="flex items-center justify-center h-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 pt-2">
+                        <span class="text-[9px] text-gray-300 flex items-center gap-0.5">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+                            {{ isRtl ? 'إضافة' : 'Add' }}
+                        </span>
                     </div>
                 </div>
             </div>

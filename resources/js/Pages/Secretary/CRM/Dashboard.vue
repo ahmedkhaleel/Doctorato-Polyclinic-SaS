@@ -36,15 +36,45 @@ function refreshDashboard() {
     router.reload({ preserveScroll: true, onSuccess: () => { loadedAt.value = Date.now(); updateFreshness(); } });
 }
 
+/* ---------- Auto-refresh interval selector ---------- */
+const autoRefreshOptions = [
+    { key: 0, en: 'Off', ar: 'إيقاف' },
+    { key: 30, en: '30s', ar: '30 ث' },
+    { key: 60, en: '1m', ar: '1 د' },
+    { key: 300, en: '5m', ar: '5 د' },
+];
+const savedAutoRefresh = (() => { try { const v = localStorage.getItem('crm_dashboard_autoRefresh'); return v ? parseInt(v) : 0; } catch { return 0; } })();
+const autoRefreshInterval = ref(savedAutoRefresh);
+const showAutoRefreshPicker = ref(false);
+let autoRefreshHandle = null;
+
+function setAutoRefresh(seconds) {
+    autoRefreshInterval.value = seconds;
+    showAutoRefreshPicker.value = false;
+    try { localStorage.setItem('crm_dashboard_autoRefresh', String(seconds)); } catch {}
+    clearInterval(autoRefreshHandle);
+    if (seconds > 0) {
+        autoRefreshHandle = setInterval(refreshDashboard, seconds * 1000);
+    }
+}
+
+const autoRefreshLabel = computed(() => {
+    const opt = autoRefreshOptions.find(o => o.key === autoRefreshInterval.value);
+    return opt ? (isRtl.value ? opt.ar : opt.en) : (isRtl.value ? 'إيقاف' : 'Off');
+});
+
 onMounted(() => {
     setTimeout(() => { mounted.value = true; }, 50);
     startCounters();
     loadedAt.value = Date.now();
     updateFreshness();
     freshnessTimer = setInterval(updateFreshness, 30000);
+    if (autoRefreshInterval.value > 0) {
+        autoRefreshHandle = setInterval(refreshDashboard, autoRefreshInterval.value * 1000);
+    }
 });
 
-onBeforeUnmount(() => { clearInterval(freshnessTimer); });
+onBeforeUnmount(() => { clearInterval(freshnessTimer); clearInterval(autoRefreshHandle); });
 
 /* ---------- Animated counters ---------- */
 const counterMyLeads = ref(0);
@@ -498,6 +528,35 @@ const activityTypeConfig = {
                             <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
                             {{ timeSinceLoad }}
                         </button>
+                        <!-- Auto-refresh picker -->
+                        <div class="relative">
+                            <button @click.stop="showAutoRefreshPicker = !showAutoRefreshPicker"
+                                class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] transition-all"
+                                :class="autoRefreshInterval > 0 ? 'bg-emerald-400/25 text-emerald-200 ring-1 ring-emerald-400/30' : 'bg-white/10 hover:bg-white/20 text-teal-200'"
+                                :title="isRtl ? 'تحديث تلقائي' : 'Auto-refresh'">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                <span v-if="autoRefreshInterval > 0" class="w-1.5 h-1.5 rounded-full bg-emerald-300 animate-pulse"></span>
+                                {{ autoRefreshLabel }}
+                            </button>
+                            <Transition
+                                enter-active-class="transition-all duration-200"
+                                enter-from-class="opacity-0 scale-95 -translate-y-1"
+                                enter-to-class="opacity-100 scale-100 translate-y-0"
+                                leave-active-class="transition-all duration-150"
+                                leave-from-class="opacity-100 scale-100"
+                                leave-to-class="opacity-0 scale-95"
+                            >
+                                <div v-if="showAutoRefreshPicker" class="absolute top-full mt-1.5 start-0 w-32 bg-white rounded-xl shadow-xl border border-gray-200 py-1.5 z-30">
+                                    <button v-for="opt in autoRefreshOptions" :key="opt.key"
+                                        @click="setAutoRefresh(opt.key)"
+                                        class="w-full text-start px-3 py-1.5 text-xs transition-colors flex items-center justify-between"
+                                        :class="autoRefreshInterval === opt.key ? 'bg-teal-50 text-teal-700 font-semibold' : 'text-gray-600 hover:bg-gray-50'">
+                                        <span>{{ isRtl ? opt.ar : opt.en }}</span>
+                                        <svg v-if="autoRefreshInterval === opt.key" class="w-3.5 h-3.5 text-teal-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                    </button>
+                                </div>
+                            </Transition>
+                        </div>
                         <span class="hidden md:inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/10 text-teal-200 text-[10px]">
                             <kbd class="px-1 py-0.5 rounded bg-white/15 text-white font-mono text-[10px]">N</kbd> {{ isRtl ? 'جديد' : 'New' }}
                             <kbd class="px-1 py-0.5 rounded bg-white/15 text-white font-mono text-[10px] ms-1.5">L</kbd> {{ isRtl ? 'عملاء' : 'Leads' }}
