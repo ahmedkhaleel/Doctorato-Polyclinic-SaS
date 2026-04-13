@@ -405,7 +405,7 @@ const todayProgress = computed(() => {
 
         <!-- Current In-Progress Banner -->
         <div v-if="currentInProgress && activeView === 'today'"
-            class="relative overflow-hidden rounded-2xl border-2 border-blue-200 bg-gradient-to-r from-blue-50 via-white to-blue-50 p-5"
+            class="relative overflow-hidden rounded-2xl border-2 border-blue-200 bg-gradient-to-r from-blue-50 via-white to-blue-50 p-4 sm:p-5"
             :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
             style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.35s"
         >
@@ -434,7 +434,7 @@ const todayProgress = computed(() => {
                         </div>
                     </div>
                 </div>
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-2 flex-wrap">
                     <button @click="showConfirmComplete = currentInProgress" class="inline-flex items-center gap-1.5 px-4 py-2.5 text-sm font-semibold text-white bg-emerald-500 hover:bg-emerald-600 rounded-xl transition-all shadow-sm shadow-emerald-200 hover:shadow-md hover:shadow-emerald-200">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
                         {{ isRtl ? 'إكمال' : 'Complete' }}
@@ -453,7 +453,7 @@ const todayProgress = computed(() => {
         >
             <!-- Tabs & Filters -->
             <div class="px-5 pt-4 pb-0 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                <div class="flex items-center gap-1 bg-gray-100/80 rounded-xl p-1">
+                <div class="flex items-center gap-1 bg-gray-100/80 rounded-xl p-1 overflow-x-auto scrollbar-none">
                     <button v-for="tab in viewTabs" :key="tab.key" @click="switchView(tab.key)"
                         class="relative px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200"
                         :class="activeView === tab.key
@@ -468,7 +468,7 @@ const todayProgress = computed(() => {
                 </div>
                 <div class="flex items-center gap-2 flex-wrap">
                     <!-- Module Filter -->
-                    <div class="inline-flex items-center rounded-lg border border-gray-200 overflow-hidden">
+                    <div class="inline-flex items-center rounded-lg border border-gray-200 overflow-hidden flex-shrink-0">
                         <button @click="setModuleFilter('')"
                             class="px-2.5 py-1.5 text-[11px] font-semibold transition-all"
                             :class="!moduleFilter ? 'bg-gray-800 text-white' : 'bg-white text-gray-500 hover:bg-gray-50'"
@@ -482,7 +482,7 @@ const todayProgress = computed(() => {
                             :class="moduleFilter === 'dermatology' ? 'bg-pink-600 text-white' : 'bg-white text-pink-700 hover:bg-pink-50'"
                         >{{ isRtl ? 'جلدية' : 'Derma' }}</button>
                     </div>
-                    <div class="w-40">
+                    <div class="w-full sm:w-40">
                         <SearchableSelect
                             v-model="statusFilter"
                             :options="getStatusSelectOptions(isRtl)"
@@ -504,7 +504,7 @@ const todayProgress = computed(() => {
             <!-- Date Range Filter -->
             <Transition enter-active-class="transition-all duration-200 ease-out" enter-from-class="max-h-0 opacity-0" enter-to-class="max-h-20 opacity-100" leave-active-class="transition-all duration-150 ease-in" leave-from-class="max-h-20 opacity-100" leave-to-class="max-h-0 opacity-0">
                 <div v-if="showDateFilter" class="px-5 pt-3 pb-0 overflow-hidden">
-                    <div class="flex items-center gap-3">
+                    <div class="flex flex-wrap items-center gap-2 sm:gap-3">
                         <div class="flex items-center gap-2">
                             <label class="text-xs text-gray-500">{{ isRtl ? 'من' : 'From' }}</label>
                             <input v-model="dateFrom" type="date" :max="dateTo || undefined" @change="applyFilters" class="text-sm border border-gray-200 rounded-lg px-3 py-1.5 bg-white text-gray-600 focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265]" />
@@ -535,7 +535,7 @@ const todayProgress = computed(() => {
                         @action="handleSwipeAction(visit, $event)"
                     >
                     <div
-                        class="group px-5 py-4 hover:bg-gray-50/60 transition-all duration-200 cursor-pointer"
+                        class="group px-3 sm:px-5 py-3 sm:py-4 hover:bg-gray-50/60 transition-all duration-200 cursor-pointer"
                         :class="mounted ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4'"
                         :style="{ transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)', transitionDelay: `${0.45 + index * 0.03}s` }"
                         @click="$inertia ? null : router.visit(`/doctor/visits/${visit.id}`)"
@@ -586,14 +586,14 @@ const todayProgress = computed(() => {
                                         <span v-if="visit.module === 'dental'" class="inline-flex items-center gap-0.5 text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-cyan-50 text-cyan-700 border border-cyan-200"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342" /></svg> {{ isRtl ? 'أسنان' : 'Dental' }}</span>
                                         <span v-else class="inline-flex items-center gap-0.5 text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-pink-50 text-pink-700 border border-pink-200">{{ isRtl ? 'جلدية' : 'Derma' }}</span>
                                         <span class="text-gray-200">&middot;</span>
-                                        <span class="inline-flex items-center text-xs font-medium px-1.5 py-0.5 rounded bg-gray-50 text-gray-600">{{ getVisitTypeLabel(visit) }}</span>
+                                        <span class="inline-flex items-center text-xs font-medium px-1.5 py-0.5 rounded bg-gray-50 text-gray-600 truncate max-w-[120px] sm:max-w-none">{{ getVisitTypeLabel(visit) }}</span>
                                         <template v-if="getDentalDescription(visit)">
                                             <span class="text-gray-200">&middot;</span>
                                             <span class="text-xs font-medium text-cyan-600">{{ getDentalDescription(visit) }}</span>
                                         </template>
                                         <template v-if="visit.service">
                                             <span class="text-gray-200">&middot;</span>
-                                            <span class="text-xs text-gray-500">{{ isRtl ? (visit.service.name_ar || visit.service.name_en) : visit.service.name_en }}</span>
+                                            <span class="text-xs text-gray-500 truncate max-w-[100px] sm:max-w-none">{{ isRtl ? (visit.service.name_ar || visit.service.name_en) : visit.service.name_en }}</span>
                                         </template>
                                         <template v-if="activeView !== 'today'">
                                             <span class="text-gray-200">&middot;</span>
@@ -636,7 +636,7 @@ const todayProgress = computed(() => {
                                     <span class="w-1.5 h-1.5 rounded-full" :class="statusConfig[visit.status]?.dot"></span>
                                     {{ statusConfig[visit.status]?.label }}
                                 </span>
-                                <div class="flex items-center gap-1.5" @click.stop>
+                                <div class="flex items-center gap-1.5 flex-wrap" @click.stop>
                                     <button v-if="visit.status === 'waiting'" @click="showConfirmStart = visit"
                                         class="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-semibold text-white bg-blue-500 hover:bg-blue-600 rounded-lg transition-all shadow-sm shadow-blue-200 hover:shadow-md hover:shadow-blue-200 hover:-translate-y-0.5"
                                     >

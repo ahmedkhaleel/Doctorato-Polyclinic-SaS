@@ -152,7 +152,7 @@ function sendConsent() {
                     {{ locale === 'ar' ? (plan.title_ar || plan.title_en || `#${plan.id}`) : (plan.title_en || plan.title_ar || `#${plan.id}`) }}
                 </h1>
             </div>
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-2 flex-wrap">
                 <Link v-if="plan.patient" :href="`/doctor/dental/chart/${plan.patient.id}`"
                     class="inline-flex items-center px-3 py-2 text-sm font-medium text-[#C4A265] bg-[#C4A265]/5 rounded-lg hover:bg-[#C4A265]/10 border border-[#C4A265]/10 transition-colors">
                     <svg class="w-4 h-4 ltr:mr-1.5 rtl:ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
@@ -167,9 +167,9 @@ function sendConsent() {
         </div>
 
         <!-- Plan Info + Actions -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <!-- Main Info -->
-            <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6 space-y-5">
+            <div class="md:col-span-2 lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6 space-y-5">
                 <div class="flex items-start justify-between">
                     <div class="flex items-center gap-2 flex-wrap">
                         <span :class="[statusColors[plan.status] || 'bg-gray-100 text-gray-800', 'px-3 py-1 rounded-full text-sm font-medium']">
@@ -232,7 +232,7 @@ function sendConsent() {
             </div>
 
             <!-- Status Actions Sidebar -->
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6 space-y-4">
+            <div class="md:col-span-2 lg:col-span-1 bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6 space-y-4">
                 <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wider">{{ isRtl ? 'إجراءات' : 'Actions' }}</h3>
 
                 <div class="space-y-2">
@@ -285,7 +285,7 @@ function sendConsent() {
 
         <!-- Consent Section -->
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
-            <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+            <div class="px-4 sm:px-6 py-4 border-b border-gray-100 flex items-center justify-between flex-wrap gap-3">
                 <div class="flex items-center gap-3">
                     <div class="w-9 h-9 rounded-lg flex items-center justify-center"
                          :class="hasSignedConsent ? 'bg-green-100' : hasPendingConsent ? 'bg-yellow-100' : 'bg-gray-100'">
@@ -301,7 +301,7 @@ function sendConsent() {
                         <p class="text-xs text-gray-400">{{ isRtl ? 'التوقيع الرقمي على خطة العلاج' : 'Digital signature on treatment plan' }}</p>
                     </div>
                 </div>
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-2 flex-wrap">
                     <span v-if="latestConsent" :class="[consentStatusColors[latestConsent.status], 'px-3 py-1 rounded-full text-xs font-medium']">
                         {{ consentStatusLabel(latestConsent.status) }}
                     </span>
@@ -317,7 +317,7 @@ function sendConsent() {
                     </button>
                 </div>
             </div>
-            <div class="p-6">
+            <div class="p-4 sm:p-6">
                 <div v-if="!latestConsent" class="text-center py-4">
                     <p class="text-sm text-gray-500">{{ isRtl ? 'لم يتم إرسال طلب موافقة بعد' : 'No consent request sent yet' }}</p>
                     <p v-if="needsConsent" class="text-xs text-amber-500 mt-1">{{ isRtl ? 'يجب الحصول على موافقة المريض قبل بدء العلاج' : 'Patient consent required before starting' }}</p>
@@ -384,7 +384,7 @@ function sendConsent() {
 
         <!-- Treatments Table -->
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
-            <div class="px-6 py-4 border-b border-gray-100">
+            <div class="px-4 sm:px-6 py-4 border-b border-gray-100">
                 <h2 class="text-lg font-semibold text-gray-800">{{ isRtl ? 'العلاجات' : 'Treatments' }}</h2>
             </div>
 
@@ -401,10 +401,10 @@ function sendConsent() {
                         <tr>
                             <th class="px-4 py-3 text-start text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'السن' : 'Tooth' }}</th>
                             <th class="px-4 py-3 text-start text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'نوع العلاج' : 'Treatment Type' }}</th>
-                            <th class="px-4 py-3 text-start text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'الأسطح' : 'Surfaces' }}</th>
-                            <th class="px-4 py-3 text-start text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'الوصف' : 'Description' }}</th>
+                            <th class="px-4 py-3 text-start text-xs font-semibold text-gray-500 uppercase tracking-wider hidden sm:table-cell">{{ isRtl ? 'الأسطح' : 'Surfaces' }}</th>
+                            <th class="px-4 py-3 text-start text-xs font-semibold text-gray-500 uppercase tracking-wider hidden md:table-cell">{{ isRtl ? 'الوصف' : 'Description' }}</th>
                             <th class="px-4 py-3 text-start text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'التكلفة' : 'Cost' }}</th>
-                            <th class="px-4 py-3 text-start text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'تكلفة المختبر' : 'Lab Cost' }}</th>
+                            <th class="px-4 py-3 text-start text-xs font-semibold text-gray-500 uppercase tracking-wider hidden sm:table-cell">{{ isRtl ? 'تكلفة المختبر' : 'Lab Cost' }}</th>
                             <th class="px-4 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'الحالة' : 'Status' }}</th>
                         </tr>
                     </thead>
@@ -414,10 +414,10 @@ function sendConsent() {
                             <td class="px-4 py-3 text-sm text-gray-700">
                                 {{ treatment.treatment_type ? (locale === 'ar' ? (treatment.treatment_type.name_ar || treatment.treatment_type.name_en) : (treatment.treatment_type.name_en || treatment.treatment_type.name_ar)) : '-' }}
                             </td>
-                            <td class="px-4 py-3 text-sm text-gray-600">{{ treatment.surfaces || '-' }}</td>
-                            <td class="px-4 py-3 text-sm text-gray-600 max-w-xs truncate">{{ treatment.description || '-' }}</td>
+                            <td class="px-4 py-3 text-sm text-gray-600 hidden sm:table-cell">{{ treatment.surfaces || '-' }}</td>
+                            <td class="px-4 py-3 text-sm text-gray-600 max-w-xs truncate hidden md:table-cell">{{ treatment.description || '-' }}</td>
                             <td class="px-4 py-3 text-sm text-gray-700 font-medium">{{ formatCurrency(treatment.cost) }}</td>
-                            <td class="px-4 py-3 text-sm text-gray-500">{{ formatCurrency(treatment.lab_cost) }}</td>
+                            <td class="px-4 py-3 text-sm text-gray-500 hidden sm:table-cell">{{ formatCurrency(treatment.lab_cost) }}</td>
                             <td class="px-4 py-3 text-center">
                                 <span :class="[treatmentStatusColors[treatment.status] || 'bg-gray-100 text-gray-700', 'px-2.5 py-1 rounded-full text-xs font-medium']">
                                     {{ treatmentStatusLabels[treatment.status] || treatment.status }}

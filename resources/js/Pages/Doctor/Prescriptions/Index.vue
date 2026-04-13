@@ -150,12 +150,12 @@ function hasMedicalNotes(patient) {
 <template>
     <div>
         <!-- Header -->
-        <div class="flex items-center justify-between mb-6">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
             <div>
                 <h1 class="text-2xl font-bold text-gray-900">{{ $t('a_prescriptions') }}</h1>
                 <p class="text-sm text-gray-500 mt-1">{{ isRtl ? 'إنشاء وإدارة وطباعة الوصفات الطبية لمرضاك' : 'Create, manage and print prescriptions for your patients' }}</p>
             </div>
-            <button @click="showCreate = !showCreate" class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-[#C4A265] to-[#D4B87A] hover:from-[#A68B52] hover:to-[#C4A265] rounded-xl transition-all duration-200 shadow-lg shadow-[#C4A265]/20">
+            <button @click="showCreate = !showCreate" class="inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-[#C4A265] to-[#D4B87A] hover:from-[#A68B52] hover:to-[#C4A265] rounded-xl transition-all duration-200 shadow-lg shadow-[#C4A265]/20">
                 <svg v-if="!showCreate" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
                 <svg v-else class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                 {{ showCreate ? (isRtl ? 'إلغاء' : 'Cancel') : (isRtl ? 'وصفة جديدة' : 'New Prescription') }}
@@ -165,14 +165,14 @@ function hasMedicalNotes(patient) {
         <!-- ══════ CREATE FORM ══════ -->
         <Transition enter-active-class="transition-all duration-300 ease-out" enter-from-class="opacity-0 -translate-y-4" enter-to-class="opacity-100 translate-y-0" leave-active-class="transition-all duration-200 ease-in" leave-from-class="opacity-100" leave-to-class="opacity-0 -translate-y-4">
             <div v-if="showCreate" class="bg-white rounded-2xl shadow-sm border border-gray-100 mb-6 overflow-hidden">
-                <div class="bg-gradient-to-r from-[#C4A265]/5 to-transparent px-6 py-4 border-b border-gray-100">
+                <div class="bg-gradient-to-r from-[#C4A265]/5 to-transparent px-4 sm:px-6 py-4 border-b border-gray-100">
                     <h3 class="text-base font-bold text-gray-800 flex items-center gap-2">
                         <svg class="w-5 h-5 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
                         {{ isRtl ? 'وصفة طبية جديدة' : 'New Prescription' }}
                     </h3>
                 </div>
-                <form @submit.prevent="submitPrescription" class="p-6 space-y-5">
-                    <div class="grid lg:grid-cols-2 gap-5">
+                <form @submit.prevent="submitPrescription" class="p-4 sm:p-6 space-y-5">
+                    <div class="grid md:grid-cols-2 gap-4 sm:gap-5">
                         <div>
                             <label class="text-xs font-semibold text-gray-500 mb-1.5 block uppercase tracking-wide">{{ isRtl ? 'المريض *' : 'Patient *' }}</label>
                             <PatientSearchSelect v-model="form.patient_id" :required="true" @patient-selected="onPatientSelected" />
@@ -289,16 +289,16 @@ function hasMedicalNotes(patient) {
                 <table class="w-full text-sm">
                     <thead>
                         <tr class="bg-gradient-to-r from-gray-50 to-gray-50/50">
-                            <th class="ltr:text-left rtl:text-right px-5 py-3.5 text-[10px] font-bold text-gray-400 uppercase tracking-wider">{{ isRtl ? 'المريض' : 'Patient' }}</th>
-                            <th class="ltr:text-left rtl:text-right px-5 py-3.5 text-[10px] font-bold text-gray-400 uppercase tracking-wider">{{ isRtl ? 'التشخيص' : 'Diagnosis' }}</th>
-                            <th class="text-center px-5 py-3.5 text-[10px] font-bold text-gray-400 uppercase tracking-wider">{{ isRtl ? 'أدوية' : 'Meds' }}</th>
-                            <th class="ltr:text-left rtl:text-right px-5 py-3.5 text-[10px] font-bold text-gray-400 uppercase tracking-wider">{{ isRtl ? 'التاريخ' : 'Date' }}</th>
-                            <th class="ltr:text-right rtl:text-left px-5 py-3.5 text-[10px] font-bold text-gray-400 uppercase tracking-wider">{{ isRtl ? 'الإجراءات' : 'Actions' }}</th>
+                            <th class="ltr:text-left rtl:text-right px-3 sm:px-5 py-3.5 text-[10px] font-bold text-gray-400 uppercase tracking-wider">{{ isRtl ? 'المريض' : 'Patient' }}</th>
+                            <th class="ltr:text-left rtl:text-right px-3 sm:px-5 py-3.5 text-[10px] font-bold text-gray-400 uppercase tracking-wider hidden sm:table-cell">{{ isRtl ? 'التشخيص' : 'Diagnosis' }}</th>
+                            <th class="text-center px-3 sm:px-5 py-3.5 text-[10px] font-bold text-gray-400 uppercase tracking-wider hidden sm:table-cell">{{ isRtl ? 'أدوية' : 'Meds' }}</th>
+                            <th class="ltr:text-left rtl:text-right px-3 sm:px-5 py-3.5 text-[10px] font-bold text-gray-400 uppercase tracking-wider hidden md:table-cell">{{ isRtl ? 'التاريخ' : 'Date' }}</th>
+                            <th class="ltr:text-right rtl:text-left px-3 sm:px-5 py-3.5 text-[10px] font-bold text-gray-400 uppercase tracking-wider">{{ isRtl ? 'الإجراءات' : 'Actions' }}</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-50">
                         <tr v-for="rx in prescriptions.data" :key="rx.id" class="hover:bg-[#FDF8F0]/50 transition-colors group">
-                            <td class="px-5 py-3.5">
+                            <td class="px-3 sm:px-5 py-3.5">
                                 <div class="flex items-center gap-3">
                                     <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-[#C4A265]/15 to-[#C4A265]/5 flex items-center justify-center text-[#C4A265] font-bold text-xs flex-shrink-0">{{ rx.patient?.full_name?.charAt(0) || '?' }}</div>
                                     <div>
@@ -313,14 +313,14 @@ function hasMedicalNotes(patient) {
                                     </div>
                                 </div>
                             </td>
-                            <td class="px-5 py-3.5 text-gray-600 max-w-[200px]"><p class="truncate text-[13px]">{{ rx.diagnosis || '-' }}</p></td>
-                            <td class="px-5 py-3.5 text-center"><span class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-[#C4A265]/10 text-[#C4A265] text-xs font-bold">{{ rx.items?.length || 0 }}</span></td>
-                            <td class="px-5 py-3.5">
+                            <td class="px-3 sm:px-5 py-3.5 text-gray-600 max-w-[200px] hidden sm:table-cell"><p class="truncate text-[13px]">{{ rx.diagnosis || '-' }}</p></td>
+                            <td class="px-3 sm:px-5 py-3.5 text-center hidden sm:table-cell"><span class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-[#C4A265]/10 text-[#C4A265] text-xs font-bold">{{ rx.items?.length || 0 }}</span></td>
+                            <td class="px-3 sm:px-5 py-3.5 hidden md:table-cell">
                                 <span class="text-[13px] text-gray-500">{{ formatDate(rx.created_at) }}</span>
                                 <p class="text-[10px] text-gray-400 mt-0.5">Rx #{{ rx.id }}</p>
                             </td>
-                            <td class="px-5 py-3.5 text-right">
-                                <div class="flex items-center justify-end gap-1 opacity-70 group-hover:opacity-100 transition-opacity">
+                            <td class="px-3 sm:px-5 py-3.5 text-right">
+                                <div class="flex flex-wrap items-center justify-end gap-1 opacity-70 group-hover:opacity-100 transition-opacity">
                                     <button @click="openView(rx)" class="p-1.5 text-gray-500 hover:text-[#C4A265] hover:bg-[#C4A265]/5 rounded-lg transition-colors" :title="isRtl ? 'عرض' : 'View'"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg></button>
                                     <button @click="openEdit(rx)" class="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" :title="isRtl ? 'تعديل' : 'Edit'"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg></button>
                                     <button @click="printPdf(rx.id)" class="p-1.5 text-gray-500 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors" :title="isRtl ? 'طباعة' : 'Print'"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" /></svg></button>
@@ -338,7 +338,7 @@ function hasMedicalNotes(patient) {
                 <p class="text-sm font-semibold text-gray-500">{{ isRtl ? 'لا توجد وصفات' : 'No prescriptions found' }}</p>
                 <p class="text-xs text-gray-400 mt-1">{{ isRtl ? 'أنشئ أول وصفة باستخدام الزر أعلاه' : 'Create your first prescription using the button above' }}</p>
             </div>
-            <div v-if="prescriptions.links?.length > 3" class="flex items-center justify-center gap-1 px-6 py-4 border-t border-gray-100 bg-gray-50/50">
+            <div v-if="prescriptions.links?.length > 3" class="flex flex-wrap items-center justify-center gap-1 px-4 sm:px-6 py-4 border-t border-gray-100 bg-gray-50/50">
                 <template v-for="link in prescriptions.links" :key="link.label">
                     <Link v-if="link.url" :href="link.url" class="px-3 py-1.5 rounded-lg text-xs font-medium transition-colors" :class="link.active ? 'bg-[#C4A265] text-white shadow-sm' : 'text-gray-500 hover:bg-white hover:shadow-sm'" v-html="link.label" preserve-state />
                     <span v-else class="px-3 py-1.5 text-xs text-gray-300" v-html="link.label" />
@@ -351,12 +351,12 @@ function hasMedicalNotes(patient) {
             <Transition enter-active-class="transition-all duration-200" enter-from-class="opacity-0" enter-to-class="opacity-100" leave-active-class="transition-all duration-150" leave-from-class="opacity-100" leave-to-class="opacity-0">
                 <div v-if="viewingPrescription" class="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" @click.self="viewingPrescription = null">
                     <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-                        <div class="sticky top-0 bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between z-10">
+                        <div class="sticky top-0 bg-white border-b border-gray-100 px-4 sm:px-6 py-4 flex items-center justify-between z-10">
                             <div>
                                 <h3 class="text-lg font-bold text-gray-900">{{ isRtl ? 'تفاصيل الوصفة' : 'Prescription Details' }}</h3>
                                 <p class="text-xs text-gray-400 mt-0.5">Rx #{{ viewingPrescription.id }} · {{ formatDate(viewingPrescription.created_at) }}</p>
                             </div>
-                            <div class="flex items-center gap-2">
+                            <div class="flex flex-wrap items-center gap-2">
                                 <button @click="printPdf(viewingPrescription.id)" class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 rounded-lg transition-colors">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" /></svg>
                                     {{ isRtl ? 'طباعة' : 'Print' }}
@@ -368,8 +368,8 @@ function hasMedicalNotes(patient) {
                                 <button @click="viewingPrescription = null" class="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:text-gray-600 hover:bg-gray-100"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg></button>
                             </div>
                         </div>
-                        <div class="p-6 space-y-5">
-                            <div class="flex items-start gap-4 p-4 bg-gray-50 rounded-xl">
+                        <div class="p-4 sm:p-6 space-y-5">
+                            <div class="flex items-start gap-3 sm:gap-4 p-4 bg-gray-50 rounded-xl">
                                 <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-[#C4A265] to-[#D4B87A] flex items-center justify-center text-white font-bold text-lg flex-shrink-0">{{ viewingPrescription.patient?.full_name?.charAt(0) || '?' }}</div>
                                 <div class="flex-1">
                                     <p class="font-bold text-gray-900">{{ viewingPrescription.patient?.full_name }}</p>
@@ -397,19 +397,19 @@ function hasMedicalNotes(patient) {
                                 <div class="border border-gray-200 rounded-xl overflow-hidden">
                                     <table class="w-full text-sm">
                                         <thead><tr class="bg-gray-50">
-                                            <th class="ltr:text-left rtl:text-right px-4 py-2.5 text-[10px] font-bold text-gray-400 uppercase">#</th>
-                                            <th class="ltr:text-left rtl:text-right px-4 py-2.5 text-[10px] font-bold text-gray-400 uppercase">{{ isRtl ? 'الدواء' : 'Medication' }}</th>
-                                            <th class="ltr:text-left rtl:text-right px-4 py-2.5 text-[10px] font-bold text-gray-400 uppercase">{{ isRtl ? 'الجرعة' : 'Dosage' }}</th>
-                                            <th class="ltr:text-left rtl:text-right px-4 py-2.5 text-[10px] font-bold text-gray-400 uppercase">{{ isRtl ? 'التكرار' : 'Frequency' }}</th>
-                                            <th class="ltr:text-left rtl:text-right px-4 py-2.5 text-[10px] font-bold text-gray-400 uppercase">{{ isRtl ? 'المدة' : 'Duration' }}</th>
+                                            <th class="ltr:text-left rtl:text-right px-3 sm:px-4 py-2.5 text-[10px] font-bold text-gray-400 uppercase">#</th>
+                                            <th class="ltr:text-left rtl:text-right px-3 sm:px-4 py-2.5 text-[10px] font-bold text-gray-400 uppercase">{{ isRtl ? 'الدواء' : 'Medication' }}</th>
+                                            <th class="ltr:text-left rtl:text-right px-3 sm:px-4 py-2.5 text-[10px] font-bold text-gray-400 uppercase hidden sm:table-cell">{{ isRtl ? 'الجرعة' : 'Dosage' }}</th>
+                                            <th class="ltr:text-left rtl:text-right px-3 sm:px-4 py-2.5 text-[10px] font-bold text-gray-400 uppercase hidden sm:table-cell">{{ isRtl ? 'التكرار' : 'Frequency' }}</th>
+                                            <th class="ltr:text-left rtl:text-right px-3 sm:px-4 py-2.5 text-[10px] font-bold text-gray-400 uppercase hidden sm:table-cell">{{ isRtl ? 'المدة' : 'Duration' }}</th>
                                         </tr></thead>
                                         <tbody class="divide-y divide-gray-100">
                                             <tr v-for="(item, idx) in viewingPrescription.items" :key="idx" class="hover:bg-gray-50/50">
-                                                <td class="px-4 py-3 text-xs text-gray-400 font-mono">{{ idx + 1 }}</td>
-                                                <td class="px-4 py-3"><p class="font-semibold text-gray-800">{{ item.medication_name }}</p><p v-if="item.instructions" class="text-[11px] text-gray-400 mt-0.5 italic">{{ item.instructions }}</p></td>
-                                                <td class="px-4 py-3 text-gray-600">{{ item.dosage || '-' }}</td>
-                                                <td class="px-4 py-3 text-gray-600">{{ item.frequency || '-' }}</td>
-                                                <td class="px-4 py-3 text-gray-600">{{ item.duration || '-' }}</td>
+                                                <td class="px-3 sm:px-4 py-3 text-xs text-gray-400 font-mono">{{ idx + 1 }}</td>
+                                                <td class="px-3 sm:px-4 py-3"><p class="font-semibold text-gray-800">{{ item.medication_name }}</p><p v-if="item.instructions" class="text-[11px] text-gray-400 mt-0.5 italic">{{ item.instructions }}</p></td>
+                                                <td class="px-3 sm:px-4 py-3 text-gray-600 hidden sm:table-cell">{{ item.dosage || '-' }}</td>
+                                                <td class="px-3 sm:px-4 py-3 text-gray-600 hidden sm:table-cell">{{ item.frequency || '-' }}</td>
+                                                <td class="px-3 sm:px-4 py-3 text-gray-600 hidden sm:table-cell">{{ item.duration || '-' }}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -430,19 +430,19 @@ function hasMedicalNotes(patient) {
             <Transition enter-active-class="transition-all duration-200" enter-from-class="opacity-0" enter-to-class="opacity-100" leave-active-class="transition-all duration-150" leave-from-class="opacity-100" leave-to-class="opacity-0">
                 <div v-if="editingPrescription" class="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" @click.self="editingPrescription = null">
                     <div class="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
-                        <div class="sticky top-0 bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between z-10">
+                        <div class="sticky top-0 bg-white border-b border-gray-100 px-4 sm:px-6 py-4 flex items-center justify-between z-10">
                             <div>
                                 <h3 class="text-lg font-bold text-gray-900">{{ isRtl ? 'تعديل الوصفة' : 'Edit Prescription' }}</h3>
                                 <p class="text-xs text-gray-400 mt-0.5">{{ editingPrescription.patient?.full_name }} · Rx #{{ editingPrescription.id }}</p>
                             </div>
                             <button @click="editingPrescription = null" class="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:text-gray-600 hover:bg-gray-100"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg></button>
                         </div>
-                        <form @submit.prevent="submitEdit" class="p-6 space-y-5">
+                        <form @submit.prevent="submitEdit" class="p-4 sm:p-6 space-y-5">
                             <div v-if="hasMedicalNotes(editingPrescription.patient)" class="flex items-start gap-3 px-4 py-3 bg-red-50 border border-red-200 rounded-xl">
                                 <svg class="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M12 3a9 9 0 110 18 9 9 0 010-18z" /></svg>
                                 <div><p class="text-xs font-bold text-red-700 uppercase">{{ isRtl ? 'ملاحظات طبية / حساسية' : 'Medical Notes / Allergies' }}</p><p class="text-sm text-red-600 mt-0.5">{{ editingPrescription.patient.medical_notes }}</p></div>
                             </div>
-                            <div class="grid lg:grid-cols-2 gap-4">
+                            <div class="grid md:grid-cols-2 gap-4">
                                 <div><label class="text-xs font-semibold text-gray-500 mb-1.5 block uppercase tracking-wide">{{ isRtl ? 'التشخيص' : 'Diagnosis' }}</label><input v-model="editForm.diagnosis" type="text" class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]" /></div>
                                 <div><label class="text-xs font-semibold text-gray-500 mb-1.5 block uppercase tracking-wide">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label><input v-model="editForm.notes" type="text" class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]" /></div>
                             </div>
@@ -473,7 +473,7 @@ function hasMedicalNotes(patient) {
                                     </div>
                                 </div>
                             </div>
-                            <div class="flex justify-end gap-2 pt-2">
+                            <div class="flex flex-wrap justify-end gap-2 pt-2">
                                 <button type="button" @click="editingPrescription = null" class="px-5 py-2.5 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors">{{ isRtl ? 'إلغاء' : 'Cancel' }}</button>
                                 <button type="submit" :disabled="editForm.processing" class="px-6 py-2.5 text-sm font-semibold text-white bg-[#C4A265] hover:bg-[#A68B52] rounded-xl transition-colors disabled:opacity-50">{{ editForm.processing ? (isRtl ? 'جاري الحفظ...' : 'Saving...') : (isRtl ? 'تحديث الوصفة' : 'Update Prescription') }}</button>
                             </div>
@@ -487,12 +487,12 @@ function hasMedicalNotes(patient) {
         <Teleport to="body">
             <Transition enter-active-class="transition-all duration-200" enter-from-class="opacity-0" enter-to-class="opacity-100" leave-active-class="transition-all duration-150" leave-from-class="opacity-100" leave-to-class="opacity-0">
                 <div v-if="showDeleteConfirm" class="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" @click.self="showDeleteConfirm = null">
-                    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6">
+                    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-4 sm:p-6">
                         <div class="flex items-center gap-3 mb-4">
                             <div class="w-12 h-12 rounded-xl bg-red-100 flex items-center justify-center"><svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></div>
                             <div><h3 class="text-lg font-bold text-gray-900">{{ isRtl ? 'حذف الوصفة؟' : 'Delete Prescription?' }}</h3><p class="text-sm text-gray-500">{{ isRtl ? 'لا يمكن التراجع عن هذا الإجراء.' : 'This action cannot be undone.' }}</p></div>
                         </div>
-                        <div class="flex justify-end gap-2">
+                        <div class="flex flex-wrap justify-end gap-2">
                             <button @click="showDeleteConfirm = null" class="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors">{{ isRtl ? 'إلغاء' : 'Cancel' }}</button>
                             <button @click="deletePrescription(showDeleteConfirm)" class="px-4 py-2 text-sm font-medium text-white bg-red-500 hover:bg-red-600 rounded-xl transition-colors">{{ isRtl ? 'حذف' : 'Delete' }}</button>
                         </div>

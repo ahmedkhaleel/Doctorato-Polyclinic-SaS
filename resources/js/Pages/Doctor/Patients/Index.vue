@@ -356,7 +356,7 @@ function timeAgo(dateStr) {
         </div>
 
         <!-- Stats Strip -->
-        <div class="grid grid-cols-3 gap-3"
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3"
             :class="statsVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
             style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1)"
         >
@@ -403,7 +403,7 @@ function timeAgo(dateStr) {
             style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1)"
         >
             <!-- Toolbar -->
-            <div class="flex items-center justify-between mb-3 px-1">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3 px-1">
                 <div class="flex items-center gap-3">
                     <p class="text-sm text-gray-500 font-medium">
                         <span v-if="search">
@@ -466,7 +466,7 @@ function timeAgo(dateStr) {
                         :class="getAvatarColor(patient.id)"
                     ></div>
 
-                    <div class="p-5">
+                    <div class="p-4 sm:p-5">
                         <!-- Avatar + Name -->
                         <div class="flex items-start gap-3.5 mb-4">
                             <div class="w-12 h-12 rounded-xl bg-gradient-to-br flex items-center justify-center text-white text-sm font-bold flex-shrink-0 shadow-sm transition-transform duration-300 group-hover:scale-105"
@@ -546,7 +546,7 @@ function timeAgo(dateStr) {
                 <div class="divide-y divide-gray-50">
                     <Link v-for="(patient, index) in filteredPatients" :key="patient.id"
                         :href="`/doctor/patients/${patient.id}`"
-                        class="group flex items-center gap-4 px-5 py-4 hover:bg-gray-50/80 transition-all duration-200"
+                        class="group flex items-center gap-3 sm:gap-4 px-4 sm:px-5 py-4 hover:bg-gray-50/80 transition-all duration-200"
                         :class="contentVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4'"
                         :style="{ transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)', transitionDelay: `${0.05 + index * 0.03}s` }"
                     >

@@ -121,7 +121,7 @@ function advanceTreatmentStatus(treatmentId, currentStatus) {
                 </div>
 
                 <!-- Filters -->
-                <div class="flex flex-col sm:flex-row gap-3 max-w-3xl"
+                <div class="flex flex-col sm:flex-row flex-wrap gap-3 max-w-3xl"
                     :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
                     style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.15s"
                 >
@@ -155,7 +155,7 @@ function advanceTreatmentStatus(treatmentId, currentStatus) {
                     </select>
                 </div>
                 <!-- Advanced Filters Row -->
-                <div class="flex flex-col sm:flex-row gap-3 max-w-3xl mt-3"
+                <div class="flex flex-col sm:flex-row flex-wrap gap-3 max-w-3xl mt-3"
                     :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
                     style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.2s"
                 >
@@ -247,7 +247,7 @@ function advanceTreatmentStatus(treatmentId, currentStatus) {
             </div>
 
             <!-- Pagination -->
-            <div v-if="treatments.links && treatments.links.length > 3" class="flex items-center justify-center gap-1 px-6 py-4 border-t border-gray-100 bg-gray-50/50">
+            <div v-if="treatments.links && treatments.links.length > 3" class="flex items-center justify-center gap-1 px-4 sm:px-6 py-4 border-t border-gray-100 bg-gray-50/50 flex-wrap">
                 <template v-for="link in treatments.links" :key="link.label">
                     <Link v-if="link.url" :href="link.url"
                         class="px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"

@@ -177,7 +177,7 @@ const statusOptions = computed(() => {
                 </div>
 
                 <!-- Stats -->
-                <div class="flex gap-3 mt-6">
+                <div class="flex flex-wrap gap-2 sm:gap-3 mt-6">
                     <div class="bg-white/5 backdrop-blur-sm rounded-xl px-4 py-3 border border-white/10 flex-1">
                         <p class="text-xs text-gray-400">{{ isRtl ? 'الحجوزات' : 'Bookings' }}</p>
                         <p class="text-lg font-bold text-white mt-0.5">{{ bookingsCount }}</p>
@@ -196,7 +196,7 @@ const statusOptions = computed(() => {
 
         <!-- Tabs -->
         <div
-            class="flex gap-2 transition-all duration-700"
+            class="flex flex-wrap gap-2 overflow-x-auto scrollbar-none transition-all duration-700"
             :class="cardsLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'"
         >
             <button
@@ -297,7 +297,7 @@ const statusOptions = computed(() => {
                     :key="booking.id"
                     class="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 overflow-hidden"
                 >
-                    <div class="flex flex-col sm:flex-row sm:items-center gap-4 p-5">
+                    <div class="flex flex-col sm:flex-row sm:items-center gap-4 p-4 sm:p-5">
                         <!-- Booking Number + Patient -->
                         <div class="flex items-center gap-3 sm:w-56">
                             <div class="w-11 h-11 rounded-xl bg-[#C4A265]/10 flex items-center justify-center flex-shrink-0">
@@ -372,7 +372,7 @@ const statusOptions = computed(() => {
                     :key="bb.id"
                     class="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 overflow-hidden"
                 >
-                    <div class="p-5">
+                    <div class="p-4 sm:p-5">
                         <!-- Top Row: Booking Number + Patient + Status -->
                         <div class="flex flex-col sm:flex-row sm:items-center gap-4">
                             <div class="flex items-center gap-3 flex-1 min-w-0">
@@ -420,7 +420,7 @@ const statusOptions = computed(() => {
                         <!-- Services Breakdown -->
                         <div v-if="bb.doctor_services?.length" class="mt-4 pt-3 border-t border-gray-100">
                             <p class="text-[10px] font-semibold text-gray-400 uppercase mb-2">{{ isRtl ? 'خدماتك في هذه الباقة' : 'Your services in this package' }}</p>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-2">
                                 <div v-for="(svc, i) in bb.doctor_services" :key="i"
                                     class="flex items-center gap-3 bg-gray-50 rounded-lg px-3 py-2"
                                 >
@@ -456,7 +456,7 @@ const statusOptions = computed(() => {
         </div>
 
         <!-- Pagination -->
-        <div v-if="activePagination?.links?.length > 3" class="flex items-center justify-center gap-1 mt-4">
+        <div v-if="activePagination?.links?.length > 3" class="flex flex-wrap items-center justify-center gap-1 mt-4">
             <template v-for="link in activePagination.links" :key="link.label">
                 <Link v-if="link.url" :href="link.url" class="px-3 py-1.5 rounded-lg text-xs font-medium transition-colors" :class="link.active ? 'bg-[#C4A265] text-white' : 'text-gray-500 hover:bg-gray-100 bg-white border border-gray-200'" v-html="link.label" preserve-state />
                 <span v-else class="px-3 py-1.5 text-xs text-gray-300" v-html="link.label" />

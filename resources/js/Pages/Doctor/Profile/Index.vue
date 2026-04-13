@@ -83,7 +83,7 @@ const displayPhoto = computed(() => photoPreview.value || props.doctor.photo_url
 </script>
 
 <template>
-    <div class="space-y-6">
+    <div class="space-y-4 sm:space-y-6">
         <!-- Hero Header -->
         <div
             class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 transition-all duration-700"
@@ -141,7 +141,7 @@ const displayPhoto = computed(() => photoPreview.value || props.doctor.photo_url
                 </div>
 
                 <!-- Quick Stats -->
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6">
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 mt-4 sm:mt-6">
                     <div class="bg-white/5 backdrop-blur-sm rounded-xl px-4 py-3 border border-white/10">
                         <p class="text-xs text-gray-400">{{ $t('a_consultation_fees') }}</p>
                         <p class="text-lg font-bold text-white mt-0.5">{{ formatCurrency(doctor.consultation_fee || 0) }}</p>
@@ -164,7 +164,7 @@ const displayPhoto = computed(() => photoPreview.value || props.doctor.photo_url
 
         <!-- Tab Navigation -->
         <div
-            class="flex gap-1 bg-white rounded-xl p-1 shadow-sm border border-gray-100 transition-all duration-500"
+            class="flex gap-1 bg-white rounded-xl p-1 shadow-sm border border-gray-100 transition-all duration-500 overflow-x-auto scrollbar-none"
             :class="headerLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
         >
             <button
@@ -207,13 +207,13 @@ const displayPhoto = computed(() => photoPreview.value || props.doctor.photo_url
             <!-- Profile Edit Tab -->
             <div v-if="activeTab === 'profile'">
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div class="border-b border-gray-100 px-6 py-4">
+                    <div class="border-b border-gray-100 px-4 sm:px-6 py-4">
                         <h3 class="text-base font-bold text-gray-800 flex items-center gap-2">
                             <svg class="w-5 h-5 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
                             {{ $t('a_edit_profile') }}
                         </h3>
                     </div>
-                    <form @submit.prevent="updateProfile" class="p-6 space-y-5">
+                    <form @submit.prevent="updateProfile" class="p-4 sm:p-6 space-y-5">
                         <!-- Photo indicator -->
                         <div v-if="photoPreview" class="flex items-center gap-3 p-3 bg-amber-50 rounded-xl border border-amber-200">
                             <img :src="photoPreview" class="w-10 h-10 rounded-lg object-cover" />
@@ -226,7 +226,7 @@ const displayPhoto = computed(() => photoPreview.value || props.doctor.photo_url
                             </button>
                         </div>
 
-                        <div class="grid md:grid-cols-2 gap-5">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                             <div>
                                 <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">{{ $t('a_phone') }}</label>
                                 <input v-model="profileForm.phone" type="text" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition" />
@@ -250,7 +250,7 @@ const displayPhoto = computed(() => photoPreview.value || props.doctor.photo_url
                             <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">{{ $t('a_clinic_notes') }}</label>
                             <textarea v-model="profileForm.clinic_notes" rows="2" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition"></textarea>
                         </div>
-                        <div class="flex items-center justify-between pt-2 border-t border-gray-100">
+                        <div class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-gray-100">
                             <button type="button" @click="triggerPhotoUpload" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 rounded-xl hover:bg-gray-200 transition">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                                 {{ $t('a_upload_photo') }}
@@ -267,19 +267,19 @@ const displayPhoto = computed(() => photoPreview.value || props.doctor.photo_url
             <!-- Password Tab -->
             <div v-if="activeTab === 'password'">
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden max-w-lg mx-auto">
-                    <div class="border-b border-gray-100 px-6 py-4">
+                    <div class="border-b border-gray-100 px-4 sm:px-6 py-4">
                         <h3 class="text-base font-bold text-gray-800 flex items-center gap-2">
                             <svg class="w-5 h-5 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
                             {{ $t('a_change_password') }}
                         </h3>
                     </div>
-                    <form @submit.prevent="updatePassword" class="p-6 space-y-5">
+                    <form @submit.prevent="updatePassword" class="p-4 sm:p-6 space-y-5">
                         <div>
                             <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">{{ $t('a_current_password') }}</label>
                             <input v-model="passwordForm.current_password" type="password" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition" required />
                             <p v-if="passwordForm.errors.current_password" class="text-xs text-red-500 mt-1">{{ passwordForm.errors.current_password }}</p>
                         </div>
-                        <div class="grid md:grid-cols-2 gap-5">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                             <div>
                                 <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">{{ $t('a_new_password') }}</label>
                                 <input v-model="passwordForm.password" type="password" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition" required />
@@ -302,9 +302,9 @@ const displayPhoto = computed(() => photoPreview.value || props.doctor.photo_url
 
             <!-- Info Tab -->
             <div v-if="activeTab === 'info'">
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
                     <!-- Consultation Fees Card -->
-                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6">
                         <div class="flex items-center gap-3 mb-4">
                             <div class="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center">
                                 <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -328,7 +328,7 @@ const displayPhoto = computed(() => photoPreview.value || props.doctor.photo_url
                     </div>
 
                     <!-- Commission Rates Card -->
-                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6">
                         <div class="flex items-center gap-3 mb-4">
                             <div class="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center">
                                 <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z" /></svg>
@@ -352,7 +352,7 @@ const displayPhoto = computed(() => photoPreview.value || props.doctor.photo_url
                     </div>
 
                     <!-- Schedule Card -->
-                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6">
                         <div class="flex items-center gap-3 mb-4">
                             <div class="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
                                 <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -369,7 +369,7 @@ const displayPhoto = computed(() => photoPreview.value || props.doctor.photo_url
                     </div>
 
                     <!-- Custom Service Rates Card -->
-                    <div v-if="doctor.service_rates?.length > 0" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:col-span-2 lg:col-span-3">
+                    <div v-if="doctor.service_rates?.length > 0" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6 md:col-span-2 lg:col-span-3">
                         <div class="flex items-center gap-3 mb-1">
                             <div class="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center">
                                 <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A2 2 0 013 12V7a4 4 0 014-4z" /></svg>

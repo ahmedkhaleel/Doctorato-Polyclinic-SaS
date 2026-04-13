@@ -162,7 +162,7 @@ function getActionUrl(n) {
 </script>
 
 <template>
-    <div class="space-y-5">
+    <div class="space-y-4 sm:space-y-5">
         <!-- Hero Header -->
         <div
             class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6 sm:p-8 transition-all duration-700"
@@ -248,33 +248,33 @@ function getActionUrl(n) {
 
         <!-- Quick Stats Strip -->
         <div
-            class="grid grid-cols-3 gap-3 transition-all duration-700"
+            class="grid grid-cols-3 gap-2 sm:gap-3 transition-all duration-700"
             :class="statsLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
         >
-            <div class="bg-white rounded-xl border border-gray-100 px-4 py-3 flex items-center gap-3">
-                <div class="w-9 h-9 rounded-lg bg-gray-50 flex items-center justify-center flex-shrink-0">
-                    <svg class="w-4.5 h-4.5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+            <div class="bg-white rounded-xl border border-gray-100 px-3 sm:px-4 py-2.5 sm:py-3 flex items-center gap-2 sm:gap-3">
+                <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-gray-50 flex items-center justify-center flex-shrink-0">
+                    <svg class="w-4 h-4 sm:w-4.5 sm:h-4.5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
                 </div>
                 <div class="min-w-0">
-                    <p class="text-lg font-bold text-gray-900 leading-tight">{{ totalCount }}</p>
+                    <p class="text-base sm:text-lg font-bold text-gray-900 leading-tight">{{ totalCount }}</p>
                     <p class="text-[10px] text-gray-400 font-medium truncate">{{ isRtl ? 'إجمالي' : 'Total' }}</p>
                 </div>
             </div>
-            <div class="bg-white rounded-xl border border-gray-100 px-4 py-3 flex items-center gap-3">
-                <div class="w-9 h-9 rounded-lg bg-amber-50 flex items-center justify-center flex-shrink-0">
-                    <svg class="w-4.5 h-4.5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+            <div class="bg-white rounded-xl border border-gray-100 px-3 sm:px-4 py-2.5 sm:py-3 flex items-center gap-2 sm:gap-3">
+                <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-amber-50 flex items-center justify-center flex-shrink-0">
+                    <svg class="w-4 h-4 sm:w-4.5 sm:h-4.5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
                 </div>
                 <div class="min-w-0">
-                    <p class="text-lg font-bold leading-tight" :class="unreadCount > 0 ? 'text-amber-600' : 'text-gray-900'">{{ unreadCount }}</p>
+                    <p class="text-base sm:text-lg font-bold leading-tight" :class="unreadCount > 0 ? 'text-amber-600' : 'text-gray-900'">{{ unreadCount }}</p>
                     <p class="text-[10px] text-gray-400 font-medium truncate">{{ isRtl ? 'غير مقروء' : 'Unread' }}</p>
                 </div>
             </div>
-            <div class="bg-white rounded-xl border border-gray-100 px-4 py-3 flex items-center gap-3">
-                <div class="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
-                    <svg class="w-4.5 h-4.5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" /></svg>
+            <div class="bg-white rounded-xl border border-gray-100 px-3 sm:px-4 py-2.5 sm:py-3 flex items-center gap-2 sm:gap-3">
+                <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
+                    <svg class="w-4 h-4 sm:w-4.5 sm:h-4.5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" /></svg>
                 </div>
                 <div class="min-w-0">
-                    <p class="text-sm font-bold text-gray-900 leading-tight truncate">{{ mostCommonType }}</p>
+                    <p class="text-xs sm:text-sm font-bold text-gray-900 leading-tight truncate">{{ mostCommonType }}</p>
                     <p class="text-[10px] text-gray-400 font-medium truncate">{{ isRtl ? 'الأكثر شيوعا' : 'Most common' }}</p>
                 </div>
             </div>
@@ -298,7 +298,7 @@ function getActionUrl(n) {
             class="transition-all duration-700"
             :class="cardsLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'"
         >
-            <div v-if="notificationsList.length > 0" class="space-y-6">
+            <div v-if="notificationsList.length > 0" class="space-y-4 sm:space-y-6">
                 <div v-for="([groupKey, items], gi) in groupedNotifications" :key="groupKey">
                     <!-- Section header -->
                     <div class="flex items-center gap-3 px-1">
@@ -313,7 +313,7 @@ function getActionUrl(n) {
                             v-for="(n, ni) in items"
                             :key="n.id"
                             @click="handleNotificationClick(n)"
-                            class="notification-card group relative flex items-start gap-4 p-4 rounded-xl border transition-all duration-300 cursor-pointer overflow-hidden"
+                            class="notification-card group relative flex items-start gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl border transition-all duration-300 cursor-pointer overflow-hidden"
                             :class="[
                                 n.read
                                     ? 'bg-white border-gray-100 hover:shadow-md hover:shadow-gray-100/80 hover:-translate-y-0.5'
@@ -332,7 +332,7 @@ function getActionUrl(n) {
                             ></div>
 
                             <!-- Icon -->
-                            <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-110" :class="getNotificationMeta(n).bg">
+                            <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-110" :class="getNotificationMeta(n).bg">
                                 <svg class="w-5 h-5" :class="getNotificationMeta(n).color" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="getNotificationMeta(n).icon" /></svg>
                             </div>
 

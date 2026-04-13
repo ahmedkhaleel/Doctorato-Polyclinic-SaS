@@ -272,7 +272,7 @@ function formatDate(d) {
         <!-- Skeleton Loader -->
         <SkeletonLoader v-if="dataLoading" type="list" :count="5" />
 
-        <div v-else class="grid lg:grid-cols-3 gap-6">
+        <div v-else class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             <!-- Main Column -->
             <div class="lg:col-span-2 space-y-6">
                 <!-- Recent Payouts -->
@@ -280,7 +280,7 @@ function formatDate(d) {
                     :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
                     style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.3s"
                 >
-                    <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+                    <div class="flex items-center justify-between px-4 sm:px-6 py-4 border-b border-gray-100">
                         <div class="flex items-center gap-2">
                             <div class="w-8 h-8 rounded-lg bg-[#C4A265]/10 flex items-center justify-center">
                                 <svg class="w-4 h-4 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
@@ -291,7 +291,7 @@ function formatDate(d) {
                     <div class="divide-y divide-gray-100/80">
                         <Link v-for="(payout, index) in recentPayouts" :key="payout.id"
                             :href="`/doctor/commission/payouts/${payout.id}`"
-                            class="group flex items-center justify-between px-6 py-4 hover:bg-gray-50/60 transition-all duration-200"
+                            class="group flex items-center justify-between px-4 sm:px-6 py-4 hover:bg-gray-50/60 transition-all duration-200"
                             :class="mounted ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4'"
                             :style="{ transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)', transitionDelay: `${0.35 + index * 0.04}s` }"
                         >
@@ -337,14 +337,14 @@ function formatDate(d) {
                     :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
                     style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.35s"
                 >
-                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between px-6 py-4 border-b border-gray-100 gap-3">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between px-4 sm:px-6 py-4 border-b border-gray-100 gap-3">
                         <div class="flex items-center gap-2">
                             <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
                                 <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
                             </div>
                             <h2 class="text-sm font-bold text-gray-800">{{ isRtl ? 'تفاصيل العمولة' : 'Commission Details' }}</h2>
                         </div>
-                        <div class="flex items-center gap-2">
+                        <div class="flex items-center gap-2 flex-wrap">
                             <input v-model="dateFrom" type="date" :max="dateTo || undefined" class="text-xs border border-gray-200 rounded-lg px-2.5 py-1.5 bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265]" />
                             <input v-model="dateTo" type="date" :min="dateFrom || undefined" class="text-xs border border-gray-200 rounded-lg px-2.5 py-1.5 bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265]" />
                             <button @click="applyFilter" class="px-3 py-1.5 text-xs font-semibold text-white bg-[#C4A265] hover:bg-[#A68B52] rounded-lg transition-colors">{{ isRtl ? 'فلتر' : 'Filter' }}</button>
@@ -356,27 +356,27 @@ function formatDate(d) {
                         <table class="w-full text-sm">
                             <thead>
                                 <tr class="bg-gray-50/80">
-                                    <th class="ltr:text-left rtl:text-right px-6 py-3 text-[10px] font-semibold text-gray-400 uppercase">{{ isRtl ? 'المريض' : 'Patient' }}</th>
-                                    <th class="ltr:text-left rtl:text-right px-6 py-3 text-[10px] font-semibold text-gray-400 uppercase">{{ isRtl ? 'الخدمة' : 'Service' }}</th>
-                                    <th class="ltr:text-left rtl:text-right px-6 py-3 text-[10px] font-semibold text-gray-400 uppercase">{{ isRtl ? 'التاريخ' : 'Date' }}</th>
-                                    <th class="ltr:text-right rtl:text-left px-6 py-3 text-[10px] font-semibold text-gray-400 uppercase">{{ isRtl ? 'النسبة' : 'Rate' }}</th>
-                                    <th class="ltr:text-right rtl:text-left px-6 py-3 text-[10px] font-semibold text-gray-400 uppercase">{{ isRtl ? 'العمولة' : 'Commission' }}</th>
-                                    <th class="text-center px-6 py-3 text-[10px] font-semibold text-gray-400 uppercase">{{ isRtl ? 'الدفعة' : 'Payout' }}</th>
+                                    <th class="ltr:text-left rtl:text-right px-4 sm:px-6 py-3 text-[10px] font-semibold text-gray-400 uppercase">{{ isRtl ? 'المريض' : 'Patient' }}</th>
+                                    <th class="hidden sm:table-cell ltr:text-left rtl:text-right px-6 py-3 text-[10px] font-semibold text-gray-400 uppercase">{{ isRtl ? 'الخدمة' : 'Service' }}</th>
+                                    <th class="hidden sm:table-cell ltr:text-left rtl:text-right px-6 py-3 text-[10px] font-semibold text-gray-400 uppercase">{{ isRtl ? 'التاريخ' : 'Date' }}</th>
+                                    <th class="ltr:text-right rtl:text-left px-4 sm:px-6 py-3 text-[10px] font-semibold text-gray-400 uppercase">{{ isRtl ? 'النسبة' : 'Rate' }}</th>
+                                    <th class="ltr:text-right rtl:text-left px-4 sm:px-6 py-3 text-[10px] font-semibold text-gray-400 uppercase">{{ isRtl ? 'العمولة' : 'Commission' }}</th>
+                                    <th class="hidden sm:table-cell text-center px-6 py-3 text-[10px] font-semibold text-gray-400 uppercase">{{ isRtl ? 'الدفعة' : 'Payout' }}</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100">
                                 <tr v-for="visit in visits.data" :key="visit.id" class="hover:bg-gray-50/50 transition-colors">
-                                    <td class="px-6 py-3 font-semibold text-gray-800">{{ visit.patient?.full_name }}</td>
-                                    <td class="px-6 py-3 text-gray-500">{{ (isRtl ? (visit.service?.name_ar || visit.service?.name_en) : visit.service?.name_en) || '-' }}</td>
-                                    <td class="px-6 py-3 text-gray-500">{{ formatDate(visit.visit_date) }}</td>
-                                    <td class="px-6 py-3 text-right">
+                                    <td class="px-4 sm:px-6 py-3 font-semibold text-gray-800">{{ visit.patient?.full_name }}</td>
+                                    <td class="hidden sm:table-cell px-6 py-3 text-gray-500">{{ (isRtl ? (visit.service?.name_ar || visit.service?.name_en) : visit.service?.name_en) || '-' }}</td>
+                                    <td class="hidden sm:table-cell px-6 py-3 text-gray-500">{{ formatDate(visit.visit_date) }}</td>
+                                    <td class="px-4 sm:px-6 py-3 text-right">
                                         <span class="font-semibold" :class="visit.commission_rate != commissionInfo?.default_rate ? 'text-[#C4A265]' : 'text-gray-500'">
                                             {{ visit.commission_rate }}%
                                         </span>
                                         <span v-if="visit.commission_rate != commissionInfo?.default_rate" class="text-[9px] text-[#C4A265] block">{{ isRtl ? 'مخصص' : 'custom' }}</span>
                                     </td>
-                                    <td class="px-6 py-3 text-right font-bold text-[#C4A265]">{{ formatCurrency(visit.commission_amount) }}</td>
-                                    <td class="px-6 py-3 text-center">
+                                    <td class="px-4 sm:px-6 py-3 text-right font-bold text-[#C4A265]">{{ formatCurrency(visit.commission_amount) }}</td>
+                                    <td class="hidden sm:table-cell px-6 py-3 text-center">
                                         <Link v-if="visit.payout_status === 'paid'" :href="`/doctor/commission/payouts/${visit.payout_id}`"
                                             class="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 transition-colors">
                                             <span class="w-1 h-1 rounded-full bg-emerald-500"></span> {{ isRtl ? 'مدفوع' : 'Paid' }}
@@ -402,7 +402,7 @@ function formatDate(d) {
                         <p class="text-sm text-gray-400">{{ isRtl ? 'لا توجد سجلات عمولة لهذه الفترة' : 'No commission records for this period' }}</p>
                     </div>
 
-                    <div v-if="visits.links?.length > 3" class="flex items-center justify-center gap-1 px-6 py-4 border-t border-gray-100 bg-gray-50/50">
+                    <div v-if="visits.links?.length > 3" class="flex items-center justify-center flex-wrap gap-1 px-4 sm:px-6 py-4 border-t border-gray-100 bg-gray-50/50">
                         <template v-for="link in visits.links" :key="link.label">
                             <Link v-if="link.url" :href="link.url" class="px-3 py-1.5 rounded-lg text-xs font-medium transition-colors" :class="link.active ? 'bg-[#C4A265] text-white' : 'text-gray-500 hover:bg-gray-100'" v-html="link.label" preserve-state />
                             <span v-else class="px-3 py-1.5 text-xs text-gray-300" v-html="link.label" />
@@ -418,13 +418,13 @@ function formatDate(d) {
                     :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
                     style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.3s"
                 >
-                    <div class="px-5 py-4 border-b border-gray-100 flex items-center gap-2">
+                    <div class="px-3 sm:px-5 py-4 border-b border-gray-100 flex items-center gap-2">
                         <div class="w-8 h-8 rounded-lg bg-purple-50 flex items-center justify-center">
                             <svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
                         </div>
                         <h3 class="text-sm font-bold text-gray-800">{{ isRtl ? 'الاتجاه (6 أشهر)' : 'Trend (6 months)' }}</h3>
                     </div>
-                    <div class="p-5">
+                    <div class="p-3 sm:p-5">
                         <div class="flex items-end gap-2 h-32">
                             <div v-for="(item, i) in monthlyTrend" :key="item.label"
                                 class="flex-1 flex flex-col items-center gap-1 relative group cursor-pointer"
@@ -465,7 +465,7 @@ function formatDate(d) {
                     :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
                     style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.35s"
                 >
-                    <div class="px-5 py-4 cursor-pointer hover:bg-gray-50/50 transition-colors flex items-center justify-between" @click="showRates = !showRates">
+                    <div class="px-3 sm:px-5 py-4 cursor-pointer hover:bg-gray-50/50 transition-colors flex items-center justify-between" @click="showRates = !showRates">
                         <div class="flex items-center gap-2">
                             <div class="w-8 h-8 rounded-lg bg-[#C4A265]/10 flex items-center justify-center">
                                 <svg class="w-4 h-4 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
@@ -479,7 +479,7 @@ function formatDate(d) {
                     </div>
 
                     <Transition enter-active-class="transition duration-200 ease-out" enter-from-class="opacity-0" enter-to-class="opacity-100" leave-active-class="transition duration-150 ease-in" leave-from-class="opacity-100" leave-to-class="opacity-0">
-                        <div v-if="showRates" class="px-5 pb-5 space-y-1.5">
+                        <div v-if="showRates" class="px-3 sm:px-5 pb-5 space-y-1.5">
                             <div class="bg-blue-50/50 rounded-lg p-3 mb-3">
                                 <p class="text-[10px] text-blue-700 leading-relaxed">
                                     <strong>{{ isRtl ? 'كيف تعمل:' : 'How it works:' }}</strong> {{ isRtl ? `نسبة مخصصة لخدمة معينة، أو النسبة الافتراضية (${commissionInfo.default_rate}%). العمولة = (الفاتورة - تكلفة التوريد) × النسبة%.` : `Custom rate for specific service, or default rate (${commissionInfo.default_rate}%). Commission = (Invoice - Supply Cost) x Rate%.` }}

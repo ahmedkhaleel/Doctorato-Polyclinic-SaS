@@ -42,7 +42,7 @@ onUnmounted(() => { document.removeEventListener('mousemove', onDrag); document.
 
 <template>
     <div class="max-w-4xl mx-auto space-y-6">
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-3 flex-wrap">
             <Link href="/doctor/dental/comparisons" class="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center text-gray-400 hover:text-gray-600 transition">
                 <svg class="w-5 h-5 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
             </Link>
@@ -53,7 +53,7 @@ onUnmounted(() => { document.removeEventListener('mousemove', onDrag); document.
         </div>
 
         <!-- View Modes -->
-        <div class="flex items-center justify-center gap-1 bg-white rounded-xl p-1 border border-gray-100 shadow-sm">
+        <div class="flex items-center justify-center gap-1 bg-white rounded-xl p-1 border border-gray-100 shadow-sm overflow-x-auto scrollbar-none">
             <button v-for="mode in ['slider', 'side']" :key="mode" @click="viewMode = mode"
                 :class="viewMode === mode ? 'bg-[#C4A265] text-white shadow-md' : 'text-gray-500 hover:bg-gray-100'"
                 class="px-4 py-2 rounded-lg text-xs font-medium transition-all">
@@ -81,12 +81,12 @@ onUnmounted(() => { document.removeEventListener('mousemove', onDrag); document.
         </div>
 
         <!-- Details -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="bg-white rounded-xl p-3 sm:p-4 border border-gray-100 shadow-sm">
                 <p class="text-xs text-gray-400">{{ isRtl ? 'المريض' : 'Patient' }}</p>
                 <p class="text-sm font-semibold text-gray-800 mt-1">{{ comp.patient?.full_name || '-' }}</p>
             </div>
-            <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
+            <div class="bg-white rounded-xl p-3 sm:p-4 border border-gray-100 shadow-sm">
                 <p class="text-xs text-gray-400">{{ isRtl ? 'التاريخ' : 'Period' }}</p>
                 <p class="text-sm font-semibold text-gray-800 mt-1">{{ formatDate(comp.before_date) }} → {{ formatDate(comp.after_date) }}</p>
             </div>
@@ -102,7 +102,7 @@ onUnmounted(() => { document.removeEventListener('mousemove', onDrag); document.
             </div>
         </div>
 
-        <div v-if="comp.description" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6">
+        <div v-if="comp.description" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6">
             <p class="text-xs text-gray-400 mb-1">{{ isRtl ? 'الوصف' : 'Description' }}</p>
             <p class="text-sm text-gray-700 leading-relaxed">{{ comp.description }}</p>
         </div>

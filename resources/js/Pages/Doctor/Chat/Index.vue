@@ -61,7 +61,7 @@ function handleBack() {
 </script>
 
 <template>
-    <div class="h-[calc(100vh-72px-57px)] flex rounded-2xl overflow-hidden bg-white shadow-sm border border-gray-200/80">
+    <div class="h-[calc(100vh-64px-48px)] sm:h-[calc(100vh-72px-57px)] flex rounded-xl sm:rounded-2xl overflow-hidden bg-white shadow-sm border border-gray-200/80">
         <div
             class="w-full lg:w-[340px] lg:border-r border-gray-200 flex-shrink-0"
             :class="mobileShowChat && activeConversation ? 'hidden lg:flex lg:flex-col' : 'flex flex-col'"

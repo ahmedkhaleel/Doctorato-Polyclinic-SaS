@@ -107,7 +107,7 @@ function formatDateTime(d) {
                         </p>
                     </div>
 
-                    <div class="flex items-center gap-3"
+                    <div class="flex items-center gap-3 flex-wrap"
                         :class="mounted ? 'opacity-100 scale-100' : 'opacity-0 scale-90'"
                         style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.15s"
                     >
@@ -151,7 +151,7 @@ function formatDateTime(d) {
         </div>
 
         <!-- Content Grid -->
-        <div class="grid lg:grid-cols-3 gap-6">
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             <!-- Main Content -->
             <div class="lg:col-span-2 space-y-6">
                 <!-- Visits Table -->
@@ -159,7 +159,7 @@ function formatDateTime(d) {
                     :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
                     style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.25s"
                 >
-                    <div class="px-6 py-4 border-b border-gray-100 flex items-center gap-2">
+                    <div class="px-4 sm:px-6 py-4 border-b border-gray-100 flex items-center gap-2">
                         <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
                             <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
                         </div>
@@ -170,12 +170,12 @@ function formatDateTime(d) {
                         <table class="w-full text-sm">
                             <thead>
                                 <tr class="bg-gray-50/80">
-                                    <th class="ltr:text-left rtl:text-right px-5 py-2.5 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">{{ isRtl ? 'التاريخ' : 'Date' }}</th>
-                                    <th class="ltr:text-left rtl:text-right px-5 py-2.5 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">{{ isRtl ? 'المريض' : 'Patient' }}</th>
-                                    <th class="ltr:text-left rtl:text-right px-5 py-2.5 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">{{ isRtl ? 'الخدمة' : 'Service' }}</th>
-                                    <th class="ltr:text-right rtl:text-left px-5 py-2.5 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">{{ isRtl ? 'المبلغ' : 'Amount' }}</th>
-                                    <th class="ltr:text-right rtl:text-left px-5 py-2.5 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">{{ isRtl ? 'النسبة' : 'Rate' }}</th>
-                                    <th class="ltr:text-right rtl:text-left px-5 py-2.5 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">{{ isRtl ? 'العمولة' : 'Commission' }}</th>
+                                    <th class="hidden sm:table-cell ltr:text-left rtl:text-right px-3 sm:px-5 py-2.5 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">{{ isRtl ? 'التاريخ' : 'Date' }}</th>
+                                    <th class="ltr:text-left rtl:text-right px-3 sm:px-5 py-2.5 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">{{ isRtl ? 'المريض' : 'Patient' }}</th>
+                                    <th class="hidden sm:table-cell ltr:text-left rtl:text-right px-3 sm:px-5 py-2.5 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">{{ isRtl ? 'الخدمة' : 'Service' }}</th>
+                                    <th class="hidden sm:table-cell ltr:text-right rtl:text-left px-3 sm:px-5 py-2.5 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">{{ isRtl ? 'المبلغ' : 'Amount' }}</th>
+                                    <th class="ltr:text-right rtl:text-left px-3 sm:px-5 py-2.5 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">{{ isRtl ? 'النسبة' : 'Rate' }}</th>
+                                    <th class="ltr:text-right rtl:text-left px-3 sm:px-5 py-2.5 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">{{ isRtl ? 'العمولة' : 'Commission' }}</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100/80">
@@ -184,36 +184,38 @@ function formatDateTime(d) {
                                     :class="mounted ? 'opacity-100' : 'opacity-0'"
                                     :style="{ transition: 'opacity 0.4s ease', transitionDelay: `${0.35 + index * 0.03}s` }"
                                 >
-                                    <td class="px-5 py-3">
+                                    <td class="hidden sm:table-cell px-3 sm:px-5 py-3">
                                         <span class="text-xs text-gray-500">{{ formatDate(visit.visit_date) }}</span>
                                     </td>
-                                    <td class="px-5 py-3">
+                                    <td class="px-3 sm:px-5 py-3">
                                         <span class="text-sm font-medium text-gray-800">{{ visit.patient?.full_name || '-' }}</span>
                                     </td>
-                                    <td class="px-5 py-3">
+                                    <td class="hidden sm:table-cell px-3 sm:px-5 py-3">
                                         <span class="text-xs text-gray-500">{{ visit.service?.name_en || (visit.visit_type === 'consultation' ? (isRtl ? 'استشارة' : 'Consultation') : (isRtl ? 'جلسة' : 'Session')) }}</span>
                                     </td>
-                                    <td class="px-5 py-3 text-right">
+                                    <td class="hidden sm:table-cell px-3 sm:px-5 py-3 text-right">
                                         <span class="text-xs text-gray-600 font-medium">{{ parseFloat(visit.pivot?.visit_amount || 0).toLocaleString() }}</span>
                                     </td>
-                                    <td class="px-5 py-3 text-right">
+                                    <td class="px-3 sm:px-5 py-3 text-right">
                                         <span class="text-xs font-semibold text-[#C4A265]">{{ visit.pivot?.commission_rate }}%</span>
                                     </td>
-                                    <td class="px-5 py-3 text-right">
+                                    <td class="px-3 sm:px-5 py-3 text-right">
                                         <span class="text-sm font-bold text-[#C4A265]">{{ parseFloat(visit.pivot?.commission_amount || 0).toLocaleString() }}</span>
                                     </td>
                                 </tr>
                             </tbody>
                             <tfoot>
                                 <tr class="bg-gray-50/80 border-t-2 border-gray-100">
-                                    <td colspan="3" class="px-5 py-3.5">
+                                    <td class="hidden sm:table-cell px-3 sm:px-5 py-3.5"></td>
+                                    <td class="px-3 sm:px-5 py-3.5">
                                         <span class="text-sm font-bold text-gray-700">{{ isRtl ? 'الإجمالي' : 'Total' }}</span>
                                     </td>
-                                    <td class="px-5 py-3.5 text-right">
+                                    <td class="hidden sm:table-cell px-3 sm:px-5 py-3.5"></td>
+                                    <td class="hidden sm:table-cell px-3 sm:px-5 py-3.5 text-right">
                                         <span class="text-sm font-bold text-gray-700">{{ parseFloat(payout.total_revenue || 0).toLocaleString() }}</span>
                                     </td>
-                                    <td class="px-5 py-3.5"></td>
-                                    <td class="px-5 py-3.5 text-right">
+                                    <td class="px-3 sm:px-5 py-3.5"></td>
+                                    <td class="px-3 sm:px-5 py-3.5 text-right">
                                         <span class="text-sm font-bold text-[#C4A265]">{{ formatCurrency(payout.total_commission) }}</span>
                                     </td>
                                 </tr>
@@ -230,13 +232,13 @@ function formatDateTime(d) {
                     :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
                     style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.3s"
                 >
-                    <div class="px-5 py-3.5 border-b border-gray-100 flex items-center gap-2">
+                    <div class="px-3 sm:px-5 py-3.5 border-b border-gray-100 flex items-center gap-2">
                         <div class="w-7 h-7 rounded-lg bg-[#C4A265]/10 flex items-center justify-center">
                             <svg class="w-3.5 h-3.5 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
                         </div>
                         <h3 class="text-sm font-bold text-gray-800">{{ isRtl ? 'الملخص المالي' : 'Financial Summary' }}</h3>
                     </div>
-                    <div class="p-5 space-y-3">
+                    <div class="p-4 sm:p-5 space-y-3">
                         <div class="flex justify-between items-center text-sm">
                             <span class="text-gray-500">{{ isRtl ? 'إجمالي الإيرادات' : 'Total Revenue' }}</span>
                             <span class="font-semibold text-gray-800">{{ formatCurrency(payout.total_revenue) }}</span>
@@ -267,7 +269,7 @@ function formatDateTime(d) {
                     style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.35s"
                 >
                     <!-- Paid -->
-                    <div v-if="payout.status === 'paid'" class="p-5">
+                    <div v-if="payout.status === 'paid'" class="p-4 sm:p-5">
                         <div class="flex items-center gap-2 mb-4">
                             <div class="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center">
                                 <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -295,7 +297,7 @@ function formatDateTime(d) {
                     </div>
 
                     <!-- Confirmed -->
-                    <div v-else-if="payout.status === 'confirmed'" class="p-5">
+                    <div v-else-if="payout.status === 'confirmed'" class="p-4 sm:p-5">
                         <div class="flex items-center gap-2 mb-3">
                             <div class="w-8 h-8 rounded-lg bg-amber-100 flex items-center justify-center">
                                 <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -310,7 +312,7 @@ function formatDateTime(d) {
                     </div>
 
                     <!-- Draft -->
-                    <div v-else-if="payout.status === 'draft'" class="p-5">
+                    <div v-else-if="payout.status === 'draft'" class="p-4 sm:p-5">
                         <div class="flex items-center gap-2 mb-3">
                             <div class="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center">
                                 <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
@@ -321,7 +323,7 @@ function formatDateTime(d) {
                     </div>
 
                     <!-- Cancelled -->
-                    <div v-else-if="payout.status === 'cancelled'" class="p-5">
+                    <div v-else-if="payout.status === 'cancelled'" class="p-4 sm:p-5">
                         <div class="flex items-center gap-2 mb-3">
                             <div class="w-8 h-8 rounded-lg bg-red-100 flex items-center justify-center">
                                 <svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -341,13 +343,13 @@ function formatDateTime(d) {
                     :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
                     style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.4s"
                 >
-                    <div class="px-5 py-3.5 border-b border-gray-100 flex items-center gap-2">
+                    <div class="px-3 sm:px-5 py-3.5 border-b border-gray-100 flex items-center gap-2">
                         <div class="w-7 h-7 rounded-lg bg-purple-50 flex items-center justify-center">
                             <svg class="w-3.5 h-3.5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                         </div>
                         <h3 class="text-sm font-bold text-gray-800">{{ isRtl ? 'التفاصيل' : 'Details' }}</h3>
                     </div>
-                    <div class="p-5 space-y-3">
+                    <div class="p-4 sm:p-5 space-y-3">
                         <div class="flex justify-between text-sm">
                             <span class="text-gray-500">{{ isRtl ? 'إجمالي الزيارات' : 'Total Visits' }}</span>
                             <span class="font-semibold text-gray-800">{{ payout.total_visits }}</span>
@@ -376,13 +378,13 @@ function formatDateTime(d) {
                     :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
                     style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.45s"
                 >
-                    <div class="px-5 py-3.5 border-b border-gray-100 flex items-center gap-2">
+                    <div class="px-3 sm:px-5 py-3.5 border-b border-gray-100 flex items-center gap-2">
                         <div class="w-7 h-7 rounded-lg bg-cyan-50 flex items-center justify-center">
                             <svg class="w-3.5 h-3.5 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" /></svg>
                         </div>
                         <h3 class="text-sm font-bold text-gray-800">{{ isRtl ? 'ملاحظات' : 'Notes' }}</h3>
                     </div>
-                    <div class="p-5">
+                    <div class="p-4 sm:p-5">
                         <p class="text-sm text-gray-600 whitespace-pre-line leading-relaxed">{{ payout.notes }}</p>
                     </div>
                 </div>

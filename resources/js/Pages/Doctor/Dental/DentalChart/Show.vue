@@ -367,7 +367,7 @@ function formatDate(d) {
                             <span class="text-gray-500 font-mono text-xs bg-white/10 px-2 py-0.5 rounded">{{ patient.file_number }}</span>
                         </div>
                     </div>
-                    <div class="flex items-center gap-2 flex-wrap">
+                    <div class="flex items-center gap-2 flex-wrap justify-start sm:justify-end">
                         <!-- Adult/Deciduous Toggle -->
                         <button @click="showDeciduousTeeth = !showDeciduousTeeth; selectedTooth = null;"
                             class="inline-flex items-center px-3 py-2 text-xs font-medium rounded-xl border transition-all"
@@ -419,7 +419,7 @@ function formatDate(d) {
             :class="patient.allergies ? 'bg-red-50 border-red-200' : 'bg-amber-50 border-amber-200'"
             :style="mounted ? 'opacity:1;transform:translateY(0)' : 'opacity:0;transform:translateY(1rem)'"
             style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.1s">
-            <div class="px-5 py-3 flex items-start gap-3">
+            <div class="px-3 sm:px-5 py-3 flex items-start gap-3">
                 <div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
                     :class="patient.allergies ? 'bg-red-100' : 'bg-amber-100'">
                     <svg class="w-5 h-5" :class="patient.allergies ? 'text-red-600' : 'text-amber-600'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -468,7 +468,8 @@ function formatDate(d) {
                 </div>
             </div>
 
-            <div class="px-2 sm:px-4 md:px-6 py-4">
+            <div class="px-2 sm:px-4 md:px-6 py-4 overflow-x-auto scrollbar-none">
+                <div class="min-w-[500px]">
 
                 <!-- ═══ UPPER JAW ═══ -->
                 <div class="text-center mb-2">
@@ -747,6 +748,7 @@ function formatDate(d) {
                 <div class="text-center mt-3 mb-1">
                     <span class="text-[10px] text-gray-300">{{ isRtl ? 'اضغط مرة لعرض التفاصيل • اضغط مرتين للتعديل' : 'Click to view details • Double-click to edit' }}</span>
                 </div>
+                </div>
             </div>
         </div>
 
@@ -756,7 +758,7 @@ function formatDate(d) {
             <div v-if="selectedTooth && !showModal" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
                 <div class="flex items-stretch border-b border-gray-100">
                     <!-- Tooth Info -->
-                    <div class="flex-1 px-5 py-4">
+                    <div class="flex-1 px-3 sm:px-5 py-4">
                         <div class="flex items-center gap-3 mb-3">
                             <div class="w-10 h-10 rounded-xl flex items-center justify-center font-mono text-lg font-bold"
                                 :style="{ backgroundColor: conditionTheme[getToothData(selectedTooth).condition].fill, color: conditionTheme[getToothData(selectedTooth).condition].text, border: '2px solid ' + conditionTheme[getToothData(selectedTooth).condition].stroke }">
@@ -772,7 +774,7 @@ function formatDate(d) {
                                     <span v-if="getToothData(selectedTooth).notes" class="text-[10px] text-gray-400">{{ getToothData(selectedTooth).notes }}</span>
                                 </div>
                             </div>
-                            <div class="ms-auto flex items-center gap-1.5">
+                            <div class="ms-auto flex items-center gap-1.5 flex-wrap">
                                 <button @click="showQuickTreatment = !showQuickTreatment"
                                     class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-cyan-600 bg-cyan-50 hover:bg-cyan-100 rounded-lg border border-cyan-200 transition-all"
                                     :class="showQuickTreatment ? 'ring-2 ring-cyan-300' : ''">
@@ -803,7 +805,7 @@ function formatDate(d) {
                 <Transition enter-active-class="transition-all duration-300 ease-out" enter-from-class="opacity-0 max-h-0" enter-to-class="opacity-100 max-h-96"
                     leave-active-class="transition-all duration-200 ease-in" leave-from-class="opacity-100 max-h-96" leave-to-class="opacity-0 max-h-0">
                     <div v-if="showQuickTreatment" class="border-b border-gray-100 overflow-hidden">
-                        <div class="px-5 py-2.5 bg-cyan-50/50 border-b border-cyan-100/50 flex items-center justify-between">
+                        <div class="px-3 sm:px-5 py-2.5 bg-cyan-50/50 border-b border-cyan-100/50 flex items-center justify-between">
                             <span class="text-xs font-bold text-cyan-700 uppercase tracking-wider">{{ isRtl ? 'إضافة علاج سريع' : 'Quick Add Treatment' }}</span>
                             <button @click="resetQuickTreatment" class="text-gray-400 hover:text-gray-600 transition-colors">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
@@ -879,12 +881,12 @@ function formatDate(d) {
 
                 <!-- Treatment History -->
                 <div v-if="getToothTreatments(selectedTooth).length > 0">
-                    <div class="px-5 py-2.5 bg-gray-50/50 border-b border-gray-100 flex items-center justify-between">
+                    <div class="px-3 sm:px-5 py-2.5 bg-gray-50/50 border-b border-gray-100 flex items-center justify-between">
                         <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'سجل العلاج' : 'Treatment History' }}</span>
                         <span class="text-[10px] bg-[#C4A265]/10 text-[#C4A265] px-2 py-0.5 rounded-full font-bold">{{ getToothTreatments(selectedTooth).length }}</span>
                     </div>
                     <div class="divide-y divide-gray-50">
-                        <div v-for="tr in getToothTreatments(selectedTooth)" :key="tr.id" class="px-5 py-3 flex items-center justify-between hover:bg-gray-50/50 transition-colors">
+                        <div v-for="tr in getToothTreatments(selectedTooth)" :key="tr.id" class="px-3 sm:px-5 py-3 flex items-center justify-between hover:bg-gray-50/50 transition-colors">
                             <div class="flex items-center gap-2.5">
                                 <div class="w-1.5 h-1.5 rounded-full flex-shrink-0" :class="{
                                     'bg-green-500': tr.status === 'completed',
@@ -912,7 +914,7 @@ function formatDate(d) {
                         </div>
                     </div>
                 </div>
-                <div v-else class="px-5 py-6 text-center">
+                <div v-else class="px-3 sm:px-5 py-6 text-center">
                     <p class="text-xs text-gray-300">{{ isRtl ? 'لا يوجد سجل علاج لهذا السن' : 'No treatment history for this tooth' }}</p>
                 </div>
             </div>
@@ -925,7 +927,7 @@ function formatDate(d) {
             leave-active-class="transition-all duration-200 ease-in" leave-from-class="opacity-100" leave-to-class="opacity-0">
             <div v-if="showModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4" @click.self="showModal = false">
                 <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden">
-                    <div class="bg-gradient-to-r from-gray-900 to-gray-800 px-6 py-4 flex items-center justify-between">
+                    <div class="bg-gradient-to-r from-gray-900 to-gray-800 px-4 sm:px-6 py-4 flex items-center justify-between">
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 rounded-xl bg-[#C4A265]/20 flex items-center justify-center">
                                 <span class="text-[#C4A265] font-bold font-mono text-lg">{{ selectedTooth }}</span>
@@ -939,7 +941,7 @@ function formatDate(d) {
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                         </button>
                     </div>
-                    <div class="p-6 space-y-5">
+                    <div class="p-4 sm:p-6 space-y-5">
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-3">{{ isRtl ? 'حالة السن' : 'Condition' }}</label>
                             <div class="grid grid-cols-3 gap-2">
@@ -977,7 +979,7 @@ function formatDate(d) {
                             <textarea v-model="editForm.notes" rows="2" class="w-full border-2 border-gray-100 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all resize-none" :placeholder="isRtl ? 'أضف ملاحظات...' : 'Add notes...'"></textarea>
                         </div>
                     </div>
-                    <div class="px-6 py-4 bg-gray-50 border-t flex gap-3 justify-end">
+                    <div class="px-4 sm:px-6 py-4 bg-gray-50 border-t flex gap-3 justify-end flex-wrap">
                         <button @click="showModal = false" class="px-5 py-2.5 border-2 border-gray-200 rounded-xl text-sm font-medium text-gray-600 hover:bg-white transition-all">{{ isRtl ? 'إلغاء' : 'Cancel' }}</button>
                         <button @click="saveTooth" :disabled="saving" class="px-6 py-2.5 bg-[#C4A265] text-white rounded-xl text-sm font-semibold hover:bg-[#B39255] disabled:opacity-50 transition-all shadow-lg shadow-[#C4A265]/20 flex items-center gap-2">
                             <svg v-if="saving" class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>

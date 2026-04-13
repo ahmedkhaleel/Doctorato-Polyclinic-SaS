@@ -143,22 +143,22 @@ const activeTab = ref('visits');
 
         <!-- Tabs -->
         <div
-            class="flex gap-1 bg-white rounded-xl p-1 shadow-sm border border-gray-100 transition-all duration-500"
+            class="flex gap-1 bg-white rounded-xl p-1 shadow-sm border border-gray-100 transition-all duration-500 overflow-x-auto scrollbar-none"
             :class="headerLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
         >
-            <button @click="activeTab = 'visits'" class="flex-1 px-3 py-2.5 rounded-lg text-sm font-medium transition-all" :class="activeTab === 'visits' ? 'bg-gray-900 text-white shadow-sm' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'">
+            <button @click="activeTab = 'visits'" class="flex-1 px-3 py-2.5 rounded-lg text-sm font-medium transition-all whitespace-nowrap" :class="activeTab === 'visits' ? 'bg-gray-900 text-white shadow-sm' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'">
                 {{ isRtl ? 'الزيارات' : 'Visits' }}
             </button>
-            <button @click="activeTab = 'info'" class="flex-1 px-3 py-2.5 rounded-lg text-sm font-medium transition-all" :class="activeTab === 'info' ? 'bg-gray-900 text-white shadow-sm' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'">
+            <button @click="activeTab = 'info'" class="flex-1 px-3 py-2.5 rounded-lg text-sm font-medium transition-all whitespace-nowrap" :class="activeTab === 'info' ? 'bg-gray-900 text-white shadow-sm' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'">
                 {{ isRtl ? 'البيانات' : 'Details' }}
             </button>
-            <button @click="activeTab = 'notes'" class="flex-1 px-3 py-2.5 rounded-lg text-sm font-medium transition-all" :class="activeTab === 'notes' ? 'bg-gray-900 text-white shadow-sm' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'">
+            <button @click="activeTab = 'notes'" class="flex-1 px-3 py-2.5 rounded-lg text-sm font-medium transition-all whitespace-nowrap" :class="activeTab === 'notes' ? 'bg-gray-900 text-white shadow-sm' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'">
                 {{ isRtl ? 'ملاحظاتي' : 'My Notes' }}
             </button>
-            <button v-if="allPhotos.length" @click="activeTab = 'photos'" class="flex-1 px-3 py-2.5 rounded-lg text-sm font-medium transition-all" :class="activeTab === 'photos' ? 'bg-gray-900 text-white shadow-sm' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'">
+            <button v-if="allPhotos.length" @click="activeTab = 'photos'" class="flex-1 px-3 py-2.5 rounded-lg text-sm font-medium transition-all whitespace-nowrap" :class="activeTab === 'photos' ? 'bg-gray-900 text-white shadow-sm' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'">
                 {{ isRtl ? 'الصور' : 'Photos' }}
             </button>
-            <button v-if="$page.props.modules?.dental?.enabled && dentalData" @click="activeTab = 'dental'" class="flex-1 px-3 py-2.5 rounded-lg text-sm font-medium transition-all" :class="activeTab === 'dental' ? 'bg-gray-900 text-white shadow-sm' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'">
+            <button v-if="$page.props.modules?.dental?.enabled && dentalData" @click="activeTab = 'dental'" class="flex-1 px-3 py-2.5 rounded-lg text-sm font-medium transition-all whitespace-nowrap" :class="activeTab === 'dental' ? 'bg-gray-900 text-white shadow-sm' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'">
                 {{ isRtl ? 'الأسنان' : 'Dental' }}
             </button>
         </div>
@@ -220,7 +220,7 @@ const activeTab = ref('visits');
 
             <!-- Info Tab -->
             <div v-if="activeTab === 'info'" class="grid md:grid-cols-2 gap-5">
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6">
                     <h3 class="text-xs font-bold text-gray-500 uppercase mb-4 flex items-center gap-2">
                         <svg class="w-4 h-4 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                         {{ isRtl ? 'بيانات المريض' : 'Patient Details' }}
@@ -233,7 +233,7 @@ const activeTab = ref('visits');
                         <div class="flex justify-between py-1.5"><span class="text-gray-500">{{ isRtl ? 'العنوان' : 'Address' }}</span><span class="font-medium text-gray-800 max-w-[180px] ltr:text-right rtl:text-left">{{ patient.address || '-' }}</span></div>
                     </div>
                 </div>
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6">
                     <h3 class="text-xs font-bold text-gray-500 uppercase mb-4 flex items-center gap-2">
                         <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
                         {{ isRtl ? 'التاريخ الطبي' : 'Medical History' }}
@@ -245,7 +245,7 @@ const activeTab = ref('visits');
 
             <!-- Notes Tab -->
             <div v-if="activeTab === 'notes'">
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6">
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="text-sm font-bold text-gray-800 flex items-center gap-2">
                             <svg class="w-4 h-4 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
@@ -280,12 +280,12 @@ const activeTab = ref('visits');
             <!-- Photos Tab -->
             <div v-if="activeTab === 'photos' && allPhotos.length">
                 <div class="grid md:grid-cols-2 gap-5">
-                    <div v-if="beforePhotos.length" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                    <div v-if="beforePhotos.length" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6">
                         <h3 class="text-sm font-bold text-amber-600 uppercase mb-3 flex items-center gap-2">
                             <span class="w-6 h-6 rounded-lg bg-amber-100 flex items-center justify-center text-xs">{{ beforePhotos.length }}</span>
                             {{ isRtl ? 'قبل' : 'Before' }}
                         </h3>
-                        <div class="grid grid-cols-3 gap-2">
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
                             <div v-for="photo in beforePhotos" :key="photo.id" class="aspect-square rounded-xl overflow-hidden bg-gray-100 relative group">
                                 <img :src="'/storage/' + photo.photo_path" class="w-full h-full object-cover" />
                                 <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-2">
@@ -294,12 +294,12 @@ const activeTab = ref('visits');
                             </div>
                         </div>
                     </div>
-                    <div v-if="afterPhotos.length" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                    <div v-if="afterPhotos.length" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6">
                         <h3 class="text-sm font-bold text-emerald-600 uppercase mb-3 flex items-center gap-2">
                             <span class="w-6 h-6 rounded-lg bg-emerald-100 flex items-center justify-center text-xs">{{ afterPhotos.length }}</span>
                             {{ isRtl ? 'بعد' : 'After' }}
                         </h3>
-                        <div class="grid grid-cols-3 gap-2">
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
                             <div v-for="photo in afterPhotos" :key="photo.id" class="aspect-square rounded-xl overflow-hidden bg-gray-100 relative group">
                                 <img :src="'/storage/' + photo.photo_path" class="w-full h-full object-cover" />
                                 <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-2">
@@ -314,7 +314,7 @@ const activeTab = ref('visits');
             <!-- Dental Tab -->
             <div v-if="activeTab === 'dental' && $page.props.modules?.dental?.enabled && dentalData" class="space-y-5">
                 <!-- Dental Stats -->
-                <div v-if="dentalData?.stats" class="grid grid-cols-3 gap-3">
+                <div v-if="dentalData?.stats" class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     <div class="bg-white rounded-xl border border-cyan-100 p-4 shadow-sm">
                         <p class="text-2xl font-bold text-cyan-700">{{ dentalData.stats.total_treatments }}</p>
                         <p class="text-xs text-gray-500">{{ isRtl ? 'إجمالي العلاجات' : 'Total Treatments' }}</p>
@@ -330,7 +330,7 @@ const activeTab = ref('visits');
                 </div>
 
                 <!-- Quick Links -->
-                <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                     <Link :href="`/doctor/dental/chart/${patient.id}`" class="flex items-center gap-3 p-3 bg-white rounded-xl border border-gray-200 hover:border-[#C4A265]/40 hover:bg-[#C4A265]/5 transition group shadow-sm">
                         <div class="w-9 h-9 rounded-lg flex items-center justify-center bg-[#C4A265]/10"><svg class="w-4 h-4 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342" /></svg></div>
                         <div><p class="text-xs font-semibold text-gray-800">{{ isRtl ? 'المخطط' : 'Chart' }}</p><p class="text-[10px] text-gray-400">{{ dentalData?.charts?.length || 0 }} {{ isRtl ? 'سن' : 'teeth' }}</p></div>

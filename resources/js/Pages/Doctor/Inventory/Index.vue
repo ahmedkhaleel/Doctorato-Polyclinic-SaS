@@ -75,7 +75,7 @@ onMounted(() => { requestAnimationFrame(() => { mounted.value = true; }); });
 </script>
 
 <template>
-    <div class="space-y-6">
+    <div class="space-y-4 sm:space-y-6">
         <!-- Hero Header -->
         <div
             class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6 sm:p-8 transition-all duration-700"
@@ -111,7 +111,7 @@ onMounted(() => { requestAnimationFrame(() => { mounted.value = true; }); });
 
         <!-- Filters -->
         <div class="flex flex-wrap items-center gap-3">
-            <div class="relative flex-1 min-w-[240px] max-w-md">
+            <div class="relative flex-1 min-w-[200px] sm:min-w-[240px] max-w-md">
                 <svg class="absolute start-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
@@ -146,7 +146,7 @@ onMounted(() => { requestAnimationFrame(() => { mounted.value = true; }); });
                 class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-500 hover:shadow-md hover:border-gray-200"
                 :style="{ opacity: mounted ? 1 : 0, transform: mounted ? 'translateY(0)' : 'translateY(16px)', transitionDelay: `${100 + index * 40}ms`, transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }"
             >
-                <div class="p-5">
+                <div class="p-4 sm:p-5">
                     <!-- Header -->
                     <div class="flex items-start justify-between mb-3">
                         <div class="flex-1 min-w-0">

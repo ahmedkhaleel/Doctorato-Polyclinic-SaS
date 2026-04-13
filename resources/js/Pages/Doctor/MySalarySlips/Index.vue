@@ -143,7 +143,7 @@ onMounted(() => {
                     <!-- Hover accent stripe -->
                     <div class="absolute top-0 bottom-0 w-1 bg-gradient-to-b from-indigo-400 to-indigo-600 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" :class="isRtl ? 'right-0' : 'left-0'"></div>
 
-                    <div class="flex flex-col sm:flex-row sm:items-center gap-4 p-5 relative">
+                    <div class="flex flex-col sm:flex-row sm:items-center gap-4 p-4 sm:p-5 relative">
                         <!-- Period -->
                         <div class="flex items-center gap-3 sm:w-52">
                             <div class="w-13 h-13 rounded-xl bg-gradient-to-br from-indigo-50 to-indigo-100 flex flex-col items-center justify-center shadow-sm group-hover:shadow-md group-hover:scale-105 transition-all duration-300">
@@ -173,7 +173,7 @@ onMounted(() => {
                         </div>
 
                         <!-- Paid Date & Action -->
-                        <div class="flex items-center gap-3">
+                        <div class="flex items-center gap-3 flex-wrap">
                             <div v-if="slip.paid_at" class="text-xs text-gray-400">
                                 <span class="inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-emerald-50 text-emerald-600 rounded-lg font-medium">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>

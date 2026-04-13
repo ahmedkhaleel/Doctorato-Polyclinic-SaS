@@ -82,7 +82,7 @@ function handlePrint() {
     <div class="space-y-6">
         <!-- Header -->
         <div
-            class="flex items-center justify-between print:hidden transition-all duration-700"
+            class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 print:hidden transition-all duration-700"
             :class="headerLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
             :style="{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }"
         >
@@ -113,7 +113,7 @@ function handlePrint() {
             :class="infoLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
             :style="{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }"
         >
-            <div class="p-6">
+            <div class="p-4 sm:p-6">
                 <div class="flex items-center gap-4">
                     <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-[#4f46e5] to-[#6366f1] flex items-center justify-center shadow-lg shadow-indigo-500/20">
                         <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
@@ -127,7 +127,7 @@ function handlePrint() {
                     </div>
                 </div>
             </div>
-            <div v-if="slip?.payment_method || slip?.paid_at" class="px-6 py-4 bg-gray-50/50 border-t border-gray-100 flex flex-wrap gap-6">
+            <div v-if="slip?.payment_method || slip?.paid_at" class="px-4 sm:px-6 py-4 bg-gray-50/50 border-t border-gray-100 flex flex-wrap gap-4 sm:gap-6">
                 <div v-if="slip.paid_at" class="flex items-center gap-2">
                     <div class="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center">
                         <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
@@ -151,13 +151,13 @@ function handlePrint() {
 
         <!-- Earnings & Deductions -->
         <div
-            class="grid lg:grid-cols-2 gap-6 transition-all duration-700"
+            class="grid lg:grid-cols-2 gap-4 sm:gap-6 transition-all duration-700"
             :class="tablesLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'"
             :style="{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }"
         >
             <!-- Earnings Card -->
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
-                <div class="px-6 py-4 border-b border-gray-100 flex items-center gap-3">
+                <div class="px-4 sm:px-6 py-4 border-b border-gray-100 flex items-center gap-3">
                     <div class="w-9 h-9 rounded-xl bg-emerald-50 flex items-center justify-center">
                         <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
                     </div>
@@ -167,7 +167,7 @@ function handlePrint() {
                     </div>
                 </div>
                 <div class="divide-y divide-gray-50">
-                    <div v-for="item in earnings" :key="item.key" class="flex items-center justify-between px-6 py-3.5 hover:bg-gray-50/50 transition-colors group">
+                    <div v-for="item in earnings" :key="item.key" class="flex items-center justify-between px-4 sm:px-6 py-3.5 hover:bg-gray-50/50 transition-colors group">
                         <div class="flex items-center gap-3">
                             <svg class="w-4 h-4 text-gray-300 group-hover:text-emerald-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" :d="item.icon" /></svg>
                             <span class="text-sm text-gray-600">{{ isRtl ? item.labelAr : item.label }}</span>
@@ -175,7 +175,7 @@ function handlePrint() {
                         <span class="text-sm font-semibold tabular-nums" :class="Number(slip?.[item.key]) > 0 ? 'text-gray-800' : 'text-gray-300'">{{ formatCurrency(slip?.[item.key]) }}</span>
                     </div>
                 </div>
-                <div class="flex items-center justify-between px-6 py-4 bg-emerald-50/50 border-t border-emerald-100">
+                <div class="flex items-center justify-between px-4 sm:px-6 py-4 bg-emerald-50/50 border-t border-emerald-100">
                     <span class="text-sm font-bold text-emerald-700">{{ isRtl ? 'إجمالي المكاسب' : 'Total Earnings' }}</span>
                     <span class="text-base font-bold text-emerald-700 tabular-nums">{{ formatCurrency(slip?.total_earnings) }}</span>
                 </div>
@@ -183,7 +183,7 @@ function handlePrint() {
 
             <!-- Deductions Card -->
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
-                <div class="px-6 py-4 border-b border-gray-100 flex items-center gap-3">
+                <div class="px-4 sm:px-6 py-4 border-b border-gray-100 flex items-center gap-3">
                     <div class="w-9 h-9 rounded-xl bg-red-50 flex items-center justify-center">
                         <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" /></svg>
                     </div>
@@ -193,7 +193,7 @@ function handlePrint() {
                     </div>
                 </div>
                 <div class="divide-y divide-gray-50">
-                    <div v-for="item in deductions" :key="item.key" class="flex items-center justify-between px-6 py-3.5 hover:bg-gray-50/50 transition-colors group">
+                    <div v-for="item in deductions" :key="item.key" class="flex items-center justify-between px-4 sm:px-6 py-3.5 hover:bg-gray-50/50 transition-colors group">
                         <div class="flex items-center gap-3">
                             <svg class="w-4 h-4 text-gray-300 group-hover:text-red-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" :d="item.icon" /></svg>
                             <span class="text-sm text-gray-600">{{ isRtl ? item.labelAr : item.label }}</span>
@@ -201,7 +201,7 @@ function handlePrint() {
                         <span class="text-sm font-semibold tabular-nums" :class="Number(slip?.[item.key]) > 0 ? 'text-gray-800' : 'text-gray-300'">{{ formatCurrency(slip?.[item.key]) }}</span>
                     </div>
                 </div>
-                <div class="flex items-center justify-between px-6 py-4 bg-red-50/50 border-t border-red-100">
+                <div class="flex items-center justify-between px-4 sm:px-6 py-4 bg-red-50/50 border-t border-red-100">
                     <span class="text-sm font-bold text-red-700">{{ isRtl ? 'إجمالي الخصومات' : 'Total Deductions' }}</span>
                     <span class="text-base font-bold text-red-700 tabular-nums">{{ formatCurrency(slip?.total_deductions) }}</span>
                 </div>

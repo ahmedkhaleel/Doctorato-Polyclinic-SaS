@@ -87,7 +87,7 @@ function formatDate(date) {
                     {{ patient.full_name }} <span class="font-mono text-xs text-gray-400">({{ patient.file_number }})</span>
                 </p>
             </div>
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-2 flex-wrap">
                 <button
                     @click="showUploadForm = !showUploadForm"
                     class="inline-flex items-center px-4 py-2.5 rounded-xl text-white text-sm font-medium transition bg-[#C4A265] hover:bg-[#B39255]"
@@ -111,7 +111,7 @@ function formatDate(date) {
         </div>
 
         <!-- Upload Form -->
-        <div v-if="showUploadForm" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6 space-y-5">
+        <div v-if="showUploadForm" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6 space-y-5">
             <h2 class="text-lg font-semibold text-gray-800 border-b border-gray-100 pb-3">{{ isRtl ? 'رفع أشعة جديدة' : 'Upload New X-Ray' }}</h2>
 
             <form @submit.prevent="submitUpload" class="space-y-5">
@@ -170,7 +170,7 @@ function formatDate(date) {
                         class="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]"></textarea>
                 </div>
 
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-3 flex-wrap">
                     <button
                         type="submit"
                         :disabled="processing"
@@ -195,7 +195,7 @@ function formatDate(date) {
             <p class="text-xs text-gray-400 mt-1">{{ isRtl ? 'اضغط على زر "رفع أشعة" لإضافة صورة جديدة' : 'Click "Upload X-Ray" to add a new image' }}</p>
         </div>
 
-        <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <div v-for="xray in xrays" :key="xray.id"
                 class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden hover:shadow-md transition group cursor-pointer"
                 @click="selectedXray = xray"
@@ -221,7 +221,7 @@ function formatDate(date) {
                         </span>
                     </div>
                 </div>
-                <div class="p-4 space-y-2">
+                <div class="p-3 sm:p-4 space-y-2">
                     <div class="flex items-center justify-between">
                         <span class="text-sm font-medium text-gray-900">{{ isRtl ? 'سن' : 'Tooth' }} {{ xray.tooth_number || '-' }}</span>
                         <span class="text-xs text-gray-400">{{ formatDate(xray.taken_date || xray.created_at) }}</span>
@@ -247,8 +247,8 @@ function formatDate(date) {
                         alt=""
                         class="w-full rounded-xl"
                     />
-                    <div class="mt-4 bg-white rounded-xl p-4">
-                        <div class="grid grid-cols-2 gap-4 text-sm">
+                    <div class="mt-4 bg-white rounded-xl p-3 sm:p-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
                             <div>
                                 <span class="text-gray-500">{{ isRtl ? 'النوع' : 'Type' }}:</span>
                                 <span class="ms-1 font-medium">{{ selectedXray.type }}</span>

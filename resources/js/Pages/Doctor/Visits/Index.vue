@@ -185,7 +185,7 @@ function getVisitTypeLabel(visit) {
                         </div>
 
                         <!-- Date Range Filters -->
-                        <div class="flex items-center gap-2">
+                        <div class="flex flex-wrap items-center gap-2">
                             <div class="relative">
                                 <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                                 <input
@@ -401,7 +401,7 @@ function getVisitTypeLabel(visit) {
             <div v-if="visits.data?.length > 0" class="divide-y divide-gray-100/80">
                 <Link v-for="(visit, index) in visits.data" :key="visit.id"
                     :href="`/doctor/visits/${visit.id}`"
-                    class="group flex items-center gap-4 px-5 py-4 hover:bg-gray-50/60 transition-all duration-200"
+                    class="group flex items-center gap-4 px-3 sm:px-5 py-4 hover:bg-gray-50/60 transition-all duration-200"
                     :class="mounted ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4'"
                     :style="{ transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)', transitionDelay: `${0.25 + index * 0.04}s` }"
                 >
@@ -488,7 +488,7 @@ function getVisitTypeLabel(visit) {
             </div>
 
             <!-- Pagination (list) -->
-            <div v-if="visits.links?.length > 3" class="flex items-center justify-center gap-1 px-6 py-4 border-t border-gray-100 bg-gray-50/50">
+            <div v-if="visits.links?.length > 3" class="flex items-center justify-center gap-1 px-3 sm:px-5 py-4 border-t border-gray-100 bg-gray-50/50">
                 <template v-for="link in visits.links" :key="link.label">
                     <Link v-if="link.url" :href="link.url"
                         class="px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"

@@ -91,7 +91,7 @@ const rejectedCount = computed(() => leavesList.value.filter(l => l.status === '
             <div class="absolute bottom-0 left-0 w-64 h-64 bg-gradient-radial from-[#C4A265]/5 to-transparent rounded-full translate-y-1/2 -translate-x-1/4"></div>
 
             <div class="relative z-10">
-                <div class="flex items-center justify-between">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                     <div class="flex items-center gap-4">
                         <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-teal-400 to-teal-600 flex items-center justify-center shadow-lg shadow-teal-500/20">
                             <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
@@ -108,7 +108,7 @@ const rejectedCount = computed(() => leavesList.value.filter(l => l.status === '
                 </div>
 
                 <!-- Stats -->
-                <div class="grid grid-cols-3 gap-4 mt-6">
+                <div class="grid grid-cols-3 gap-3 sm:gap-4 mt-6">
                     <div class="bg-white/5 backdrop-blur-sm rounded-xl px-4 py-3 border border-white/10">
                         <p class="text-xs text-gray-400">{{ isRtl ? 'قيد الانتظار' : 'Pending' }}</p>
                         <p class="text-lg font-bold text-amber-400 mt-0.5">{{ pendingCount }}</p>
@@ -140,7 +140,7 @@ const rejectedCount = computed(() => leavesList.value.filter(l => l.status === '
                     :key="leave.id"
                     class="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 overflow-hidden"
                 >
-                    <div class="flex flex-col sm:flex-row sm:items-center gap-4 p-5">
+                    <div class="flex flex-col sm:flex-row sm:items-center gap-4 p-4 sm:p-5">
                         <!-- Type Icon -->
                         <div class="flex items-center gap-3 sm:w-44">
                             <div class="w-11 h-11 rounded-xl flex items-center justify-center" :class="typeConfig[leave.leave_type]?.bg || 'bg-gray-100'">
@@ -159,7 +159,7 @@ const rejectedCount = computed(() => leavesList.value.filter(l => l.status === '
                         </div>
 
                         <!-- Dates -->
-                        <div class="flex-1 flex items-center gap-3">
+                        <div class="flex-1 flex items-center gap-3 flex-wrap">
                             <div class="flex items-center gap-2 text-sm">
                                 <span class="text-gray-400 text-xs">{{ isRtl ? 'من' : 'From' }}</span>
                                 <span class="font-semibold text-gray-700 tabular-nums">{{ formatDate(leave.start_date) }}</span>
@@ -190,7 +190,7 @@ const rejectedCount = computed(() => leavesList.value.filter(l => l.status === '
                     </div>
 
                     <!-- Reason row on mobile -->
-                    <div v-if="leave.reason" class="lg:hidden px-5 pb-4 -mt-2">
+                    <div v-if="leave.reason" class="lg:hidden px-4 sm:px-5 pb-4 -mt-2">
                         <p class="text-xs text-gray-400"><span class="font-medium text-gray-500">{{ isRtl ? 'السبب:' : 'Reason:' }}</span> {{ leave.reason }}</p>
                     </div>
                 </div>
@@ -225,7 +225,7 @@ const rejectedCount = computed(() => leavesList.value.filter(l => l.status === '
                     <Transition enter-active-class="transition duration-200 ease-out" enter-from-class="opacity-0 scale-95" enter-to-class="opacity-100 scale-100" leave-active-class="transition duration-150 ease-in" leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-95">
                         <div v-if="showModal" class="relative w-full max-w-lg bg-white rounded-2xl shadow-2xl overflow-hidden">
                             <!-- Header -->
-                            <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-gray-50/50">
+                            <div class="flex items-center justify-between px-4 sm:px-6 py-4 border-b border-gray-100 bg-gray-50/50">
                                 <div class="flex items-center gap-3">
                                     <div class="w-10 h-10 rounded-xl bg-teal-50 flex items-center justify-center">
                                         <svg class="w-5 h-5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
@@ -238,7 +238,7 @@ const rejectedCount = computed(() => leavesList.value.filter(l => l.status === '
                             </div>
 
                             <!-- Body -->
-                            <form @submit.prevent="submitLeave" class="p-6 space-y-4">
+                            <form @submit.prevent="submitLeave" class="p-4 sm:p-6 space-y-4">
                                 <!-- Leave Type Cards -->
                                 <div>
                                     <label class="block text-sm font-semibold text-gray-700 mb-2">{{ isRtl ? 'نوع الإجازة' : 'Leave Type' }}</label>
@@ -282,7 +282,7 @@ const rejectedCount = computed(() => leavesList.value.filter(l => l.status === '
                                 </div>
 
                                 <!-- Footer -->
-                                <div class="flex items-center justify-end gap-3 pt-2">
+                                <div class="flex items-center justify-end gap-3 pt-2 flex-wrap">
                                     <button type="button" @click="closeModal" class="px-5 py-2.5 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors">
                                         {{ isRtl ? 'إلغاء' : 'Cancel' }}
                                     </button>

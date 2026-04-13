@@ -122,7 +122,7 @@ const priorityColors = {
                     </select>
                 </div>
                 <!-- Date Range Filters -->
-                <div class="flex flex-col sm:flex-row gap-3 max-w-2xl mt-3"
+                <div class="flex flex-col sm:flex-row flex-wrap gap-3 max-w-2xl mt-3"
                     :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
                     style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.2s"
                 >
@@ -158,11 +158,11 @@ const priorityColors = {
                             <th class="px-4 py-3 text-start text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'المريض' : 'Patient' }}</th>
                             <th class="px-4 py-3 text-start text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'العنوان' : 'Title' }}</th>
                             <th class="px-4 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'الحالة' : 'Status' }}</th>
-                            <th class="px-4 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'الأولوية' : 'Priority' }}</th>
-                            <th class="px-4 py-3 text-start text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'التكلفة المتوقعة' : 'Est. Cost' }}</th>
-                            <th class="px-4 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'العلاجات' : 'Treatments' }}</th>
-                            <th class="px-4 py-3 text-start text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'تاريخ البدء' : 'Start Date' }}</th>
-                            <th class="px-4 py-3 text-start text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'تاريخ الانتهاء' : 'End Date' }}</th>
+                            <th class="px-4 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider hidden sm:table-cell">{{ isRtl ? 'الأولوية' : 'Priority' }}</th>
+                            <th class="px-4 py-3 text-start text-xs font-semibold text-gray-500 uppercase tracking-wider hidden sm:table-cell">{{ isRtl ? 'التكلفة المتوقعة' : 'Est. Cost' }}</th>
+                            <th class="px-4 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider hidden md:table-cell">{{ isRtl ? 'العلاجات' : 'Treatments' }}</th>
+                            <th class="px-4 py-3 text-start text-xs font-semibold text-gray-500 uppercase tracking-wider hidden lg:table-cell">{{ isRtl ? 'تاريخ البدء' : 'Start Date' }}</th>
+                            <th class="px-4 py-3 text-start text-xs font-semibold text-gray-500 uppercase tracking-wider hidden lg:table-cell">{{ isRtl ? 'تاريخ الانتهاء' : 'End Date' }}</th>
                             <th class="px-4 py-3 text-end text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'إجراءات' : 'Actions' }}</th>
                         </tr>
                     </thead>
@@ -188,7 +188,7 @@ const priorityColors = {
                                     }[plan.status] || plan.status }}
                                 </span>
                             </td>
-                            <td class="px-4 py-3 text-center">
+                            <td class="px-4 py-3 text-center hidden sm:table-cell">
                                 <span :class="[priorityColors[plan.priority] || 'bg-gray-100 text-gray-600', 'px-2.5 py-1 rounded-full text-xs font-medium']">
                                     {{ isRtl ? {
                                         low: 'منخفض', normal: 'عادي', high: 'مرتفع', urgent: 'عاجل'
@@ -197,14 +197,14 @@ const priorityColors = {
                                     }[plan.priority] || 'Normal' }}
                                 </span>
                             </td>
-                            <td class="px-4 py-3 text-sm text-gray-700 font-medium">{{ formatCurrency(plan.estimated_cost) }}</td>
-                            <td class="px-4 py-3 text-center">
+                            <td class="px-4 py-3 text-sm text-gray-700 font-medium hidden sm:table-cell">{{ formatCurrency(plan.estimated_cost) }}</td>
+                            <td class="px-4 py-3 text-center hidden md:table-cell">
                                 <span class="inline-flex items-center justify-center min-w-[28px] h-6 px-2 rounded-full bg-[#C4A265]/10 text-[#C4A265] text-xs font-bold">
                                     {{ plan.treatments_count ?? (plan.treatments?.length || 0) }}
                                 </span>
                             </td>
-                            <td class="px-4 py-3 text-sm text-gray-500">{{ formatDate(plan.start_date) }}</td>
-                            <td class="px-4 py-3 text-sm text-gray-500">{{ formatDate(plan.expected_end_date) }}</td>
+                            <td class="px-4 py-3 text-sm text-gray-500 hidden lg:table-cell">{{ formatDate(plan.start_date) }}</td>
+                            <td class="px-4 py-3 text-sm text-gray-500 hidden lg:table-cell">{{ formatDate(plan.expected_end_date) }}</td>
                             <td class="px-4 py-3 text-end">
                                 <Link :href="`/doctor/dental/treatment-plans/${plan.id}`"
                                     class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-[#C4A265] bg-[#C4A265]/5 hover:bg-[#C4A265]/10 border border-[#C4A265]/10 transition-colors">
@@ -229,7 +229,7 @@ const priorityColors = {
             </div>
 
             <!-- Pagination -->
-            <div v-if="plans.links && plans.links.length > 3" class="flex items-center justify-center gap-1 px-6 py-4 border-t border-gray-100 bg-gray-50/50">
+            <div v-if="plans.links && plans.links.length > 3" class="flex items-center justify-center gap-1 px-4 sm:px-6 py-4 border-t border-gray-100 bg-gray-50/50 flex-wrap">
                 <template v-for="link in plans.links" :key="link.label">
                     <Link v-if="link.url" :href="link.url"
                         class="px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"

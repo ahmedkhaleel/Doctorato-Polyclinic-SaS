@@ -67,7 +67,7 @@ function formatDate(date) {
                         <h1 class="text-2xl sm:text-3xl font-bold text-white">{{ isRtl ? 'صور الأشعة' : 'X-Rays' }}</h1>
                         <p class="text-gray-400 text-sm mt-1">{{ isRtl ? 'جميع صور الأشعة الخاصة بمرضاك' : 'All your patients x-ray images' }}</p>
                     </div>
-                    <div class="flex items-center gap-3">
+                    <div class="flex items-center gap-3 flex-wrap">
                         <!-- View Toggle -->
                         <div class="flex items-center bg-white/5 backdrop-blur-sm rounded-lg p-1 border border-white/10">
                             <button
@@ -137,9 +137,9 @@ function formatDate(date) {
                         <tr>
                             <th class="px-4 py-3 text-start text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'المريض' : 'Patient' }}</th>
                             <th class="px-4 py-3 text-start text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'النوع' : 'Type' }}</th>
-                            <th class="px-4 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'رقم السن' : 'Tooth #' }}</th>
+                            <th class="px-4 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider hidden sm:table-cell">{{ isRtl ? 'رقم السن' : 'Tooth #' }}</th>
                             <th class="px-4 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'صورة مصغرة' : 'Thumbnail' }}</th>
-                            <th class="px-4 py-3 text-start text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'التاريخ' : 'Date' }}</th>
+                            <th class="px-4 py-3 text-start text-xs font-semibold text-gray-500 uppercase tracking-wider hidden sm:table-cell">{{ isRtl ? 'التاريخ' : 'Date' }}</th>
                             <th class="px-4 py-3 text-end text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'إجراءات' : 'Actions' }}</th>
                         </tr>
                     </thead>
@@ -157,7 +157,7 @@ function formatDate(date) {
                                     }[xray.type] || xray.type : xray.type }}
                                 </span>
                             </td>
-                            <td class="px-4 py-3 text-sm text-center font-mono font-bold">{{ xray.tooth_number || '-' }}</td>
+                            <td class="px-4 py-3 text-sm text-center font-mono font-bold hidden sm:table-cell">{{ xray.tooth_number || '-' }}</td>
                             <td class="px-4 py-3 text-center">
                                 <img
                                     v-if="xray.image_url"
@@ -168,7 +168,7 @@ function formatDate(date) {
                                 />
                                 <span v-else class="text-gray-400 text-xs">-</span>
                             </td>
-                            <td class="px-4 py-3 text-sm text-gray-500">{{ formatDate(xray.taken_date || xray.created_at) }}</td>
+                            <td class="px-4 py-3 text-sm text-gray-500 hidden sm:table-cell">{{ formatDate(xray.taken_date || xray.created_at) }}</td>
                             <td class="px-4 py-3 text-end">
                                 <Link v-if="xray.patient" :href="`/doctor/dental/xrays/patient/${xray.patient.id}`"
                                     class="text-[#C4A265] hover:text-[#B39255] text-xs font-medium transition-colors">
@@ -189,7 +189,7 @@ function formatDate(date) {
             </div>
 
             <!-- Pagination -->
-            <div v-if="xrays.links && xrays.links.length > 3" class="flex items-center justify-center gap-1 px-6 py-4 border-t border-gray-100 bg-gray-50/50">
+            <div v-if="xrays.links && xrays.links.length > 3" class="flex items-center justify-center gap-1 px-4 sm:px-6 py-4 border-t border-gray-100 bg-gray-50/50 flex-wrap">
                 <template v-for="link in xrays.links" :key="link.label">
                     <Link v-if="link.url" :href="link.url"
                         class="px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"
@@ -280,8 +280,8 @@ function formatDate(date) {
                         alt=""
                         class="w-full rounded-lg"
                     />
-                    <div class="mt-4 bg-white rounded-xl p-4">
-                        <div class="grid grid-cols-2 gap-4 text-sm">
+                    <div class="mt-4 bg-white rounded-xl p-3 sm:p-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
                             <div>
                                 <span class="text-gray-500">{{ isRtl ? 'المريض' : 'Patient' }}:</span>
                                 <span class="ms-1 font-medium">{{ selectedXray.patient?.full_name || '-' }}</span>

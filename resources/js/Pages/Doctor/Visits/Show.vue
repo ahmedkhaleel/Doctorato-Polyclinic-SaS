@@ -262,7 +262,7 @@ function formatDate(date) {
                     </div>
 
                     <!-- Action Buttons -->
-                    <div class="flex items-center gap-2">
+                    <div class="flex flex-wrap items-center gap-2">
                         <button v-if="visit.status === 'waiting'" @click="startVisit"
                             class="inline-flex items-center gap-1.5 px-5 py-2.5 text-sm font-semibold text-white bg-blue-500 hover:bg-blue-600 rounded-xl transition-all shadow-sm shadow-blue-900/30 hover:shadow-md hover:-translate-y-0.5"
                         >
@@ -291,7 +291,7 @@ function formatDate(date) {
                 style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.1s"
             >
                 <div class="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-red-500 via-amber-500 to-red-500"></div>
-                <div class="px-6 py-4">
+                <div class="px-4 sm:px-6 py-4">
                     <div class="flex items-center justify-between mb-3">
                         <div class="flex items-center gap-2">
                             <div class="w-8 h-8 rounded-lg bg-red-100 flex items-center justify-center animate-pulse">
@@ -355,7 +355,7 @@ function formatDate(date) {
             </button>
         </div>
 
-        <div class="grid lg:grid-cols-3 gap-6">
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             <!-- Main Content -->
             <div class="lg:col-span-2 space-y-6">
 
@@ -364,7 +364,7 @@ function formatDate(date) {
                     :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
                     style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.15s"
                 >
-                    <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+                    <div class="flex items-center justify-between px-4 sm:px-6 py-4 border-b border-gray-100">
                         <div class="flex items-center gap-2">
                             <div class="w-8 h-8 rounded-lg bg-purple-50 flex items-center justify-center">
                                 <svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
@@ -375,7 +375,7 @@ function formatDate(date) {
                             class="text-xs font-medium text-[#C4A265] hover:text-[#A68B52] hover:bg-[#C4A265]/5 px-3 py-1.5 rounded-lg transition-all"
                         >{{ isRtl ? 'تعديل' : 'Edit' }}</button>
                     </div>
-                    <div class="p-6">
+                    <div class="p-4 sm:p-6">
                         <div v-if="!showDiagnosisEdit">
                             <div class="mb-4">
                                 <p class="text-xs text-gray-500 font-medium mb-1.5">{{ isRtl ? 'التشخيص' : 'Diagnosis' }}</p>
@@ -411,7 +411,7 @@ function formatDate(date) {
                     :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
                     style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.25s"
                 >
-                    <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+                    <div class="flex items-center justify-between px-4 sm:px-6 py-4 border-b border-gray-100">
                         <div class="flex items-center gap-2">
                             <div class="w-8 h-8 rounded-lg bg-cyan-50 flex items-center justify-center">
                                 <svg class="w-4 h-4 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
@@ -426,7 +426,7 @@ function formatDate(date) {
                             {{ isRtl ? 'رفع' : 'Upload' }}
                         </button>
                     </div>
-                    <div class="p-6">
+                    <div class="p-4 sm:p-6">
                         <!-- Photo Upload Form -->
                         <Transition enter-active-class="transition-all duration-300" enter-from-class="opacity-0 -translate-y-3" enter-to-class="opacity-100 translate-y-0" leave-active-class="transition-all duration-200" leave-from-class="opacity-100" leave-to-class="opacity-0 -translate-y-3">
                             <div v-if="showPhotoUpload" class="bg-gray-50 rounded-xl p-5 mb-5 border border-gray-200">
@@ -492,7 +492,7 @@ function formatDate(date) {
                             <p v-if="beforePhotos.length > 0 || afterPhotos.length > 0" class="text-xs font-semibold text-gray-500 uppercase mb-2 flex items-center gap-1.5">
                                 <span class="w-2 h-2 rounded-full bg-gray-400"></span> {{ isRtl ? 'أخرى' : 'Other' }}
                             </p>
-                            <div class="grid grid-cols-3 gap-2">
+                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
                                 <div v-for="photo in otherPhotos" :key="photo.id" class="aspect-square rounded-xl overflow-hidden bg-gray-100 relative group cursor-pointer hover:ring-2 hover:ring-gray-300 transition-all">
                                     <img :src="'/storage/' + photo.photo_path" :alt="photo.caption" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                                     <div v-if="photo.caption" class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent text-white text-[10px] px-2 py-2 opacity-0 group-hover:opacity-100 transition-opacity">{{ photo.caption }}</div>
@@ -522,13 +522,13 @@ function formatDate(date) {
                     :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
                     style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.3s"
                 >
-                    <div class="px-6 py-4 border-b border-gray-100 flex items-center gap-2">
+                    <div class="px-4 sm:px-6 py-4 border-b border-gray-100 flex items-center gap-2">
                         <div class="w-8 h-8 rounded-lg bg-teal-50 flex items-center justify-center">
                             <svg class="w-4 h-4 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
                         </div>
                         <h3 class="text-sm font-bold text-gray-800">{{ isRtl ? 'طب الأسنان' : 'Dental' }}</h3>
                     </div>
-                    <div class="p-6 space-y-6">
+                    <div class="p-4 sm:p-6 space-y-6">
                         <!-- Dental Treatments Table -->
                         <div>
                             <h4 class="text-xs font-bold text-gray-500 uppercase mb-3">{{ isRtl ? 'علاجات الأسنان' : 'Dental Treatments' }}</h4>
@@ -588,7 +588,7 @@ function formatDate(date) {
                         <!-- X-rays Preview -->
                         <div v-if="dentalXrays?.length > 0">
                             <h4 class="text-xs font-bold text-gray-500 uppercase mb-3">{{ isRtl ? 'صور الأشعة' : 'X-Rays' }}</h4>
-                            <div class="grid grid-cols-3 gap-2">
+                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
                                 <div v-for="xray in dentalXrays.slice(0, 6)" :key="xray.id" class="aspect-square rounded-xl overflow-hidden bg-gray-100 relative group cursor-pointer hover:ring-2 hover:ring-[#C4A265]/50 transition-all">
                                     <img :src="'/storage/' + xray.image_path" :alt="xray.notes || 'X-ray'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                                     <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent text-white text-[10px] px-2 py-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -629,13 +629,13 @@ function formatDate(date) {
                     :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
                     style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.15s"
                 >
-                    <div class="px-6 py-4 border-b border-gray-100 flex items-center gap-2">
+                    <div class="px-4 sm:px-6 py-4 border-b border-gray-100 flex items-center gap-2">
                         <div class="w-8 h-8 rounded-lg bg-[#C4A265]/10 flex items-center justify-center">
                             <svg class="w-4 h-4 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                         </div>
                         <h3 class="text-sm font-bold text-gray-800">{{ isRtl ? 'معلومات المريض' : 'Patient Info' }}</h3>
                     </div>
-                    <div class="p-6 space-y-3 text-sm">
+                    <div class="p-4 sm:p-6 space-y-3 text-sm">
                         <div class="flex justify-between"><span class="text-gray-500">{{ isRtl ? 'الاسم' : 'Name' }}</span><span class="font-medium text-gray-800">{{ visit.patient?.full_name }}</span></div>
                         <div class="flex justify-between"><span class="text-gray-500">{{ isRtl ? 'رقم الملف' : 'File #' }}</span><span class="font-mono text-[#C4A265]">{{ visit.patient?.file_number || '-' }}</span></div>
                         <div class="flex justify-between"><span class="text-gray-500">{{ isRtl ? 'الهاتف' : 'Phone' }}</span><span class="text-gray-800">{{ visit.patient?.phone || '-' }}</span></div>
@@ -649,7 +649,7 @@ function formatDate(date) {
                             <p class="text-xs text-red-700">{{ visit.patient.allergies }}</p>
                         </div>
                     </div>
-                    <div class="px-6 pb-5">
+                    <div class="px-4 sm:px-6 pb-5">
                         <Link :href="`/doctor/patients/${visit.patient?.id}`" class="inline-flex items-center gap-1 text-xs font-medium text-[#C4A265] hover:text-[#A68B52] transition-colors">
                             {{ isRtl ? 'عرض الملف الكامل' : 'View Full Profile' }}
                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
@@ -662,7 +662,7 @@ function formatDate(date) {
                     :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
                     style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.18s"
                 >
-                    <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+                    <div class="px-4 sm:px-6 py-4 border-b border-gray-100 flex items-center justify-between">
                         <div class="flex items-center gap-2">
                             <div class="w-8 h-8 rounded-lg bg-rose-50 flex items-center justify-center">
                                 <svg class="w-4 h-4 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
@@ -833,7 +833,7 @@ function formatDate(date) {
                     :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
                     style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.19s"
                 >
-                    <div class="px-6 py-4 border-b border-gray-100 flex items-center gap-2">
+                    <div class="px-4 sm:px-6 py-4 border-b border-gray-100 flex items-center gap-2">
                         <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
                             <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
                         </div>
@@ -855,13 +855,13 @@ function formatDate(date) {
                     :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
                     style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.2s"
                 >
-                    <div class="px-6 py-4 border-b border-gray-100 flex items-center gap-2">
+                    <div class="px-4 sm:px-6 py-4 border-b border-gray-100 flex items-center gap-2">
                         <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
                             <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
                         </div>
                         <h3 class="text-sm font-bold text-gray-800">{{ isRtl ? 'تفاصيل الزيارة' : 'Visit Details' }}</h3>
                     </div>
-                    <div class="p-6 space-y-3 text-sm">
+                    <div class="p-4 sm:p-6 space-y-3 text-sm">
                         <div class="flex justify-between"><span class="text-gray-500">{{ isRtl ? 'النوع' : 'Type' }}</span><span class="text-gray-800 capitalize">{{ isRtl ? ({ consultation: 'استشارة', session: 'جلسة', follow_up: 'متابعة' }[visit.visit_type] || visit.visit_type) : visit.visit_type }}</span></div>
                         <div class="flex justify-between"><span class="text-gray-500">{{ isRtl ? 'الخدمة' : 'Service' }}</span><span class="text-gray-800">{{ (isRtl ? (visit.service?.name_ar || visit.service?.name_en) : visit.service?.name_en) || '-' }}</span></div>
                         <div v-if="visit.started_at" class="flex justify-between"><span class="text-gray-500">{{ isRtl ? 'بدأت' : 'Started' }}</span><span class="text-gray-800">{{ new Date(visit.started_at).toLocaleTimeString(isRtl ? 'ar-EG' : 'en-GB', { hour: '2-digit', minute: '2-digit' }) }}</span></div>
@@ -878,13 +878,13 @@ function formatDate(date) {
                     :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
                     style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.25s"
                 >
-                    <div class="px-6 py-4 border-b border-gray-100 flex items-center gap-2">
+                    <div class="px-4 sm:px-6 py-4 border-b border-gray-100 flex items-center gap-2">
                         <div class="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center">
                             <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z" /></svg>
                         </div>
                         <h3 class="text-sm font-bold text-gray-800">{{ isRtl ? 'الفاتورة' : 'Invoice' }}</h3>
                     </div>
-                    <div class="p-6 space-y-3 text-sm">
+                    <div class="p-4 sm:p-6 space-y-3 text-sm">
                         <div class="flex justify-between"><span class="text-gray-500">{{ isRtl ? 'رقم الفاتورة' : 'Invoice #' }}</span><span class="font-mono text-[#C4A265]">{{ visit.invoice.invoice_number }}</span></div>
                         <div class="flex justify-between"><span class="text-gray-500">{{ isRtl ? 'الإجمالي' : 'Total' }}</span><span class="font-medium">{{ formatCurrency(visit.invoice.total) }}</span></div>
                         <div class="flex justify-between"><span class="text-gray-500">{{ isRtl ? 'المدفوع' : 'Paid' }}</span><span class="text-emerald-600 font-medium">{{ formatCurrency(visit.invoice.paid_amount) }}</span></div>

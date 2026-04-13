@@ -81,12 +81,12 @@ const colorMap = {
         </div>
 
         <!-- Stats Cards -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
             <button
                 v-for="card in statCards"
                 :key="card.label"
                 @click="statusFilter = card.filter"
-                class="relative bg-white rounded-2xl p-4 shadow-sm border border-gray-100/80 hover:shadow-md transition-all duration-200 text-left"
+                class="relative bg-white rounded-2xl p-3 sm:p-4 shadow-sm border border-gray-100/80 hover:shadow-md transition-all duration-200 text-left"
                 :class="statusFilter === card.filter ? 'ring-2 ring-offset-1 ring-[#C4A265]' : ''"
             >
                 <div :class="`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${colorMap[card.color].gradient} rounded-t-2xl opacity-80`"></div>
@@ -96,7 +96,7 @@ const colorMap = {
         </div>
 
         <!-- Filters -->
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4">
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-3 sm:p-4">
             <div class="flex flex-col sm:flex-row gap-3">
                 <div class="flex-1">
                     <input
@@ -123,10 +123,10 @@ const colorMap = {
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
             <div v-if="followups.data?.length" class="divide-y divide-gray-50">
                 <div v-for="f in followups.data" :key="f.id"
-                    class="px-6 py-4 hover:bg-gray-50/50 transition-colors"
+                    class="px-4 sm:px-6 py-4 hover:bg-gray-50/50 transition-colors"
                     :class="isOverdue(f) ? 'bg-red-50/30' : ''">
-                    <div class="flex items-center justify-between gap-4">
-                        <div class="flex items-center gap-4 min-w-0 flex-1">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+                        <div class="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
                             <div class="w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold flex-shrink-0"
                                 :class="isOverdue(f) ? 'bg-red-100 text-red-700' : 'bg-gradient-to-br from-cyan-50 to-teal-50 text-cyan-700'">
                                 {{ (f.patient?.full_name || '?').charAt(0).toUpperCase() }}
@@ -145,7 +145,7 @@ const colorMap = {
                             </div>
                         </div>
 
-                        <div class="flex items-center gap-4 flex-shrink-0">
+                        <div class="flex items-center gap-3 sm:gap-4 flex-shrink-0 flex-wrap sm:flex-nowrap ps-0 sm:ps-0">
                             <!-- Date & countdown -->
                             <div class="text-right">
                                 <p class="text-xs font-semibold text-gray-700">{{ formatDate(f.scheduled_date) }}</p>
@@ -198,7 +198,7 @@ const colorMap = {
             </div>
 
             <!-- Pagination -->
-            <div v-if="followups.last_page > 1" class="px-6 py-4 border-t border-gray-100 flex justify-center gap-1">
+            <div v-if="followups.last_page > 1" class="px-4 sm:px-6 py-4 border-t border-gray-100 flex justify-center gap-1 flex-wrap">
                 <Link v-for="link in followups.links" :key="link.label"
                     :href="link.url || '#'"
                     :class="['px-3 py-1.5 text-xs rounded-lg border', link.active ? 'bg-[#C4A265] text-white border-[#C4A265]' : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50']"

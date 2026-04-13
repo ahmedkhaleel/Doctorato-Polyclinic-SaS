@@ -133,7 +133,7 @@ const completionDash = computed(() => {
 <template>
     <div>
         <!-- Hero Header -->
-        <div class="relative mb-8 overflow-hidden rounded-2xl bg-gradient-to-br from-[#1a1523] via-[#1e1a2e] to-[#2a1f3d] p-7 shadow-xl"
+        <div class="relative mb-8 overflow-hidden rounded-2xl bg-gradient-to-br from-[#1a1523] via-[#1e1a2e] to-[#2a1f3d] p-5 sm:p-7 shadow-xl"
             :class="mounted ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'"
             style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1)">
             <!-- Decorative elements -->
@@ -203,7 +203,7 @@ const completionDash = computed(() => {
         </div>
 
         <!-- Main Grid -->
-        <div class="grid lg:grid-cols-3 gap-6">
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             <!-- Left Column (2 cols) -->
             <div class="lg:col-span-2 space-y-6">
 
@@ -211,7 +211,7 @@ const completionDash = computed(() => {
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden"
                     :class="mounted ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'"
                     style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.15s">
-                    <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-gray-50/80 to-white">
+                    <div class="flex items-center justify-between px-4 sm:px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-gray-50/80 to-white">
                         <div class="flex items-center gap-3">
                             <div class="w-8 h-8 rounded-xl bg-amber-50 flex items-center justify-center">
                                 <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
@@ -229,7 +229,7 @@ const completionDash = computed(() => {
                     <SkeletonLoader v-if="dataLoading" type="list" :count="4" />
                     <div v-else-if="todayQueue.length > 0" class="divide-y divide-gray-50">
                         <div v-for="(visit, i) in todayQueue" :key="visit.id"
-                            class="flex items-center justify-between px-6 py-3.5 hover:bg-gray-50/60 transition-all duration-200 group"
+                            class="flex items-center justify-between px-4 sm:px-6 py-3 hover:bg-gray-50/60 transition-all duration-200 group"
                             :class="mounted ? 'translate-x-0 opacity-100' : '-translate-x-4 opacity-0'"
                             :style="{ transitionDelay: (0.2 + i * 0.05) + 's' }">
                             <div class="flex items-center gap-3.5">
@@ -276,7 +276,7 @@ const completionDash = computed(() => {
                     class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden"
                     :class="mounted ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'"
                     style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s">
-                    <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-gray-50/80 to-white">
+                    <div class="flex items-center justify-between px-4 sm:px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-gray-50/80 to-white">
                         <div class="flex items-center gap-3">
                             <div class="w-8 h-8 rounded-xl bg-indigo-50 flex items-center justify-center">
                                 <svg class="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -288,7 +288,7 @@ const completionDash = computed(() => {
                         </div>
                         <span class="text-[10px] font-semibold text-gray-400 tabular-nums">{{ currentTimeString }}</span>
                     </div>
-                    <div class="px-6 py-4">
+                    <div class="px-4 sm:px-6 py-4">
                         <div class="relative">
                             <!-- Timeline vertical line -->
                             <div class="absolute top-0 bottom-0 w-0.5 bg-gray-100 rounded-full"
@@ -360,7 +360,7 @@ const completionDash = computed(() => {
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden"
                     :class="mounted ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'"
                     style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.3s">
-                    <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-gray-50/80 to-white">
+                    <div class="flex items-center justify-between px-4 sm:px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-gray-50/80 to-white">
                         <div class="flex items-center gap-3">
                             <div class="w-8 h-8 rounded-xl bg-emerald-50 flex items-center justify-center">
                                 <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -380,16 +380,16 @@ const completionDash = computed(() => {
                         <table class="w-full text-sm">
                             <thead>
                                 <tr class="border-b border-gray-50">
-                                    <th class="ltr:text-left rtl:text-right px-6 py-2.5 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">{{ isRtl ? 'المريض' : 'Patient' }}</th>
+                                    <th class="ltr:text-left rtl:text-right px-4 sm:px-6 py-2.5 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">{{ isRtl ? 'المريض' : 'Patient' }}</th>
                                     <th class="ltr:text-left rtl:text-right px-3 py-2.5 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">{{ isRtl ? 'النوع' : 'Type' }}</th>
                                     <th class="ltr:text-right rtl:text-left px-3 py-2.5 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">{{ isRtl ? 'المبلغ' : 'Amount' }}</th>
-                                    <th class="ltr:text-right rtl:text-left px-3 py-2.5 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">{{ isRtl ? 'النسبة' : 'Rate' }}</th>
-                                    <th class="ltr:text-right rtl:text-left px-6 py-2.5 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">{{ isRtl ? 'العمولة' : 'Commission' }}</th>
+                                    <th class="hidden sm:table-cell ltr:text-right rtl:text-left px-3 py-2.5 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">{{ isRtl ? 'النسبة' : 'Rate' }}</th>
+                                    <th class="ltr:text-right rtl:text-left px-4 sm:px-6 py-2.5 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">{{ isRtl ? 'العمولة' : 'Commission' }}</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-50">
                                 <tr v-for="visit in recentVisits" :key="visit.id" class="hover:bg-gray-50/60 transition-colors">
-                                    <td class="px-6 py-3">
+                                    <td class="px-4 sm:px-6 py-3">
                                         <div class="flex items-center gap-2.5">
                                             <div class="w-7 h-7 rounded-full bg-gradient-to-br from-[#C4A265]/15 to-[#C4A265]/5 flex items-center justify-center text-[10px] font-bold text-[#C4A265]">
                                                 {{ visit.patient?.full_name?.charAt(0) || '?' }}
@@ -406,10 +406,10 @@ const completionDash = computed(() => {
                                     <td class="px-3 py-3 text-right">
                                         <span class="text-xs font-medium text-gray-600 tabular-nums">{{ formatCurrency(visit.visit_amount) }}</span>
                                     </td>
-                                    <td class="px-3 py-3 text-right">
+                                    <td class="hidden sm:table-cell px-3 py-3 text-right">
                                         <span class="text-xs font-medium text-gray-500 tabular-nums">{{ parseFloat(visit.commission_rate || 0) }}%</span>
                                     </td>
-                                    <td class="px-6 py-3 text-right">
+                                    <td class="px-4 sm:px-6 py-3 text-right">
                                         <span class="text-sm font-bold tabular-nums" :class="parseFloat(visit.commission_amount || 0) > 0 ? 'text-[#C4A265]' : 'text-gray-300'">
                                             {{ formatCurrency(visit.commission_amount) }}
                                         </span>
@@ -705,7 +705,7 @@ const completionDash = computed(() => {
         <div class="mt-6 bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden"
             :class="mounted ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'"
             style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.5s">
-            <div class="px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-gray-50/80 to-white flex items-center justify-between">
+            <div class="px-4 sm:px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-gray-50/80 to-white flex items-center justify-between">
                 <div class="flex items-center gap-3">
                     <div class="w-9 h-9 rounded-xl bg-indigo-50 flex items-center justify-center">
                         <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>

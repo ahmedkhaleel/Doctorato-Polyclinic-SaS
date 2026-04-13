@@ -40,7 +40,7 @@ function openChart(patientId) {
 <template>
     <div class="max-w-4xl mx-auto py-6 px-4 sm:px-6">
         <!-- Hero Header -->
-        <div class="relative mb-8 rounded-2xl overflow-hidden bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f3460] p-8 text-white shadow-xl">
+        <div class="relative mb-8 rounded-2xl overflow-hidden bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f3460] p-5 sm:p-8 text-white shadow-xl">
             <div class="absolute inset-0 opacity-10">
                 <svg class="w-full h-full" viewBox="0 0 400 200"><path d="M200,20 C180,20 170,40 165,60 C160,80 150,90 140,100 C130,110 120,130 120,150 C120,170 135,190 155,190 C170,190 180,180 185,170 C190,160 195,155 200,155 C205,155 210,160 215,170 C220,180 230,190 245,190 C265,190 280,170 280,150 C280,130 270,110 260,100 C250,90 240,80 235,60 C230,40 220,20 200,20Z" fill="currentColor" /></svg>
             </div>

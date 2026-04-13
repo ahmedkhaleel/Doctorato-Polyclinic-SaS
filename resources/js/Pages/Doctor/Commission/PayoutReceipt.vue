@@ -187,12 +187,14 @@ onMounted(() => {
     right: 0;
     background: linear-gradient(135deg, #1f2937, #111827);
     color: white;
-    padding: 12px 24px;
+    padding: 12px 16px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     z-index: 50;
     box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    flex-wrap: wrap;
+    gap: 8px;
 }
 
 .toolbar-left {
@@ -225,6 +227,7 @@ onMounted(() => {
 .toolbar-actions {
     display: flex;
     gap: 10px;
+    flex-wrap: wrap;
 }
 
 .btn-print {
@@ -270,7 +273,7 @@ onMounted(() => {
 .print-page {
     max-width: 800px;
     margin: 72px auto 0;
-    padding: 40px;
+    padding: 16px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: #333;
     background: #fff;
@@ -281,6 +284,8 @@ onMounted(() => {
     justify-content: space-between;
     align-items: flex-start;
     margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 12px;
 }
 
 .header-left { flex: 1; }
@@ -366,6 +371,9 @@ onMounted(() => {
     border-collapse: collapse;
     margin-bottom: 30px;
     font-size: 12px;
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .items-table thead tr { background-color: #f8f5f0; }
@@ -392,7 +400,8 @@ onMounted(() => {
 .text-right { text-align: right; }
 
 .totals-section {
-    width: 320px;
+    width: 100%;
+    max-width: 320px;
     margin-left: auto;
     margin-bottom: 30px;
 }
@@ -474,11 +483,15 @@ onMounted(() => {
     display: flex;
     justify-content: space-between;
     margin: 50px 0 30px;
+    flex-wrap: wrap;
+    gap: 24px;
 }
 
 .signature-box {
     width: 200px;
+    min-width: 140px;
     text-align: center;
+    flex: 1;
 }
 
 .signature-line {
@@ -512,9 +525,16 @@ onMounted(() => {
     margin-top: 4px !important;
 }
 
+@media (min-width: 640px) {
+    .toolbar { padding: 12px 24px; }
+    .print-page { padding: 40px; }
+    .items-table { display: table; overflow-x: visible; }
+}
+
 @media print {
     .no-print { display: none !important; }
     .print-page { padding: 0; margin-top: 0 !important; }
+    .items-table { display: table; overflow-x: visible; }
     .status-badge { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     .items-table thead tr { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     .payment-info { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
