@@ -196,6 +196,20 @@ function onCardLeave() {
     hoveredLead.value = null;
 }
 
+/* ── Stage conversion rates ────────────────────────────── */
+const stageConversions = computed(() => {
+    const results = [];
+    for (let i = 0; i < statuses.length; i++) {
+        const current = (localColumns.value[statuses[i]] || []).length;
+        const next = i < statuses.length - 1 ? (localColumns.value[statuses[i + 1]] || []).length : 0;
+        const rate = current > 0 && i < statuses.length - 1 ? Math.round((next / current) * 100) : null;
+        results.push({ status: statuses[i], count: current, rate });
+    }
+    return results;
+});
+
+const maxStageCount = computed(() => Math.max(...stageConversions.value.map(s => s.count), 1));
+
 /* ── Helpers ────────────────────────────────────────────── */
 function timeAgo(date) {
     if (!date) return '';
@@ -255,6 +269,36 @@ function formatFullDate(date) {
                     {{ isRtl ? 'عميل جديد' : 'New Lead' }}
                 </Link>
             </div>
+        </div>
+    </div>
+
+    <!-- Stage Conversion Funnel Bar -->
+    <div :class="['bg-white rounded-2xl shadow-sm border border-gray-100 p-4 mb-4 transition-all duration-700', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4']"
+         :style="{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)', transitionDelay: '100ms' }">
+        <div class="flex items-center gap-2 mb-3">
+            <svg class="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
+            <span class="text-xs font-semibold text-gray-700">{{ isRtl ? '\u0645\u0639\u062F\u0644\u0627\u062A \u0627\u0644\u062A\u062D\u0648\u064A\u0644 \u0628\u064A\u0646 \u0627\u0644\u0645\u0631\u0627\u062D\u0644' : 'Stage-to-Stage Conversion' }}</span>
+        </div>
+        <div class="flex items-end gap-1">
+            <template v-for="(sc, idx) in stageConversions" :key="sc.status">
+                <!-- Stage bar -->
+                <div class="flex-1 text-center group">
+                    <div class="relative mx-auto" style="max-width: 80px">
+                        <div class="bg-slate-100 rounded-t-lg overflow-hidden" style="height: 48px">
+                            <div class="w-full rounded-t-lg transition-all duration-1000 ease-out absolute bottom-0"
+                                 :class="['bg-gradient-to-t', statusConfig[sc.status].gradient]"
+                                 :style="{ height: mounted ? Math.max((sc.count / maxStageCount) * 100, 8) + '%' : '0%' }"></div>
+                        </div>
+                        <div class="text-[11px] font-bold text-gray-800 mt-1">{{ sc.count }}</div>
+                        <div class="text-[9px] text-gray-400 truncate px-0.5">{{ isRtl ? statusConfig[sc.status].ar : statusConfig[sc.status].en }}</div>
+                    </div>
+                </div>
+                <!-- Arrow with conversion rate -->
+                <div v-if="idx < stageConversions.length - 1" class="flex-shrink-0 flex flex-col items-center justify-end pb-5 w-8">
+                    <span v-if="sc.rate !== null" :class="['text-[9px] font-bold mb-0.5 tabular-nums', sc.rate >= 50 ? 'text-emerald-600' : sc.rate >= 25 ? 'text-amber-600' : 'text-red-500']">{{ sc.rate }}%</span>
+                    <svg class="w-4 h-4 text-gray-300" :class="isRtl ? 'rotate-180' : ''" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+                </div>
+            </template>
         </div>
     </div>
 

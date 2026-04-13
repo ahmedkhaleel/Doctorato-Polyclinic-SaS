@@ -149,6 +149,27 @@ function sendTemplate() {
     });
 }
 
+/* ---------- Template effectiveness ---------- */
+function getEffectiveness(template) {
+    const usage = template.usage_count || 0;
+    if (usage === 0) return { score: 0, label: { en: 'Unused', ar: '\u063A\u064A\u0631 \u0645\u0633\u062A\u062E\u062F\u0645' }, color: 'text-gray-400', bg: 'bg-gray-50' };
+    if (usage < 5) return { score: 1, label: { en: 'Low', ar: '\u0645\u0646\u062E\u0641\u0636' }, color: 'text-amber-600', bg: 'bg-amber-50' };
+    if (usage < 20) return { score: 2, label: { en: 'Good', ar: '\u062C\u064A\u062F' }, color: 'text-blue-600', bg: 'bg-blue-50' };
+    return { score: 3, label: { en: 'Excellent', ar: '\u0645\u0645\u062A\u0627\u0632' }, color: 'text-emerald-600', bg: 'bg-emerald-50' };
+}
+
+/* ---------- Template stats ---------- */
+const templateStats = computed(() => {
+    const all = props.templates || [];
+    const totalUsage = all.reduce((sum, t) => sum + (t.usage_count || 0), 0);
+    const mostUsed = all.length > 0 ? [...all].sort((a, b) => (b.usage_count || 0) - (a.usage_count || 0))[0] : null;
+    const byChannel = {};
+    all.forEach(t => {
+        byChannel[t.channel] = (byChannel[t.channel] || 0) + 1;
+    });
+    return { total: all.length, totalUsage, mostUsed, byChannel };
+});
+
 /* ---------- Expand body preview ---------- */
 const expandedId = ref(null);
 function toggleExpand(id) {
@@ -230,6 +251,28 @@ function duplicateTemplate(template) {
         </div>
     </div>
 
+    <!-- Template Stats Strip -->
+    <div :class="['flex items-center gap-3 flex-wrap mb-4 transition-all duration-700', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4']"
+         :style="{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)', transitionDelay: '130ms' }">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 text-slate-600 text-xs font-medium">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 12h10"/></svg>
+            {{ templateStats.total }} {{ isRtl ? '\u0642\u0627\u0644\u0628' : 'templates' }}
+        </span>
+        <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-teal-50 text-teal-600 text-xs font-medium">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            {{ templateStats.totalUsage }} {{ isRtl ? '\u0625\u0631\u0633\u0627\u0644' : 'sends' }}
+        </span>
+        <span v-for="(count, ch) in templateStats.byChannel" :key="ch"
+              class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium border"
+              :style="{ backgroundColor: channelConfig[ch]?.bg || '#f3f4f6', color: channelConfig[ch]?.text || '#6b7280', borderColor: channelConfig[ch]?.border || '#e5e7eb' }">
+            {{ count }} {{ isRtl ? (channelConfig[ch]?.label?.ar || ch) : (channelConfig[ch]?.label?.en || ch) }}
+        </span>
+        <span v-if="templateStats.mostUsed" class="hidden sm:inline-flex items-center gap-1 ms-auto text-xs text-slate-400">
+            <svg class="w-3.5 h-3.5 text-amber-400" fill="currentColor" viewBox="0 0 24 24"><path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
+            {{ isRtl ? '\u0627\u0644\u0623\u0643\u062B\u0631:' : 'Top:' }} {{ templateStats.mostUsed.name }}
+        </span>
+    </div>
+
     <!-- Templates Grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
         <div v-for="(template, idx) in templates" :key="template.id"
@@ -268,7 +311,7 @@ function duplicateTemplate(template) {
                         <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
                         {{ template.usage_count || 0 }} {{ isRtl ? 'مرة' : 'sent' }}
                     </span>
-                    <span v-if="(template.usage_count || 0) >= 20" class="text-[9px] text-teal-500 font-medium">{{ isRtl ? 'الأكثر استخداما' : 'Popular' }}</span>
+                    <span :class="['text-[9px] font-medium', getEffectiveness(template).color]">{{ isRtl ? getEffectiveness(template).label.ar : getEffectiveness(template).label.en }}</span>
                 </div>
             </div>
 

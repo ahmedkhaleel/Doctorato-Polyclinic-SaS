@@ -230,6 +230,15 @@ const dataQualityIssues = computed(() => {
     return issues;
 });
 
+/* ── Import tips ──────────────────────────────────────── */
+const showTips = ref(true);
+const importTips = [
+    { en: 'File must include "Name" and "Phone" columns (required)', ar: '\u064A\u062C\u0628 \u0623\u0646 \u064A\u062D\u062A\u0648\u064A \u0627\u0644\u0645\u0644\u0641 \u0639\u0644\u0649 \u0623\u0639\u0645\u062F\u0629 "\u0627\u0644\u0627\u0633\u0645" \u0648"\u0627\u0644\u0647\u0627\u062A\u0641" (\u0645\u0637\u0644\u0648\u0628)' },
+    { en: 'Phone numbers should include country code (e.g. +971)', ar: '\u064A\u062C\u0628 \u0623\u0646 \u062A\u062A\u0636\u0645\u0646 \u0623\u0631\u0642\u0627\u0645 \u0627\u0644\u0647\u0627\u062A\u0641 \u0631\u0645\u0632 \u0627\u0644\u062F\u0648\u0644\u0629 (\u0645\u062B\u0644 971+)' },
+    { en: 'Max file size: 5MB. Supported: .xlsx, .csv', ar: '\u062D\u062C\u0645 \u0623\u0642\u0635\u0649: 5 \u0645\u064A\u063A\u0627. \u0627\u0644\u0635\u064A\u063A: xlsx\u060C csv' },
+    { en: 'Duplicate phones will be handled based on your chosen strategy', ar: '\u0633\u064A\u062A\u0645 \u0627\u0644\u062A\u0639\u0627\u0645\u0644 \u0645\u0639 \u0627\u0644\u0623\u0631\u0642\u0627\u0645 \u0627\u0644\u0645\u0643\u0631\u0631\u0629 \u062D\u0633\u0628 \u0627\u0644\u0627\u0633\u062A\u0631\u0627\u062A\u064A\u062C\u064A\u0629 \u0627\u0644\u0645\u062E\u062A\u0627\u0631\u0629' },
+];
+
 function startImport() {
     if (!canImport.value || !file.value) return;
     isImporting.value = true;
@@ -315,6 +324,32 @@ function startImport() {
             </div>
         </div>
     </div>
+
+    <!-- Import Tips -->
+    <Transition enter-active-class="transition-all duration-300 ease-out" enter-from-class="opacity-0 -translate-y-2" enter-to-class="opacity-100 translate-y-0"
+                leave-active-class="transition-all duration-200" leave-from-class="opacity-100" leave-to-class="opacity-0 -translate-y-2">
+        <div v-if="step === 1 && showTips"
+             :class="['bg-gradient-to-r from-teal-50 to-emerald-50 border border-teal-200 rounded-2xl p-4 mb-4 transition-all duration-700', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4']"
+             :style="{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)', transitionDelay: '150ms' }">
+            <div class="flex items-start justify-between gap-3 mb-3">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-lg bg-teal-100 flex items-center justify-center flex-shrink-0">
+                        <svg class="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    </div>
+                    <span class="text-sm font-semibold text-teal-800">{{ isRtl ? '\u0646\u0635\u0627\u0626\u062D \u0627\u0644\u0627\u0633\u062A\u064A\u0631\u0627\u062F' : 'Import Tips' }}</span>
+                </div>
+                <button @click="showTips = false" class="text-teal-400 hover:text-teal-600 transition-colors flex-shrink-0">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <ul class="space-y-1.5">
+                <li v-for="(tip, idx) in importTips" :key="idx" class="flex items-start gap-2 text-xs text-teal-700">
+                    <svg class="w-3.5 h-3.5 text-teal-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                    {{ isRtl ? tip.ar : tip.en }}
+                </li>
+            </ul>
+        </div>
+    </Transition>
 
     <!-- Step 1: Upload -->
     <div v-if="step === 1"

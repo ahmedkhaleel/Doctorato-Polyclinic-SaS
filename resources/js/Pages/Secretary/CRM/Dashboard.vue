@@ -251,6 +251,18 @@ const dailyProgress = computed(() => {
     return { total, completed, pct };
 });
 
+/* ---------- Conversion rate metric ---------- */
+const conversionMetric = computed(() => {
+    const dist = props.statusDistribution || {};
+    const total = Object.values(dist).reduce((a, b) => a + b, 0);
+    const converted = dist.converted || 0;
+    const rate = total > 0 ? Math.round((converted / total) * 100) : 0;
+    const newLeads = dist.new || 0;
+    const contacted = dist.contacted || 0;
+    const contactRate = newLeads > 0 ? Math.round((contacted / newLeads) * 100) : 0;
+    return { total, converted, rate, contactRate };
+});
+
 /* ---------- Mini sparkline data ---------- */
 function generateSparkline(data, count) {
     if (!data || !data.length) {
@@ -496,6 +508,52 @@ const activityTypeConfig = {
                         <svg v-else width="100%" height="32" preserveAspectRatio="none" class="opacity-20">
                             <path d="M0,28 L200,28" fill="none" stroke="#9ca3af" stroke-width="1" stroke-dasharray="4 4"/>
                         </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============ CONVERSION METRICS ============ -->
+            <div class="grid grid-cols-2 gap-4"
+                :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
+                style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.27s">
+                <!-- Contact Rate -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex items-center gap-4">
+                    <div class="relative w-14 h-14 flex-shrink-0">
+                        <svg viewBox="0 0 100 100" class="w-full h-full -rotate-90">
+                            <circle cx="50" cy="50" r="40" fill="none" stroke="#f1f5f9" stroke-width="8"/>
+                            <circle cx="50" cy="50" r="40" fill="none"
+                                    :stroke="conversionMetric.contactRate >= 50 ? '#0d9488' : '#f59e0b'" stroke-width="8" stroke-linecap="round"
+                                    :stroke-dasharray="(conversionMetric.contactRate / 100 * 251) + ' 251'"
+                                    class="transition-all duration-1000 ease-out"/>
+                        </svg>
+                        <span class="absolute inset-0 flex items-center justify-center text-sm font-bold"
+                              :class="conversionMetric.contactRate >= 50 ? 'text-teal-700' : 'text-amber-600'">
+                            {{ conversionMetric.contactRate }}%
+                        </span>
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold text-gray-700">{{ isRtl ? '\u0645\u0639\u062F\u0644 \u0627\u0644\u062A\u0648\u0627\u0635\u0644' : 'Contact Rate' }}</p>
+                        <p class="text-[11px] text-gray-400 mt-0.5">{{ isRtl ? '\u0645\u0646 \u062C\u062F\u064A\u062F \u0625\u0644\u0649 \u062A\u0645 \u0627\u0644\u062A\u0648\u0627\u0635\u0644' : 'New to Contacted' }}</p>
+                    </div>
+                </div>
+                <!-- Conversion Rate -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex items-center gap-4">
+                    <div class="relative w-14 h-14 flex-shrink-0">
+                        <svg viewBox="0 0 100 100" class="w-full h-full -rotate-90">
+                            <circle cx="50" cy="50" r="40" fill="none" stroke="#f1f5f9" stroke-width="8"/>
+                            <circle cx="50" cy="50" r="40" fill="none"
+                                    :stroke="conversionMetric.rate >= 20 ? '#10b981' : conversionMetric.rate >= 10 ? '#0d9488' : '#ef4444'" stroke-width="8" stroke-linecap="round"
+                                    :stroke-dasharray="(conversionMetric.rate / 100 * 251) + ' 251'"
+                                    class="transition-all duration-1000 ease-out"/>
+                        </svg>
+                        <span class="absolute inset-0 flex items-center justify-center text-sm font-bold"
+                              :class="conversionMetric.rate >= 20 ? 'text-emerald-600' : conversionMetric.rate >= 10 ? 'text-teal-700' : 'text-red-500'">
+                            {{ conversionMetric.rate }}%
+                        </span>
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold text-gray-700">{{ isRtl ? '\u0645\u0639\u062F\u0644 \u0627\u0644\u062A\u062D\u0648\u064A\u0644' : 'Conversion Rate' }}</p>
+                        <p class="text-[11px] text-gray-400 mt-0.5">{{ conversionMetric.converted }} / {{ conversionMetric.total }} {{ isRtl ? '\u0639\u0645\u064A\u0644' : 'leads' }}</p>
                     </div>
                 </div>
             </div>

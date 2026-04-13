@@ -368,6 +368,43 @@ function closeQuickView() {
     setTimeout(() => { quickViewLead.value = null; }, 300);
 }
 
+/* ── Keyboard shortcuts ── */
+function handleKeyboard(e) {
+    // Don't fire if user is typing in an input
+    if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) return;
+    if (e.key === '/' || e.key === '\u0637') {
+        e.preventDefault();
+        document.querySelector('[data-search-input]')?.focus();
+    }
+    if (e.key === 'n' || e.key === 'N' || e.key === '\u0646') {
+        e.preventDefault();
+        router.get('/secretary/crm/leads/create');
+    }
+    if (e.key === 'Escape') {
+        closeQuickView();
+        inlineStatusOpen.value = null;
+        showColumnMenu.value = false;
+    }
+}
+
+onMounted(() => {
+    document.addEventListener('keydown', handleKeyboard);
+});
+
+onBeforeUnmount(() => {
+    document.removeEventListener('keydown', handleKeyboard);
+});
+
+/* ── Leads summary stats ── */
+const leadsSummary = computed(() => {
+    const data = props.leads?.data || [];
+    const total = props.leads?.total || data.length;
+    const hotCount = data.filter(l => l.priority == 1 || l.priority === 'hot').length;
+    const overdueCount = data.filter(l => l.next_follow_up_at && new Date(l.next_follow_up_at) < new Date()).length;
+    const highScore = data.filter(l => (l.score || 0) >= 70).length;
+    return { total, hotCount, overdueCount, highScore, shown: data.length };
+});
+
 /* ── Active filter pills ── */
 const activeFilterPills = computed(() => {
     const pills = [];
@@ -467,8 +504,8 @@ const activeFilterPills = computed(() => {
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                             </svg>
                         </div>
-                        <input v-model="search" type="text"
-                            :placeholder="isRtl ? 'بحث بالاسم، الهاتف، البريد الإلكتروني...' : 'Search by name, phone, email...'"
+                        <input v-model="search" type="text" data-search-input
+                            :placeholder="isRtl ? '\u0628\u062D\u062B \u0628\u0627\u0644\u0627\u0633\u0645\u060C \u0627\u0644\u0647\u0627\u062A\u0641\u060C \u0627\u0644\u0628\u0631\u064A\u062F \u0627\u0644\u0625\u0644\u0643\u062A\u0631\u0648\u0646\u064A... (/)' : 'Search by name, phone, email... (/)'  "
                             class="w-full ltr:pl-11 rtl:pr-11 ltr:pr-4 rtl:pl-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all duration-200 bg-gray-50 focus:bg-white" />
                     </div>
 
@@ -684,6 +721,31 @@ const activeFilterPills = computed(() => {
                     </div>
                 </div>
             </Transition>
+
+            <!-- ═══════════════ SUMMARY STRIP ═══════════════ -->
+            <div class="flex items-center gap-3 flex-wrap text-xs" :class="mounted ? 'opacity-100' : 'opacity-0'" style="transition: opacity 0.4s">
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600 font-medium">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                    {{ leadsSummary.shown }}<span v-if="leadsSummary.total > leadsSummary.shown">/{{ leadsSummary.total }}</span> {{ isRtl ? '\u0639\u0645\u064A\u0644' : 'leads' }}
+                </span>
+                <span v-if="leadsSummary.hotCount > 0" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-red-50 text-red-600 font-medium">
+                    <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>
+                    {{ leadsSummary.hotCount }} {{ isRtl ? '\u0633\u0627\u062E\u0646' : 'hot' }}
+                </span>
+                <span v-if="leadsSummary.overdueCount > 0" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-amber-50 text-amber-600 font-medium">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    {{ leadsSummary.overdueCount }} {{ isRtl ? '\u0645\u062A\u0623\u062E\u0631' : 'overdue' }}
+                </span>
+                <span v-if="leadsSummary.highScore > 0" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-teal-50 text-teal-600 font-medium">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
+                    {{ leadsSummary.highScore }} {{ isRtl ? '\u0646\u0642\u0627\u0637 \u0639\u0627\u0644\u064A\u0629' : 'high score' }}
+                </span>
+                <span class="flex-1"></span>
+                <span class="text-gray-400 hidden sm:inline">
+                    <kbd class="px-1.5 py-0.5 bg-gray-100 rounded text-[10px] font-mono border border-gray-200">/</kbd> {{ isRtl ? '\u0628\u062D\u062B' : 'search' }}
+                    <kbd class="px-1.5 py-0.5 bg-gray-100 rounded text-[10px] font-mono border border-gray-200 ms-2">N</kbd> {{ isRtl ? '\u062C\u062F\u064A\u062F' : 'new' }}
+                </span>
+            </div>
 
             <!-- ═══════════════ GRID VIEW ═══════════════ -->
             <div v-if="viewMode === 'grid' && leads.data?.length" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
