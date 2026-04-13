@@ -467,17 +467,37 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handleReportsKey
                 {{ isRtl ? 'أداء المصادر' : 'Source Performance' }}
             </h3>
             <div v-if="sourcePerformance && sourcePerformance.length" class="space-y-3">
-                <div v-for="source in sourcePerformance" :key="source.name_en"
-                     class="bg-slate-50 rounded-xl p-3 border border-slate-100">
+                <div v-for="(source, sIdx) in sourcePerformance" :key="source.name_en"
+                     class="bg-slate-50 rounded-xl p-3 border border-slate-100 transition-all duration-200 hover:border-slate-200 hover:shadow-sm">
                     <div class="flex items-center justify-between mb-2">
                         <div class="flex items-center gap-2">
-                            <div class="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold text-white"
-                                 :style="{ background: source.color || '#0d9488' }">
-                                {{ (source.name_en || '?')[0].toUpperCase() }}
+                            <!-- Rank medal for top 3, number badge for rest -->
+                            <div v-if="sIdx < 3" class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
+                                 :class="sIdx === 0 ? 'bg-amber-100' : sIdx === 1 ? 'bg-slate-200' : 'bg-orange-100'">
+                                <svg class="w-4.5 h-4.5" :class="sIdx === 0 ? 'text-amber-500' : sIdx === 1 ? 'text-slate-400' : 'text-orange-400'" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
                             </div>
-                            <span class="text-sm font-medium text-slate-700">{{ isRtl ? source.name_ar : source.name_en }}</span>
+                            <div v-else class="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold text-white flex-shrink-0"
+                                 :style="{ background: source.color || '#0d9488' }">
+                                {{ sIdx + 1 }}
+                            </div>
+                            <div class="min-w-0">
+                                <span class="text-sm font-medium text-slate-700">{{ isRtl ? source.name_ar : source.name_en }}</span>
+                                <span v-if="sIdx === 0" class="ms-1.5 text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-700 border border-amber-200">{{ isRtl ? 'الأفضل' : 'Top' }}</span>
+                            </div>
                         </div>
-                        <span class="text-xs text-slate-500">{{ source.total }} {{ isRtl ? 'عميل' : 'leads' }}</span>
+                        <span class="text-xs text-slate-500 tabular-nums">{{ source.total }} {{ isRtl ? 'عميل' : 'leads' }}</span>
+                    </div>
+                    <!-- Conversion rate progress bar -->
+                    <div class="mb-2">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="text-[10px] text-slate-400">{{ isRtl ? 'معدل التحويل' : 'Conversion Rate' }}</span>
+                            <span class="text-xs font-bold tabular-nums" :class="source.conversion_rate >= 30 ? 'text-emerald-600' : source.conversion_rate >= 15 ? 'text-amber-600' : 'text-slate-500'">{{ source.conversion_rate }}%</span>
+                        </div>
+                        <div class="h-1.5 bg-slate-200 rounded-full overflow-hidden">
+                            <div class="h-full rounded-full transition-all duration-1000 ease-out"
+                                 :class="source.conversion_rate >= 30 ? 'bg-emerald-500' : source.conversion_rate >= 15 ? 'bg-amber-400' : 'bg-slate-400'"
+                                 :style="{ width: mounted ? Math.min(source.conversion_rate, 100) + '%' : '0%' }"></div>
+                        </div>
                     </div>
                     <div class="flex items-center gap-3 text-xs">
                         <div class="flex items-center gap-1 text-emerald-600">
@@ -488,10 +508,6 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handleReportsKey
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
                             {{ source.avg_score }} {{ isRtl ? 'نقاط' : 'score' }}
                         </div>
-                        <div class="flex-1"></div>
-                        <span class="font-semibold" :class="source.conversion_rate >= 30 ? 'text-emerald-600' : source.conversion_rate >= 15 ? 'text-amber-600' : 'text-slate-500'">
-                            {{ source.conversion_rate }}% {{ isRtl ? 'تحويل' : 'conv.' }}
-                        </span>
                     </div>
                 </div>
             </div>

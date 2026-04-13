@@ -63,10 +63,17 @@ const autoRefreshLabel = computed(() => {
     return opt ? (isRtl.value ? opt.ar : opt.en) : (isRtl.value ? 'إيقاف' : 'Off');
 });
 
+function closeAutoRefreshPicker(e) {
+    if (showAutoRefreshPicker.value && !e.target.closest('[data-auto-refresh-picker]')) {
+        showAutoRefreshPicker.value = false;
+    }
+}
+
 onMounted(() => {
     setTimeout(() => { mounted.value = true; }, 50);
     startCounters();
     loadedAt.value = Date.now();
+    document.addEventListener('click', closeAutoRefreshPicker);
     updateFreshness();
     freshnessTimer = setInterval(updateFreshness, 30000);
     if (autoRefreshInterval.value > 0) {
@@ -74,7 +81,7 @@ onMounted(() => {
     }
 });
 
-onBeforeUnmount(() => { clearInterval(freshnessTimer); clearInterval(autoRefreshHandle); });
+onBeforeUnmount(() => { clearInterval(freshnessTimer); clearInterval(autoRefreshHandle); document.removeEventListener('click', closeAutoRefreshPicker); });
 
 /* ---------- Animated counters ---------- */
 const counterMyLeads = ref(0);
@@ -529,7 +536,7 @@ const activityTypeConfig = {
                             {{ timeSinceLoad }}
                         </button>
                         <!-- Auto-refresh picker -->
-                        <div class="relative">
+                        <div class="relative" data-auto-refresh-picker>
                             <button @click.stop="showAutoRefreshPicker = !showAutoRefreshPicker"
                                 class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] transition-all"
                                 :class="autoRefreshInterval > 0 ? 'bg-emerald-400/25 text-emerald-200 ring-1 ring-emerald-400/30' : 'bg-white/10 hover:bg-white/20 text-teal-200'"

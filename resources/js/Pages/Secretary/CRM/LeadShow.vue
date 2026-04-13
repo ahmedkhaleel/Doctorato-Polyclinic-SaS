@@ -396,6 +396,24 @@ function useQuickNote(template) {
     activityForm.description = isRtl.value ? template.ar : template.en;
 }
 
+/* Quick-log: one-click submit a note instantly */
+const quickLogSaving = ref(null);
+function quickLogNote(template) {
+    if (quickLogSaving.value) return;
+    const text = isRtl.value ? template.ar : template.en;
+    quickLogSaving.value = text;
+    router.post(`/secretary/crm/leads/${props.lead.id}/activity`, {
+        type: 'note',
+        description: text,
+        direction: '',
+        outcome: '',
+    }, {
+        preserveScroll: true,
+        onSuccess: () => { quickLogSaving.value = null; },
+        onError: () => { quickLogSaving.value = null; },
+    });
+}
+
 // Activity filter
 const activitySearchQuery = ref('');
 const activityTypeFilter = ref('all');
@@ -1220,11 +1238,20 @@ function handleLeadShowKey(e) {
                                             ></textarea>
                                             <!-- Quick note templates -->
                                             <div class="flex flex-wrap gap-1.5 mt-2">
-                                                <button v-for="qn in quickNoteTemplates" :key="qn.en"
-                                                    type="button" @click="useQuickNote(qn)"
-                                                    class="text-[11px] px-2.5 py-1 rounded-lg border border-gray-200 text-gray-500 hover:border-teal-300 hover:text-teal-600 hover:bg-teal-50 transition-all">
-                                                    {{ isRtl ? qn.ar : qn.en }}
-                                                </button>
+                                                <div v-for="qn in quickNoteTemplates" :key="qn.en" class="inline-flex items-center rounded-lg border border-gray-200 hover:border-teal-300 hover:bg-teal-50 transition-all group/qn">
+                                                    <button type="button" @click="useQuickNote(qn)"
+                                                        class="text-[11px] px-2 py-1 text-gray-500 group-hover/qn:text-teal-600 transition-colors"
+                                                        :title="isRtl ? 'انقر للتعبئة' : 'Click to fill'">
+                                                        {{ isRtl ? qn.ar : qn.en }}
+                                                    </button>
+                                                    <button type="button" @click="quickLogNote(qn)"
+                                                        :disabled="quickLogSaving === (isRtl ? qn.ar : qn.en)"
+                                                        class="px-1.5 py-1 border-s border-gray-200 text-gray-300 hover:text-teal-600 transition-colors"
+                                                        :title="isRtl ? 'حفظ فوري' : 'Quick log'">
+                                                        <svg v-if="quickLogSaving === (isRtl ? qn.ar : qn.en)" class="w-3 h-3 animate-spin text-teal-500" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" class="opacity-25"/><path fill="currentColor" class="opacity-75" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+                                                        <svg v-else class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="mb-3">

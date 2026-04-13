@@ -235,6 +235,29 @@ function getFilteredFollowUpsForDay(dateStr) {
     return fups.filter(f => f.status === activeFilter.value);
 }
 
+/* ── Filter count badges ────────────────────────────── */
+const filterCounts = computed(() => {
+    const all = props.followUps || [];
+    return {
+        all: all.length,
+        pending: all.filter(f => f.status === 'pending').length,
+        completed: all.filter(f => f.status === 'completed').length,
+        missed: all.filter(f => f.status === 'missed').length,
+        overdue: all.filter(f => f.is_overdue).length,
+    };
+});
+
+/* ── Type distribution for current month ────────────── */
+const typeDistribution = computed(() => {
+    const all = props.followUps || [];
+    const types = {};
+    all.forEach(f => {
+        const t = f.type || 'other';
+        types[t] = (types[t] || 0) + 1;
+    });
+    return types;
+});
+
 /* ── Visual helpers ──────────────────────────────────── */
 const typeConfig = {
     call:     { en: 'Call',     ar: 'مكالمة',   color: 'bg-blue-500',   lightBg: 'bg-blue-50 text-blue-700 border-blue-200' },
@@ -514,11 +537,20 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handleCalendarKe
                 <div class="flex items-center gap-1.5 flex-wrap">
                     <button v-for="opt in filterOptions" :key="opt.key"
                         @click="activeFilter = opt.key"
-                        :class="['px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 border',
+                        :class="['inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 border',
                             activeFilter === opt.key
                                 ? 'bg-teal-500 text-white border-teal-500 shadow-sm'
                                 : 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100']">
                         {{ isRtl ? opt.ar : opt.en }}
+                        <span v-if="filterCounts[opt.key] > 0"
+                              :class="['text-[10px] font-bold min-w-[18px] h-[18px] flex items-center justify-center rounded-full tabular-nums',
+                                  activeFilter === opt.key
+                                      ? 'bg-white/25 text-white'
+                                      : opt.key === 'overdue' && filterCounts[opt.key] > 0
+                                          ? 'bg-red-100 text-red-600'
+                                          : 'bg-gray-200 text-gray-500']">
+                            {{ filterCounts[opt.key] }}
+                        </span>
                     </button>
                 </div>
             </div>
@@ -530,6 +562,7 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handleCalendarKe
                 <div v-for="(cfg, key) in typeConfig" :key="key" class="flex items-center gap-1">
                     <span :class="['w-2 h-2 rounded-full', cfg.color]"></span>
                     <span class="text-[11px] text-gray-500">{{ isRtl ? cfg.ar : cfg.en }}</span>
+                    <span v-if="typeDistribution[key]" class="text-[9px] font-bold text-gray-400 tabular-nums">({{ typeDistribution[key] }})</span>
                 </div>
             </div>
             <button @click="openQuickAdd(new Date().toISOString().split('T')[0])"

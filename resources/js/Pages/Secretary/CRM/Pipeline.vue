@@ -250,6 +250,40 @@ const priorityBreakdown = computed(() => {
     };
 });
 
+/* ── Quick move to next stage ─────────────────────────── */
+function moveToNextStage(lead, currentStatus) {
+    const idx = statuses.indexOf(currentStatus);
+    if (idx < 0 || idx >= statuses.length - 1) return;
+    const toStatus = statuses[idx + 1];
+
+    // Optimistic update
+    localColumns.value[currentStatus] = (localColumns.value[currentStatus] || []).filter(l => l.id != lead.id);
+    if (!localColumns.value[toStatus]) localColumns.value[toStatus] = [];
+    localColumns.value[toStatus].push(lead);
+
+    const toLabel = isRtl.value ? statusConfig[toStatus]?.ar : statusConfig[toStatus]?.en;
+    router.post(`/secretary/crm/leads/${lead.id}/status`, { status: toStatus }, {
+        preserveScroll: true,
+        preserveState: true,
+        onSuccess: () => {
+            showToast(
+                isRtl.value
+                    ? `تم نقل العميل إلى "${toLabel}" بنجاح`
+                    : `Lead moved to "${toLabel}" successfully`,
+                'success'
+            );
+            nextTick(() => initDragAndDrop());
+        },
+        onError: () => {
+            localColumns.value[toStatus] = (localColumns.value[toStatus] || []).filter(l => l.id != lead.id);
+            if (!localColumns.value[currentStatus]) localColumns.value[currentStatus] = [];
+            localColumns.value[currentStatus].push(lead);
+            showToast(isRtl.value ? 'حدث خطأ. تم التراجع.' : 'Error. Changes reverted.', 'error');
+            nextTick(() => initDragAndDrop());
+        },
+    });
+}
+
 /* ── Helpers ────────────────────────────────────────────── */
 function timeAgo(date) {
     if (!date) return '';
@@ -533,6 +567,14 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handlePipelineKe
 
                         <!-- Quick action buttons (visible on hover) -->
                         <div class="mt-2 pt-2 border-t border-gray-50 flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-all duration-200">
+                            <!-- Quick move to next stage -->
+                            <button v-if="statuses.indexOf(status) < statuses.length - 1"
+                                @click.stop="moveToNextStage(lead, status)"
+                                class="flex-1 inline-flex items-center justify-center gap-1 py-1.5 rounded-lg text-[10px] font-semibold bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200/60 transition-colors"
+                                :title="isRtl ? ('نقل إلى ' + statusConfig[statuses[statuses.indexOf(status) + 1]]?.ar) : ('Move to ' + statusConfig[statuses[statuses.indexOf(status) + 1]]?.en)">
+                                <svg class="w-3 h-3" :class="isRtl ? 'rotate-180' : ''" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+                                {{ isRtl ? statusConfig[statuses[statuses.indexOf(status) + 1]]?.ar : statusConfig[statuses[statuses.indexOf(status) + 1]]?.en }}
+                            </button>
                             <a :href="`tel:${lead.phone}`" @click.stop
                                class="flex-1 inline-flex items-center justify-center gap-1 py-1.5 rounded-lg text-[10px] font-semibold bg-teal-50 text-teal-700 hover:bg-teal-100 border border-teal-200/60 transition-colors"
                                :title="isRtl ? '\u0627\u062A\u0635\u0627\u0644' : 'Call'">
