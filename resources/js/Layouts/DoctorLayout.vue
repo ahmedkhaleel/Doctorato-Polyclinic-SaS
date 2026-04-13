@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, watchEffect } from 'vue';
+import { ref, computed, watchEffect, onMounted, onUnmounted } from 'vue';
 import { Link, usePage, router } from '@inertiajs/vue3';
 import DoctorNotificationBell from '@/Components/Doctor/DoctorNotificationBell.vue';
 import ToastNotification from '@/Components/Doctor/ToastNotification.vue';
@@ -135,6 +135,91 @@ watchEffect(() => {
 function toggleSidebar() { sidebarOpen.value = !sidebarOpen.value; }
 function closeSidebar()  { sidebarOpen.value = false; }
 function logout()        { router.post('/doctor/logout'); }
+
+/* ── Global Quick Search (Cmd+K / Ctrl+K) ──────────────── */
+const showQuickSearch = ref(false);
+const quickSearchQuery = ref('');
+const quickSearchInput = ref(null);
+
+const quickSearchPages = computed(() => {
+    const pages = [
+        { label: isRtl.value ? 'لوحة التحكم' : 'Dashboard', href: '/doctor', icon: 'grid', group: isRtl.value ? 'الرئيسية' : 'Main' },
+        { label: isRtl.value ? 'طابور اليوم' : "Today's Queue", href: '/doctor/queue', icon: 'queue', group: isRtl.value ? 'الرئيسية' : 'Main' },
+        { label: isRtl.value ? 'المرضى' : 'Patients', href: '/doctor/patients', icon: 'heart', group: isRtl.value ? 'العيادة' : 'Clinical' },
+        { label: isRtl.value ? 'الزيارات' : 'Visits', href: '/doctor/visits', icon: 'clipboard', group: isRtl.value ? 'العيادة' : 'Clinical' },
+        { label: isRtl.value ? 'الوصفات' : 'Prescriptions', href: '/doctor/prescriptions', icon: 'pill', group: isRtl.value ? 'العيادة' : 'Clinical' },
+        { label: isRtl.value ? 'الحجوزات' : 'Bookings', href: '/doctor/bookings', icon: 'calendar', group: isRtl.value ? 'العيادة' : 'Clinical' },
+        { label: isRtl.value ? 'العمولة' : 'Commission', href: '/doctor/commission', icon: 'cash', group: isRtl.value ? 'المالية' : 'Finance' },
+        { label: isRtl.value ? 'الحضور' : 'Attendance', href: '/doctor/my-attendance', icon: 'checklist', group: 'HR' },
+        { label: isRtl.value ? 'الإجازات' : 'Leaves', href: '/doctor/my-leaves', icon: 'logout', group: 'HR' },
+        { label: isRtl.value ? 'كشوف الراتب' : 'Salary Slips', href: '/doctor/my-salary-slips', icon: 'salary', group: 'HR' },
+        { label: isRtl.value ? 'الدردشة' : 'Chat', href: '/doctor/chat', icon: 'chat', group: isRtl.value ? 'حسابي' : 'Account' },
+        { label: isRtl.value ? 'الملف الشخصي' : 'Profile', href: '/doctor/profile', icon: 'user', group: isRtl.value ? 'حسابي' : 'Account' },
+        { label: isRtl.value ? 'الإشعارات' : 'Notifications', href: '/doctor/notifications', icon: 'bell', group: isRtl.value ? 'حسابي' : 'Account' },
+    ];
+    // Add dental pages if dental module enabled
+    if (modules.value.dental?.enabled && doctorModule.value === 'dental') {
+        pages.push(
+            { label: isRtl.value ? 'مخطط الأسنان' : 'Dental Chart', href: '/doctor/dental/chart-search', icon: 'tooth', group: isRtl.value ? 'طب الأسنان' : 'Dental' },
+            { label: isRtl.value ? 'خطط العلاج' : 'Treatment Plans', href: '/doctor/dental/treatment-plans', icon: 'clipboard', group: isRtl.value ? 'طب الأسنان' : 'Dental' },
+            { label: isRtl.value ? 'العلاجات' : 'Treatments', href: '/doctor/dental/treatments', icon: 'pill', group: isRtl.value ? 'طب الأسنان' : 'Dental' },
+            { label: isRtl.value ? 'الأشعة' : 'X-rays', href: '/doctor/dental/xrays', icon: 'camera', group: isRtl.value ? 'طب الأسنان' : 'Dental' },
+        );
+    }
+    return pages;
+});
+
+const filteredQuickSearch = computed(() => {
+    if (!quickSearchQuery.value) return quickSearchPages.value;
+    const q = quickSearchQuery.value.toLowerCase();
+    return quickSearchPages.value.filter(p =>
+        p.label.toLowerCase().includes(q) || p.group.toLowerCase().includes(q) || p.href.includes(q)
+    );
+});
+
+const quickSearchHighlight = ref(0);
+
+function openQuickSearch() {
+    showQuickSearch.value = true;
+    quickSearchQuery.value = '';
+    quickSearchHighlight.value = 0;
+    setTimeout(() => quickSearchInput.value?.focus(), 100);
+}
+
+function closeQuickSearch() {
+    showQuickSearch.value = false;
+}
+
+function quickSearchNavigate(href) {
+    closeQuickSearch();
+    router.visit(href);
+}
+
+function handleQuickSearchKey(e) {
+    if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        quickSearchHighlight.value = Math.min(quickSearchHighlight.value + 1, filteredQuickSearch.value.length - 1);
+    } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        quickSearchHighlight.value = Math.max(quickSearchHighlight.value - 1, 0);
+    } else if (e.key === 'Enter' && filteredQuickSearch.value[quickSearchHighlight.value]) {
+        quickSearchNavigate(filteredQuickSearch.value[quickSearchHighlight.value].href);
+    }
+}
+
+function handleGlobalKey(e) {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        if (showQuickSearch.value) closeQuickSearch();
+        else openQuickSearch();
+    }
+    if (e.key === 'Escape' && showQuickSearch.value) {
+        closeQuickSearch();
+    }
+}
+
+onMounted(() => { document.addEventListener('keydown', handleGlobalKey); });
+onUnmounted(() => { document.removeEventListener('keydown', handleGlobalKey); });
 </script>
 
 <template>
@@ -291,7 +376,15 @@ function logout()        { router.post('/doctor/logout'); }
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
                 </button>
 
-                <div class="hidden lg:block"></div>
+                <!-- Quick Search Trigger -->
+                <button @click="openQuickSearch"
+                    class="hidden lg:inline-flex items-center gap-3 px-4 py-2 rounded-xl bg-gray-50 hover:bg-gray-100 border border-gray-200 text-sm text-gray-400 hover:text-gray-500 transition-all duration-200 min-w-[220px]">
+                    <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                    <span class="flex-1 ltr:text-left rtl:text-right">{{ isRtl ? 'بحث سريع...' : 'Quick search...' }}</span>
+                    <kbd class="hidden sm:inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-white border border-gray-200 text-[10px] font-mono text-gray-400 shadow-sm">
+                        <span class="text-[9px]">&#8984;</span>K
+                    </kbd>
+                </button>
 
                 <!-- Right side -->
                 <div class="flex items-center gap-3">
@@ -364,6 +457,78 @@ function logout()        { router.post('/doctor/logout'); }
 
         <!-- Chat Toast Notifications -->
         <ChatToast panelPrefix="doctor" accentColor="#C4A265" />
+
+        <!-- Quick Search Modal (Cmd+K) -->
+        <Teleport to="body">
+            <Transition
+                enter-active-class="transition-all duration-200 ease-out"
+                enter-from-class="opacity-0"
+                enter-to-class="opacity-100"
+                leave-active-class="transition-all duration-150 ease-in"
+                leave-from-class="opacity-100"
+                leave-to-class="opacity-0"
+            >
+                <div v-if="showQuickSearch" class="fixed inset-0 z-[100] flex items-start justify-center pt-[15vh]" @click.self="closeQuickSearch">
+                    <div class="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
+                    <div class="relative w-full max-w-lg mx-4 bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden"
+                        :class="showQuickSearch ? 'scale-100 opacity-100' : 'scale-95 opacity-0'"
+                        style="transition: transform 0.2s ease-out, opacity 0.2s ease-out">
+                        <!-- Search Input -->
+                        <div class="flex items-center gap-3 px-5 py-4 border-b border-gray-100">
+                            <svg class="w-5 h-5 text-[#C4A265] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                            <input ref="quickSearchInput" v-model="quickSearchQuery"
+                                @keydown="handleQuickSearchKey"
+                                :placeholder="isRtl ? 'ابحث عن صفحة أو ميزة...' : 'Search for a page or feature...'"
+                                class="flex-1 text-sm text-gray-800 placeholder-gray-400 border-0 focus:ring-0 p-0 bg-transparent" />
+                            <kbd class="px-2 py-0.5 rounded bg-gray-100 border border-gray-200 text-[10px] font-mono text-gray-400">ESC</kbd>
+                        </div>
+                        <!-- Results -->
+                        <div class="max-h-[340px] overflow-y-auto py-2">
+                            <div v-if="filteredQuickSearch.length === 0" class="px-5 py-10 text-center">
+                                <svg class="w-10 h-10 mx-auto text-gray-200 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                                <p class="text-sm text-gray-400">{{ isRtl ? 'لا توجد نتائج' : 'No results found' }}</p>
+                            </div>
+                            <button v-for="(item, idx) in filteredQuickSearch" :key="item.href"
+                                @click="quickSearchNavigate(item.href)"
+                                @mouseenter="quickSearchHighlight = idx"
+                                class="w-full flex items-center gap-3 px-5 py-3 text-sm transition-all duration-100"
+                                :class="quickSearchHighlight === idx ? 'bg-[#C4A265]/10 text-[#C4A265]' : 'text-gray-600 hover:bg-gray-50'">
+                                <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors"
+                                    :class="quickSearchHighlight === idx ? 'bg-[#C4A265]/20' : 'bg-gray-100'">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path v-if="item.icon === 'grid'" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1V5zm10 0a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1v-4zm10 0a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
+                                        <path v-else-if="item.icon === 'queue'" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                                        <path v-else-if="item.icon === 'heart'" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                        <path v-else-if="item.icon === 'clipboard'" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                        <path v-else-if="item.icon === 'pill'" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.5 12.75l6-6a4.243 4.243 0 016.01 6.01l-6 6a4.243 4.243 0 01-6.01-6.01zM12 9l-3 3" />
+                                        <path v-else-if="item.icon === 'calendar'" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                        <path v-else-if="item.icon === 'cash'" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                                        <path v-else-if="item.icon === 'checklist'" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                        <path v-else-if="item.icon === 'user'" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                        <path v-else-if="item.icon === 'chat'" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                                        <path v-else-if="item.icon === 'tooth'" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3C10.5 3 9 4.5 8.5 6.5C8 8.5 7 9.5 6 10.5C5 11.5 4 13 4 15C4 17 5.5 19 7.5 19C9 19 10 18 10.5 17C11 16 11.5 15.5 12 15.5C12.5 15.5 13 16 13.5 17C14 18 15 19 16.5 19C18.5 19 20 17 20 15C20 13 19 11.5 18 10.5C17 9.5 16 8.5 15.5 6.5C15 4.5 13.5 3 12 3Z" />
+                                        <path v-else-if="item.icon === 'camera'" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                                        <path v-else-if="item.icon === 'bell'" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                                        <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                    </svg>
+                                </div>
+                                <div class="flex-1 ltr:text-left rtl:text-right">
+                                    <p class="font-medium text-sm">{{ item.label }}</p>
+                                    <p class="text-[10px] text-gray-400">{{ item.group }}</p>
+                                </div>
+                                <svg v-if="quickSearchHighlight === idx" class="w-4 h-4 text-[#C4A265]/60 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
+                            </button>
+                        </div>
+                        <!-- Footer Hint -->
+                        <div class="px-5 py-3 border-t border-gray-100 bg-gray-50/60 flex items-center gap-4 text-[10px] text-gray-400">
+                            <span class="flex items-center gap-1"><kbd class="px-1 py-0.5 rounded bg-white border border-gray-200 text-[9px] font-mono shadow-sm">&uarr;&darr;</kbd> {{ isRtl ? 'تنقل' : 'Navigate' }}</span>
+                            <span class="flex items-center gap-1"><kbd class="px-1.5 py-0.5 rounded bg-white border border-gray-200 text-[9px] font-mono shadow-sm">Enter</kbd> {{ isRtl ? 'فتح' : 'Open' }}</span>
+                            <span class="flex items-center gap-1"><kbd class="px-1.5 py-0.5 rounded bg-white border border-gray-200 text-[9px] font-mono shadow-sm">Esc</kbd> {{ isRtl ? 'إغلاق' : 'Close' }}</span>
+                        </div>
+                    </div>
+                </div>
+            </Transition>
+        </Teleport>
     </div>
 </template>
 
