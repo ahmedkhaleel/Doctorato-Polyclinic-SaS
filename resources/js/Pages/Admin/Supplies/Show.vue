@@ -177,6 +177,16 @@ onMounted(() => {
                                 {{ displayName(supply.supply_category) }}
                             </span>
                             <span v-if="supply.unit">{{ supply.unit }}</span>
+                            <span
+                                v-if="supply.module && supply.module !== 'shared'"
+                                class="px-2 py-0.5 rounded-md text-xs font-bold uppercase"
+                                :class="supply.module === 'dental' ? 'bg-sky-400/20 text-sky-300' : 'bg-rose-400/20 text-rose-300'"
+                            >
+                                {{ supply.module }}
+                            </span>
+                            <span v-else-if="supply.module === 'shared'" class="px-2 py-0.5 rounded-md text-xs font-bold uppercase bg-white/10 text-white/50">
+                                shared
+                            </span>
                         </div>
                     </div>
 

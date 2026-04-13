@@ -22,6 +22,7 @@ const props = defineProps({
 const search = ref(props.filters?.search || '');
 const categoryFilter = ref(props.filters?.category_id || '');
 const stockFilter = ref(props.filters?.stock || '');
+const moduleFilter = ref(props.filters?.module || '');
 const viewMode = ref('grid');
 let searchTimeout = null;
 
@@ -34,6 +35,7 @@ function buildParams() {
         search: search.value || undefined,
         category_id: categoryFilter.value || undefined,
         stock: stockFilter.value || undefined,
+        module: moduleFilter.value || undefined,
     };
 }
 
@@ -47,7 +49,7 @@ watch(search, () => {
     }, 400);
 });
 
-watch([categoryFilter, stockFilter], () => {
+watch([categoryFilter, stockFilter, moduleFilter], () => {
     router.get('/admin/supplies', buildParams(), {
         preserveState: true,
         replace: true,
@@ -122,15 +124,23 @@ function cancelDelete() {
 }
 
 const hasActiveFilters = computed(() => {
-    return search.value || categoryFilter.value || stockFilter.value;
+    return search.value || categoryFilter.value || stockFilter.value || moduleFilter.value;
 });
 
 function clearFilters() {
     search.value = '';
     categoryFilter.value = '';
     stockFilter.value = '';
+    moduleFilter.value = '';
     router.get('/admin/supplies', {}, { preserveState: true, replace: true });
 }
+
+const moduleOptions = [
+    { value: '', label: { en: 'All Modules', ar: 'كل الأقسام' } },
+    { value: 'derma', label: { en: 'Dermatology', ar: 'الجلدية' } },
+    { value: 'dental', label: { en: 'Dental', ar: 'الأسنان' } },
+    { value: 'shared', label: { en: 'Shared', ar: 'مشترك' } },
+];
 </script>
 
 <template>
@@ -192,6 +202,14 @@ function clearFilters() {
                         >
                             <option value="">{{ $t('a_all_categories') }}</option>
                             <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ cat.name_en }}</option>
+                        </select>
+
+                        <!-- Module -->
+                        <select
+                            v-model="moduleFilter"
+                            class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-colors min-w-[140px]"
+                        >
+                            <option v-for="opt in moduleOptions" :key="opt.value" :value="opt.value">{{ isRtl ? opt.label.ar : opt.label.en }}</option>
                         </select>
 
                         <!-- Stock Status -->
@@ -312,8 +330,20 @@ function clearFilters() {
                                     </span>
                                 </div>
 
-                                <!-- SKU -->
-                                <p class="text-xs font-mono text-indigo-600 tracking-wide mb-4">SKU: {{ supply.sku || 'N/A' }}</p>
+                                <!-- SKU & Module -->
+                                <div class="flex items-center gap-2 mb-4">
+                                    <p class="text-xs font-mono text-indigo-600 tracking-wide">SKU: {{ supply.sku || 'N/A' }}</p>
+                                    <span
+                                        v-if="supply.module && supply.module !== 'shared'"
+                                        class="px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider"
+                                        :class="supply.module === 'dental' ? 'bg-sky-100 text-sky-700' : 'bg-rose-100 text-rose-700'"
+                                    >
+                                        {{ supply.module }}
+                                    </span>
+                                    <span v-else-if="supply.module === 'shared'" class="px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-gray-100 text-gray-500">
+                                        {{ isRtl ? 'مشترك' : 'shared' }}
+                                    </span>
+                                </div>
 
                                 <!-- Stock Level -->
                                 <div class="mb-3">

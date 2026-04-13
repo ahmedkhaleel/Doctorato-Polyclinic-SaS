@@ -12,7 +12,7 @@ class Supply extends Model
     use HasFactory, LogsActivity;
 
     protected $fillable = [
-        'supply_category_id', 'name_ar', 'name_en', 'sku', 'barcode', 'category', 'unit',
+        'supply_category_id', 'module', 'name_ar', 'name_en', 'sku', 'barcode', 'category', 'unit',
         'quantity', 'min_quantity', 'purchase_price', 'supplier',
         'image', 'expiry_date', 'batch_number', 'description', 'is_active',
     ];
@@ -60,5 +60,16 @@ class Supply extends Model
     public function scopeLowStock($query)
     {
         return $query->whereColumn('quantity', '<=', 'min_quantity');
+    }
+
+    public function scopeForModule($query, string $module)
+    {
+        if ($module === 'all') {
+            return $query;
+        }
+
+        return $query->where(function ($q) use ($module) {
+            $q->where('module', $module)->orWhere('module', 'shared');
+        });
     }
 }

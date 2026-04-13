@@ -19,6 +19,7 @@ const form = useForm({
     _method: 'PUT',
     name_en: props.supply.name_en || '',
     name_ar: props.supply.name_ar || '',
+    module: props.supply.module || 'shared',
     sku: props.supply.sku || '',
     barcode: props.supply.barcode || '',
     supply_category_id: props.supply.supply_category_id || '',
@@ -103,7 +104,7 @@ const unitOptions = ['pcs', 'ml', 'mg', 'g', 'box', 'pack', 'bottle', 'tube', 'v
                                 </div>
                             </div>
 
-                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $t('a_sku') }}</label>
                                     <input v-model="form.sku" type="text" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm font-mono focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all duration-200" />
@@ -120,6 +121,15 @@ const unitOptions = ['pcs', 'ml', 'mg', 'g', 'box', 'pack', 'bottle', 'tube', 'v
                                         <option value="">{{ $t('a_select_category') }}</option>
                                         <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ cat.name_en }}</option>
                                     </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ isRtl ? 'القسم الطبي' : 'Medical Module' }}</label>
+                                    <select v-model="form.module" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all duration-200">
+                                        <option value="shared">{{ isRtl ? 'مشترك' : 'Shared' }}</option>
+                                        <option value="derma">{{ isRtl ? 'الجلدية' : 'Dermatology' }}</option>
+                                        <option value="dental">{{ isRtl ? 'الأسنان' : 'Dental' }}</option>
+                                    </select>
+                                    <p v-if="form.errors.module" class="mt-1.5 text-sm text-red-500">{{ form.errors.module }}</p>
                                 </div>
                             </div>
 

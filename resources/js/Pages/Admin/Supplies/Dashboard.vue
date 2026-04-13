@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
-import { Link, usePage } from '@inertiajs/vue3';
+import { Link, router, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
 import { useCurrency } from '@/Composables/useCurrency.js';
@@ -22,7 +22,20 @@ const props = defineProps({
     recentTransactions: Array,
     topUsed: Array,
     monthlyTrends: Object,
+    activeModule: { type: String, default: 'all' },
 });
+
+/* ── Module tabs ── */
+const moduleTabs = [
+    { value: 'all',    label: { en: 'All', ar: 'الكل' }, icon: 'M4 6h16M4 10h16M4 14h16M4 18h16' },
+    { value: 'derma',  label: { en: 'Dermatology', ar: 'الجلدية' }, icon: 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z' },
+    { value: 'dental', label: { en: 'Dental', ar: 'الأسنان' }, icon: 'M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z' },
+    { value: 'shared', label: { en: 'Shared', ar: 'مشترك' }, icon: 'M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z' },
+];
+
+function switchModule(mod) {
+    router.get('/admin/inventory', mod === 'all' ? {} : { module: mod }, { preserveState: true, replace: true });
+}
 
 /* ── Animation state ── */
 const mounted = ref(false);
@@ -260,6 +273,27 @@ const quickLinks = computed(() => [
                                 {{ isRtl ? 'إضافة منتج' : 'Add Product' }}
                             </Link>
                         </div>
+                    </div>
+
+                    <!-- Module Tabs -->
+                    <div class="flex flex-wrap gap-1.5 mb-3"
+                        :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
+                        style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.12s"
+                    >
+                        <button
+                            v-for="tab in moduleTabs"
+                            :key="tab.value"
+                            @click="switchModule(tab.value)"
+                            class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold transition-all duration-200 border"
+                            :class="activeModule === tab.value
+                                ? 'bg-white text-indigo-900 border-white/80 shadow-lg shadow-white/10'
+                                : 'bg-white/5 text-white/70 border-white/10 hover:bg-white/10 hover:text-white'"
+                        >
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="tab.icon" />
+                            </svg>
+                            {{ isRtl ? tab.label.ar : tab.label.en }}
+                        </button>
                     </div>
 
                     <!-- Quick navigation pills -->

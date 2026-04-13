@@ -16,23 +16,34 @@ use Inertia\Response;
 
 class SupplyController extends Controller
 {
-    public function dashboard(): Response
+    public function dashboard(Request $request): Response
     {
-        $totalProducts = Supply::count();
-        $activeProducts = Supply::active()->count();
-        $lowStockCount = Supply::lowStock()->count();
-        $expiringSoonCount = Supply::whereNotNull('expiry_date')
+        $module = $request->input('module', 'all');
+        $baseQuery = fn () => Supply::when($module !== 'all', fn ($q) => $q->forModule($module));
+
+        $totalProducts = $baseQuery()->count();
+        $activeProducts = $baseQuery()->active()->count();
+        $lowStockCount = $baseQuery()->lowStock()->count();
+        $expiringSoonCount = $baseQuery()->whereNotNull('expiry_date')
             ->where('expiry_date', '<=', Carbon::now()->addDays(30))
             ->where('expiry_date', '>=', Carbon::now())
             ->count();
-        $expiredCount = Supply::whereNotNull('expiry_date')
+        $expiredCount = $baseQuery()->whereNotNull('expiry_date')
             ->where('expiry_date', '<', Carbon::now())
             ->count();
 
-        $totalValue = Supply::active()->sum(DB::raw('quantity * purchase_price'));
+        $totalValue = $baseQuery()->active()->sum(DB::raw('quantity * purchase_price'));
+
+        // Get supply IDs for module-filtered transaction queries
+        $supplyIds = $module !== 'all' ? $baseQuery()->pluck('id') : null;
 
         // Category distribution
-        $categoryDistribution = SupplyCategory::withCount(['supplies' => fn ($q) => $q->active()])
+        $categoryDistribution = SupplyCategory::withCount(['supplies' => function ($q) use ($module) {
+            $q->active();
+            if ($module !== 'all') {
+                $q->forModule($module);
+            }
+        }])
             ->ordered()
             ->get()
             ->map(fn ($c) => [
@@ -42,14 +53,14 @@ class SupplyController extends Controller
             ]);
 
         // Low stock items
-        $lowStockItems = Supply::lowStock()
+        $lowStockItems = $baseQuery()->lowStock()
             ->with('supplyCategory')
             ->orderByRaw('quantity - min_quantity ASC')
             ->limit(10)
             ->get();
 
         // Expiring soon items
-        $expiringSoonItems = Supply::whereNotNull('expiry_date')
+        $expiringSoonItems = $baseQuery()->whereNotNull('expiry_date')
             ->where('expiry_date', '<=', Carbon::now()->addDays(30))
             ->where('expiry_date', '>=', Carbon::now())
             ->with('supplyCategory')
@@ -59,6 +70,7 @@ class SupplyController extends Controller
 
         // Recent transactions
         $recentTransactions = SupplyTransaction::with(['supply', 'creator'])
+            ->when($supplyIds, fn ($q) => $q->whereIn('supply_id', $supplyIds))
             ->latest()
             ->limit(10)
             ->get();
@@ -66,6 +78,7 @@ class SupplyController extends Controller
         // Top used supplies (most usage transactions in last 30 days)
         $topUsed = SupplyTransaction::where('transaction_type', 'usage')
             ->where('created_at', '>=', Carbon::now()->subDays(30))
+            ->when($supplyIds, fn ($q) => $q->whereIn('supply_id', $supplyIds))
             ->select('supply_id', DB::raw('SUM(quantity) as total_used'))
             ->groupBy('supply_id')
             ->orderByDesc('total_used')
@@ -75,6 +88,7 @@ class SupplyController extends Controller
 
         // Monthly transaction trends (last 6 months)
         $monthlyTrends = SupplyTransaction::where('created_at', '>=', Carbon::now()->subMonths(6))
+            ->when($supplyIds, fn ($q) => $q->whereIn('supply_id', $supplyIds))
             ->select(
                 DB::raw("DATE_FORMAT(created_at, '%Y-%m') as month"),
                 'transaction_type',
@@ -104,6 +118,7 @@ class SupplyController extends Controller
             'recentTransactions' => $recentTransactions,
             'topUsed' => $topUsed,
             'monthlyTrends' => $monthlyTrends,
+            'activeModule' => $module,
         ]);
     }
 
@@ -140,6 +155,10 @@ class SupplyController extends Controller
             $query->where('supply_category_id', $categoryId);
         }
 
+        if ($module = $request->input('module')) {
+            $query->forModule($module);
+        }
+
         $supplies = $query->latest()->paginate(15)->withQueryString();
 
         $categories = SupplyCategory::active()->ordered()->get();
@@ -147,7 +166,7 @@ class SupplyController extends Controller
         return Inertia::render('Admin/Supplies/Index', [
             'supplies' => $supplies,
             'categories' => $categories,
-            'filters' => $request->only(['search', 'status', 'stock', 'category_id']),
+            'filters' => $request->only(['search', 'status', 'stock', 'category_id', 'module']),
         ]);
     }
 
@@ -165,6 +184,7 @@ class SupplyController extends Controller
         $data = $request->validate([
             'name_ar' => 'required|string|max:255',
             'name_en' => 'required|string|max:255',
+            'module' => 'nullable|string|in:derma,dental,shared',
             'sku' => 'nullable|string|max:100|unique:supplies,sku',
             'barcode' => 'nullable|string|max:100|unique:supplies,barcode',
             'supply_category_id' => 'nullable|exists:supply_categories,id',
@@ -240,6 +260,7 @@ class SupplyController extends Controller
         $data = $request->validate([
             'name_ar' => 'required|string|max:255',
             'name_en' => 'required|string|max:255',
+            'module' => 'nullable|string|in:derma,dental,shared',
             'sku' => 'nullable|string|max:100|unique:supplies,sku,' . $supply->id,
             'barcode' => 'nullable|string|max:100|unique:supplies,barcode,' . $supply->id,
             'supply_category_id' => 'nullable|exists:supply_categories,id',
