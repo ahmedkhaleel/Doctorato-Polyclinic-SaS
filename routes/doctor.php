@@ -20,6 +20,8 @@ use App\Http\Controllers\Doctor\DoctorDentalTreatmentPlanController;
 use App\Http\Controllers\Doctor\DoctorDentalXrayController;
 use App\Http\Controllers\Doctor\DoctorDentalFollowupController;
 use App\Http\Controllers\Doctor\DoctorExportController;
+use App\Http\Controllers\Doctor\DoctorPatientNoteController;
+use App\Http\Controllers\Doctor\DoctorFavoritePatientController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -61,8 +63,17 @@ Route::middleware('doctor.auth')->group(function () {
 
     // ─── My Patients ────────────────────────────────────────
     Route::get('/patients', [DoctorPatientController::class, 'index'])->name('doctor.patients.index');
+    Route::get('/patients/favorites', [DoctorFavoritePatientController::class, 'index'])->name('doctor.patients.favorites');
     Route::get('/patients/{patient}', [DoctorPatientController::class, 'show'])->name('doctor.patients.show');
     Route::put('/patients/{patient}/notes', [DoctorPatientController::class, 'updateNotes'])->name('doctor.patients.updateNotes');
+
+    // ─── Patient Quick Notes ────────────────────────────────
+    Route::post('/patients/{patient}/notes/store', [DoctorPatientNoteController::class, 'store'])->name('doctor.patients.notes.store');
+    Route::post('/patients/{patient}/notes/{note}/delete', [DoctorPatientNoteController::class, 'destroy'])->name('doctor.patients.notes.destroy');
+    Route::post('/patients/{patient}/notes/{note}/toggle-pin', [DoctorPatientNoteController::class, 'togglePin'])->name('doctor.patients.notes.togglePin');
+
+    // ─── Patient Favorites ──────────────────────────────────
+    Route::post('/patients/{patient}/favorite/toggle', [DoctorFavoritePatientController::class, 'toggle'])->name('doctor.patients.favorite.toggle');
 
     // ─── My Visits ──────────────────────────────────────────
     Route::get('/visits', [DoctorVisitController::class, 'index'])->name('doctor.visits.index');

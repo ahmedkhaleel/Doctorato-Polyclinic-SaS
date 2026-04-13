@@ -124,4 +124,14 @@ class Doctor extends Model
     {
         return $this->hasMany(PackageBundleBookingService::class);
     }
+
+    public function patientNotes()
+    {
+        return $this->hasMany(DoctorPatientNote::class);
+    }
+
+    public function favoritePatients()
+    {
+        return $this->hasMany(DoctorFavoritePatient::class);
+    }
 }

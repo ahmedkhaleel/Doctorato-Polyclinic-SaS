@@ -296,6 +296,16 @@ class Patient extends Model
             ->latestOfMany();
     }
 
+    public function doctorNotes()
+    {
+        return $this->hasMany(DoctorPatientNote::class);
+    }
+
+    public function doctorFavorites()
+    {
+        return $this->hasMany(DoctorFavoritePatient::class);
+    }
+
     // ─── Accessors ──────────────────────────────────────
 
     protected function photoUrl(): Attribute

@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers\Doctor;
 
+use App\Models\DoctorFavoritePatient;
+use App\Models\DoctorPatientNote;
 use App\Models\MedicalDataAccessLog;
 use App\Models\Patient;
+use App\Models\Service;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -24,6 +28,10 @@ class DoctorPatientController extends BaseDoctorController
         // Validate filter inputs
         $filters = $request->validate([
             'search' => 'nullable|string|max:100',
+            'last_visit_from' => 'nullable|date',
+            'last_visit_to' => 'nullable|date',
+            'service_id' => 'nullable|integer|exists:services,id',
+            'favorites_only' => 'nullable|boolean',
         ]);
 
         if ($search = $filters['search'] ?? null) {
@@ -34,11 +42,63 @@ class DoctorPatientController extends BaseDoctorController
             });
         }
 
+        // Filter by last visit date range
+        if ($lastVisitFrom = $filters['last_visit_from'] ?? null) {
+            $query->whereHas('visits', function ($q) use ($doctorId, $lastVisitFrom) {
+                $q->where('doctor_id', $doctorId)
+                    ->where('visit_date', '>=', $lastVisitFrom);
+            });
+        }
+
+        if ($lastVisitTo = $filters['last_visit_to'] ?? null) {
+            $query->whereHas('visits', function ($q) use ($doctorId, $lastVisitTo) {
+                $q->where('doctor_id', $doctorId)
+                    ->where('visit_date', '<=', $lastVisitTo);
+            });
+        }
+
+        // Filter by service
+        if ($serviceId = $filters['service_id'] ?? null) {
+            $query->whereHas('visits', function ($q) use ($doctorId, $serviceId) {
+                $q->where('doctor_id', $doctorId)
+                    ->where('service_id', $serviceId);
+            });
+        }
+
+        // Filter favorites only
+        if ($filters['favorites_only'] ?? false) {
+            $query->whereHas('doctorFavorites', function ($q) use ($doctorId) {
+                $q->where('doctor_id', $doctorId);
+            });
+        }
+
+        // Eager-load the doctor's quick notes and favorite status
+        $query->with(['doctorNotes' => function ($q) use ($doctorId) {
+            $q->where('doctor_id', $doctorId)->orderByDesc('is_pinned')->latest();
+        }]);
+
+        // Add is_favorite attribute
+        $query->withExists(['doctorFavorites as is_favorite' => function ($q) use ($doctorId) {
+            $q->where('doctor_id', $doctorId);
+        }]);
+
         $patients = $query->latest()->paginate(15)->withQueryString();
+
+        // Services list for filter dropdown
+        $services = Service::select('id', 'name_en', 'name_ar')
+            ->orderBy('name_en')
+            ->get();
+
+        // Get favorite patient IDs for this doctor
+        $favoriteIds = DoctorFavoritePatient::where('doctor_id', $doctorId)
+            ->pluck('patient_id')
+            ->toArray();
 
         return Inertia::render('Doctor/Patients/Index', [
             'patients' => $patients,
-            'filters' => $request->only(['search']),
+            'filters' => $request->only(['search', 'last_visit_from', 'last_visit_to', 'service_id', 'favorites_only']),
+            'services' => $services,
+            'favoriteIds' => $favoriteIds,
         ]);
     }
 
@@ -107,11 +167,24 @@ class DoctorPatientController extends BaseDoctorController
             );
         }
 
+        // Load quick notes and favorite status
+        $quickNotes = DoctorPatientNote::where('doctor_id', $doctorId)
+            ->where('patient_id', $patient->id)
+            ->orderByDesc('is_pinned')
+            ->latest()
+            ->get();
+
+        $isFavorite = DoctorFavoritePatient::where('doctor_id', $doctorId)
+            ->where('patient_id', $patient->id)
+            ->exists();
+
         return Inertia::render('Doctor/Patients/Show', [
             'patient' => $patient,
             'dentalData' => $dentalData,
             'dentalRiskFlags' => $dentalRiskFlags,
             'dentalMedicalHistory' => $dentalMedicalHistory,
+            'quickNotes' => $quickNotes,
+            'isFavorite' => $isFavorite,
         ]);
     }
 
