@@ -34,14 +34,13 @@ function openEdit(s) { editing.value = s; form.value = { ...s }; showModal.value
 
 function submit() {
     processing.value = true
-    const url = editing.value ? `/admin/suppliers/${editing.value.id}` : '/admin/suppliers'
-    const method = editing.value ? 'put' : 'post'
-    router[method](url, form.value, { onSuccess: () => { showModal.value = false }, onFinish: () => { processing.value = false } })
+    const url = editing.value ? `/admin/suppliers/${editing.value.id}/update` : '/admin/suppliers'
+    router.post(url, form.value, { onSuccess: () => { showModal.value = false }, onFinish: () => { processing.value = false } })
 }
 
 function remove(s) {
     if (confirm(isRtl.value ? 'هل أنت متأكد من حذف هذا المورد؟' : 'Are you sure you want to delete this supplier?')) {
-        router.delete(`/admin/suppliers/${s.id}`)
+        router.post(`/admin/suppliers/${s.id}/delete`)
     }
 }
 

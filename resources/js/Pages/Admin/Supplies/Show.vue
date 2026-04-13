@@ -49,7 +49,7 @@ function submitTransaction() {
 // ── Delete ────────────────────────────────────────────────────────
 function deleteSupply() {
     if (window.confirm('Are you sure you want to delete this supply item? This action cannot be undone.')) {
-        router.delete(`/admin/supplies/${props.supply.id}`);
+        router.post(`/admin/supplies/${props.supply.id}/delete`);
     }
 }
 

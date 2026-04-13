@@ -58,7 +58,7 @@ function openEdit(cat) {
 
 function submit() {
     if (editingCategory.value) {
-        form.put(`/admin/supply-categories/${editingCategory.value.id}`, {
+        form.post(`/admin/supply-categories/${editingCategory.value.id}/update`, {
             onSuccess: () => { showModal.value = false; },
         });
     } else {
@@ -74,7 +74,7 @@ function confirmDelete(id) {
 }
 
 function deleteCategory() {
-    router.delete(`/admin/supply-categories/${deletingId.value}`, {
+    router.post(`/admin/supply-categories/${deletingId.value}/delete`, {
         onSuccess: () => { showDeleteConfirm.value = false; deletingId.value = null; },
     });
 }

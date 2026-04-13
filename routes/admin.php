@@ -398,8 +398,8 @@ Route::middleware('admin.auth')->group(function () {
         // Supply Categories
         Route::get('/supply-categories', [SupplyCategoryController::class, 'index'])->name('admin.supply-categories.index')->middleware('permission:supplies.view');
         Route::post('/supply-categories', [SupplyCategoryController::class, 'store'])->name('admin.supply-categories.store')->middleware('permission:supplies.create');
-        Route::put('/supply-categories/{category}', [SupplyCategoryController::class, 'update'])->name('admin.supply-categories.update')->middleware('permission:supplies.update');
-        Route::delete('/supply-categories/{category}', [SupplyCategoryController::class, 'destroy'])->name('admin.supply-categories.destroy')->middleware('permission:supplies.delete');
+        Route::post('/supply-categories/{category}/update', [SupplyCategoryController::class, 'update'])->name('admin.supply-categories.update')->middleware('permission:supplies.update');
+        Route::post('/supply-categories/{category}/delete', [SupplyCategoryController::class, 'destroy'])->name('admin.supply-categories.destroy')->middleware('permission:supplies.delete');
 
         // Supplies
         Route::get('/supplies', [SupplyController::class, 'index'])->name('admin.supplies.index')->middleware('permission:supplies.view');
@@ -407,8 +407,8 @@ Route::middleware('admin.auth')->group(function () {
         Route::post('/supplies', [SupplyController::class, 'store'])->name('admin.supplies.store')->middleware('permission:supplies.create');
         Route::get('/supplies/{supply}', [SupplyController::class, 'show'])->name('admin.supplies.show')->middleware('permission:supplies.view');
         Route::get('/supplies/{supply}/edit', [SupplyController::class, 'edit'])->name('admin.supplies.edit')->middleware('permission:supplies.update');
-        Route::put('/supplies/{supply}', [SupplyController::class, 'update'])->name('admin.supplies.update')->middleware('permission:supplies.update');
-        Route::delete('/supplies/{supply}', [SupplyController::class, 'destroy'])->name('admin.supplies.destroy')->middleware('permission:supplies.delete');
+        Route::post('/supplies/{supply}/update', [SupplyController::class, 'update'])->name('admin.supplies.update')->middleware('permission:supplies.update');
+        Route::post('/supplies/{supply}/delete', [SupplyController::class, 'destroy'])->name('admin.supplies.destroy')->middleware('permission:supplies.delete');
         Route::get('/supplies/{supply}/transactions', [SupplyController::class, 'transactions'])->name('admin.supplies.transactions')->middleware('permission:supplies.view');
         Route::post('/supplies/{supply}/transactions', [SupplyController::class, 'addTransaction'])->name('admin.supplies.addTransaction')->middleware('permission:supplies.update');
     });
@@ -771,8 +771,8 @@ Route::middleware('admin.auth')->group(function () {
     Route::middleware('module:inventory')->group(function () {
         Route::get('/suppliers', [SupplierController::class, 'index'])->name('admin.suppliers.index')->middleware('permission:supplies.view');
         Route::post('/suppliers', [SupplierController::class, 'store'])->name('admin.suppliers.store')->middleware('permission:supplies.create');
-        Route::put('/suppliers/{supplier}', [SupplierController::class, 'update'])->name('admin.suppliers.update')->middleware('permission:supplies.update');
-        Route::delete('/suppliers/{supplier}', [SupplierController::class, 'destroy'])->name('admin.suppliers.destroy')->middleware('permission:supplies.delete');
+        Route::post('/suppliers/{supplier}/update', [SupplierController::class, 'update'])->name('admin.suppliers.update')->middleware('permission:supplies.update');
+        Route::post('/suppliers/{supplier}/delete', [SupplierController::class, 'destroy'])->name('admin.suppliers.destroy')->middleware('permission:supplies.delete');
 
         Route::get('/purchase-orders', [PurchaseOrderController::class, 'index'])->name('admin.purchase-orders.index')->middleware('permission:supplies.view');
         Route::get('/purchase-orders/create', [PurchaseOrderController::class, 'create'])->name('admin.purchase-orders.create')->middleware('permission:supplies.create');

@@ -51,7 +51,7 @@ function removeImage() {
 }
 
 function submit() {
-    form.post(`/admin/supplies/${props.supply.id}`, {
+    form.post(`/admin/supplies/${props.supply.id}/update`, {
         forceFormData: true,
     });
 }

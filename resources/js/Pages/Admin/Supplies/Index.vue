@@ -108,7 +108,7 @@ function confirmDelete(supply) {
 }
 
 function executeDelete() {
-    router.delete(`/admin/supplies/${deletingSupplyId.value}`, {
+    router.post(`/admin/supplies/${deletingSupplyId.value}/delete`, {
         onFinish: () => {
             showDeleteModal.value = false;
             deletingSupplyId.value = null;
