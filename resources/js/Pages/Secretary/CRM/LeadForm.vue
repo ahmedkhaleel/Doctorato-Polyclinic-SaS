@@ -83,6 +83,89 @@ const filteredServices = computed(() => {
     );
 });
 
+const nationalityOptions = [
+    { value: 'Emirati', ar: 'إماراتي', en: 'Emirati' },
+    { value: 'Egyptian', ar: 'مصري', en: 'Egyptian' },
+    { value: 'Saudi', ar: 'سعودي', en: 'Saudi' },
+    { value: 'Kuwaiti', ar: 'كويتي', en: 'Kuwaiti' },
+    { value: 'Qatari', ar: 'قطري', en: 'Qatari' },
+    { value: 'Bahraini', ar: 'بحريني', en: 'Bahraini' },
+    { value: 'Omani', ar: 'عماني', en: 'Omani' },
+    { value: 'Jordanian', ar: 'أردني', en: 'Jordanian' },
+    { value: 'Lebanese', ar: 'لبناني', en: 'Lebanese' },
+    { value: 'Syrian', ar: 'سوري', en: 'Syrian' },
+    { value: 'Iraqi', ar: 'عراقي', en: 'Iraqi' },
+    { value: 'Palestinian', ar: 'فلسطيني', en: 'Palestinian' },
+    { value: 'Yemeni', ar: 'يمني', en: 'Yemeni' },
+    { value: 'Libyan', ar: 'ليبي', en: 'Libyan' },
+    { value: 'Tunisian', ar: 'تونسي', en: 'Tunisian' },
+    { value: 'Algerian', ar: 'جزائري', en: 'Algerian' },
+    { value: 'Moroccan', ar: 'مغربي', en: 'Moroccan' },
+    { value: 'Sudanese', ar: 'سوداني', en: 'Sudanese' },
+    { value: 'Somali', ar: 'صومالي', en: 'Somali' },
+    { value: 'Turkish', ar: 'تركي', en: 'Turkish' },
+    { value: 'Iranian', ar: 'إيراني', en: 'Iranian' },
+    { value: 'Pakistani', ar: 'باكستاني', en: 'Pakistani' },
+    { value: 'Indian', ar: 'هندي', en: 'Indian' },
+    { value: 'Bangladeshi', ar: 'بنغلاديشي', en: 'Bangladeshi' },
+    { value: 'Sri Lankan', ar: 'سريلانكي', en: 'Sri Lankan' },
+    { value: 'Afghan', ar: 'أفغاني', en: 'Afghan' },
+    { value: 'Filipino', ar: 'فلبيني', en: 'Filipino' },
+    { value: 'Indonesian', ar: 'إندونيسي', en: 'Indonesian' },
+    { value: 'Malaysian', ar: 'ماليزي', en: 'Malaysian' },
+    { value: 'Chinese', ar: 'صيني', en: 'Chinese' },
+    { value: 'Japanese', ar: 'ياباني', en: 'Japanese' },
+    { value: 'Korean', ar: 'كوري', en: 'Korean' },
+    { value: 'Thai', ar: 'تايلاندي', en: 'Thai' },
+    { value: 'Ethiopian', ar: 'إثيوبي', en: 'Ethiopian' },
+    { value: 'Nigerian', ar: 'نيجيري', en: 'Nigerian' },
+    { value: 'Kenyan', ar: 'كيني', en: 'Kenyan' },
+    { value: 'South African', ar: 'جنوب أفريقي', en: 'South African' },
+    { value: 'American', ar: 'أمريكي', en: 'American' },
+    { value: 'Canadian', ar: 'كندي', en: 'Canadian' },
+    { value: 'British', ar: 'بريطاني', en: 'British' },
+    { value: 'French', ar: 'فرنسي', en: 'French' },
+    { value: 'German', ar: 'ألماني', en: 'German' },
+    { value: 'Italian', ar: 'إيطالي', en: 'Italian' },
+    { value: 'Spanish', ar: 'إسباني', en: 'Spanish' },
+    { value: 'Russian', ar: 'روسي', en: 'Russian' },
+    { value: 'Australian', ar: 'أسترالي', en: 'Australian' },
+    { value: 'Other', ar: 'أخرى', en: 'Other' },
+];
+
+const cityOptions = [
+    { value: 'Abu Dhabi', ar: 'أبوظبي', en: 'Abu Dhabi' },
+    { value: 'Dubai', ar: 'دبي', en: 'Dubai' },
+    { value: 'Sharjah', ar: 'الشارقة', en: 'Sharjah' },
+    { value: 'Ajman', ar: 'عجمان', en: 'Ajman' },
+    { value: 'Ras Al Khaimah', ar: 'رأس الخيمة', en: 'Ras Al Khaimah' },
+    { value: 'Fujairah', ar: 'الفجيرة', en: 'Fujairah' },
+    { value: 'Umm Al Quwain', ar: 'أم القيوين', en: 'Umm Al Quwain' },
+    { value: 'Al Ain', ar: 'العين', en: 'Al Ain' },
+    { value: 'Khor Fakkan', ar: 'خورفكان', en: 'Khor Fakkan' },
+    { value: 'Kalba', ar: 'كلباء', en: 'Kalba' },
+    { value: 'Dibba Al-Fujairah', ar: 'دبا الفجيرة', en: 'Dibba Al-Fujairah' },
+    { value: 'Other', ar: 'أخرى', en: 'Other' },
+];
+
+/* ---------- Source icon helper ---------- */
+function sourceIcon(icon) {
+    const map = {
+        globe: 'M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9',
+        phone: 'M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z',
+        whatsapp: 'M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z',
+        facebook: 'M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z',
+        instagram: 'M16 4H8a4 4 0 00-4 4v8a4 4 0 004 4h8a4 4 0 004-4V8a4 4 0 00-4-4zm-4 11a3 3 0 110-6 3 3 0 010 6zm4.5-7.5a1 1 0 110-2 1 1 0 010 2z',
+        tiktok: 'M9 12a4 4 0 104 4V4a5 5 0 005 5',
+        google: 'M21.35 11.1h-9.18v2.73h5.51c-.24 1.27-.97 2.34-2.06 3.06v2.54h3.33c1.94-1.79 3.06-4.42 3.06-7.53 0-.52-.05-1.02-.14-1.5zM12.17 21c2.78 0 5.11-.92 6.81-2.5l-3.33-2.54c-.92.62-2.1.98-3.48.98-2.68 0-4.95-1.81-5.76-4.24H3.01v2.63A10.17 10.17 0 0012.17 21z',
+        walk: 'M13 7a2 2 0 100-4 2 2 0 000 4zm-1 14l-2-7-3 1.5V21h-2v-7l3-1.5L7 9l5-1 4 3v3h2v2h-4v5h-2z',
+        users: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z',
+        snapchat: 'M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 18c-4.418 0-8-3.582-8-8s3.582-8 8-8 8 3.582 8 8-3.582 8-8 8z',
+        more: 'M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z',
+    };
+    return map[icon] || map.more;
+}
+
 const priorityOptions = [
     { value: 1, label: { en: 'Hot', ar: '\u0633\u0627\u062E\u0646' }, icon: 'hot', color: 'bg-red-100 text-red-700 border-red-300 ring-red-400' },
     { value: 2, label: { en: 'Warm', ar: '\u062F\u0627\u0641\u0626' }, icon: 'warm', color: 'bg-amber-100 text-amber-700 border-amber-300 ring-amber-400' },
@@ -317,16 +400,20 @@ const phoneValidation = computed(() => {
                 <!-- City -->
                 <div>
                     <label class="block text-sm font-semibold text-slate-600 mb-1.5">{{ isRtl ? '\u0627\u0644\u0645\u062F\u064A\u0646\u0629' : 'City' }}</label>
-                    <input v-model="form.city" type="text"
-                           class="w-full rounded-xl border border-slate-200 bg-slate-50/50 hover:border-slate-300 px-4 py-3 text-sm transition-all duration-200 focus:ring-2 focus:ring-teal-400/40 focus:border-teal-400 outline-none"
-                           :placeholder="isRtl ? '\u0645\u062B\u0627\u0644: \u0623\u0628\u0648\u0638\u0628\u064A' : 'e.g. Abu Dhabi'" />
+                    <select v-model="form.city"
+                            class="w-full rounded-xl border border-slate-200 bg-slate-50/50 hover:border-slate-300 px-4 py-3 text-sm transition-all duration-200 focus:ring-2 focus:ring-teal-400/40 focus:border-teal-400 outline-none">
+                        <option value="">{{ isRtl ? '-- اختر المدينة --' : '-- Select City --' }}</option>
+                        <option v-for="c in cityOptions" :key="c.value" :value="c.value">{{ isRtl ? c.ar : c.en }}</option>
+                    </select>
                 </div>
                 <!-- Nationality -->
                 <div>
                     <label class="block text-sm font-semibold text-slate-600 mb-1.5">{{ isRtl ? '\u0627\u0644\u062C\u0646\u0633\u064A\u0629' : 'Nationality' }}</label>
-                    <input v-model="form.nationality" type="text"
-                           class="w-full rounded-xl border border-slate-200 bg-slate-50/50 hover:border-slate-300 px-4 py-3 text-sm transition-all duration-200 focus:ring-2 focus:ring-teal-400/40 focus:border-teal-400 outline-none"
-                           :placeholder="isRtl ? '\u0645\u062B\u0627\u0644: \u0625\u0645\u0627\u0631\u0627\u062A\u064A' : 'e.g. Emirati'" />
+                    <select v-model="form.nationality"
+                            class="w-full rounded-xl border border-slate-200 bg-slate-50/50 hover:border-slate-300 px-4 py-3 text-sm transition-all duration-200 focus:ring-2 focus:ring-teal-400/40 focus:border-teal-400 outline-none">
+                        <option value="">{{ isRtl ? '-- اختر الجنسية --' : '-- Select Nationality --' }}</option>
+                        <option v-for="n in nationalityOptions" :key="n.value" :value="n.value">{{ isRtl ? n.ar : n.en }}</option>
+                    </select>
                 </div>
             </div>
         </div>
@@ -340,27 +427,61 @@ const phoneValidation = computed(() => {
                 </div>
                 <h2 class="text-lg font-bold text-slate-800">{{ isRtl ? '\u062A\u0641\u0627\u0635\u064A\u0644 \u0627\u0644\u0639\u0645\u064A\u0644 \u0627\u0644\u0645\u062D\u062A\u0645\u0644' : 'Lead Details' }}</h2>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
-                <!-- Source -->
-                <div>
-                    <label class="block text-sm font-semibold text-slate-600 mb-1.5">{{ isRtl ? '\u0645\u0635\u062F\u0631 \u0627\u0644\u0639\u0645\u064A\u0644' : 'Lead Source' }}</label>
-                    <select v-model="form.lead_source_id"
-                            class="w-full rounded-xl border border-slate-200 bg-slate-50/50 hover:border-slate-300 px-4 py-3 text-sm transition-all duration-200 focus:ring-2 focus:ring-teal-400/40 focus:border-teal-400 outline-none">
-                        <option value="">{{ isRtl ? '-- \u0627\u062E\u062A\u0631 \u0627\u0644\u0645\u0635\u062F\u0631 --' : '-- Select Source --' }}</option>
-                        <option v-for="s in sources" :key="s.id" :value="s.id">
-                            {{ isRtl ? s.name_ar : s.name_en }}
-                        </option>
-                    </select>
+            <!-- Source - Visual Grid -->
+            <div class="mb-5">
+                <label class="block text-sm font-semibold text-slate-600 mb-2.5">{{ isRtl ? 'مصدر العميل' : 'Lead Source' }}</label>
+                <div v-if="sources && sources.length > 0" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
+                    <button v-for="s in sources" :key="s.id" type="button"
+                            @click="form.lead_source_id = form.lead_source_id === s.id ? '' : s.id"
+                            :class="['relative flex flex-col items-center gap-1.5 py-3 px-2 rounded-xl border-2 text-xs font-medium transition-all duration-200',
+                                form.lead_source_id === s.id
+                                    ? 'border-teal-400 bg-teal-50 text-teal-700 ring-2 ring-teal-400/30 shadow-sm scale-[1.03]'
+                                    : 'border-slate-200 text-slate-500 hover:border-slate-300 hover:bg-slate-50']">
+                        <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200"
+                             :style="{ backgroundColor: form.lead_source_id === s.id ? s.color + '20' : '#f1f5f9' }">
+                            <svg class="w-4 h-4" :style="{ color: form.lead_source_id === s.id ? s.color : '#94a3b8' }"
+                                 fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" :d="sourceIcon(s.icon)" />
+                            </svg>
+                        </div>
+                        <span class="text-[10px] leading-tight text-center">{{ isRtl ? s.name_ar : s.name_en }}</span>
+                        <div v-if="form.lead_source_id === s.id" class="absolute -top-1.5 -right-1.5 w-5 h-5 bg-teal-500 rounded-full flex items-center justify-center shadow-sm">
+                            <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                        </div>
+                    </button>
                 </div>
-                <!-- Campaign -->
-                <div>
-                    <label class="block text-sm font-semibold text-slate-600 mb-1.5">{{ isRtl ? '\u0627\u0644\u062D\u0645\u0644\u0629' : 'Campaign' }}</label>
-                    <select v-model="form.campaign_id"
-                            class="w-full rounded-xl border border-slate-200 bg-slate-50/50 hover:border-slate-300 px-4 py-3 text-sm transition-all duration-200 focus:ring-2 focus:ring-teal-400/40 focus:border-teal-400 outline-none">
-                        <option value="">{{ isRtl ? '-- \u0627\u062E\u062A\u0631 \u0627\u0644\u062D\u0645\u0644\u0629 --' : '-- Select Campaign --' }}</option>
-                        <option v-for="c in campaigns" :key="c.id" :value="c.id">{{ c.name }}</option>
-                    </select>
+                <div v-else class="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-700 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-amber-500 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
+                    {{ isRtl ? 'لا توجد مصادر عملاء. يرجى تشغيل LeadSourceSeeder.' : 'No lead sources available. Please run LeadSourceSeeder.' }}
                 </div>
+                <p v-if="form.errors.lead_source_id" class="mt-1.5 text-xs text-red-500">{{ form.errors.lead_source_id }}</p>
+            </div>
+
+            <!-- Campaign - Card Style -->
+            <div class="mb-5">
+                <label class="block text-sm font-semibold text-slate-600 mb-2.5">{{ isRtl ? 'الحملة' : 'Campaign' }}</label>
+                <div v-if="campaigns && campaigns.length > 0" class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+                    <button v-for="c in campaigns" :key="c.id" type="button"
+                            @click="form.campaign_id = form.campaign_id === c.id ? '' : c.id"
+                            :class="['relative flex items-center gap-3 py-3.5 px-4 rounded-xl border-2 text-sm transition-all duration-200 text-start',
+                                form.campaign_id === c.id
+                                    ? 'border-teal-400 bg-teal-50 text-teal-700 ring-2 ring-teal-400/30 shadow-sm'
+                                    : 'border-slate-200 text-slate-600 hover:border-slate-300 hover:bg-slate-50']">
+                        <div :class="['w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-200',
+                                form.campaign_id === c.id ? 'bg-teal-500 text-white' : 'bg-slate-100 text-slate-400']">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/></svg>
+                        </div>
+                        <span class="font-medium leading-snug">{{ c.name }}</span>
+                        <div v-if="form.campaign_id === c.id" class="absolute -top-1.5 -right-1.5 w-5 h-5 bg-teal-500 rounded-full flex items-center justify-center shadow-sm">
+                            <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                        </div>
+                    </button>
+                </div>
+                <div v-else class="bg-slate-50 border border-slate-200 rounded-xl p-4 text-sm text-slate-500 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>
+                    {{ isRtl ? 'لا توجد حملات نشطة حالياً' : 'No active campaigns available' }}
+                </div>
+                <p v-if="form.errors.campaign_id" class="mt-1.5 text-xs text-red-500">{{ form.errors.campaign_id }}</p>
             </div>
 
             <!-- Priority -->
