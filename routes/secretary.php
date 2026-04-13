@@ -19,6 +19,7 @@ use App\Http\Controllers\Secretary\SecretaryPackageBundleBookingController;
 use App\Http\Controllers\Secretary\SecretarySalarySlipController;
 use App\Http\Controllers\Secretary\SecretaryCrmController;
 use App\Http\Controllers\Secretary\SecretaryDentalController;
+use App\Http\Controllers\Secretary\SecretaryInventoryController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -141,6 +142,10 @@ Route::middleware('secretary.auth')->group(function () {
     });
 
     // ─── CRM / Leads ──────────────────────────────────────────
+    // ─── Inventory ─────────────────────────────────────────
+    Route::get('/inventory', [SecretaryInventoryController::class, 'index'])->name('secretary.inventory.index');
+    Route::post('/inventory/{supply}/quick-adjust', [SecretaryInventoryController::class, 'quickAdjust'])->name('secretary.inventory.quickAdjust');
+
     Route::get('/crm', [SecretaryCrmController::class, 'dashboard'])->name('secretary.crm.dashboard');
     Route::get('/crm/leads', [SecretaryCrmController::class, 'leads'])->name('secretary.crm.leads');
     Route::post('/crm/leads/bulk-status', [SecretaryCrmController::class, 'bulkUpdateStatus'])->name('secretary.crm.bulkStatus');

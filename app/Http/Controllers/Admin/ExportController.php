@@ -15,6 +15,7 @@ use App\Exports\DentalTreatmentsExport;
 use App\Exports\DentalTreatmentPlansExport;
 use App\Exports\DentalFollowupsExport;
 use App\Exports\DentalLabOrdersExport;
+use App\Exports\SuppliesExport;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -187,6 +188,21 @@ class ExportController extends Controller
                 $request->input('date_to'),
                 $request->input('status'),
                 $request->input('doctor_id') ? (int) $request->input('doctor_id') : null
+            ),
+            $filename
+        );
+    }
+
+    public function supplies(Request $request)
+    {
+        $filename = 'supplies-' . now()->format('Y-m-d') . '.xlsx';
+
+        return Excel::download(
+            new SuppliesExport(
+                $request->input('search'),
+                $request->input('module'),
+                $request->input('stock'),
+                $request->input('category_id') ? (int) $request->input('category_id') : null
             ),
             $filename
         );

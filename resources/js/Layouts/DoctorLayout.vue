@@ -48,6 +48,7 @@ const navGroups = computed(() => [
             { label: t('a_visits'),          href: '/doctor/visits',       icon: 'clipboard' },
             { label: t('a_prescriptions'),   href: '/doctor/prescriptions', icon: 'pill' },
             { label: t('a_bookings'),        href: '/doctor/bookings',     icon: 'calendar' },
+            { label: isRtl.value ? 'المخزون' : 'Inventory',  href: '/doctor/inventory',    icon: 'box' },
         ],
     },
     {
@@ -149,6 +150,7 @@ const quickSearchPages = computed(() => {
         { label: isRtl.value ? 'الزيارات' : 'Visits', href: '/doctor/visits', icon: 'clipboard', group: isRtl.value ? 'العيادة' : 'Clinical' },
         { label: isRtl.value ? 'الوصفات' : 'Prescriptions', href: '/doctor/prescriptions', icon: 'pill', group: isRtl.value ? 'العيادة' : 'Clinical' },
         { label: isRtl.value ? 'الحجوزات' : 'Bookings', href: '/doctor/bookings', icon: 'calendar', group: isRtl.value ? 'العيادة' : 'Clinical' },
+        { label: isRtl.value ? 'المخزون' : 'Inventory', href: '/doctor/inventory', icon: 'box', group: isRtl.value ? 'العيادة' : 'Clinical' },
         { label: isRtl.value ? 'العمولة' : 'Commission', href: '/doctor/commission', icon: 'cash', group: isRtl.value ? 'المالية' : 'Finance' },
         { label: isRtl.value ? 'الحضور' : 'Attendance', href: '/doctor/my-attendance', icon: 'checklist', group: 'HR' },
         { label: isRtl.value ? 'الإجازات' : 'Leaves', href: '/doctor/my-leaves', icon: 'logout', group: 'HR' },
@@ -330,6 +332,8 @@ onUnmounted(() => { document.removeEventListener('keydown', handleGlobalKey); })
                         <svg v-else-if="item.icon === 'camera'" class="w-[16px] h-[16px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                         <!-- Clock (Follow-ups) -->
                         <svg v-else-if="item.icon === 'clock'" class="w-[16px] h-[16px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        <!-- Box (Inventory) -->
+                        <svg v-else-if="item.icon === 'box'" class="w-[16px] h-[16px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
                             </div>
                             <span>{{ item.label }}</span>
                             <!-- Active indicator dot -->
@@ -546,6 +550,7 @@ onUnmounted(() => { document.removeEventListener('keydown', handleGlobalKey); })
                                         <path v-else-if="item.icon === 'tooth'" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3C10.5 3 9 4.5 8.5 6.5C8 8.5 7 9.5 6 10.5C5 11.5 4 13 4 15C4 17 5.5 19 7.5 19C9 19 10 18 10.5 17C11 16 11.5 15.5 12 15.5C12.5 15.5 13 16 13.5 17C14 18 15 19 16.5 19C18.5 19 20 17 20 15C20 13 19 11.5 18 10.5C17 9.5 16 8.5 15.5 6.5C15 4.5 13.5 3 12 3Z" />
                                         <path v-else-if="item.icon === 'camera'" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
                                         <path v-else-if="item.icon === 'bell'" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                                        <path v-else-if="item.icon === 'box'" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                                         <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z" />
                                     </svg>
                                 </div>

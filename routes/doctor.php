@@ -22,6 +22,7 @@ use App\Http\Controllers\Doctor\DoctorDentalFollowupController;
 use App\Http\Controllers\Doctor\DoctorExportController;
 use App\Http\Controllers\Doctor\DoctorPatientNoteController;
 use App\Http\Controllers\Doctor\DoctorFavoritePatientController;
+use App\Http\Controllers\Doctor\DoctorInventoryController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -102,6 +103,9 @@ Route::middleware('doctor.auth')->group(function () {
     Route::get('/commission', [DoctorCommissionController::class, 'index'])->name('doctor.commission.index')->middleware('module:hr');
     Route::get('/commission/payouts/{payout}', [DoctorCommissionController::class, 'payoutShow'])->name('doctor.commission.payout-show')->middleware('module:hr');
     Route::get('/commission/payouts/{payout}/print', [DoctorCommissionController::class, 'payoutPrint'])->name('doctor.commission.payout-print')->middleware('module:hr');
+
+    // ─── Inventory (read-only) ───────────────────────────────
+    Route::get('/inventory', [DoctorInventoryController::class, 'index'])->name('doctor.inventory.index');
 
     // ─── Chat / Messaging ─────────────────────────────────────
     Route::get('/chat', [DoctorChatController::class, 'index'])->name('doctor.chat.index');

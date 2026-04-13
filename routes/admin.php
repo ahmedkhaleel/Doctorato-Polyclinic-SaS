@@ -330,8 +330,8 @@ Route::middleware('admin.auth')->group(function () {
     // ─── Medications ────────────────────────────────────────
     Route::get('/medications', [MedicationController::class, 'index'])->name('admin.medications.index')->middleware('permission:medications.view');
     Route::post('/medications', [MedicationController::class, 'store'])->name('admin.medications.store')->middleware('permission:medications.create');
-    Route::put('/medications/{medication}', [MedicationController::class, 'update'])->name('admin.medications.update')->middleware('permission:medications.update');
-    Route::delete('/medications/{medication}', [MedicationController::class, 'destroy'])->name('admin.medications.destroy')->middleware('permission:medications.delete');
+    Route::post('/medications/{medication}/update', [MedicationController::class, 'update'])->name('admin.medications.update')->middleware('permission:medications.update');
+    Route::post('/medications/{medication}/delete', [MedicationController::class, 'destroy'])->name('admin.medications.destroy')->middleware('permission:medications.delete');
     Route::get('/api/medications', [MedicationController::class, 'search'])->name('admin.medications.search')->middleware(['permission:medications.view', 'throttle:30,1']);
 
     // ─── Global Search ─────────────────────────────────────
@@ -524,6 +524,7 @@ Route::middleware('admin.auth')->group(function () {
     Route::get('/exports/dental-lab-orders', [ExportController::class, 'dentalLabOrders'])->name('admin.exports.dentalLabOrders')->middleware(['module:dental', 'permission:dental.view', 'throttle:10,1']);
     Route::get('/exports/dental-treatment-plans', [ExportController::class, 'dentalTreatmentPlans'])->name('admin.exports.dentalTreatmentPlans')->middleware(['module:dental', 'permission:dental.view', 'throttle:10,1']);
     Route::get('/exports/dental-followups', [ExportController::class, 'dentalFollowups'])->name('admin.exports.dentalFollowups')->middleware(['module:dental', 'permission:dental.view', 'throttle:10,1']);
+    Route::get('/exports/supplies', [ExportController::class, 'supplies'])->name('admin.exports.supplies')->middleware(['permission:supplies.view', 'throttle:10,1']);
 
     // ─── Activity Logs ────────────────────────────────────────
     Route::get('/activity-logs', [ActivityLogController::class, 'index'])->name('admin.activity-logs.index')->middleware('permission:reports.view');

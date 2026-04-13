@@ -168,6 +168,13 @@ const moduleOptions = [
                             <p class="text-2xl font-bold text-white leading-none tabular-nums">{{ supplies.total }}</p>
                             <p class="text-[10px] text-indigo-300 mt-1 font-medium uppercase tracking-wide">{{ isRtl ? 'إجمالي' : 'Total' }}</p>
                         </div>
+                        <a
+                            :href="`/admin/exports/supplies?${new URLSearchParams(Object.fromEntries(Object.entries(buildParams()).filter(([,v]) => v))).toString()}`"
+                            class="inline-flex items-center gap-2 px-4 py-2.5 bg-white/5 backdrop-blur-sm text-white/80 text-sm font-medium rounded-xl border border-white/10 hover:bg-white/10 hover:text-white transition-all duration-200"
+                        >
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                            {{ isRtl ? 'تصدير Excel' : 'Export' }}
+                        </a>
                         <Link v-if="can('supplies.create')" href="/admin/supplies/create"
                             class="inline-flex items-center gap-2 px-5 py-2.5 bg-white/10 backdrop-blur-sm text-white text-sm font-semibold rounded-xl border border-white/20 hover:bg-white/20 transition-all duration-200 shadow-lg shadow-black/10"
                         >
