@@ -416,6 +416,28 @@ class LeadController extends Controller
     }
 
     /**
+     * Quick-update lead priority.
+     */
+    public function updatePriority(Request $request, Lead $lead): RedirectResponse
+    {
+        $data = $request->validate([
+            'priority' => 'required|in:1,2,3',
+        ]);
+
+        $oldPriority = $lead->priority;
+        $lead->update(['priority' => (int) $data['priority']]);
+
+        LeadActivity::create([
+            'lead_id' => $lead->id,
+            'type' => 'system',
+            'subject' => "Priority changed from {$oldPriority} to {$data['priority']}",
+            'performed_by' => auth()->id(),
+        ]);
+
+        return back()->with('success', 'Lead priority updated.');
+    }
+
+    /**
      * Convert lead to patient (with optional booking).
      */
     public function convert(Request $request, Lead $lead): RedirectResponse

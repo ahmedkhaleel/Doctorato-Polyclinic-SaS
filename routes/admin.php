@@ -566,6 +566,7 @@ Route::middleware('admin.auth')->group(function () {
     Route::post('/leads/{lead}', [LeadController::class, 'update'])->name('admin.leads.update')->middleware('permission:leads.update');
     Route::delete('/leads/{lead}', [LeadController::class, 'destroy'])->name('admin.leads.destroy')->middleware('permission:leads.delete');
     Route::post('/leads/{lead}/status', [LeadController::class, 'updateStatus'])->name('admin.leads.updateStatus')->middleware('permission:leads.update');
+    Route::post('/leads/{lead}/priority', [LeadController::class, 'updatePriority'])->name('admin.leads.updatePriority')->middleware('permission:leads.update');
     Route::get('/leads/{lead}/quick-view', [LeadController::class, 'quickView'])->name('admin.leads.quickView')->middleware('permission:leads.view');
     Route::post('/leads/{lead}/activity', [LeadController::class, 'logActivity'])->name('admin.leads.logActivity')->middleware('permission:leads.update');
     Route::post('/leads/{lead}/follow-up', [LeadController::class, 'scheduleFollowUp'])->name('admin.leads.scheduleFollowUp')->middleware('permission:leads.update');

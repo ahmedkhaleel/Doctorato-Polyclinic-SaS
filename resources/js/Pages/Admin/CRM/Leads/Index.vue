@@ -27,6 +27,7 @@ onMounted(() => {
     setTimeout(() => {
         mounted.value = true;
     }, 50);
+    document.addEventListener('click', () => { quickActionLeadId.value = null; });
 });
 
 const search = ref(props.filters?.search || '');
@@ -187,6 +188,23 @@ function exportLeads() {
     if (statusFilter.value) params.set('status', statusFilter.value);
     if (sourceFilter.value) params.set('source_id', sourceFilter.value);
     window.location.href = '/admin/leads-export?' + params.toString();
+}
+
+// ── Inline Quick Actions ──
+const quickActionLeadId = ref(null);
+
+function toggleQuickMenu(leadId) {
+    quickActionLeadId.value = quickActionLeadId.value === leadId ? null : leadId;
+}
+
+function quickChangeStatus(leadId, newStatus) {
+    quickActionLeadId.value = null;
+    router.post(`/admin/leads/${leadId}/status`, { status: newStatus }, { preserveScroll: true });
+}
+
+function quickChangePriority(leadId, newPriority) {
+    quickActionLeadId.value = null;
+    router.post(`/admin/leads/${leadId}/priority`, { priority: newPriority }, { preserveScroll: true });
 }
 </script>
 
@@ -561,10 +579,52 @@ function exportLeads() {
                                     </div>
                                 </td>
                                 <td class="px-5 py-3.5">
-                                    <Link :href="`/admin/leads/${lead.id}`"
-                                        class="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1.5 rounded-lg transition-all duration-200 hover:bg-[#C4A265]/10 opacity-70 group-hover:opacity-100" style="color: #C4A265;"
-                                    >{{ $t('a_view') }}<svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
-                                    </Link>
+                                    <div class="flex items-center gap-1 opacity-70 group-hover:opacity-100 transition-opacity">
+                                        <Link :href="`/admin/leads/${lead.id}`"
+                                            class="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1.5 rounded-lg transition-all duration-200 hover:bg-[#C4A265]/10" style="color: #C4A265;"
+                                        >{{ $t('a_view') }}<svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                                        </Link>
+                                        <!-- Quick Actions Toggle -->
+                                        <div v-if="can('leads.update')" class="relative">
+                                            <button @click.stop="toggleQuickMenu(lead.id)" class="p-1.5 rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-all duration-200">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" /></svg>
+                                            </button>
+                                            <!-- Quick Actions Dropdown -->
+                                            <transition
+                                                enter-active-class="transition duration-150 ease-out"
+                                                enter-from-class="opacity-0 scale-95"
+                                                enter-to-class="opacity-100 scale-100"
+                                                leave-active-class="transition duration-100 ease-in"
+                                                leave-from-class="opacity-100 scale-100"
+                                                leave-to-class="opacity-0 scale-95"
+                                            >
+                                                <div v-if="quickActionLeadId === lead.id"
+                                                    class="absolute ltr:right-0 rtl:left-0 top-full mt-1 w-48 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-50"
+                                                    @click.stop
+                                                >
+                                                    <p class="px-3 py-1 text-[10px] font-bold text-gray-400 uppercase tracking-wider">Status</p>
+                                                    <button v-for="(label, key) in statusLabels" :key="key"
+                                                        v-show="key !== lead.status && key !== 'dormant'"
+                                                        @click="quickChangeStatus(lead.id, key)"
+                                                        class="w-full ltr:text-left rtl:text-right px-3 py-1.5 text-xs text-gray-600 hover:bg-gray-50 flex items-center gap-2 transition-colors"
+                                                    >
+                                                        <span class="w-2 h-2 rounded-full" :class="statusColors[key]?.split(' ')[0]"></span>
+                                                        {{ label }}
+                                                    </button>
+                                                    <div class="border-t border-gray-100 my-1.5"></div>
+                                                    <p class="px-3 py-1 text-[10px] font-bold text-gray-400 uppercase tracking-wider">Priority</p>
+                                                    <button v-for="(plabel, pkey) in { 1: 'Hot', 2: 'Warm', 3: 'Cold' }" :key="pkey"
+                                                        v-show="parseInt(pkey) !== lead.priority"
+                                                        @click="quickChangePriority(lead.id, pkey)"
+                                                        class="w-full ltr:text-left rtl:text-right px-3 py-1.5 text-xs text-gray-600 hover:bg-gray-50 flex items-center gap-2 transition-colors"
+                                                    >
+                                                        <span class="w-2 h-2 rounded-full" :class="priorityDots[pkey]"></span>
+                                                        {{ plabel }}
+                                                    </button>
+                                                </div>
+                                            </transition>
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>

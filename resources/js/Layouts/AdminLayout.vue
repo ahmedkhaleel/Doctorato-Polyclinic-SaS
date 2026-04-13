@@ -291,6 +291,9 @@ function logout()        { router.post('/admin/logout'); }
                                 :class="isGroupOpen(group.key) ? 'bg-[var(--brand-primary)] scale-100' : 'bg-white/20 scale-75'"
                             ></div>
                             <span>{{ groupTitle(group) }}</span>
+                            <span v-if="group.key === 'crm' && page.props.notifications?.crm_overdue_count > 0"
+                                class="inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 text-[9px] font-bold text-white bg-red-500 rounded-full animate-pulse"
+                            >{{ page.props.notifications.crm_overdue_count }}</span>
                         </div>
                         <svg
                             class="w-3.5 h-3.5 transition-transform duration-300 ease-out"

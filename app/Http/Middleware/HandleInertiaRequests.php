@@ -75,9 +75,10 @@ class HandleInertiaRequests extends Middleware
                         'unread_bookings' => Booking::where('is_read', false)->count(),
                         'unread_messages' => ContactMessage::where('is_read', false)->count(),
                         'unread_system' => $request->user()->unreadNotifications()->count(),
+                        'crm_overdue_count' => LeadFollowUp::overdue()->count(),
                     ];
                 } catch (\Throwable) {
-                    return ['unread_bookings' => 0, 'unread_messages' => 0, 'unread_system' => 0];
+                    return ['unread_bookings' => 0, 'unread_messages' => 0, 'unread_system' => 0, 'crm_overdue_count' => 0];
                 }
             },
             'doctor_notifications' => function () use ($isDoctorRoute, $request) {
