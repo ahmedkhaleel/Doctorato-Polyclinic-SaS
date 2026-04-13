@@ -101,34 +101,54 @@ const statusLabels = {
 
 /* ---------- Export CSV ---------- */
 function exportCSV() {
-    // Build CSV from funnel + source + top leads
-    let csv = 'Report Type,Item,Value\n';
+    let csv = '';
 
-    // Funnel data
+    // Section 1: Funnel Summary
+    csv += 'FUNNEL SUMMARY\n';
+    csv += 'Stage,Count\n';
     Object.entries(props.funnel || {}).forEach(([status, count]) => {
         const label = funnelConfig[status]?.en || status;
-        csv += `Funnel,${label},${count}\n`;
+        csv += `${label},${count}\n`;
     });
 
-    // Source performance
+    // Section 2: Source Performance
+    csv += '\nSOURCE PERFORMANCE\n';
+    csv += 'Source,Total Leads,Converted,Conversion Rate\n';
     (props.sourcePerformance || []).forEach(s => {
-        csv += `Source,${s.name_en},${s.total} leads / ${s.converted} converted / ${s.conversion_rate}% rate\n`;
+        csv += `"${(s.name_en || '').replace(/"/g, '""')}",${s.total},${s.converted},${s.conversion_rate}%\n`;
     });
 
-    // Top leads
-    (props.topLeads || []).forEach((lead, i) => {
-        csv += `Top Lead #${i+1},${lead.full_name},Score: ${lead.score}\n`;
-    });
-
-    // Comparison
-    if (props.comparison) {
-        Object.entries(props.comparison).forEach(([key, val]) => {
-            csv += `Comparison,${key},Current: ${val.current} / Previous: ${val.previous}\n`;
+    // Section 3: Daily Activity Trend
+    if (props.activityTrend?.length) {
+        csv += '\nDAILY ACTIVITY TREND\n';
+        csv += 'Date,Activities,Follow-ups\n';
+        props.activityTrend.forEach(d => {
+            csv += `${d.date},${d.activities},${d.follow_ups}\n`;
         });
     }
 
-    csv += `\nAvg Response Time,,${props.avgResponseHours}h\n`;
-    csv += `Period,,${selectedPeriod.value} days\n`;
+    // Section 4: Top Leads
+    csv += '\nTOP LEADS\n';
+    csv += 'Rank,Name,Score,Status,Phone\n';
+    (props.topLeads || []).forEach((lead, i) => {
+        csv += `${i + 1},"${(lead.full_name || '').replace(/"/g, '""')}",${lead.score},${lead.status || ''},"${lead.phone || ''}"\n`;
+    });
+
+    // Section 5: Period Comparison
+    if (props.comparison) {
+        csv += '\nPERIOD COMPARISON\n';
+        csv += 'Metric,Current Period,Previous Period,Change\n';
+        Object.entries(props.comparison).forEach(([key, val]) => {
+            const change = getChange(val.current, val.previous);
+            csv += `${key},${val.current},${val.previous},${change > 0 ? '+' : ''}${change}%\n`;
+        });
+    }
+
+    // Section 6: Summary metrics
+    csv += '\nKEY METRICS\n';
+    csv += `Avg Response Time,${props.avgResponseHours}h\n`;
+    csv += `Report Period,${periodLabels[selectedPeriod.value]?.en || selectedPeriod.value}\n`;
+    csv += `Generated,${new Date().toISOString().split('T')[0]}\n`;
 
     const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);

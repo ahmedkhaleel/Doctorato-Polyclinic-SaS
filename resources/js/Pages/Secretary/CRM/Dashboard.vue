@@ -443,8 +443,8 @@ const activityTypeConfig = {
             <!-- ============ STATS CARDS ============ -->
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
                 <!-- My Active Leads -->
-                <div
-                    class="group relative bg-white rounded-2xl shadow-sm border border-gray-100 p-5 hover:shadow-md hover:scale-[1.02] cursor-default"
+                <Link href="/secretary/crm/leads"
+                    class="group relative bg-white rounded-2xl shadow-sm border border-gray-100 p-5 hover:shadow-md hover:scale-[1.02] cursor-pointer block"
                     :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
                     style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.1s"
                 >
@@ -464,11 +464,11 @@ const activityTypeConfig = {
                             <path :d="sparklinePath(sparklines.leads, 200, 32)" fill="none" stroke="#0d9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transition-all duration-1000"/>
                         </svg>
                     </div>
-                </div>
+                </Link>
 
                 <!-- New Leads -->
-                <div
-                    class="group relative bg-white rounded-2xl shadow-sm border border-gray-100 p-5 hover:shadow-md hover:scale-[1.02] cursor-default"
+                <Link href="/secretary/crm/leads?status=new"
+                    class="group relative bg-white rounded-2xl shadow-sm border border-gray-100 p-5 hover:shadow-md hover:scale-[1.02] cursor-pointer block"
                     :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
                     style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.15s"
                 >
@@ -488,11 +488,11 @@ const activityTypeConfig = {
                             <path :d="sparklinePath([1,3,2,5,4,3,6], 200, 32)" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                     </div>
-                </div>
+                </Link>
 
                 <!-- Today Follow-ups -->
-                <div
-                    class="group relative bg-white rounded-2xl shadow-sm border border-gray-100 p-5 hover:shadow-md hover:scale-[1.02] cursor-default"
+                <Link href="/secretary/crm/calendar"
+                    class="group relative bg-white rounded-2xl shadow-sm border border-gray-100 p-5 hover:shadow-md hover:scale-[1.02] cursor-pointer block"
                     :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
                     style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.2s"
                 >
@@ -512,11 +512,11 @@ const activityTypeConfig = {
                             <path :d="sparklinePath(sparklines.followups, 200, 32)" fill="none" stroke="#0d9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                     </div>
-                </div>
+                </Link>
 
                 <!-- Overdue -->
-                <div
-                    class="group relative bg-white rounded-2xl shadow-sm border border-gray-100 p-5 hover:shadow-md hover:scale-[1.02] cursor-default"
+                <Link href="/secretary/crm/calendar"
+                    class="group relative bg-white rounded-2xl shadow-sm border border-gray-100 p-5 hover:shadow-md hover:scale-[1.02] cursor-pointer block"
                     :class="[mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4', stats.overdue_follow_ups > 0 ? 'border-red-200 bg-red-50/30' : '']"
                     style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.25s"
                 >
@@ -539,7 +539,7 @@ const activityTypeConfig = {
                             <path d="M0,28 L200,28" fill="none" stroke="#9ca3af" stroke-width="1" stroke-dasharray="4 4"/>
                         </svg>
                     </div>
-                </div>
+                </Link>
             </div>
 
             <!-- ============ CONVERSION METRICS ============ -->

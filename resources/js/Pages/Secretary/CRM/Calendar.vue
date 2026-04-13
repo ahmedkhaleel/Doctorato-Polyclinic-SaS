@@ -294,12 +294,24 @@ const quickAddNotes = ref('');
 const quickAddTime = ref('09:00');
 const quickAddSaving = ref(false);
 
+const quickAddLeadSearch = ref('');
+const filteredQuickAddLeads = computed(() => {
+    if (!props.activeLeads?.length) return [];
+    if (!quickAddLeadSearch.value.trim()) return props.activeLeads;
+    const q = quickAddLeadSearch.value.trim().toLowerCase();
+    return props.activeLeads.filter(l =>
+        (l.full_name || '').toLowerCase().includes(q) ||
+        (l.phone || '').includes(q)
+    );
+});
+
 function openQuickAdd(dateStr) {
     quickAddDate.value = dateStr;
     quickAddType.value = 'call';
     quickAddLeadId.value = '';
     quickAddNotes.value = '';
     quickAddTime.value = '09:00';
+    quickAddLeadSearch.value = '';
     showQuickAdd.value = true;
 }
 
@@ -493,9 +505,16 @@ function snoozeFollowUp(fuId, key) {
                         !cell.isCurrentMonth ? 'text-gray-300' : 'text-gray-700']">
                         {{ cell.day }}
                     </span>
-                    <span v-if="getFilteredFollowUpsForDay(cell.date).length > 0" class="text-[10px] font-bold text-teal-600 bg-teal-100 rounded-full w-5 h-5 flex items-center justify-center">
-                        {{ getFilteredFollowUpsForDay(cell.date).length }}
-                    </span>
+                    <div class="flex items-center gap-1">
+                        <button v-if="cell.isCurrentMonth" @click.stop="openQuickAdd(cell.date)"
+                            class="w-5 h-5 rounded-full bg-teal-100 text-teal-600 hover:bg-teal-500 hover:text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-150"
+                            :title="isRtl ? 'إضافة متابعة' : 'Add follow-up'">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+                        </button>
+                        <span v-if="getFilteredFollowUpsForDay(cell.date).length > 0" class="text-[10px] font-bold text-teal-600 bg-teal-100 rounded-full w-5 h-5 flex items-center justify-center">
+                            {{ getFilteredFollowUpsForDay(cell.date).length }}
+                        </span>
+                    </div>
                 </div>
 
                 <!-- Follow-up dots / mini cards -->
@@ -834,10 +853,16 @@ function snoozeFollowUp(fuId, key) {
                     <div class="p-6 space-y-4">
                         <div>
                             <label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'العميل' : 'Lead' }} *</label>
-                            <select v-model="quickAddLeadId" class="w-full rounded-xl border-gray-200 text-sm focus:ring-teal-500 focus:border-teal-500">
+                            <input v-if="activeLeads && activeLeads.length > 8"
+                                v-model="quickAddLeadSearch"
+                                type="text"
+                                class="w-full rounded-xl border-gray-200 text-sm focus:ring-teal-500 focus:border-teal-500 mb-2"
+                                :placeholder="isRtl ? 'ابحث بالاسم أو الهاتف...' : 'Search by name or phone...'" />
+                            <select v-model="quickAddLeadId" class="w-full rounded-xl border-gray-200 text-sm focus:ring-teal-500 focus:border-teal-500" size="1">
                                 <option value="">{{ isRtl ? '-- اختر عميل --' : '-- Select lead --' }}</option>
-                                <option v-for="lead in activeLeads" :key="lead.id" :value="lead.id">{{ lead.full_name }} - {{ lead.phone }}</option>
+                                <option v-for="lead in filteredQuickAddLeads" :key="lead.id" :value="lead.id">{{ lead.full_name }} - {{ lead.phone }}</option>
                             </select>
+                            <p v-if="quickAddLeadSearch && filteredQuickAddLeads.length === 0" class="text-xs text-gray-400 mt-1">{{ isRtl ? 'لا توجد نتائج' : 'No results' }}</p>
                         </div>
                         <div class="grid grid-cols-2 gap-3">
                             <div>

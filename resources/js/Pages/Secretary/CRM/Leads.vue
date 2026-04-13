@@ -263,7 +263,11 @@ function bulkUpdatePriority(priority) {
 
 /* ── Export CSV ── */
 function exportLeadsCSV() {
-    const data = props.leads?.data || [];
+    const allData = props.leads?.data || [];
+    // If leads are selected, export only selected; otherwise export all
+    const data = selectedLeads.value.length > 0
+        ? allData.filter(l => selectedLeads.value.includes(l.id))
+        : allData;
     if (!data.length) return;
 
     const headers = ['Name', 'Phone', 'Email', 'Status', 'Priority', 'Source', 'Score', 'City', 'Next Follow-up', 'Created'];
@@ -285,11 +289,12 @@ function exportLeadsCSV() {
         csv += row.join(',') + '\n';
     });
 
+    const suffix = selectedLeads.value.length > 0 ? `-selected-${selectedLeads.value.length}` : '';
     const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `leads-export-${new Date().toISOString().split('T')[0]}.csv`;
+    link.download = `leads-export${suffix}-${new Date().toISOString().split('T')[0]}.csv`;
     link.click();
     URL.revokeObjectURL(url);
 }
@@ -521,7 +526,9 @@ const activeFilterPills = computed(() => {
                             <button @click="exportLeadsCSV"
                                class="inline-flex items-center gap-1.5 px-3 py-2 bg-white/15 hover:bg-white/25 backdrop-blur text-white rounded-lg text-xs font-medium transition-all duration-200 border border-white/20">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                                {{ isRtl ? 'تصدير CSV' : 'Export CSV' }}
+                                {{ selectedLeads.length > 0
+                                    ? (isRtl ? `تصدير (${selectedLeads.length})` : `Export (${selectedLeads.length})`)
+                                    : (isRtl ? 'تصدير CSV' : 'Export CSV') }}
                             </button>
                             <Link href="/secretary/crm/pipeline"
                                   class="inline-flex items-center gap-1.5 px-3 py-2 bg-white/15 hover:bg-white/25 backdrop-blur text-white rounded-lg text-xs font-medium transition-all duration-200 border border-white/20">
