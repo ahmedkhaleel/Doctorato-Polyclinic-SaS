@@ -77,6 +77,26 @@ function changeStatus(newStatus) {
     });
 }
 
+// Priority change inline
+const showPriorityPicker = ref(false);
+const priorityChanging = ref(false);
+const priorityOptions = [
+    { value: 1, en: 'Hot', ar: '\u0633\u0627\u062E\u0646', color: 'bg-red-100 text-red-700 border-red-300 hover:bg-red-200' },
+    { value: 2, en: 'Warm', ar: '\u062F\u0627\u0641\u0626', color: 'bg-amber-100 text-amber-700 border-amber-300 hover:bg-amber-200' },
+    { value: 3, en: 'Cold', ar: '\u0628\u0627\u0631\u062F', color: 'bg-blue-100 text-blue-700 border-blue-300 hover:bg-blue-200' },
+];
+
+function changePriority(newPriority) {
+    if (priorityChanging.value) return;
+    priorityChanging.value = true;
+    router.post(`/secretary/crm/leads/${props.lead.id}/priority`, {
+        priority: newPriority,
+    }, {
+        preserveScroll: true,
+        onFinish: () => { priorityChanging.value = false; showPriorityPicker.value = false; },
+    });
+}
+
 // Activity form
 const activityForm = useForm({
     type: 'note',
@@ -638,15 +658,40 @@ function whatsappUrl(phone) {
                                         >
                                             {{ isRtl ? (statusLabels[lead.status]?.ar || lead.status) : (statusLabels[lead.status]?.en || lead.status) }}
                                         </span>
-                                        <!-- Priority badge -->
-                                        <span
-                                            v-if="lead.priority && priorityDisplay[lead.priority]"
-                                            class="px-2.5 py-0.5 rounded-full text-xs font-semibold"
-                                            :class="priorityDisplay[lead.priority].color"
-                                        >
+                                        <!-- Priority badge (clickable) -->
+                                        <div class="relative">
+                                            <button
+                                                v-if="lead.priority && priorityDisplay[lead.priority]"
+                                                @click="showPriorityPicker = !showPriorityPicker"
+                                                class="px-2.5 py-0.5 rounded-full text-xs font-semibold cursor-pointer transition-all duration-200 hover:ring-2 hover:ring-white/40"
+                                                :class="priorityDisplay[lead.priority].color"
+                                                :title="isRtl ? '\u0627\u0646\u0642\u0631 \u0644\u062A\u063A\u064A\u064A\u0631 \u0627\u0644\u0623\u0648\u0644\u0648\u064A\u0629' : 'Click to change priority'"
+                                            >
                                                 <svg class="w-3.5 h-3.5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="priorityDisplay[lead.priority].icon"/></svg>
-                                            {{ isRtl ? priorityDisplay[lead.priority].label.ar : priorityDisplay[lead.priority].label.en }}
-                                        </span>
+                                                {{ isRtl ? priorityDisplay[lead.priority].label.ar : priorityDisplay[lead.priority].label.en }}
+                                                <svg class="w-3 h-3 inline-block ms-0.5 opacity-60" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                                            </button>
+                                            <Transition
+                                                enter-active-class="transition-all duration-200 ease-out"
+                                                enter-from-class="opacity-0 scale-95 -translate-y-1"
+                                                enter-to-class="opacity-100 scale-100 translate-y-0"
+                                                leave-active-class="transition-all duration-150 ease-in"
+                                                leave-from-class="opacity-100 scale-100"
+                                                leave-to-class="opacity-0 scale-95">
+                                                <div v-if="showPriorityPicker" class="absolute top-full mt-1 z-30 bg-white rounded-xl shadow-xl border border-gray-200 p-1.5 min-w-[120px]">
+                                                    <button v-for="po in priorityOptions" :key="po.value"
+                                                        @click="changePriority(po.value)"
+                                                        :disabled="priorityChanging || lead.priority == po.value"
+                                                        :class="['w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold border transition-all duration-150 mb-0.5 last:mb-0',
+                                                            lead.priority == po.value ? po.color + ' ring-1 ring-offset-1' : 'border-transparent hover:' + po.color.split(' ')[0],
+                                                            priorityChanging ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer']">
+                                                        <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" :d="priorityDisplay[po.value]?.icon"/></svg>
+                                                        {{ isRtl ? po.ar : po.en }}
+                                                        <svg v-if="lead.priority == po.value" class="w-3.5 h-3.5 ms-auto text-current" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                                    </button>
+                                                </div>
+                                            </Transition>
+                                        </div>
                                     </div>
 
                                     <!-- Contact details -->

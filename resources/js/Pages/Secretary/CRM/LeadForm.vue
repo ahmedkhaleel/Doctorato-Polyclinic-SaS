@@ -102,6 +102,18 @@ const formProgress = computed(() => {
     return Math.round((filled / formSections.length) * 100);
 });
 
+/* ---------- Email validation ---------- */
+const emailValidation = computed(() => {
+    const email = form.email.trim();
+    if (!email) return null;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+    if (!emailRegex.test(email)) return { valid: false, en: 'Invalid email format', ar: '\u0635\u064A\u063A\u0629 \u0628\u0631\u064A\u062F \u063A\u064A\u0631 \u0635\u062D\u064A\u062D\u0629' };
+    const domain = email.split('@')[1]?.toLowerCase();
+    const disposable = ['tempmail.com', 'throwaway.email', 'guerrillamail.com', 'mailinator.com', 'yopmail.com'];
+    if (disposable.includes(domain)) return { valid: false, en: 'Disposable email not allowed', ar: '\u0628\u0631\u064A\u062F \u0645\u0624\u0642\u062A \u063A\u064A\u0631 \u0645\u0633\u0645\u0648\u062D' };
+    return { valid: true, en: 'Valid email', ar: '\u0628\u0631\u064A\u062F \u0635\u062D\u064A\u062D' };
+});
+
 /* ---------- Phone validation ---------- */
 const phoneValidation = computed(() => {
     const phone = form.phone.trim();
@@ -251,10 +263,23 @@ const phoneValidation = computed(() => {
                     <label class="block text-sm font-semibold text-slate-600 mb-1.5">
                         {{ isRtl ? '\u0627\u0644\u0628\u0631\u064A\u062F \u0627\u0644\u0625\u0644\u0643\u062A\u0631\u0648\u0646\u064A' : 'Email' }}
                     </label>
-                    <input v-model="form.email" type="email" dir="ltr"
-                           class="w-full rounded-xl border border-slate-200 bg-slate-50/50 hover:border-slate-300 px-4 py-3 text-sm transition-all duration-200 focus:ring-2 focus:ring-teal-400/40 focus:border-teal-400 outline-none"
-                           placeholder="email@example.com" />
-                    <p v-if="form.errors.email" class="mt-1 text-xs text-red-500">{{ form.errors.email }}</p>
+                    <div class="relative">
+                        <input v-model="form.email" type="email" dir="ltr"
+                               :class="['w-full rounded-xl border bg-slate-50/50 hover:border-slate-300 px-4 py-3 text-sm transition-all duration-200 focus:ring-2 outline-none',
+                                   emailValidation && !emailValidation.valid
+                                       ? 'border-red-300 focus:ring-red-400/40 focus:border-red-400'
+                                       : emailValidation && emailValidation.valid
+                                           ? 'border-emerald-300 focus:ring-emerald-400/40 focus:border-emerald-400'
+                                           : 'border-slate-200 focus:ring-teal-400/40 focus:border-teal-400']"
+                               placeholder="email@example.com" />
+                        <!-- Validation icon -->
+                        <div v-if="emailValidation" :class="['absolute top-1/2 -translate-y-1/2', isRtl ? 'left-3' : 'right-3']">
+                            <svg v-if="emailValidation.valid" class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                            <svg v-else class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/></svg>
+                        </div>
+                    </div>
+                    <p v-if="emailValidation && !emailValidation.valid" class="mt-1 text-xs text-red-500">{{ isRtl ? emailValidation.ar : emailValidation.en }}</p>
+                    <p v-else-if="form.errors.email" class="mt-1 text-xs text-red-500">{{ form.errors.email }}</p>
                 </div>
             </div>
         </div>

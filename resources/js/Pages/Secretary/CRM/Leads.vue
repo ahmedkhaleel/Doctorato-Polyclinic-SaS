@@ -13,7 +13,8 @@ const props = defineProps({
 });
 
 /* ── View / Animation State ── */
-const viewMode = ref('grid');
+const savedViewMode = typeof localStorage !== 'undefined' ? localStorage.getItem('crm_leads_viewMode') : null;
+const viewMode = ref(savedViewMode || 'grid');
 const mounted = ref(false);
 const inlineStatusOpen = ref(null);
 onMounted(() => {
@@ -405,6 +406,11 @@ function quickViewAddNote() {
         onFinish: () => { quickViewSavingNote.value = false; },
     });
 }
+
+/* ── Persist view mode ── */
+watch(viewMode, (val) => {
+    try { localStorage.setItem('crm_leads_viewMode', val); } catch {}
+});
 
 /* ── Keyboard shortcuts ── */
 function handleKeyboard(e) {

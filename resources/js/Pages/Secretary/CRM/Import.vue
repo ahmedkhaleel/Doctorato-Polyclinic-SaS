@@ -10,7 +10,10 @@ const mounted = ref(false);
 onMounted(() => { setTimeout(() => { mounted.value = true; }, 50); });
 
 /* ── Steps ──────────────────────────────────────────────── */
-const step = ref(1); // 1: Upload, 2: Map columns, 3: Confirm & import
+const step = ref(1); // 1: Upload, 2: Map columns, 3: Confirm & import, 4: Results
+
+/* ── Import results ────────────────────────────────────── */
+const importResults = ref(null);
 
 /* ── Upload state ───────────────────────────────────────── */
 const file = ref(null);
@@ -239,7 +242,7 @@ const importTips = [
     { en: 'Duplicate phones will be handled based on your chosen strategy', ar: '\u0633\u064A\u062A\u0645 \u0627\u0644\u062A\u0639\u0627\u0645\u0644 \u0645\u0639 \u0627\u0644\u0623\u0631\u0642\u0627\u0645 \u0627\u0644\u0645\u0643\u0631\u0631\u0629 \u062D\u0633\u0628 \u0627\u0644\u0627\u0633\u062A\u0631\u0627\u062A\u064A\u062C\u064A\u0629 \u0627\u0644\u0645\u062E\u062A\u0627\u0631\u0629' },
 ];
 
-function startImport() {
+async function startImport() {
     if (!canImport.value || !file.value) return;
     isImporting.value = true;
 
@@ -254,10 +257,65 @@ function startImport() {
         }
     });
 
-    router.post('/secretary/crm/import/process', formData, {
-        forceFormData: true,
-        onFinish: () => { isImporting.value = false; },
-    });
+    try {
+        const response = await fetch('/secretary/crm/import/process', {
+            method: 'POST',
+            body: formData,
+            credentials: 'same-origin',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '',
+                'Accept': 'application/json',
+            },
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            importResults.value = {
+                imported: data.imported || 0,
+                skipped: data.skipped || 0,
+                updated: data.updated || 0,
+                errors: data.errors || 0,
+                errorDetails: data.error_details || [],
+                total: totalRows.value,
+                duration: data.duration || null,
+            };
+            step.value = 4;
+        } else {
+            importResults.value = {
+                imported: 0,
+                skipped: 0,
+                updated: 0,
+                errors: totalRows.value,
+                errorDetails: [{ row: 0, message: data.error || data.message || (isRtl.value ? 'خطأ في الاستيراد' : 'Import failed') }],
+                total: totalRows.value,
+                duration: null,
+            };
+            step.value = 4;
+        }
+    } catch (err) {
+        importResults.value = {
+            imported: 0, skipped: 0, updated: 0,
+            errors: totalRows.value,
+            errorDetails: [{ row: 0, message: isRtl.value ? 'خطأ في الاتصال بالخادم' : 'Connection error' }],
+            total: totalRows.value, duration: null,
+        };
+        step.value = 4;
+    } finally {
+        isImporting.value = false;
+    }
+}
+
+function startNewImport() {
+    importResults.value = null;
+    file.value = null;
+    fileName.value = '';
+    fileSize.value = '';
+    headers.value = [];
+    preview.value = [];
+    totalRows.value = 0;
+    columnMap.value = {};
+    step.value = 1;
 }
 </script>
 
@@ -319,7 +377,16 @@ function startImport() {
                 <div :class="['w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300',
                     step >= 3 ? 'bg-teal-500 text-white shadow-md shadow-teal-200' : 'bg-gray-100 text-gray-400']">3</div>
                 <span :class="['text-sm font-medium transition-colors', step >= 3 ? 'text-teal-700' : 'text-gray-400']">
-                    {{ isRtl ? 'استيراد' : 'Import' }}
+                    {{ isRtl ? 'تأكيد' : 'Confirm' }}
+                </span>
+            </div>
+            <div :class="['w-16 h-0.5 mx-2 transition-colors duration-300', step >= 4 ? 'bg-teal-400' : 'bg-gray-200']"></div>
+            <!-- Step 4 -->
+            <div class="flex items-center gap-2">
+                <div :class="['w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300',
+                    step >= 4 ? 'bg-teal-500 text-white shadow-md shadow-teal-200' : 'bg-gray-100 text-gray-400']">4</div>
+                <span :class="['text-sm font-medium transition-colors', step >= 4 ? 'text-teal-700' : 'text-gray-400']">
+                    {{ isRtl ? 'النتائج' : 'Results' }}
                 </span>
             </div>
         </div>
@@ -675,6 +742,156 @@ function startImport() {
                 <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
                 {{ isImporting ? (isRtl ? 'جاري الاستيراد...' : 'Importing...') : (isRtl ? 'بدء الاستيراد' : 'Start Import') }}
             </button>
+        </div>
+    </div>
+
+    <!-- Step 4: Import Results -->
+    <div v-if="step === 4 && importResults"
+         class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 transition-all duration-500">
+
+        <!-- Success/Partial/Error header -->
+        <div class="text-center mb-8">
+            <div :class="['w-20 h-20 mx-auto mb-4 rounded-2xl flex items-center justify-center',
+                importResults.errors === 0 && importResults.imported > 0
+                    ? 'bg-emerald-100'
+                    : importResults.imported > 0
+                        ? 'bg-amber-100'
+                        : 'bg-red-100']">
+                <!-- Success icon -->
+                <svg v-if="importResults.errors === 0 && importResults.imported > 0" class="w-10 h-10 text-emerald-600" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <!-- Partial icon -->
+                <svg v-else-if="importResults.imported > 0" class="w-10 h-10 text-amber-600" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/>
+                </svg>
+                <!-- Error icon -->
+                <svg v-else class="w-10 h-10 text-red-600" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </div>
+            <h2 class="text-xl font-bold text-gray-800">
+                {{ importResults.errors === 0 && importResults.imported > 0
+                    ? (isRtl ? 'تم الاستيراد بنجاح' : 'Import Successful')
+                    : importResults.imported > 0
+                        ? (isRtl ? 'تم الاستيراد مع تحذيرات' : 'Import Completed with Warnings')
+                        : (isRtl ? 'فشل الاستيراد' : 'Import Failed') }}
+            </h2>
+            <p v-if="importResults.duration" class="text-sm text-gray-400 mt-1">
+                {{ isRtl ? `استغرقت العملية ${importResults.duration} ثانية` : `Completed in ${importResults.duration}s` }}
+            </p>
+        </div>
+
+        <!-- Results stats cards -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <!-- Imported -->
+            <div class="rounded-xl border-2 border-emerald-100 bg-emerald-50/50 p-4 text-center">
+                <div class="w-10 h-10 mx-auto mb-2 rounded-xl bg-emerald-100 flex items-center justify-center">
+                    <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
+                    </svg>
+                </div>
+                <div class="text-3xl font-bold text-emerald-600">{{ importResults.imported }}</div>
+                <div class="text-xs text-emerald-600/70 mt-1 font-medium">{{ isRtl ? 'تم استيرادهم' : 'Imported' }}</div>
+            </div>
+            <!-- Updated -->
+            <div class="rounded-xl border-2 border-blue-100 bg-blue-50/50 p-4 text-center">
+                <div class="w-10 h-10 mx-auto mb-2 rounded-xl bg-blue-100 flex items-center justify-center">
+                    <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182"/>
+                    </svg>
+                </div>
+                <div class="text-3xl font-bold text-blue-600">{{ importResults.updated }}</div>
+                <div class="text-xs text-blue-600/70 mt-1 font-medium">{{ isRtl ? 'تم تحديثهم' : 'Updated' }}</div>
+            </div>
+            <!-- Skipped -->
+            <div class="rounded-xl border-2 border-amber-100 bg-amber-50/50 p-4 text-center">
+                <div class="w-10 h-10 mx-auto mb-2 rounded-xl bg-amber-100 flex items-center justify-center">
+                    <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 8.688c0-.864.933-1.405 1.683-.977l7.108 4.062a1.125 1.125 0 010 1.953l-7.108 4.062A1.125 1.125 0 013 16.81V8.688zM12.75 8.688c0-.864.933-1.405 1.683-.977l7.108 4.062a1.125 1.125 0 010 1.953l-7.108 4.062a1.125 1.125 0 01-1.683-.977V8.688z"/>
+                    </svg>
+                </div>
+                <div class="text-3xl font-bold text-amber-600">{{ importResults.skipped }}</div>
+                <div class="text-xs text-amber-600/70 mt-1 font-medium">{{ isRtl ? 'تم تخطيهم' : 'Skipped' }}</div>
+            </div>
+            <!-- Errors -->
+            <div class="rounded-xl border-2 border-red-100 bg-red-50/50 p-4 text-center">
+                <div class="w-10 h-10 mx-auto mb-2 rounded-xl bg-red-100 flex items-center justify-center">
+                    <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/>
+                    </svg>
+                </div>
+                <div class="text-3xl font-bold text-red-600">{{ importResults.errors }}</div>
+                <div class="text-xs text-red-600/70 mt-1 font-medium">{{ isRtl ? 'أخطاء' : 'Errors' }}</div>
+            </div>
+        </div>
+
+        <!-- Progress bar -->
+        <div class="mb-8">
+            <div class="flex items-center justify-between text-xs text-gray-500 mb-2">
+                <span>{{ isRtl ? 'نسبة النجاح' : 'Success Rate' }}</span>
+                <span class="font-bold">{{ importResults.total > 0 ? Math.round(((importResults.imported + importResults.updated) / importResults.total) * 100) : 0 }}%</span>
+            </div>
+            <div class="h-3 bg-gray-100 rounded-full overflow-hidden flex">
+                <div v-if="importResults.imported > 0"
+                     class="bg-emerald-500 transition-all duration-1000"
+                     :style="{ width: (importResults.imported / importResults.total * 100) + '%' }"></div>
+                <div v-if="importResults.updated > 0"
+                     class="bg-blue-500 transition-all duration-1000"
+                     :style="{ width: (importResults.updated / importResults.total * 100) + '%' }"></div>
+                <div v-if="importResults.skipped > 0"
+                     class="bg-amber-400 transition-all duration-1000"
+                     :style="{ width: (importResults.skipped / importResults.total * 100) + '%' }"></div>
+                <div v-if="importResults.errors > 0"
+                     class="bg-red-400 transition-all duration-1000"
+                     :style="{ width: (importResults.errors / importResults.total * 100) + '%' }"></div>
+            </div>
+            <div class="flex items-center gap-4 mt-2 text-[11px] text-gray-400">
+                <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-500"></span>{{ isRtl ? 'مستورد' : 'Imported' }}</span>
+                <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-blue-500"></span>{{ isRtl ? 'محدث' : 'Updated' }}</span>
+                <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-amber-400"></span>{{ isRtl ? 'تخطي' : 'Skipped' }}</span>
+                <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-red-400"></span>{{ isRtl ? 'خطأ' : 'Error' }}</span>
+            </div>
+        </div>
+
+        <!-- Error details -->
+        <div v-if="importResults.errorDetails.length > 0" class="rounded-xl border border-red-100 bg-red-50/50 p-4 mb-8">
+            <h4 class="text-xs font-semibold text-red-600 uppercase tracking-wider mb-3 flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/>
+                </svg>
+                {{ isRtl ? 'تفاصيل الأخطاء' : 'Error Details' }}
+            </h4>
+            <div class="space-y-1.5 max-h-48 overflow-y-auto">
+                <div v-for="(err, idx) in importResults.errorDetails.slice(0, 20)" :key="idx"
+                     class="flex items-start gap-2 text-sm text-red-700 bg-white/60 rounded-lg px-3 py-2">
+                    <span v-if="err.row" class="text-[11px] font-mono bg-red-100 text-red-600 px-1.5 py-0.5 rounded flex-shrink-0">
+                        {{ isRtl ? 'صف' : 'Row' }} {{ err.row }}
+                    </span>
+                    <span class="text-red-600 text-sm">{{ err.message }}</span>
+                </div>
+                <p v-if="importResults.errorDetails.length > 20" class="text-xs text-red-400 text-center pt-2">
+                    {{ isRtl ? `و ${importResults.errorDetails.length - 20} خطأ آخر...` : `And ${importResults.errorDetails.length - 20} more errors...` }}
+                </p>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex items-center justify-between gap-3">
+            <button @click="startNewImport"
+                class="px-5 py-2.5 rounded-xl text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 transition-all duration-200 flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+                </svg>
+                {{ isRtl ? 'استيراد ملف آخر' : 'Import Another File' }}
+            </button>
+            <a href="/secretary/crm/leads"
+                class="px-6 py-2.5 rounded-xl text-sm font-bold bg-gradient-to-r from-teal-500 to-emerald-500 text-white hover:from-teal-600 hover:to-emerald-600 shadow-lg shadow-teal-200 transition-all duration-200 flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+                </svg>
+                {{ isRtl ? 'عرض العملاء' : 'View Leads' }}
+            </a>
         </div>
     </div>
 

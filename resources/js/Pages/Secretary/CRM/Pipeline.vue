@@ -167,10 +167,14 @@ onBeforeUnmount(() => {
 });
 
 /* ── Collapse/Expand stages ────────────────────────────── */
-const collapsedStages = ref({});
+const savedCollapsed = (() => {
+    try { return JSON.parse(localStorage.getItem('crm_pipeline_collapsed') || '{}'); } catch { return {}; }
+})();
+const collapsedStages = ref(savedCollapsed);
 
 function toggleCollapse(status) {
     collapsedStages.value = { ...collapsedStages.value, [status]: !collapsedStages.value[status] };
+    try { localStorage.setItem('crm_pipeline_collapsed', JSON.stringify(collapsedStages.value)); } catch {}
 }
 
 function isCollapsed(status) {
