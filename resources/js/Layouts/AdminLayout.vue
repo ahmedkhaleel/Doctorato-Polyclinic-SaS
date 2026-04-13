@@ -119,6 +119,7 @@ const navGroups = [
             { labelEn: 'Assignment Rules', labelAr: 'قواعد التعيين',     href: '/admin/assignment-rules',  icon: 'source',   permission: 'leads.view' },
             { labelEn: 'Import Leads',     labelAr: 'استيراد العملاء',   href: '/admin/leads-import',     icon: 'upload',    permission: 'leads.create' },
             { labelEn: 'CRM Reports',      labelAr: 'تقارير CRM',        href: '/admin/crm-reports',      icon: 'chart',     permission: 'leads.view' },
+            { labelEn: 'Settings',         labelAr: 'الإعدادات',         href: '/admin/crm-settings',     icon: 'cog',       permission: 'leads.view' },
         ],
     },
     {

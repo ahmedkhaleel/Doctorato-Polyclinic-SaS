@@ -99,6 +99,19 @@ class Lead extends Model
                     'duration_minutes' => $durationMinutes,
                     'changed_at' => now(),
                 ]);
+
+                // Notify assigned user of status change
+                if ($lead->assigned_to && (int)$lead->assigned_to !== (int)auth()->id()) {
+                    $assignedUser = \App\Models\User::find($lead->assigned_to);
+                    if ($assignedUser) {
+                        $assignedUser->notify(new \App\Notifications\LeadStatusChangedNotification(
+                            $lead,
+                            $oldStatus,
+                            $newStatus,
+                            auth()->user()?->name
+                        ));
+                    }
+                }
             }
         });
     }
