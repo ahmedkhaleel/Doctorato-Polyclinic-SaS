@@ -50,7 +50,11 @@ class LeadController extends Controller
         }
 
         if ($assignedTo = $request->input('assigned_to')) {
-            $query->where('assigned_to', $assignedTo);
+            if ($assignedTo === 'unassigned') {
+                $query->whereNull('assigned_to');
+            } else {
+                $query->where('assigned_to', (int) $assignedTo);
+            }
         }
 
         if ($campaignId = $request->input('campaign_id')) {

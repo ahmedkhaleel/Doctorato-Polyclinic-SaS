@@ -123,6 +123,17 @@ function timeAgo(date) {
     return Math.floor(diff / 86400) + 'd ago';
 }
 
+function leadAge(date) {
+    if (!date) return { days: 0, label: '-', color: 'text-gray-400' };
+    const days = Math.floor((new Date() - new Date(date)) / 86400000);
+    if (days === 0) return { days, label: 'Today', color: 'text-emerald-600' };
+    if (days === 1) return { days, label: '1d', color: 'text-emerald-600' };
+    if (days <= 7) return { days, label: days + 'd', color: 'text-blue-600' };
+    if (days <= 14) return { days, label: days + 'd', color: 'text-amber-600' };
+    if (days <= 30) return { days, label: days + 'd', color: 'text-orange-600' };
+    return { days, label: days + 'd', color: 'text-red-600' };
+}
+
 function getInitials(name) {
     if (!name) return '??';
     return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
@@ -301,7 +312,7 @@ function exportLeads() {
                 :class="{ 'card-entrance-active': mounted }"
                 :style="{ transitionDelay: '160ms' }"
             >
-                <div class="grid grid-cols-1 md:grid-cols-5 gap-3">
+                <div class="grid grid-cols-1 md:grid-cols-6 gap-3">
                     <!-- Search Input -->
                     <div class="relative md:col-span-2">
                         <div class="absolute ltr:left-3.5 rtl:right-3.5 top-1/2 -translate-y-1/2 flex items-center pointer-events-none">
@@ -346,6 +357,20 @@ function exportLeads() {
                         <select v-model="sourceFilter" class="w-full text-sm bg-gray-50 border border-gray-200 rounded-xl py-2.5 ltr:pl-9 rtl:pr-9 ltr:pr-8 rtl:pl-8 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200 appearance-none cursor-pointer">
                             <option value="">{{ $t('a_all_sources') }}</option>
                             <option v-for="s in sources" :key="s.id" :value="s.id">{{ s.name_en }}</option>
+                        </select>
+                        <div class="absolute ltr:right-3 rtl:left-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                        </div>
+                    </div>
+                    <!-- Assigned To Filter -->
+                    <div class="relative">
+                        <div class="absolute ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                        </div>
+                        <select v-model="assignedFilter" class="w-full text-sm bg-gray-50 border border-gray-200 rounded-xl py-2.5 ltr:pl-9 rtl:pr-9 ltr:pr-8 rtl:pl-8 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200 appearance-none cursor-pointer">
+                            <option value="">All Staff</option>
+                            <option value="unassigned">Unassigned</option>
+                            <option v-for="a in assignees" :key="a.id" :value="a.id">{{ a.name }}</option>
                         </select>
                         <div class="absolute ltr:right-3 rtl:left-3 top-1/2 -translate-y-1/2 pointer-events-none">
                             <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
@@ -440,7 +465,7 @@ function exportLeads() {
                                 <th class="px-5 py-3.5 font-semibold tracking-wider text-center">{{ $t('a_score') }}</th>
                                 <th class="px-5 py-3.5 font-semibold tracking-wider">{{ $t('a_assigned_to') }}</th>
                                 <th class="px-5 py-3.5 font-semibold tracking-wider">Next Follow-up</th>
-                                <th class="px-5 py-3.5 font-semibold tracking-wider">{{ $t('a_created') }}</th>
+                                <th class="px-5 py-3.5 font-semibold tracking-wider text-center">Age</th>
                                 <th class="px-5 py-3.5 font-semibold tracking-wider"></th>
                             </tr>
                         </thead>
@@ -461,9 +486,12 @@ function exportLeads() {
                                             <span class="text-[10px] font-bold text-white">{{ getInitials(lead.full_name) }}</span>
                                         </div>
                                         <div>
-                                            <Link :href="`/admin/leads/${lead.id}`" class="font-semibold text-gray-800 hover:text-[#C4A265] transition-colors duration-200">
-                                                {{ lead.full_name }}
-                                            </Link>
+                                            <div class="flex items-center gap-1.5">
+                                                <Link :href="`/admin/leads/${lead.id}`" class="font-semibold text-gray-800 hover:text-[#C4A265] transition-colors duration-200">
+                                                    {{ lead.full_name }}
+                                                </Link>
+                                                <span v-if="lead.module === 'dental'" class="px-1.5 py-0.5 text-[8px] font-bold rounded bg-sky-50 text-sky-600 border border-sky-200 uppercase">D</span>
+                                            </div>
                                             <p class="text-xs text-gray-400 mt-0.5" v-if="lead.city">{{ lead.city }}</p>
                                         </div>
                                     </div>
@@ -526,8 +554,11 @@ function exportLeads() {
                                     </span>
                                     <span v-else class="text-xs text-gray-400">-</span>
                                 </td>
-                                <td class="px-5 py-3.5">
-                                    <span class="text-xs text-gray-400">{{ timeAgo(lead.created_at) }}</span>
+                                <td class="px-5 py-3.5 text-center">
+                                    <div class="inline-flex flex-col items-center" :title="formatDate(lead.created_at)">
+                                        <span class="text-xs font-bold" :class="leadAge(lead.created_at).color">{{ leadAge(lead.created_at).label }}</span>
+                                        <span class="text-[9px] text-gray-400 mt-0.5">{{ timeAgo(lead.created_at) }}</span>
+                                    </div>
                                 </td>
                                 <td class="px-5 py-3.5">
                                     <Link :href="`/admin/leads/${lead.id}`"
