@@ -23,6 +23,7 @@ const props = defineProps({
     slaMetrics: Object,
     staleLeads: Array,
     upcomingFollowUps: Object,
+    stageAnalytics: Object,
     period: String,
 });
 
@@ -183,6 +184,19 @@ const sourcesTotal = computed(() => {
 function getInitials(name) {
     if (!name) return '??';
     return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+}
+
+// Stage Analytics bar width (proportional to max avg_minutes)
+const stageAnalyticsMaxMinutes = computed(() => {
+    if (!props.stageAnalytics) return 1;
+    const vals = Object.values(props.stageAnalytics).map(s => s.avg_minutes || 0);
+    return Math.max(...vals, 1);
+});
+
+function stageBarWidth(stageKey) {
+    const data = props.stageAnalytics?.[stageKey];
+    if (!data) return 0;
+    return Math.round((data.avg_minutes / stageAnalyticsMaxMinutes.value) * 100);
 }
 
 // Conversion Funnel computed
@@ -836,6 +850,73 @@ function missFollowUp(fuId) {
                             <span class="text-xs font-bold text-gray-700">{{ calendarDays.reduce((s, d) => s + d.followUpCount, 0) }}</span>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- Time in Stage Analytics -->
+            <div
+                v-if="stageAnalytics && Object.keys(stageAnalytics).length > 0"
+                class="card-entrance bg-white rounded-2xl shadow-sm hover:shadow-md p-6 border border-gray-100 transition-all duration-300"
+                :class="{ 'card-entrance-active': mounted }"
+                :style="{ transitionDelay: '540ms' }"
+            >
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-[#C4A265] to-[#A8893F] flex items-center justify-center">
+                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider">Time in Stage Analytics</h3>
+                </div>
+
+                <div class="space-y-3">
+                    <template v-for="stageKey in ['new', 'contacted', 'qualified', 'appointment_booked', 'consultation_done', 'negotiation']" :key="stageKey">
+                        <div
+                            v-if="stageAnalytics[stageKey]"
+                            class="group flex items-center gap-3 relative"
+                        >
+                            <div class="w-28 flex-shrink-0" :class="isRtl ? 'text-left' : 'text-right'">
+                                <span class="text-xs font-medium text-gray-600 group-hover:text-gray-900 transition-colors">{{ statusLabels[stageKey] || stageKey }}</span>
+                            </div>
+                            <div class="flex-1 relative">
+                                <div class="h-8 bg-gray-50 rounded-lg overflow-hidden">
+                                    <div
+                                        class="h-full rounded-lg flex items-center transition-all duration-700 ease-out"
+                                        :class="'bg-gradient-to-r ' + (statusGradients[stageKey] || 'from-gray-400 to-gray-500')"
+                                        :style="{
+                                            width: mounted ? Math.max(stageBarWidth(stageKey), 8) + '%' : '0%',
+                                            minWidth: '40px',
+                                        }"
+                                    >
+                                        <span class="text-[11px] font-bold text-white drop-shadow-sm px-2 whitespace-nowrap">
+                                            {{ stageAnalytics[stageKey].avg_display }}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <!-- Hover tooltip -->
+                                <div class="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 px-3 py-2 bg-gray-800 text-white text-[11px] rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-20 whitespace-nowrap">
+                                    <div class="font-semibold mb-1">{{ statusLabels[stageKey] }}</div>
+                                    <div>Avg: {{ stageAnalytics[stageKey].avg_display }}</div>
+                                    <div>Min: {{ stageAnalytics[stageKey].min_display }}</div>
+                                    <div>Max: {{ stageAnalytics[stageKey].max_display }}</div>
+                                    <div>Transitions: {{ stageAnalytics[stageKey].transitions }}</div>
+                                    <div class="absolute left-1/2 -translate-x-1/2 top-full w-2 h-2 bg-gray-800 rotate-45 -mt-1"></div>
+                                </div>
+                            </div>
+                            <div class="w-12 flex-shrink-0 text-right">
+                                <span class="text-[11px] font-semibold text-gray-500">{{ stageAnalytics[stageKey].transitions }}x</span>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- Summary row -->
+                <div class="mt-5 pt-4 border-t border-gray-100 flex items-center justify-between text-xs text-gray-400">
+                    <span>Based on stage transitions this period</span>
+                    <span class="font-semibold" :style="{ color: '#C4A265' }">
+                        {{ Object.values(stageAnalytics).reduce((s, v) => s + v.transitions, 0) }} total transitions
+                    </span>
                 </div>
             </div>
 

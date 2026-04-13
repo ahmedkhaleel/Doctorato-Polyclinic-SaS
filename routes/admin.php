@@ -58,6 +58,7 @@ use App\Http\Controllers\Admin\LeadSourceController;
 use App\Http\Controllers\Admin\CommunicationTemplateController;
 use App\Http\Controllers\Admin\MarketerCommissionController;
 use App\Http\Controllers\Admin\CrmReportController;
+use App\Http\Controllers\Admin\CrmSettingsController;
 use App\Http\Controllers\Admin\LeadScoringRuleController;
 use App\Http\Controllers\Admin\FollowUpSequenceController;
 use App\Http\Controllers\Admin\LeadAssignmentRuleController;
@@ -634,6 +635,10 @@ Route::middleware('admin.auth')->group(function () {
 
     // CRM Reports
     Route::get('/crm-reports', [CrmReportController::class, 'index'])->name('admin.crm-reports.index')->middleware('permission:leads.view');
+
+    // CRM Settings
+    Route::get('/crm-settings', [CrmSettingsController::class, 'index'])->name('admin.crm-settings')->middleware('permission:settings.view');
+    Route::post('/crm-settings', [CrmSettingsController::class, 'update'])->name('admin.crm-settings.update')->middleware('permission:settings.update');
 
     // Follow-up Automation Sequences
     Route::get('/sequences', [FollowUpSequenceController::class, 'index'])->name('admin.sequences.index')->middleware('permission:leads.view');

@@ -68,6 +68,41 @@ class Lead extends Model
         ];
     }
 
+    // ─── Boot ────────────────────────────────────────────
+
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        static::updating(function ($lead) {
+            if ($lead->isDirty('status')) {
+                $oldStatus = $lead->getOriginal('status');
+                $newStatus = $lead->status;
+
+                // Calculate duration in previous status
+                $lastEntry = LeadStageHistory::where('lead_id', $lead->id)
+                    ->latest('changed_at')
+                    ->first();
+
+                $durationMinutes = null;
+                if ($lastEntry) {
+                    $durationMinutes = (int) $lastEntry->changed_at->diffInMinutes(now());
+                } elseif ($lead->created_at) {
+                    $durationMinutes = (int) $lead->created_at->diffInMinutes(now());
+                }
+
+                LeadStageHistory::create([
+                    'lead_id' => $lead->id,
+                    'from_status' => $oldStatus,
+                    'to_status' => $newStatus,
+                    'changed_by' => auth()->id(),
+                    'duration_minutes' => $durationMinutes,
+                    'changed_at' => now(),
+                ]);
+            }
+        });
+    }
+
     // ─── Constants ───────────────────────────────────────
 
     const STATUS_NEW = 'new';
@@ -150,6 +185,11 @@ class Lead extends Model
     public function commissions(): HasMany
     {
         return $this->hasMany(MarketerCommission::class);
+    }
+
+    public function stageHistory(): HasMany
+    {
+        return $this->hasMany(LeadStageHistory::class)->orderBy('changed_at');
     }
 
     // ─── Scopes ──────────────────────────────────────────

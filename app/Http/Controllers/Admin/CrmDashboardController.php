@@ -7,6 +7,7 @@ use App\Models\Lead;
 use App\Models\LeadActivity;
 use App\Models\LeadFollowUp;
 use App\Models\LeadSource;
+use App\Models\LeadStageHistory;
 use App\Models\CrmCampaign;
 use App\Models\User;
 use Carbon\Carbon;
@@ -196,6 +197,28 @@ class CrmDashboardController extends Controller
             ],
         ];
 
+        // ── Stage Analytics (time-in-stage) ──
+        $stageAnalytics = LeadStageHistory::selectRaw("
+            from_status,
+            COUNT(*) as transitions,
+            AVG(duration_minutes) as avg_minutes,
+            MIN(duration_minutes) as min_minutes,
+            MAX(duration_minutes) as max_minutes
+        ")
+        ->whereNotNull('from_status')
+        ->whereNotNull('duration_minutes')
+        ->where('changed_at', '>=', $startDate)
+        ->groupBy('from_status')
+        ->get()
+        ->keyBy('from_status')
+        ->map(fn($s) => [
+            'transitions' => $s->transitions,
+            'avg_minutes' => round($s->avg_minutes),
+            'avg_display' => $this->formatMinutes($s->avg_minutes),
+            'min_display' => $this->formatMinutes($s->min_minutes),
+            'max_display' => $this->formatMinutes($s->max_minutes),
+        ]);
+
         // ── Upcoming Follow-ups (next 7 days for mini calendar) ──
         $upcomingFollowUps = LeadFollowUp::where('status', 'pending')
             ->whereBetween('scheduled_at', [now()->startOfDay(), now()->addDays(7)->endOfDay()])
@@ -221,6 +244,7 @@ class CrmDashboardController extends Controller
             'slaMetrics' => $slaMetrics,
             'staleLeads' => $staleLeads,
             'upcomingFollowUps' => $upcomingFollowUps,
+            'stageAnalytics' => $stageAnalytics,
             'period' => $period,
         ]);
     }
