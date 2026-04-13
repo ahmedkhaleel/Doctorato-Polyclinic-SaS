@@ -633,8 +633,35 @@ const showStickyHeader = ref(false);
 function handleScroll() {
     showStickyHeader.value = window.scrollY > 260;
 }
-onMounted(() => { window.addEventListener('scroll', handleScroll, { passive: true }); });
-onBeforeUnmount(() => { window.removeEventListener('scroll', handleScroll); });
+onMounted(() => {
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    document.addEventListener('keydown', handleLeadShowKey);
+});
+onBeforeUnmount(() => {
+    window.removeEventListener('scroll', handleScroll);
+    document.removeEventListener('keydown', handleLeadShowKey);
+});
+
+/* ── Keyboard shortcuts ────────────────────────────── */
+function handleLeadShowKey(e) {
+    if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) return;
+    if (showConvertModal.value || showLostModal.value || showFollowUpForm.value) return;
+    if (e.key === 'a' || e.key === 'A') {
+        e.preventDefault();
+        switchTab('activity');
+        setTimeout(() => { document.querySelector('[data-activity-desc]')?.focus(); }, 300);
+    }
+    if (e.key === 'f' || e.key === 'F') { e.preventDefault(); showFollowUpForm.value = true; }
+    if (e.key === 'p' || e.key === 'P') { e.preventDefault(); printLeadProfile(); }
+    if (e.key === 'b' || e.key === 'B' || e.key === 'Backspace') {
+        if (e.key === 'Backspace') return; // only B, not backspace
+        e.preventDefault(); router.get('/secretary/crm/leads');
+    }
+    if (e.key === 'Escape') {
+        if (showScoreBreakdown.value) { showScoreBreakdown.value = false; return; }
+        if (showPriorityPicker.value) { showPriorityPicker.value = false; return; }
+    }
+}
 </script>
 
 <template>
@@ -705,15 +732,24 @@ onBeforeUnmount(() => { window.removeEventListener('scroll', handleScroll); });
 
                     <div class="max-w-7xl mx-auto relative z-10">
                         <!-- Back button -->
-                        <Link
-                            href="/secretary/crm/leads"
-                            class="inline-flex items-center gap-1.5 text-teal-100 hover:text-white text-sm mb-6 transition-colors"
-                        >
-                            <svg class="w-4 h-4" :class="isRtl ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-                            </svg>
-                            {{ isRtl ? 'العودة للعملاء المحتملين' : 'Back to Leads' }}
-                        </Link>
+                        <div class="flex items-center justify-between mb-6">
+                            <Link
+                                href="/secretary/crm/leads"
+                                class="inline-flex items-center gap-1.5 text-teal-100 hover:text-white text-sm transition-colors"
+                            >
+                                <svg class="w-4 h-4" :class="isRtl ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                                </svg>
+                                {{ isRtl ? 'العودة للعملاء المحتملين' : 'Back to Leads' }}
+                            </Link>
+                            <!-- Keyboard hints -->
+                            <div class="hidden lg:flex items-center gap-2 text-teal-200/50 text-[10px]">
+                                <span class="flex items-center gap-1"><kbd class="px-1 py-0.5 bg-white/10 rounded text-[9px] font-mono">A</kbd> {{ isRtl ? 'نشاط' : 'Activity' }}</span>
+                                <span class="flex items-center gap-1"><kbd class="px-1 py-0.5 bg-white/10 rounded text-[9px] font-mono">F</kbd> {{ isRtl ? 'متابعة' : 'Follow-up' }}</span>
+                                <span class="flex items-center gap-1"><kbd class="px-1 py-0.5 bg-white/10 rounded text-[9px] font-mono">P</kbd> {{ isRtl ? 'طباعة' : 'Print' }}</span>
+                                <span class="flex items-center gap-1"><kbd class="px-1 py-0.5 bg-white/10 rounded text-[9px] font-mono">B</kbd> {{ isRtl ? 'رجوع' : 'Back' }}</span>
+                            </div>
+                        </div>
 
                         <div class="flex flex-col lg:flex-row lg:items-start gap-6">
                             <!-- Avatar + Info -->
@@ -1130,6 +1166,7 @@ onBeforeUnmount(() => { window.removeEventListener('scroll', handleScroll); });
                                             <textarea
                                                 v-model="activityForm.description"
                                                 rows="2"
+                                                data-activity-desc
                                                 class="w-full rounded-lg border-gray-300 text-sm focus:ring-teal-500 focus:border-teal-500 resize-none"
                                                 :placeholder="isRtl ? 'أضف وصفاً...' : 'Add description...'"
                                             ></textarea>

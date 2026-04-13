@@ -503,9 +503,20 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handlePipelineKe
 
                 <!-- Empty state -->
                 <div v-if="filteredLeads(localColumns[status]).length === 0"
-                     class="flex flex-col items-center justify-center py-8 text-gray-300">
-                    <svg class="w-10 h-10 mb-2" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>
-                    <p class="text-xs">{{ isRtl ? 'لا يوجد عملاء' : 'No leads' }}</p>
+                     class="flex flex-col items-center justify-center py-10 text-center">
+                    <div class="w-14 h-14 rounded-2xl mb-3 flex items-center justify-center border-2 border-dashed"
+                         :class="statusConfig[status].border" style="opacity: 0.4;">
+                        <svg class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>
+                    </div>
+                    <p class="text-xs font-medium text-gray-400 mb-1">{{ isRtl ? 'لا يوجد عملاء' : 'No leads here' }}</p>
+                    <p class="text-[10px] text-gray-300 mb-3 max-w-[180px]">
+                        {{ isRtl ? 'اسحب عميلاً من مرحلة أخرى أو أنشئ عميلاً جديداً' : 'Drag a lead from another stage or create a new one' }}
+                    </p>
+                    <Link href="/secretary/crm/leads/create"
+                          class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-[10px] font-semibold text-teal-600 bg-teal-50 hover:bg-teal-100 border border-teal-200/60 transition-all duration-200">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+                        {{ isRtl ? 'عميل جديد' : 'New Lead' }}
+                    </Link>
                 </div>
             </div>
         </div>

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { Link, router, usePage } from '@inertiajs/vue3';
 import SecretaryLayout from '@/Layouts/SecretaryLayout.vue';
 
@@ -190,6 +190,20 @@ const channelMax = computed(() => Math.max(...channelBreakdown.value.map(c => c.
 function printReport() {
     window.print();
 }
+
+/* ── Keyboard shortcuts ── */
+function handleReportsKey(e) {
+    if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) return;
+    if (e.key === 'p' || e.key === 'P') { e.preventDefault(); printReport(); }
+    if (e.key === 'e' || e.key === 'E') { e.preventDefault(); exportCSV(); }
+    if (e.key === 'c' || e.key === 'C') { e.preventDefault(); showComparison.value = !showComparison.value; }
+    if (e.key === 'r' || e.key === 'R') { e.preventDefault(); router.reload({ preserveScroll: true }); }
+    if (e.key === 'l' || e.key === 'L') { e.preventDefault(); router.get('/secretary/crm/leads'); }
+    if (e.key === 'd' || e.key === 'D') { e.preventDefault(); router.get('/secretary/crm'); }
+}
+
+onMounted(() => { document.addEventListener('keydown', handleReportsKey); });
+onBeforeUnmount(() => { document.removeEventListener('keydown', handleReportsKey); });
 </script>
 
 <template>
@@ -238,6 +252,13 @@ function printReport() {
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                     {{ isRtl ? '\u062A\u0635\u062F\u064A\u0631' : 'Export' }}
                 </button>
+                <!-- Keyboard hints -->
+                <div class="hidden lg:flex items-center gap-2 text-white/50 text-[10px] print:hidden">
+                    <span class="flex items-center gap-1"><kbd class="px-1 py-0.5 bg-white/15 rounded text-[9px] font-mono">P</kbd> {{ isRtl ? 'طباعة' : 'Print' }}</span>
+                    <span class="flex items-center gap-1"><kbd class="px-1 py-0.5 bg-white/15 rounded text-[9px] font-mono">E</kbd> {{ isRtl ? 'تصدير' : 'Export' }}</span>
+                    <span class="flex items-center gap-1"><kbd class="px-1 py-0.5 bg-white/15 rounded text-[9px] font-mono">C</kbd> {{ isRtl ? 'مقارنة' : 'Compare' }}</span>
+                    <span class="flex items-center gap-1"><kbd class="px-1 py-0.5 bg-white/15 rounded text-[9px] font-mono">R</kbd> {{ isRtl ? 'تحديث' : 'Refresh' }}</span>
+                </div>
             </div>
         </div>
         <!-- Custom date range -->

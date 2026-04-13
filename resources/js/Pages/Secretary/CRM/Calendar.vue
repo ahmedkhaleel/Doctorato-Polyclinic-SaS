@@ -180,6 +180,13 @@ const selectedDateFormatted = computed(() => {
     return `${dayNum} ${monthNames[lang][monthIdx]} ${d.getFullYear()}`;
 });
 
+/* ── Today's follow-up count ────────────────────────── */
+const todayFollowUpCount = computed(() => {
+    const today = new Date();
+    const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+    return (followUpsByDate.value[todayStr] || []).length;
+});
+
 /* ── Navigation ──────────────────────────────────────── */
 function goToMonth(month, year) {
     router.get('/secretary/crm/calendar', { month, year }, { preserveState: true, preserveScroll: true });
@@ -429,7 +436,11 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handleCalendarKe
                 </div>
             </div>
             <!-- Quick stats -->
-            <div class="flex gap-3">
+            <div class="flex gap-3 flex-wrap">
+                <div v-if="todayFollowUpCount > 0" class="bg-white/25 backdrop-blur rounded-xl px-4 py-2 text-center ring-1 ring-white/30">
+                    <div class="text-2xl font-bold text-white">{{ todayFollowUpCount }}</div>
+                    <div class="text-xs text-white font-medium">{{ isRtl ? 'اليوم' : 'Today' }}</div>
+                </div>
                 <div class="bg-white/15 backdrop-blur rounded-xl px-4 py-2 text-center">
                     <div class="text-2xl font-bold text-white">{{ monthStats?.total || 0 }}</div>
                     <div class="text-xs text-teal-100">{{ isRtl ? 'الإجمالي' : 'Total' }}</div>
@@ -547,10 +558,11 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handleCalendarKe
 
                 <!-- Day number -->
                 <div class="flex items-center justify-between mb-1">
-                    <span :class="['text-sm font-medium leading-none',
+                    <span :class="['text-sm font-medium leading-none relative',
                         cell.isToday ? 'w-7 h-7 rounded-full bg-teal-500 text-white flex items-center justify-center text-xs font-bold' : '',
                         !cell.isCurrentMonth ? 'text-gray-300' : 'text-gray-700']">
-                        {{ cell.day }}
+                        <span v-if="cell.isToday" class="absolute inset-0 rounded-full bg-teal-400 animate-ping opacity-30"></span>
+                        <span class="relative">{{ cell.day }}</span>
                     </span>
                     <div class="flex items-center gap-1">
                         <button v-if="cell.isCurrentMonth" @click.stop="openQuickAdd(cell.date)"
