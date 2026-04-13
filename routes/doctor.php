@@ -26,6 +26,7 @@ use App\Http\Controllers\Doctor\DoctorInventoryController;
 use App\Http\Controllers\Doctor\DoctorPediatricDashboardController;
 use App\Http\Controllers\Doctor\DoctorPediatricPatientController;
 use App\Http\Controllers\Doctor\DoctorPediatricVisitController;
+use App\Http\Controllers\Doctor\DoctorPediatricExtraController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -204,6 +205,15 @@ Route::middleware('doctor.auth')->group(function () {
         // Visits
         Route::get('/visits', [DoctorPediatricVisitController::class, 'index'])->name('doctor.pediatric.visits.index');
         Route::get('/visits/{visit}', [DoctorPediatricVisitController::class, 'show'])->name('doctor.pediatric.visits.show');
+
+        // Prescriptions
+        Route::get('/prescriptions', [DoctorPediatricExtraController::class, 'prescriptions'])->name('doctor.pediatric.prescriptions.index');
+
+        // Well-Child Schedule
+        Route::get('/well-child', [DoctorPediatricExtraController::class, 'wellChild'])->name('doctor.pediatric.wellchild.index');
+
+        // Reports
+        Route::get('/reports', [DoctorPediatricExtraController::class, 'reports'])->name('doctor.pediatric.reports.index');
     });
 
     // ─── Exports ────────────────────────────────────────────

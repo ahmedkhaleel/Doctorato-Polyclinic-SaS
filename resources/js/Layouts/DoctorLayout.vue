@@ -72,6 +72,9 @@ const navGroups = computed(() => [
             { label: isRtl.value ? 'لوحة التحكم' : 'Dashboard',       href: '/doctor/pediatric',               icon: 'grid' },
             { label: isRtl.value ? 'المرضى' : 'Patients',             href: '/doctor/pediatric/patients',      icon: 'heart' },
             { label: isRtl.value ? 'الزيارات' : 'Visits',             href: '/doctor/pediatric/visits',        icon: 'clipboard' },
+            { label: isRtl.value ? 'الوصفات' : 'Prescriptions',       href: '/doctor/pediatric/prescriptions', icon: 'pill' },
+            { label: isRtl.value ? 'فحص الطفل السليم' : 'Well-Child', href: '/doctor/pediatric/well-child',    icon: 'calendar' },
+            { label: isRtl.value ? 'التقارير' : 'Reports',            href: '/doctor/pediatric/reports',       icon: 'checklist' },
         ],
     },
     {
@@ -177,6 +180,9 @@ const quickSearchPages = computed(() => {
             { label: isRtl.value ? 'لوحة الأطفال' : 'Pediatric Dashboard', href: '/doctor/pediatric', icon: 'grid', group: isRtl.value ? 'طب الأطفال' : 'Pediatrics' },
             { label: isRtl.value ? 'مرضى الأطفال' : 'Pediatric Patients', href: '/doctor/pediatric/patients', icon: 'heart', group: isRtl.value ? 'طب الأطفال' : 'Pediatrics' },
             { label: isRtl.value ? 'زيارات الأطفال' : 'Pediatric Visits', href: '/doctor/pediatric/visits', icon: 'clipboard', group: isRtl.value ? 'طب الأطفال' : 'Pediatrics' },
+            { label: isRtl.value ? 'وصفات الأطفال' : 'Pediatric Prescriptions', href: '/doctor/pediatric/prescriptions', icon: 'pill', group: isRtl.value ? 'طب الأطفال' : 'Pediatrics' },
+            { label: isRtl.value ? 'فحص الطفل السليم' : 'Well-Child', href: '/doctor/pediatric/well-child', icon: 'calendar', group: isRtl.value ? 'طب الأطفال' : 'Pediatrics' },
+            { label: isRtl.value ? 'تقارير الأطفال' : 'Pediatric Reports', href: '/doctor/pediatric/reports', icon: 'checklist', group: isRtl.value ? 'طب الأطفال' : 'Pediatrics' },
         );
     }
     // Add dental pages if dental module enabled
