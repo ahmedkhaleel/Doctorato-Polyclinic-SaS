@@ -24,6 +24,83 @@ const form = useForm({
     photo: null,
 });
 
+const nationalityOptions = [
+    { value: 'Egyptian', ar: 'مصري', en: 'Egyptian' },
+    { value: 'Saudi', ar: 'سعودي', en: 'Saudi' },
+    { value: 'Emirati', ar: 'إماراتي', en: 'Emirati' },
+    { value: 'Kuwaiti', ar: 'كويتي', en: 'Kuwaiti' },
+    { value: 'Qatari', ar: 'قطري', en: 'Qatari' },
+    { value: 'Bahraini', ar: 'بحريني', en: 'Bahraini' },
+    { value: 'Omani', ar: 'عماني', en: 'Omani' },
+    { value: 'Jordanian', ar: 'أردني', en: 'Jordanian' },
+    { value: 'Lebanese', ar: 'لبناني', en: 'Lebanese' },
+    { value: 'Syrian', ar: 'سوري', en: 'Syrian' },
+    { value: 'Iraqi', ar: 'عراقي', en: 'Iraqi' },
+    { value: 'Palestinian', ar: 'فلسطيني', en: 'Palestinian' },
+    { value: 'Yemeni', ar: 'يمني', en: 'Yemeni' },
+    { value: 'Libyan', ar: 'ليبي', en: 'Libyan' },
+    { value: 'Tunisian', ar: 'تونسي', en: 'Tunisian' },
+    { value: 'Algerian', ar: 'جزائري', en: 'Algerian' },
+    { value: 'Moroccan', ar: 'مغربي', en: 'Moroccan' },
+    { value: 'Sudanese', ar: 'سوداني', en: 'Sudanese' },
+    { value: 'Somali', ar: 'صومالي', en: 'Somali' },
+    { value: 'Mauritanian', ar: 'موريتاني', en: 'Mauritanian' },
+    { value: 'Djiboutian', ar: 'جيبوتي', en: 'Djiboutian' },
+    { value: 'Comoran', ar: 'قمري', en: 'Comoran' },
+    { value: 'Turkish', ar: 'تركي', en: 'Turkish' },
+    { value: 'Iranian', ar: 'إيراني', en: 'Iranian' },
+    { value: 'Pakistani', ar: 'باكستاني', en: 'Pakistani' },
+    { value: 'Indian', ar: 'هندي', en: 'Indian' },
+    { value: 'Bangladeshi', ar: 'بنغلاديشي', en: 'Bangladeshi' },
+    { value: 'Sri Lankan', ar: 'سريلانكي', en: 'Sri Lankan' },
+    { value: 'Afghan', ar: 'أفغاني', en: 'Afghan' },
+    { value: 'Filipino', ar: 'فلبيني', en: 'Filipino' },
+    { value: 'Indonesian', ar: 'إندونيسي', en: 'Indonesian' },
+    { value: 'Malaysian', ar: 'ماليزي', en: 'Malaysian' },
+    { value: 'Chinese', ar: 'صيني', en: 'Chinese' },
+    { value: 'Japanese', ar: 'ياباني', en: 'Japanese' },
+    { value: 'Korean', ar: 'كوري', en: 'Korean' },
+    { value: 'Thai', ar: 'تايلاندي', en: 'Thai' },
+    { value: 'Vietnamese', ar: 'فيتنامي', en: 'Vietnamese' },
+    { value: 'Nepali', ar: 'نيبالي', en: 'Nepali' },
+    { value: 'Ethiopian', ar: 'إثيوبي', en: 'Ethiopian' },
+    { value: 'Eritrean', ar: 'إريتري', en: 'Eritrean' },
+    { value: 'Nigerian', ar: 'نيجيري', en: 'Nigerian' },
+    { value: 'Kenyan', ar: 'كيني', en: 'Kenyan' },
+    { value: 'South African', ar: 'جنوب أفريقي', en: 'South African' },
+    { value: 'Ghanaian', ar: 'غاني', en: 'Ghanaian' },
+    { value: 'Tanzanian', ar: 'تنزاني', en: 'Tanzanian' },
+    { value: 'Ugandan', ar: 'أوغندي', en: 'Ugandan' },
+    { value: 'American', ar: 'أمريكي', en: 'American' },
+    { value: 'Canadian', ar: 'كندي', en: 'Canadian' },
+    { value: 'Mexican', ar: 'مكسيكي', en: 'Mexican' },
+    { value: 'Brazilian', ar: 'برازيلي', en: 'Brazilian' },
+    { value: 'Argentine', ar: 'أرجنتيني', en: 'Argentine' },
+    { value: 'Colombian', ar: 'كولومبي', en: 'Colombian' },
+    { value: 'British', ar: 'بريطاني', en: 'British' },
+    { value: 'French', ar: 'فرنسي', en: 'French' },
+    { value: 'German', ar: 'ألماني', en: 'German' },
+    { value: 'Italian', ar: 'إيطالي', en: 'Italian' },
+    { value: 'Spanish', ar: 'إسباني', en: 'Spanish' },
+    { value: 'Dutch', ar: 'هولندي', en: 'Dutch' },
+    { value: 'Belgian', ar: 'بلجيكي', en: 'Belgian' },
+    { value: 'Swiss', ar: 'سويسري', en: 'Swiss' },
+    { value: 'Austrian', ar: 'نمساوي', en: 'Austrian' },
+    { value: 'Swedish', ar: 'سويدي', en: 'Swedish' },
+    { value: 'Norwegian', ar: 'نرويجي', en: 'Norwegian' },
+    { value: 'Danish', ar: 'دنماركي', en: 'Danish' },
+    { value: 'Finnish', ar: 'فنلندي', en: 'Finnish' },
+    { value: 'Greek', ar: 'يوناني', en: 'Greek' },
+    { value: 'Portuguese', ar: 'برتغالي', en: 'Portuguese' },
+    { value: 'Polish', ar: 'بولندي', en: 'Polish' },
+    { value: 'Romanian', ar: 'روماني', en: 'Romanian' },
+    { value: 'Ukrainian', ar: 'أوكراني', en: 'Ukrainian' },
+    { value: 'Russian', ar: 'روسي', en: 'Russian' },
+    { value: 'Australian', ar: 'أسترالي', en: 'Australian' },
+    { value: 'New Zealander', ar: 'نيوزيلندي', en: 'New Zealander' },
+    { value: 'Other', ar: 'أخرى', en: 'Other' },
+];
+
 const referralOptions = [
     { value: 'walk_in', label: isRtl.value ? 'حضور مباشر' : 'Walk-in' },
     { value: 'social_media', label: isRtl.value ? 'وسائل التواصل' : 'Social Media' },
@@ -96,6 +173,7 @@ function submit() {
                                     class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500 focus:bg-white transition"
                                     :placeholder="isRtl ? 'الهاتف الثانوي (اختياري)' : 'Secondary phone (optional)'"
                                 />
+                                <p v-if="form.errors.phone2" class="mt-1.5 text-xs text-red-600">{{ form.errors.phone2 }}</p>
                             </div>
                         </div>
 
@@ -133,12 +211,15 @@ function submit() {
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ isRtl ? 'الجنسية' : 'Nationality' }}</label>
-                                <input
+                                <select
                                     v-model="form.nationality"
-                                    type="text"
                                     class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500 focus:bg-white transition"
-                                    :placeholder="isRtl ? 'الجنسية' : 'Nationality'"
-                                />
+                                >
+                                    <option v-for="nat in nationalityOptions" :key="nat.value" :value="nat.value">
+                                        {{ isRtl ? nat.ar : nat.en }}
+                                    </option>
+                                </select>
+                                <p v-if="form.errors.nationality" class="mt-1.5 text-xs text-red-600">{{ form.errors.nationality }}</p>
                             </div>
                         </div>
 
