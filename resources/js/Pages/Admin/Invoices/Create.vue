@@ -25,7 +25,7 @@ onMounted(() => {
 });
 
 // Only show enabled medical modules (derma, dental)
-const medicalSlugs = ['derma', 'dental'];
+const medicalSlugs = ['derma', 'dental', 'pediatric'];
 const selectedModule = ref('');
 const activeModules = computed(() => {
     return Object.entries(modules.value)

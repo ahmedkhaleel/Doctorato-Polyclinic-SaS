@@ -19,7 +19,7 @@ const source = ref(props.filters?.source || '');
 const moduleFilter = ref(props.filters?.module || '');
 
 const modules = computed(() => page.props.modules || {});
-const clinicalSlugs = ['derma', 'dental'];
+const clinicalSlugs = ['derma', 'dental', 'pediatric'];
 const activeModules = computed(() => {
     const mods = [];
     if (modules.value) {

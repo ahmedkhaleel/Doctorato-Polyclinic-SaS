@@ -38,7 +38,7 @@ const activeModules = computed(() => {
     return mods;
 });
 
-const medicalModules = computed(() => activeModules.value.filter(m => ['derma', 'dental'].includes(m.slug)));
+const medicalModules = computed(() => activeModules.value.filter(m => ['derma', 'dental', 'pediatric'].includes(m.slug)));
 
 const stats = computed(() => {
     const all = props.doctors?.data || [];

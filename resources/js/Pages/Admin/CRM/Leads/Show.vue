@@ -395,7 +395,7 @@ const enabledDepartments = computed(() => {
         derma: 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z',
         dental: 'M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z',
     };
-    return ['derma', 'dental']
+    return ['derma', 'dental', 'pediatric']
         .filter(slug => allModules[slug]?.enabled || allModules[slug]?.is_core)
         .map(slug => ({
             slug,

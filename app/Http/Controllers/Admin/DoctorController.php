@@ -36,7 +36,7 @@ class DoctorController extends Controller
     public function index(Request $request): Response
     {
         $doctors = Doctor::query()
-            ->whereIn('module', ['derma', 'dental'])
+            ->whereIn('module', ModuleManager::MEDICAL_MODULES)
             ->when($request->module, function ($query, $module) {
                 $query->where('module', $module);
             })
@@ -53,7 +53,7 @@ class DoctorController extends Controller
         return Inertia::render('Admin/Doctors/Index', [
             'doctors' => $doctors,
             'filters' => $request->only(['search', 'module']),
-            'modules' => collect(ModuleManager::getActiveModules())->only(['derma', 'dental'])->all(),
+            'modules' => collect(ModuleManager::getActiveModules())->only(ModuleManager::MEDICAL_MODULES)->all(),
         ]);
     }
 
@@ -69,8 +69,10 @@ class DoctorController extends Controller
                 'followup_fee' => Setting::get('followup_fee', 0),
                 'dental_consultant_fee' => Setting::get('dental_consultant_fee', 0),
                 'dental_specialist_fee' => Setting::get('dental_specialist_fee', 0),
+                'pediatric_consultant_fee' => (float) ModuleManager::getSetting('pediatric', 'consultation_consultant_fee', Setting::get('pediatric_consultant_fee', 0)),
+                'pediatric_specialist_fee' => (float) ModuleManager::getSetting('pediatric', 'consultation_specialist_fee', Setting::get('pediatric_specialist_fee', 0)),
             ],
-            'modules' => collect(ModuleManager::getActiveModules())->only(['derma', 'dental'])->all(),
+            'modules' => collect(ModuleManager::getActiveModules())->only(ModuleManager::MEDICAL_MODULES)->all(),
         ]);
     }
 
@@ -369,8 +371,10 @@ class DoctorController extends Controller
                 'followup_fee' => Setting::get('followup_fee', 0),
                 'dental_consultant_fee' => Setting::get('dental_consultant_fee', 0),
                 'dental_specialist_fee' => Setting::get('dental_specialist_fee', 0),
+                'pediatric_consultant_fee' => (float) ModuleManager::getSetting('pediatric', 'consultation_consultant_fee', Setting::get('pediatric_consultant_fee', 0)),
+                'pediatric_specialist_fee' => (float) ModuleManager::getSetting('pediatric', 'consultation_specialist_fee', Setting::get('pediatric_specialist_fee', 0)),
             ],
-            'modules' => collect(ModuleManager::getActiveModules())->only(['derma', 'dental'])->all(),
+            'modules' => collect(ModuleManager::getActiveModules())->only(ModuleManager::MEDICAL_MODULES)->all(),
         ]);
     }
 

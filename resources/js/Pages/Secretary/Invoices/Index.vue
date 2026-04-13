@@ -12,7 +12,7 @@ const isRtl = computed(() => (page.props.dir || 'rtl') === 'rtl');
 const props = defineProps({ invoices: Object, filters: Object });
 
 const modules = computed(() => page.props.modules || {});
-const clinicalSlugs = ['derma', 'dental'];
+const clinicalSlugs = ['derma', 'dental', 'pediatric'];
 const activeModules = computed(() => {
     return Object.entries(modules.value)
         .filter(([slug, m]) => m.is_enabled !== false && clinicalSlugs.includes(slug))

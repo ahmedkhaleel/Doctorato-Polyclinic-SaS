@@ -60,6 +60,8 @@ const form = useForm({
     dental_service_fee: '',
     dental_consultation_commission: '',
     dental_service_commission: '',
+    pediatric_consultation_commission: '',
+    pediatric_followup_commission: '',
     clinic_notes: '',
     // Auto-create user account
     create_user_account: false,
@@ -121,6 +123,12 @@ const dermatologyFeeForType = computed(() => {
 const dentalFeeForType = computed(() => {
     if (form.doctor_type === 'consultant') return props.pricingSettings?.dental_consultant_fee || 0;
     if (form.doctor_type === 'specialist') return props.pricingSettings?.dental_specialist_fee || 0;
+    return 0;
+});
+
+const pediatricFeeForType = computed(() => {
+    if (form.doctor_type === 'consultant') return props.pricingSettings?.pediatric_consultant_fee || 0;
+    if (form.doctor_type === 'specialist') return props.pricingSettings?.pediatric_specialist_fee || 0;
     return 0;
 });
 
@@ -366,7 +374,7 @@ function serviceRateOptions(currentIndex) {
                             </div>
 
                             <!-- Applicable Fees from Settings (read-only info) -->
-                            <div v-if="form.doctor_type && form.module !== 'dental'" class="p-4 rounded-xl border border-dashed space-y-2"
+                            <div v-if="form.doctor_type && form.module === 'derma'" class="p-4 rounded-xl border border-dashed space-y-2"
                                  :class="form.doctor_type === 'consultant' ? 'border-[#C4A265]/40 bg-[#C4A265]/5' : 'border-blue-300 bg-blue-50/30'">
                                 <h4 class="text-xs font-semibold uppercase tracking-wider" :class="form.doctor_type === 'consultant' ? 'text-[#C4A265]' : 'text-blue-600'">
                                     Applicable Consultation Fees (from Settings)
@@ -412,6 +420,25 @@ function serviceRateOptions(currentIndex) {
                                 </div>
                                 <p class="text-[10px] text-gray-400 text-center">{{ locale === 'ar' ? 'رسوم الكشف تُدار من الإعدادات العامة' : 'Consultation fees are managed in general settings' }}</p>
                             </div>
+                            <!-- Pediatric Fees -->
+                            <div v-if="form.module === 'pediatric' && form.doctor_type" class="p-4 rounded-xl border border-dashed border-green-300 bg-green-50/30 space-y-3">
+                                <h4 class="text-xs font-semibold uppercase tracking-wider text-green-600">
+                                    {{ locale === 'ar' ? 'رسوم استشارات الأطفال المطبقة (من الإعدادات)' : 'Applicable Pediatric Consultation Fees (from Settings)' }}
+                                </h4>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div class="text-center p-2 bg-white/80 rounded-lg">
+                                        <p class="text-xs text-gray-400 mb-0.5">{{ locale === 'ar' ? 'كشف أطفال' : 'Pediatric Consultation' }}</p>
+                                        <p class="text-xs text-gray-400">{{ form.doctor_type === 'consultant' ? (locale === 'ar' ? 'استشاري' : 'Consultant') : (locale === 'ar' ? 'أخصائي' : 'Specialist') }}</p>
+                                        <p class="text-lg font-bold text-green-600">{{ pediatricFeeForType }} <span class="text-xs font-normal text-gray-400">{{ currencyCode }}</span></p>
+                                    </div>
+                                    <div class="text-center p-2 bg-white/80 rounded-lg">
+                                        <p class="text-xs text-gray-400 mb-0.5">{{ locale === 'ar' ? 'رسوم المتابعة' : 'Follow-up Fee' }}</p>
+                                        <p class="text-xs text-gray-400">&nbsp;</p>
+                                        <p class="text-lg font-bold text-green-600">{{ pricingSettings?.pediatric_followup_fee || 0 }} <span class="text-xs font-normal text-gray-400">{{ currencyCode }}</span></p>
+                                    </div>
+                                </div>
+                                <p class="text-[10px] text-gray-400 text-center">{{ locale === 'ar' ? 'رسوم الكشف تُدار من الإعدادات العامة' : 'Consultation fees are managed in general settings' }}</p>
+                            </div>
                             <div v-if="!form.doctor_type" class="p-3 bg-amber-50 border border-amber-200 rounded-xl">
                                 <p class="text-xs text-amber-700 flex items-center gap-1.5">
                                     <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" /></svg>
@@ -427,7 +454,7 @@ function serviceRateOptions(currentIndex) {
 
                             <div class="space-y-3">
                                 <!-- Derma Commission Rates -->
-                                <template v-if="form.module !== 'dental'">
+                                <template v-if="form.module === 'derma'">
                                 <div class="flex items-center gap-4 p-4 rounded-xl border border-gray-200 bg-gray-50/50">
                                     <div class="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center flex-shrink-0">
                                         <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
@@ -505,6 +532,40 @@ function serviceRateOptions(currentIndex) {
                                         <div class="w-28">
                                             <div class="relative">
                                                 <input v-model="form.dental_service_commission" type="number" step="0.01" min="0" max="100" placeholder="0" class="w-full px-3 py-2 pr-8 border border-gray-300 rounded-lg text-sm ltr:text-right rtl:text-left font-semibold focus:ring-2 focus:ring-cyan-300 focus:border-cyan-400" />
+                                                <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400 font-medium">%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </template>
+
+                                <!-- Pediatric Commission Rates -->
+                                <template v-if="form.module === 'pediatric'">
+                                    <div class="flex items-center gap-4 p-4 rounded-xl border border-gray-200 bg-gray-50/50">
+                                        <div class="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center flex-shrink-0">
+                                            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8.25a3.75 3.75 0 100-7.5 3.75 3.75 0 000 7.5zM6.75 12a.75.75 0 00-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 00.75-.75v-.008a.75.75 0 00-.75-.75H6.75zm10.5 0a.75.75 0 00-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 00.75-.75v-.008a.75.75 0 00-.75-.75h-.008zM12 10.5c-3.315 0-6 2.685-6 6v3a.75.75 0 00.75.75h10.5a.75.75 0 00.75-.75v-3c0-3.315-2.685-6-6-6z" /></svg>
+                                        </div>
+                                        <div class="flex-1">
+                                            <label class="block text-sm font-semibold text-gray-700">{{ locale === 'ar' ? 'عمولة استشارة الأطفال' : 'Pediatric Consultation Commission' }}</label>
+                                            <p class="text-xs text-gray-400">{{ locale === 'ar' ? 'Consultation' : 'كشف أطفال' }}</p>
+                                        </div>
+                                        <div class="w-28">
+                                            <div class="relative">
+                                                <input v-model="form.pediatric_consultation_commission" type="number" step="0.01" min="0" max="100" placeholder="0" class="w-full px-3 py-2 pr-8 border border-gray-300 rounded-lg text-sm ltr:text-right rtl:text-left font-semibold focus:ring-2 focus:ring-green-300 focus:border-green-400" />
+                                                <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400 font-medium">%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-4 p-4 rounded-xl border border-gray-200 bg-gray-50/50">
+                                        <div class="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center flex-shrink-0">
+                                            <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                                        </div>
+                                        <div class="flex-1">
+                                            <label class="block text-sm font-semibold text-gray-700">{{ locale === 'ar' ? 'عمولة المتابعة' : 'Follow-up Commission' }}</label>
+                                            <p class="text-xs text-gray-400">{{ locale === 'ar' ? 'Follow-up' : 'متابعة أطفال' }}</p>
+                                        </div>
+                                        <div class="w-28">
+                                            <div class="relative">
+                                                <input v-model="form.pediatric_followup_commission" type="number" step="0.01" min="0" max="100" placeholder="0" class="w-full px-3 py-2 pr-8 border border-gray-300 rounded-lg text-sm ltr:text-right rtl:text-left font-semibold focus:ring-2 focus:ring-green-300 focus:border-green-400" />
                                                 <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400 font-medium">%</span>
                                             </div>
                                         </div>

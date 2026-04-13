@@ -23,7 +23,7 @@ const moduleFilter = ref(props.filters?.module || '');
 
 const modules = computed(() => page.props.modules || {});
 /* ── Only show MEDICAL modules that are ENABLED (not HR, inventory, insurance) ── */
-const medicalModuleSlugs = ['derma', 'dental'];
+const medicalModuleSlugs = ['derma', 'dental', 'pediatric'];
 const activeModules = computed(() => {
     const mods = [];
     if (modules.value) {

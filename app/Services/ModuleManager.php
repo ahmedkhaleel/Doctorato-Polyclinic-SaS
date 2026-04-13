@@ -80,6 +80,11 @@ class ModuleManager
     ];
 
     /**
+     * Medical specialty modules (have doctors, visits, bookings)
+     */
+    const MEDICAL_MODULES = ['derma', 'dental', 'pediatric'];
+
+    /**
      * Get all registered modules
      */
     public static function getAllModules(): array
