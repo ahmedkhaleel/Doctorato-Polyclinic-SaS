@@ -19,14 +19,16 @@ onMounted(() => {
     setTimeout(() => { mounted.value = true; }, 50);
 });
 
-// Tabs
-const activeTab = ref('activity');
+// Tabs — persisted to localStorage
+const savedTab = (() => { try { return localStorage.getItem('crm_leadshow_tab'); } catch { return null; } })();
+const activeTab = ref(savedTab || 'activity');
 const tabTransition = ref(false);
 function switchTab(tab) {
     if (tab === activeTab.value) return;
     tabTransition.value = true;
     setTimeout(() => {
         activeTab.value = tab;
+        try { localStorage.setItem('crm_leadshow_tab', tab); } catch {}
         setTimeout(() => { tabTransition.value = false; }, 30);
     }, 200);
 }

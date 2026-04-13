@@ -298,9 +298,27 @@ function formatFullDate(date) {
     <!-- Stage Conversion Funnel Bar -->
     <div :class="['bg-white rounded-2xl shadow-sm border border-gray-100 p-4 mb-4 transition-all duration-700', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4']"
          :style="{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)', transitionDelay: '100ms' }">
-        <div class="flex items-center gap-2 mb-3">
-            <svg class="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
-            <span class="text-xs font-semibold text-gray-700">{{ isRtl ? '\u0645\u0639\u062F\u0644\u0627\u062A \u0627\u0644\u062A\u062D\u0648\u064A\u0644 \u0628\u064A\u0646 \u0627\u0644\u0645\u0631\u0627\u062D\u0644' : 'Stage-to-Stage Conversion' }}</span>
+        <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
+                <span class="text-xs font-semibold text-gray-700">{{ isRtl ? '\u0645\u0639\u062F\u0644\u0627\u062A \u0627\u0644\u062A\u062D\u0648\u064A\u0644 \u0628\u064A\u0646 \u0627\u0644\u0645\u0631\u0627\u062D\u0644' : 'Stage-to-Stage Conversion' }}</span>
+            </div>
+            <div class="flex items-center gap-3 text-[11px]">
+                <span class="flex items-center gap-1 text-gray-500">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+                    {{ isRtl ? 'أول←آخر:' : 'Start→End:' }}
+                    <span :class="['font-bold', stageConversions.length > 1 && stageConversions[0].count > 0 ? (Math.round(stageConversions[stageConversions.length - 1].count / stageConversions[0].count * 100) >= 30 ? 'text-emerald-600' : 'text-amber-600') : 'text-gray-400']">
+                        {{ stageConversions.length > 1 && stageConversions[0].count > 0 ? Math.round(stageConversions[stageConversions.length - 1].count / stageConversions[0].count * 100) : 0 }}%
+                    </span>
+                </span>
+                <span class="flex items-center gap-1 text-gray-500">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    {{ isRtl ? 'متأخر:' : 'Overdue:' }}
+                    <span :class="['font-bold', Object.values(columnStats).reduce((s, c) => s + c.overdueCount, 0) > 0 ? 'text-red-600' : 'text-gray-400']">
+                        {{ Object.values(columnStats).reduce((s, c) => s + c.overdueCount, 0) }}
+                    </span>
+                </span>
+            </div>
         </div>
         <div class="flex items-end gap-1">
             <template v-for="(sc, idx) in stageConversions" :key="sc.status">

@@ -556,8 +556,12 @@ const activeFilterPills = computed(() => {
                             </svg>
                         </div>
                         <input v-model="search" type="text" data-search-input
-                            :placeholder="isRtl ? '\u0628\u062D\u062B \u0628\u0627\u0644\u0627\u0633\u0645\u060C \u0627\u0644\u0647\u0627\u062A\u0641\u060C \u0627\u0644\u0628\u0631\u064A\u062F \u0627\u0644\u0625\u0644\u0643\u062A\u0631\u0648\u0646\u064A... (/)' : 'Search by name, phone, email... (/)'  "
-                            class="w-full ltr:pl-11 rtl:pr-11 ltr:pr-4 rtl:pl-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all duration-200 bg-gray-50 focus:bg-white" />
+                            :placeholder="isRtl ? '\u0628\u062D\u062B \u0628\u0627\u0644\u0627\u0633\u0645\u060C \u0627\u0644\u0647\u0627\u062A\u0641\u060C \u0627\u0644\u0628\u0631\u064A\u062F \u0627\u0644\u0625\u0644\u0643\u062A\u0631\u0648\u0646\u064A...' : 'Search by name, phone, email...'  "
+                            class="w-full ltr:pl-11 rtl:pr-11 ltr:pr-12 rtl:pl-12 py-2.5 text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all duration-200 bg-gray-50 focus:bg-white" />
+                        <!-- Keyboard shortcut badge -->
+                        <div v-if="!search" class="absolute inset-y-0 ltr:right-0 rtl:left-0 ltr:pr-3 rtl:pl-3 hidden md:flex items-center pointer-events-none">
+                            <kbd class="px-1.5 py-0.5 text-[10px] font-mono font-semibold text-gray-400 bg-gray-100 border border-gray-200 rounded shadow-sm">/</kbd>
+                        </div>
                     </div>
 
                     <!-- Status Dropdown -->
