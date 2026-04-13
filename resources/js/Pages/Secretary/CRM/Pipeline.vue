@@ -498,20 +498,28 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handlePipelineKe
                 </span>
             </div>
 
-            <!-- Column stats strip -->
+            <!-- Column stats strip + age health bar -->
             <div v-if="!isCollapsed(status) && filteredLeads(localColumns[status]).length > 0"
-                 :class="['flex items-center justify-between px-3 py-1.5 text-[10px] border-x', statusConfig[status].bg, statusConfig[status].border]">
-                <div class="flex items-center gap-0.5 text-gray-400" :title="isRtl ? '\u0645\u062A\u0648\u0633\u0637 \u0627\u0644\u0623\u064A\u0627\u0645' : 'Avg days'">
-                    <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    <span class="font-semibold" :class="columnStats[status].avgDays > 7 ? 'text-amber-500' : 'text-gray-500'">{{ columnStats[status].avgDays }}{{ isRtl ? '\u064A' : 'd' }}</span>
+                 :class="['border-x', statusConfig[status].bg, statusConfig[status].border]">
+                <!-- Age health micro-bar -->
+                <div class="h-1 w-full bg-gray-100 overflow-hidden">
+                    <div class="h-full transition-all duration-700 ease-out"
+                         :style="{ width: Math.min((columnStats[status].avgDays / 14) * 100, 100) + '%',
+                                   background: columnStats[status].avgDays <= 3 ? '#10b981' : columnStats[status].avgDays <= 7 ? '#f59e0b' : '#ef4444' }"></div>
                 </div>
-                <div class="flex items-center gap-0.5 text-gray-400" :title="isRtl ? '\u0645\u062A\u0648\u0633\u0637 \u0627\u0644\u0646\u0642\u0627\u0637' : 'Avg score'">
-                    <svg class="w-3 h-3 text-amber-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                    <span class="font-semibold" :class="columnStats[status].avgScore >= 70 ? 'text-teal-600' : columnStats[status].avgScore >= 40 ? 'text-amber-500' : 'text-gray-500'">{{ columnStats[status].avgScore }}</span>
-                </div>
-                <div v-if="columnStats[status].overdueCount > 0" class="flex items-center gap-0.5 text-red-500" :title="isRtl ? '\u0645\u062A\u0623\u062E\u0631\u0629' : 'Overdue'">
-                    <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/></svg>
-                    <span class="font-bold">{{ columnStats[status].overdueCount }}</span>
+                <div class="flex items-center justify-between px-3 py-1.5 text-[10px]">
+                    <div class="flex items-center gap-0.5 text-gray-400" :title="isRtl ? '\u0645\u062A\u0648\u0633\u0637 \u0627\u0644\u0623\u064A\u0627\u0645' : 'Avg days'">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <span class="font-semibold" :class="columnStats[status].avgDays > 7 ? 'text-red-500' : columnStats[status].avgDays > 3 ? 'text-amber-500' : 'text-emerald-600'">{{ columnStats[status].avgDays }}{{ isRtl ? '\u064A' : 'd' }}</span>
+                    </div>
+                    <div class="flex items-center gap-0.5 text-gray-400" :title="isRtl ? '\u0645\u062A\u0648\u0633\u0637 \u0627\u0644\u0646\u0642\u0627\u0637' : 'Avg score'">
+                        <svg class="w-3 h-3 text-amber-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <span class="font-semibold" :class="columnStats[status].avgScore >= 70 ? 'text-teal-600' : columnStats[status].avgScore >= 40 ? 'text-amber-500' : 'text-gray-500'">{{ columnStats[status].avgScore }}</span>
+                    </div>
+                    <div v-if="columnStats[status].overdueCount > 0" class="flex items-center gap-0.5 text-red-500" :title="isRtl ? '\u0645\u062A\u0623\u062E\u0631\u0629' : 'Overdue'">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/></svg>
+                        <span class="font-bold">{{ columnStats[status].overdueCount }}</span>
+                    </div>
                 </div>
             </div>
 

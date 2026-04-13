@@ -425,6 +425,27 @@ const sparklines = computed(() => {
     };
 });
 
+/* ---------- Activity type distribution ---------- */
+const activityTypeDistribution = computed(() => {
+    const acts = props.recentActivities || [];
+    if (!acts.length) return [];
+    const types = [
+        { key: 'call', en: 'Calls', ar: 'مكالمات', color: '#10b981' },
+        { key: 'whatsapp', en: 'WhatsApp', ar: 'واتساب', color: '#25d366' },
+        { key: 'email', en: 'Email', ar: 'بريد', color: '#3b82f6' },
+        { key: 'sms', en: 'SMS', ar: 'رسائل', color: '#8b5cf6' },
+        { key: 'meeting', en: 'Meetings', ar: 'اجتماعات', color: '#f59e0b' },
+        { key: 'note', en: 'Notes', ar: 'ملاحظات', color: '#64748b' },
+    ];
+    const total = acts.length;
+    return types.map(t => {
+        const count = acts.filter(a => a.type === t.key).length;
+        return { ...t, count, pct: total > 0 ? Math.round((count / total) * 100) : 0 };
+    }).filter(t => t.count > 0);
+});
+
+const activityDistMax = computed(() => Math.max(...activityTypeDistribution.value.map(t => t.count), 1));
+
 /* ---------- Keyboard shortcuts ---------- */
 function handleDashboardKey(e) {
     if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) return;
@@ -1271,6 +1292,39 @@ const activityTypeConfig = {
                             </div>
                             <p class="text-sm font-medium text-gray-500">{{ isRtl ? 'لم يتم تعيين عملاء لك بعد' : 'No leads assigned yet' }}</p>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============ ACTIVITY TYPE DISTRIBUTION ============ -->
+            <div v-if="activityTypeDistribution.length"
+                class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 overflow-hidden"
+                :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
+                style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.48s">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background: linear-gradient(135deg, #8b5cf6, #a78bfa);">
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/><path stroke-linecap="round" stroke-linejoin="round" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/></svg>
+                        </div>
+                        <h3 class="text-sm font-bold text-gray-800">{{ isRtl ? 'توزيع الأنشطة' : 'Activity Breakdown' }}</h3>
+                    </div>
+                    <span class="text-xs text-gray-400">{{ (recentActivities || []).length }} {{ isRtl ? 'نشاط' : 'total' }}</span>
+                </div>
+                <div class="space-y-2.5">
+                    <div v-for="(t, idx) in activityTypeDistribution" :key="t.key"
+                         class="flex items-center gap-3 group">
+                        <span class="text-[11px] font-medium text-gray-500 w-16 truncate">{{ isRtl ? t.ar : t.en }}</span>
+                        <div class="flex-1 h-4 bg-gray-50 rounded-lg overflow-hidden">
+                            <div class="h-full rounded-lg transition-all duration-1000 ease-out flex items-center justify-end px-1.5"
+                                 :style="{
+                                     width: mounted ? Math.max((t.count / activityDistMax) * 100, 6) + '%' : '0%',
+                                     backgroundColor: t.color,
+                                     transitionDelay: (0.55 + idx * 0.08) + 's'
+                                 }">
+                                <span class="text-[9px] font-bold text-white">{{ t.count }}</span>
+                            </div>
+                        </div>
+                        <span class="text-[10px] font-semibold text-gray-400 w-8 text-end tabular-nums">{{ t.pct }}%</span>
                     </div>
                 </div>
             </div>

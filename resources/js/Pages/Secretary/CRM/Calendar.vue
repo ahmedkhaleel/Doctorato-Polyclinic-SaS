@@ -418,6 +418,26 @@ function snoozeFollowUp(fuId, key) {
     }, { preserveScroll: true, preserveState: true });
 }
 
+/* ── Day heatmap intensity ─────────────────────────── */
+const dayMaxFollowUps = computed(() => {
+    const map = followUpsByDate.value;
+    let max = 0;
+    for (const k in map) {
+        if (map[k].length > max) max = map[k].length;
+    }
+    return Math.max(max, 1);
+});
+
+function dayHeatmapStyle(dateStr, isCurrentMonth) {
+    if (!isCurrentMonth) return {};
+    const count = (followUpsByDate.value[dateStr] || []).length;
+    if (count === 0) return {};
+    const intensity = Math.min(count / dayMaxFollowUps.value, 1);
+    // Scale from 0.04 to 0.18 opacity
+    const alpha = 0.04 + intensity * 0.14;
+    return { backgroundColor: `rgba(13, 148, 136, ${alpha.toFixed(2)})` };
+}
+
 /* ── Keyboard shortcuts ──────────────────────────────── */
 function handleCalendarKey(e) {
     if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) return;
@@ -633,7 +653,8 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handleCalendarKe
                  :class="['relative min-h-[90px] md:min-h-[110px] border-b border-r border-gray-50 p-1.5 cursor-pointer transition-all duration-150 hover:bg-teal-50/40 group',
                     !cell.isCurrentMonth ? 'bg-gray-50/50' : '',
                     cell.isToday ? 'bg-teal-50/60 ring-1 ring-inset ring-teal-200' : '',
-                    selectedDate === cell.date ? 'bg-teal-50 ring-2 ring-inset ring-teal-400' : '']">
+                    selectedDate === cell.date ? 'bg-teal-50 ring-2 ring-inset ring-teal-400' : '']"
+                 :style="!cell.isToday && selectedDate !== cell.date ? dayHeatmapStyle(cell.date, cell.isCurrentMonth) : {}"
 
                 <!-- Day number -->
                 <div class="flex items-center justify-between mb-1">

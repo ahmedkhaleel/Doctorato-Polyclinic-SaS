@@ -414,6 +414,27 @@ function quickLogNote(template) {
     });
 }
 
+/* Contact auto-log: opens the link AND logs an activity */
+const contactAutoLogSaving = ref(null);
+function contactAutoLog(type) {
+    if (contactAutoLogSaving.value) return;
+    contactAutoLogSaving.value = type;
+    const descriptions = {
+        call: isRtl.value ? 'تم إجراء مكالمة' : 'Initiated a call',
+        whatsapp: isRtl.value ? 'تم فتح محادثة واتساب' : 'Opened WhatsApp chat',
+        email: isRtl.value ? 'تم إرسال بريد إلكتروني' : 'Sent an email',
+    };
+    router.post(`/secretary/crm/leads/${props.lead.id}/activity`, {
+        type: type === 'whatsapp' ? 'whatsapp' : type === 'email' ? 'email' : 'call',
+        description: descriptions[type] || '',
+        direction: 'outbound',
+        outcome: '',
+    }, {
+        preserveScroll: true,
+        onFinish: () => { contactAutoLogSaving.value = null; },
+    });
+}
+
 // Activity filter
 const activitySearchQuery = ref('');
 const activityTypeFilter = ref('all');
@@ -1757,19 +1778,34 @@ function handleLeadShowKey(e) {
                             </h3>
                             <div class="grid grid-cols-2 gap-2">
                                 <a v-if="lead.phone" :href="whatsappUrl(lead.phone)" target="_blank"
-                                   class="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-emerald-50 text-emerald-700 hover:bg-emerald-100 transition-colors border border-emerald-200 text-sm font-medium">
-                                    <svg class="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.832-1.438A9.955 9.955 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2z"/></svg>
+                                   @click="contactAutoLog('whatsapp')"
+                                   class="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-emerald-50 text-emerald-700 hover:bg-emerald-100 transition-colors border border-emerald-200 text-sm font-medium relative group/btn">
+                                    <svg v-if="contactAutoLogSaving !== 'whatsapp'" class="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.832-1.438A9.955 9.955 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2z"/></svg>
+                                    <svg v-else class="w-4 h-4 flex-shrink-0 animate-spin" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
                                     {{ isRtl ? 'واتساب' : 'WhatsApp' }}
+                                    <span class="absolute -top-1 -end-1 w-3.5 h-3.5 rounded-full bg-emerald-500 text-white flex items-center justify-center opacity-0 group-hover/btn:opacity-100 transition-opacity" :title="isRtl ? 'تسجيل تلقائي' : 'Auto-log'">
+                                        <svg class="w-2 h-2" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                    </span>
                                 </a>
                                 <a v-if="lead.phone" :href="'tel:' + lead.phone"
-                                   class="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-green-50 text-green-700 hover:bg-green-100 transition-colors border border-green-200 text-sm font-medium">
-                                    <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                                   @click="contactAutoLog('call')"
+                                   class="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-green-50 text-green-700 hover:bg-green-100 transition-colors border border-green-200 text-sm font-medium relative group/btn">
+                                    <svg v-if="contactAutoLogSaving !== 'call'" class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                                    <svg v-else class="w-4 h-4 flex-shrink-0 animate-spin" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
                                     {{ isRtl ? 'اتصال' : 'Call' }}
+                                    <span class="absolute -top-1 -end-1 w-3.5 h-3.5 rounded-full bg-green-500 text-white flex items-center justify-center opacity-0 group-hover/btn:opacity-100 transition-opacity" :title="isRtl ? 'تسجيل تلقائي' : 'Auto-log'">
+                                        <svg class="w-2 h-2" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                    </span>
                                 </a>
                                 <a v-if="lead.email" :href="'mailto:' + lead.email"
-                                   class="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-blue-50 text-blue-700 hover:bg-blue-100 transition-colors border border-blue-200 text-sm font-medium">
-                                    <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                                   @click="contactAutoLog('email')"
+                                   class="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-blue-50 text-blue-700 hover:bg-blue-100 transition-colors border border-blue-200 text-sm font-medium relative group/btn">
+                                    <svg v-if="contactAutoLogSaving !== 'email'" class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                                    <svg v-else class="w-4 h-4 flex-shrink-0 animate-spin" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
                                     {{ isRtl ? 'بريد' : 'Email' }}
+                                    <span class="absolute -top-1 -end-1 w-3.5 h-3.5 rounded-full bg-blue-500 text-white flex items-center justify-center opacity-0 group-hover/btn:opacity-100 transition-opacity" :title="isRtl ? 'تسجيل تلقائي' : 'Auto-log'">
+                                        <svg class="w-2 h-2" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                    </span>
                                 </a>
                                 <button v-if="lead.phone" @click="copyPhone"
                                     class="flex items-center gap-2 px-3 py-2.5 rounded-xl transition-colors border text-sm font-medium"
@@ -1779,6 +1815,11 @@ function handleLeadShowKey(e) {
                                     {{ phoneCopied ? (isRtl ? 'تم النسخ' : 'Copied') : (isRtl ? 'نسخ الهاتف' : 'Copy Phone') }}
                                 </button>
                             </div>
+                            <!-- Auto-log hint -->
+                            <p class="mt-2 text-[10px] text-gray-400 flex items-center gap-1">
+                                <svg class="w-3 h-3 text-teal-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                {{ isRtl ? 'الضغط على الأزرار يسجل النشاط تلقائياً' : 'Clicking logs activity automatically' }}
+                            </p>
                         </div>
 
                         <!-- Activity Summary -->
