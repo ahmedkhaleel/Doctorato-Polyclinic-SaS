@@ -83,6 +83,36 @@ class SecretaryCrmController extends BaseSecretaryController
         $totalConverted = Lead::assignedTo($userId)->where('status', 'converted')->count();
         $conversionRate = $totalAssigned > 0 ? round(($totalConverted / $totalAssigned) * 100, 1) : 0;
 
+        // Weekly performance metrics
+        $weekStart = now()->startOfWeek();
+        $weeklyStats = [
+            'leads_added' => Lead::assignedTo($userId)->where('created_at', '>=', $weekStart)->count(),
+            'activities_logged' => LeadActivity::where('performed_by', $userId)->where('created_at', '>=', $weekStart)->count(),
+            'follow_ups_completed' => LeadFollowUp::forUser($userId)->where('status', 'completed')->where('updated_at', '>=', $weekStart)->count(),
+            'calls_made' => LeadActivity::where('performed_by', $userId)->where('type', 'call')->where('created_at', '>=', $weekStart)->count(),
+            'whatsapp_sent' => LeadActivity::where('performed_by', $userId)->where('type', 'whatsapp')->where('created_at', '>=', $weekStart)->count(),
+        ];
+
+        // Module distribution (derma vs dental)
+        $moduleDistribution = Lead::assignedTo($userId)
+            ->whereNotIn('status', ['converted', 'lost'])
+            ->selectRaw("COALESCE(module, 'derma') as module, count(*) as count")
+            ->groupBy(DB::raw("COALESCE(module, 'derma')"))
+            ->pluck('count', 'module')
+            ->toArray();
+
+        // Activity trend (last 7 days)
+        $activityTrend = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $date = now()->subDays($i)->toDateString();
+            $activityTrend[] = [
+                'date' => $date,
+                'count' => LeadActivity::where('performed_by', $userId)
+                    ->whereDate('created_at', $date)
+                    ->count(),
+            ];
+        }
+
         return Inertia::render('Secretary/CRM/Dashboard', [
             'stats' => $stats,
             'todayFollowUps' => $todayFollowUps,
@@ -92,6 +122,9 @@ class SecretaryCrmController extends BaseSecretaryController
             'recentActivities' => $recentActivities,
             'todayActivityCount' => $todayActivityCount,
             'conversionRate' => $conversionRate,
+            'weeklyStats' => $weeklyStats,
+            'moduleDistribution' => $moduleDistribution,
+            'activityTrend' => $activityTrend,
         ]);
     }
 

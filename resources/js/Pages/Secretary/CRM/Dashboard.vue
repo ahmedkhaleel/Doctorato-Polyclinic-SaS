@@ -15,6 +15,9 @@ const props = defineProps({
     recentActivities: Array,
     todayActivityCount: Number,
     conversionRate: Number,
+    weeklyStats: Object,
+    moduleDistribution: Object,
+    activityTrend: Array,
 });
 
 const mounted = ref(false);
@@ -796,6 +799,132 @@ const activityTypeConfig = {
                 </div>
                 <div v-if="dailyProgress.pct >= 100" class="mt-2 text-center">
                     <span class="text-xs font-medium text-emerald-600">{{ isRtl ? 'عمل رائع! أنجزت كل مهام اليوم' : 'Great job! All tasks completed for today' }}</span>
+                </div>
+            </div>
+
+            <!-- ============ WEEKLY PERFORMANCE + MODULE DISTRIBUTION ============ -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4"
+                :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
+                style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.26s">
+
+                <!-- Weekly Performance -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-sm font-semibold text-gray-800 flex items-center gap-2">
+                            <svg class="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                            </svg>
+                            {{ isRtl ? 'أداء هذا الأسبوع' : 'This Week' }}
+                        </h3>
+                        <span class="text-[10px] text-gray-400 font-medium">{{ isRtl ? 'من بداية الأسبوع' : 'Since Monday' }}</span>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        <div class="bg-teal-50/60 rounded-xl p-3 text-center border border-teal-100">
+                            <div class="text-xl font-bold text-teal-700">{{ weeklyStats?.leads_added || 0 }}</div>
+                            <div class="text-[10px] text-teal-600 font-medium mt-0.5">{{ isRtl ? 'عملاء جدد' : 'New Leads' }}</div>
+                        </div>
+                        <div class="bg-blue-50/60 rounded-xl p-3 text-center border border-blue-100">
+                            <div class="text-xl font-bold text-blue-700">{{ weeklyStats?.activities_logged || 0 }}</div>
+                            <div class="text-[10px] text-blue-600 font-medium mt-0.5">{{ isRtl ? 'نشاط' : 'Activities' }}</div>
+                        </div>
+                        <div class="bg-emerald-50/60 rounded-xl p-3 text-center border border-emerald-100">
+                            <div class="text-xl font-bold text-emerald-700">{{ weeklyStats?.follow_ups_completed || 0 }}</div>
+                            <div class="text-[10px] text-emerald-600 font-medium mt-0.5">{{ isRtl ? 'متابعات مكتملة' : 'Completed F/U' }}</div>
+                        </div>
+                        <div class="bg-indigo-50/60 rounded-xl p-3 text-center border border-indigo-100">
+                            <div class="text-xl font-bold text-indigo-700">{{ weeklyStats?.calls_made || 0 }}</div>
+                            <div class="text-[10px] text-indigo-600 font-medium mt-0.5">{{ isRtl ? 'مكالمات' : 'Calls' }}</div>
+                        </div>
+                        <div class="bg-green-50/60 rounded-xl p-3 text-center border border-green-100">
+                            <div class="text-xl font-bold text-green-700">{{ weeklyStats?.whatsapp_sent || 0 }}</div>
+                            <div class="text-[10px] text-green-600 font-medium mt-0.5">{{ isRtl ? 'واتساب' : 'WhatsApp' }}</div>
+                        </div>
+                        <div class="bg-purple-50/60 rounded-xl p-3 text-center border border-purple-100">
+                            <div class="text-xl font-bold text-purple-700">{{ conversionRate || 0 }}%</div>
+                            <div class="text-[10px] text-purple-600 font-medium mt-0.5">{{ isRtl ? 'نسبة التحويل' : 'Conv. Rate' }}</div>
+                        </div>
+                    </div>
+
+                    <!-- Activity Sparkline -->
+                    <div v-if="activityTrend?.length" class="mt-4 pt-3 border-t border-gray-100">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-[10px] text-gray-400 font-medium uppercase tracking-wider">{{ isRtl ? 'نشاط آخر 7 أيام' : 'Last 7 Days Activity' }}</span>
+                            <span class="text-[10px] font-bold text-gray-600">{{ activityTrend.reduce((s, d) => s + d.count, 0) }} {{ isRtl ? 'إجمالي' : 'total' }}</span>
+                        </div>
+                        <div class="flex items-end gap-1 h-12">
+                            <div v-for="(day, i) in activityTrend" :key="i"
+                                class="flex-1 rounded-t transition-all duration-700"
+                                :class="mounted ? '' : 'h-0'"
+                                :style="{
+                                    height: mounted ? Math.max((day.count / Math.max(...activityTrend.map(d => d.count), 1)) * 48, 4) + 'px' : '0px',
+                                    backgroundColor: i === activityTrend.length - 1 ? '#0d9488' : '#ccfbf1',
+                                    transitionDelay: (i * 80 + 400) + 'ms'
+                                }"
+                                :title="day.date + ': ' + day.count">
+                            </div>
+                        </div>
+                        <div class="flex gap-1 mt-1">
+                            <span v-for="(day, i) in activityTrend" :key="'l'+i" class="flex-1 text-center text-[8px] text-gray-400">
+                                {{ new Date(day.date).toLocaleDateString(isRtl ? 'ar-SA' : 'en-US', { weekday: 'narrow' }) }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Module Distribution -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+                    <h3 class="text-sm font-semibold text-gray-800 flex items-center gap-2 mb-4">
+                        <svg class="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z"/>
+                        </svg>
+                        {{ isRtl ? 'توزيع الأقسام' : 'Department Distribution' }}
+                    </h3>
+
+                    <div v-if="moduleDistribution && (moduleDistribution.derma || moduleDistribution.dental)" class="space-y-4">
+                        <!-- Visual Bars -->
+                        <div class="space-y-3">
+                            <div>
+                                <div class="flex items-center justify-between mb-1.5">
+                                    <span class="flex items-center gap-1.5 text-sm font-medium text-teal-700">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.098 19.902a3.75 3.75 0 005.304 0l6.401-6.402M6.75 21A3.75 3.75 0 013 17.25V4.125C3 3.504 3.504 3 4.125 3h5.25c.621 0 1.125.504 1.125 1.125v4.072M6.75 21a3.75 3.75 0 003.75-3.75V8.197"/></svg>
+                                        {{ isRtl ? 'جلدية' : 'Derma' }}
+                                    </span>
+                                    <span class="text-sm font-bold text-teal-700">{{ moduleDistribution.derma || 0 }}</span>
+                                </div>
+                                <div class="h-3 rounded-full bg-gray-100 overflow-hidden">
+                                    <div class="h-full rounded-full transition-all duration-1000 ease-out"
+                                        style="background: linear-gradient(90deg, #0d9488, #14b8a6)"
+                                        :style="{ width: mounted ? Math.round(((moduleDistribution.derma || 0) / Math.max((moduleDistribution.derma || 0) + (moduleDistribution.dental || 0), 1)) * 100) + '%' : '0%' }">
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex items-center justify-between mb-1.5">
+                                    <span class="flex items-center gap-1.5 text-sm font-medium text-sky-700">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                        {{ isRtl ? 'أسنان' : 'Dental' }}
+                                    </span>
+                                    <span class="text-sm font-bold text-sky-700">{{ moduleDistribution.dental || 0 }}</span>
+                                </div>
+                                <div class="h-3 rounded-full bg-gray-100 overflow-hidden">
+                                    <div class="h-full rounded-full transition-all duration-1000 ease-out"
+                                        style="background: linear-gradient(90deg, #0284c7, #38bdf8)"
+                                        :style="{ width: mounted ? Math.round(((moduleDistribution.dental || 0) / Math.max((moduleDistribution.derma || 0) + (moduleDistribution.dental || 0), 1)) * 100) + '%' : '0%' }">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Summary -->
+                        <div class="bg-gray-50 rounded-xl p-3 flex items-center justify-between">
+                            <span class="text-xs text-gray-500">{{ isRtl ? 'إجمالي العملاء النشطين' : 'Total Active Leads' }}</span>
+                            <span class="text-lg font-bold text-gray-800">{{ (moduleDistribution.derma || 0) + (moduleDistribution.dental || 0) }}</span>
+                        </div>
+                    </div>
+                    <div v-else class="text-center py-8 text-gray-400">
+                        <svg class="w-10 h-10 mx-auto mb-2 text-gray-300" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"/></svg>
+                        <p class="text-xs">{{ isRtl ? 'لا توجد بيانات بعد' : 'No data yet' }}</p>
+                    </div>
                 </div>
             </div>
 

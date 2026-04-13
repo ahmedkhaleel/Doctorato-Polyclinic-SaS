@@ -296,20 +296,29 @@ function exportLeadsCSV() {
         : allData;
     if (!data.length) return;
 
-    const headers = ['Name', 'Phone', 'Email', 'Status', 'Priority', 'Source', 'Score', 'City', 'Next Follow-up', 'Created'];
+    const prioLabels = { 1: 'Hot', 2: 'Warm', 3: 'Cold' };
+    const headers = ['Name', 'Phone', 'Phone 2', 'Email', 'Status', 'Priority', 'Module', 'Source', 'Campaign', 'Score', 'City', 'Nationality', 'Gender', 'DOB', 'Next Follow-up', 'Follow-up Count', 'Notes', 'Created'];
     let csv = headers.join(',') + '\n';
 
     data.forEach(l => {
         const row = [
             `"${(l.full_name || '').replace(/"/g, '""')}"`,
             `"${l.phone || ''}"`,
+            `"${l.phone2 || ''}"`,
             `"${l.email || ''}"`,
             l.status || '',
-            l.priority || '',
+            prioLabels[l.priority] || l.priority || '',
+            l.module || 'derma',
             `"${(l.source?.name_en || '').replace(/"/g, '""')}"`,
+            `"${(l.campaign?.name || '').replace(/"/g, '""')}"`,
             l.score || 0,
             `"${(l.city || '').replace(/"/g, '""')}"`,
+            `"${(l.nationality || '').replace(/"/g, '""')}"`,
+            l.gender || '',
+            l.date_of_birth || '',
             l.next_follow_up_at || '',
+            l.follow_up_count || 0,
+            `"${(l.notes || '').replace(/"/g, '""').replace(/\n/g, ' ')}"`,
             l.created_at ? new Date(l.created_at).toISOString().split('T')[0] : '',
         ];
         csv += row.join(',') + '\n';
