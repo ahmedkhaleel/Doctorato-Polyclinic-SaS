@@ -2,18 +2,16 @@
 
 namespace App\Http\Controllers\Secretary;
 
-use App\Http\Controllers\Controller;
 use App\Models\Supply;
 use App\Models\SupplyCategory;
 use App\Models\SupplyTransaction;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class SecretaryInventoryController extends Controller
+class SecretaryInventoryController extends BaseSecretaryController
 {
     public function index(Request $request): Response
     {
