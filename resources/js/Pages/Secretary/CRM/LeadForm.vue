@@ -560,7 +560,7 @@ const phoneValidation = computed(() => {
         </div>
 
         <!-- Section 2: Personal Info -->
-        <div :class="['bg-white rounded-2xl shadow-sm border border-slate-100 p-6 mb-6 transition-all duration-700', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6']"
+        <div :class="['relative z-20 bg-white rounded-2xl shadow-sm border border-slate-100 p-6 mb-6 transition-all duration-700', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6']"
              :style="{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)', transitionDelay: '200ms' }">
             <div class="flex items-center gap-3 mb-5">
                 <div class="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
