@@ -89,8 +89,14 @@ function statusBadge(supply) {
     return { text: t('a_in_stock'), classes: 'bg-emerald-100 text-emerald-800 border border-emerald-200' };
 }
 
+const ACCENT = '#6366F1'; // Inventory module indigo
+
 function categoryColor(supply) {
-    return supply.supply_category?.color || '#C4A265';
+    return supply.supply_category?.color || ACCENT;
+}
+
+function displayName(supply) {
+    return isRtl.value ? (supply.name_ar || supply.name_en) : supply.name_en;
 }
 
 function confirmDelete(supply) {
@@ -131,32 +137,35 @@ function clearFilters() {
     <AdminLayout :title="$t('a_products')">
         <div class="space-y-6">
 
-            <!-- Header -->
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-[#C4A265]/10 flex items-center justify-center">
-                        <svg class="w-5 h-5 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                        </svg>
-                    </div>
+            <!-- Hero Header -->
+            <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-900 via-indigo-800 to-purple-900 p-6 sm:p-8">
+                <div class="absolute top-0 right-0 w-72 h-72 bg-indigo-400/10 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl"></div>
+                <div class="absolute bottom-0 left-0 w-48 h-48 bg-purple-500/10 rounded-full translate-y-1/2 -translate-x-1/4 blur-2xl"></div>
+                <div class="absolute inset-0 opacity-[0.03]" style="background-image: url('data:image/svg+xml,%3Csvg width=&quot;40&quot; height=&quot;40&quot; viewBox=&quot;0 0 40 40&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;%3E%3Cg fill=&quot;%23fff&quot;%3E%3Ccircle cx=&quot;1&quot; cy=&quot;1&quot; r=&quot;1&quot;/%3E%3C/g%3E%3C/svg%3E')"></div>
+                <div class="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                     <div>
-                        <h1 class="text-2xl font-bold text-gray-800">{{ $t('a_products') }}</h1>
-                        <p class="text-sm text-gray-500">{{ $t('a_manage_inventory') }}</p>
+                        <div class="flex items-center gap-2 mb-2">
+                            <div class="w-8 h-8 rounded-lg bg-indigo-400/20 flex items-center justify-center">
+                                <svg class="w-4 h-4 text-indigo-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
+                            </div>
+                            <p class="text-indigo-300 text-xs font-semibold tracking-wider uppercase">{{ isRtl ? 'المخزون' : 'Inventory' }}</p>
+                        </div>
+                        <h1 class="text-2xl sm:text-3xl font-bold text-white">{{ isRtl ? 'المنتجات' : 'Products' }}</h1>
+                        <p class="text-indigo-200/70 text-sm mt-1">{{ isRtl ? 'إدارة المستلزمات والمنتجات الطبية' : 'Manage medical supplies and products' }}</p>
                     </div>
-                    <span class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#C4A265]/10 text-[#C4A265]">
-                        {{ supplies.total }} {{ $t('a_total') }}
-                    </span>
+                    <div class="flex items-center gap-3">
+                        <div class="bg-white/5 backdrop-blur-sm rounded-xl px-5 py-3.5 border border-white/10 text-center min-w-[80px]">
+                            <p class="text-2xl font-bold text-white leading-none tabular-nums">{{ supplies.total }}</p>
+                            <p class="text-[10px] text-indigo-300 mt-1 font-medium uppercase tracking-wide">{{ isRtl ? 'إجمالي' : 'Total' }}</p>
+                        </div>
+                        <Link v-if="can('supplies.create')" href="/admin/supplies/create"
+                            class="inline-flex items-center gap-2 px-5 py-2.5 bg-white/10 backdrop-blur-sm text-white text-sm font-semibold rounded-xl border border-white/20 hover:bg-white/20 transition-all duration-200 shadow-lg shadow-black/10"
+                        >
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+                            {{ isRtl ? 'إضافة منتج' : 'Add Product' }}
+                        </Link>
+                    </div>
                 </div>
-                <Link
-                    v-if="can('supplies.create')"
-                    href="/admin/supplies/create"
-                    class="inline-flex items-center px-5 py-2.5 rounded-xl text-white text-sm font-semibold transition-all duration-200 hover:scale-[1.04] hover:shadow-lg active:scale-[0.98] bg-[#C4A265] hover:bg-[#B3914F] shadow-md"
-                >
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                    </svg>
-                    {{ $t('a_add_product') }}
-                </Link>
             </div>
 
             <!-- Filter Bar -->
@@ -171,7 +180,7 @@ function clearFilters() {
                             v-model="search"
                             type="text"
                             :placeholder="$t('a_search_products')"
-                            class="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-colors"
+                            class="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-colors"
                         />
                     </div>
 
@@ -179,7 +188,7 @@ function clearFilters() {
                         <!-- Category -->
                         <select
                             v-model="categoryFilter"
-                            class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-colors min-w-[160px]"
+                            class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-colors min-w-[160px]"
                         >
                             <option value="">{{ $t('a_all_categories') }}</option>
                             <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ cat.name_en }}</option>
@@ -188,7 +197,7 @@ function clearFilters() {
                         <!-- Stock Status -->
                         <select
                             v-model="stockFilter"
-                            class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-colors min-w-[140px]"
+                            class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-colors min-w-[140px]"
                         >
                             <option value="">{{ $t('a_all_stock') }}</option>
                             <option value="low">{{ $t('a_low_stock') }}</option>
@@ -215,7 +224,7 @@ function clearFilters() {
                         <div class="flex items-center bg-gray-100 rounded-xl p-1">
                             <button
                                 @click="viewMode = 'grid'"
-                                :class="viewMode === 'grid' ? 'bg-white text-[#C4A265] shadow-sm' : 'text-gray-400 hover:text-gray-600'"
+                                :class="viewMode === 'grid' ? 'bg-white text-indigo-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'"
                                 class="p-2 rounded-lg transition-all duration-200"
                                 title="Grid View"
                             >
@@ -225,7 +234,7 @@ function clearFilters() {
                             </button>
                             <button
                                 @click="viewMode = 'table'"
-                                :class="viewMode === 'table' ? 'bg-white text-[#C4A265] shadow-sm' : 'text-gray-400 hover:text-gray-600'"
+                                :class="viewMode === 'table' ? 'bg-white text-indigo-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'"
                                 class="p-2 rounded-lg transition-all duration-200"
                                 title="Table View"
                             >
@@ -285,8 +294,9 @@ function clearFilters() {
                                 <!-- Category badge -->
                                 <div class="flex items-start justify-between mb-3">
                                     <div class="flex-1 min-w-0">
-                                        <h3 class="text-base font-bold text-gray-900 truncate">{{ supply.name_en }}</h3>
-                                        <p v-if="supply.name_ar" class="text-sm text-gray-400 truncate mt-0.5" dir="rtl">{{ supply.name_ar }}</p>
+                                        <h3 class="text-base font-bold text-gray-900 truncate">{{ displayName(supply) }}</h3>
+                                        <p v-if="!isRtl && supply.name_ar" class="text-sm text-gray-400 truncate mt-0.5" dir="rtl">{{ supply.name_ar }}</p>
+                                        <p v-if="isRtl && supply.name_en" class="text-sm text-gray-400 truncate mt-0.5">{{ supply.name_en }}</p>
                                     </div>
                                     <span
                                         v-if="supply.supply_category"
@@ -303,7 +313,7 @@ function clearFilters() {
                                 </div>
 
                                 <!-- SKU -->
-                                <p class="text-xs font-mono text-[#C4A265] tracking-wide mb-4">SKU: {{ supply.sku || 'N/A' }}</p>
+                                <p class="text-xs font-mono text-indigo-600 tracking-wide mb-4">SKU: {{ supply.sku || 'N/A' }}</p>
 
                                 <!-- Stock Level -->
                                 <div class="mb-3">
@@ -349,7 +359,7 @@ function clearFilters() {
                                         <Link
                                             v-if="can('supplies.view')"
                                             :href="`/admin/supplies/${supply.id}/transactions`"
-                                            class="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium text-[#C4A265] bg-[#C4A265]/5 hover:bg-[#C4A265]/10 border border-[#C4A265]/20 transition-colors duration-200"
+                                            class="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium text-indigo-600 bg-indigo-50 hover:bg-indigo-100 border border-indigo-100 transition-colors duration-200"
                                         >
                                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -392,7 +402,7 @@ function clearFilters() {
                         </div>
                         <h3 class="text-sm font-semibold text-gray-900 mb-1">{{ $t('a_no_products_found') }}</h3>
                         <p class="text-sm text-gray-500 mb-4">{{ $t('a_adjust_search') }}</p>
-                        <button v-if="hasActiveFilters" @click="clearFilters" class="text-sm font-medium text-[#C4A265] hover:underline">
+                        <button v-if="hasActiveFilters" @click="clearFilters" class="text-sm font-medium text-indigo-600 hover:underline">
                             {{ $t('a_clear_all_filters') }}
                         </button>
                     </div>
@@ -422,7 +432,7 @@ function clearFilters() {
                                         :class="{ 'bg-red-50/50': isLowStock(supply) }"
                                     >
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="text-sm font-mono text-[#C4A265] font-medium">{{ supply.sku || '-' }}</span>
+                                            <span class="text-sm font-mono text-indigo-600 font-medium">{{ supply.sku || '-' }}</span>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="text-sm font-semibold text-gray-900">{{ supply.name_en }}</div>
@@ -474,7 +484,7 @@ function clearFilters() {
                                                 <Link
                                                     v-if="can('supplies.view')"
                                                     :href="`/admin/supplies/${supply.id}/transactions`"
-                                                    class="p-2 rounded-lg text-[#C4A265] hover:bg-[#C4A265]/10 transition-colors duration-200"
+                                                    class="p-2 rounded-lg text-indigo-600 hover:bg-indigo-50 transition-colors duration-200"
                                                     title="View"
                                                 >
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -540,7 +550,7 @@ function clearFilters() {
                             :class="link.active
                                 ? 'text-white border-transparent shadow-sm'
                                 : 'text-gray-600 border-gray-200 hover:bg-gray-50 hover:border-gray-300'"
-                            :style="link.active ? 'background-color: #C4A265;' : ''"
+                            :style="link.active ? 'background-color: #6366F1;' : ''"
                             preserve-state
                         />
                         <span v-else v-html="link.label" class="px-3 py-1.5 text-sm text-gray-300" />
