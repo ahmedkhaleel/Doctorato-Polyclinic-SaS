@@ -421,13 +421,35 @@ function formatFullDate(date) {
                                 <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                                 {{ timeAgo(lead.last_contacted_at) }}
                             </div>
-                            <div v-else class="text-[10px] text-gray-300">{{ isRtl ? 'لم يتم التواصل' : 'No contact' }}</div>
+                            <div v-else class="text-[10px] text-gray-300">{{ isRtl ? '\u0644\u0645 \u064A\u062A\u0645 \u0627\u0644\u062A\u0648\u0627\u0635\u0644' : 'No contact' }}</div>
 
                             <div v-if="lead.next_follow_up_at" class="flex items-center gap-1 text-[10px]"
                                  :class="new Date(lead.next_follow_up_at) < new Date() ? 'text-red-500 font-semibold' : 'text-teal-500'">
                                 <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                                 {{ new Date(lead.next_follow_up_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) }}
                             </div>
+                        </div>
+
+                        <!-- Quick action buttons (visible on hover) -->
+                        <div class="mt-2 pt-2 border-t border-gray-50 flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-all duration-200">
+                            <a :href="`tel:${lead.phone}`" @click.stop
+                               class="flex-1 inline-flex items-center justify-center gap-1 py-1.5 rounded-lg text-[10px] font-semibold bg-teal-50 text-teal-700 hover:bg-teal-100 border border-teal-200/60 transition-colors"
+                               :title="isRtl ? '\u0627\u062A\u0635\u0627\u0644' : 'Call'">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                                {{ isRtl ? '\u0627\u062A\u0635\u0627\u0644' : 'Call' }}
+                            </a>
+                            <a :href="`https://wa.me/${(lead.phone || '').replace(/[^0-9+]/g, '')}`" target="_blank" @click.stop
+                               class="flex-1 inline-flex items-center justify-center gap-1 py-1.5 rounded-lg text-[10px] font-semibold bg-green-50 text-green-700 hover:bg-green-100 border border-green-200/60 transition-colors"
+                               :title="isRtl ? '\u0648\u0627\u062A\u0633\u0627\u0628' : 'WhatsApp'">
+                                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>
+                                <span class="hidden sm:inline">WA</span>
+                            </a>
+                            <Link :href="`/secretary/crm/leads/${lead.id}`" @click.stop
+                                class="flex-1 inline-flex items-center justify-center gap-1 py-1.5 rounded-lg text-[10px] font-semibold bg-gray-50 text-gray-600 hover:bg-gray-100 border border-gray-200/60 transition-colors"
+                                :title="isRtl ? '\u0639\u0631\u0636' : 'View'">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                                {{ isRtl ? '\u0639\u0631\u0636' : 'View' }}
+                            </Link>
                         </div>
                     </div>
                 </div>

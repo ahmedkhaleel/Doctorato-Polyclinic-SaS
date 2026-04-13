@@ -192,11 +192,47 @@ function duplicateTemplate(template) {
     duplicating.value = template.id;
     router.post('/secretary/crm/templates/duplicate', {
         _duplicate: template.id,
-        name: template.name + (isRtl.value ? ' (نسخة)' : ' (Copy)'),
+        name: template.name + (isRtl.value ? ' (\u0646\u0633\u062E\u0629)' : ' (Copy)'),
     }, {
         preserveScroll: true,
         onFinish: () => { duplicating.value = null; },
     });
+}
+
+/* ---------- Inline name edit ---------- */
+const editingNameId = ref(null);
+const editingNameValue = ref('');
+
+function startEditName(template) {
+    editingNameId.value = template.id;
+    editingNameValue.value = template.name;
+}
+
+function saveEditName(templateId) {
+    if (!editingNameValue.value.trim()) { editingNameId.value = null; return; }
+    router.post(`/secretary/crm/templates/${templateId}/rename`, {
+        name: editingNameValue.value.trim(),
+    }, {
+        preserveScroll: true,
+        preserveState: true,
+        onFinish: () => { editingNameId.value = null; },
+    });
+}
+
+function cancelEditName() {
+    editingNameId.value = null;
+    editingNameValue.value = '';
+}
+
+/* ---------- Last used date formatter ---------- */
+function formatLastUsed(date) {
+    if (!date) return isRtl.value ? '\u0644\u0645 \u064A\u064F\u0633\u062A\u062E\u062F\u0645' : 'Never used';
+    const d = new Date(date);
+    const diff = Math.floor((Date.now() - d.getTime()) / 86400000);
+    if (diff === 0) return isRtl.value ? '\u0627\u0644\u064A\u0648\u0645' : 'Today';
+    if (diff === 1) return isRtl.value ? '\u0623\u0645\u0633' : 'Yesterday';
+    if (diff < 7) return isRtl.value ? `\u0645\u0646\u0630 ${diff} \u0623\u064A\u0627\u0645` : `${diff}d ago`;
+    return d.toLocaleDateString(isRtl.value ? 'ar-SA' : 'en-GB', { month: 'short', day: 'numeric' });
 }
 </script>
 
@@ -290,7 +326,19 @@ function duplicateTemplate(template) {
                         </svg>
                     </div>
                     <div class="min-w-0">
-                        <h3 class="font-semibold text-slate-800 text-sm truncate">{{ template.name }}</h3>
+                        <!-- Inline name edit -->
+                        <div v-if="editingNameId === template.id" class="flex items-center gap-1">
+                            <input v-model="editingNameValue" type="text"
+                                class="flex-1 min-w-0 rounded-lg border-teal-300 text-sm font-semibold py-1 px-2 focus:ring-teal-500 focus:border-teal-500"
+                                @keyup.enter="saveEditName(template.id)" @keyup.escape="cancelEditName" ref="nameInput" />
+                            <button @click="saveEditName(template.id)" class="w-6 h-6 rounded-md bg-teal-500 text-white flex items-center justify-center hover:bg-teal-600 flex-shrink-0">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                            </button>
+                            <button @click="cancelEditName" class="w-6 h-6 rounded-md bg-gray-100 text-gray-500 flex items-center justify-center hover:bg-gray-200 flex-shrink-0">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                            </button>
+                        </div>
+                        <h3 v-else @dblclick="startEditName(template)" class="font-semibold text-slate-800 text-sm truncate cursor-pointer hover:text-teal-600 transition-colors" :title="isRtl ? '\u0627\u0646\u0642\u0631 \u0645\u0631\u062A\u064A\u0646 \u0644\u0644\u062A\u0639\u062F\u064A\u0644' : 'Double-click to rename'">{{ template.name }}</h3>
                         <div class="flex items-center gap-2 mt-1">
                             <span class="text-xs px-2 py-0.5 rounded-full font-medium"
                                   :style="{ background: channelConfig[template.channel]?.bg, color: channelConfig[template.channel]?.text }">
@@ -312,6 +360,10 @@ function duplicateTemplate(template) {
                         {{ template.usage_count || 0 }} {{ isRtl ? 'مرة' : 'sent' }}
                     </span>
                     <span :class="['text-[9px] font-medium', getEffectiveness(template).color]">{{ isRtl ? getEffectiveness(template).label.ar : getEffectiveness(template).label.en }}</span>
+                    <span class="text-[9px] text-slate-400 flex items-center gap-0.5">
+                        <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        {{ formatLastUsed(template.last_used_at) }}
+                    </span>
                 </div>
             </div>
 

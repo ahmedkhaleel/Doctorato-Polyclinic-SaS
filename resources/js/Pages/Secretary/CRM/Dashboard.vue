@@ -211,6 +211,36 @@ const filteredActivities = computed(() => {
     return props.recentActivities.filter(a => a.type === activityFilter.value);
 });
 
+/* ---------- Time-grouped activities ---------- */
+const activityShowAll = ref(false);
+const ACTIVITY_INITIAL_COUNT = 8;
+
+const groupedFeedActivities = computed(() => {
+    const acts = filteredActivities.value;
+    const shown = activityShowAll.value ? acts : acts.slice(0, ACTIVITY_INITIAL_COUNT);
+    const groups = [];
+    const today = new Date(); today.setHours(0,0,0,0);
+    const yesterday = new Date(today); yesterday.setDate(yesterday.getDate() - 1);
+    let currentGroup = null;
+
+    shown.forEach(act => {
+        const d = new Date(act.created_at); d.setHours(0,0,0,0);
+        let label;
+        if (d.getTime() === today.getTime()) label = isRtl.value ? '\u0627\u0644\u064A\u0648\u0645' : 'Today';
+        else if (d.getTime() === yesterday.getTime()) label = isRtl.value ? '\u0623\u0645\u0633' : 'Yesterday';
+        else label = d.toLocaleDateString(isRtl.value ? 'ar-SA' : 'en-US', { month: 'short', day: 'numeric' });
+
+        if (!currentGroup || currentGroup.label !== label) {
+            currentGroup = { label, items: [] };
+            groups.push(currentGroup);
+        }
+        currentGroup.items.push(act);
+    });
+    return groups;
+});
+
+const hasMoreActivities = computed(() => filteredActivities.value.length > ACTIVITY_INITIAL_COUNT);
+
 /* ---------- Dashboard snooze ---------- */
 const snoozeOpenId = ref(null);
 
@@ -1067,27 +1097,42 @@ const activityTypeConfig = {
                         </div>
                     </div>
 
-                    <div v-if="filteredActivities.length" class="divide-y divide-gray-50 max-h-72 overflow-y-auto">
-                        <div v-for="(act, idx) in filteredActivities" :key="act.id"
-                             class="px-5 py-3 flex items-start gap-3 hover:bg-gray-50/50 transition-colors"
-                             :class="mounted ? 'opacity-100' : 'opacity-0'"
-                             :style="`transition: opacity 0.5s ease ${0.6 + idx * 0.05}s`">
-                            <!-- Icon -->
-                            <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5"
-                                 :class="activityTypeConfig[act.type]?.color || 'bg-gray-100 text-gray-500'">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" :d="activityTypeConfig[act.type]?.icon || activityTypeConfig.system.icon" />
-                                </svg>
+                    <div v-if="filteredActivities.length" class="max-h-96 overflow-y-auto">
+                        <div v-for="(group, gIdx) in groupedFeedActivities" :key="group.label">
+                            <!-- Time group header -->
+                            <div class="px-5 py-1.5 bg-gray-50/80 border-y border-gray-100/80 sticky top-0 z-[1]">
+                                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{{ group.label }}</span>
                             </div>
-                            <div class="flex-1 min-w-0">
-                                <p class="text-sm text-gray-700 truncate">{{ act.subject }}</p>
-                                <div class="flex items-center gap-2 mt-0.5">
-                                    <Link v-if="act.lead" :href="`/secretary/crm/leads/${act.lead_id}`" class="text-[11px] text-teal-600 hover:underline font-medium truncate">
-                                        {{ act.lead?.full_name }}
-                                    </Link>
-                                    <span class="text-[11px] text-gray-400">{{ timeAgo(act.created_at) }}</span>
+                            <div class="divide-y divide-gray-50">
+                                <div v-for="(act, idx) in group.items" :key="act.id"
+                                     class="px-5 py-3 flex items-start gap-3 hover:bg-gray-50/50 transition-colors"
+                                     :class="mounted ? 'opacity-100' : 'opacity-0'"
+                                     :style="`transition: opacity 0.5s ease ${0.6 + (gIdx * 3 + idx) * 0.04}s`">
+                                    <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5"
+                                         :class="activityTypeConfig[act.type]?.color || 'bg-gray-100 text-gray-500'">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" :d="activityTypeConfig[act.type]?.icon || activityTypeConfig.system.icon" />
+                                        </svg>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm text-gray-700 truncate">{{ act.subject }}</p>
+                                        <div class="flex items-center gap-2 mt-0.5">
+                                            <Link v-if="act.lead" :href="`/secretary/crm/leads/${act.lead_id}`" class="text-[11px] text-teal-600 hover:underline font-medium truncate">
+                                                {{ act.lead?.full_name }}
+                                            </Link>
+                                            <span class="text-[11px] text-gray-400">{{ timeAgo(act.created_at) }}</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+                        </div>
+                        <!-- Show More / Less toggle -->
+                        <div v-if="hasMoreActivities" class="px-5 py-2.5 border-t border-gray-100 text-center">
+                            <button @click="activityShowAll = !activityShowAll"
+                                class="text-xs font-semibold text-teal-600 hover:text-teal-700 transition-colors inline-flex items-center gap-1">
+                                <svg :class="['w-3.5 h-3.5 transition-transform duration-200', activityShowAll ? 'rotate-180' : '']" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                                {{ activityShowAll ? (isRtl ? '\u0639\u0631\u0636 \u0623\u0642\u0644' : 'Show Less') : (isRtl ? '\u0639\u0631\u0636 \u0627\u0644\u0643\u0644 (' + filteredActivities.length + ')' : 'Show All (' + filteredActivities.length + ')') }}
+                            </button>
                         </div>
                     </div>
 

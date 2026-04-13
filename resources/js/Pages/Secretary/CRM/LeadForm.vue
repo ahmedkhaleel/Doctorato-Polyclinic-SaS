@@ -71,6 +71,18 @@ function toggleService(id) {
     }
 }
 
+/* ---------- Service search filter ---------- */
+const serviceSearch = ref('');
+const filteredServices = computed(() => {
+    if (!props.services?.length) return [];
+    if (!serviceSearch.value.trim()) return props.services;
+    const q = serviceSearch.value.trim().toLowerCase();
+    return props.services.filter(s =>
+        (s.name_en || '').toLowerCase().includes(q) ||
+        (s.name_ar || '').includes(q)
+    );
+});
+
 const priorityOptions = [
     { value: 1, label: { en: 'Hot', ar: '\u0633\u0627\u062E\u0646' }, icon: 'hot', color: 'bg-red-100 text-red-700 border-red-300 ring-red-400' },
     { value: 2, label: { en: 'Warm', ar: '\u062F\u0627\u0641\u0626' }, icon: 'warm', color: 'bg-amber-100 text-amber-700 border-amber-300 ring-amber-400' },
@@ -343,15 +355,31 @@ const phoneValidation = computed(() => {
 
             <!-- Interested Services -->
             <div v-if="services && services.length > 0">
-                <label class="block text-sm font-semibold text-slate-600 mb-2">{{ isRtl ? '\u0627\u0644\u062E\u062F\u0645\u0627\u062A \u0627\u0644\u0645\u0647\u062A\u0645 \u0628\u0647\u0627' : 'Interested Services' }}</label>
-                <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
-                    <button v-for="svc in services" :key="svc.id" type="button"
+                <div class="flex items-center justify-between mb-2">
+                    <label class="text-sm font-semibold text-slate-600">{{ isRtl ? '\u0627\u0644\u062E\u062F\u0645\u0627\u062A \u0627\u0644\u0645\u0647\u062A\u0645 \u0628\u0647\u0627' : 'Interested Services' }}</label>
+                    <span v-if="form.interested_services.length > 0" class="text-[10px] font-bold text-teal-600 bg-teal-50 px-2 py-0.5 rounded-full">
+                        {{ form.interested_services.length }} {{ isRtl ? '\u0645\u062E\u062A\u0627\u0631\u0629' : 'selected' }}
+                    </span>
+                </div>
+                <!-- Search filter (shows when 6+ services) -->
+                <div v-if="services.length >= 6" class="relative mb-2.5">
+                    <svg class="w-3.5 h-3.5 text-slate-400 absolute top-1/2 -translate-y-1/2 pointer-events-none" :class="isRtl ? 'right-3' : 'left-3'" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="m21 21-4.35-4.35"/></svg>
+                    <input v-model="serviceSearch" type="text"
+                        :placeholder="isRtl ? '\u0628\u062D\u062B \u0641\u064A \u0627\u0644\u062E\u062F\u0645\u0627\u062A...' : 'Search services...'"
+                        class="w-full rounded-xl border border-slate-200 bg-slate-50/50 text-xs py-2.5 transition-all duration-200 focus:ring-2 focus:ring-teal-400/40 focus:border-teal-400 outline-none"
+                        :class="isRtl ? 'pr-9 pl-3' : 'pl-9 pr-3'" />
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-2" :class="services.length >= 12 ? 'max-h-48 overflow-y-auto rounded-xl' : ''">
+                    <button v-for="svc in filteredServices" :key="svc.id" type="button"
                             @click="toggleService(svc.id)"
                             :class="['py-2.5 px-3 rounded-xl border text-xs font-medium transition-all duration-200', form.interested_services.includes(svc.id) ? 'bg-teal-50 border-teal-400 text-teal-700 ring-1 ring-teal-300' : 'border-slate-200 text-slate-500 hover:border-slate-300 hover:bg-slate-50']">
                         <svg v-if="form.interested_services.includes(svc.id)" class="inline-block w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                         {{ isRtl ? svc.name_ar : svc.name_en }}
                     </button>
                 </div>
+                <p v-if="serviceSearch && filteredServices.length === 0" class="text-xs text-slate-400 text-center py-3">
+                    {{ isRtl ? '\u0644\u0627 \u062A\u0648\u062C\u062F \u0646\u062A\u0627\u0626\u062C' : 'No matching services' }}
+                </p>
             </div>
         </div>
 
