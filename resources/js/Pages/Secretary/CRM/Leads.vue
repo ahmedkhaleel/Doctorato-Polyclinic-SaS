@@ -299,6 +299,26 @@ function exportLeadsCSV() {
     URL.revokeObjectURL(url);
 }
 
+/* ── Status distribution mini-bar ── */
+const statusDistribution = computed(() => {
+    const allData = props.leads?.data || [];
+    if (!allData.length) return [];
+    const counts = {};
+    allData.forEach(l => { counts[l.status] = (counts[l.status] || 0) + 1; });
+    const total = allData.length;
+    const order = ['new', 'contacted', 'qualified', 'appointment_booked', 'consultation_done', 'negotiation', 'converted', 'lost', 'dormant'];
+    return order
+        .filter(s => counts[s])
+        .map(s => ({
+            status: s,
+            count: counts[s],
+            pct: Math.round((counts[s] / total) * 100),
+            label: statusLabels.value[s] || s,
+            color: statusColors[s]?.dot || '#9ca3af',
+            bg: statusColors[s]?.bg || '#f3f4f6',
+        }));
+});
+
 /* ── Inline status change ── */
 const inlineStatusOptions = ['new', 'contacted', 'qualified', 'appointment_booked', 'consultation_done', 'negotiation'];
 
@@ -800,6 +820,33 @@ const activeFilterPills = computed(() => {
                     <kbd class="px-1.5 py-0.5 bg-gray-100 rounded text-[10px] font-mono border border-gray-200">/</kbd> {{ isRtl ? '\u0628\u062D\u062B' : 'search' }}
                     <kbd class="px-1.5 py-0.5 bg-gray-100 rounded text-[10px] font-mono border border-gray-200 ms-2">N</kbd> {{ isRtl ? '\u062C\u062F\u064A\u062F' : 'new' }}
                 </span>
+            </div>
+
+            <!-- ═══════════════ STATUS DISTRIBUTION BAR ═══════════════ -->
+            <div v-if="statusDistribution.length > 1 && leads.data?.length"
+                 class="bg-white rounded-xl border border-gray-100 p-3 mb-4 transition-all duration-500"
+                 :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'"
+                 :style="{ transitionDelay: '0.12s' }">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="text-[11px] font-semibold text-gray-500">{{ isRtl ? 'توزيع الحالات' : 'Status Distribution' }}</span>
+                    <span class="text-[10px] text-gray-400">({{ leads.data.length }} {{ isRtl ? 'عميل' : 'leads' }})</span>
+                </div>
+                <!-- Segmented bar -->
+                <div class="flex rounded-full overflow-hidden h-2 bg-gray-100">
+                    <div v-for="seg in statusDistribution" :key="seg.status"
+                         class="transition-all duration-700 ease-out first:rounded-s-full last:rounded-e-full"
+                         :style="{ width: Math.max(seg.pct, 2) + '%', backgroundColor: seg.color }"
+                         :title="`${seg.label}: ${seg.count} (${seg.pct}%)`">
+                    </div>
+                </div>
+                <!-- Legend -->
+                <div class="flex flex-wrap items-center gap-x-3 gap-y-1 mt-2">
+                    <div v-for="seg in statusDistribution" :key="seg.status" class="flex items-center gap-1">
+                        <span class="w-2 h-2 rounded-full flex-shrink-0" :style="{ backgroundColor: seg.color }"></span>
+                        <span class="text-[10px] text-gray-500">{{ seg.label }}</span>
+                        <span class="text-[10px] font-bold text-gray-700">{{ seg.count }}</span>
+                    </div>
+                </div>
             </div>
 
             <!-- ═══════════════ GRID VIEW ═══════════════ -->

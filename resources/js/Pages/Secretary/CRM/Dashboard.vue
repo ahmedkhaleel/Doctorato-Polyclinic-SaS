@@ -18,10 +18,33 @@ const props = defineProps({
 });
 
 const mounted = ref(false);
+const loadedAt = ref(null);
+const timeSinceLoad = ref('');
+let freshnessTimer = null;
+
+function updateFreshness() {
+    if (!loadedAt.value) return;
+    const diff = Math.floor((Date.now() - loadedAt.value) / 1000);
+    if (diff < 60) { timeSinceLoad.value = isRtl.value ? 'الآن' : 'Just now'; return; }
+    const mins = Math.floor(diff / 60);
+    if (mins < 60) { timeSinceLoad.value = isRtl.value ? `منذ ${mins} د` : `${mins}m ago`; return; }
+    const hrs = Math.floor(mins / 60);
+    timeSinceLoad.value = isRtl.value ? `منذ ${hrs} س` : `${hrs}h ago`;
+}
+
+function refreshDashboard() {
+    router.reload({ preserveScroll: true, onSuccess: () => { loadedAt.value = Date.now(); updateFreshness(); } });
+}
+
 onMounted(() => {
     setTimeout(() => { mounted.value = true; }, 50);
     startCounters();
+    loadedAt.value = Date.now();
+    updateFreshness();
+    freshnessTimer = setInterval(updateFreshness, 30000);
 });
+
+onBeforeUnmount(() => { clearInterval(freshnessTimer); });
 
 /* ---------- Animated counters ---------- */
 const counterMyLeads = ref(0);
@@ -471,6 +494,10 @@ const activityTypeConfig = {
                         <span class="px-3 py-1 rounded-full bg-white/10 text-teal-100 text-xs">
                             {{ new Date().toLocaleDateString(isRtl ? 'ar-SA' : 'en-GB', { weekday: 'long', day: 'numeric', month: 'long' }) }}
                         </span>
+                        <button @click="refreshDashboard" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/10 hover:bg-white/20 text-teal-200 text-[10px] transition-all" :title="isRtl ? 'تحديث البيانات' : 'Refresh data'">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                            {{ timeSinceLoad }}
+                        </button>
                         <span class="hidden md:inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/10 text-teal-200 text-[10px]">
                             <kbd class="px-1 py-0.5 rounded bg-white/15 text-white font-mono text-[10px]">N</kbd> {{ isRtl ? 'جديد' : 'New' }}
                             <kbd class="px-1 py-0.5 rounded bg-white/15 text-white font-mono text-[10px] ms-1.5">L</kbd> {{ isRtl ? 'عملاء' : 'Leads' }}

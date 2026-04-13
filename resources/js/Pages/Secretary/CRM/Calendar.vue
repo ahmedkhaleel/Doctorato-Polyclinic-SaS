@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { Link, router, usePage } from '@inertiajs/vue3';
 import SecretaryLayout from '@/Layouts/SecretaryLayout.vue';
 
@@ -361,6 +361,44 @@ function snoozeFollowUp(fuId, key) {
         notes: isRtl.value ? 'تم التأجيل' : 'Snoozed',
     }, { preserveScroll: true, preserveState: true });
 }
+
+/* ── Keyboard shortcuts ──────────────────────────────── */
+function handleCalendarKey(e) {
+    if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) return;
+    if (showQuickAdd.value || showDetail.value) return;
+
+    if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        if (viewMode.value === 'month') { isRtl.value ? nextMonth() : prevMonth(); }
+        else { isRtl.value ? nextWeek() : prevWeek(); }
+    }
+    if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        if (viewMode.value === 'month') { isRtl.value ? prevMonth() : nextMonth(); }
+        else { isRtl.value ? prevWeek() : nextWeek(); }
+    }
+    if (e.key === 't' || e.key === 'T' || e.key === '\u062A') {
+        e.preventDefault();
+        if (viewMode.value === 'month') goToday(); else goTodayWeek();
+    }
+    if (e.key === 'w' || e.key === 'W' || e.key === '\u0648') {
+        e.preventDefault();
+        viewMode.value = 'week';
+    }
+    if (e.key === 'm' || e.key === 'M' || e.key === '\u0645') {
+        e.preventDefault();
+        viewMode.value = 'month';
+    }
+    if (e.key === 'n' || e.key === 'N' || e.key === '\u0646') {
+        e.preventDefault();
+        const today = new Date();
+        const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+        openQuickAdd(todayStr);
+    }
+}
+
+onMounted(() => { document.addEventListener('keydown', handleCalendarKey); });
+onBeforeUnmount(() => { document.removeEventListener('keydown', handleCalendarKey); });
 </script>
 
 <template>
@@ -444,6 +482,12 @@ function snoozeFollowUp(fuId, key) {
                         <svg class="w-3.5 h-3.5 inline-block me-1 -mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
                         {{ isRtl ? 'اسبوع' : 'Week' }}
                     </button>
+                </div>
+                <!-- Keyboard hints (desktop) -->
+                <div class="hidden md:flex items-center gap-1.5 text-[10px] text-gray-400">
+                    <span class="flex items-center gap-1"><kbd class="px-1 py-0.5 font-mono font-semibold bg-gray-100 border border-gray-200 rounded shadow-sm text-[9px]">T</kbd> {{ isRtl ? 'اليوم' : 'Today' }}</span>
+                    <span class="flex items-center gap-1"><kbd class="px-1 py-0.5 font-mono font-semibold bg-gray-100 border border-gray-200 rounded shadow-sm text-[9px]">N</kbd> {{ isRtl ? 'جديد' : 'New' }}</span>
+                    <span class="flex items-center gap-1"><kbd class="px-1 py-0.5 font-mono font-semibold bg-gray-100 border border-gray-200 rounded shadow-sm text-[9px]">&larr;&rarr;</kbd> {{ isRtl ? 'تنقل' : 'Nav' }}</span>
                 </div>
                 <!-- Filter pills -->
                 <div class="flex items-center gap-1.5 flex-wrap">

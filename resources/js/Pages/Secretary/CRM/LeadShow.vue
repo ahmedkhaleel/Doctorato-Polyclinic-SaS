@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, watch, onMounted } from 'vue';
+import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue';
 import { Link, useForm, router, usePage } from '@inertiajs/vue3';
 import SecretaryLayout from '@/Layouts/SecretaryLayout.vue';
 
@@ -608,11 +608,72 @@ function whatsappUrl(phone) {
     const clean = phone.replace(/[^0-9+]/g, '');
     return `https://wa.me/${clean.replace('+', '')}`;
 }
+
+/* ── Sticky header on scroll ────────────────────────── */
+const showStickyHeader = ref(false);
+function handleScroll() {
+    showStickyHeader.value = window.scrollY > 260;
+}
+onMounted(() => { window.addEventListener('scroll', handleScroll, { passive: true }); });
+onBeforeUnmount(() => { window.removeEventListener('scroll', handleScroll); });
 </script>
 
 <template>
     <SecretaryLayout>
         <div class="min-h-screen bg-gray-50 pb-12" :dir="isRtl ? 'rtl' : 'ltr'">
+            <!-- Sticky compact header -->
+            <Teleport to="body">
+                <Transition
+                    enter-active-class="transition-all duration-300 ease-out"
+                    enter-from-class="opacity-0 -translate-y-full"
+                    enter-to-class="opacity-100 translate-y-0"
+                    leave-active-class="transition-all duration-200 ease-in"
+                    leave-from-class="opacity-100 translate-y-0"
+                    leave-to-class="opacity-0 -translate-y-full"
+                >
+                    <div v-if="showStickyHeader" class="fixed top-0 inset-x-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-sm" :dir="isRtl ? 'rtl' : 'ltr'">
+                        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex items-center justify-between gap-4">
+                            <div class="flex items-center gap-3 min-w-0">
+                                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-teal-500 to-teal-700 flex items-center justify-center text-sm font-bold text-white flex-shrink-0">
+                                    {{ initial }}
+                                </div>
+                                <div class="min-w-0">
+                                    <h2 class="text-sm font-bold text-gray-900 truncate">{{ lead.full_name }}</h2>
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-[10px] font-semibold px-1.5 py-0.5 rounded-full" :class="statusColors[lead.status] || 'bg-gray-100 text-gray-700'">
+                                            {{ isRtl ? (statusLabels[lead.status]?.ar || lead.status) : (statusLabels[lead.status]?.en || lead.status) }}
+                                        </span>
+                                        <span class="text-[10px] text-gray-400 font-medium">{{ isRtl ? 'النقاط:' : 'Score:' }} {{ lead.score || 0 }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <a v-if="lead.phone" :href="`tel:${lead.phone}`"
+                                   class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-teal-50 text-teal-700 hover:bg-teal-100 border border-teal-200 transition-all">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                                    <span class="hidden sm:inline">{{ isRtl ? 'اتصال' : 'Call' }}</span>
+                                </a>
+                                <a v-if="lead.phone" :href="whatsappUrl(lead.phone)" target="_blank"
+                                   class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-green-50 text-green-700 hover:bg-green-100 border border-green-200 transition-all">
+                                    <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>
+                                    <span class="hidden sm:inline">WA</span>
+                                </a>
+                                <button @click="showFollowUpForm = true"
+                                   class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-amber-50 text-amber-700 hover:bg-amber-100 border border-amber-200 transition-all">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                    <span class="hidden sm:inline">{{ isRtl ? 'متابعة' : 'Follow-up' }}</span>
+                                </button>
+                                <Link href="/secretary/crm/leads"
+                                   class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-gray-50 text-gray-600 hover:bg-gray-100 border border-gray-200 transition-all">
+                                    <svg class="w-3.5 h-3.5" :class="isRtl ? 'rotate-180' : ''" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+                                    <span class="hidden sm:inline">{{ isRtl ? 'رجوع' : 'Back' }}</span>
+                                </Link>
+                            </div>
+                        </div>
+                    </div>
+                </Transition>
+            </Teleport>
+
             <!-- Hero Card -->
             <div
                 class="relative overflow-hidden transition-all duration-700 ease-out"
