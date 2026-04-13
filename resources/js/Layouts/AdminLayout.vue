@@ -136,6 +136,15 @@ const navGroups = [
         ],
     },
     {
+        key: 'pediatric', titleEn: 'Pediatrics', titleAr: 'طب الأطفال', moduleKey: 'pediatric',
+        items: [
+            { labelEn: 'Dashboard',     labelAr: 'لوحة التحكم',   href: '/admin/pediatric',              icon: 'grid',      permission: null },
+            { labelEn: 'Patients',      labelAr: 'المرضى',        href: '/admin/pediatric/patients',     icon: 'heart',     permission: null },
+            { labelEn: 'Vaccinations',  labelAr: 'التطعيمات',     href: '/admin/pediatric/vaccinations', icon: 'checklist', permission: null },
+            { labelEn: 'Growth',        labelAr: 'النمو',         href: '/admin/pediatric/growth',       icon: 'activity',  permission: null },
+        ],
+    },
+    {
         key: 'hr', titleEn: 'HR', titleAr: 'الموارد البشرية', moduleKey: 'hr',
         items: [
             { labelEn: 'HR Dashboard',  labelAr: 'لوحة HR',         href: '/admin/hr-dashboard',       icon: 'hrDash',    permission: 'employees.view' },

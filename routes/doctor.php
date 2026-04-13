@@ -192,6 +192,15 @@ Route::middleware('doctor.auth')->group(function () {
         // Allergies
         Route::post('/patients/{patient}/allergy', [DoctorPediatricPatientController::class, 'storeAllergy'])->name('doctor.pediatric.patients.allergy.store');
 
+        // Chronic Conditions
+        Route::post('/patients/{patient}/chronic-condition', [DoctorPediatricPatientController::class, 'storeChronicCondition'])->name('doctor.pediatric.patients.chronic.store');
+
+        // Nutrition
+        Route::post('/patients/{patient}/nutrition', [DoctorPediatricPatientController::class, 'storeNutrition'])->name('doctor.pediatric.patients.nutrition.store');
+
+        // Screening Tests
+        Route::post('/patients/{patient}/screening', [DoctorPediatricPatientController::class, 'storeScreening'])->name('doctor.pediatric.patients.screening.store');
+
         // Visits
         Route::get('/visits', [DoctorPediatricVisitController::class, 'index'])->name('doctor.pediatric.visits.index');
         Route::get('/visits/{visit}', [DoctorPediatricVisitController::class, 'show'])->name('doctor.pediatric.visits.show');

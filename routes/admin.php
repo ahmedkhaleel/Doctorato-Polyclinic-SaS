@@ -765,6 +765,14 @@ Route::middleware('admin.auth')->group(function () {
     Route::post('/dental/prescription-templates/{template}', [DentalPrescriptionTemplateController::class, 'update'])->name('admin.dental.prescription-templates.update')->middleware(['module:dental', 'permission:dental.update']);
     Route::post('/dental/prescription-templates/{template}/delete', [DentalPrescriptionTemplateController::class, 'destroy'])->name('admin.dental.prescription-templates.destroy')->middleware(['module:dental', 'permission:dental.delete']);
 
+    // ─── Pediatric Module ──────────────────────────────────────
+    Route::prefix('pediatric')->middleware('module:pediatric')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Admin\AdminPediatricController::class, 'dashboard'])->name('admin.pediatric.dashboard');
+        Route::get('/patients', [\App\Http\Controllers\Admin\AdminPediatricController::class, 'patients'])->name('admin.pediatric.patients');
+        Route::get('/vaccinations', [\App\Http\Controllers\Admin\AdminPediatricController::class, 'vaccinations'])->name('admin.pediatric.vaccinations');
+        Route::get('/growth', [\App\Http\Controllers\Admin\AdminPediatricController::class, 'growth'])->name('admin.pediatric.growth');
+    });
+
     // ═══════════════════════════════════════════════════════════
     // ═══ SUPPLIERS & PURCHASE ORDERS ══════════════════════════
     // ═══════════════════════════════════════════════════════════

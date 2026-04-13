@@ -305,4 +305,73 @@ class DoctorPediatricPatientController extends BaseDoctorController
 
         return redirect()->back()->with('success', $this->msg('Vaccination schedule initialized', 'تم تفعيل جدول التطعيمات'));
     }
+
+    /**
+     * Store chronic condition.
+     */
+    public function storeChronicCondition(Request $request, Patient $patient)
+    {
+        $validated = $request->validate([
+            'condition_type' => 'required|in:asthma,diabetes_type1,epilepsy,congenital_heart,anemia,kidney,genetic,other',
+            'condition_name' => 'required|string|max:255',
+            'severity' => 'nullable|in:mild,moderate,severe',
+            'notes' => 'nullable|string|max:1000',
+        ]);
+
+        PediatricChronicCondition::create(array_merge($validated, [
+            'patient_id' => $patient->id,
+        ]));
+
+        return redirect()->back()->with('success', $this->msg('Chronic condition recorded', 'تم تسجيل المرض المزمن'));
+    }
+
+    /**
+     * Store nutrition record.
+     */
+    public function storeNutrition(Request $request, Patient $patient)
+    {
+        $validated = $request->validate([
+            'feeding_type' => 'nullable|in:breastfed,formula,mixed',
+            'feeds_per_day' => 'nullable|integer|min:0|max:20',
+            'formula_brand' => 'nullable|string|max:255',
+            'meals_per_day' => 'nullable|integer|min:0|max:10',
+            'diet_quality' => 'nullable|in:varied,limited,vegetarian,vegan',
+            'supplements' => 'nullable|array',
+            'eating_problems' => 'nullable|array',
+            'notes' => 'nullable|string|max:1000',
+        ]);
+
+        $ageMonths = $patient->date_of_birth ? $patient->date_of_birth->diffInMonths(now()) : 0;
+
+        PediatricNutritionRecord::create(array_merge($validated, [
+            'patient_id' => $patient->id,
+            'age_months' => $ageMonths,
+        ]));
+
+        return redirect()->back()->with('success', $this->msg('Nutrition record saved', 'تم حفظ سجل التغذية'));
+    }
+
+    /**
+     * Store screening test.
+     */
+    public function storeScreening(Request $request, Patient $patient)
+    {
+        $validated = $request->validate([
+            'test_type' => 'required|in:mchat,vanderbilt_parent,vanderbilt_teacher,phq_a,vision,hearing',
+            'test_date' => 'required|date',
+            'total_score' => 'nullable|integer|min:0',
+            'result' => 'nullable|in:normal,low_risk,medium_risk,high_risk,positive,negative',
+            'notes' => 'nullable|string|max:1000',
+        ]);
+
+        $ageMonths = $patient->date_of_birth ? $patient->date_of_birth->diffInMonths($validated['test_date']) : 0;
+
+        PediatricScreeningTest::create(array_merge($validated, [
+            'patient_id' => $patient->id,
+            'doctor_id' => $this->doctorId($request),
+            'age_months' => $ageMonths,
+        ]));
+
+        return redirect()->back()->with('success', $this->msg('Screening test recorded', 'تم تسجيل نتيجة الفحص'));
+    }
 }

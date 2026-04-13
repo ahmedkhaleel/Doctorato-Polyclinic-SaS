@@ -50,6 +50,9 @@ const tabs = [
     { key: 'vaccines', label: 'Vaccines', labelAr: 'التطعيمات', icon: 'shield' },
     { key: 'development', label: 'Development', labelAr: 'التطور', icon: 'activity' },
     { key: 'allergies', label: 'Allergies', labelAr: 'الحساسية', icon: 'alert-triangle' },
+    { key: 'chronic', label: 'Chronic', labelAr: 'أمراض مزمنة', icon: 'heart-pulse' },
+    { key: 'nutrition', label: 'Nutrition', labelAr: 'التغذية', icon: 'apple' },
+    { key: 'screening', label: 'Screening', labelAr: 'الفحوصات', icon: 'clipboard-check' },
     { key: 'visits', label: 'Visits', labelAr: 'الزيارات', icon: 'clipboard' },
 ];
 
@@ -198,6 +201,140 @@ function submitAllergy() {
         onSuccess: () => {
             showAllergyForm.value = false;
             allergyForm.reset();
+        },
+    });
+}
+
+// ── Chronic Condition Form ──
+const showChronicForm = ref(false);
+const chronicForm = useForm({
+    condition_type: '',
+    condition_name: '',
+    severity: '',
+    notes: '',
+});
+
+const conditionTypes = [
+    { value: 'asthma', label: 'Asthma', labelAr: 'ربو' },
+    { value: 'diabetes_type1', label: 'Diabetes Type 1', labelAr: 'سكري النوع الأول' },
+    { value: 'epilepsy', label: 'Epilepsy', labelAr: 'صرع' },
+    { value: 'congenital_heart', label: 'Congenital Heart Disease', labelAr: 'أمراض القلب الخلقية' },
+    { value: 'anemia', label: 'Anemia', labelAr: 'فقر الدم' },
+    { value: 'kidney', label: 'Kidney Disease', labelAr: 'أمراض الكلى' },
+    { value: 'genetic', label: 'Genetic Disorder', labelAr: 'اضطراب وراثي' },
+    { value: 'other', label: 'Other', labelAr: 'أخرى' },
+];
+
+const chronicSeverityBadge = {
+    mild: { bg: 'bg-yellow-50 dark:bg-yellow-900/30', text: 'text-yellow-700 dark:text-yellow-400', label: 'Mild', labelAr: 'خفيف' },
+    moderate: { bg: 'bg-orange-50 dark:bg-orange-900/30', text: 'text-orange-700 dark:text-orange-400', label: 'Moderate', labelAr: 'متوسط' },
+    severe: { bg: 'bg-red-50 dark:bg-red-900/30', text: 'text-red-700 dark:text-red-400', label: 'Severe', labelAr: 'شديد' },
+    controlled: { bg: 'bg-emerald-50 dark:bg-emerald-900/30', text: 'text-emerald-700 dark:text-emerald-400', label: 'Controlled', labelAr: 'مسيطر عليه' },
+};
+
+function submitChronic() {
+    chronicForm.post(`/doctor/pediatric/patients/${props.patient.id}/chronic-condition`, {
+        preserveScroll: true,
+        onSuccess: () => {
+            showChronicForm.value = false;
+            chronicForm.reset();
+        },
+    });
+}
+
+// ── Nutrition Form ──
+const showNutritionForm = ref(false);
+const nutritionForm = useForm({
+    feeding_type: '',
+    feeds_per_day: '',
+    formula_brand: '',
+    meals_per_day: '',
+    diet_quality: '',
+    supplements: [],
+    eating_problems: [],
+    notes: '',
+});
+
+const feedingTypes = [
+    { value: 'breastfed', label: 'Breastfed', labelAr: 'رضاعة طبيعية' },
+    { value: 'formula', label: 'Formula', labelAr: 'حليب صناعي' },
+    { value: 'mixed', label: 'Mixed', labelAr: 'مختلط' },
+    { value: 'solid', label: 'Solid Foods', labelAr: 'أطعمة صلبة' },
+    { value: 'regular', label: 'Regular Diet', labelAr: 'نظام غذائي عادي' },
+];
+
+const dietQualityOptions = [
+    { value: 'excellent', label: 'Excellent', labelAr: 'ممتاز' },
+    { value: 'good', label: 'Good', labelAr: 'جيد' },
+    { value: 'fair', label: 'Fair', labelAr: 'مقبول' },
+    { value: 'poor', label: 'Poor', labelAr: 'ضعيف' },
+];
+
+const supplementOptions = [
+    { value: 'vitamin_d', label: 'Vitamin D', labelAr: 'فيتامين د' },
+    { value: 'iron', label: 'Iron', labelAr: 'حديد' },
+    { value: 'multivitamin', label: 'Multivitamin', labelAr: 'فيتامينات متعددة' },
+    { value: 'calcium', label: 'Calcium', labelAr: 'كالسيوم' },
+    { value: 'omega3', label: 'Omega-3', labelAr: 'أوميغا 3' },
+    { value: 'fluoride', label: 'Fluoride', labelAr: 'فلورايد' },
+];
+
+const eatingProblemOptions = [
+    { value: 'picky_eater', label: 'Picky Eater', labelAr: 'انتقائي في الأكل' },
+    { value: 'poor_appetite', label: 'Poor Appetite', labelAr: 'ضعف الشهية' },
+    { value: 'excessive_appetite', label: 'Excessive Appetite', labelAr: 'شهية مفرطة' },
+    { value: 'food_allergy', label: 'Food Allergy Related', labelAr: 'متعلق بحساسية الطعام' },
+    { value: 'reflux', label: 'Reflux / Vomiting', labelAr: 'ارتجاع / قيء' },
+    { value: 'swallowing', label: 'Swallowing Difficulty', labelAr: 'صعوبة في البلع' },
+];
+
+function submitNutrition() {
+    nutritionForm.post(`/doctor/pediatric/patients/${props.patient.id}/nutrition`, {
+        preserveScroll: true,
+        onSuccess: () => {
+            showNutritionForm.value = false;
+            nutritionForm.reset();
+        },
+    });
+}
+
+// ── Screening Form ──
+const showScreeningForm = ref(false);
+const screeningForm = useForm({
+    test_type: '',
+    test_date: new Date().toISOString().split('T')[0],
+    total_score: '',
+    result: '',
+    notes: '',
+});
+
+const screeningTestTypes = [
+    { value: 'mchat', label: 'M-CHAT (Autism Screening)', labelAr: 'فحص التوحد M-CHAT' },
+    { value: 'vanderbilt_parent', label: 'Vanderbilt Parent (ADHD)', labelAr: 'فاندربيلت للوالدين (ADHD)' },
+    { value: 'vision', label: 'Vision Screening', labelAr: 'فحص البصر' },
+    { value: 'hearing', label: 'Hearing Screening', labelAr: 'فحص السمع' },
+];
+
+const screeningResultOptions = [
+    { value: 'normal', label: 'Normal', labelAr: 'طبيعي' },
+    { value: 'at_risk', label: 'At Risk', labelAr: 'معرض للخطر' },
+    { value: 'abnormal', label: 'Abnormal', labelAr: 'غير طبيعي' },
+    { value: 'needs_rescreen', label: 'Needs Rescreen', labelAr: 'يحتاج إعادة فحص' },
+];
+
+const screeningResultBadge = {
+    normal: { bg: 'bg-emerald-50 dark:bg-emerald-900/30', text: 'text-emerald-700 dark:text-emerald-400' },
+    at_risk: { bg: 'bg-amber-50 dark:bg-amber-900/30', text: 'text-amber-700 dark:text-amber-400' },
+    abnormal: { bg: 'bg-red-50 dark:bg-red-900/30', text: 'text-red-700 dark:text-red-400' },
+    needs_rescreen: { bg: 'bg-blue-50 dark:bg-blue-900/30', text: 'text-blue-700 dark:text-blue-400' },
+};
+
+function submitScreening() {
+    screeningForm.post(`/doctor/pediatric/patients/${props.patient.id}/screening`, {
+        preserveScroll: true,
+        onSuccess: () => {
+            showScreeningForm.value = false;
+            screeningForm.reset();
         },
     });
 }
@@ -895,6 +1032,453 @@ const bmi = computed(() => {
                     <p class="text-sm text-gray-500 dark:text-gray-400">{{ isRtl ? 'لا توجد حساسية مسجلة' : 'No allergies recorded' }}</p>
                     <button @click="showAllergyForm = true" class="mt-3 text-sm text-emerald-600 hover:text-emerald-700 font-medium transition">
                         {{ isRtl ? 'إضافة حساسية' : 'Add an allergy' }}
+                    </button>
+                </div>
+            </div>
+
+            <!-- ──────── CHRONIC CONDITIONS TAB ──────── -->
+            <div v-else-if="activeTab === 'chronic'" class="space-y-5">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-base font-semibold text-gray-900 dark:text-white">
+                        {{ isRtl ? 'الأمراض المزمنة' : 'Chronic Conditions' }}
+                    </h3>
+                    <button
+                        @click="showChronicForm = !showChronicForm"
+                        class="inline-flex items-center gap-1.5 px-3.5 py-2 bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-medium rounded-xl shadow-sm shadow-emerald-500/20 transition-all duration-200 hover:shadow-md"
+                    >
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+                        {{ isRtl ? 'إضافة حالة مزمنة' : 'Add Condition' }}
+                    </button>
+                </div>
+
+                <!-- Chronic Form -->
+                <Transition
+                    enter-active-class="transition-all duration-300 ease-out"
+                    enter-from-class="opacity-0 -translate-y-2 max-h-0"
+                    enter-to-class="opacity-100 translate-y-0 max-h-96"
+                    leave-active-class="transition-all duration-200 ease-in"
+                    leave-from-class="opacity-100 translate-y-0 max-h-96"
+                    leave-to-class="opacity-0 -translate-y-2 max-h-0"
+                >
+                    <div v-if="showChronicForm" class="bg-white dark:bg-gray-800 rounded-xl border border-amber-200 dark:border-amber-800/50 shadow-sm p-4 sm:p-5 overflow-hidden">
+                        <form @submit.prevent="submitChronic" class="space-y-4">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{{ isRtl ? 'نوع الحالة' : 'Condition Type' }}</label>
+                                    <SearchableSelect
+                                        v-model="chronicForm.condition_type"
+                                        :options="conditionTypes.map(t => ({ value: t.value, label: isRtl ? t.labelAr : t.label }))"
+                                        :placeholder="isRtl ? 'اختر النوع' : 'Select type'"
+                                        accentColor="#4CAF50"
+                                    />
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{{ isRtl ? 'اسم الحالة' : 'Condition Name' }}</label>
+                                    <input v-model="chronicForm.condition_name" type="text" :placeholder="isRtl ? 'مثال: ربو خفيف متقطع' : 'e.g. Mild intermittent asthma'" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition" />
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{{ isRtl ? 'الشدة' : 'Severity' }}</label>
+                                    <SearchableSelect
+                                        v-model="chronicForm.severity"
+                                        :options="[
+                                            { value: 'mild', label: isRtl ? 'خفيف' : 'Mild' },
+                                            { value: 'moderate', label: isRtl ? 'متوسط' : 'Moderate' },
+                                            { value: 'severe', label: isRtl ? 'شديد' : 'Severe' },
+                                            { value: 'controlled', label: isRtl ? 'مسيطر عليه' : 'Controlled' },
+                                        ]"
+                                        :placeholder="isRtl ? 'اختر الشدة' : 'Select severity'"
+                                        accentColor="#4CAF50"
+                                    />
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
+                                    <input v-model="chronicForm.notes" type="text" :placeholder="isRtl ? 'أدوية، متابعة...' : 'Medications, follow-up...'" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition" />
+                                </div>
+                            </div>
+                            <div v-if="chronicForm.errors && Object.keys(chronicForm.errors).length" class="text-xs text-red-500">
+                                <p v-for="(err, key) in chronicForm.errors" :key="key">{{ err }}</p>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button type="submit" :disabled="chronicForm.processing" class="px-4 py-2 bg-amber-500 hover:bg-amber-600 disabled:opacity-50 text-white text-sm font-medium rounded-lg transition shadow-sm">
+                                    {{ chronicForm.processing ? (isRtl ? 'جاري الحفظ...' : 'Saving...') : (isRtl ? 'حفظ' : 'Save') }}
+                                </button>
+                                <button type="button" @click="showChronicForm = false; chronicForm.reset();" class="px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition">
+                                    {{ isRtl ? 'إلغاء' : 'Cancel' }}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </Transition>
+
+                <!-- Chronic Conditions List -->
+                <div v-if="chronicConditions?.length" class="space-y-3">
+                    <div
+                        v-for="(condition, idx) in chronicConditions"
+                        :key="condition.id"
+                        class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm p-4 hover:shadow-md transition-all duration-200"
+                        :style="{ transitionDelay: `${idx * 40}ms` }"
+                    >
+                        <div class="flex items-start justify-between gap-3">
+                            <div class="flex-1">
+                                <div class="flex items-center gap-2 flex-wrap">
+                                    <h4 class="text-sm font-semibold text-gray-900 dark:text-white">
+                                        {{ isRtl ? (condition.name_ar || condition.condition_name || condition.name) : (condition.condition_name || condition.name) }}
+                                    </h4>
+                                    <span
+                                        v-if="condition.severity"
+                                        class="text-xs font-medium px-2 py-0.5 rounded-full"
+                                        :class="(chronicSeverityBadge[condition.severity] || chronicSeverityBadge.mild).bg + ' ' + (chronicSeverityBadge[condition.severity] || chronicSeverityBadge.mild).text"
+                                    >
+                                        {{ isRtl ? (chronicSeverityBadge[condition.severity] || chronicSeverityBadge.mild).labelAr : (chronicSeverityBadge[condition.severity] || chronicSeverityBadge.mild).label }}
+                                    </span>
+                                    <span v-if="condition.condition_type" class="text-xs text-gray-400 bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded capitalize">
+                                        {{ condition.condition_type.replace(/_/g, ' ') }}
+                                    </span>
+                                </div>
+                                <p v-if="condition.medications" class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                    <span class="font-medium">{{ isRtl ? 'الأدوية:' : 'Medications:' }}</span> {{ condition.medications }}
+                                </p>
+                                <p v-if="condition.notes" class="text-xs text-gray-400 mt-0.5">{{ condition.notes }}</p>
+                                <p v-if="condition.since || condition.diagnosed_date" class="text-xs text-gray-400 mt-0.5">
+                                    {{ isRtl ? 'منذ:' : 'Since:' }} {{ condition.since || condition.diagnosed_date }}
+                                </p>
+                            </div>
+                            <span
+                                class="flex-shrink-0 w-2 h-2 rounded-full mt-2"
+                                :class="condition.status === 'active' || !condition.status ? 'bg-amber-500' : 'bg-gray-300'"
+                            ></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Empty Chronic -->
+                <div v-else-if="!showChronicForm" class="text-center py-12 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700">
+                    <div class="w-14 h-14 mx-auto rounded-full bg-amber-50 dark:bg-amber-900/20 flex items-center justify-center mb-3">
+                        <svg class="w-7 h-7 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
+                    </div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ isRtl ? 'لا توجد أمراض مزمنة مسجلة' : 'No chronic conditions recorded' }}</p>
+                    <button @click="showChronicForm = true" class="mt-3 text-sm text-emerald-600 hover:text-emerald-700 font-medium transition">
+                        {{ isRtl ? 'إضافة حالة مزمنة' : 'Add a chronic condition' }}
+                    </button>
+                </div>
+            </div>
+
+            <!-- ──────── NUTRITION TAB ──────── -->
+            <div v-else-if="activeTab === 'nutrition'" class="space-y-5">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-base font-semibold text-gray-900 dark:text-white">
+                        {{ isRtl ? 'التغذية' : 'Nutrition' }}
+                    </h3>
+                    <button
+                        @click="showNutritionForm = !showNutritionForm"
+                        class="inline-flex items-center gap-1.5 px-3.5 py-2 bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-medium rounded-xl shadow-sm shadow-emerald-500/20 transition-all duration-200 hover:shadow-md"
+                    >
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+                        {{ isRtl ? 'إضافة سجل تغذية' : 'Add Nutrition Record' }}
+                    </button>
+                </div>
+
+                <!-- Nutrition Form -->
+                <Transition
+                    enter-active-class="transition-all duration-300 ease-out"
+                    enter-from-class="opacity-0 -translate-y-2 max-h-0"
+                    enter-to-class="opacity-100 translate-y-0 max-h-[600px]"
+                    leave-active-class="transition-all duration-200 ease-in"
+                    leave-from-class="opacity-100 translate-y-0 max-h-[600px]"
+                    leave-to-class="opacity-0 -translate-y-2 max-h-0"
+                >
+                    <div v-if="showNutritionForm" class="bg-white dark:bg-gray-800 rounded-xl border border-green-200 dark:border-green-800/50 shadow-sm p-4 sm:p-5 overflow-hidden">
+                        <form @submit.prevent="submitNutrition" class="space-y-4">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{{ isRtl ? 'نوع التغذية' : 'Feeding Type' }}</label>
+                                    <SearchableSelect
+                                        v-model="nutritionForm.feeding_type"
+                                        :options="feedingTypes.map(t => ({ value: t.value, label: isRtl ? t.labelAr : t.label }))"
+                                        :placeholder="isRtl ? 'اختر النوع' : 'Select type'"
+                                        accentColor="#4CAF50"
+                                    />
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{{ isRtl ? 'عدد الرضعات/اليوم' : 'Feeds per Day' }}</label>
+                                    <input v-model="nutritionForm.feeds_per_day" type="number" min="0" :placeholder="isRtl ? 'للرضع' : 'For infants'" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition" />
+                                </div>
+                                <div v-if="nutritionForm.feeding_type === 'formula' || nutritionForm.feeding_type === 'mixed'">
+                                    <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{{ isRtl ? 'ماركة الحليب الصناعي' : 'Formula Brand' }}</label>
+                                    <input v-model="nutritionForm.formula_brand" type="text" :placeholder="isRtl ? 'مثال: سيميلاك' : 'e.g. Similac'" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition" />
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{{ isRtl ? 'عدد الوجبات/اليوم' : 'Meals per Day' }}</label>
+                                    <input v-model="nutritionForm.meals_per_day" type="number" min="0" :placeholder="isRtl ? 'للأطفال الأكبر' : 'For older kids'" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition" />
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{{ isRtl ? 'جودة النظام الغذائي' : 'Diet Quality' }}</label>
+                                    <SearchableSelect
+                                        v-model="nutritionForm.diet_quality"
+                                        :options="dietQualityOptions.map(q => ({ value: q.value, label: isRtl ? q.labelAr : q.label }))"
+                                        :placeholder="isRtl ? 'اختر الجودة' : 'Select quality'"
+                                        accentColor="#4CAF50"
+                                    />
+                                </div>
+                            </div>
+
+                            <!-- Supplements Checkboxes -->
+                            <div>
+                                <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-2">{{ isRtl ? 'المكملات الغذائية' : 'Supplements' }}</label>
+                                <div class="flex flex-wrap gap-2">
+                                    <label
+                                        v-for="sup in supplementOptions"
+                                        :key="sup.value"
+                                        class="inline-flex items-center gap-1.5 text-xs px-2.5 py-1.5 rounded-lg border cursor-pointer transition-all duration-150"
+                                        :class="nutritionForm.supplements.includes(sup.value)
+                                            ? 'bg-emerald-50 dark:bg-emerald-900/30 border-emerald-300 dark:border-emerald-700 text-emerald-700 dark:text-emerald-400'
+                                            : 'bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:border-gray-300'"
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            :value="sup.value"
+                                            v-model="nutritionForm.supplements"
+                                            class="sr-only"
+                                        />
+                                        <svg v-if="nutritionForm.supplements.includes(sup.value)" class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" /></svg>
+                                        {{ isRtl ? sup.labelAr : sup.label }}
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Eating Problems Checkboxes -->
+                            <div>
+                                <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-2">{{ isRtl ? 'مشاكل الأكل' : 'Eating Problems' }}</label>
+                                <div class="flex flex-wrap gap-2">
+                                    <label
+                                        v-for="prob in eatingProblemOptions"
+                                        :key="prob.value"
+                                        class="inline-flex items-center gap-1.5 text-xs px-2.5 py-1.5 rounded-lg border cursor-pointer transition-all duration-150"
+                                        :class="nutritionForm.eating_problems.includes(prob.value)
+                                            ? 'bg-red-50 dark:bg-red-900/30 border-red-300 dark:border-red-700 text-red-700 dark:text-red-400'
+                                            : 'bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:border-gray-300'"
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            :value="prob.value"
+                                            v-model="nutritionForm.eating_problems"
+                                            class="sr-only"
+                                        />
+                                        <svg v-if="nutritionForm.eating_problems.includes(prob.value)" class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" /></svg>
+                                        {{ isRtl ? prob.labelAr : prob.label }}
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
+                                <input v-model="nutritionForm.notes" type="text" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition" />
+                            </div>
+                            <div v-if="nutritionForm.errors && Object.keys(nutritionForm.errors).length" class="text-xs text-red-500">
+                                <p v-for="(err, key) in nutritionForm.errors" :key="key">{{ err }}</p>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button type="submit" :disabled="nutritionForm.processing" class="px-4 py-2 bg-green-500 hover:bg-green-600 disabled:opacity-50 text-white text-sm font-medium rounded-lg transition shadow-sm">
+                                    {{ nutritionForm.processing ? (isRtl ? 'جاري الحفظ...' : 'Saving...') : (isRtl ? 'حفظ' : 'Save') }}
+                                </button>
+                                <button type="button" @click="showNutritionForm = false; nutritionForm.reset();" class="px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition">
+                                    {{ isRtl ? 'إلغاء' : 'Cancel' }}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </Transition>
+
+                <!-- Nutrition Records List -->
+                <div v-if="nutritionRecords?.length" class="space-y-3">
+                    <div
+                        v-for="(record, idx) in nutritionRecords"
+                        :key="record.id"
+                        class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm p-4 hover:shadow-md transition-all duration-200"
+                        :style="{ transitionDelay: `${idx * 40}ms` }"
+                    >
+                        <div class="flex items-start justify-between gap-3">
+                            <div class="flex-1">
+                                <div class="flex items-center gap-2 flex-wrap">
+                                    <h4 class="text-sm font-semibold text-gray-900 dark:text-white capitalize">
+                                        {{ record.feeding_type ? record.feeding_type.replace(/_/g, ' ') : (isRtl ? 'سجل تغذية' : 'Nutrition Record') }}
+                                    </h4>
+                                    <span v-if="record.diet_quality" class="text-xs font-medium px-2 py-0.5 rounded-full"
+                                        :class="{
+                                            'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400': record.diet_quality === 'excellent' || record.diet_quality === 'good',
+                                            'bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400': record.diet_quality === 'fair',
+                                            'bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-400': record.diet_quality === 'poor',
+                                        }"
+                                    >
+                                        {{ record.diet_quality }}
+                                    </span>
+                                    <span v-if="record.created_at" class="text-xs text-gray-400">{{ record.created_at?.split('T')[0] || record.created_at }}</span>
+                                </div>
+                                <div class="flex flex-wrap gap-x-4 gap-y-1 mt-1.5 text-xs text-gray-500 dark:text-gray-400">
+                                    <span v-if="record.feeds_per_day">{{ isRtl ? 'رضعات:' : 'Feeds:' }} {{ record.feeds_per_day }}/{{ isRtl ? 'يوم' : 'day' }}</span>
+                                    <span v-if="record.meals_per_day">{{ isRtl ? 'وجبات:' : 'Meals:' }} {{ record.meals_per_day }}/{{ isRtl ? 'يوم' : 'day' }}</span>
+                                    <span v-if="record.formula_brand">{{ isRtl ? 'الحليب:' : 'Formula:' }} {{ record.formula_brand }}</span>
+                                </div>
+                                <div v-if="record.supplements?.length" class="flex flex-wrap gap-1 mt-1.5">
+                                    <span
+                                        v-for="s in (Array.isArray(record.supplements) ? record.supplements : [])"
+                                        :key="s"
+                                        class="text-[10px] bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 px-1.5 py-0.5 rounded"
+                                    >{{ s.replace(/_/g, ' ') }}</span>
+                                </div>
+                                <div v-if="record.eating_problems?.length" class="flex flex-wrap gap-1 mt-1">
+                                    <span
+                                        v-for="p in (Array.isArray(record.eating_problems) ? record.eating_problems : [])"
+                                        :key="p"
+                                        class="text-[10px] bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 px-1.5 py-0.5 rounded"
+                                    >{{ p.replace(/_/g, ' ') }}</span>
+                                </div>
+                                <p v-if="record.notes" class="text-xs text-gray-400 mt-1">{{ record.notes }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Empty Nutrition -->
+                <div v-else-if="!showNutritionForm" class="text-center py-12 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700">
+                    <div class="w-14 h-14 mx-auto rounded-full bg-green-50 dark:bg-green-900/20 flex items-center justify-center mb-3">
+                        <svg class="w-7 h-7 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z" /></svg>
+                    </div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ isRtl ? 'لا توجد سجلات تغذية بعد' : 'No nutrition records yet' }}</p>
+                    <button @click="showNutritionForm = true" class="mt-3 text-sm text-emerald-600 hover:text-emerald-700 font-medium transition">
+                        {{ isRtl ? 'إضافة سجل تغذية' : 'Add nutrition record' }}
+                    </button>
+                </div>
+            </div>
+
+            <!-- ──────── SCREENING TAB ──────── -->
+            <div v-else-if="activeTab === 'screening'" class="space-y-5">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-base font-semibold text-gray-900 dark:text-white">
+                        {{ isRtl ? 'الفحوصات' : 'Screening Tests' }}
+                    </h3>
+                    <button
+                        @click="showScreeningForm = !showScreeningForm"
+                        class="inline-flex items-center gap-1.5 px-3.5 py-2 bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-medium rounded-xl shadow-sm shadow-emerald-500/20 transition-all duration-200 hover:shadow-md"
+                    >
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+                        {{ isRtl ? 'فحص جديد' : 'New Screening' }}
+                    </button>
+                </div>
+
+                <!-- Screening Form -->
+                <Transition
+                    enter-active-class="transition-all duration-300 ease-out"
+                    enter-from-class="opacity-0 -translate-y-2 max-h-0"
+                    enter-to-class="opacity-100 translate-y-0 max-h-96"
+                    leave-active-class="transition-all duration-200 ease-in"
+                    leave-from-class="opacity-100 translate-y-0 max-h-96"
+                    leave-to-class="opacity-0 -translate-y-2 max-h-0"
+                >
+                    <div v-if="showScreeningForm" class="bg-white dark:bg-gray-800 rounded-xl border border-blue-200 dark:border-blue-800/50 shadow-sm p-4 sm:p-5 overflow-hidden">
+                        <form @submit.prevent="submitScreening" class="space-y-4">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{{ isRtl ? 'نوع الفحص' : 'Test Type' }}</label>
+                                    <SearchableSelect
+                                        v-model="screeningForm.test_type"
+                                        :options="screeningTestTypes.map(t => ({ value: t.value, label: isRtl ? t.labelAr : t.label }))"
+                                        :placeholder="isRtl ? 'اختر نوع الفحص' : 'Select test type'"
+                                        accentColor="#4CAF50"
+                                    />
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{{ isRtl ? 'تاريخ الفحص' : 'Test Date' }}</label>
+                                    <input v-model="screeningForm.test_date" type="date" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition" />
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{{ isRtl ? 'الدرجة الكلية' : 'Total Score' }}</label>
+                                    <input v-model="screeningForm.total_score" type="number" step="0.1" :placeholder="isRtl ? 'مثال: 2' : 'e.g. 2'" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition" />
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{{ isRtl ? 'النتيجة' : 'Result' }}</label>
+                                    <SearchableSelect
+                                        v-model="screeningForm.result"
+                                        :options="screeningResultOptions.map(r => ({ value: r.value, label: isRtl ? r.labelAr : r.label }))"
+                                        :placeholder="isRtl ? 'اختر النتيجة' : 'Select result'"
+                                        accentColor="#4CAF50"
+                                    />
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
+                                <input v-model="screeningForm.notes" type="text" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition" />
+                            </div>
+                            <div v-if="screeningForm.errors && Object.keys(screeningForm.errors).length" class="text-xs text-red-500">
+                                <p v-for="(err, key) in screeningForm.errors" :key="key">{{ err }}</p>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button type="submit" :disabled="screeningForm.processing" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 disabled:opacity-50 text-white text-sm font-medium rounded-lg transition shadow-sm">
+                                    {{ screeningForm.processing ? (isRtl ? 'جاري الحفظ...' : 'Saving...') : (isRtl ? 'حفظ' : 'Save') }}
+                                </button>
+                                <button type="button" @click="showScreeningForm = false; screeningForm.reset();" class="px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition">
+                                    {{ isRtl ? 'إلغاء' : 'Cancel' }}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </Transition>
+
+                <!-- Screening Tests List -->
+                <div v-if="screeningTests?.length" class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead class="bg-gray-50 dark:bg-gray-700/50">
+                                <tr>
+                                    <th class="px-4 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400 text-start">{{ isRtl ? 'نوع الفحص' : 'Test Type' }}</th>
+                                    <th class="px-4 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400 text-start">{{ isRtl ? 'التاريخ' : 'Date' }}</th>
+                                    <th class="px-4 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400 text-start">{{ isRtl ? 'الدرجة' : 'Score' }}</th>
+                                    <th class="px-4 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400 text-start">{{ isRtl ? 'النتيجة' : 'Result' }}</th>
+                                    <th class="px-4 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400 text-start">{{ isRtl ? 'ملاحظات' : 'Notes' }}</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+                                <tr
+                                    v-for="(test, idx) in screeningTests"
+                                    :key="test.id"
+                                    class="hover:bg-gray-50/50 dark:hover:bg-gray-700/30 transition-colors"
+                                    :class="idx === 0 ? 'bg-blue-50/30 dark:bg-blue-900/10' : ''"
+                                >
+                                    <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-nowrap font-medium">
+                                        {{ screeningTestTypes.find(t => t.value === test.test_type)
+                                            ? (isRtl ? screeningTestTypes.find(t => t.value === test.test_type).labelAr : screeningTestTypes.find(t => t.value === test.test_type).label)
+                                            : (test.test_type || '--').replace(/_/g, ' ') }}
+                                        <span v-if="idx === 0" class="text-[10px] text-blue-600 font-medium mx-1">{{ isRtl ? 'الأحدث' : 'Latest' }}</span>
+                                    </td>
+                                    <td class="px-4 py-3 text-gray-600 dark:text-gray-400 whitespace-nowrap">{{ test.test_date || '--' }}</td>
+                                    <td class="px-4 py-3 font-medium text-gray-900 dark:text-white">{{ test.total_score ?? '--' }}</td>
+                                    <td class="px-4 py-3">
+                                        <span
+                                            v-if="test.result"
+                                            class="inline-flex items-center text-xs font-medium px-2 py-0.5 rounded-full"
+                                            :class="(screeningResultBadge[test.result] || screeningResultBadge.normal).bg + ' ' + (screeningResultBadge[test.result] || screeningResultBadge.normal).text"
+                                        >
+                                            {{ screeningResultOptions.find(r => r.value === test.result)
+                                                ? (isRtl ? screeningResultOptions.find(r => r.value === test.result).labelAr : screeningResultOptions.find(r => r.value === test.result).label)
+                                                : test.result }}
+                                        </span>
+                                        <span v-else class="text-gray-400">--</span>
+                                    </td>
+                                    <td class="px-4 py-3 text-gray-500 dark:text-gray-400 text-xs max-w-[200px] truncate">{{ test.notes || '--' }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Empty Screening -->
+                <div v-else-if="!showScreeningForm" class="text-center py-12 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700">
+                    <div class="w-14 h-14 mx-auto rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center mb-3">
+                        <svg class="w-7 h-7 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>
+                    </div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ isRtl ? 'لا توجد فحوصات مسجلة بعد' : 'No screening tests recorded yet' }}</p>
+                    <button @click="showScreeningForm = true" class="mt-3 text-sm text-emerald-600 hover:text-emerald-700 font-medium transition">
+                        {{ isRtl ? 'إضافة فحص' : 'Add a screening test' }}
                     </button>
                 </div>
             </div>
