@@ -300,6 +300,18 @@ function submitConvert() {
     });
 }
 
+// Reactivate lead (lost/dormant → new)
+const reactivating = ref(false);
+function reactivateLead() {
+    const msg = isRtl.value ? 'هل تريد إعادة تنشيط هذا العميل المحتمل؟' : 'Reactivate this lead back to New status?';
+    if (!confirm(msg)) return;
+    reactivating.value = true;
+    router.post(`/secretary/crm/leads/${props.lead.id}/reactivate`, {}, {
+        preserveScroll: true,
+        onFinish: () => reactivating.value = false,
+    });
+}
+
 // Mark as Lost
 const showLostModal = ref(false);
 const lostForm = useForm({
@@ -1117,6 +1129,33 @@ const tabIndicatorStyle = computed(() => {
                                 </div>
                             </template>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lost / Dormant Info Banner -->
+            <div v-if="lead.status === 'lost' || lead.status === 'dormant'" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
+                <div class="bg-gradient-to-r from-red-50 to-rose-50 border border-red-200 rounded-2xl p-5">
+                    <div class="flex items-center justify-between gap-4">
+                        <div class="flex items-center gap-4">
+                            <div class="w-11 h-11 rounded-xl bg-red-100 flex items-center justify-center shrink-0">
+                                <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                            </div>
+                            <div>
+                                <p class="text-sm font-bold text-red-800">{{ lead.status === 'lost' ? (isRtl ? 'تم تسجيل خسارة هذا العميل' : 'Lead Marked as Lost') : (isRtl ? 'العميل المحتمل خامل' : 'Lead is Dormant') }}</p>
+                                <p v-if="lead.loss_reason" class="text-xs text-red-600 mt-0.5">{{ lead.loss_reason }}</p>
+                                <p v-if="lead.lost_at" class="text-xs text-red-400 mt-0.5">{{ isRtl ? 'تاريخ الخسارة:' : 'Lost on:' }} {{ new Date(lead.lost_at).toLocaleDateString() }}</p>
+                            </div>
+                        </div>
+                        <button
+                            @click="reactivateLead"
+                            :disabled="reactivating"
+                            class="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-semibold rounded-xl border border-teal-300 bg-white text-teal-700 hover:bg-teal-50 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 shrink-0">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                            </svg>
+                            {{ isRtl ? 'اعادة تنشيط' : 'Reactivate' }}
+                        </button>
                     </div>
                 </div>
             </div>

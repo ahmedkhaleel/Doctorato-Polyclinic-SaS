@@ -113,6 +113,34 @@ class SecretaryCrmController extends BaseSecretaryController
             ];
         }
 
+        // SLA Metrics (avg response time for this secretary's leads)
+        $avgResponseMinutes = Lead::assignedTo($userId)
+            ->whereNotNull('first_contacted_at')
+            ->where('created_at', '>=', $weekStart)
+            ->selectRaw('AVG(TIMESTAMPDIFF(MINUTE, created_at, first_contacted_at)) as avg_minutes')
+            ->value('avg_minutes');
+
+        $slaMetrics = [
+            'avg_response_minutes' => $avgResponseMinutes ? round($avgResponseMinutes) : null,
+            'avg_response_display' => $this->formatMinutes($avgResponseMinutes),
+            'awaiting_contact' => Lead::assignedTo($userId)->where('status', 'new')->whereNull('first_contacted_at')->count(),
+        ];
+
+        // Stale leads (no activity for 7+ days, still in pipeline)
+        $staleLeads = Lead::assignedTo($userId)
+            ->inPipeline()
+            ->where(function ($q) {
+                $q->where('updated_at', '<', now()->subDays(7))
+                  ->orWhere(function ($q2) {
+                      $q2->whereNull('last_contacted_at')
+                          ->where('created_at', '<', now()->subDays(3));
+                  });
+            })
+            ->with(['source:id,name_en,color'])
+            ->orderBy('updated_at')
+            ->limit(5)
+            ->get(['id', 'full_name', 'phone', 'status', 'priority', 'assigned_to', 'lead_source_id', 'updated_at', 'last_contacted_at', 'created_at']);
+
         return Inertia::render('Secretary/CRM/Dashboard', [
             'stats' => $stats,
             'todayFollowUps' => $todayFollowUps,
@@ -125,6 +153,8 @@ class SecretaryCrmController extends BaseSecretaryController
             'weeklyStats' => $weeklyStats,
             'moduleDistribution' => $moduleDistribution,
             'activityTrend' => $activityTrend,
+            'slaMetrics' => $slaMetrics,
+            'staleLeads' => $staleLeads,
         ]);
     }
 
@@ -768,6 +798,45 @@ class SecretaryCrmController extends BaseSecretaryController
         return back()->with('success', $this->msg(
             'Lead marked as lost.',
             'تم تسجيل العميل كخسارة.'
+        ));
+    }
+
+    /**
+     * Reactivate a lost or dormant lead back to new status.
+     */
+    public function reactivate(Request $request, Lead $lead): RedirectResponse
+    {
+        if (((int) $lead->assigned_to) !== ((int) auth()->id())) {
+            abort(403);
+        }
+
+        if (!in_array($lead->status, ['lost', 'dormant'])) {
+            return back()->with('error', $this->msg(
+                'Only lost or dormant leads can be reactivated.',
+                'يمكن إعادة تنشيط العملاء المفقودين أو الخاملين فقط.'
+            ));
+        }
+
+        $oldStatus = $lead->status;
+        $lead->update([
+            'status' => 'new',
+            'loss_reason' => null,
+            'lost_at' => null,
+        ]);
+
+        LeadActivity::logStatusChange($lead, $oldStatus, 'new');
+
+        LeadActivity::create([
+            'lead_id' => $lead->id,
+            'type' => 'system',
+            'subject' => 'Lead reactivated',
+            'description' => "Lead reactivated from {$oldStatus} status",
+            'performed_by' => auth()->id(),
+        ]);
+
+        return back()->with('success', $this->msg(
+            'Lead reactivated successfully.',
+            'تم إعادة تنشيط العميل المحتمل بنجاح.'
         ));
     }
 
@@ -1504,5 +1573,13 @@ class SecretaryCrmController extends BaseSecretaryController
             'comparison' => $comparison,
             'period' => $period,
         ]);
+    }
+
+    private function formatMinutes(?float $minutes): string
+    {
+        if ($minutes === null || $minutes === 0.0) return '-';
+        if ($minutes < 60) return round($minutes) . 'm';
+        if ($minutes < 1440) return round($minutes / 60, 1) . 'h';
+        return round($minutes / 1440, 1) . 'd';
     }
 }

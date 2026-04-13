@@ -18,6 +18,8 @@ const props = defineProps({
     weeklyStats: Object,
     moduleDistribution: Object,
     activityTrend: Array,
+    slaMetrics: Object,
+    staleLeads: Array,
 });
 
 const mounted = ref(false);
@@ -768,6 +770,57 @@ const activityTypeConfig = {
                         <p class="text-sm font-semibold text-gray-700">{{ isRtl ? '\u0645\u0639\u062F\u0644 \u0627\u0644\u062A\u062D\u0648\u064A\u0644' : 'Conversion Rate' }}</p>
                         <p class="text-[11px] text-gray-400 mt-0.5">{{ conversionMetric.converted }} / {{ conversionMetric.total }} {{ isRtl ? '\u0639\u0645\u064A\u0644' : 'leads' }}</p>
                     </div>
+                </div>
+            </div>
+
+            <!-- ============ SLA & STALE LEADS ============ -->
+            <div v-if="slaMetrics" class="grid grid-cols-2 gap-4"
+                :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
+                style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.275s">
+                <!-- Avg Response Time -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: linear-gradient(135deg, #6366f1, #818cf8)">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    </div>
+                    <div>
+                        <p class="text-lg font-bold text-gray-800">{{ slaMetrics.avg_response_display || '-' }}</p>
+                        <p class="text-[10px] text-gray-400 font-medium uppercase">{{ isRtl ? 'متوسط وقت الاستجابة' : 'Avg Response' }}</p>
+                    </div>
+                </div>
+                <!-- Awaiting Contact -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex items-center gap-3"
+                     :class="slaMetrics.awaiting_contact > 0 ? 'border-amber-200 bg-amber-50/30' : ''">
+                    <div class="w-10 h-10 rounded-xl flex items-center justify-center"
+                         :style="slaMetrics.awaiting_contact > 0 ? 'background: linear-gradient(135deg, #f59e0b, #fbbf24)' : 'background: linear-gradient(135deg, #9ca3af, #d1d5db)'">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                    </div>
+                    <div>
+                        <p class="text-lg font-bold" :class="slaMetrics.awaiting_contact > 0 ? 'text-amber-600' : 'text-gray-800'">{{ slaMetrics.awaiting_contact }}</p>
+                        <p class="text-[10px] text-gray-400 font-medium uppercase">{{ isRtl ? 'بانتظار التواصل' : 'Awaiting Contact' }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stale Leads Alert -->
+            <div v-if="staleLeads?.length" class="bg-amber-50 border border-amber-200 rounded-2xl p-4"
+                :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
+                style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.28s">
+                <div class="flex items-center gap-2 mb-3">
+                    <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4.5c-.77-.833-2.694-.833-3.464 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
+                    <h3 class="text-xs font-bold text-amber-800 uppercase tracking-wider">{{ isRtl ? 'عملاء بحاجة للمتابعة' : 'Stale Leads' }}</h3>
+                </div>
+                <div class="space-y-2">
+                    <Link v-for="lead in staleLeads" :key="lead.id"
+                          :href="`/secretary/crm/leads/${lead.id}`"
+                          class="flex items-center justify-between bg-white/70 rounded-xl px-3 py-2 hover:bg-white transition">
+                        <div>
+                            <p class="text-sm font-semibold text-gray-800">{{ lead.full_name }}</p>
+                            <p class="text-[10px] text-gray-400">{{ lead.phone }}</p>
+                        </div>
+                        <span class="text-[10px] text-amber-600 font-medium">
+                            {{ Math.floor((Date.now() - new Date(lead.updated_at)) / 86400000) }}{{ isRtl ? ' يوم' : 'd ago' }}
+                        </span>
+                    </Link>
                 </div>
             </div>
 

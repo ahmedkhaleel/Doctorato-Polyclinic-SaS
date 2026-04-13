@@ -160,6 +160,7 @@ Route::middleware('secretary.auth')->group(function () {
     Route::post('/crm/follow-ups/{followUp}/miss', [SecretaryCrmController::class, 'missFollowUp'])->name('secretary.crm.missFollowUp');
     Route::post('/crm/leads/{lead}/convert', [SecretaryCrmController::class, 'convertToPatient'])->name('secretary.crm.convertToPatient');
     Route::post('/crm/leads/{lead}/lost', [SecretaryCrmController::class, 'markAsLost'])->name('secretary.crm.markAsLost');
+    Route::post('/crm/leads/{lead}/reactivate', [SecretaryCrmController::class, 'reactivate'])->name('secretary.crm.reactivate');
     Route::post('/crm/follow-ups/{followUp}/reschedule', [SecretaryCrmController::class, 'rescheduleFollowUp'])->name('secretary.crm.rescheduleFollowUp');
     Route::get('/crm/check-duplicate', [SecretaryCrmController::class, 'checkDuplicate'])->name('secretary.crm.checkDuplicate');
     Route::get('/crm/performance', [SecretaryCrmController::class, 'performance'])->name('secretary.crm.performance');
