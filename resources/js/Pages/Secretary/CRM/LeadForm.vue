@@ -145,16 +145,42 @@ const citiesByNationality = {
         { value: 'Al Ain', ar: 'العين', en: 'Al Ain' },
     ],
     Egyptian: [
-        { value: 'Cairo', ar: 'القاهرة', en: 'Cairo' },
-        { value: 'Giza', ar: 'الجيزة', en: 'Giza' },
-        { value: 'Alexandria', ar: 'الإسكندرية', en: 'Alexandria' },
-        { value: 'Sharm El Sheikh', ar: 'شرم الشيخ', en: 'Sharm El Sheikh' },
-        { value: 'Hurghada', ar: 'الغردقة', en: 'Hurghada' },
-        { value: 'Luxor', ar: 'الأقصر', en: 'Luxor' },
-        { value: 'Aswan', ar: 'أسوان', en: 'Aswan' },
-        { value: 'Mansoura', ar: 'المنصورة', en: 'Mansoura' },
-        { value: 'Tanta', ar: 'طنطا', en: 'Tanta' },
-        { value: 'Zagazig', ar: 'الزقازيق', en: 'Zagazig' },
+        { value: 'Cairo', ar: 'القاهرة', en: 'Cairo', cities: [
+            { value: 'Nasr City', ar: 'مدينة نصر' }, { value: 'Heliopolis', ar: 'مصر الجديدة' }, { value: 'Maadi', ar: 'المعادي' },
+            { value: 'New Cairo', ar: 'القاهرة الجديدة' }, { value: 'Zamalek', ar: 'الزمالك' }, { value: 'Downtown', ar: 'وسط البلد' },
+            { value: 'Shubra', ar: 'شبرا' }, { value: 'Ain Shams', ar: 'عين شمس' }, { value: 'El Rehab', ar: 'الرحاب' },
+            { value: 'Madinet Badr', ar: 'مدينة بدر' }, { value: 'Shorouk', ar: 'الشروق' }, { value: 'Obour', ar: 'العبور' },
+        ]},
+        { value: 'Giza', ar: 'الجيزة', en: 'Giza', cities: [
+            { value: 'Dokki', ar: 'الدقي' }, { value: 'Mohandessin', ar: 'المهندسين' }, { value: 'Agouza', ar: 'العجوزة' },
+            { value: 'Haram', ar: 'الهرم' }, { value: 'Faisal', ar: 'فيصل' }, { value: '6th October', ar: '6 أكتوبر' },
+            { value: 'Sheikh Zayed', ar: 'الشيخ زايد' }, { value: 'Smart Village', ar: 'القرية الذكية' },
+        ]},
+        { value: 'Alexandria', ar: 'الإسكندرية', en: 'Alexandria', cities: [
+            { value: 'Montaza', ar: 'المنتزه' }, { value: 'Sidi Gaber', ar: 'سيدي جابر' }, { value: 'Smouha', ar: 'سموحة' },
+            { value: 'Gleem', ar: 'جليم' }, { value: 'Miami', ar: 'ميامي' }, { value: 'Mandara', ar: 'المندرة' },
+            { value: 'Agami', ar: 'العجمي' }, { value: 'Borg El Arab', ar: 'برج العرب' },
+        ]},
+        { value: 'Sharqia', ar: 'الشرقية', en: 'Sharqia', cities: [
+            { value: 'Zagazig', ar: 'الزقازيق' }, { value: '10th Ramadan', ar: 'العاشر من رمضان' }, { value: 'Bilbeis', ar: 'بلبيس' },
+            { value: 'Abu Hammad', ar: 'أبو حماد' }, { value: 'Minya Al Qamh', ar: 'منيا القمح' },
+        ]},
+        { value: 'Dakahlia', ar: 'الدقهلية', en: 'Dakahlia', cities: [
+            { value: 'Mansoura', ar: 'المنصورة' }, { value: 'Talkha', ar: 'طلخا' }, { value: 'Mit Ghamr', ar: 'ميت غمر' },
+        ]},
+        { value: 'Gharbia', ar: 'الغربية', en: 'Gharbia', cities: [
+            { value: 'Tanta', ar: 'طنطا' }, { value: 'El Mahalla', ar: 'المحلة الكبرى' },
+        ]},
+        { value: 'Qalyubia', ar: 'القليوبية', en: 'Qalyubia', cities: [
+            { value: 'Banha', ar: 'بنها' }, { value: 'Shubra El Kheima', ar: 'شبرا الخيمة' }, { value: 'Qalyub', ar: 'قليوب' },
+        ]},
+        { value: 'Monufia', ar: 'المنوفية', en: 'Monufia', cities: [
+            { value: 'Shebin El Kom', ar: 'شبين الكوم' }, { value: 'Menouf', ar: 'منوف' }, { value: 'Sadat City', ar: 'مدينة السادات' },
+        ]},
+        { value: 'Beheira', ar: 'البحيرة', en: 'Beheira', cities: [
+            { value: 'Damanhour', ar: 'دمنهور' }, { value: 'Kafr El Dawwar', ar: 'كفر الدوار' },
+        ]},
+        { value: 'Kafr El Sheikh', ar: 'كفر الشيخ', en: 'Kafr El Sheikh' },
         { value: 'Ismailia', ar: 'الإسماعيلية', en: 'Ismailia' },
         { value: 'Suez', ar: 'السويس', en: 'Suez' },
         { value: 'Port Said', ar: 'بورسعيد', en: 'Port Said' },
@@ -165,18 +191,17 @@ const citiesByNationality = {
         { value: 'Asyut', ar: 'أسيوط', en: 'Asyut' },
         { value: 'Sohag', ar: 'سوهاج', en: 'Sohag' },
         { value: 'Qena', ar: 'قنا', en: 'Qena' },
-        { value: 'Kafr El Sheikh', ar: 'كفر الشيخ', en: 'Kafr El Sheikh' },
-        { value: 'Gharbia', ar: 'الغربية', en: 'Gharbia' },
-        { value: 'Monufia', ar: 'المنوفية', en: 'Monufia' },
-        { value: 'Beheira', ar: 'البحيرة', en: 'Beheira' },
-        { value: 'Qalyubia', ar: 'القليوبية', en: 'Qalyubia' },
-        { value: 'Sharqia', ar: 'الشرقية', en: 'Sharqia' },
-        { value: 'Dakahlia', ar: 'الدقهلية', en: 'Dakahlia' },
-        { value: 'New Valley', ar: 'الوادي الجديد', en: 'New Valley' },
-        { value: 'Red Sea', ar: 'البحر الأحمر', en: 'Red Sea' },
+        { value: 'Luxor', ar: 'الأقصر', en: 'Luxor' },
+        { value: 'Aswan', ar: 'أسوان', en: 'Aswan' },
+        { value: 'Red Sea', ar: 'البحر الأحمر', en: 'Red Sea', cities: [
+            { value: 'Hurghada', ar: 'الغردقة' }, { value: 'El Gouna', ar: 'الجونة' },
+        ]},
+        { value: 'South Sinai', ar: 'جنوب سيناء', en: 'South Sinai', cities: [
+            { value: 'Sharm El Sheikh', ar: 'شرم الشيخ' }, { value: 'Dahab', ar: 'دهب' },
+        ]},
         { value: 'Matruh', ar: 'مطروح', en: 'Matruh' },
         { value: 'North Sinai', ar: 'شمال سيناء', en: 'North Sinai' },
-        { value: 'South Sinai', ar: 'جنوب سيناء', en: 'South Sinai' },
+        { value: 'New Valley', ar: 'الوادي الجديد', en: 'New Valley' },
     ],
     Saudi: [
         { value: 'Riyadh', ar: 'الرياض', en: 'Riyadh' },
@@ -308,10 +333,56 @@ function selectNationality(val) {
     }
 }
 
+/* ---------- Sub-city (area within governorate) ---------- */
+const selectedGov = ref('');
+const areaOpen = ref(false);
+const areaSearch = ref('');
+const areaRef = ref(null);
+
+const governorateAreas = computed(() => {
+    if (form.nationality !== 'Egyptian' || !selectedGov.value) return [];
+    const list = citiesByNationality.Egyptian || [];
+    const gov = list.find(g => g.value === selectedGov.value);
+    return gov?.cities || [];
+});
+
+const filteredAreas = computed(() => {
+    const list = governorateAreas.value;
+    if (!areaSearch.value.trim()) return list;
+    const q = areaSearch.value.trim().toLowerCase();
+    return list.filter(a => a.ar.includes(q) || a.value.toLowerCase().includes(q));
+});
+
 function selectCity(val) {
+    if (form.nationality === 'Egyptian') {
+        selectedGov.value = val;
+        const gov = (citiesByNationality.Egyptian || []).find(g => g.value === val);
+        if (gov?.cities?.length) {
+            // Has sub-cities — store governorate temporarily, wait for area pick
+            form.city = val;
+            cityOpen.value = false;
+            citySearch.value = '';
+            // Auto-open area dropdown
+            setTimeout(() => { areaOpen.value = true; }, 200);
+            return;
+        }
+    }
     form.city = val;
+    selectedGov.value = '';
     cityOpen.value = false;
     citySearch.value = '';
+}
+
+function selectArea(val) {
+    const govLabel = isRtl.value
+        ? (citiesByNationality.Egyptian || []).find(g => g.value === selectedGov.value)?.ar
+        : selectedGov.value;
+    const areaLabel = isRtl.value
+        ? governorateAreas.value.find(a => a.value === val)?.ar
+        : val;
+    form.city = `${govLabel} - ${areaLabel}`;
+    areaOpen.value = false;
+    areaSearch.value = '';
 }
 
 function getNatLabel(val) {
@@ -320,14 +391,20 @@ function getNatLabel(val) {
 }
 
 function getCityLabel(val) {
+    if (!val) return '';
+    /* Handle combined "Gov - Area" values for Egyptian */
+    if (val.includes(' - ')) {
+        return val;
+    }
     const c = cityOptions.value.find(o => o.value === val);
-    return c ? (isRtl.value ? c.ar : c.en) : '';
+    return c ? (isRtl.value ? c.ar : c.en) : val;
 }
 
 /* Close dropdowns on outside click */
 function handleOutsideClick(e) {
     if (natRef.value && !natRef.value.contains(e.target)) natOpen.value = false;
     if (cityRef.value && !cityRef.value.contains(e.target)) cityOpen.value = false;
+    if (areaRef.value && !areaRef.value.contains(e.target)) areaOpen.value = false;
 }
 onMounted(() => document.addEventListener('mousedown', handleOutsideClick));
 onBeforeUnmount(() => document.removeEventListener('mousedown', handleOutsideClick));
@@ -337,6 +414,9 @@ watch(() => form.nationality, (newVal, oldVal) => {
     if (newVal !== oldVal) {
         form.city = '';
         citySearch.value = '';
+        selectedGov.value = '';
+        areaSearch.value = '';
+        areaOpen.value = false;
     }
 });
 
@@ -667,6 +747,50 @@ const phoneValidation = computed(() => {
                                     <svg v-if="form.city === c.value" class="w-4 h-4 text-teal-500 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                                 </button>
                                 <div v-if="filteredCities.length === 0" class="px-4 py-6 text-center text-xs text-slate-400">
+                                    {{ isRtl ? 'لا توجد نتائج' : 'No results found' }}
+                                </div>
+                            </div>
+                        </div>
+                    </Transition>
+                </div>
+                <!-- Area / City (for Egyptian governorates with sub-cities) -->
+                <div v-if="form.nationality === 'Egyptian' && selectedGov && governorateAreas.length > 0" ref="areaRef" class="relative">
+                    <label class="block text-sm font-semibold text-slate-600 mb-1.5">
+                        {{ isRtl ? 'المدينة / المنطقة' : 'City / Area' }}
+                    </label>
+                    <button type="button" @click="areaOpen = !areaOpen; if (areaOpen) nextTick(() => { const el = areaRef?.querySelector?.('input'); if(el) el.focus(); })"
+                            :class="['w-full rounded-xl border bg-slate-50/50 hover:border-slate-300 px-4 py-3 text-sm transition-all duration-200 focus:ring-2 focus:ring-teal-400/40 focus:border-teal-400 outline-none flex items-center justify-between',
+                                areaOpen ? 'border-teal-400 ring-2 ring-teal-400/30 bg-white' : 'border-slate-200']">
+                        <span :class="form.city && form.city.includes(' - ') ? 'text-slate-800' : 'text-slate-400'">
+                            {{ form.city && form.city.includes(' - ') ? form.city.split(' - ')[1] : (isRtl ? 'اختر المدينة / المنطقة' : 'Select City / Area') }}
+                        </span>
+                        <svg :class="['w-4 h-4 text-slate-400 transition-transform duration-200', areaOpen ? 'rotate-180' : '']" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <p class="mt-1 text-[10px] text-teal-500 flex items-center gap-1">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                        {{ isRtl ? ('محافظة: ' + ((citiesByNationality.Egyptian || []).find(g => g.value === selectedGov)?.ar || selectedGov)) : ('Governorate: ' + selectedGov) }}
+                    </p>
+                    <Transition enter-active-class="transition duration-200 ease-out" enter-from-class="opacity-0 -translate-y-2 scale-95" enter-to-class="opacity-100 translate-y-0 scale-100"
+                                leave-active-class="transition duration-150 ease-in" leave-from-class="opacity-100 translate-y-0 scale-100" leave-to-class="opacity-0 -translate-y-2 scale-95">
+                        <div v-if="areaOpen" class="absolute z-50 mt-1.5 w-full bg-white rounded-xl border border-slate-200 shadow-xl shadow-slate-200/50 overflow-hidden">
+                            <div class="p-2 border-b border-slate-100">
+                                <div class="relative">
+                                    <svg class="w-4 h-4 text-slate-400 absolute top-1/2 -translate-y-1/2 pointer-events-none" :class="isRtl ? 'right-3' : 'left-3'" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="m21 21-4.35-4.35"/></svg>
+                                    <input v-model="areaSearch" type="text"
+                                           :placeholder="isRtl ? 'ابحث عن المدينة...' : 'Search area...'"
+                                           class="w-full rounded-lg border border-slate-200 text-sm py-2.5 outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-400/30"
+                                           :class="isRtl ? 'pr-9 pl-3' : 'pl-9 pr-3'" />
+                                </div>
+                            </div>
+                            <div class="max-h-52 overflow-y-auto overscroll-contain">
+                                <button v-for="a in filteredAreas" :key="a.value" type="button"
+                                        @click="selectArea(a.value)"
+                                        :class="['w-full text-start px-4 py-2.5 text-sm transition-colors duration-100 flex items-center justify-between',
+                                            form.city && form.city.includes(a.value) ? 'bg-teal-50 text-teal-700 font-medium' : 'text-slate-600 hover:bg-slate-50']">
+                                    <span>{{ isRtl ? a.ar : a.value }}</span>
+                                    <svg v-if="form.city && form.city.includes(a.value)" class="w-4 h-4 text-teal-500 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                </button>
+                                <div v-if="filteredAreas.length === 0" class="px-4 py-6 text-center text-xs text-slate-400">
                                     {{ isRtl ? 'لا توجد نتائج' : 'No results found' }}
                                 </div>
                             </div>
