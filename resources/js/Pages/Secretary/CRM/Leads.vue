@@ -566,7 +566,7 @@ const activeFilterPills = computed(() => {
 
 <template>
     <SecretaryLayout :title="isRtl ? 'العملاء المحتملين' : 'Leads'">
-        <div class="max-w-7xl mx-auto space-y-6">
+        <div class="max-w-7xl mx-auto space-y-6 pb-20 md:pb-0">
 
             <!-- ═══════════════ HEADER ═══════════════ -->
             <div class="relative overflow-hidden rounded-2xl p-6 sm:p-8"
@@ -1672,6 +1672,43 @@ const activeFilterPills = computed(() => {
         </Transition>
     </Teleport>
 
+    <!-- Mobile Bottom Action Bar (visible on small screens only) -->
+    <Teleport to="body">
+        <div class="fixed bottom-0 left-0 right-0 z-40 md:hidden">
+            <div class="bg-white/95 backdrop-blur-lg border-t border-gray-200 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] px-2 pb-safe">
+                <div class="flex items-center justify-around py-2">
+                    <!-- Dashboard -->
+                    <Link href="/secretary/crm" class="flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl text-gray-500 hover:text-teal-600 hover:bg-teal-50 transition-all duration-200">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6"/></svg>
+                        <span class="text-[10px] font-semibold">{{ isRtl ? 'لوحة' : 'Dashboard' }}</span>
+                    </Link>
+                    <!-- Pipeline -->
+                    <Link href="/secretary/crm/pipeline" class="flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl text-gray-500 hover:text-teal-600 hover:bg-teal-50 transition-all duration-200">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"/></svg>
+                        <span class="text-[10px] font-semibold">{{ isRtl ? 'أنابيب' : 'Pipeline' }}</span>
+                    </Link>
+                    <!-- New Lead (center, prominent) -->
+                    <Link href="/secretary/crm/leads/create" class="flex flex-col items-center gap-0.5 -mt-5">
+                        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-teal-500 to-emerald-500 flex items-center justify-center shadow-lg shadow-teal-500/30 ring-4 ring-white">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+                        </div>
+                        <span class="text-[10px] font-bold text-teal-600">{{ isRtl ? 'جديد' : 'New' }}</span>
+                    </Link>
+                    <!-- Follow-ups -->
+                    <Link href="/secretary/crm/calendar" class="flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl text-gray-500 hover:text-teal-600 hover:bg-teal-50 transition-all duration-200 relative">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>
+                        <span class="text-[10px] font-semibold">{{ isRtl ? 'التقويم' : 'Calendar' }}</span>
+                    </Link>
+                    <!-- Leads (current page, highlighted) -->
+                    <div class="flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl text-teal-600 bg-teal-50">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z"/></svg>
+                        <span class="text-[10px] font-bold">{{ isRtl ? 'العملاء' : 'Leads' }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </Teleport>
+
     <!-- Scroll-to-top floating button -->
     <Teleport to="body">
         <Transition
@@ -1683,7 +1720,7 @@ const activeFilterPills = computed(() => {
             leave-to-class="opacity-0 scale-75 translate-y-4"
         >
             <button v-if="showScrollTop" @click="scrollToTop"
-                class="fixed bottom-6 z-40 w-10 h-10 rounded-full bg-teal-600 text-white shadow-lg hover:bg-teal-700 hover:shadow-xl hover:scale-110 transition-all duration-200 flex items-center justify-center"
+                class="fixed z-40 w-10 h-10 rounded-full bg-teal-600 text-white shadow-lg hover:bg-teal-700 hover:shadow-xl hover:scale-110 transition-all duration-200 flex items-center justify-center bottom-20 md:bottom-6"
                 :class="isRtl ? 'left-6' : 'right-6'"
                 :title="isRtl ? 'للأعلى' : 'Back to top'">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/></svg>
@@ -1703,5 +1740,8 @@ const activeFilterPills = computed(() => {
 .pill-leave-to {
     opacity: 0;
     transform: scale(0.85) translateY(-4px);
+}
+.pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 0.5rem);
 }
 </style>
