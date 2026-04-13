@@ -123,7 +123,7 @@ function isLowStock() {
                     <form @submit.prevent="submit" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_type') }} <span class="text-red-500">*</span></label>
-                            <select v-model="form.transaction_type" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent">
+                            <select v-model="form.transaction_type" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-transparent">
                                 <option value="purchase">{{ $t('a_purchase') }}</option>
                                 <option value="adjustment">{{ $t('a_adjustment') }}</option>
                             </select>
@@ -131,17 +131,17 @@ function isLowStock() {
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_quantity') }} <span class="text-red-500">*</span></label>
-                            <input v-model="form.quantity" type="number" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" :placeholder="$t('a_use_negative_reduction')" />
+                            <input v-model="form.quantity" type="number" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-transparent" :placeholder="$t('a_use_negative_reduction')" />
                             <p v-if="form.errors.quantity" class="mt-1 text-sm text-red-600">{{ form.errors.quantity }}</p>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_unit_cost') }}</label>
-                            <input v-model="form.unit_cost" type="number" step="0.01" min="0" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" placeholder="0.00" />
+                            <input v-model="form.unit_cost" type="number" step="0.01" min="0" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-transparent" placeholder="0.00" />
                             <p v-if="form.errors.unit_cost" class="mt-1 text-sm text-red-600">{{ form.errors.unit_cost }}</p>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_notes') }}</label>
-                            <input v-model="form.notes" type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" :placeholder="$t('a_optional_notes')" />
+                            <input v-model="form.notes" type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-transparent" :placeholder="$t('a_optional_notes')" />
                         </div>
                         <div class="sm:col-span-2 lg:col-span-4 flex justify-end">
                             <button
