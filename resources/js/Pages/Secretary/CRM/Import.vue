@@ -235,6 +235,7 @@ const dataQualityIssues = computed(() => {
 
 /* ── Import tips ──────────────────────────────────────── */
 const showTips = ref(true);
+const showQualityDetails = ref(false);
 const importTips = [
     { en: 'File must include "Name" and "Phone" columns (required)', ar: '\u064A\u062C\u0628 \u0623\u0646 \u064A\u062D\u062A\u0648\u064A \u0627\u0644\u0645\u0644\u0641 \u0639\u0644\u0649 \u0623\u0639\u0645\u062F\u0629 "\u0627\u0644\u0627\u0633\u0645" \u0648"\u0627\u0644\u0647\u0627\u062A\u0641" (\u0645\u0637\u0644\u0648\u0628)' },
     { en: 'Phone numbers should include country code (e.g. +971)', ar: '\u064A\u062C\u0628 \u0623\u0646 \u062A\u062A\u0636\u0645\u0646 \u0623\u0631\u0642\u0627\u0645 \u0627\u0644\u0647\u0627\u062A\u0641 \u0631\u0645\u0632 \u0627\u0644\u062F\u0648\u0644\u0629 (\u0645\u062B\u0644 971+)' },
@@ -726,6 +727,84 @@ function startNewImport() {
                     <p class="text-[11px] text-gray-400 ms-6">{{ isRtl ? strat.desc_ar : strat.desc_en }}</p>
                 </button>
             </div>
+        </div>
+
+        <!-- Data Quality Readiness -->
+        <div class="rounded-xl border p-4 mb-8"
+             :class="dataQualityIssues.length === 0
+                 ? 'border-emerald-200 bg-emerald-50/50'
+                 : dataQualityIssues.filter(i => i.type === 'error').length > 0
+                     ? 'border-red-200 bg-red-50/50'
+                     : 'border-amber-200 bg-amber-50/50'">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <!-- Green check if clean -->
+                    <div v-if="dataQualityIssues.length === 0"
+                         class="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center flex-shrink-0">
+                        <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <!-- Warning/error icon -->
+                    <div v-else class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+                         :class="dataQualityIssues.filter(i => i.type === 'error').length > 0 ? 'bg-red-100' : 'bg-amber-100'">
+                        <svg class="w-5 h-5" :class="dataQualityIssues.filter(i => i.type === 'error').length > 0 ? 'text-red-600' : 'text-amber-600'"
+                             fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-semibold"
+                            :class="dataQualityIssues.length === 0 ? 'text-emerald-700' : dataQualityIssues.filter(i => i.type === 'error').length > 0 ? 'text-red-700' : 'text-amber-700'">
+                            {{ dataQualityIssues.length === 0
+                                ? (isRtl ? 'البيانات جاهزة للاستيراد' : 'Data is ready for import')
+                                : (isRtl ? 'تم اكتشاف مشاكل في البيانات' : 'Data quality issues detected') }}
+                        </h4>
+                        <div v-if="dataQualityIssues.length > 0" class="flex items-center gap-3 mt-1">
+                            <span v-if="dataQualityIssues.filter(i => i.type === 'error').length > 0"
+                                  class="inline-flex items-center gap-1 text-xs text-red-600">
+                                <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>
+                                {{ dataQualityIssues.filter(i => i.type === 'error').length }} {{ isRtl ? 'خطأ' : 'errors' }}
+                            </span>
+                            <span v-if="dataQualityIssues.filter(i => i.type === 'warning').length > 0"
+                                  class="inline-flex items-center gap-1 text-xs text-amber-600">
+                                <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                                {{ dataQualityIssues.filter(i => i.type === 'warning').length }} {{ isRtl ? 'تحذير' : 'warnings' }}
+                            </span>
+                        </div>
+                        <p v-else class="text-xs text-emerald-500 mt-0.5">
+                            {{ isRtl ? `${totalRows} صف بدون مشاكل` : `${totalRows} rows with no issues` }}
+                        </p>
+                    </div>
+                </div>
+                <button v-if="dataQualityIssues.length > 0"
+                        @click="showQualityDetails = !showQualityDetails"
+                        class="text-xs font-medium px-3 py-1.5 rounded-lg transition-all duration-200"
+                        :class="dataQualityIssues.filter(i => i.type === 'error').length > 0
+                            ? 'text-red-600 bg-red-100 hover:bg-red-200'
+                            : 'text-amber-600 bg-amber-100 hover:bg-amber-200'">
+                    {{ showQualityDetails
+                        ? (isRtl ? 'إخفاء' : 'Hide')
+                        : (isRtl ? 'عرض التفاصيل' : 'Show details') }}
+                </button>
+            </div>
+            <!-- Expandable issue list -->
+            <Transition enter-active-class="transition-all duration-300 ease-out" enter-from-class="opacity-0 max-h-0" enter-to-class="opacity-100 max-h-60"
+                        leave-active-class="transition-all duration-200 ease-in" leave-from-class="opacity-100 max-h-60" leave-to-class="opacity-0 max-h-0">
+                <div v-if="showQualityDetails && dataQualityIssues.length > 0" class="mt-3 overflow-hidden">
+                    <div class="max-h-40 overflow-y-auto rounded-lg border border-gray-200 bg-white divide-y divide-gray-50">
+                        <div v-for="(issue, idx) in dataQualityIssues.slice(0, 20)" :key="idx"
+                             class="flex items-center gap-2 px-3 py-2 text-xs">
+                            <span class="w-1.5 h-1.5 rounded-full flex-shrink-0"
+                                  :class="issue.type === 'error' ? 'bg-red-500' : 'bg-amber-500'"></span>
+                            <span class="text-gray-600">{{ issue.msg }}</span>
+                        </div>
+                        <div v-if="dataQualityIssues.length > 20" class="px-3 py-2 text-xs text-gray-400 text-center">
+                            {{ isRtl ? `و ${dataQualityIssues.length - 20} مشكلة أخرى...` : `and ${dataQualityIssues.length - 20} more issues...` }}
+                        </div>
+                    </div>
+                </div>
+            </Transition>
         </div>
 
         <!-- Actions -->

@@ -554,6 +554,25 @@ const completedFollowUps = computed(() => {
     return (props.followUps || []).filter(f => f.status === 'completed').length;
 });
 
+/* ── Next follow-up countdown ────────────────────────── */
+const nextFollowUp = computed(() => {
+    const pending = (props.followUps || []).filter(f => f.status === 'pending' && f.scheduled_at);
+    if (!pending.length) return null;
+    pending.sort((a, b) => new Date(a.scheduled_at) - new Date(b.scheduled_at));
+    const fu = pending[0];
+    const diff = new Date(fu.scheduled_at).getTime() - Date.now();
+    const isOverdue = diff < 0;
+    const absDiff = Math.abs(diff);
+    const mins = Math.floor(absDiff / 60000);
+    const hrs = Math.floor(mins / 60);
+    const days = Math.floor(hrs / 24);
+    let label;
+    if (days > 0) label = isRtl.value ? `${days} يوم` : `${days}d`;
+    else if (hrs > 0) label = isRtl.value ? `${hrs} ساعة` : `${hrs}h`;
+    else label = isRtl.value ? `${mins} دقيقة` : `${mins}m`;
+    return { ...fu, isOverdue, label, type: fu.type };
+});
+
 // Print lead profile
 function printLeadProfile() {
     const lead = props.lead;
@@ -951,6 +970,47 @@ onBeforeUnmount(() => { window.removeEventListener('scroll', handleScroll); });
                         </div>
                         <div class="text-xs font-medium text-gray-500 group-hover:text-teal-700 transition-colors">{{ isRtl ? 'طباعة الملف' : 'Print Profile' }}</div>
                     </button>
+                </div>
+            </div>
+
+            <!-- Next Follow-up Countdown -->
+            <div v-if="nextFollowUp" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-3">
+                <div :class="['rounded-xl border p-3 flex items-center justify-between transition-all duration-500',
+                    nextFollowUp.isOverdue
+                        ? 'bg-red-50 border-red-200'
+                        : 'bg-amber-50 border-amber-200',
+                    mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4']"
+                     :style="{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)', transitionDelay: '180ms' }">
+                    <div class="flex items-center gap-3">
+                        <div :class="['w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0',
+                            nextFollowUp.isOverdue ? 'bg-red-100' : 'bg-amber-100']">
+                            <svg :class="['w-[18px] h-[18px]', nextFollowUp.isOverdue ? 'text-red-600' : 'text-amber-600']" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="text-xs font-semibold" :class="nextFollowUp.isOverdue ? 'text-red-700' : 'text-amber-700'">
+                                {{ nextFollowUp.isOverdue
+                                    ? (isRtl ? 'متابعة متأخرة!' : 'Overdue follow-up!')
+                                    : (isRtl ? 'المتابعة القادمة' : 'Next follow-up') }}
+                            </div>
+                            <div class="text-[10px] mt-0.5" :class="nextFollowUp.isOverdue ? 'text-red-500' : 'text-amber-500'">
+                                {{ nextFollowUp.isOverdue ? (isRtl ? 'منذ ' : '') : (isRtl ? 'خلال ' : 'in ') }}{{ nextFollowUp.label }}{{ nextFollowUp.isOverdue && !isRtl ? ' ago' : '' }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span :class="['text-lg font-bold tabular-nums', nextFollowUp.isOverdue ? 'text-red-600 animate-pulse' : 'text-amber-600']">
+                            {{ nextFollowUp.label }}
+                        </span>
+                        <button @click="showFollowUpForm = true"
+                            :class="['px-3 py-1.5 rounded-lg text-xs font-semibold transition-all',
+                                nextFollowUp.isOverdue
+                                    ? 'bg-red-100 text-red-700 hover:bg-red-200 border border-red-300'
+                                    : 'bg-amber-100 text-amber-700 hover:bg-amber-200 border border-amber-300']">
+                            {{ isRtl ? 'إعادة جدولة' : 'Reschedule' }}
+                        </button>
+                    </div>
                 </div>
             </div>
 

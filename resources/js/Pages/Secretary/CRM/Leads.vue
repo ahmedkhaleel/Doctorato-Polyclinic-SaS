@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, watch, onMounted, onBeforeUnmount } from 'vue';
+import { computed, ref, watch, onMounted, onBeforeUnmount, onUnmounted } from 'vue';
 import { Link, router, usePage } from '@inertiajs/vue3';
 import SecretaryLayout from '@/Layouts/SecretaryLayout.vue';
 
@@ -431,6 +431,17 @@ function quickViewAddNote() {
         onFinish: () => { quickViewSavingNote.value = false; },
     });
 }
+
+/* ── Scroll-to-top button ── */
+const showScrollTop = ref(false);
+function handleScrollTop() {
+    showScrollTop.value = window.scrollY > 400;
+}
+function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+onMounted(() => { window.addEventListener('scroll', handleScrollTop, { passive: true }); });
+onUnmounted(() => { window.removeEventListener('scroll', handleScrollTop); });
 
 /* ── Persist view mode ── */
 watch(viewMode, (val) => {
@@ -1382,6 +1393,25 @@ const activeFilterPills = computed(() => {
                     </div>
                 </Transition>
             </div>
+        </Transition>
+    </Teleport>
+
+    <!-- Scroll-to-top floating button -->
+    <Teleport to="body">
+        <Transition
+            enter-active-class="transition-all duration-300 ease-out"
+            enter-from-class="opacity-0 scale-75 translate-y-4"
+            enter-to-class="opacity-100 scale-100 translate-y-0"
+            leave-active-class="transition-all duration-200 ease-in"
+            leave-from-class="opacity-100 scale-100 translate-y-0"
+            leave-to-class="opacity-0 scale-75 translate-y-4"
+        >
+            <button v-if="showScrollTop" @click="scrollToTop"
+                class="fixed bottom-6 z-40 w-10 h-10 rounded-full bg-teal-600 text-white shadow-lg hover:bg-teal-700 hover:shadow-xl hover:scale-110 transition-all duration-200 flex items-center justify-center"
+                :class="isRtl ? 'left-6' : 'right-6'"
+                :title="isRtl ? 'للأعلى' : 'Back to top'">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/></svg>
+            </button>
         </Transition>
     </Teleport>
 

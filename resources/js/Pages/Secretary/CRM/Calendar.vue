@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
+import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue';
 import { Link, router, usePage } from '@inertiajs/vue3';
 import SecretaryLayout from '@/Layouts/SecretaryLayout.vue';
 
@@ -91,8 +91,9 @@ function getFollowUpsForDay(dateStr) {
     return followUpsByDate.value[dateStr] || [];
 }
 
-/* ── View mode (month / week) ────────────────────────── */
-const viewMode = ref('month'); // 'month' | 'week'
+/* ── View mode (month / week) — persisted ────────────── */
+const savedViewMode = (() => { try { return localStorage.getItem('crm_calendar_viewMode'); } catch { return null; } })();
+const viewMode = ref(savedViewMode || 'month'); // 'month' | 'week'
 const currentWeekStart = ref(null);
 
 function initWeek() {
@@ -105,6 +106,8 @@ function initWeek() {
     currentWeekStart.value = sat;
 }
 initWeek();
+
+watch(viewMode, (val) => { try { localStorage.setItem('crm_calendar_viewMode', val); } catch {} });
 
 const weekDays = computed(() => {
     if (!currentWeekStart.value) return [];
