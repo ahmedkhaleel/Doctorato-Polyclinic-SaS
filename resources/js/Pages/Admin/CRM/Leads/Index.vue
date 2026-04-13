@@ -492,6 +492,7 @@ function quickChangePriority(leadId, newPriority) {
                                 <th class="px-5 py-3.5 font-semibold tracking-wider">{{ $t('a_assigned_to') }}</th>
                                 <th class="px-5 py-3.5 font-semibold tracking-wider">Next Follow-up</th>
                                 <th class="px-5 py-3.5 font-semibold tracking-wider text-center">Age</th>
+                                <th class="px-5 py-3.5 font-semibold tracking-wider text-center">Last Touch</th>
                                 <th class="px-5 py-3.5 font-semibold tracking-wider"></th>
                             </tr>
                         </thead>
@@ -585,6 +586,12 @@ function quickChangePriority(leadId, newPriority) {
                                         <span class="text-xs font-bold" :class="leadAge(lead.created_at).color">{{ leadAge(lead.created_at).label }}</span>
                                         <span class="text-[9px] text-gray-400 mt-0.5">{{ timeAgo(lead.created_at) }}</span>
                                     </div>
+                                </td>
+                                <td class="px-5 py-3.5 text-center">
+                                    <div v-if="lead.last_contacted_at" class="inline-flex flex-col items-center" :title="formatDate(lead.last_contacted_at)">
+                                        <span class="text-xs font-medium text-gray-600">{{ timeAgo(lead.last_contacted_at) }}</span>
+                                    </div>
+                                    <span v-else class="text-[10px] text-red-400 font-medium">{{ isRtl ? 'لم يتم التواصل' : 'Never' }}</span>
                                 </td>
                                 <td class="px-5 py-3.5">
                                     <div class="flex items-center gap-1 opacity-70 group-hover:opacity-100 transition-opacity">

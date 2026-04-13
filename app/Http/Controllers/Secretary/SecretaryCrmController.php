@@ -141,6 +141,8 @@ class SecretaryCrmController extends BaseSecretaryController
             ->limit(5)
             ->get(['id', 'full_name', 'phone', 'status', 'priority', 'assigned_to', 'lead_source_id', 'updated_at', 'last_contacted_at', 'created_at']);
 
+        $leadSources = LeadSource::active()->ordered()->get(['id', 'name_en', 'name_ar']);
+
         return Inertia::render('Secretary/CRM/Dashboard', [
             'stats' => $stats,
             'todayFollowUps' => $todayFollowUps,
@@ -155,6 +157,7 @@ class SecretaryCrmController extends BaseSecretaryController
             'activityTrend' => $activityTrend,
             'slaMetrics' => $slaMetrics,
             'staleLeads' => $staleLeads,
+            'leadSources' => $leadSources,
         ]);
     }
 

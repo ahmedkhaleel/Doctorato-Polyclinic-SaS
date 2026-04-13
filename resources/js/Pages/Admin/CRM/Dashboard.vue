@@ -44,6 +44,26 @@ function changePeriod(p) {
     router.get('/admin/crm', { period: p }, { preserveState: true, replace: true });
 }
 
+// Quick Add Lead Modal
+const showQuickAdd = ref(false);
+const quickAddForm = useForm({
+    full_name: '',
+    phone: '',
+    lead_source_id: '',
+    module: 'derma',
+    priority: 3,
+});
+
+function submitQuickAdd() {
+    quickAddForm.post('/admin/leads', {
+        preserveScroll: true,
+        onSuccess: () => {
+            quickAddForm.reset();
+            showQuickAdd.value = false;
+        },
+    });
+}
+
 const statusLabels = {
     new: 'New',
     contacted: 'Contacted',
@@ -210,11 +230,11 @@ function missFollowUp(fuId) {
                             </span>
                         </button>
                     </div>
-                    <Link v-if="can('leads.create')" href="/admin/leads/create"
+                    <button v-if="can('leads.create')" @click="showQuickAdd = true"
                         class="inline-flex items-center px-4 py-2.5 rounded-xl text-white text-sm font-semibold transition-all duration-200 shadow-md shadow-[#C4A265]/25 hover:shadow-lg hover:shadow-[#C4A265]/30 hover:-translate-y-0.5 active:translate-y-0"
                         style="background: linear-gradient(135deg, #C4A265, #A8893E);"
                     >
-                        <svg class="w-4 h-4 ltr:mr-1.5 rtl:ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>{{ $t('a_new_lead') }}</Link>
+                        <svg class="w-4 h-4 ltr:mr-1.5 rtl:ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>{{ $t('a_new_lead') }}</button>
                 </div>
             </div>
 
@@ -844,6 +864,91 @@ function missFollowUp(fuId) {
                 </div>
             </div>
         </div>
+        <!-- Quick Add Lead Modal -->
+        <Teleport to="body">
+            <Transition enter-active-class="transition-all duration-300 ease-out" enter-from-class="opacity-0" enter-to-class="opacity-100" leave-active-class="transition-all duration-200 ease-in" leave-from-class="opacity-100" leave-to-class="opacity-0">
+                <div v-if="showQuickAdd" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" @click.self="showQuickAdd = false">
+                    <Transition enter-active-class="transition-all duration-300 ease-out" enter-from-class="opacity-0 scale-95 translate-y-4" enter-to-class="opacity-100 scale-100 translate-y-0" leave-active-class="transition-all duration-200 ease-in" leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-95">
+                        <div v-if="showQuickAdd" class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden" :dir="isRtl ? 'rtl' : 'ltr'">
+                            <div class="h-1 bg-gradient-to-r from-[#C4A265] via-[#D4B87A] to-[#C4A265]"></div>
+                            <div class="p-6">
+                                <div class="flex items-center justify-between mb-5">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 rounded-xl bg-[#C4A265]/10 flex items-center justify-center">
+                                            <svg class="w-5 h-5 text-[#C4A265]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
+                                        </div>
+                                        <div>
+                                            <h3 class="text-lg font-bold text-gray-900">{{ isRtl ? 'إضافة سريعة' : 'Quick Add Lead' }}</h3>
+                                            <p class="text-xs text-gray-400">{{ isRtl ? 'أدخل البيانات الأساسية' : 'Enter basic info' }}</p>
+                                        </div>
+                                    </div>
+                                    <button @click="showQuickAdd = false" class="text-gray-400 hover:text-gray-600 transition">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                                    </button>
+                                </div>
+                                <form @submit.prevent="submitQuickAdd" class="space-y-4">
+                                    <div>
+                                        <label class="block text-xs font-semibold text-gray-600 mb-1.5">{{ isRtl ? 'الاسم الكامل' : 'Full Name' }} *</label>
+                                        <input v-model="quickAddForm.full_name" type="text" required
+                                            class="w-full rounded-xl border-gray-200 text-sm focus:ring-[#C4A265] focus:border-[#C4A265] transition"
+                                            :placeholder="isRtl ? 'أدخل اسم العميل' : 'Enter lead name'" />
+                                        <p v-if="quickAddForm.errors.full_name" class="text-xs text-red-500 mt-1">{{ quickAddForm.errors.full_name }}</p>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-semibold text-gray-600 mb-1.5">{{ isRtl ? 'رقم الهاتف' : 'Phone' }} *</label>
+                                        <input v-model="quickAddForm.phone" type="tel" required dir="ltr"
+                                            class="w-full rounded-xl border-gray-200 text-sm focus:ring-[#C4A265] focus:border-[#C4A265] transition"
+                                            placeholder="05xxxxxxxx" />
+                                        <p v-if="quickAddForm.errors.phone" class="text-xs text-red-500 mt-1">{{ quickAddForm.errors.phone }}</p>
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-3">
+                                        <div>
+                                            <label class="block text-xs font-semibold text-gray-600 mb-1.5">{{ isRtl ? 'المصدر' : 'Source' }}</label>
+                                            <select v-model="quickAddForm.lead_source_id"
+                                                class="w-full rounded-xl border-gray-200 text-sm focus:ring-[#C4A265] focus:border-[#C4A265] transition">
+                                                <option value="">{{ isRtl ? 'اختر المصدر' : 'Select source' }}</option>
+                                                <option v-for="src in leadsBySource" :key="src.id" :value="src.id">{{ src.name }}</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="block text-xs font-semibold text-gray-600 mb-1.5">{{ isRtl ? 'القسم' : 'Module' }}</label>
+                                            <select v-model="quickAddForm.module"
+                                                class="w-full rounded-xl border-gray-200 text-sm focus:ring-[#C4A265] focus:border-[#C4A265] transition">
+                                                <option value="derma">Derma</option>
+                                                <option value="dental">Dental</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-semibold text-gray-600 mb-1.5">{{ isRtl ? 'الأولوية' : 'Priority' }}</label>
+                                        <div class="flex gap-2">
+                                            <button v-for="p in [{v:1,l:'Hot',c:'border-red-300 bg-red-50 text-red-700'},{v:2,l:'Warm',c:'border-amber-300 bg-amber-50 text-amber-700'},{v:3,l:'Cold',c:'border-blue-300 bg-blue-50 text-blue-700'}]"
+                                                :key="p.v" type="button" @click="quickAddForm.priority = p.v"
+                                                class="flex-1 py-2 text-xs font-semibold rounded-lg border transition-all"
+                                                :class="quickAddForm.priority === p.v ? p.c + ' ring-2 ring-offset-1 ring-[#C4A265]/40' : 'border-gray-200 text-gray-500 hover:bg-gray-50'">
+                                                {{ p.l }}
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center justify-between pt-2">
+                                        <Link href="/admin/leads/create" class="text-xs text-[#C4A265] hover:underline font-medium">
+                                            {{ isRtl ? 'النموذج الكامل' : 'Full form' }}
+                                            <svg class="w-3 h-3 inline-block" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" :d="isRtl ? 'M15 19l-7-7 7-7' : 'M9 5l7 7-7 7'"/></svg>
+                                        </Link>
+                                        <button type="submit" :disabled="quickAddForm.processing"
+                                            class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-white text-sm font-semibold transition-all duration-200 shadow-md hover:shadow-lg hover:-translate-y-0.5 disabled:opacity-50"
+                                            style="background: linear-gradient(135deg, #C4A265, #A8893E);">
+                                            <svg v-if="quickAddForm.processing" class="animate-spin w-4 h-4" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+                                            {{ quickAddForm.processing ? (isRtl ? 'جارٍ الحفظ...' : 'Saving...') : (isRtl ? 'حفظ' : 'Save Lead') }}
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </Transition>
+                </div>
+            </Transition>
+        </Teleport>
     </AdminLayout>
 </template>
 
