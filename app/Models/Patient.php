@@ -45,6 +45,13 @@ class Patient extends Model
         'is_smoker', 'smoking_frequency',
         'jaw_problems', 'teeth_grinding',
         'last_dental_visit', 'dental_medical_notes',
+        // Pediatric fields
+        'guardian_name', 'guardian_relation', 'guardian_phone', 'guardian_phone2',
+        'guardian_email', 'guardian_occupation',
+        'birth_type', 'birth_place', 'gestational_age_weeks',
+        'birth_weight_kg', 'birth_length_cm', 'birth_head_circumference_cm',
+        'apgar_1min', 'apgar_5min', 'birth_complications', 'nicu_days',
+        'newborn_screening', 'feeding_type', 'pregnancy_complications',
     ];
 
     protected $casts = [
@@ -65,6 +72,13 @@ class Patient extends Model
         'is_smoker' => 'boolean',
         'jaw_problems' => 'boolean',
         'teeth_grinding' => 'boolean',
+        // Pediatric casts
+        'birth_complications' => 'array',
+        'newborn_screening' => 'array',
+        'gestational_age_weeks' => 'decimal:1',
+        'birth_weight_kg' => 'decimal:3',
+        'birth_length_cm' => 'decimal:1',
+        'birth_head_circumference_cm' => 'decimal:1',
     ];
 
     /**
@@ -118,6 +132,38 @@ class Patient extends Model
     public function packageBundleBookings()
     {
         return $this->hasMany(PackageBundleBooking::class);
+    }
+
+    // ─── Pediatric Relationships ─────────────────────────
+
+    public function pediatricGrowthRecords()
+    {
+        return $this->hasMany(PediatricGrowthRecord::class);
+    }
+
+    public function pediatricVaccinations()
+    {
+        return $this->hasMany(PediatricVaccination::class);
+    }
+
+    public function pediatricMilestones()
+    {
+        return $this->hasMany(PediatricMilestone::class);
+    }
+
+    public function pediatricAllergies()
+    {
+        return $this->hasMany(PediatricAllergy::class);
+    }
+
+    public function pediatricFamilyHistory()
+    {
+        return $this->hasMany(PediatricFamilyHistory::class);
+    }
+
+    public function pediatricChronicConditions()
+    {
+        return $this->hasMany(PediatricChronicCondition::class);
     }
 
     // ─── Sensitive Data Access ─────────────────────────

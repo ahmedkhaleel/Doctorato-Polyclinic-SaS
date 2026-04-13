@@ -65,6 +65,16 @@ const navGroups = computed(() => [
         ],
     },
     {
+        title: isRtl.value ? 'طب الأطفال' : 'Pediatrics',
+        key: 'pediatric',
+        moduleKey: 'pediatric',
+        items: [
+            { label: isRtl.value ? 'لوحة التحكم' : 'Dashboard',       href: '/doctor/pediatric',               icon: 'grid' },
+            { label: isRtl.value ? 'المرضى' : 'Patients',             href: '/doctor/pediatric/patients',      icon: 'heart' },
+            { label: isRtl.value ? 'الزيارات' : 'Visits',             href: '/doctor/pediatric/visits',        icon: 'clipboard' },
+        ],
+    },
+    {
         title: isRtl.value ? 'الموارد البشرية' : 'HR',
         key: 'hr',
         moduleKey: 'hr',
@@ -94,6 +104,8 @@ const filteredGroups = computed(() =>
             if (modules.value[g.moduleKey]?.enabled !== true) return false;
             // Dental section only for dental doctors
             if (g.moduleKey === 'dental' && doctorModule.value !== 'dental') return false;
+            // Pediatric section only for pediatric doctors
+            if (g.moduleKey === 'pediatric' && doctorModule.value !== 'pediatric') return false;
             return true;
         }
         return true;
@@ -159,6 +171,14 @@ const quickSearchPages = computed(() => {
         { label: isRtl.value ? 'الملف الشخصي' : 'Profile', href: '/doctor/profile', icon: 'user', group: isRtl.value ? 'حسابي' : 'Account' },
         { label: isRtl.value ? 'الإشعارات' : 'Notifications', href: '/doctor/notifications', icon: 'bell', group: isRtl.value ? 'حسابي' : 'Account' },
     ];
+    // Add pediatric pages if pediatric module enabled
+    if (modules.value.pediatric?.enabled && doctorModule.value === 'pediatric') {
+        pages.push(
+            { label: isRtl.value ? 'لوحة الأطفال' : 'Pediatric Dashboard', href: '/doctor/pediatric', icon: 'grid', group: isRtl.value ? 'طب الأطفال' : 'Pediatrics' },
+            { label: isRtl.value ? 'مرضى الأطفال' : 'Pediatric Patients', href: '/doctor/pediatric/patients', icon: 'heart', group: isRtl.value ? 'طب الأطفال' : 'Pediatrics' },
+            { label: isRtl.value ? 'زيارات الأطفال' : 'Pediatric Visits', href: '/doctor/pediatric/visits', icon: 'clipboard', group: isRtl.value ? 'طب الأطفال' : 'Pediatrics' },
+        );
+    }
     // Add dental pages if dental module enabled
     if (modules.value.dental?.enabled && doctorModule.value === 'dental') {
         pages.push(

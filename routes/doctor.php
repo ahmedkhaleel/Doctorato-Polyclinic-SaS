@@ -23,6 +23,9 @@ use App\Http\Controllers\Doctor\DoctorExportController;
 use App\Http\Controllers\Doctor\DoctorPatientNoteController;
 use App\Http\Controllers\Doctor\DoctorFavoritePatientController;
 use App\Http\Controllers\Doctor\DoctorInventoryController;
+use App\Http\Controllers\Doctor\DoctorPediatricDashboardController;
+use App\Http\Controllers\Doctor\DoctorPediatricPatientController;
+use App\Http\Controllers\Doctor\DoctorPediatricVisitController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -166,6 +169,32 @@ Route::middleware('doctor.auth')->group(function () {
         // Dental Prescription Templates
         Route::get('/prescription-templates', [DoctorPrescriptionController::class, 'dentalTemplates'])->name('doctor.dental-prescription-templates.index');
         Route::post('/prescriptions/apply-template/{template}', [DoctorPrescriptionController::class, 'applyDentalTemplate'])->name('doctor.prescriptions.applyDentalTemplate');
+    });
+
+    // ─── Pediatric Module ──────────────────────────────────────
+    Route::prefix('pediatric')->middleware('module:pediatric')->group(function () {
+        Route::get('/', [DoctorPediatricDashboardController::class, 'index'])->name('doctor.pediatric.dashboard');
+
+        // Patients
+        Route::get('/patients', [DoctorPediatricPatientController::class, 'index'])->name('doctor.pediatric.patients.index');
+        Route::get('/patients/{patient}', [DoctorPediatricPatientController::class, 'show'])->name('doctor.pediatric.patients.show');
+
+        // Growth Records
+        Route::post('/patients/{patient}/growth', [DoctorPediatricPatientController::class, 'storeGrowth'])->name('doctor.pediatric.patients.growth.store');
+
+        // Vaccinations
+        Route::post('/patients/{patient}/vaccination', [DoctorPediatricPatientController::class, 'storeVaccination'])->name('doctor.pediatric.patients.vaccination.store');
+        Route::post('/patients/{patient}/vaccinations/initialize', [DoctorPediatricPatientController::class, 'initializeVaccinations'])->name('doctor.pediatric.patients.vaccinations.initialize');
+
+        // Milestones
+        Route::post('/patients/{patient}/milestone', [DoctorPediatricPatientController::class, 'updateMilestone'])->name('doctor.pediatric.patients.milestone.update');
+
+        // Allergies
+        Route::post('/patients/{patient}/allergy', [DoctorPediatricPatientController::class, 'storeAllergy'])->name('doctor.pediatric.patients.allergy.store');
+
+        // Visits
+        Route::get('/visits', [DoctorPediatricVisitController::class, 'index'])->name('doctor.pediatric.visits.index');
+        Route::get('/visits/{visit}', [DoctorPediatricVisitController::class, 'show'])->name('doctor.pediatric.visits.show');
     });
 
     // ─── Exports ────────────────────────────────────────────

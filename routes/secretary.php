@@ -192,6 +192,21 @@ Route::middleware('secretary.auth')->group(function () {
         Route::get('/patient-risk/{patient}', [SecretaryDentalController::class, 'patientRiskAlert'])->name('secretary.dental.patient-risk');
     });
 
+    // ─── Pediatric Module ──────────────────────────────────────
+    Route::prefix('pediatric')->middleware('module:pediatric')->group(function () {
+        Route::get('/patients', [\App\Http\Controllers\Secretary\SecretaryPediatricPatientController::class, 'index'])->name('secretary.pediatric.patients.index');
+        Route::get('/patients/create', [\App\Http\Controllers\Secretary\SecretaryPediatricPatientController::class, 'create'])->name('secretary.pediatric.patients.create');
+        Route::post('/patients', [\App\Http\Controllers\Secretary\SecretaryPediatricPatientController::class, 'store'])->name('secretary.pediatric.patients.store');
+        Route::get('/patients/{patient}', [\App\Http\Controllers\Secretary\SecretaryPediatricPatientController::class, 'show'])->name('secretary.pediatric.patients.show');
+        Route::get('/patients/{patient}/edit', [\App\Http\Controllers\Secretary\SecretaryPediatricPatientController::class, 'edit'])->name('secretary.pediatric.patients.edit');
+        Route::post('/patients/{patient}/update', [\App\Http\Controllers\Secretary\SecretaryPediatricPatientController::class, 'update'])->name('secretary.pediatric.patients.update');
+
+        Route::get('/visits', [\App\Http\Controllers\Secretary\SecretaryPediatricVisitController::class, 'index'])->name('secretary.pediatric.visits.index');
+        Route::get('/visits/{visit}', [\App\Http\Controllers\Secretary\SecretaryPediatricVisitController::class, 'show'])->name('secretary.pediatric.visits.show');
+
+        Route::get('/vaccinations', [\App\Http\Controllers\Secretary\SecretaryPediatricVaccinationController::class, 'index'])->name('secretary.pediatric.vaccinations.index');
+    });
+
     // ─── Profile ────────────────────────────────────────────
     Route::get('/profile', [SecretaryProfileController::class, 'index'])->name('secretary.profile.index');
     Route::post('/profile/update', [SecretaryProfileController::class, 'update'])->name('secretary.profile.update');

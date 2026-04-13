@@ -24,7 +24,7 @@ const moduleFilter = ref(props.filters?.module || '');
 let searchTimeout = null;
 
 const modules = computed(() => page.props.modules || {});
-const medicalSlugs = ['derma', 'dental'];
+const medicalSlugs = ['derma', 'dental', 'pediatric'];
 const activeModules = computed(() => {
     const mods = [];
     if (modules.value) {

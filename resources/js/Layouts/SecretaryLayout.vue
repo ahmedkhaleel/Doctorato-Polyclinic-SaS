@@ -74,6 +74,15 @@ const navGroups = [
         ],
     },
     {
+        key: 'pediatric', titleEn: 'Pediatrics', titleAr: 'طب الأطفال',
+        moduleKey: 'pediatric',
+        items: [
+            { labelEn: 'Patients',      labelAr: 'المرضى',        href: '/secretary/pediatric/patients',      icon: 'patients' },
+            { labelEn: 'Visits',        labelAr: 'الزيارات',      href: '/secretary/pediatric/visits',        icon: 'clipboard' },
+            { labelEn: 'Vaccinations',  labelAr: 'التطعيمات',     href: '/secretary/pediatric/vaccinations',  icon: 'checklist' },
+        ],
+    },
+    {
         key: 'hr', titleEn: 'HR', titleAr: 'الموارد البشرية',
         moduleKey: 'hr',
         items: [
