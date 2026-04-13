@@ -154,6 +154,7 @@ Route::middleware('secretary.auth')->group(function () {
     Route::post('/crm/leads/{lead}/activity', [SecretaryCrmController::class, 'logActivity'])->name('secretary.crm.logActivity');
     Route::post('/crm/leads/{lead}/follow-up', [SecretaryCrmController::class, 'scheduleFollowUp'])->name('secretary.crm.scheduleFollowUp');
     Route::post('/crm/leads/{lead}/status', [SecretaryCrmController::class, 'updateStatus'])->name('secretary.crm.updateStatus');
+    Route::post('/crm/leads/{lead}/priority', [SecretaryCrmController::class, 'updatePriority'])->name('secretary.crm.updatePriority');
     Route::post('/crm/leads/{lead}/quick-send', [SecretaryCrmController::class, 'quickSend'])->name('secretary.crm.quickSend');
     Route::post('/crm/follow-ups/{followUp}/complete', [SecretaryCrmController::class, 'completeFollowUp'])->name('secretary.crm.completeFollowUp');
     Route::post('/crm/follow-ups/{followUp}/miss', [SecretaryCrmController::class, 'missFollowUp'])->name('secretary.crm.missFollowUp');

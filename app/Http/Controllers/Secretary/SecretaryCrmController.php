@@ -530,6 +530,32 @@ class SecretaryCrmController extends BaseSecretaryController
     }
 
     /**
+     * Update the priority of a single lead (hot/warm/cold).
+     */
+    public function updatePriority(Request $request, Lead $lead): RedirectResponse
+    {
+        if (((int) $lead->assigned_to) !== ((int) auth()->id())) {
+            abort(403);
+        }
+
+        $data = $request->validate([
+            'priority' => 'required|in:1,2,3',
+        ]);
+
+        $oldPriority = $lead->priority;
+        $lead->update(['priority' => (int) $data['priority']]);
+
+        LeadActivity::create([
+            'lead_id' => $lead->id,
+            'type' => 'system',
+            'subject' => "Priority changed from {$oldPriority} to {$data['priority']}",
+            'performed_by' => auth()->id(),
+        ]);
+
+        return back()->with('success', $this->msg('Lead priority updated.', 'تم تحديث أولوية العميل المحتمل.'));
+    }
+
+    /**
      * Quick-send using a template.
      */
     public function quickSend(Request $request, Lead $lead): RedirectResponse
