@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, onMounted } from 'vue';
+import { computed, ref, watch, onMounted, onBeforeUnmount, nextTick } from 'vue';
 import { Link, useForm, usePage } from '@inertiajs/vue3';
 import SecretaryLayout from '@/Layouts/SecretaryLayout.vue';
 
@@ -133,7 +133,129 @@ const nationalityOptions = [
     { value: 'Other', ar: 'أخرى', en: 'Other' },
 ];
 
-const cityOptions = [
+const citiesByNationality = {
+    Emirati: [
+        { value: 'Abu Dhabi', ar: 'أبوظبي', en: 'Abu Dhabi' },
+        { value: 'Dubai', ar: 'دبي', en: 'Dubai' },
+        { value: 'Sharjah', ar: 'الشارقة', en: 'Sharjah' },
+        { value: 'Ajman', ar: 'عجمان', en: 'Ajman' },
+        { value: 'Ras Al Khaimah', ar: 'رأس الخيمة', en: 'Ras Al Khaimah' },
+        { value: 'Fujairah', ar: 'الفجيرة', en: 'Fujairah' },
+        { value: 'Umm Al Quwain', ar: 'أم القيوين', en: 'Umm Al Quwain' },
+        { value: 'Al Ain', ar: 'العين', en: 'Al Ain' },
+    ],
+    Egyptian: [
+        { value: 'Cairo', ar: 'القاهرة', en: 'Cairo' },
+        { value: 'Giza', ar: 'الجيزة', en: 'Giza' },
+        { value: 'Alexandria', ar: 'الإسكندرية', en: 'Alexandria' },
+        { value: 'Sharm El Sheikh', ar: 'شرم الشيخ', en: 'Sharm El Sheikh' },
+        { value: 'Hurghada', ar: 'الغردقة', en: 'Hurghada' },
+        { value: 'Luxor', ar: 'الأقصر', en: 'Luxor' },
+        { value: 'Aswan', ar: 'أسوان', en: 'Aswan' },
+        { value: 'Mansoura', ar: 'المنصورة', en: 'Mansoura' },
+        { value: 'Tanta', ar: 'طنطا', en: 'Tanta' },
+        { value: 'Zagazig', ar: 'الزقازيق', en: 'Zagazig' },
+        { value: 'Ismailia', ar: 'الإسماعيلية', en: 'Ismailia' },
+        { value: 'Suez', ar: 'السويس', en: 'Suez' },
+        { value: 'Port Said', ar: 'بورسعيد', en: 'Port Said' },
+        { value: 'Damietta', ar: 'دمياط', en: 'Damietta' },
+        { value: 'Fayoum', ar: 'الفيوم', en: 'Fayoum' },
+        { value: 'Beni Suef', ar: 'بني سويف', en: 'Beni Suef' },
+        { value: 'Minya', ar: 'المنيا', en: 'Minya' },
+        { value: 'Asyut', ar: 'أسيوط', en: 'Asyut' },
+        { value: 'Sohag', ar: 'سوهاج', en: 'Sohag' },
+        { value: 'Qena', ar: 'قنا', en: 'Qena' },
+        { value: 'Kafr El Sheikh', ar: 'كفر الشيخ', en: 'Kafr El Sheikh' },
+        { value: 'Gharbia', ar: 'الغربية', en: 'Gharbia' },
+        { value: 'Monufia', ar: 'المنوفية', en: 'Monufia' },
+        { value: 'Beheira', ar: 'البحيرة', en: 'Beheira' },
+        { value: 'Qalyubia', ar: 'القليوبية', en: 'Qalyubia' },
+        { value: 'Sharqia', ar: 'الشرقية', en: 'Sharqia' },
+        { value: 'Dakahlia', ar: 'الدقهلية', en: 'Dakahlia' },
+        { value: 'New Valley', ar: 'الوادي الجديد', en: 'New Valley' },
+        { value: 'Red Sea', ar: 'البحر الأحمر', en: 'Red Sea' },
+        { value: 'Matruh', ar: 'مطروح', en: 'Matruh' },
+        { value: 'North Sinai', ar: 'شمال سيناء', en: 'North Sinai' },
+        { value: 'South Sinai', ar: 'جنوب سيناء', en: 'South Sinai' },
+    ],
+    Saudi: [
+        { value: 'Riyadh', ar: 'الرياض', en: 'Riyadh' },
+        { value: 'Jeddah', ar: 'جدة', en: 'Jeddah' },
+        { value: 'Mecca', ar: 'مكة المكرمة', en: 'Mecca' },
+        { value: 'Medina', ar: 'المدينة المنورة', en: 'Medina' },
+        { value: 'Dammam', ar: 'الدمام', en: 'Dammam' },
+        { value: 'Khobar', ar: 'الخبر', en: 'Khobar' },
+        { value: 'Tabuk', ar: 'تبوك', en: 'Tabuk' },
+        { value: 'Abha', ar: 'أبها', en: 'Abha' },
+    ],
+    Jordanian: [
+        { value: 'Amman', ar: 'عمّان', en: 'Amman' },
+        { value: 'Irbid', ar: 'إربد', en: 'Irbid' },
+        { value: 'Zarqa', ar: 'الزرقاء', en: 'Zarqa' },
+        { value: 'Aqaba', ar: 'العقبة', en: 'Aqaba' },
+    ],
+    Lebanese: [
+        { value: 'Beirut', ar: 'بيروت', en: 'Beirut' },
+        { value: 'Tripoli', ar: 'طرابلس', en: 'Tripoli' },
+        { value: 'Sidon', ar: 'صيدا', en: 'Sidon' },
+    ],
+    Syrian: [
+        { value: 'Damascus', ar: 'دمشق', en: 'Damascus' },
+        { value: 'Aleppo', ar: 'حلب', en: 'Aleppo' },
+        { value: 'Homs', ar: 'حمص', en: 'Homs' },
+        { value: 'Latakia', ar: 'اللاذقية', en: 'Latakia' },
+    ],
+    Iraqi: [
+        { value: 'Baghdad', ar: 'بغداد', en: 'Baghdad' },
+        { value: 'Basra', ar: 'البصرة', en: 'Basra' },
+        { value: 'Erbil', ar: 'أربيل', en: 'Erbil' },
+        { value: 'Mosul', ar: 'الموصل', en: 'Mosul' },
+    ],
+    Palestinian: [
+        { value: 'Ramallah', ar: 'رام الله', en: 'Ramallah' },
+        { value: 'Gaza', ar: 'غزة', en: 'Gaza' },
+        { value: 'Nablus', ar: 'نابلس', en: 'Nablus' },
+        { value: 'Hebron', ar: 'الخليل', en: 'Hebron' },
+    ],
+    Kuwaiti: [
+        { value: 'Kuwait City', ar: 'مدينة الكويت', en: 'Kuwait City' },
+        { value: 'Hawalli', ar: 'حولي', en: 'Hawalli' },
+        { value: 'Salmiya', ar: 'السالمية', en: 'Salmiya' },
+    ],
+    Qatari: [
+        { value: 'Doha', ar: 'الدوحة', en: 'Doha' },
+        { value: 'Al Wakrah', ar: 'الوكرة', en: 'Al Wakrah' },
+    ],
+    Bahraini: [
+        { value: 'Manama', ar: 'المنامة', en: 'Manama' },
+        { value: 'Muharraq', ar: 'المحرق', en: 'Muharraq' },
+    ],
+    Omani: [
+        { value: 'Muscat', ar: 'مسقط', en: 'Muscat' },
+        { value: 'Salalah', ar: 'صلالة', en: 'Salalah' },
+        { value: 'Sohar', ar: 'صحار', en: 'Sohar' },
+    ],
+    Indian: [
+        { value: 'Mumbai', ar: 'مومباي', en: 'Mumbai' },
+        { value: 'Delhi', ar: 'دلهي', en: 'Delhi' },
+        { value: 'Bangalore', ar: 'بنغالور', en: 'Bangalore' },
+        { value: 'Kerala', ar: 'كيرالا', en: 'Kerala' },
+        { value: 'Hyderabad', ar: 'حيدر أباد', en: 'Hyderabad' },
+        { value: 'Chennai', ar: 'تشيناي', en: 'Chennai' },
+    ],
+    Pakistani: [
+        { value: 'Karachi', ar: 'كراتشي', en: 'Karachi' },
+        { value: 'Lahore', ar: 'لاهور', en: 'Lahore' },
+        { value: 'Islamabad', ar: 'إسلام آباد', en: 'Islamabad' },
+    ],
+    Filipino: [
+        { value: 'Manila', ar: 'مانيلا', en: 'Manila' },
+        { value: 'Cebu', ar: 'سيبو', en: 'Cebu' },
+    ],
+};
+
+/* UAE cities as default fallback */
+const defaultCities = [
     { value: 'Abu Dhabi', ar: 'أبوظبي', en: 'Abu Dhabi' },
     { value: 'Dubai', ar: 'دبي', en: 'Dubai' },
     { value: 'Sharjah', ar: 'الشارقة', en: 'Sharjah' },
@@ -142,11 +264,81 @@ const cityOptions = [
     { value: 'Fujairah', ar: 'الفجيرة', en: 'Fujairah' },
     { value: 'Umm Al Quwain', ar: 'أم القيوين', en: 'Umm Al Quwain' },
     { value: 'Al Ain', ar: 'العين', en: 'Al Ain' },
-    { value: 'Khor Fakkan', ar: 'خورفكان', en: 'Khor Fakkan' },
-    { value: 'Kalba', ar: 'كلباء', en: 'Kalba' },
-    { value: 'Dibba Al-Fujairah', ar: 'دبا الفجيرة', en: 'Dibba Al-Fujairah' },
-    { value: 'Other', ar: 'أخرى', en: 'Other' },
 ];
+
+const cityOptions = computed(() => {
+    const nat = form.nationality;
+    const list = (nat && citiesByNationality[nat]) ? citiesByNationality[nat] : defaultCities;
+    return [...list, { value: 'Other', ar: 'أخرى', en: 'Other' }];
+});
+
+/* ---------- Searchable Select Logic ---------- */
+const natOpen = ref(false);
+const natSearch = ref('');
+const natRef = ref(null);
+const cityOpen = ref(false);
+const citySearch = ref('');
+const cityRef = ref(null);
+
+const filteredNationalities = computed(() => {
+    if (!natSearch.value.trim()) return nationalityOptions;
+    const q = natSearch.value.trim().toLowerCase();
+    return nationalityOptions.filter(n =>
+        n.ar.includes(q) || n.en.toLowerCase().includes(q) || n.value.toLowerCase().includes(q)
+    );
+});
+
+const filteredCities = computed(() => {
+    const list = cityOptions.value;
+    if (!citySearch.value.trim()) return list;
+    const q = citySearch.value.trim().toLowerCase();
+    return list.filter(c =>
+        c.ar.includes(q) || c.en.toLowerCase().includes(q) || c.value.toLowerCase().includes(q)
+    );
+});
+
+function selectNationality(val) {
+    form.nationality = val;
+    natOpen.value = false;
+    natSearch.value = '';
+    // Reset city when nationality changes (cities might differ)
+    if (val !== form.nationality) {
+        form.city = '';
+        citySearch.value = '';
+    }
+}
+
+function selectCity(val) {
+    form.city = val;
+    cityOpen.value = false;
+    citySearch.value = '';
+}
+
+function getNatLabel(val) {
+    const n = nationalityOptions.find(o => o.value === val);
+    return n ? (isRtl.value ? n.ar : n.en) : '';
+}
+
+function getCityLabel(val) {
+    const c = cityOptions.value.find(o => o.value === val);
+    return c ? (isRtl.value ? c.ar : c.en) : '';
+}
+
+/* Close dropdowns on outside click */
+function handleOutsideClick(e) {
+    if (natRef.value && !natRef.value.contains(e.target)) natOpen.value = false;
+    if (cityRef.value && !cityRef.value.contains(e.target)) cityOpen.value = false;
+}
+onMounted(() => document.addEventListener('mousedown', handleOutsideClick));
+onBeforeUnmount(() => document.removeEventListener('mousedown', handleOutsideClick));
+
+/* Reset city when nationality changes */
+watch(() => form.nationality, (newVal, oldVal) => {
+    if (newVal !== oldVal) {
+        form.city = '';
+        citySearch.value = '';
+    }
+});
 
 /* ---------- Source icon helper ---------- */
 function sourceIcon(icon) {
@@ -397,23 +589,89 @@ const phoneValidation = computed(() => {
                     <input v-model="form.date_of_birth" type="date" dir="ltr"
                            class="w-full rounded-xl border border-slate-200 bg-slate-50/50 hover:border-slate-300 px-4 py-3 text-sm transition-all duration-200 focus:ring-2 focus:ring-teal-400/40 focus:border-teal-400 outline-none" />
                 </div>
-                <!-- City -->
-                <div>
-                    <label class="block text-sm font-semibold text-slate-600 mb-1.5">{{ isRtl ? '\u0627\u0644\u0645\u062F\u064A\u0646\u0629' : 'City' }}</label>
-                    <select v-model="form.city"
-                            class="w-full rounded-xl border border-slate-200 bg-slate-50/50 hover:border-slate-300 px-4 py-3 text-sm transition-all duration-200 focus:ring-2 focus:ring-teal-400/40 focus:border-teal-400 outline-none">
-                        <option value="">{{ isRtl ? '-- اختر المدينة --' : '-- Select City --' }}</option>
-                        <option v-for="c in cityOptions" :key="c.value" :value="c.value">{{ isRtl ? c.ar : c.en }}</option>
-                    </select>
+                <!-- Nationality (Searchable) -->
+                <div ref="natRef" class="relative">
+                    <label class="block text-sm font-semibold text-slate-600 mb-1.5">{{ isRtl ? 'الجنسية' : 'Nationality' }}</label>
+                    <button type="button" @click="natOpen = !natOpen; if (natOpen) nextTick(() => { const el = natRef?.querySelector?.('input'); if(el) el.focus(); })"
+                            :class="['w-full rounded-xl border bg-slate-50/50 hover:border-slate-300 px-4 py-3 text-sm transition-all duration-200 focus:ring-2 focus:ring-teal-400/40 focus:border-teal-400 outline-none flex items-center justify-between',
+                                natOpen ? 'border-teal-400 ring-2 ring-teal-400/30 bg-white' : 'border-slate-200']">
+                        <span :class="form.nationality ? 'text-slate-800' : 'text-slate-400'">
+                            {{ form.nationality ? getNatLabel(form.nationality) : (isRtl ? 'اختر الجنسية' : 'Select Nationality') }}
+                        </span>
+                        <svg :class="['w-4 h-4 text-slate-400 transition-transform duration-200', natOpen ? 'rotate-180' : '']" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <!-- Dropdown -->
+                    <Transition enter-active-class="transition duration-200 ease-out" enter-from-class="opacity-0 -translate-y-2 scale-95" enter-to-class="opacity-100 translate-y-0 scale-100"
+                                leave-active-class="transition duration-150 ease-in" leave-from-class="opacity-100 translate-y-0 scale-100" leave-to-class="opacity-0 -translate-y-2 scale-95">
+                        <div v-if="natOpen" class="absolute z-50 mt-1.5 w-full bg-white rounded-xl border border-slate-200 shadow-xl shadow-slate-200/50 overflow-hidden">
+                            <div class="p-2 border-b border-slate-100">
+                                <div class="relative">
+                                    <svg class="w-4 h-4 text-slate-400 absolute top-1/2 -translate-y-1/2 pointer-events-none" :class="isRtl ? 'right-3' : 'left-3'" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="m21 21-4.35-4.35"/></svg>
+                                    <input v-model="natSearch" type="text" :placeholder="isRtl ? 'ابحث عن الجنسية...' : 'Search nationality...'"
+                                           class="w-full rounded-lg border border-slate-200 text-sm py-2.5 outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-400/30"
+                                           :class="isRtl ? 'pr-9 pl-3' : 'pl-9 pr-3'" />
+                                </div>
+                            </div>
+                            <div class="max-h-52 overflow-y-auto overscroll-contain">
+                                <button v-for="n in filteredNationalities" :key="n.value" type="button"
+                                        @click="selectNationality(n.value)"
+                                        :class="['w-full text-start px-4 py-2.5 text-sm transition-colors duration-100 flex items-center justify-between',
+                                            form.nationality === n.value ? 'bg-teal-50 text-teal-700 font-medium' : 'text-slate-600 hover:bg-slate-50']">
+                                    <span>{{ isRtl ? n.ar : n.en }}</span>
+                                    <svg v-if="form.nationality === n.value" class="w-4 h-4 text-teal-500 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                </button>
+                                <div v-if="filteredNationalities.length === 0" class="px-4 py-6 text-center text-xs text-slate-400">
+                                    {{ isRtl ? 'لا توجد نتائج' : 'No results found' }}
+                                </div>
+                            </div>
+                        </div>
+                    </Transition>
                 </div>
-                <!-- Nationality -->
-                <div>
-                    <label class="block text-sm font-semibold text-slate-600 mb-1.5">{{ isRtl ? '\u0627\u0644\u062C\u0646\u0633\u064A\u0629' : 'Nationality' }}</label>
-                    <select v-model="form.nationality"
-                            class="w-full rounded-xl border border-slate-200 bg-slate-50/50 hover:border-slate-300 px-4 py-3 text-sm transition-all duration-200 focus:ring-2 focus:ring-teal-400/40 focus:border-teal-400 outline-none">
-                        <option value="">{{ isRtl ? '-- اختر الجنسية --' : '-- Select Nationality --' }}</option>
-                        <option v-for="n in nationalityOptions" :key="n.value" :value="n.value">{{ isRtl ? n.ar : n.en }}</option>
-                    </select>
+                <!-- City / Governorate (Searchable, Dynamic) -->
+                <div ref="cityRef" class="relative">
+                    <label class="block text-sm font-semibold text-slate-600 mb-1.5">
+                        {{ form.nationality === 'Egyptian' ? (isRtl ? 'المحافظة' : 'Governorate') : (isRtl ? 'المدينة' : 'City') }}
+                    </label>
+                    <button type="button" @click="cityOpen = !cityOpen; if (cityOpen) nextTick(() => { const el = cityRef?.querySelector?.('input'); if(el) el.focus(); })"
+                            :class="['w-full rounded-xl border bg-slate-50/50 hover:border-slate-300 px-4 py-3 text-sm transition-all duration-200 focus:ring-2 focus:ring-teal-400/40 focus:border-teal-400 outline-none flex items-center justify-between',
+                                cityOpen ? 'border-teal-400 ring-2 ring-teal-400/30 bg-white' : 'border-slate-200']">
+                        <span :class="form.city ? 'text-slate-800' : 'text-slate-400'">
+                            {{ form.city ? getCityLabel(form.city) : (form.nationality === 'Egyptian' ? (isRtl ? 'اختر المحافظة' : 'Select Governorate') : (isRtl ? 'اختر المدينة' : 'Select City')) }}
+                        </span>
+                        <svg :class="['w-4 h-4 text-slate-400 transition-transform duration-200', cityOpen ? 'rotate-180' : '']" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <!-- Hint: nationality-linked -->
+                    <p v-if="form.nationality && citiesByNationality[form.nationality]" class="mt-1 text-[10px] text-teal-500 flex items-center gap-1">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        {{ isRtl ? ('معروض: ' + (form.nationality === 'Egyptian' ? 'محافظات مصر' : 'مدن ' + getNatLabel(form.nationality))) : ('Showing: ' + getNatLabel(form.nationality) + (form.nationality === 'Egyptian' ? ' governorates' : ' cities')) }}
+                    </p>
+                    <!-- Dropdown -->
+                    <Transition enter-active-class="transition duration-200 ease-out" enter-from-class="opacity-0 -translate-y-2 scale-95" enter-to-class="opacity-100 translate-y-0 scale-100"
+                                leave-active-class="transition duration-150 ease-in" leave-from-class="opacity-100 translate-y-0 scale-100" leave-to-class="opacity-0 -translate-y-2 scale-95">
+                        <div v-if="cityOpen" class="absolute z-50 mt-1.5 w-full bg-white rounded-xl border border-slate-200 shadow-xl shadow-slate-200/50 overflow-hidden">
+                            <div class="p-2 border-b border-slate-100">
+                                <div class="relative">
+                                    <svg class="w-4 h-4 text-slate-400 absolute top-1/2 -translate-y-1/2 pointer-events-none" :class="isRtl ? 'right-3' : 'left-3'" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="m21 21-4.35-4.35"/></svg>
+                                    <input v-model="citySearch" type="text"
+                                           :placeholder="form.nationality === 'Egyptian' ? (isRtl ? 'ابحث عن المحافظة...' : 'Search governorate...') : (isRtl ? 'ابحث عن المدينة...' : 'Search city...')"
+                                           class="w-full rounded-lg border border-slate-200 text-sm py-2.5 outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-400/30"
+                                           :class="isRtl ? 'pr-9 pl-3' : 'pl-9 pr-3'" />
+                                </div>
+                            </div>
+                            <div class="max-h-52 overflow-y-auto overscroll-contain">
+                                <button v-for="c in filteredCities" :key="c.value" type="button"
+                                        @click="selectCity(c.value)"
+                                        :class="['w-full text-start px-4 py-2.5 text-sm transition-colors duration-100 flex items-center justify-between',
+                                            form.city === c.value ? 'bg-teal-50 text-teal-700 font-medium' : 'text-slate-600 hover:bg-slate-50']">
+                                    <span>{{ isRtl ? c.ar : c.en }}</span>
+                                    <svg v-if="form.city === c.value" class="w-4 h-4 text-teal-500 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                </button>
+                                <div v-if="filteredCities.length === 0" class="px-4 py-6 text-center text-xs text-slate-400">
+                                    {{ isRtl ? 'لا توجد نتائج' : 'No results found' }}
+                                </div>
+                            </div>
+                        </div>
+                    </Transition>
                 </div>
             </div>
         </div>
