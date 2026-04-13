@@ -129,10 +129,18 @@ function formatDate(d) {
             <div class="absolute bottom-0 left-0 w-48 h-48 bg-emerald-500/10 rounded-full translate-y-1/2 -translate-x-1/4 blur-2xl"></div>
 
             <div class="relative z-10">
-                <div class="mb-6">
-                    <p class="text-[#C4A265] text-xs font-semibold tracking-wider uppercase mb-1">{{ isRtl ? 'الأرباح' : 'Earnings' }}</p>
-                    <h1 class="text-2xl sm:text-3xl font-bold text-white">{{ $t('a_commission') }}</h1>
-                    <p class="text-gray-400 text-sm mt-1">{{ isRtl ? 'تتبع أرباحك ومدفوعاتك' : 'Track your earnings and payouts' }}</p>
+                <div class="flex items-start justify-between gap-4 mb-6">
+                    <div>
+                        <p class="text-[#C4A265] text-xs font-semibold tracking-wider uppercase mb-1">{{ isRtl ? 'الأرباح' : 'Earnings' }}</p>
+                        <h1 class="text-2xl sm:text-3xl font-bold text-white">{{ $t('a_commission') }}</h1>
+                        <p class="text-gray-400 text-sm mt-1">{{ isRtl ? 'تتبع أرباحك ومدفوعاتك' : 'Track your earnings and payouts' }}</p>
+                    </div>
+                    <a href="/doctor/export/commissions"
+                        class="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-white/80 bg-white/10 hover:bg-white/15 border border-white/10 rounded-xl transition-all backdrop-blur-sm hover:shadow-lg flex-shrink-0"
+                    >
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                        {{ isRtl ? 'تصدير Excel' : 'Export Excel' }}
+                    </a>
                 </div>
 
                 <!-- Stats in Hero -->

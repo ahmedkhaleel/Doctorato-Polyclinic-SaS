@@ -90,10 +90,17 @@ onMounted(() => {
                     <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-indigo-400 to-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-500/20">
                         <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
                     </div>
-                    <div>
+                    <div class="flex-1">
                         <h1 class="text-2xl font-bold text-white">{{ $t('a_my_salary_slips') }}</h1>
                         <p class="text-sm text-gray-400 mt-0.5">{{ isRtl ? 'عرض وتحميل كشوف الرواتب' : 'View and download your salary slips' }}</p>
                     </div>
+                    <!-- Export Button -->
+                    <a v-if="slipsList.length" href="/doctor/export/salary-slips"
+                        class="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-white/80 bg-white/10 hover:bg-white/15 border border-white/10 rounded-xl transition-all backdrop-blur-sm hover:shadow-lg"
+                    >
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                        {{ isRtl ? 'تصدير Excel' : 'Export Excel' }}
+                    </a>
                 </div>
 
                 <!-- Stats -->

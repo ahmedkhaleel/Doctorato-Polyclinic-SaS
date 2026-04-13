@@ -4,6 +4,7 @@ import { Link, router, usePage } from '@inertiajs/vue3';
 import DoctorLayout from '@/Layouts/DoctorLayout.vue';
 import SearchableSelect from '@/Components/Doctor/SearchableSelect.vue';
 import SkeletonLoader from '@/Components/Doctor/SkeletonLoader.vue';
+import WeeklyCalendar from '@/Components/Doctor/WeeklyCalendar.vue';
 
 defineOptions({ layout: DoctorLayout });
 
@@ -29,6 +30,25 @@ const props = defineProps({
 const headerLoaded = ref(false);
 const cardsLoaded = ref(false);
 const dataLoading = ref(true);
+const viewMode = ref(localStorage.getItem('doctor_bookings_viewMode') || 'list');
+
+function setViewMode(mode) {
+    viewMode.value = mode;
+    try { localStorage.setItem('doctor_bookings_viewMode', mode); } catch {}
+}
+
+// Calendar status config (localized)
+const calendarStatusConfig = computed(() => ({
+    confirmed: { label: isRtl.value ? 'مؤكد' : 'Confirmed', bg: 'bg-blue-50', text: 'text-blue-700', dot: 'bg-blue-500', border: 'border-blue-200' },
+    in_progress: { label: isRtl.value ? 'قيد التنفيذ' : 'In Progress', bg: 'bg-indigo-50', text: 'text-indigo-700', dot: 'bg-indigo-500', border: 'border-indigo-200' },
+    completed: { label: isRtl.value ? 'مكتمل' : 'Completed', bg: 'bg-emerald-50', text: 'text-emerald-700', dot: 'bg-emerald-500', border: 'border-emerald-200' },
+    cancelled: { label: isRtl.value ? 'ملغي' : 'Cancelled', bg: 'bg-red-50', text: 'text-red-700', dot: 'bg-red-500', border: 'border-red-200' },
+    pending: { label: isRtl.value ? 'معلق' : 'Pending', bg: 'bg-amber-50', text: 'text-amber-700', dot: 'bg-amber-500', border: 'border-amber-200' },
+}));
+
+function onCalendarEventClick(event) {
+    if (event.id) router.visit(`/doctor/bookings/${event.id}`);
+}
 
 onMounted(() => {
     setTimeout(() => headerLoaded.value = true, 50);
@@ -240,12 +260,33 @@ const statusOptions = computed(() => {
                     size="sm"
                 />
             </div>
+            <!-- View Mode Toggle -->
+            <div v-if="activeTab === 'bookings'" class="flex items-center bg-gray-100 rounded-lg p-0.5 gap-0.5 ms-auto">
+                <button @click="setViewMode('list')" class="p-2 rounded-md transition-all"
+                    :class="viewMode === 'list' ? 'bg-white text-gray-800 shadow-sm' : 'text-gray-400 hover:text-gray-600'">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
+                </button>
+                <button @click="setViewMode('calendar')" class="p-2 rounded-md transition-all"
+                    :class="viewMode === 'calendar' ? 'bg-white text-gray-800 shadow-sm' : 'text-gray-400 hover:text-gray-600'">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                </button>
+            </div>
         </div>
 
         <!-- Skeleton Loading -->
         <SkeletonLoader v-if="dataLoading" type="list" :count="5" />
 
-        <!-- ═══════════ BOOKINGS TAB ═══════════ -->
+        <!-- ═══════════ CALENDAR VIEW ═══════════ -->
+        <WeeklyCalendar
+            v-if="!dataLoading && activeTab === 'bookings' && viewMode === 'calendar'"
+            :events="bookingsList"
+            :is-rtl="isRtl"
+            :status-config="calendarStatusConfig"
+            accent-color="#C4A265"
+            @event-click="onCalendarEventClick"
+        />
+
+        <!-- ═══════════ BOOKINGS TAB (LIST VIEW) ═══════════ -->
         <div v-else-if="activeTab === 'bookings'"
             class="transition-all duration-700"
             :class="cardsLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'"

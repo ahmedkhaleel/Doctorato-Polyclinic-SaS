@@ -19,6 +19,7 @@ use App\Http\Controllers\Doctor\DoctorDentalTreatmentController;
 use App\Http\Controllers\Doctor\DoctorDentalTreatmentPlanController;
 use App\Http\Controllers\Doctor\DoctorDentalXrayController;
 use App\Http\Controllers\Doctor\DoctorDentalFollowupController;
+use App\Http\Controllers\Doctor\DoctorExportController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -151,6 +152,11 @@ Route::middleware('doctor.auth')->group(function () {
         Route::get('/prescription-templates', [DoctorPrescriptionController::class, 'dentalTemplates'])->name('doctor.dental-prescription-templates.index');
         Route::post('/prescriptions/apply-template/{template}', [DoctorPrescriptionController::class, 'applyDentalTemplate'])->name('doctor.prescriptions.applyDentalTemplate');
     });
+
+    // ─── Exports ────────────────────────────────────────────
+    Route::get('/export/visits', [DoctorExportController::class, 'exportVisits'])->name('doctor.export.visits');
+    Route::get('/export/commissions', [DoctorExportController::class, 'exportCommissions'])->name('doctor.export.commissions')->middleware('module:hr');
+    Route::get('/export/salary-slips', [DoctorExportController::class, 'exportSalarySlips'])->name('doctor.export.salary-slips')->middleware('module:hr');
 
     // ─── My Profile ─────────────────────────────────────────
     Route::get('/profile', [DoctorProfileController::class, 'index'])->name('doctor.profile.index');
