@@ -242,15 +242,6 @@ class SecretaryCrmController extends BaseSecretaryController
     {
         // Ensure the secretary can only view leads assigned to them
         if (((int) $lead->assigned_to) !== ((int) auth()->id())) {
-            \Log::error('CRM show 403', [
-                'lead_id' => $lead->id,
-                'assigned_to' => $lead->assigned_to,
-                'assigned_to_type' => gettype($lead->assigned_to),
-                'auth_id' => auth()->id(),
-                'auth_id_type' => gettype(auth()->id()),
-                'cast_assigned' => (int) $lead->assigned_to,
-                'cast_auth' => (int) auth()->id(),
-            ]);
             abort(403);
         }
 
@@ -331,12 +322,6 @@ class SecretaryCrmController extends BaseSecretaryController
         $data['score'] = 0;
 
         $lead = Lead::create($data);
-
-        \Log::info('CRM store lead created', [
-            'lead_id' => $lead->id,
-            'assigned_to' => $lead->assigned_to,
-            'auth_id' => auth()->id(),
-        ]);
 
         // Apply initial scoring
         LeadScoringRule::applyToLead($lead, 'lead_created');
