@@ -129,6 +129,31 @@ class SecretaryCrmController extends BaseSecretaryController
             $query->whereDate('created_at', '<=', $dateTo);
         }
 
+        // Quick filter chips
+        if ($quickFilter = $request->input('quick_filter')) {
+            switch ($quickFilter) {
+                case 'overdue':
+                    $query->whereNotNull('next_follow_up_at')
+                          ->where('next_follow_up_at', '<', now())
+                          ->whereNotIn('status', ['converted', 'lost']);
+                    break;
+                case 'no_follow_up':
+                    $query->whereNull('next_follow_up_at')
+                          ->whereNotIn('status', ['converted', 'lost']);
+                    break;
+                case 'today_follow_up':
+                    $query->whereDate('next_follow_up_at', now()->toDateString());
+                    break;
+                case 'new_today':
+                    $query->whereDate('created_at', now()->toDateString());
+                    break;
+                case 'hot':
+                    $query->where('priority', 1)
+                          ->whereNotIn('status', ['converted', 'lost']);
+                    break;
+            }
+        }
+
         // Sort
         $sortField = $request->input('sort', 'created_at');
         $sortDir = $request->input('dir', 'desc');
@@ -143,10 +168,30 @@ class SecretaryCrmController extends BaseSecretaryController
 
         $sources = LeadSource::active()->ordered()->get(['id', 'name_en', 'name_ar', 'color']);
 
+        // Quick filter counts for chips
+        $baseQuery = Lead::assignedTo($userId);
+        $quickFilterCounts = [
+            'overdue' => (clone $baseQuery)->whereNotNull('next_follow_up_at')
+                ->where('next_follow_up_at', '<', now())
+                ->whereNotIn('status', ['converted', 'lost'])
+                ->count(),
+            'no_follow_up' => (clone $baseQuery)->whereNull('next_follow_up_at')
+                ->whereNotIn('status', ['converted', 'lost'])
+                ->count(),
+            'today_follow_up' => (clone $baseQuery)->whereDate('next_follow_up_at', now()->toDateString())
+                ->count(),
+            'new_today' => (clone $baseQuery)->whereDate('created_at', now()->toDateString())
+                ->count(),
+            'hot' => (clone $baseQuery)->where('priority', 1)
+                ->whereNotIn('status', ['converted', 'lost'])
+                ->count(),
+        ];
+
         return Inertia::render('Secretary/CRM/Leads', [
             'leads' => $leads,
             'sources' => $sources,
-            'filters' => $request->only(['search', 'status', 'priority', 'source', 'date_from', 'date_to', 'sort', 'dir']),
+            'filters' => $request->only(['search', 'status', 'priority', 'source', 'date_from', 'date_to', 'sort', 'dir', 'quick_filter']),
+            'quickFilterCounts' => $quickFilterCounts,
         ]);
     }
 
