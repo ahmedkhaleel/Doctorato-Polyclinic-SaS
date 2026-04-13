@@ -705,6 +705,81 @@ const completionDash = computed(() => {
             </div>
         </div>
 
+        <!-- Monthly Performance Overview -->
+        <div class="mt-6 bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden"
+            :class="mounted ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'"
+            style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.5s">
+            <div class="px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-gray-50/80 to-white flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-indigo-50 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
+                    </div>
+                    <div>
+                        <h2 class="text-sm font-bold text-gray-800">{{ isRtl ? 'ملخص الأداء الشهري' : 'Monthly Performance' }}</h2>
+                        <p class="text-[10px] text-gray-400">{{ isRtl ? 'مقارنة بالشهر الماضي' : 'Compared to last month' }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="p-6">
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    <!-- Total Visits -->
+                    <div class="relative group p-4 rounded-xl border border-gray-100 hover:border-indigo-200 hover:shadow-sm transition-all duration-300 overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-400 to-indigo-600 transform origin-left transition-transform duration-500" :style="{ transform: mounted ? 'scaleX(1)' : 'scaleX(0)' }"></div>
+                        <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1">{{ isRtl ? 'الزيارات' : 'Visits' }}</p>
+                        <p class="text-2xl font-bold text-gray-800 tabular-nums">{{ monthly?.total_visits || 0 }}</p>
+                        <div class="flex items-center gap-1 mt-1.5">
+                            <span class="inline-flex items-center gap-0.5 text-[10px] font-semibold px-1.5 py-0.5 rounded-full"
+                                :class="visitChange >= 0 ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-500'">
+                                <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path v-if="visitChange >= 0" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+                                    <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                                </svg>
+                                {{ Math.abs(visitChange) }}%
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Completed -->
+                    <div class="relative group p-4 rounded-xl border border-gray-100 hover:border-emerald-200 hover:shadow-sm transition-all duration-300 overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-400 to-emerald-600 transform origin-left transition-transform duration-500" :style="{ transform: mounted ? 'scaleX(1)' : 'scaleX(0)', transitionDelay: '0.1s' }"></div>
+                        <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1">{{ isRtl ? 'مكتملة' : 'Completed' }}</p>
+                        <p class="text-2xl font-bold text-gray-800 tabular-nums">{{ monthly?.completed_visits || 0 }}</p>
+                        <div class="mt-1.5">
+                            <div class="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                                <div class="h-full bg-emerald-500 rounded-full transition-all duration-1000" :style="{ width: mounted ? (completionRate || 0) + '%' : '0%' }"></div>
+                            </div>
+                            <p class="text-[10px] text-gray-400 mt-1 tabular-nums">{{ completionRate || 0 }}% {{ isRtl ? 'نسبة الإكمال' : 'completion' }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Unique Patients -->
+                    <div class="relative group p-4 rounded-xl border border-gray-100 hover:border-blue-200 hover:shadow-sm transition-all duration-300 overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 to-blue-600 transform origin-left transition-transform duration-500" :style="{ transform: mounted ? 'scaleX(1)' : 'scaleX(0)', transitionDelay: '0.2s' }"></div>
+                        <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1">{{ isRtl ? 'مرضى فريدون' : 'Unique Patients' }}</p>
+                        <p class="text-2xl font-bold text-gray-800 tabular-nums">{{ monthly?.unique_patients || 0 }}</p>
+                        <p class="text-[10px] text-gray-400 mt-1.5">{{ isRtl ? 'من إجمالي' : 'out of' }} {{ monthly?.total_visits || 0 }} {{ isRtl ? 'زيارة' : 'visits' }}</p>
+                    </div>
+
+                    <!-- Monthly Commission -->
+                    <div class="relative group p-4 rounded-xl border border-gray-100 hover:border-[#C4A265]/30 hover:shadow-sm transition-all duration-300 overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#C4A265] to-[#D4B87A] transform origin-left transition-transform duration-500" :style="{ transform: mounted ? 'scaleX(1)' : 'scaleX(0)', transitionDelay: '0.3s' }"></div>
+                        <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1">{{ isRtl ? 'العمولة' : 'Commission' }}</p>
+                        <p class="text-2xl font-bold text-[#C4A265] tabular-nums">{{ formatCurrency(monthly?.total_commission || 0) }}</p>
+                        <div class="flex items-center gap-1 mt-1.5">
+                            <span class="inline-flex items-center gap-0.5 text-[10px] font-semibold px-1.5 py-0.5 rounded-full"
+                                :class="commissionChange >= 0 ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-500'">
+                                <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path v-if="commissionChange >= 0" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+                                    <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                                </svg>
+                                {{ Math.abs(commissionChange) }}%
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Medical Risk Alerts for Today's Dental Patients -->
         <div v-if="todayMedicalAlerts && todayMedicalAlerts.length > 0"
             class="mt-6 bg-red-50 rounded-2xl border border-red-200 shadow-sm overflow-hidden"

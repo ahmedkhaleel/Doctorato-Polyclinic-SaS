@@ -3,6 +3,7 @@ import { ref, computed, onMounted } from 'vue';
 import { Link, usePage } from '@inertiajs/vue3';
 import DoctorLayout from '@/Layouts/DoctorLayout.vue';
 import { useCurrency } from '@/Composables/useCurrency.js';
+import SkeletonLoader from '@/Components/Doctor/SkeletonLoader.vue';
 
 defineOptions({ layout: DoctorLayout });
 
@@ -18,10 +19,12 @@ const props = defineProps({
 
 const headerLoaded = ref(false);
 const cardsLoaded = ref(false);
+const dataLoading = ref(true);
 
 onMounted(() => {
     setTimeout(() => headerLoaded.value = true, 50);
     setTimeout(() => cardsLoaded.value = true, 200);
+    setTimeout(() => dataLoading.value = false, 600);
 });
 
 const monthNamesEn = ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -122,7 +125,8 @@ onMounted(() => {
             :class="cardsLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'"
             :style="{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }"
         >
-            <div v-if="slipsList.length" class="space-y-3">
+            <SkeletonLoader v-if="dataLoading" type="list" :count="4" />
+            <div v-else-if="slipsList.length" class="space-y-3">
                 <div
                     v-for="(slip, index) in slipsList"
                     :key="slip.id"
