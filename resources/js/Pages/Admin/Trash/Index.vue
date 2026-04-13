@@ -54,7 +54,7 @@ function restoreItem(type, id) {
 
 function forceDeleteItem(type, id) {
     if (window.confirm(isRtl.value ? 'هل أنت متأكد؟ سيتم حذف هذا العنصر نهائياً ولا يمكن استعادته!' : 'Are you sure? This will permanently delete this item and cannot be undone!')) {
-        router.delete(`/admin/trash/${type}/${id}`);
+        router.post(`/admin/trash/${type}/${id}/delete`);
     }
 }
 
@@ -66,7 +66,7 @@ function restoreAll(type) {
 
 function emptyTrash(type) {
     if (window.confirm(isRtl.value ? 'تحذير! سيتم حذف جميع العناصر نهائياً. هل أنت متأكد؟' : 'WARNING! This will permanently delete all items. Are you sure?')) {
-        router.delete(`/admin/trash/${type}/empty`);
+        router.post(`/admin/trash/${type}/empty`);
     }
 }
 

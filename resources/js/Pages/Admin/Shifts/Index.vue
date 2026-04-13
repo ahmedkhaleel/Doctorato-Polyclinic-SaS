@@ -65,7 +65,7 @@ function submitEdit(id) {
 
 function deleteShift(id) {
     if (window.confirm('Are you sure you want to delete this shift?')) {
-        router.delete(`/admin/shifts/${id}`, { preserveScroll: true });
+        router.post(`/admin/shifts/${id}/delete`, { preserveScroll: true });
     }
 }
 </script>

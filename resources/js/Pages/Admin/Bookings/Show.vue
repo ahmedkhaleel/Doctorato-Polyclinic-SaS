@@ -575,7 +575,7 @@ function onConsentFilesSelected(event) {
 
 function deleteConsent(consentId) {
     if (!confirm('Delete this consent document?')) return;
-    router.delete(`/admin/bookings/${props.booking.id}/consents/${consentId}`, {
+    router.post(`/admin/bookings/${props.booking.id}/consents/${consentId}/delete`, {
         preserveScroll: true,
     });
 }
@@ -684,7 +684,7 @@ const deletingBooking = ref(false);
 function deleteBooking() {
     if (!confirm('Are you sure you want to permanently delete this booking? This will remove all appointments, services, invoice, and payments. This action cannot be undone.')) return;
     deletingBooking.value = true;
-    router.delete(`/admin/bookings/${props.booking.id}`, {
+    router.post(`/admin/bookings/${props.booking.id}/delete`, {
         onFinish: () => { deletingBooking.value = false; },
     });
 }

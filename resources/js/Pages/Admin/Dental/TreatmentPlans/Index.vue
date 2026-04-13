@@ -81,7 +81,7 @@ const deletingId = ref(null);
 function deletePlan(id) {
     if (window.confirm(t('a_confirm_delete'))) {
         deletingId.value = id;
-        router.delete(`/admin/dental/treatment-plans/${id}`, {
+        router.post(`/admin/dental/treatment-plans/${id}/delete`, {
             onFinish: () => { deletingId.value = null; },
         });
     }

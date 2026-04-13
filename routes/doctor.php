@@ -66,7 +66,7 @@ Route::middleware('doctor.auth')->group(function () {
     Route::get('/patients', [DoctorPatientController::class, 'index'])->name('doctor.patients.index');
     Route::get('/patients/favorites', [DoctorFavoritePatientController::class, 'index'])->name('doctor.patients.favorites');
     Route::get('/patients/{patient}', [DoctorPatientController::class, 'show'])->name('doctor.patients.show');
-    Route::put('/patients/{patient}/notes', [DoctorPatientController::class, 'updateNotes'])->name('doctor.patients.updateNotes');
+    Route::post('/patients/{patient}/notes', [DoctorPatientController::class, 'updateNotes'])->name('doctor.patients.updateNotes');
 
     // ─── Patient Quick Notes ────────────────────────────────
     Route::post('/patients/{patient}/notes/store', [DoctorPatientNoteController::class, 'store'])->name('doctor.patients.notes.store');
@@ -82,15 +82,15 @@ Route::middleware('doctor.auth')->group(function () {
     Route::post('/visits/{visit}/start', [DoctorVisitController::class, 'start'])->name('doctor.visits.start');
     Route::post('/visits/{visit}/complete', [DoctorVisitController::class, 'complete'])->name('doctor.visits.complete');
     Route::post('/visits/{visit}/cancel', [DoctorVisitController::class, 'cancel'])->name('doctor.visits.cancel');
-    Route::put('/visits/{visit}/diagnosis', [DoctorVisitController::class, 'updateDiagnosis'])->name('doctor.visits.updateDiagnosis');
+    Route::post('/visits/{visit}/diagnosis', [DoctorVisitController::class, 'updateDiagnosis'])->name('doctor.visits.updateDiagnosis');
     Route::post('/visits/{visit}/photos', [DoctorVisitController::class, 'uploadPhoto'])->name('doctor.visits.uploadPhoto');
     Route::post('/patients/{patient}/vitals', [DoctorVisitController::class, 'storeVitals'])->name('doctor.patients.vitals.store');
 
     // ─── Prescriptions ──────────────────────────────────────
     Route::get('/prescriptions', [DoctorPrescriptionController::class, 'index'])->name('doctor.prescriptions.index');
     Route::post('/prescriptions', [DoctorPrescriptionController::class, 'store'])->name('doctor.prescriptions.store');
-    Route::put('/prescriptions/{prescription}', [DoctorPrescriptionController::class, 'update'])->name('doctor.prescriptions.update');
-    Route::delete('/prescriptions/{prescription}', [DoctorPrescriptionController::class, 'destroy'])->name('doctor.prescriptions.destroy');
+    Route::post('/prescriptions/{prescription}/update', [DoctorPrescriptionController::class, 'update'])->name('doctor.prescriptions.update');
+    Route::post('/prescriptions/{prescription}/delete', [DoctorPrescriptionController::class, 'destroy'])->name('doctor.prescriptions.destroy');
     Route::post('/prescriptions/{prescription}/duplicate', [DoctorPrescriptionController::class, 'duplicate'])->name('doctor.prescriptions.duplicate');
     Route::get('/prescriptions/{prescription}/pdf', [DoctorPrescriptionController::class, 'downloadPdf'])->name('doctor.prescriptions.pdf');
     Route::get('/prescriptions/{prescription}/print', [DoctorPrescriptionController::class, 'printPdf'])->name('doctor.prescriptions.print');
@@ -175,6 +175,6 @@ Route::middleware('doctor.auth')->group(function () {
 
     // ─── My Profile ─────────────────────────────────────────
     Route::get('/profile', [DoctorProfileController::class, 'index'])->name('doctor.profile.index');
-    Route::put('/profile', [DoctorProfileController::class, 'update'])->name('doctor.profile.update');
-    Route::put('/profile/password', [DoctorProfileController::class, 'updatePassword'])->name('doctor.profile.password');
+    Route::post('/profile/update', [DoctorProfileController::class, 'update'])->name('doctor.profile.update');
+    Route::post('/profile/password', [DoctorProfileController::class, 'updatePassword'])->name('doctor.profile.password');
 });

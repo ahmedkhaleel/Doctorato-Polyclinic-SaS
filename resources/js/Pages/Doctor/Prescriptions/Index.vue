@@ -91,7 +91,7 @@ function submitEdit() {
 
 // ─── View / Delete / Duplicate / PDF ─────────────
 function openView(rx) { viewingPrescription.value = rx; }
-function deletePrescription(id) { router.delete(`/doctor/prescriptions/${id}`, { onSuccess: () => { showDeleteConfirm.value = null; } }); }
+function deletePrescription(id) { router.post(`/doctor/prescriptions/${id}/delete`, {}, { onSuccess: () => { showDeleteConfirm.value = null; } }); }
 function duplicatePrescription(id) { router.post(`/doctor/prescriptions/${id}/duplicate`); }
 function downloadPdf(id) { window.open(`/doctor/prescriptions/${id}/pdf`, '_blank'); }
 function printPdf(id) { window.open(`/doctor/prescriptions/${id}/print`, '_blank'); }

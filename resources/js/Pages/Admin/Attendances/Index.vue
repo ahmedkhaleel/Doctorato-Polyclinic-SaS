@@ -172,7 +172,7 @@ function hasLocation(record) {
 
 function submitAttendance() {
     if (editingId.value) {
-        form.put(`/admin/attendances/${editingId.value}`, {
+        form.post(`/admin/attendances/${editingId.value}/update`, {
             preserveScroll: true,
             onSuccess: () => { form.reset(); showForm.value = false; editingId.value = null; },
         });
@@ -214,7 +214,7 @@ function cancelForm() {
 function deleteAttendance(id) {
     const msg = isRtl.value ? 'هل أنت متأكد من حذف هذا السجل؟' : 'Are you sure you want to delete this record?';
     if (window.confirm(msg)) {
-        router.delete(`/admin/attendances/${id}`, { preserveScroll: true });
+        router.post(`/admin/attendances/${id}/delete`, { preserveScroll: true });
     }
 }
 

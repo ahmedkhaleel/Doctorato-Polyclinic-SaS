@@ -30,7 +30,7 @@ watch(search, (val) => {
 
 function deleteDoctor(id) {
     if (window.confirm(isRtl ? 'هل أنت متأكد من حذف هذا الطبيب؟' : 'Are you sure you want to delete this doctor?')) {
-        router.delete(`/webmaster/doctors/${id}`);
+        router.post(`/webmaster/doctors/${id}/delete`);
     }
 }
 

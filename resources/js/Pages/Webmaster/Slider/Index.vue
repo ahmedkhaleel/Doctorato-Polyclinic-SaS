@@ -20,12 +20,12 @@ const dragOver = ref(null);
 
 function deleteSlide(id) {
     if (window.confirm(isRtl ? 'هل أنت متأكد من حذف هذا السلايد؟' : 'Are you sure you want to delete this slide?')) {
-        router.delete(`/webmaster/slider/${id}`);
+        router.post(`/webmaster/slider/${id}/delete`);
     }
 }
 
 function toggleActive(slide) {
-    router.put(`/webmaster/slider/${slide.id}`, {
+    router.post(`/webmaster/slider/${slide.id}/update`, {
         title_ar: slide.title_ar || '',
         title_en: slide.title_en || '',
         subtitle_ar: slide.subtitle_ar || '',

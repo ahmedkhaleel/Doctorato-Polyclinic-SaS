@@ -61,7 +61,7 @@ function openStatusChange(status) {
 
 function submitStatusChange() {
     processing.value = true
-    router.put(`/admin/purchase-orders/${props.order.id}/status`, {
+    router.post(`/admin/purchase-orders/${props.order.id}/status`, {
         status: newStatus.value,
         delivery_notes: deliveryNotes.value || undefined,
     }, {

@@ -53,7 +53,7 @@ watch([categoryFilter, dateFrom, dateTo], () => {
 
 function deleteExpense(id) {
     if (window.confirm(t('a_confirm_delete_expense'))) {
-        router.delete(`/admin/expenses/${id}`);
+        router.post(`/admin/expenses/${id}/delete`);
     }
 }
 

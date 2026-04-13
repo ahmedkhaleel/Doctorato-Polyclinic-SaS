@@ -31,7 +31,7 @@ watch(search, (val) => {
 
 function deleteTag(id) {
     if (window.confirm(isRtl ? 'هل أنت متأكد من حذف هذا الوسم؟' : 'Are you sure you want to delete this tag?')) {
-        router.delete(`/webmaster/tags/${id}`);
+        router.post(`/webmaster/tags/${id}/delete`);
     }
 }
 </script>

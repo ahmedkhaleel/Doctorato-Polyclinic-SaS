@@ -59,7 +59,7 @@ function submit() {
 
 function deleteSource(id) {
     if (confirm('Are you sure? Sources with existing leads cannot be deleted.')) {
-        router.delete(`/admin/lead-sources/${id}`, { preserveScroll: true });
+        router.post(`/admin/lead-sources/${id}/delete`, { preserveScroll: true });
     }
 }
 

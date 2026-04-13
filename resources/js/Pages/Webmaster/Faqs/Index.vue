@@ -30,7 +30,7 @@ watch(search, (val) => {
 
 function deleteFaq(id) {
     if (window.confirm(isRtl ? 'هل أنت متأكد من حذف هذا السؤال؟' : 'Are you sure you want to delete this FAQ?')) {
-        router.delete(`/webmaster/faqs/${id}`);
+        router.post(`/webmaster/faqs/${id}/delete`);
     }
 }
 </script>

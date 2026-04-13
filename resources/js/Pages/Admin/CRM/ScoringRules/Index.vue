@@ -60,7 +60,7 @@ function submit() {
 
 function deleteRule(id) {
     if (confirm('Delete this scoring rule?')) {
-        router.delete(`/admin/scoring-rules/${id}`);
+        router.post(`/admin/scoring-rules/${id}/delete`);
     }
 }
 

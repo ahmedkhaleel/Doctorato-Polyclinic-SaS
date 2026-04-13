@@ -18,7 +18,7 @@ const form = useForm({
 });
 
 function submit() {
-    form.put(`/webmaster/tags/${props.tag.id}`);
+    form.post(`/webmaster/tags/${props.tag.id}/update`);
 }
 </script>
 

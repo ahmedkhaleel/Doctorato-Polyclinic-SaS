@@ -129,7 +129,7 @@ const deletingId = ref(null);
 function deleteNotification(n) {
     if (!confirm(locale.value === 'ar' ? 'حذف هذا التنبيه؟' : 'Delete this notification?')) return;
     deletingId.value = n.id;
-    router.delete(`/admin/dental/smart-notifications/${n.id}`, {
+    router.post(`/admin/dental/smart-notifications/${n.id}/delete`, {
         preserveState: true,
         onFinish: () => { deletingId.value = null; },
     });

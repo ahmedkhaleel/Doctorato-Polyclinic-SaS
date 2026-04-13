@@ -31,7 +31,7 @@ watch(search, (val) => {
 
 function deleteItem(id) {
     if (window.confirm(isRtl ? 'هل أنت متأكد من حذف هذا العنصر؟' : 'Are you sure you want to delete this gallery item?')) {
-        router.delete(`/webmaster/gallery/${id}`);
+        router.post(`/webmaster/gallery/${id}/delete`);
     }
 }
 </script>

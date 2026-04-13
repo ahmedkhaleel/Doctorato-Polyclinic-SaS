@@ -59,7 +59,7 @@ watch([dateFrom, dateTo, moduleFilter], () => {
 
 function deletePayment(id) {
     if (window.confirm(t('a_confirm_delete_payment'))) {
-        router.delete(`/admin/payments/${id}`);
+        router.post(`/admin/payments/${id}/delete`);
     }
 }
 

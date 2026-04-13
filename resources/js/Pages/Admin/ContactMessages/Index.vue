@@ -46,7 +46,7 @@ watch(isReadFilter, (val) => {
 
 function deleteMessage(id) {
     if (window.confirm(t('a_confirm_delete_message'))) {
-        router.delete(`/admin/contact-messages/${id}`);
+        router.post(`/admin/contact-messages/${id}/delete`);
     }
 }
 

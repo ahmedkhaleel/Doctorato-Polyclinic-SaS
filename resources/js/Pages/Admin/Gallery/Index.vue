@@ -33,7 +33,7 @@ watch(search, (val) => {
 
 function deleteItem(id) {
     if (window.confirm(t('a_confirm_delete_gallery'))) {
-        router.delete(`/admin/gallery/${id}`);
+        router.post(`/admin/gallery/${id}/delete`);
     }
 }
 </script>

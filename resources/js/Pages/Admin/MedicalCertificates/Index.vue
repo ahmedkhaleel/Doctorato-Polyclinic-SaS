@@ -96,12 +96,12 @@ function submitCreate() {
 }
 
 function issueCert(id) {
-    router.put(`/admin/medical-certificates/${id}/issue`, {}, { preserveState: false });
+    router.post(`/admin/medical-certificates/${id}/issue`, {}, { preserveState: false });
 }
 
 function cancelCert(id) {
     if (!confirm(isRtl.value ? 'هل تريد إلغاء هذه الشهادة؟' : 'Cancel this certificate?')) return;
-    router.put(`/admin/medical-certificates/${id}/cancel`, {}, { preserveState: false });
+    router.post(`/admin/medical-certificates/${id}/cancel`, {}, { preserveState: false });
 }
 
 /* Auto-calc days */

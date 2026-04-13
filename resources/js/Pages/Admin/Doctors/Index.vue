@@ -79,7 +79,7 @@ function cancelDelete() {
 
 function executeDelete() {
     if (deleteId.value) {
-        router.delete(`/admin/doctors/${deleteId.value}`);
+        router.post(`/admin/doctors/${deleteId.value}/delete`);
         deleteId.value = null;
     }
 }

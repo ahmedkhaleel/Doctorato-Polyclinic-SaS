@@ -49,7 +49,7 @@ function openEdit(company) {
 
 function submit() {
     if (editingCompany.value) {
-        router.put(`/admin/insurance/companies/${editingCompany.value.id}`, form.value, {
+        router.post(`/admin/insurance/companies/${editingCompany.value.id}/update`, form.value, {
             onSuccess: () => { showCreateModal.value = false; resetForm() }
         })
     } else {
@@ -61,7 +61,7 @@ function submit() {
 
 function deleteCompany(company) {
     if (confirm(isRtl.value ? 'هل أنت متأكد من حذف هذه الشركة؟' : 'Are you sure you want to delete this company?')) {
-        router.delete(`/admin/insurance/companies/${company.id}`)
+        router.post(`/admin/insurance/companies/${company.id}/delete`)
     }
 }
 </script>

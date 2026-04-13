@@ -43,12 +43,12 @@ const rolesCount = computed(() => {
 
 function deleteUser(id) {
     if (window.confirm(t('a_confirm_delete_user'))) {
-        router.delete(`/admin/users/${id}`);
+        router.post(`/admin/users/${id}/delete`);
     }
 }
 
 function toggleActive(user) {
-    router.put(`/admin/users/${user.id}`, {
+    router.post(`/admin/users/${user.id}/update`, {
         name: user.name,
         email: user.email,
         role_id: user.role_id,

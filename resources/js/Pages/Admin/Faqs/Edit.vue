@@ -31,7 +31,7 @@ const categories = [
 ];
 
 function submit() {
-    form.put(`/admin/faqs/${props.faq.id}`);
+    form.post(`/admin/faqs/${props.faq.id}/update`);
 }
 </script>
 

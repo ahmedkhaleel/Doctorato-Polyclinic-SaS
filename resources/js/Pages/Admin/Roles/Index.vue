@@ -96,7 +96,7 @@ const deletingId = ref(null);
 function deleteRole(id) {
     if (window.confirm(t('a_confirm_delete_role'))) {
         deletingId.value = id;
-        router.delete(`/admin/roles/${id}`, {
+        router.post(`/admin/roles/${id}/delete`, {
             onFinish: () => { deletingId.value = null; }
         });
     }

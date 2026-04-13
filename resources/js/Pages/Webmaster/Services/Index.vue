@@ -30,7 +30,7 @@ watch(search, (val) => {
 
 function deleteService(id) {
     if (window.confirm(isRtl ? 'هل أنت متأكد من حذف هذه الخدمة؟' : 'Are you sure you want to delete this service?')) {
-        router.delete(`/webmaster/services/${id}`);
+        router.post(`/webmaster/services/${id}/delete`);
     }
 }
 

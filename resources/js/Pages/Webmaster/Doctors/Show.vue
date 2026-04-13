@@ -172,7 +172,7 @@ function submitPrescription() {
 
 function deletePrescription(rxId) {
     if (window.confirm('Are you sure you want to delete this prescription?')) {
-        router.delete(`/webmaster/prescriptions/${rxId}`, {
+        router.post(`/webmaster/prescriptions/${rxId}/delete`, {}, {
             preserveScroll: true,
         });
     }

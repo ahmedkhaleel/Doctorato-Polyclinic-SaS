@@ -81,7 +81,7 @@ onUnmounted(() => {
 
 function deleteComparison() {
     if (window.confirm(isRtl.value ? 'حذف هذه المقارنة؟' : 'Delete this comparison?')) {
-        router.delete(`/admin/dental/comparisons/${comp.value.id}`);
+        router.post(`/admin/dental/comparisons/${comp.value.id}/delete`);
     }
 }
 </script>

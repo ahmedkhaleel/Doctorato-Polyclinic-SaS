@@ -66,7 +66,7 @@ Route::middleware('secretary.auth')->group(function () {
     Route::post('/patients/quick-create', [SecretaryPatientController::class, 'quickStore'])->name('secretary.patients.quickStore');
     Route::get('/patients/{patient}', [SecretaryPatientController::class, 'show'])->name('secretary.patients.show');
     Route::get('/patients/{patient}/edit', [SecretaryPatientController::class, 'edit'])->name('secretary.patients.edit');
-    Route::put('/patients/{patient}', [SecretaryPatientController::class, 'update'])->name('secretary.patients.update');
+    Route::post('/patients/{patient}/update', [SecretaryPatientController::class, 'update'])->name('secretary.patients.update');
     Route::get('/api/patients', [SecretaryPatientController::class, 'search'])->name('secretary.patients.search');
 
     // ─── Today Queue ────────────────────────────────────────
@@ -83,16 +83,16 @@ Route::middleware('secretary.auth')->group(function () {
     Route::post('/bookings', [SecretaryBookingController::class, 'store'])->name('secretary.bookings.store');
     Route::get('/bookings/check-followup', [SecretaryBookingController::class, 'checkFollowUp'])->name('secretary.bookings.checkFollowUp');
     Route::get('/bookings/{booking}', [SecretaryBookingController::class, 'show'])->name('secretary.bookings.show');
-    Route::put('/bookings/{booking}/status', [SecretaryBookingController::class, 'updateStatus'])->name('secretary.bookings.updateStatus');
+    Route::post('/bookings/{booking}/status', [SecretaryBookingController::class, 'updateStatus'])->name('secretary.bookings.updateStatus');
     Route::post('/bookings/{booking}/confirm', [SecretaryBookingController::class, 'confirm'])->name('secretary.bookings.confirm');
     Route::post('/bookings/{booking}/payment', [SecretaryBookingController::class, 'processPayment'])->name('secretary.bookings.payment');
     Route::get('/bookings/{booking}/receipt', [SecretaryBookingController::class, 'printReceipt'])->name('secretary.bookings.receipt');
     Route::get('/bookings/{booking}/payments/{payment}/receipt', [SecretaryBookingController::class, 'printPaymentReceipt'])->name('secretary.bookings.paymentReceipt');
     Route::post('/bookings/{booking}/retouch', [SecretaryBookingController::class, 'addRetouchSession'])->name('secretary.bookings.retouch');
     Route::post('/bookings/{booking}/consents', [SecretaryBookingController::class, 'uploadConsent'])->name('secretary.bookings.uploadConsent');
-    Route::delete('/bookings/{booking}/consents/{consent}', [SecretaryBookingController::class, 'deleteConsent'])->name('secretary.bookings.deleteConsent');
+    Route::post('/bookings/{booking}/consents/{consent}/delete', [SecretaryBookingController::class, 'deleteConsent'])->name('secretary.bookings.deleteConsent');
     Route::post('/bookings/{booking}/appointments/{appointment}/check-in', [SecretaryBookingController::class, 'checkInAppointment'])->name('secretary.bookings.checkInAppointment');
-    Route::put('/bookings/{booking}/appointments/{appointment}/reschedule', [SecretaryBookingController::class, 'rescheduleAppointment'])->name('secretary.bookings.rescheduleAppointment');
+    Route::post('/bookings/{booking}/appointments/{appointment}/reschedule', [SecretaryBookingController::class, 'rescheduleAppointment'])->name('secretary.bookings.rescheduleAppointment');
 
     // ─── Package Bundle Bookings ──────────────────────────────
     Route::get('/bundle-bookings', [SecretaryPackageBundleBookingController::class, 'index'])->name('secretary.bundle-bookings.index');
@@ -194,6 +194,6 @@ Route::middleware('secretary.auth')->group(function () {
 
     // ─── Profile ────────────────────────────────────────────
     Route::get('/profile', [SecretaryProfileController::class, 'index'])->name('secretary.profile.index');
-    Route::put('/profile', [SecretaryProfileController::class, 'update'])->name('secretary.profile.update');
-    Route::put('/profile/password', [SecretaryProfileController::class, 'updatePassword'])->name('secretary.profile.password');
+    Route::post('/profile/update', [SecretaryProfileController::class, 'update'])->name('secretary.profile.update');
+    Route::post('/profile/password', [SecretaryProfileController::class, 'updatePassword'])->name('secretary.profile.password');
 });

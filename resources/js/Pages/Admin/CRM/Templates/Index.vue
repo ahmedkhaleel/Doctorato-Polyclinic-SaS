@@ -97,7 +97,7 @@ function truncateBody(body, len = 80) {
 
 function deleteTemplate(id) {
     if (confirm('Are you sure you want to delete this template?')) {
-        router.delete(`/admin/templates/${id}`);
+        router.post(`/admin/templates/${id}/delete`);
     }
 }
 </script>

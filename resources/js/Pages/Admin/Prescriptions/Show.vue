@@ -65,7 +65,7 @@ function cancelEdit() {
 
 function deletePrescription() {
     if (window.confirm('Are you sure you want to delete this prescription?')) {
-        router.delete(`/admin/prescriptions/${rx.id}`, {
+        router.post(`/admin/prescriptions/${rx.id}/delete`, {
             onSuccess: () => {
                 window.history.back();
             },

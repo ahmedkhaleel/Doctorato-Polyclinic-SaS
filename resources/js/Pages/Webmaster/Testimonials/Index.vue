@@ -30,7 +30,7 @@ watch(search, (val) => {
 
 function deleteTestimonial(id) {
     if (window.confirm(isRtl ? 'هل أنت متأكد من حذف هذه الشهادة؟' : 'Are you sure you want to delete this testimonial?')) {
-        router.delete(`/webmaster/testimonials/${id}`);
+        router.post(`/webmaster/testimonials/${id}/delete`);
     }
 }
 

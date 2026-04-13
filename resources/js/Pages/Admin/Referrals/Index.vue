@@ -123,7 +123,7 @@ const allowedTransitions = {
 function submitStatusChange() {
     if (!selectedReferral.value || !statusForm.value.status) return
     submitting.value = true
-    router.put(`/admin/referrals/${selectedReferral.value.id}/status`, statusForm.value, {
+    router.post(`/admin/referrals/${selectedReferral.value.id}/status`, statusForm.value, {
         onFinish: () => { submitting.value = false },
         onSuccess: () => { showStatusModal.value = false },
     })

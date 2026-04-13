@@ -87,7 +87,7 @@ watch(moduleFilter, () => {
 
 function deleteVisit(id) {
     if (window.confirm('Are you sure you want to delete this visit? This action cannot be undone.')) {
-        router.delete(`/admin/visits/${id}`);
+        router.post(`/admin/visits/${id}/delete`);
     }
 }
 

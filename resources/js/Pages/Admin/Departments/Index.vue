@@ -66,7 +66,7 @@ function deleteDepartment(dept) {
         return;
     }
     if (window.confirm(`Are you sure you want to delete "${dept.name_en}"?`)) {
-        router.delete(`/admin/departments/${dept.id}`, { preserveScroll: true });
+        router.post(`/admin/departments/${dept.id}/delete`, { preserveScroll: true });
     }
 }
 </script>

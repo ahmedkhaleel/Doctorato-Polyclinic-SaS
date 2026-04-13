@@ -68,7 +68,7 @@ function submit() {
 
 function deleteRule(id) {
     if (confirm('Delete this assignment rule?')) {
-        router.delete(`/admin/assignment-rules/${id}`);
+        router.post(`/admin/assignment-rules/${id}/delete`);
     }
 }
 

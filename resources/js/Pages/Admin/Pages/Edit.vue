@@ -26,7 +26,7 @@ const form = useForm({
 });
 
 function submit() {
-    form.put(`/admin/pages/${props.page.id}`);
+    form.post(`/admin/pages/${props.page.id}/update`);
 }
 </script>
 

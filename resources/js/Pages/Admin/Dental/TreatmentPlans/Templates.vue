@@ -164,7 +164,7 @@ function duplicateTemplate(template) {
 
 function deleteTemplate(template) {
     if (!confirm(isRtl.value ? 'هل أنت متأكد من حذف هذا القالب؟' : 'Delete this template?')) return;
-    router.delete(`/admin/dental/treatment-plan-templates/${template.id}`, { preserveScroll: true });
+    router.post(`/admin/dental/treatment-plan-templates/${template.id}/delete`, { preserveScroll: true });
 }
 
 function seedDefaults() {

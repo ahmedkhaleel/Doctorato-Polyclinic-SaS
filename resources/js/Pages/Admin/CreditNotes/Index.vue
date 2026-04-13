@@ -105,7 +105,7 @@ function openStatusChange(note) {
 function submitStatusChange() {
     if (!selectedNote.value || !statusForm.value.status) return
     submitting.value = true
-    router.put(`/admin/credit-notes/${selectedNote.value.id}/status`, statusForm.value, {
+    router.post(`/admin/credit-notes/${selectedNote.value.id}/status`, statusForm.value, {
         onFinish: () => { submitting.value = false },
         onSuccess: () => { showStatusModal.value = false },
     })

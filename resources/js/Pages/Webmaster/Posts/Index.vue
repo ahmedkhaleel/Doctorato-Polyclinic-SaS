@@ -30,7 +30,7 @@ watch(search, (val) => {
 
 function deletePost(id) {
     if (window.confirm(isRtl ? 'هل أنت متأكد من حذف هذا المقال؟' : 'Are you sure you want to delete this post?')) {
-        router.delete(`/webmaster/posts/${id}`);
+        router.post(`/webmaster/posts/${id}/delete`);
     }
 }
 

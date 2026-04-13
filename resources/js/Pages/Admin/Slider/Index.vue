@@ -22,12 +22,12 @@ const dragOver = ref(null);
 
 function deleteSlide(id) {
     if (window.confirm(t('a_confirm_delete_slide'))) {
-        router.delete(`/admin/slider/${id}`);
+        router.post(`/admin/slider/${id}/delete`);
     }
 }
 
 function toggleActive(slide) {
-    router.put(`/admin/slider/${slide.id}`, {
+    router.post(`/admin/slider/${slide.id}/update`, {
         title_ar: slide.title_ar || '',
         title_en: slide.title_en || '',
         subtitle_ar: slide.subtitle_ar || '',

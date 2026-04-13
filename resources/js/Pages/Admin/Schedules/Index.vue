@@ -68,7 +68,7 @@ function cancelEdit() {
 
 function saveSchedule(doctorId) {
     const schedules = Object.values(editSchedules.value);
-    router.put(`/admin/schedules/${doctorId}`, { schedules }, {
+    router.post(`/admin/schedules/${doctorId}/update`, { schedules }, {
         preserveState: true,
         onSuccess: () => cancelEdit(),
     });

@@ -78,7 +78,7 @@ function submitRecord() {
 
 function deleteRecord(id) {
     if (window.confirm('Are you sure you want to delete this record?')) {
-        router.delete(`/admin/penalties/${id}`, { preserveScroll: true });
+        router.post(`/admin/penalties/${id}/delete`, { preserveScroll: true });
     }
 }
 </script>

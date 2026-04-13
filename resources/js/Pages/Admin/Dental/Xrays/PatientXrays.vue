@@ -71,7 +71,7 @@ function submitUpload() {
 
 function deleteXray(id) {
     if (window.confirm(t('a_confirm_delete'))) {
-        router.delete(`/admin/dental/xrays/${id}`, {
+        router.post(`/admin/dental/xrays/${id}/delete`, {
             preserveScroll: true,
         });
     }

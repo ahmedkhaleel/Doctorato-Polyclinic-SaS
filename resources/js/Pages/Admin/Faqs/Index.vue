@@ -32,7 +32,7 @@ watch(search, (val) => {
 
 function deleteFaq(id) {
     if (window.confirm(t('a_confirm_delete_faq'))) {
-        router.delete(`/admin/faqs/${id}`);
+        router.post(`/admin/faqs/${id}/delete`);
     }
 }
 </script>

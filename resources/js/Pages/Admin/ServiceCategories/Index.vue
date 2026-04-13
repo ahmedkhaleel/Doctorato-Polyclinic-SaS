@@ -59,7 +59,7 @@ watch(moduleFilter, () => {
 
 function deleteCategory(id) {
     if (window.confirm(t('a_confirm_delete_category'))) {
-        router.delete(`/admin/service-categories/${id}`);
+        router.post(`/admin/service-categories/${id}/delete`);
     }
 }
 </script>

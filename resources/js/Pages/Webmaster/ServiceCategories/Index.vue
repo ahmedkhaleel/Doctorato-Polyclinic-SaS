@@ -31,7 +31,7 @@ watch(search, (val) => {
 
 function deleteCategory(id) {
     if (window.confirm(isRtl ? 'هل أنت متأكد من حذف هذا التصنيف؟' : 'Are you sure you want to delete this category?')) {
-        router.delete(`/webmaster/service-categories/${id}`);
+        router.post(`/webmaster/service-categories/${id}/delete`);
     }
 }
 </script>

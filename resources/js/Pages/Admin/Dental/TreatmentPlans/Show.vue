@@ -84,7 +84,7 @@ function updateStatus(newStatus) {
 
 function deletePlan() {
     if (window.confirm(t('a_confirm_delete'))) {
-        router.delete(`/admin/dental/treatment-plans/${props.plan.id}`);
+        router.post(`/admin/dental/treatment-plans/${props.plan.id}/delete`);
     }
 }
 

@@ -20,7 +20,7 @@ const form = useForm({
 });
 
 function submit() {
-    form.put(`/admin/service-categories/${props.category.id}`);
+    form.post(`/admin/service-categories/${props.category.id}/update`);
 }
 </script>
 

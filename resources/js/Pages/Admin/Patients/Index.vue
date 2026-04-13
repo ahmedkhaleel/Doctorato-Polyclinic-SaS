@@ -42,7 +42,7 @@ function clearSearch() {
 
 function deletePatient(id) {
     if (window.confirm('Are you sure you want to delete this patient? This action cannot be undone.')) {
-        router.delete(`/admin/patients/${id}`);
+        router.post(`/admin/patients/${id}/delete`);
     }
 }
 

@@ -102,7 +102,7 @@ function formatDate(date) {
 
 function deleteCampaign(id) {
     if (confirm('Are you sure you want to delete this campaign?')) {
-        router.delete(`/admin/campaigns/${id}`);
+        router.post(`/admin/campaigns/${id}/delete`);
     }
 }
 </script>

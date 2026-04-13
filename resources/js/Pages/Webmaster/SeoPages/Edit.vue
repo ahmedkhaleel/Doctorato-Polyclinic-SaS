@@ -25,7 +25,7 @@ const form = useForm({
 });
 
 function submit() {
-    form.put(`/webmaster/seo-pages/${props.seoPage.id}`);
+    form.post(`/webmaster/seo-pages/${props.seoPage.id}/update`);
 }
 
 // Preview helpers

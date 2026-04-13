@@ -60,7 +60,7 @@ watch([statusFilter, moduleFilter, dateFrom, dateTo], () => {
 
 function deleteInvoice(id) {
     if (window.confirm('Are you sure you want to delete this invoice? This action cannot be undone.')) {
-        router.delete(`/admin/invoices/${id}`);
+        router.post(`/admin/invoices/${id}/delete`);
     }
 }
 

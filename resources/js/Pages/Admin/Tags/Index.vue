@@ -33,7 +33,7 @@ watch(search, (val) => {
 
 function deleteTag(id) {
     if (window.confirm(t('a_confirm_delete_tag'))) {
-        router.delete(`/admin/tags/${id}`);
+        router.post(`/admin/tags/${id}/delete`);
     }
 }
 </script>

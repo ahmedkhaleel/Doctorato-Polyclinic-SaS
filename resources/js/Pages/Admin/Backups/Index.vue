@@ -67,7 +67,7 @@ function deleteBackup(path) {
     if (!confirm(isRtl.value ? 'هل أنت متأكد من حذف هذه النسخة الاحتياطية؟' : 'Are you sure you want to delete this backup?')) return;
 
     loading.value.delete = path;
-    router.delete(route('admin.backups.destroy'), {
+    router.post(route('admin.backups.destroy'), {
         data: { path },
         preserveScroll: true,
         onFinish: () => { loading.value.delete = null; },

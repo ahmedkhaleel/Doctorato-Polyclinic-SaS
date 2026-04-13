@@ -249,7 +249,7 @@ function submitEditPrescription(rxId) {
 
 function deletePrescription(rxId) {
     if (window.confirm('Are you sure you want to delete this prescription?')) {
-        router.delete(`/admin/prescriptions/${rxId}`, {
+        router.post(`/admin/prescriptions/${rxId}/delete`, {
             preserveScroll: true,
         });
     }

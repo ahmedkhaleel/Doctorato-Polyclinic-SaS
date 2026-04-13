@@ -128,9 +128,9 @@ Route::middleware('admin.auth')->group(function () {
     // ─── Notification Center (Full Page) ──────────────────────
     Route::get('/notification-center', [NotificationCenterController::class, 'index'])->name('admin.notification-center.index');
     Route::post('/notification-center/mark-all-read', [NotificationCenterController::class, 'markAllRead'])->name('admin.notification-center.markAllRead');
-    Route::delete('/notification-center/clear', [NotificationCenterController::class, 'destroyAll'])->name('admin.notification-center.clear');
+    Route::post('/notification-center/clear', [NotificationCenterController::class, 'destroyAll'])->name('admin.notification-center.clear');
     Route::post('/notification-center/{id}/read', [NotificationCenterController::class, 'markRead'])->name('admin.notification-center.markRead');
-    Route::delete('/notification-center/{id}', [NotificationCenterController::class, 'destroy'])->name('admin.notification-center.destroy');
+    Route::post('/notification-center/{id}/delete', [NotificationCenterController::class, 'destroy'])->name('admin.notification-center.destroy');
 
     // ─── Chat / Messaging ─────────────────────────────────────
     Route::get('/chat', [ChatController::class, 'index'])->name('admin.chat.index');
@@ -140,31 +140,31 @@ Route::middleware('admin.auth')->group(function () {
     Route::get('/chat/{user}/poll', [ChatController::class, 'poll'])->name('admin.chat.poll')->middleware('throttle:30,1');
     Route::post('/chat/{user}/mark-read', [ChatController::class, 'markRead'])->name('admin.chat.markRead')->middleware('throttle:30,1');
     Route::get('/chat/{user}/older', [ChatController::class, 'loadOlder'])->name('admin.chat.loadOlder')->middleware('throttle:30,1');
-    Route::delete('/chat/{user}', [ChatController::class, 'destroy'])->name('admin.chat.destroy');
+    Route::post('/chat/{user}/delete', [ChatController::class, 'destroy'])->name('admin.chat.destroy');
 
     // ─── Posts ──────────────────────────────────────────────
     Route::get('/posts', [PostController::class, 'index'])->name('admin.posts.index')->middleware('permission:posts.view');
     Route::get('/posts/create', [PostController::class, 'create'])->name('admin.posts.create')->middleware('permission:posts.create');
     Route::post('/posts', [PostController::class, 'store'])->name('admin.posts.store')->middleware('permission:posts.create');
     Route::get('/posts/{post}/edit', [PostController::class, 'edit'])->name('admin.posts.edit')->middleware('permission:posts.update');
-    Route::put('/posts/{post}', [PostController::class, 'update'])->name('admin.posts.update')->middleware('permission:posts.update');
-    Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('admin.posts.destroy')->middleware('permission:posts.delete');
+    Route::post('/posts/{post}/update', [PostController::class, 'update'])->name('admin.posts.update')->middleware('permission:posts.update');
+    Route::post('/posts/{post}/delete', [PostController::class, 'destroy'])->name('admin.posts.destroy')->middleware('permission:posts.delete');
 
     // ─── Post Categories ───────────────────────────────────
     Route::get('/post-categories', [PostCategoryController::class, 'index'])->name('admin.post-categories.index')->middleware('permission:post_categories.view');
     Route::get('/post-categories/create', [PostCategoryController::class, 'create'])->name('admin.post-categories.create')->middleware('permission:post_categories.create');
     Route::post('/post-categories', [PostCategoryController::class, 'store'])->name('admin.post-categories.store')->middleware('permission:post_categories.create');
     Route::get('/post-categories/{post_category}/edit', [PostCategoryController::class, 'edit'])->name('admin.post-categories.edit')->middleware('permission:post_categories.update');
-    Route::put('/post-categories/{post_category}', [PostCategoryController::class, 'update'])->name('admin.post-categories.update')->middleware('permission:post_categories.update');
-    Route::delete('/post-categories/{post_category}', [PostCategoryController::class, 'destroy'])->name('admin.post-categories.destroy')->middleware('permission:post_categories.delete');
+    Route::post('/post-categories/{post_category}/update', [PostCategoryController::class, 'update'])->name('admin.post-categories.update')->middleware('permission:post_categories.update');
+    Route::post('/post-categories/{post_category}/delete', [PostCategoryController::class, 'destroy'])->name('admin.post-categories.destroy')->middleware('permission:post_categories.delete');
 
     // ─── Tags ──────────────────────────────────────────────
     Route::get('/tags', [TagController::class, 'index'])->name('admin.tags.index')->middleware('permission:tags.view');
     Route::get('/tags/create', [TagController::class, 'create'])->name('admin.tags.create')->middleware('permission:tags.create');
     Route::post('/tags', [TagController::class, 'store'])->name('admin.tags.store')->middleware('permission:tags.create');
     Route::get('/tags/{tag}/edit', [TagController::class, 'edit'])->name('admin.tags.edit')->middleware('permission:tags.update');
-    Route::put('/tags/{tag}', [TagController::class, 'update'])->name('admin.tags.update')->middleware('permission:tags.update');
-    Route::delete('/tags/{tag}', [TagController::class, 'destroy'])->name('admin.tags.destroy')->middleware('permission:tags.delete');
+    Route::post('/tags/{tag}/update', [TagController::class, 'update'])->name('admin.tags.update')->middleware('permission:tags.update');
+    Route::post('/tags/{tag}/delete', [TagController::class, 'destroy'])->name('admin.tags.destroy')->middleware('permission:tags.delete');
 
     // ─── Services ──────────────────────────────────────────
     Route::get('/services', [ServiceController::class, 'index'])->name('admin.services.index')->middleware('permission:services.view');
@@ -172,8 +172,8 @@ Route::middleware('admin.auth')->group(function () {
     Route::post('/services', [ServiceController::class, 'store'])->name('admin.services.store')->middleware('permission:services.create');
     Route::get('/services/{service}', [ServiceController::class, 'show'])->name('admin.services.show')->middleware('permission:services.view');
     Route::get('/services/{service}/edit', [ServiceController::class, 'edit'])->name('admin.services.edit')->middleware('permission:services.update');
-    Route::put('/services/{service}', [ServiceController::class, 'update'])->name('admin.services.update')->middleware('permission:services.update');
-    Route::delete('/services/{service}', [ServiceController::class, 'destroy'])->name('admin.services.destroy')->middleware('permission:services.delete');
+    Route::post('/services/{service}/update', [ServiceController::class, 'update'])->name('admin.services.update')->middleware('permission:services.update');
+    Route::post('/services/{service}/delete', [ServiceController::class, 'destroy'])->name('admin.services.destroy')->middleware('permission:services.delete');
 
     // ─── Service Categories ────────────────────────────────
     Route::get('/service-categories', [ServiceCategoryController::class, 'index'])->name('admin.service-categories.index')->middleware('permission:service_categories.view');
@@ -181,8 +181,8 @@ Route::middleware('admin.auth')->group(function () {
     Route::post('/service-categories', [ServiceCategoryController::class, 'store'])->name('admin.service-categories.store')->middleware('permission:service_categories.create');
     Route::get('/service-categories/{service_category}', [ServiceCategoryController::class, 'show'])->name('admin.service-categories.show')->middleware('permission:service_categories.view');
     Route::get('/service-categories/{service_category}/edit', [ServiceCategoryController::class, 'edit'])->name('admin.service-categories.edit')->middleware('permission:service_categories.update');
-    Route::put('/service-categories/{service_category}', [ServiceCategoryController::class, 'update'])->name('admin.service-categories.update')->middleware('permission:service_categories.update');
-    Route::delete('/service-categories/{service_category}', [ServiceCategoryController::class, 'destroy'])->name('admin.service-categories.destroy')->middleware('permission:service_categories.delete');
+    Route::post('/service-categories/{service_category}/update', [ServiceCategoryController::class, 'update'])->name('admin.service-categories.update')->middleware('permission:service_categories.update');
+    Route::post('/service-categories/{service_category}/delete', [ServiceCategoryController::class, 'destroy'])->name('admin.service-categories.destroy')->middleware('permission:service_categories.delete');
 
     // ─── Doctors ───────────────────────────────────────────
     Route::get('/doctors', [DoctorController::class, 'index'])->name('admin.doctors.index')->middleware('permission:doctors.view');
@@ -191,7 +191,7 @@ Route::middleware('admin.auth')->group(function () {
     Route::get('/doctors/{doctor}', [DoctorController::class, 'show'])->name('admin.doctors.show')->middleware('permission:doctors.view');
     Route::get('/doctors/{doctor}/edit', [DoctorController::class, 'edit'])->name('admin.doctors.edit')->middleware('permission:doctors.update');
     Route::post('/doctors/{doctor}', [DoctorController::class, 'update'])->name('admin.doctors.update')->middleware('permission:doctors.update');
-    Route::delete('/doctors/{doctor}', [DoctorController::class, 'destroy'])->name('admin.doctors.destroy')->middleware('permission:doctors.delete');
+    Route::post('/doctors/{doctor}/delete', [DoctorController::class, 'destroy'])->name('admin.doctors.destroy')->middleware('permission:doctors.delete');
     Route::post('/doctors/{doctor}/create-user', [DoctorController::class, 'createUserAccount'])->name('admin.doctors.createUser')->middleware('permission:doctors.update');
 
     // ─── Gallery ───────────────────────────────────────────
@@ -199,29 +199,29 @@ Route::middleware('admin.auth')->group(function () {
     Route::get('/gallery/create', [GalleryController::class, 'create'])->name('admin.gallery.create')->middleware('permission:gallery.create');
     Route::post('/gallery', [GalleryController::class, 'store'])->name('admin.gallery.store')->middleware('permission:gallery.create');
     Route::get('/gallery/{gallery}/edit', [GalleryController::class, 'edit'])->name('admin.gallery.edit')->middleware('permission:gallery.update');
-    Route::put('/gallery/{gallery}', [GalleryController::class, 'update'])->name('admin.gallery.update')->middleware('permission:gallery.update');
-    Route::delete('/gallery/{gallery}', [GalleryController::class, 'destroy'])->name('admin.gallery.destroy')->middleware('permission:gallery.delete');
+    Route::post('/gallery/{gallery}/update', [GalleryController::class, 'update'])->name('admin.gallery.update')->middleware('permission:gallery.update');
+    Route::post('/gallery/{gallery}/delete', [GalleryController::class, 'destroy'])->name('admin.gallery.destroy')->middleware('permission:gallery.delete');
 
     // ─── Testimonials ──────────────────────────────────────
     Route::get('/testimonials', [TestimonialController::class, 'index'])->name('admin.testimonials.index')->middleware('permission:testimonials.view');
     Route::get('/testimonials/create', [TestimonialController::class, 'create'])->name('admin.testimonials.create')->middleware('permission:testimonials.create');
     Route::post('/testimonials', [TestimonialController::class, 'store'])->name('admin.testimonials.store')->middleware('permission:testimonials.create');
     Route::get('/testimonials/{testimonial}/edit', [TestimonialController::class, 'edit'])->name('admin.testimonials.edit')->middleware('permission:testimonials.update');
-    Route::put('/testimonials/{testimonial}', [TestimonialController::class, 'update'])->name('admin.testimonials.update')->middleware('permission:testimonials.update');
-    Route::delete('/testimonials/{testimonial}', [TestimonialController::class, 'destroy'])->name('admin.testimonials.destroy')->middleware('permission:testimonials.delete');
+    Route::post('/testimonials/{testimonial}/update', [TestimonialController::class, 'update'])->name('admin.testimonials.update')->middleware('permission:testimonials.update');
+    Route::post('/testimonials/{testimonial}/delete', [TestimonialController::class, 'destroy'])->name('admin.testimonials.destroy')->middleware('permission:testimonials.delete');
 
     // ─── FAQs ──────────────────────────────────────────────
     Route::get('/faqs', [FaqController::class, 'index'])->name('admin.faqs.index')->middleware('permission:faqs.view');
     Route::get('/faqs/create', [FaqController::class, 'create'])->name('admin.faqs.create')->middleware('permission:faqs.create');
     Route::post('/faqs', [FaqController::class, 'store'])->name('admin.faqs.store')->middleware('permission:faqs.create');
     Route::get('/faqs/{faq}/edit', [FaqController::class, 'edit'])->name('admin.faqs.edit')->middleware('permission:faqs.update');
-    Route::put('/faqs/{faq}', [FaqController::class, 'update'])->name('admin.faqs.update')->middleware('permission:faqs.update');
-    Route::delete('/faqs/{faq}', [FaqController::class, 'destroy'])->name('admin.faqs.destroy')->middleware('permission:faqs.delete');
+    Route::post('/faqs/{faq}/update', [FaqController::class, 'update'])->name('admin.faqs.update')->middleware('permission:faqs.update');
+    Route::post('/faqs/{faq}/delete', [FaqController::class, 'destroy'])->name('admin.faqs.destroy')->middleware('permission:faqs.delete');
 
     // ─── Pages (view + update only) ────────────────────────
     Route::get('/pages', [PageController::class, 'index'])->name('admin.pages.index')->middleware('permission:pages.view');
     Route::get('/pages/{page}/edit', [PageController::class, 'edit'])->name('admin.pages.edit')->middleware('permission:pages.update');
-    Route::put('/pages/{page}', [PageController::class, 'update'])->name('admin.pages.update')->middleware('permission:pages.update');
+    Route::post('/pages/{page}/update', [PageController::class, 'update'])->name('admin.pages.update')->middleware('permission:pages.update');
 
     // ─── Bookings (full CRUD + workflow) ─────────────────────
     Route::get('/bookings', [BookingController::class, 'index'])->name('admin.bookings.index')->middleware('permission:bookings.view');
@@ -237,32 +237,32 @@ Route::middleware('admin.auth')->group(function () {
     Route::get('/bookings/{booking}/payments/{payment}/receipt', [BookingController::class, 'printPaymentReceipt'])->name('admin.bookings.paymentReceipt')->middleware('permission:bookings.view');
     Route::post('/bookings/{booking}/retouch', [BookingController::class, 'addRetouchSession'])->name('admin.bookings.retouch')->middleware('permission:bookings.update');
     Route::post('/bookings/{booking}/consents', [BookingController::class, 'uploadConsent'])->name('admin.bookings.uploadConsent')->middleware('permission:bookings.update');
-    Route::delete('/bookings/{booking}/consents/{consent}', [BookingController::class, 'deleteConsent'])->name('admin.bookings.deleteConsent')->middleware('permission:bookings.update');
+    Route::post('/bookings/{booking}/consents/{consent}/delete', [BookingController::class, 'deleteConsent'])->name('admin.bookings.deleteConsent')->middleware('permission:bookings.update');
     Route::post('/bookings/{booking}/appointments/{appointment}/check-in', [BookingController::class, 'checkInAppointment'])->name('admin.bookings.checkInAppointment')->middleware('permission:bookings.update');
-    Route::put('/bookings/{booking}/appointments/{appointment}/reschedule', [BookingController::class, 'rescheduleAppointment'])->name('admin.bookings.rescheduleAppointment')->middleware('permission:bookings.update');
-    Route::put('/bookings/{booking}/services', [BookingController::class, 'updateServices'])->name('admin.bookings.updateServices')->middleware('permission:bookings.edit_services');
-    Route::delete('/bookings/{booking}', [BookingController::class, 'destroy'])->name('admin.bookings.destroy')->middleware('permission:bookings.delete');
+    Route::post('/bookings/{booking}/appointments/{appointment}/reschedule', [BookingController::class, 'rescheduleAppointment'])->name('admin.bookings.rescheduleAppointment')->middleware('permission:bookings.update');
+    Route::post('/bookings/{booking}/services/update', [BookingController::class, 'updateServices'])->name('admin.bookings.updateServices')->middleware('permission:bookings.edit_services');
+    Route::post('/bookings/{booking}/delete', [BookingController::class, 'destroy'])->name('admin.bookings.destroy')->middleware('permission:bookings.delete');
 
     // ─── Contact Messages (view + delete) ──────────────────
     Route::get('/contact-messages', [ContactMessageController::class, 'index'])->name('admin.contact-messages.index')->middleware('permission:contact_messages.view');
     Route::get('/contact-messages/{contactMessage}', [ContactMessageController::class, 'show'])->name('admin.contact-messages.show')->middleware('permission:contact_messages.view');
-    Route::delete('/contact-messages/{contactMessage}', [ContactMessageController::class, 'destroy'])->name('admin.contact-messages.destroy')->middleware('permission:contact_messages.delete');
+    Route::post('/contact-messages/{contactMessage}/delete', [ContactMessageController::class, 'destroy'])->name('admin.contact-messages.destroy')->middleware('permission:contact_messages.delete');
 
     // ─── Users ─────────────────────────────────────────────
     Route::get('/users', [UserController::class, 'index'])->name('admin.users.index')->middleware('permission:users.view');
     Route::get('/users/create', [UserController::class, 'create'])->name('admin.users.create')->middleware('permission:users.create');
     Route::post('/users', [UserController::class, 'store'])->name('admin.users.store')->middleware('permission:users.create');
     Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('admin.users.edit')->middleware('permission:users.update');
-    Route::put('/users/{user}', [UserController::class, 'update'])->name('admin.users.update')->middleware('permission:users.update');
-    Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('admin.users.destroy')->middleware('permission:users.delete');
+    Route::post('/users/{user}/update', [UserController::class, 'update'])->name('admin.users.update')->middleware('permission:users.update');
+    Route::post('/users/{user}/delete', [UserController::class, 'destroy'])->name('admin.users.destroy')->middleware('permission:users.delete');
 
     // ─── Roles & Permissions ───────────────────────────────
     Route::get('/roles', [RoleController::class, 'index'])->name('admin.roles.index')->middleware('permission:roles.view');
     Route::get('/roles/create', [RoleController::class, 'create'])->name('admin.roles.create')->middleware('permission:roles.create');
     Route::post('/roles', [RoleController::class, 'store'])->name('admin.roles.store')->middleware('permission:roles.create');
     Route::get('/roles/{role}/edit', [RoleController::class, 'edit'])->name('admin.roles.edit')->middleware('permission:roles.update');
-    Route::put('/roles/{role}', [RoleController::class, 'update'])->name('admin.roles.update')->middleware('permission:roles.update');
-    Route::delete('/roles/{role}', [RoleController::class, 'destroy'])->name('admin.roles.destroy')->middleware('permission:roles.delete');
+    Route::post('/roles/{role}/update', [RoleController::class, 'update'])->name('admin.roles.update')->middleware('permission:roles.update');
+    Route::post('/roles/{role}/delete', [RoleController::class, 'destroy'])->name('admin.roles.destroy')->middleware('permission:roles.delete');
 
     // ─── Settings (view + update) ──────────────────────────
     Route::get('/settings', [SettingController::class, 'index'])->name('admin.settings.index')->middleware('permission:settings.view');
@@ -278,16 +278,16 @@ Route::middleware('admin.auth')->group(function () {
         Route::post('/backups/run-database', [\App\Http\Controllers\Admin\BackupController::class, 'runDatabase'])->name('admin.backups.runDatabase')->middleware('throttle:5,10');
         Route::post('/backups/download', [\App\Http\Controllers\Admin\BackupController::class, 'download'])->name('admin.backups.download')->middleware('throttle:10,1');
         Route::post('/backups/cleanup', [\App\Http\Controllers\Admin\BackupController::class, 'cleanup'])->name('admin.backups.cleanup')->middleware('throttle:3,10');
-        Route::delete('/backups', [\App\Http\Controllers\Admin\BackupController::class, 'destroy'])->name('admin.backups.destroy')->middleware('throttle:10,1');
+        Route::post('/backups/delete', [\App\Http\Controllers\Admin\BackupController::class, 'destroy'])->name('admin.backups.destroy')->middleware('throttle:10,1');
     });
 
     // ─── Trash / Recycle Bin (سلة المحذوفات) ───────────────────
     Route::middleware('permission:settings.update')->group(function () {
         Route::get('/trash', [TrashController::class, 'index'])->name('admin.trash.index');
         Route::post('/trash/{type}/restore-all', [TrashController::class, 'restoreAll'])->name('admin.trash.restoreAll');
-        Route::delete('/trash/{type}/empty', [TrashController::class, 'emptyTrash'])->name('admin.trash.empty');
+        Route::post('/trash/{type}/empty', [TrashController::class, 'emptyTrash'])->name('admin.trash.empty');
         Route::post('/trash/{type}/{id}/restore', [TrashController::class, 'restore'])->name('admin.trash.restore');
-        Route::delete('/trash/{type}/{id}', [TrashController::class, 'forceDelete'])->name('admin.trash.forceDelete');
+        Route::post('/trash/{type}/{id}/delete', [TrashController::class, 'forceDelete'])->name('admin.trash.forceDelete');
     });
 
     // ═══════════════════════════════════════════════════════════
@@ -303,9 +303,9 @@ Route::middleware('admin.auth')->group(function () {
     Route::get('/patients/{patient}', [PatientController::class, 'show'])->name('admin.patients.show')->middleware('permission:patients.view');
     Route::get('/patients/{patient}/timeline', [PatientController::class, 'timeline'])->name('admin.patients.timeline')->middleware('permission:patients.view');
     Route::get('/patients/{patient}/edit', [PatientController::class, 'edit'])->name('admin.patients.edit')->middleware('permission:patients.update');
-    Route::put('/patients/{patient}', [PatientController::class, 'update'])->name('admin.patients.update')->middleware('permission:patients.update');
-    Route::delete('/patients/{patient}', [PatientController::class, 'destroy'])->name('admin.patients.destroy')->middleware('permission:patients.delete');
-    Route::put('/patients/{patient}/dental-medical', [PatientController::class, 'updateDentalMedical'])->name('admin.patients.updateDentalMedical')->middleware(['permission:patients.update', 'module:dental']);
+    Route::post('/patients/{patient}/update', [PatientController::class, 'update'])->name('admin.patients.update')->middleware('permission:patients.update');
+    Route::post('/patients/{patient}/delete', [PatientController::class, 'destroy'])->name('admin.patients.destroy')->middleware('permission:patients.delete');
+    Route::post('/patients/{patient}/dental-medical', [PatientController::class, 'updateDentalMedical'])->name('admin.patients.updateDentalMedical')->middleware(['permission:patients.update', 'module:dental']);
 
     // ─── Visits ──────────────────────────────────────────────
     Route::get('/visits', [VisitController::class, 'index'])->name('admin.visits.index')->middleware('permission:visits.view');
@@ -314,8 +314,8 @@ Route::middleware('admin.auth')->group(function () {
     Route::post('/visits/{visit}/start', [VisitController::class, 'start'])->name('admin.visits.start')->middleware('permission:visits.update');
     Route::post('/visits/{visit}/complete', [VisitController::class, 'complete'])->name('admin.visits.complete')->middleware('permission:visits.update');
     Route::post('/visits/{visit}/cancel', [VisitController::class, 'cancel'])->name('admin.visits.cancel')->middleware('permission:visits.update');
-    Route::put('/visits/{visit}/diagnosis', [VisitController::class, 'updateDiagnosis'])->name('admin.visits.updateDiagnosis')->middleware('permission:visits.update');
-    Route::put('/visits/{visit}/details', [VisitController::class, 'updateDetails'])->name('admin.visits.updateDetails')->middleware('permission:visits.update');
+    Route::post('/visits/{visit}/diagnosis', [VisitController::class, 'updateDiagnosis'])->name('admin.visits.updateDiagnosis')->middleware('permission:visits.update');
+    Route::post('/visits/{visit}/details', [VisitController::class, 'updateDetails'])->name('admin.visits.updateDetails')->middleware('permission:visits.update');
     Route::post('/visits/{visit}/photos', [VisitController::class, 'uploadPhoto'])->name('admin.visits.uploadPhoto')->middleware('permission:visits.update');
 
     // ─── Prescriptions ───────────────────────────────────────
@@ -324,8 +324,8 @@ Route::middleware('admin.auth')->group(function () {
     Route::get('/prescriptions/{prescription}/print', [PrescriptionController::class, 'print'])->name('admin.prescriptions.print')->middleware('permission:prescriptions.view');
     Route::get('/prescriptions/{prescription}/pdf', [PrescriptionController::class, 'downloadPdf'])->name('admin.prescriptions.pdf')->middleware('permission:prescriptions.view');
     Route::post('/prescriptions', [PrescriptionController::class, 'store'])->name('admin.prescriptions.store')->middleware('permission:prescriptions.create');
-    Route::put('/prescriptions/{prescription}', [PrescriptionController::class, 'update'])->name('admin.prescriptions.update')->middleware('permission:prescriptions.update');
-    Route::delete('/prescriptions/{prescription}', [PrescriptionController::class, 'destroy'])->name('admin.prescriptions.destroy')->middleware('permission:prescriptions.delete');
+    Route::post('/prescriptions/{prescription}/update', [PrescriptionController::class, 'update'])->name('admin.prescriptions.update')->middleware('permission:prescriptions.update');
+    Route::post('/prescriptions/{prescription}/delete', [PrescriptionController::class, 'destroy'])->name('admin.prescriptions.destroy')->middleware('permission:prescriptions.delete');
 
     // ─── Medications ────────────────────────────────────────
     Route::get('/medications', [MedicationController::class, 'index'])->name('admin.medications.index')->middleware('permission:medications.view');
@@ -342,7 +342,7 @@ Route::middleware('admin.auth')->group(function () {
     Route::get('/invoices/create', [InvoiceController::class, 'create'])->name('admin.invoices.create')->middleware('permission:invoices.create');
     Route::post('/invoices', [InvoiceController::class, 'store'])->name('admin.invoices.store')->middleware('permission:invoices.create');
     Route::get('/invoices/{invoice}', [InvoiceController::class, 'show'])->name('admin.invoices.show')->middleware('permission:invoices.view');
-    Route::put('/invoices/{invoice}', [InvoiceController::class, 'update'])->name('admin.invoices.update')->middleware('permission:invoices.update');
+    Route::post('/invoices/{invoice}/update', [InvoiceController::class, 'update'])->name('admin.invoices.update')->middleware('permission:invoices.update');
     Route::get('/invoices/{invoice}/print', [InvoiceController::class, 'print'])->name('admin.invoices.print')->middleware('permission:invoices.view');
     Route::get('/invoices/{invoice}/pdf', [InvoiceController::class, 'downloadPdf'])->name('admin.invoices.pdf')->middleware('permission:invoices.view');
     Route::get('/invoices/{invoice}/payments/{payment}/receipt', [InvoiceController::class, 'printPaymentReceipt'])->name('admin.invoices.paymentReceipt')->middleware('permission:invoices.view');
@@ -350,12 +350,12 @@ Route::middleware('admin.auth')->group(function () {
     // ─── Payments ────────────────────────────────────────────
     Route::get('/payments', [PaymentController::class, 'index'])->name('admin.payments.index')->middleware('permission:payments.view');
     Route::post('/payments', [PaymentController::class, 'store'])->name('admin.payments.store')->middleware('permission:payments.create');
-    Route::delete('/payments/{payment}', [PaymentController::class, 'destroy'])->name('admin.payments.destroy')->middleware('permission:payments.delete');
+    Route::post('/payments/{payment}/delete', [PaymentController::class, 'destroy'])->name('admin.payments.destroy')->middleware('permission:payments.delete');
 
     // ─── Payment Methods ─────────────────────────────────────
     Route::get('/payment-methods', [PaymentMethodController::class, 'index'])->name('admin.payment-methods.index')->middleware('permission:payments.view');
     Route::post('/payment-methods', [PaymentMethodController::class, 'store'])->name('admin.payment-methods.store')->middleware('permission:payments.create');
-    Route::put('/payment-methods/{paymentMethod}', [PaymentMethodController::class, 'update'])->name('admin.payment-methods.update')->middleware('permission:payments.create');
+    Route::post('/payment-methods/{paymentMethod}/update', [PaymentMethodController::class, 'update'])->name('admin.payment-methods.update')->middleware('permission:payments.create');
 
     // ─── Discount Codes ──────────────────────────────────────
     Route::get('/discount-codes', [DiscountCodeController::class, 'index'])->name('admin.discount-codes.index')->middleware('permission:discount_codes.view');
@@ -363,31 +363,31 @@ Route::middleware('admin.auth')->group(function () {
     Route::post('/discount-codes', [DiscountCodeController::class, 'store'])->name('admin.discount-codes.store')->middleware('permission:discount_codes.create');
     Route::get('/discount-codes/{discountCode}/edit', [DiscountCodeController::class, 'edit'])->name('admin.discount-codes.edit')->middleware('permission:discount_codes.update');
     Route::post('/discount-codes/{discountCode}', [DiscountCodeController::class, 'update'])->name('admin.discount-codes.update')->middleware('permission:discount_codes.update');
-    Route::delete('/discount-codes/{discountCode}', [DiscountCodeController::class, 'destroy'])->name('admin.discount-codes.destroy')->middleware('permission:discount_codes.delete');
+    Route::post('/discount-codes/{discountCode}/delete', [DiscountCodeController::class, 'destroy'])->name('admin.discount-codes.destroy')->middleware('permission:discount_codes.delete');
     Route::post('/api/discount-codes/validate', [DiscountCodeController::class, 'validateCode'])->name('admin.discount-codes.validate')->middleware(['permission:discount_codes.view', 'throttle:30,1']);
 
     // ─── Expense Categories ──────────────────────────────────
     Route::get('/expense-categories', [ExpenseCategoryController::class, 'index'])->name('admin.expense-categories.index')->middleware('permission:expenses.view');
     Route::post('/expense-categories', [ExpenseCategoryController::class, 'store'])->name('admin.expense-categories.store')->middleware('permission:expenses.create');
-    Route::put('/expense-categories/{expenseCategory}', [ExpenseCategoryController::class, 'update'])->name('admin.expense-categories.update')->middleware('permission:expenses.update');
-    Route::delete('/expense-categories/{expenseCategory}', [ExpenseCategoryController::class, 'destroy'])->name('admin.expense-categories.destroy')->middleware('permission:expenses.delete');
+    Route::post('/expense-categories/{expenseCategory}/update', [ExpenseCategoryController::class, 'update'])->name('admin.expense-categories.update')->middleware('permission:expenses.update');
+    Route::post('/expense-categories/{expenseCategory}/delete', [ExpenseCategoryController::class, 'destroy'])->name('admin.expense-categories.destroy')->middleware('permission:expenses.delete');
 
     // ─── Expenses ────────────────────────────────────────────
     Route::get('/expenses', [ExpenseController::class, 'index'])->name('admin.expenses.index')->middleware('permission:expenses.view');
     Route::get('/expenses/create', [ExpenseController::class, 'create'])->name('admin.expenses.create')->middleware('permission:expenses.create');
     Route::post('/expenses', [ExpenseController::class, 'store'])->name('admin.expenses.store')->middleware('permission:expenses.create');
     Route::get('/expenses/{expense}/edit', [ExpenseController::class, 'edit'])->name('admin.expenses.edit')->middleware('permission:expenses.update');
-    Route::put('/expenses/{expense}', [ExpenseController::class, 'update'])->name('admin.expenses.update')->middleware('permission:expenses.update');
-    Route::delete('/expenses/{expense}', [ExpenseController::class, 'destroy'])->name('admin.expenses.destroy')->middleware('permission:expenses.delete');
+    Route::post('/expenses/{expense}/update', [ExpenseController::class, 'update'])->name('admin.expenses.update')->middleware('permission:expenses.update');
+    Route::post('/expenses/{expense}/delete', [ExpenseController::class, 'destroy'])->name('admin.expenses.destroy')->middleware('permission:expenses.delete');
 
     // ─── Doctor Payouts ──────────────────────────────────────
     Route::get('/doctor-payouts', [AdminDoctorPayoutController::class, 'index'])->name('admin.doctor-payouts.index')->middleware(['module:hr', 'permission:doctor_payouts.view']);
     Route::get('/doctor-payouts/create', [AdminDoctorPayoutController::class, 'create'])->name('admin.doctor-payouts.create')->middleware(['module:hr', 'permission:doctor_payouts.create']);
     Route::post('/doctor-payouts', [AdminDoctorPayoutController::class, 'store'])->name('admin.doctor-payouts.store')->middleware(['module:hr', 'permission:doctor_payouts.create']);
     Route::get('/doctor-payouts/{payout}', [AdminDoctorPayoutController::class, 'show'])->name('admin.doctor-payouts.show')->middleware(['module:hr', 'permission:doctor_payouts.view']);
-    Route::put('/doctor-payouts/{payout}/confirm', [AdminDoctorPayoutController::class, 'confirm'])->name('admin.doctor-payouts.confirm')->middleware(['module:hr', 'permission:doctor_payouts.update']);
-    Route::put('/doctor-payouts/{payout}/mark-paid', [AdminDoctorPayoutController::class, 'markPaid'])->name('admin.doctor-payouts.mark-paid')->middleware(['module:hr', 'permission:doctor_payouts.update']);
-    Route::put('/doctor-payouts/{payout}/cancel', [AdminDoctorPayoutController::class, 'cancel'])->name('admin.doctor-payouts.cancel')->middleware(['module:hr', 'permission:doctor_payouts.update']);
+    Route::post('/doctor-payouts/{payout}/confirm', [AdminDoctorPayoutController::class, 'confirm'])->name('admin.doctor-payouts.confirm')->middleware(['module:hr', 'permission:doctor_payouts.update']);
+    Route::post('/doctor-payouts/{payout}/mark-paid', [AdminDoctorPayoutController::class, 'markPaid'])->name('admin.doctor-payouts.mark-paid')->middleware(['module:hr', 'permission:doctor_payouts.update']);
+    Route::post('/doctor-payouts/{payout}/cancel', [AdminDoctorPayoutController::class, 'cancel'])->name('admin.doctor-payouts.cancel')->middleware(['module:hr', 'permission:doctor_payouts.update']);
     Route::get('/doctor-payouts/{payout}/print', [AdminDoctorPayoutController::class, 'printReceipt'])->name('admin.doctor-payouts.print')->middleware(['module:hr', 'permission:doctor_payouts.view']);
     Route::get('/api/doctor-unpaid-visits', [AdminDoctorPayoutController::class, 'getUnpaidVisits'])->name('admin.doctor-payouts.unpaid-visits')->middleware(['module:hr', 'permission:doctor_payouts.create']);
 
@@ -422,7 +422,7 @@ Route::middleware('admin.auth')->group(function () {
         Route::get('/departments', [DepartmentController::class, 'index'])->name('admin.departments.index')->middleware('permission:departments.view');
         Route::post('/departments', [DepartmentController::class, 'store'])->name('admin.departments.store')->middleware('permission:departments.create');
         Route::post('/departments/{department}', [DepartmentController::class, 'update'])->name('admin.departments.update')->middleware('permission:departments.update');
-        Route::delete('/departments/{department}', [DepartmentController::class, 'destroy'])->name('admin.departments.destroy')->middleware('permission:departments.delete');
+        Route::post('/departments/{department}/delete', [DepartmentController::class, 'destroy'])->name('admin.departments.destroy')->middleware('permission:departments.delete');
 
         // Employees
         Route::get('/employees', [EmployeeController::class, 'index'])->name('admin.employees.index')->middleware('permission:employees.view');
@@ -431,7 +431,7 @@ Route::middleware('admin.auth')->group(function () {
         Route::get('/employees/{employee}', [EmployeeController::class, 'show'])->name('admin.employees.show')->middleware('permission:employees.view');
         Route::get('/employees/{employee}/edit', [EmployeeController::class, 'edit'])->name('admin.employees.edit')->middleware('permission:employees.update');
         Route::post('/employees/{employee}', [EmployeeController::class, 'update'])->name('admin.employees.update')->middleware('permission:employees.update');
-        Route::delete('/employees/{employee}', [EmployeeController::class, 'destroy'])->name('admin.employees.destroy')->middleware('permission:employees.delete');
+        Route::post('/employees/{employee}/delete', [EmployeeController::class, 'destroy'])->name('admin.employees.destroy')->middleware('permission:employees.delete');
 
         // Payroll
         Route::get('/payroll', [PayrollController::class, 'index'])->name('admin.payroll.index')->middleware('permission:salary_slips.view');
@@ -453,27 +453,27 @@ Route::middleware('admin.auth')->group(function () {
         // Penalties & Rewards
         Route::get('/penalties', [PenaltyController::class, 'index'])->name('admin.penalties.index')->middleware('permission:penalties.view');
         Route::post('/penalties', [PenaltyController::class, 'store'])->name('admin.penalties.store')->middleware('permission:penalties.create');
-        Route::delete('/penalties/{penalty}', [PenaltyController::class, 'destroy'])->name('admin.penalties.destroy')->middleware('permission:penalties.delete');
+        Route::post('/penalties/{penalty}/delete', [PenaltyController::class, 'destroy'])->name('admin.penalties.destroy')->middleware('permission:penalties.delete');
 
         // Shifts
         Route::get('/shifts', [ShiftController::class, 'index'])->name('admin.shifts.index')->middleware('permission:shifts.view');
         Route::post('/shifts', [ShiftController::class, 'store'])->name('admin.shifts.store')->middleware('permission:shifts.create');
-        Route::put('/shifts/{shift}', [ShiftController::class, 'update'])->name('admin.shifts.update')->middleware('permission:shifts.update');
-        Route::delete('/shifts/{shift}', [ShiftController::class, 'destroy'])->name('admin.shifts.destroy')->middleware('permission:shifts.delete');
+        Route::post('/shifts/{shift}/update', [ShiftController::class, 'update'])->name('admin.shifts.update')->middleware('permission:shifts.update');
+        Route::post('/shifts/{shift}/delete', [ShiftController::class, 'destroy'])->name('admin.shifts.destroy')->middleware('permission:shifts.delete');
 
         // Attendance
         Route::get('/attendances', [AttendanceController::class, 'index'])->name('admin.attendances.index')->middleware('permission:attendances.view');
         Route::post('/attendances', [AttendanceController::class, 'store'])->name('admin.attendances.store')->middleware('permission:attendances.create');
-        Route::put('/attendances/{attendance}', [AttendanceController::class, 'update'])->name('admin.attendances.update')->middleware('permission:attendances.update');
+        Route::post('/attendances/{attendance}/update', [AttendanceController::class, 'update'])->name('admin.attendances.update')->middleware('permission:attendances.update');
         Route::post('/attendances/quick-check-in', [AttendanceController::class, 'quickCheckIn'])->name('admin.attendances.quick-check-in')->middleware('permission:attendances.create');
         Route::post('/attendances/quick-check-out', [AttendanceController::class, 'quickCheckOut'])->name('admin.attendances.quick-check-out')->middleware('permission:attendances.create');
-        Route::delete('/attendances/{attendance}', [AttendanceController::class, 'destroy'])->name('admin.attendances.destroy')->middleware('permission:attendances.delete');
+        Route::post('/attendances/{attendance}/delete', [AttendanceController::class, 'destroy'])->name('admin.attendances.destroy')->middleware('permission:attendances.delete');
 
         // Leaves
         Route::get('/leaves', [LeaveController::class, 'index'])->name('admin.leaves.index')->middleware('permission:leaves.view');
         Route::get('/leaves/create', [LeaveController::class, 'create'])->name('admin.leaves.create')->middleware('permission:leaves.create');
         Route::post('/leaves', [LeaveController::class, 'store'])->name('admin.leaves.store')->middleware('permission:leaves.create');
-        Route::put('/leaves/{leave}', [LeaveController::class, 'update'])->name('admin.leaves.update')->middleware('permission:leaves.update');
+        Route::post('/leaves/{leave}/update', [LeaveController::class, 'update'])->name('admin.leaves.update')->middleware('permission:leaves.update');
     });
 
     // ─── Package Bundles ────────────────────────────────────────
@@ -483,7 +483,7 @@ Route::middleware('admin.auth')->group(function () {
     Route::get('/package-bundles/{packageBundle}', [PackageBundleController::class, 'show'])->name('admin.package-bundles.show')->middleware('permission:package_bundles.view');
     Route::get('/package-bundles/{packageBundle}/edit', [PackageBundleController::class, 'edit'])->name('admin.package-bundles.edit')->middleware('permission:package_bundles.update');
     Route::post('/package-bundles/{packageBundle}/update', [PackageBundleController::class, 'update'])->name('admin.package-bundles.update')->middleware('permission:package_bundles.update');
-    Route::delete('/package-bundles/{packageBundle}', [PackageBundleController::class, 'destroy'])->name('admin.package-bundles.destroy')->middleware('permission:package_bundles.delete');
+    Route::post('/package-bundles/{packageBundle}/delete', [PackageBundleController::class, 'destroy'])->name('admin.package-bundles.destroy')->middleware('permission:package_bundles.delete');
     Route::post('/package-bundles/{packageBundle}/toggle-active', [PackageBundleController::class, 'toggleActive'])->name('admin.package-bundles.toggleActive')->middleware('permission:package_bundles.update');
 
     // ─── Package Bundle Bookings ─────────────────────────────────
@@ -542,14 +542,14 @@ Route::middleware('admin.auth')->group(function () {
     Route::get('/slider/create', [SliderController::class, 'create'])->name('admin.slider.create')->middleware('permission:settings.update');
     Route::post('/slider', [SliderController::class, 'store'])->name('admin.slider.store')->middleware('permission:settings.update');
     Route::get('/slider/{heroSlide}/edit', [SliderController::class, 'edit'])->name('admin.slider.edit')->middleware('permission:settings.update');
-    Route::put('/slider/{heroSlide}', [SliderController::class, 'update'])->name('admin.slider.update')->middleware('permission:settings.update');
-    Route::delete('/slider/{heroSlide}', [SliderController::class, 'destroy'])->name('admin.slider.destroy')->middleware('permission:settings.update');
+    Route::post('/slider/{heroSlide}/update', [SliderController::class, 'update'])->name('admin.slider.update')->middleware('permission:settings.update');
+    Route::post('/slider/{heroSlide}/delete', [SliderController::class, 'destroy'])->name('admin.slider.destroy')->middleware('permission:settings.update');
     Route::post('/slider/update-order', [SliderController::class, 'updateOrder'])->name('admin.slider.updateOrder')->middleware('permission:settings.update');
 
     // ─── SEO Pages ───────────────────────────────────────────
     Route::get('/seo-pages', [SeoPageController::class, 'index'])->name('admin.seoPages.index')->middleware('permission:settings.view');
     Route::get('/seo-pages/{seoPage}/edit', [SeoPageController::class, 'edit'])->name('admin.seoPages.edit')->middleware('permission:settings.view');
-    Route::put('/seo-pages/{seoPage}', [SeoPageController::class, 'update'])->name('admin.seoPages.update')->middleware('permission:settings.update');
+    Route::post('/seo-pages/{seoPage}/update', [SeoPageController::class, 'update'])->name('admin.seoPages.update')->middleware('permission:settings.update');
 
     // ─── Tracking & Pixels ───────────────────────────────────
     Route::get('/tracking', [TrackingController::class, 'index'])->name('admin.tracking.index')->middleware('permission:settings.view');
@@ -567,7 +567,7 @@ Route::middleware('admin.auth')->group(function () {
     Route::get('/leads/{lead}', [LeadController::class, 'show'])->name('admin.leads.show')->middleware('permission:leads.view');
     Route::get('/leads/{lead}/edit', [LeadController::class, 'edit'])->name('admin.leads.edit')->middleware('permission:leads.update');
     Route::post('/leads/{lead}', [LeadController::class, 'update'])->name('admin.leads.update')->middleware('permission:leads.update');
-    Route::delete('/leads/{lead}', [LeadController::class, 'destroy'])->name('admin.leads.destroy')->middleware('permission:leads.delete');
+    Route::post('/leads/{lead}/delete', [LeadController::class, 'destroy'])->name('admin.leads.destroy')->middleware('permission:leads.delete');
     Route::post('/leads/{lead}/status', [LeadController::class, 'updateStatus'])->name('admin.leads.updateStatus')->middleware('permission:leads.update');
     Route::post('/leads/{lead}/priority', [LeadController::class, 'updatePriority'])->name('admin.leads.updatePriority')->middleware('permission:leads.update');
     Route::post('/leads/{lead}/reactivate', [LeadController::class, 'reactivate'])->name('admin.leads.reactivate')->middleware('permission:leads.update');
@@ -598,13 +598,13 @@ Route::middleware('admin.auth')->group(function () {
     Route::get('/campaigns/{campaign}', [CrmCampaignController::class, 'show'])->name('admin.campaigns.show')->middleware('permission:crm_campaigns.view');
     Route::get('/campaigns/{campaign}/edit', [CrmCampaignController::class, 'edit'])->name('admin.campaigns.edit')->middleware('permission:crm_campaigns.update');
     Route::post('/campaigns/{campaign}', [CrmCampaignController::class, 'update'])->name('admin.campaigns.update')->middleware('permission:crm_campaigns.update');
-    Route::delete('/campaigns/{campaign}', [CrmCampaignController::class, 'destroy'])->name('admin.campaigns.destroy')->middleware('permission:crm_campaigns.delete');
+    Route::post('/campaigns/{campaign}/delete', [CrmCampaignController::class, 'destroy'])->name('admin.campaigns.destroy')->middleware('permission:crm_campaigns.delete');
 
     // Lead Sources
     Route::get('/lead-sources', [LeadSourceController::class, 'index'])->name('admin.lead-sources.index')->middleware('permission:lead_sources.view');
     Route::post('/lead-sources', [LeadSourceController::class, 'store'])->name('admin.lead-sources.store')->middleware('permission:lead_sources.create');
     Route::post('/lead-sources/{leadSource}', [LeadSourceController::class, 'update'])->name('admin.lead-sources.update')->middleware('permission:lead_sources.update');
-    Route::delete('/lead-sources/{leadSource}', [LeadSourceController::class, 'destroy'])->name('admin.lead-sources.destroy')->middleware('permission:lead_sources.delete');
+    Route::post('/lead-sources/{leadSource}/delete', [LeadSourceController::class, 'destroy'])->name('admin.lead-sources.destroy')->middleware('permission:lead_sources.delete');
 
     // Communication Templates
     Route::get('/templates', [CommunicationTemplateController::class, 'index'])->name('admin.templates.index')->middleware('permission:communication_templates.view');
@@ -612,7 +612,7 @@ Route::middleware('admin.auth')->group(function () {
     Route::post('/templates', [CommunicationTemplateController::class, 'store'])->name('admin.templates.store')->middleware('permission:communication_templates.create');
     Route::get('/templates/{template}/edit', [CommunicationTemplateController::class, 'edit'])->name('admin.templates.edit')->middleware('permission:communication_templates.update');
     Route::post('/templates/{template}', [CommunicationTemplateController::class, 'update'])->name('admin.templates.update')->middleware('permission:communication_templates.update');
-    Route::delete('/templates/{template}', [CommunicationTemplateController::class, 'destroy'])->name('admin.templates.destroy')->middleware('permission:communication_templates.delete');
+    Route::post('/templates/{template}/delete', [CommunicationTemplateController::class, 'destroy'])->name('admin.templates.destroy')->middleware('permission:communication_templates.delete');
 
     // Marketer Commissions
     Route::get('/commissions', [MarketerCommissionController::class, 'index'])->name('admin.commissions.index')->middleware('permission:marketer_commissions.view');
@@ -620,19 +620,19 @@ Route::middleware('admin.auth')->group(function () {
     Route::post('/commissions', [MarketerCommissionController::class, 'store'])->name('admin.commissions.store')->middleware('permission:marketer_commissions.create');
     Route::post('/commissions/{commission}/approve', [MarketerCommissionController::class, 'approve'])->name('admin.commissions.approve')->middleware('permission:marketer_commissions.update');
     Route::post('/commissions/{commission}/mark-paid', [MarketerCommissionController::class, 'markPaid'])->name('admin.commissions.markPaid')->middleware('permission:marketer_commissions.update');
-    Route::delete('/commissions/{commission}', [MarketerCommissionController::class, 'destroy'])->name('admin.commissions.destroy')->middleware('permission:marketer_commissions.delete');
+    Route::post('/commissions/{commission}/delete', [MarketerCommissionController::class, 'destroy'])->name('admin.commissions.destroy')->middleware('permission:marketer_commissions.delete');
 
     // Scoring Rules
     Route::get('/scoring-rules', [LeadScoringRuleController::class, 'index'])->name('admin.scoring-rules.index')->middleware('permission:leads.view');
     Route::post('/scoring-rules', [LeadScoringRuleController::class, 'store'])->name('admin.scoring-rules.store')->middleware('permission:leads.update');
     Route::post('/scoring-rules/{rule}', [LeadScoringRuleController::class, 'update'])->name('admin.scoring-rules.update')->middleware('permission:leads.update');
-    Route::delete('/scoring-rules/{rule}', [LeadScoringRuleController::class, 'destroy'])->name('admin.scoring-rules.destroy')->middleware('permission:leads.update');
+    Route::post('/scoring-rules/{rule}/delete', [LeadScoringRuleController::class, 'destroy'])->name('admin.scoring-rules.destroy')->middleware('permission:leads.update');
 
     // Assignment Rules
     Route::get('/assignment-rules', [LeadAssignmentRuleController::class, 'index'])->name('admin.assignment-rules.index')->middleware('permission:leads.view');
     Route::post('/assignment-rules', [LeadAssignmentRuleController::class, 'store'])->name('admin.assignment-rules.store')->middleware('permission:leads.update');
     Route::post('/assignment-rules/{rule}', [LeadAssignmentRuleController::class, 'update'])->name('admin.assignment-rules.update')->middleware('permission:leads.update');
-    Route::delete('/assignment-rules/{rule}', [LeadAssignmentRuleController::class, 'destroy'])->name('admin.assignment-rules.destroy')->middleware('permission:leads.update');
+    Route::post('/assignment-rules/{rule}/delete', [LeadAssignmentRuleController::class, 'destroy'])->name('admin.assignment-rules.destroy')->middleware('permission:leads.update');
 
     // CRM Reports
     Route::get('/crm-reports', [CrmReportController::class, 'index'])->name('admin.crm-reports.index')->middleware('permission:leads.view');
@@ -647,7 +647,7 @@ Route::middleware('admin.auth')->group(function () {
     Route::post('/sequences', [FollowUpSequenceController::class, 'store'])->name('admin.sequences.store')->middleware('permission:leads.create');
     Route::get('/sequences/{sequence}/edit', [FollowUpSequenceController::class, 'edit'])->name('admin.sequences.edit')->middleware('permission:leads.update');
     Route::post('/sequences/{sequence}', [FollowUpSequenceController::class, 'update'])->name('admin.sequences.update')->middleware('permission:leads.update');
-    Route::delete('/sequences/{sequence}', [FollowUpSequenceController::class, 'destroy'])->name('admin.sequences.destroy')->middleware('permission:leads.delete');
+    Route::post('/sequences/{sequence}/delete', [FollowUpSequenceController::class, 'destroy'])->name('admin.sequences.destroy')->middleware('permission:leads.delete');
     Route::post('/sequences/{sequence}/toggle', [FollowUpSequenceController::class, 'toggle'])->name('admin.sequences.toggle')->middleware('permission:leads.update');
     Route::get('/sequences/{sequence}/enrollments', [FollowUpSequenceController::class, 'enrollments'])->name('admin.sequences.enrollments')->middleware('permission:leads.view');
     Route::post('/sequences/enroll', [FollowUpSequenceController::class, 'enrollLead'])->name('admin.sequences.enroll')->middleware('permission:leads.update');
@@ -675,7 +675,7 @@ Route::middleware('admin.auth')->group(function () {
     Route::get('/dental/chart/{patient}', [DentalChartController::class, 'show'])->name('admin.dental.chart.show')->middleware(['module:dental', 'permission:dental.view']);
     Route::post('/dental/chart/{patient}/tooth/{toothNumber}', [DentalChartController::class, 'updateTooth'])->name('admin.dental.chart.updateTooth')->middleware(['module:dental', 'permission:dental.update']);
     Route::post('/dental/chart/{patient}/tooth/{toothNumber}/entry', [DentalChartController::class, 'addEntry'])->name('admin.dental.chart.addEntry')->middleware(['module:dental', 'permission:dental.update']);
-    Route::delete('/dental/chart/{patient}/entry/{entry}', [DentalChartController::class, 'deleteEntry'])->name('admin.dental.chart.deleteEntry')->middleware(['module:dental', 'permission:dental.delete']);
+    Route::post('/dental/chart/{patient}/entry/{entry}/delete', [DentalChartController::class, 'deleteEntry'])->name('admin.dental.chart.deleteEntry')->middleware(['module:dental', 'permission:dental.delete']);
     Route::post('/dental/chart/{patient}/initialize', [DentalChartController::class, 'initializeChart'])->name('admin.dental.chart.initialize')->middleware(['module:dental', 'permission:dental.create']);
 
     // Dental Treatment Plans
@@ -685,7 +685,7 @@ Route::middleware('admin.auth')->group(function () {
     Route::get('/dental/treatment-plans/{treatmentPlan}', [DentalTreatmentPlanController::class, 'show'])->name('admin.dental.treatment-plans.show')->middleware(['module:dental', 'permission:dental.view']);
     Route::post('/dental/treatment-plans/{treatmentPlan}', [DentalTreatmentPlanController::class, 'update'])->name('admin.dental.treatment-plans.update')->middleware(['module:dental', 'permission:dental.update']);
     Route::get('/dental/treatment-plans/{treatmentPlan}/pdf', [DentalTreatmentPlanController::class, 'downloadPdf'])->name('admin.dental.treatment-plans.pdf')->middleware(['module:dental', 'permission:dental.view']);
-    Route::delete('/dental/treatment-plans/{treatmentPlan}', [DentalTreatmentPlanController::class, 'destroy'])->name('admin.dental.treatment-plans.destroy')->middleware(['module:dental', 'permission:dental.delete']);
+    Route::post('/dental/treatment-plans/{treatmentPlan}/delete', [DentalTreatmentPlanController::class, 'destroy'])->name('admin.dental.treatment-plans.destroy')->middleware(['module:dental', 'permission:dental.delete']);
 
     // Dental Treatment Plan Consent
     Route::post('/dental/treatment-plans/{treatmentPlan}/consent/send', [\App\Http\Controllers\Admin\TreatmentPlanConsentController::class, 'send'])->name('admin.dental.consent.send')->middleware(['module:dental', 'permission:dental.update']);
@@ -698,20 +698,20 @@ Route::middleware('admin.auth')->group(function () {
     Route::post('/dental/treatment-plan-templates/{template}', [\App\Http\Controllers\Admin\DentalTreatmentPlanTemplateController::class, 'update'])->name('admin.dental.plan-templates.update')->middleware(['module:dental', 'permission:dental.update']);
     Route::post('/dental/treatment-plan-templates/{template}/toggle', [\App\Http\Controllers\Admin\DentalTreatmentPlanTemplateController::class, 'toggleActive'])->name('admin.dental.plan-templates.toggle')->middleware(['module:dental', 'permission:dental.update']);
     Route::post('/dental/treatment-plan-templates/{template}/duplicate', [\App\Http\Controllers\Admin\DentalTreatmentPlanTemplateController::class, 'duplicate'])->name('admin.dental.plan-templates.duplicate')->middleware(['module:dental', 'permission:dental.create']);
-    Route::delete('/dental/treatment-plan-templates/{template}', [\App\Http\Controllers\Admin\DentalTreatmentPlanTemplateController::class, 'destroy'])->name('admin.dental.plan-templates.destroy')->middleware(['module:dental', 'permission:dental.delete']);
+    Route::post('/dental/treatment-plan-templates/{template}/delete', [\App\Http\Controllers\Admin\DentalTreatmentPlanTemplateController::class, 'destroy'])->name('admin.dental.plan-templates.destroy')->middleware(['module:dental', 'permission:dental.delete']);
     Route::post('/dental/treatment-plan-templates-seed', [\App\Http\Controllers\Admin\DentalTreatmentPlanTemplateController::class, 'seedDefaults'])->name('admin.dental.plan-templates.seed')->middleware(['module:dental', 'permission:dental.create']);
 
     // Dental Treatments
     Route::get('/dental/treatments', [DentalTreatmentController::class, 'index'])->name('admin.dental.treatments.index')->middleware(['module:dental', 'permission:dental.view']);
     Route::post('/dental/treatments', [DentalTreatmentController::class, 'store'])->name('admin.dental.treatments.store')->middleware(['module:dental', 'permission:dental.create']);
     Route::post('/dental/treatments/{treatment}', [DentalTreatmentController::class, 'update'])->name('admin.dental.treatments.update')->middleware(['module:dental', 'permission:dental.update']);
-    Route::delete('/dental/treatments/{treatment}', [DentalTreatmentController::class, 'destroy'])->name('admin.dental.treatments.destroy')->middleware(['module:dental', 'permission:dental.delete']);
+    Route::post('/dental/treatments/{treatment}/delete', [DentalTreatmentController::class, 'destroy'])->name('admin.dental.treatments.destroy')->middleware(['module:dental', 'permission:dental.delete']);
 
     // Dental X-rays
     Route::get('/dental/xrays', [DentalXrayController::class, 'index'])->name('admin.dental.xrays.index')->middleware(['module:dental', 'permission:dental.view']);
     Route::post('/dental/xrays', [DentalXrayController::class, 'store'])->name('admin.dental.xrays.store')->middleware(['module:dental', 'permission:dental.create']);
     Route::post('/dental/xrays/{xray}', [DentalXrayController::class, 'update'])->name('admin.dental.xrays.update')->middleware(['module:dental', 'permission:dental.update']);
-    Route::delete('/dental/xrays/{xray}', [DentalXrayController::class, 'destroy'])->name('admin.dental.xrays.destroy')->middleware(['module:dental', 'permission:dental.delete']);
+    Route::post('/dental/xrays/{xray}/delete', [DentalXrayController::class, 'destroy'])->name('admin.dental.xrays.destroy')->middleware(['module:dental', 'permission:dental.delete']);
     Route::get('/dental/xrays/patient/{patient}', [DentalXrayController::class, 'patientXrays'])->name('admin.dental.xrays.patient')->middleware(['module:dental', 'permission:dental.view']);
 
     // Dental Lab Orders
@@ -722,7 +722,7 @@ Route::middleware('admin.auth')->group(function () {
     Route::post('/dental/lab-orders', [DentalLabOrderController::class, 'store'])->name('admin.dental.lab-orders.store')->middleware(['module:dental', 'permission:dental.create']);
     Route::post('/dental/lab-orders/{labOrder}', [DentalLabOrderController::class, 'update'])->name('admin.dental.lab-orders.update')->middleware(['module:dental', 'permission:dental.update']);
     Route::post('/dental/lab-orders/{labOrder}/status', [DentalLabOrderController::class, 'update'])->name('admin.dental.lab-orders.status')->middleware(['module:dental', 'permission:dental.update']);
-    Route::delete('/dental/lab-orders/{labOrder}', [DentalLabOrderController::class, 'destroy'])->name('admin.dental.lab-orders.destroy')->middleware(['module:dental', 'permission:dental.delete']);
+    Route::post('/dental/lab-orders/{labOrder}/delete', [DentalLabOrderController::class, 'destroy'])->name('admin.dental.lab-orders.destroy')->middleware(['module:dental', 'permission:dental.delete']);
     Route::post('/dental/lab-orders-bulk/update-status', [DentalLabOrderController::class, 'bulkUpdateStatus'])->name('admin.dental.lab-orders.bulk-status')->middleware(['module:dental', 'permission:dental.update', 'throttle:10,1']);
     Route::post('/dental/lab-orders-bulk/sms-notify', [DentalLabOrderController::class, 'bulkSmsNotify'])->name('admin.dental.lab-orders.bulk-sms')->middleware(['module:dental', 'permission:dental.update', 'throttle:5,1']);
     Route::get('/dental/lab-orders-bulk/print', [DentalLabOrderController::class, 'printOrders'])->name('admin.dental.lab-orders.print')->middleware(['module:dental', 'permission:dental.view']);
@@ -734,7 +734,7 @@ Route::middleware('admin.auth')->group(function () {
     Route::post('/dental/smart-notifications/{notification}/resend', [\App\Http\Controllers\Admin\DentalSmartNotificationController::class, 'resend'])->name('admin.dental.smart-notifications.resend')->middleware(['module:dental', 'permission:dental.update']);
     Route::post('/dental/smart-notifications/{notification}/cancel', [\App\Http\Controllers\Admin\DentalSmartNotificationController::class, 'cancel'])->name('admin.dental.smart-notifications.cancel')->middleware(['module:dental', 'permission:dental.update']);
     Route::post('/dental/smart-notifications/{notification}/responded', [\App\Http\Controllers\Admin\DentalSmartNotificationController::class, 'markResponded'])->name('admin.dental.smart-notifications.responded')->middleware(['module:dental', 'permission:dental.update']);
-    Route::delete('/dental/smart-notifications/{notification}', [\App\Http\Controllers\Admin\DentalSmartNotificationController::class, 'destroy'])->name('admin.dental.smart-notifications.destroy')->middleware(['module:dental', 'permission:dental.delete']);
+    Route::post('/dental/smart-notifications/{notification}/delete', [\App\Http\Controllers\Admin\DentalSmartNotificationController::class, 'destroy'])->name('admin.dental.smart-notifications.destroy')->middleware(['module:dental', 'permission:dental.delete']);
 
     // Dental Follow-up Rules
     Route::get('/dental/followup-rules', [\App\Http\Controllers\Admin\DentalFollowupRuleController::class, 'index'])->name('admin.dental.followup-rules.index')->middleware(['module:dental', 'permission:dental.view']);
@@ -751,7 +751,7 @@ Route::middleware('admin.auth')->group(function () {
     Route::post('/dental/comparisons', [\App\Http\Controllers\Admin\DentalComparisonController::class, 'store'])->name('admin.dental.comparisons.store')->middleware(['module:dental', 'permission:dental.create']);
     Route::get('/dental/comparisons/{comparison}', [\App\Http\Controllers\Admin\DentalComparisonController::class, 'show'])->name('admin.dental.comparisons.show')->middleware(['module:dental', 'permission:dental.view']);
     Route::post('/dental/comparisons/{comparison}', [\App\Http\Controllers\Admin\DentalComparisonController::class, 'update'])->name('admin.dental.comparisons.update')->middleware(['module:dental', 'permission:dental.update']);
-    Route::delete('/dental/comparisons/{comparison}', [\App\Http\Controllers\Admin\DentalComparisonController::class, 'destroy'])->name('admin.dental.comparisons.destroy')->middleware(['module:dental', 'permission:dental.delete']);
+    Route::post('/dental/comparisons/{comparison}/delete', [\App\Http\Controllers\Admin\DentalComparisonController::class, 'destroy'])->name('admin.dental.comparisons.destroy')->middleware(['module:dental', 'permission:dental.delete']);
     Route::post('/dental/comparisons/{comparison}/toggle-visibility', [\App\Http\Controllers\Admin\DentalComparisonController::class, 'toggleVisibility'])->name('admin.dental.comparisons.toggle-visibility')->middleware(['module:dental', 'permission:dental.update']);
     Route::post('/dental/comparisons/{comparison}/toggle-featured', [\App\Http\Controllers\Admin\DentalComparisonController::class, 'toggleFeatured'])->name('admin.dental.comparisons.toggle-featured')->middleware(['module:dental', 'permission:dental.update']);
 
@@ -763,7 +763,7 @@ Route::middleware('admin.auth')->group(function () {
     Route::get('/dental/prescription-templates', [DentalPrescriptionTemplateController::class, 'index'])->name('admin.dental.prescription-templates.index')->middleware(['module:dental', 'permission:dental.view']);
     Route::post('/dental/prescription-templates', [DentalPrescriptionTemplateController::class, 'store'])->name('admin.dental.prescription-templates.store')->middleware(['module:dental', 'permission:dental.create']);
     Route::post('/dental/prescription-templates/{template}', [DentalPrescriptionTemplateController::class, 'update'])->name('admin.dental.prescription-templates.update')->middleware(['module:dental', 'permission:dental.update']);
-    Route::delete('/dental/prescription-templates/{template}', [DentalPrescriptionTemplateController::class, 'destroy'])->name('admin.dental.prescription-templates.destroy')->middleware(['module:dental', 'permission:dental.delete']);
+    Route::post('/dental/prescription-templates/{template}/delete', [DentalPrescriptionTemplateController::class, 'destroy'])->name('admin.dental.prescription-templates.destroy')->middleware(['module:dental', 'permission:dental.delete']);
 
     // ═══════════════════════════════════════════════════════════
     // ═══ SUPPLIERS & PURCHASE ORDERS ══════════════════════════
@@ -795,7 +795,7 @@ Route::middleware('admin.auth')->group(function () {
     // ═══════════════════════════════════════════════════════════
     Route::get('/patients/{patient}/documents', [PatientDocumentController::class, 'index'])->name('admin.patient.documents.index')->middleware('permission:patients.view');
     Route::post('/patients/{patient}/documents', [PatientDocumentController::class, 'store'])->name('admin.patient.documents.store')->middleware('permission:patients.update');
-    Route::delete('/patients/{patient}/documents/{document}', [PatientDocumentController::class, 'destroy'])->name('admin.patient.documents.destroy')->middleware('permission:patients.update');
+    Route::post('/patients/{patient}/documents/{document}/delete', [PatientDocumentController::class, 'destroy'])->name('admin.patient.documents.destroy')->middleware('permission:patients.update');
     Route::get('/documents/expiring', [PatientDocumentController::class, 'expiring'])->name('admin.documents.expiring')->middleware('permission:patients.view');
 
     // ═══════════════════════════════════════════════════════════
@@ -806,8 +806,8 @@ Route::middleware('admin.auth')->group(function () {
         Route::get('/insurance/companies/create', [InsuranceCompanyController::class, 'create'])->name('admin.insurance.companies.create')->middleware('permission:settings.update');
         Route::post('/insurance/companies', [InsuranceCompanyController::class, 'store'])->name('admin.insurance.companies.store')->middleware('permission:settings.update');
         Route::get('/insurance/companies/{company}/edit', [InsuranceCompanyController::class, 'edit'])->name('admin.insurance.companies.edit')->middleware('permission:settings.update');
-        Route::put('/insurance/companies/{company}', [InsuranceCompanyController::class, 'update'])->name('admin.insurance.companies.update')->middleware('permission:settings.update');
-        Route::delete('/insurance/companies/{company}', [InsuranceCompanyController::class, 'destroy'])->name('admin.insurance.companies.destroy')->middleware('permission:settings.update');
+        Route::post('/insurance/companies/{company}/update', [InsuranceCompanyController::class, 'update'])->name('admin.insurance.companies.update')->middleware('permission:settings.update');
+        Route::post('/insurance/companies/{company}/delete', [InsuranceCompanyController::class, 'destroy'])->name('admin.insurance.companies.destroy')->middleware('permission:settings.update');
 
         Route::get('/insurance/claims', [InsuranceClaimController::class, 'index'])->name('admin.insurance.claims.index')->middleware('permission:invoices.view');
         Route::post('/insurance/claims', [InsuranceClaimController::class, 'store'])->name('admin.insurance.claims.store')->middleware('permission:invoices.create');
@@ -826,25 +826,25 @@ Route::middleware('admin.auth')->group(function () {
     // ═══════════════════════════════════════════════════════════
     Route::get('/referrals', [ReferralController::class, 'index'])->name('admin.referrals.index')->middleware('permission:visits.view');
     Route::post('/referrals', [ReferralController::class, 'store'])->name('admin.referrals.store')->middleware('permission:visits.create');
-    Route::put('/referrals/{referral}/status', [ReferralController::class, 'updateStatus'])->name('admin.referrals.status')->middleware('permission:visits.update');
+    Route::post('/referrals/{referral}/status', [ReferralController::class, 'updateStatus'])->name('admin.referrals.status')->middleware('permission:visits.update');
 
     // ═══ CREDIT NOTES ═══════════════════════════════════════════
     // ═══════════════════════════════════════════════════════════
     Route::get('/credit-notes', [CreditNoteController::class, 'index'])->name('admin.credit-notes.index')->middleware('permission:invoices.view');
     Route::post('/credit-notes', [CreditNoteController::class, 'store'])->name('admin.credit-notes.store')->middleware('permission:invoices.create');
-    Route::put('/credit-notes/{creditNote}/status', [CreditNoteController::class, 'updateStatus'])->name('admin.credit-notes.status')->middleware('permission:invoices.update');
+    Route::post('/credit-notes/{creditNote}/status', [CreditNoteController::class, 'updateStatus'])->name('admin.credit-notes.status')->middleware('permission:invoices.update');
 
     // ═══ DOCTOR SCHEDULES ═══════════════════════════════════════
     // ═══════════════════════════════════════════════════════════
     Route::get('/schedules', [DoctorScheduleController::class, 'index'])->name('admin.schedules.index')->middleware('permission:doctors.view');
-    Route::put('/schedules/{doctor}', [DoctorScheduleController::class, 'update'])->name('admin.schedules.update')->middleware('permission:doctors.update');
+    Route::post('/schedules/{doctor}/update', [DoctorScheduleController::class, 'update'])->name('admin.schedules.update')->middleware('permission:doctors.update');
 
     // ═══ MEDICAL CERTIFICATES ═══════════════════════════════════
     // ═══════════════════════════════════════════════════════════
     Route::get('/medical-certificates', [MedicalCertificateController::class, 'index'])->name('admin.medical-certificates.index')->middleware('permission:visits.view');
     Route::post('/medical-certificates', [MedicalCertificateController::class, 'store'])->name('admin.medical-certificates.store')->middleware('permission:visits.create');
-    Route::put('/medical-certificates/{medicalCertificate}/issue', [MedicalCertificateController::class, 'issue'])->name('admin.medical-certificates.issue')->middleware('permission:visits.update');
-    Route::put('/medical-certificates/{medicalCertificate}/cancel', [MedicalCertificateController::class, 'cancel'])->name('admin.medical-certificates.cancel')->middleware('permission:visits.update');
+    Route::post('/medical-certificates/{medicalCertificate}/issue', [MedicalCertificateController::class, 'issue'])->name('admin.medical-certificates.issue')->middleware('permission:visits.update');
+    Route::post('/medical-certificates/{medicalCertificate}/cancel', [MedicalCertificateController::class, 'cancel'])->name('admin.medical-certificates.cancel')->middleware('permission:visits.update');
 
     // ═══ APPOINTMENT REMINDERS ══════════════════════════════════
     // ═══════════════════════════════════════════════════════════

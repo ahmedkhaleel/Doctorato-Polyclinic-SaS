@@ -46,8 +46,8 @@ Route::middleware('webmaster.auth')->group(function () {
     Route::get('/slider/create', [SliderController::class, 'create'])->name('webmaster.slider.create')->middleware('permission:settings.update');
     Route::post('/slider', [SliderController::class, 'store'])->name('webmaster.slider.store')->middleware('permission:settings.update');
     Route::get('/slider/{heroSlide}/edit', [SliderController::class, 'edit'])->name('webmaster.slider.edit')->middleware('permission:settings.update');
-    Route::put('/slider/{heroSlide}', [SliderController::class, 'update'])->name('webmaster.slider.update')->middleware('permission:settings.update');
-    Route::delete('/slider/{heroSlide}', [SliderController::class, 'destroy'])->name('webmaster.slider.destroy')->middleware('permission:settings.update');
+    Route::post('/slider/{heroSlide}/update', [SliderController::class, 'update'])->name('webmaster.slider.update')->middleware('permission:settings.update');
+    Route::post('/slider/{heroSlide}/delete', [SliderController::class, 'destroy'])->name('webmaster.slider.destroy')->middleware('permission:settings.update');
     Route::post('/slider/update-order', [SliderController::class, 'updateOrder'])->name('webmaster.slider.updateOrder')->middleware('permission:settings.update');
 
     // ─── Services ──────────────────────────────────────────────
@@ -55,16 +55,16 @@ Route::middleware('webmaster.auth')->group(function () {
     Route::get('/services/create', [ServiceController::class, 'create'])->name('webmaster.services.create')->middleware('permission:services.create');
     Route::post('/services', [ServiceController::class, 'store'])->name('webmaster.services.store')->middleware('permission:services.create');
     Route::get('/services/{service}/edit', [ServiceController::class, 'edit'])->name('webmaster.services.edit')->middleware('permission:services.update');
-    Route::put('/services/{service}', [ServiceController::class, 'update'])->name('webmaster.services.update')->middleware('permission:services.update');
-    Route::delete('/services/{service}', [ServiceController::class, 'destroy'])->name('webmaster.services.destroy')->middleware('permission:services.delete');
+    Route::post('/services/{service}/update', [ServiceController::class, 'update'])->name('webmaster.services.update')->middleware('permission:services.update');
+    Route::post('/services/{service}/delete', [ServiceController::class, 'destroy'])->name('webmaster.services.destroy')->middleware('permission:services.delete');
 
     // ─── Service Categories ────────────────────────────────────
     Route::get('/service-categories', [ServiceCategoryController::class, 'index'])->name('webmaster.service-categories.index')->middleware('permission:service_categories.view');
     Route::get('/service-categories/create', [ServiceCategoryController::class, 'create'])->name('webmaster.service-categories.create')->middleware('permission:service_categories.create');
     Route::post('/service-categories', [ServiceCategoryController::class, 'store'])->name('webmaster.service-categories.store')->middleware('permission:service_categories.create');
     Route::get('/service-categories/{service_category}/edit', [ServiceCategoryController::class, 'edit'])->name('webmaster.service-categories.edit')->middleware('permission:service_categories.update');
-    Route::put('/service-categories/{service_category}', [ServiceCategoryController::class, 'update'])->name('webmaster.service-categories.update')->middleware('permission:service_categories.update');
-    Route::delete('/service-categories/{service_category}', [ServiceCategoryController::class, 'destroy'])->name('webmaster.service-categories.destroy')->middleware('permission:service_categories.delete');
+    Route::post('/service-categories/{service_category}/update', [ServiceCategoryController::class, 'update'])->name('webmaster.service-categories.update')->middleware('permission:service_categories.update');
+    Route::post('/service-categories/{service_category}/delete', [ServiceCategoryController::class, 'destroy'])->name('webmaster.service-categories.destroy')->middleware('permission:service_categories.delete');
 
     // ─── Doctors ───────────────────────────────────────────────
     Route::get('/doctors', [DoctorController::class, 'index'])->name('webmaster.doctors.index')->middleware('permission:doctors.view');
@@ -72,66 +72,66 @@ Route::middleware('webmaster.auth')->group(function () {
     Route::post('/doctors', [DoctorController::class, 'store'])->name('webmaster.doctors.store')->middleware('permission:doctors.create');
     Route::get('/doctors/{doctor}', [DoctorController::class, 'show'])->name('webmaster.doctors.show')->middleware('permission:doctors.view');
     Route::get('/doctors/{doctor}/edit', [DoctorController::class, 'edit'])->name('webmaster.doctors.edit')->middleware('permission:doctors.update');
-    Route::put('/doctors/{doctor}', [DoctorController::class, 'update'])->name('webmaster.doctors.update')->middleware('permission:doctors.update');
-    Route::delete('/doctors/{doctor}', [DoctorController::class, 'destroy'])->name('webmaster.doctors.destroy')->middleware('permission:doctors.delete');
+    Route::post('/doctors/{doctor}/update', [DoctorController::class, 'update'])->name('webmaster.doctors.update')->middleware('permission:doctors.update');
+    Route::post('/doctors/{doctor}/delete', [DoctorController::class, 'destroy'])->name('webmaster.doctors.destroy')->middleware('permission:doctors.delete');
 
     // ─── Gallery ───────────────────────────────────────────────
     Route::get('/gallery', [GalleryController::class, 'index'])->name('webmaster.gallery.index')->middleware('permission:gallery.view');
     Route::get('/gallery/create', [GalleryController::class, 'create'])->name('webmaster.gallery.create')->middleware('permission:gallery.create');
     Route::post('/gallery', [GalleryController::class, 'store'])->name('webmaster.gallery.store')->middleware('permission:gallery.create');
     Route::get('/gallery/{gallery}/edit', [GalleryController::class, 'edit'])->name('webmaster.gallery.edit')->middleware('permission:gallery.update');
-    Route::put('/gallery/{gallery}', [GalleryController::class, 'update'])->name('webmaster.gallery.update')->middleware('permission:gallery.update');
-    Route::delete('/gallery/{gallery}', [GalleryController::class, 'destroy'])->name('webmaster.gallery.destroy')->middleware('permission:gallery.delete');
+    Route::post('/gallery/{gallery}/update', [GalleryController::class, 'update'])->name('webmaster.gallery.update')->middleware('permission:gallery.update');
+    Route::post('/gallery/{gallery}/delete', [GalleryController::class, 'destroy'])->name('webmaster.gallery.destroy')->middleware('permission:gallery.delete');
 
     // ─── Testimonials ──────────────────────────────────────────
     Route::get('/testimonials', [TestimonialController::class, 'index'])->name('webmaster.testimonials.index')->middleware('permission:testimonials.view');
     Route::get('/testimonials/create', [TestimonialController::class, 'create'])->name('webmaster.testimonials.create')->middleware('permission:testimonials.create');
     Route::post('/testimonials', [TestimonialController::class, 'store'])->name('webmaster.testimonials.store')->middleware('permission:testimonials.create');
     Route::get('/testimonials/{testimonial}/edit', [TestimonialController::class, 'edit'])->name('webmaster.testimonials.edit')->middleware('permission:testimonials.update');
-    Route::put('/testimonials/{testimonial}', [TestimonialController::class, 'update'])->name('webmaster.testimonials.update')->middleware('permission:testimonials.update');
-    Route::delete('/testimonials/{testimonial}', [TestimonialController::class, 'destroy'])->name('webmaster.testimonials.destroy')->middleware('permission:testimonials.delete');
+    Route::post('/testimonials/{testimonial}/update', [TestimonialController::class, 'update'])->name('webmaster.testimonials.update')->middleware('permission:testimonials.update');
+    Route::post('/testimonials/{testimonial}/delete', [TestimonialController::class, 'destroy'])->name('webmaster.testimonials.destroy')->middleware('permission:testimonials.delete');
 
     // ─── FAQs ──────────────────────────────────────────────────
     Route::get('/faqs', [FaqController::class, 'index'])->name('webmaster.faqs.index')->middleware('permission:faqs.view');
     Route::get('/faqs/create', [FaqController::class, 'create'])->name('webmaster.faqs.create')->middleware('permission:faqs.create');
     Route::post('/faqs', [FaqController::class, 'store'])->name('webmaster.faqs.store')->middleware('permission:faqs.create');
     Route::get('/faqs/{faq}/edit', [FaqController::class, 'edit'])->name('webmaster.faqs.edit')->middleware('permission:faqs.update');
-    Route::put('/faqs/{faq}', [FaqController::class, 'update'])->name('webmaster.faqs.update')->middleware('permission:faqs.update');
-    Route::delete('/faqs/{faq}', [FaqController::class, 'destroy'])->name('webmaster.faqs.destroy')->middleware('permission:faqs.delete');
+    Route::post('/faqs/{faq}/update', [FaqController::class, 'update'])->name('webmaster.faqs.update')->middleware('permission:faqs.update');
+    Route::post('/faqs/{faq}/delete', [FaqController::class, 'destroy'])->name('webmaster.faqs.destroy')->middleware('permission:faqs.delete');
 
     // ─── Pages (view + update only) ────────────────────────────
     Route::get('/pages', [PageController::class, 'index'])->name('webmaster.pages.index')->middleware('permission:pages.view');
     Route::get('/pages/{page}/edit', [PageController::class, 'edit'])->name('webmaster.pages.edit')->middleware('permission:pages.update');
-    Route::put('/pages/{page}', [PageController::class, 'update'])->name('webmaster.pages.update')->middleware('permission:pages.update');
+    Route::post('/pages/{page}/update', [PageController::class, 'update'])->name('webmaster.pages.update')->middleware('permission:pages.update');
 
     // ─── Blog Posts ────────────────────────────────────────────
     Route::get('/posts', [PostController::class, 'index'])->name('webmaster.posts.index')->middleware('permission:posts.view');
     Route::get('/posts/create', [PostController::class, 'create'])->name('webmaster.posts.create')->middleware('permission:posts.create');
     Route::post('/posts', [PostController::class, 'store'])->name('webmaster.posts.store')->middleware('permission:posts.create');
     Route::get('/posts/{post}/edit', [PostController::class, 'edit'])->name('webmaster.posts.edit')->middleware('permission:posts.update');
-    Route::put('/posts/{post}', [PostController::class, 'update'])->name('webmaster.posts.update')->middleware('permission:posts.update');
-    Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('webmaster.posts.destroy')->middleware('permission:posts.delete');
+    Route::post('/posts/{post}/update', [PostController::class, 'update'])->name('webmaster.posts.update')->middleware('permission:posts.update');
+    Route::post('/posts/{post}/delete', [PostController::class, 'destroy'])->name('webmaster.posts.destroy')->middleware('permission:posts.delete');
 
     // ─── Post Categories ───────────────────────────────────────
     Route::get('/post-categories', [PostCategoryController::class, 'index'])->name('webmaster.post-categories.index')->middleware('permission:post_categories.view');
     Route::get('/post-categories/create', [PostCategoryController::class, 'create'])->name('webmaster.post-categories.create')->middleware('permission:post_categories.create');
     Route::post('/post-categories', [PostCategoryController::class, 'store'])->name('webmaster.post-categories.store')->middleware('permission:post_categories.create');
     Route::get('/post-categories/{post_category}/edit', [PostCategoryController::class, 'edit'])->name('webmaster.post-categories.edit')->middleware('permission:post_categories.update');
-    Route::put('/post-categories/{post_category}', [PostCategoryController::class, 'update'])->name('webmaster.post-categories.update')->middleware('permission:post_categories.update');
-    Route::delete('/post-categories/{post_category}', [PostCategoryController::class, 'destroy'])->name('webmaster.post-categories.destroy')->middleware('permission:post_categories.delete');
+    Route::post('/post-categories/{post_category}/update', [PostCategoryController::class, 'update'])->name('webmaster.post-categories.update')->middleware('permission:post_categories.update');
+    Route::post('/post-categories/{post_category}/delete', [PostCategoryController::class, 'destroy'])->name('webmaster.post-categories.destroy')->middleware('permission:post_categories.delete');
 
     // ─── Tags ──────────────────────────────────────────────────
     Route::get('/tags', [TagController::class, 'index'])->name('webmaster.tags.index')->middleware('permission:tags.view');
     Route::get('/tags/create', [TagController::class, 'create'])->name('webmaster.tags.create')->middleware('permission:tags.create');
     Route::post('/tags', [TagController::class, 'store'])->name('webmaster.tags.store')->middleware('permission:tags.create');
     Route::get('/tags/{tag}/edit', [TagController::class, 'edit'])->name('webmaster.tags.edit')->middleware('permission:tags.update');
-    Route::put('/tags/{tag}', [TagController::class, 'update'])->name('webmaster.tags.update')->middleware('permission:tags.update');
-    Route::delete('/tags/{tag}', [TagController::class, 'destroy'])->name('webmaster.tags.destroy')->middleware('permission:tags.delete');
+    Route::post('/tags/{tag}/update', [TagController::class, 'update'])->name('webmaster.tags.update')->middleware('permission:tags.update');
+    Route::post('/tags/{tag}/delete', [TagController::class, 'destroy'])->name('webmaster.tags.destroy')->middleware('permission:tags.delete');
 
     // ─── SEO Pages ─────────────────────────────────────────────
     Route::get('/seo-pages', [SeoPageController::class, 'index'])->name('webmaster.seoPages.index')->middleware('permission:settings.view');
     Route::get('/seo-pages/{seoPage}/edit', [SeoPageController::class, 'edit'])->name('webmaster.seoPages.edit')->middleware('permission:settings.view');
-    Route::put('/seo-pages/{seoPage}', [SeoPageController::class, 'update'])->name('webmaster.seoPages.update')->middleware('permission:settings.update');
+    Route::post('/seo-pages/{seoPage}/update', [SeoPageController::class, 'update'])->name('webmaster.seoPages.update')->middleware('permission:settings.update');
 
     // ─── Tracking & Pixels ─────────────────────────────────────
     Route::get('/tracking', [TrackingController::class, 'index'])->name('webmaster.tracking.index')->middleware('permission:settings.view');

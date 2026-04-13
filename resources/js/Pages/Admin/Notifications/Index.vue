@@ -108,13 +108,13 @@ function markAllRead() {
 
 function deleteNotification(id) {
     if (String(id).startsWith('booking_') || String(id).startsWith('message_')) return;
-    router.delete(`/admin/notification-center/${id}`, { preserveState: false });
+    router.post(`/admin/notification-center/${id}/delete`, { preserveState: false });
 }
 
 function clearRead() {
     if (!confirm(isRtl.value ? 'حذف جميع الإشعارات المقروءة؟' : 'Delete all read notifications?')) return;
-    router.delete('/admin/notification-center/clear', {
-        data: { only_read: true },
+    router.post('/admin/notification-center/clear', {
+        only_read: true,
         preserveState: false,
     });
 }

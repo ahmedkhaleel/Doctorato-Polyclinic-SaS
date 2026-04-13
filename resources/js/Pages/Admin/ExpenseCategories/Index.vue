@@ -77,7 +77,7 @@ function closeModal() {
 
 function submit() {
     if (editingCategory.value) {
-        form.put(`/admin/expense-categories/${editingCategory.value.id}`, {
+        form.post(`/admin/expense-categories/${editingCategory.value.id}/update`, {
             onSuccess: () => closeModal(),
         });
     } else {
@@ -89,7 +89,7 @@ function submit() {
 
 function deleteCategory(id) {
     if (window.confirm(locale.value === 'ar' ? 'هل أنت متأكد من حذف هذا التصنيف؟' : 'Are you sure you want to delete this category?')) {
-        router.delete(`/admin/expense-categories/${id}`);
+        router.post(`/admin/expense-categories/${id}/delete`);
     }
 }
 

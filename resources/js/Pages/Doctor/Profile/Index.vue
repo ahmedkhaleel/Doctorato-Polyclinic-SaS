@@ -57,10 +57,9 @@ const passwordForm = useForm({
 });
 
 function updateProfile() {
-    profileForm.post('/doctor/profile', {
+    profileForm.post('/doctor/profile/update', {
         forceFormData: true,
         preserveScroll: true,
-        _method: 'put',
         onSuccess: () => {
             photoPreview.value = null;
             profileForm.photo = null;
@@ -69,7 +68,7 @@ function updateProfile() {
 }
 
 function updatePassword() {
-    passwordForm.put('/doctor/profile/password', {
+    passwordForm.post('/doctor/profile/password', {
         preserveScroll: true,
         onSuccess: () => passwordForm.reset(),
     });

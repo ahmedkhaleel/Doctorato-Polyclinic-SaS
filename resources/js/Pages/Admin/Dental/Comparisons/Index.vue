@@ -71,7 +71,7 @@ function formatDate(date) {
 
 function deleteComparison(id) {
     if (window.confirm(isRtl.value ? 'هل أنت متأكد من الحذف؟' : 'Are you sure you want to delete?')) {
-        router.delete(`/admin/dental/comparisons/${id}`);
+        router.post(`/admin/dental/comparisons/${id}/delete`);
     }
 }
 

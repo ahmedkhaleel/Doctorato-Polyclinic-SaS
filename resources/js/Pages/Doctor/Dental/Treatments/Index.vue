@@ -88,7 +88,7 @@ const nextStatusIcon = {
 function advanceTreatmentStatus(treatmentId, currentStatus) {
     const next = nextStatusMap[currentStatus];
     if (!next) return;
-    router.put(`/doctor/dental/treatments/${treatmentId}`, { status: next }, {
+    router.post(`/doctor/dental/treatments/${treatmentId}`, { status: next }, {
         preserveScroll: true,
         preserveState: true,
     });

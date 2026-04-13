@@ -324,7 +324,7 @@ function saveEntry() {
 
 function deleteEntry(entryId) {
     if (!confirm(isRtl.value ? 'هل أنت متأكد من حذف هذا السجل؟' : 'Delete this entry?')) return;
-    router.delete(`/admin/dental/chart/${props.patient.id}/entry/${entryId}`, { preserveScroll: true });
+    router.post(`/admin/dental/chart/${props.patient.id}/entry/${entryId}/delete`, { preserveScroll: true });
 }
 
 function handleFileSelect(e) {

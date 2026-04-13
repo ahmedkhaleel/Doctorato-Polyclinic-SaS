@@ -39,7 +39,7 @@ function confirmDelete(seq) {
 }
 
 function performDelete() {
-    router.delete(`/admin/sequences/${deletingSequence.value.id}`, {
+    router.post(`/admin/sequences/${deletingSequence.value.id}/delete`, {
         preserveScroll: true,
         onSuccess: () => { deleteModal.value = false; deletingSequence.value = null; },
     });

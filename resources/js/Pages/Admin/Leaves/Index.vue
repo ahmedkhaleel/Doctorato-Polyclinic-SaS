@@ -34,21 +34,21 @@ watch([employeeFilter, statusFilter, typeFilter], () => {
 function approveLeave(id) {
     const msg = isRtl.value ? 'هل تريد الموافقة على هذا الطلب؟' : 'Approve this leave request?';
     if (window.confirm(msg)) {
-        router.put(`/admin/leaves/${id}/approve`, {}, { preserveScroll: true });
+        router.post(`/admin/leaves/${id}/approve`, {}, { preserveScroll: true });
     }
 }
 
 function rejectLeave(id) {
     const msg = isRtl.value ? 'هل تريد رفض هذا الطلب؟' : 'Reject this leave request?';
     if (window.confirm(msg)) {
-        router.put(`/admin/leaves/${id}/reject`, {}, { preserveScroll: true });
+        router.post(`/admin/leaves/${id}/reject`, {}, { preserveScroll: true });
     }
 }
 
 function deleteLeave(id) {
     const msg = isRtl.value ? 'هل أنت متأكد من حذف هذا الطلب؟' : 'Are you sure you want to delete this leave request?';
     if (window.confirm(msg)) {
-        router.delete(`/admin/leaves/${id}`, { preserveScroll: true });
+        router.post(`/admin/leaves/${id}/delete`, { preserveScroll: true });
     }
 }
 

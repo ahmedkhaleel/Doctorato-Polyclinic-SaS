@@ -492,7 +492,7 @@ function onConsentFilesSelected(event) {
 
 function deleteConsent(consentId) {
     if (!confirm('Delete this consent document?')) return;
-    router.delete(`/secretary/bookings/${props.booking.id}/consents/${consentId}`, {
+    router.post(`/secretary/bookings/${props.booking.id}/consents/${consentId}/delete`, {}, {
         preserveScroll: true,
     });
 }

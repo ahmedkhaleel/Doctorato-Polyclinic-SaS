@@ -49,7 +49,7 @@ function filterByStatus(status) {
 
 function deleteCode(id) {
     if (window.confirm(t('a_confirm_delete_discount'))) {
-        router.delete(`/admin/discount-codes/${id}`);
+        router.post(`/admin/discount-codes/${id}/delete`);
     }
 }
 

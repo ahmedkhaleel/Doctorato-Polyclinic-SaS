@@ -73,7 +73,7 @@ function markPaid(id) {
 
 function deleteCommission(id) {
     if (confirm('Delete this commission?')) {
-        router.delete(`/admin/commissions/${id}`);
+        router.post(`/admin/commissions/${id}/delete`);
     }
 }
 </script>

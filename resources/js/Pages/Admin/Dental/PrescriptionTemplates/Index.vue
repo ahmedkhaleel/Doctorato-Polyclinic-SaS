@@ -110,7 +110,7 @@ function submitForm() {
 
 function deleteTemplate(tpl) {
     if (confirm(locale.value === 'ar' ? 'هل أنت متأكد من الحذف؟' : 'Are you sure you want to delete this template?')) {
-        router.delete(`/admin/dental/prescription-templates/${tpl.id}`, { preserveScroll: true });
+        router.post(`/admin/dental/prescription-templates/${tpl.id}/delete`, { preserveScroll: true });
     }
 }
 

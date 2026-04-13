@@ -58,7 +58,7 @@ watch(moduleFilter, () => {
 
 function deleteService(id) {
     if (window.confirm(t('a_confirm_delete_service'))) {
-        router.delete(`/admin/services/${id}`);
+        router.post(`/admin/services/${id}/delete`);
     }
 }
 

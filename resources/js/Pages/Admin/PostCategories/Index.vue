@@ -33,7 +33,7 @@ watch(search, (val) => {
 
 function deleteCategory(id) {
     if (window.confirm(t('a_confirm_delete_post_category'))) {
-        router.delete(`/admin/post-categories/${id}`);
+        router.post(`/admin/post-categories/${id}/delete`);
     }
 }
 </script>

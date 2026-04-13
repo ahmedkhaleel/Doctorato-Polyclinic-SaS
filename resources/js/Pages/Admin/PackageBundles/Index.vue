@@ -156,7 +156,7 @@ function confirmDelete(bundle) {
     showDeleteModal.value = true;
 }
 function executeDelete() {
-    router.delete(`/admin/package-bundles/${deletingBundle.value.id}`, {
+    router.post(`/admin/package-bundles/${deletingBundle.value.id}/delete`, {
         onFinish: () => {
             showDeleteModal.value = false;
             deletingBundle.value = null;

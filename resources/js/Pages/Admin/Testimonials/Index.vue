@@ -32,7 +32,7 @@ watch(search, (val) => {
 
 function deleteTestimonial(id) {
     if (window.confirm(t('a_confirm_delete_testimonial'))) {
-        router.delete(`/admin/testimonials/${id}`);
+        router.post(`/admin/testimonials/${id}/delete`);
     }
 }
 
