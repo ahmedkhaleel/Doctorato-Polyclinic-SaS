@@ -21,7 +21,7 @@ const mounted = ref(false);
 const inlineStatusOpen = ref(null);
 onMounted(() => {
     setTimeout(() => { mounted.value = true; }, 50);
-    document.addEventListener('click', () => { inlineStatusOpen.value = null; showColumnMenu.value = false; });
+    document.addEventListener('click', () => { inlineStatusOpen.value = null; inlinePriorityOpen.value = null; showColumnMenu.value = false; });
     // Store lead IDs for prev/next navigation in LeadShow
     try {
         const ids = (props.leads?.data || []).map(l => l.id);
@@ -364,6 +364,22 @@ function toggleInlineStatus(leadId) {
 function changeLeadStatus(leadId, newStatus) {
     inlineStatusOpen.value = null;
     router.post(`/secretary/crm/leads/${leadId}/status`, { status: newStatus }, {
+        preserveScroll: true,
+        preserveState: true,
+    });
+}
+
+/* ── Inline priority change ── */
+const inlinePriorityOpen = ref(null);
+
+function toggleInlinePriority(leadId) {
+    inlinePriorityOpen.value = inlinePriorityOpen.value === leadId ? null : leadId;
+    inlineStatusOpen.value = null;
+}
+
+function changeLeadPriority(leadId, newPriority) {
+    inlinePriorityOpen.value = null;
+    router.post(`/secretary/crm/leads/${leadId}/priority`, { priority: newPriority }, {
         preserveScroll: true,
         preserveState: true,
     });
@@ -1155,13 +1171,29 @@ const activeFilterPills = computed(() => {
                             </Transition>
                         </div>
 
-                        <!-- Priority Badge -->
-                        <span v-if="lead.priority && priorityConfig[lead.priority]"
-                            class="inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1 rounded-full border"
-                            :style="{ backgroundColor: priorityConfig[lead.priority].bg, color: priorityConfig[lead.priority].text, borderColor: priorityConfig[lead.priority].border }">
-                            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" :d="priorityConfig[lead.priority].icon"/></svg>
-                            {{ priorityConfig[lead.priority].label }}
-                        </span>
+                        <!-- Priority Badge (clickable) -->
+                        <div v-if="lead.priority && priorityConfig[lead.priority]" class="relative">
+                            <button @click.stop="toggleInlinePriority(lead.id)"
+                                class="inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1 rounded-full border cursor-pointer hover:shadow-sm transition-all"
+                                :style="{ backgroundColor: priorityConfig[lead.priority].bg, color: priorityConfig[lead.priority].text, borderColor: priorityConfig[lead.priority].border }">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" :d="priorityConfig[lead.priority].icon"/></svg>
+                                {{ priorityConfig[lead.priority].label }}
+                                <svg class="w-2.5 h-2.5 opacity-50" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                            </button>
+                            <Transition enter-active-class="transition-all duration-150 ease-out" enter-from-class="opacity-0 scale-95 -translate-y-1" enter-to-class="opacity-100 scale-100 translate-y-0" leave-active-class="transition-all duration-100 ease-in" leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-95">
+                                <div v-if="inlinePriorityOpen === lead.id"
+                                     class="absolute z-30 top-full mt-1 bg-white rounded-xl shadow-xl border border-gray-100 py-1.5 min-w-[130px]"
+                                     :class="isRtl ? 'right-0' : 'left-0'">
+                                    <button v-for="p in [1, 2, 3]" :key="p" @click.stop="changeLeadPriority(lead.id, p)"
+                                        :class="['w-full flex items-center gap-2 px-3 py-1.5 text-xs text-start hover:bg-gray-50 transition-colors',
+                                            lead.priority === p ? 'font-bold' : '']">
+                                        <span class="w-2 h-2 rounded-full flex-shrink-0" :style="{ backgroundColor: priorityConfig[p]?.dot || priorityConfig[p]?.text }"></span>
+                                        {{ priorityConfig[p]?.label || p }}
+                                        <svg v-if="lead.priority === p" class="w-3 h-3 text-teal-500 ms-auto" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                    </button>
+                                </div>
+                            </Transition>
+                        </div>
 
                         <!-- Source Badge -->
                         <span v-if="lead.source"
@@ -1289,14 +1321,30 @@ const activeFilterPills = computed(() => {
                                     </span>
                                     <span v-else class="text-gray-400 text-xs">-</span>
                                 </td>
-                                <!-- Priority -->
+                                <!-- Priority (clickable) -->
                                 <td v-if="isColumnVisible('priority')" class="px-5 py-3.5 text-center">
-                                    <span v-if="lead.priority && priorityConfig[lead.priority]"
-                                        class="inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1 rounded-full border"
-                                        :style="{ backgroundColor: priorityConfig[lead.priority].bg, color: priorityConfig[lead.priority].text, borderColor: priorityConfig[lead.priority].border }">
-                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" :d="priorityConfig[lead.priority].icon"/></svg>
-                            {{ priorityConfig[lead.priority].label }}
-                                    </span>
+                                    <div v-if="lead.priority && priorityConfig[lead.priority]" class="relative inline-block">
+                                        <button @click.stop="toggleInlinePriority(lead.id)"
+                                            class="inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1 rounded-full border cursor-pointer hover:shadow-sm transition-all"
+                                            :style="{ backgroundColor: priorityConfig[lead.priority].bg, color: priorityConfig[lead.priority].text, borderColor: priorityConfig[lead.priority].border }">
+                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" :d="priorityConfig[lead.priority].icon"/></svg>
+                                            {{ priorityConfig[lead.priority].label }}
+                                            <svg class="w-2.5 h-2.5 opacity-50" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                                        </button>
+                                        <Transition enter-active-class="transition-all duration-150 ease-out" enter-from-class="opacity-0 scale-95 -translate-y-1" enter-to-class="opacity-100 scale-100 translate-y-0" leave-active-class="transition-all duration-100 ease-in" leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-95">
+                                            <div v-if="inlinePriorityOpen === lead.id"
+                                                 class="absolute z-30 top-full mt-1 bg-white rounded-xl shadow-xl border border-gray-100 py-1.5 min-w-[130px]"
+                                                 :class="isRtl ? 'right-0' : 'left-0'">
+                                                <button v-for="p in [1, 2, 3]" :key="p" @click.stop="changeLeadPriority(lead.id, p)"
+                                                    :class="['w-full flex items-center gap-2 px-3 py-1.5 text-xs text-start hover:bg-gray-50 transition-colors',
+                                                        lead.priority === p ? 'font-bold' : '']">
+                                                    <span class="w-2 h-2 rounded-full flex-shrink-0" :style="{ backgroundColor: priorityConfig[p]?.dot || priorityConfig[p]?.text }"></span>
+                                                    {{ priorityConfig[p]?.label || p }}
+                                                    <svg v-if="lead.priority === p" class="w-3 h-3 text-teal-500 ms-auto" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                                </button>
+                                            </div>
+                                        </Transition>
+                                    </div>
                                 </td>
                                 <!-- Status (clickable inline change) -->
                                 <td v-if="isColumnVisible('status')" class="px-5 py-3.5 text-center">

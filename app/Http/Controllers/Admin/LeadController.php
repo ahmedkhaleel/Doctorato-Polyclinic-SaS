@@ -622,17 +622,38 @@ class LeadController extends Controller
     {
         $query = Lead::with(['source:id,name_en', 'assignedUser:id,name', 'campaign:id,name']);
 
-        if ($status = $request->input('status')) {
-            $query->where('status', $status);
-        }
-        if ($sourceId = $request->input('source_id')) {
-            $query->where('lead_source_id', $sourceId);
-        }
-        if ($dateFrom = $request->input('date_from')) {
-            $query->whereDate('created_at', '>=', $dateFrom);
-        }
-        if ($dateTo = $request->input('date_to')) {
-            $query->whereDate('created_at', '<=', $dateTo);
+        // Export specific selected leads
+        if ($ids = $request->input('ids')) {
+            $idArray = array_filter(explode(',', $ids), 'is_numeric');
+            if (!empty($idArray)) {
+                $query->whereIn('id', $idArray);
+            }
+        } else {
+            if ($status = $request->input('status')) {
+                $query->where('status', $status);
+            }
+            if ($sourceId = $request->input('source_id')) {
+                $query->where('lead_source_id', $sourceId);
+            }
+            if ($assignedTo = $request->input('assigned_to')) {
+                $query->where('assigned_to', $assignedTo);
+            }
+            if ($module = $request->input('module')) {
+                $query->where('module', $module);
+            }
+            if ($search = $request->input('search')) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('full_name', 'like', "%{$search}%")
+                      ->orWhere('phone', 'like', "%{$search}%")
+                      ->orWhere('email', 'like', "%{$search}%");
+                });
+            }
+            if ($dateFrom = $request->input('date_from')) {
+                $query->whereDate('created_at', '>=', $dateFrom);
+            }
+            if ($dateTo = $request->input('date_to')) {
+                $query->whereDate('created_at', '<=', $dateTo);
+            }
         }
 
         $leads = $query->latest()->get();
