@@ -213,7 +213,7 @@ class SecretaryCrmController extends BaseSecretaryController
      */
     public function quickView(Lead $lead)
     {
-        if ($lead->assigned_to !== auth()->id()) {
+        if (((int) $lead->assigned_to) !== ((int) auth()->id())) {
             abort(403);
         }
 
@@ -241,7 +241,16 @@ class SecretaryCrmController extends BaseSecretaryController
     public function show(Lead $lead): Response
     {
         // Ensure the secretary can only view leads assigned to them
-        if ($lead->assigned_to !== auth()->id()) {
+        if (((int) $lead->assigned_to) !== ((int) auth()->id())) {
+            \Log::error('CRM show 403', [
+                'lead_id' => $lead->id,
+                'assigned_to' => $lead->assigned_to,
+                'assigned_to_type' => gettype($lead->assigned_to),
+                'auth_id' => auth()->id(),
+                'auth_id_type' => gettype(auth()->id()),
+                'cast_assigned' => (int) $lead->assigned_to,
+                'cast_auth' => (int) auth()->id(),
+            ]);
             abort(403);
         }
 
@@ -323,6 +332,12 @@ class SecretaryCrmController extends BaseSecretaryController
 
         $lead = Lead::create($data);
 
+        \Log::info('CRM store lead created', [
+            'lead_id' => $lead->id,
+            'assigned_to' => $lead->assigned_to,
+            'auth_id' => auth()->id(),
+        ]);
+
         // Apply initial scoring
         LeadScoringRule::applyToLead($lead, 'lead_created');
 
@@ -342,7 +357,7 @@ class SecretaryCrmController extends BaseSecretaryController
      */
     public function edit(Lead $lead): Response
     {
-        if ($lead->assigned_to !== auth()->id()) {
+        if (((int) $lead->assigned_to) !== ((int) auth()->id())) {
             abort(403);
         }
 
@@ -363,7 +378,7 @@ class SecretaryCrmController extends BaseSecretaryController
      */
     public function update(Request $request, Lead $lead): RedirectResponse
     {
-        if ($lead->assigned_to !== auth()->id()) {
+        if (((int) $lead->assigned_to) !== ((int) auth()->id())) {
             abort(403);
         }
 
@@ -394,7 +409,7 @@ class SecretaryCrmController extends BaseSecretaryController
      */
     public function logActivity(Request $request, Lead $lead): RedirectResponse
     {
-        if ($lead->assigned_to !== auth()->id()) {
+        if (((int) $lead->assigned_to) !== ((int) auth()->id())) {
             abort(403);
         }
 
@@ -431,7 +446,7 @@ class SecretaryCrmController extends BaseSecretaryController
      */
     public function scheduleFollowUp(Request $request, Lead $lead): RedirectResponse
     {
-        if ($lead->assigned_to !== auth()->id()) {
+        if (((int) $lead->assigned_to) !== ((int) auth()->id())) {
             abort(403);
         }
 
@@ -464,7 +479,7 @@ class SecretaryCrmController extends BaseSecretaryController
      */
     public function completeFollowUp(Request $request, LeadFollowUp $followUp): RedirectResponse
     {
-        if ($followUp->assigned_to !== auth()->id()) {
+        if (((int) $followUp->assigned_to) !== ((int) auth()->id())) {
             abort(403);
         }
 
@@ -490,7 +505,7 @@ class SecretaryCrmController extends BaseSecretaryController
      */
     public function missFollowUp(LeadFollowUp $followUp): RedirectResponse
     {
-        if ($followUp->assigned_to !== auth()->id()) {
+        if (((int) $followUp->assigned_to) !== ((int) auth()->id())) {
             abort(403);
         }
 
@@ -513,7 +528,7 @@ class SecretaryCrmController extends BaseSecretaryController
      */
     public function updateStatus(Request $request, Lead $lead): RedirectResponse
     {
-        if ($lead->assigned_to !== auth()->id()) {
+        if (((int) $lead->assigned_to) !== ((int) auth()->id())) {
             abort(403);
         }
 
@@ -534,7 +549,7 @@ class SecretaryCrmController extends BaseSecretaryController
      */
     public function quickSend(Request $request, Lead $lead): RedirectResponse
     {
-        if ($lead->assigned_to !== auth()->id()) {
+        if (((int) $lead->assigned_to) !== ((int) auth()->id())) {
             abort(403);
         }
 
@@ -571,7 +586,7 @@ class SecretaryCrmController extends BaseSecretaryController
      */
     public function convertToPatient(Request $request, Lead $lead): RedirectResponse
     {
-        if ($lead->assigned_to !== auth()->id()) {
+        if (((int) $lead->assigned_to) !== ((int) auth()->id())) {
             abort(403);
         }
 
@@ -618,7 +633,7 @@ class SecretaryCrmController extends BaseSecretaryController
      */
     public function markAsLost(Request $request, Lead $lead): RedirectResponse
     {
-        if ($lead->assigned_to !== auth()->id()) {
+        if (((int) $lead->assigned_to) !== ((int) auth()->id())) {
             abort(403);
         }
 
@@ -650,7 +665,7 @@ class SecretaryCrmController extends BaseSecretaryController
      */
     public function rescheduleFollowUp(Request $request, LeadFollowUp $followUp): RedirectResponse
     {
-        if ($followUp->assigned_to !== auth()->id()) {
+        if (((int) $followUp->assigned_to) !== ((int) auth()->id())) {
             abort(403);
         }
 
@@ -1232,7 +1247,7 @@ class SecretaryCrmController extends BaseSecretaryController
         $template = CommunicationTemplate::findOrFail($data['template_id']);
         $lead = Lead::findOrFail($data['lead_id']);
 
-        if ($lead->assigned_to !== auth()->id()) {
+        if (((int) $lead->assigned_to) !== ((int) auth()->id())) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
