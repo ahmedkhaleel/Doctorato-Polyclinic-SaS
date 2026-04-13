@@ -653,20 +653,30 @@ const activeFilterPills = computed(() => {
                         </button>
 
                         <!-- Sort Dropdown -->
-                        <div class="relative min-w-[140px]">
-                            <select @change="changeSort($event.target.value)" :value="sortField"
-                                class="w-full appearance-none text-sm border border-gray-200 rounded-xl py-2.5 ltr:pl-4 rtl:pr-4 ltr:pr-10 rtl:pl-10 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all duration-200 bg-gray-50 focus:bg-white cursor-pointer">
-                                <option value="created_at">{{ isRtl ? 'الأحدث' : 'Newest' }}</option>
-                                <option value="full_name">{{ isRtl ? 'الاسم' : 'Name' }}</option>
-                                <option value="score">{{ isRtl ? 'النقاط' : 'Score' }}</option>
-                                <option value="priority">{{ isRtl ? 'الأولوية' : 'Priority' }}</option>
-                                <option value="next_follow_up_at">{{ isRtl ? 'المتابعة' : 'Follow-up' }}</option>
-                            </select>
-                            <div class="absolute inset-y-0 ltr:right-0 rtl:left-0 ltr:pr-3 rtl:pl-3 flex items-center pointer-events-none">
-                                <svg class="w-4 h-4 text-gray-400 transition-transform duration-200" :class="sortDir === 'asc' ? 'rotate-180' : ''" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
-                                </svg>
+                        <div class="flex items-center gap-1">
+                            <div class="relative min-w-[140px]">
+                                <select @change="changeSort($event.target.value)" :value="sortField"
+                                    class="w-full appearance-none text-sm border border-gray-200 rounded-xl py-2.5 ltr:pl-4 rtl:pr-4 ltr:pr-10 rtl:pl-10 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all duration-200 bg-gray-50 focus:bg-white cursor-pointer">
+                                    <option value="created_at">{{ isRtl ? 'الأحدث' : 'Newest' }}</option>
+                                    <option value="full_name">{{ isRtl ? 'الاسم' : 'Name' }}</option>
+                                    <option value="score">{{ isRtl ? 'النقاط' : 'Score' }}</option>
+                                    <option value="priority">{{ isRtl ? 'الأولوية' : 'Priority' }}</option>
+                                    <option value="next_follow_up_at">{{ isRtl ? 'المتابعة' : 'Follow-up' }}</option>
+                                </select>
+                                <div class="absolute inset-y-0 ltr:right-0 rtl:left-0 ltr:pr-3 rtl:pl-3 flex items-center pointer-events-none">
+                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                                    </svg>
+                                </div>
                             </div>
+                            <!-- Sort direction toggle -->
+                            <button @click="sortDir = sortDir === 'asc' ? 'desc' : 'asc'; applyFilters()"
+                                class="p-2.5 rounded-xl border border-gray-200 bg-gray-50 hover:bg-teal-50 hover:border-teal-200 text-gray-400 hover:text-teal-600 transition-all duration-200"
+                                :title="sortDir === 'asc' ? (isRtl ? 'تصاعدي' : 'Ascending') : (isRtl ? 'تنازلي' : 'Descending')">
+                                <svg class="w-4 h-4 transition-transform duration-300" :class="sortDir === 'asc' ? 'rotate-180' : ''" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"/>
+                                </svg>
+                            </button>
                         </div>
 
                         <!-- View Toggle -->

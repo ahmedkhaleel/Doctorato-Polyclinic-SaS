@@ -277,6 +277,31 @@ const totalFunnelLeads = computed(() => {
     return Object.values(props.statusDistribution || {}).reduce((a, b) => a + b, 0);
 });
 
+/* ---------- Week-at-a-Glance strip ---------- */
+const weekGlance = computed(() => {
+    const days = [];
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const allFUs = [...(props.todayFollowUps || []), ...(props.overdueFollowUps || [])];
+    const dayNames = isRtl.value
+        ? ['أحد', 'إثنين', 'ثلاثاء', 'أربعاء', 'خميس', 'جمعة', 'سبت']
+        : ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    for (let i = 0; i < 7; i++) {
+        const d = new Date(today);
+        d.setDate(d.getDate() + i);
+        const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        const count = allFUs.filter(fu => fu.scheduled_at && fu.scheduled_at.startsWith(dateStr)).length;
+        days.push({
+            date: dateStr,
+            day: d.getDate(),
+            dayName: dayNames[d.getDay()],
+            isToday: i === 0,
+            count,
+        });
+    }
+    return days;
+});
+
 /* ---------- Activity feed filter ---------- */
 const activityFilter = ref('all');
 const activityFilterOptions = [
@@ -750,6 +775,39 @@ const activityTypeConfig = {
                 </div>
                 <div v-if="dailyProgress.pct >= 100" class="mt-2 text-center">
                     <span class="text-xs font-medium text-emerald-600">{{ isRtl ? 'عمل رائع! أنجزت كل مهام اليوم' : 'Great job! All tasks completed for today' }}</span>
+                </div>
+            </div>
+
+            <!-- ============ WEEK AT A GLANCE ============ -->
+            <div
+                class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4"
+                :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
+                style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.29s"
+            >
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center gap-2">
+                        <svg class="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                        <h3 class="text-xs font-bold text-gray-700 uppercase tracking-wider">{{ isRtl ? 'نظرة على الأسبوع' : 'Week at a Glance' }}</h3>
+                    </div>
+                    <Link href="/secretary/crm/calendar" class="text-[10px] font-medium text-teal-600 hover:underline">{{ isRtl ? 'التقويم' : 'Calendar' }}</Link>
+                </div>
+                <div class="grid grid-cols-7 gap-1.5">
+                    <Link v-for="wd in weekGlance" :key="wd.date" href="/secretary/crm/calendar"
+                        :class="['flex flex-col items-center rounded-xl py-2.5 transition-all duration-200 border',
+                            wd.isToday
+                                ? 'bg-teal-50 border-teal-200 shadow-sm'
+                                : wd.count > 0
+                                    ? 'bg-gray-50 border-gray-100 hover:border-teal-200 hover:bg-teal-50/50'
+                                    : 'bg-gray-50/50 border-transparent hover:bg-gray-50']">
+                        <span :class="['text-[10px] font-medium', wd.isToday ? 'text-teal-600' : 'text-gray-400']">{{ wd.dayName }}</span>
+                        <span :class="['text-sm font-bold mt-0.5', wd.isToday ? 'text-teal-700' : 'text-gray-700']">{{ wd.day }}</span>
+                        <span v-if="wd.count > 0"
+                              :class="['mt-1 text-[10px] font-bold min-w-[20px] h-[20px] flex items-center justify-center rounded-full',
+                                  wd.isToday ? 'bg-teal-500 text-white' : 'bg-gray-200 text-gray-600']">
+                            {{ wd.count }}
+                        </span>
+                        <span v-else class="mt-1 w-1.5 h-1.5 rounded-full bg-gray-200"></span>
+                    </Link>
                 </div>
             </div>
 

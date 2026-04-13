@@ -235,6 +235,22 @@ function getFilteredFollowUpsForDay(dateStr) {
     return fups.filter(f => f.status === activeFilter.value);
 }
 
+/* ── Month completion stats ─────────────────────────── */
+const monthCompletionStats = computed(() => {
+    const all = props.followUps || [];
+    const total = all.length;
+    const completed = all.filter(f => f.status === 'completed').length;
+    const missed = all.filter(f => f.status === 'missed').length;
+    const pending = all.filter(f => f.status === 'pending').length;
+    const rate = total > 0 ? Math.round((completed / total) * 100) : 0;
+    return {
+        total, completed, missed, pending, rate,
+        completedPct: total > 0 ? Math.round((completed / total) * 100) : 0,
+        missedPct: total > 0 ? Math.round((missed / total) * 100) : 0,
+        pendingPct: total > 0 ? Math.round((pending / total) * 100) : 0,
+    };
+});
+
 /* ── Filter count badges ────────────────────────────── */
 const filterCounts = computed(() => {
     const all = props.followUps || [];
@@ -570,6 +586,29 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handleCalendarKe
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
                 {{ isRtl ? 'متابعة جديدة' : 'New Follow-up' }}
             </button>
+        </div>
+    </div>
+
+    <!-- ========== MONTH COMPLETION STATS ========== -->
+    <div v-if="monthCompletionStats.total > 0"
+         :class="['bg-white rounded-xl shadow-sm border border-gray-100 px-4 py-3 mb-4 transition-all duration-700', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4']"
+         :style="{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)', transitionDelay: '180ms' }">
+        <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center gap-2">
+                <svg class="w-3.5 h-3.5 text-teal-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                <span class="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'إنجاز الشهر' : 'Month Progress' }}</span>
+            </div>
+            <div class="flex items-center gap-3 text-[10px] font-semibold">
+                <span class="text-emerald-600">{{ monthCompletionStats.completed }} {{ isRtl ? 'مكتمل' : 'done' }}</span>
+                <span class="text-amber-500">{{ monthCompletionStats.pending }} {{ isRtl ? 'معلق' : 'pending' }}</span>
+                <span v-if="monthCompletionStats.missed" class="text-red-500">{{ monthCompletionStats.missed }} {{ isRtl ? 'فائت' : 'missed' }}</span>
+                <span :class="['font-bold', monthCompletionStats.rate >= 70 ? 'text-emerald-600' : monthCompletionStats.rate >= 40 ? 'text-amber-600' : 'text-red-500']">{{ monthCompletionStats.rate }}%</span>
+            </div>
+        </div>
+        <div class="h-2 bg-gray-100 rounded-full overflow-hidden flex">
+            <div class="h-full bg-emerald-500 transition-all duration-1000 ease-out" :style="{ width: mounted ? monthCompletionStats.completedPct + '%' : '0%' }"></div>
+            <div class="h-full bg-amber-400 transition-all duration-1000 ease-out" :style="{ width: mounted ? monthCompletionStats.pendingPct + '%' : '0%', transitionDelay: '100ms' }"></div>
+            <div class="h-full bg-red-400 transition-all duration-1000 ease-out" :style="{ width: mounted ? monthCompletionStats.missedPct + '%' : '0%', transitionDelay: '200ms' }"></div>
         </div>
     </div>
 

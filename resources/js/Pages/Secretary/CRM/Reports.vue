@@ -99,6 +99,15 @@ const statusLabels = {
     negotiation: { en: 'Negotiation', ar: 'تفاوض' },
 };
 
+/* ---------- Best source highlight ---------- */
+const bestSource = computed(() => {
+    if (!props.sourcePerformance?.length) return null;
+    // Best = highest conversion rate with at least 2 leads
+    const qualified = props.sourcePerformance.filter(s => s.total >= 2);
+    if (!qualified.length) return props.sourcePerformance[0];
+    return qualified.reduce((best, s) => s.conversion_rate > best.conversion_rate ? s : best, qualified[0]);
+});
+
 /* ---------- Export CSV ---------- */
 function exportCSV() {
     let csv = '';
@@ -311,6 +320,37 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handleReportsKey
                         {{ Math.abs(getChange(comparison[item.key].current, comparison[item.key].previous)) }}%
                     </div>
                     <p class="text-xs text-slate-400 mt-0.5">{{ isRtl ? 'مقارنة بالفترة السابقة' : 'vs previous period' }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Best Performing Source Highlight -->
+    <div v-if="bestSource"
+         :class="['bg-gradient-to-r from-teal-50 via-emerald-50 to-teal-50 rounded-2xl shadow-sm border border-teal-100 p-5 mb-6 transition-all duration-700', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6']"
+         :style="{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)', transitionDelay: '180ms' }">
+        <div class="flex items-center gap-4 flex-wrap">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-teal-500 to-emerald-500 flex items-center justify-center shadow-sm flex-shrink-0">
+                <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </div>
+            <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-2">
+                    <span class="text-xs font-semibold text-teal-600 uppercase tracking-wider">{{ isRtl ? 'أفضل مصدر أداء' : 'Top Performing Source' }}</span>
+                </div>
+                <p class="text-lg font-bold text-slate-800 mt-0.5">{{ isRtl ? bestSource.name_ar : bestSource.name_en }}</p>
+            </div>
+            <div class="flex items-center gap-5 flex-wrap">
+                <div class="text-center">
+                    <p class="text-2xl font-bold text-teal-700">{{ bestSource.total }}</p>
+                    <p class="text-[10px] text-teal-600 font-medium">{{ isRtl ? 'عميل' : 'leads' }}</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-2xl font-bold text-emerald-600">{{ bestSource.conversion_rate }}%</p>
+                    <p class="text-[10px] text-emerald-600 font-medium">{{ isRtl ? 'تحويل' : 'conversion' }}</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-2xl font-bold text-blue-600">{{ bestSource.converted }}</p>
+                    <p class="text-[10px] text-blue-600 font-medium">{{ isRtl ? 'محول' : 'converted' }}</p>
                 </div>
             </div>
         </div>

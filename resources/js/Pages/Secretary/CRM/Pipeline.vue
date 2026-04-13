@@ -298,6 +298,15 @@ function formatFullDate(date) {
     return new Date(date).toLocaleDateString(isRtl.value ? 'ar-SA' : 'en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
+/* ── Compact view toggle ─────────────────────────────── */
+const savedCompactView = (() => { try { return localStorage.getItem('crm_pipeline_compact') === '1'; } catch { return false; } })();
+const compactView = ref(savedCompactView);
+
+function toggleCompactView() {
+    compactView.value = !compactView.value;
+    try { localStorage.setItem('crm_pipeline_compact', compactView.value ? '1' : '0'); } catch {}
+}
+
 /* ── Keyboard shortcuts ──────────────────────────────── */
 function handlePipelineKey(e) {
     if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) return;
@@ -357,6 +366,13 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handlePipelineKe
                     <option value="2">{{ isRtl ? 'دافئ' : 'Warm' }}</option>
                     <option value="3">{{ isRtl ? 'بارد' : 'Cold' }}</option>
                 </select>
+                <!-- Compact toggle -->
+                <button @click="toggleCompactView"
+                    :class="['p-2 rounded-lg border text-xs transition-all duration-200',
+                        compactView ? 'bg-teal-50 border-teal-200 text-teal-600' : 'border-gray-200 bg-white text-gray-500 hover:bg-gray-50']"
+                    :title="isRtl ? (compactView ? 'عرض عادي' : 'عرض مضغوط') : (compactView ? 'Normal view' : 'Compact view')">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
+                </button>
                 <!-- List view -->
                 <Link href="/secretary/crm/leads" class="inline-flex items-center px-3 py-2 rounded-lg border border-gray-200 bg-white text-xs font-medium text-gray-600 hover:bg-gray-50 transition-all">
                     <svg class="w-3.5 h-3.5 me-1.5 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
@@ -526,14 +542,19 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handlePipelineKe
                     </div>
 
                     <!-- Info -->
-                    <div class="px-3 pb-2.5">
+                    <div :class="['px-3', compactView ? 'pb-1.5' : 'pb-2.5']">
                         <div class="flex items-center gap-1.5 text-xs text-gray-400 mb-1.5">
                             <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
                             <span dir="ltr">{{ lead.phone }}</span>
+                            <!-- Compact: inline score -->
+                            <span v-if="compactView && lead.score > 0" class="ms-auto text-[10px] font-bold text-amber-600 flex items-center gap-0.5">
+                                <svg class="w-2.5 h-2.5 text-amber-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                {{ lead.score }}
+                            </span>
                         </div>
 
-                        <!-- Source + Score -->
-                        <div class="flex items-center justify-between">
+                        <!-- Source + Score (hidden in compact) -->
+                        <div v-if="!compactView" class="flex items-center justify-between">
                             <span v-if="lead.source" class="text-[10px] text-gray-400 truncate max-w-[120px]">
                                 {{ isRtl ? lead.source?.name_ar : lead.source?.name_en }}
                             </span>
@@ -544,14 +565,14 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handlePipelineKe
                             </div>
                         </div>
 
-                        <!-- Stale warning -->
-                        <div v-if="isStale(lead)" class="mt-1.5 flex items-center gap-1 text-[10px] text-amber-600 bg-amber-50 rounded-md px-2 py-1 border border-amber-200/60">
+                        <!-- Stale warning (hidden in compact) -->
+                        <div v-if="!compactView && isStale(lead)" class="mt-1.5 flex items-center gap-1 text-[10px] text-amber-600 bg-amber-50 rounded-md px-2 py-1 border border-amber-200/60">
                             <svg class="w-3 h-3 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/></svg>
                             {{ daysInStage(lead) }}{{ isRtl ? ' يوم في هذه المرحلة' : 'd in stage' }}
                         </div>
 
                         <!-- Footer: last contact + next follow-up -->
-                        <div class="mt-2 pt-2 border-t border-gray-50 flex items-center justify-between">
+                        <div :class="['flex items-center justify-between', compactView ? 'mt-1' : 'mt-2 pt-2 border-t border-gray-50']">
                             <div v-if="lead.last_contacted_at" class="flex items-center gap-1 text-[10px] text-gray-400">
                                 <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                                 {{ timeAgo(lead.last_contacted_at) }}
@@ -565,8 +586,8 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handlePipelineKe
                             </div>
                         </div>
 
-                        <!-- Quick action buttons (visible on hover) -->
-                        <div class="mt-2 pt-2 border-t border-gray-50 flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-all duration-200">
+                        <!-- Quick action buttons (visible on hover, hidden in compact) -->
+                        <div v-if="!compactView" class="mt-2 pt-2 border-t border-gray-50 flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-all duration-200">
                             <!-- Quick move to next stage -->
                             <button v-if="statuses.indexOf(status) < statuses.length - 1"
                                 @click.stop="moveToNextStage(lead, status)"
