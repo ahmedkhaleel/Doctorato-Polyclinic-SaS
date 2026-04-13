@@ -21,6 +21,7 @@ const props = defineProps({
     slaMetrics: Object,
     staleLeads: Array,
     leadSources: Array,
+    teamLeaderboard: Array,
 });
 
 const mounted = ref(false);
@@ -1496,6 +1497,110 @@ const activityTypeConfig = {
                             <p class="text-sm font-medium text-gray-500">{{ isRtl ? 'لم يتم تعيين عملاء لك بعد' : 'No leads assigned yet' }}</p>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- ============ TEAM LEADERBOARD ============ -->
+            <div v-if="teamLeaderboard?.length > 1"
+                class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden"
+                :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
+                style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.46s">
+                <!-- Teal Gradient Header -->
+                <div class="px-5 py-4 border-b border-gray-100" style="background: linear-gradient(135deg, #0d9488, #0f766e);">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center">
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-bold text-white uppercase tracking-wider">{{ isRtl ? 'ترتيب الفريق' : 'Team Leaderboard' }}</h3>
+                            <p class="text-[10px] text-teal-100 mt-0.5">{{ isRtl ? 'مقارنة أداء السكرتارية هذا الأسبوع' : 'Secretary performance comparison this week' }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Table Header -->
+                <div class="px-5 py-2.5 bg-gray-50 border-b border-gray-100 grid grid-cols-12 gap-2 items-center text-[10px] font-bold text-gray-400 uppercase tracking-wider">
+                    <div class="col-span-1">#</div>
+                    <div class="col-span-3">{{ isRtl ? 'الاسم' : 'Name' }}</div>
+                    <div class="col-span-2 text-center">{{ isRtl ? 'الإجمالي' : 'Total' }}</div>
+                    <div class="col-span-2 text-center">{{ isRtl ? 'محول' : 'Converted' }}</div>
+                    <div class="col-span-2 text-center">{{ isRtl ? 'هذا الأسبوع' : 'This Week' }}</div>
+                    <div class="col-span-2 text-center">{{ isRtl ? 'نسبة التحويل' : 'Conv. %' }}</div>
+                </div>
+
+                <!-- Leaderboard Rows -->
+                <div class="divide-y divide-gray-50">
+                    <div v-for="(member, idx) in teamLeaderboard" :key="member.id"
+                        class="px-5 py-3 grid grid-cols-12 gap-2 items-center transition-all duration-300"
+                        :class="[
+                            member.is_me ? 'bg-teal-50/60 border-l-2 border-teal-500' : 'hover:bg-gray-50',
+                            mounted ? 'opacity-100 translate-x-0' : 'opacity-0 ' + (isRtl ? 'translate-x-4' : '-translate-x-4')
+                        ]"
+                        :style="{ transitionDelay: mounted ? (0.5 + idx * 0.08) + 's' : '0s' }">
+
+                        <!-- Rank Badge -->
+                        <div class="col-span-1">
+                            <div v-if="idx === 0" class="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold text-white" style="background: linear-gradient(135deg, #f59e0b, #d97706);">1</div>
+                            <div v-else-if="idx === 1" class="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold text-white" style="background: linear-gradient(135deg, #9ca3af, #6b7280);">2</div>
+                            <div v-else-if="idx === 2" class="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold text-white" style="background: linear-gradient(135deg, #d97706, #92400e);">3</div>
+                            <div v-else class="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold text-gray-400 bg-gray-100">{{ idx + 1 }}</div>
+                        </div>
+
+                        <!-- Name + Initials Avatar -->
+                        <div class="col-span-3 flex items-center gap-2 min-w-0">
+                            <div class="w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-bold text-white flex-shrink-0"
+                                :style="{ background: member.is_me ? 'linear-gradient(135deg, #0d9488, #14b8a6)' : 'linear-gradient(135deg, #94a3b8, #64748b)' }">
+                                {{ member.name.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase() }}
+                            </div>
+                            <div class="min-w-0">
+                                <p class="text-xs font-semibold text-gray-800 truncate">{{ member.name }}</p>
+                                <span v-if="member.is_me" class="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-bold text-teal-700 bg-teal-100">{{ isRtl ? 'انت' : 'You' }}</span>
+                            </div>
+                        </div>
+
+                        <!-- Total Leads -->
+                        <div class="col-span-2 text-center">
+                            <span class="text-sm font-bold text-gray-700">{{ member.total_leads }}</span>
+                        </div>
+
+                        <!-- Converted -->
+                        <div class="col-span-2 text-center">
+                            <span class="inline-flex items-center gap-1 text-sm font-bold" :class="member.converted_leads > 0 ? 'text-emerald-600' : 'text-gray-400'">
+                                <svg v-if="member.converted_leads > 0" class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                {{ member.converted_leads }}
+                            </span>
+                        </div>
+
+                        <!-- Period Leads (This Week) -->
+                        <div class="col-span-2 text-center">
+                            <span class="inline-flex items-center justify-center min-w-[24px] h-6 px-1.5 rounded-full text-xs font-bold"
+                                :class="member.period_leads > 0 ? 'bg-blue-50 text-blue-600' : 'bg-gray-50 text-gray-400'">
+                                {{ member.period_leads }}
+                            </span>
+                        </div>
+
+                        <!-- Conversion Rate Progress Bar -->
+                        <div class="col-span-2">
+                            <div class="flex items-center gap-1.5">
+                                <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                                    <div class="h-full rounded-full transition-all duration-1000 ease-out"
+                                        :style="{
+                                            width: mounted ? member.conversion_rate + '%' : '0%',
+                                            background: member.conversion_rate >= 50 ? 'linear-gradient(90deg, #10b981, #34d399)' : member.conversion_rate >= 25 ? 'linear-gradient(90deg, #0d9488, #14b8a6)' : 'linear-gradient(90deg, #f59e0b, #fbbf24)',
+                                            transitionDelay: (0.6 + idx * 0.08) + 's'
+                                        }">
+                                    </div>
+                                </div>
+                                <span class="text-[10px] font-bold text-gray-500 w-8 text-end tabular-nums">{{ member.conversion_rate }}%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Summary Footer -->
+                <div class="px-5 py-3 bg-gray-50/80 border-t border-gray-100 flex items-center justify-between">
+                    <span class="text-[10px] text-gray-400">{{ teamLeaderboard.length }} {{ isRtl ? 'عضو فريق' : 'team members' }}</span>
+                    <span class="text-[10px] text-gray-400">{{ isRtl ? 'مرتب حسب التحويلات' : 'Sorted by conversions' }}</span>
                 </div>
             </div>
 

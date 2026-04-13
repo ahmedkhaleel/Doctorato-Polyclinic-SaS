@@ -22,6 +22,7 @@ const props = defineProps({
     weeklyComparison: Object,
     slaMetrics: Object,
     staleLeads: Array,
+    upcomingFollowUps: Object,
     period: String,
 });
 
@@ -183,6 +184,119 @@ function getInitials(name) {
     if (!name) return '??';
     return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
 }
+
+// Conversion Funnel computed
+const funnelStageOrder = ['new', 'contacted', 'qualified', 'appointment_booked', 'consultation_done', 'negotiation', 'converted'];
+const funnelStageLabels = {
+    new: 'New',
+    contacted: 'Contacted',
+    qualified: 'Qualified',
+    appointment_booked: 'Appointment Booked',
+    consultation_done: 'Consultation Done',
+    negotiation: 'Negotiation',
+    converted: 'Converted',
+};
+const funnelStageColors = {
+    new: '#3B82F6',
+    contacted: '#6366F1',
+    qualified: '#A855F7',
+    appointment_booked: '#F59E0B',
+    consultation_done: '#14B8A6',
+    negotiation: '#F97316',
+    converted: '#22C55E',
+};
+
+const funnelStages = computed(() => {
+    const stats = props.pipelineStats || {};
+    const total = funnelStageOrder.reduce((sum, key) => sum + (stats[key] || 0), 0);
+    if (total === 0) return [];
+
+    let prevCount = null;
+    return funnelStageOrder.map((key, idx) => {
+        const count = stats[key] || 0;
+        const pctOfTotal = Math.round((count / total) * 100);
+        const widthPct = total > 0 ? Math.max((count / total) * 100, count > 0 ? 8 : 2) : 2;
+        const dropOff = prevCount !== null && prevCount > 0
+            ? Math.round(((prevCount - count) / prevCount) * 100)
+            : null;
+        prevCount = count;
+        return {
+            key,
+            label: funnelStageLabels[key],
+            count,
+            pctOfTotal,
+            widthPct,
+            dropOff,
+            color: funnelStageColors[key],
+            gradient: statusGradients[key] || 'from-gray-400 to-gray-500',
+        };
+    });
+});
+
+// Mini Calendar (7-day strip, Saturday-first)
+const calendarDays = computed(() => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // Find the most recent Saturday (or today if Saturday)
+    const dayOfWeek = today.getDay(); // 0=Sun..6=Sat
+    const diffToSat = dayOfWeek >= 6 ? 0 : dayOfWeek + 1; // days since last Saturday
+    const startDate = new Date(today);
+    startDate.setDate(today.getDate() - diffToSat);
+
+    const days = [];
+    const todayStr = today.toISOString().split('T')[0];
+
+    // Build map of follow-up counts by date from todayFollowUps
+    const fuByDate = {};
+    (props.todayFollowUps || []).forEach(fu => {
+        const d = fu.scheduled_at ? fu.scheduled_at.split('T')[0] : fu.scheduled_date;
+        if (d) {
+            fuByDate[d] = (fuByDate[d] || 0) + 1;
+        }
+    });
+
+    // Count overdue by date
+    const overdueByDate = {};
+    (props.overdueFollowUps || []).forEach(fu => {
+        const d = fu.scheduled_at ? fu.scheduled_at.split('T')[0] : fu.scheduled_date;
+        if (d) {
+            overdueByDate[d] = (overdueByDate[d] || 0) + 1;
+        }
+    });
+    const totalOverdue = (props.overdueFollowUps || []).length;
+
+    const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const dayNamesAr = ['\u0627\u0644\u0623\u062D\u062F', '\u0627\u0644\u0627\u062B\u0646\u064A\u0646', '\u0627\u0644\u062B\u0644\u0627\u062B\u0627\u0621', '\u0627\u0644\u0623\u0631\u0628\u0639\u0627\u0621', '\u0627\u0644\u062E\u0645\u064A\u0633', '\u0627\u0644\u062C\u0645\u0639\u0629', '\u0627\u0644\u0633\u0628\u062A'];
+
+    for (let i = 0; i < 7; i++) {
+        const d = new Date(startDate);
+        d.setDate(startDate.getDate() + i);
+        const dateStr = d.toISOString().split('T')[0];
+        const isPast = d < today;
+        const isToday = dateStr === todayStr;
+        const dow = d.getDay();
+
+        days.push({
+            date: dateStr,
+            dayName: isRtl.value ? dayNamesAr[dow] : dayNames[dow],
+            dayNum: d.getDate(),
+            isToday,
+            isPast,
+            isFuture: !isPast && !isToday,
+            followUpCount: fuByDate[dateStr] || 0,
+            overdueCount: isPast ? (overdueByDate[dateStr] || 0) : 0,
+        });
+    }
+
+    // Put total overdue on today if no specific date mapping found
+    if (totalOverdue > 0 && days.filter(d => d.isPast).every(d => d.overdueCount === 0)) {
+        const todayDay = days.find(d => d.isToday);
+        if (todayDay) todayDay.overdueCount = totalOverdue;
+    }
+
+    return days;
+});
 
 // Follow-up actions
 function completeFollowUp(fuId) {
@@ -537,6 +651,189 @@ function missFollowUp(fuId) {
                         <div v-if="!leadsBySource?.length" class="text-sm text-gray-400 text-center py-8">
                             <svg class="w-10 h-10 mx-auto text-gray-200 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" /></svg>
                             No data yet
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Conversion Funnel + Mini Calendar -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Conversion Funnel Chart -->
+                <div
+                    class="card-entrance lg:col-span-2 bg-white rounded-2xl shadow-sm hover:shadow-md p-6 border border-gray-100 transition-all duration-300"
+                    :class="{ 'card-entrance-active': mounted }"
+                    :style="{ transitionDelay: '500ms' }"
+                >
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-[#C4A265] to-[#A8893F] flex items-center justify-center">
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h18l-3 6h-12L3 4zm3 6v10h12V10M9 10v10m6-10v10" />
+                            </svg>
+                        </div>
+                        <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider">Conversion Funnel</h3>
+                    </div>
+
+                    <div v-if="funnelStages.length" class="space-y-1">
+                        <template v-for="(stage, idx) in funnelStages" :key="stage.key">
+                            <!-- Drop-off indicator (between stages) -->
+                            <div v-if="stage.dropOff !== null && stage.dropOff > 0" class="flex items-center justify-center gap-2 py-1">
+                                <div class="flex items-center gap-1 text-xs text-red-400">
+                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                                    </svg>
+                                    <span class="font-medium">-{{ stage.dropOff }}%</span>
+                                </div>
+                            </div>
+
+                            <!-- Funnel bar -->
+                            <div class="flex items-center gap-3 group">
+                                <div class="w-28 flex-shrink-0" :class="isRtl ? 'text-left' : 'text-right'">
+                                    <span class="text-xs font-medium text-gray-600 group-hover:text-gray-900 transition-colors">{{ stage.label }}</span>
+                                </div>
+                                <div class="flex-1 flex justify-center">
+                                    <div
+                                        class="h-9 rounded-lg flex items-center justify-center transition-all duration-700 ease-out relative overflow-hidden cursor-default"
+                                        :class="'bg-gradient-to-r ' + stage.gradient"
+                                        :style="{
+                                            width: mounted ? stage.widthPct + '%' : '0%',
+                                            minWidth: stage.count > 0 ? '60px' : '20px',
+                                        }"
+                                    >
+                                        <span class="text-xs font-bold text-white drop-shadow-sm relative z-10">{{ stage.count }}</span>
+                                        <div class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                    </div>
+                                </div>
+                                <div class="w-14 flex-shrink-0">
+                                    <span class="text-xs font-semibold" :style="{ color: stage.color }">{{ stage.pctOfTotal }}%</span>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+
+                    <div v-else class="text-sm text-gray-400 text-center py-12">
+                        <svg class="w-10 h-10 mx-auto text-gray-200 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M3 4h18l-3 6h-12L3 4zm3 6v10h12V10" />
+                        </svg>
+                        No pipeline data yet
+                    </div>
+
+                    <!-- Funnel summary -->
+                    <div v-if="funnelStages.length" class="mt-5 pt-4 border-t border-gray-100 flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <div class="text-center">
+                                <div class="text-lg font-bold text-gray-800">{{ funnelStages[0]?.count || 0 }}</div>
+                                <div class="text-[10px] text-gray-400 uppercase">Top</div>
+                            </div>
+                            <svg class="w-4 h-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                            </svg>
+                            <div class="text-center">
+                                <div class="text-lg font-bold text-green-600">{{ funnelStages[funnelStages.length - 1]?.count || 0 }}</div>
+                                <div class="text-[10px] text-gray-400 uppercase">Converted</div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-sm font-bold" :style="{ color: '#C4A265' }">
+                                {{ funnelStages[0]?.count > 0 ? Math.round((funnelStages[funnelStages.length - 1]?.count / funnelStages[0]?.count) * 100) : 0 }}%
+                            </div>
+                            <div class="text-[10px] text-gray-400 uppercase">Overall Rate</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mini Calendar Widget -->
+                <div
+                    class="card-entrance bg-white rounded-2xl shadow-sm hover:shadow-md p-6 border border-gray-100 transition-all duration-300"
+                    :class="{ 'card-entrance-active': mounted }"
+                    :style="{ transitionDelay: '520ms' }"
+                >
+                    <div class="flex items-center justify-between mb-5">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-[#C4A265] to-[#A8893F] flex items-center justify-center">
+                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                            </div>
+                            <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider">This Week</h3>
+                        </div>
+                        <Link
+                            href="/admin/crm/calendar"
+                            class="text-xs font-semibold hover:underline transition-colors"
+                            :style="{ color: '#C4A265' }"
+                        >
+                            View Calendar
+                            <svg class="w-3 h-3 inline-block" :class="isRtl ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </Link>
+                    </div>
+
+                    <div class="grid grid-cols-7 gap-1.5">
+                        <div
+                            v-for="day in calendarDays"
+                            :key="day.date"
+                            class="flex flex-col items-center py-2 px-1 rounded-xl transition-all duration-200 cursor-default relative"
+                            :class="{
+                                'bg-gradient-to-b from-[#C4A265]/10 to-[#C4A265]/5 ring-2 ring-[#C4A265] shadow-sm': day.isToday,
+                                'bg-gray-50/80 hover:bg-gray-100/80': !day.isToday && !day.isPast,
+                                'bg-gray-50/40': day.isPast && !day.isToday,
+                            }"
+                        >
+                            <!-- Day name -->
+                            <span
+                                class="text-[10px] font-semibold uppercase tracking-wide mb-1"
+                                :class="day.isToday ? 'text-[#C4A265]' : day.isPast ? 'text-gray-300' : 'text-gray-400'"
+                            >{{ day.dayName }}</span>
+
+                            <!-- Day number -->
+                            <span
+                                class="text-sm font-bold mb-1.5"
+                                :class="day.isToday ? 'text-[#C4A265]' : day.isPast ? 'text-gray-300' : 'text-gray-700'"
+                            >{{ day.dayNum }}</span>
+
+                            <!-- Follow-up count dot -->
+                            <div v-if="day.followUpCount > 0"
+                                class="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold text-white"
+                                :class="day.isToday ? 'bg-[#C4A265]' : 'bg-blue-400'"
+                            >
+                                {{ day.followUpCount }}
+                            </div>
+                            <div v-else class="w-5 h-5 rounded-full bg-gray-100 flex items-center justify-center">
+                                <span class="w-1.5 h-1.5 rounded-full" :class="day.isPast ? 'bg-gray-200' : 'bg-gray-300'"></span>
+                            </div>
+
+                            <!-- Overdue badge -->
+                            <div
+                                v-if="day.overdueCount > 0"
+                                class="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center ring-2 ring-white"
+                            >
+                                {{ day.overdueCount > 9 ? '9+' : day.overdueCount }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Calendar summary -->
+                    <div class="mt-5 pt-4 border-t border-gray-100 space-y-2.5">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-[#C4A265]"></span>
+                                <span class="text-xs text-gray-500">Today's follow-ups</span>
+                            </div>
+                            <span class="text-xs font-bold text-gray-700">{{ todayFollowUps?.length || 0 }}</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-red-500"></span>
+                                <span class="text-xs text-gray-500">Overdue</span>
+                            </div>
+                            <span class="text-xs font-bold text-red-600">{{ overdueFollowUps?.length || 0 }}</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-blue-400"></span>
+                                <span class="text-xs text-gray-500">This week total</span>
+                            </div>
+                            <span class="text-xs font-bold text-gray-700">{{ calendarDays.reduce((s, d) => s + d.followUpCount, 0) }}</span>
                         </div>
                     </div>
                 </div>

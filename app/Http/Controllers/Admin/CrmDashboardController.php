@@ -196,6 +196,16 @@ class CrmDashboardController extends Controller
             ],
         ];
 
+        // ── Upcoming Follow-ups (next 7 days for mini calendar) ──
+        $upcomingFollowUps = LeadFollowUp::where('status', 'pending')
+            ->whereBetween('scheduled_at', [now()->startOfDay(), now()->addDays(7)->endOfDay()])
+            ->selectRaw('DATE(scheduled_at) as date, COUNT(*) as count')
+            ->groupBy('date')
+            ->orderBy('date')
+            ->get()
+            ->pluck('count', 'date')
+            ->toArray();
+
         return Inertia::render('Admin/CRM/Dashboard', [
             'pipelineStats' => $pipelineStats,
             'metrics' => $metrics,
@@ -210,6 +220,7 @@ class CrmDashboardController extends Controller
             'weeklyComparison' => $weeklyComparison,
             'slaMetrics' => $slaMetrics,
             'staleLeads' => $staleLeads,
+            'upcomingFollowUps' => $upcomingFollowUps,
             'period' => $period,
         ]);
     }

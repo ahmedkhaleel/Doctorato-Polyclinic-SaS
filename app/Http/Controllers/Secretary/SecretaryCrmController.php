@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Secretary;
 
 use App\Models\Lead;
+use App\Models\User;
 use App\Models\Patient;
 use App\Models\LeadActivity;
 use App\Models\LeadFollowUp;
@@ -143,6 +144,26 @@ class SecretaryCrmController extends BaseSecretaryController
 
         $leadSources = LeadSource::active()->ordered()->get(['id', 'name_en', 'name_ar']);
 
+        // Team leaderboard: compare performance across secretaries
+        $teamLeaderboard = User::whereHas('role', fn($q) => $q->where('name', 'secretary'))
+            ->withCount([
+                'assignedLeads as total_leads',
+                'assignedLeads as converted_leads' => fn($q) => $q->where('status', 'converted'),
+                'assignedLeads as period_leads' => fn($q) => $q->where('created_at', '>=', $weekStart),
+            ])
+            ->get(['id', 'name'])
+            ->map(fn($u) => [
+                'id' => $u->id,
+                'name' => $u->name,
+                'total_leads' => $u->total_leads,
+                'converted_leads' => $u->converted_leads,
+                'period_leads' => $u->period_leads,
+                'conversion_rate' => $u->total_leads > 0 ? round(($u->converted_leads / $u->total_leads) * 100, 1) : 0,
+                'is_me' => $u->id === $userId,
+            ])
+            ->sortByDesc('converted_leads')
+            ->values();
+
         return Inertia::render('Secretary/CRM/Dashboard', [
             'stats' => $stats,
             'todayFollowUps' => $todayFollowUps,
@@ -158,6 +179,7 @@ class SecretaryCrmController extends BaseSecretaryController
             'slaMetrics' => $slaMetrics,
             'staleLeads' => $staleLeads,
             'leadSources' => $leadSources,
+            'teamLeaderboard' => $teamLeaderboard,
         ]);
     }
 
