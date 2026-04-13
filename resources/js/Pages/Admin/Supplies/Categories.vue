@@ -24,22 +24,22 @@ const form = useForm({
     name_en: '',
     name_ar: '',
     icon: '',
-    color: '#C4A265',
+    color: '#6366F1',
     description: '',
     display_order: 0,
     is_active: true,
 });
 
 const colorPresets = [
-    '#8B5CF6', '#F59E0B', '#EC4899', '#6B7280',
+    '#6366F1', '#8B5CF6', '#F59E0B', '#EC4899',
     '#10B981', '#3B82F6', '#EF4444', '#14B8A6',
-    '#C4A265', '#F97316', '#6366F1', '#84CC16',
+    '#6B7280', '#F97316', '#84CC16', '#0EA5E9',
 ];
 
 function openCreate() {
     editingCategory.value = null;
     form.reset();
-    form.color = '#C4A265';
+    form.color = '#6366F1';
     form.is_active = true;
     showModal.value = true;
 }
@@ -49,7 +49,7 @@ function openEdit(cat) {
     form.name_en = cat.name_en;
     form.name_ar = cat.name_ar;
     form.icon = cat.icon || '';
-    form.color = cat.color || '#C4A265';
+    form.color = cat.color || '#6366F1';
     form.description = cat.description || '';
     form.display_order = cat.display_order || 0;
     form.is_active = cat.is_active;
@@ -87,7 +87,7 @@ function deleteCategory() {
             <div class="flex items-center justify-between animate-fade-in-up">
                 <div>
                     <div class="flex items-center gap-2 text-sm text-gray-500 mb-1">
-                        <a href="/admin/inventory" class="hover:text-[#C4A265] transition-colors">{{ $t('a_inventory') }}</a>
+                        <a href="/admin/inventory" class="hover:text-indigo-600 transition-colors">{{ $t('a_inventory') }}</a>
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
                         <span class="text-gray-400">{{ $t('a_categories') }}</span>
                     </div>
@@ -96,8 +96,8 @@ function deleteCategory() {
                 <button
                     v-if="can('supplies.create')"
                     @click="openCreate"
-                    class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-white text-sm font-semibold transition-all duration-300 shadow-lg shadow-[#C4A265]/20 hover:shadow-xl hover:shadow-[#C4A265]/30 hover:-translate-y-0.5"
-                    style="background: linear-gradient(135deg, #C4A265, #D4B87A);"
+                    class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-white text-sm font-semibold transition-all duration-300 shadow-lg shadow-indigo-500/20 hover:shadow-xl hover:shadow-indigo-500/30 hover:-translate-y-0.5"
+                    style="background: linear-gradient(135deg, #6366F1, #818CF8);"
                 >
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
                     {{ $t('a_add_category') }}
@@ -112,12 +112,12 @@ function deleteCategory() {
                     class="opacity-0 animate-inventory-card bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden inventory-card-hover group"
                 >
                     <!-- Color accent -->
-                    <div class="h-1.5" :style="{ background: `linear-gradient(90deg, ${cat.color || '#C4A265'}, ${cat.color || '#C4A265'}88)` }"></div>
+                    <div class="h-1.5" :style="{ background: `linear-gradient(90deg, ${cat.color || '#6366F1'}, ${cat.color || '#6366F1'}88)` }"></div>
 
                     <div class="p-5">
                         <div class="flex items-start justify-between mb-4">
-                            <div class="w-12 h-12 rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110" :style="{ backgroundColor: (cat.color || '#C4A265') + '15' }">
-                                <svg class="w-6 h-6" :style="{ color: cat.color || '#C4A265' }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="w-12 h-12 rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110" :style="{ backgroundColor: (cat.color || '#6366F1') + '15' }">
+                                <svg class="w-6 h-6" :style="{ color: cat.color || '#6366F1' }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0v10l-8 4-8-4V7m16 0l-8 4m0 10V11m0 0L4 7" />
                                 </svg>
                             </div>
@@ -194,19 +194,19 @@ function deleteCategory() {
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $t('a_name_english') }} <span class="text-red-500">*</span></label>
-                                        <input v-model="form.name_en" type="text" placeholder="e.g. Injectables" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all" />
+                                        <input v-model="form.name_en" type="text" placeholder="e.g. Injectables" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all" />
                                         <p v-if="form.errors.name_en" class="mt-1 text-sm text-red-500">{{ form.errors.name_en }}</p>
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $t('a_name_arabic') }} <span class="text-red-500">*</span></label>
-                                        <input v-model="form.name_ar" type="text" dir="rtl" placeholder="مثال: حقن تجميلية" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all" />
+                                        <input v-model="form.name_ar" type="text" dir="rtl" placeholder="مثال: حقن تجميلية" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all" />
                                         <p v-if="form.errors.name_ar" class="mt-1 text-sm text-red-500">{{ form.errors.name_ar }}</p>
                                     </div>
                                 </div>
 
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $t('a_description') }}</label>
-                                    <textarea v-model="form.description" rows="2" placeholder="Brief description of this category..." class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all resize-none"></textarea>
+                                    <textarea v-model="form.description" rows="2" placeholder="Brief description of this category..." class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all resize-none"></textarea>
                                 </div>
 
                                 <div>
@@ -228,11 +228,11 @@ function deleteCategory() {
                                 <div class="grid grid-cols-2 gap-4">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $t('a_display_order') }}</label>
-                                        <input v-model="form.display_order" type="number" min="0" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all" />
+                                        <input v-model="form.display_order" type="number" min="0" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all" />
                                     </div>
                                     <div class="flex items-end pb-1">
                                         <label class="flex items-center gap-2 cursor-pointer">
-                                            <input v-model="form.is_active" type="checkbox" class="rounded border-gray-300 text-[#C4A265] focus:ring-[#C4A265]/20 w-5 h-5" />
+                                            <input v-model="form.is_active" type="checkbox" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500/20 w-5 h-5" />
                                             <span class="text-sm font-medium text-gray-700">{{ $t('a_active') }}</span>
                                         </label>
                                     </div>
@@ -253,7 +253,7 @@ function deleteCategory() {
                                         type="submit"
                                         :disabled="form.processing"
                                         class="px-5 py-2.5 rounded-xl text-white text-sm font-semibold transition-all disabled:opacity-50"
-                                        style="background: linear-gradient(135deg, #C4A265, #D4B87A);"
+                                        style="background: linear-gradient(135deg, #6366F1, #818CF8);"
                                     >
                                         {{ form.processing ? $t('a_saving') : (editingCategory ? $t('a_update') : $t('a_create')) }}
                                     </button>

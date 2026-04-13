@@ -76,7 +76,7 @@ function isLowStock() {
                     <p class="text-sm text-gray-500 mt-1">{{ $t('a_transaction_history') }}</p>
                 </div>
                 <div class="flex items-center space-x-3 rtl:space-x-reverse">
-                    <span class="text-sm font-mono px-3 py-1 rounded-full bg-yellow-50" style="color: #C4A265;">{{ supply.sku }}</span>
+                    <span class="text-sm font-mono px-3 py-1 rounded-full bg-yellow-50" style="color: #6366F1;">{{ supply.sku }}</span>
                     <Link href="/admin/supplies" class="text-sm text-gray-500 hover:text-gray-700 underline">{{ $t('a_back_to_supplies') }}</Link>
                 </div>
             </div>
@@ -114,7 +114,7 @@ function isLowStock() {
                         v-if="can('supplies.update')"
                         @click="showForm = !showForm"
                         class="text-sm font-medium hover:underline"
-                        style="color: #C4A265;"
+                        style="color: #6366F1;"
                     >
                         {{ showForm ? $t('a_cancel') : $t('a_new_transaction') }}
                     </button>
@@ -148,7 +148,7 @@ function isLowStock() {
                                 type="submit"
                                 :disabled="form.processing"
                                 class="px-6 py-2 rounded-lg text-white text-sm font-medium transition disabled:opacity-50"
-                                style="background-color: #C4A265;"
+                                style="background-color: #6366F1;"
                             >
                                 {{ form.processing ? $t('a_saving') : $t('a_add_transaction') }}
                             </button>
@@ -188,7 +188,7 @@ function isLowStock() {
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ txn.unit_cost ? formatCurrency(txn.unit_cost) : '-' }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                    <Link v-if="txn.visit_id" :href="`/admin/visits/${txn.visit_id}`" class="font-medium hover:underline" style="color: #C4A265;">#{{ txn.visit_id }}</Link>
+                                    <Link v-if="txn.visit_id" :href="`/admin/visits/${txn.visit_id}`" class="font-medium hover:underline" style="color: #6366F1;">#{{ txn.visit_id }}</Link>
                                     <span v-else class="text-gray-400">-</span>
                                 </td>
                                 <td class="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">{{ txn.notes || '-' }}</td>
@@ -211,7 +211,7 @@ function isLowStock() {
                                 v-html="link.label"
                                 class="px-3 py-1 text-sm rounded border transition"
                                 :class="link.active ? 'text-white border-transparent' : 'text-gray-600 border-gray-300 hover:bg-gray-50'"
-                                :style="link.active ? 'background-color: #C4A265;' : ''"
+                                :style="link.active ? 'background-color: #6366F1;' : ''"
                                 preserve-state
                             />
                             <span v-else v-html="link.label" class="px-3 py-1 text-sm text-gray-400" />

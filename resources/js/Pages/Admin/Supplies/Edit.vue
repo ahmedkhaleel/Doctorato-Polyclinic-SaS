@@ -65,15 +65,15 @@ const unitOptions = ['pcs', 'ml', 'mg', 'g', 'box', 'pack', 'bottle', 'tube', 'v
             <div class="flex items-center justify-between animate-fade-in-up">
                 <div>
                     <div class="flex items-center gap-2 text-sm text-gray-500 mb-1">
-                        <Link href="/admin/inventory" class="hover:text-[#C4A265] transition-colors">{{ $t('a_inventory') }}</Link>
+                        <Link href="/admin/inventory" class="hover:text-indigo-600 transition-colors">{{ $t('a_inventory') }}</Link>
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
-                        <Link href="/admin/supplies" class="hover:text-[#C4A265] transition-colors">{{ $t('a_products') }}</Link>
+                        <Link href="/admin/supplies" class="hover:text-indigo-600 transition-colors">{{ $t('a_products') }}</Link>
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
                         <span class="text-gray-400">{{ $t('a_edit') }}</span>
                     </div>
                     <h1 class="text-2xl font-bold text-gray-800">Edit: {{ supply.name_en }}</h1>
                 </div>
-                <span class="text-sm font-mono px-3 py-1.5 rounded-full bg-[#C4A265]/10 text-[#C4A265] font-medium">{{ supply.sku }}</span>
+                <span class="text-sm font-mono px-3 py-1.5 rounded-full bg-indigo-500/10 text-indigo-600 font-medium">{{ supply.sku }}</span>
             </div>
 
             <form @submit.prevent="submit" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -83,8 +83,8 @@ const unitOptions = ['pcs', 'ml', 'mg', 'g', 'box', 'pack', 'bottle', 'tube', 'v
                     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden animate-fade-in-up" style="animation-delay: 0.1s;">
                         <div class="px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white">
                             <h2 class="text-base font-semibold text-gray-800 flex items-center gap-2">
-                                <div class="w-8 h-8 rounded-lg bg-[#C4A265]/10 flex items-center justify-center">
-                                    <svg class="w-4 h-4 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                <div class="w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center">
+                                    <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                 </div>
                                 {{ $t('a_basic_information') }}
                             </h2>
@@ -93,12 +93,12 @@ const unitOptions = ['pcs', 'ml', 'mg', 'g', 'box', 'pack', 'bottle', 'tube', 'v
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $t('a_name_english') }} <span class="text-red-500">*</span></label>
-                                    <input v-model="form.name_en" type="text" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all duration-200" />
+                                    <input v-model="form.name_en" type="text" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all duration-200" />
                                     <p v-if="form.errors.name_en" class="mt-1.5 text-sm text-red-500">{{ form.errors.name_en }}</p>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $t('a_name_arabic') }} <span class="text-red-500">*</span></label>
-                                    <input v-model="form.name_ar" type="text" dir="rtl" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all duration-200" />
+                                    <input v-model="form.name_ar" type="text" dir="rtl" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all duration-200" />
                                     <p v-if="form.errors.name_ar" class="mt-1.5 text-sm text-red-500">{{ form.errors.name_ar }}</p>
                                 </div>
                             </div>
@@ -106,17 +106,17 @@ const unitOptions = ['pcs', 'ml', 'mg', 'g', 'box', 'pack', 'bottle', 'tube', 'v
                             <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $t('a_sku') }}</label>
-                                    <input v-model="form.sku" type="text" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm font-mono focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all duration-200" />
+                                    <input v-model="form.sku" type="text" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm font-mono focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all duration-200" />
                                     <p v-if="form.errors.sku" class="mt-1.5 text-sm text-red-500">{{ form.errors.sku }}</p>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $t('a_barcode') }}</label>
-                                    <input v-model="form.barcode" type="text" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm font-mono focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all duration-200" />
+                                    <input v-model="form.barcode" type="text" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm font-mono focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all duration-200" />
                                     <p v-if="form.errors.barcode" class="mt-1.5 text-sm text-red-500">{{ form.errors.barcode }}</p>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $t('a_category') }}</label>
-                                    <select v-model="form.supply_category_id" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all duration-200">
+                                    <select v-model="form.supply_category_id" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all duration-200">
                                         <option value="">{{ $t('a_select_category') }}</option>
                                         <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ cat.name_en }}</option>
                                     </select>
@@ -125,7 +125,7 @@ const unitOptions = ['pcs', 'ml', 'mg', 'g', 'box', 'pack', 'bottle', 'tube', 'v
 
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $t('a_description') }}</label>
-                                <textarea v-model="form.description" rows="3" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all duration-200 resize-none"></textarea>
+                                <textarea v-model="form.description" rows="3" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all duration-200 resize-none"></textarea>
                             </div>
                         </div>
                     </div>
@@ -151,11 +151,11 @@ const unitOptions = ['pcs', 'ml', 'mg', 'g', 'box', 'pack', 'bottle', 'tube', 'v
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $t('a_min_quantity_alert') }}</label>
-                                    <input v-model="form.min_quantity" type="number" min="0" step="0.01" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all duration-200" />
+                                    <input v-model="form.min_quantity" type="number" min="0" step="0.01" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all duration-200" />
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $t('a_unit') }}</label>
-                                    <select v-model="form.unit" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all duration-200">
+                                    <select v-model="form.unit" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all duration-200">
                                         <option value="">{{ $t('a_select_unit') }}</option>
                                         <option v-for="u in unitOptions" :key="u" :value="u">{{ u }}</option>
                                     </select>
@@ -182,7 +182,7 @@ const unitOptions = ['pcs', 'ml', 'mg', 'g', 'box', 'pack', 'bottle', 'tube', 'v
                                 </button>
                             </div>
                             <label class="block cursor-pointer">
-                                <div class="border-2 border-dashed border-gray-200 rounded-xl p-6 text-center hover:border-[#C4A265]/50 hover:bg-[#C4A265]/[0.02] transition-all duration-300">
+                                <div class="border-2 border-dashed border-gray-200 rounded-xl p-6 text-center hover:border-indigo-400/50 hover:bg-indigo-50/50 transition-all duration-300">
                                     <svg class="w-8 h-8 mx-auto text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" /></svg>
                                     <p class="text-sm text-gray-500">{{ $t('a_click_upload') }}</p>
                                     <p class="text-xs text-gray-400 mt-1">{{ $t('a_png_jpg_2mb') }}</p>
@@ -208,19 +208,19 @@ const unitOptions = ['pcs', 'ml', 'mg', 'g', 'box', 'pack', 'bottle', 'tube', 'v
                         <div class="p-6 space-y-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $t('a_purchase_price') }} ({{ currencyCode }})</label>
-                                <input v-model="form.purchase_price" type="number" step="0.01" min="0" placeholder="0.00" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all duration-200" />
+                                <input v-model="form.purchase_price" type="number" step="0.01" min="0" placeholder="0.00" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all duration-200" />
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $t('a_supplier') }}</label>
-                                <input v-model="form.supplier" type="text" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all duration-200" />
+                                <input v-model="form.supplier" type="text" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all duration-200" />
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $t('a_batch_number') }}</label>
-                                <input v-model="form.batch_number" type="text" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm font-mono focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all duration-200" />
+                                <input v-model="form.batch_number" type="text" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm font-mono focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all duration-200" />
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $t('a_expiry_date') }}</label>
-                                <input v-model="form.expiry_date" type="date" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all duration-200" />
+                                <input v-model="form.expiry_date" type="date" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all duration-200" />
                             </div>
                         </div>
                     </div>
@@ -229,8 +229,8 @@ const unitOptions = ['pcs', 'ml', 'mg', 'g', 'box', 'pack', 'bottle', 'tube', 'v
                     <button
                         type="submit"
                         :disabled="form.processing"
-                        class="w-full px-6 py-3.5 rounded-xl text-white font-semibold text-sm transition-all duration-300 disabled:opacity-50 shadow-lg shadow-[#C4A265]/20 hover:shadow-xl hover:shadow-[#C4A265]/30 hover:-translate-y-0.5 active:translate-y-0"
-                        style="background: linear-gradient(135deg, #C4A265, #D4B87A);"
+                        class="w-full px-6 py-3.5 rounded-xl text-white font-semibold text-sm transition-all duration-300 disabled:opacity-50 shadow-lg shadow-indigo-500/20 hover:shadow-xl hover:shadow-indigo-500/30 hover:-translate-y-0.5 active:translate-y-0"
+                        style="background: linear-gradient(135deg, #6366F1, #818CF8);"
                     >
                         <span v-if="form.processing" class="flex items-center justify-center gap-2">
                             <svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>

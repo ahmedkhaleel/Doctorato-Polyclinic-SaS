@@ -123,7 +123,7 @@ function submit() {
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
                         <label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'المورد' : 'Supplier' }} *</label>
-                        <select v-model="form.supplier_id" required class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-cyan-500 focus:border-cyan-500">
+                        <select v-model="form.supplier_id" required class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-indigo-500 focus:border-indigo-500">
                             <option value="">{{ isRtl ? 'اختر المورد' : 'Select Supplier' }}</option>
                             <option v-for="s in suppliers" :key="s.id" :value="s.id">{{ isRtl ? s.name_ar : s.name_en }}</option>
                         </select>
@@ -133,11 +133,11 @@ function submit() {
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'تاريخ التسليم المتوقع' : 'Expected Delivery' }}</label>
-                        <input v-model="form.expected_delivery_date" type="date" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-cyan-500 focus:border-cyan-500" />
+                        <input v-model="form.expected_delivery_date" type="date" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-indigo-500 focus:border-indigo-500" />
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
-                        <input v-model="form.notes" type="text" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-cyan-500 focus:border-cyan-500" :placeholder="isRtl ? 'ملاحظات اختيارية...' : 'Optional notes...'" />
+                        <input v-model="form.notes" type="text" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-indigo-500 focus:border-indigo-500" :placeholder="isRtl ? 'ملاحظات اختيارية...' : 'Optional notes...'" />
                     </div>
                 </div>
             </div>
@@ -148,14 +148,14 @@ function submit() {
 
                 <!-- Search supplies -->
                 <div class="relative mb-4">
-                    <input v-model="searchSupply" type="text" :placeholder="isRtl ? 'ابحث عن صنف بالاسم أو الرمز...' : 'Search item by name or SKU...'" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-cyan-500 focus:border-cyan-500 ps-10" />
+                    <input v-model="searchSupply" type="text" :placeholder="isRtl ? 'ابحث عن صنف بالاسم أو الرمز...' : 'Search item by name or SKU...'" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-indigo-500 focus:border-indigo-500 ps-10" />
                     <svg class="w-4 h-4 text-gray-400 absolute top-3 start-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                 </div>
 
                 <!-- Supply list (limited) -->
                 <div v-if="searchSupply" class="max-h-48 overflow-y-auto border border-gray-100 rounded-xl mb-4 divide-y divide-gray-50">
                     <button v-for="supply in filteredSupplies.slice(0, 10)" :key="supply.id" type="button" @click="addItem(supply)"
-                        class="w-full flex items-center justify-between px-4 py-2.5 hover:bg-cyan-50 transition text-start"
+                        class="w-full flex items-center justify-between px-4 py-2.5 hover:bg-indigo-50 transition text-start"
                         :class="form.items.find(i => i.supply_id === supply.id) ? 'bg-gray-50 opacity-50' : ''">
                         <div>
                             <div class="text-sm font-medium text-gray-700">{{ isRtl ? supply.name_ar : supply.name_en }}</div>
@@ -195,10 +195,10 @@ function submit() {
                                     </span>
                                 </td>
                                 <td class="px-4 py-2.5 text-center">
-                                    <input v-model.number="item.quantity_ordered" type="number" min="0.01" step="0.01" required class="w-full px-2 py-1.5 border border-gray-200 rounded-lg text-sm text-center focus:ring-cyan-500 focus:border-cyan-500" />
+                                    <input v-model.number="item.quantity_ordered" type="number" min="0.01" step="0.01" required class="w-full px-2 py-1.5 border border-gray-200 rounded-lg text-sm text-center focus:ring-indigo-500 focus:border-indigo-500" />
                                 </td>
                                 <td class="px-4 py-2.5 text-center">
-                                    <input v-model.number="item.unit_price" type="number" min="0" step="0.01" required class="w-full px-2 py-1.5 border border-gray-200 rounded-lg text-sm text-center focus:ring-cyan-500 focus:border-cyan-500" />
+                                    <input v-model.number="item.unit_price" type="number" min="0" step="0.01" required class="w-full px-2 py-1.5 border border-gray-200 rounded-lg text-sm text-center focus:ring-indigo-500 focus:border-indigo-500" />
                                 </td>
                                 <td class="px-4 py-2.5 text-center font-medium text-gray-800">
                                     {{ formatCurrency(item.quantity_ordered * item.unit_price) }}
@@ -213,7 +213,7 @@ function submit() {
                         <tfoot>
                             <tr class="bg-gray-50">
                                 <td colspan="4" class="px-4 py-3 text-end font-semibold text-gray-700">{{ isRtl ? 'الإجمالي' : 'Subtotal' }}</td>
-                                <td class="px-4 py-3 text-center font-bold text-cyan-700 text-base">{{ formatCurrency(subtotal) }}</td>
+                                <td class="px-4 py-3 text-center font-bold text-indigo-700 text-base">{{ formatCurrency(subtotal) }}</td>
                                 <td></td>
                             </tr>
                         </tfoot>
@@ -232,7 +232,7 @@ function submit() {
                     {{ isRtl ? 'إلغاء' : 'Cancel' }}
                 </Link>
                 <button type="submit" :disabled="submitting || form.items.length === 0 || !form.supplier_id"
-                    class="px-6 py-2.5 bg-cyan-600 text-white rounded-xl hover:bg-cyan-700 text-sm font-medium transition disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center gap-2">
+                    class="px-6 py-2.5 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 text-sm font-medium transition disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center gap-2">
                     <svg v-if="submitting" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
                     {{ isRtl ? 'إنشاء أمر الشراء' : 'Create Purchase Order' }}
                 </button>

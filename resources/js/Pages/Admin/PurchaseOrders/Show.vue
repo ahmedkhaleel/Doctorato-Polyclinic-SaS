@@ -139,7 +139,7 @@ const receivedPercentage = computed(() => {
                 </button>
                 <!-- Status Actions -->
                 <button v-for="ns in nextStatuses" :key="ns" @click="openStatusChange(ns)"
-                    :class="ns === 'cancelled' ? 'border-red-200 text-red-600 hover:bg-red-50' : 'border-cyan-200 text-cyan-700 hover:bg-cyan-50'"
+                    :class="ns === 'cancelled' ? 'border-red-200 text-red-600 hover:bg-red-50' : 'border-indigo-200 text-indigo-700 hover:bg-indigo-50'"
                     class="px-4 py-2.5 border rounded-xl text-sm font-medium transition">
                     {{ statusLabel(ns).text }}
                 </button>
@@ -171,7 +171,7 @@ const receivedPercentage = computed(() => {
                     </div>
                     <div class="flex justify-between text-sm font-bold pt-2 border-t">
                         <span class="text-gray-700">{{ isRtl ? 'الإجمالي' : 'Total' }}</span>
-                        <span class="text-cyan-700">{{ formatCurrency(order.total) }}</span>
+                        <span class="text-indigo-700">{{ formatCurrency(order.total) }}</span>
                     </div>
                 </div>
             </div>
@@ -181,7 +181,7 @@ const receivedPercentage = computed(() => {
                 <h3 class="text-xs font-semibold text-gray-500 uppercase mb-3">{{ isRtl ? 'تقدم الاستلام' : 'Receiving Progress' }}</h3>
                 <div class="flex items-center gap-3 mb-3">
                     <div class="flex-1 bg-gray-100 rounded-full h-3 overflow-hidden">
-                        <div class="h-full rounded-full transition-all duration-500" :class="receivedPercentage === 100 ? 'bg-green-500' : receivedPercentage > 0 ? 'bg-cyan-500' : 'bg-gray-200'" :style="{ width: receivedPercentage + '%' }"></div>
+                        <div class="h-full rounded-full transition-all duration-500" :class="receivedPercentage === 100 ? 'bg-green-500' : receivedPercentage > 0 ? 'bg-indigo-500' : 'bg-gray-200'" :style="{ width: receivedPercentage + '%' }"></div>
                     </div>
                     <span class="text-sm font-bold" :class="receivedPercentage === 100 ? 'text-green-600' : 'text-gray-700'">{{ receivedPercentage }}%</span>
                 </div>
@@ -282,7 +282,7 @@ const receivedPercentage = computed(() => {
                     <div class="flex justify-end gap-3 pt-4 border-t">
                         <button @click="showStatusModal = false" class="px-5 py-2.5 text-gray-600 hover:bg-gray-100 rounded-xl text-sm font-medium">{{ isRtl ? 'إلغاء' : 'Cancel' }}</button>
                         <button @click="submitStatusChange" :disabled="processing"
-                            :class="newStatus === 'cancelled' ? 'bg-red-600 hover:bg-red-700' : 'bg-cyan-600 hover:bg-cyan-700'"
+                            :class="newStatus === 'cancelled' ? 'bg-red-600 hover:bg-red-700' : 'bg-indigo-600 hover:bg-indigo-700'"
                             class="px-5 py-2.5 text-white rounded-xl text-sm font-medium transition disabled:opacity-50">
                             {{ isRtl ? 'تأكيد' : 'Confirm' }}
                         </button>
@@ -298,7 +298,7 @@ const receivedPercentage = computed(() => {
                 <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto p-6">
                     <div class="flex items-center justify-between mb-5">
                         <h2 class="text-lg font-bold text-gray-800">{{ isRtl ? 'استلام الأصناف' : 'Receive Items' }}</h2>
-                        <button @click="receiveAll" class="text-sm text-cyan-600 hover:text-cyan-700 font-medium">
+                        <button @click="receiveAll" class="text-sm text-indigo-600 hover:text-indigo-700 font-medium">
                             {{ isRtl ? 'استلام الكل' : 'Receive All' }}
                         </button>
                     </div>
@@ -323,7 +323,7 @@ const receivedPercentage = computed(() => {
                                 <td class="px-3 py-2.5 text-center text-gray-600">{{ item.quantity_ordered }} {{ item.unit }}</td>
                                 <td class="px-3 py-2.5 text-center text-gray-400">{{ item.quantity_received }}</td>
                                 <td class="px-3 py-2.5 text-center">
-                                    <input v-model.number="item.new_received" type="number" :min="0" :max="item.quantity_ordered" step="0.01" class="w-full px-2 py-1.5 border border-gray-200 rounded-lg text-sm text-center focus:ring-cyan-500 focus:border-cyan-500" />
+                                    <input v-model.number="item.new_received" type="number" :min="0" :max="item.quantity_ordered" step="0.01" class="w-full px-2 py-1.5 border border-gray-200 rounded-lg text-sm text-center focus:ring-indigo-500 focus:border-indigo-500" />
                                 </td>
                                 <td class="px-3 py-2.5 text-center">
                                     <input v-model="item.batch_number" type="text" class="w-full px-2 py-1.5 border border-gray-200 rounded-lg text-sm text-center" :placeholder="isRtl ? 'اختياري' : 'Optional'" />
