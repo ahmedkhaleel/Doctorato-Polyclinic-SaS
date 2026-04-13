@@ -135,7 +135,7 @@ const statusForm = useForm({
 });
 
 function updateStatus() {
-    statusForm.patch(`/admin/bookings/${props.booking.id}`, {
+    statusForm.post(`/admin/bookings/${props.booking.id}/update`, {
         preserveScroll: true,
     });
 }

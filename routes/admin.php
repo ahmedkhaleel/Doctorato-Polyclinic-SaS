@@ -230,7 +230,7 @@ Route::middleware('admin.auth')->group(function () {
     Route::get('/bookings/create', [BookingController::class, 'create'])->name('admin.bookings.create')->middleware('permission:bookings.create');
     Route::post('/bookings', [BookingController::class, 'store'])->name('admin.bookings.store')->middleware('permission:bookings.create');
     Route::get('/bookings/{booking}', [BookingController::class, 'show'])->name('admin.bookings.show')->middleware('permission:bookings.view');
-    Route::patch('/bookings/{booking}', [BookingController::class, 'update'])->name('admin.bookings.update')->middleware('permission:bookings.update');
+    Route::post('/bookings/{booking}/update', [BookingController::class, 'update'])->name('admin.bookings.update')->middleware('permission:bookings.update');
     Route::post('/bookings/{booking}/confirm', [BookingController::class, 'confirm'])->name('admin.bookings.confirm')->middleware('permission:bookings.update');
     Route::post('/bookings/{booking}/payment', [BookingController::class, 'processPayment'])->name('admin.bookings.payment')->middleware('permission:bookings.update');
     Route::get('/bookings/{booking}/receipt', [BookingController::class, 'printReceipt'])->name('admin.bookings.receipt')->middleware('permission:bookings.view');
