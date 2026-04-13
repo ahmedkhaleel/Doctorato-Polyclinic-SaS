@@ -4,11 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Lead;
+use App\Models\LeadActivity;
 use App\Models\LeadFollowUp;
 use App\Models\LeadSource;
 use App\Models\CrmCampaign;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -97,6 +100,71 @@ class CrmDashboardController extends Controller
             ->get()
             ->pluck('count', 'date');
 
+        // ── Team Performance (top staff) ──
+        $teamPerformance = User::active()
+            ->whereHas('assignedLeads')
+            ->withCount([
+                'assignedLeads as total_leads',
+                'assignedLeads as active_leads' => fn ($q) => $q->whereNotIn('status', ['converted', 'lost']),
+                'assignedLeads as converted_leads' => fn ($q) => $q->where('status', 'converted'),
+                'assignedLeads as period_leads' => fn ($q) => $q->where('created_at', '>=', $startDate),
+                'assignedLeads as period_converted' => fn ($q) => $q->where('status', 'converted')->where('converted_at', '>=', $startDate),
+            ])
+            ->get(['id', 'name'])
+            ->map(function ($user) use ($startDate) {
+                // Overdue follow-ups for this user
+                $overdueCount = LeadFollowUp::where('assigned_to', $user->id)
+                    ->where('status', 'pending')
+                    ->where('scheduled_at', '<', now())
+                    ->count();
+
+                // Activities this period
+                $periodActivities = LeadActivity::where('performed_by', $user->id)
+                    ->where('created_at', '>=', $startDate)
+                    ->count();
+
+                return [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'total_leads' => $user->total_leads,
+                    'active_leads' => $user->active_leads,
+                    'converted_leads' => $user->converted_leads,
+                    'period_leads' => $user->period_leads,
+                    'period_converted' => $user->period_converted,
+                    'conversion_rate' => $user->total_leads > 0 ? round(($user->converted_leads / $user->total_leads) * 100, 1) : 0,
+                    'overdue_follow_ups' => $overdueCount,
+                    'period_activities' => $periodActivities,
+                ];
+            })
+            ->sortByDesc('period_converted')
+            ->values()
+            ->take(8);
+
+        // ── Module Distribution ──
+        $moduleDistribution = Lead::whereNotIn('status', ['converted', 'lost'])
+            ->selectRaw("COALESCE(module, 'derma') as module, count(*) as count")
+            ->groupBy(DB::raw("COALESCE(module, 'derma')"))
+            ->pluck('count', 'module')
+            ->toArray();
+
+        // ── Weekly Comparison ──
+        $thisWeekStart = Carbon::now()->startOfWeek();
+        $lastWeekStart = Carbon::now()->subWeek()->startOfWeek();
+        $lastWeekEnd = Carbon::now()->subWeek()->endOfWeek();
+
+        $weeklyComparison = [
+            'this_week' => [
+                'leads' => Lead::where('created_at', '>=', $thisWeekStart)->count(),
+                'converted' => Lead::where('status', 'converted')->where('converted_at', '>=', $thisWeekStart)->count(),
+                'activities' => LeadActivity::where('created_at', '>=', $thisWeekStart)->count(),
+            ],
+            'last_week' => [
+                'leads' => Lead::whereBetween('created_at', [$lastWeekStart, $lastWeekEnd])->count(),
+                'converted' => Lead::where('status', 'converted')->whereBetween('converted_at', [$lastWeekStart, $lastWeekEnd])->count(),
+                'activities' => LeadActivity::whereBetween('created_at', [$lastWeekStart, $lastWeekEnd])->count(),
+            ],
+        ];
+
         return Inertia::render('Admin/CRM/Dashboard', [
             'pipelineStats' => $pipelineStats,
             'metrics' => $metrics,
@@ -106,6 +174,9 @@ class CrmDashboardController extends Controller
             'overdueFollowUps' => $overdueFollowUps,
             'activeCampaigns' => $activeCampaigns,
             'leadTrend' => $leadTrend,
+            'teamPerformance' => $teamPerformance,
+            'moduleDistribution' => $moduleDistribution,
+            'weeklyComparison' => $weeklyComparison,
             'period' => $period,
         ]);
     }

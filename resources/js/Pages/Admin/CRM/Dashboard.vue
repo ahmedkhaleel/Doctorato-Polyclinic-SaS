@@ -17,6 +17,9 @@ const props = defineProps({
     overdueFollowUps: Array,
     activeCampaigns: Array,
     leadTrend: Object,
+    teamPerformance: Array,
+    moduleDistribution: Object,
+    weeklyComparison: Object,
     period: String,
 });
 
@@ -119,6 +122,35 @@ function timeAgo(date) {
 
 const pipelineTotal = computed(() => {
     return Object.values(props.pipelineStats || {}).reduce((a, b) => a + b, 0);
+});
+
+// Lead trend chart data (last 14 days for visual bar chart)
+const trendBars = computed(() => {
+    const entries = Object.entries(props.leadTrend || {});
+    const last14 = entries.slice(-14);
+    const maxVal = Math.max(...last14.map(([, v]) => v), 1);
+    return last14.map(([date, count]) => ({
+        date,
+        count,
+        pct: Math.round((count / maxVal) * 100),
+        dayLabel: new Date(date).toLocaleDateString('en-US', { weekday: 'short' }),
+        dayNum: new Date(date).getDate(),
+    }));
+});
+
+// Weekly comparison deltas
+function weekDelta(key) {
+    const wc = props.weeklyComparison;
+    if (!wc) return 0;
+    const thisVal = wc.this_week?.[key] || 0;
+    const lastVal = wc.last_week?.[key] || 0;
+    if (lastVal === 0) return thisVal > 0 ? 100 : 0;
+    return Math.round(((thisVal - lastVal) / lastVal) * 100);
+}
+
+// Module distribution
+const moduleTotal = computed(() => {
+    return Object.values(props.moduleDistribution || {}).reduce((a, b) => a + b, 0);
 });
 
 const sourcesTotal = computed(() => {
@@ -269,6 +301,122 @@ function missFollowUp(fuId) {
                     <p class="text-3xl font-bold text-gray-800 tracking-tight">{{ metrics.avg_score }}</p>
                     <div class="flex items-center gap-1.5 mt-2">
                         <span class="text-xs text-gray-400">{{ $t('a_pipeline_average') }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Weekly Comparison + Module Distribution -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <!-- This Week vs Last Week Cards -->
+                <div v-for="(item, idx) in [
+                    { key: 'leads', label: isRtl ? 'عملاء هذا الاسبوع' : 'Leads This Week', icon: 'M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z', gradient: 'from-blue-500 to-blue-600', shadow: 'shadow-blue-200/50' },
+                    { key: 'converted', label: isRtl ? 'تحويلات هذا الاسبوع' : 'Converted This Week', icon: 'M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z', gradient: 'from-emerald-500 to-emerald-600', shadow: 'shadow-emerald-200/50' },
+                    { key: 'activities', label: isRtl ? 'انشطة هذا الاسبوع' : 'Activities This Week', icon: 'M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z', gradient: 'from-violet-500 to-violet-600', shadow: 'shadow-violet-200/50' },
+                ]" :key="item.key"
+                    class="card-entrance group bg-white rounded-2xl shadow-sm hover:shadow-md p-5 border border-gray-100 transition-all duration-300 hover:-translate-y-0.5"
+                    :class="{ 'card-entrance-active': mounted }"
+                    :style="{ transitionDelay: (400 + idx * 60) + 'ms' }"
+                >
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-9 h-9 rounded-lg bg-gradient-to-br flex items-center justify-center shadow-md group-hover:scale-110 transition-transform duration-300"
+                            :class="[item.gradient, item.shadow]">
+                            <svg class="w-4.5 h-4.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" :d="item.icon" /></svg>
+                        </div>
+                        <span class="text-xs font-semibold text-gray-500 uppercase tracking-wider leading-tight">{{ item.label }}</span>
+                    </div>
+                    <div class="flex items-end justify-between">
+                        <p class="text-2xl font-bold text-gray-800">{{ weeklyComparison?.this_week?.[item.key] || 0 }}</p>
+                        <div class="flex items-center gap-1">
+                            <span v-if="weekDelta(item.key) > 0" class="inline-flex items-center gap-0.5 text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" /></svg>
+                                {{ weekDelta(item.key) }}%
+                            </span>
+                            <span v-else-if="weekDelta(item.key) < 0" class="inline-flex items-center gap-0.5 text-xs font-semibold text-red-600 bg-red-50 px-2 py-0.5 rounded-md">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" /></svg>
+                                {{ Math.abs(weekDelta(item.key)) }}%
+                            </span>
+                            <span v-else class="text-xs font-medium text-gray-400 bg-gray-50 px-2 py-0.5 rounded-md">--</span>
+                            <span class="text-[10px] text-gray-400">vs last week</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lead Trend (14-day bar chart) + Module Distribution -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Lead Trend Chart -->
+                <div
+                    class="card-entrance lg:col-span-2 bg-white rounded-2xl shadow-sm hover:shadow-md p-6 border border-gray-100 transition-all duration-300"
+                    :class="{ 'card-entrance-active': mounted }"
+                    :style="{ transitionDelay: '580ms' }"
+                >
+                    <div class="flex items-center justify-between mb-5">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-[#C4A265] to-[#A8893E] flex items-center justify-center">
+                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" /></svg>
+                            </div>
+                            <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider">{{ isRtl ? 'اتجاه العملاء المحتملين' : 'Lead Trend' }}</h3>
+                        </div>
+                        <span class="text-xs text-gray-400">{{ isRtl ? 'اخر 14 يوم' : 'Last 14 days' }}</span>
+                    </div>
+                    <div class="flex items-end gap-1.5 h-36">
+                        <div v-for="(bar, i) in trendBars" :key="bar.date"
+                            class="flex-1 flex flex-col items-center gap-1 group relative"
+                        >
+                            <div class="absolute -top-7 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-[10px] font-bold px-2 py-0.5 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-10">
+                                {{ bar.count }} leads
+                            </div>
+                            <div
+                                class="w-full rounded-t-md bg-gradient-to-t from-[#C4A265] to-[#d4b97a] transition-all duration-700 ease-out group-hover:from-[#A8893E] group-hover:to-[#C4A265] cursor-default"
+                                :style="{ height: mounted ? Math.max(bar.pct, bar.count > 0 ? 8 : 2) + '%' : '0%', transitionDelay: (i * 40) + 'ms' }"
+                            ></div>
+                            <span class="text-[9px] text-gray-400 font-medium hidden sm:block">{{ bar.dayNum }}</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-between mt-2 text-[10px] text-gray-300 font-medium">
+                        <span>{{ trendBars[0]?.dayLabel }}</span>
+                        <span>{{ trendBars[trendBars.length - 1]?.dayLabel }}</span>
+                    </div>
+                </div>
+
+                <!-- Module Distribution -->
+                <div
+                    class="card-entrance bg-white rounded-2xl shadow-sm hover:shadow-md p-6 border border-gray-100 transition-all duration-300"
+                    :class="{ 'card-entrance-active': mounted }"
+                    :style="{ transitionDelay: '640ms' }"
+                >
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center">
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z" /></svg>
+                        </div>
+                        <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider">{{ isRtl ? 'توزيع الاقسام' : 'Module Split' }}</h3>
+                    </div>
+                    <div class="space-y-5">
+                        <div v-for="(mod, key) in { derma: { label: isRtl ? 'جلدية' : 'Derma', color: 'from-teal-400 to-teal-600', bg: 'bg-teal-100', text: 'text-teal-700' }, dental: { label: isRtl ? 'اسنان' : 'Dental', color: 'from-sky-400 to-sky-600', bg: 'bg-sky-100', text: 'text-sky-700' } }" :key="key">
+                            <div class="flex items-center justify-between mb-2">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-3 h-3 rounded-full bg-gradient-to-br" :class="mod.color"></span>
+                                    <span class="text-sm font-semibold text-gray-700">{{ mod.label }}</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-lg font-bold text-gray-800">{{ moduleDistribution?.[key] || 0 }}</span>
+                                    <span class="text-xs font-medium px-2 py-0.5 rounded-full" :class="[mod.bg, mod.text]">
+                                        {{ moduleTotal > 0 ? Math.round(((moduleDistribution?.[key] || 0) / moduleTotal) * 100) : 0 }}%
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
+                                <div
+                                    class="h-full rounded-full bg-gradient-to-r transition-all duration-700 ease-out"
+                                    :class="mod.color"
+                                    :style="{ width: mounted ? (moduleTotal > 0 ? Math.max(((moduleDistribution?.[key] || 0) / moduleTotal) * 100, (moduleDistribution?.[key] || 0) > 0 ? 5 : 0) : 0) + '%' : '0%' }"
+                                ></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between">
+                        <span class="text-xs font-medium text-gray-500">{{ isRtl ? 'اجمالي في المسار' : 'Total Active' }}</span>
+                        <span class="text-sm font-bold text-gray-800">{{ moduleTotal }} {{ isRtl ? 'عميل' : 'leads' }}</span>
                     </div>
                 </div>
             </div>
@@ -551,6 +699,89 @@ function missFollowUp(fuId) {
                                 </td>
                                 <td class="px-6 py-4 ltr:text-right rtl:text-left">
                                     <span class="text-sm font-medium text-gray-700">{{ formatCurrency(c.budget) }}</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- Team Performance Leaderboard -->
+            <div
+                class="card-entrance bg-white rounded-2xl shadow-sm hover:shadow-md border border-gray-100 transition-all duration-300 overflow-hidden"
+                :class="{ 'card-entrance-active': mounted }"
+                :style="{ transitionDelay: '800ms' }"
+                v-if="teamPerformance?.length"
+            >
+                <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gradient-to-r from-[#C4A265]/5 to-transparent">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-[#C4A265] to-[#A8893E] flex items-center justify-center">
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                        </div>
+                        <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider">{{ isRtl ? 'اداء الفريق' : 'Team Performance' }}</h3>
+                    </div>
+                    <Link href="/admin/crm-reports" class="text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors duration-200 hover:bg-[#C4A265]/10" style="color: #C4A265;">
+                        {{ isRtl ? 'تقرير مفصل' : 'Full Report' }}
+                        <svg class="w-3 h-3 inline ltr:ml-0.5 rtl:mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                    </Link>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="ltr:text-left rtl:text-right text-[11px] text-gray-400 uppercase border-b border-gray-100 bg-gray-50/40">
+                                <th class="px-6 py-3.5 font-semibold tracking-wider">{{ isRtl ? 'الموظف' : 'Staff' }}</th>
+                                <th class="px-4 py-3.5 font-semibold tracking-wider text-center">{{ isRtl ? 'نشط' : 'Active' }}</th>
+                                <th class="px-4 py-3.5 font-semibold tracking-wider text-center">{{ isRtl ? 'محول' : 'Conv.' }}</th>
+                                <th class="px-4 py-3.5 font-semibold tracking-wider text-center hidden sm:table-cell">{{ isRtl ? 'نسبة' : 'Rate' }}</th>
+                                <th class="px-4 py-3.5 font-semibold tracking-wider text-center hidden md:table-cell">{{ isRtl ? 'انشطة' : 'Acts.' }}</th>
+                                <th class="px-4 py-3.5 font-semibold tracking-wider text-center hidden md:table-cell">{{ isRtl ? 'متاخر' : 'Overdue' }}</th>
+                                <th class="px-4 py-3.5 font-semibold tracking-wider text-center">{{ isRtl ? 'الفترة' : 'Period' }}</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-50">
+                            <tr v-for="(member, idx) in teamPerformance" :key="member.id"
+                                class="hover:bg-gray-50/70 transition-colors duration-150"
+                                :class="idx % 2 === 1 ? 'bg-gray-50/30' : ''"
+                            >
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-[#C4A265] to-[#A8893E] flex items-center justify-center flex-shrink-0">
+                                            <span class="text-[10px] font-bold text-white">{{ getInitials(member.name) }}</span>
+                                        </div>
+                                        <div>
+                                            <p class="font-semibold text-gray-800 text-sm">{{ member.name }}</p>
+                                            <p class="text-[10px] text-gray-400">{{ member.total_leads }} total</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-4 py-4 text-center">
+                                    <span class="inline-flex items-center justify-center min-w-[2rem] px-2 py-0.5 rounded-lg bg-blue-50 text-blue-700 text-xs font-bold">{{ member.active_leads }}</span>
+                                </td>
+                                <td class="px-4 py-4 text-center">
+                                    <span class="inline-flex items-center justify-center min-w-[2rem] px-2 py-0.5 rounded-lg bg-emerald-50 text-emerald-700 text-xs font-bold">{{ member.converted_leads }}</span>
+                                </td>
+                                <td class="px-4 py-4 text-center hidden sm:table-cell">
+                                    <div class="flex items-center justify-center gap-1.5">
+                                        <div class="w-16 bg-gray-100 rounded-full h-1.5 overflow-hidden">
+                                            <div class="h-full rounded-full bg-gradient-to-r from-emerald-400 to-emerald-600 transition-all duration-500"
+                                                :style="{ width: Math.min(member.conversion_rate, 100) + '%' }"></div>
+                                        </div>
+                                        <span class="text-xs font-semibold text-gray-600 w-10 text-right">{{ member.conversion_rate }}%</span>
+                                    </div>
+                                </td>
+                                <td class="px-4 py-4 text-center hidden md:table-cell">
+                                    <span class="text-xs font-medium text-gray-600">{{ member.period_activities }}</span>
+                                </td>
+                                <td class="px-4 py-4 text-center hidden md:table-cell">
+                                    <span v-if="member.overdue_follow_ups > 0" class="inline-flex items-center justify-center min-w-[2rem] px-2 py-0.5 rounded-lg bg-red-50 text-red-600 text-xs font-bold">
+                                        {{ member.overdue_follow_ups }}
+                                    </span>
+                                    <span v-else class="text-xs text-emerald-500 font-medium">0</span>
+                                </td>
+                                <td class="px-4 py-4 text-center">
+                                    <div class="text-xs">
+                                        <span class="font-bold text-gray-700">{{ member.period_converted }}</span>
+                                        <span class="text-gray-400">/{{ member.period_leads }}</span>
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>
