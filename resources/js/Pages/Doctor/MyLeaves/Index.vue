@@ -2,6 +2,7 @@
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { Link, router, useForm, usePage } from '@inertiajs/vue3';
 import DoctorLayout from '@/Layouts/DoctorLayout.vue';
+import SkeletonLoader from '@/Components/Doctor/SkeletonLoader.vue';
 
 defineOptions({ layout: DoctorLayout });
 
@@ -15,10 +16,12 @@ const props = defineProps({
 
 const headerLoaded = ref(false);
 const cardsLoaded = ref(false);
+const dataLoading = ref(true);
 
 onMounted(() => {
     setTimeout(() => headerLoaded.value = true, 50);
     setTimeout(() => cardsLoaded.value = true, 200);
+    setTimeout(() => dataLoading.value = false, 600);
 });
 
 const showModal = ref(false);
@@ -122,8 +125,12 @@ const rejectedCount = computed(() => leavesList.value.filter(l => l.status === '
             </div>
         </div>
 
+        <!-- Skeleton Loader -->
+        <SkeletonLoader v-if="dataLoading" type="list" :count="5" />
+
         <!-- Leave Cards -->
         <div
+            v-else
             class="transition-all duration-700"
             :class="cardsLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'"
         >

@@ -2,6 +2,7 @@
 import { ref, watch, onMounted, computed } from 'vue';
 import { Link, router, usePage } from '@inertiajs/vue3';
 import DoctorLayout from '@/Layouts/DoctorLayout.vue';
+import SkeletonLoader from '@/Components/Doctor/SkeletonLoader.vue';
 import { useCurrency } from '@/Composables/useCurrency.js';
 
 defineOptions({ layout: DoctorLayout });
@@ -23,11 +24,13 @@ const props = defineProps({
 });
 
 const mounted = ref(false);
+const dataLoading = ref(true);
 const dateFrom = ref(props.filters?.date_from || '');
 const dateTo = ref(props.filters?.date_to || '');
 
 onMounted(() => {
     setTimeout(() => { mounted.value = true; }, 50);
+    setTimeout(() => dataLoading.value = false, 600);
     animateCounters();
 });
 
@@ -258,7 +261,10 @@ function formatDate(d) {
             </div>
         </div>
 
-        <div class="grid lg:grid-cols-3 gap-6">
+        <!-- Skeleton Loader -->
+        <SkeletonLoader v-if="dataLoading" type="list" :count="5" />
+
+        <div v-else class="grid lg:grid-cols-3 gap-6">
             <!-- Main Column -->
             <div class="lg:col-span-2 space-y-6">
                 <!-- Recent Payouts -->

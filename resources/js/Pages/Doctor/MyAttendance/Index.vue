@@ -2,6 +2,7 @@
 import { ref, computed, onMounted } from 'vue';
 import { router, usePage } from '@inertiajs/vue3';
 import DoctorLayout from '@/Layouts/DoctorLayout.vue';
+import SkeletonLoader from '@/Components/Doctor/SkeletonLoader.vue';
 
 defineOptions({ layout: DoctorLayout });
 
@@ -122,9 +123,11 @@ const hasCheckedOut = computed(() => !!props.today?.check_out);
 
 const headerLoaded = ref(false);
 const cardsLoaded = ref(false);
+const dataLoading = ref(true);
 onMounted(() => {
     setTimeout(() => headerLoaded.value = true, 50);
     setTimeout(() => cardsLoaded.value = true, 200);
+    setTimeout(() => dataLoading.value = false, 600);
 });
 </script>
 
@@ -289,8 +292,11 @@ onMounted(() => {
             </div>
         </div>
 
+        <!-- Skeleton Loader -->
+        <SkeletonLoader v-if="dataLoading" type="list" :count="5" />
+
         <!-- ═══ RECORDS ═══ -->
-        <div class="transition-all duration-700" :class="cardsLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'">
+        <div v-else class="transition-all duration-700" :class="cardsLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'">
             <h2 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3">{{ isRtl ? 'سجلات الحضور' : 'Attendance Records' }}</h2>
 
             <div v-if="records && records.length" class="space-y-2">

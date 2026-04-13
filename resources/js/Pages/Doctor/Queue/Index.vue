@@ -2,6 +2,8 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { Link, router, usePage } from '@inertiajs/vue3';
 import DoctorLayout from '@/Layouts/DoctorLayout.vue';
+import SearchableSelect from '@/Components/Doctor/SearchableSelect.vue';
+import SkeletonLoader from '@/Components/Doctor/SkeletonLoader.vue';
 
 defineOptions({ layout: DoctorLayout });
 
@@ -447,13 +449,22 @@ const todayProgress = computed(() => {
                             :class="moduleFilter === 'dermatology' ? 'bg-pink-600 text-white' : 'bg-white text-pink-700 hover:bg-pink-50'"
                         >{{ isRtl ? 'جلدية' : 'Derma' }}</button>
                     </div>
-                    <select v-model="statusFilter" @change="applyFilters" class="text-sm border border-gray-200 rounded-lg px-3 py-1.5 bg-white text-gray-600 focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-colors">
-                        <option value="">{{ isRtl ? 'كل الحالات' : 'All Statuses' }}</option>
-                        <option value="waiting">{{ isRtl ? 'انتظار' : 'Waiting' }}</option>
-                        <option value="in_progress">{{ isRtl ? 'جاري' : 'In Progress' }}</option>
-                        <option value="completed">{{ isRtl ? 'مكتمل' : 'Completed' }}</option>
-                        <option value="cancelled">{{ isRtl ? 'ملغي' : 'Cancelled' }}</option>
-                    </select>
+                    <div class="w-40">
+                        <SearchableSelect
+                            v-model="statusFilter"
+                            :options="[
+                                { value: '', label: isRtl ? 'كل الحالات' : 'All Statuses' },
+                                { value: 'waiting', label: isRtl ? 'انتظار' : 'Waiting', color: '#f59e0b' },
+                                { value: 'in_progress', label: isRtl ? 'جاري' : 'In Progress', color: '#3b82f6' },
+                                { value: 'completed', label: isRtl ? 'مكتمل' : 'Completed', color: '#10b981' },
+                                { value: 'cancelled', label: isRtl ? 'ملغي' : 'Cancelled', color: '#6b7280' },
+                            ]"
+                            :placeholder="isRtl ? 'كل الحالات' : 'All Statuses'"
+                            :search-placeholder="isRtl ? 'بحث...' : 'Search...'"
+                            size="sm"
+                            @update:model-value="applyFilters"
+                        />
+                    </div>
                     <button @click="showDateFilter = !showDateFilter"
                         class="p-2 rounded-lg border transition-all duration-200"
                         :class="showDateFilter ? 'bg-[#C4A265]/5 border-[#C4A265]/30 text-[#C4A265]' : 'border-gray-200 text-gray-400 hover:text-gray-600 hover:bg-gray-50'"

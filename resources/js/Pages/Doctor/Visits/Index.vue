@@ -2,6 +2,7 @@
 import { ref, watch, onMounted, computed } from 'vue';
 import { Link, router, usePage } from '@inertiajs/vue3';
 import DoctorLayout from '@/Layouts/DoctorLayout.vue';
+import SkeletonLoader from '@/Components/Doctor/SkeletonLoader.vue';
 
 defineOptions({ layout: DoctorLayout });
 
@@ -22,6 +23,7 @@ const props = defineProps({
 });
 
 const mounted = ref(false);
+const dataLoading = ref(true);
 const search = ref(props.filters?.search || '');
 const status = ref(props.filters?.status || '');
 const moduleFilter = ref(props.filters?.module || '');
@@ -37,6 +39,7 @@ onMounted(() => {
         if (saved === 'grid' || saved === 'list') viewMode.value = saved;
     } catch {}
     setTimeout(() => { mounted.value = true; }, 50);
+    setTimeout(() => { dataLoading.value = false; }, 600);
 });
 
 watch(viewMode, (val) => {
@@ -385,8 +388,11 @@ function getVisitTypeLabel(visit) {
             </div>
         </div>
 
+        <!-- Skeleton Loading State -->
+        <SkeletonLoader v-if="dataLoading" />
+
         <!-- LIST VIEW -->
-        <div v-if="viewMode === 'list'" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden"
+        <div v-if="!dataLoading && viewMode === 'list'" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden"
             :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
             style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.22s"
         >
@@ -493,7 +499,7 @@ function getVisitTypeLabel(visit) {
         </div>
 
         <!-- GRID VIEW -->
-        <template v-if="viewMode === 'grid'">
+        <template v-if="!dataLoading && viewMode === 'grid'">
             <div v-if="visits.data?.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 <Link v-for="(visit, index) in visits.data" :key="visit.id"
                     :href="`/doctor/visits/${visit.id}`"

@@ -2,6 +2,7 @@
 import { ref, computed, onMounted } from 'vue';
 import { Link, router, usePage } from '@inertiajs/vue3';
 import DoctorLayout from '@/Layouts/DoctorLayout.vue';
+import SkeletonLoader from '@/Components/Doctor/SkeletonLoader.vue';
 
 defineOptions({ layout: DoctorLayout });
 
@@ -17,11 +18,13 @@ const props = defineProps({
 const headerLoaded = ref(false);
 const statsLoaded = ref(false);
 const cardsLoaded = ref(false);
+const dataLoading = ref(true);
 
 onMounted(() => {
     setTimeout(() => headerLoaded.value = true, 50);
     setTimeout(() => statsLoaded.value = true, 150);
     setTimeout(() => cardsLoaded.value = true, 250);
+    setTimeout(() => dataLoading.value = false, 600);
 });
 
 const activeFilter = ref(props.filter);
@@ -286,8 +289,12 @@ function getActionUrl(n) {
             {{ isRtl ? 'اسحب للتفاعل مع الإشعار' : 'Tap a notification to view details' }}
         </p>
 
+        <!-- Skeleton Loader -->
+        <SkeletonLoader v-if="dataLoading" type="list" :count="5" />
+
         <!-- Notification Cards (Grouped) -->
         <div
+            v-else
             class="transition-all duration-700"
             :class="cardsLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'"
         >

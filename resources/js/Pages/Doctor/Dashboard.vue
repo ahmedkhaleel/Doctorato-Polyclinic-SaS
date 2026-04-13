@@ -3,6 +3,7 @@ import { Link, usePage } from '@inertiajs/vue3';
 import DoctorLayout from '@/Layouts/DoctorLayout.vue';
 import { ref, computed, onMounted } from 'vue';
 import { useCurrency } from '@/Composables/useCurrency.js';
+import SkeletonLoader from '@/Components/Doctor/SkeletonLoader.vue';
 
 defineOptions({ layout: DoctorLayout });
 
@@ -30,6 +31,7 @@ const props = defineProps({
 
 // Animation state
 const mounted = ref(false);
+const dataLoading = ref(true);
 const animatedValues = ref({
     todayTotal: 0,
     waiting: 0,
@@ -40,6 +42,7 @@ const animatedValues = ref({
 
 onMounted(() => {
     setTimeout(() => { mounted.value = true; }, 50);
+    setTimeout(() => { dataLoading.value = false; }, 500);
     animateCounters();
 });
 
@@ -227,7 +230,8 @@ const completionDash = computed(() => {
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
                         </Link>
                     </div>
-                    <div v-if="todayQueue.length > 0" class="divide-y divide-gray-50">
+                    <SkeletonLoader v-if="dataLoading" type="list" :count="4" />
+                    <div v-else-if="todayQueue.length > 0" class="divide-y divide-gray-50">
                         <div v-for="(visit, i) in todayQueue" :key="visit.id"
                             class="flex items-center justify-between px-6 py-3.5 hover:bg-gray-50/60 transition-all duration-200 group"
                             :class="mounted ? 'translate-x-0 opacity-100' : '-translate-x-4 opacity-0'"
@@ -375,7 +379,8 @@ const completionDash = computed(() => {
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
                         </Link>
                     </div>
-                    <div v-if="recentVisits?.length > 0" class="overflow-x-auto">
+                    <SkeletonLoader v-if="dataLoading" type="card" :count="3" />
+                    <div v-else-if="recentVisits?.length > 0" class="overflow-x-auto">
                         <table class="w-full text-sm">
                             <thead>
                                 <tr class="border-b border-gray-50">

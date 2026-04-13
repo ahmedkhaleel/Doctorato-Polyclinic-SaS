@@ -2,6 +2,8 @@
 import { ref, watch, computed, onMounted } from 'vue';
 import { Link, router, usePage } from '@inertiajs/vue3';
 import DoctorLayout from '@/Layouts/DoctorLayout.vue';
+import SearchableSelect from '@/Components/Doctor/SearchableSelect.vue';
+import SkeletonLoader from '@/Components/Doctor/SkeletonLoader.vue';
 
 defineOptions({ layout: DoctorLayout });
 
@@ -26,10 +28,12 @@ const props = defineProps({
 
 const headerLoaded = ref(false);
 const cardsLoaded = ref(false);
+const dataLoading = ref(true);
 
 onMounted(() => {
     setTimeout(() => headerLoaded.value = true, 50);
     setTimeout(() => cardsLoaded.value = true, 200);
+    setTimeout(() => dataLoading.value = false, 600);
 });
 
 // ── Tab & Filters ──────────────────────────────────────
@@ -110,6 +114,25 @@ const bundleStatuses = [
     { value: 'completed', label: 'Completed', labelAr: 'مكتمل' },
     { value: 'cancelled', label: 'Cancelled', labelAr: 'ملغي' },
 ];
+
+// SearchableSelect options
+const moduleOptions = computed(() => [
+    { value: '', label: isRtl.value ? 'كل الأقسام' : 'All Departments' },
+    ...activeModules.value.map(m => ({ value: m.slug, label: m.name })),
+]);
+
+const statusOptions = computed(() => {
+    const base = [{ value: '', label: isRtl.value ? 'جميع الحالات' : 'All Statuses' }];
+    if (activeTab.value === 'bookings') {
+        return [...base,
+            { value: 'confirmed', label: isRtl.value ? 'مؤكد' : 'Confirmed', color: '#3b82f6' },
+            { value: 'in_progress', label: isRtl.value ? 'قيد التنفيذ' : 'In Progress', color: '#6366f1' },
+            { value: 'completed', label: isRtl.value ? 'مكتمل' : 'Completed', color: '#10b981' },
+            { value: 'cancelled', label: isRtl.value ? 'ملغي' : 'Cancelled', color: '#ef4444' },
+        ];
+    }
+    return [...base, ...bundleStatuses.map(s => ({ value: s.value, label: isRtl.value ? s.labelAr : s.label }))];
+});
 </script>
 
 <template>
@@ -197,26 +220,33 @@ const bundleStatuses = [
                         : (isRtl ? 'بحث بالاسم، الهاتف، اسم الباقة...' : 'Search name, phone, package...')"
                     class="w-full ps-10 pe-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition" />
             </div>
-            <select v-if="activeTab === 'bookings' && activeModules.length > 1" v-model="moduleFilter" class="px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]">
-                <option value="">{{ isRtl ? 'كل الأقسام' : 'All Departments' }}</option>
-                <option v-for="mod in activeModules" :key="mod.slug" :value="mod.slug">{{ mod.name }}</option>
-            </select>
-            <select v-model="status" class="px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]">
-                <option value="">{{ isRtl ? 'جميع الحالات' : 'All Statuses' }}</option>
-                <template v-if="activeTab === 'bookings'">
-                    <option value="confirmed">{{ isRtl ? 'مؤكد' : 'Confirmed' }}</option>
-                    <option value="in_progress">{{ isRtl ? 'قيد التنفيذ' : 'In Progress' }}</option>
-                    <option value="completed">{{ isRtl ? 'مكتمل' : 'Completed' }}</option>
-                    <option value="cancelled">{{ isRtl ? 'ملغي' : 'Cancelled' }}</option>
-                </template>
-                <template v-else>
-                    <option v-for="s in bundleStatuses" :key="s.value" :value="s.value">{{ isRtl ? s.labelAr : s.label }}</option>
-                </template>
-            </select>
+            <div v-if="activeTab === 'bookings' && activeModules.length > 1" class="w-44">
+                <SearchableSelect
+                    v-model="moduleFilter"
+                    :options="moduleOptions"
+                    :placeholder="isRtl ? 'كل الأقسام' : 'All Departments'"
+                    :search-placeholder="isRtl ? 'بحث...' : 'Search...'"
+                    icon="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                    size="sm"
+                />
+            </div>
+            <div class="w-44">
+                <SearchableSelect
+                    v-model="status"
+                    :options="statusOptions"
+                    :placeholder="isRtl ? 'جميع الحالات' : 'All Statuses'"
+                    :search-placeholder="isRtl ? 'بحث...' : 'Search...'"
+                    icon="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
+                    size="sm"
+                />
+            </div>
         </div>
 
+        <!-- Skeleton Loading -->
+        <SkeletonLoader v-if="dataLoading" type="list" :count="5" />
+
         <!-- ═══════════ BOOKINGS TAB ═══════════ -->
-        <div v-if="activeTab === 'bookings'"
+        <div v-else-if="activeTab === 'bookings'"
             class="transition-all duration-700"
             :class="cardsLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'"
         >
@@ -291,7 +321,7 @@ const bundleStatuses = [
         </div>
 
         <!-- ═══════════ PACKAGES TAB ═══════════ -->
-        <div v-if="activeTab === 'packages'"
+        <div v-else-if="activeTab === 'packages'"
             class="transition-all duration-700"
             :class="cardsLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'"
         >

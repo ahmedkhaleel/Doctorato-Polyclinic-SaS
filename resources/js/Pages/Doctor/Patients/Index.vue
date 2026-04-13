@@ -2,6 +2,7 @@
 import { ref, watch, onMounted, onUnmounted, computed } from 'vue';
 import { Link, router, usePage } from '@inertiajs/vue3';
 import DoctorLayout from '@/Layouts/DoctorLayout.vue';
+import SkeletonLoader from '@/Components/Doctor/SkeletonLoader.vue';
 
 defineOptions({ layout: DoctorLayout });
 
@@ -14,6 +15,7 @@ const props = defineProps({
     filters: Object,
 });
 
+const dataLoading = ref(true);
 const mounted = ref(false);
 const statsVisible = ref(false);
 const contentVisible = ref(false);
@@ -31,6 +33,7 @@ onMounted(() => {
     setTimeout(() => { mounted.value = true; }, 50);
     setTimeout(() => { statsVisible.value = true; }, 200);
     setTimeout(() => { contentVisible.value = true; }, 350);
+    setTimeout(() => { dataLoading.value = false; }, 600);
 
     // Keyboard shortcut: / to focus search
     document.addEventListener('keydown', handleKeydown);
@@ -269,8 +272,11 @@ function timeAgo(dateStr) {
                 </div>
             </div>
 
+            <!-- Skeleton Loading State -->
+            <SkeletonLoader v-if="dataLoading" :type="viewMode === 'grid' ? 'card' : 'list'" :count="6" />
+
             <!-- Grid View -->
-            <div v-if="patients.data?.length > 0 && viewMode === 'grid'"
+            <div v-else-if="patients.data?.length > 0 && viewMode === 'grid'"
                 class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
             >
                 <Link v-for="(patient, index) in patients.data" :key="patient.id"
@@ -342,7 +348,7 @@ function timeAgo(dateStr) {
             </div>
 
             <!-- List View -->
-            <div v-if="patients.data?.length > 0 && viewMode === 'list'"
+            <div v-else-if="patients.data?.length > 0 && viewMode === 'list'"
                 class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden"
             >
                 <div class="divide-y divide-gray-50">
@@ -398,7 +404,7 @@ function timeAgo(dateStr) {
             </div>
 
             <!-- Empty State -->
-            <div v-if="!patients.data?.length"
+            <div v-else-if="!patients.data?.length"
                 class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden"
             >
                 <div class="py-24 text-center">
