@@ -499,6 +499,24 @@ watch(viewMode, (val) => {
     try { localStorage.setItem('crm_leads_viewMode', val); } catch {}
 });
 
+/* ── Kanban columns ── */
+const kanbanColumns = computed(() => {
+    const pipelineOrder = ['new', 'contacted', 'qualified', 'appointment_booked', 'consultation_done', 'negotiation', 'converted', 'lost'];
+    const cols = pipelineOrder.map(s => ({
+        status: s,
+        label: statusLabels.value[s] || s,
+        color: statusColors[s] || { bg: '#f3f4f6', text: '#6b7280', dot: '#9ca3af' },
+        leads: []
+    }));
+    if (props.leads?.data) {
+        props.leads.data.forEach(lead => {
+            const col = cols.find(c => c.status === lead.status);
+            if (col) col.leads.push(lead);
+        });
+    }
+    return cols;
+});
+
 /* ── Keyboard shortcuts ── */
 function handleKeyboard(e) {
     // Don't fire if user is typing in an input
@@ -756,6 +774,13 @@ const activeFilterPills = computed(() => {
                                 class="p-2 rounded-lg transition-all duration-200">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 10h16M4 14h16M4 18h16"/>
+                                </svg>
+                            </button>
+                            <button @click="viewMode = 'kanban'"
+                                :class="viewMode === 'kanban' ? 'bg-white shadow-sm text-teal-600' : 'text-gray-500 hover:text-gray-700'"
+                                class="p-2 rounded-lg transition-all duration-200">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"/>
                                 </svg>
                             </button>
                         </div>
@@ -1454,8 +1479,80 @@ const activeFilterPills = computed(() => {
                 </div>
             </div>
 
+            <!-- ═══════════════ KANBAN VIEW ═══════════════ -->
+            <div v-if="viewMode === 'kanban'"
+                 class="overflow-x-auto pb-4"
+                 :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
+                 style="transition: all 0.4s ease;">
+                <div class="flex gap-4" style="min-width: max-content;">
+                    <div v-for="col in kanbanColumns" :key="col.status"
+                        class="w-72 flex-shrink-0 rounded-2xl border overflow-hidden"
+                        :style="{ backgroundColor: col.color.bg, borderColor: col.color.dot + '30' }">
+                        <!-- Column Header -->
+                        <div class="px-4 py-3 border-b flex items-center justify-between"
+                            :style="{ borderColor: col.color.dot + '20' }">
+                            <div class="flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full" :style="{ backgroundColor: col.color.dot }"></span>
+                                <span class="text-sm font-bold" :style="{ color: col.color.text }">{{ col.label }}</span>
+                            </div>
+                            <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-white/80" :style="{ color: col.color.text }">{{ col.leads.length }}</span>
+                        </div>
+                        <!-- Column Body -->
+                        <div class="p-3 space-y-3 max-h-[calc(100vh-360px)] overflow-y-auto">
+                            <div v-for="lead in col.leads" :key="lead.id"
+                                class="bg-white rounded-xl shadow-sm border border-white/60 p-3.5 hover:shadow-md transition-all duration-200 cursor-pointer group"
+                                @click="router.visit(`/secretary/crm/leads/${lead.id}`)">
+                                <div class="flex items-start justify-between mb-2">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
+                                            :style="{ background: getAvatarGradient(lead.id) }">
+                                            <span class="text-[9px] font-bold text-white">{{ getInitials(lead.full_name) }}</span>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm font-semibold text-gray-800 group-hover:text-teal-600 transition-colors">{{ lead.full_name }}</p>
+                                            <p class="text-[10px] text-gray-400">{{ lead.phone || '-' }}</p>
+                                        </div>
+                                    </div>
+                                    <span v-if="priorityConfig[lead.priority]" class="px-1.5 py-0.5 text-[8px] font-bold rounded-full ring-1"
+                                        :style="{ backgroundColor: priorityConfig[lead.priority].bg, color: priorityConfig[lead.priority].text, borderColor: priorityConfig[lead.priority].border }">
+                                        {{ priorityConfig[lead.priority].label }}
+                                    </span>
+                                </div>
+                                <div class="flex items-center gap-2 flex-wrap">
+                                    <span v-if="lead.source" class="text-[9px] font-medium px-1.5 py-0.5 rounded-full"
+                                        :style="{ backgroundColor: (lead.source.color || '#6b7280') + '15', color: lead.source.color || '#6b7280' }">
+                                        {{ lead.source.name_en }}
+                                    </span>
+                                    <span v-if="lead.assigned_user" class="text-[9px] text-gray-400 flex items-center gap-1">
+                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                                        {{ lead.assigned_user.name }}
+                                    </span>
+                                    <span v-if="lead.module === 'dental'" class="px-1 py-0.5 text-[7px] font-bold rounded bg-sky-50 text-sky-600 border border-sky-200 uppercase">D</span>
+                                </div>
+                                <div class="flex items-center justify-between mt-2 pt-2 border-t border-gray-50 text-[9px] text-gray-400">
+                                    <span>{{ timeAgo(lead.created_at) }}</span>
+                                    <div v-if="lead.next_follow_up_at" class="flex items-center gap-1"
+                                        :class="isOverdue(lead.next_follow_up_at) ? 'text-red-500 font-bold' : ''">
+                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                        {{ formatDate(lead.next_follow_up_at) }}
+                                    </div>
+                                    <span v-else class="text-gray-300">{{ isRtl ? 'لا متابعة' : 'No follow-up' }}</span>
+                                </div>
+                            </div>
+                            <!-- Empty Column -->
+                            <div v-if="!col.leads.length" class="text-center py-8">
+                                <div class="w-10 h-10 mx-auto rounded-full bg-white/60 flex items-center justify-center mb-2">
+                                    <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" /></svg>
+                                </div>
+                                <p class="text-[10px] text-gray-400">{{ isRtl ? 'لا يوجد عملاء' : 'No leads' }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- ═══════════════ EMPTY STATE ═══════════════ -->
-            <div v-if="!leads.data?.length"
+            <div v-if="!leads.data?.length && viewMode !== 'kanban'"
                  class="bg-white rounded-2xl shadow-sm border border-gray-100 px-8 py-16 text-center"
                  :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
                  style="transition: all 0.5s ease;">
