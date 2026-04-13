@@ -31,14 +31,15 @@ onMounted(() => {
     animateCounters();
 });
 
-// Animated counters
-const animatedValues = ref({ thisMonth: 0, lastMonth: 0, total: 0 });
+// Animated counters with pending payout
+const animatedValues = ref({ thisMonth: 0, lastMonth: 0, total: 0, pending: 0 });
 
 function animateCounters() {
     const targets = {
         thisMonth: props.summary?.this_month || 0,
         lastMonth: props.summary?.last_month || 0,
         total: props.summary?.total || 0,
+        pending: props.payoutSummary?.total_pending || 0,
     };
     const duration = 1200;
     const start = performance.now();
@@ -49,9 +50,35 @@ function animateCounters() {
         animatedValues.value.thisMonth = Math.round(targets.thisMonth * eased);
         animatedValues.value.lastMonth = Math.round(targets.lastMonth * eased);
         animatedValues.value.total = Math.round(targets.total * eased);
+        animatedValues.value.pending = Math.round(targets.pending * eased);
         if (progress < 1) requestAnimationFrame(step);
     }
     requestAnimationFrame(step);
+}
+
+// Month-over-month growth
+const monthGrowth = computed(() => {
+    const last = props.summary?.last_month || 0;
+    const current = props.summary?.this_month || 0;
+    if (last === 0) return current > 0 ? 100 : 0;
+    return Math.round(((current - last) / last) * 100);
+});
+
+// Hovered bar in trend chart
+const hoveredBar = ref(null);
+
+// Share payout link to clipboard
+const copiedPayoutId = ref(null);
+function sharePayoutLink(payout) {
+    const url = `${window.location.origin}/doctor/commission/payouts/${payout.id}`;
+    if (navigator.share) {
+        navigator.share({ title: payout.payout_number, url }).catch(() => {});
+    } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(url).then(() => {
+            copiedPayoutId.value = payout.id;
+            setTimeout(() => { copiedPayoutId.value = null; }, 2000);
+        });
+    }
 }
 
 function applyFilter() {
@@ -106,8 +133,9 @@ function formatDate(d) {
                 </div>
 
                 <!-- Stats in Hero -->
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <div class="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10"
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    <!-- This Month - Primary stat -->
+                    <div class="col-span-2 sm:col-span-1 bg-white/8 backdrop-blur-sm rounded-xl p-4 border border-[#C4A265]/30 ring-1 ring-[#C4A265]/10"
                         :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
                         style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.1s"
                     >
@@ -117,10 +145,19 @@ function formatDate(d) {
                             </div>
                             <div>
                                 <p class="text-2xl font-bold text-[#C4A265]">{{ formatCurrency(animatedValues.thisMonth) }}</p>
-                                <p class="text-xs text-gray-400">{{ isRtl ? 'هذا الشهر' : 'This Month' }}</p>
+                                <div class="flex items-center gap-1.5">
+                                    <p class="text-xs text-gray-400">{{ isRtl ? 'هذا الشهر' : 'This Month' }}</p>
+                                    <span v-if="monthGrowth !== 0" class="inline-flex items-center gap-0.5 text-[10px] font-semibold px-1.5 py-0.5 rounded-full"
+                                        :class="monthGrowth > 0 ? 'bg-emerald-500/20 text-emerald-400' : 'bg-red-500/20 text-red-400'">
+                                        <svg v-if="monthGrowth > 0" class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7" /></svg>
+                                        <svg v-else class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" /></svg>
+                                        {{ Math.abs(monthGrowth) }}%
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <!-- Last Month -->
                     <div class="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10"
                         :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
                         style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.15s"
@@ -135,9 +172,25 @@ function formatDate(d) {
                             </div>
                         </div>
                     </div>
-                    <div class="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10"
+                    <!-- Pending Payout -->
+                    <div class="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-amber-500/20"
                         :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
                         style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.2s"
+                    >
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-lg bg-amber-500/20 flex items-center justify-center">
+                                <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            </div>
+                            <div>
+                                <p class="text-2xl font-bold text-amber-400">{{ formatCurrency(animatedValues.pending) }}</p>
+                                <p class="text-xs text-gray-400">{{ isRtl ? 'قيد الانتظار' : 'Pending' }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Total Earned -->
+                    <div class="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10"
+                        :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
+                        style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.25s"
                     >
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 rounded-lg bg-emerald-500/20 flex items-center justify-center">
@@ -153,12 +206,12 @@ function formatDate(d) {
             </div>
         </div>
 
-        <!-- Payout Status Cards -->
-        <div v-if="payoutSummary" class="grid grid-cols-2 lg:grid-cols-4 gap-3"
-            :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
-            style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.25s"
-        >
-            <div class="bg-white rounded-xl border border-emerald-100 p-4 hover:shadow-sm transition-all">
+        <!-- Payout Status Cards - staggered entrance -->
+        <div v-if="payoutSummary" class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+            <div class="bg-white rounded-xl border border-emerald-100 p-4 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300"
+                :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'"
+                style="transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.28s"
+            >
                 <div class="flex items-center gap-2 mb-1.5">
                     <div class="w-7 h-7 rounded-lg bg-emerald-50 flex items-center justify-center">
                         <svg class="w-3.5 h-3.5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -167,7 +220,10 @@ function formatDate(d) {
                 </div>
                 <p class="text-lg font-bold text-emerald-700">{{ formatCurrency(payoutSummary.total_paid) }}</p>
             </div>
-            <div class="bg-white rounded-xl border border-amber-100 p-4 hover:shadow-sm transition-all">
+            <div class="bg-white rounded-xl border border-amber-100 p-4 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300"
+                :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'"
+                style="transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.34s"
+            >
                 <div class="flex items-center gap-2 mb-1.5">
                     <div class="w-7 h-7 rounded-lg bg-amber-50 flex items-center justify-center">
                         <svg class="w-3.5 h-3.5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -176,7 +232,10 @@ function formatDate(d) {
                 </div>
                 <p class="text-lg font-bold text-amber-700">{{ formatCurrency(payoutSummary.total_pending) }}</p>
             </div>
-            <div class="bg-white rounded-xl border border-gray-200 p-4 hover:shadow-sm transition-all">
+            <div class="bg-white rounded-xl border border-gray-200 p-4 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300"
+                :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'"
+                style="transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.40s"
+            >
                 <div class="flex items-center gap-2 mb-1.5">
                     <div class="w-7 h-7 rounded-lg bg-gray-50 flex items-center justify-center">
                         <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
@@ -185,7 +244,10 @@ function formatDate(d) {
                 </div>
                 <p class="text-lg font-bold text-gray-600">{{ formatCurrency(payoutSummary.total_draft) }}</p>
             </div>
-            <div class="bg-white rounded-xl border border-rose-100 p-4 hover:shadow-sm transition-all">
+            <div class="bg-white rounded-xl border border-rose-100 p-4 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300"
+                :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'"
+                style="transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.46s"
+            >
                 <div class="flex items-center gap-2 mb-1.5">
                     <div class="w-7 h-7 rounded-lg bg-rose-50 flex items-center justify-center">
                         <svg class="w-3.5 h-3.5 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -231,7 +293,7 @@ function formatDate(d) {
                                     <p class="text-xs text-gray-400">{{ formatDate(payout.period_start) }} – {{ formatDate(payout.period_end) }}</p>
                                 </div>
                             </div>
-                            <div class="flex items-center gap-3">
+                            <div class="flex items-center gap-2">
                                 <div class="text-right">
                                     <p class="text-sm font-bold text-[#C4A265]">{{ formatCurrency(payout.net_amount) }}</p>
                                     <span class="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full border"
@@ -241,6 +303,15 @@ function formatDate(d) {
                                         {{ payoutStatusConfig[payout.status]?.label }}
                                     </span>
                                 </div>
+                                <!-- Share / Copy link button -->
+                                <button v-if="payout.status === 'paid'"
+                                    @click.stop.prevent="sharePayoutLink(payout)"
+                                    class="w-7 h-7 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200 hover:bg-[#C4A265]/10"
+                                    :title="isRtl ? 'نسخ الرابط' : 'Copy link'"
+                                >
+                                    <svg v-if="copiedPayoutId === payout.id" class="w-3.5 h-3.5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                                    <svg v-else class="w-3.5 h-3.5 text-gray-400 hover:text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
+                                </button>
                                 <svg class="w-4 h-4 text-gray-300 group-hover:text-[#C4A265] group-hover:translate-x-0.5 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
                             </div>
                         </Link>
@@ -340,14 +411,37 @@ function formatDate(d) {
                         <h3 class="text-sm font-bold text-gray-800">{{ isRtl ? 'الاتجاه (6 أشهر)' : 'Trend (6 months)' }}</h3>
                     </div>
                     <div class="p-5">
-                        <div class="flex items-end gap-2 h-28">
-                            <div v-for="(item, i) in monthlyTrend" :key="item.label" class="flex-1 flex flex-col items-center gap-1">
-                                <span class="text-[10px] font-medium text-gray-500 tabular-nums">{{ item.value?.toLocaleString() }}</span>
-                                <div class="w-full rounded-t-lg bg-gradient-to-t from-[#C4A265] to-[#D4B87A] transition-all duration-700 ease-out"
-                                    :style="{ height: mounted ? Math.max(4, (item.value / maxTrend) * 80) + 'px' : '4px', transitionDelay: `${0.4 + i * 0.08}s` }"
+                        <div class="flex items-end gap-2 h-32">
+                            <div v-for="(item, i) in monthlyTrend" :key="item.label"
+                                class="flex-1 flex flex-col items-center gap-1 relative group cursor-pointer"
+                                @mouseenter="hoveredBar = i" @mouseleave="hoveredBar = null"
+                            >
+                                <!-- Hover tooltip -->
+                                <div v-if="hoveredBar === i"
+                                    class="absolute -top-8 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-[10px] font-semibold px-2 py-1 rounded-md shadow-lg whitespace-nowrap z-10"
+                                    style="animation: fadeIn 0.15s ease-out"
+                                >
+                                    {{ formatCurrency(item.value) }}
+                                    <div class="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
+                                </div>
+                                <span class="text-[10px] font-medium tabular-nums transition-colors duration-200"
+                                    :class="hoveredBar === i ? 'text-[#C4A265] font-bold' : 'text-gray-500'">
+                                    {{ item.value?.toLocaleString() }}
+                                </span>
+                                <div class="w-full rounded-t-lg transition-all duration-700 ease-out"
+                                    :class="hoveredBar === i ? 'bg-gradient-to-t from-[#A68B52] to-[#C4A265] shadow-lg shadow-[#C4A265]/20' : 'bg-gradient-to-t from-[#C4A265] to-[#D4B87A]'"
+                                    :style="{ height: mounted ? Math.max(4, (item.value / maxTrend) * 88) + 'px' : '4px', transitionDelay: `${0.4 + i * 0.08}s` }"
                                 ></div>
-                                <span class="text-[10px] text-gray-400">{{ item.label }}</span>
+                                <span class="text-[10px] transition-colors duration-200"
+                                    :class="hoveredBar === i ? 'text-gray-700 font-semibold' : 'text-gray-400'">
+                                    {{ item.label }}
+                                </span>
                             </div>
+                        </div>
+                        <!-- Trend summary line -->
+                        <div v-if="monthlyTrend?.length >= 2" class="mt-3 pt-3 border-t border-gray-100 flex items-center justify-between">
+                            <span class="text-[10px] text-gray-400">{{ isRtl ? 'المتوسط الشهري' : 'Monthly avg' }}</span>
+                            <span class="text-xs font-bold text-gray-600">{{ formatCurrency(Math.round(monthlyTrend.reduce((s, m) => s + (m.value || 0), 0) / monthlyTrend.length)) }}</span>
                         </div>
                     </div>
                 </div>
@@ -401,3 +495,10 @@ function formatDate(d) {
         </div>
     </div>
 </template>
+
+<style scoped>
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateX(-50%) translateY(4px); }
+    to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+</style>
