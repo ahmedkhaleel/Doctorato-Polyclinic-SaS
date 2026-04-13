@@ -555,6 +555,7 @@ Route::middleware('admin.auth')->group(function () {
 
     // ─── CRM ────────────────────────────────────────────────
     Route::get('/crm', [CrmDashboardController::class, 'index'])->name('admin.crm.dashboard')->middleware('permission:leads.view');
+    Route::get('/crm/calendar', [CrmDashboardController::class, 'calendar'])->name('admin.crm.calendar')->middleware('permission:leads.view');
 
     // Leads
     Route::get('/leads', [LeadController::class, 'index'])->name('admin.leads.index')->middleware('permission:leads.view');
@@ -567,6 +568,7 @@ Route::middleware('admin.auth')->group(function () {
     Route::delete('/leads/{lead}', [LeadController::class, 'destroy'])->name('admin.leads.destroy')->middleware('permission:leads.delete');
     Route::post('/leads/{lead}/status', [LeadController::class, 'updateStatus'])->name('admin.leads.updateStatus')->middleware('permission:leads.update');
     Route::post('/leads/{lead}/priority', [LeadController::class, 'updatePriority'])->name('admin.leads.updatePriority')->middleware('permission:leads.update');
+    Route::post('/leads/{lead}/reactivate', [LeadController::class, 'reactivate'])->name('admin.leads.reactivate')->middleware('permission:leads.update');
     Route::get('/leads/{lead}/quick-view', [LeadController::class, 'quickView'])->name('admin.leads.quickView')->middleware('permission:leads.view');
     Route::post('/leads/{lead}/activity', [LeadController::class, 'logActivity'])->name('admin.leads.logActivity')->middleware('permission:leads.update');
     Route::post('/leads/{lead}/follow-up', [LeadController::class, 'scheduleFollowUp'])->name('admin.leads.scheduleFollowUp')->middleware('permission:leads.update');

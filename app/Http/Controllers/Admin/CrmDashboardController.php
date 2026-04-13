@@ -222,6 +222,64 @@ class CrmDashboardController extends Controller
         return round($minutes / 1440, 1) . 'd';
     }
 
+    /**
+     * CRM Follow-up Calendar for admins.
+     */
+    public function calendar(Request $request): Response
+    {
+        $month = (int) $request->input('month', now()->month);
+        $year = (int) $request->input('year', now()->year);
+
+        $startDate = Carbon::create($year, $month, 1)->startOfDay();
+        $endDate = $startDate->copy()->endOfMonth()->endOfDay();
+
+        $calendarStart = $startDate->copy()->startOfWeek(Carbon::SATURDAY);
+        $calendarEnd = $endDate->copy()->endOfWeek(Carbon::FRIDAY);
+
+        $followUps = LeadFollowUp::with(['lead:id,full_name,phone,status,priority', 'assignedUser:id,name'])
+            ->whereBetween('scheduled_at', [$calendarStart, $calendarEnd])
+            ->orderBy('scheduled_at')
+            ->get()
+            ->map(fn ($fu) => [
+                'id' => $fu->id,
+                'lead_id' => $fu->lead_id,
+                'lead_name' => $fu->lead?->full_name ?? '-',
+                'lead_phone' => $fu->lead?->phone ?? '-',
+                'lead_status' => $fu->lead?->status ?? '-',
+                'lead_priority' => $fu->lead?->priority ?? 3,
+                'assigned_to_name' => $fu->assignedUser?->name ?? '-',
+                'type' => $fu->type,
+                'status' => $fu->status,
+                'scheduled_at' => $fu->scheduled_at->toIso8601String(),
+                'scheduled_date' => $fu->scheduled_at->format('Y-m-d'),
+                'scheduled_time' => $fu->scheduled_at->format('H:i'),
+                'notes' => $fu->notes,
+                'result' => $fu->result,
+                'is_overdue' => $fu->status === 'pending' && $fu->scheduled_at->isPast(),
+            ]);
+
+        $monthStats = [
+            'total' => LeadFollowUp::whereBetween('scheduled_at', [$startDate, $endDate])->count(),
+            'pending' => LeadFollowUp::where('status', 'pending')
+                ->whereBetween('scheduled_at', [$startDate, $endDate])->count(),
+            'completed' => LeadFollowUp::where('status', 'completed')
+                ->whereBetween('scheduled_at', [$startDate, $endDate])->count(),
+            'missed' => LeadFollowUp::where('status', 'missed')
+                ->whereBetween('scheduled_at', [$startDate, $endDate])->count(),
+            'overdue' => LeadFollowUp::overdue()->count(),
+        ];
+
+        $assignees = User::active()->select('id', 'name')->orderBy('name')->get();
+
+        return Inertia::render('Admin/CRM/Calendar', [
+            'followUps' => $followUps,
+            'monthStats' => $monthStats,
+            'assignees' => $assignees,
+            'month' => $month,
+            'year' => $year,
+        ]);
+    }
+
     private function calculateConversionRate(Carbon $startDate): float
     {
         $total = Lead::where('created_at', '>=', $startDate)->count();

@@ -219,6 +219,18 @@ function confirmLostStatus() {
     });
 }
 
+// Reactivate lead (lost/dormant → new)
+const reactivating = ref(false);
+function reactivateLead() {
+    const msg = isRtl.value ? 'هل تريد إعادة تنشيط هذا العميل المحتمل؟' : 'Reactivate this lead back to New status?';
+    if (!confirm(msg)) return;
+    reactivating.value = true;
+    router.post(`/admin/leads/${props.lead.id}/reactivate`, {}, {
+        preserveScroll: true,
+        onFinish: () => reactivating.value = false,
+    });
+}
+
 // Convert modal
 const showConvertModal = ref(false);
 const selectedDepartment = ref('');
@@ -889,16 +901,27 @@ function translateDescription(desc) {
             </transition>
 
             <!-- ===================== LOST INFO ===================== -->
-            <div v-if="lead.status === 'lost'" class="bg-gradient-to-r from-red-50 to-rose-50 border border-red-200 rounded-2xl p-6">
-                <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-2xl bg-red-100 flex items-center justify-center shrink-0">
-                        <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+            <div v-if="lead.status === 'lost' || lead.status === 'dormant'" class="bg-gradient-to-r from-red-50 to-rose-50 border border-red-200 rounded-2xl p-6">
+                <div class="flex items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-2xl bg-red-100 flex items-center justify-center shrink-0">
+                            <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-red-800">{{ lead.status === 'lost' ? $t('a_lead_marked_lost') : (isRtl ? 'العميل المحتمل خامل' : 'Lead is Dormant') }}</p>
+                            <p v-if="lead.loss_reason" class="text-xs text-red-600 mt-0.5">{{ lead.loss_reason }}</p>
+                            <p v-if="lead.lost_at" class="text-xs text-red-400 mt-0.5">{{ $t('a_lost_on') }} {{ formatDate(lead.lost_at) }}</p>
+                        </div>
                     </div>
-                    <div>
-                        <p class="text-sm font-bold text-red-800">{{ $t('a_lead_marked_lost') }}</p>
-                        <p class="text-xs text-red-600 mt-0.5">{{ lead.loss_reason || $t('a_no_reason_provided') }}</p>
-                        <p class="text-xs text-red-400 mt-0.5">{{ $t('a_lost_on') }} {{ formatDate(lead.lost_at) }}</p>
-                    </div>
+                    <button v-if="can('leads.update')"
+                        @click="reactivateLead"
+                        :disabled="reactivating"
+                        class="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-semibold rounded-xl border border-green-300 bg-white text-green-700 hover:bg-green-50 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 shrink-0">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                        </svg>
+                        {{ isRtl ? 'اعادة تنشيط' : 'Reactivate' }}
+                    </button>
                 </div>
             </div>
 

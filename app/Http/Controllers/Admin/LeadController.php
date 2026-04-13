@@ -438,6 +438,34 @@ class LeadController extends Controller
     }
 
     /**
+     * Reactivate a lost or dormant lead back into the pipeline.
+     */
+    public function reactivate(Request $request, Lead $lead): RedirectResponse
+    {
+        if (!in_array($lead->status, ['lost', 'dormant'])) {
+            return back()->with('error', 'Only lost or dormant leads can be reactivated.');
+        }
+
+        $oldStatus = $lead->status;
+        $lead->update([
+            'status' => 'new',
+            'loss_reason' => null,
+            'lost_at' => null,
+        ]);
+
+        LeadActivity::logStatusChange($lead, $oldStatus, 'new');
+
+        LeadActivity::create([
+            'lead_id' => $lead->id,
+            'type' => 'system',
+            'subject' => "Lead reactivated from {$oldStatus}",
+            'performed_by' => auth()->id(),
+        ]);
+
+        return back()->with('success', 'Lead reactivated successfully.');
+    }
+
+    /**
      * Convert lead to patient (with optional booking).
      */
     public function convert(Request $request, Lead $lead): RedirectResponse
