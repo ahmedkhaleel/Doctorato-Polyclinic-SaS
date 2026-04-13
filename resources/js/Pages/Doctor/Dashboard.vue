@@ -105,6 +105,24 @@ const statusConfig = computed(() => ({
     cancelled: { label: isRtl.value ? 'ملغي' : 'Cancelled', bg: 'bg-gray-100', text: 'text-gray-500', dot: 'bg-gray-400', ring: 'ring-gray-400/20' },
 }));
 
+// Current time for timeline
+const currentTimeString = computed(() => {
+    const now = new Date();
+    return now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+});
+
+// Follow-up urgency helper
+function getFollowupUrgency(dueDate) {
+    if (!dueDate) return 'upcoming';
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const due = new Date(dueDate);
+    due.setHours(0, 0, 0, 0);
+    if (due < today) return 'overdue';
+    if (due.getTime() === today.getTime()) return 'today';
+    return 'upcoming';
+}
+
 // Completion rate ring
 const completionDash = computed(() => {
     const circumference = 2 * Math.PI * 40;
@@ -253,10 +271,95 @@ const completionDash = computed(() => {
                     </div>
                 </div>
 
+                <!-- Today's Timeline -->
+                <div v-if="todayQueue.length > 0"
+                    class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden"
+                    :class="mounted ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'"
+                    style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s">
+                    <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-gray-50/80 to-white">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-xl bg-indigo-50 flex items-center justify-center">
+                                <svg class="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            </div>
+                            <div>
+                                <h2 class="text-sm font-bold text-gray-800">{{ isRtl ? 'جدول اليوم' : 'Today\'s Timeline' }}</h2>
+                                <p class="text-[10px] text-gray-400">{{ isRtl ? 'الترتيب الزمني لمرضى اليوم' : 'Chronological view of today\'s patients' }}</p>
+                            </div>
+                        </div>
+                        <span class="text-[10px] font-semibold text-gray-400 tabular-nums">{{ currentTimeString }}</span>
+                    </div>
+                    <div class="px-6 py-4">
+                        <div class="relative">
+                            <!-- Timeline vertical line -->
+                            <div class="absolute top-0 bottom-0 w-0.5 bg-gray-100 rounded-full"
+                                :class="isRtl ? 'right-[15px]' : 'left-[15px]'"></div>
+
+                            <!-- Current time indicator -->
+                            <div class="absolute top-0 z-10 flex items-center gap-2"
+                                :class="isRtl ? 'right-[9px]' : 'left-[9px]'">
+                                <div class="w-3 h-3 rounded-full bg-[#C4A265] shadow-[0_0_0_4px_rgba(196,162,101,0.15)]"
+                                    style="animation: pulse 2s infinite"></div>
+                                <span class="text-[9px] font-bold text-[#C4A265] uppercase tracking-wider"
+                                    :class="isRtl ? 'mr-1' : 'ml-1'">{{ isRtl ? 'الآن' : 'NOW' }}</span>
+                            </div>
+
+                            <!-- Timeline items -->
+                            <div class="space-y-0 pt-6">
+                                <div v-for="(visit, i) in todayQueue" :key="'tl-' + visit.id"
+                                    class="relative flex items-start gap-4 pb-4"
+                                    :class="[
+                                        isRtl ? 'pr-10' : 'pl-10',
+                                        mounted ? 'translate-y-0 opacity-100' : 'translate-y-3 opacity-0'
+                                    ]"
+                                    :style="{ transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1) ' + (0.25 + i * 0.06) + 's' }">
+                                    <!-- Node dot -->
+                                    <div class="absolute top-1 w-[11px] h-[11px] rounded-full border-2 border-white shadow-sm"
+                                        :class="[
+                                            isRtl ? 'right-[10px]' : 'left-[10px]',
+                                            visit.status === 'waiting' ? 'bg-amber-400' :
+                                            visit.status === 'in_progress' ? 'bg-blue-500' :
+                                            visit.status === 'completed' ? 'bg-emerald-500' : 'bg-gray-300'
+                                        ]"></div>
+
+                                    <!-- Content -->
+                                    <div class="flex-1 flex items-center justify-between gap-3 p-3 rounded-xl border transition-all duration-200 hover:shadow-sm"
+                                        :class="visit.status === 'in_progress' ? 'bg-blue-50/50 border-blue-100' :
+                                                visit.status === 'completed' ? 'bg-emerald-50/30 border-emerald-100/60' :
+                                                'bg-gray-50/50 border-gray-100/60'">
+                                        <div class="flex items-center gap-3 min-w-0">
+                                            <div class="w-8 h-8 rounded-lg flex items-center justify-center text-[10px] font-bold shrink-0"
+                                                :class="visit.status === 'waiting' ? 'bg-amber-100 text-amber-700' :
+                                                        visit.status === 'in_progress' ? 'bg-blue-100 text-blue-700' :
+                                                        'bg-emerald-100 text-emerald-700'">
+                                                {{ visit.patient?.full_name?.charAt(0) || '?' }}
+                                            </div>
+                                            <div class="min-w-0">
+                                                <p class="text-xs font-semibold text-gray-800 truncate">{{ visit.patient?.full_name }}</p>
+                                                <p class="text-[10px] text-gray-400 truncate">{{ visit.service?.name_en || visit.visit_type }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center gap-2 shrink-0">
+                                            <span class="text-[10px] font-medium text-gray-400 tabular-nums">
+                                                {{ visit.checked_in_at ? new Date(visit.checked_in_at).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }) : '--:--' }}
+                                            </span>
+                                            <span class="inline-flex items-center gap-1 text-[9px] font-semibold px-2 py-0.5 rounded-full"
+                                                :class="[statusConfig[visit.status]?.bg, statusConfig[visit.status]?.text]">
+                                                <span class="w-1 h-1 rounded-full" :class="statusConfig[visit.status]?.dot"
+                                                    :style="visit.status === 'in_progress' ? 'animation: pulse 2s infinite' : ''"></span>
+                                                {{ statusConfig[visit.status]?.label }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Recent Completed Visits -->
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden"
                     :class="mounted ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'"
-                    style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.25s">
+                    style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.3s">
                     <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-gray-50/80 to-white">
                         <div class="flex items-center gap-3">
                             <div class="w-8 h-8 rounded-xl bg-emerald-50 flex items-center justify-center">
@@ -402,6 +505,31 @@ const completionDash = computed(() => {
                     </div>
                 </div>
 
+                <!-- Dental Quick Stats -->
+                <div v-if="dental && (dental.active_plans || dental.pending_treatments || dental.overdue_followups)"
+                    class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden"
+                    :class="mounted ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'"
+                    style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.25s">
+                    <div class="px-5 py-3.5 border-b border-gray-100 bg-gradient-to-r from-cyan-50/40 to-white flex items-center gap-2">
+                        <svg class="w-4 h-4 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3C10.5 3 9 4.5 8.5 6.5C8 8.5 7 9.5 6 10.5C5 11.5 4 13 4 15C4 17 5.5 19 7.5 19C9 19 10 18 10.5 17C11 16 11.5 15.5 12 15.5C12.5 15.5 13 16 13.5 17C14 18 15 19 16.5 19C18.5 19 20 17 20 15C20 13 19 11.5 18 10.5C17 9.5 16 8.5 15.5 6.5C15 4.5 13.5 3 12 3Z" /></svg>
+                        <h3 class="text-xs font-bold text-gray-700 uppercase tracking-wider">{{ isRtl ? 'ملخص الأسنان' : 'Dental Quick Stats' }}</h3>
+                    </div>
+                    <div class="p-5 grid grid-cols-3 gap-3">
+                        <div class="text-center p-2.5 rounded-xl bg-blue-50/50">
+                            <p class="text-lg font-bold text-blue-600 tabular-nums">{{ dental.active_plans ?? 0 }}</p>
+                            <p class="text-[10px] font-medium text-gray-500 mt-0.5">{{ isRtl ? 'خطط نشطة' : 'Active Plans' }}</p>
+                        </div>
+                        <div class="text-center p-2.5 rounded-xl bg-amber-50/50">
+                            <p class="text-lg font-bold text-amber-600 tabular-nums">{{ dental.pending_treatments ?? 0 }}</p>
+                            <p class="text-[10px] font-medium text-gray-500 mt-0.5">{{ isRtl ? 'معلّق' : 'Pending' }}</p>
+                        </div>
+                        <div class="text-center p-2.5 rounded-xl" :class="(dental.overdue_followups ?? 0) > 0 ? 'bg-red-50/50' : 'bg-gray-50/50'">
+                            <p class="text-lg font-bold tabular-nums" :class="(dental.overdue_followups ?? 0) > 0 ? 'text-red-600' : 'text-gray-400'">{{ dental.overdue_followups ?? 0 }}</p>
+                            <p class="text-[10px] font-medium text-gray-500 mt-0.5">{{ isRtl ? 'متأخرة' : 'Overdue' }}</p>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Payout Summary -->
                 <div v-if="payoutSummary" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden"
                     :class="mounted ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'"
@@ -465,10 +593,54 @@ const completionDash = computed(() => {
                     </div>
                 </div>
 
+                <!-- Pending Follow-ups (Sidebar) -->
+                <div v-if="pendingFollowups?.length > 0"
+                    class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden"
+                    :class="mounted ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'"
+                    style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.38s">
+                    <div class="flex items-center justify-between px-5 py-3.5 border-b border-gray-100 bg-gradient-to-r from-gray-50/80 to-white">
+                        <div class="flex items-center gap-2">
+                            <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            <h3 class="text-xs font-bold text-gray-700 uppercase tracking-wider">{{ isRtl ? 'المتابعات المعلقة' : 'Pending Follow-ups' }}</h3>
+                        </div>
+                        <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-amber-100 text-[10px] font-bold text-amber-700">{{ pendingFollowups.length }}</span>
+                    </div>
+                    <div class="divide-y divide-gray-50">
+                        <div v-for="followup in pendingFollowups.slice(0, 5)" :key="'fu-' + followup.id"
+                            class="px-5 py-3 flex items-center gap-3 hover:bg-gray-50/50 transition-colors">
+                            <div class="w-8 h-8 rounded-lg flex items-center justify-center text-[10px] font-bold shrink-0"
+                                :class="getFollowupUrgency(followup.scheduled_date) === 'overdue' ? 'bg-red-100 text-red-700' :
+                                        getFollowupUrgency(followup.scheduled_date) === 'today' ? 'bg-amber-100 text-amber-700' :
+                                        'bg-emerald-100 text-emerald-700'">
+                                {{ (followup.patient?.full_name || '?').charAt(0).toUpperCase() }}
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-xs font-semibold text-gray-800 truncate">{{ followup.patient?.full_name || '-' }}</p>
+                                <p class="text-[10px] text-gray-400 truncate">
+                                    {{ followup.scheduled_date ? new Date(followup.scheduled_date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }) : '-' }}
+                                </p>
+                            </div>
+                            <span class="text-[9px] font-bold px-2 py-0.5 rounded-full shrink-0"
+                                :class="getFollowupUrgency(followup.scheduled_date) === 'overdue' ? 'bg-red-50 text-red-600' :
+                                        getFollowupUrgency(followup.scheduled_date) === 'today' ? 'bg-amber-50 text-amber-600' :
+                                        'bg-emerald-50 text-emerald-600'">
+                                {{ getFollowupUrgency(followup.scheduled_date) === 'overdue' ? (isRtl ? 'متأخر' : 'Overdue') :
+                                   getFollowupUrgency(followup.scheduled_date) === 'today' ? (isRtl ? 'اليوم' : 'Today') :
+                                   (isRtl ? 'قادم' : 'Upcoming') }}
+                            </span>
+                        </div>
+                    </div>
+                    <div v-if="pendingFollowups.length > 5" class="px-5 py-2.5 border-t border-gray-100 text-center">
+                        <Link href="/doctor/dental/followups" class="text-[10px] font-semibold text-[#C4A265] hover:text-[#B3914F]">
+                            {{ isRtl ? `عرض الكل (${pendingFollowups.length})` : `View all (${pendingFollowups.length})` }}
+                        </Link>
+                    </div>
+                </div>
+
                 <!-- Upcoming Bookings -->
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden"
                     :class="mounted ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'"
-                    style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.4s">
+                    style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.42s">
                     <div class="flex items-center justify-between px-5 py-3.5 border-b border-gray-100 bg-gradient-to-r from-gray-50/80 to-white">
                         <div class="flex items-center gap-2">
                             <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
