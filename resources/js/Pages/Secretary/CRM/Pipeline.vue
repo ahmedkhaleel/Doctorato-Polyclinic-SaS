@@ -534,7 +534,8 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handlePipelineKe
                      @mouseenter="onCardEnter(lead, $event)"
                      @mouseleave="onCardLeave"
                      :class="['bg-white rounded-xl border shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer group border-s-[3px]',
-                        priorityConfig[lead.priority]?.borderL || 'border-s-gray-300']">
+                        priorityConfig[lead.priority]?.borderL || 'border-s-gray-300',
+                        isStale(lead) ? 'ring-1 ring-amber-300/60 bg-amber-50/30' : '']">
 
                     <!-- Drag handle -->
                     <div class="drag-handle px-3 pt-2.5 pb-1 flex items-center justify-between cursor-grab active:cursor-grabbing">

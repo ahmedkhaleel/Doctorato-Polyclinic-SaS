@@ -10,6 +10,7 @@ const props = defineProps({
     leads: Object,
     filters: Object,
     sources: Array,
+    services: Array,
     quickFilterCounts: Object,
 });
 
@@ -39,6 +40,8 @@ const dateTo = ref(props.filters?.date_to || '');
 const sortField = ref(props.filters?.sort || 'created_at');
 const sortDir = ref(props.filters?.dir || 'desc');
 const quickFilter = ref(props.filters?.quick_filter || '');
+const moduleFilter = ref(props.filters?.module || '');
+const serviceFilter2 = ref(props.filters?.service || '');
 const showAdvancedFilters = ref(false);
 
 let searchTimeout = null;
@@ -49,6 +52,8 @@ function applyFilters() {
         status: statusFilter.value || undefined,
         priority: priorityFilter.value || undefined,
         source: sourceFilter.value || undefined,
+        module: moduleFilter.value || undefined,
+        service: serviceFilter2.value || undefined,
         date_from: dateFrom.value || undefined,
         date_to: dateTo.value || undefined,
         sort: sortField.value !== 'created_at' ? sortField.value : undefined,
@@ -91,6 +96,8 @@ function clearFilters() {
     dateFrom.value = '';
     dateTo.value = '';
     quickFilter.value = '';
+    moduleFilter.value = '';
+    serviceFilter2.value = '';
     sortField.value = 'created_at';
     sortDir.value = 'desc';
     router.get('/secretary/crm/leads', {}, { preserveState: true, replace: true });
@@ -104,14 +111,18 @@ function removeFilter(key) {
     if (key === 'date_from') dateFrom.value = '';
     if (key === 'date_to') dateTo.value = '';
     if (key === 'quick_filter') quickFilter.value = '';
+    if (key === 'module') moduleFilter.value = '';
+    if (key === 'service') serviceFilter2.value = '';
     applyFilters();
 }
 
-const hasActiveFilters = computed(() => !!(search.value || statusFilter.value || priorityFilter.value || sourceFilter.value || dateFrom.value || dateTo.value || quickFilter.value));
+const hasActiveFilters = computed(() => !!(search.value || statusFilter.value || priorityFilter.value || sourceFilter.value || dateFrom.value || dateTo.value || quickFilter.value || moduleFilter.value || serviceFilter2.value));
 
 const advancedFilterCount = computed(() => {
     let c = 0;
     if (sourceFilter.value) c++;
+    if (moduleFilter.value) c++;
+    if (serviceFilter2.value) c++;
     if (dateFrom.value) c++;
     if (dateTo.value) c++;
     return c;
@@ -523,6 +534,13 @@ const activeFilterPills = computed(() => {
     if (dateTo.value) {
         pills.push({ key: 'date_to', label: (isRtl.value ? 'إلى: ' : 'To: ') + dateTo.value });
     }
+    if (moduleFilter.value) {
+        pills.push({ key: 'module', label: moduleFilter.value === 'derma' ? (isRtl.value ? 'جلدية' : 'Derma') : (isRtl.value ? 'أسنان' : 'Dental') });
+    }
+    if (serviceFilter2.value) {
+        const svc = (props.services || []).find(s => s.id == serviceFilter2.value);
+        pills.push({ key: 'service', label: svc ? (isRtl.value ? svc.name_ar : svc.name_en) : serviceFilter2.value });
+    }
     if (quickFilter.value) {
         const qfLabels = {
             overdue: isRtl.value ? 'متابعات متأخرة' : 'Overdue Follow-ups',
@@ -752,7 +770,7 @@ const activeFilterPills = computed(() => {
                     leave-active-class="transition-all duration-200 ease-in"
                     leave-from-class="opacity-100 max-h-40"
                     leave-to-class="opacity-0 max-h-0">
-                    <div v-if="showAdvancedFilters" class="overflow-hidden mt-3 pt-3 border-t border-gray-100">
+                    <div v-if="showAdvancedFilters" class="overflow-hidden mt-3 pt-3 border-t border-gray-100 space-y-3">
                         <div class="flex flex-col sm:flex-row gap-3">
                             <!-- Source Filter -->
                             <div class="relative flex-1">
@@ -772,6 +790,50 @@ const activeFilterPills = computed(() => {
                                     </svg>
                                 </div>
                             </div>
+                            <!-- Module (Derma/Dental) -->
+                            <div class="flex-1">
+                                <label class="block text-[11px] font-medium text-gray-500 mb-1 uppercase tracking-wider">
+                                    {{ isRtl ? 'القسم' : 'Department' }}
+                                </label>
+                                <div class="flex gap-1.5">
+                                    <button type="button" @click="moduleFilter = moduleFilter === 'derma' ? '' : 'derma'; applyFilters()"
+                                        :class="['flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-sm font-medium border transition-all duration-200',
+                                            moduleFilter === 'derma'
+                                                ? 'bg-teal-50 text-teal-700 border-teal-300'
+                                                : 'border-gray-200 text-gray-500 bg-gray-50 hover:border-teal-200']">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.098 19.902a3.75 3.75 0 005.304 0l6.401-6.402M6.75 21A3.75 3.75 0 013 17.25V4.125C3 3.504 3.504 3 4.125 3h5.25c.621 0 1.125.504 1.125 1.125v4.072M6.75 21a3.75 3.75 0 003.75-3.75V8.197M6.75 21h13.125c.621 0 1.125-.504 1.125-1.125v-5.25c0-.621-.504-1.125-1.125-1.125h-4.072M10.5 8.197l2.88-2.88c.438-.439 1.15-.439 1.59 0l3.712 3.713c.44.44.44 1.152 0 1.59l-2.879 2.88M6.75 17.25h.008v.008H6.75v-.008z"/></svg>
+                                        {{ isRtl ? 'جلدية' : 'Derma' }}
+                                    </button>
+                                    <button type="button" @click="moduleFilter = moduleFilter === 'dental' ? '' : 'dental'; applyFilters()"
+                                        :class="['flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-sm font-medium border transition-all duration-200',
+                                            moduleFilter === 'dental'
+                                                ? 'bg-sky-50 text-sky-700 border-sky-300'
+                                                : 'border-gray-200 text-gray-500 bg-gray-50 hover:border-sky-200']">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z"/></svg>
+                                        {{ isRtl ? 'أسنان' : 'Dental' }}
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- Service Filter -->
+                            <div class="relative flex-1" v-if="services && services.length">
+                                <label class="block text-[11px] font-medium text-gray-500 mb-1 uppercase tracking-wider">
+                                    {{ isRtl ? 'الخدمة' : 'Service' }}
+                                </label>
+                                <select v-model="serviceFilter2" @change="applyFilters()"
+                                    class="w-full appearance-none text-sm border border-gray-200 rounded-xl py-2.5 ltr:pl-4 rtl:pr-4 ltr:pr-10 rtl:pl-10 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all duration-200 bg-gray-50 focus:bg-white cursor-pointer">
+                                    <option value="">{{ isRtl ? 'جميع الخدمات' : 'All Services' }}</option>
+                                    <option v-for="svc in services" :key="svc.id" :value="svc.id">
+                                        {{ isRtl ? svc.name_ar : svc.name_en }}
+                                    </option>
+                                </select>
+                                <div class="absolute bottom-0 inset-y-auto ltr:right-0 rtl:left-0 ltr:pr-3 rtl:pl-3 h-[42px] flex items-center pointer-events-none">
+                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex flex-col sm:flex-row gap-3">
                             <!-- Date From -->
                             <div class="flex-1">
                                 <label class="block text-[11px] font-medium text-gray-500 mb-1 uppercase tracking-wider">
@@ -788,6 +850,7 @@ const activeFilterPills = computed(() => {
                                 <input v-model="dateTo" type="date"
                                     class="w-full text-sm border border-gray-200 rounded-xl py-2.5 px-4 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all duration-200 bg-gray-50 focus:bg-white" />
                             </div>
+                            <div class="flex-1"></div>
                         </div>
                     </div>
                 </Transition>
@@ -1096,6 +1159,15 @@ const activeFilterPills = computed(() => {
                             class="inline-flex items-center gap-1 text-[11px] font-medium px-2.5 py-1 rounded-full"
                             :style="{ backgroundColor: lead.source.color + '15', color: lead.source.color }">
                             {{ lead.source.name_en }}
+                        </span>
+
+                        <!-- Module Badge -->
+                        <span v-if="lead.module"
+                            class="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full"
+                            :class="lead.module === 'dental' ? 'bg-sky-50 text-sky-600 border border-sky-200' : 'bg-teal-50 text-teal-600 border border-teal-200'">
+                            <svg v-if="lead.module === 'dental'" class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            <svg v-else class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.098 19.902a3.75 3.75 0 005.304 0l6.401-6.402M6.75 21A3.75 3.75 0 013 17.25V4.125C3 3.504 3.504 3 4.125 3h5.25c.621 0 1.125.504 1.125 1.125v4.072M6.75 21a3.75 3.75 0 003.75-3.75V8.197"/></svg>
+                            {{ lead.module === 'dental' ? (isRtl ? 'أسنان' : 'Dental') : (isRtl ? 'جلدية' : 'Derma') }}
                         </span>
                     </div>
 

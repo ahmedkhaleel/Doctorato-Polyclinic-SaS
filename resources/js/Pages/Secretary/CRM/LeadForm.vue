@@ -28,6 +28,7 @@ const form = useForm({
     nationality: props.lead?.nationality || '',
     lead_source_id: props.lead?.lead_source_id || '',
     campaign_id: props.lead?.campaign_id || '',
+    module: props.lead?.module || 'derma',
     priority: props.lead?.priority || 2,
     interested_services: props.lead?.interested_services || [],
     notes: props.lead?.notes || '',
@@ -864,6 +865,33 @@ const phoneValidation = computed(() => {
                     {{ isRtl ? 'لا توجد حملات نشطة حالياً' : 'No active campaigns available' }}
                 </div>
                 <p v-if="form.errors.campaign_id" class="mt-1.5 text-xs text-red-500">{{ form.errors.campaign_id }}</p>
+            </div>
+
+            <!-- Module (Derma / Dental) -->
+            <div class="mb-5">
+                <label class="block text-sm font-semibold text-slate-600 mb-2">{{ isRtl ? 'القسم' : 'Department' }} <span class="text-red-500">*</span></label>
+                <div class="flex gap-3">
+                    <button type="button" @click="form.module = 'derma'"
+                        :class="['flex-1 py-3 px-4 rounded-xl border-2 text-sm font-semibold transition-all duration-300 flex items-center justify-center gap-2',
+                            form.module === 'derma'
+                                ? 'bg-teal-50 text-teal-700 border-teal-300 ring-2 ring-teal-400 shadow-sm scale-[1.02]'
+                                : 'border-slate-200 text-slate-400 hover:border-slate-300']">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4.098 19.902a3.75 3.75 0 005.304 0l6.401-6.402M6.75 21A3.75 3.75 0 013 17.25V4.125C3 3.504 3.504 3 4.125 3h5.25c.621 0 1.125.504 1.125 1.125v4.072M6.75 21a3.75 3.75 0 003.75-3.75V8.197M6.75 21h13.125c.621 0 1.125-.504 1.125-1.125v-5.25c0-.621-.504-1.125-1.125-1.125h-4.072M10.5 8.197l2.88-2.88c.438-.439 1.15-.439 1.59 0l3.712 3.713c.44.44.44 1.152 0 1.59l-2.879 2.88M6.75 17.25h.008v.008H6.75v-.008z"/>
+                        </svg>
+                        {{ isRtl ? 'جلدية' : 'Derma' }}
+                    </button>
+                    <button type="button" @click="form.module = 'dental'"
+                        :class="['flex-1 py-3 px-4 rounded-xl border-2 text-sm font-semibold transition-all duration-300 flex items-center justify-center gap-2',
+                            form.module === 'dental'
+                                ? 'bg-sky-50 text-sky-700 border-sky-300 ring-2 ring-sky-400 shadow-sm scale-[1.02]'
+                                : 'border-slate-200 text-slate-400 hover:border-slate-300']">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z"/>
+                        </svg>
+                        {{ isRtl ? 'أسنان' : 'Dental' }}
+                    </button>
+                </div>
             </div>
 
             <!-- Priority -->

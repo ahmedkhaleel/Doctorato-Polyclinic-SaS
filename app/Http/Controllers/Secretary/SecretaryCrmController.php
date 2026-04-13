@@ -129,6 +129,16 @@ class SecretaryCrmController extends BaseSecretaryController
             $query->whereDate('created_at', '<=', $dateTo);
         }
 
+        // Module filter (derma/dental)
+        if ($module = $request->input('module')) {
+            $query->where('module', $module);
+        }
+
+        // Service filter (interested_services JSON contains)
+        if ($service = $request->input('service')) {
+            $query->whereJsonContains('interested_services', (int) $service);
+        }
+
         // Quick filter chips
         if ($quickFilter = $request->input('quick_filter')) {
             switch ($quickFilter) {
@@ -167,6 +177,7 @@ class SecretaryCrmController extends BaseSecretaryController
         $leads = $query->paginate(20)->withQueryString();
 
         $sources = LeadSource::active()->ordered()->get(['id', 'name_en', 'name_ar', 'color']);
+        $services = Service::where('status', 'active')->get(['id', 'name_en', 'name_ar']);
 
         // Quick filter counts for chips
         $baseQuery = Lead::assignedTo($userId);
@@ -190,7 +201,8 @@ class SecretaryCrmController extends BaseSecretaryController
         return Inertia::render('Secretary/CRM/Leads', [
             'leads' => $leads,
             'sources' => $sources,
-            'filters' => $request->only(['search', 'status', 'priority', 'source', 'date_from', 'date_to', 'sort', 'dir', 'quick_filter']),
+            'services' => $services,
+            'filters' => $request->only(['search', 'status', 'priority', 'source', 'date_from', 'date_to', 'sort', 'dir', 'quick_filter', 'module', 'service']),
             'quickFilterCounts' => $quickFilterCounts,
         ]);
     }
@@ -355,6 +367,7 @@ class SecretaryCrmController extends BaseSecretaryController
             'nationality' => 'nullable|string|max:100',
             'lead_source_id' => 'nullable|exists:lead_sources,id',
             'campaign_id' => 'nullable|exists:crm_campaigns,id',
+            'module' => 'nullable|in:derma,dental',
             'priority' => 'required|in:1,2,3',
             'interested_services' => 'nullable|array',
             'notes' => 'nullable|string',
@@ -423,6 +436,7 @@ class SecretaryCrmController extends BaseSecretaryController
             'nationality' => 'nullable|string|max:100',
             'lead_source_id' => 'nullable|exists:lead_sources,id',
             'campaign_id' => 'nullable|exists:crm_campaigns,id',
+            'module' => 'nullable|in:derma,dental',
             'priority' => 'required|in:1,2,3',
             'interested_services' => 'nullable|array',
             'notes' => 'nullable|string',

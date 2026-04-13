@@ -2063,6 +2063,17 @@ const tabIndicatorStyle = computed(() => {
                                     <span v-else class="text-gray-400">-</span>
                                 </div>
 
+                                <!-- Module / Department -->
+                                <div v-if="lead.module" class="flex items-center justify-between text-sm">
+                                    <span class="text-gray-500">{{ isRtl ? 'القسم' : 'Department' }}</span>
+                                    <span class="inline-flex items-center gap-1.5 font-medium px-2.5 py-1 rounded-full text-xs"
+                                        :class="lead.module === 'dental' ? 'bg-sky-50 text-sky-700 border border-sky-200' : 'bg-teal-50 text-teal-700 border border-teal-200'">
+                                        <svg v-if="lead.module === 'dental'" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                        <svg v-else class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.098 19.902a3.75 3.75 0 005.304 0l6.401-6.402M6.75 21A3.75 3.75 0 013 17.25V4.125C3 3.504 3.504 3 4.125 3h5.25c.621 0 1.125.504 1.125 1.125v4.072M6.75 21a3.75 3.75 0 003.75-3.75V8.197"/></svg>
+                                        {{ lead.module === 'dental' ? (isRtl ? 'أسنان' : 'Dental') : (isRtl ? 'جلدية' : 'Derma') }}
+                                    </span>
+                                </div>
+
                                 <!-- Campaign -->
                                 <div class="flex items-center justify-between text-sm">
                                     <span class="text-gray-500">{{ isRtl ? 'الحملة' : 'Campaign' }}</span>
