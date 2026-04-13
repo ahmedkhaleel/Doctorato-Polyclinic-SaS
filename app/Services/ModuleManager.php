@@ -172,10 +172,26 @@ class ModuleManager
             return false;
         }
 
-        DB::table('module_settings')
-            ->where('module', $module)
-            ->where('key', 'enabled')
-            ->update(['value' => '1']);
+        if (! self::tableExists()) {
+            return false;
+        }
+
+        // Use updateOrInsert to handle modules that have no rows yet
+        DB::table('module_settings')->updateOrInsert(
+            ['module' => $module, 'key' => 'enabled'],
+            [
+                'value' => '1',
+                'type' => 'boolean',
+                'label_ar' => 'تفعيل القسم',
+                'label_en' => 'Enable Module',
+                'group' => 'general',
+                'display_order' => 1,
+                'updated_at' => now(),
+            ]
+        );
+
+        // Also ensure basic module info rows exist
+        self::ensureModuleSettingsExist($module);
 
         self::clearCache($module);
         return true;
@@ -190,13 +206,49 @@ class ModuleManager
             return false;
         }
 
-        DB::table('module_settings')
-            ->where('module', $module)
-            ->where('key', 'enabled')
-            ->update(['value' => '0']);
+        if (! self::tableExists()) {
+            return false;
+        }
+
+        // Use updateOrInsert to handle modules that have no rows yet
+        DB::table('module_settings')->updateOrInsert(
+            ['module' => $module, 'key' => 'enabled'],
+            [
+                'value' => '0',
+                'type' => 'boolean',
+                'label_ar' => 'تفعيل القسم',
+                'label_en' => 'Enable Module',
+                'group' => 'general',
+                'display_order' => 1,
+                'updated_at' => now(),
+            ]
+        );
 
         self::clearCache($module);
         return true;
+    }
+
+    /**
+     * Ensure basic module settings rows exist (name, icon, color).
+     */
+    private static function ensureModuleSettingsExist(string $module): void
+    {
+        $defaults = self::MODULES[$module] ?? [];
+        $now = now();
+
+        $rows = [
+            ['key' => 'name_ar', 'value' => $defaults['default_name_ar'] ?? $module, 'type' => 'text', 'label_ar' => 'اسم القسم (عربي)', 'label_en' => 'Module Name (Arabic)', 'display_order' => 2],
+            ['key' => 'name_en', 'value' => $defaults['default_name_en'] ?? $module, 'type' => 'text', 'label_ar' => 'اسم القسم (إنجليزي)', 'label_en' => 'Module Name (English)', 'display_order' => 3],
+            ['key' => 'icon', 'value' => $defaults['icon'] ?? '', 'type' => 'text', 'label_ar' => 'أيقونة القسم', 'label_en' => 'Module Icon', 'display_order' => 4],
+            ['key' => 'color', 'value' => $defaults['color'] ?? '#6B7280', 'type' => 'text', 'label_ar' => 'لون القسم', 'label_en' => 'Module Color', 'display_order' => 5],
+        ];
+
+        foreach ($rows as $row) {
+            DB::table('module_settings')->updateOrInsert(
+                ['module' => $module, 'key' => $row['key']],
+                array_merge($row, ['module' => $module, 'group' => 'general', 'created_at' => $now, 'updated_at' => $now])
+            );
+        }
     }
 
     /**
