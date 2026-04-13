@@ -204,7 +204,7 @@ onMounted(() => {
             :class="headerLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
         >
             <!-- Live Clock -->
-            <div class="bg-gradient-to-r from-gray-50 to-white px-6 py-4 border-b border-gray-100">
+            <div class="bg-gradient-to-r from-gray-50 to-white px-4 sm:px-6 py-4 border-b border-gray-100">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">{{ isRtl ? 'اليوم' : 'Today' }}</p>
@@ -217,7 +217,7 @@ onMounted(() => {
             </div>
 
             <!-- Action Buttons -->
-            <div class="p-6">
+            <div class="p-4 sm:p-6">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <!-- Check In Button -->
                     <div class="relative">

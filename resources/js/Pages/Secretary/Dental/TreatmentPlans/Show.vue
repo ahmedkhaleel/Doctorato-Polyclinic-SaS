@@ -95,14 +95,14 @@ function getTreatmentTypeName(treatment) {
 <template>
     <div>
         <!-- Header -->
-        <div class="flex items-center justify-between mb-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
             <div>
                 <h1 class="text-2xl font-bold text-gray-900">
                     {{ isRtl ? (plan.title_ar || plan.title_en || `خطة #${plan.id}`) : (plan.title_en || plan.title_ar || `Plan #${plan.id}`) }}
                 </h1>
                 <p class="text-sm text-gray-500 mt-1">{{ isRtl ? 'تفاصيل خطة العلاج' : 'Treatment Plan Details' }}</p>
             </div>
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-3 flex-wrap">
                 <Link v-if="plan.patient" :href="`/secretary/dental/chart/${plan.patient.id}`" class="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-[#C4A265] bg-[#C4A265]/10 rounded-xl hover:bg-[#C4A265]/20 transition-all">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
                     {{ isRtl ? 'مخطط الأسنان' : 'Dental Chart' }}
@@ -115,7 +115,7 @@ function getTreatmentTypeName(treatment) {
         </div>
 
         <!-- Patient Info Card -->
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6 mb-6">
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6 mb-6">
             <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">{{ isRtl ? 'معلومات المريض' : 'Patient Information' }}</h2>
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
                 <div>
@@ -134,9 +134,9 @@ function getTreatmentTypeName(treatment) {
         </div>
 
         <!-- Plan Details + Summary -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 mb-6">
             <!-- Plan Details -->
-            <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6 space-y-5">
+            <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6 space-y-5">
                 <div class="flex items-start justify-between flex-wrap gap-3">
                     <div class="flex items-center gap-2 flex-wrap">
                         <span class="inline-flex px-3 py-1 rounded-full text-xs font-semibold border" :class="statusColors[plan.status] || 'bg-gray-50 text-gray-600 border-gray-200'">
@@ -195,7 +195,7 @@ function getTreatmentTypeName(treatment) {
             </div>
 
             <!-- Cost Summary -->
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6 space-y-4">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6 space-y-4">
                 <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'ملخص التكاليف' : 'Cost Summary' }}</h3>
                 <div class="space-y-3">
                     <div class="flex items-center justify-between text-sm">
@@ -218,7 +218,7 @@ function getTreatmentTypeName(treatment) {
 
         <!-- Treatments Table -->
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
-            <div class="px-6 py-4 border-b border-gray-100">
+            <div class="px-4 sm:px-6 py-4 border-b border-gray-100">
                 <h2 class="text-lg font-semibold text-gray-800">{{ isRtl ? 'العلاجات' : 'Treatments' }}</h2>
             </div>
 
@@ -233,10 +233,10 @@ function getTreatmentTypeName(treatment) {
                         <tr class="bg-gray-50/80">
                             <th class="ltr:text-left rtl:text-right px-6 py-3 text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'السن' : 'Tooth' }}</th>
                             <th class="ltr:text-left rtl:text-right px-6 py-3 text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'نوع العلاج' : 'Treatment Type' }}</th>
-                            <th class="ltr:text-left rtl:text-right px-6 py-3 text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'الأسطح' : 'Surfaces' }}</th>
-                            <th class="ltr:text-left rtl:text-right px-6 py-3 text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'الوصف' : 'Description' }}</th>
+                            <th class="ltr:text-left rtl:text-right px-6 py-3 text-xs font-semibold text-gray-500 uppercase hidden sm:table-cell">{{ isRtl ? 'الأسطح' : 'Surfaces' }}</th>
+                            <th class="ltr:text-left rtl:text-right px-6 py-3 text-xs font-semibold text-gray-500 uppercase hidden md:table-cell">{{ isRtl ? 'الوصف' : 'Description' }}</th>
                             <th class="ltr:text-right rtl:text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'التكلفة' : 'Cost' }}</th>
-                            <th class="ltr:text-right rtl:text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'تكلفة المختبر' : 'Lab Cost' }}</th>
+                            <th class="ltr:text-right rtl:text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase hidden sm:table-cell">{{ isRtl ? 'تكلفة المختبر' : 'Lab Cost' }}</th>
                             <th class="px-6 py-3 text-xs font-semibold text-gray-500 uppercase text-center">{{ isRtl ? 'الحالة' : 'Status' }}</th>
                         </tr>
                     </thead>
@@ -244,10 +244,10 @@ function getTreatmentTypeName(treatment) {
                         <tr v-for="treatment in plan.treatments" :key="treatment.id" class="hover:bg-gray-50/50 transition-colors">
                             <td class="px-6 py-3 font-mono font-medium text-gray-900">{{ treatment.tooth_number || '-' }}</td>
                             <td class="px-6 py-3 text-gray-700">{{ getTreatmentTypeName(treatment) }}</td>
-                            <td class="px-6 py-3 text-gray-600">{{ treatment.surfaces || '-' }}</td>
-                            <td class="px-6 py-3 text-gray-600 max-w-[200px] truncate">{{ treatment.description || '-' }}</td>
+                            <td class="px-6 py-3 text-gray-600 hidden sm:table-cell">{{ treatment.surfaces || '-' }}</td>
+                            <td class="px-6 py-3 text-gray-600 max-w-[200px] truncate hidden md:table-cell">{{ treatment.description || '-' }}</td>
                             <td class="px-6 py-3 ltr:text-right rtl:text-left font-medium text-gray-700">{{ formatCurrency(treatment.cost) }}</td>
-                            <td class="px-6 py-3 ltr:text-right rtl:text-left text-gray-500">{{ formatCurrency(treatment.lab_cost) }}</td>
+                            <td class="px-6 py-3 ltr:text-right rtl:text-left text-gray-500 hidden sm:table-cell">{{ formatCurrency(treatment.lab_cost) }}</td>
                             <td class="px-6 py-3 text-center">
                                 <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold border" :class="treatmentStatusColors[treatment.status] || 'bg-gray-50 text-gray-600 border-gray-200'">
                                     {{ treatmentStatusLabels[treatment.status] || treatment.status || (isRtl ? 'مخطط' : 'Planned') }}

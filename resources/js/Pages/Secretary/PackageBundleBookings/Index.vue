@@ -53,7 +53,7 @@ function getProgress(booking) {
 
 <template>
     <div class="space-y-6">
-        <div class="flex items-center justify-between">
+        <div class="flex flex-wrap items-center justify-between gap-3">
             <h1 class="text-2xl font-bold text-gray-800">{{ isRtl ? 'حجوزات الباقات' : 'Bundle Bookings' }}</h1>
             <Link
                 href="/secretary/bundle-bookings/create"
@@ -88,8 +88,8 @@ function getProgress(booking) {
                             <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ isRtl ? 'حجز' : 'Booking' }}</th>
                             <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ isRtl ? 'المريض' : 'Patient' }}</th>
                             <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ isRtl ? 'الباقة' : 'Bundle' }}</th>
-                            <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ isRtl ? 'السعر' : 'Price' }}</th>
-                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">{{ isRtl ? 'التقدم' : 'Progress' }}</th>
+                            <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden sm:table-cell">{{ isRtl ? 'السعر' : 'Price' }}</th>
+                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider hidden sm:table-cell">{{ isRtl ? 'التقدم' : 'Progress' }}</th>
                             <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">{{ isRtl ? 'الحالة' : 'Status' }}</th>
                             <th class="px-6 py-3 ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ isRtl ? 'إجراءات' : 'Actions' }}</th>
                         </tr>
@@ -105,13 +105,13 @@ function getProgress(booking) {
                                 <div class="text-xs text-gray-400">{{ b.patient?.phone }}</div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ b.package_bundle?.name_en || '-' }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">
+                            <td class="px-6 py-4 whitespace-nowrap hidden sm:table-cell">
                                 <div class="text-sm font-medium text-gray-900">{{ formatCurrency(b.total_price) }}</div>
                                 <div class="text-xs" :class="Number(b.balance_due) > 0 ? 'text-red-500' : 'text-green-500'">
                                     {{ Number(b.balance_due) > 0 ? 'Due: ' + formatCurrency(b.balance_due) : 'Paid' }}
                                 </div>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-center">
+                            <td class="px-6 py-4 whitespace-nowrap text-center hidden sm:table-cell">
                                 <div class="flex items-center gap-2">
                                     <div class="flex-1 bg-gray-200 rounded-full h-2">
                                         <div class="h-2 rounded-full transition-all duration-500" :style="`width: ${getProgress(b)}%; background-color: #0d9488;`"></div>
@@ -142,7 +142,7 @@ function getProgress(booking) {
                 </table>
             </div>
 
-            <div v-if="bookings.links && bookings.links.length > 3" class="px-6 py-3 border-t border-gray-200 flex items-center justify-between">
+            <div v-if="bookings.links && bookings.links.length > 3" class="px-4 sm:px-6 py-3 border-t border-gray-200 flex flex-col sm:flex-row items-center justify-between gap-2">
                 <p class="text-sm text-gray-500">{{ isRtl ? 'عرض' : 'Showing' }} {{ bookings.from }} {{ isRtl ? 'إلى' : 'to' }} {{ bookings.to }} {{ isRtl ? 'من' : 'of' }} {{ bookings.total }} {{ isRtl ? 'نتيجة' : 'results' }}</p>
                 <nav class="flex space-x-1">
                     <template v-for="link in bookings.links" :key="link.label">

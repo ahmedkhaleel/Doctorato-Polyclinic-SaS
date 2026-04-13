@@ -133,7 +133,7 @@ onMounted(() => { requestAnimationFrame(() => { mounted.value = true; }); });
                             {{ isRtl ? 'إدارة المستلزمات وتسجيل حركات المخزون' : 'Manage supplies and record stock transactions' }}
                         </p>
                     </div>
-                    <div class="flex items-center gap-3">
+                    <div class="flex items-center gap-3 flex-wrap">
                         <div class="bg-white/10 backdrop-blur-sm rounded-xl px-4 py-3 text-center">
                             <p class="text-2xl font-bold text-white">{{ stats.total }}</p>
                             <p class="text-[10px] text-gray-400 uppercase tracking-wide">{{ isRtl ? 'المنتجات' : 'Products' }}</p>
@@ -181,7 +181,7 @@ onMounted(() => { requestAnimationFrame(() => { mounted.value = true; }); });
         </div>
 
         <!-- Supplies Grid -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
             <div
                 v-for="(supply, index) in supplies.data"
                 :key="supply.id"

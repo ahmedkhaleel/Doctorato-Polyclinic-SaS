@@ -303,7 +303,7 @@ const selectedLeadName = computed(() => {
     <!-- ============================================ -->
     <!--  HERO HEADER                                 -->
     <!-- ============================================ -->
-    <div :class="['relative overflow-hidden rounded-3xl bg-gradient-to-br from-teal-700 via-teal-600 to-emerald-500 p-8 md:p-10 mb-8 shadow-2xl shadow-teal-900/20 transition-all duration-1000', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-8']">
+    <div :class="['relative overflow-hidden rounded-3xl bg-gradient-to-br from-teal-700 via-teal-600 to-emerald-500 p-5 sm:p-8 md:p-10 mb-8 shadow-2xl shadow-teal-900/20 transition-all duration-1000', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-8']">
         <!-- Decorative SVG shapes -->
         <div class="absolute inset-0 overflow-hidden pointer-events-none">
             <svg class="absolute -top-16 -right-16 w-72 h-72 text-white/[0.06] animate-[spin_60s_linear_infinite]" viewBox="0 0 200 200" fill="currentColor">
@@ -321,7 +321,7 @@ const selectedLeadName = computed(() => {
             <div class="absolute top-1/3 left-16 w-1 h-1 bg-white/20 rounded-full animate-bounce" style="animation-delay: 0.5s; animation-duration: 3.5s;"></div>
         </div>
 
-        <div class="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+        <div class="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 sm:gap-6">
             <div class="flex items-center gap-5">
                 <div class="w-16 h-16 bg-white/15 backdrop-blur-sm rounded-2xl flex items-center justify-center ring-1 ring-white/20 shadow-lg">
                     <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
@@ -405,7 +405,7 @@ const selectedLeadName = computed(() => {
     <!-- ============================================ -->
     <!--  SEARCH + FILTERS BAR                        -->
     <!-- ============================================ -->
-    <div :class="['bg-white rounded-2xl shadow-sm border border-slate-200/60 p-5 mb-8 transition-all duration-700', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6']"
+    <div :class="['bg-white rounded-2xl shadow-sm border border-slate-200/60 p-4 sm:p-5 mb-8 transition-all duration-700', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6']"
          :style="{ transitionDelay: '200ms' }">
         <div class="flex flex-col lg:flex-row gap-4 items-stretch lg:items-center">
             <!-- Search -->
@@ -423,7 +423,7 @@ const selectedLeadName = computed(() => {
             </div>
 
             <!-- Channel Segmented Buttons -->
-            <div class="flex items-center bg-slate-100/80 rounded-xl p-1 gap-0.5">
+            <div class="flex items-center bg-slate-100/80 rounded-xl p-1 gap-0.5 overflow-x-auto scrollbar-none">
                 <button v-for="ch in channels" :key="ch.value"
                         @click="channelFilter = ch.value; applyFilters()"
                         :class="['relative flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-200 whitespace-nowrap',
@@ -463,7 +463,7 @@ const selectedLeadName = computed(() => {
     <!-- ============================================ -->
     <!--  TEMPLATE CARDS GRID                         -->
     <!-- ============================================ -->
-    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5">
         <div v-for="(template, idx) in templates" :key="template.id"
              :class="['relative bg-white rounded-2xl shadow-sm border border-slate-200/60 overflow-hidden group hover:shadow-xl hover:-translate-y-1 transition-all duration-500', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10']"
              :style="{ transitionDelay: (250 + idx * 70) + 'ms' }">
@@ -489,7 +489,7 @@ const selectedLeadName = computed(() => {
             </Transition>
 
             <!-- Card Header -->
-            <div class="px-5 pt-5 pb-3">
+            <div class="px-3 sm:px-5 pt-4 sm:pt-5 pb-3">
                 <div class="flex items-start justify-between gap-3">
                     <div class="flex items-center gap-3 min-w-0 flex-1">
                         <!-- Channel icon badge -->
@@ -547,7 +547,7 @@ const selectedLeadName = computed(() => {
             </div>
 
             <!-- Body Preview -->
-            <div class="px-5 pb-3">
+            <div class="px-3 sm:px-5 pb-3">
                 <div @click="toggleExpand(template.id)"
                      class="relative bg-gradient-to-br from-slate-50 to-slate-100/50 rounded-xl p-3.5 text-sm text-slate-600 leading-relaxed cursor-pointer hover:from-slate-100 hover:to-slate-50 transition-all duration-200 border border-slate-100"
                      :class="expandedId !== template.id ? 'max-h-[5.5rem] overflow-hidden' : ''">
@@ -564,7 +564,7 @@ const selectedLeadName = computed(() => {
             </div>
 
             <!-- Card Actions -->
-            <div class="px-5 pb-5 pt-1">
+            <div class="px-3 sm:px-5 pb-5 pt-1">
                 <div class="flex items-center gap-2">
                     <!-- Send Button -->
                     <button @click="openSendModal(template)"
@@ -654,7 +654,7 @@ const selectedLeadName = computed(() => {
             >
                 <div v-if="showSendModal" class="relative bg-white rounded-3xl shadow-2xl w-full max-w-xl max-h-[90vh] overflow-y-auto ring-1 ring-black/5">
                     <!-- Modal Header -->
-                    <div class="sticky top-0 bg-white/95 backdrop-blur-md border-b border-slate-100 px-6 py-4 flex items-center justify-between rounded-t-3xl z-10">
+                    <div class="sticky top-0 bg-white/95 backdrop-blur-md border-b border-slate-100 px-4 sm:px-6 py-4 flex items-center justify-between rounded-t-3xl z-10">
                         <div class="flex items-center gap-3">
                             <div class="w-11 h-11 rounded-xl flex items-center justify-center ring-1 shadow-sm"
                                  :style="{ background: channelConfig[selectedTemplate?.channel]?.bg, color: channelConfig[selectedTemplate?.channel]?.text, ringColor: channelConfig[selectedTemplate?.channel]?.border }">

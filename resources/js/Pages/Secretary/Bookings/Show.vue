@@ -622,7 +622,7 @@ function submitReschedule() {
                     </p>
                 </div>
             </div>
-            <div class="flex items-center gap-2 ml-8 sm:ml-0">
+            <div class="flex flex-wrap items-center gap-2 ml-8 sm:ml-0">
                 <a :href="`/secretary/bookings/${booking.id}/receipt`" target="_blank" class="inline-flex items-center gap-1.5 px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 transition-all shadow-sm">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" /></svg>
                     {{ isRtl ? 'طباعة الإيصال' : 'Print Receipt' }}
@@ -631,7 +631,7 @@ function submitReschedule() {
         </div>
 
         <!-- ─── Follow-up Eligibility Banner ───────────────────── -->
-        <div v-if="showFollowUpBanner" class="flex items-start gap-3 px-5 py-4 bg-teal-50 border border-teal-200 rounded-2xl">
+        <div v-if="showFollowUpBanner" class="flex items-start gap-3 px-3 sm:px-5 py-4 bg-teal-50 border border-teal-200 rounded-2xl">
             <div class="w-8 h-8 rounded-lg bg-teal-100 flex items-center justify-center flex-shrink-0 mt-0.5">
                 <svg class="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
             </div>
@@ -646,7 +646,7 @@ function submitReschedule() {
 
         <!-- ─── Medical Risk Alert Banner (Dental) ───────────── -->
         <div v-if="medicalRiskFlags && medicalRiskFlags.length > 0"
-            class="flex items-start gap-3 px-5 py-4 bg-red-50 border border-red-200 rounded-2xl">
+            class="flex items-start gap-3 px-3 sm:px-5 py-4 bg-red-50 border border-red-200 rounded-2xl">
             <div class="w-8 h-8 rounded-lg bg-red-100 flex items-center justify-center flex-shrink-0 mt-0.5">
                 <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
@@ -677,11 +677,11 @@ function submitReschedule() {
         </div>
 
         <!-- ─── Main Grid ──────────────────────────────────────── -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             <!-- ─── Left Column (2/3) ──────────────────────────── -->
             <div class="lg:col-span-2 space-y-6">
                 <!-- Patient Info Card -->
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6">
                     <div class="flex items-center gap-2 mb-4 border-b border-gray-100 pb-3">
                         <div class="w-8 h-8 rounded-lg bg-teal-50 flex items-center justify-center">
                             <svg class="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
@@ -735,7 +735,7 @@ function submitReschedule() {
                 </div>
 
                 <!-- Booking Request Details (Service, Doctor, Preferred Date/Time from website booking) -->
-                <div v-if="booking.service || booking.doctor || booking.preferred_date || booking.preferred_time" class="bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl shadow-sm border border-[#C4A265]/20 p-6">
+                <div v-if="booking.service || booking.doctor || booking.preferred_date || booking.preferred_time" class="bg-gradient-to-br from-[#FAF7F2] to-white rounded-2xl shadow-sm border border-[#C4A265]/20 p-4 sm:p-6">
                     <div class="flex items-center gap-2 mb-4">
                         <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-[#C4A265] to-[#A68B52] flex items-center justify-center flex-shrink-0">
                             <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
@@ -800,14 +800,14 @@ function submitReschedule() {
                 </div>
 
                 <!-- Notes Card -->
-                <div v-if="booking.notes" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6">
+                <div v-if="booking.notes" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6">
                     <h3 class="text-sm font-bold text-gray-800 mb-2">Booking Notes</h3>
                     <p class="text-sm text-gray-600 whitespace-pre-wrap">{{ booking.notes }}</p>
                 </div>
 
                 <!-- ─── Services Table ─────────────────────────────── -->
                 <div v-if="booking.booking_services?.length" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
-                    <div class="px-6 py-4 border-b border-gray-100">
+                    <div class="px-4 sm:px-6 py-4 border-b border-gray-100">
                         <h2 class="text-sm font-bold text-gray-800">Services</h2>
                     </div>
                     <div class="overflow-x-auto">
@@ -818,10 +818,10 @@ function submitReschedule() {
                                     <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'الخدمة' : 'Service' }}</th>
                                     <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'الطبيب' : 'Doctor' }}</th>
                                     <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">Sessions</th>
-                                    <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">Unit Price</th>
-                                    <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'الخصم' : 'Discount' }}</th>
+                                    <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase hidden sm:table-cell">Unit Price</th>
+                                    <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase hidden sm:table-cell">{{ isRtl ? 'الخصم' : 'Discount' }}</th>
                                     <th class="px-6 py-3 ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'الإجمالي' : 'Total' }}</th>
-                                    <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'الحالة' : 'Status' }}</th>
+                                    <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase hidden sm:table-cell">{{ isRtl ? 'الحالة' : 'Status' }}</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100">
@@ -848,10 +848,10 @@ function submitReschedule() {
                                                      :style="{ width: (bs.sessions_count > 0 ? ((bs.completed_sessions || 0) / bs.sessions_count * 100) : 0) + '%' }"></div>
                                             </div>
                                         </td>
-                                        <td class="px-6 py-3 text-gray-600">{{ formatCurrency(bs.unit_price) }}</td>
-                                        <td class="px-6 py-3 text-gray-600">{{ bs.discount_per_session > 0 ? formatCurrency(bs.discount_per_session) + '/session' : '-' }}</td>
+                                        <td class="px-6 py-3 text-gray-600 hidden sm:table-cell">{{ formatCurrency(bs.unit_price) }}</td>
+                                        <td class="px-6 py-3 text-gray-600 hidden sm:table-cell">{{ bs.discount_per_session > 0 ? formatCurrency(bs.discount_per_session) + '/session' : '-' }}</td>
                                         <td class="px-6 py-3 ltr:text-right rtl:text-left font-bold text-gray-800">{{ formatCurrency(bs.total_price) }}</td>
-                                        <td class="px-6 py-3">
+                                        <td class="px-6 py-3 hidden sm:table-cell">
                                             <span class="inline-flex px-2 py-0.5 rounded-full text-xs font-semibold border capitalize" :class="serviceStatusColors[bs.status] || 'bg-gray-50 text-gray-600 border-gray-200'">
                                                 {{ bs.status || '-' }}
                                             </span>
@@ -926,7 +926,7 @@ function submitReschedule() {
                 <!-- ─── Add Retouch Session ──────────────────────────── -->
                 <div v-if="canAddRetouch" class="bg-white rounded-2xl shadow-sm border border-purple-200 overflow-hidden">
                     <button type="button" @click="showRetouchForm = !showRetouchForm"
-                        class="w-full px-6 py-4 flex items-center justify-between bg-purple-50/80 hover:bg-purple-50 transition-colors">
+                        class="w-full px-4 sm:px-6 py-4 flex items-center justify-between bg-purple-50/80 hover:bg-purple-50 transition-colors">
                         <div class="flex items-center gap-3">
                             <div class="w-8 h-8 rounded-lg bg-purple-100 flex items-center justify-center">
                                 <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
@@ -939,7 +939,7 @@ function submitReschedule() {
                         </svg>
                     </button>
 
-                    <div v-if="showRetouchForm" class="p-6 space-y-4 border-t border-purple-100">
+                    <div v-if="showRetouchForm" class="p-4 sm:p-6 space-y-4 border-t border-purple-100">
                         <form @submit.prevent="submitRetouch" class="space-y-4">
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <!-- Service Selection -->
@@ -1008,7 +1008,7 @@ function submitReschedule() {
 
                 <!-- ─── All Appointments (Flat List) ───────────────── -->
                 <div v-if="booking.appointments?.length" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
-                    <div class="px-6 py-4 border-b border-gray-100">
+                    <div class="px-4 sm:px-6 py-4 border-b border-gray-100">
                         <h2 class="text-sm font-bold text-gray-800">All Appointments</h2>
                     </div>
                     <div class="overflow-x-auto">
@@ -1017,8 +1017,8 @@ function submitReschedule() {
                                 <tr class="bg-gray-50/80">
                                     <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">#</th>
                                     <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'التاريخ' : 'Date' }}</th>
-                                    <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'الوقت' : 'Time' }}</th>
-                                    <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'الطبيب' : 'Doctor' }}</th>
+                                    <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase hidden sm:table-cell">{{ isRtl ? 'الوقت' : 'Time' }}</th>
+                                    <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase hidden sm:table-cell">{{ isRtl ? 'الطبيب' : 'Doctor' }}</th>
                                     <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'الحالة' : 'Status' }}</th>
                                     <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">Visit / Actions</th>
                                 </tr>
@@ -1030,8 +1030,8 @@ function submitReschedule() {
                                         <span v-if="appt.is_retouch" class="ltr:ml-1 rtl:mr-1 inline-flex px-1.5 py-0.5 rounded text-[10px] font-bold bg-purple-50 text-purple-600 border border-purple-200">Retouch</span>
                                     </td>
                                     <td class="px-6 py-3 text-gray-700">{{ formatDate(appt.appointment_date) }}</td>
-                                    <td class="px-6 py-3 text-gray-600">{{ formatTime(appt.start_time) }} - {{ formatTime(appt.end_time) }}</td>
-                                    <td class="px-6 py-3 text-gray-600">{{ appt.doctor?.name_en || appt.doctor?.name_ar || '-' }}</td>
+                                    <td class="px-6 py-3 text-gray-600 hidden sm:table-cell">{{ formatTime(appt.start_time) }} - {{ formatTime(appt.end_time) }}</td>
+                                    <td class="px-6 py-3 text-gray-600 hidden sm:table-cell">{{ appt.doctor?.name_en || appt.doctor?.name_ar || '-' }}</td>
                                     <td class="px-6 py-3">
                                         <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold border capitalize" :class="appointmentStatusColors[appt.status] || 'bg-gray-50 text-gray-600 border-gray-200'">
                                             {{ appt.status?.replace('_', ' ') || '-' }}
@@ -1061,7 +1061,7 @@ function submitReschedule() {
 
                 <!-- ─── Invoice Section ────────────────────────────── -->
                 <div v-if="invoice" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
-                    <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+                    <div class="px-4 sm:px-6 py-4 border-b border-gray-100 flex flex-wrap items-center justify-between gap-2">
                         <div>
                             <h2 class="text-sm font-bold text-gray-800">{{ isRtl ? 'الفاتورة' : 'Invoice' }}</h2>
                             <p class="text-xs text-gray-400 mt-0.5">
@@ -1099,7 +1099,7 @@ function submitReschedule() {
                     </table>
 
                     <!-- Invoice Summary -->
-                    <div class="px-6 py-4 bg-gray-50/50 border-t border-gray-100">
+                    <div class="px-4 sm:px-6 py-4 bg-gray-50/50 border-t border-gray-100">
                         <div class="flex justify-end">
                             <dl class="space-y-2 w-64">
                                 <div class="flex justify-between text-sm">
@@ -1129,7 +1129,7 @@ function submitReschedule() {
 
                 <!-- ─── Payments History ───────────────────────────── -->
                 <div v-if="invoice?.payments?.length" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
-                    <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+                    <div class="px-4 sm:px-6 py-4 border-b border-gray-100 flex flex-wrap items-center justify-between gap-2">
                         <h2 class="text-sm font-bold text-gray-800">Payments History</h2>
                         <button
                             v-if="hasInvoiceBalance"
@@ -1147,8 +1147,8 @@ function submitReschedule() {
                                 <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'التاريخ' : 'Date' }}</th>
                                 <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'المبلغ' : 'Amount' }}</th>
                                 <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'الطريقة' : 'Method' }}</th>
-                                <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">Reference</th>
-                                <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">Received By</th>
+                                <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase hidden sm:table-cell">Reference</th>
+                                <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase hidden sm:table-cell">Received By</th>
                                 <th class="px-6 py-3 text-center text-xs font-semibold text-gray-500 uppercase">Receipt</th>
                             </tr>
                         </thead>
@@ -1157,8 +1157,8 @@ function submitReschedule() {
                                 <td class="px-6 py-3 text-gray-500">{{ formatDate(payment.payment_date || payment.created_at) }}</td>
                                 <td class="px-6 py-3 font-bold text-emerald-600">{{ formatCurrency(payment.amount) }}</td>
                                 <td class="px-6 py-3 text-gray-500">{{ payment.payment_method?.name_en || payment.paymentMethod?.name_en || '-' }}</td>
-                                <td class="px-6 py-3 text-gray-500 font-mono">{{ payment.reference_number || '-' }}</td>
-                                <td class="px-6 py-3 text-gray-500">{{ payment.receiver?.name || '-' }}</td>
+                                <td class="px-6 py-3 text-gray-500 font-mono hidden sm:table-cell">{{ payment.reference_number || '-' }}</td>
+                                <td class="px-6 py-3 text-gray-500 hidden sm:table-cell">{{ payment.receiver?.name || '-' }}</td>
                                 <td class="px-6 py-3 text-center">
                                     <a :href="`/secretary/bookings/${booking.id}/payments/${payment.id}/receipt`"
                                        target="_blank"
@@ -1175,7 +1175,7 @@ function submitReschedule() {
 
                 <!-- ─── Payment Form (Inline) ─────────────────────── -->
                 <div v-if="showPaymentForm" class="bg-white rounded-2xl shadow-sm border border-teal-200 overflow-hidden">
-                    <div class="px-6 py-4 border-b border-teal-100 bg-teal-50/50">
+                    <div class="px-4 sm:px-6 py-4 border-b border-teal-100 bg-teal-50/50">
                         <div class="flex items-center justify-between">
                             <h2 class="text-sm font-bold text-teal-800">{{ isRtl ? 'تسجيل دفعة' : 'Record Payment' }}</h2>
                             <button type="button" @click="showPaymentForm = false" class="text-gray-400 hover:text-gray-600 transition">
@@ -1183,7 +1183,7 @@ function submitReschedule() {
                             </button>
                         </div>
                     </div>
-                    <form @submit.prevent="submitPayment" class="p-6">
+                    <form @submit.prevent="submitPayment" class="p-4 sm:p-6">
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-xs font-medium text-gray-500 mb-1.5">{{ isRtl ? 'طريقة الدفع' : 'Payment Method' }} <span class="text-red-500">*</span></label>
@@ -1219,7 +1219,7 @@ function submitReschedule() {
                 </div>
 
                 <!-- Add Payment Button (when no payments yet but balance > 0) -->
-                <div v-if="hasInvoiceBalance && !showPaymentForm && (!invoice?.payments || invoice.payments.length === 0)" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6 text-center">
+                <div v-if="hasInvoiceBalance && !showPaymentForm && (!invoice?.payments || invoice.payments.length === 0)" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6 text-center">
                     <svg class="w-10 h-10 text-gray-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
                     <p class="text-sm text-gray-500 mb-3">No payments recorded yet. Balance: <span class="font-bold text-red-600">{{ formatCurrency(invoiceBalance) }}</span></p>
                     <button @click="openPaymentForm" type="button" class="inline-flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-teal-500 to-cyan-500 text-white rounded-xl text-sm font-semibold hover:from-teal-600 hover:to-cyan-600 transition shadow-sm">
@@ -1233,7 +1233,7 @@ function submitReschedule() {
                 <!-- ═══════════════════════════════════════════════════════ -->
                 <div v-if="isUnconfirmed && patients" class="bg-white rounded-2xl shadow-sm border border-yellow-200 overflow-hidden">
                     <button type="button" @click="showConfirmSection = !showConfirmSection"
-                        class="w-full px-6 py-4 flex items-center justify-between bg-yellow-50/80 hover:bg-yellow-50 transition-colors">
+                        class="w-full px-4 sm:px-6 py-4 flex items-center justify-between bg-yellow-50/80 hover:bg-yellow-50 transition-colors">
                         <div class="flex items-center gap-3">
                             <div class="w-8 h-8 rounded-lg bg-yellow-100 flex items-center justify-center">
                                 <svg class="w-4 h-4 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -1245,7 +1245,7 @@ function submitReschedule() {
                         </svg>
                     </button>
 
-                    <div v-if="showConfirmSection" class="p-6 space-y-6 border-t border-yellow-100">
+                    <div v-if="showConfirmSection" class="p-4 sm:p-6 space-y-6 border-t border-yellow-100">
                         <!-- General Validation Errors -->
                         <div v-if="Object.keys(confirmErrors).length" class="p-3 bg-red-50 border border-red-200 rounded-xl">
                             <p class="text-xs font-semibold text-red-700 mb-1">Please fix the following errors:</p>
@@ -1493,7 +1493,7 @@ function submitReschedule() {
             <!-- ─── Right Column (Sidebar 1/3) ─────────────────── -->
             <div class="space-y-6">
                 <!-- Status Update Card -->
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6">
                     <h3 class="text-sm font-bold text-gray-800 mb-4 border-b border-gray-100 pb-2">Update Status</h3>
                     <form @submit.prevent="updateStatus" class="space-y-4">
                         <div>
@@ -1518,7 +1518,7 @@ function submitReschedule() {
                 </div>
 
                 <!-- Invoice Summary (Sidebar) -->
-                <div v-if="invoice" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6">
+                <div v-if="invoice" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6">
                     <h3 class="text-sm font-bold text-gray-800 mb-4 border-b border-gray-100 pb-2">Invoice Summary</h3>
                     <dl class="space-y-3">
                         <div class="flex justify-between text-sm">
@@ -1549,7 +1549,7 @@ function submitReschedule() {
                 </div>
 
                 <!-- Booking Details Card -->
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6">
                     <h3 class="text-sm font-bold text-gray-800 mb-4 border-b border-gray-100 pb-2">{{ isRtl ? 'تفاصيل الحجز' : 'Booking Details' }}</h3>
                     <dl class="space-y-3">
                         <div class="flex justify-between text-sm">
@@ -1584,13 +1584,13 @@ function submitReschedule() {
                 </div>
 
                 <!-- Admin Notes Card -->
-                <div v-if="booking.admin_notes" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6">
+                <div v-if="booking.admin_notes" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6">
                     <h3 class="text-sm font-bold text-gray-800 mb-2">Admin Notes</h3>
                     <p class="text-sm text-gray-600 whitespace-pre-wrap">{{ booking.admin_notes }}</p>
                 </div>
 
                 <!-- Consent Documents Card -->
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6">
                     <h3 class="text-sm font-bold text-gray-800 mb-4 border-b border-gray-100 pb-2">Consent Documents</h3>
 
                     <!-- Existing consents -->
@@ -1663,9 +1663,9 @@ function submitReschedule() {
         <Teleport to="body">
             <div v-if="editingAppointment" class="fixed inset-0 z-[60] flex items-center justify-center p-4">
                 <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" @click="closeRescheduleModal"></div>
-                <div class="relative w-full max-w-lg bg-white rounded-2xl shadow-2xl overflow-hidden transform transition-all">
+                <div class="relative w-full max-w-lg mx-auto bg-white rounded-2xl shadow-2xl overflow-hidden transform transition-all">
                     <!-- Modal Header -->
-                    <div class="px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-teal-50 to-transparent">
+                    <div class="px-4 sm:px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-teal-50 to-transparent">
                         <div class="flex items-center justify-between">
                             <div>
                                 <h3 class="text-lg font-bold text-gray-900">Edit Appointment</h3>
@@ -1681,7 +1681,7 @@ function submitReschedule() {
                     </div>
 
                     <!-- Modal Body -->
-                    <div class="px-6 py-5 space-y-5 max-h-[70vh] overflow-y-auto">
+                    <div class="px-4 sm:px-6 py-5 space-y-5 max-h-[70vh] overflow-y-auto">
                         <!-- Doctor -->
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-1.5">{{ isRtl ? 'الطبيب' : 'Doctor' }}</label>
@@ -1742,7 +1742,7 @@ function submitReschedule() {
                     </div>
 
                     <!-- Modal Footer -->
-                    <div class="px-6 py-4 border-t border-gray-100 bg-gray-50/50 flex items-center justify-end gap-3">
+                    <div class="px-4 sm:px-6 py-4 border-t border-gray-100 bg-gray-50/50 flex items-center justify-end gap-3">
                         <button @click="closeRescheduleModal" class="px-4 py-2 rounded-xl text-sm font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-100 transition-colors">
                             {{ isRtl ? 'إلغاء' : 'Cancel' }}
                         </button>

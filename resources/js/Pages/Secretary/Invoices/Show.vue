@@ -59,21 +59,21 @@ function submitPayment() {
 <template>
     <div>
         <!-- Header -->
-        <div class="flex items-center justify-between mb-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
             <div>
                 <h1 class="text-2xl font-bold text-gray-900">Invoice {{ invoice.invoice_number }}</h1>
                 <p class="text-sm text-gray-500 mt-1">Created {{ formatDate(invoice.created_at) }}</p>
             </div>
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-3 flex-wrap">
                 <span :class="statusColors[invoice.status]" class="px-3 py-1 text-xs font-semibold rounded-full border capitalize">{{ invoice.status }}</span>
                 <Link href="/secretary/invoices" class="text-sm text-gray-500 hover:text-gray-700">← Back</Link>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div class="lg:col-span-2 space-y-6">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
+            <div class="lg:col-span-2 space-y-4 sm:space-y-6">
                 <!-- Patient & Invoice Info -->
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6">
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <div>
                             <h3 class="text-xs font-semibold text-gray-400 uppercase mb-2">{{ isRtl ? 'المريض' : 'Patient' }}</h3>
@@ -95,16 +95,17 @@ function submitPayment() {
 
                 <!-- Items Table -->
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
-                    <div class="px-6 py-4 border-b border-gray-100">
+                    <div class="px-4 sm:px-6 py-4 border-b border-gray-100">
                         <h2 class="text-sm font-bold text-gray-800">Items</h2>
                     </div>
+                    <div class="overflow-x-auto">
                     <table class="w-full text-sm">
                         <thead>
                             <tr class="bg-gray-50/80">
                                 <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">Description</th>
                                 <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">Qty</th>
                                 <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">Unit Price</th>
-                                <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'الخصم' : 'Discount' }}</th>
+                                <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase hidden sm:table-cell">{{ isRtl ? 'الخصم' : 'Discount' }}</th>
                                 <th class="px-6 py-3 ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'الإجمالي' : 'Total' }}</th>
                             </tr>
                         </thead>
@@ -116,16 +117,17 @@ function submitPayment() {
                                 </td>
                                 <td class="px-6 py-3 text-gray-500">{{ item.quantity }}</td>
                                 <td class="px-6 py-3 text-gray-500">{{ formatCurrency(item.unit_price) }}</td>
-                                <td class="px-6 py-3 text-gray-500">{{ item.discount > 0 ? formatCurrency(item.discount) : '-' }}</td>
+                                <td class="px-6 py-3 text-gray-500 hidden sm:table-cell">{{ item.discount > 0 ? formatCurrency(item.discount) : '-' }}</td>
                                 <td class="px-6 py-3 ltr:text-right rtl:text-left font-bold text-gray-800">{{ formatCurrency(item.total) }}</td>
                             </tr>
                         </tbody>
                     </table>
+                    </div>
                 </div>
 
                 <!-- Payments Table -->
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
-                    <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+                    <div class="px-4 sm:px-6 py-4 border-b border-gray-100 flex items-center justify-between flex-wrap gap-2">
                         <h2 class="text-sm font-bold text-gray-800">{{ isRtl ? 'المدفوعات' : 'Payments' }}</h2>
                         <button
                             v-if="invoice.status !== 'paid' && invoice.status !== 'cancelled'"
@@ -139,7 +141,7 @@ function submitPayment() {
                     </div>
 
                     <!-- Payment Form -->
-                    <div v-if="showPaymentForm" class="px-6 py-4 bg-teal-50/50 border-b border-teal-100">
+                    <div v-if="showPaymentForm" class="px-4 sm:px-6 py-4 bg-teal-50/50 border-b border-teal-100">
                         <form @submit.prevent="submitPayment" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                             <div>
                                 <label class="block text-xs font-medium text-gray-500 mb-1">Payment Method <span class="text-red-500">*</span></label>
@@ -175,14 +177,15 @@ function submitPayment() {
                         </form>
                     </div>
 
+                    <div class="overflow-x-auto">
                     <table class="w-full text-sm">
                         <thead>
                             <tr class="bg-gray-50/80">
                                 <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'التاريخ' : 'Date' }}</th>
                                 <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'الطريقة' : 'Method' }}</th>
                                 <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'المبلغ' : 'Amount' }}</th>
-                                <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">Reference</th>
-                                <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">Received By</th>
+                                <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase hidden sm:table-cell">Reference</th>
+                                <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase hidden sm:table-cell">Received By</th>
                                 <th class="px-6 py-3 text-center text-xs font-semibold text-gray-500 uppercase">Receipt</th>
                             </tr>
                         </thead>
@@ -191,8 +194,8 @@ function submitPayment() {
                                 <td class="px-6 py-3 text-gray-500">{{ formatDate(payment.payment_date) }}</td>
                                 <td class="px-6 py-3 text-gray-500">{{ payment.payment_method?.name_en || '-' }}</td>
                                 <td class="px-6 py-3 font-bold text-emerald-600">{{ formatCurrency(payment.amount) }}</td>
-                                <td class="px-6 py-3 text-gray-500 font-mono">{{ payment.reference_number || '-' }}</td>
-                                <td class="px-6 py-3 text-gray-500">{{ payment.receiver?.name || '-' }}</td>
+                                <td class="px-6 py-3 text-gray-500 font-mono hidden sm:table-cell">{{ payment.reference_number || '-' }}</td>
+                                <td class="px-6 py-3 text-gray-500 hidden sm:table-cell">{{ payment.receiver?.name || '-' }}</td>
                                 <td class="px-6 py-3 text-center">
                                     <a :href="`/secretary/invoices/${invoice.id}/payments/${payment.id}/receipt`"
                                        target="_blank"
@@ -208,12 +211,13 @@ function submitPayment() {
                             </tr>
                         </tbody>
                     </table>
+                    </div>
                 </div>
             </div>
 
             <!-- Sidebar Summary -->
-            <div class="space-y-6">
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6">
+            <div class="space-y-4 sm:space-y-6">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6">
                     <h2 class="text-sm font-bold text-gray-800 mb-4 border-b border-gray-100 pb-2">Summary</h2>
                     <dl class="space-y-3">
                         <div class="flex justify-between text-sm">
@@ -240,7 +244,7 @@ function submitPayment() {
                 </div>
 
                 <!-- Quick Links -->
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6">
                     <h2 class="text-sm font-bold text-gray-800 mb-4 border-b border-gray-100 pb-2">Quick Links</h2>
                     <div class="space-y-2">
                         <Link v-if="invoice.patient" :href="`/secretary/patients/${invoice.patient.id}`" class="flex items-center gap-2 text-sm font-medium text-teal-600 hover:text-teal-800 transition">
@@ -254,7 +258,7 @@ function submitPayment() {
                     </div>
                 </div>
 
-                <div v-if="invoice.notes" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6">
+                <div v-if="invoice.notes" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6">
                     <h2 class="text-sm font-bold text-gray-800 mb-2">{{ isRtl ? 'ملاحظات' : 'Notes' }}</h2>
                     <p class="text-sm text-gray-600 whitespace-pre-wrap">{{ invoice.notes }}</p>
                 </div>

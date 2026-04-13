@@ -101,7 +101,7 @@ function submit() {
 
 <template>
     <div>
-        <div class="flex items-center justify-between mb-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
             <div>
                 <h1 class="text-2xl font-bold text-gray-900">{{ isRtl ? 'إنشاء فاتورة' : 'Create Invoice' }}</h1>
                 <p class="text-sm text-gray-500 mt-1">Create a new patient invoice</p>
@@ -111,7 +111,7 @@ function submit() {
 
         <form @submit.prevent="submit" class="space-y-6">
             <!-- Patient Selection -->
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6">
                 <h2 class="text-sm font-bold text-gray-800 mb-4 border-b border-gray-100 pb-2">{{ isRtl ? 'تفاصيل الفاتورة' : 'Invoice Details' }}</h2>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
@@ -126,7 +126,7 @@ function submit() {
             </div>
 
             <!-- Line Items -->
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6">
                 <div class="flex items-center justify-between border-b border-gray-100 pb-2 mb-4">
                     <h2 class="text-sm font-bold text-gray-800">Items</h2>
                     <button type="button" @click="addItem" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-teal-500 text-white rounded-lg text-xs font-semibold hover:bg-teal-600 transition">
@@ -182,9 +182,9 @@ function submit() {
             </div>
 
             <!-- Discount + Summary -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
                 <!-- Discount Code -->
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6">
                     <h2 class="text-sm font-bold text-gray-800 mb-4 border-b border-gray-100 pb-2">Discount Code</h2>
                     <div v-if="!form.discount_code_id" class="flex gap-2">
                         <input v-model="discountCodeInput" type="text" :placeholder="isRtl ? 'أدخل رمز الخصم' : 'Enter discount code'" class="flex-1 px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500" />
@@ -202,7 +202,7 @@ function submit() {
                 </div>
 
                 <!-- Summary -->
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6">
                     <h2 class="text-sm font-bold text-gray-800 mb-4 border-b border-gray-100 pb-2">Summary</h2>
                     <dl class="space-y-3">
                         <div class="flex justify-between text-sm">

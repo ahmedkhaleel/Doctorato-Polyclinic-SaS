@@ -575,7 +575,7 @@ const activityTypeConfig = {
 
             <!-- ============ HERO GRADIENT HEADER ============ -->
             <div
-                class="relative overflow-hidden rounded-2xl p-6 md:p-8"
+                class="relative overflow-hidden rounded-2xl p-5 sm:p-6 md:p-8"
                 :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
                 style="background: linear-gradient(135deg, #0d9488 0%, #0f766e 50%, #134e4a 100%); transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0s"
             >
@@ -648,7 +648,7 @@ const activityTypeConfig = {
             </div>
 
             <!-- ============ STATS CARDS ============ -->
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                 <!-- My Active Leads -->
                 <Link href="/secretary/crm/leads"
                     class="group relative bg-white rounded-2xl shadow-sm border border-gray-100 p-5 hover:shadow-md hover:scale-[1.02] cursor-pointer block"
@@ -1043,7 +1043,7 @@ const activityTypeConfig = {
                 style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.3s"
             >
                 <Link href="/secretary/crm/leads"
-                    class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-white text-sm font-semibold shadow-sm hover:shadow-md transition-all duration-200 hover:scale-[1.02]"
+                    class="inline-flex items-center gap-2 px-3 sm:px-5 py-2.5 rounded-xl text-white text-sm font-semibold shadow-sm hover:shadow-md transition-all duration-200 hover:scale-[1.02]"
                     style="background: linear-gradient(135deg, #0d9488, #0f766e);"
                 >
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1053,7 +1053,7 @@ const activityTypeConfig = {
                 </Link>
 
                 <Link href="/secretary/crm/calendar"
-                    class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-teal-700 text-sm font-semibold bg-teal-50 border border-teal-200 hover:bg-teal-100 transition-all duration-200 hover:scale-[1.02]"
+                    class="inline-flex items-center gap-2 px-3 sm:px-5 py-2.5 rounded-xl text-teal-700 text-sm font-semibold bg-teal-50 border border-teal-200 hover:bg-teal-100 transition-all duration-200 hover:scale-[1.02]"
                 >
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -1062,7 +1062,7 @@ const activityTypeConfig = {
                 </Link>
 
                 <Link href="/secretary/crm/pipeline"
-                    class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-teal-700 text-sm font-semibold bg-teal-50 border border-teal-200 hover:bg-teal-100 transition-all duration-200 hover:scale-[1.02]"
+                    class="inline-flex items-center gap-2 px-3 sm:px-5 py-2.5 rounded-xl text-teal-700 text-sm font-semibold bg-teal-50 border border-teal-200 hover:bg-teal-100 transition-all duration-200 hover:scale-[1.02]"
                 >
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7" />
@@ -1071,7 +1071,7 @@ const activityTypeConfig = {
                 </Link>
 
                 <Link href="/secretary/crm/templates"
-                    class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-teal-700 text-sm font-semibold bg-teal-50 border border-teal-200 hover:bg-teal-100 transition-all duration-200 hover:scale-[1.02]"
+                    class="inline-flex items-center gap-2 px-3 sm:px-5 py-2.5 rounded-xl text-teal-700 text-sm font-semibold bg-teal-50 border border-teal-200 hover:bg-teal-100 transition-all duration-200 hover:scale-[1.02]"
                 >
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 12h10" />
@@ -1080,7 +1080,7 @@ const activityTypeConfig = {
                 </Link>
 
                 <button @click="showQuickAdd = true"
-                    class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-teal-700 text-sm font-semibold bg-teal-50 border border-teal-200 hover:bg-teal-100 transition-all duration-200 hover:scale-[1.02]"
+                    class="inline-flex items-center gap-2 px-3 sm:px-5 py-2.5 rounded-xl text-teal-700 text-sm font-semibold bg-teal-50 border border-teal-200 hover:bg-teal-100 transition-all duration-200 hover:scale-[1.02]"
                 >
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
@@ -1090,10 +1090,10 @@ const activityTypeConfig = {
             </div>
 
             <!-- ============ MAIN CONTENT GRID ============ -->
-            <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
 
                 <!-- LEFT COLUMN: Follow-ups -->
-                <div class="xl:col-span-2 space-y-6">
+                <div class="md:col-span-2 xl:col-span-2 space-y-4 sm:space-y-6">
 
                     <!-- ---- TODAY'S FOLLOW-UPS ---- -->
                     <div
@@ -1101,7 +1101,7 @@ const activityTypeConfig = {
                         :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
                         style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.35s"
                     >
-                        <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between" style="background: linear-gradient(135deg, #f0fdfa, #ccfbf1);">
+                        <div class="px-4 sm:px-6 py-4 border-b border-gray-100 flex items-center justify-between" style="background: linear-gradient(135deg, #f0fdfa, #ccfbf1);">
                             <div class="flex items-center gap-3">
                                 <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background: linear-gradient(135deg, #0d9488, #14b8a6);">
                                     <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1199,7 +1199,7 @@ const activityTypeConfig = {
                             </div>
                         </div>
 
-                        <div v-else class="px-6 py-12 text-center">
+                        <div v-else class="px-4 sm:px-6 py-12 text-center">
                             <div class="w-16 h-16 rounded-2xl mx-auto mb-4 flex items-center justify-center" style="background: linear-gradient(135deg, #f0fdfa, #ccfbf1);">
                                 <svg class="w-8 h-8 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -1217,7 +1217,7 @@ const activityTypeConfig = {
                         :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
                         style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.4s"
                     >
-                        <div class="px-6 py-4 border-b border-red-100 flex items-center justify-between bg-gradient-to-r from-red-50 to-rose-50">
+                        <div class="px-4 sm:px-6 py-4 border-b border-red-100 flex items-center justify-between bg-gradient-to-r from-red-50 to-rose-50">
                             <div class="flex items-center gap-3">
                                 <div class="w-8 h-8 rounded-lg flex items-center justify-center bg-gradient-to-br from-red-500 to-rose-500 relative">
                                     <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1391,7 +1391,7 @@ const activityTypeConfig = {
                         :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
                         style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.4s"
                     >
-                        <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+                        <div class="px-4 sm:px-6 py-4 border-b border-gray-100 flex items-center justify-between">
                             <div class="flex items-center gap-3">
                                 <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background: linear-gradient(135deg, #0d9488, #14b8a6);">
                                     <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1409,7 +1409,7 @@ const activityTypeConfig = {
                             <Link
                                 v-for="(lead, idx) in recentLeads" :key="lead.id"
                                 :href="`/secretary/crm/leads/${lead.id}`"
-                                class="block px-5 py-4 hover:bg-gray-50/70 transition-all duration-200 group"
+                                class="block px-3 sm:px-5 py-4 hover:bg-gray-50/70 transition-all duration-200 group"
                                 :class="mounted ? 'opacity-100 translate-x-0' : (isRtl ? 'opacity-0 translate-x-4' : 'opacity-0 -translate-x-4')"
                                 :style="`transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: ${0.45 + idx * 0.06}s`"
                             >
@@ -1488,7 +1488,7 @@ const activityTypeConfig = {
                             </Link>
                         </div>
 
-                        <div v-else class="px-6 py-12 text-center">
+                        <div v-else class="px-4 sm:px-6 py-12 text-center">
                             <div class="w-16 h-16 rounded-2xl mx-auto mb-4 flex items-center justify-center bg-gray-50">
                                 <svg class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -1506,7 +1506,7 @@ const activityTypeConfig = {
                 :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
                 style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.46s">
                 <!-- Teal Gradient Header -->
-                <div class="px-5 py-4 border-b border-gray-100" style="background: linear-gradient(135deg, #0d9488, #0f766e);">
+                <div class="px-3 sm:px-5 py-4 border-b border-gray-100" style="background: linear-gradient(135deg, #0d9488, #0f766e);">
                     <div class="flex items-center gap-3">
                         <div class="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center">
                             <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
@@ -1519,7 +1519,7 @@ const activityTypeConfig = {
                 </div>
 
                 <!-- Table Header -->
-                <div class="px-5 py-2.5 bg-gray-50 border-b border-gray-100 grid grid-cols-12 gap-2 items-center text-[10px] font-bold text-gray-400 uppercase tracking-wider">
+                <div class="px-3 sm:px-5 py-2.5 bg-gray-50 border-b border-gray-100 grid grid-cols-12 gap-2 items-center text-[10px] font-bold text-gray-400 uppercase tracking-wider">
                     <div class="col-span-1">#</div>
                     <div class="col-span-3">{{ isRtl ? 'الاسم' : 'Name' }}</div>
                     <div class="col-span-2 text-center">{{ isRtl ? 'الإجمالي' : 'Total' }}</div>
@@ -1531,7 +1531,7 @@ const activityTypeConfig = {
                 <!-- Leaderboard Rows -->
                 <div class="divide-y divide-gray-50">
                     <div v-for="(member, idx) in teamLeaderboard" :key="member.id"
-                        class="px-5 py-3 grid grid-cols-12 gap-2 items-center transition-all duration-300"
+                        class="px-3 sm:px-5 py-3 grid grid-cols-12 gap-2 items-center transition-all duration-300"
                         :class="[
                             member.is_me ? 'bg-teal-50/60 border-l-2 border-teal-500' : 'hover:bg-gray-50',
                             mounted ? 'opacity-100 translate-x-0' : 'opacity-0 ' + (isRtl ? 'translate-x-4' : '-translate-x-4')
@@ -1598,7 +1598,7 @@ const activityTypeConfig = {
                 </div>
 
                 <!-- Summary Footer -->
-                <div class="px-5 py-3 bg-gray-50/80 border-t border-gray-100 flex items-center justify-between">
+                <div class="px-3 sm:px-5 py-3 bg-gray-50/80 border-t border-gray-100 flex flex-wrap items-center justify-between">
                     <span class="text-[10px] text-gray-400">{{ teamLeaderboard.length }} {{ isRtl ? 'عضو فريق' : 'team members' }}</span>
                     <span class="text-[10px] text-gray-400">{{ isRtl ? 'مرتب حسب التحويلات' : 'Sorted by conversions' }}</span>
                 </div>
@@ -1638,7 +1638,7 @@ const activityTypeConfig = {
             </div>
 
             <!-- ============ FUNNEL + ACTIVITY FEED ============ -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
 
                 <!-- Mini Conversion Funnel -->
                 <div
@@ -1689,7 +1689,7 @@ const activityTypeConfig = {
                     :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
                     style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.55s"
                 >
-                    <div class="px-5 py-4 border-b border-gray-100">
+                    <div class="px-3 sm:px-5 py-4 border-b border-gray-100">
                         <div class="flex items-center justify-between mb-3">
                             <div class="flex items-center gap-3">
                                 <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background: linear-gradient(135deg, #0d9488, #14b8a6);">
@@ -1717,12 +1717,12 @@ const activityTypeConfig = {
                     <div v-if="filteredActivities.length" class="max-h-96 overflow-y-auto">
                         <div v-for="(group, gIdx) in groupedFeedActivities" :key="group.label">
                             <!-- Time group header -->
-                            <div class="px-5 py-1.5 bg-gray-50/80 border-y border-gray-100/80 sticky top-0 z-[1]">
+                            <div class="px-3 sm:px-5 py-1.5 bg-gray-50/80 border-y border-gray-100/80 sticky top-0 z-[1]">
                                 <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{{ group.label }}</span>
                             </div>
                             <div class="divide-y divide-gray-50">
                                 <div v-for="(act, idx) in group.items" :key="act.id"
-                                     class="px-5 py-3 flex items-start gap-3 hover:bg-gray-50/50 transition-colors"
+                                     class="px-3 sm:px-5 py-3 flex items-start gap-3 hover:bg-gray-50/50 transition-colors"
                                      :class="mounted ? 'opacity-100' : 'opacity-0'"
                                      :style="`transition: opacity 0.5s ease ${0.6 + (gIdx * 3 + idx) * 0.04}s`">
                                     <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5"
@@ -1744,7 +1744,7 @@ const activityTypeConfig = {
                             </div>
                         </div>
                         <!-- Show More / Less toggle -->
-                        <div v-if="hasMoreActivities" class="px-5 py-2.5 border-t border-gray-100 text-center">
+                        <div v-if="hasMoreActivities" class="px-3 sm:px-5 py-2.5 border-t border-gray-100 text-center">
                             <button @click="activityShowAll = !activityShowAll"
                                 class="text-xs font-semibold text-teal-600 hover:text-teal-700 transition-colors inline-flex items-center gap-1">
                                 <svg :class="['w-3.5 h-3.5 transition-transform duration-200', activityShowAll ? 'rotate-180' : '']" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
@@ -1753,7 +1753,7 @@ const activityTypeConfig = {
                         </div>
                     </div>
 
-                    <div v-else class="px-5 py-10 text-center">
+                    <div v-else class="px-3 sm:px-5 py-10 text-center">
                         <div class="w-12 h-12 rounded-xl mx-auto mb-3 flex items-center justify-center bg-gray-50">
                             <svg class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />

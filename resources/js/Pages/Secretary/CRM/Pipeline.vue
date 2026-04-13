@@ -340,7 +340,7 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handlePipelineKe
     <div :class="['bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-5 transition-all duration-700', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4']"
          :style="{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }">
         <div class="h-1 bg-gradient-to-r from-teal-500 via-emerald-400 to-teal-500"></div>
-        <div class="px-5 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <div class="px-3 sm:px-5 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div class="flex items-center gap-3">
                 <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-teal-500 to-emerald-500 flex items-center justify-center shadow-sm">
                     <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" /></svg>
@@ -350,7 +350,7 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handlePipelineKe
                     <p class="text-xs text-gray-400 mt-0.5">{{ totalLeads }} {{ isRtl ? 'عميل' : 'leads' }} — {{ isRtl ? 'اسحب لتغيير الحالة' : 'Drag to change status' }}</p>
                 </div>
             </div>
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-2 flex-wrap">
                 <!-- Search -->
                 <div class="relative">
                     <svg class="w-3.5 h-3.5 text-gray-400 absolute top-1/2 -translate-y-1/2 start-2.5 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
@@ -473,7 +473,7 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handlePipelineKe
     </div>
 
     <!-- Pipeline Columns -->
-    <div :class="['flex gap-4 overflow-x-auto pb-4 transition-all duration-700 delay-150', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6']"
+    <div :class="['flex gap-3 sm:gap-4 overflow-x-auto pb-4 scrollbar-none transition-all duration-700 delay-150', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6']"
          :style="{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }">
 
         <div v-for="status in statuses" :key="status" :class="['flex-shrink-0 transition-all duration-300', isCollapsed(status) ? 'w-[52px]' : 'w-[280px]']">

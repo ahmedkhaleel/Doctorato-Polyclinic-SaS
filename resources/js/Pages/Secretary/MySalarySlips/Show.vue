@@ -84,7 +84,7 @@ onMounted(() => {
                                 <p class="text-3xl font-black text-white">{{ formatCurrency(slip.net_salary) }}</p>
                             </div>
                         </div>
-                        <div class="flex items-center gap-6">
+                        <div class="flex items-center gap-4 sm:gap-6 flex-wrap">
                             <div class="text-center">
                                 <p class="text-[10px] text-gray-400 uppercase font-semibold">{{ isRtl ? 'الإجمالي' : 'Earnings' }}</p>
                                 <p class="text-lg font-bold text-emerald-400">{{ formatCurrency(slip.total_earnings) }}</p>
@@ -101,7 +101,7 @@ onMounted(() => {
 
         <div class="space-y-6 transition-all duration-500" :class="cardsLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'">
             <!-- Employee Info Card -->
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6">
                 <h3 class="text-sm font-bold text-gray-800 mb-4 flex items-center gap-2">
                     <svg class="w-4 h-4 text-[#0d9488]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                     {{ isRtl ? 'معلومات الموظف' : 'Employee Information' }}
@@ -123,20 +123,20 @@ onMounted(() => {
             </div>
 
             <!-- Two-column: Earnings & Deductions -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
                 <!-- Earnings -->
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
-                    <div class="px-6 py-4 border-b border-gray-100 flex items-center gap-2">
+                    <div class="px-4 sm:px-6 py-4 border-b border-gray-100 flex items-center gap-2">
                         <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
                         <h2 class="text-sm font-bold text-gray-800">{{ isRtl ? 'المستحقات' : 'Earnings' }}</h2>
                     </div>
                     <div class="divide-y divide-gray-50">
-                        <div v-for="item in earnings" :key="item.key" class="flex items-center justify-between px-6 py-3 hover:bg-gray-50/50">
+                        <div v-for="item in earnings" :key="item.key" class="flex items-center justify-between px-4 sm:px-6 py-3 hover:bg-gray-50/50">
                             <span class="text-sm text-gray-700">{{ isRtl ? item.labelAr : item.label }}</span>
                             <span class="text-sm font-medium text-gray-800">{{ formatCurrency(slip[item.key]) }}</span>
                         </div>
                     </div>
-                    <div class="flex items-center justify-between px-6 py-3 border-t-2 border-emerald-200 bg-emerald-50/50">
+                    <div class="flex items-center justify-between px-4 sm:px-6 py-3 border-t-2 border-emerald-200 bg-emerald-50/50">
                         <span class="text-sm font-bold text-gray-800">{{ isRtl ? 'إجمالي المستحقات' : 'Total Earnings' }}</span>
                         <span class="text-sm font-bold text-[#0d9488]">{{ formatCurrency(slip.total_earnings) }}</span>
                     </div>
@@ -144,17 +144,17 @@ onMounted(() => {
 
                 <!-- Deductions -->
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
-                    <div class="px-6 py-4 border-b border-gray-100 flex items-center gap-2">
+                    <div class="px-4 sm:px-6 py-4 border-b border-gray-100 flex items-center gap-2">
                         <div class="w-2 h-2 rounded-full bg-red-500"></div>
                         <h2 class="text-sm font-bold text-gray-800">{{ isRtl ? 'الخصومات' : 'Deductions' }}</h2>
                     </div>
                     <div class="divide-y divide-gray-50">
-                        <div v-for="item in deductions" :key="item.key" class="flex items-center justify-between px-6 py-3 hover:bg-gray-50/50">
+                        <div v-for="item in deductions" :key="item.key" class="flex items-center justify-between px-4 sm:px-6 py-3 hover:bg-gray-50/50">
                             <span class="text-sm text-gray-700">{{ isRtl ? item.labelAr : item.label }}</span>
                             <span class="text-sm font-medium text-red-600">{{ formatCurrency(slip[item.key]) }}</span>
                         </div>
                     </div>
-                    <div class="flex items-center justify-between px-6 py-3 border-t-2 border-red-200 bg-red-50/50">
+                    <div class="flex items-center justify-between px-4 sm:px-6 py-3 border-t-2 border-red-200 bg-red-50/50">
                         <span class="text-sm font-bold text-gray-800">{{ isRtl ? 'إجمالي الخصومات' : 'Total Deductions' }}</span>
                         <span class="text-sm font-bold text-red-600">{{ formatCurrency(slip.total_deductions) }}</span>
                     </div>
@@ -162,7 +162,7 @@ onMounted(() => {
             </div>
 
             <!-- Payment Details -->
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6">
                 <h3 class="text-sm font-bold text-gray-800 mb-4 flex items-center gap-2">
                     <svg class="w-4 h-4 text-[#0d9488]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
                     {{ isRtl ? 'تفاصيل الدفع' : 'Payment Details' }}

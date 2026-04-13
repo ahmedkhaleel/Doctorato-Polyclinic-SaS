@@ -88,7 +88,7 @@ const colorMap = {
         </div>
 
         <!-- Stats Cards -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
             <button
                 v-for="card in statCards"
                 :key="card.label"
@@ -132,8 +132,8 @@ const colorMap = {
                     <thead>
                         <tr class="bg-gray-50/50">
                             <th class="px-6 py-3 ltr:text-left rtl:text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'المريض' : 'Patient' }}</th>
-                            <th class="px-6 py-3 ltr:text-left rtl:text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'الطبيب' : 'Doctor' }}</th>
-                            <th class="px-6 py-3 ltr:text-left rtl:text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'العلاج' : 'Treatment' }}</th>
+                            <th class="px-6 py-3 ltr:text-left rtl:text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider hidden sm:table-cell">{{ isRtl ? 'الطبيب' : 'Doctor' }}</th>
+                            <th class="px-6 py-3 ltr:text-left rtl:text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider hidden md:table-cell">{{ isRtl ? 'العلاج' : 'Treatment' }}</th>
                             <th class="px-6 py-3 ltr:text-left rtl:text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'تاريخ المتابعة' : 'Follow-up Date' }}</th>
                             <th class="px-6 py-3 ltr:text-left rtl:text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'الحالة' : 'Status' }}</th>
                             <th class="px-6 py-3 ltr:text-left rtl:text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'إجراء' : 'Action' }}</th>
@@ -154,10 +154,10 @@ const colorMap = {
                                     </div>
                                 </div>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 hidden sm:table-cell">
                                 {{ $localized(f.doctor, 'name') || '-' }}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
+                            <td class="px-6 py-4 whitespace-nowrap hidden md:table-cell">
                                 <div>
                                     <p class="text-sm text-gray-700">{{ f.treatment?.treatment_type?.replace('_', ' ') || '-' }}</p>
                                     <p v-if="f.treatment?.tooth_number" class="text-[11px] text-gray-400">

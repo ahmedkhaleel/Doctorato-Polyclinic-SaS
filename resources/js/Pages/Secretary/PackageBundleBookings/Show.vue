@@ -355,15 +355,15 @@ function toggleSection(key) {
         </div>
 
         <!-- Overview Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div class="bg-white rounded-lg shadow-sm p-5">
+        <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+            <div class="bg-white rounded-lg shadow-sm p-4 sm:p-5">
                 <div class="text-xs font-medium text-gray-400 uppercase mb-2">{{ isRtl ? 'الحالة' : 'Status' }}</div>
                 <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold"
                       :class="bookingStatusColors[b.status] || 'bg-gray-100 text-gray-800'">
                     {{ b.status?.replace(/_/g, ' ') }}
                 </span>
             </div>
-            <div class="bg-white rounded-lg shadow-sm p-5">
+            <div class="bg-white rounded-lg shadow-sm p-4 sm:p-5">
                 <div class="text-xs font-medium text-gray-400 uppercase mb-2">{{ isRtl ? 'التقدم' : 'Progress' }}</div>
                 <div class="flex items-center gap-3">
                     <div class="flex-1 bg-gray-200 rounded-full h-2.5">
@@ -372,11 +372,11 @@ function toggleSection(key) {
                     <span class="text-sm font-bold text-gray-700">{{ b.progress_percentage }}%</span>
                 </div>
             </div>
-            <div class="bg-white rounded-lg shadow-sm p-5">
+            <div class="bg-white rounded-lg shadow-sm p-4 sm:p-5">
                 <div class="text-xs font-medium text-gray-400 uppercase mb-2">{{ isRtl ? 'السعر الإجمالي' : 'Total Price' }}</div>
                 <div class="text-xl font-bold" style="color: #0d9488;">{{ formatCurrency(b.total_price) }}</div>
             </div>
-            <div class="bg-white rounded-lg shadow-sm p-5">
+            <div class="bg-white rounded-lg shadow-sm p-4 sm:p-5">
                 <div class="text-xs font-medium text-gray-400 uppercase mb-2">{{ isRtl ? 'المبلغ المتبقي' : 'Balance Due' }}</div>
                 <div class="text-xl font-bold" :class="Number(b.balance_due) > 0 ? 'text-red-600' : 'text-green-600'">
                     {{ Number(b.balance_due) > 0 ? formatCurrency(b.balance_due) : 'Paid' }}
@@ -386,8 +386,8 @@ function toggleSection(key) {
         </div>
 
         <!-- Patient & Bundle -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div class="bg-white rounded-lg shadow-sm p-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+            <div class="bg-white rounded-lg shadow-sm p-4 sm:p-6">
                 <h3 class="text-xs font-semibold text-gray-400 uppercase mb-4">{{ isRtl ? 'المريض' : 'Patient' }}</h3>
                 <div class="flex items-center gap-4">
                     <div class="w-12 h-12 rounded-full flex items-center justify-center text-white text-lg font-semibold" style="background-color: #0d9488;">{{ b.patient?.full_name?.charAt(0) }}</div>
@@ -398,7 +398,7 @@ function toggleSection(key) {
                     </div>
                 </div>
             </div>
-            <div class="bg-white rounded-lg shadow-sm p-6">
+            <div class="bg-white rounded-lg shadow-sm p-4 sm:p-6">
                 <h3 class="text-xs font-semibold text-gray-400 uppercase mb-4">{{ isRtl ? 'تفاصيل الحجز' : 'Booking Details' }}</h3>
                 <div class="grid grid-cols-2 gap-3 text-sm">
                     <div><span class="text-gray-400">{{ isRtl ? 'الباقة' : 'Bundle' }}</span><div class="font-medium text-gray-900">{{ b.package_bundle?.name_en }}</div></div>
@@ -422,11 +422,11 @@ function toggleSection(key) {
 
         <!-- Services Progress -->
         <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-            <button @click="toggleSection('services')" class="w-full flex items-center justify-between p-5 ltr:text-left rtl:ltr:text-right rtl:text-left hover:bg-gray-50 transition">
+            <button @click="toggleSection('services')" class="w-full flex items-center justify-between p-4 sm:p-5 ltr:text-left rtl:ltr:text-right rtl:text-left hover:bg-gray-50 transition">
                 <h3 class="text-lg font-semibold text-gray-800">{{ isRtl ? 'تقدم الخدمات' : 'Services Progress' }}</h3>
                 <svg class="w-5 h-5 text-gray-400 transition-transform" :class="expandedSections.services ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
             </button>
-            <div v-show="expandedSections.services" class="px-5 pb-5 space-y-4">
+            <div v-show="expandedSections.services" class="px-3 sm:px-5 pb-5 space-y-4">
                 <div v-for="bs in b.bundle_services" :key="bs.id"
                      class="border rounded-xl p-4"
                      :class="bs.status === 'completed' ? 'border-green-200 bg-green-50/30' : bs.status === 'cancelled' ? 'border-red-200 bg-red-50/30' : 'border-gray-200'">
@@ -452,13 +452,13 @@ function toggleSection(key) {
 
         <!-- Appointments Schedule -->
         <div v-if="hasAppointments" class="bg-white rounded-lg shadow-sm overflow-hidden">
-            <button @click="toggleSection('appointments')" class="w-full flex items-center justify-between p-5 ltr:text-left rtl:ltr:text-right rtl:text-left hover:bg-gray-50 transition">
+            <button @click="toggleSection('appointments')" class="w-full flex items-center justify-between p-4 sm:p-5 ltr:text-left rtl:ltr:text-right rtl:text-left hover:bg-gray-50 transition">
                 <h3 class="text-lg font-semibold text-gray-800">{{ isRtl ? 'جدول المواعيد' : 'Appointments Schedule' }} ({{ b.appointments?.length || 0 }})</h3>
                 <svg class="w-5 h-5 text-gray-400 transition-transform" :class="expandedSections.appointments ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                 </svg>
             </button>
-            <div v-show="expandedSections.appointments" class="px-5 pb-5">
+            <div v-show="expandedSections.appointments" class="px-3 sm:px-5 pb-5">
                 <div class="overflow-x-auto">
                     <table class="min-w-full text-sm">
                         <thead>
@@ -467,7 +467,7 @@ function toggleSection(key) {
                                 <th class="px-3 py-2.5 text-center text-xs font-medium text-gray-500 uppercase">{{ isRtl ? 'الجلسة' : 'Session' }}</th>
                                 <th class="px-3 py-2.5 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase">{{ isRtl ? 'الطبيب' : 'Doctor' }}</th>
                                 <th class="px-3 py-2.5 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase">{{ isRtl ? 'التاريخ' : 'Date' }}</th>
-                                <th class="px-3 py-2.5 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase">{{ isRtl ? 'الوقت' : 'Time' }}</th>
+                                <th class="px-3 py-2.5 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase hidden sm:table-cell">{{ isRtl ? 'الوقت' : 'Time' }}</th>
                                 <th class="px-3 py-2.5 text-center text-xs font-medium text-gray-500 uppercase">{{ isRtl ? 'الحالة' : 'Status' }}</th>
                                 <th class="px-3 py-2.5 text-center text-xs font-medium text-gray-500 uppercase">{{ isRtl ? 'إجراءات' : 'Actions' }}</th>
                             </tr>
@@ -481,7 +481,7 @@ function toggleSection(key) {
                                 <td class="px-3 py-2.5 text-center text-gray-600">{{ apt.session_number }}</td>
                                 <td class="px-3 py-2.5 text-gray-600">{{ apt.doctor?.name_en || '-' }}</td>
                                 <td class="px-3 py-2.5 text-gray-600">{{ formatDate(apt.appointment_date) }}</td>
-                                <td class="px-3 py-2.5 text-gray-600">{{ formatTime(apt.start_time) }} - {{ formatTime(apt.end_time) }}</td>
+                                <td class="px-3 py-2.5 text-gray-600 hidden sm:table-cell">{{ formatTime(apt.start_time) }} - {{ formatTime(apt.end_time) }}</td>
                                 <td class="px-3 py-2.5 text-center">
                                     <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold"
                                           :class="appointmentStatusColors[apt.status] || 'bg-gray-100 text-gray-800'">
@@ -489,7 +489,7 @@ function toggleSection(key) {
                                     </span>
                                 </td>
                                 <td class="px-3 py-2.5 text-center">
-                                    <div class="flex items-center justify-center gap-1">
+                                    <div class="flex flex-wrap items-center justify-center gap-1">
                                         <!-- Check-in button -->
                                         <button v-if="['scheduled', 'confirmed'].includes(apt.status) && !apt.visit_id && ['in_progress', 'confirmed'].includes(b.status)"
                                                 @click="checkInAppointment(apt)"
@@ -519,11 +519,11 @@ function toggleSection(key) {
 
         <!-- Visits -->
         <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-            <button @click="toggleSection('visits')" class="w-full flex items-center justify-between p-5 ltr:text-left rtl:ltr:text-right rtl:text-left hover:bg-gray-50 transition">
+            <button @click="toggleSection('visits')" class="w-full flex items-center justify-between p-4 sm:p-5 ltr:text-left rtl:ltr:text-right rtl:text-left hover:bg-gray-50 transition">
                 <h3 class="text-lg font-semibold text-gray-800">{{ isRtl ? 'الزيارات' : 'Visits' }} ({{ b.visits?.length || 0 }})</h3>
                 <svg class="w-5 h-5 text-gray-400 transition-transform" :class="expandedSections.visits ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
             </button>
-            <div v-show="expandedSections.visits" class="px-5 pb-5">
+            <div v-show="expandedSections.visits" class="px-3 sm:px-5 pb-5">
                 <div v-if="b.visits && b.visits.length > 0" class="overflow-x-auto">
                     <table class="min-w-full text-sm">
                         <thead><tr class="border-b border-gray-200">
@@ -552,11 +552,11 @@ function toggleSection(key) {
 
         <!-- Payments -->
         <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-            <button @click="toggleSection('payments')" class="w-full flex items-center justify-between p-5 ltr:text-left rtl:ltr:text-right rtl:text-left hover:bg-gray-50 transition">
+            <button @click="toggleSection('payments')" class="w-full flex items-center justify-between p-4 sm:p-5 ltr:text-left rtl:ltr:text-right rtl:text-left hover:bg-gray-50 transition">
                 <h3 class="text-lg font-semibold text-gray-800">{{ isRtl ? 'المدفوعات' : 'Payments' }} ({{ payments.length }})</h3>
                 <svg class="w-5 h-5 text-gray-400 transition-transform" :class="expandedSections.payments ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
             </button>
-            <div v-show="expandedSections.payments" class="px-5 pb-5">
+            <div v-show="expandedSections.payments" class="px-3 sm:px-5 pb-5">
                 <table v-if="payments.length > 0" class="min-w-full text-sm">
                     <thead><tr class="border-b border-gray-200">
                         <th class="px-3 py-2.5 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase">{{ isRtl ? 'التاريخ' : 'Date' }}</th>
@@ -589,7 +589,7 @@ function toggleSection(key) {
     <Teleport to="body">
         <div v-if="showPaymentModal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
             <div class="fixed inset-0 bg-black/40" @click="showPaymentModal = false"></div>
-            <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 z-10">
+            <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md mx-auto p-4 sm:p-6 z-10">
                 <div class="flex items-center justify-between mb-6">
                     <h3 class="text-lg font-semibold text-gray-800">{{ isRtl ? 'تسجيل دفعة' : 'Record Payment' }}</h3>
                     <button @click="showPaymentModal = false" class="p-1 text-gray-400 hover:text-gray-600"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg></button>
@@ -632,7 +632,7 @@ function toggleSection(key) {
     <Teleport to="body">
         <div v-if="showRescheduleModal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
             <div class="fixed inset-0 bg-black/40" @click="showRescheduleModal = false"></div>
-            <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6 z-10 max-h-[90vh] overflow-y-auto">
+            <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-auto p-4 sm:p-6 z-10 max-h-[90vh] overflow-y-auto">
                 <div class="flex items-center justify-between mb-6">
                     <h3 class="text-lg font-semibold text-gray-800">{{ isRtl ? 'إعادة جدولة الموعد' : 'Reschedule Appointment' }}</h3>
                     <button @click="showRescheduleModal = false" class="p-1 text-gray-400 hover:text-gray-600 transition">
@@ -702,7 +702,7 @@ function toggleSection(key) {
     <Teleport to="body">
         <div v-if="showRetouchModal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
             <div class="fixed inset-0 bg-black/40" @click="showRetouchModal = false"></div>
-            <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6 z-10 max-h-[90vh] overflow-y-auto">
+            <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-auto p-4 sm:p-6 z-10 max-h-[90vh] overflow-y-auto">
                 <div class="flex items-center justify-between mb-6">
                     <h3 class="text-lg font-semibold text-gray-800">{{ isRtl ? 'إضافة جلسة ريتوش' : 'Add Retouch Session' }}</h3>
                     <button @click="showRetouchModal = false" class="p-1 text-gray-400 hover:text-gray-600 transition">

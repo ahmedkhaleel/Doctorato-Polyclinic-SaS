@@ -184,7 +184,7 @@ const severityStyles = {
             <div
                 v-for="card in statsCards"
                 :key="card.label"
-                class="group relative bg-white rounded-2xl p-5 shadow-sm hover:shadow-lg border border-gray-100/80 hover:border-gray-200/80 transition-all duration-300 overflow-hidden"
+                class="group relative bg-white rounded-2xl p-4 sm:p-5 shadow-sm hover:shadow-lg border border-gray-100/80 hover:border-gray-200/80 transition-all duration-300 overflow-hidden"
             >
                 <!-- Gradient accent top -->
                 <div :class="`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${card.gradient} opacity-80`"></div>
@@ -218,7 +218,7 @@ const severityStyles = {
 
         <!-- Medical Risk Alerts Banner -->
         <div v-if="medicalAlerts && medicalAlerts.length > 0" class="bg-red-50 rounded-2xl border border-red-200 shadow-sm overflow-hidden">
-            <div class="px-6 py-4 border-b border-red-100 flex items-center gap-3">
+            <div class="px-4 sm:px-6 py-4 border-b border-red-100 flex items-center gap-3">
                 <div class="w-9 h-9 rounded-xl bg-red-100 flex items-center justify-center flex-shrink-0">
                     <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
@@ -236,7 +236,7 @@ const severityStyles = {
                 </div>
             </div>
             <div class="divide-y divide-red-100">
-                <div v-for="alert in medicalAlerts" :key="alert.visit_id" class="px-6 py-3">
+                <div v-for="alert in medicalAlerts" :key="alert.visit_id" class="px-4 sm:px-6 py-3">
                     <div class="flex items-start justify-between gap-4">
                         <div class="flex items-center gap-3 min-w-0">
                             <div class="w-8 h-8 rounded-lg bg-red-100 flex items-center justify-center text-red-700 text-xs font-bold flex-shrink-0">
@@ -265,7 +265,7 @@ const severityStyles = {
         <!-- Pending Followups + Overdue Alert -->
         <div v-if="(pendingFollowups && pendingFollowups.length > 0) || overdueFollowups > 0"
             class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
-            <div class="px-6 py-5 border-b border-gray-100 flex items-center justify-between">
+            <div class="px-4 sm:px-6 py-5 border-b border-gray-100 flex items-center justify-between flex-wrap gap-3">
                 <div class="flex items-center gap-3">
                     <div class="w-9 h-9 rounded-xl bg-amber-50 flex items-center justify-center">
                         <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -291,7 +291,7 @@ const severityStyles = {
                 </Link>
             </div>
             <div class="divide-y divide-gray-50">
-                <div v-for="f in pendingFollowups" :key="f.id" class="px-6 py-3 hover:bg-gray-50/50 transition-colors"
+                <div v-for="f in pendingFollowups" :key="f.id" class="px-4 sm:px-6 py-3 hover:bg-gray-50/50 transition-colors"
                     :class="daysUntil(f.scheduled_date) < 0 ? 'bg-red-50/30' : ''">
                     <div class="flex items-center justify-between gap-4">
                         <div class="flex items-center gap-3 min-w-0">
@@ -334,11 +334,11 @@ const severityStyles = {
         </div>
 
         <!-- Today's Queue + Pending Bookings -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
 
             <!-- Today's Queue (2/3) -->
             <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
-                <div class="px-6 py-5 border-b border-gray-100 flex items-center justify-between">
+                <div class="px-4 sm:px-6 py-5 border-b border-gray-100 flex items-center justify-between">
                     <div>
                         <h2 class="text-[15px] font-semibold text-gray-900">{{ isRtl ? 'طابور اليوم' : "Today's Queue" }}</h2>
                         <p class="text-xs text-gray-400 mt-0.5">{{ isRtl ? 'المرضى في الانتظار والعلاج' : 'Patients waiting and in progress' }}</p>
@@ -357,12 +357,12 @@ const severityStyles = {
                     <table class="min-w-full">
                         <thead>
                             <tr class="bg-gray-50/50">
-                                <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider">#</th>
-                                <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'المريض' : 'Patient' }}</th>
-                                <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'الطبيب' : 'Doctor' }}</th>
-                                <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'الخدمة' : 'Service' }}</th>
-                                <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'الحالة' : 'Status' }}</th>
-                                <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'الانتظار' : 'Wait' }}</th>
+                                <th class="px-3 sm:px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider">#</th>
+                                <th class="px-3 sm:px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'المريض' : 'Patient' }}</th>
+                                <th class="px-3 sm:px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider hidden sm:table-cell">{{ isRtl ? 'الطبيب' : 'Doctor' }}</th>
+                                <th class="px-3 sm:px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider hidden sm:table-cell">{{ isRtl ? 'الخدمة' : 'Service' }}</th>
+                                <th class="px-3 sm:px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'الحالة' : 'Status' }}</th>
+                                <th class="px-3 sm:px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider hidden sm:table-cell">{{ isRtl ? 'الانتظار' : 'Wait' }}</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100">
@@ -371,8 +371,8 @@ const severityStyles = {
                                 :key="visit.id"
                                 class="hover:bg-gray-50/50 transition-colors duration-150"
                             >
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400 font-mono">{{ index + 1 }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td class="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-400 font-mono">{{ index + 1 }}</td>
+                                <td class="px-3 sm:px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center gap-3">
                                         <div class="w-8 h-8 rounded-lg bg-teal-50 flex items-center justify-center text-teal-600 text-xs font-bold flex-shrink-0">
                                             {{ (visit.patient?.name || visit.patient?.full_name || '?').charAt(0).toUpperCase() }}
@@ -382,13 +382,13 @@ const severityStyles = {
                                         </span>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                                <td class="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-600 hidden sm:table-cell">
                                     {{ visit.doctor?.name_en || visit.doctor?.name || '-' }}
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                                <td class="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-600 hidden sm:table-cell">
                                     {{ visit.service?.name_en || visit.service?.name || '-' }}
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td class="px-3 sm:px-6 py-4 whitespace-nowrap">
                                     <span
                                         :class="[getStatusStyle(visit.status).bg, getStatusStyle(visit.status).text]"
                                         class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold"
@@ -397,7 +397,7 @@ const severityStyles = {
                                         {{ getStatusStyle(visit.status).label }}
                                     </span>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td class="px-3 sm:px-6 py-4 whitespace-nowrap hidden sm:table-cell">
                                     <span
                                         v-if="visit.status === 'waiting' || visit.status === 'in_progress'"
                                         :class="waitTimeColor(waitTime(visit.created_at))"
@@ -428,7 +428,7 @@ const severityStyles = {
 
             <!-- Pending Bookings (1/3) -->
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
-                <div class="px-6 py-5 border-b border-gray-100 flex items-center justify-between">
+                <div class="px-4 sm:px-6 py-5 border-b border-gray-100 flex items-center justify-between">
                     <div>
                         <h2 class="text-[15px] font-semibold text-gray-900">{{ isRtl ? 'حجوزات معلقة' : 'Pending Bookings' }}</h2>
                         <p class="text-xs text-gray-400 mt-0.5">{{ isRtl ? 'في انتظار التأكيد' : 'Awaiting confirmation' }}</p>
@@ -447,7 +447,7 @@ const severityStyles = {
                     <div
                         v-for="booking in pendingBookings"
                         :key="booking.id"
-                        class="px-6 py-4 hover:bg-gray-50/50 transition-colors duration-150"
+                        class="px-4 sm:px-6 py-4 hover:bg-gray-50/50 transition-colors duration-150"
                     >
                         <div class="flex items-start justify-between gap-3">
                             <div class="flex items-center gap-3 min-w-0">
@@ -509,11 +509,11 @@ const severityStyles = {
         </div>
 
         <!-- Dental Lab Orders Overview -->
-        <div v-if="dental" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div v-if="dental" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
 
             <!-- Dental Alert Cards (1/3) -->
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
-                <div class="px-6 py-5 border-b border-gray-100">
+                <div class="px-4 sm:px-6 py-5 border-b border-gray-100">
                     <div class="flex items-center gap-3">
                         <div class="w-9 h-9 rounded-xl bg-cyan-50 flex items-center justify-center">
                             <svg class="w-5 h-5 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3C10.5 3 9 4.5 8.5 6.5C8 8.5 7 9.5 6 10.5C5 11.5 4 13 4 15C4 17 5.5 19 7.5 19C9 19 10 18 10.5 17C11 16 11.5 15.5 12 15.5C12.5 15.5 13 16 13.5 17C14 18 15 19 16.5 19C18.5 19 20 17 20 15C20 13 19 11.5 18 10.5C17 9.5 16 8.5 15.5 6.5C15 4.5 13.5 3 12 3Z" /></svg>
@@ -525,7 +525,7 @@ const severityStyles = {
                     </div>
                 </div>
                 <div class="divide-y divide-gray-50">
-                    <Link href="/secretary/dental/lab-orders?status=ready" class="flex items-center justify-between px-6 py-4 hover:bg-emerald-50/30 transition-colors">
+                    <Link href="/secretary/dental/lab-orders?status=ready" class="flex items-center justify-between px-4 sm:px-6 py-4 hover:bg-emerald-50/30 transition-colors">
                         <div class="flex items-center gap-3">
                             <div class="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center">
                                 <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -537,7 +537,7 @@ const severityStyles = {
                         </div>
                         <span class="inline-flex items-center justify-center min-w-[28px] h-7 px-2 rounded-lg text-sm font-bold" :class="(dental.lab_ready ?? 0) > 0 ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-400'">{{ dental.lab_ready ?? 0 }}</span>
                     </Link>
-                    <Link href="/secretary/dental/lab-orders" class="flex items-center justify-between px-6 py-4 hover:bg-amber-50/30 transition-colors">
+                    <Link href="/secretary/dental/lab-orders" class="flex items-center justify-between px-4 sm:px-6 py-4 hover:bg-amber-50/30 transition-colors">
                         <div class="flex items-center gap-3">
                             <div class="w-8 h-8 rounded-lg bg-amber-50 flex items-center justify-center">
                                 <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -549,7 +549,7 @@ const severityStyles = {
                         </div>
                         <span class="inline-flex items-center justify-center min-w-[28px] h-7 px-2 rounded-lg text-sm font-bold bg-amber-100 text-amber-700">{{ dental.lab_pending ?? 0 }}</span>
                     </Link>
-                    <Link href="/secretary/dental/lab-orders?overdue=1" class="flex items-center justify-between px-6 py-4 hover:bg-red-50/30 transition-colors">
+                    <Link href="/secretary/dental/lab-orders?overdue=1" class="flex items-center justify-between px-4 sm:px-6 py-4 hover:bg-red-50/30 transition-colors">
                         <div class="flex items-center gap-3">
                             <div class="w-8 h-8 rounded-lg bg-red-50 flex items-center justify-center">
                                 <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
@@ -561,7 +561,7 @@ const severityStyles = {
                         </div>
                         <span class="inline-flex items-center justify-center min-w-[28px] h-7 px-2 rounded-lg text-sm font-bold" :class="(dental.lab_overdue ?? 0) > 0 ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-400'">{{ dental.lab_overdue ?? 0 }}</span>
                     </Link>
-                    <Link href="/secretary/dental/treatment-plans" class="flex items-center justify-between px-6 py-4 hover:bg-blue-50/30 transition-colors">
+                    <Link href="/secretary/dental/treatment-plans" class="flex items-center justify-between px-4 sm:px-6 py-4 hover:bg-blue-50/30 transition-colors">
                         <div class="flex items-center gap-3">
                             <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
                                 <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
@@ -578,7 +578,7 @@ const severityStyles = {
 
             <!-- Recent Lab Orders (2/3) -->
             <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
-                <div class="px-6 py-5 border-b border-gray-100 flex items-center justify-between">
+                <div class="px-4 sm:px-6 py-5 border-b border-gray-100 flex items-center justify-between">
                     <div>
                         <h2 class="text-[15px] font-semibold text-gray-900">{{ isRtl ? 'آخر طلبات المعمل' : 'Recent Lab Orders' }}</h2>
                         <p class="text-xs text-gray-400 mt-0.5">{{ isRtl ? 'الطلبات النشطة الأخيرة' : 'Latest active orders' }}</p>
@@ -595,16 +595,16 @@ const severityStyles = {
                     <table v-if="dental.recent_lab_orders?.length > 0" class="min-w-full">
                         <thead>
                             <tr class="bg-gray-50/50">
-                                <th class="px-6 py-3 ltr:text-left rtl:text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'المريض' : 'Patient' }}</th>
-                                <th class="px-6 py-3 ltr:text-left rtl:text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'الطبيب' : 'Doctor' }}</th>
-                                <th class="px-6 py-3 ltr:text-left rtl:text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'النوع' : 'Type' }}</th>
-                                <th class="px-6 py-3 ltr:text-left rtl:text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'الحالة' : 'Status' }}</th>
-                                <th class="px-6 py-3 ltr:text-left rtl:text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'التاريخ المتوقع' : 'Expected' }}</th>
+                                <th class="px-3 sm:px-6 py-3 ltr:text-left rtl:text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'المريض' : 'Patient' }}</th>
+                                <th class="px-3 sm:px-6 py-3 ltr:text-left rtl:text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider hidden sm:table-cell">{{ isRtl ? 'الطبيب' : 'Doctor' }}</th>
+                                <th class="px-3 sm:px-6 py-3 ltr:text-left rtl:text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider hidden sm:table-cell">{{ isRtl ? 'النوع' : 'Type' }}</th>
+                                <th class="px-3 sm:px-6 py-3 ltr:text-left rtl:text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'الحالة' : 'Status' }}</th>
+                                <th class="px-3 sm:px-6 py-3 ltr:text-left rtl:text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider hidden sm:table-cell">{{ isRtl ? 'التاريخ المتوقع' : 'Expected' }}</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100">
                             <tr v-for="order in dental.recent_lab_orders" :key="order.id" class="hover:bg-gray-50/50 transition-colors duration-150">
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td class="px-3 sm:px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center gap-2">
                                         <div class="w-7 h-7 rounded-lg bg-cyan-50 flex items-center justify-center text-cyan-600 text-xs font-bold flex-shrink-0">
                                             {{ (order.patient?.full_name || '?').charAt(0).toUpperCase() }}
@@ -612,9 +612,9 @@ const severityStyles = {
                                         <span class="text-sm font-semibold text-gray-900">{{ order.patient?.full_name || '-' }}</span>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ order.doctor?.name_en || order.doctor?.name_ar || '-' }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 capitalize">{{ (order.item_type || '-').replace('_', ' ') }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td class="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-600 hidden sm:table-cell">{{ order.doctor?.name_en || order.doctor?.name_ar || '-' }}</td>
+                                <td class="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-600 capitalize hidden sm:table-cell">{{ (order.item_type || '-').replace('_', ' ') }}</td>
+                                <td class="px-3 sm:px-6 py-4 whitespace-nowrap">
                                     <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold"
                                         :class="{
                                             'bg-emerald-50 text-emerald-700': order.status === 'ready',
@@ -632,7 +632,7 @@ const severityStyles = {
                                         {{ order.status?.replace('_', ' ') }}
                                     </span>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ order.expected_date ? formatDate(order.expected_date) : '-' }}</td>
+                                <td class="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500 hidden sm:table-cell">{{ order.expected_date ? formatDate(order.expected_date) : '-' }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -650,7 +650,7 @@ const severityStyles = {
 
         <!-- Recent Payments -->
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
-            <div class="px-6 py-5 border-b border-gray-100 flex items-center justify-between">
+            <div class="px-4 sm:px-6 py-5 border-b border-gray-100 flex items-center justify-between">
                 <div>
                     <h2 class="text-[15px] font-semibold text-gray-900">{{ isRtl ? 'المدفوعات الأخيرة' : 'Recent Payments' }}</h2>
                     <p class="text-xs text-gray-400 mt-0.5">{{ isRtl ? 'آخر المعاملات المالية اليوم' : 'Latest payment transactions today' }}</p>
@@ -676,11 +676,11 @@ const severityStyles = {
                     </colgroup>
                     <thead>
                         <tr class="bg-gray-50/50">
-                            <th class="px-5 py-3 text-start text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'المريض' : 'Patient' }}</th>
-                            <th class="px-5 py-3 text-start text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'الفاتورة' : 'Invoice' }}</th>
-                            <th class="px-5 py-3 text-start text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'الطريقة' : 'Method' }}</th>
-                            <th class="px-5 py-3 text-start text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'المبلغ' : 'Amount' }}</th>
-                            <th class="px-5 py-3 text-start text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'الوقت' : 'Time' }}</th>
+                            <th class="px-3 sm:px-5 py-3 text-start text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'المريض' : 'Patient' }}</th>
+                            <th class="px-3 sm:px-5 py-3 text-start text-[11px] font-semibold text-gray-500 uppercase tracking-wider hidden sm:table-cell">{{ isRtl ? 'الفاتورة' : 'Invoice' }}</th>
+                            <th class="px-3 sm:px-5 py-3 text-start text-[11px] font-semibold text-gray-500 uppercase tracking-wider hidden sm:table-cell">{{ isRtl ? 'الطريقة' : 'Method' }}</th>
+                            <th class="px-3 sm:px-5 py-3 text-start text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'المبلغ' : 'Amount' }}</th>
+                            <th class="px-3 sm:px-5 py-3 text-start text-[11px] font-semibold text-gray-500 uppercase tracking-wider hidden sm:table-cell">{{ isRtl ? 'الوقت' : 'Time' }}</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
@@ -689,7 +689,7 @@ const severityStyles = {
                             :key="payment.id"
                             class="hover:bg-gray-50/50 transition-colors duration-150"
                         >
-                            <td class="px-5 py-4 whitespace-nowrap">
+                            <td class="px-3 sm:px-5 py-4 whitespace-nowrap">
                                 <div class="flex items-center gap-3">
                                     <div class="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-600 text-xs font-bold flex-shrink-0">
                                         {{ (payment.invoice?.patient?.full_name || payment.patient?.full_name || '?').charAt(0).toUpperCase() }}
@@ -699,18 +699,18 @@ const severityStyles = {
                                     </span>
                                 </div>
                             </td>
-                            <td class="px-5 py-4 whitespace-nowrap text-sm text-gray-500 font-mono">
+                            <td class="px-3 sm:px-5 py-4 whitespace-nowrap text-sm text-gray-500 font-mono hidden sm:table-cell">
                                 #{{ payment.invoice_id || payment.invoice?.id || '-' }}
                             </td>
-                            <td class="px-5 py-4 whitespace-nowrap">
+                            <td class="px-3 sm:px-5 py-4 whitespace-nowrap hidden sm:table-cell">
                                 <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-gray-50 text-gray-600 capitalize">
                                     {{ isRtl ? (payment.payment_method?.name_ar || payment.payment_method?.name_en || payment.method || '-') : (payment.payment_method?.name_en || payment.payment_method?.name_ar || payment.method || '-') }}
                                 </span>
                             </td>
-                            <td class="px-5 py-4 whitespace-nowrap text-sm font-bold text-emerald-600">
+                            <td class="px-3 sm:px-5 py-4 whitespace-nowrap text-sm font-bold text-emerald-600">
                                 {{ formatCurrency(payment.amount) }}
                             </td>
-                            <td class="px-5 py-4 whitespace-nowrap text-sm text-gray-400">
+                            <td class="px-3 sm:px-5 py-4 whitespace-nowrap text-sm text-gray-400 hidden sm:table-cell">
                                 {{ formatTime(payment.created_at) }}
                             </td>
                         </tr>

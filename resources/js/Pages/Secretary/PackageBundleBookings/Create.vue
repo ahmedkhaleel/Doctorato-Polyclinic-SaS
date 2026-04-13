@@ -344,7 +344,7 @@ function submit() {
         <!-- Step 1: Patient & Bundle Selection -->
         <div v-show="currentStep === 1" class="space-y-6">
             <!-- Patient Search -->
-            <div class="bg-white rounded-lg shadow-sm p-6">
+            <div class="bg-white rounded-lg shadow-sm p-4 sm:p-6">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">{{ isRtl ? 'اختر المريض' : 'Select Patient' }}</h3>
 
                 <div v-if="selectedPatient" class="flex items-center justify-between p-4 border-2 rounded-lg" style="border-color: #0d9488; background-color: rgba(13,148,136,0.05);">
@@ -415,14 +415,14 @@ function submit() {
             </div>
 
             <!-- Bundle Selection -->
-            <div class="bg-white rounded-lg shadow-sm p-6">
+            <div class="bg-white rounded-lg shadow-sm p-4 sm:p-6">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">{{ isRtl ? 'اختر الباقة' : 'Select Package Bundle' }}</h3>
 
                 <div v-if="bundles.length === 0" class="text-center py-8 text-gray-500 text-sm">
                     No active bundles available. Please create a package bundle first.
                 </div>
 
-                <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     <button v-for="bundle in bundles" :key="bundle.id"
                             @click="selectedBundleId = bundle.id"
                             class="relative ltr:text-left rtl:ltr:text-right rtl:text-left p-5 rounded-xl border-2 transition-all duration-200 hover:shadow-md"
@@ -473,7 +473,7 @@ function submit() {
 
         <!-- Step 2: Assign Doctors per Service -->
         <div v-show="currentStep === 2" class="space-y-6">
-            <div class="bg-white rounded-lg shadow-sm p-6">
+            <div class="bg-white rounded-lg shadow-sm p-4 sm:p-6">
                 <h3 class="text-lg font-semibold text-gray-800 mb-2">{{ isRtl ? 'تعيين الأطباء' : 'Assign Doctors' }}</h3>
                 <p class="text-sm text-gray-500 mb-6">{{ isRtl ? 'عيّن طبيباً لكل خدمة في الباقة.' : 'Assign a doctor for each service in the bundle.' }}</p>
 
@@ -510,7 +510,7 @@ function submit() {
         <!-- Step 3: Schedule Appointments -->
         <div v-show="currentStep === 3" class="space-y-6">
             <div v-for="(sa, sIndex) in serviceAssignments" :key="sa.package_bundle_service_id"
-                 class="bg-white rounded-lg shadow-sm p-6">
+                 class="bg-white rounded-lg shadow-sm p-4 sm:p-6">
                 <div class="flex items-center gap-3 mb-4 pb-3 border-b border-gray-200">
                     <div class="w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm font-bold" style="background-color: #0d9488;">
                         {{ sIndex + 1 }}
@@ -602,7 +602,7 @@ function submit() {
 
         <!-- Step 4: Review & Confirm -->
         <div v-show="currentStep === 4" class="space-y-6">
-            <div class="bg-white rounded-lg shadow-sm p-6">
+            <div class="bg-white rounded-lg shadow-sm p-4 sm:p-6">
                 <h3 class="text-lg font-semibold text-gray-800 mb-6">{{ isRtl ? 'مراجعة وتأكيد' : 'Review & Confirm' }}</h3>
 
                 <!-- Patient Summary -->

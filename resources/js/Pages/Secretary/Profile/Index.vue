@@ -44,9 +44,9 @@ function formatDate(date) {
             <p class="text-sm text-gray-500 mt-1">{{ isRtl ? 'عرض وتحديث ملفك الشخصي' : 'View and update your profile' }}</p>
         </div>
 
-        <div class="grid lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
             <!-- Profile Card -->
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6">
                 <div class="text-center">
                     <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-teal-500 to-cyan-500 flex items-center justify-center mx-auto mb-3 text-white text-2xl font-bold">
                         {{ user.name?.charAt(0)?.toUpperCase() || 'S' }}
@@ -69,12 +69,12 @@ function formatDate(date) {
             </div>
 
             <!-- Edit Forms -->
-            <div class="lg:col-span-2 space-y-6">
+            <div class="lg:col-span-2 space-y-4 sm:space-y-6">
                 <!-- Profile Form -->
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6">
                     <h3 class="text-base font-bold text-gray-800 mb-4">{{ isRtl ? 'تعديل الملف الشخصي' : 'Edit Profile' }}</h3>
                     <form @submit.prevent="updateProfile" class="space-y-4">
-                        <div class="grid md:grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <label class="text-xs font-medium text-gray-500 mb-1 block">{{ isRtl ? 'الاسم' : 'Name' }}</label>
                                 <input v-model="profileForm.name" type="text" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500" required />
@@ -95,7 +95,7 @@ function formatDate(date) {
                 </div>
 
                 <!-- Password Form -->
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6">
                     <h3 class="text-base font-bold text-gray-800 mb-4">{{ isRtl ? 'تغيير كلمة المرور' : 'Change Password' }}</h3>
                     <form @submit.prevent="updatePassword" class="space-y-4">
                         <div>
@@ -103,7 +103,7 @@ function formatDate(date) {
                             <input v-model="passwordForm.current_password" type="password" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500" required />
                             <p v-if="passwordForm.errors.current_password" class="text-xs text-red-500 mt-1">{{ passwordForm.errors.current_password }}</p>
                         </div>
-                        <div class="grid md:grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <label class="text-xs font-medium text-gray-500 mb-1 block">{{ isRtl ? 'كلمة المرور الجديدة' : 'New Password' }}</label>
                                 <input v-model="passwordForm.password" type="password" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500" required />

@@ -325,7 +325,7 @@ function startNewImport() {
 <div class="min-h-screen bg-gradient-to-br from-slate-50 via-teal-50/20 to-slate-50 p-4 md:p-6" :dir="isRtl ? 'rtl' : 'ltr'">
 
     <!-- Header -->
-    <div :class="['relative overflow-hidden rounded-2xl bg-gradient-to-r from-teal-600 via-teal-500 to-emerald-500 p-6 md:p-8 mb-6 shadow-xl transition-all duration-700', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4']"
+    <div :class="['relative overflow-hidden rounded-2xl bg-gradient-to-r from-teal-600 via-teal-500 to-emerald-500 p-5 sm:p-6 md:p-8 mb-6 shadow-xl transition-all duration-700', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4']"
          :style="{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }">
         <div class="absolute inset-0 opacity-10">
             <div class="absolute -top-10 -right-10 w-40 h-40 bg-white rounded-full"></div>
@@ -421,7 +421,7 @@ function startNewImport() {
 
     <!-- Step 1: Upload -->
     <div v-if="step === 1"
-         :class="['bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 transition-all duration-700 delay-200', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4']"
+         :class="['bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6 md:p-8 transition-all duration-700 delay-200', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4']"
          :style="{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }">
 
         <!-- Drop zone -->
@@ -517,7 +517,7 @@ function startNewImport() {
 
     <!-- Step 2: Map Columns -->
     <div v-if="step === 2"
-         class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 transition-all duration-500">
+         class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6 md:p-8 transition-all duration-500">
 
         <!-- Summary -->
         <div class="flex items-center justify-between mb-6 pb-4 border-b border-gray-100">
@@ -659,7 +659,7 @@ function startNewImport() {
 
     <!-- Step 3: Confirm -->
     <div v-if="step === 3"
-         class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 transition-all duration-500">
+         class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6 md:p-8 transition-all duration-500">
 
         <div class="text-center mb-8">
             <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-teal-100 flex items-center justify-center">
@@ -826,7 +826,7 @@ function startNewImport() {
 
     <!-- Step 4: Import Results -->
     <div v-if="step === 4 && importResults"
-         class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 transition-all duration-500">
+         class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6 md:p-8 transition-all duration-500">
 
         <!-- Success/Partial/Error header -->
         <div class="text-center mb-8">

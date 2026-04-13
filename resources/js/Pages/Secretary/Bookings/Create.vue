@@ -539,7 +539,7 @@ const stepLabels = computed(() => [
 
         <!-- Booking Type Selector -->
             <div class="mb-6">
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-5 max-w-4xl mx-auto">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-5 max-w-4xl mx-auto">
                     <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">{{ isRtl ? 'نوع الحجز' : 'Booking Type' }}</h3>
                     <div class="flex flex-wrap gap-3">
                         <button
@@ -612,7 +612,7 @@ const stepLabels = computed(() => [
 
             <!-- Follow-up Eligibility Banner -->
             <div v-if="followUpInfo?.eligible && bookingType === 'dermatology_consultation'" class="mb-6 max-w-4xl mx-auto">
-                <div class="flex items-start gap-3 px-5 py-4 bg-teal-50 border border-teal-200 rounded-2xl">
+                <div class="flex items-start gap-3 px-3 sm:px-5 py-4 bg-teal-50 border border-teal-200 rounded-2xl">
                     <div class="w-8 h-8 rounded-lg bg-teal-100 flex items-center justify-center flex-shrink-0 mt-0.5">
                         <svg class="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                     </div>
@@ -680,7 +680,7 @@ const stepLabels = computed(() => [
             <!-- STEP 1: Select Patient                         -->
             <!-- ============================================= -->
             <div v-show="currentStep === 1">
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6">
                     <h2 class="text-sm font-bold text-gray-800 mb-4 border-b border-gray-100 pb-2">{{ isRtl ? 'اختر المريض' : 'Select Patient' }}</h2>
 
                     <!-- Patient Search -->
@@ -774,7 +774,7 @@ const stepLabels = computed(() => [
             <div v-show="currentStep === 2">
                 <!-- Consultation Mode -->
                 <template v-if="isConsultation">
-                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6">
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6">
                         <div class="border-b border-gray-100 pb-2 mb-4">
                             <h2 class="text-sm font-bold text-gray-800">
                                 {{ bookingType === 'dermatology_consultation' ? 'Dermatology Consultation' : bookingType === 'dental_consultation' ? 'Dental Consultation' : 'Cosmetic Consultation' }}
@@ -846,7 +846,7 @@ const stepLabels = computed(() => [
 
                 <!-- Service Mode -->
                 <template v-else>
-                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6">
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6">
                         <div class="flex items-center justify-between border-b border-gray-100 pb-2 mb-4">
                             <h2 class="text-sm font-bold text-gray-800">Services</h2>
                             <button
@@ -990,7 +990,7 @@ const stepLabels = computed(() => [
                     <div
                         v-for="(row, sIndex) in serviceRows"
                         :key="sIndex"
-                        class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6"
+                        class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6"
                     >
                         <h2 class="text-sm font-bold text-gray-800 mb-1">
                             {{ isConsultation
@@ -1016,7 +1016,7 @@ const stepLabels = computed(() => [
                                     <span class="text-xs font-semibold text-gray-500">Session {{ aIndex + 1 }}</span>
                                 </div>
 
-                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                                     <!-- Doctor override -->
                                     <div>
                                         <label class="block text-xs font-medium text-gray-500 mb-1">{{ isRtl ? 'الطبيب' : 'Doctor' }}</label>
@@ -1116,7 +1116,7 @@ const stepLabels = computed(() => [
             <div v-show="currentStep === 4">
                 <div class="space-y-6">
                     <!-- Patient Summary -->
-                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6">
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6">
                         <h2 class="text-sm font-bold text-gray-800 mb-4 border-b border-gray-100 pb-2">{{ isRtl ? 'المريض' : 'Patient' }}</h2>
                         <div v-if="selectedPatient" class="flex items-center gap-4">
                             <div class="w-12 h-12 rounded-xl bg-gradient-to-r from-teal-500 to-cyan-500 flex items-center justify-center text-white text-lg font-bold flex-shrink-0">
@@ -1133,7 +1133,7 @@ const stepLabels = computed(() => [
                     </div>
 
                     <!-- Services Summary -->
-                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6">
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6">
                         <h2 class="text-sm font-bold text-gray-800 mb-4 border-b border-gray-100 pb-2">Services & Appointments</h2>
                         <div class="space-y-5">
                             <div v-for="(row, sIndex) in serviceRows" :key="sIndex">
@@ -1194,7 +1194,7 @@ const stepLabels = computed(() => [
                     </div>
 
                     <!-- Notes -->
-                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6">
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6">
                         <h2 class="text-sm font-bold text-gray-800 mb-4 border-b border-gray-100 pb-2">{{ isRtl ? 'ملاحظات' : 'Notes' }}</h2>
                         <textarea
                             v-model="notes"
@@ -1205,7 +1205,7 @@ const stepLabels = computed(() => [
                     </div>
 
                     <!-- Promo Code -->
-                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6">
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6">
                         <PromoCodeInput
                             v-model="promoCode"
                             booking-type="service"

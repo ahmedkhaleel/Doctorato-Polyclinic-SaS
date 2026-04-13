@@ -31,7 +31,7 @@ function formatDate(date) {
 
 <template>
     <div>
-        <div class="flex items-center justify-between mb-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
             <div>
                 <h1 class="text-2xl font-bold text-gray-900">{{ isRtl ? 'الوصفات الطبية' : 'Prescriptions' }}</h1>
                 <p class="text-sm text-gray-500 mt-1">View patient prescriptions (read-only)</p>
@@ -40,20 +40,21 @@ function formatDate(date) {
 
         <!-- Search -->
         <div class="flex flex-wrap items-center gap-3 mb-6">
-            <input v-model="search" type="text" :placeholder="isRtl ? 'بحث بالمريض أو الطبيب...' : 'Search by patient or doctor...'" class="px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500 w-72" />
+            <input v-model="search" type="text" :placeholder="isRtl ? 'بحث بالمريض أو الطبيب...' : 'Search by patient or doctor...'" class="px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500 w-full sm:w-72" />
         </div>
 
         <!-- Table -->
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
+            <div class="overflow-x-auto">
             <table class="w-full text-sm">
                 <thead>
                     <tr class="bg-gray-50/80">
                         <th class="ltr:text-left rtl:ltr:text-right rtl:text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Rx #</th>
                         <th class="ltr:text-left rtl:ltr:text-right rtl:text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'المريض' : 'Patient' }}</th>
                         <th class="ltr:text-left rtl:ltr:text-right rtl:text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'الطبيب' : 'Doctor' }}</th>
-                        <th class="ltr:text-left rtl:ltr:text-right rtl:text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'التاريخ' : 'Date' }}</th>
+                        <th class="ltr:text-left rtl:ltr:text-right rtl:text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase hidden sm:table-cell">{{ isRtl ? 'التاريخ' : 'Date' }}</th>
                         <th class="ltr:text-left rtl:ltr:text-right rtl:text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Items</th>
-                        <th class="ltr:text-left rtl:ltr:text-right rtl:text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Diagnosis</th>
+                        <th class="ltr:text-left rtl:ltr:text-right rtl:text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase hidden sm:table-cell">Diagnosis</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
@@ -66,16 +67,17 @@ function formatDate(date) {
                             <div class="text-xs text-gray-400">{{ rx.patient?.phone || '' }}</div>
                         </td>
                         <td class="px-6 py-3 text-gray-600">{{ rx.doctor?.name_en || rx.doctor?.name_ar || '-' }}</td>
-                        <td class="px-6 py-3 text-gray-500">{{ formatDate(rx.prescription_date || rx.created_at) }}</td>
+                        <td class="px-6 py-3 text-gray-500 hidden sm:table-cell">{{ formatDate(rx.prescription_date || rx.created_at) }}</td>
                         <td class="px-6 py-3">
                             <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-teal-50 text-teal-700">
                                 {{ rx.items?.length || 0 }} items
                             </span>
                         </td>
-                        <td class="px-6 py-3 text-gray-500 max-w-xs truncate">{{ rx.diagnosis || '-' }}</td>
+                        <td class="px-6 py-3 text-gray-500 max-w-xs truncate hidden sm:table-cell">{{ rx.diagnosis || '-' }}</td>
                     </tr>
                 </tbody>
             </table>
+            </div>
 
             <div v-if="prescriptions.data?.length === 0" class="py-12 text-center">
                 <p class="text-sm text-gray-400">{{ isRtl ? 'لا توجد وصفات طبية' : 'No prescriptions found' }}</p>

@@ -926,7 +926,7 @@ const tabIndicatorStyle = computed(() => {
                             </div>
                         </div>
 
-                        <div class="flex flex-col lg:flex-row lg:items-start gap-6">
+                        <div class="flex flex-col lg:flex-row lg:items-start gap-4 sm:gap-6">
                             <!-- Avatar + Info -->
                             <div class="flex items-start gap-5 flex-1">
                                 <!-- Avatar with score gauge -->
@@ -1300,7 +1300,7 @@ const tabIndicatorStyle = computed(() => {
 
             <!-- Main Content: 2-col layout -->
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-2 pt-6">
-                <div class="flex flex-col lg:flex-row gap-6">
+                <div class="flex flex-col lg:flex-row gap-4 sm:gap-6">
 
                     <!-- Main Content Area (2/3) -->
                     <div
@@ -1311,7 +1311,7 @@ const tabIndicatorStyle = computed(() => {
                         <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
                             <!-- Tab Header with Animated Indicator -->
                             <div class="relative">
-                                <div class="flex relative z-10">
+                                <div class="flex relative z-10 overflow-x-auto scrollbar-none">
                                     <button
                                         v-for="tab in [
                                             { key: 'activity', en: 'Activities', ar: 'النشاطات', icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z', count: (activities || []).length },
@@ -2254,7 +2254,7 @@ const tabIndicatorStyle = computed(() => {
             >
                 <div v-if="showConvertModal" class="fixed inset-0 z-50 flex items-center justify-center p-4" :dir="isRtl ? 'rtl' : 'ltr'">
                     <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" @click="showConvertModal = false"></div>
-                    <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 transform transition-all duration-300">
+                    <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md p-4 sm:p-6 transform transition-all duration-300">
                         <div class="flex items-center gap-3 mb-5">
                             <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center">
                                 <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
@@ -2328,7 +2328,7 @@ const tabIndicatorStyle = computed(() => {
             >
                 <div v-if="showLostModal" class="fixed inset-0 z-50 flex items-center justify-center p-4" :dir="isRtl ? 'rtl' : 'ltr'">
                     <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" @click="showLostModal = false"></div>
-                    <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 transform transition-all duration-300">
+                    <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md p-4 sm:p-6 transform transition-all duration-300">
                         <div class="flex items-center gap-3 mb-5">
                             <div class="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center">
                                 <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>

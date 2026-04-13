@@ -399,7 +399,7 @@ function logout()        { router.post('/secretary/logout'); }
             </header>
 
             <!-- Page content -->
-            <main class="flex-1 p-4 lg:p-8">
+            <main class="flex-1 p-4 lg:p-8 pb-24 md:pb-4">
                 <slot />
             </main>
 
@@ -424,6 +424,43 @@ function logout()        { router.post('/secretary/logout'); }
 
         <!-- Chat Toast Notifications -->
         <ChatToast panelPrefix="secretary" accentColor="#14b8a6" />
+
+        <!-- Mobile Bottom Navigation Bar -->
+        <Teleport to="body">
+            <div class="fixed bottom-0 left-0 right-0 z-40 md:hidden">
+                <div class="bg-white/95 backdrop-blur-lg border-t border-gray-200 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] px-2 pb-safe">
+                    <div class="flex items-center justify-around py-2">
+                        <!-- Dashboard -->
+                        <Link href="/secretary" :class="['flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-all duration-200', currentUrl === '/secretary' || currentUrl === '/secretary/' ? 'text-teal-600 bg-teal-50' : 'text-gray-500 hover:text-teal-600 hover:bg-teal-50']">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25a2.25 2.25 0 01-2.25-2.25v-2.25z"/></svg>
+                            <span class="text-[10px] font-semibold">{{ isRtl ? 'لوحة' : 'Home' }}</span>
+                        </Link>
+                        <!-- Queue -->
+                        <Link href="/secretary/queue" :class="['flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-all duration-200', currentUrl.startsWith('/secretary/queue') ? 'text-teal-600 bg-teal-50' : 'text-gray-500 hover:text-teal-600 hover:bg-teal-50']">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z"/></svg>
+                            <span class="text-[10px] font-semibold">{{ isRtl ? 'الطابور' : 'Queue' }}</span>
+                        </Link>
+                        <!-- New Booking (center, prominent) -->
+                        <Link href="/secretary/bookings/create" class="flex flex-col items-center gap-0.5 -mt-5">
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-teal-500 to-cyan-500 flex items-center justify-center shadow-lg shadow-teal-500/30 ring-4 ring-white">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+                            </div>
+                            <span class="text-[10px] font-bold text-teal-600">{{ isRtl ? 'حجز' : 'Book' }}</span>
+                        </Link>
+                        <!-- Patients -->
+                        <Link href="/secretary/patients" :class="['flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-all duration-200', currentUrl.startsWith('/secretary/patients') ? 'text-teal-600 bg-teal-50' : 'text-gray-500 hover:text-teal-600 hover:bg-teal-50']">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/></svg>
+                            <span class="text-[10px] font-semibold">{{ isRtl ? 'المرضى' : 'Patients' }}</span>
+                        </Link>
+                        <!-- More (opens sidebar) -->
+                        <button @click="toggleSidebar()" class="flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl text-gray-500 hover:text-teal-600 hover:bg-teal-50 transition-all duration-200">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/></svg>
+                            <span class="text-[10px] font-semibold">{{ isRtl ? 'المزيد' : 'More' }}</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </Teleport>
     </div>
 </template>
 
@@ -443,5 +480,8 @@ function logout()        { router.post('/secretary/logout'); }
 }
 .nav-collapse {
     will-change: max-height, opacity;
+}
+.pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 0.5rem);
 }
 </style>

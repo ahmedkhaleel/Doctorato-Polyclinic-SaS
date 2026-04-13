@@ -179,7 +179,7 @@ const streakMessage = computed(() => {
 <div class="min-h-screen bg-gradient-to-br from-slate-50 via-teal-50/20 to-slate-50 p-4 md:p-6" :dir="isRtl ? 'rtl' : 'ltr'">
 
     <!-- Header -->
-    <div :class="['relative overflow-hidden rounded-2xl bg-gradient-to-r from-teal-600 via-teal-500 to-emerald-500 p-6 md:p-8 mb-6 shadow-xl transition-all duration-700', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4']"
+    <div :class="['relative overflow-hidden rounded-2xl bg-gradient-to-r from-teal-600 via-teal-500 to-emerald-500 p-5 sm:p-6 md:p-8 mb-6 shadow-xl transition-all duration-700', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4']"
          :style="{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }">
         <div class="absolute inset-0 opacity-10">
             <div class="absolute -top-10 -right-10 w-40 h-40 bg-white rounded-full"></div>
@@ -397,9 +397,9 @@ const streakMessage = computed(() => {
     </div>
 
     <!-- ═══ MIDDLE ROW: Activity Chart + Status Distribution ═══ -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6">
         <!-- Activity Chart (14 days) -->
-        <div :class="['lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-100 p-5 transition-all duration-700', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6']"
+        <div :class="['md:col-span-2 lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-100 p-5 transition-all duration-700', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6']"
              :style="{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)', transitionDelay: '300ms' }">
             <h3 class="text-sm font-semibold text-slate-800 mb-4 flex items-center gap-2">
                 <svg class="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg>
@@ -484,7 +484,7 @@ const streakMessage = computed(() => {
     </div>
 
     <!-- ═══ BOTTOM ROW: Source Performance + Follow-up + Monthly Stats ═══ -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6">
         <!-- Source Performance -->
         <div :class="['bg-white rounded-2xl shadow-sm border border-slate-100 p-5 transition-all duration-700', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6']"
              :style="{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)', transitionDelay: '450ms' }">
@@ -596,7 +596,7 @@ const streakMessage = computed(() => {
                 leave-active-class="transition-all duration-200 ease-in"
                 leave-from-class="opacity-100 scale-100"
                 leave-to-class="opacity-0 scale-95">
-                <div v-if="showGoalEditor" class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md p-6" :dir="isRtl ? 'rtl' : 'ltr'">
+                <div v-if="showGoalEditor" class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md p-4 sm:p-6" :dir="isRtl ? 'rtl' : 'ltr'">
                     <div class="flex items-center justify-between mb-6">
                         <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
                             <div class="w-8 h-8 bg-teal-100 rounded-lg flex items-center justify-center">

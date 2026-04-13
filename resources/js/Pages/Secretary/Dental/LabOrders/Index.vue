@@ -89,7 +89,7 @@ const itemTypeLabels = computed(() => ({
 <template>
     <div>
         <!-- Header -->
-        <div class="flex items-center justify-between mb-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
             <div>
                 <h1 class="text-2xl font-bold text-gray-900">{{ isRtl ? 'طلبات المختبر' : 'Lab Orders' }}</h1>
                 <p class="text-sm text-gray-500 mt-1">{{ isRtl ? 'متابعة طلبات مختبر الأسنان' : 'Track dental lab orders' }}</p>
@@ -101,8 +101,8 @@ const itemTypeLabels = computed(() => ({
         </div>
 
         <!-- Stats Cards -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-5">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-6">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-5">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm text-gray-500">{{ isRtl ? 'طلبات معلقة' : 'Pending Orders' }}</p>
@@ -113,7 +113,7 @@ const itemTypeLabels = computed(() => ({
                     </div>
                 </div>
             </div>
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-5">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-5">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm text-gray-500">{{ isRtl ? 'متأخرة' : 'Overdue' }}</p>
@@ -124,7 +124,7 @@ const itemTypeLabels = computed(() => ({
                     </div>
                 </div>
             </div>
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-5">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-5">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm text-gray-500">{{ isRtl ? 'في المختبر' : 'In Lab' }}</p>
@@ -143,7 +143,7 @@ const itemTypeLabels = computed(() => ({
                 v-model="search"
                 type="text"
                 :placeholder="isRtl ? 'بحث بالمريض أو المختبر...' : 'Search by patient or lab...'"
-                class="px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] w-72"
+                class="px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] w-full sm:w-72"
             />
             <select v-model="status" class="px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]">
                 <option value="">{{ isRtl ? 'جميع الحالات' : 'All Statuses' }}</option>
@@ -165,8 +165,8 @@ const itemTypeLabels = computed(() => ({
                         <tr class="bg-gray-50/80">
                             <th class="ltr:text-left rtl:text-right px-6 py-3 text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'المريض' : 'Patient' }}</th>
                             <th class="ltr:text-left rtl:text-right px-6 py-3 text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'نوع العنصر' : 'Item Type' }}</th>
-                            <th class="ltr:text-left rtl:text-right px-6 py-3 text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'المادة' : 'Material' }}</th>
-                            <th class="ltr:text-left rtl:text-right px-6 py-3 text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'المختبر' : 'Lab Name' }}</th>
+                            <th class="ltr:text-left rtl:text-right px-6 py-3 text-xs font-semibold text-gray-500 uppercase hidden sm:table-cell">{{ isRtl ? 'المادة' : 'Material' }}</th>
+                            <th class="ltr:text-left rtl:text-right px-6 py-3 text-xs font-semibold text-gray-500 uppercase hidden sm:table-cell">{{ isRtl ? 'المختبر' : 'Lab Name' }}</th>
                             <th class="px-6 py-3 text-xs font-semibold text-gray-500 uppercase text-center">{{ isRtl ? 'الحالة' : 'Status' }}</th>
                             <th class="ltr:text-left rtl:text-right px-6 py-3 text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'التاريخ المتوقع' : 'Expected Date' }}</th>
                             <th class="ltr:text-right rtl:text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'إجراءات' : 'Actions' }}</th>
@@ -184,8 +184,8 @@ const itemTypeLabels = computed(() => ({
                                 <div class="text-xs text-gray-400">{{ order.patient?.file_number || '' }}</div>
                             </td>
                             <td class="px-6 py-3 text-gray-700">{{ itemTypeLabels[order.item_type] || order.item_type || '-' }}</td>
-                            <td class="px-6 py-3 text-gray-600">{{ order.material || '-' }}</td>
-                            <td class="px-6 py-3 text-gray-600">{{ order.lab_name || '-' }}</td>
+                            <td class="px-6 py-3 text-gray-600 hidden sm:table-cell">{{ order.material || '-' }}</td>
+                            <td class="px-6 py-3 text-gray-600 hidden sm:table-cell">{{ order.lab_name || '-' }}</td>
                             <td class="px-6 py-3 text-center">
                                 <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold border" :class="statusColors[order.status] || 'bg-gray-50 text-gray-600 border-gray-200'">
                                     {{ statusLabels[order.status] || order.status }}

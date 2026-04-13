@@ -121,7 +121,7 @@ function formatSelectedDate(dateStr) {
                 <h1 class="text-2xl font-bold text-gray-900">{{ isRtl ? 'تقويم المواعيد' : 'Appointment Calendar' }}</h1>
                 <p class="text-sm text-gray-500 mt-1">{{ isRtl ? 'عرض جميع الزيارات والحجوزات حسب التاريخ.' : 'View all visits and bookings by date.' }}</p>
             </div>
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-3 flex-wrap">
                 <Link href="/secretary/bookings/create" class="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-teal-500 to-cyan-500 text-white text-sm font-medium rounded-xl hover:from-teal-600 hover:to-cyan-600 transition-all duration-200 shadow-sm">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
                     {{ isRtl ? 'حجز جديد' : 'New Booking' }}
@@ -158,7 +158,7 @@ function formatSelectedDate(dateStr) {
         </div>
 
         <!-- Controls -->
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 flex flex-wrap items-center justify-between gap-3">
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-3 sm:p-4 flex flex-wrap items-center justify-between gap-3">
             <div class="flex items-center gap-2">
                 <button @click="prevMonth" class="w-9 h-9 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 transition-colors">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
@@ -169,7 +169,7 @@ function formatSelectedDate(dateStr) {
                 </button>
                 <button @click="goToday" class="px-3 py-1.5 text-xs font-medium text-teal-600 bg-teal-50 rounded-lg hover:bg-teal-100 transition-colors ltr:ml-2 rtl:mr-2">{{ isRtl ? 'اليوم' : 'Today' }}</button>
             </div>
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-3 flex-wrap">
                 <select v-model="doctorId" class="px-4 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-colors">
                     <option value="">{{ isRtl ? 'جميع الأطباء' : 'All Doctors' }}</option>
                     <option v-for="doc in doctors" :key="doc.id" :value="doc.id">{{ doc.name_en }}</option>
@@ -181,7 +181,7 @@ function formatSelectedDate(dateStr) {
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             <!-- Calendar Grid -->
             <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
                 <div class="grid grid-cols-7 bg-gray-50/80">
@@ -192,7 +192,7 @@ function formatSelectedDate(dateStr) {
                         v-for="(day, idx) in calendarDays"
                         :key="idx"
                         @click="selectDay(day)"
-                        class="min-h-[90px] p-1.5 border-b border-r border-gray-100 transition-colors duration-150"
+                        class="min-h-[60px] sm:min-h-[90px] p-1 sm:p-1.5 border-b border-r border-gray-100 transition-colors duration-150"
                         :class="{
                             'bg-white hover:bg-gray-50 cursor-pointer': day.date,
                             'bg-gray-50/50': !day.date,
@@ -215,11 +215,11 @@ function formatSelectedDate(dateStr) {
 
             <!-- Day Detail Sidebar -->
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
-                <div class="p-4 border-b border-gray-100 bg-gray-50/50">
+                <div class="p-3 sm:p-4 border-b border-gray-100 bg-gray-50/50">
                     <h3 v-if="selectedDay" class="text-sm font-semibold text-gray-900">{{ formatSelectedDate(selectedDay) }}</h3>
                     <h3 v-else class="text-sm font-semibold text-gray-400">{{ isRtl ? 'اختر يوماً لعرض التفاصيل' : 'Select a day to view details' }}</h3>
                 </div>
-                <div class="p-4 max-h-[500px] overflow-y-auto">
+                <div class="p-3 sm:p-4 max-h-[500px] overflow-y-auto">
                     <div v-if="selectedDayEvents.length" class="space-y-2.5">
                         <div
                             v-for="ev in selectedDayEvents"

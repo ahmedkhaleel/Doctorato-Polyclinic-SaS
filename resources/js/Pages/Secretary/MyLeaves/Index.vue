@@ -116,7 +116,7 @@ const leaveTypeOptions = [
                 </div>
 
                 <!-- Stats -->
-                <div class="grid grid-cols-3 gap-4 mt-6">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mt-6">
                     <div class="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10">
                         <p class="text-xs text-gray-400 font-medium">{{ isRtl ? 'معلقة' : 'Pending' }}</p>
                         <p class="text-2xl font-bold text-amber-400 mt-1">{{ pendingCount }}</p>
@@ -140,7 +140,7 @@ const leaveTypeOptions = [
                 :key="leave.id"
                 class="bg-white rounded-2xl shadow-sm border border-gray-100/80 hover:shadow-md transition-all duration-300 overflow-hidden"
             >
-                <div class="flex flex-col sm:flex-row sm:items-center gap-4 p-5">
+                <div class="flex flex-col sm:flex-row sm:items-center gap-4 p-4 sm:p-5">
                     <!-- Type Icon -->
                     <div class="flex items-center gap-3 flex-1 min-w-0">
                         <div :class="[getType(leave.leave_type).bg]" class="w-12 h-12 rounded-xl flex items-center justify-center text-xl flex-shrink-0">
@@ -161,7 +161,7 @@ const leaveTypeOptions = [
                     </div>
 
                     <!-- Date Range -->
-                    <div class="flex items-center gap-3">
+                    <div class="flex items-center gap-3 flex-wrap">
                         <div class="text-center">
                             <p class="text-[10px] text-gray-400 font-semibold uppercase">{{ isRtl ? 'من' : 'From' }}</p>
                             <p class="text-sm font-semibold text-gray-700 mt-0.5">{{ formatDate(leave.start_date) }}</p>
@@ -211,7 +211,7 @@ const leaveTypeOptions = [
                             <!-- Leave Type Visual Selector -->
                             <div>
                                 <label class="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">{{ isRtl ? 'نوع الإجازة *' : 'Leave Type *' }}</label>
-                                <div class="grid grid-cols-4 gap-2">
+                                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
                                     <button v-for="opt in leaveTypeOptions" :key="opt.value" type="button" @click="form.leave_type = opt.value"
                                         class="flex flex-col items-center gap-1 p-3 rounded-xl border-2 transition-all text-center"
                                         :class="form.leave_type === opt.value ? 'border-[#0d9488] bg-[#0d9488]/5 shadow-sm' : 'border-gray-100 hover:border-gray-200'"

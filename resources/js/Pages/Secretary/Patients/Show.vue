@@ -89,7 +89,7 @@ function getDoctorName(doctorId) {
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
                 Back to Patients
             </Link>
-            <div class="flex items-center justify-between">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div class="flex items-center gap-4">
                     <div v-if="patient.photo" class="w-14 h-14 rounded-2xl overflow-hidden ring-2 ring-teal-100 flex-shrink-0">
                         <img
@@ -125,9 +125,9 @@ function getDoctorName(doctorId) {
         </div>
 
         <!-- Patient Info Card -->
-        <div class="grid lg:grid-cols-3 gap-6 mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6">
             <!-- Contact & Personal -->
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6">
                 <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">{{ isRtl ? 'معلومات الاتصال' : 'Contact Details' }}</h3>
                 <div class="space-y-3 text-sm">
                     <div class="flex justify-between">
@@ -150,7 +150,7 @@ function getDoctorName(doctorId) {
             </div>
 
             <!-- Personal Details -->
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6">
                 <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">{{ isRtl ? 'البيانات الشخصية' : 'Personal Details' }}</h3>
                 <div class="space-y-3 text-sm">
                     <div class="flex justify-between">
@@ -181,7 +181,7 @@ function getDoctorName(doctorId) {
             </div>
 
             <!-- Medical Notes -->
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6">
                 <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">{{ isRtl ? 'ملاحظات طبية' : 'Medical Notes' }}</h3>
                 <p v-if="patient.medical_notes" class="text-sm text-gray-700 whitespace-pre-wrap leading-relaxed">{{ patient.medical_notes }}</p>
                 <p v-else class="text-sm text-gray-400 italic">{{ isRtl ? 'لا توجد ملاحظات طبية' : 'No medical notes recorded' }}</p>
@@ -189,12 +189,12 @@ function getDoctorName(doctorId) {
         </div>
 
         <!-- Dental Quick Links -->
-        <div v-if="$page.props.modules?.dental?.enabled && hasDentalVisits" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6 mb-6">
+        <div v-if="$page.props.modules?.dental?.enabled && hasDentalVisits" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6 mb-6">
             <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4 flex items-center gap-2">
                 <svg class="w-4 h-4 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
                 {{ isRtl ? 'طب الأسنان' : 'Dental' }}
             </h3>
-            <div class="grid grid-cols-3 gap-3">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <Link :href="`/secretary/dental/patient-chart/${patient.id}`"
                     class="flex items-center gap-3 p-3 rounded-xl border border-gray-200 hover:border-teal-300 hover:bg-teal-50/50 transition group"
                 >
@@ -232,9 +232,9 @@ function getDoctorName(doctorId) {
         </div>
 
         <!-- Financial Summary -->
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6 mb-6">
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6 mb-6">
             <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">{{ isRtl ? 'الملخص المالي' : 'Financial Summary' }}</h3>
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 sm:gap-4">
                 <div class="text-center p-4 bg-gray-50 rounded-xl">
                     <p class="text-[10px] text-gray-500 uppercase tracking-wider font-semibold mb-1">{{ isRtl ? 'إجمالي الفواتير' : 'Total Invoiced' }}</p>
                     <p class="text-lg font-bold text-gray-800">{{ formatCurrency(financialSummary?.total_invoiced) }}</p>
@@ -261,8 +261,8 @@ function getDoctorName(doctorId) {
         <!-- Tabs -->
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
             <!-- Tab Navigation -->
-            <div class="border-b border-gray-100 px-6">
-                <nav class="flex gap-6 -mb-px">
+            <div class="border-b border-gray-100 px-4 sm:px-6">
+                <nav class="flex gap-4 sm:gap-6 -mb-px overflow-x-auto scrollbar-none">
                     <button
                         v-for="tab in [
                             { key: 'visits', label: 'Recent Visits' },
@@ -283,14 +283,14 @@ function getDoctorName(doctorId) {
             </div>
 
             <!-- Recent Visits Tab -->
-            <div v-if="activeTab === 'visits'" class="p-6">
+            <div v-if="activeTab === 'visits'" class="p-4 sm:p-6">
                 <div v-if="patient.visits?.length > 0" class="overflow-x-auto">
                     <table class="w-full text-sm">
                         <thead>
                             <tr class="bg-gray-50/80 rounded-lg">
                                 <th class="ltr:text-left rtl:ltr:text-right rtl:text-left px-4 py-2.5 text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'التاريخ' : 'Date' }}</th>
                                 <th class="ltr:text-left rtl:ltr:text-right rtl:text-left px-4 py-2.5 text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'الخدمة' : 'Service' }}</th>
-                                <th class="ltr:text-left rtl:ltr:text-right rtl:text-left px-4 py-2.5 text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'الطبيب' : 'Doctor' }}</th>
+                                <th class="ltr:text-left rtl:ltr:text-right rtl:text-left px-4 py-2.5 text-xs font-semibold text-gray-500 uppercase hidden sm:table-cell">{{ isRtl ? 'الطبيب' : 'Doctor' }}</th>
                                 <th class="ltr:text-left rtl:ltr:text-right rtl:text-left px-4 py-2.5 text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'الحالة' : 'Status' }}</th>
                                 <th class="ltr:text-right rtl:text-left px-4 py-2.5 text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'إجراءات' : 'Actions' }}</th>
                             </tr>
@@ -299,7 +299,7 @@ function getDoctorName(doctorId) {
                             <tr v-for="visit in patient.visits" :key="visit.id" class="hover:bg-gray-50/50 transition-colors">
                                 <td class="px-4 py-3 text-gray-800">{{ formatDate(visit.visit_date) }}</td>
                                 <td class="px-4 py-3 text-gray-600">{{ visit.service?.name_en || visit.visit_type || '-' }}</td>
-                                <td class="px-4 py-3 text-gray-600">{{ visit.doctor?.name_en || getDoctorName(visit.doctor_id) }}</td>
+                                <td class="px-4 py-3 text-gray-600 hidden sm:table-cell">{{ visit.doctor?.name_en || getDoctorName(visit.doctor_id) }}</td>
                                 <td class="px-4 py-3">
                                     <span class="inline-flex px-2 py-0.5 rounded-full text-[10px] font-semibold border capitalize" :class="visitStatusColors[visit.status] || 'bg-gray-50 text-gray-600 border-gray-200'">
                                         {{ visit.status }}
@@ -321,11 +321,11 @@ function getDoctorName(doctorId) {
             </div>
 
             <!-- Packages Tab -->
-            <div v-if="activeTab === 'packages'" class="p-6">
+            <div v-if="activeTab === 'packages'" class="p-4 sm:p-6">
                 <div v-if="patient.package_bundle_bookings?.length > 0" class="space-y-5">
                     <div v-for="booking in patient.package_bundle_bookings" :key="booking.id" class="border border-gray-100 rounded-2xl overflow-hidden">
                         <!-- Booking Header -->
-                        <div class="flex items-center justify-between p-4 bg-gray-50/50 border-b border-gray-100">
+                        <div class="flex flex-wrap items-center justify-between gap-3 p-3 sm:p-4 bg-gray-50/50 border-b border-gray-100">
                             <div class="flex items-center gap-3">
                                 <div class="w-10 h-10 rounded-xl bg-teal-50 flex items-center justify-center">
                                     <svg class="w-5 h-5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
@@ -335,7 +335,7 @@ function getDoctorName(doctorId) {
                                     <p class="text-xs text-gray-400 font-mono">{{ booking.booking_number }}</p>
                                 </div>
                             </div>
-                            <div class="flex items-center gap-3">
+                            <div class="flex items-center gap-3 flex-wrap">
                                 <span class="inline-flex px-2.5 py-0.5 rounded-full text-[10px] font-semibold border capitalize" :class="bundleStatusColors[booking.status] || 'bg-gray-50 text-gray-600 border-gray-200'">
                                     {{ booking.status?.replace('_', ' ') }}
                                 </span>
@@ -344,7 +344,7 @@ function getDoctorName(doctorId) {
                         </div>
 
                         <!-- Progress Bar -->
-                        <div class="px-4 pt-3 pb-1">
+                        <div class="px-3 sm:px-4 pt-3 pb-1">
                             <div class="flex items-center justify-between text-xs mb-1.5">
                                 <span class="text-gray-500">{{ isRtl ? 'التقدم' : 'Progress' }}</span>
                                 <span class="font-semibold text-teal-600">{{ bundleProgress(booking) }}%</span>
@@ -355,7 +355,7 @@ function getDoctorName(doctorId) {
                         </div>
 
                         <!-- Financial Row -->
-                        <div class="grid grid-cols-3 gap-4 px-4 py-3 text-sm">
+                        <div class="grid grid-cols-3 gap-3 sm:gap-4 px-3 sm:px-4 py-3 text-sm">
                             <div>
                                 <span class="text-gray-400 text-xs block">{{ isRtl ? 'الإجمالي' : 'Total' }}</span>
                                 <span class="font-semibold text-gray-800">{{ formatCurrency(booking.total_price) }}</span>
@@ -372,11 +372,11 @@ function getDoctorName(doctorId) {
 
                         <!-- Services Breakdown -->
                         <div class="border-t border-gray-100">
-                            <div class="px-4 py-2.5 bg-gray-50/50">
+                            <div class="px-3 sm:px-4 py-2.5 bg-gray-50/50">
                                 <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">{{ isRtl ? 'الخدمات' : 'Services' }}</span>
                             </div>
                             <div class="divide-y divide-gray-50">
-                                <div v-for="bs in booking.bundle_services" :key="bs.id" class="px-4 py-3 flex items-center justify-between gap-4">
+                                <div v-for="bs in booking.bundle_services" :key="bs.id" class="px-3 sm:px-4 py-3 flex flex-wrap items-center justify-between gap-3 sm:gap-4">
                                     <div class="flex-1 min-w-0">
                                         <p class="text-sm font-medium text-gray-800 truncate">{{ bs.service?.name_en || '-' }}</p>
                                         <p class="text-xs text-gray-400">
@@ -410,7 +410,7 @@ function getDoctorName(doctorId) {
                         </div>
 
                         <!-- Dates Footer -->
-                        <div class="px-4 py-2.5 bg-gray-50/50 border-t border-gray-100 flex items-center gap-6 text-xs text-gray-400">
+                        <div class="px-3 sm:px-4 py-2.5 bg-gray-50/50 border-t border-gray-100 flex flex-wrap items-center gap-3 sm:gap-6 text-xs text-gray-400">
                             <span v-if="booking.started_at">{{ isRtl ? 'بدأ:' : 'Started:' }} {{ formatDate(booking.started_at) }}</span>
                             <span v-if="booking.completed_at">{{ isRtl ? 'اكتمل:' : 'Completed:' }} {{ formatDate(booking.completed_at) }}</span>
                             <span v-if="!booking.started_at && !booking.completed_at">{{ isRtl ? 'أنشئ:' : 'Created:' }} {{ formatDate(booking.created_at) }}</span>
@@ -426,7 +426,7 @@ function getDoctorName(doctorId) {
             </div>
 
             <!-- Invoices Tab -->
-            <div v-if="activeTab === 'invoices'" class="p-6">
+            <div v-if="activeTab === 'invoices'" class="p-4 sm:p-6">
                 <div v-if="patient.invoices?.length > 0" class="overflow-x-auto">
                     <table class="w-full text-sm">
                         <thead>
@@ -434,7 +434,7 @@ function getDoctorName(doctorId) {
                                 <th class="ltr:text-left rtl:ltr:text-right rtl:text-left px-4 py-2.5 text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'فاتورة #' : 'Invoice #' }}</th>
                                 <th class="ltr:text-left rtl:ltr:text-right rtl:text-left px-4 py-2.5 text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'التاريخ' : 'Date' }}</th>
                                 <th class="ltr:text-left rtl:ltr:text-right rtl:text-left px-4 py-2.5 text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'المبلغ' : 'Amount' }}</th>
-                                <th class="ltr:text-left rtl:ltr:text-right rtl:text-left px-4 py-2.5 text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'المدفوع' : 'Paid' }}</th>
+                                <th class="ltr:text-left rtl:ltr:text-right rtl:text-left px-4 py-2.5 text-xs font-semibold text-gray-500 uppercase hidden sm:table-cell">{{ isRtl ? 'المدفوع' : 'Paid' }}</th>
                                 <th class="ltr:text-left rtl:ltr:text-right rtl:text-left px-4 py-2.5 text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'الحالة' : 'Status' }}</th>
                                 <th class="ltr:text-right rtl:text-left px-4 py-2.5 text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'إجراءات' : 'Actions' }}</th>
                             </tr>
@@ -444,7 +444,7 @@ function getDoctorName(doctorId) {
                                 <td class="px-4 py-3 font-mono font-semibold text-teal-600">{{ invoice.invoice_number || `#${invoice.id}` }}</td>
                                 <td class="px-4 py-3 text-gray-600">{{ formatDate(invoice.created_at) }}</td>
                                 <td class="px-4 py-3 font-medium text-gray-800">{{ formatCurrency(invoice.total_amount) }}</td>
-                                <td class="px-4 py-3 text-emerald-600 font-medium">{{ formatCurrency(invoice.paid_amount) }}</td>
+                                <td class="px-4 py-3 text-emerald-600 font-medium hidden sm:table-cell">{{ formatCurrency(invoice.paid_amount) }}</td>
                                 <td class="px-4 py-3">
                                     <span class="inline-flex px-2 py-0.5 rounded-full text-[10px] font-semibold border capitalize" :class="invoiceStatusColors[invoice.status] || 'bg-gray-50 text-gray-600 border-gray-200'">
                                         {{ invoice.status }}
@@ -466,14 +466,14 @@ function getDoctorName(doctorId) {
             </div>
 
             <!-- Prescriptions Tab -->
-            <div v-if="activeTab === 'prescriptions'" class="p-6">
+            <div v-if="activeTab === 'prescriptions'" class="p-4 sm:p-6">
                 <div v-if="patient.prescriptions?.length > 0" class="overflow-x-auto">
                     <table class="w-full text-sm">
                         <thead>
                             <tr class="bg-gray-50/80 rounded-lg">
                                 <th class="ltr:text-left rtl:ltr:text-right rtl:text-left px-4 py-2.5 text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'التاريخ' : 'Date' }}</th>
                                 <th class="ltr:text-left rtl:ltr:text-right rtl:text-left px-4 py-2.5 text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'الطبيب' : 'Doctor' }}</th>
-                                <th class="ltr:text-left rtl:ltr:text-right rtl:text-left px-4 py-2.5 text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'التشخيص' : 'Diagnosis' }}</th>
+                                <th class="ltr:text-left rtl:ltr:text-right rtl:text-left px-4 py-2.5 text-xs font-semibold text-gray-500 uppercase hidden sm:table-cell">{{ isRtl ? 'التشخيص' : 'Diagnosis' }}</th>
                                 <th class="ltr:text-left rtl:ltr:text-right rtl:text-left px-4 py-2.5 text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'الأدوية' : 'Medications' }}</th>
                             </tr>
                         </thead>
@@ -481,7 +481,7 @@ function getDoctorName(doctorId) {
                             <tr v-for="rx in patient.prescriptions" :key="rx.id" class="hover:bg-gray-50/50 transition-colors">
                                 <td class="px-4 py-3 text-gray-600">{{ formatDate(rx.created_at) }}</td>
                                 <td class="px-4 py-3 text-gray-600">{{ rx.doctor?.name_en || getDoctorName(rx.doctor_id) }}</td>
-                                <td class="px-4 py-3 text-gray-800">{{ rx.diagnosis || '-' }}</td>
+                                <td class="px-4 py-3 text-gray-800 hidden sm:table-cell">{{ rx.diagnosis || '-' }}</td>
                                 <td class="px-4 py-3">
                                     <div v-if="rx.items?.length > 0" class="space-y-1">
                                         <div v-for="item in rx.items" :key="item.id" class="flex items-center gap-1.5 text-xs">

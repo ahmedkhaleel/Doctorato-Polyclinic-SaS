@@ -61,7 +61,7 @@ onMounted(() => {
                 </div>
 
                 <!-- Stats -->
-                <div class="grid grid-cols-3 gap-4 mt-6">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mt-6">
                     <div class="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10">
                         <p class="text-xs text-gray-400 font-medium">{{ isRtl ? 'الكشوف' : 'Total Slips' }}</p>
                         <p class="text-2xl font-bold text-white mt-1">{{ slips?.data?.length || 0 }}</p>
@@ -85,7 +85,7 @@ onMounted(() => {
                 :key="slip.id"
                 class="group bg-white rounded-2xl shadow-sm border border-gray-100/80 hover:shadow-lg hover:border-gray-200/80 transition-all duration-300 overflow-hidden"
             >
-                <div class="flex flex-col sm:flex-row sm:items-center gap-4 p-5">
+                <div class="flex flex-col sm:flex-row sm:items-center gap-4 p-4 sm:p-5">
                     <!-- Month/Year -->
                     <div class="flex items-center gap-4 flex-1 min-w-0">
                         <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#0d9488]/15 to-[#0d9488]/5 flex flex-col items-center justify-center flex-shrink-0">
@@ -104,7 +104,7 @@ onMounted(() => {
                     </div>
 
                     <!-- Financial Summary -->
-                    <div class="flex items-center gap-6 sm:gap-8">
+                    <div class="flex items-center gap-4 sm:gap-8 flex-wrap">
                         <div class="text-center">
                             <p class="text-[10px] text-gray-400 font-semibold uppercase">{{ isRtl ? 'الإجمالي' : 'Earnings' }}</p>
                             <p class="text-sm font-bold text-gray-700 mt-0.5">{{ formatCurrency(slip.total_earnings) }}</p>

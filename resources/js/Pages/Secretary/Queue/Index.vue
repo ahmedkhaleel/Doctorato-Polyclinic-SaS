@@ -241,7 +241,7 @@ function refreshQueue() {
                 <h1 class="text-2xl font-bold text-gray-800">{{ isRtl ? 'طابور اليوم' : "Today's Queue" }}</h1>
                 <p class="text-sm text-gray-500 mt-1">{{ todayFormatted }}</p>
             </div>
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-3 flex-wrap">
                 <button
                     @click="refreshQueue"
                     class="inline-flex items-center px-4 py-2.5 rounded-lg border border-gray-200 text-sm font-medium text-gray-600 hover:bg-gray-50 transition"
@@ -305,8 +305,8 @@ function refreshQueue() {
         </div>
 
         <!-- Summary Stats -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-4">
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+            <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-3 sm:p-4">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-teal-500 to-cyan-500 flex items-center justify-center">
                         <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -320,7 +320,7 @@ function refreshQueue() {
                 </div>
             </div>
 
-            <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-4">
+            <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-3 sm:p-4">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-lg bg-yellow-100 flex items-center justify-center">
                         <svg class="w-5 h-5 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -334,7 +334,7 @@ function refreshQueue() {
                 </div>
             </div>
 
-            <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-4">
+            <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-3 sm:p-4">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">
                         <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -349,7 +349,7 @@ function refreshQueue() {
                 </div>
             </div>
 
-            <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-4">
+            <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-3 sm:p-4">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center">
                         <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -365,11 +365,11 @@ function refreshQueue() {
         </div>
 
         <!-- Doctor Queues -->
-        <div v-if="filteredDoctorIds.length > 0" class="space-y-6">
+        <div v-if="filteredDoctorIds.length > 0" class="space-y-4 sm:space-y-6">
             <div v-for="(doctorId, dIdx) in filteredDoctorIds" :key="doctorId">
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                     <!-- Doctor Header -->
-                    <div class="px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-teal-50 to-cyan-50">
+                    <div class="px-4 sm:px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-teal-50 to-cyan-50">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-3">
                                 <div :class="'bg-gradient-to-br ' + getDoctorGradient(dIdx)" class="w-10 h-10 rounded-lg flex items-center justify-center text-white text-sm font-bold shadow-sm">
@@ -393,7 +393,7 @@ function refreshQueue() {
                         <div
                             v-for="(visit, vIdx) in filteredVisitsByDoctor[doctorId]"
                             :key="visit.id"
-                            class="px-6 py-4 hover:bg-teal-50/20 transition-colors"
+                            class="px-4 sm:px-6 py-4 hover:bg-teal-50/20 transition-colors"
                         >
                             <div class="flex flex-wrap items-center justify-between gap-4">
                                 <!-- Left: Queue number + Patient info -->
@@ -477,7 +477,7 @@ function refreshQueue() {
                                 </Transition>
 
                                 <!-- Right: Status + Actions -->
-                                <div class="flex items-center gap-3 flex-shrink-0">
+                                <div class="flex items-center gap-2 sm:gap-3 flex-shrink-0 flex-wrap">
                                     <!-- Status Badge -->
                                     <span
                                         :class="statusColors[visit.status]"

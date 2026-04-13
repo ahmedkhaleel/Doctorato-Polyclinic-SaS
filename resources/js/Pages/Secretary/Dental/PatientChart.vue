@@ -77,12 +77,12 @@ const conditionSummary = computed(() => {
 <template>
     <div>
         <!-- Header -->
-        <div class="flex items-center justify-between mb-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
             <div>
                 <h1 class="text-2xl font-bold text-gray-900">{{ isRtl ? 'مخطط الأسنان' : 'Dental Chart' }}</h1>
                 <p class="text-sm text-gray-500 mt-1">{{ patient.full_name }} — {{ patient.file_number }}</p>
             </div>
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-3 flex-wrap">
                 <Link :href="`/secretary/dental/treatment-plans?search=${encodeURIComponent(patient.full_name)}`" class="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-[#C4A265] bg-[#C4A265]/10 rounded-xl hover:bg-[#C4A265]/20 transition-all">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
                     {{ isRtl ? 'خطط العلاج' : 'Treatment Plans' }}
@@ -95,8 +95,8 @@ const conditionSummary = computed(() => {
         </div>
 
         <!-- Patient Info -->
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6 mb-6">
-            <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 text-sm">
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6 mb-6">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
                 <div>
                     <span class="text-gray-400 block mb-1">{{ isRtl ? 'الاسم' : 'Name' }}</span>
                     <span class="font-semibold text-gray-800">{{ patient.full_name }}</span>
@@ -127,7 +127,7 @@ const conditionSummary = computed(() => {
         </div>
 
         <!-- Dental Chart -->
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6 mb-6">
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6 mb-6 overflow-x-auto">
             <h2 class="text-center text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">{{ isRtl ? 'الفك العلوي' : 'Upper Jaw' }}</h2>
 
             <!-- Upper Jaw -->
@@ -201,7 +201,7 @@ const conditionSummary = computed(() => {
         </div>
 
         <!-- Selected Tooth Details (read-only) -->
-        <div v-if="selectedTooth && selectedToothData" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6 mb-6">
+        <div v-if="selectedTooth && selectedToothData" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6 mb-6">
             <h3 class="text-lg font-semibold text-gray-800 mb-4">
                 {{ isRtl ? 'السن' : 'Tooth' }} #{{ selectedTooth }}
             </h3>
@@ -230,7 +230,7 @@ const conditionSummary = computed(() => {
         </div>
 
         <!-- Condition Summary -->
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6">
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6">
             <h3 class="text-lg font-semibold text-gray-800 mb-4">{{ isRtl ? 'ملخص الحالات' : 'Condition Summary' }}</h3>
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
                 <div

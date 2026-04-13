@@ -85,7 +85,7 @@ function getDoctorName(plan) {
 <template>
     <div>
         <!-- Header -->
-        <div class="flex items-center justify-between mb-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
             <div>
                 <h1 class="text-2xl font-bold text-gray-900">{{ isRtl ? 'خطط العلاج' : 'Treatment Plans' }}</h1>
                 <p class="text-sm text-gray-500 mt-1">{{ isRtl ? 'عرض جميع خطط علاج الأسنان' : 'View all dental treatment plans' }}</p>
@@ -102,7 +102,7 @@ function getDoctorName(plan) {
                 v-model="search"
                 type="text"
                 :placeholder="isRtl ? 'بحث بالاسم أو رقم الهاتف...' : 'Search by name or phone...'"
-                class="px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] w-72"
+                class="px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] w-full sm:w-72"
             />
             <select v-model="status" class="px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]">
                 <option value="">{{ isRtl ? 'جميع الحالات' : 'All Statuses' }}</option>
@@ -131,9 +131,9 @@ function getDoctorName(plan) {
                             <th class="ltr:text-left rtl:text-right px-6 py-3 text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'الطبيب' : 'Doctor' }}</th>
                             <th class="ltr:text-left rtl:text-right px-6 py-3 text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'العنوان' : 'Title' }}</th>
                             <th class="px-6 py-3 text-xs font-semibold text-gray-500 uppercase text-center">{{ isRtl ? 'الحالة' : 'Status' }}</th>
-                            <th class="px-6 py-3 text-xs font-semibold text-gray-500 uppercase text-center">{{ isRtl ? 'الأولوية' : 'Priority' }}</th>
-                            <th class="ltr:text-right rtl:text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'التكلفة المقدرة' : 'Est. Cost' }}</th>
-                            <th class="px-6 py-3 text-xs font-semibold text-gray-500 uppercase text-center">{{ isRtl ? 'العلاجات' : 'Treatments' }}</th>
+                            <th class="px-6 py-3 text-xs font-semibold text-gray-500 uppercase text-center hidden sm:table-cell">{{ isRtl ? 'الأولوية' : 'Priority' }}</th>
+                            <th class="ltr:text-right rtl:text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase hidden sm:table-cell">{{ isRtl ? 'التكلفة المقدرة' : 'Est. Cost' }}</th>
+                            <th class="px-6 py-3 text-xs font-semibold text-gray-500 uppercase text-center hidden md:table-cell">{{ isRtl ? 'العلاجات' : 'Treatments' }}</th>
                             <th class="ltr:text-right rtl:text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'إجراءات' : 'Actions' }}</th>
                         </tr>
                     </thead>
@@ -154,13 +154,13 @@ function getDoctorName(plan) {
                                     {{ statusLabels[plan.status] || plan.status }}
                                 </span>
                             </td>
-                            <td class="px-6 py-3 text-center">
+                            <td class="px-6 py-3 text-center hidden sm:table-cell">
                                 <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold border" :class="priorityColors[plan.priority] || 'bg-gray-50 text-gray-600 border-gray-200'">
                                     {{ priorityLabels[plan.priority] || plan.priority || (isRtl ? 'عادي' : 'Normal') }}
                                 </span>
                             </td>
-                            <td class="px-6 py-3 ltr:text-right rtl:text-left font-medium text-gray-700">{{ formatCurrency(plan.estimated_cost) }}</td>
-                            <td class="px-6 py-3 text-center">
+                            <td class="px-6 py-3 ltr:text-right rtl:text-left font-medium text-gray-700 hidden sm:table-cell">{{ formatCurrency(plan.estimated_cost) }}</td>
+                            <td class="px-6 py-3 text-center hidden md:table-cell">
                                 <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#C4A265]/10 text-[#C4A265] text-xs font-bold">
                                     {{ plan.treatments_count ?? plan.treatments?.length ?? 0 }}
                                 </span>

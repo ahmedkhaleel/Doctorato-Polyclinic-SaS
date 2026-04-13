@@ -106,7 +106,7 @@ onMounted(() => {
                             class="w-full ltr:pl-10 ltr:pr-4 rtl:pr-10 rtl:pl-4 py-2.5 bg-white/10 border border-white/20 rounded-xl text-sm text-white placeholder-gray-400 focus:ring-2 focus:ring-[#0d9488]/50 focus:border-[#0d9488] transition"
                         />
                     </div>
-                    <div class="flex items-center gap-2">
+                    <div class="flex items-center gap-2 flex-wrap">
                         <input v-model="dateFrom" type="date" :max="dateTo || undefined" class="px-3 py-2.5 bg-white/10 border border-white/20 rounded-xl text-sm text-white focus:ring-2 focus:ring-[#0d9488]/50 focus:border-[#0d9488] [color-scheme:dark]" />
                         <span class="text-gray-400 text-xs">{{ isRtl ? 'إلى' : 'to' }}</span>
                         <input v-model="dateTo" type="date" :min="dateFrom || undefined" class="px-3 py-2.5 bg-white/10 border border-white/20 rounded-xl text-sm text-white focus:ring-2 focus:ring-[#0d9488]/50 focus:border-[#0d9488] [color-scheme:dark]" />
@@ -154,7 +154,7 @@ onMounted(() => {
                     </div>
 
                     <!-- Details -->
-                    <div class="flex items-center gap-5 sm:gap-6">
+                    <div class="flex items-center gap-4 sm:gap-6 flex-wrap">
                         <div class="text-center">
                             <p class="text-[10px] text-gray-400 font-semibold uppercase">{{ isRtl ? 'المريض' : 'Patient' }}</p>
                             <p class="text-xs font-semibold text-gray-700 mt-0.5 max-w-[120px] truncate">{{ payment.invoice?.patient?.full_name || '-' }}</p>

@@ -482,7 +482,7 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handleCalendarKe
 <div class="min-h-screen bg-gradient-to-br from-slate-50 via-teal-50/20 to-slate-50 p-4 md:p-6" :dir="isRtl ? 'rtl' : 'ltr'">
 
     <!-- Header -->
-    <div :class="['relative overflow-hidden rounded-2xl bg-gradient-to-r from-teal-600 via-teal-500 to-emerald-500 p-6 md:p-8 mb-6 shadow-xl transition-all duration-700', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4']"
+    <div :class="['relative overflow-hidden rounded-2xl bg-gradient-to-r from-teal-600 via-teal-500 to-emerald-500 p-5 sm:p-6 md:p-8 mb-6 shadow-xl transition-all duration-700', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4']"
          :style="{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }">
         <div class="absolute inset-0 opacity-10">
             <div class="absolute -top-10 -right-10 w-40 h-40 bg-white rounded-full"></div>
@@ -636,9 +636,11 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handleCalendarKe
     <div v-if="viewMode === 'month'"
          :class="['bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-700 delay-200', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4']"
          :style="{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }">
+      <div class="overflow-x-auto"
+         :style="{ minWidth: '0' }">
 
         <!-- Day headers -->
-        <div class="grid grid-cols-7 bg-gray-50 border-b border-gray-100">
+        <div class="grid grid-cols-7 bg-gray-50 border-b border-gray-100" style="min-width: 500px;">
             <div v-for="(day, idx) in (isRtl ? dayNames.ar : dayNames.en)" :key="idx"
                  :class="['py-3 text-center text-xs font-semibold uppercase tracking-wider',
                     idx === 6 ? 'text-red-400' : 'text-gray-500']">
@@ -647,7 +649,7 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handleCalendarKe
         </div>
 
         <!-- Calendar cells -->
-        <div class="grid grid-cols-7">
+        <div class="grid grid-cols-7" style="min-width: 500px;">
             <div v-for="(cell, idx) in calendarDays" :key="idx"
                  @click="selectDay(cell.date)"
                  :class="['relative min-h-[90px] md:min-h-[110px] border-b border-r border-gray-50 p-1.5 cursor-pointer transition-all duration-150 hover:bg-teal-50/40 group',
@@ -720,6 +722,7 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handleCalendarKe
                 </div>
             </div>
         </div>
+      </div>
     </div>
 
     <!-- ========== WEEK VIEW ========== -->
@@ -743,7 +746,8 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handleCalendarKe
         </div>
 
         <!-- Week columns -->
-        <div class="grid grid-cols-7 divide-x divide-gray-100">
+        <div class="overflow-x-auto">
+        <div class="grid grid-cols-7 divide-x divide-gray-100" style="min-width: 500px;">
             <div v-for="(wd, idx) in weekDays" :key="wd.date"
                  @click="selectDay(wd.date)"
                  :class="['group min-h-[350px] cursor-pointer transition-all duration-150 hover:bg-teal-50/30',
@@ -798,6 +802,7 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handleCalendarKe
                     </div>
                 </div>
             </div>
+        </div>
         </div>
     </div>
 
@@ -1013,7 +1018,7 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handleCalendarKe
             <div class="fixed inset-0 bg-black/40 backdrop-blur-sm" @click="showQuickAdd = false"></div>
             <Transition enter-active-class="transition duration-300 ease-out" enter-from-class="opacity-0 scale-95 translate-y-4" enter-to-class="opacity-100 scale-100 translate-y-0" leave-active-class="transition duration-200 ease-in" leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-95">
                 <div v-if="showQuickAdd" class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md">
-                    <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+                    <div class="px-4 sm:px-6 py-4 border-b border-gray-100 flex items-center justify-between">
                         <h3 class="font-semibold text-gray-800">{{ isRtl ? 'إضافة متابعة سريعة' : 'Quick Add Follow-up' }}</h3>
                         <button @click="showQuickAdd = false" class="w-8 h-8 rounded-lg bg-gray-100 hover:bg-gray-200 flex items-center justify-center"><svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12"/></svg></button>
                     </div>

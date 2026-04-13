@@ -501,7 +501,7 @@ const phoneValidation = computed(() => {
     </nav>
 
     <!-- Hero Header -->
-    <div :class="['relative overflow-hidden rounded-2xl bg-gradient-to-r from-teal-600 via-teal-500 to-emerald-500 p-6 md:p-8 mb-8 shadow-xl transition-all duration-700', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4']"
+    <div :class="['relative overflow-hidden rounded-2xl bg-gradient-to-r from-teal-600 via-teal-500 to-emerald-500 p-5 sm:p-6 md:p-8 mb-8 shadow-xl transition-all duration-700', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4']"
          :style="{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)', transitionDelay: '50ms' }">
         <div class="absolute inset-0 opacity-10">
             <div class="absolute -top-10 -right-10 w-40 h-40 bg-white rounded-full"></div>
@@ -537,7 +537,7 @@ const phoneValidation = computed(() => {
             <div class="h-full rounded-full transition-all duration-700 ease-out"
                  :style="{ width: formProgress + '%', background: formProgress >= 75 ? 'linear-gradient(90deg, #10b981, #059669)' : formProgress >= 50 ? 'linear-gradient(90deg, #0d9488, #14b8a6)' : 'linear-gradient(90deg, #94a3b8, #cbd5e1)' }"></div>
         </div>
-        <div class="flex items-center gap-1">
+        <div class="flex items-center gap-1 overflow-x-auto scrollbar-none">
             <div v-for="(section, idx) in formSections" :key="section.key"
                  class="flex items-center gap-1">
                 <div :class="['flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium transition-all duration-300',
@@ -554,7 +554,7 @@ const phoneValidation = computed(() => {
     <form @submit.prevent="submit" :style="{ direction: isRtl ? 'rtl' : 'ltr' }">
 
         <!-- Section 1: Contact Info -->
-        <div :class="['bg-white rounded-2xl shadow-sm border border-slate-100 p-6 mb-6 transition-all duration-700', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6']"
+        <div :class="['bg-white rounded-2xl shadow-sm border border-slate-100 p-4 sm:p-6 mb-6 transition-all duration-700', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6']"
              :style="{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)', transitionDelay: '100ms' }">
             <div class="flex items-center gap-3 mb-5">
                 <div class="w-10 h-10 bg-teal-100 rounded-xl flex items-center justify-center">
@@ -562,7 +562,7 @@ const phoneValidation = computed(() => {
                 </div>
                 <h2 class="text-lg font-bold text-slate-800">{{ isRtl ? '\u0645\u0639\u0644\u0648\u0645\u0627\u062A \u0627\u0644\u0627\u062A\u0635\u0627\u0644' : 'Contact Information' }}</h2>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
                 <!-- Full Name -->
                 <div>
                     <label class="block text-sm font-semibold text-slate-600 mb-1.5">
@@ -641,7 +641,7 @@ const phoneValidation = computed(() => {
         </div>
 
         <!-- Section 2: Personal Info -->
-        <div :class="['relative z-20 bg-white rounded-2xl shadow-sm border border-slate-100 p-6 mb-6 transition-all duration-700', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6']"
+        <div :class="['relative z-20 bg-white rounded-2xl shadow-sm border border-slate-100 p-4 sm:p-6 mb-6 transition-all duration-700', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6']"
              :style="{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)', transitionDelay: '200ms' }">
             <div class="flex items-center gap-3 mb-5">
                 <div class="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
@@ -649,7 +649,7 @@ const phoneValidation = computed(() => {
                 </div>
                 <h2 class="text-lg font-bold text-slate-800">{{ isRtl ? '\u0627\u0644\u0645\u0639\u0644\u0648\u0645\u0627\u062A \u0627\u0644\u0634\u062E\u0635\u064A\u0629' : 'Personal Information' }}</h2>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
                 <!-- Gender -->
                 <div>
                     <label class="block text-sm font-semibold text-slate-600 mb-1.5">{{ isRtl ? '\u0627\u0644\u062C\u0646\u0633' : 'Gender' }}</label>
@@ -802,7 +802,7 @@ const phoneValidation = computed(() => {
         </div>
 
         <!-- Section 3: Lead Details -->
-        <div :class="['bg-white rounded-2xl shadow-sm border border-slate-100 p-6 mb-6 transition-all duration-700', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6']"
+        <div :class="['bg-white rounded-2xl shadow-sm border border-slate-100 p-4 sm:p-6 mb-6 transition-all duration-700', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6']"
              :style="{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)', transitionDelay: '300ms' }">
             <div class="flex items-center gap-3 mb-5">
                 <div class="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
@@ -940,7 +940,7 @@ const phoneValidation = computed(() => {
         </div>
 
         <!-- Section 4: Notes -->
-        <div :class="['bg-white rounded-2xl shadow-sm border border-slate-100 p-6 mb-6 transition-all duration-700', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6']"
+        <div :class="['bg-white rounded-2xl shadow-sm border border-slate-100 p-4 sm:p-6 mb-6 transition-all duration-700', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6']"
              :style="{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)', transitionDelay: '400ms' }">
             <div class="flex items-center gap-3 mb-5">
                 <div class="w-10 h-10 bg-sky-100 rounded-xl flex items-center justify-center">

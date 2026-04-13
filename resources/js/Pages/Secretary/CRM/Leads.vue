@@ -603,7 +603,7 @@ const activeFilterPills = computed(() => {
         <div class="max-w-7xl mx-auto space-y-6 pb-20 md:pb-0">
 
             <!-- ═══════════════ HEADER ═══════════════ -->
-            <div class="relative overflow-hidden rounded-2xl p-6 sm:p-8"
+            <div class="relative overflow-hidden rounded-2xl p-5 sm:p-6 md:p-8"
                  style="background: linear-gradient(135deg, #0d9488 0%, #0f766e 50%, #115e59 100%);">
                 <!-- Decorative circles -->
                 <div class="absolute -top-10 ltr:-right-10 rtl:-left-10 w-40 h-40 rounded-full opacity-10" style="background: white;"></div>
@@ -663,7 +663,7 @@ const activeFilterPills = computed(() => {
             </div>
 
             <!-- ═══════════════ FILTER BAR ═══════════════ -->
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 transition-all duration-300">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-3 sm:p-5 transition-all duration-300">
                 <div class="flex flex-col lg:flex-row gap-3">
                     <!-- Search -->
                     <div class="relative flex-1 group">
@@ -1111,7 +1111,7 @@ const activeFilterPills = computed(() => {
             </div>
 
             <!-- ═══════════════ GRID VIEW ═══════════════ -->
-            <div v-if="viewMode === 'grid' && leads.data?.length" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+            <div v-if="viewMode === 'grid' && leads.data?.length" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4">
                 <div v-for="(lead, idx) in leads.data" :key="lead.id"
                     class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 hover:shadow-md hover:border-teal-200 transition-all duration-300 group"
                     :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
@@ -1300,12 +1300,12 @@ const activeFilterPills = computed(() => {
                                 </th>
                                 <th class="px-5 py-3.5 font-semibold ltr:text-left rtl:text-right">{{ isRtl ? 'العميل' : 'Lead' }}</th>
                                 <th v-if="isColumnVisible('phone')" class="px-5 py-3.5 font-semibold ltr:text-left rtl:text-right">{{ isRtl ? 'التواصل' : 'Contact' }}</th>
-                                <th v-if="isColumnVisible('source')" class="px-5 py-3.5 font-semibold ltr:text-left rtl:text-right">{{ isRtl ? 'المصدر' : 'Source' }}</th>
-                                <th v-if="isColumnVisible('priority')" class="px-5 py-3.5 font-semibold text-center">{{ isRtl ? 'الأولوية' : 'Priority' }}</th>
+                                <th v-if="isColumnVisible('source')" class="px-5 py-3.5 font-semibold ltr:text-left rtl:text-right hidden sm:table-cell">{{ isRtl ? 'المصدر' : 'Source' }}</th>
+                                <th v-if="isColumnVisible('priority')" class="px-5 py-3.5 font-semibold text-center hidden sm:table-cell">{{ isRtl ? 'الأولوية' : 'Priority' }}</th>
                                 <th v-if="isColumnVisible('status')" class="px-5 py-3.5 font-semibold text-center">{{ isRtl ? 'الحالة' : 'Status' }}</th>
-                                <th v-if="isColumnVisible('score')" class="px-5 py-3.5 font-semibold text-center">{{ isRtl ? 'النقاط' : 'Score' }}</th>
-                                <th v-if="isColumnVisible('next_follow_up')" class="px-5 py-3.5 font-semibold ltr:text-left rtl:text-right">{{ isRtl ? 'المتابعة القادمة' : 'Next Follow-up' }}</th>
-                                <th v-if="isColumnVisible('created_at')" class="px-5 py-3.5 font-semibold ltr:text-left rtl:text-right">{{ isRtl ? 'تاريخ الإنشاء' : 'Created' }}</th>
+                                <th v-if="isColumnVisible('score')" class="px-5 py-3.5 font-semibold text-center hidden md:table-cell">{{ isRtl ? 'النقاط' : 'Score' }}</th>
+                                <th v-if="isColumnVisible('next_follow_up')" class="px-5 py-3.5 font-semibold ltr:text-left rtl:text-right hidden md:table-cell">{{ isRtl ? 'المتابعة القادمة' : 'Next Follow-up' }}</th>
+                                <th v-if="isColumnVisible('created_at')" class="px-5 py-3.5 font-semibold ltr:text-left rtl:text-right hidden lg:table-cell">{{ isRtl ? 'تاريخ الإنشاء' : 'Created' }}</th>
                                 <th class="px-5 py-3.5 font-semibold text-center">{{ isRtl ? 'إجراءات' : 'Actions' }}</th>
                             </tr>
                         </thead>
@@ -1338,7 +1338,7 @@ const activeFilterPills = computed(() => {
                                     <p v-if="isColumnVisible('email') && lead.email" class="text-[11px] text-gray-400 mt-0.5 truncate max-w-[180px]">{{ lead.email }}</p>
                                 </td>
                                 <!-- Source -->
-                                <td v-if="isColumnVisible('source')" class="px-5 py-3.5">
+                                <td v-if="isColumnVisible('source')" class="px-5 py-3.5 hidden sm:table-cell">
                                     <span v-if="lead.source"
                                         class="inline-flex items-center gap-1 text-[11px] font-medium px-2.5 py-1 rounded-full"
                                         :style="{ backgroundColor: lead.source.color + '15', color: lead.source.color }">
@@ -1347,7 +1347,7 @@ const activeFilterPills = computed(() => {
                                     <span v-else class="text-gray-400 text-xs">-</span>
                                 </td>
                                 <!-- Priority (clickable) -->
-                                <td v-if="isColumnVisible('priority')" class="px-5 py-3.5 text-center">
+                                <td v-if="isColumnVisible('priority')" class="px-5 py-3.5 text-center hidden sm:table-cell">
                                     <div v-if="lead.priority && priorityConfig[lead.priority]" class="relative inline-block">
                                         <button @click.stop="toggleInlinePriority(lead.id)"
                                             class="inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1 rounded-full border cursor-pointer hover:shadow-sm transition-all"
@@ -1397,7 +1397,7 @@ const activeFilterPills = computed(() => {
                                     </div>
                                 </td>
                                 <!-- Score -->
-                                <td v-if="isColumnVisible('score')" class="px-5 py-3.5 text-center">
+                                <td v-if="isColumnVisible('score')" class="px-5 py-3.5 text-center hidden md:table-cell">
                                     <div class="inline-flex items-center gap-1.5">
                                         <div class="relative w-8 h-8">
                                             <svg class="w-8 h-8 -rotate-90" viewBox="0 0 36 36">
@@ -1418,7 +1418,7 @@ const activeFilterPills = computed(() => {
                                     </div>
                                 </td>
                                 <!-- Next Follow-up -->
-                                <td v-if="isColumnVisible('next_follow_up')" class="px-5 py-3.5">
+                                <td v-if="isColumnVisible('next_follow_up')" class="px-5 py-3.5 hidden md:table-cell">
                                     <div v-if="lead.next_follow_up_at" class="flex items-center gap-1.5"
                                          :class="isOverdue(lead.next_follow_up_at) ? 'text-red-500' : 'text-gray-500'">
                                         <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -1434,7 +1434,7 @@ const activeFilterPills = computed(() => {
                                     <span v-else class="text-xs text-gray-400">-</span>
                                 </td>
                                 <!-- Created -->
-                                <td v-if="isColumnVisible('created_at')" class="px-5 py-3.5">
+                                <td v-if="isColumnVisible('created_at')" class="px-5 py-3.5 hidden lg:table-cell">
                                     <span class="text-xs text-gray-400">{{ timeAgo(lead.created_at) }}</span>
                                 </td>
                                 <!-- Actions + Hover overlay -->
@@ -1627,7 +1627,7 @@ const activeFilterPills = computed(() => {
 
             <!-- ═══════════════ PAGINATION ═══════════════ -->
             <div v-if="leads.last_page > 1"
-                 class="bg-white rounded-2xl shadow-sm border border-gray-100 px-6 py-4">
+                 class="bg-white rounded-2xl shadow-sm border border-gray-100 px-4 sm:px-6 py-4">
                 <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
                     <p class="text-sm text-gray-500">
                         {{ isRtl ? 'عرض' : 'Showing' }}

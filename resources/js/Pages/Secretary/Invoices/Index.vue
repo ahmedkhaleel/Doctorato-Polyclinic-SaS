@@ -112,7 +112,7 @@ onMounted(() => {
                 </div>
 
                 <!-- Quick Stats -->
-                <div class="grid grid-cols-3 gap-3 mt-6">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-6">
                     <div class="bg-white/5 backdrop-blur-sm rounded-xl p-3.5 border border-white/10">
                         <p class="text-xs text-gray-400 font-medium">{{ isRtl ? 'الإجمالي' : 'Total Revenue' }}</p>
                         <p class="text-2xl font-bold text-white mt-1">{{ formatCurrency(totalRevenue) }}</p>
@@ -156,7 +156,7 @@ onMounted(() => {
                     </div>
 
                     <!-- Financial Summary -->
-                    <div class="flex items-center gap-6 sm:gap-8">
+                    <div class="flex items-center gap-4 sm:gap-6 flex-wrap">
                         <div class="text-center">
                             <p class="text-[10px] text-gray-400 font-semibold uppercase">{{ isRtl ? 'التاريخ' : 'Date' }}</p>
                             <p class="text-xs font-semibold text-gray-700 mt-0.5">{{ formatDate(inv.invoice_date) }}</p>

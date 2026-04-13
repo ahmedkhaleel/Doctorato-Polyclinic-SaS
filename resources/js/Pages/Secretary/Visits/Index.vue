@@ -107,7 +107,7 @@ onMounted(() => {
 <template>
     <div>
         <!-- ═══ HERO HEADER ═══ -->
-        <div class="relative -mx-4 sm:-mx-6 lg:-mx-8 -mt-4 sm:-mt-6 mb-8 px-4 sm:px-6 lg:px-8 pt-8 pb-10 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 overflow-hidden transition-all duration-700" :class="headerLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'">
+        <div class="relative -mx-4 sm:-mx-6 lg:-mx-8 -mt-4 sm:-mt-6 mb-8 px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8 pb-8 sm:pb-10 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 overflow-hidden transition-all duration-700" :class="headerLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'">
             <div class="absolute inset-0 opacity-10" style="background: radial-gradient(circle at 30% 50%, #0d9488 0%, transparent 60%)"></div>
             <div class="relative z-10">
                 <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
@@ -156,7 +156,7 @@ onMounted(() => {
                         <option value="session">{{ isRtl ? 'جلسة' : 'Session' }}</option>
                         <option value="follow_up">{{ isRtl ? 'متابعة' : 'Follow Up' }}</option>
                     </select>
-                    <div class="flex items-center gap-2">
+                    <div class="flex flex-wrap items-center gap-2">
                         <input v-model="dateFrom" type="date" :max="dateTo || undefined" class="px-3 py-2.5 bg-white/10 border border-white/20 rounded-xl text-sm text-white focus:ring-2 focus:ring-[#0d9488]/50 focus:border-[#0d9488] [color-scheme:dark]" />
                         <span class="text-gray-400 text-xs">{{ isRtl ? 'إلى' : 'to' }}</span>
                         <input v-model="dateTo" type="date" :min="dateFrom || undefined" class="px-3 py-2.5 bg-white/10 border border-white/20 rounded-xl text-sm text-white focus:ring-2 focus:ring-[#0d9488]/50 focus:border-[#0d9488] [color-scheme:dark]" />
