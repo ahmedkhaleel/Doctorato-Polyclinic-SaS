@@ -42,6 +42,8 @@ class StoreDoctorRequest extends FormRequest
             'followup_commission' => 'nullable|numeric|min:0|max:100',
             'dental_consultation_commission' => 'nullable|numeric|min:0|max:100',
             'dental_service_commission' => 'nullable|numeric|min:0|max:100',
+            'pediatric_consultation_commission' => 'nullable|numeric|min:0|max:100',
+            'pediatric_followup_commission' => 'nullable|numeric|min:0|max:100',
             'clinic_notes' => 'nullable|string',
             // Auto-create user account
             'create_user_account' => 'nullable|boolean',

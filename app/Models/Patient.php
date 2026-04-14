@@ -166,6 +166,16 @@ class Patient extends Model
         return $this->hasMany(PediatricChronicCondition::class);
     }
 
+    public function pediatricNutritionRecords()
+    {
+        return $this->hasMany(PediatricNutritionRecord::class);
+    }
+
+    public function pediatricScreeningTests()
+    {
+        return $this->hasMany(PediatricScreeningTest::class);
+    }
+
     // ─── Sensitive Data Access ─────────────────────────
 
     /**

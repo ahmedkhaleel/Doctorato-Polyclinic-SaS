@@ -25,6 +25,7 @@ class Doctor extends Model
         'dental_consultation_fee', 'dental_service_fee',
         'dermatology_commission', 'cosmetic_commission', 'followup_commission',
         'dental_consultation_commission', 'dental_service_commission',
+        'pediatric_consultation_commission', 'pediatric_followup_commission',
         'clinic_notes',
     ];
 
@@ -40,6 +41,8 @@ class Doctor extends Model
         'dental_service_fee' => 'decimal:2',
         'dental_consultation_commission' => 'decimal:2',
         'dental_service_commission' => 'decimal:2',
+        'pediatric_consultation_commission' => 'decimal:2',
+        'pediatric_followup_commission' => 'decimal:2',
     ];
 
     protected $appends = ['photo_url'];
