@@ -104,13 +104,15 @@ function formatDate(date) {
     const yesterday = new Date(today); yesterday.setDate(yesterday.getDate() - 1);
     if (d.toDateString() === today.toDateString()) return isRtl.value ? 'اليوم' : 'Today';
     if (d.toDateString() === yesterday.toDateString()) return isRtl.value ? 'أمس' : 'Yesterday';
-    return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    const loc = isRtl.value ? 'ar-EG' : 'en-GB';
+    return d.toLocaleDateString(loc, { day: '2-digit', month: 'short', year: 'numeric' });
 }
 
 function formatTime(date) {
     if (!date) return '';
     const d = new Date(date);
-    return d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+    const loc = isRtl.value ? 'ar-EG' : 'en-US';
+    return d.toLocaleTimeString(loc, { hour: '2-digit', minute: '2-digit', hour12: true });
 }
 </script>
 
@@ -151,12 +153,12 @@ function formatTime(date) {
                     >
                         <!-- Search -->
                         <div class="relative flex-1 max-w-lg">
-                            <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                            <svg class="absolute ltr:left-4 rtl:right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                             <input
                                 v-model="search"
                                 type="text"
                                 :placeholder="isRtl ? 'بحث باسم المريض أو ولي الأمر...' : 'Search patient or guardian name...'"
-                                class="w-full pl-12 pr-4 py-3 bg-white/15 backdrop-blur-sm border border-white/20 rounded-xl text-sm text-white placeholder-white/50 focus:ring-2 focus:ring-white/30 focus:border-white/40 focus:bg-white/20 transition-all"
+                                class="w-full ltr:pl-12 ltr:pr-4 rtl:pr-12 rtl:pl-4 py-3 bg-white/15 backdrop-blur-sm border border-white/20 rounded-xl text-sm text-white placeholder-white/50 focus:ring-2 focus:ring-white/30 focus:border-white/40 focus:bg-white/20 transition-all"
                             />
                         </div>
 

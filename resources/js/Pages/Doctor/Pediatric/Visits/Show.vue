@@ -134,14 +134,17 @@ function formatAge(months) {
 function formatDate(date) {
     if (!date) return '-';
     const d = new Date(date);
-    return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    const loc = isRtl.value ? 'ar-EG' : 'en-GB';
+    return d.toLocaleDateString(loc, { day: '2-digit', month: 'short', year: 'numeric' });
 }
 
 function formatDateTime(date) {
     if (!date) return '-';
     const d = new Date(date);
-    const datePart = d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
-    const timePart = d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+    const dateLoc = isRtl.value ? 'ar-EG' : 'en-GB';
+    const timeLoc = isRtl.value ? 'ar-EG' : 'en-US';
+    const datePart = d.toLocaleDateString(dateLoc, { day: '2-digit', month: 'short', year: 'numeric' });
+    const timePart = d.toLocaleTimeString(timeLoc, { hour: '2-digit', minute: '2-digit', hour12: true });
     return `${datePart} ${timePart}`;
 }
 

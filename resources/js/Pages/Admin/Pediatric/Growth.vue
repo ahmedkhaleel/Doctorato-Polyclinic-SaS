@@ -90,7 +90,8 @@ function percentileBg(val) {
 /* ── Helpers ────────────────────────────────────────────── */
 function formatDate(date) {
     if (!date) return '-';
-    return new Date(date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    const loc = isRtl.value ? 'ar-EG' : 'en-GB';
+    return new Date(date).toLocaleDateString(loc, { day: '2-digit', month: 'short', year: 'numeric' });
 }
 
 function calcAge(dob) {

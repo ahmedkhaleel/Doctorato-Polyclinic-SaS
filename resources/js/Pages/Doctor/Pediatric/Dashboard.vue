@@ -106,7 +106,8 @@ function getVisitStatusBadge(status) {
 function formatTime(dateStr) {
     if (!dateStr) return '--';
     const d = new Date(dateStr);
-    return d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+    const locale = isRtl.value ? 'ar-EG' : 'en-US';
+    return d.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit', hour12: true });
 }
 
 function formatDate(dateStr) {

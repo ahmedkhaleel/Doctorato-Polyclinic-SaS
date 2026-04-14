@@ -1,0 +1,1 @@
+.ped-hero-up[data-v-befc2798]{animation:pedHeroUp-befc2798 .7s cubic-bezier(.16,1,.3,1) both}@keyframes pedHeroUp-befc2798{0%{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}.ped-float[data-v-befc2798]{animation:pedFloat-befc2798 6s ease-in-out infinite}@keyframes pedFloat-befc2798{0%,to{transform:translateY(0)}50%{transform:translateY(-12px)}}
