@@ -59,7 +59,7 @@ const seoDescription = computed(() => localized(props.seo, 'description'));
                     {{ isRtl ? 'من نحن' : 'About Us' }}
                 </h1>
                 <p class="text-white/60 text-base sm:text-lg">
-                    {{ isRtl ? 'تعرفي على عيادة أورا ديرما' : 'Get to know AURA Derma Clinic' }}
+                    {{ isRtl ? 'تعرفي على عيادة دكتوراتو' : 'Get to know Doctorato Polyclinic' }}
                 </p>
             </div>
         </section>
@@ -107,8 +107,8 @@ const seoDescription = computed(() => localized(props.seo, 'description'));
                         <div v-else class="space-y-4">
                             <p class="text-charcoal/70 text-lg leading-relaxed">
                                 {{ isRtl
-                                    ? 'تأسست عيادة أورا ديرما على يد نخبة من أمهر أطباء الجلدية والتجميل في مصر، بهدف تقديم أعلى مستويات العناية بالبشرة في بيئة راقية ومريحة.'
-                                    : 'AURA Derma Clinic was founded by an elite group of the most skilled dermatology and cosmetic doctors in Egypt, with the aim of providing the highest standards of skincare in an elegant and comfortable environment.'
+                                    ? 'تأسست عيادة دكتوراتو على يد نخبة من أمهر أطباء الجلدية والتجميل في مصر، بهدف تقديم أعلى مستويات العناية بالبشرة في بيئة راقية ومريحة.'
+                                    : 'Doctorato Polyclinic was founded by an elite group of the most skilled dermatology and cosmetic doctors in Egypt, with the aim of providing the highest standards of skincare in an elegant and comfortable environment.'
                                 }}
                             </p>
                             <p class="text-charcoal/60 leading-relaxed">
@@ -130,7 +130,7 @@ const seoDescription = computed(() => localized(props.seo, 'description'));
                             <!-- Clinic Image -->
                             <div class="relative w-full h-[420px] rounded-lg overflow-hidden shadow-xl">
                                 <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&q=80"
-                                     alt="AURA Derma Clinic" class="w-full h-full object-cover" />
+                                     alt="Doctorato Polyclinic" class="w-full h-full object-cover" />
                             </div>
                             <!-- Decorative gold dot -->
                             <div class="absolute -bottom-3 ltr:-left-3 rtl:-right-3 w-6 h-6 bg-gold-primary rounded-full"></div>
@@ -295,7 +295,7 @@ const seoDescription = computed(() => localized(props.seo, 'description'));
 
 
         <!-- ============================== -->
-        <!-- WHY CHOOSE AURA SECTION        -->
+        <!-- WHY CHOOSE DOCTORATO SECTION        -->
         <!-- ============================== -->
         <section class="relative py-16 md:py-20 bg-beige overflow-hidden">
             <!-- Texture overlay -->
@@ -312,12 +312,12 @@ const seoDescription = computed(() => localized(props.seo, 'description'));
                     <div class="flex items-center justify-center gap-3 mb-4">
                         <span class="block w-8 h-px bg-gold-primary"></span>
                         <span class="text-gold-primary text-sm font-semibold uppercase tracking-widest">
-                            {{ isRtl ? 'لماذا أورا' : 'Why AURA' }}
+                            {{ isRtl ? 'لماذا دكتوراتو' : 'Why Doctorato' }}
                         </span>
                         <span class="block w-8 h-px bg-gold-primary"></span>
                     </div>
                     <h2 class="text-3xl sm:text-4xl font-bold text-charcoal mb-4">
-                        {{ isRtl ? 'لماذا تختارين عيادة أورا؟' : 'Why Choose AURA Clinic?' }}
+                        {{ isRtl ? 'لماذا تختارين عيادة دكتوراتو؟' : 'Why Choose Doctorato?' }}
                     </h2>
                     <p class="text-charcoal/60 text-lg max-w-2xl mx-auto">
                         {{ isRtl

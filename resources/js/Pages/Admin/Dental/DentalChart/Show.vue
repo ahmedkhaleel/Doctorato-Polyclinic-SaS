@@ -2,6 +2,7 @@
 import { ref, computed, onMounted, watch } from 'vue';
 import { Link, usePage, router } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import ConfirmModal from '@/Components/Admin/ConfirmModal.vue';
 import { useCurrency } from '@/Composables/useCurrency';
 
 const page = usePage();
@@ -322,9 +323,19 @@ function saveEntry() {
     });
 }
 
+const showDeleteEntryModal = ref(false);
+const pendingDeleteEntryId = ref(null);
+
 function deleteEntry(entryId) {
-    if (!confirm(isRtl.value ? 'هل أنت متأكد من حذف هذا السجل؟' : 'Delete this entry?')) return;
-    router.post(`/admin/dental/chart/${props.patient.id}/entry/${entryId}/delete`, { preserveScroll: true });
+    pendingDeleteEntryId.value = entryId;
+    showDeleteEntryModal.value = true;
+}
+
+function executeDeleteEntry() {
+    if (!pendingDeleteEntryId.value) return;
+    router.post(`/admin/dental/chart/${props.patient.id}/entry/${pendingDeleteEntryId.value}/delete`, { preserveScroll: true });
+    showDeleteEntryModal.value = false;
+    pendingDeleteEntryId.value = null;
 }
 
 function handleFileSelect(e) {
@@ -339,11 +350,14 @@ function removeFile(idx) { entryForm.value.files.splice(idx, 1); mediaPreview.va
 function toggleSurface(surface) { const idx = editForm.value.surfaces.indexOf(surface); if (idx > -1) editForm.value.surfaces.splice(idx, 1); else editForm.value.surfaces.push(surface); }
 function toggleEntrySurface(surface) { const idx = entryForm.value.surfaces.indexOf(surface); if (idx > -1) entryForm.value.surfaces.splice(idx, 1); else entryForm.value.surfaces.push(surface); }
 
-function initializeChart() {
-    const msg = chartMode.value === 'deciduous'
-        ? (isRtl.value ? 'هل أنت متأكد من تهيئة أسنان الأطفال؟' : 'Initialize deciduous chart?')
-        : (isRtl.value ? 'هل أنت متأكد من تهيئة المخطط؟' : 'Initialize chart?');
-    if (!window.confirm(msg)) return;
+const showInitializeModal = ref(false);
+
+function confirmInitializeChart() {
+    showInitializeModal.value = true;
+}
+
+function executeInitializeChart() {
+    showInitializeModal.value = false;
     router.post(`/admin/dental/chart/${props.patient.id}/initialize`, { mode: chartMode.value }, { preserveScroll: true });
 }
 
@@ -357,8 +371,7 @@ const selectedToothTreatments = computed(() => selectedTooth.value ? getToothTre
 <AdminLayout :title="isRtl ? 'مخطط الأسنان' : 'Dental Chart'">
 <div class="space-y-5">
     <!-- ═══ HERO ═══ -->
-    <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-5 sm:p-7"
-        :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'" style="transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1)">
+    <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-5 sm:p-7 dental-hero-enter">
         <div class="absolute top-0 right-0 w-72 h-72 bg-cyan-500/10 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl"></div>
         <div class="absolute bottom-0 left-0 w-48 h-48 bg-teal-500/8 rounded-full translate-y-1/3 -translate-x-1/4 blur-2xl"></div>
         <div class="relative z-10">
@@ -395,7 +408,7 @@ const selectedToothTreatments = computed(() => selectedTooth.value ? getToothTre
                     <Link :href="`/admin/dental/xrays/patient/${patient.id}`" class="inline-flex items-center px-3 py-2 text-xs font-medium text-cyan-300 bg-cyan-500/15 rounded-xl hover:bg-cyan-500/25 border border-cyan-500/20 transition-all">
                         {{ isRtl ? 'الأشعة' : 'X-Rays' }}
                     </Link>
-                    <button @click="initializeChart" class="inline-flex items-center px-3 py-2 text-xs font-medium text-cyan-400 bg-cyan-500/15 rounded-xl hover:bg-cyan-500/25 border border-cyan-500/20 transition-all">
+                    <button @click="confirmInitializeChart" class="inline-flex items-center px-3 py-2 text-xs font-medium text-cyan-400 bg-cyan-500/15 rounded-xl hover:bg-cyan-500/25 border border-cyan-500/20 transition-all">
                         {{ isRtl ? 'تهيئة' : 'Init' }}
                     </button>
                 </div>
@@ -432,7 +445,7 @@ const selectedToothTreatments = computed(() => selectedTooth.value ? getToothTre
     </div>
 
     <!-- ═══ CHART ═══ -->
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden" :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'" style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.15s">
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden dental-card-enter" style="animation-delay:0.15s">
         <!-- Legend -->
         <div class="px-4 sm:px-6 py-3 bg-gray-50/80 border-b border-gray-100 flex flex-wrap items-center gap-x-4 gap-y-1.5">
             <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{{ isRtl ? 'دليل' : 'Legend' }}</span>
@@ -1006,6 +1019,30 @@ const selectedToothTreatments = computed(() => selectedTooth.value ? getToothTre
 </div>
 </Transition>
 </Teleport>
+
+<!-- Initialize Chart Confirm Modal -->
+<ConfirmModal
+    :show="showInitializeModal"
+    :title="isRtl ? 'تهيئة المخطط' : 'Initialize Chart'"
+    :message="isRtl ? (chartMode === 'deciduous' ? 'هل أنت متأكد من تهيئة أسنان الأطفال؟' : 'هل أنت متأكد من تهيئة المخطط؟') : (chartMode === 'deciduous' ? 'Initialize deciduous chart?' : 'Initialize chart?')"
+    :confirmText="isRtl ? 'تهيئة' : 'Initialize'"
+    :cancelText="isRtl ? 'إلغاء' : 'Cancel'"
+    confirmColor="cyan"
+    @confirm="executeInitializeChart"
+    @cancel="showInitializeModal = false"
+/>
+
+<!-- Delete Entry Confirm Modal -->
+<ConfirmModal
+    :show="showDeleteEntryModal"
+    :title="isRtl ? 'حذف السجل' : 'Delete Entry'"
+    :message="isRtl ? 'هل أنت متأكد من حذف هذا السجل؟ لا يمكن التراجع عن هذا الإجراء.' : 'Are you sure you want to delete this entry? This action cannot be undone.'"
+    :confirmText="isRtl ? 'حذف' : 'Delete'"
+    :cancelText="isRtl ? 'إلغاء' : 'Cancel'"
+    confirmColor="red"
+    @confirm="executeDeleteEntry"
+    @cancel="showDeleteEntryModal = false"
+/>
 </AdminLayout>
 </template>
 
@@ -1051,4 +1088,15 @@ const selectedToothTreatments = computed(() => selectedTooth.value ? getToothTre
 /* Animations */
 .dental-row-enter .dental-tooth-cell, .dental-row-enter .dental-occlusal-cell { animation: toothFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
 @keyframes toothFadeIn { from { opacity: 0; transform: translateY(8px) scale(0.9); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+@keyframes dentalHeroEnter {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes dentalCardEnter {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+.dental-hero-enter { animation: dentalHeroEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.dental-card-enter { animation: dentalCardEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
 </style>

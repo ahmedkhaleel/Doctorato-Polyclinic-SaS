@@ -182,6 +182,7 @@ Route::middleware('doctor.auth')->group(function () {
 
         // Growth Records
         Route::post('/patients/{patient}/growth', [DoctorPediatricPatientController::class, 'storeGrowth'])->name('doctor.pediatric.patients.growth.store');
+        Route::post('/patients/{patient}/growth/{record}/update', [DoctorPediatricPatientController::class, 'updateGrowth'])->name('doctor.pediatric.patients.growth.update');
         Route::post('/patients/{patient}/growth/{record}/delete', [DoctorPediatricPatientController::class, 'destroyGrowth'])->name('doctor.pediatric.patients.growth.destroy');
 
         // Vaccinations
@@ -216,6 +217,9 @@ Route::middleware('doctor.auth')->group(function () {
 
         // Well-Child Schedule
         Route::get('/well-child', [DoctorPediatricExtraController::class, 'wellChild'])->name('doctor.pediatric.wellchild.index');
+        Route::get('/well-child/{patient}', [DoctorPediatricExtraController::class, 'wellChildPatient'])->name('doctor.pediatric.wellchild.show');
+        Route::post('/well-child/{patient}/initialize', [DoctorPediatricExtraController::class, 'initializeWellChild'])->name('doctor.pediatric.wellchild.initialize');
+        Route::post('/well-child/{patient}/{wellChild}/update', [DoctorPediatricExtraController::class, 'updateWellChild'])->name('doctor.pediatric.wellchild.update');
 
         // Reports
         Route::get('/reports', [DoctorPediatricExtraController::class, 'reports'])->name('doctor.pediatric.reports.index');
@@ -223,6 +227,10 @@ Route::middleware('doctor.auth')->group(function () {
         // PDF Exports
         Route::get('/patients/{patient}/vaccination-card', [DoctorPediatricExtraController::class, 'vaccinationCardPdf'])->name('doctor.pediatric.patients.vaccinationCard');
         Route::get('/patients/{patient}/growth-report', [DoctorPediatricExtraController::class, 'growthReportPdf'])->name('doctor.pediatric.patients.growthReport');
+        Route::get('/patients/{patient}/general-report', [DoctorPediatricExtraController::class, 'generalReportPdf'])->name('doctor.pediatric.patients.generalReport');
+        Route::get('/patients/{patient}/school-certificate', [DoctorPediatricExtraController::class, 'schoolCertificatePdf'])->name('doctor.pediatric.patients.schoolCertificate');
+        Route::get('/patients/{patient}/referral-letter', [DoctorPediatricExtraController::class, 'referralLetterPdf'])->name('doctor.pediatric.patients.referralLetter');
+        Route::get('/patients/{patient}/medical-leave', [DoctorPediatricExtraController::class, 'medicalLeavePdf'])->name('doctor.pediatric.patients.medicalLeave');
     });
 
     // ─── Exports ────────────────────────────────────────────

@@ -136,7 +136,7 @@ const previewMessage = computed(() => {
         .replace(/{first_name}/g, (props.lead.full_name || '').split(' ')[0])
         .replace(/{phone}/g, props.lead.phone || '')
         .replace(/{email}/g, props.lead.email || '')
-        .replace(/{clinic_name}/g, 'Aura Derma Clinic')
+        .replace(/{clinic_name}/g, 'Doctorato Polyclinic')
         .replace(/{date}/g, new Date().toLocaleDateString('en-GB'));
 });
 

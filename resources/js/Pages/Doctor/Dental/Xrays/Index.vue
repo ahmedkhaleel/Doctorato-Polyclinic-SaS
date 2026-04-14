@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, onMounted, computed } from 'vue';
+import { ref, watch, computed } from 'vue';
 import { Link, router, usePage } from '@inertiajs/vue3';
 import DoctorLayout from '@/Layouts/DoctorLayout.vue';
 import { useLocale } from '@/Composables/useLocale.js';
@@ -17,27 +17,32 @@ const props = defineProps({
     xrayTypes: Array,
 });
 
-const mounted = ref(false);
 const search = ref(props.filters?.search || '');
 const typeFilter = ref(props.filters?.type || '');
 const viewMode = ref('grid');
 const selectedXray = ref(null);
+const isFiltering = ref(false);
 
 let searchTimeout = null;
 
-onMounted(() => {
-    setTimeout(() => { mounted.value = true; }, 50);
+// ─── Toast Notification ─────────────────────────────────
+const showSuccess = ref(false);
+const successMessage = ref('');
+watch(() => page.props.flash?.success, (msg) => {
+    if (msg) { successMessage.value = msg; showSuccess.value = true; setTimeout(() => { showSuccess.value = false; }, 4000); }
 });
 
 function applyFilters() {
     clearTimeout(searchTimeout);
     searchTimeout = setTimeout(() => {
+        isFiltering.value = true;
         router.get('/doctor/dental/xrays', {
             search: search.value || undefined,
             type: typeFilter.value || undefined,
         }, {
             preserveState: true,
             replace: true,
+            onFinish: () => { isFiltering.value = false; },
         });
     }, 400);
 }
@@ -53,10 +58,7 @@ function formatDate(date) {
 <template>
     <div class="space-y-6">
         <!-- Hero Header -->
-        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6 sm:p-8"
-            :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
-            style="transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1)"
-        >
+        <div class="dental-hero-enter relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6 sm:p-8">
             <div class="absolute top-0 right-0 w-72 h-72 bg-[#C4A265]/10 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl"></div>
             <div class="absolute bottom-0 left-0 w-48 h-48 bg-purple-500/10 rounded-full translate-y-1/2 -translate-x-1/4 blur-2xl"></div>
 
@@ -97,12 +99,10 @@ function formatDate(date) {
                 </div>
 
                 <!-- Filters -->
-                <div class="flex flex-col sm:flex-row gap-3 max-w-2xl"
-                    :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
-                    style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.15s"
-                >
+                <div class="flex flex-col sm:flex-row gap-3 max-w-2xl dental-card-enter" style="animation-delay:0.15s">
                     <div class="relative flex-1">
-                        <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                        <svg v-if="!isFiltering" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                        <svg v-else class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#C4A265] animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
                         <input
                             v-model="search"
                             type="text"
@@ -127,10 +127,7 @@ function formatDate(date) {
         </div>
 
         <!-- Table View -->
-        <div v-if="viewMode === 'table'" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden"
-            :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
-            style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.2s"
-        >
+        <div v-if="viewMode === 'table'" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden dental-card-enter" style="animation-delay:0.2s">
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50/80">
@@ -202,10 +199,7 @@ function formatDate(date) {
         </div>
 
         <!-- Grid View -->
-        <div v-if="viewMode === 'grid'"
-            :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
-            style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.2s"
-        >
+        <div v-if="viewMode === 'grid'" class="dental-card-enter" style="animation-delay:0.2s">
             <div v-if="!xrays.data || xrays.data.length === 0" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-12 text-center">
                 <div class="w-16 h-16 mx-auto bg-gray-50 rounded-2xl flex items-center justify-center mb-4 border border-gray-100">
                     <svg class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
@@ -265,47 +259,88 @@ function formatDate(date) {
             </div>
         </div>
 
+        <!-- Success Toast -->
+        <Transition
+            enter-active-class="transition ease-out duration-300"
+            enter-from-class="translate-y-4 opacity-0"
+            enter-to-class="translate-y-0 opacity-100"
+            leave-active-class="transition ease-in duration-200"
+            leave-from-class="translate-y-0 opacity-100"
+            leave-to-class="translate-y-4 opacity-0"
+        >
+            <div v-if="showSuccess" class="fixed bottom-6 ltr:right-6 rtl:left-6 z-50 flex items-center gap-3 px-5 py-3 bg-emerald-600 text-white rounded-xl shadow-lg shadow-emerald-200/50">
+                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <span class="text-sm font-medium">{{ successMessage }}</span>
+            </div>
+        </Transition>
+
         <!-- Lightbox Modal -->
         <Teleport to="body">
-            <div v-if="selectedXray" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4" @click.self="selectedXray = null">
-                <div class="relative max-w-4xl w-full">
-                    <button @click="selectedXray = null" class="absolute -top-10 end-0 text-white hover:text-gray-300 transition">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                    <img
-                        v-if="selectedXray.image_url"
-                        :src="selectedXray.image_url"
-                        alt=""
-                        class="w-full rounded-lg"
-                    />
-                    <div class="mt-4 bg-white rounded-xl p-3 sm:p-4">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-                            <div>
-                                <span class="text-gray-500">{{ isRtl ? 'المريض' : 'Patient' }}:</span>
-                                <span class="ms-1 font-medium">{{ selectedXray.patient?.full_name || '-' }}</span>
-                            </div>
-                            <div>
-                                <span class="text-gray-500">{{ isRtl ? 'النوع' : 'Type' }}:</span>
-                                <span class="ms-1 font-medium">{{ selectedXray.type }}</span>
-                            </div>
-                            <div>
-                                <span class="text-gray-500">{{ isRtl ? 'السن' : 'Tooth' }}:</span>
-                                <span class="ms-1 font-medium">{{ selectedXray.tooth_number || '-' }}</span>
-                            </div>
-                            <div>
-                                <span class="text-gray-500">{{ isRtl ? 'التاريخ' : 'Date' }}:</span>
-                                <span class="ms-1 font-medium">{{ formatDate(selectedXray.taken_date || selectedXray.created_at) }}</span>
-                            </div>
-                            <div v-if="selectedXray.findings" class="col-span-2">
-                                <span class="text-gray-500">{{ isRtl ? 'النتائج' : 'Findings' }}:</span>
-                                <span class="ms-1">{{ selectedXray.findings }}</span>
+            <Transition
+                enter-active-class="transition ease-out duration-300"
+                enter-from-class="opacity-0"
+                enter-to-class="opacity-100"
+                leave-active-class="transition ease-in duration-200"
+                leave-from-class="opacity-100"
+                leave-to-class="opacity-0"
+            >
+                <div v-if="selectedXray" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4" @click.self="selectedXray = null">
+                    <div class="relative max-w-4xl w-full animate-[lightboxScale_0.3s_ease-out]">
+                        <button @click="selectedXray = null" class="absolute -top-10 end-0 text-white hover:text-gray-300 transition">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                        <img
+                            v-if="selectedXray.image_url"
+                            :src="selectedXray.image_url"
+                            alt=""
+                            class="w-full rounded-xl shadow-2xl"
+                        />
+                        <div class="mt-4 bg-white rounded-xl p-3 sm:p-4 shadow-lg">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                                <div>
+                                    <span class="text-gray-500">{{ isRtl ? 'المريض' : 'Patient' }}:</span>
+                                    <span class="ms-1 font-medium">{{ selectedXray.patient?.full_name || '-' }}</span>
+                                </div>
+                                <div>
+                                    <span class="text-gray-500">{{ isRtl ? 'النوع' : 'Type' }}:</span>
+                                    <span class="ms-1 font-medium">{{ selectedXray.type }}</span>
+                                </div>
+                                <div>
+                                    <span class="text-gray-500">{{ isRtl ? 'السن' : 'Tooth' }}:</span>
+                                    <span class="ms-1 font-medium">{{ selectedXray.tooth_number || '-' }}</span>
+                                </div>
+                                <div>
+                                    <span class="text-gray-500">{{ isRtl ? 'التاريخ' : 'Date' }}:</span>
+                                    <span class="ms-1 font-medium">{{ formatDate(selectedXray.taken_date || selectedXray.created_at) }}</span>
+                                </div>
+                                <div v-if="selectedXray.findings" class="col-span-2">
+                                    <span class="text-gray-500">{{ isRtl ? 'النتائج' : 'Findings' }}:</span>
+                                    <span class="ms-1">{{ selectedXray.findings }}</span>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </Transition>
         </Teleport>
     </div>
 </template>
+
+<style>
+@keyframes dentalHeroEnter {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes dentalCardEnter {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+.dental-hero-enter { animation: dentalHeroEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.dental-card-enter { animation: dentalCardEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
+@keyframes lightboxScale {
+    from { opacity: 0; transform: scale(0.92); }
+    to   { opacity: 1; transform: scale(1); }
+}
+</style>

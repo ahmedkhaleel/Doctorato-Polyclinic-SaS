@@ -117,9 +117,13 @@ const isDentalEnabled = computed(() => {
     const dental = Object.values(modules.value).find(m => m.slug === 'dental');
     return dental?.enabled ?? false;
 });
+const isPediatricEnabled = computed(() => {
+    const ped = Object.values(modules.value).find(m => m.slug === 'pediatric');
+    return ped?.enabled ?? false;
+});
 
 const isConsultation = computed(() =>
-    bookingType.value === 'dermatology_consultation' || bookingType.value === 'cosmetic_consultation' || bookingType.value === 'dental_consultation'
+    ['dermatology_consultation', 'cosmetic_consultation', 'dental_consultation', 'pediatric_consultation'].includes(bookingType.value)
 );
 
 const isDental = computed(() =>
@@ -627,7 +631,7 @@ function getServiceLabel(id) {
             <div class="mb-6">
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-5 max-w-4xl mx-auto">
                     <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">{{ $t('a_booking_type') }}</h3>
-                    <div class="grid gap-3" :class="isDentalEnabled ? 'grid-cols-5' : 'grid-cols-3'">
+                    <div class="grid gap-3 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4" :class="{ 'xl:grid-cols-5': isDentalEnabled || isPediatricEnabled }">
                         <button
                             type="button"
                             @click="bookingType = 'dermatology_consultation'"
@@ -689,6 +693,32 @@ function getServiceLabel(id) {
                             ]"
                         >
                             <p class="text-sm font-semibold text-gray-800">{{ $t('a_dental_service') }}</p>
+                        </button>
+                        <button
+                            v-if="isPediatricEnabled"
+                            type="button"
+                            @click="bookingType = 'pediatric_consultation'"
+                            :class="[
+                                'p-3 rounded-xl border-2 transition-all text-start',
+                                bookingType === 'pediatric_consultation'
+                                    ? 'border-green-500 bg-green-50/50'
+                                    : 'border-gray-200 hover:border-gray-300'
+                            ]"
+                        >
+                            <p class="text-sm font-semibold text-gray-800">{{ isRtl ? 'كشف أطفال' : 'Pediatric Consultation' }}</p>
+                        </button>
+                        <button
+                            v-if="isPediatricEnabled"
+                            type="button"
+                            @click="bookingType = 'pediatric_service'"
+                            :class="[
+                                'p-3 rounded-xl border-2 transition-all text-start',
+                                bookingType === 'pediatric_service'
+                                    ? 'border-green-500 bg-green-50/50'
+                                    : 'border-gray-200 hover:border-gray-300'
+                            ]"
+                        >
+                            <p class="text-sm font-semibold text-gray-800">{{ isRtl ? 'خدمة أطفال' : 'Pediatric Service' }}</p>
                         </button>
                     </div>
                 </div>

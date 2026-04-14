@@ -28,8 +28,8 @@ function submit() {
         <div class="w-full max-w-md">
             <!-- Logo -->
             <div class="text-center mb-8">
-                <img src="/images/logo/logo.png" alt="AURA Derma Clinic" class="mx-auto h-20 w-auto mb-3 drop-shadow-lg" />
-                <h1 class="text-3xl font-bold tracking-widest text-purple-400">AURA</h1>
+                <img src="/images/logo/logo.png" alt="Doctorato Polyclinic" class="mx-auto h-20 w-auto mb-3 drop-shadow-lg" />
+                <h1 class="text-3xl font-bold tracking-widest text-[var(--brand-primary)]">Doctorato</h1>
                 <p class="text-gray-400 text-sm uppercase tracking-widest mt-1">{{ isRtl ? 'بوابة مدير الموقع' : 'Webmaster Portal' }}</p>
             </div>
 
@@ -54,7 +54,7 @@ function submit() {
                             autofocus
                             class="w-full px-4 py-3 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white placeholder-white/30 focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 text-sm transition-all duration-200"
                             :class="form.errors.email ? 'border-red-500/50' : ''"
-                            placeholder="webmaster@aura-derma.com"
+                            placeholder="webmaster@doctorato.com"
                         />
                         <p v-if="form.errors.email" class="mt-1.5 text-sm text-red-400">{{ form.errors.email }}</p>
                     </div>
@@ -103,7 +103,7 @@ function submit() {
                 </form>
             </div>
 
-            <p class="text-center text-white/20 text-xs mt-6">&copy; {{ new Date().getFullYear() }} {{ isRtl ? 'عيادة أورا ديرما &middot; بوابة مدير الموقع' : 'AURA Derma Clinic &middot; Webmaster Portal' }}</p>
+            <p class="text-center text-white/20 text-xs mt-6">&copy; {{ new Date().getFullYear() }} {{ isRtl ? 'عيادة دكتوراتو &middot; بوابة مدير الموقع' : 'Doctorato Polyclinic &middot; Webmaster Portal' }}</p>
         </div>
     </div>
 </template>

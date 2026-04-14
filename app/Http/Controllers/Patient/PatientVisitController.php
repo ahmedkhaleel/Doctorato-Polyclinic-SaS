@@ -12,7 +12,7 @@ class PatientVisitController extends BasePatientController
     public function index(Request $request): Response
     {
         $filters = $request->validate([
-            'module' => 'nullable|string|in:derma,dental',
+            'module' => 'nullable|string|in:derma,dental,pediatric',
         ]);
 
         $query = Visit::where('patient_id', $this->patientId($request))

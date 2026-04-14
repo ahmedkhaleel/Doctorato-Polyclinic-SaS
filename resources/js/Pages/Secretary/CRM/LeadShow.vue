@@ -272,7 +272,7 @@ const previewMessage = computed(() => {
         .replace(/{first_name}/g, (props.lead.full_name || '').split(' ')[0])
         .replace(/{phone}/g, props.lead.phone || '')
         .replace(/{email}/g, props.lead.email || '')
-        .replace(/{clinic_name}/g, isRtl.value ? 'عيادة أورا ديرما' : 'Aura Derma Clinic')
+        .replace(/{clinic_name}/g, isRtl.value ? 'عيادة دكتوراتو' : 'Doctorato Polyclinic')
         .replace(/{date}/g, today);
 });
 
@@ -668,7 +668,7 @@ function printLeadProfile() {
         '<style>body{font-family:system-ui,sans-serif;padding:30px;color:#333}table{width:100%;border-collapse:collapse}th{background:#0d9488;color:white;text-align:start;padding:8px 10px;font-size:13px}.ig{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:20px 0}.ii{padding:10px;background:#f9fafb;border-radius:8px;border:1px solid #e5e7eb}.il{font-size:11px;color:#6b7280;text-transform:uppercase}.iv{font-size:15px;font-weight:600;margin-top:2px}h1{color:#0d9488;margin:0}</style></head><body>',
         '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px"><div><h1>' + (lead.full_name || '').replace(/</g, '&lt;') + '</h1>',
         '<p style="color:#6b7280;margin:4px 0">' + statusText + ' | ' + prioText + ' | Score: ' + (lead.score || 0) + '</p></div>',
-        '<div style="font-size:12px;color:#9ca3af">Aura Derma Clinic CRM</div></div>',
+        '<div style="font-size:12px;color:#9ca3af">Doctorato Polyclinic CRM</div></div>',
         '<div class="ig"><div class="ii"><div class="il">Phone</div><div class="iv">' + (lead.phone || '-') + '</div></div>',
         '<div class="ii"><div class="il">Email</div><div class="iv">' + (lead.email || '-').replace(/</g, '&lt;') + '</div></div>',
         '<div class="ii"><div class="il">City</div><div class="iv">' + (lead.city || '-').replace(/</g, '&lt;') + '</div></div>',

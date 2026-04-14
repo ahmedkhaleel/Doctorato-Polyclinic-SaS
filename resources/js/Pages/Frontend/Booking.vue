@@ -148,6 +148,12 @@ const bookingTypes = computed(() => {
             { key: 'dental_service', icon: 'M11.42 15.17l-5.658-5.66A4.022 4.022 0 013 6.476V5a1 1 0 011-1h2.476c1.064 0 2.084.423 2.836 1.176l5.658 5.66M11.42 15.17l2.496-2.496M11.42 15.17l4.243 4.243a2 2 0 002.828 0l.586-.586a2 2 0 000-2.828L14.83 11.758M14.83 11.758L18 8.586a2 2 0 000-2.828l-.586-.586a2 2 0 00-2.828 0L11.42 8.414', color: 'teal' },
         ];
     }
+    if (selectedModule.value === 'pediatric') {
+        return [
+            { key: 'pediatric_consultation', icon: 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z', color: 'green' },
+            { key: 'pediatric_service', icon: 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z', color: 'lime' },
+        ];
+    }
     // Default: derma
     return [
         { key: 'dermatology_consultation', icon: 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z', color: 'blue' },
@@ -177,10 +183,10 @@ const today = computed(() => {
 
 // Booking type helpers
 const isConsultation = computed(() =>
-    ['dermatology_consultation', 'cosmetic_consultation', 'dental_consultation'].includes(form.booking_type)
+    ['dermatology_consultation', 'cosmetic_consultation', 'dental_consultation', 'pediatric_consultation'].includes(form.booking_type)
 );
 
-const isService = computed(() => ['service', 'dental_service'].includes(form.booking_type));
+const isService = computed(() => ['service', 'dental_service', 'pediatric_service'].includes(form.booking_type));
 
 // Filtered services based on selected category + module
 const filteredServices = computed(() => {

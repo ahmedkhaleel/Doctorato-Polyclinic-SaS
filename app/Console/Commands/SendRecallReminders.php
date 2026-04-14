@@ -129,7 +129,7 @@ class SendRecallReminders extends Command
         $windowStart = today()->subMonths($months)->subDays(3);
         $windowEnd = today()->subMonths($months)->addDays(3);
 
-        $patients = $this->getPatientsForRecall('dermatology', $windowStart, $windowEnd, $maxPerDay);
+        $patients = $this->getPatientsForRecall('derma', $windowStart, $windowEnd, $maxPerDay);
 
         $count = 0;
 

@@ -47,6 +47,12 @@ Schedule::command('dental:smart-notifications')->everyTwoHours()->between('08:00
 // Dental: Auto-expire pending treatment plan consents daily at midnight
 Schedule::command('dental:expire-consents')->dailyAt('00:30');
 
+// Pediatric: Send upcoming vaccination reminders (7 days ahead) at 9:00 AM
+Schedule::command('pediatric:vaccination-reminders --type=upcoming --days=7')->dailyAt('09:00');
+
+// Pediatric: Send overdue vaccination alerts weekly on Tuesdays at 10:30 AM
+Schedule::command('pediatric:vaccination-reminders --type=overdue --days=14')->weeklyOn(2, '10:30');
+
 // Inventory: Check low stock and auto-generate purchase orders daily at 9:00 AM
 Schedule::command('inventory:check-low-stock')->dailyAt('09:00');
 

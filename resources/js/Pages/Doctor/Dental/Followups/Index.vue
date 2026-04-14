@@ -17,11 +17,18 @@ const props = defineProps({
 const search = ref(props.filters?.search || '');
 const statusFilter = ref(props.filters?.status || 'pending');
 
+const isFiltering = ref(false);
+
 function applyFilters() {
+    isFiltering.value = true;
     router.get('/doctor/dental/followups', {
         search: search.value || undefined,
         status: statusFilter.value || undefined,
-    }, { preserveState: true, preserveScroll: true });
+    }, {
+        preserveState: true,
+        preserveScroll: true,
+        onFinish: () => { isFiltering.value = false; },
+    });
 }
 
 let searchTimeout = null;
@@ -74,53 +81,61 @@ const colorMap = {
 
 <template>
     <div class="space-y-6">
-        <!-- Header -->
-        <div>
-            <h1 class="text-2xl font-bold text-gray-900">{{ isRtl ? 'متابعات مرضاي' : 'My Patient Follow-ups' }}</h1>
-            <p class="text-sm text-gray-500 mt-1">{{ isRtl ? 'مواعيد المتابعة المجدولة لمرضاك' : 'Scheduled follow-up appointments for your patients' }}</p>
-        </div>
+        <!-- Hero Header -->
+        <div class="dental-hero-enter relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6 sm:p-7">
+            <div class="absolute -top-12 ltr:-right-12 rtl:-left-12 w-48 h-48 bg-[#C4A265]/10 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-8 ltr:left-20 rtl:right-20 w-32 h-32 bg-purple-500/10 rounded-full blur-2xl"></div>
 
-        <!-- Stats Cards -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-            <button
-                v-for="card in statCards"
-                :key="card.label"
-                @click="statusFilter = card.filter"
-                class="relative bg-white rounded-2xl p-3 sm:p-4 shadow-sm border border-gray-100/80 hover:shadow-md transition-all duration-200 text-left"
-                :class="statusFilter === card.filter ? 'ring-2 ring-offset-1 ring-[#C4A265]' : ''"
-            >
-                <div :class="`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${colorMap[card.color].gradient} rounded-t-2xl opacity-80`"></div>
-                <p class="text-[13px] font-medium text-gray-500">{{ card.label }}</p>
-                <p class="text-2xl font-bold mt-1" :class="colorMap[card.color].text">{{ card.value }}</p>
-            </button>
-        </div>
-
-        <!-- Filters -->
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-3 sm:p-4">
-            <div class="flex flex-col sm:flex-row gap-3">
-                <div class="flex-1">
-                    <input
-                        v-model="search"
-                        type="text"
-                        :placeholder="isRtl ? 'بحث بالاسم أو رقم الملف...' : 'Search by name or file #...'"
-                        class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-[#C4A265] focus:border-transparent"
-                    />
+            <div class="relative z-10">
+                <div class="mb-5">
+                    <p class="text-[#C4A265] text-xs font-semibold tracking-wider uppercase mb-1">{{ isRtl ? 'طب الأسنان' : 'Dental' }}</p>
+                    <h1 class="text-2xl sm:text-3xl font-bold text-white">{{ isRtl ? 'متابعات مرضاي' : 'My Patient Follow-ups' }}</h1>
+                    <p class="text-gray-400 text-sm mt-1">{{ isRtl ? 'مواعيد المتابعة المجدولة لمرضاك' : 'Scheduled follow-up appointments for your patients' }}</p>
                 </div>
-                <select
-                    v-model="statusFilter"
-                    class="px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-[#C4A265] focus:border-transparent"
-                >
-                    <option value="pending">{{ isRtl ? 'تحتاج حجز' : 'Needs Booking' }}</option>
-                    <option value="overdue">{{ isRtl ? 'متأخرة' : 'Overdue' }}</option>
-                    <option value="booked">{{ isRtl ? 'تم الحجز' : 'Booked' }}</option>
-                    <option value="completed">{{ isRtl ? 'مكتمل' : 'Completed' }}</option>
-                    <option value="all">{{ isRtl ? 'الكل' : 'All' }}</option>
-                </select>
+
+                <!-- Stats inside hero -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
+                    <button
+                        v-for="(card, idx) in statCards"
+                        :key="card.label"
+                        @click="statusFilter = card.filter"
+                        class="dental-card-enter relative bg-white/5 backdrop-blur-sm rounded-xl p-3 border text-left transition-all duration-200 hover:bg-white/10"
+                        :class="statusFilter === card.filter ? 'border-[#C4A265]/50 ring-1 ring-[#C4A265]/30' : 'border-white/10'"
+                        :style="{ animationDelay: (0.15 + idx * 0.05) + 's' }"
+                    >
+                        <p class="text-[11px] font-medium text-gray-400">{{ card.label }}</p>
+                        <p class="text-xl font-bold mt-0.5 text-white">{{ card.value }}</p>
+                    </button>
+                </div>
+
+                <!-- Filters inside hero -->
+                <div class="dental-card-enter flex flex-col sm:flex-row gap-3 mt-4" style="animation-delay:0.35s">
+                    <div class="relative flex-1">
+                        <svg v-if="!isFiltering" class="absolute ltr:left-4 rtl:right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                        <svg v-else class="absolute ltr:left-4 rtl:right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#C4A265] animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+                        <input
+                            v-model="search"
+                            type="text"
+                            :placeholder="isRtl ? 'بحث بالاسم أو رقم الملف...' : 'Search by name or file #...'"
+                            class="w-full ltr:pl-11 rtl:pr-11 px-4 py-2.5 bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl text-sm text-white placeholder-gray-400 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]/50 transition"
+                        />
+                    </div>
+                    <select
+                        v-model="statusFilter"
+                        class="px-4 py-2.5 bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl text-sm text-white focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]/50 transition"
+                    >
+                        <option value="pending" class="text-gray-900">{{ isRtl ? 'تحتاج حجز' : 'Needs Booking' }}</option>
+                        <option value="overdue" class="text-gray-900">{{ isRtl ? 'متأخرة' : 'Overdue' }}</option>
+                        <option value="booked" class="text-gray-900">{{ isRtl ? 'تم الحجز' : 'Booked' }}</option>
+                        <option value="completed" class="text-gray-900">{{ isRtl ? 'مكتمل' : 'Completed' }}</option>
+                        <option value="all" class="text-gray-900">{{ isRtl ? 'الكل' : 'All' }}</option>
+                    </select>
+                </div>
             </div>
         </div>
 
         <!-- Followups List -->
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
+        <div class="dental-card-enter bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden" style="animation-delay:0.4s">
             <div v-if="followups.data?.length" class="divide-y divide-gray-50">
                 <div v-for="f in followups.data" :key="f.id"
                     class="px-4 sm:px-6 py-4 hover:bg-gray-50/50 transition-colors"
@@ -207,3 +222,16 @@ const colorMap = {
         </div>
     </div>
 </template>
+
+<style>
+@keyframes dentalHeroEnter {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes dentalCardEnter {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+.dental-hero-enter { animation: dentalHeroEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.dental-card-enter { animation: dentalCardEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
+</style>

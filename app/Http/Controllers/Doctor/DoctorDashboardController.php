@@ -8,7 +8,12 @@ use App\Models\DentalScheduledFollowup;
 use App\Models\DentalTreatment;
 use App\Models\DentalTreatmentPlan;
 use App\Models\DoctorPayout;
+use App\Models\Invoice;
+use App\Models\Patient;
+use App\Models\PediatricGrowthRecord;
+use App\Models\PediatricVaccination;
 use App\Models\Visit;
+use App\Services\ModuleManager;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -219,6 +224,41 @@ class DoctorDashboardController extends BaseDoctorController
             }
         }
 
+        // ─── Pediatric overview (for pediatric doctors) ─────────
+        $pediatric = null;
+        if ($doctor->module === 'pediatric' && ModuleManager::isEnabled('pediatric')) {
+            $pediatricVisitsMonth = Visit::where('doctor_id', $doctorId)
+                ->where('module', 'pediatric')
+                ->whereMonth('visit_date', $now->month)
+                ->whereYear('visit_date', $now->year);
+
+            $pediatricRevenueMonth = Invoice::whereHas('visit', function ($q) use ($doctorId, $now) {
+                $q->where('doctor_id', $doctorId)
+                    ->where('module', 'pediatric')
+                    ->where('status', 'completed')
+                    ->whereMonth('visit_date', $now->month)
+                    ->whereYear('visit_date', $now->year);
+            })->sum('total');
+
+            $pediatric = [
+                'total_patients' => Patient::whereHas('visits', fn ($q) => $q->where('doctor_id', $doctorId)->where('module', 'pediatric'))->count(),
+                'visits_today' => Visit::where('doctor_id', $doctorId)->where('module', 'pediatric')->whereDate('visit_date', today())->count(),
+                'visits_this_month' => (clone $pediatricVisitsMonth)->count(),
+                'vaccinations_due' => PediatricVaccination::where('doctor_id', $doctorId)
+                    ->where('status', PediatricVaccination::STATUS_SCHEDULED)
+                    ->where('scheduled_date', '<=', today())
+                    ->count(),
+                'growth_alerts' => PediatricGrowthRecord::where('doctor_id', $doctorId)
+                    ->where(function ($q) {
+                        $q->where('weight_percentile', '<', 3)
+                            ->orWhere('weight_percentile', '>', 97)
+                            ->orWhere('height_percentile', '<', 3)
+                            ->orWhere('bmi_percentile', '>', 97);
+                    })->whereMonth('measurement_date', $now->month)->count(),
+                'revenue_this_month' => round((float) $pediatricRevenueMonth, 2),
+            ];
+        }
+
         return Inertia::render('Doctor/Dashboard', [
             'today' => $today,
             'monthly' => $monthly,
@@ -231,6 +271,7 @@ class DoctorDashboardController extends BaseDoctorController
             'payoutSummary' => $payoutSummary,
             'doctorInfo' => $doctorInfo,
             'dental' => $dental,
+            'pediatric' => $pediatric,
             'pendingFollowups' => $pendingFollowups,
             'todayMedicalAlerts' => $todayMedicalAlerts,
         ]);

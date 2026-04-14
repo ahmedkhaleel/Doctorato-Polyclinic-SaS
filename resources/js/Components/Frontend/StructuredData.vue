@@ -16,8 +16,8 @@ const props = defineProps({
 const medicalBusinessSchema = {
     '@context': 'https://schema.org',
     '@type': 'MedicalBusiness',
-    'name': 'AURA Derma Aesthetic Clinic',
-    'alternateName': '\u0639\u064A\u0627\u062F\u0629 \u0623\u0648\u0631\u0627 \u062F\u064A\u0631\u0645\u0627 \u0644\u0644\u062C\u0644\u062F\u064A\u0629 \u0648\u0627\u0644\u062A\u062C\u0645\u064A\u0644',
+    'name': 'Doctorato Polyclinic',
+    'alternateName': '\u0639\u064A\u0627\u062F\u0629 \u062F\u0643\u062A\u0648\u0631\u0627\u062A\u0648 \u0627\u0644\u062A\u062E\u0635\u0635\u064A\u0629',
     'image': '/images/clinic-photo.jpg',
     'address': {
         '@type': 'PostalAddress',
@@ -26,9 +26,9 @@ const medicalBusinessSchema = {
         'addressCountry': 'EG',
     },
     'telephone': '+201234567890',
-    'url': 'https://auraderma.com',
+    'url': 'https://doctorato.com',
     'priceRange': '$$',
-    'medicalSpecialty': ['Dermatology', 'PlasticSurgery'],
+    'medicalSpecialty': ['Dermatology', 'Dentistry', 'Pediatrics'],
     'openingHours': 'Sa-Th 10:00-22:00',
 };
 
@@ -39,17 +39,17 @@ const articleSchema = computed(() => ({
     'description': props.data.description || '',
     'author': {
         '@type': 'Person',
-        'name': props.data.author || 'AURA Derma Clinic',
+        'name': props.data.author || 'Doctorato Polyclinic',
     },
     'datePublished': props.data.datePublished || '',
     'dateModified': props.data.dateModified || props.data.datePublished || '',
     'image': props.data.image || '/images/og-default.jpg',
     'publisher': {
         '@type': 'Organization',
-        'name': 'AURA Derma Aesthetic Clinic',
+        'name': 'Doctorato Polyclinic',
         'logo': {
             '@type': 'ImageObject',
-            'url': 'https://auraderma.com/images/logo.png',
+            'url': 'https://doctorato.com/images/logo.png',
         },
     },
     'mainEntityOfPage': {
@@ -66,8 +66,8 @@ const serviceSchema = computed(() => ({
     'image': props.data.image || '/images/og-default.jpg',
     'provider': {
         '@type': 'MedicalBusiness',
-        'name': 'AURA Derma Aesthetic Clinic',
-        'url': 'https://auraderma.com',
+        'name': 'Doctorato Polyclinic',
+        'url': 'https://doctorato.com',
     },
 }));
 

@@ -54,4 +54,26 @@ class SecretaryPediatricVaccinationController extends Controller
 
         return redirect()->back()->with('success', 'Vaccination status updated');
     }
+
+    /**
+     * Batch update vaccination statuses.
+     */
+    public function batchUpdateStatus(Request $request)
+    {
+        $validated = $request->validate([
+            'vaccination_ids' => 'required|array|min:1|max:50',
+            'vaccination_ids.*' => 'integer|exists:pediatric_vaccinations,id',
+            'status' => 'required|in:scheduled,given,missed,postponed,contraindicated',
+            'given_date' => 'nullable|date|before_or_equal:today',
+        ]);
+
+        $data = ['status' => $validated['status']];
+        if ($validated['status'] === 'given' && !empty($validated['given_date'])) {
+            $data['given_date'] = $validated['given_date'];
+        }
+
+        $count = PediatricVaccination::whereIn('id', $validated['vaccination_ids'])->update($data);
+
+        return redirect()->back()->with('success', "Updated {$count} vaccination(s)");
+    }
 }

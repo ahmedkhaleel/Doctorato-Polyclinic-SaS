@@ -17,7 +17,7 @@ class SettingSeeder extends Seeder
             ['key' => 'phone_1',          'value' => '01007729159',                                      'group' => 'contact'],
             ['key' => 'phone_2',          'value' => '0238244047',                                       'group' => 'contact'],
             ['key' => 'whatsapp',         'value' => '01007729159',                                      'group' => 'contact'],
-            ['key' => 'email',            'value' => 'info@aura-clinic.net',                             'group' => 'contact'],
+            ['key' => 'email',            'value' => 'info@doctorato.com',                             'group' => 'contact'],
 
             // ── Address ─────────────────────────────────────────────────
             ['key' => 'address_ar',       'value' => '٦ أكتوبر - كايرو ميديكال سنتر - المحور المركزي - الدور الثاني - عيادة 71', 'group' => 'contact'],

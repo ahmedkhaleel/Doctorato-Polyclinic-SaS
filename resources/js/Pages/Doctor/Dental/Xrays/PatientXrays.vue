@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { Link, router, usePage, useForm } from '@inertiajs/vue3';
 import DoctorLayout from '@/Layouts/DoctorLayout.vue';
 import { useLocale } from '@/Composables/useLocale.js';
@@ -10,6 +10,13 @@ const { t } = useLocale();
 const page = usePage();
 const locale = computed(() => page.props.locale || 'ar');
 const isRtl = computed(() => (page.props.dir || 'rtl') === 'rtl');
+
+// ─── Toast Notification ─────────────────────────────────
+const showSuccess = ref(false);
+const successMessage = ref('');
+watch(() => page.props.flash?.success, (msg) => {
+    if (msg) { successMessage.value = msg; showSuccess.value = true; setTimeout(() => { showSuccess.value = false; }, 4000); }
+});
 
 const props = defineProps({
     patient: Object,
@@ -78,40 +85,43 @@ function formatDate(date) {
 
 <template>
     <div class="space-y-6">
-        <!-- Header -->
-        <div class="flex items-center justify-between flex-wrap gap-4">
-            <div>
-                <p class="text-[#C4A265] text-xs font-semibold tracking-wider uppercase mb-1">{{ isRtl ? 'صور الأشعة' : 'X-Rays' }}</p>
-                <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">{{ isRtl ? 'صور أشعة المريض' : 'Patient X-Rays' }}</h1>
-                <p class="text-gray-500 text-sm mt-1">
-                    {{ patient.full_name }} <span class="font-mono text-xs text-gray-400">({{ patient.file_number }})</span>
-                </p>
-            </div>
-            <div class="flex items-center gap-2 flex-wrap">
-                <button
-                    @click="showUploadForm = !showUploadForm"
-                    class="inline-flex items-center px-4 py-2.5 rounded-xl text-white text-sm font-medium transition bg-[#C4A265] hover:bg-[#B39255]"
-                >
-                    <svg class="w-4 h-4 ltr:mr-2 rtl:ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                    </svg>
-                    {{ isRtl ? 'رفع أشعة' : 'Upload X-Ray' }}
-                </button>
-                <Link :href="`/doctor/dental/chart/${patient.id}`"
-                    class="inline-flex items-center px-3 py-2.5 text-sm font-medium text-[#C4A265] bg-[#C4A265]/5 rounded-xl hover:bg-[#C4A265]/10 border border-[#C4A265]/10 transition-colors">
-                    <svg class="w-4 h-4 ltr:mr-1.5 rtl:ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
-                    {{ isRtl ? 'المخطط' : 'Chart' }}
-                </Link>
-                <Link href="/doctor/dental/xrays"
-                    class="inline-flex items-center px-3 py-2.5 text-sm font-medium text-gray-500 hover:text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors">
-                    <svg class="w-4 h-4 ltr:mr-1.5 rtl:ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
-                    {{ isRtl ? 'رجوع' : 'Back' }}
-                </Link>
+        <!-- Hero Header -->
+        <div class="dental-hero-enter relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6 sm:p-7">
+            <div class="absolute -top-12 ltr:-right-12 rtl:-left-12 w-48 h-48 bg-[#C4A265]/10 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-8 ltr:left-20 rtl:right-20 w-32 h-32 bg-purple-500/10 rounded-full blur-2xl"></div>
+
+            <div class="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <Link href="/doctor/dental/xrays" class="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-sm flex items-center justify-center hover:bg-white/20 transition ring-1 ring-white/15">
+                        <svg class="w-5 h-5 text-white rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                    </Link>
+                    <div>
+                        <p class="text-[#C4A265]/80 text-xs font-semibold tracking-wider uppercase">{{ isRtl ? 'صور الأشعة' : 'X-Rays' }}</p>
+                        <h1 class="text-xl sm:text-2xl font-bold text-white mt-0.5">{{ patient.full_name }}</h1>
+                        <p class="text-gray-400 text-xs font-mono mt-0.5">{{ patient.file_number }}</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 flex-wrap">
+                    <button
+                        @click="showUploadForm = !showUploadForm"
+                        class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-gray-900 bg-[#C4A265] rounded-xl hover:bg-[#B39255] transition-all"
+                    >
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                        </svg>
+                        {{ isRtl ? 'رفع أشعة' : 'Upload X-Ray' }}
+                    </button>
+                    <Link :href="`/doctor/dental/chart/${patient.id}`"
+                        class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white/90 bg-white/10 backdrop-blur-sm rounded-xl hover:bg-white/20 border border-white/15 transition-all">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                        {{ isRtl ? 'المخطط' : 'Chart' }}
+                    </Link>
+                </div>
             </div>
         </div>
 
         <!-- Upload Form -->
-        <div v-if="showUploadForm" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6 space-y-5">
+        <div v-if="showUploadForm" class="dental-card-enter bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6 space-y-5" style="animation-delay:0.1s">
             <h2 class="text-lg font-semibold text-gray-800 border-b border-gray-100 pb-3">{{ isRtl ? 'رفع أشعة جديدة' : 'Upload New X-Ray' }}</h2>
 
             <form @submit.prevent="submitUpload" class="space-y-5">
@@ -234,45 +244,86 @@ function formatDate(date) {
 
         <!-- Lightbox Modal -->
         <Teleport to="body">
-            <div v-if="selectedXray" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4" @click.self="selectedXray = null">
-                <div class="relative max-w-4xl w-full">
-                    <button @click="selectedXray = null" class="absolute -top-10 end-0 text-white hover:text-gray-300 transition">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                    <img
-                        v-if="selectedXray.image_url"
-                        :src="selectedXray.image_url"
-                        alt=""
-                        class="w-full rounded-xl"
-                    />
-                    <div class="mt-4 bg-white rounded-xl p-3 sm:p-4">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-                            <div>
-                                <span class="text-gray-500">{{ isRtl ? 'النوع' : 'Type' }}:</span>
-                                <span class="ms-1 font-medium">{{ selectedXray.type }}</span>
-                            </div>
-                            <div>
-                                <span class="text-gray-500">{{ isRtl ? 'السن' : 'Tooth' }}:</span>
-                                <span class="ms-1 font-medium">{{ selectedXray.tooth_number || '-' }}</span>
-                            </div>
-                            <div>
-                                <span class="text-gray-500">{{ isRtl ? 'التاريخ' : 'Date' }}:</span>
-                                <span class="ms-1 font-medium">{{ formatDate(selectedXray.taken_date || selectedXray.created_at) }}</span>
-                            </div>
-                            <div v-if="selectedXray.findings" class="col-span-2">
-                                <span class="text-gray-500">{{ isRtl ? 'النتائج' : 'Findings' }}:</span>
-                                <span class="ms-1">{{ selectedXray.findings }}</span>
-                            </div>
-                            <div v-if="selectedXray.notes" class="col-span-2">
-                                <span class="text-gray-500">{{ isRtl ? 'ملاحظات' : 'Notes' }}:</span>
-                                <span class="ms-1">{{ selectedXray.notes }}</span>
+            <Transition
+                enter-active-class="transition ease-out duration-300"
+                enter-from-class="opacity-0"
+                enter-to-class="opacity-100"
+                leave-active-class="transition ease-in duration-200"
+                leave-from-class="opacity-100"
+                leave-to-class="opacity-0"
+            >
+                <div v-if="selectedXray" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4" @click.self="selectedXray = null">
+                    <div class="relative max-w-4xl w-full animate-[lightboxScale_0.3s_ease-out]">
+                        <button @click="selectedXray = null" class="absolute -top-10 end-0 text-white hover:text-gray-300 transition">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                        <img
+                            v-if="selectedXray.image_url"
+                            :src="selectedXray.image_url"
+                            alt=""
+                            class="w-full rounded-xl shadow-2xl"
+                        />
+                        <div class="mt-4 bg-white rounded-xl p-3 sm:p-4 shadow-lg">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                                <div>
+                                    <span class="text-gray-500">{{ isRtl ? 'النوع' : 'Type' }}:</span>
+                                    <span class="ms-1 font-medium">{{ selectedXray.type }}</span>
+                                </div>
+                                <div>
+                                    <span class="text-gray-500">{{ isRtl ? 'السن' : 'Tooth' }}:</span>
+                                    <span class="ms-1 font-medium">{{ selectedXray.tooth_number || '-' }}</span>
+                                </div>
+                                <div>
+                                    <span class="text-gray-500">{{ isRtl ? 'التاريخ' : 'Date' }}:</span>
+                                    <span class="ms-1 font-medium">{{ formatDate(selectedXray.taken_date || selectedXray.created_at) }}</span>
+                                </div>
+                                <div v-if="selectedXray.findings" class="col-span-2">
+                                    <span class="text-gray-500">{{ isRtl ? 'النتائج' : 'Findings' }}:</span>
+                                    <span class="ms-1">{{ selectedXray.findings }}</span>
+                                </div>
+                                <div v-if="selectedXray.notes" class="col-span-2">
+                                    <span class="text-gray-500">{{ isRtl ? 'ملاحظات' : 'Notes' }}:</span>
+                                    <span class="ms-1">{{ selectedXray.notes }}</span>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </Transition>
         </Teleport>
+
+        <!-- Success Toast -->
+        <Transition
+            enter-active-class="transition ease-out duration-300"
+            enter-from-class="translate-y-4 opacity-0"
+            enter-to-class="translate-y-0 opacity-100"
+            leave-active-class="transition ease-in duration-200"
+            leave-from-class="translate-y-0 opacity-100"
+            leave-to-class="translate-y-4 opacity-0"
+        >
+            <div v-if="showSuccess" class="fixed bottom-6 ltr:right-6 rtl:left-6 z-50 flex items-center gap-3 px-5 py-3 bg-emerald-600 text-white rounded-xl shadow-lg shadow-emerald-200/50">
+                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <span class="text-sm font-medium">{{ successMessage }}</span>
+            </div>
+        </Transition>
     </div>
 </template>
+
+<style>
+@keyframes dentalHeroEnter {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes dentalCardEnter {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+.dental-hero-enter { animation: dentalHeroEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.dental-card-enter { animation: dentalCardEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
+@keyframes lightboxScale {
+    from { opacity: 0; transform: scale(0.92); }
+    to   { opacity: 1; transform: scale(1); }
+}
+</style>

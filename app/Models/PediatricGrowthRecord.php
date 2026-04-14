@@ -4,11 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\LogsActivity;
 
 class PediatricGrowthRecord extends Model
 {
-    use HasFactory, LogsActivity;
+    use HasFactory, LogsActivity, SoftDeletes;
 
     protected $fillable = [
         'patient_id', 'visit_id', 'doctor_id', 'measurement_date', 'age_months',
@@ -29,6 +30,10 @@ class PediatricGrowthRecord extends Model
         'height_percentile' => 'decimal:2',
         'head_percentile' => 'decimal:2',
         'bmi_percentile' => 'decimal:2',
+        'weight_zscore' => 'decimal:2',
+        'height_zscore' => 'decimal:2',
+        'head_zscore' => 'decimal:2',
+        'bmi_zscore' => 'decimal:2',
     ];
 
     public function patient()

@@ -2,8 +2,13 @@
 import { ref, watch, computed } from 'vue';
 import { Link, router, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import ConfirmModal from '@/Components/Admin/ConfirmModal.vue';
 import { useLocale } from '@/Composables/useLocale.js';
 import { useCurrency } from '@/Composables/useCurrency.js';
+
+// ─── Toast Notification ─────────────────────────────────
+const showSuccessToast = ref(false);
+const successToastMsg = ref('');
 
 const { t } = useLocale();
 const { formatCurrency } = useCurrency();
@@ -216,12 +221,15 @@ function executeBulkStatus() {
     });
 }
 
-function executeBulkSms() {
+const showBulkSmsModal = ref(false);
+
+function confirmBulkSms() {
     if (!selectedIds.value.length) return;
-    if (!confirm(locale.value === 'ar'
-        ? `هل تريد إرسال SMS لـ ${selectedIds.value.length} مريض؟`
-        : `Send SMS to ${selectedIds.value.length} patients?`
-    )) return;
+    showBulkSmsModal.value = true;
+}
+
+function executeBulkSms() {
+    showBulkSmsModal.value = false;
     bulkProcessing.value = true;
     router.post('/admin/dental/lab-orders-bulk/sms-notify', {
         order_ids: selectedIds.value,
@@ -233,6 +241,11 @@ function executeBulkSms() {
         },
     });
 }
+
+// Toast watcher
+watch(() => page.props.flash?.success, (msg) => {
+    if (msg) { successToastMsg.value = msg; showSuccessToast.value = true; setTimeout(() => { showSuccessToast.value = false; }, 4000); }
+});
 
 function executeBulkPrint() {
     if (!selectedIds.value.length) return;
@@ -457,7 +470,7 @@ function executeBulkPrint() {
                                 {{ locale === 'ar' ? 'تغيير الحالة' : 'Change Status' }}
                             </button>
                             <!-- Bulk SMS -->
-                            <button @click="executeBulkSms" :disabled="bulkProcessing" class="lo-bulk-btn lo-bulk-btn--sms">
+                            <button @click="confirmBulkSms" :disabled="bulkProcessing" class="lo-bulk-btn lo-bulk-btn--sms">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
                                 {{ locale === 'ar' ? 'إرسال SMS' : 'Send SMS' }}
                             </button>
@@ -655,6 +668,33 @@ function executeBulkPrint() {
                 </div>
             </Transition>
         </Teleport>
+
+        <!-- Bulk SMS Confirm Modal -->
+        <ConfirmModal
+            :show="showBulkSmsModal"
+            :title="locale === 'ar' ? 'إرسال SMS جماعي' : 'Bulk SMS Notification'"
+            :message="locale === 'ar' ? `هل تريد إرسال SMS لـ ${selectedIds.length} مريض/مرضى؟` : `Send SMS notification to ${selectedIds.length} patient(s)?`"
+            :confirmText="locale === 'ar' ? 'إرسال' : 'Send'"
+            :cancelText="locale === 'ar' ? 'إلغاء' : 'Cancel'"
+            confirmColor="cyan"
+            @confirm="executeBulkSms"
+            @cancel="showBulkSmsModal = false"
+        />
+
+        <!-- Success Toast -->
+        <Transition
+            enter-active-class="transition ease-out duration-300"
+            enter-from-class="translate-y-4 opacity-0"
+            enter-to-class="translate-y-0 opacity-100"
+            leave-active-class="transition ease-in duration-200"
+            leave-from-class="translate-y-0 opacity-100"
+            leave-to-class="translate-y-4 opacity-0"
+        >
+            <div v-if="showSuccessToast" class="fixed bottom-6 ltr:right-6 rtl:left-6 z-50 flex items-center gap-3 px-5 py-3 bg-emerald-600 text-white rounded-xl shadow-lg shadow-emerald-200/50">
+                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <span class="text-sm font-medium">{{ successToastMsg }}</span>
+            </div>
+        </Transition>
     </AdminLayout>
 </template>
 

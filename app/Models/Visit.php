@@ -164,4 +164,31 @@ class Visit extends Model
                 $q->whereIn('doctor_payouts.status', ['draft', 'confirmed', 'paid']);
             });
     }
+
+    public function scopePediatric($query)
+    {
+        return $query->where('module', 'pediatric');
+    }
+
+    public function scopeDental($query)
+    {
+        return $query->where('module', 'dental');
+    }
+
+    public function scopeDerma($query)
+    {
+        return $query->where('module', 'derma');
+    }
+
+    // ─── Pediatric Relationships ────────────────────────
+
+    public function pediatricVisit()
+    {
+        return $this->hasOne(PediatricVisit::class);
+    }
+
+    public function pediatricPrescriptions()
+    {
+        return $this->hasMany(PediatricPrescription::class);
+    }
 }

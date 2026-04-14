@@ -66,8 +66,8 @@ function printPage() {
                         A
                     </div>
                     <div>
-                        <h1 class="text-3xl font-bold tracking-wide" style="color: #C4A265;">AURA Derma Clinic</h1>
-                        <p class="text-sm text-gray-500">Dermatology & Aesthetic Medicine</p>
+                        <h1 class="text-3xl font-bold tracking-wide" style="color: #C4A265;">Doctorato Polyclinic</h1>
+                        <p class="text-sm text-gray-500">Doctorato Polyclinic</p>
                     </div>
                 </div>
             </div>
@@ -164,7 +164,7 @@ function printPage() {
 
             <!-- Footer -->
             <div class="mt-12 pt-4 border-t text-center text-xs text-gray-400">
-                <p>AURA Derma Clinic &middot; This prescription is valid for one month from the date of issue.</p>
+                <p>Doctorato Polyclinic &middot; This prescription is valid for one month from the date of issue.</p>
             </div>
         </div>
     </div>

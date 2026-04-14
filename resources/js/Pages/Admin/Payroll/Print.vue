@@ -71,7 +71,7 @@ onMounted(() => {
         <!-- Company Header -->
         <div class="header">
             <div class="header-left">
-                <h1 class="clinic-name">Aura Derma Clinic</h1>
+                <h1 class="clinic-name">Doctorato Polyclinic</h1>
                 <p class="clinic-subtitle">{{ $t('a_salary_slip') }}</p>
             </div>
             <div class="header-right">

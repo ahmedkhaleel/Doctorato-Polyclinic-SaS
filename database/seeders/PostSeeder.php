@@ -31,7 +31,7 @@ class PostSeeder extends Seeder
                 'excerpt_ar'     => 'تعرفي على الخطوات الأساسية لروتين العناية بالبشرة اليومي الذي يناسب جميع أنواع البشرة ويمنحك نتائج مذهلة.',
                 'excerpt_en'     => 'Learn the essential steps of a daily skincare routine that suits all skin types and gives you amazing results.',
                 'content_ar'     => '<h2>أهمية الروتين اليومي للبشرة</h2>
-<p>العناية بالبشرة ليست رفاهية بل ضرورة للحفاظ على صحة ونضارة بشرتك. الروتين اليومي المنتظم هو المفتاح للحصول على بشرة صحية ومشرقة. في عيادة أورا ديرما، نؤمن بأن البشرة الجميلة تبدأ من العناية اليومية الصحيحة.</p>
+<p>العناية بالبشرة ليست رفاهية بل ضرورة للحفاظ على صحة ونضارة بشرتك. الروتين اليومي المنتظم هو المفتاح للحصول على بشرة صحية ومشرقة. في عيادة دكتوراتو، نؤمن بأن البشرة الجميلة تبدأ من العناية اليومية الصحيحة.</p>
 
 <h2>الخطوة الأولى: التنظيف</h2>
 <p>ابدئي يومك بتنظيف بشرتك بغسول مناسب لنوع بشرتك. استخدمي غسولاً لطيفاً خالياً من الكبريتات إذا كانت بشرتك حساسة، أو غسولاً رغوياً إذا كانت بشرتك دهنية. التنظيف يزيل الأوساخ والزيوت المتراكمة ويهيئ بشرتك لامتصاص المنتجات التالية.</p>
@@ -57,10 +57,10 @@ class PostSeeder extends Seeder
 <li>استشيري طبيب الجلدية لتحديد المنتجات المناسبة لبشرتك</li>
 </ul>
 
-<p>في عيادة أورا ديرما، نقدم استشارات متخصصة لتحديد نوع بشرتك وتصميم روتين عناية مخصص لك. احجزي موعدك الآن واحصلي على بشرة أحلامك.</p>',
+<p>في عيادة دكتوراتو، نقدم استشارات متخصصة لتحديد نوع بشرتك وتصميم روتين عناية مخصص لك. احجزي موعدك الآن واحصلي على بشرة أحلامك.</p>',
 
                 'content_en'     => '<h2>The Importance of a Daily Skincare Routine</h2>
-<p>Skincare is not a luxury but a necessity to maintain healthy, radiant skin. A consistent daily routine is the key to achieving beautiful, glowing skin. At AURA Derma Clinic, we believe that beautiful skin starts with the right daily care.</p>
+<p>Skincare is not a luxury but a necessity to maintain healthy, radiant skin. A consistent daily routine is the key to achieving beautiful, glowing skin. At Doctorato Polyclinic, we believe that beautiful skin starts with the right daily care.</p>
 
 <h2>Step 1: Cleansing</h2>
 <p>Start your day by cleansing your skin with a cleanser suited to your skin type. Use a gentle, sulfate-free cleanser for sensitive skin, or a foaming cleanser for oily skin. Cleansing removes accumulated dirt and oils and prepares your skin to absorb subsequent products.</p>
@@ -86,7 +86,7 @@ class PostSeeder extends Seeder
 <li>Consult a dermatologist to determine the right products for your skin</li>
 </ul>
 
-<p>At AURA Derma Clinic, we offer specialized consultations to determine your skin type and design a customized skincare routine for you. Book your appointment now and get the skin of your dreams.</p>',
+<p>At Doctorato Polyclinic, we offer specialized consultations to determine your skin type and design a customized skincare routine for you. Book your appointment now and get the skin of your dreams.</p>',
                 'status'         => 'published',
                 'is_featured'    => true,
                 'published_at'   => Carbon::now()->subDays(2),
@@ -132,7 +132,7 @@ class PostSeeder extends Seeder
 <h2>عدد الجلسات الموصى بها</h2>
 <p>للحصول على أفضل النتائج، ننصح بإجراء جلسة كل 4 إلى 6 أسابيع. يمكنك رؤية نتائج واضحة من الجلسة الأولى، ولكن الجلسات المنتظمة تعزز النتائج وتحافظ على صحة بشرتك على المدى الطويل.</p>
 
-<p>في عيادة أورا ديرما، نستخدم أحدث أجهزة الهيدرافيشيال مع سيرومات طبية عالية الجودة لضمان أفضل النتائج. احجزي جلستك الآن واستمتعي ببشرة نقية ومشرقة.</p>',
+<p>في عيادة دكتوراتو، نستخدم أحدث أجهزة الهيدرافيشيال مع سيرومات طبية عالية الجودة لضمان أفضل النتائج. احجزي جلستك الآن واستمتعي ببشرة نقية ومشرقة.</p>',
 
                 'content_en'     => '<h2>What is HydraFacial Technology?</h2>
 <p>HydraFacial is an advanced skincare technology that combines deep cleansing, gentle exfoliation, extraction, and intensive hydration in a single session. It relies on a sophisticated device using Vortex Technology to effectively cleanse and nourish the skin without any pain or downtime.</p>
@@ -164,7 +164,7 @@ class PostSeeder extends Seeder
 <h2>Recommended Number of Sessions</h2>
 <p>For best results, we recommend a session every 4 to 6 weeks. You can see visible results from the first session, but regular sessions enhance results and maintain your skin health long-term.</p>
 
-<p>At AURA Derma Clinic, we use the latest HydraFacial devices with high-quality medical serums to ensure the best results. Book your session now and enjoy clear, radiant skin.</p>',
+<p>At Doctorato Polyclinic, we use the latest HydraFacial devices with high-quality medical serums to ensure the best results. Book your session now and enjoy clear, radiant skin.</p>',
                 'status'         => 'published',
                 'is_featured'    => false,
                 'published_at'   => Carbon::now()->subDays(5),
@@ -212,7 +212,7 @@ class PostSeeder extends Seeder
 <li>استخدام واقي شمس منتهي الصلاحية</li>
 </ul>
 
-<p>في عيادة أورا ديرما، نقدم استشارات متخصصة لاختيار واقي الشمس الأمثل لنوع بشرتك واحتياجاتك. كما نوفر مجموعة مختارة من أفضل واقيات الشمس الطبية المتوفرة عالمياً.</p>',
+<p>في عيادة دكتوراتو، نقدم استشارات متخصصة لاختيار واقي الشمس الأمثل لنوع بشرتك واحتياجاتك. كما نوفر مجموعة مختارة من أفضل واقيات الشمس الطبية المتوفرة عالمياً.</p>',
 
                 'content_en'     => '<h2>Why Is Sunscreen Essential?</h2>
 <p>Ultraviolet (UV) rays from the sun are the number one cause of premature skin aging, hyperpigmentation, and even skin cancer. Sunscreen is not just for summer or the beach; it should be used daily throughout the year, even on cloudy days.</p>
@@ -246,7 +246,7 @@ class PostSeeder extends Seeder
 <li>Using expired sunscreen</li>
 </ul>
 
-<p>At AURA Derma Clinic, we offer specialized consultations to choose the optimal sunscreen for your skin type and needs. We also provide a curated selection of the best medical-grade sunscreens available globally.</p>',
+<p>At Doctorato Polyclinic, we offer specialized consultations to choose the optimal sunscreen for your skin type and needs. We also provide a curated selection of the best medical-grade sunscreens available globally.</p>',
                 'status'         => 'published',
                 'is_featured'    => false,
                 'published_at'   => Carbon::now()->subDays(8),
@@ -292,7 +292,7 @@ class PostSeeder extends Seeder
 <p>نتائج البوتكس تدوم من 4 إلى 6 أشهر، بينما تدوم نتائج الفيلر من 6 أشهر إلى سنتين حسب نوع الفيلر ومنطقة الحقن.</p>
 
 <h2>هل الحقن آمنة؟</h2>
-<p>نعم، الحقن التجميلية آمنة عندما تُجرى بواسطة طبيب متخصص ذو خبرة. في عيادة أورا ديرما، نستخدم فقط المنتجات المعتمدة عالمياً ونتبع أعلى معايير السلامة لضمان نتائج طبيعية وآمنة.</p>',
+<p>نعم، الحقن التجميلية آمنة عندما تُجرى بواسطة طبيب متخصص ذو خبرة. في عيادة دكتوراتو، نستخدم فقط المنتجات المعتمدة عالمياً ونتبع أعلى معايير السلامة لضمان نتائج طبيعية وآمنة.</p>',
 
                 'content_en'     => '<h2>Introduction to Cosmetic Injections</h2>
 <p>Cosmetic injections have become one of the most common cosmetic procedures worldwide for their ability to rejuvenate facial appearance without surgery. Botox and fillers are the most widely used, but many people confuse them. In this article, we clarify the differences and uses of each.</p>
@@ -324,7 +324,7 @@ class PostSeeder extends Seeder
 <p>Botox results last 4 to 6 months, while filler results last from 6 months to 2 years depending on the type of filler and injection area.</p>
 
 <h2>Are Injections Safe?</h2>
-<p>Yes, cosmetic injections are safe when performed by an experienced, specialized physician. At AURA Derma Clinic, we use only globally approved products and follow the highest safety standards to ensure natural, safe results.</p>',
+<p>Yes, cosmetic injections are safe when performed by an experienced, specialized physician. At Doctorato Polyclinic, we use only globally approved products and follow the highest safety standards to ensure natural, safe results.</p>',
                 'status'         => 'published',
                 'is_featured'    => false,
                 'published_at'   => Carbon::now()->subDays(12),
@@ -362,7 +362,7 @@ class PostSeeder extends Seeder
 <li>العقيدات والأكياس (الحالات الشديدة)</li>
 </ul>
 
-<h2>أحدث طرق العلاج في عيادة أورا ديرما</h2>
+<h2>أحدث طرق العلاج في عيادة دكتوراتو</h2>
 <p>نقدم في عيادتنا مجموعة شاملة من العلاجات المتقدمة:</p>
 <ul>
 <li><strong>التقشير الكيميائي:</strong> يزيل الطبقة السطحية ويفتح المسام المسدودة</li>
@@ -381,7 +381,7 @@ class PostSeeder extends Seeder
 <li>قللي من التوتر واحصلي على نوم كافٍ</li>
 </ul>
 
-<p>لا تدعي حب الشباب يؤثر على ثقتك بنفسك. في عيادة أورا ديرما، نقدم خطط علاجية مخصصة تناسب حالتك. احجزي استشارتك اليوم.</p>',
+<p>لا تدعي حب الشباب يؤثر على ثقتك بنفسك. في عيادة دكتوراتو، نقدم خطط علاجية مخصصة تناسب حالتك. احجزي استشارتك اليوم.</p>',
 
                 'content_en'     => '<h2>What Is Acne?</h2>
 <p>Acne is a skin condition that occurs when hair follicles become clogged with oil and dead skin cells, leading to pimples, blackheads, and whiteheads. Although it is most common during adolescence, it can affect people at any age.</p>
@@ -405,7 +405,7 @@ class PostSeeder extends Seeder
 <li>Nodules and cysts (severe cases)</li>
 </ul>
 
-<h2>Latest Treatment Methods at AURA Derma Clinic</h2>
+<h2>Latest Treatment Methods at Doctorato Polyclinic</h2>
 <p>We offer a comprehensive range of advanced treatments at our clinic:</p>
 <ul>
 <li><strong>Chemical Peeling:</strong> Removes the surface layer and unclogs pores</li>
@@ -424,7 +424,7 @@ class PostSeeder extends Seeder
 <li>Reduce stress and get adequate sleep</li>
 </ul>
 
-<p>Don\'t let acne affect your confidence. At AURA Derma Clinic, we provide customized treatment plans that suit your condition. Book your consultation today.</p>',
+<p>Don\'t let acne affect your confidence. At Doctorato Polyclinic, we provide customized treatment plans that suit your condition. Book your consultation today.</p>',
                 'status'         => 'published',
                 'is_featured'    => false,
                 'published_at'   => Carbon::now()->subDays(15),
@@ -467,10 +467,10 @@ class PostSeeder extends Seeder
 <li>أخبري الطبيب عن أي أدوية تتناولينها</li>
 </ul>
 
-<h2>أحدث أجهزة الليزر في عيادة أورا ديرما</h2>
+<h2>أحدث أجهزة الليزر في عيادة دكتوراتو</h2>
 <p>نستخدم في عيادتنا أحدث أجهزة الليزر المعتمدة عالمياً والمناسبة لجميع أنواع البشرة، بما فيها البشرة الداكنة. أجهزتنا مزودة بأنظمة تبريد متقدمة لضمان راحتك أثناء الجلسة.</p>
 
-<p>احجزي جلستك الأولى في عيادة أورا ديرما واستمتعي ببشرة ناعمة خالية من الشعر.</p>',
+<p>احجزي جلستك الأولى في عيادة دكتوراتو واستمتعي ببشرة ناعمة خالية من الشعر.</p>',
 
                 'content_en'     => '<h2>Why Laser Hair Removal?</h2>
 <p>If you\'re tired of frequent shaving, painful waxing, or depilatory creams, laser hair removal is the ideal, permanent solution. Modern laser technology provides a permanent reduction in hair growth of up to 90% after completing the recommended sessions.</p>
@@ -499,10 +499,10 @@ class PostSeeder extends Seeder
 <li>Inform your doctor about any medications you are taking</li>
 </ul>
 
-<h2>Latest Laser Devices at AURA Derma Clinic</h2>
+<h2>Latest Laser Devices at Doctorato Polyclinic</h2>
 <p>At our clinic, we use the latest globally approved laser devices suitable for all skin types, including darker skin tones. Our devices are equipped with advanced cooling systems to ensure your comfort during the session.</p>
 
-<p>Book your first session at AURA Derma Clinic and enjoy smooth, hair-free skin.</p>',
+<p>Book your first session at Doctorato Polyclinic and enjoy smooth, hair-free skin.</p>',
                 'status'         => 'published',
                 'is_featured'    => false,
                 'published_at'   => Carbon::now()->subDays(18),
@@ -539,7 +539,7 @@ class PostSeeder extends Seeder
 <li>العوامل الوراثية</li>
 </ul>
 
-<h2>العلاجات المتقدمة في أورا ديرما</h2>
+<h2>العلاجات المتقدمة في دكتوراتو</h2>
 <p>نقدم مجموعة متكاملة من العلاجات المتخصصة:</p>
 <ul>
 <li><strong>التقشير الكيميائي:</strong> يزيل الطبقات السطحية المتصبغة ويكشف عن بشرة جديدة</li>
@@ -557,7 +557,7 @@ class PostSeeder extends Seeder
 <li>استخدام منتجات تحتوي على فيتامين C ومضادات الأكسدة</li>
 </ul>
 
-<p>في عيادة أورا ديرما، نصمم خطة علاج مخصصة لكل حالة للحصول على أفضل النتائج. احجزي موعدك لاستشارة مجانية.</p>',
+<p>في عيادة دكتوراتو، نصمم خطة علاج مخصصة لكل حالة للحصول على أفضل النتائج. احجزي موعدك لاستشارة مجانية.</p>',
 
                 'content_en'     => '<h2>What Is Skin Pigmentation?</h2>
 <p>Skin pigmentation refers to dark or light areas that appear on the skin due to increased or decreased melanin production. It is one of the most common skin concerns and significantly affects skin appearance.</p>
@@ -580,7 +580,7 @@ class PostSeeder extends Seeder
 <li>Genetic factors</li>
 </ul>
 
-<h2>Advanced Treatments at AURA Derma</h2>
+<h2>Advanced Treatments at Doctorato</h2>
 <p>We offer a comprehensive range of specialized treatments:</p>
 <ul>
 <li><strong>Chemical Peeling:</strong> Removes pigmented surface layers to reveal new skin</li>
@@ -598,7 +598,7 @@ class PostSeeder extends Seeder
 <li>Use products containing Vitamin C and antioxidants</li>
 </ul>
 
-<p>At AURA Derma Clinic, we design a customized treatment plan for each case to achieve the best results. Book your appointment for a free consultation.</p>',
+<p>At Doctorato Polyclinic, we design a customized treatment plan for each case to achieve the best results. Book your appointment for a free consultation.</p>',
                 'status'         => 'published',
                 'is_featured'    => false,
                 'published_at'   => Carbon::now()->subDays(22),
@@ -624,7 +624,7 @@ class PostSeeder extends Seeder
 <p>ننصح بزيارة طبيب الجلدية مرة على الأقل سنوياً لفحص البشرة العام. إذا كانت لديك مشاكل جلدية محددة، قد تحتاجين لزيارات أكثر تكراراً حسب خطة العلاج.</p>
 
 <h2>4. هل البوتكس يجمد الوجه؟</h2>
-<p>لا، إذا تم حقنه بالجرعة الصحيحة وبواسطة طبيب ماهر. في عيادة أورا ديرما، نستخدم تقنيات حقن دقيقة تحافظ على التعبيرات الطبيعية للوجه مع تقليل التجاعيد.</p>
+<p>لا، إذا تم حقنه بالجرعة الصحيحة وبواسطة طبيب ماهر. في عيادة دكتوراتو، نستخدم تقنيات حقن دقيقة تحافظ على التعبيرات الطبيعية للوجه مع تقليل التجاعيد.</p>
 
 <h2>5. هل الليزر مؤلم؟</h2>
 <p>معظم أجهزة الليزر الحديثة مزودة بأنظمة تبريد تجعل الجلسة مريحة. قد تشعرين ببعض الوخز الخفيف، لكنه محتمل ولا يحتاج لتخدير في معظم الحالات.</p>
@@ -642,7 +642,7 @@ class PostSeeder extends Seeder
 <p>ننصح بتجنب معظم العلاجات التجميلية أثناء الحمل والرضاعة كإجراء احترازي. يمكنك الاستمرار في الروتين الأساسي (تنظيف، ترطيب، واقي شمس) مع تجنب الريتينول وبعض الأحماض.</p>
 
 <h2>10. كيف أختار العيادة المناسبة؟</h2>
-<p>ابحثي عن عيادة مرخصة بأطباء متخصصين ذوي خبرة، تستخدم أجهزة ومنتجات معتمدة عالمياً، وتقدم استشارة شاملة قبل أي إجراء. في عيادة أورا ديرما، نفخر بتوفير كل هذه المعايير مع اهتمام شخصي بكل مريضة.</p>',
+<p>ابحثي عن عيادة مرخصة بأطباء متخصصين ذوي خبرة، تستخدم أجهزة ومنتجات معتمدة عالمياً، وتقدم استشارة شاملة قبل أي إجراء. في عيادة دكتوراتو، نفخر بتوفير كل هذه المعايير مع اهتمام شخصي بكل مريضة.</p>',
 
                 'content_en'     => '<h2>1. What Is the Best Age to Start Skincare?</h2>
 <p>There is no specific age, but we recommend starting a basic routine (cleanse + moisturize + sunscreen) from teenage years. Advanced treatments like Botox and fillers are best started in your mid-twenties as a preventive measure.</p>
@@ -654,7 +654,7 @@ class PostSeeder extends Seeder
 <p>We recommend visiting a dermatologist at least once a year for a general skin examination. If you have specific skin concerns, you may need more frequent visits depending on your treatment plan.</p>
 
 <h2>4. Does Botox Freeze Your Face?</h2>
-<p>No, not when injected in the right dosage by a skilled physician. At AURA Derma Clinic, we use precise injection techniques that preserve natural facial expressions while reducing wrinkles.</p>
+<p>No, not when injected in the right dosage by a skilled physician. At Doctorato Polyclinic, we use precise injection techniques that preserve natural facial expressions while reducing wrinkles.</p>
 
 <h2>5. Is Laser Treatment Painful?</h2>
 <p>Most modern laser devices are equipped with cooling systems that make the session comfortable. You may feel slight tingling, but it is tolerable and does not require anesthesia in most cases.</p>
@@ -672,7 +672,7 @@ class PostSeeder extends Seeder
 <p>We recommend avoiding most cosmetic treatments during pregnancy and breastfeeding as a precautionary measure. You can continue your basic routine (cleanse, moisturize, sunscreen) while avoiding retinol and certain acids.</p>
 
 <h2>10. How Do I Choose the Right Clinic?</h2>
-<p>Look for a licensed clinic with experienced specialist doctors, using globally approved devices and products, offering a comprehensive consultation before any procedure. At AURA Derma Clinic, we are proud to provide all these standards with personal attention to every patient.</p>',
+<p>Look for a licensed clinic with experienced specialist doctors, using globally approved devices and products, offering a comprehensive consultation before any procedure. At Doctorato Polyclinic, we are proud to provide all these standards with personal attention to every patient.</p>',
                 'status'         => 'published',
                 'is_featured'    => false,
                 'published_at'   => Carbon::now()->subDays(25),

@@ -2,6 +2,7 @@
 import { ref, watch, computed } from 'vue';
 import { Link, router, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import ConfirmModal from '@/Components/Admin/ConfirmModal.vue';
 import { useLocale } from '@/Composables/useLocale.js';
 import { useCurrency } from '@/Composables/useCurrency.js';
 
@@ -9,7 +10,7 @@ const { t } = useLocale();
 const { formatCurrency } = useCurrency();
 const page = usePage();
 const locale = computed(() => page.props.locale || 'ar');
-
+const isRtl = computed(() => (page.props.dir || 'rtl') === 'rtl');
 const props = defineProps({
     plans: Object,
     filters: Object,
@@ -28,6 +29,7 @@ let searchTimeout = null;
 function applyFilters() {
     clearTimeout(searchTimeout);
     searchTimeout = setTimeout(() => {
+        isFiltering.value = true;
         router.get('/admin/dental/treatment-plans', {
             search: search.value || undefined,
             status: statusFilter.value || undefined,
@@ -37,6 +39,7 @@ function applyFilters() {
         }, {
             preserveState: true,
             replace: true,
+            onFinish: () => { isFiltering.value = false; },
         });
     }, 400);
 }
@@ -77,14 +80,34 @@ function clearFilters() {
 }
 
 const deletingId = ref(null);
+const showDeleteModal = ref(false);
+const pendingDeleteId = ref(null);
+const isFiltering = ref(false);
+const showSuccess = ref(false);
+const successMessage = ref('');
+
+// Flash success from server
+const flash = computed(() => page.props.flash || {});
+watch(() => flash.value?.success, (msg) => {
+    if (msg) {
+        successMessage.value = msg;
+        showSuccess.value = true;
+        setTimeout(() => { showSuccess.value = false; }, 3500);
+    }
+}, { immediate: true });
 
 function deletePlan(id) {
-    if (window.confirm(t('a_confirm_delete'))) {
-        deletingId.value = id;
-        router.post(`/admin/dental/treatment-plans/${id}/delete`, {
-            onFinish: () => { deletingId.value = null; },
-        });
-    }
+    pendingDeleteId.value = id;
+    showDeleteModal.value = true;
+}
+
+function confirmDelete() {
+    const id = pendingDeleteId.value;
+    showDeleteModal.value = false;
+    deletingId.value = id;
+    router.post(`/admin/dental/treatment-plans/${id}/delete`, {}, {
+        onFinish: () => { deletingId.value = null; pendingDeleteId.value = null; },
+    });
 }
 
 function progressPercent(plan) {
@@ -137,12 +160,36 @@ function progressPercent(plan) {
                 </div>
             </div>
 
+            <!-- ── Quick Stats ──────────────────────────────────── -->
+            <div class="dental-card-enter grid grid-cols-2 sm:grid-cols-4 gap-3" style="animation-delay: 0.1s">
+                <div v-for="(stat, i) in [
+                    { label: isRtl ? 'مسودة' : 'Draft', count: plans.data?.filter(p => p.status === 'draft').length || 0, color: 'gray', icon: 'M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z' },
+                    { label: isRtl ? 'قيد التنفيذ' : 'In Progress', count: plans.data?.filter(p => p.status === 'in_progress').length || 0, color: 'cyan', icon: 'M13 10V3L4 14h7v7l9-11h-7z' },
+                    { label: isRtl ? 'مكتملة' : 'Completed', count: plans.data?.filter(p => p.status === 'completed').length || 0, color: 'emerald', icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' },
+                    { label: isRtl ? 'الإجمالي' : 'Total', count: plans.total || 0, color: 'blue', icon: 'M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10' },
+                ]" :key="i"
+                    class="bg-white rounded-xl border border-gray-100 p-4 hover:shadow-md transition-all duration-300 group"
+                    :style="{ animationDelay: `${0.12 + i * 0.06}s` }"
+                >
+                    <div class="flex items-center gap-3">
+                        <div :class="`bg-${stat.color}-50 text-${stat.color}-600 group-hover:scale-110`" class="w-10 h-10 rounded-xl flex items-center justify-center transition-transform duration-300">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" :d="stat.icon" /></svg>
+                        </div>
+                        <div>
+                            <div class="text-xl font-bold text-gray-900">{{ stat.count }}</div>
+                            <div class="text-xs text-gray-500">{{ stat.label }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- ── Search + Filters ──────────────────────────────── -->
             <div class="dental-card-enter bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden" style="animation-delay: 0.15s">
                 <div class="p-5">
                     <div class="flex items-center gap-3">
                         <div class="relative flex-1">
-                            <svg class="absolute top-1/2 -translate-y-1/2 ltr:left-4 rtl:right-4 w-4.5 h-4.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                            <svg v-if="!isFiltering" class="absolute top-1/2 -translate-y-1/2 ltr:left-4 rtl:right-4 w-4.5 h-4.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                            <svg v-else class="absolute top-1/2 -translate-y-1/2 ltr:left-4 rtl:right-4 w-4.5 h-4.5 text-cyan-500 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" /><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
                             <input
                                 v-model="search"
                                 type="text"
@@ -325,6 +372,37 @@ function progressPercent(plan) {
                 </div>
             </div>
         </div>
+
+        <!-- ── Delete Confirm Modal ────────────────────────────── -->
+        <ConfirmModal
+            :show="showDeleteModal"
+            :title="isRtl ? 'حذف خطة العلاج' : 'Delete Treatment Plan'"
+            :message="isRtl ? 'هل أنت متأكد من حذف هذه الخطة؟ سيتم حذف جميع العلاجات المرتبطة بها.' : 'Are you sure you want to delete this plan? All associated treatments will be removed.'"
+            :confirm-text="isRtl ? 'حذف' : 'Delete'"
+            :cancel-text="isRtl ? 'إلغاء' : 'Cancel'"
+            confirm-color="red"
+            @confirm="confirmDelete"
+            @cancel="showDeleteModal = false"
+        />
+
+        <!-- ── Success Toast ───────────────────────────────────── -->
+        <Teleport to="body">
+            <Transition
+                enter-active-class="transition-all duration-500 ease-out"
+                enter-from-class="opacity-0 translate-y-4 scale-95"
+                enter-to-class="opacity-100 translate-y-0 scale-100"
+                leave-active-class="transition-all duration-300 ease-in"
+                leave-from-class="opacity-100 translate-y-0 scale-100"
+                leave-to-class="opacity-0 -translate-y-2 scale-95"
+            >
+                <div v-if="showSuccess" class="fixed top-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 px-5 py-3 bg-emerald-600 text-white rounded-xl shadow-2xl shadow-emerald-200">
+                    <div class="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" /></svg>
+                    </div>
+                    <span class="text-sm font-medium">{{ successMessage }}</span>
+                </div>
+            </Transition>
+        </Teleport>
     </AdminLayout>
 </template>
 

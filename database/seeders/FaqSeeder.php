@@ -16,10 +16,10 @@ class FaqSeeder extends Seeder
             // ── General ─────────────────────────────────────────────────
             [
                 'category'     => 'general',
-                'question_ar'  => 'أين يقع عيادة أورا ديرما كلينك؟',
-                'question_en'  => 'Where is Aura Derma Clinic located?',
-                'answer_ar'    => 'تقع عيادة أورا ديرما كلينك في ٦ أكتوبر - كايرو ميديكال سنتر (CMC) - المحور المركزي - الدور الثاني - عيادة رقم 71.',
-                'answer_en'    => 'Aura Derma Clinic is located at CMC (Cairo Medical Center), Central Axis, 6th of October City, 2nd Floor, Clinic No. 71.',
+                'question_ar'  => 'أين يقع عيادة دكتوراتو كلينك؟',
+                'question_en'  => 'Where is Doctorato Polyclinic located?',
+                'answer_ar'    => 'تقع عيادة دكتوراتو كلينك في ٦ أكتوبر - كايرو ميديكال سنتر (CMC) - المحور المركزي - الدور الثاني - عيادة رقم 71.',
+                'answer_en'    => 'Doctorato Polyclinic is located at CMC (Cairo Medical Center), Central Axis, 6th of October City, 2nd Floor, Clinic No. 71.',
                 'display_order' => 1,
             ],
             [
@@ -34,16 +34,16 @@ class FaqSeeder extends Seeder
                 'category'     => 'general',
                 'question_ar'  => 'من هم الأطباء في العيادة؟',
                 'question_en'  => 'Who are the doctors at the clinic?',
-                'answer_ar'    => 'يضم فريق أورا ديرما كلينك نخبة من أطباء الجلدية والتجميل بقيادة د. أسماء حمدي الحاصلة على دكتوراه وزمالة في الأمراض الجلدية والتجميل والليزر، بالإضافة إلى فريق متميز من الأخصائيات.',
-                'answer_en'    => 'Aura Derma Clinic\'s team includes elite dermatology and aesthetics doctors led by Dr. Asmaa Hamdy, who holds a Doctorate and Fellowship in Dermatology, Aesthetics & Laser, along with a distinguished team of specialists.',
+                'answer_ar'    => 'يضم فريق دكتوراتو كلينك نخبة من أطباء الجلدية والتجميل بقيادة د. أسماء حمدي الحاصلة على دكتوراه وزمالة في الأمراض الجلدية والتجميل والليزر، بالإضافة إلى فريق متميز من الأخصائيات.',
+                'answer_en'    => 'Doctorato Polyclinic\'s team includes elite dermatology and aesthetics doctors led by Dr. Asmaa Hamdy, who holds a Doctorate and Fellowship in Dermatology, Aesthetics & Laser, along with a distinguished team of specialists.',
                 'display_order' => 3,
             ],
             [
                 'category'     => 'general',
                 'question_ar'  => 'هل العيادة مجهزة بأحدث الأجهزة؟',
                 'question_en'  => 'Is the clinic equipped with the latest devices?',
-                'answer_ar'    => 'نعم، عيادة أورا ديرما كلينك مجهزة بأحدث الأجهزة العالمية المعتمدة في مجال الجلدية والتجميل والليزر، ونحرص على تحديث أجهزتنا باستمرار لتقديم أفضل خدمة.',
-                'answer_en'    => 'Yes, Aura Derma Clinic is equipped with the latest internationally certified devices in dermatology, aesthetics, and laser. We continuously update our equipment to provide the best service.',
+                'answer_ar'    => 'نعم، عيادة دكتوراتو كلينك مجهزة بأحدث الأجهزة العالمية المعتمدة في مجال الجلدية والتجميل والليزر، ونحرص على تحديث أجهزتنا باستمرار لتقديم أفضل خدمة.',
+                'answer_en'    => 'Yes, Doctorato Polyclinic is equipped with the latest internationally certified devices in dermatology, aesthetics, and laser. We continuously update our equipment to provide the best service.',
                 'display_order' => 4,
             ],
 

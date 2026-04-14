@@ -128,7 +128,7 @@ onUnmounted(() => {
                 <div class="flex items-center justify-center gap-5 mb-8" v-scroll-reveal="{ type: 'blur-in', delay: 100 }">
                     <span class="block w-16 h-px bg-gradient-to-r from-transparent to-[var(--brand-primary)]/70"></span>
                     <span class="text-[var(--brand-primary)] text-xs font-semibold uppercase tracking-[0.35em]">
-                        {{ isRtl ? 'عيادة الجلدية والتجميل' : 'Derma & Aesthetic Clinic' }}
+                        {{ isRtl ? 'عيادة متعددة التخصصات' : 'Polyclinic' }}
                     </span>
                     <span class="block w-16 h-px bg-gradient-to-l from-transparent to-[var(--brand-primary)]/70"></span>
                 </div>
@@ -139,8 +139,8 @@ onUnmounted(() => {
                         <span class="text-gold-shimmer">{{ slides[currentSlide].title }}</span>
                     </template>
                     <template v-else>
-                        <span class="text-gold-shimmer">{{ isRtl ? 'أورا ديرما' : 'AURA' }}</span>
-                        <span v-if="!isRtl" class="text-white"> Derma</span>
+                        <span class="text-gold-shimmer">{{ isRtl ? 'دكتوراتو' : 'Doctorato' }}</span>
+                        
                     </template>
                 </h1>
 
@@ -231,7 +231,7 @@ onUnmounted(() => {
                             <!-- Main image -->
                             <div class="relative w-full h-[420px] sm:h-[480px] rounded-2xl overflow-hidden shadow-2xl shadow-[var(--brand-primary)]/10">
                                 <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=800&q=80"
-                                     alt="AURA Derma Clinic"
+                                     alt="Doctorato Polyclinic"
                                      class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
                                 <!-- Bottom gradient overlay -->
                                 <div class="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[#1E1E1E]/40 to-transparent"></div>
@@ -263,21 +263,21 @@ onUnmounted(() => {
 
                         <h2 class="text-3xl sm:text-4xl md:text-[2.75rem] font-bold text-[#1E1E1E] mb-6 leading-tight">
                             {{ isRtl
-                                ? 'عيادة أورا ديرما للجلدية والتجميل'
-                                : 'AURA Derma Dermatology & Cosmetic Clinic'
+                                ? 'عيادة دكتوراتو التخصصية'
+                                : 'Doctorato Polyclinic'
                             }}
                         </h2>
 
                         <p class="text-[#6B5B4E] text-lg leading-[1.85] mb-5">
                             {{ isRtl
-                                ? 'نؤمن في عيادة أورا ديرما بأن كل بشرة تستحق العناية الفائقة. نقدم أحدث تقنيات العلاج والتجميل في بيئة راقية ومريحة، مع فريق طبي متخصص يضع راحتك وجمالك في المقام الأول.'
-                                : 'At AURA Derma Clinic, we believe every skin deserves exceptional care. We offer the latest treatment and cosmetic technologies in an elegant, comfortable environment, with a specialized medical team that puts your comfort and beauty first.'
+                                ? 'عيادة دكتوراتو هي عيادة متعددة التخصصات الطبية تقدم أعلى مستويات الرعاية الصحية في بيئة راقية ومريحة، مع فريق طبي متخصص يضع صحتك وراحتك في المقام الأول.'
+                                : 'Doctorato is a multi-specialty polyclinic providing the highest standards of healthcare in an elegant, comfortable environment, with a specialized medical team that puts your health and comfort first.'
                             }}
                         </p>
                         <p class="text-[#8C8279] leading-relaxed mb-8">
                             {{ isRtl
-                                ? 'تأسست العيادة على يد نخبة من أطباء الجلدية والتجميل، لتكون وجهتك الأولى للعناية بالبشرة في مصر.'
-                                : 'Founded by an elite team of dermatology and cosmetic specialists, the clinic is your premier destination for skincare in Egypt.'
+                                ? 'تأسست العيادة على يد نخبة من الأطباء المتخصصين في مختلف التخصصات الطبية، لتكون وجهتك الأولى للرعاية الصحية المتكاملة.'
+                                : 'Founded by an elite team of medical specialists across multiple disciplines, the clinic is your premier destination for comprehensive healthcare.'
                             }}
                         </p>
 
@@ -363,12 +363,12 @@ onUnmounted(() => {
                     <div class="flex items-center justify-center gap-3 mb-5">
                         <span class="block w-10 h-px bg-[var(--brand-primary)]"></span>
                         <span class="text-[var(--brand-primary)] text-xs font-semibold uppercase tracking-[0.25em]">
-                            {{ isRtl ? 'لماذا أورا' : 'Why AURA' }}
+                            {{ isRtl ? 'لماذا دكتوراتو' : 'Why Doctorato' }}
                         </span>
                         <span class="block w-10 h-px bg-[var(--brand-primary)]"></span>
                     </div>
                     <h2 class="text-3xl sm:text-4xl md:text-[2.75rem] font-bold text-[#1E1E1E]">
-                        {{ isRtl ? 'لماذا تختارين عيادة أورا؟' : 'Why Choose AURA Clinic?' }}
+                        {{ isRtl ? 'لماذا تختارين عيادة دكتوراتو؟' : 'Why Choose Doctorato?' }}
                     </h2>
                 </div>
 

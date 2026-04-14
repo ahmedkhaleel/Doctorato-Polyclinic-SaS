@@ -2,6 +2,7 @@
 import { Link, usePage } from '@inertiajs/vue3';
 import DoctorLayout from '@/Layouts/DoctorLayout.vue';
 import { ref, computed, onMounted } from 'vue';
+import { getChildAge as _getChildAge } from '@/Composables/usePediatricAge';
 
 defineOptions({ layout: DoctorLayout });
 
@@ -118,19 +119,7 @@ function formatDate(dateStr) {
 }
 
 function getChildAge(dob) {
-    if (!dob) return '--';
-    const birth = new Date(dob);
-    const now = new Date();
-    const months = (now.getFullYear() - birth.getFullYear()) * 12 + (now.getMonth() - birth.getMonth());
-    if (months < 1) {
-        const days = Math.floor((now - birth) / (1000 * 60 * 60 * 24));
-        return isRtl.value ? `${days} يوم` : `${days}d`;
-    }
-    if (months < 24) return isRtl.value ? `${months} شهر` : `${months}m`;
-    const years = Math.floor(months / 12);
-    const rem = months % 12;
-    if (rem === 0) return isRtl.value ? `${years} سنة` : `${years}y`;
-    return isRtl.value ? `${years} سنة ${rem} شهر` : `${years}y ${rem}m`;
+    return _getChildAge(dob, isRtl.value);
 }
 </script>
 

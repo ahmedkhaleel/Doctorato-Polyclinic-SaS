@@ -18,7 +18,7 @@ class PatientBookingController extends BasePatientController
         $patient = $this->patient($request);
 
         $filters = $request->validate([
-            'module' => 'nullable|string|in:derma,dental',
+            'module' => 'nullable|string|in:derma,dental,pediatric',
         ]);
 
         $query = Booking::where('patient_id', $patient->id)
@@ -68,8 +68,8 @@ class PatientBookingController extends BasePatientController
         $patient = $this->patient($request);
 
         $data = $request->validate([
-            'booking_type' => 'required|in:dermatology_consultation,cosmetic_consultation,service,dental_consultation,dental_service',
-            'module' => 'nullable|string|in:derma,dental',
+            'booking_type' => 'required|in:dermatology_consultation,cosmetic_consultation,service,dental_consultation,dental_service,pediatric_consultation,pediatric_service',
+            'module' => 'nullable|string|in:derma,dental,pediatric',
             'service_id' => 'nullable|exists:services,id',
             'doctor_id' => 'nullable|exists:doctors,id',
             'preferred_date' => 'required|date|after_or_equal:today',
@@ -82,6 +82,9 @@ class PatientBookingController extends BasePatientController
         $module = $data['module'] ?? 'derma';
         if (in_array($data['booking_type'] ?? '', ['dental_consultation', 'dental_service'])) {
             $module = 'dental';
+        }
+        if (in_array($data['booking_type'] ?? '', ['pediatric_consultation', 'pediatric_service'])) {
+            $module = 'pediatric';
         }
 
         $booking = Booking::create([

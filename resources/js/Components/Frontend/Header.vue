@@ -110,7 +110,7 @@ onUnmounted(() => {
                 <Link :href="localizedRoute('/')" class="flex-shrink-0 group">
                     <img
                         src="/images/logo/logo.png"
-                        alt="AURA Derma Aesthetic Clinic"
+                        alt="Doctorato Polyclinic"
                         class="h-14 lg:h-16 w-auto transition-transform duration-300 group-hover:scale-105"
                     />
                 </Link>
@@ -197,7 +197,7 @@ onUnmounted(() => {
                 <div class="flex items-center justify-between p-4 border-b border-gray-100">
                     <img
                         src="/images/logo/logo.png"
-                        alt="AURA Derma Aesthetic Clinic"
+                        alt="Doctorato Polyclinic"
                         class="h-12 w-auto"
                     />
                     <button @click="closeMobileMenu" class="p-2 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100">

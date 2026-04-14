@@ -7,6 +7,18 @@ use Illuminate\Validation\Rule;
 
 class UpdateDentalTreatmentPlanRequest extends FormRequest
 {
+    /**
+     * Valid status transitions to prevent skipping steps.
+     * Key = current status, Value = array of allowed next statuses.
+     */
+    private const STATUS_TRANSITIONS = [
+        'draft'       => ['approved', 'cancelled'],
+        'approved'    => ['in_progress', 'cancelled'],
+        'in_progress' => ['completed', 'cancelled'],
+        'completed'   => [],           // terminal
+        'cancelled'   => ['draft'],    // allow re-opening as draft
+    ];
+
     public function authorize(): bool
     {
         return true;
@@ -26,6 +38,40 @@ class UpdateDentalTreatmentPlanRequest extends FormRequest
             'expected_end_date' => 'nullable|date|after_or_equal:start_date',
             'notes' => 'nullable|string|max:5000',
         ];
+    }
+
+    /**
+     * Additional validation after the standard rules pass.
+     */
+    public function withValidator($validator): void
+    {
+        $validator->after(function ($validator) {
+            $newStatus = $this->input('status');
+            if (!$newStatus) {
+                return;
+            }
+
+            $plan = $this->route('treatmentPlan') ?? $this->route('treatment_plan');
+            if (!$plan) {
+                return;
+            }
+
+            $currentStatus = $plan->status;
+            if ($currentStatus === $newStatus) {
+                return; // no change
+            }
+
+            $allowed = self::STATUS_TRANSITIONS[$currentStatus] ?? [];
+            if (!in_array($newStatus, $allowed, true)) {
+                $isAr = app()->getLocale() === 'ar';
+                $validator->errors()->add(
+                    'status',
+                    $isAr
+                        ? "لا يمكن تغيير الحالة من «{$currentStatus}» إلى «{$newStatus}»"
+                        : "Cannot transition from '{$currentStatus}' to '{$newStatus}'"
+                );
+            }
+        });
     }
 
     public function attributes(): array

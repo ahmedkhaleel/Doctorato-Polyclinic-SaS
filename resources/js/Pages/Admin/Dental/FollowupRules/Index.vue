@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue';
 import { Link, router, usePage, useForm } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import ConfirmModal from '@/Components/Admin/ConfirmModal.vue';
 import { useLocale } from '@/Composables/useLocale.js';
 
 const { t } = useLocale();
@@ -100,9 +101,20 @@ function toggleGlobal() {
     router.post('/admin/dental/followup-rules-global/toggle', {}, { preserveScroll: true });
 }
 
+const showCancelModal = ref(false);
+const pendingCancelId = ref(null);
+const showResetModal = ref(false);
+
 function cancelFollowup(id) {
-    if (!confirm(isRtl.value ? 'هل أنت متأكد من إلغاء هذه المتابعة؟' : 'Cancel this follow-up?')) return;
-    router.post(`/admin/dental/scheduled-followups/${id}/cancel`, {}, { preserveScroll: true });
+    pendingCancelId.value = id;
+    showCancelModal.value = true;
+}
+
+function executeCancelFollowup() {
+    if (!pendingCancelId.value) return;
+    router.post(`/admin/dental/scheduled-followups/${pendingCancelId.value}/cancel`, {}, { preserveScroll: true });
+    showCancelModal.value = false;
+    pendingCancelId.value = null;
 }
 
 function sendSms(id) {
@@ -110,8 +122,12 @@ function sendSms(id) {
 }
 
 function seedDefaults() {
-    if (!confirm(isRtl.value ? 'سيتم إعادة تعيين القواعد الافتراضية. هل تريد المتابعة؟' : 'Reset to default rules?')) return;
+    showResetModal.value = true;
+}
+
+function executeSeedDefaults() {
     router.post('/admin/dental/followup-rules-seed', {}, { preserveScroll: true });
+    showResetModal.value = false;
 }
 
 const followupStatusConfig = {
@@ -420,6 +436,30 @@ const activeTab = ref('rules');
                 </div>
             </Transition>
         </Teleport>
+
+        <!-- Cancel Follow-up Confirm Modal -->
+        <ConfirmModal
+            :show="showCancelModal"
+            :title="isRtl ? 'إلغاء المتابعة' : 'Cancel Follow-up'"
+            :message="isRtl ? 'هل أنت متأكد من إلغاء هذه المتابعة؟' : 'Are you sure you want to cancel this follow-up?'"
+            :confirmText="isRtl ? 'إلغاء المتابعة' : 'Cancel Follow-up'"
+            :cancelText="isRtl ? 'تراجع' : 'Go Back'"
+            confirmColor="red"
+            @confirm="executeCancelFollowup"
+            @cancel="showCancelModal = false"
+        />
+
+        <!-- Reset Defaults Confirm Modal -->
+        <ConfirmModal
+            :show="showResetModal"
+            :title="isRtl ? 'إعادة تعيين القواعد' : 'Reset Default Rules'"
+            :message="isRtl ? 'سيتم إعادة تعيين القواعد الافتراضية. هل تريد المتابعة؟' : 'This will reset to the default follow-up rules. Continue?'"
+            :confirmText="isRtl ? 'إعادة تعيين' : 'Reset'"
+            :cancelText="isRtl ? 'إلغاء' : 'Cancel'"
+            confirmColor="amber"
+            @confirm="executeSeedDefaults"
+            @cancel="showResetModal = false"
+        />
     </AdminLayout>
 </template>
 

@@ -31,10 +31,12 @@ const bookingTypeLabels = {
     service: 'Service Booking',
     dental_consultation: 'Dental Consultation',
     dental_service: 'Dental Service',
+    pediatric_consultation: 'Pediatric Consultation',
+    pediatric_service: 'Pediatric Service',
 };
 
 const isConsultationBooking = computed(() => {
-    return ['dermatology_consultation', 'cosmetic_consultation', 'dental_consultation'].includes(props.booking.booking_type);
+    return ['dermatology_consultation', 'cosmetic_consultation', 'dental_consultation', 'pediatric_consultation'].includes(props.booking.booking_type);
 });
 
 const bookingTypeColors = {
@@ -43,6 +45,8 @@ const bookingTypeColors = {
     service: 'bg-emerald-50 text-emerald-700 border-emerald-200',
     dental_consultation: 'bg-cyan-50 text-cyan-700 border-cyan-200',
     dental_service: 'bg-teal-50 text-teal-700 border-teal-200',
+    pediatric_consultation: 'bg-green-50 text-green-700 border-green-200',
+    pediatric_service: 'bg-lime-50 text-lime-700 border-lime-200',
 };
 
 const page = usePage();

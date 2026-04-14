@@ -279,7 +279,7 @@ function logout()        { router.post('/admin/logout'); }
                 <Link href="/admin" class="flex items-center">
                     <img
                         src="/images/logo/logo.png"
-                        alt="AURA Derma Aesthetic Clinic"
+                        alt="Doctorato Polyclinic"
                         class="h-12 w-auto brightness-0 invert opacity-90"
                     />
                 </Link>
@@ -592,7 +592,7 @@ function logout()        { router.post('/admin/logout'); }
             <!-- Footer -->
             <footer class="border-t border-gray-200/60 bg-white/60 backdrop-blur-sm py-3 px-4 lg:px-8">
                 <div class="flex flex-col sm:flex-row items-center justify-between gap-1 text-[11px] text-gray-400">
-                    <p>&copy; {{ new Date().getFullYear() }} {{ isRtl ? 'عيادة أورا ديرما التجميلية' : 'AURA Derma Aesthetic Clinic' }}</p>
+                    <p>&copy; {{ new Date().getFullYear() }} {{ isRtl ? 'عيادة دكتوراتو التخصصية' : 'Doctorato Polyclinic' }}</p>
                     <p>
                         {{ isRtl ? 'تطوير' : 'Developed by' }}
                         <a href="https://markeza-group.com" target="_blank" rel="noopener noreferrer"

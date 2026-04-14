@@ -26,6 +26,7 @@ const props = defineProps({
     payoutSummary: Object,
     doctorInfo: Object,
     dental: Object,
+    pediatric: Object,
     pendingFollowups: Array,
     todayMedicalAlerts: Array,
 });
@@ -946,6 +947,54 @@ const completionDash = computed(() => {
                 </div>
                 <div class="px-3 py-4 text-center">
                     <p class="text-lg font-bold text-cyan-600">{{ formatCurrency(dental.month_revenue) }}</p>
+                    <p class="text-[10px] font-medium text-gray-500 mt-0.5">{{ isRtl ? 'إيرادات' : 'Revenue' }}</p>
+                </div>
+            </div>
+        </div>
+        <!-- Pediatric Overview (only for pediatric doctors) -->
+        <div v-if="pediatric" class="mt-6 bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden"
+            :class="mounted ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'"
+            style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.55s">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-green-50/50 to-white">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-xl bg-green-50 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                    </div>
+                    <div>
+                        <h2 class="text-sm font-bold text-gray-800">{{ isRtl ? 'نظرة عامة على طب الأطفال' : 'Pediatric Overview' }}</h2>
+                        <p class="text-[10px] text-gray-400">{{ isRtl ? 'ملخص زيارات وتطعيمات ونمو الأطفال' : 'Children visits, vaccinations & growth summary' }}</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <Link href="/doctor/pediatric/dashboard" class="inline-flex items-center gap-1.5 text-[11px] font-semibold text-green-600 hover:text-green-700 px-3 py-1.5 rounded-lg hover:bg-green-50 transition-all">
+                        {{ isRtl ? 'لوحة التحكم' : 'Dashboard' }}
+                        <svg class="w-3.5 h-3.5 ltr:rotate-0 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                    </Link>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 divide-x rtl:divide-x-reverse divide-gray-100">
+                <div class="px-3 py-4 text-center">
+                    <p class="text-2xl font-bold text-green-600">{{ pediatric.total_patients ?? 0 }}</p>
+                    <p class="text-[10px] font-medium text-gray-500 mt-0.5">{{ isRtl ? 'مرضى' : 'Patients' }}</p>
+                </div>
+                <div class="px-3 py-4 text-center">
+                    <p class="text-2xl font-bold text-gray-800">{{ pediatric.visits_today ?? 0 }}</p>
+                    <p class="text-[10px] font-medium text-gray-500 mt-0.5">{{ isRtl ? 'زيارات اليوم' : 'Today' }}</p>
+                </div>
+                <div class="px-3 py-4 text-center">
+                    <p class="text-2xl font-bold text-amber-600">{{ pediatric.vaccinations_due ?? 0 }}</p>
+                    <p class="text-[10px] font-medium text-gray-500 mt-0.5">{{ isRtl ? 'تطعيمات مستحقة' : 'Vacc. Due' }}</p>
+                </div>
+                <div class="px-3 py-4 text-center">
+                    <p class="text-2xl font-bold" :class="(pediatric.growth_alerts ?? 0) > 0 ? 'text-red-600' : 'text-gray-400'">{{ pediatric.growth_alerts ?? 0 }}</p>
+                    <p class="text-[10px] font-medium text-gray-500 mt-0.5">{{ isRtl ? 'تنبيهات نمو' : 'Growth Alerts' }}</p>
+                </div>
+                <div class="px-3 py-4 text-center">
+                    <p class="text-2xl font-bold text-gray-800">{{ pediatric.visits_this_month ?? 0 }}</p>
+                    <p class="text-[10px] font-medium text-gray-500 mt-0.5">{{ isRtl ? 'الشهر' : 'Month' }}</p>
+                </div>
+                <div class="px-3 py-4 text-center">
+                    <p class="text-lg font-bold text-green-600">{{ formatCurrency(pediatric.revenue_this_month ?? 0) }}</p>
                     <p class="text-[10px] font-medium text-gray-500 mt-0.5">{{ isRtl ? 'إيرادات' : 'Revenue' }}</p>
                 </div>
             </div>

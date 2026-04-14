@@ -14,7 +14,7 @@ class UpdateDoctorRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'module' => 'nullable|string|in:derma,dental',
+            'module' => 'nullable|string|in:derma,dental,pediatric',
             'name_ar' => 'required|string|max:255',
             'name_en' => 'required|string|max:255',
             'photo' => 'nullable|image|mimes:jpg,jpeg,png,webp,gif|max:20480',

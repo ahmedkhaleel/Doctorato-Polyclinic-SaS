@@ -269,7 +269,7 @@ onUnmounted(() => { document.removeEventListener('keydown', handleGlobalKey); })
                         </svg>
                     </div>
                     <div>
-                        <span class="text-[15px] font-bold text-[#C4A265] tracking-wide">AURA</span>
+                        <span class="text-[15px] font-bold text-[var(--brand-primary)] tracking-wide">Doctorato</span>
                         <span class="block text-[10px] text-white/30 uppercase tracking-widest -mt-0.5">{{ isRtl ? 'بوابة الطبيب' : 'Doctor Portal' }}</span>
                     </div>
                 </Link>
@@ -469,7 +469,7 @@ onUnmounted(() => { document.removeEventListener('keydown', handleGlobalKey); })
             <!-- Footer -->
             <footer class="border-t border-gray-200/60 bg-white/60 backdrop-blur-sm py-3 px-4 lg:px-8">
                 <div class="flex flex-col sm:flex-row items-center justify-between gap-1 text-[11px] text-gray-400">
-                    <p>&copy; {{ new Date().getFullYear() }} {{ isRtl ? 'عيادة أورا ديرما التجميلية' : 'AURA Derma Aesthetic Clinic' }}</p>
+                    <p>&copy; {{ new Date().getFullYear() }} {{ isRtl ? 'عيادة دكتوراتو التخصصية' : 'Doctorato Polyclinic' }}</p>
                     <p>
                         {{ isRtl ? 'تطوير' : 'Developed by' }}
                         <a href="https://markeza-group.com" target="_blank" rel="noopener noreferrer"

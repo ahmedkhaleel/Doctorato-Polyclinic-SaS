@@ -548,7 +548,7 @@ function missFollowUp(fuId) {
                         <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider">{{ isRtl ? 'توزيع الاقسام' : 'Module Split' }}</h3>
                     </div>
                     <div class="space-y-5">
-                        <Link v-for="(mod, key) in { derma: { label: isRtl ? 'جلدية' : 'Derma', color: 'from-teal-400 to-teal-600', bg: 'bg-teal-100', text: 'text-teal-700' }, dental: { label: isRtl ? 'اسنان' : 'Dental', color: 'from-sky-400 to-sky-600', bg: 'bg-sky-100', text: 'text-sky-700' } }" :key="key"
+                        <Link v-for="(mod, key) in { derma: { label: isRtl ? 'جلدية' : 'Derma', color: 'from-teal-400 to-teal-600', bg: 'bg-teal-100', text: 'text-teal-700' }, dental: { label: isRtl ? 'اسنان' : 'Dental', color: 'from-sky-400 to-sky-600', bg: 'bg-sky-100', text: 'text-sky-700' }, pediatric: { label: isRtl ? 'أطفال' : 'Pediatric', color: 'from-green-400 to-green-600', bg: 'bg-green-100', text: 'text-green-700' } }" :key="key"
                             :href="`/admin/leads?module=${key}`"
                             class="block hover:bg-gray-50/50 -mx-2 px-2 py-1 rounded-lg transition-colors"
                         >
@@ -1294,6 +1294,7 @@ function missFollowUp(fuId) {
                                                 class="w-full rounded-xl border-gray-200 text-sm focus:ring-[#C4A265] focus:border-[#C4A265] transition">
                                                 <option value="derma">Derma</option>
                                                 <option value="dental">Dental</option>
+                                                <option value="pediatric">Pediatric</option>
                                             </select>
                                         </div>
                                     </div>

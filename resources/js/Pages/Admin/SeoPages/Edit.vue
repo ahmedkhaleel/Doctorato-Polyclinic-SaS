@@ -40,7 +40,7 @@ const previewDescription = computed(() => {
 });
 
 const previewUrl = computed(() => {
-    return form.canonical_url || `https://auraderma.com/${props.seoPage.page_identifier}`;
+    return form.canonical_url || `https://doctorato.com/${props.seoPage.page_identifier}`;
 });
 
 const titleLengthClass = computed(() => {
@@ -139,7 +139,7 @@ const descLengthClass = computed(() => {
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_canonical_url') }}</label>
-                            <input v-model="form.canonical_url" type="text" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" placeholder="https://auraderma.com/page" />
+                            <input v-model="form.canonical_url" type="text" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" placeholder="https://doctorato.com/page" />
                             <p class="mt-1 text-xs text-gray-400">Leave empty for automatic canonical URL</p>
                         </div>
                     </div>
@@ -181,7 +181,7 @@ const descLengthClass = computed(() => {
                             v-model="form.structured_data"
                             rows="6"
                             class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-xs font-mono focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
-                            placeholder='{ "@context": "https://schema.org", "@type": "MedicalClinic", "name": "AURA Derma Clinic" }'
+                            placeholder='{ "@context": "https://schema.org", "@type": "MedicalClinic", "name": "Doctorato Polyclinic" }'
                         ></textarea>
                         <p class="mt-1 text-xs text-gray-400">Optional JSON-LD structured data for rich search results</p>
                         <p v-if="form.errors.structured_data" class="mt-1 text-sm text-red-600">{{ form.errors.structured_data }}</p>

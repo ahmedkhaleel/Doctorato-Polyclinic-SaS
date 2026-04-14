@@ -137,33 +137,33 @@ class ReportController extends Controller
             'prev_patients'   => $prevPatients,
         ];
 
-        // ── Module Comparison (dental vs dermatology) ────────────
+        // ── Module Comparison (derma vs dental vs pediatric) ────────────
         $moduleComparison = null;
         $modulesConfig = ModuleManager::getForFrontend();
-        if (($modulesConfig['dental']['enabled'] ?? false) && !$module) {
+        $enabledMedical = collect(['derma', 'dental', 'pediatric'])
+            ->filter(fn ($m) => $modulesConfig[$m]['enabled'] ?? false);
+        if ($enabledMedical->count() >= 2 && !$module) {
             $moduleComparison = [];
-            foreach (['dermatology', 'dental'] as $mod) {
-                $modVisitFilter = $mod === 'dermatology' ? 'dermatology' : 'dental';
-
+            foreach ($enabledMedical as $mod) {
                 $modRevenueQ = Payment::whereMonth('payment_date', $now->month)->whereYear('payment_date', $now->year)
-                    ->whereHas('invoice', fn ($q) => $q->whereHas('visit', fn ($q2) => $q2->where('module', $modVisitFilter)));
+                    ->whereHas('invoice', fn ($q) => $q->whereHas('visit', fn ($q2) => $q2->where('module', $mod)));
                 $modRevenue = round((float) $modRevenueQ->sum('amount'), 2);
 
                 $modPrevRevenueQ = Payment::whereMonth('payment_date', $lastMonth->month)->whereYear('payment_date', $lastMonth->year)
-                    ->whereHas('invoice', fn ($q) => $q->whereHas('visit', fn ($q2) => $q2->where('module', $modVisitFilter)));
+                    ->whereHas('invoice', fn ($q) => $q->whereHas('visit', fn ($q2) => $q2->where('module', $mod)));
                 $modPrevRevenue = round((float) $modPrevRevenueQ->sum('amount'), 2);
 
                 $modVisits = Visit::whereMonth('visit_date', $now->month)->whereYear('visit_date', $now->year)
-                    ->where('module', $modVisitFilter)->count();
+                    ->where('module', $mod)->count();
                 $modPrevVisits = Visit::whereMonth('visit_date', $lastMonth->month)->whereYear('visit_date', $lastMonth->year)
-                    ->where('module', $modVisitFilter)->count();
+                    ->where('module', $mod)->count();
 
                 $modCompleted = Visit::where('status', 'completed')
                     ->whereMonth('visit_date', $now->month)->whereYear('visit_date', $now->year)
-                    ->where('module', $modVisitFilter)->count();
+                    ->where('module', $mod)->count();
 
                 $modNewPatients = Visit::whereMonth('visit_date', $now->month)->whereYear('visit_date', $now->year)
-                    ->where('module', $modVisitFilter)
+                    ->where('module', $mod)
                     ->distinct('patient_id')->count('patient_id');
 
                 $moduleComparison[$mod] = [

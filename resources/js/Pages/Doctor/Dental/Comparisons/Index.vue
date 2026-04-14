@@ -17,6 +17,7 @@ const props = defineProps({
 
 const search = ref(props.filters?.search || '');
 const selectedCategory = ref(props.filters?.category || '');
+const isFiltering = ref(false);
 
 const categoryLabels = {
     orthodontic: { ar: 'تقويم', en: 'Orthodontic' },
@@ -52,10 +53,15 @@ watch(search, () => {
 });
 
 function applyFilters() {
+    isFiltering.value = true;
     router.get('/doctor/dental/comparisons', {
         search: search.value || undefined,
         category: selectedCategory.value || undefined,
-    }, { preserveState: true, preserveScroll: true });
+    }, {
+        preserveState: true,
+        preserveScroll: true,
+        onFinish: () => { isFiltering.value = false; },
+    });
 }
 
 function formatDate(date) {
@@ -66,37 +72,49 @@ function formatDate(date) {
 
 <template>
     <div class="space-y-6">
-        <!-- Header -->
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div>
-                <p class="text-[#C4A265] text-xs font-semibold tracking-wider uppercase mb-1">{{ isRtl ? 'مقارنة الصور' : 'Photo Comparisons' }}</p>
-                <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">{{ isRtl ? 'قبل / بعد' : 'Before & After' }}</h1>
-            </div>
-        </div>
+        <!-- Hero Header -->
+        <div class="dental-hero-enter relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6 sm:p-7">
+            <div class="absolute -top-12 ltr:-right-12 rtl:-left-12 w-48 h-48 bg-[#C4A265]/10 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-8 ltr:left-20 rtl:right-20 w-32 h-32 bg-purple-500/10 rounded-full blur-2xl"></div>
 
-        <!-- Filters -->
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-3 sm:p-4">
-            <div class="flex flex-wrap gap-3 items-center">
-                <div class="relative flex-1 min-w-[200px]">
-                    <svg class="absolute top-1/2 -translate-y-1/2 ltr:left-3 rtl:right-3 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                    <input v-model="search" type="text" :placeholder="isRtl ? 'بحث...' : 'Search...'"
-                        class="w-full ltr:pl-10 rtl:pr-10 pr-4 py-2.5 bg-gray-50/50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition" />
+            <div class="relative z-10">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-5">
+                    <div>
+                        <p class="text-[#C4A265] text-xs font-semibold tracking-wider uppercase mb-1">{{ isRtl ? 'مقارنة الصور' : 'Photo Comparisons' }}</p>
+                        <h1 class="text-2xl sm:text-3xl font-bold text-white">{{ isRtl ? 'قبل / بعد' : 'Before & After' }}</h1>
+                        <p class="text-gray-400 text-sm mt-1">{{ isRtl ? 'صور مقارنة قبل وبعد العلاج' : 'Before and after treatment comparisons' }}</p>
+                    </div>
+                    <div class="bg-white/5 backdrop-blur-sm rounded-xl px-4 py-3 border border-white/10 text-center">
+                        <p class="text-2xl font-bold text-white">{{ comparisons?.total || comparisons?.data?.length || 0 }}</p>
+                        <p class="text-xs text-gray-400">{{ isRtl ? 'إجمالي المقارنات' : 'Total' }}</p>
+                    </div>
                 </div>
-                <div class="flex flex-wrap gap-1.5 overflow-x-auto scrollbar-none">
-                    <button @click="selectedCategory = ''; applyFilters()"
-                        :class="!selectedCategory ? 'bg-[#C4A265] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'"
-                        class="px-3 py-1.5 rounded-lg text-xs font-medium transition">{{ isRtl ? 'الكل' : 'All' }}</button>
-                    <button v-for="cat in categories" :key="cat" @click="selectedCategory = cat; applyFilters()"
-                        :class="selectedCategory === cat ? 'bg-[#C4A265] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'"
-                        class="px-3 py-1.5 rounded-lg text-xs font-medium transition">{{ categoryLabel(cat) }}</button>
+
+                <!-- Filters -->
+                <div class="dental-card-enter flex flex-wrap gap-3 items-center" style="animation-delay:0.15s">
+                    <div class="relative flex-1 min-w-[200px]">
+                        <svg v-if="!isFiltering" class="absolute top-1/2 -translate-y-1/2 ltr:left-3 rtl:right-3 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                        <svg v-else class="absolute top-1/2 -translate-y-1/2 ltr:left-3 rtl:right-3 w-4 h-4 text-[#C4A265] animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+                        <input v-model="search" type="text" :placeholder="isRtl ? 'بحث...' : 'Search...'"
+                            class="w-full ltr:pl-10 rtl:pr-10 pr-4 py-2.5 bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl text-sm text-white placeholder-gray-400 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]/50 transition" />
+                    </div>
+                    <div class="flex flex-wrap gap-1.5 overflow-x-auto scrollbar-none">
+                        <button @click="selectedCategory = ''; applyFilters()"
+                            :class="!selectedCategory ? 'bg-[#C4A265] text-white' : 'bg-white/10 text-gray-300 hover:bg-white/20'"
+                            class="px-3 py-1.5 rounded-lg text-xs font-medium transition">{{ isRtl ? 'الكل' : 'All' }}</button>
+                        <button v-for="cat in categories" :key="cat" @click="selectedCategory = cat; applyFilters()"
+                            :class="selectedCategory === cat ? 'bg-[#C4A265] text-white' : 'bg-white/10 text-gray-300 hover:bg-white/20'"
+                            class="px-3 py-1.5 rounded-lg text-xs font-medium transition">{{ categoryLabel(cat) }}</button>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Grid -->
         <div v-if="comparisons?.data?.length" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            <Link v-for="comp in comparisons.data" :key="comp.id" :href="`/doctor/dental/comparisons/${comp.id}`"
-                class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden hover:shadow-lg hover:border-gray-200 transition-all duration-300 block group">
+            <Link v-for="(comp, i) in comparisons.data" :key="comp.id" :href="`/doctor/dental/comparisons/${comp.id}`"
+                class="dental-card-enter bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden hover:shadow-lg hover:border-gray-200 transition-all duration-300 block group"
+                :style="{ animationDelay: (0.2 + i * 0.05) + 's' }">
                 <div class="relative aspect-[4/3] overflow-hidden bg-gray-100">
                     <div class="absolute inset-0 flex">
                         <div class="w-1/2 h-full overflow-hidden">
@@ -142,3 +160,16 @@ function formatDate(date) {
         </div>
     </div>
 </template>
+
+<style>
+@keyframes dentalHeroEnter {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes dentalCardEnter {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+.dental-hero-enter { animation: dentalHeroEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.dental-card-enter { animation: dentalCardEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
+</style>

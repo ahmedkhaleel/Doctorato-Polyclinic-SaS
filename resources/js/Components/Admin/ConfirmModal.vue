@@ -26,6 +26,8 @@ const colorMap = {
     gold: { bg: 'bg-[#C4A265] hover:bg-[#B3914F]', icon: 'bg-[#C4A265]/10 text-[#C4A265]' },
     blue: { bg: 'bg-blue-600 hover:bg-blue-700', icon: 'bg-blue-100 text-blue-600' },
     green: { bg: 'bg-green-600 hover:bg-green-700', icon: 'bg-green-100 text-green-600' },
+    cyan: { bg: 'bg-cyan-600 hover:bg-cyan-700', icon: 'bg-cyan-100 text-cyan-600' },
+    amber: { bg: 'bg-amber-600 hover:bg-amber-700', icon: 'bg-amber-100 text-amber-600' },
 };
 </script>
 

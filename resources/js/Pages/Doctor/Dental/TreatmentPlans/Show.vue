@@ -1,7 +1,8 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { Link, router, usePage, useForm } from '@inertiajs/vue3';
 import DoctorLayout from '@/Layouts/DoctorLayout.vue';
+import ConfirmModal from '@/Components/Doctor/ConfirmModal.vue';
 import { useLocale } from '@/Composables/useLocale.js';
 import { useCurrency } from '@/Composables/useCurrency.js';
 
@@ -84,15 +85,38 @@ const statusForm = useForm({
     status: '',
 });
 
-function updateStatus(newStatus) {
-    const msg = isRtl.value ? 'هل أنت متأكد من تغيير الحالة؟' : 'Are you sure you want to change the status?';
-    if (!window.confirm(msg)) return;
+// ─── Toast Notification ─────────────────────────────────
+const showSuccess = ref(false);
+const successMessage = ref('');
+const showErrorToast = ref(false);
+const errorToastMsg = ref('');
+const page_flash = usePage();
+watch(() => page_flash.props.flash?.success, (msg) => {
+    if (msg) { successMessage.value = msg; showSuccess.value = true; setTimeout(() => { showSuccess.value = false; }, 4000); }
+});
+watch(() => page_flash.props.flash?.error, (msg) => {
+    if (msg) { errorToastMsg.value = msg; showErrorToast.value = true; setTimeout(() => { showErrorToast.value = false; }, 5000); }
+});
+
+// ─── Confirm Modals ─────────────────────────────────────
+const showStatusModal = ref(false);
+const pendingStatus = ref(null);
+
+function confirmStatusChange(newStatus) {
+    pendingStatus.value = newStatus;
+    showStatusModal.value = true;
+}
+
+function executeStatusChange() {
+    if (!pendingStatus.value) return;
     updatingStatus.value = true;
-    statusForm.status = newStatus;
+    showStatusModal.value = false;
+    statusForm.status = pendingStatus.value;
     statusForm.post(`/doctor/dental/treatment-plans/${props.plan.id}/update`, {
         preserveScroll: true,
         onFinish: () => {
             updatingStatus.value = false;
+            pendingStatus.value = null;
         },
     });
 }
@@ -144,32 +168,42 @@ function sendConsent() {
 
 <template>
     <div class="space-y-6">
-        <!-- Header -->
-        <div class="flex items-center justify-between flex-wrap gap-4">
-            <div>
-                <p class="text-[#C4A265] text-xs font-semibold tracking-wider uppercase mb-1">{{ isRtl ? 'خطة العلاج' : 'Treatment Plan' }} #{{ plan.id }}</p>
-                <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">
-                    {{ locale === 'ar' ? (plan.title_ar || plan.title_en || `#${plan.id}`) : (plan.title_en || plan.title_ar || `#${plan.id}`) }}
-                </h1>
-            </div>
-            <div class="flex items-center gap-2 flex-wrap">
-                <Link v-if="plan.patient" :href="`/doctor/dental/chart/${plan.patient.id}`"
-                    class="inline-flex items-center px-3 py-2 text-sm font-medium text-[#C4A265] bg-[#C4A265]/5 rounded-lg hover:bg-[#C4A265]/10 border border-[#C4A265]/10 transition-colors">
-                    <svg class="w-4 h-4 ltr:mr-1.5 rtl:ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
-                    {{ isRtl ? 'مخطط الأسنان' : 'Dental Chart' }}
-                </Link>
-                <Link href="/doctor/dental/treatment-plans"
-                    class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
-                    <svg class="w-4 h-4 ltr:mr-1.5 rtl:ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
-                    {{ isRtl ? 'رجوع' : 'Back' }}
-                </Link>
+        <!-- Hero Header -->
+        <div class="dental-hero-enter relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6 sm:p-7">
+            <div class="absolute -top-12 ltr:-right-12 rtl:-left-12 w-48 h-48 bg-[#C4A265]/10 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-8 ltr:left-20 rtl:right-20 w-32 h-32 bg-purple-500/10 rounded-full blur-2xl"></div>
+
+            <div class="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <Link href="/doctor/dental/treatment-plans" class="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-sm flex items-center justify-center hover:bg-white/20 transition ring-1 ring-white/15">
+                        <svg class="w-5 h-5 text-white rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                    </Link>
+                    <div>
+                        <p class="text-[#C4A265]/80 text-xs font-semibold tracking-wider uppercase">{{ isRtl ? 'خطة العلاج' : 'Treatment Plan' }} #{{ plan.id }}</p>
+                        <h1 class="text-xl sm:text-2xl font-bold text-white mt-0.5">
+                            {{ locale === 'ar' ? (plan.title_ar || plan.title_en || `#${plan.id}`) : (plan.title_en || plan.title_ar || `#${plan.id}`) }}
+                        </h1>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 flex-wrap">
+                    <Link v-if="plan.patient" :href="`/doctor/dental/chart/${plan.patient.id}`"
+                        class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white/90 bg-white/10 backdrop-blur-sm rounded-xl hover:bg-white/20 border border-white/15 transition-all">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                        {{ isRtl ? 'مخطط الأسنان' : 'Dental Chart' }}
+                    </Link>
+                    <a :href="`/doctor/dental/treatment-plans/${plan.id}/pdf`" target="_blank"
+                        class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white/90 bg-white/10 backdrop-blur-sm rounded-xl hover:bg-white/20 border border-white/15 transition-all">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                        PDF
+                    </a>
+                </div>
             </div>
         </div>
 
         <!-- Plan Info + Actions -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <!-- Main Info -->
-            <div class="md:col-span-2 lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6 space-y-5">
+            <div class="dental-card-enter md:col-span-2 lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6 space-y-5" style="animation-delay:0.1s">
                 <div class="flex items-start justify-between">
                     <div class="flex items-center gap-2 flex-wrap">
                         <span :class="[statusColors[plan.status] || 'bg-gray-100 text-gray-800', 'px-3 py-1 rounded-full text-sm font-medium']">
@@ -232,13 +266,13 @@ function sendConsent() {
             </div>
 
             <!-- Status Actions Sidebar -->
-            <div class="md:col-span-2 lg:col-span-1 bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6 space-y-4">
+            <div class="dental-card-enter md:col-span-2 lg:col-span-1 bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6 space-y-4" style="animation-delay:0.15s">
                 <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wider">{{ isRtl ? 'إجراءات' : 'Actions' }}</h3>
 
                 <div class="space-y-2">
                     <button
                         v-if="plan.status === 'draft' || plan.status === 'pending'"
-                        @click="updateStatus('approved')"
+                        @click="confirmStatusChange('approved')"
                         :disabled="updatingStatus"
                         class="w-full px-4 py-2.5 text-sm font-medium text-white bg-blue-600 rounded-xl hover:bg-blue-700 disabled:opacity-50 transition"
                     >
@@ -246,7 +280,7 @@ function sendConsent() {
                     </button>
                     <button
                         v-if="plan.status === 'approved' && hasSignedConsent"
-                        @click="updateStatus('in_progress')"
+                        @click="confirmStatusChange('in_progress')"
                         :disabled="updatingStatus"
                         class="w-full px-4 py-2.5 text-sm font-medium text-white bg-[#C4A265] rounded-xl hover:bg-[#B39255] disabled:opacity-50 transition"
                     >
@@ -260,7 +294,7 @@ function sendConsent() {
                     </div>
                     <button
                         v-if="plan.status === 'in_progress'"
-                        @click="updateStatus('completed')"
+                        @click="confirmStatusChange('completed')"
                         :disabled="updatingStatus"
                         class="w-full px-4 py-2.5 text-sm font-medium text-white bg-green-600 rounded-xl hover:bg-green-700 disabled:opacity-50 transition"
                     >
@@ -268,7 +302,7 @@ function sendConsent() {
                     </button>
                     <button
                         v-if="plan.status !== 'completed' && plan.status !== 'cancelled'"
-                        @click="updateStatus('cancelled')"
+                        @click="confirmStatusChange('cancelled')"
                         :disabled="updatingStatus"
                         class="w-full px-4 py-2.5 text-sm font-medium text-red-600 bg-red-50 rounded-xl hover:bg-red-100 disabled:opacity-50 transition"
                     >
@@ -284,7 +318,7 @@ function sendConsent() {
         </div>
 
         <!-- Consent Section -->
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
+        <div class="dental-card-enter bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden" style="animation-delay:0.2s">
             <div class="px-4 sm:px-6 py-4 border-b border-gray-100 flex items-center justify-between flex-wrap gap-3">
                 <div class="flex items-center gap-3">
                     <div class="w-9 h-9 rounded-lg flex items-center justify-center"
@@ -383,7 +417,7 @@ function sendConsent() {
         </Teleport>
 
         <!-- Treatments Table -->
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
+        <div class="dental-card-enter bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden" style="animation-delay:0.25s">
             <div class="px-4 sm:px-6 py-4 border-b border-gray-100">
                 <h2 class="text-lg font-semibold text-gray-800">{{ isRtl ? 'العلاجات' : 'Treatments' }}</h2>
             </div>
@@ -428,5 +462,60 @@ function sendConsent() {
                 </table>
             </div>
         </div>
+
+        <!-- Status Change Confirm Modal -->
+        <ConfirmModal
+            :show="showStatusModal"
+            :title="isRtl ? 'تأكيد تغيير الحالة' : 'Confirm Status Change'"
+            :message="isRtl ? 'هل أنت متأكد من تغيير حالة خطة العلاج؟' : 'Are you sure you want to change the treatment plan status?'"
+            :confirmText="isRtl ? 'تأكيد' : 'Confirm'"
+            :cancelText="isRtl ? 'إلغاء' : 'Cancel'"
+            type="info"
+            @confirm="executeStatusChange"
+            @cancel="showStatusModal = false"
+        />
+
+        <!-- Success Toast -->
+        <Transition
+            enter-active-class="transition ease-out duration-300"
+            enter-from-class="translate-y-4 opacity-0"
+            enter-to-class="translate-y-0 opacity-100"
+            leave-active-class="transition ease-in duration-200"
+            leave-from-class="translate-y-0 opacity-100"
+            leave-to-class="translate-y-4 opacity-0"
+        >
+            <div v-if="showSuccess" class="fixed bottom-6 ltr:right-6 rtl:left-6 z-50 flex items-center gap-3 px-5 py-3 bg-emerald-600 text-white rounded-xl shadow-lg shadow-emerald-200/50">
+                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <span class="text-sm font-medium">{{ successMessage }}</span>
+            </div>
+        </Transition>
+
+        <!-- Error Toast -->
+        <Transition
+            enter-active-class="transition ease-out duration-300"
+            enter-from-class="translate-y-4 opacity-0"
+            enter-to-class="translate-y-0 opacity-100"
+            leave-active-class="transition ease-in duration-200"
+            leave-from-class="translate-y-0 opacity-100"
+            leave-to-class="translate-y-4 opacity-0"
+        >
+            <div v-if="showErrorToast" class="fixed bottom-6 ltr:right-6 rtl:left-6 z-50 flex items-center gap-3 px-5 py-3 bg-red-600 text-white rounded-xl shadow-lg shadow-red-200/50">
+                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <span class="text-sm font-medium">{{ errorToastMsg }}</span>
+            </div>
+        </Transition>
     </div>
 </template>
+
+<style>
+@keyframes dentalHeroEnter {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes dentalCardEnter {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+.dental-hero-enter { animation: dentalHeroEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.dental-card-enter { animation: dentalCardEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
+</style>

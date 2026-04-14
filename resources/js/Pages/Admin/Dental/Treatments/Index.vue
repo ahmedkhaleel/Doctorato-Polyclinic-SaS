@@ -1,9 +1,14 @@
 <script setup>
-import { ref, watch, computed } from 'vue';
+import { ref, watch, computed, onMounted } from 'vue';
 import { Link, router, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { useLocale } from '@/Composables/useLocale.js';
 import { useCurrency } from '@/Composables/useCurrency.js';
+
+// ─── Toast + Loading ────────────────────────────────────
+const isFiltering = ref(false);
+const showSuccess = ref(false);
+const successMessage = ref('');
 
 const { t } = useLocale();
 const { formatCurrency } = useCurrency();
@@ -30,6 +35,7 @@ let searchTimeout = null;
 
 function applyFilters() {
     clearTimeout(searchTimeout);
+    isFiltering.value = true;
     searchTimeout = setTimeout(() => {
         router.get('/admin/dental/treatments', {
             search: search.value || undefined,
@@ -42,11 +48,16 @@ function applyFilters() {
         }, {
             preserveState: true,
             replace: true,
+            onFinish: () => { isFiltering.value = false; },
         });
     }, 400);
 }
 
 watch([search, statusFilter, typeFilter, doctorFilter, toothNumber, dateFrom, dateTo], applyFilters);
+
+watch(() => page.props.flash?.success, (msg) => {
+    if (msg) { successMessage.value = msg; showSuccess.value = true; setTimeout(() => { showSuccess.value = false; }, 4000); }
+});
 
 function formatDate(date) {
     if (!date) return '-';
@@ -109,7 +120,8 @@ function clearFilters() {
                 <div class="p-5">
                     <div class="flex items-center gap-3">
                         <div class="relative flex-1">
-                            <svg class="absolute top-1/2 -translate-y-1/2 ltr:left-4 rtl:right-4 w-4.5 h-4.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                            <svg v-if="!isFiltering" class="absolute top-1/2 -translate-y-1/2 ltr:left-4 rtl:right-4 w-4.5 h-4.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                            <svg v-else class="absolute top-1/2 -translate-y-1/2 ltr:left-4 rtl:right-4 w-4.5 h-4.5 text-cyan-500 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
                             <input
                                 v-model="search"
                                 type="text"
@@ -265,6 +277,14 @@ function clearFilters() {
                 </div>
             </div>
         </div>
+
+        <!-- Success Toast -->
+        <Transition enter-active-class="transition ease-out duration-300" enter-from-class="translate-y-4 opacity-0" enter-to-class="translate-y-0 opacity-100" leave-active-class="transition ease-in duration-200" leave-from-class="translate-y-0 opacity-100" leave-to-class="translate-y-4 opacity-0">
+            <div v-if="showSuccess" class="fixed bottom-6 ltr:right-6 rtl:left-6 z-50 flex items-center gap-3 px-5 py-3 bg-emerald-600 text-white rounded-xl shadow-lg shadow-emerald-200/50">
+                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <span class="text-sm font-medium">{{ successMessage }}</span>
+            </div>
+        </Transition>
     </AdminLayout>
 </template>
 

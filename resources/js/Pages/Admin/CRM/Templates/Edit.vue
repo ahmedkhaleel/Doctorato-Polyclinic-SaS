@@ -339,7 +339,7 @@ function submit() {
                                         <span class="w-3 h-3 rounded-full bg-green-400"></span>
                                     </div>
                                     <div class="space-y-1">
-                                        <p class="text-[10px] text-gray-400"><span class="font-semibold text-gray-500">From:</span> Aura Derma Clinic</p>
+                                        <p class="text-[10px] text-gray-400"><span class="font-semibold text-gray-500">From:</span> Doctorato Polyclinic</p>
                                         <p class="text-[10px] text-gray-400"><span class="font-semibold text-gray-500">Subject:</span> {{ form.subject || 'No subject' }}</p>
                                     </div>
                                 </div>
@@ -349,7 +349,7 @@ function submit() {
                                     </p>
                                 </div>
                                 <div class="bg-gray-50 border-t border-gray-100 px-4 py-2">
-                                    <p class="text-[9px] text-gray-300 text-center">Aura Derma Clinic</p>
+                                    <p class="text-[9px] text-gray-300 text-center">Doctorato Polyclinic</p>
                                 </div>
                             </div>
                         </div>

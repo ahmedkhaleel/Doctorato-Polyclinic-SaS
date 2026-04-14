@@ -26,6 +26,7 @@ class Doctor extends Model
         'dermatology_commission', 'cosmetic_commission', 'followup_commission',
         'dental_consultation_commission', 'dental_service_commission',
         'pediatric_consultation_commission', 'pediatric_followup_commission',
+        'pediatric_consultation_fee',
         'clinic_notes',
     ];
 
@@ -43,6 +44,7 @@ class Doctor extends Model
         'dental_service_commission' => 'decimal:2',
         'pediatric_consultation_commission' => 'decimal:2',
         'pediatric_followup_commission' => 'decimal:2',
+        'pediatric_consultation_fee' => 'decimal:2',
     ];
 
     protected $appends = ['photo_url'];
@@ -141,5 +143,17 @@ class Doctor extends Model
     public function favoritePatients()
     {
         return $this->hasMany(DoctorFavoritePatient::class);
+    }
+
+    // ─── Pediatric Relationships ────────────────────────
+
+    public function pediatricVisits()
+    {
+        return $this->hasMany(PediatricVisit::class);
+    }
+
+    public function pediatricPrescriptions()
+    {
+        return $this->hasMany(PediatricPrescription::class);
     }
 }

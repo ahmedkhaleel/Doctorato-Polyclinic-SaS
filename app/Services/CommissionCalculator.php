@@ -96,6 +96,14 @@ class CommissionCalculator
             return (float) $doctor->cosmetic_commission;
         }
 
+        if ($consultationType === 'pediatric' && $doctor->pediatric_consultation_commission !== null) {
+            return (float) $doctor->pediatric_consultation_commission;
+        }
+
+        if ($consultationType === 'dental' && $doctor->dental_consultation_commission !== null) {
+            return (float) $doctor->dental_consultation_commission;
+        }
+
         return (float) ($doctor->default_commission_percentage ?? 0);
     }
 
@@ -123,6 +131,22 @@ class CommissionCalculator
                 return (float) $doctor->cosmetic_fee;
             }
             return (float) Setting::get('cosmetic_consultation_fee', 0);
+        }
+
+        if ($consultationType === 'pediatric') {
+            // Per-doctor override first
+            if ($doctor->pediatric_consultation_fee !== null && (float) $doctor->pediatric_consultation_fee > 0) {
+                return (float) $doctor->pediatric_consultation_fee;
+            }
+            return (float) Setting::get('pediatric_consultation_fee', 0);
+        }
+
+        if ($consultationType === 'dental') {
+            // Per-doctor override first
+            if ($doctor->dental_consultation_fee !== null && (float) $doctor->dental_consultation_fee > 0) {
+                return (float) $doctor->dental_consultation_fee;
+            }
+            return (float) \App\Services\ModuleManager::getSetting('dental', 'consultation_fee', 300);
         }
 
         return (float) ($doctor->consultation_fee ?? 0);

@@ -2,6 +2,7 @@
 import { ref, computed, onMounted } from 'vue';
 import { Link, usePage, router } from '@inertiajs/vue3';
 import DoctorLayout from '@/Layouts/DoctorLayout.vue';
+import ConfirmModal from '@/Components/Doctor/ConfirmModal.vue';
 import { useLocale } from '@/Composables/useLocale.js';
 
 defineOptions({ layout: DoctorLayout });
@@ -329,9 +330,14 @@ function saveTooth() {
     });
 }
 
-function initializeChart() {
-    const msg = isRtl.value ? 'هل أنت متأكد من تهيئة المخطط؟ سيتم إنشاء سجل لكل سن.' : 'Initialize chart? This will create a record for each tooth.';
-    if (!window.confirm(msg)) return;
+const showInitializeModal = ref(false);
+
+function confirmInitializeChart() {
+    showInitializeModal.value = true;
+}
+
+function executeInitializeChart() {
+    showInitializeModal.value = false;
     router.post(`/doctor/dental/chart/${props.patient.id}/initialize`, {}, { preserveScroll: true });
 }
 
@@ -352,9 +358,7 @@ function formatDate(d) {
 <template>
     <div class="space-y-5">
         <!-- ═══ HERO HEADER ═══ -->
-        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-5 sm:p-7"
-            :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
-            style="transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1)">
+        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-5 sm:p-7 dental-hero-enter">
             <div class="absolute top-0 right-0 w-72 h-72 bg-[#C4A265]/10 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl"></div>
             <div class="absolute bottom-0 left-0 w-48 h-48 bg-cyan-500/10 rounded-full translate-y-1/2 -translate-x-1/4 blur-2xl"></div>
             <div class="relative z-10">
@@ -387,7 +391,7 @@ function formatDate(d) {
                             <svg class="w-3.5 h-3.5 ltr:mr-1.5 rtl:ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                             {{ isRtl ? 'الأشعة' : 'X-Rays' }}
                         </Link>
-                        <button @click="initializeChart"
+                        <button @click="confirmInitializeChart"
                             class="inline-flex items-center px-3 py-2 text-xs font-medium text-[#C4A265] bg-[#C4A265]/15 rounded-xl hover:bg-[#C4A265]/25 border border-[#C4A265]/20 transition-all">
                             <svg class="w-3.5 h-3.5 ltr:mr-1.5 rtl:ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
                             {{ isRtl ? 'تهيئة' : 'Init' }}
@@ -415,10 +419,9 @@ function formatDate(d) {
 
         <!-- ═══ MEDICAL ALERT BANNER ═══ -->
         <div v-if="patient.allergies || patient.chronic_conditions || patient.current_medications"
-            class="rounded-2xl border-2 overflow-hidden"
+            class="rounded-2xl border-2 overflow-hidden dental-card-enter"
             :class="patient.allergies ? 'bg-red-50 border-red-200' : 'bg-amber-50 border-amber-200'"
-            :style="mounted ? 'opacity:1;transform:translateY(0)' : 'opacity:0;transform:translateY(1rem)'"
-            style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.1s">
+            style="animation-delay: 0.1s">
             <div class="px-3 sm:px-5 py-3 flex items-start gap-3">
                 <div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
                     :class="patient.allergies ? 'bg-red-100' : 'bg-amber-100'">
@@ -454,9 +457,8 @@ function formatDate(d) {
         </div>
 
         <!-- ═══ MAIN DENTAL CHART ═══ -->
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden"
-            :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
-            style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.15s">
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden dental-card-enter"
+            style="animation-delay: 0.15s">
 
             <!-- Legend Bar -->
             <div class="px-4 sm:px-6 py-3 bg-gray-50/80 border-b border-gray-100 flex flex-wrap items-center gap-x-4 gap-y-1.5">
@@ -990,6 +992,18 @@ function formatDate(d) {
             </div>
         </Transition>
     </Teleport>
+
+    <!-- Initialize Chart Confirm Modal -->
+    <ConfirmModal
+        :show="showInitializeModal"
+        :title="isRtl ? 'تهيئة المخطط' : 'Initialize Chart'"
+        :message="isRtl ? 'هل أنت متأكد من تهيئة المخطط؟ سيتم إنشاء سجل لكل سن.' : 'Initialize chart? This will create a record for each tooth.'"
+        :confirmText="isRtl ? 'تهيئة' : 'Initialize'"
+        :cancelText="isRtl ? 'إلغاء' : 'Cancel'"
+        type="warning"
+        @confirm="executeInitializeChart"
+        @cancel="showInitializeModal = false"
+    />
 </template>
 
 <style scoped>
@@ -1152,4 +1166,16 @@ function formatDate(d) {
     from { opacity: 0; transform: translateY(8px) scale(0.9); }
     to { opacity: 1; transform: translateY(0) scale(1); }
 }
+
+/* ═══ Hero & Card Enter Animations ═══ */
+@keyframes dentalHeroEnter {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes dentalCardEnter {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+.dental-hero-enter { animation: dentalHeroEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.dental-card-enter { animation: dentalCardEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
 </style>

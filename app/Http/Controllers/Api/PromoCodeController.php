@@ -46,7 +46,7 @@ class PromoCodeController extends Controller
     {
         $request->validate([
             'code' => 'required|string|max:50',
-            'booking_type' => 'required|in:dermatology_consultation,cosmetic_consultation,dental_consultation,service,package_bundle',
+            'booking_type' => 'required|in:dermatology_consultation,cosmetic_consultation,dental_consultation,pediatric_consultation,pediatric_service,service,package_bundle',
             'service_id' => 'nullable|integer',
             'package_bundle_id' => 'nullable|integer',
             'amount' => 'nullable|numeric|min:0',

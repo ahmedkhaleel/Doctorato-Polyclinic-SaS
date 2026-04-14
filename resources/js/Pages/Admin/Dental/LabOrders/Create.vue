@@ -38,10 +38,6 @@ const form = ref({
 
 const errors = ref({});
 const processing = ref(false);
-const mounted = ref(false);
-
-onMounted(() => { setTimeout(() => mounted.value = true, 50); });
-
 function submit() {
     processing.value = true;
     errors.value = {};

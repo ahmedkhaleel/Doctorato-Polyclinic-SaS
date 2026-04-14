@@ -16,6 +16,8 @@ const props = defineProps({
     ageDistribution: Object,
     genderDistribution: Object,
     monthlyTrend: Array,
+    revenueTrend: Array,
+    revenueByDoctor: Array,
     topVaccines: Array,
     growthAlerts: Object,
     milestoneStats: Object,
@@ -774,6 +776,94 @@ const hoveredBar = ref(null);
                     <svg class="w-12 h-12 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" /></svg>
                     <p class="text-sm font-medium">{{ isRtl ? 'لا توجد بيانات أطباء' : 'No doctor data yet' }}</p>
                 </div>
+            </div>
+        </div>
+
+        <!-- ══════════ REVENUE ANALYTICS ══════════ -->
+        <div :ref="setSectionRef('revenue')" data-section="revenue"
+            class="ped-section bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6"
+            :class="{ 'ped-section-visible': visibleSections.has('revenue') }">
+            <div class="flex items-center justify-between mb-5">
+                <h2 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+                    <span class="w-2 h-2 bg-emerald-500 rounded-full"></span>
+                    {{ isRtl ? 'تحليل الإيرادات' : 'Revenue Analytics' }}
+                </h2>
+            </div>
+
+            <!-- Revenue Stat Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+                <div class="rounded-xl border border-emerald-100 bg-gradient-to-br from-emerald-50 to-green-50 p-4">
+                    <p class="text-xs font-medium text-emerald-600">{{ isRtl ? 'إيرادات هذا الشهر' : 'Revenue This Month' }}</p>
+                    <p class="text-2xl font-bold text-emerald-700 mt-1 tabular-nums">{{ (stats?.revenueThisMonth ?? 0).toLocaleString() }} <span class="text-sm font-normal text-emerald-500">{{ isRtl ? 'د.ع' : 'IQD' }}</span></p>
+                    <div v-if="stats?.revenueLastMonth" class="mt-1.5">
+                        <span class="text-[10px] font-medium px-2 py-0.5 rounded-full"
+                            :class="stats.revenueThisMonth >= stats.revenueLastMonth ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-600'">
+                            {{ stats.revenueThisMonth >= stats.revenueLastMonth ? '↑' : '↓' }}
+                            {{ stats.revenueLastMonth > 0 ? Math.abs(Math.round(((stats.revenueThisMonth - stats.revenueLastMonth) / stats.revenueLastMonth) * 100)) : 0 }}%
+                            {{ isRtl ? 'عن الشهر الماضي' : 'vs last month' }}
+                        </span>
+                    </div>
+                </div>
+                <div class="rounded-xl border border-blue-100 bg-gradient-to-br from-blue-50 to-indigo-50 p-4">
+                    <p class="text-xs font-medium text-blue-600">{{ isRtl ? 'المحصّل هذا الشهر' : 'Collected This Month' }}</p>
+                    <p class="text-2xl font-bold text-blue-700 mt-1 tabular-nums">{{ (stats?.collectedThisMonth ?? 0).toLocaleString() }} <span class="text-sm font-normal text-blue-500">{{ isRtl ? 'د.ع' : 'IQD' }}</span></p>
+                    <div v-if="stats?.revenueThisMonth > 0" class="mt-1.5">
+                        <div class="w-full bg-blue-100 rounded-full h-1.5">
+                            <div class="bg-blue-500 h-1.5 rounded-full transition-all duration-700" :style="{ width: Math.min(100, Math.round((stats.collectedThisMonth / stats.revenueThisMonth) * 100)) + '%' }"></div>
+                        </div>
+                        <span class="text-[10px] text-blue-500 mt-0.5">{{ Math.round((stats.collectedThisMonth / stats.revenueThisMonth) * 100) }}% {{ isRtl ? 'محصّل' : 'collected' }}</span>
+                    </div>
+                </div>
+                <div class="rounded-xl border border-amber-100 bg-gradient-to-br from-amber-50 to-orange-50 p-4">
+                    <p class="text-xs font-medium text-amber-600">{{ isRtl ? 'الشهر الماضي' : 'Last Month' }}</p>
+                    <p class="text-2xl font-bold text-amber-700 mt-1 tabular-nums">{{ (stats?.revenueLastMonth ?? 0).toLocaleString() }} <span class="text-sm font-normal text-amber-500">{{ isRtl ? 'د.ع' : 'IQD' }}</span></p>
+                </div>
+            </div>
+
+            <!-- Revenue Trend Chart (Bar) -->
+            <div v-if="revenueTrend?.length" class="mb-6">
+                <h3 class="text-sm font-semibold text-gray-700 mb-3">{{ isRtl ? 'اتجاه الإيرادات (12 شهر)' : 'Revenue Trend (12 Months)' }}</h3>
+                <div class="flex items-end gap-1.5 h-32">
+                    <div v-for="(m, mi) in revenueTrend" :key="mi"
+                        class="flex-1 flex flex-col items-center gap-1 group relative">
+                        <div class="w-full rounded-t-md bg-gradient-to-t from-emerald-500 to-green-400 ped-bar transition-all duration-200 group-hover:from-emerald-600 group-hover:to-green-500"
+                            :style="{ height: Math.max(4, (m.total / Math.max(...revenueTrend.map(r => r.total), 1)) * 100) + '%', animationDelay: `${mi * 60}ms` }">
+                        </div>
+                        <span class="text-[9px] text-gray-400 truncate w-full text-center">{{ m.monthShort }}</span>
+                        <!-- Tooltip -->
+                        <div class="absolute -top-10 left-1/2 -translate-x-1/2 hidden group-hover:flex bg-gray-800 text-white text-[10px] px-2 py-1 rounded-lg whitespace-nowrap z-10 shadow-lg">
+                            {{ m.month }}: {{ m.total?.toLocaleString() }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Revenue by Doctor -->
+            <div v-if="revenueByDoctor?.length">
+                <h3 class="text-sm font-semibold text-gray-700 mb-3">{{ isRtl ? 'الإيرادات حسب الطبيب (هذا الشهر)' : 'Revenue by Doctor (This Month)' }}</h3>
+                <div class="space-y-2.5">
+                    <div v-for="doc in revenueByDoctor" :key="doc.doctor_id" class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center text-xs font-bold text-emerald-600 flex-shrink-0">
+                            {{ (doc.name_en || doc.name_ar || '?').charAt(0) }}
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center justify-between text-xs mb-1">
+                                <span class="font-medium text-gray-700 truncate">{{ isRtl ? (doc.name_ar || doc.name_en) : (doc.name_en || doc.name_ar) }}</span>
+                                <span class="font-bold text-gray-900 tabular-nums ms-2">{{ doc.total?.toLocaleString() }}</span>
+                            </div>
+                            <div class="w-full bg-gray-100 rounded-full h-1.5">
+                                <div class="bg-emerald-500 h-1.5 rounded-full transition-all duration-700"
+                                    :style="{ width: Math.max(4, (doc.total / Math.max(...revenueByDoctor.map(d => d.total), 1)) * 100) + '%' }"></div>
+                            </div>
+                        </div>
+                        <span class="text-[10px] text-gray-400 flex-shrink-0 tabular-nums">{{ doc.invoice_count }} {{ isRtl ? 'فاتورة' : 'inv.' }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div v-if="!revenueTrend?.length && !revenueByDoctor?.length" class="text-center py-8 text-gray-300">
+                <svg class="w-12 h-12 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                <p class="text-sm font-medium">{{ isRtl ? 'لا توجد بيانات إيرادات بعد' : 'No revenue data yet' }}</p>
             </div>
         </div>
 

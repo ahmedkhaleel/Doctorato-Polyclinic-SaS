@@ -22,28 +22,35 @@ class BookingController extends Controller
 
     public function create(): Response
     {
-        $serviceCategories = ServiceCategory::whereHas('services', function ($q) {
-            $q->where('status', 'active')->where('bookable', true)->whereIn('module', ['derma', 'dental']);
-        })->with(['services' => function ($q) {
-            $q->where('status', 'active')->where('bookable', true)->whereIn('module', ['derma', 'dental'])->orderBy('display_order');
+        // Only medical specialty modules should appear on booking page
+        $allActive = array_keys(ModuleManager::getActiveModules());
+        $enabledModules = array_intersect($allActive, ModuleManager::MEDICAL_MODULES);
+
+        $serviceCategories = ServiceCategory::whereHas('services', function ($q) use ($enabledModules) {
+            $q->where('status', 'active')->where('bookable', true)->whereIn('module', $enabledModules);
+        })->with(['services' => function ($q) use ($enabledModules) {
+            $q->where('status', 'active')->where('bookable', true)->whereIn('module', $enabledModules)->orderBy('display_order');
         }])
             ->orderBy('display_order')
             ->get();
 
         $services = Service::active()->bookable()
-            ->whereIn('module', ['derma', 'dental'])
+            ->whereIn('module', $enabledModules)
             ->orderBy('display_order')
             ->get();
 
         $doctors = Doctor::active()
-            ->whereIn('module', ['derma', 'dental'])
+            ->whereIn('module', $enabledModules)
             ->orderBy('display_order')
             ->get();
 
         $doctorSchedules = DoctorSchedule::active()
             ->get(['doctor_id', 'day_of_week', 'start_time', 'end_time']);
 
-        $activeModules = collect(ModuleManager::getActiveModules())->only(['derma', 'dental'])->all();
+        // Only pass medical modules to the booking page
+        $activeModules = collect(ModuleManager::getActiveModules())
+            ->only(ModuleManager::MEDICAL_MODULES)
+            ->all();
 
         return Inertia::render('Frontend/Booking', [
             'serviceCategories' => $serviceCategories,

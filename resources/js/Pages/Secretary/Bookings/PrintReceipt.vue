@@ -84,11 +84,11 @@ onMounted(() => {
                 <div class="text-center mb-8 pb-6 border-b border-gray-200">
                     <img
                         src="/images/logo.png"
-                        alt="AURA Derma Clinic"
+                        alt="Doctorato Polyclinic"
                         class="mx-auto h-20 mb-3 object-contain"
                     />
-                    <h1 class="text-xl font-bold text-gray-900 tracking-wide">AURA Derma Clinic</h1>
-                    <p class="text-sm text-gray-500 font-medium" dir="rtl">عيادة أورا ديرما</p>
+                    <h1 class="text-xl font-bold text-gray-900 tracking-wide">Doctorato Polyclinic</h1>
+                    <p class="text-sm text-gray-500 font-medium" dir="rtl">عيادة دكتوراتو</p>
                     <div class="mt-4 pt-3 border-t border-gray-100">
                         <h2 class="text-lg font-bold text-gray-800">Payment Receipt / إيصال دفع</h2>
                     </div>

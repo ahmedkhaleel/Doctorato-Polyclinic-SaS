@@ -9,7 +9,7 @@ const page = usePage();
 const locale = computed(() => page.props.locale || 'ar');
 const isRtl = computed(() => (page.props.dir || 'rtl') === 'rtl');
 
-const props = defineProps({ patient: Object, dentalData: Object });
+const props = defineProps({ patient: Object, dentalData: Object, pediatricData: Object });
 
 const headerLoaded = ref(false);
 const cardsLoaded = ref(false);
@@ -52,6 +52,7 @@ const allPhotos = computed(() => {
 const beforePhotos = computed(() => allPhotos.value.filter(p => p.type === 'before'));
 const afterPhotos = computed(() => allPhotos.value.filter(p => p.type === 'after'));
 const hasDentalVisits = computed(() => (props.patient?.visits || []).some(v => v.module === 'dental'));
+const hasPediatricVisits = computed(() => (props.patient?.visits || []).some(v => v.module === 'pediatric'));
 
 const visitStats = computed(() => {
     const visits = props.patient.visits || [];
@@ -160,6 +161,9 @@ const activeTab = ref('visits');
             </button>
             <button v-if="$page.props.modules?.dental?.enabled && dentalData" @click="activeTab = 'dental'" class="flex-1 px-3 py-2.5 rounded-lg text-sm font-medium transition-all whitespace-nowrap" :class="activeTab === 'dental' ? 'bg-gray-900 text-white shadow-sm' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'">
                 {{ isRtl ? 'الأسنان' : 'Dental' }}
+            </button>
+            <button v-if="$page.props.modules?.pediatric?.enabled && pediatricData" @click="activeTab = 'pediatric'" class="flex-1 px-3 py-2.5 rounded-lg text-sm font-medium transition-all whitespace-nowrap" :class="activeTab === 'pediatric' ? 'bg-green-600 text-white shadow-sm' : 'text-gray-500 hover:text-green-600 hover:bg-green-50'">
+                {{ isRtl ? 'طب الأطفال' : 'Pediatric' }}
             </button>
         </div>
 
@@ -364,6 +368,66 @@ const activeTab = ref('visits');
                             <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full" :class="t.status === 'completed' ? 'bg-emerald-50 text-emerald-600' : t.status === 'cancelled' ? 'bg-gray-50 text-gray-500' : 'bg-amber-50 text-amber-600'">{{ isRtl ? ({ completed: 'مكتمل', planned: 'مخطط', in_progress: 'جاري', cancelled: 'ملغي' }[t.status] || t.status) : t.status }}</span>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- Pediatric Tab -->
+            <div v-if="activeTab === 'pediatric' && $page.props.modules?.pediatric?.enabled && pediatricData" class="space-y-5">
+                <!-- Pediatric Stats -->
+                <div v-if="pediatricData?.stats" class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div class="bg-white rounded-xl border border-green-100 p-4 shadow-sm">
+                        <p class="text-2xl font-bold text-green-600">{{ pediatricData.stats.total_visits ?? 0 }}</p>
+                        <p class="text-xs text-gray-500">{{ isRtl ? 'إجمالي الزيارات' : 'Total Visits' }}</p>
+                    </div>
+                    <div class="bg-white rounded-xl border border-emerald-100 p-4 shadow-sm">
+                        <p class="text-2xl font-bold text-emerald-600">{{ pediatricData.stats.total_vaccinations ?? 0 }}</p>
+                        <p class="text-xs text-gray-500">{{ isRtl ? 'التطعيمات' : 'Vaccinations' }}</p>
+                    </div>
+                    <div class="bg-white rounded-xl border border-teal-100 p-4 shadow-sm">
+                        <p class="text-2xl font-bold text-teal-600">{{ pediatricData.stats.growth_records ?? 0 }}</p>
+                        <p class="text-xs text-gray-500">{{ isRtl ? 'سجلات النمو' : 'Growth Records' }}</p>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                    <Link :href="`/doctor/pediatric/patients/${patient.id}`" class="flex items-center gap-3 p-3 bg-white rounded-xl border border-gray-200 hover:border-green-300 hover:bg-green-50/50 transition group shadow-sm">
+                        <div class="w-9 h-9 rounded-lg bg-green-50 flex items-center justify-center"><svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg></div>
+                        <div><p class="text-xs font-semibold text-gray-800">{{ isRtl ? 'ملف الطفل' : 'Child Profile' }}</p><p class="text-[10px] text-gray-400">{{ isRtl ? 'عرض الملف الكامل' : 'View full profile' }}</p></div>
+                    </Link>
+                    <Link :href="`/doctor/pediatric/vaccinations?patient_id=${patient.id}`" class="flex items-center gap-3 p-3 bg-white rounded-xl border border-gray-200 hover:border-emerald-300 hover:bg-emerald-50/50 transition group shadow-sm">
+                        <div class="w-9 h-9 rounded-lg bg-emerald-50 flex items-center justify-center"><svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg></div>
+                        <div><p class="text-xs font-semibold text-gray-800">{{ isRtl ? 'التطعيمات' : 'Vaccinations' }}</p><p class="text-[10px] text-gray-400">{{ pediatricData?.stats?.total_vaccinations ?? 0 }} {{ isRtl ? 'تطعيم' : 'records' }}</p></div>
+                    </Link>
+                    <Link :href="`/doctor/pediatric/growth?patient_id=${patient.id}`" class="flex items-center gap-3 p-3 bg-white rounded-xl border border-gray-200 hover:border-teal-300 hover:bg-teal-50/50 transition group shadow-sm">
+                        <div class="w-9 h-9 rounded-lg bg-teal-50 flex items-center justify-center"><svg class="w-4 h-4 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg></div>
+                        <div><p class="text-xs font-semibold text-gray-800">{{ isRtl ? 'سجل النمو' : 'Growth Chart' }}</p><p class="text-[10px] text-gray-400">{{ pediatricData?.stats?.growth_records ?? 0 }} {{ isRtl ? 'سجل' : 'records' }}</p></div>
+                    </Link>
+                </div>
+
+                <!-- Recent Pediatric Visits -->
+                <div v-if="patient.visits?.filter(v => v.module === 'pediatric')?.length" class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+                    <div class="px-5 py-3 border-b border-gray-100">
+                        <h3 class="text-sm font-semibold text-gray-700">{{ isRtl ? 'زيارات الأطفال الأخيرة' : 'Recent Pediatric Visits' }}</h3>
+                    </div>
+                    <div class="divide-y divide-gray-50">
+                        <div v-for="visit in patient.visits.filter(v => v.module === 'pediatric')" :key="visit.id" class="px-5 py-3 flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-green-50 flex items-center justify-center text-xs font-bold text-green-600">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-sm font-medium text-gray-800">{{ isRtl ? (visit.service?.name_ar || visit.service?.name_en) : (visit.service?.name_en || visit.service?.name_ar) || visit.visit_type || '-' }}</p>
+                                <p class="text-xs text-gray-400">{{ visit.visit_date ? new Date(visit.visit_date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : '' }}</p>
+                            </div>
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full" :class="visit.status === 'completed' ? 'bg-emerald-50 text-emerald-600' : visit.status === 'cancelled' ? 'bg-gray-50 text-gray-500' : 'bg-amber-50 text-amber-600'">{{ isRtl ? ({ completed: 'مكتمل', waiting: 'انتظار', in_progress: 'جاري', cancelled: 'ملغي' }[visit.status] || visit.status) : visit.status }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div v-else class="bg-white rounded-xl border border-gray-100 shadow-sm p-8 text-center">
+                    <div class="w-12 h-12 rounded-xl bg-green-50 flex items-center justify-center mx-auto mb-3">
+                        <svg class="w-6 h-6 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                    </div>
+                    <p class="text-sm text-gray-400">{{ isRtl ? 'لا توجد زيارات أطفال بعد' : 'No pediatric visits yet' }}</p>
                 </div>
             </div>
         </div>

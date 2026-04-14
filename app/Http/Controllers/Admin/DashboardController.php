@@ -8,6 +8,9 @@ use App\Models\ContactMessage;
 use App\Models\DentalLabOrder;
 use App\Models\DentalTreatment;
 use App\Models\DentalTreatmentPlan;
+use App\Models\PediatricGrowthRecord;
+use App\Models\PediatricScreeningTest;
+use App\Models\PediatricVaccination;
 use App\Models\Expense;
 use App\Models\Invoice;
 use App\Models\Lead;
@@ -212,6 +215,38 @@ class DashboardController extends Controller
             });
         }
 
+        // ─── Pediatric Summary (only if module enabled) ───────────
+        $pediatric = null;
+        if (ModuleManager::isEnabled('pediatric')) {
+            $pediatric = Cache::remember('admin-dashboard:pediatric:' . today()->format('Y-m-d'), 900, function () use ($now) {
+                $pediatricRevenueMonth = Invoice::whereHas('visit', function ($q) use ($now) {
+                    $q->where('module', 'pediatric')
+                        ->where('status', 'completed')
+                        ->whereMonth('visit_date', $now->month)
+                        ->whereYear('visit_date', $now->year);
+                })->sum('total');
+
+                return [
+                    'total_patients' => Patient::whereHas('visits', fn ($q) => $q->where('module', 'pediatric'))->count(),
+                    'visits_this_month' => Visit::where('module', 'pediatric')
+                        ->whereMonth('visit_date', $now->month)
+                        ->whereYear('visit_date', $now->year)
+                        ->count(),
+                    'vaccinations_due' => PediatricVaccination::where('status', PediatricVaccination::STATUS_SCHEDULED)
+                        ->where('scheduled_date', '<=', today())
+                        ->count(),
+                    'growth_alerts' => PediatricGrowthRecord::where(function ($q) {
+                        $q->where('weight_percentile', '<', 3)
+                            ->orWhere('weight_percentile', '>', 97)
+                            ->orWhere('height_percentile', '<', 3)
+                            ->orWhere('bmi_percentile', '>', 97);
+                    })->whereMonth('measurement_date', $now->month)->count(),
+                    'revenue_this_month' => round((float) $pediatricRevenueMonth, 2),
+                    'screening_pending' => PediatricScreeningTest::where('result', 'pending')->count(),
+                ];
+            });
+        }
+
         return Inertia::render('Admin/Dashboard', [
             'financial' => $financial,
             'clinic' => $clinic,
@@ -224,6 +259,7 @@ class DashboardController extends Controller
             'topServices' => $topServices,
             'recentBookings' => $recentBookings,
             'dental' => $dental,
+            'pediatric' => $pediatric,
         ]);
     }
 }

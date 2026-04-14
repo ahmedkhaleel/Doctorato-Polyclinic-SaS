@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, onMounted, computed } from 'vue';
+import { ref, watch, computed } from 'vue';
 import { Link, router, usePage } from '@inertiajs/vue3';
 import DoctorLayout from '@/Layouts/DoctorLayout.vue';
 import { useLocale } from '@/Composables/useLocale.js';
@@ -19,23 +19,27 @@ const props = defineProps({
     treatmentTypes: Array,
 });
 
-const mounted = ref(false);
+// ─── Toast Notification ─────────────────────────────────
+const showSuccess = ref(false);
+const successMessage = ref('');
+watch(() => page.props.flash?.success, (msg) => {
+    if (msg) { successMessage.value = msg; showSuccess.value = true; setTimeout(() => { showSuccess.value = false; }, 4000); }
+});
+
 const search = ref(props.filters?.search || '');
 const statusFilter = ref(props.filters?.status || '');
 const typeFilter = ref(props.filters?.treatment_type || '');
 const toothNumber = ref(props.filters?.tooth_number || '');
 const dateFrom = ref(props.filters?.date_from || '');
 const dateTo = ref(props.filters?.date_to || '');
+const isFiltering = ref(false);
 
 let searchTimeout = null;
-
-onMounted(() => {
-    setTimeout(() => { mounted.value = true; }, 50);
-});
 
 function applyFilters() {
     clearTimeout(searchTimeout);
     searchTimeout = setTimeout(() => {
+        isFiltering.value = true;
         router.get('/doctor/dental/treatments', {
             search: search.value || undefined,
             status: statusFilter.value || undefined,
@@ -46,6 +50,7 @@ function applyFilters() {
         }, {
             preserveState: true,
             replace: true,
+            onFinish: () => { isFiltering.value = false; },
         });
     }, 400);
 }
@@ -98,10 +103,7 @@ function advanceTreatmentStatus(treatmentId, currentStatus) {
 <template>
     <div class="space-y-6">
         <!-- Hero Header -->
-        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6 sm:p-8"
-            :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
-            style="transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1)"
-        >
+        <div class="dental-hero-enter relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6 sm:p-8">
             <div class="absolute top-0 right-0 w-72 h-72 bg-[#C4A265]/10 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl"></div>
             <div class="absolute bottom-0 left-0 w-48 h-48 bg-purple-500/10 rounded-full translate-y-1/2 -translate-x-1/4 blur-2xl"></div>
 
@@ -121,12 +123,10 @@ function advanceTreatmentStatus(treatmentId, currentStatus) {
                 </div>
 
                 <!-- Filters -->
-                <div class="flex flex-col sm:flex-row flex-wrap gap-3 max-w-3xl"
-                    :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
-                    style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.15s"
-                >
+                <div class="flex flex-col sm:flex-row flex-wrap gap-3 max-w-3xl dental-card-enter" style="animation-delay:0.15s">
                     <div class="relative flex-1">
-                        <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                        <svg v-if="!isFiltering" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                        <svg v-else class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#C4A265] animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
                         <input
                             v-model="search"
                             type="text"
@@ -155,10 +155,7 @@ function advanceTreatmentStatus(treatmentId, currentStatus) {
                     </select>
                 </div>
                 <!-- Advanced Filters Row -->
-                <div class="flex flex-col sm:flex-row flex-wrap gap-3 max-w-3xl mt-3"
-                    :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
-                    style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.2s"
-                >
+                <div class="flex flex-col sm:flex-row flex-wrap gap-3 max-w-3xl mt-3 dental-card-enter" style="animation-delay:0.2s">
                     <input
                         v-model="toothNumber"
                         type="text"
@@ -186,10 +183,7 @@ function advanceTreatmentStatus(treatmentId, currentStatus) {
         </div>
 
         <!-- Table -->
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden"
-            :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
-            style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.2s"
-        >
+        <div class="dental-card-enter bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden" style="animation-delay:0.25s">
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50/80">
@@ -258,5 +252,33 @@ function advanceTreatmentStatus(treatmentId, currentStatus) {
                 </template>
             </div>
         </div>
+
+        <!-- Success Toast -->
+        <Transition
+            enter-active-class="transition ease-out duration-300"
+            enter-from-class="translate-y-4 opacity-0"
+            enter-to-class="translate-y-0 opacity-100"
+            leave-active-class="transition ease-in duration-200"
+            leave-from-class="translate-y-0 opacity-100"
+            leave-to-class="translate-y-4 opacity-0"
+        >
+            <div v-if="showSuccess" class="fixed bottom-6 ltr:right-6 rtl:left-6 z-50 flex items-center gap-3 px-5 py-3 bg-emerald-600 text-white rounded-xl shadow-lg shadow-emerald-200/50">
+                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <span class="text-sm font-medium">{{ successMessage }}</span>
+            </div>
+        </Transition>
     </div>
 </template>
+
+<style>
+@keyframes dentalHeroEnter {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes dentalCardEnter {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+.dental-hero-enter { animation: dentalHeroEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.dental-card-enter { animation: dentalCardEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
+</style>

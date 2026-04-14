@@ -3,7 +3,7 @@ import { usePage } from '@inertiajs/vue3';
 
 /**
  * Default theme values — used when no setting is configured.
- * These match the original AURA Derma hardcoded colors.
+ * These match the Doctorato Polyclinic brand colors (Navy + Gold).
  */
 const DEFAULTS = {
     // Frontend + Patient portal brand
@@ -13,15 +13,15 @@ const DEFAULTS = {
     brand_accent:        '#C4A265',
 
     // Sidebar / header / footer backgrounds
-    brand_sidebar_bg:    '#0f172a',
+    brand_sidebar_bg:    '#1B365D',
     brand_sidebar_text:  '#ffffff',
-    brand_header_bg:     '#3A3A3A',
-    brand_footer_bg:     '#3A3A3A',
-    brand_hero_overlay:  '#1E1E1E',
+    brand_header_bg:     '#1B365D',
+    brand_footer_bg:     '#1B365D',
+    brand_hero_overlay:  '#1B365D',
 
     // Admin panel accent
-    admin_primary:       '#0891b2',  // cyan-600
-    admin_primary_hover: '#0e7490',  // cyan-700
+    admin_primary:       '#1B365D',  // navy
+    admin_primary_hover: '#264573',  // navy-light
 
     // Typography
     brand_font_ar:       'Tajawal',

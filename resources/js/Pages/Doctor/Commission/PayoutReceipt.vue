@@ -59,8 +59,8 @@ onMounted(() => {
         <!-- Clinic Header -->
         <div class="header">
             <div class="header-left">
-                <h1 class="clinic-name">AURA Derma Clinic</h1>
-                <p class="clinic-subtitle">{{ isRtl ? 'مركز الأمراض الجلدية والتجميل' : 'Dermatology & Cosmetic Center' }}</p>
+                <h1 class="clinic-name">Doctorato Polyclinic</h1>
+                <p class="clinic-subtitle">{{ isRtl ? 'عيادة دكتوراتو التخصصية' : 'Doctorato Polyclinic' }}</p>
                 <p class="clinic-address">{{ isRtl ? 'القاهرة، مصر' : 'Cairo, Egypt' }}</p>
             </div>
             <div class="header-right">
@@ -165,7 +165,7 @@ onMounted(() => {
 
         <!-- Footer -->
         <div class="footer">
-            <p>{{ isRtl ? 'شكراً لخدمتكم في عيادة أورا ديرما' : 'Thank you for your service at AURA Derma Clinic' }}</p>
+            <p>{{ isRtl ? 'شكراً لخدمتكم في عيادة دكتوراتو' : 'Thank you for your service at Doctorato Polyclinic' }}</p>
             <p class="footer-small">{{ isRtl ? 'هذا إيصال صادر إلكترونياً.' : 'This is a computer-generated receipt.' }}</p>
         </div>
     </div>

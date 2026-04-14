@@ -8,6 +8,8 @@ use App\Models\DentalScheduledFollowup;
 use App\Models\DentalTreatmentPlan;
 use App\Models\Patient;
 use App\Models\Payment;
+use App\Models\PediatricGrowthRecord;
+use App\Models\PediatricVaccination;
 use App\Models\Visit;
 use App\Services\ModuleManager;
 use Carbon\Carbon;
@@ -105,12 +107,31 @@ class SecretaryDashboardController extends BaseSecretaryController
                 ->count();
         }
 
+        // ─── Pediatric Summary (only if module enabled) ───────────
+        $pediatric = null;
+        if (ModuleManager::isEnabled('pediatric')) {
+            $pediatric = [
+                'total_patients' => Patient::whereHas('visits', fn ($q) => $q->where('module', 'pediatric'))->count(),
+                'visits_today' => Visit::where('module', 'pediatric')->whereDate('visit_date', $today)->count(),
+                'vaccinations_due' => PediatricVaccination::where('status', PediatricVaccination::STATUS_SCHEDULED)
+                    ->where('scheduled_date', '<=', $today)
+                    ->count(),
+                'growth_alerts' => PediatricGrowthRecord::where(function ($q) {
+                    $q->where('weight_percentile', '<', 3)
+                        ->orWhere('weight_percentile', '>', 97)
+                        ->orWhere('height_percentile', '<', 3)
+                        ->orWhere('bmi_percentile', '>', 97);
+                })->whereMonth('measurement_date', now()->month)->count(),
+            ];
+        }
+
         return Inertia::render('Secretary/Dashboard', [
             'stats' => $stats,
             'todayQueue' => $todayQueue,
             'pendingBookings' => $pendingBookings,
             'recentPayments' => $recentPayments,
             'dental' => $dental,
+            'pediatric' => $pediatric,
             'medicalAlerts' => $medicalAlerts,
             'pendingFollowups' => $pendingFollowups,
             'overdueFollowups' => $overdueFollowups,

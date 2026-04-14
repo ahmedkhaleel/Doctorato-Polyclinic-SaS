@@ -2,6 +2,7 @@
 import { ref, watch, computed } from 'vue';
 import { Link, router, usePage, useForm } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import ConfirmModal from '@/Components/Admin/ConfirmModal.vue';
 import { useLocale } from '@/Composables/useLocale.js';
 
 const { t } = useLocale();
@@ -111,14 +112,24 @@ function triggerScan() {
     });
 }
 
-function resend(n) {
-    if (!confirm(locale.value === 'ar' ? 'إعادة إرسال هذا التنبيه؟' : 'Resend this notification?')) return;
-    router.post(`/admin/dental/smart-notifications/${n.id}/resend`, {}, { preserveState: true });
+// ─── Confirm Modals ─────────────────────────────────
+const showResendConfirm = ref(false);
+const showCancelConfirm = ref(false);
+const showDeleteConfirm = ref(false);
+const pendingAction = ref(null);
+
+function confirmResend(n) { pendingAction.value = n; showResendConfirm.value = true; }
+function executeResend() {
+    if (!pendingAction.value) return;
+    router.post(`/admin/dental/smart-notifications/${pendingAction.value.id}/resend`, {}, { preserveState: true });
+    showResendConfirm.value = false; pendingAction.value = null;
 }
 
-function cancel(n) {
-    if (!confirm(locale.value === 'ar' ? 'إلغاء هذا التنبيه؟' : 'Cancel this notification?')) return;
-    router.post(`/admin/dental/smart-notifications/${n.id}/cancel`, {}, { preserveState: true });
+function confirmCancel(n) { pendingAction.value = n; showCancelConfirm.value = true; }
+function executeCancel() {
+    if (!pendingAction.value) return;
+    router.post(`/admin/dental/smart-notifications/${pendingAction.value.id}/cancel`, {}, { preserveState: true });
+    showCancelConfirm.value = false; pendingAction.value = null;
 }
 
 function markResponded(n) {
@@ -126,13 +137,15 @@ function markResponded(n) {
 }
 
 const deletingId = ref(null);
-function deleteNotification(n) {
-    if (!confirm(locale.value === 'ar' ? 'حذف هذا التنبيه؟' : 'Delete this notification?')) return;
-    deletingId.value = n.id;
-    router.post(`/admin/dental/smart-notifications/${n.id}/delete`, {
+function confirmDelete(n) { pendingAction.value = n; showDeleteConfirm.value = true; }
+function executeDelete() {
+    if (!pendingAction.value) return;
+    deletingId.value = pendingAction.value.id;
+    router.post(`/admin/dental/smart-notifications/${pendingAction.value.id}/delete`, {
         preserveState: true,
         onFinish: () => { deletingId.value = null; },
     });
+    showDeleteConfirm.value = false; pendingAction.value = null;
 }
 
 // ── Manual Send Modal ────────────────────────────────
@@ -429,11 +442,11 @@ const responseRate = computed(() => {
 
                                         <!-- Actions -->
                                         <div class="flex items-center gap-2 flex-wrap">
-                                            <button v-if="n.status === 'failed'" @click.stop="resend(n)" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-blue-50 text-blue-700 hover:bg-blue-100 transition-colors">
+                                            <button v-if="n.status === 'failed'" @click.stop="confirmResend(n)" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-blue-50 text-blue-700 hover:bg-blue-100 transition-colors">
                                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
                                                 {{ locale === 'ar' ? 'إعادة إرسال' : 'Resend' }}
                                             </button>
-                                            <button v-if="n.status === 'pending'" @click.stop="cancel(n)" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-gray-50 text-gray-600 hover:bg-gray-100 transition-colors">
+                                            <button v-if="n.status === 'pending'" @click.stop="confirmCancel(n)" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-gray-50 text-gray-600 hover:bg-gray-100 transition-colors">
                                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                                                 {{ locale === 'ar' ? 'إلغاء' : 'Cancel' }}
                                             </button>
@@ -441,7 +454,7 @@ const responseRate = computed(() => {
                                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
                                                 {{ locale === 'ar' ? 'استجاب المريض' : 'Patient Responded' }}
                                             </button>
-                                            <button @click.stop="deleteNotification(n)" :disabled="deletingId === n.id" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-red-600 hover:bg-red-50 transition-colors ltr:ml-auto rtl:mr-auto">
+                                            <button @click.stop="confirmDelete(n)" :disabled="deletingId === n.id" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-red-600 hover:bg-red-50 transition-colors ltr:ml-auto rtl:mr-auto">
                                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                                                 {{ locale === 'ar' ? 'حذف' : 'Delete' }}
                                             </button>
@@ -594,6 +607,30 @@ const responseRate = computed(() => {
                 </div>
             </div>
         </Transition>
+
+        <ConfirmModal :show="showResendConfirm"
+            :title="locale === 'ar' ? 'إعادة إرسال التنبيه' : 'Resend Notification'"
+            :message="locale === 'ar' ? 'هل تريد إعادة إرسال هذا التنبيه؟' : 'Resend this notification?'"
+            :confirmText="locale === 'ar' ? 'إعادة الإرسال' : 'Resend'"
+            :cancelText="locale === 'ar' ? 'إلغاء' : 'Cancel'"
+            confirmColor="cyan"
+            @confirm="executeResend" @cancel="showResendConfirm = false" />
+
+        <ConfirmModal :show="showCancelConfirm"
+            :title="locale === 'ar' ? 'إلغاء التنبيه' : 'Cancel Notification'"
+            :message="locale === 'ar' ? 'هل تريد إلغاء هذا التنبيه؟' : 'Cancel this notification?'"
+            :confirmText="locale === 'ar' ? 'إلغاء التنبيه' : 'Cancel It'"
+            :cancelText="locale === 'ar' ? 'تراجع' : 'Go Back'"
+            confirmColor="amber"
+            @confirm="executeCancel" @cancel="showCancelConfirm = false" />
+
+        <ConfirmModal :show="showDeleteConfirm"
+            :title="locale === 'ar' ? 'حذف التنبيه' : 'Delete Notification'"
+            :message="locale === 'ar' ? 'هل أنت متأكد من حذف هذا التنبيه؟' : 'Are you sure you want to delete this notification?'"
+            :confirmText="locale === 'ar' ? 'حذف' : 'Delete'"
+            :cancelText="locale === 'ar' ? 'إلغاء' : 'Cancel'"
+            confirmColor="red"
+            @confirm="executeDelete" @cancel="showDeleteConfirm = false" />
     </AdminLayout>
 </template>
 

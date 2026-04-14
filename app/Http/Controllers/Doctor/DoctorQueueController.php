@@ -16,7 +16,7 @@ class DoctorQueueController extends BaseDoctorController
         $filters = $request->validate([
             'view' => 'nullable|in:today,upcoming,past,all',
             'status' => 'nullable|in:waiting,in_progress,completed,cancelled',
-            'module' => 'nullable|in:dental,dermatology',
+            'module' => 'nullable|in:derma,dental,pediatric',
             'date_from' => 'nullable|date',
             'date_to' => 'nullable|date',
         ]);

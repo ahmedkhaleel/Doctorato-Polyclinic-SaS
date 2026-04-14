@@ -60,10 +60,10 @@ onUnmounted(() => {
             <!-- Clinic Name -->
             <h1 class="mb-4">
                 <span class="block text-5xl sm:text-6xl lg:text-7xl font-bold text-[var(--brand-primary)] tracking-[0.2em] mb-2">
-                    AURA
+                    Doctorato
                 </span>
                 <span class="block text-lg sm:text-xl lg:text-2xl text-white/90 font-light tracking-[0.15em] uppercase">
-                    Derma Aesthetic Clinic
+                    Polyclinic
                 </span>
             </h1>
 

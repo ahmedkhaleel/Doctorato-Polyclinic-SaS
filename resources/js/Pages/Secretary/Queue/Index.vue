@@ -101,7 +101,7 @@ function getDentalDescription(visit) {
 }
 
 /* ── Module filter ─────────────────────────────────────── */
-const moduleFilter = ref('all'); // 'all' | 'dental' | 'dermatology'
+const moduleFilter = ref('all'); // 'all' | 'dental' | 'derma'
 
 function filterVisits(visits) {
     if (moduleFilter.value === 'all') return visits;
@@ -292,13 +292,13 @@ function refreshQueue() {
                 </span>
             </button>
             <button
-                @click="moduleFilter = 'dermatology'"
+                @click="moduleFilter = 'derma'"
                 class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border transition-all duration-200"
-                :class="moduleFilter === 'dermatology' ? 'bg-pink-600 text-white border-pink-600 shadow-sm' : 'bg-white text-pink-700 border-pink-200 hover:bg-pink-50'"
+                :class="moduleFilter === 'derma' ? 'bg-pink-600 text-white border-pink-600 shadow-sm' : 'bg-white text-pink-700 border-pink-200 hover:bg-pink-50'"
             >
                 {{ isRtl ? 'جلدية' : 'Derma' }}
                 <span class="inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full text-[10px] font-bold"
-                    :class="moduleFilter === 'dermatology' ? 'bg-white/20 text-white' : 'bg-pink-50 text-pink-600'">
+                    :class="moduleFilter === 'derma' ? 'bg-white/20 text-white' : 'bg-pink-50 text-pink-600'">
                     {{ dermaCount }}
                 </span>
             </button>

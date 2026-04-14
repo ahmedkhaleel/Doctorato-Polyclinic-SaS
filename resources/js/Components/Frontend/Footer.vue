@@ -40,7 +40,7 @@ const serviceLinks = [
                     <div class="mb-4">
                         <img
                             src="/images/logo/logo.png"
-                            alt="AURA Derma Aesthetic Clinic"
+                            alt="Doctorato Polyclinic"
                             class="h-20 w-auto brightness-0 invert opacity-90"
                         />
                     </div>
@@ -165,7 +165,7 @@ const serviceLinks = [
         <div class="border-t border-white/10">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
                 <div class="flex flex-col sm:flex-row items-center justify-between gap-2 text-sm text-gray-500">
-                    <p>&copy; {{ new Date().getFullYear() }} AURA Derma Aesthetic Clinic. {{ t('all_rights_reserved') }}</p>
+                    <p>&copy; {{ new Date().getFullYear() }} Doctorato Polyclinic. {{ t('all_rights_reserved') }}</p>
                     <div class="flex items-center gap-4">
                         <Link :href="localizedRoute('/page/privacy-policy')" class="hover-underline hover:text-[var(--brand-primary)] transition-colors">
                             {{ t('privacy_policy') }}

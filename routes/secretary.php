@@ -208,6 +208,7 @@ Route::middleware('secretary.auth')->group(function () {
 
         Route::get('/vaccinations', [\App\Http\Controllers\Secretary\SecretaryPediatricVaccinationController::class, 'index'])->name('secretary.pediatric.vaccinations.index');
         Route::post('/vaccinations/{vaccination}/status', [\App\Http\Controllers\Secretary\SecretaryPediatricVaccinationController::class, 'updateStatus'])->name('secretary.pediatric.vaccinations.updateStatus');
+        Route::post('/vaccinations/batch-status', [\App\Http\Controllers\Secretary\SecretaryPediatricVaccinationController::class, 'batchUpdateStatus'])->name('secretary.pediatric.vaccinations.batchUpdateStatus');
     });
 
     // ─── Profile ────────────────────────────────────────────

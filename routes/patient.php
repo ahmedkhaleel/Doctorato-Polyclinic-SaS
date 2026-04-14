@@ -12,6 +12,7 @@ use App\Http\Controllers\Patient\PatientProfileController;
 use App\Http\Controllers\Patient\PatientComparisonController;
 use App\Http\Controllers\Patient\PatientConsentController;
 use App\Http\Controllers\Patient\PatientDentalController;
+use App\Http\Controllers\Patient\PatientPediatricController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -81,6 +82,16 @@ Route::middleware('patient.auth')->group(function () {
         Route::get('/dental/consent/{consent}', [PatientConsentController::class, 'show'])->name('patient.dental.consent.show');
         Route::post('/dental/consent/{consent}/sign', [PatientConsentController::class, 'sign'])->name('patient.dental.consent.sign');
         Route::get('/dental/consent/{consent}/signed', [PatientConsentController::class, 'signed'])->name('patient.dental.consent.signed');
+    });
+
+    // ─── Pediatric ──────────────────────────────────────────
+    Route::middleware('module:pediatric')->group(function () {
+        Route::get('/pediatric/overview', [PatientPediatricController::class, 'overview'])->name('patient.pediatric.overview');
+        Route::get('/pediatric/vaccinations', [PatientPediatricController::class, 'vaccinations'])->name('patient.pediatric.vaccinations');
+        Route::get('/pediatric/growth', [PatientPediatricController::class, 'growth'])->name('patient.pediatric.growth');
+        Route::get('/pediatric/visits', [PatientPediatricController::class, 'visits'])->name('patient.pediatric.visits');
+        Route::get('/pediatric/vaccination-card', [PatientPediatricController::class, 'vaccinationCard'])->name('patient.pediatric.vaccination-card');
+        Route::get('/pediatric/growth-report', [PatientPediatricController::class, 'growthReport'])->name('patient.pediatric.growth-report');
     });
 
     // ─── My Profile ─────────────────────────────────────────

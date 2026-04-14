@@ -955,7 +955,7 @@ const activityTypeConfig = {
                         {{ isRtl ? 'توزيع الأقسام' : 'Department Distribution' }}
                     </h3>
 
-                    <div v-if="moduleDistribution && (moduleDistribution.derma || moduleDistribution.dental)" class="space-y-4">
+                    <div v-if="moduleDistribution && (moduleDistribution.derma || moduleDistribution.dental || moduleDistribution.pediatric)" class="space-y-4">
                         <!-- Visual Bars -->
                         <div class="space-y-3">
                             <div>
@@ -969,7 +969,7 @@ const activityTypeConfig = {
                                 <div class="h-3 rounded-full bg-gray-100 overflow-hidden">
                                     <div class="h-full rounded-full transition-all duration-1000 ease-out"
                                         style="background: linear-gradient(90deg, #0d9488, #14b8a6)"
-                                        :style="{ width: mounted ? Math.round(((moduleDistribution.derma || 0) / Math.max((moduleDistribution.derma || 0) + (moduleDistribution.dental || 0), 1)) * 100) + '%' : '0%' }">
+                                        :style="{ width: mounted ? Math.round(((moduleDistribution.derma || 0) / Math.max((moduleDistribution.derma || 0) + (moduleDistribution.dental || 0) + (moduleDistribution.pediatric || 0), 1)) * 100) + '%' : '0%' }">
                                     </div>
                                 </div>
                             </div>
@@ -984,7 +984,22 @@ const activityTypeConfig = {
                                 <div class="h-3 rounded-full bg-gray-100 overflow-hidden">
                                     <div class="h-full rounded-full transition-all duration-1000 ease-out"
                                         style="background: linear-gradient(90deg, #0284c7, #38bdf8)"
-                                        :style="{ width: mounted ? Math.round(((moduleDistribution.dental || 0) / Math.max((moduleDistribution.derma || 0) + (moduleDistribution.dental || 0), 1)) * 100) + '%' : '0%' }">
+                                        :style="{ width: mounted ? Math.round(((moduleDistribution.dental || 0) / Math.max((moduleDistribution.derma || 0) + (moduleDistribution.dental || 0) + (moduleDistribution.pediatric || 0), 1)) * 100) + '%' : '0%' }">
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex items-center justify-between mb-1.5">
+                                    <span class="flex items-center gap-1.5 text-sm font-medium text-green-700">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/></svg>
+                                        {{ isRtl ? 'أطفال' : 'Pediatric' }}
+                                    </span>
+                                    <span class="text-sm font-bold text-green-700">{{ moduleDistribution.pediatric || 0 }}</span>
+                                </div>
+                                <div class="h-3 rounded-full bg-gray-100 overflow-hidden">
+                                    <div class="h-full rounded-full transition-all duration-1000 ease-out"
+                                        style="background: linear-gradient(90deg, #16a34a, #4ade80)"
+                                        :style="{ width: mounted ? Math.round(((moduleDistribution.pediatric || 0) / Math.max((moduleDistribution.derma || 0) + (moduleDistribution.dental || 0) + (moduleDistribution.pediatric || 0), 1)) * 100) + '%' : '0%' }">
                                     </div>
                                 </div>
                             </div>
@@ -993,7 +1008,7 @@ const activityTypeConfig = {
                         <!-- Summary -->
                         <div class="bg-gray-50 rounded-xl p-3 flex items-center justify-between">
                             <span class="text-xs text-gray-500">{{ isRtl ? 'إجمالي العملاء النشطين' : 'Total Active Leads' }}</span>
-                            <span class="text-lg font-bold text-gray-800">{{ (moduleDistribution.derma || 0) + (moduleDistribution.dental || 0) }}</span>
+                            <span class="text-lg font-bold text-gray-800">{{ (moduleDistribution.derma || 0) + (moduleDistribution.dental || 0) + (moduleDistribution.pediatric || 0) }}</span>
                         </div>
                     </div>
                     <div v-else class="text-center py-8 text-gray-400">
@@ -1864,6 +1879,7 @@ const activityTypeConfig = {
                                                 class="w-full rounded-xl border-gray-200 text-sm focus:ring-teal-500 focus:border-teal-500 transition">
                                                 <option value="derma">Derma</option>
                                                 <option value="dental">Dental</option>
+                                                <option value="pediatric">Pediatric</option>
                                             </select>
                                         </div>
                                     </div>

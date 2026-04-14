@@ -44,8 +44,8 @@ const props = defineProps({
 const page = usePage();
 const locale = computed(() => page.props.locale || 'ar');
 
-const siteUrl = 'https://auraderma.com';
-const siteName = 'AURA Derma Aesthetic Clinic';
+const siteUrl = 'https://doctorato.com';
+const siteName = 'Doctorato Polyclinic';
 
 const currentPath = computed(() => {
     if (typeof window !== 'undefined') {

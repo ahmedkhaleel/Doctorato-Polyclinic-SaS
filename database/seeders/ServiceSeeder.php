@@ -99,7 +99,7 @@ class ServiceSeeder extends Seeder
                 'short_desc_en'  => 'Comprehensive acne treatment for all severity levels using the latest medical technologies. We offer customized treatment protocols including peeling, laser, and topical medications for clear, radiant skin.',
                 'featured_image' => 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?w=800&q=80',
                 'full_desc_ar'   => '<h2>ما هو علاج حب الشباب؟</h2>
-<p>حب الشباب هو من أكثر المشاكل الجلدية شيوعاً ويصيب مختلف الفئات العمرية. في عيادة أورا ديرما، نقدم بروتوكولات علاجية متكاملة تستهدف أسباب حب الشباب من جذوره باستخدام أحدث التقنيات والأجهزة الطبية المعتمدة عالمياً.</p>
+<p>حب الشباب هو من أكثر المشاكل الجلدية شيوعاً ويصيب مختلف الفئات العمرية. في عيادة دكتوراتو، نقدم بروتوكولات علاجية متكاملة تستهدف أسباب حب الشباب من جذوره باستخدام أحدث التقنيات والأجهزة الطبية المعتمدة عالمياً.</p>
 <h2>كيف يعمل العلاج؟</h2>
 <p>يبدأ العلاج بتشخيص دقيق لنوع حب الشباب ودرجته، ثم يتم وضع خطة علاجية مخصصة قد تشمل التقشير الكيميائي، العلاج بالليزر، الأدوية الموضعية والفموية، وجلسات التنظيف العميق. نعمل على علاج الحبوب النشطة ومنع ظهورها مجدداً وإزالة آثارها.</p>
 <h2>لمن يناسب هذا العلاج؟</h2>
@@ -110,7 +110,7 @@ class ServiceSeeder extends Seeder
 <li>أصحاب البشرة الدهنية المعرضة لظهور الحبوب</li>
 </ul>',
                 'full_desc_en'   => '<h2>What is Acne Treatment?</h2>
-<p>Acne is one of the most common skin conditions affecting people of all ages. At Aura Derma Clinic, we offer comprehensive treatment protocols that target the root causes of acne using the latest internationally approved medical technologies and devices.</p>
+<p>Acne is one of the most common skin conditions affecting people of all ages. At Doctorato Polyclinic, we offer comprehensive treatment protocols that target the root causes of acne using the latest internationally approved medical technologies and devices.</p>
 <h2>How Does the Treatment Work?</h2>
 <p>Treatment begins with an accurate diagnosis of the acne type and severity, followed by a customized treatment plan that may include chemical peeling, laser therapy, topical and oral medications, and deep cleansing sessions. We work to treat active breakouts, prevent recurrence, and remove existing scars.</p>
 <h2>Who Is This Treatment For?</h2>
@@ -144,7 +144,7 @@ class ServiceSeeder extends Seeder
                 'short_desc_en'  => 'Effective treatment for skin pigmentation, dark spots, and melasma using advanced techniques. We work to even out skin tone and restore its natural radiance through specialized sessions.',
                 'featured_image' => 'https://images.unsplash.com/photo-1505944270255-72b8c68c6a70?w=800&q=80',
                 'full_desc_ar'   => '<h2>ما هو علاج التصبغات؟</h2>
-<p>التصبغات الجلدية والبقع الداكنة تنتج عن زيادة إنتاج الميلانين في مناطق معينة من الجلد بسبب التعرض لأشعة الشمس أو التغيرات الهرمونية أو الالتهابات. في عيادة أورا ديرما، نستخدم أحدث التقنيات لعلاج جميع أنواع التصبغات بما فيها الكلف والنمش وبقع الشمس.</p>
+<p>التصبغات الجلدية والبقع الداكنة تنتج عن زيادة إنتاج الميلانين في مناطق معينة من الجلد بسبب التعرض لأشعة الشمس أو التغيرات الهرمونية أو الالتهابات. في عيادة دكتوراتو، نستخدم أحدث التقنيات لعلاج جميع أنواع التصبغات بما فيها الكلف والنمش وبقع الشمس.</p>
 <h2>كيف يعمل العلاج؟</h2>
 <p>نعتمد على مزيج من العلاجات المتقدمة تشمل التقشير الكيميائي المتخصص، وأجهزة الليزر الحديثة، والكريمات الطبية الموضعية. يتم تصميم خطة العلاج بناءً على نوع التصبغ وعمقه ونوع البشرة لضمان أفضل النتائج مع الحفاظ على سلامة الجلد.</p>
 <h2>لمن يناسب هذا العلاج؟</h2>
@@ -155,7 +155,7 @@ class ServiceSeeder extends Seeder
 <li>الراغبون في توحيد لون البشرة</li>
 </ul>',
                 'full_desc_en'   => '<h2>What is Pigmentation Treatment?</h2>
-<p>Skin pigmentation and dark spots result from excess melanin production in certain areas of the skin due to sun exposure, hormonal changes, or inflammation. At Aura Derma Clinic, we use the latest technologies to treat all types of pigmentation including melasma, freckles, and sunspots.</p>
+<p>Skin pigmentation and dark spots result from excess melanin production in certain areas of the skin due to sun exposure, hormonal changes, or inflammation. At Doctorato Polyclinic, we use the latest technologies to treat all types of pigmentation including melasma, freckles, and sunspots.</p>
 <h2>How Does the Treatment Work?</h2>
 <p>We rely on a combination of advanced treatments including specialized chemical peels, modern laser devices, and topical medical creams. The treatment plan is designed based on the type and depth of pigmentation and skin type to ensure the best results while maintaining skin safety.</p>
 <h2>Who Is This Treatment For?</h2>
@@ -324,7 +324,7 @@ class ServiceSeeder extends Seeder
                 'short_desc_en'  => 'Effective wart treatment using multiple techniques including immunotherapy serums, electrocautery, and cryotherapy. We select the most suitable treatment based on the type, size, and location of the wart.',
                 'featured_image' => 'https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=800&q=80',
                 'full_desc_ar'   => '<h2>ما هو علاج السنط؟</h2>
-<p>السنط أو الثآليل هي نتوءات جلدية تسببها فيروسات الورم الحليمي البشري (HPV). تظهر في أماكن مختلفة من الجسم وقد تكون مؤلمة أو مزعجة من الناحية الجمالية. في عيادة أورا ديرما نقدم حلولاً متعددة وفعّالة للتخلص من السنط نهائياً.</p>
+<p>السنط أو الثآليل هي نتوءات جلدية تسببها فيروسات الورم الحليمي البشري (HPV). تظهر في أماكن مختلفة من الجسم وقد تكون مؤلمة أو مزعجة من الناحية الجمالية. في عيادة دكتوراتو نقدم حلولاً متعددة وفعّالة للتخلص من السنط نهائياً.</p>
 <h2>كيف يعمل العلاج؟</h2>
 <p>نوفر عدة طرق علاجية تشمل العلاج بالأمصال المناعية التي تحفز الجهاز المناعي لمحاربة الفيروس، والكي الكهربائي لإزالة السنط بدقة، والعلاج بالتبريد باستخدام النيتروجين السائل. يختار الطبيب الأسلوب الأنسب بناءً على نوع السنط وحجمه وموقعه وعمر المريض.</p>
 <h2>لمن يناسب هذا العلاج؟</h2>
@@ -335,7 +335,7 @@ class ServiceSeeder extends Seeder
 <li>الثآليل المتكررة التي لم تستجب للعلاجات المنزلية</li>
 </ul>',
                 'full_desc_en'   => '<h2>What is Wart Treatment?</h2>
-<p>Warts are skin growths caused by human papillomavirus (HPV). They appear in various body locations and can be painful or cosmetically bothersome. At Aura Derma Clinic, we offer multiple effective solutions for permanent wart removal.</p>
+<p>Warts are skin growths caused by human papillomavirus (HPV). They appear in various body locations and can be painful or cosmetically bothersome. At Doctorato Polyclinic, we offer multiple effective solutions for permanent wart removal.</p>
 <h2>How Does the Treatment Work?</h2>
 <p>We provide several treatment methods including immunotherapy serums that stimulate the immune system to fight the virus, electrocautery for precise wart removal, and cryotherapy using liquid nitrogen. The doctor selects the most suitable approach based on the wart type, size, location, and patient age.</p>
 <h2>Who Is This Treatment For?</h2>
@@ -371,7 +371,7 @@ class ServiceSeeder extends Seeder
                 'short_desc_en'  => 'Full body laser hair removal using the latest internationally certified laser devices. Effective and safe results for all skin types with a customized session program for optimal outcomes.',
                 'featured_image' => 'https://images.unsplash.com/photo-1598524374912-6b0b0bab3da4?w=800&q=80',
                 'full_desc_ar'   => '<h2>ما هو ليزر الجسم الكامل؟</h2>
-<p>إزالة الشعر بالليزر للجسم الكامل هي إجراء تجميلي متقدم يستهدف بصيلات الشعر في جميع مناطق الجسم باستخدام أجهزة ليزر عالية التقنية. في عيادة أورا ديرما نستخدم أحدث الأجهزة المعتمدة عالمياً والتي تناسب جميع ألوان البشرة وأنواع الشعر.</p>
+<p>إزالة الشعر بالليزر للجسم الكامل هي إجراء تجميلي متقدم يستهدف بصيلات الشعر في جميع مناطق الجسم باستخدام أجهزة ليزر عالية التقنية. في عيادة دكتوراتو نستخدم أحدث الأجهزة المعتمدة عالمياً والتي تناسب جميع ألوان البشرة وأنواع الشعر.</p>
 <h2>كيف يعمل العلاج؟</h2>
 <p>يعمل الليزر عن طريق إرسال نبضات ضوئية مركزة تستهدف صبغة الميلانين في بصيلات الشعر، مما يؤدي إلى تدمير البصيلة ومنع نمو الشعر مجدداً. يتم ضبط إعدادات الجهاز حسب لون البشرة وسماكة الشعر لضمان أقصى فعالية مع أعلى درجات الأمان.</p>
 <h2>لمن يناسب هذا العلاج؟</h2>
@@ -382,7 +382,7 @@ class ServiceSeeder extends Seeder
 <li>جميع أنواع وألوان البشرة</li>
 </ul>',
                 'full_desc_en'   => '<h2>What is Full Body Laser?</h2>
-<p>Full body laser hair removal is an advanced cosmetic procedure that targets hair follicles across all body areas using high-tech laser devices. At Aura Derma Clinic, we use the latest internationally certified devices suitable for all skin tones and hair types.</p>
+<p>Full body laser hair removal is an advanced cosmetic procedure that targets hair follicles across all body areas using high-tech laser devices. At Doctorato Polyclinic, we use the latest internationally certified devices suitable for all skin tones and hair types.</p>
 <h2>How Does the Treatment Work?</h2>
 <p>The laser works by sending focused light pulses that target melanin pigment in hair follicles, destroying the follicle and preventing hair regrowth. Device settings are adjusted according to skin color and hair thickness to ensure maximum effectiveness with the highest safety standards.</p>
 <h2>Who Is This Treatment For?</h2>
@@ -416,7 +416,7 @@ class ServiceSeeder extends Seeder
                 'short_desc_en'  => 'Laser hair removal for sensitive areas with safe and comfortable technology. We use specialized devices with precise settings suitable for sensitive skin while ensuring complete privacy and comfort.',
                 'featured_image' => 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=800&q=80',
                 'full_desc_ar'   => '<h2>ما هو ليزر المناطق الحساسة؟</h2>
-<p>إزالة الشعر بالليزر في المناطق الحساسة يتطلب خبرة عالية وأجهزة متخصصة توفر أقصى فعالية مع الحفاظ على سلامة وراحة البشرة الحساسة. في عيادة أورا ديرما نوفر بيئة مريحة وخاصة مع فريق طبي متمرس يضمن أفضل تجربة علاجية.</p>
+<p>إزالة الشعر بالليزر في المناطق الحساسة يتطلب خبرة عالية وأجهزة متخصصة توفر أقصى فعالية مع الحفاظ على سلامة وراحة البشرة الحساسة. في عيادة دكتوراتو نوفر بيئة مريحة وخاصة مع فريق طبي متمرس يضمن أفضل تجربة علاجية.</p>
 <h2>كيف يعمل العلاج؟</h2>
 <p>نستخدم أجهزة ليزر متطورة بإعدادات مخصصة للمناطق الحساسة، حيث يتم ضبط الطاقة والنبضات بدقة لتناسب رقة الجلد في هذه المناطق. يتضمن العلاج نظام تبريد متقدم يقلل من الإحساس بالحرارة ويضمن راحة المريض خلال الجلسة.</p>
 <h2>لمن يناسب هذا العلاج؟</h2>
@@ -427,7 +427,7 @@ class ServiceSeeder extends Seeder
 <li>جميع أنواع البشرة</li>
 </ul>',
                 'full_desc_en'   => '<h2>What is Sensitive Areas Laser?</h2>
-<p>Laser hair removal in sensitive areas requires high expertise and specialized devices that provide maximum effectiveness while maintaining the safety and comfort of sensitive skin. At Aura Derma Clinic, we provide a comfortable and private environment with an experienced medical team ensuring the best treatment experience.</p>
+<p>Laser hair removal in sensitive areas requires high expertise and specialized devices that provide maximum effectiveness while maintaining the safety and comfort of sensitive skin. At Doctorato Polyclinic, we provide a comfortable and private environment with an experienced medical team ensuring the best treatment experience.</p>
 <h2>How Does the Treatment Work?</h2>
 <p>We use advanced laser devices with settings customized for sensitive areas, where energy and pulses are precisely adjusted to suit the delicate skin in these areas. The treatment includes an advanced cooling system that reduces heat sensation and ensures patient comfort during the session.</p>
 <h2>Who Is This Treatment For?</h2>
@@ -508,7 +508,7 @@ class ServiceSeeder extends Seeder
                 'short_desc_en'  => 'Deep skin cleansing sessions to remove impurities, blackheads, and renew skin cells. The session includes exfoliation, steam cleansing, and a nourishing mask for pure, radiant skin.',
                 'featured_image' => 'https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=800&q=80',
                 'full_desc_ar'   => '<h2>ما هو التنظيف العميق للبشرة؟</h2>
-<p>تنظيف البشرة العميق هو إجراء تجميلي شامل يهدف إلى تنقية البشرة من الشوائب والأوساخ المتراكمة في المسام وإزالة الرؤوس السوداء والبيضاء. في عيادة أورا ديرما نقدم جلسات تنظيف متكاملة تجمع بين التقنيات الحديثة والمنتجات الطبية عالية الجودة.</p>
+<p>تنظيف البشرة العميق هو إجراء تجميلي شامل يهدف إلى تنقية البشرة من الشوائب والأوساخ المتراكمة في المسام وإزالة الرؤوس السوداء والبيضاء. في عيادة دكتوراتو نقدم جلسات تنظيف متكاملة تجمع بين التقنيات الحديثة والمنتجات الطبية عالية الجودة.</p>
 <h2>كيف تتم الجلسة؟</h2>
 <p>تبدأ الجلسة بتنظيف البشرة بمنظف طبي مناسب لنوع البشرة، ثم يتم استخدام البخار لفتح المسام وتسهيل عملية التنظيف العميق. يلي ذلك استخراج الرؤوس السوداء والشوائب بأدوات معقمة ومتخصصة، ثم تطبيق تقشير لطيف وسيروم مغذي وقناع علاجي يناسب احتياجات البشرة.</p>
 <h2>لمن يناسب هذا العلاج؟</h2>
@@ -519,7 +519,7 @@ class ServiceSeeder extends Seeder
 <li>كإجراء دوري للحفاظ على صحة البشرة</li>
 </ul>',
                 'full_desc_en'   => '<h2>What is Deep Skin Cleansing?</h2>
-<p>Deep skin cleansing is a comprehensive cosmetic procedure aimed at purifying the skin from impurities and accumulated dirt in pores and removing blackheads and whiteheads. At Aura Derma Clinic, we offer complete cleansing sessions combining modern techniques with high-quality medical products.</p>
+<p>Deep skin cleansing is a comprehensive cosmetic procedure aimed at purifying the skin from impurities and accumulated dirt in pores and removing blackheads and whiteheads. At Doctorato Polyclinic, we offer complete cleansing sessions combining modern techniques with high-quality medical products.</p>
 <h2>How Is the Session Done?</h2>
 <p>The session begins with cleansing the skin using a medical cleanser suited to the skin type, then steam is used to open pores and facilitate deep cleansing. This is followed by extraction of blackheads and impurities with sterilized specialized tools, then application of gentle exfoliation, nourishing serum, and a therapeutic mask tailored to the skin\'s needs.</p>
 <h2>Who Is This Treatment For?</h2>
@@ -598,7 +598,7 @@ class ServiceSeeder extends Seeder
                 'short_desc_en'  => 'Botox injections for wrinkles and expression lines, and fillers for lip augmentation and facial contouring. We use the finest internationally certified products for natural, safe, and long-lasting results.',
                 'featured_image' => 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=800&q=80',
                 'full_desc_ar'   => '<h2>ما هي حقن البوتوكس والفيلر؟</h2>
-<p>البوتوكس هو بروتين نقي يعمل على إرخاء العضلات المسؤولة عن التجاعيد وخطوط التعبير، بينما الفيلر هو مادة حشو تعتمد غالباً على حمض الهيالورونيك لملء الخطوط وتحديد ملامح الوجه. في عيادة أورا ديرما نستخدم أفضل المنتجات العالمية المعتمدة لتحقيق نتائج طبيعية متناسقة.</p>
+<p>البوتوكس هو بروتين نقي يعمل على إرخاء العضلات المسؤولة عن التجاعيد وخطوط التعبير، بينما الفيلر هو مادة حشو تعتمد غالباً على حمض الهيالورونيك لملء الخطوط وتحديد ملامح الوجه. في عيادة دكتوراتو نستخدم أفضل المنتجات العالمية المعتمدة لتحقيق نتائج طبيعية متناسقة.</p>
 <h2>كيف يعمل العلاج؟</h2>
 <p>يتم حقن البوتوكس في مناطق محددة لإرخاء العضلات المسببة للتجاعيد مثل خطوط الجبهة وحول العينين وبين الحاجبين. أما الفيلر فيتم حقنه لتعبئة الخطوط العميقة ونفخ الشفاه وتحديد الفك والذقن وملء الهالات السوداء. يقوم الطبيب بتصميم خطة الحقن بناءً على ملامح الوجه والنتيجة المرغوبة.</p>
 <h2>لمن يناسب هذا العلاج؟</h2>
@@ -609,7 +609,7 @@ class ServiceSeeder extends Seeder
 <li>أصحاب الهالات السوداء والخطوط العميقة</li>
 </ul>',
                 'full_desc_en'   => '<h2>What are Botox and Filler Injections?</h2>
-<p>Botox is a purified protein that relaxes the muscles responsible for wrinkles and expression lines, while filler is a dermal filling substance typically based on hyaluronic acid to fill lines and define facial features. At Aura Derma Clinic, we use the best internationally certified products to achieve natural, harmonious results.</p>
+<p>Botox is a purified protein that relaxes the muscles responsible for wrinkles and expression lines, while filler is a dermal filling substance typically based on hyaluronic acid to fill lines and define facial features. At Doctorato Polyclinic, we use the best internationally certified products to achieve natural, harmonious results.</p>
 <h2>How Does the Treatment Work?</h2>
 <p>Botox is injected in specific areas to relax wrinkle-causing muscles such as forehead lines, crow\'s feet, and frown lines. Filler is injected to fill deep lines, augment lips, define the jawline and chin, and fill under-eye hollows. The doctor designs the injection plan based on facial features and desired results.</p>
 <h2>Who Is This Treatment For?</h2>
@@ -733,7 +733,7 @@ class ServiceSeeder extends Seeder
                 'short_desc_en'  => 'Chemical and cold peeling sessions for skin renewal and treatment of pigmentation and dark spots. We use carefully formulated concentrations suited to your skin type for safe, effective results.',
                 'featured_image' => 'https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=800&q=80',
                 'full_desc_ar'   => '<h2>ما هو التقشير الكيميائي والبارد؟</h2>
-<p>التقشير الكيميائي والبارد هو إجراء تجميلي يستخدم محاليل كيميائية مدروسة أو تقنية التقشير البارد لإزالة الطبقات التالفة من الجلد وتحفيز نمو خلايا جديدة صحية. في عيادة أورا ديرما نقدم مجموعة متنوعة من التقشيرات بتراكيز وعمق مختلف يناسب كل حالة.</p>
+<p>التقشير الكيميائي والبارد هو إجراء تجميلي يستخدم محاليل كيميائية مدروسة أو تقنية التقشير البارد لإزالة الطبقات التالفة من الجلد وتحفيز نمو خلايا جديدة صحية. في عيادة دكتوراتو نقدم مجموعة متنوعة من التقشيرات بتراكيز وعمق مختلف يناسب كل حالة.</p>
 <h2>كيف يعمل العلاج؟</h2>
 <p>في التقشير الكيميائي يتم تطبيق محلول حمضي على البشرة يعمل على إزالة الطبقات السطحية التالفة. أما التقشير البارد فيستخدم تركيبة خاصة تعمل على تقشير البشرة بلطف دون تقشر ظاهري، وهو مناسب أكثر للبشرة الحساسة والداكنة. يتم اختيار النوع والتركيز بناءً على مشكلة البشرة ونوعها.</p>
 <h2>لمن يناسب هذا العلاج؟</h2>
@@ -744,7 +744,7 @@ class ServiceSeeder extends Seeder
 <li>الراغبون في تجديد وتفتيح البشرة</li>
 </ul>',
                 'full_desc_en'   => '<h2>What is Chemical and Cold Peeling?</h2>
-<p>Chemical and cold peeling is a cosmetic procedure that uses carefully formulated chemical solutions or cold peeling technology to remove damaged skin layers and stimulate the growth of new healthy cells. At Aura Derma Clinic, we offer a variety of peels at different concentrations and depths suited to each condition.</p>
+<p>Chemical and cold peeling is a cosmetic procedure that uses carefully formulated chemical solutions or cold peeling technology to remove damaged skin layers and stimulate the growth of new healthy cells. At Doctorato Polyclinic, we offer a variety of peels at different concentrations and depths suited to each condition.</p>
 <h2>How Does the Treatment Work?</h2>
 <p>In chemical peeling, an acid solution is applied to the skin to remove damaged surface layers. Cold peeling uses a special formula that gently exfoliates the skin without visible peeling, making it more suitable for sensitive and darker skin. The type and concentration are chosen based on the skin concern and type.</p>
 <h2>Who Is This Treatment For?</h2>

@@ -67,9 +67,9 @@ function submit() {
             >
                 <div class="relative inline-block">
                     <div class="logo-glow absolute inset-0 w-24 h-24 mx-auto rounded-full bg-[#C4A265]/10 blur-xl"></div>
-                    <img src="/images/logo/logo.png" alt="AURA Derma Clinic" class="relative mx-auto h-24 w-auto mb-4 drop-shadow-2xl" />
+                    <img src="/images/logo/logo.png" alt="Doctorato Polyclinic" class="relative mx-auto h-24 w-auto mb-4 drop-shadow-2xl" />
                 </div>
-                <h1 class="text-4xl font-bold tracking-[0.25em] text-[#C4A265] mb-1.5">AURA</h1>
+                <h1 class="text-4xl font-bold tracking-[0.25em] text-[var(--brand-primary)] mb-1.5">Doctorato</h1>
                 <div class="flex items-center justify-center gap-3">
                     <span class="w-8 h-px bg-gradient-to-r from-transparent to-[#C4A265]/40"></span>
                     <p class="text-gray-400 text-xs uppercase tracking-[0.3em] font-medium">{{ isRtl ? 'بوابة الطبيب' : 'Doctor Portal' }}</p>
@@ -122,7 +122,7 @@ function submit() {
                                     autofocus
                                     class="w-full py-3.5 bg-white/[0.04] border border-white/[0.08] rounded-xl text-white placeholder-white/20 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]/40 focus:bg-white/[0.06] text-sm transition-all duration-300"
                                     :class="[form.errors.email ? 'border-red-500/50' : '', isRtl ? 'pr-12 pl-4' : 'pl-12 pr-4']"
-                                    placeholder="doctor@aura-derma.com"
+                                    placeholder="doctor@doctorato.com"
                                 />
                             </div>
                             <p v-if="form.errors.email" class="mt-2 text-sm text-red-400 flex items-center gap-1.5">
@@ -224,7 +224,7 @@ function submit() {
                 :style="{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }"
             >
                 <p class="text-center text-white/15 text-xs mt-8 tracking-wide">
-                    &copy; {{ new Date().getFullYear() }} {{ isRtl ? 'عيادة أورا ديرما' : 'AURA Derma Clinic' }}
+                    &copy; {{ new Date().getFullYear() }} {{ isRtl ? 'عيادة دكتوراتو' : 'Doctorato Polyclinic' }}
                 </p>
             </div>
         </div>

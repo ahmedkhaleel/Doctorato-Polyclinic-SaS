@@ -99,7 +99,7 @@ const form = useForm({
     // SMS
     sms_enabled: props.settings?.sms_enabled || '0',
     sms_provider: props.settings?.sms_provider || 'none',
-    sms_sender_name: props.settings?.sms_sender_name || 'AuraDerma',
+    sms_sender_name: props.settings?.sms_sender_name || 'Doctorato',
     sms_unifonic_app_sid: props.settings?.sms_unifonic_app_sid || '',
     sms_twilio_account_sid: props.settings?.sms_twilio_account_sid || '',
     sms_twilio_auth_token: props.settings?.sms_twilio_auth_token || '',
@@ -514,11 +514,11 @@ function submit() {
                                         </div>
                                         <div class="field">
                                             <label class="field__label">{{ isRtl ? 'نص حقوق النشر (إنجليزي)' : 'Copyright Text (English)' }}</label>
-                                            <input v-model="form.copyright_text_en" type="text" class="field__input" placeholder="AURA Derma Aesthetic Clinic" />
+                                            <input v-model="form.copyright_text_en" type="text" class="field__input" placeholder="Doctorato Polyclinic" />
                                         </div>
                                         <div class="field">
                                             <label class="field__label">{{ isRtl ? 'نص حقوق النشر (عربي)' : 'Copyright Text (Arabic)' }}</label>
-                                            <input v-model="form.copyright_text_ar" type="text" dir="rtl" class="field__input" placeholder="عيادة أورا ديرما التجميلية" />
+                                            <input v-model="form.copyright_text_ar" type="text" dir="rtl" class="field__input" placeholder="عيادة دكتوراتو التخصصية" />
                                         </div>
                                         <div class="field">
                                             <label class="field__label">{{ isRtl ? 'اسم المطور' : 'Developer Name' }}</label>
@@ -978,7 +978,7 @@ function submit() {
                                         </div>
                                         <div class="field">
                                             <label class="field__label">{{ $t('a_sender_name') }}</label>
-                                            <input v-model="form.sms_sender_name" type="text" maxlength="11" placeholder="AuraDerma" class="field__input" />
+                                            <input v-model="form.sms_sender_name" type="text" maxlength="11" placeholder="Doctorato" class="field__input" />
                                             <p class="field__hint">{{ $t('a_sender_name_hint') }}</p>
                                         </div>
                                     </div>

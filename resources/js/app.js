@@ -48,7 +48,7 @@ axios.interceptors.request.use((config) => {
 });
 
 createInertiaApp({
-    title: (title) => title ? `${title} — AURA Derma Clinic` : 'AURA Derma Aesthetic Clinic',
+    title: (title) => title ? `${title} — Doctorato Polyclinic` : 'Doctorato Polyclinic',
     resolve: (name) =>
         resolvePageComponent(
             `./Pages/${name}.vue`,

@@ -258,7 +258,7 @@ class ServiceController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $data = $request->validate([
-            'module' => 'nullable|string|in:derma,dental',
+            'module' => 'nullable|string|in:derma,dental,pediatric',
             'category_id' => 'required|exists:service_categories,id',
             'name_ar' => 'required|string|max:255',
             'name_en' => 'required|string|max:255',
@@ -324,7 +324,7 @@ class ServiceController extends Controller
     public function update(Request $request, Service $service): RedirectResponse
     {
         $data = $request->validate([
-            'module' => 'nullable|string|in:derma,dental',
+            'module' => 'nullable|string|in:derma,dental,pediatric',
             'category_id' => 'required|exists:service_categories,id',
             'name_ar' => 'required|string|max:255',
             'name_en' => 'required|string|max:255',

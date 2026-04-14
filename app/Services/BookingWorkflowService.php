@@ -349,6 +349,12 @@ class BookingWorkflowService
         } elseif ($bookingType === 'cosmetic_consultation') {
             $visitType = 'consultation';
             $consultationType = 'cosmetic';
+        } elseif ($bookingType === 'pediatric_consultation') {
+            $visitType = 'consultation';
+            $consultationType = 'pediatric';
+        } elseif ($bookingType === 'dental_consultation') {
+            $visitType = 'consultation';
+            $consultationType = 'dental';
         }
 
         foreach ($todayAppointments as $appointment) {
@@ -364,6 +370,7 @@ class BookingWorkflowService
                 'receptionist_id' => $userId,
                 'booking_id' => $booking->id,
                 'booking_appointment_id' => $appointment->id,
+                'module' => $booking->module ?? 'derma',
                 'visit_type' => $apptVisitType,
                 'consultation_type' => $apptConsultationType,
                 'service_id' => $bookingService->service_id ?? null,
@@ -431,10 +438,18 @@ class BookingWorkflowService
                 $descEn = $service->name_en ?? 'Service';
             } else {
                 // Consultation without a linked service
-                $descEn = $booking->booking_type === 'dermatology_consultation'
-                    ? 'Dermatology Consultation'
-                    : 'Cosmetic Consultation';
-                $descAr = $descEn;
+                $descEn = match ($booking->booking_type) {
+                    'dermatology_consultation' => 'Dermatology Consultation',
+                    'pediatric_consultation' => 'Pediatric Consultation',
+                    'dental_consultation' => 'Dental Consultation',
+                    default => 'Cosmetic Consultation',
+                };
+                $descAr = match ($booking->booking_type) {
+                    'dermatology_consultation' => 'كشف جلدية',
+                    'pediatric_consultation' => 'كشف أطفال',
+                    'dental_consultation' => 'كشف أسنان',
+                    default => 'كشف تجميل',
+                };
             }
 
             if ($bs->sessions_count > 1) {
@@ -669,6 +684,12 @@ class BookingWorkflowService
         } elseif ($bookingType === 'cosmetic_consultation') {
             $visitType = 'consultation';
             $consultationType = 'cosmetic';
+        } elseif ($bookingType === 'pediatric_consultation') {
+            $visitType = 'consultation';
+            $consultationType = 'pediatric';
+        } elseif ($bookingType === 'dental_consultation') {
+            $visitType = 'consultation';
+            $consultationType = 'dental';
         }
 
         if ($appointment->is_retouch) {
@@ -682,6 +703,7 @@ class BookingWorkflowService
             'receptionist_id' => $userId,
             'booking_id' => $booking->id,
             'booking_appointment_id' => $appointment->id,
+            'module' => $booking->module ?? 'derma',
             'visit_type' => $visitType,
             'consultation_type' => $consultationType,
             'service_id' => $bookingService->service_id ?? null,

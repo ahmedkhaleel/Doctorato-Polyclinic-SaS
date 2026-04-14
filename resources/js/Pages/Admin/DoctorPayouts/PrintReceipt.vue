@@ -60,8 +60,8 @@ onMounted(() => {
         <!-- Clinic Header -->
         <div class="header">
             <div class="header-left">
-                <h1 class="clinic-name">AURA Derma Clinic</h1>
-                <p class="clinic-address">Dermatology & Cosmetic Center</p>
+                <h1 class="clinic-name">Doctorato Polyclinic</h1>
+                <p class="clinic-address">Doctorato Polyclinic</p>
                 <p class="clinic-address">Cairo, Egypt</p>
             </div>
             <div class="header-right">

@@ -60,6 +60,12 @@ const bookingTypes = computed(() => {
             { value: 'dental_service', label: isRtl.value ? 'خدمة أسنان' : 'Dental Service', desc: isRtl.value ? 'حجز علاج أو إجراء لطب الأسنان' : 'Book a dental treatment or procedure' },
         ];
     }
+    if (selectedModule.value === 'pediatric') {
+        return [
+            { value: 'pediatric_consultation', label: isRtl.value ? 'كشف أطفال' : 'Pediatric Consultation', desc: isRtl.value ? 'فحص وتشخيص صحة الطفل' : 'Child health examination and diagnosis' },
+            { value: 'pediatric_service', label: isRtl.value ? 'خدمة أطفال' : 'Pediatric Service', desc: isRtl.value ? 'حجز خدمة طب أطفال' : 'Book a pediatric service' },
+        ];
+    }
     return [
         { value: 'dermatology_consultation', label: isRtl.value ? 'استشارة جلدية' : 'Dermatology Consultation', desc: isRtl.value ? 'فحص وتشخيص مشاكل الجلد' : 'Skin examination and diagnosis' },
         { value: 'cosmetic_consultation', label: isRtl.value ? 'استشارة تجميلية' : 'Cosmetic Consultation', desc: isRtl.value ? 'استشارة عمليات التجميل والعناية' : 'Cosmetic procedure consultation' },
@@ -67,8 +73,8 @@ const bookingTypes = computed(() => {
     ];
 });
 
-const isConsultation = computed(() => ['dermatology_consultation', 'cosmetic_consultation', 'dental_consultation'].includes(form.booking_type));
-const isService = computed(() => ['service', 'dental_service'].includes(form.booking_type));
+const isConsultation = computed(() => ['dermatology_consultation', 'cosmetic_consultation', 'dental_consultation', 'pediatric_consultation'].includes(form.booking_type));
+const isService = computed(() => ['service', 'dental_service', 'pediatric_service'].includes(form.booking_type));
 
 /* Filter services and doctors by module */
 const filteredCategories = computed(() => {

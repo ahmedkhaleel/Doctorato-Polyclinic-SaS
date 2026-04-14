@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Invoice;
 use App\Models\Patient;
+use App\Models\Payment;
+use App\Models\Setting;
 use App\Models\Visit;
 use App\Models\Doctor;
 use App\Models\PediatricGrowthRecord;
@@ -148,6 +151,58 @@ class AdminPediatricController extends Controller
             ->limit(10)
             ->get(['id', 'full_name', 'date_of_birth', 'gender', 'file_number', 'guardian_name', 'created_at']);
 
+        // ── Revenue stats ──
+        $revenueThisMonth = Invoice::where('module', 'pediatric')
+            ->whereMonth('invoice_date', now()->month)
+            ->whereYear('invoice_date', now()->year)
+            ->sum('total');
+        $revenueLastMonth = Invoice::where('module', 'pediatric')
+            ->whereMonth('invoice_date', now()->subMonth()->month)
+            ->whereYear('invoice_date', now()->subMonth()->year)
+            ->sum('total');
+        $collectedThisMonth = Invoice::where('module', 'pediatric')
+            ->whereMonth('invoice_date', now()->month)
+            ->whereYear('invoice_date', now()->year)
+            ->sum('paid_amount');
+
+        // Monthly revenue trend (last 12 months)
+        $revenueTrend = [];
+        for ($i = 11; $i >= 0; $i--) {
+            $date = now()->subMonths($i);
+            $monthTotal = Invoice::where('module', 'pediatric')
+                ->whereMonth('invoice_date', $date->month)
+                ->whereYear('invoice_date', $date->year)
+                ->sum('total');
+            $monthCollected = Invoice::where('module', 'pediatric')
+                ->whereMonth('invoice_date', $date->month)
+                ->whereYear('invoice_date', $date->year)
+                ->sum('paid_amount');
+            $revenueTrend[] = [
+                'month' => $date->format('M Y'),
+                'monthShort' => $date->format('M'),
+                'total' => round($monthTotal, 2),
+                'collected' => round($monthCollected, 2),
+            ];
+        }
+
+        // Revenue by doctor
+        $revenueByDoctor = Invoice::where('module', 'pediatric')
+            ->whereMonth('invoice_date', now()->month)
+            ->whereYear('invoice_date', now()->year)
+            ->join('visits', 'invoices.visit_id', '=', 'visits.id')
+            ->join('doctors', 'visits.doctor_id', '=', 'doctors.id')
+            ->select(
+                'doctors.id as doctor_id',
+                'doctors.name_en',
+                'doctors.name_ar',
+                DB::raw('SUM(invoices.total) as total'),
+                DB::raw('SUM(invoices.paid_amount) as collected'),
+                DB::raw('COUNT(invoices.id) as invoice_count')
+            )
+            ->groupBy('doctors.id', 'doctors.name_en', 'doctors.name_ar')
+            ->orderByDesc('total')
+            ->get();
+
         return Inertia::render('Admin/Pediatric/Dashboard', [
             'stats' => [
                 'totalPatients' => $totalPatients,
@@ -158,10 +213,15 @@ class AdminPediatricController extends Controller
                 'totalVaccinations' => $totalVaccinations,
                 'givenVaccinations' => $givenVaccinations,
                 'overdueVaccinations' => $overdueVaccinations,
+                'revenueThisMonth' => round($revenueThisMonth, 2),
+                'revenueLastMonth' => round($revenueLastMonth, 2),
+                'collectedThisMonth' => round($collectedThisMonth, 2),
             ],
             'ageDistribution' => $ageDistribution,
             'genderDistribution' => $genderDistribution,
             'monthlyTrend' => $monthlyTrend,
+            'revenueTrend' => $revenueTrend,
+            'revenueByDoctor' => $revenueByDoctor,
             'topVaccines' => $topVaccines,
             'growthAlerts' => $growthAlerts,
             'milestoneStats' => $milestoneStats,
@@ -319,5 +379,51 @@ class AdminPediatricController extends Controller
             'records' => $records,
             'alerts' => $alerts,
         ]);
+    }
+
+    /**
+     * Pediatric module settings page.
+     */
+    public function settings()
+    {
+        $settings = [
+            'pediatric_consultation_fee' => Setting::get('pediatric_consultation_fee', '0'),
+            'pediatric_followup_fee' => Setting::get('pediatric_followup_fee', '0'),
+            'pediatric_vaccination_reminder_days' => Setting::get('pediatric_vaccination_reminder_days', '7'),
+            'pediatric_overdue_reminder_interval' => Setting::get('pediatric_overdue_reminder_interval', '14'),
+            'pediatric_sms_reminders_enabled' => Setting::get('pediatric_sms_reminders_enabled', '1'),
+            'pediatric_growth_alert_low_percentile' => Setting::get('pediatric_growth_alert_low_percentile', '3'),
+            'pediatric_growth_alert_high_percentile' => Setting::get('pediatric_growth_alert_high_percentile', '97'),
+            'pediatric_max_age_years' => Setting::get('pediatric_max_age_years', '18'),
+            'pediatric_default_vaccine_schedule' => Setting::get('pediatric_default_vaccine_schedule', 'who_iraq'),
+        ];
+
+        return Inertia::render('Admin/Pediatric/Settings', [
+            'settings' => $settings,
+        ]);
+    }
+
+    /**
+     * Update pediatric module settings.
+     */
+    public function updateSettings(Request $request)
+    {
+        $validated = $request->validate([
+            'pediatric_consultation_fee' => 'required|numeric|min:0',
+            'pediatric_followup_fee' => 'required|numeric|min:0',
+            'pediatric_vaccination_reminder_days' => 'required|integer|min:1|max:30',
+            'pediatric_overdue_reminder_interval' => 'required|integer|min:7|max:60',
+            'pediatric_sms_reminders_enabled' => 'required|in:0,1',
+            'pediatric_growth_alert_low_percentile' => 'required|numeric|min:1|max:25',
+            'pediatric_growth_alert_high_percentile' => 'required|numeric|min:75|max:99',
+            'pediatric_max_age_years' => 'required|integer|min:12|max:21',
+            'pediatric_default_vaccine_schedule' => 'required|in:who_iraq,who_standard,custom',
+        ]);
+
+        foreach ($validated as $key => $value) {
+            Setting::set($key, $value);
+        }
+
+        return redirect()->back()->with('success', 'Pediatric settings updated successfully');
     }
 }

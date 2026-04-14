@@ -4,11 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\LogsActivity;
 
 class PediatricVaccination extends Model
 {
-    use HasFactory, LogsActivity;
+    use HasFactory, LogsActivity, SoftDeletes;
 
     const STATUS_SCHEDULED = 'scheduled';
     const STATUS_GIVEN = 'given';
@@ -51,12 +52,15 @@ class PediatricVaccination extends Model
         'dose_number', 'scheduled_age', 'scheduled_date', 'given_date',
         'batch_number', 'manufacturer', 'site_of_injection', 'status',
         'side_effects', 'notes', 'next_dose_date',
+        'reminder_sent_at', 'overdue_reminder_sent_at',
     ];
 
     protected $casts = [
         'scheduled_date' => 'date',
         'given_date' => 'date',
         'next_dose_date' => 'date',
+        'reminder_sent_at' => 'datetime',
+        'overdue_reminder_sent_at' => 'datetime',
     ];
 
     public function patient()

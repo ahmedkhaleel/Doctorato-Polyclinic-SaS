@@ -34,8 +34,8 @@ function submit() {
         <div class="w-full max-w-md">
             <!-- Logo -->
             <div class="text-center mb-8">
-                <img src="/images/logo/logo.png" alt="AURA Derma Clinic" class="mx-auto h-20 w-auto mb-3 drop-shadow-lg" />
-                <h1 class="text-3xl font-bold tracking-widest text-[var(--brand-primary)]">AURA</h1>
+                <img src="/images/logo/logo.png" alt="Doctorato Polyclinic" class="mx-auto h-20 w-auto mb-3 drop-shadow-lg" />
+                <h1 class="text-3xl font-bold tracking-widest text-[var(--brand-primary)]">Doctorato</h1>
                 <p class="text-gray-400 text-sm uppercase tracking-widest mt-1">{{ isRtl ? 'بوابة المريض' : 'Patient Portal' }}</p>
             </div>
 
@@ -149,7 +149,7 @@ function submit() {
                 </div>
             </div>
 
-            <p class="text-center text-white/20 text-xs mt-6">&copy; {{ new Date().getFullYear() }} {{ isRtl ? 'عيادة أورا ديرما' : 'AURA Derma Clinic' }} &middot; {{ isRtl ? 'بوابة المريض' : 'Patient Portal' }}</p>
+            <p class="text-center text-white/20 text-xs mt-6">&copy; {{ new Date().getFullYear() }} {{ isRtl ? 'عيادة دكتوراتو' : 'Doctorato Polyclinic' }} &middot; {{ isRtl ? 'بوابة المريض' : 'Patient Portal' }}</p>
         </div>
     </div>
 </template>

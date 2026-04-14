@@ -219,9 +219,13 @@ class VisitWorkflowService
 
         // Determine price
         if ($visit->visit_type === 'follow_up') {
-            $price = $visit->module === 'dental'
-                ? (float) \App\Services\ModuleManager::getSetting('dental', 'followup_fee', 0)
-                : (float) Setting::get('followup_fee', 0);
+            if ($visit->module === 'dental') {
+                $price = (float) \App\Services\ModuleManager::getSetting('dental', 'followup_fee', 0);
+            } elseif ($visit->module === 'pediatric') {
+                $price = (float) \App\Services\ModuleManager::getSetting('pediatric', 'followup_fee', 0);
+            } else {
+                $price = (float) Setting::get('followup_fee', 0);
+            }
             $descEn = 'Follow-up Consultation';
             $descAr = 'متابعة كشف';
         } elseif ($visit->visit_type === 'consultation') {
@@ -229,6 +233,13 @@ class VisitWorkflowService
                 $price = (float) \App\Services\ModuleManager::getSetting('dental', 'consultation_fee', 300);
                 $descEn = 'Dental Consultation';
                 $descAr = 'كشف أسنان';
+            } elseif ($visit->module === 'pediatric') {
+                $price = $this->commissionCalculator->getConsultationFee(
+                    $visit->doctor,
+                    'pediatric'
+                );
+                $descEn = 'Pediatric Consultation';
+                $descAr = 'كشف أطفال';
             } else {
                 $price = $this->commissionCalculator->getConsultationFee(
                     $visit->doctor,

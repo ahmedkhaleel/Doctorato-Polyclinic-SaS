@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue';
 import { Link, router, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import ConfirmModal from '@/Components/Admin/ConfirmModal.vue';
 import { useCurrency } from '@/Composables/useCurrency.js';
 
 const { formatCurrency } = useCurrency();
@@ -15,9 +16,6 @@ const props = defineProps({
     treatmentTypes: Array,
     filters: Object,
 });
-
-const mounted = ref(false);
-setTimeout(() => { mounted.value = true; }, 80);
 
 const activeFilter = ref(props.filters?.category || '');
 const searchQuery = ref(props.filters?.search || '');
@@ -162,14 +160,29 @@ function duplicateTemplate(template) {
     router.post(`/admin/dental/treatment-plan-templates/${template.id}/duplicate`, {}, { preserveScroll: true });
 }
 
-function deleteTemplate(template) {
-    if (!confirm(isRtl.value ? 'هل أنت متأكد من حذف هذا القالب؟' : 'Delete this template?')) return;
-    router.post(`/admin/dental/treatment-plan-templates/${template.id}/delete`, { preserveScroll: true });
+const showDeleteConfirm = ref(false);
+const pendingDeleteTpl = ref(null);
+const showSeedConfirm = ref(false);
+
+function confirmDeleteTemplate(template) {
+    pendingDeleteTpl.value = template;
+    showDeleteConfirm.value = true;
+}
+
+function executeDeleteTemplate() {
+    if (!pendingDeleteTpl.value) return;
+    router.post(`/admin/dental/treatment-plan-templates/${pendingDeleteTpl.value.id}/delete`, { preserveScroll: true });
+    showDeleteConfirm.value = false;
+    pendingDeleteTpl.value = null;
 }
 
 function seedDefaults() {
-    if (!confirm(isRtl.value ? 'سيتم إعادة تحميل القوالب الافتراضية. متأكد؟' : 'Reload default templates?')) return;
+    showSeedConfirm.value = true;
+}
+
+function executeSeedDefaults() {
     router.post('/admin/dental/treatment-plan-templates-seed', {}, { preserveScroll: true });
+    showSeedConfirm.value = false;
 }
 
 function useTemplate(template) {
@@ -182,8 +195,7 @@ function useTemplate(template) {
 <AdminLayout :title="isRtl ? 'قوالب خطط العلاج' : 'Treatment Plan Templates'">
 <div class="space-y-5">
     <!-- ═══ HERO ═══ -->
-    <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-purple-700 via-purple-600 to-indigo-700 p-6 sm:p-7"
-        :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'" style="transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1)">
+    <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-purple-700 via-purple-600 to-indigo-700 p-6 sm:p-7 dental-hero-enter">
         <div class="absolute -top-16 ltr:-right-16 rtl:-left-16 w-56 h-56 bg-purple-400/20 rounded-full blur-3xl"></div>
         <div class="absolute -bottom-12 ltr:-left-12 rtl:-right-12 w-40 h-40 bg-indigo-300/15 rounded-full blur-3xl"></div>
         <div class="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -213,7 +225,7 @@ function useTemplate(template) {
     </div>
 
     <!-- ═══ CATEGORY FILTER ═══ -->
-    <div class="flex flex-wrap gap-2" :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'" style="transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.1s">
+    <div class="flex flex-wrap gap-2 dental-card-enter" style="animation-delay:0.1s">
         <button @click="activeFilter = ''" class="px-4 py-2 rounded-xl text-sm font-medium border-2 transition-all" :class="!activeFilter ? 'border-purple-500 bg-purple-50 text-purple-700 shadow-sm' : 'border-gray-100 text-gray-500 hover:border-gray-200 bg-white'">
             {{ isRtl ? 'الكل' : 'All' }} ({{ templates.length }})
         </button>
@@ -226,9 +238,9 @@ function useTemplate(template) {
     <!-- ═══ TEMPLATE CARDS ═══ -->
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
         <div v-for="(template, ti) in filteredTemplates" :key="template.id"
-            class="group bg-white rounded-2xl shadow-sm border border-gray-100/80 hover:shadow-lg hover:border-gray-200/80 transition-all duration-300 overflow-hidden"
-            :class="[mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4', !template.is_active ? 'opacity-60' : '']"
-            :style="{ transition: `all 0.5s cubic-bezier(0.16, 1, 0.3, 1)`, transitionDelay: `${0.15 + ti * 0.04}s` }">
+            class="group bg-white rounded-2xl shadow-sm border border-gray-100/80 hover:shadow-lg hover:border-gray-200/80 transition-all duration-300 overflow-hidden dental-card-enter"
+            :class="[!template.is_active ? 'opacity-60' : '']"
+            :style="{ animationDelay: `${0.15 + ti * 0.04}s` }">
             <!-- Category Color Bar -->
             <div class="h-1" :style="{ background: categoryColors[template.category]?.accent || '#6B7280' }"></div>
 
@@ -252,7 +264,7 @@ function useTemplate(template) {
                         <button @click="toggleActive(template)" class="p-1.5 rounded-lg transition-all" :class="template.is_active ? 'text-green-500 hover:text-red-500 hover:bg-red-50' : 'text-gray-300 hover:text-green-500 hover:bg-green-50'" :title="template.is_active ? (isRtl ? 'تعطيل' : 'Deactivate') : (isRtl ? 'تفعيل' : 'Activate')">
                             <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path v-if="template.is_active" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" /><path v-else d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z" /></svg>
                         </button>
-                        <button @click="deleteTemplate(template)" class="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all" :title="isRtl ? 'حذف' : 'Delete'">
+                        <button @click="confirmDeleteTemplate(template)" class="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all" :title="isRtl ? 'حذف' : 'Delete'">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                         </button>
                     </div>
@@ -430,5 +442,42 @@ function useTemplate(template) {
 </div>
 </Transition>
 </Teleport>
+
+<!-- Delete Template Confirm Modal -->
+<ConfirmModal
+    :show="showDeleteConfirm"
+    :title="isRtl ? 'حذف القالب' : 'Delete Template'"
+    :message="isRtl ? 'هل أنت متأكد من حذف هذا القالب؟ لا يمكن التراجع عن هذا الإجراء.' : 'Are you sure you want to delete this template? This action cannot be undone.'"
+    :confirmText="isRtl ? 'حذف' : 'Delete'"
+    :cancelText="isRtl ? 'إلغاء' : 'Cancel'"
+    confirmColor="red"
+    @confirm="executeDeleteTemplate"
+    @cancel="showDeleteConfirm = false"
+/>
+
+<!-- Reset Defaults Confirm Modal -->
+<ConfirmModal
+    :show="showSeedConfirm"
+    :title="isRtl ? 'إعادة تحميل القوالب' : 'Reload Default Templates'"
+    :message="isRtl ? 'سيتم إعادة تحميل القوالب الافتراضية. هل أنت متأكد؟' : 'This will reload the default templates. Are you sure?'"
+    :confirmText="isRtl ? 'إعادة تحميل' : 'Reload'"
+    :cancelText="isRtl ? 'إلغاء' : 'Cancel'"
+    confirmColor="amber"
+    @confirm="executeSeedDefaults"
+    @cancel="showSeedConfirm = false"
+/>
 </AdminLayout>
 </template>
+
+<style>
+@keyframes dentalHeroEnter {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes dentalCardEnter {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+.dental-hero-enter { animation: dentalHeroEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.dental-card-enter { animation: dentalCardEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
+</style>

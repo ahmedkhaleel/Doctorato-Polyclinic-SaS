@@ -331,7 +331,7 @@ const maxServiceVisits = computed(() => {
                 </div>
             </div>
 
-            <!-- ── Module Comparison (Dental vs Dermatology) ──── -->
+            <!-- ── Module Comparison (Dermatology vs Dental vs Pediatric) ──── -->
             <div
                 v-if="moduleComparison && !moduleFilter"
                 class="bg-white rounded-2xl border border-gray-100/80 p-6 transition-all duration-700"
@@ -344,7 +344,7 @@ const maxServiceVisits = computed(() => {
                     </div>
                     <div>
                         <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wider">{{ isRtl ? 'مقارنة الأقسام' : 'Module Comparison' }}</h3>
-                        <p class="text-[11px] text-gray-400">{{ isRtl ? 'الجلدية مقابل الأسنان — هذا الشهر' : 'Dermatology vs Dental — This Month' }}</p>
+                        <p class="text-[11px] text-gray-400">{{ isRtl ? 'الجلدية مقابل الأسنان مقابل الأطفال — هذا الشهر' : 'Dermatology vs Dental vs Pediatric — This Month' }}</p>
                     </div>
                 </div>
 
@@ -359,10 +359,10 @@ const maxServiceVisits = computed(() => {
                                         <span class="w-2.5 h-2.5 rounded-full bg-violet-500"></span>
                                         {{ isRtl ? 'الجلدية' : 'Dermatology' }}
                                     </span>
-                                    <span class="text-xs font-bold text-gray-900">{{ formatCurrency(moduleComparison.dermatology?.revenue || 0) }}</span>
+                                    <span class="text-xs font-bold text-gray-900">{{ formatCurrency(moduleComparison.derma?.revenue || 0) }}</span>
                                 </div>
                                 <div class="h-2.5 bg-gray-100 rounded-full overflow-hidden">
-                                    <div class="h-full bg-gradient-to-r from-violet-400 to-violet-600 rounded-full transition-all duration-1000" :style="{ width: mounted ? `${Math.min(((moduleComparison.dermatology?.revenue || 0) / Math.max((moduleComparison.dermatology?.revenue || 0) + (moduleComparison.dental?.revenue || 0), 1)) * 100, 100)}%` : '0%' }"></div>
+                                    <div class="h-full bg-gradient-to-r from-violet-400 to-violet-600 rounded-full transition-all duration-1000" :style="{ width: mounted ? `${Math.min(((moduleComparison.derma?.revenue || 0) / Math.max((moduleComparison.derma?.revenue || 0) + (moduleComparison.dental?.revenue || 0) + (moduleComparison.pediatric?.revenue || 0), 1)) * 100, 100)}%` : '0%' }"></div>
                                 </div>
                             </div>
                             <div>
@@ -374,7 +374,19 @@ const maxServiceVisits = computed(() => {
                                     <span class="text-xs font-bold text-gray-900">{{ formatCurrency(moduleComparison.dental?.revenue || 0) }}</span>
                                 </div>
                                 <div class="h-2.5 bg-gray-100 rounded-full overflow-hidden">
-                                    <div class="h-full bg-gradient-to-r from-cyan-400 to-cyan-600 rounded-full transition-all duration-1000" :style="{ width: mounted ? `${Math.min(((moduleComparison.dental?.revenue || 0) / Math.max((moduleComparison.dermatology?.revenue || 0) + (moduleComparison.dental?.revenue || 0), 1)) * 100, 100)}%` : '0%' }"></div>
+                                    <div class="h-full bg-gradient-to-r from-cyan-400 to-cyan-600 rounded-full transition-all duration-1000" :style="{ width: mounted ? `${Math.min(((moduleComparison.dental?.revenue || 0) / Math.max((moduleComparison.derma?.revenue || 0) + (moduleComparison.dental?.revenue || 0) + (moduleComparison.pediatric?.revenue || 0), 1)) * 100, 100)}%` : '0%' }"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="text-xs font-medium text-gray-600 flex items-center gap-1.5">
+                                        <span class="w-2.5 h-2.5 rounded-full bg-green-500"></span>
+                                        {{ isRtl ? 'أطفال' : 'Pediatric' }}
+                                    </span>
+                                    <span class="text-xs font-bold text-gray-900">{{ formatCurrency(moduleComparison.pediatric?.revenue || 0) }}</span>
+                                </div>
+                                <div class="h-2.5 bg-gray-100 rounded-full overflow-hidden">
+                                    <div class="h-full bg-gradient-to-r from-green-400 to-green-600 rounded-full transition-all duration-1000" :style="{ width: mounted ? `${Math.min(((moduleComparison.pediatric?.revenue || 0) / Math.max((moduleComparison.derma?.revenue || 0) + (moduleComparison.dental?.revenue || 0) + (moduleComparison.pediatric?.revenue || 0), 1)) * 100, 100)}%` : '0%' }"></div>
                                 </div>
                             </div>
                         </div>
@@ -391,12 +403,12 @@ const maxServiceVisits = computed(() => {
                                         {{ isRtl ? 'الجلدية' : 'Dermatology' }}
                                     </span>
                                     <div class="flex items-center gap-2">
-                                        <span class="text-xs font-bold text-gray-900">{{ moduleComparison.dermatology?.visits || 0 }}</span>
-                                        <span class="text-[10px] text-gray-400">({{ moduleComparison.dermatology?.completed || 0 }} {{ isRtl ? 'مكتمل' : 'done' }})</span>
+                                        <span class="text-xs font-bold text-gray-900">{{ moduleComparison.derma?.visits || 0 }}</span>
+                                        <span class="text-[10px] text-gray-400">({{ moduleComparison.derma?.completed || 0 }} {{ isRtl ? 'مكتمل' : 'done' }})</span>
                                     </div>
                                 </div>
                                 <div class="h-2.5 bg-gray-100 rounded-full overflow-hidden">
-                                    <div class="h-full bg-gradient-to-r from-violet-400 to-violet-600 rounded-full transition-all duration-1000" :style="{ width: mounted ? `${Math.min(((moduleComparison.dermatology?.visits || 0) / Math.max((moduleComparison.dermatology?.visits || 0) + (moduleComparison.dental?.visits || 0), 1)) * 100, 100)}%` : '0%' }"></div>
+                                    <div class="h-full bg-gradient-to-r from-violet-400 to-violet-600 rounded-full transition-all duration-1000" :style="{ width: mounted ? `${Math.min(((moduleComparison.derma?.visits || 0) / Math.max((moduleComparison.derma?.visits || 0) + (moduleComparison.dental?.visits || 0) + (moduleComparison.pediatric?.visits || 0), 1)) * 100, 100)}%` : '0%' }"></div>
                                 </div>
                             </div>
                             <div>
@@ -411,7 +423,22 @@ const maxServiceVisits = computed(() => {
                                     </div>
                                 </div>
                                 <div class="h-2.5 bg-gray-100 rounded-full overflow-hidden">
-                                    <div class="h-full bg-gradient-to-r from-cyan-400 to-cyan-600 rounded-full transition-all duration-1000" :style="{ width: mounted ? `${Math.min(((moduleComparison.dental?.visits || 0) / Math.max((moduleComparison.dermatology?.visits || 0) + (moduleComparison.dental?.visits || 0), 1)) * 100, 100)}%` : '0%' }"></div>
+                                    <div class="h-full bg-gradient-to-r from-cyan-400 to-cyan-600 rounded-full transition-all duration-1000" :style="{ width: mounted ? `${Math.min(((moduleComparison.dental?.visits || 0) / Math.max((moduleComparison.derma?.visits || 0) + (moduleComparison.dental?.visits || 0) + (moduleComparison.pediatric?.visits || 0), 1)) * 100, 100)}%` : '0%' }"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="text-xs font-medium text-gray-600 flex items-center gap-1.5">
+                                        <span class="w-2.5 h-2.5 rounded-full bg-green-500"></span>
+                                        {{ isRtl ? 'أطفال' : 'Pediatric' }}
+                                    </span>
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs font-bold text-gray-900">{{ moduleComparison.pediatric?.visits || 0 }}</span>
+                                        <span class="text-[10px] text-gray-400">({{ moduleComparison.pediatric?.completed || 0 }} {{ isRtl ? 'مكتمل' : 'done' }})</span>
+                                    </div>
+                                </div>
+                                <div class="h-2.5 bg-gray-100 rounded-full overflow-hidden">
+                                    <div class="h-full bg-gradient-to-r from-green-400 to-green-600 rounded-full transition-all duration-1000" :style="{ width: mounted ? `${Math.min(((moduleComparison.pediatric?.visits || 0) / Math.max((moduleComparison.derma?.visits || 0) + (moduleComparison.dental?.visits || 0) + (moduleComparison.pediatric?.visits || 0), 1)) * 100, 100)}%` : '0%' }"></div>
                                 </div>
                             </div>
                         </div>
@@ -427,10 +454,10 @@ const maxServiceVisits = computed(() => {
                                         <span class="w-2.5 h-2.5 rounded-full bg-violet-500"></span>
                                         {{ isRtl ? 'الجلدية' : 'Dermatology' }}
                                     </span>
-                                    <span class="text-xs font-bold text-gray-900">{{ moduleComparison.dermatology?.patients || 0 }}</span>
+                                    <span class="text-xs font-bold text-gray-900">{{ moduleComparison.derma?.patients || 0 }}</span>
                                 </div>
                                 <div class="h-2.5 bg-gray-100 rounded-full overflow-hidden">
-                                    <div class="h-full bg-gradient-to-r from-violet-400 to-violet-600 rounded-full transition-all duration-1000" :style="{ width: mounted ? `${Math.min(((moduleComparison.dermatology?.patients || 0) / Math.max((moduleComparison.dermatology?.patients || 0) + (moduleComparison.dental?.patients || 0), 1)) * 100, 100)}%` : '0%' }"></div>
+                                    <div class="h-full bg-gradient-to-r from-violet-400 to-violet-600 rounded-full transition-all duration-1000" :style="{ width: mounted ? `${Math.min(((moduleComparison.derma?.patients || 0) / Math.max((moduleComparison.derma?.patients || 0) + (moduleComparison.dental?.patients || 0) + (moduleComparison.pediatric?.patients || 0), 1)) * 100, 100)}%` : '0%' }"></div>
                                 </div>
                             </div>
                             <div>
@@ -442,7 +469,19 @@ const maxServiceVisits = computed(() => {
                                     <span class="text-xs font-bold text-gray-900">{{ moduleComparison.dental?.patients || 0 }}</span>
                                 </div>
                                 <div class="h-2.5 bg-gray-100 rounded-full overflow-hidden">
-                                    <div class="h-full bg-gradient-to-r from-cyan-400 to-cyan-600 rounded-full transition-all duration-1000" :style="{ width: mounted ? `${Math.min(((moduleComparison.dental?.patients || 0) / Math.max((moduleComparison.dermatology?.patients || 0) + (moduleComparison.dental?.patients || 0), 1)) * 100, 100)}%` : '0%' }"></div>
+                                    <div class="h-full bg-gradient-to-r from-cyan-400 to-cyan-600 rounded-full transition-all duration-1000" :style="{ width: mounted ? `${Math.min(((moduleComparison.dental?.patients || 0) / Math.max((moduleComparison.derma?.patients || 0) + (moduleComparison.dental?.patients || 0) + (moduleComparison.pediatric?.patients || 0), 1)) * 100, 100)}%` : '0%' }"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="text-xs font-medium text-gray-600 flex items-center gap-1.5">
+                                        <span class="w-2.5 h-2.5 rounded-full bg-green-500"></span>
+                                        {{ isRtl ? 'أطفال' : 'Pediatric' }}
+                                    </span>
+                                    <span class="text-xs font-bold text-gray-900">{{ moduleComparison.pediatric?.patients || 0 }}</span>
+                                </div>
+                                <div class="h-2.5 bg-gray-100 rounded-full overflow-hidden">
+                                    <div class="h-full bg-gradient-to-r from-green-400 to-green-600 rounded-full transition-all duration-1000" :style="{ width: mounted ? `${Math.min(((moduleComparison.pediatric?.patients || 0) / Math.max((moduleComparison.derma?.patients || 0) + (moduleComparison.dental?.patients || 0) + (moduleComparison.pediatric?.patients || 0), 1)) * 100, 100)}%` : '0%' }"></div>
                                 </div>
                             </div>
                         </div>

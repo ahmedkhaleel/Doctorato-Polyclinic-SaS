@@ -105,7 +105,7 @@ const previewText = computed(() => {
     text = text.replace(/\{service\}/g, 'Skin Consultation');
     text = text.replace(/\{date\}/g, '2026-04-15');
     text = text.replace(/\{time\}/g, '10:30 AM');
-    text = text.replace(/\{clinic_name\}/g, 'Aura Derma Clinic');
+    text = text.replace(/\{clinic_name\}/g, 'Doctorato Polyclinic');
     text = text.replace(/\{clinic_phone\}/g, '+966 XX XXX XXXX');
     return text;
 });

@@ -118,6 +118,10 @@ class DoctorNotificationController extends BaseDoctorController
             'dental_appointment_reminder' => $data['patient_name'] ?? 'Dental Appointment',
             'dental_plan_due' => $data['patient_name'] ?? 'Treatment Plan Due',
             'dental_followup_reminder' => $data['patient_name'] ?? 'Follow-up Needed',
+            'pediatric_vaccination_due' => $data['patient_name'] ?? 'Vaccination Due',
+            'pediatric_vaccination_overdue' => $data['patient_name'] ?? 'Vaccination Overdue',
+            'pediatric_growth_alert' => $data['patient_name'] ?? 'Growth Alert',
+            'pediatric_milestone_alert' => $data['patient_name'] ?? 'Milestone Alert',
             default => $data['message'] ?? 'Notification',
         };
     }
@@ -132,6 +136,10 @@ class DoctorNotificationController extends BaseDoctorController
             'dental_appointment_reminder' => $data['message'] ?? ('Dental appointment today: ' . ($data['patient_name'] ?? '')),
             'dental_plan_due' => $data['message'] ?? ('Treatment plan ' . ($data['reason'] ?? 'due') . ': ' . ($data['plan_title'] ?? '')),
             'dental_followup_reminder' => $data['message'] ?? ('Follow-up needed: ' . ($data['treatment_type'] ?? 'treatment') . ' for ' . ($data['patient_name'] ?? '')),
+            'pediatric_vaccination_due' => ($data['vaccination_count'] ?? 0) . ' vaccination(s) upcoming: ' . ($data['vaccine_names'] ?? ''),
+            'pediatric_vaccination_overdue' => '⚠ ' . ($data['vaccination_count'] ?? 0) . ' vaccination(s) overdue: ' . ($data['vaccine_names'] ?? ''),
+            'pediatric_growth_alert' => $data['message'] ?? 'Growth measurement outside normal range',
+            'pediatric_milestone_alert' => ($data['delayed_count'] ?? 0) . ' developmental milestone(s) delayed',
             default => $data['message'] ?? '',
         };
     }
@@ -145,6 +153,9 @@ class DoctorNotificationController extends BaseDoctorController
             'dental_appointment_reminder' => isset($data['visit_id']) ? '/doctor/visits/' . $data['visit_id'] : '/doctor/visits',
             'dental_plan_due' => isset($data['plan_id']) ? '/doctor/dental/treatment-plans/' . $data['plan_id'] : '/doctor/dental/treatment-plans',
             'dental_followup_reminder' => isset($data['patient_id']) ? '/doctor/patients/' . $data['patient_id'] : '/doctor/patients',
+            'pediatric_vaccination_due', 'pediatric_vaccination_overdue' => isset($data['patient_id']) ? '/doctor/pediatric/patients/' . $data['patient_id'] . '?tab=vaccines' : '/doctor/pediatric/patients',
+            'pediatric_growth_alert' => isset($data['patient_id']) ? '/doctor/pediatric/patients/' . $data['patient_id'] . '?tab=growth' : '/doctor/pediatric/patients',
+            'pediatric_milestone_alert' => isset($data['patient_id']) ? '/doctor/pediatric/patients/' . $data['patient_id'] . '?tab=milestones' : '/doctor/pediatric/patients',
             default => '/doctor',
         };
     }

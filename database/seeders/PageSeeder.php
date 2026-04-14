@@ -18,16 +18,16 @@ class PageSeeder extends Seeder
                 'slug'       => 'about',
                 'title_ar'   => 'من نحن',
                 'title_en'   => 'About Us',
-                'content_ar' => '<p>أورا ديرما كلينك هي عيادة متخصصة في الأمراض الجلدية والتجميل والليزر، تأسست على يد د. أسماء حمدي الحاصلة على دكتوراه وزمالة الأمراض الجلدية والتجميل والليزر. نقدم في عيادتنا خدمات طبية وتجميلية متكاملة باستخدام أحدث الأجهزة والتقنيات العالمية المعتمدة.</p>
+                'content_ar' => '<p>دكتوراتو كلينك هي عيادة متخصصة في الأمراض الجلدية والتجميل والليزر، تأسست على يد د. أسماء حمدي الحاصلة على دكتوراه وزمالة الأمراض الجلدية والتجميل والليزر. نقدم في عيادتنا خدمات طبية وتجميلية متكاملة باستخدام أحدث الأجهزة والتقنيات العالمية المعتمدة.</p>
 <p>يضم فريقنا الطبي نخبة من أطباء الجلدية والتجميل ذوي الخبرة والكفاءة العالية، ونسعى دائماً لتقديم أفضل رعاية صحية لمرضانا في بيئة مريحة وآمنة. نؤمن بأن كل مريض يستحق عناية خاصة، لذلك نقدم بروتوكولات علاجية مخصصة تناسب كل حالة على حدة.</p>
 <p>تقع عيادتنا في موقع متميز في كايرو ميديكال سنتر بمدينة ٦ أكتوبر، ونعمل يومياً من الساعة 10 صباحاً حتى 10 مساءً لخدمة مرضانا.</p>',
-                'content_en' => '<p>Aura Derma Clinic is a specialized dermatology, aesthetics, and laser clinic founded by Dr. Asmaa Hamdy, who holds a Doctorate and Fellowship in Dermatology, Aesthetics & Laser. We provide comprehensive medical and cosmetic services using the latest internationally certified devices and technologies.</p>
+                'content_en' => '<p>Doctorato Polyclinic is a specialized dermatology, aesthetics, and laser clinic founded by Dr. Asmaa Hamdy, who holds a Doctorate and Fellowship in Dermatology, Aesthetics & Laser. We provide comprehensive medical and cosmetic services using the latest internationally certified devices and technologies.</p>
 <p>Our medical team includes elite dermatology and aesthetics doctors with extensive experience and high competence. We always strive to provide the best healthcare for our patients in a comfortable and safe environment. We believe every patient deserves special care, so we provide customized treatment protocols tailored to each individual case.</p>
 <p>Our clinic is conveniently located at Cairo Medical Center in 6th of October City, and we operate daily from 10:00 AM to 10:00 PM to serve our patients.</p>',
-                'seo_title_ar' => 'من نحن - أورا ديرما كلينك',
-                'seo_title_en' => 'About Us - Aura Derma Clinic',
-                'seo_desc_ar'  => 'تعرف على عيادة أورا ديرما كلينك المتخصصة في الأمراض الجلدية والتجميل والليزر في ٦ أكتوبر.',
-                'seo_desc_en'  => 'Learn about Aura Derma Clinic, specialized in dermatology, aesthetics, and laser in 6th of October City.',
+                'seo_title_ar' => 'من نحن - دكتوراتو كلينك',
+                'seo_title_en' => 'About Us - Doctorato Polyclinic',
+                'seo_desc_ar'  => 'تعرف على عيادة دكتوراتو كلينك المتخصصة في الأمراض الجلدية والتجميل والليزر في ٦ أكتوبر.',
+                'seo_desc_en'  => 'Learn about Doctorato Polyclinic, specialized in dermatology, aesthetics, and laser in 6th of October City.',
             ],
 
             // ── Privacy Policy ──────────────────────────────────────────
@@ -38,7 +38,7 @@ class PageSeeder extends Seeder
                 'content_ar' => '<p>آخر تحديث: مارس 2026</p>
 
 <h2>مقدمة</h2>
-<p>تلتزم عيادة أورا ديرما كلينك ("العيادة"، "نحن") بحماية خصوصية مرضاها وزوار موقعها الإلكتروني. توضح سياسة الخصوصية هذه كيفية جمع واستخدام وتخزين وحماية بياناتكم الشخصية والطبية عند استخدامكم لموقعنا الإلكتروني أو الاستفادة من خدماتنا العلاجية والتجميلية.</p>
+<p>تلتزم عيادة دكتوراتو كلينك ("العيادة"، "نحن") بحماية خصوصية مرضاها وزوار موقعها الإلكتروني. توضح سياسة الخصوصية هذه كيفية جمع واستخدام وتخزين وحماية بياناتكم الشخصية والطبية عند استخدامكم لموقعنا الإلكتروني أو الاستفادة من خدماتنا العلاجية والتجميلية.</p>
 <p>باستخدامكم لموقعنا أو حجز موعد لدينا، فإنكم توافقون على الممارسات الموضحة في هذه السياسة.</p>
 
 <h2>البيانات الشخصية التي نجمعها</h2>
@@ -136,7 +136,7 @@ class PageSeeder extends Seeder
                 'content_en' => '<p>Last Updated: March 2026</p>
 
 <h2>Introduction</h2>
-<p>Aura Derma Clinic ("the Clinic", "we", "us") is committed to protecting the privacy of our patients and website visitors. This Privacy Policy explains how we collect, use, store, and protect your personal and medical data when you use our website or avail of our medical and cosmetic services.</p>
+<p>Doctorato Polyclinic ("the Clinic", "we", "us") is committed to protecting the privacy of our patients and website visitors. This Privacy Policy explains how we collect, use, store, and protect your personal and medical data when you use our website or avail of our medical and cosmetic services.</p>
 <p>By using our website or booking an appointment with us, you consent to the practices described in this policy.</p>
 
 <h2>Personal Data We Collect</h2>
@@ -231,10 +231,10 @@ class PageSeeder extends Seeder
 <li>Phone: During working hours from 10:00 AM to 10:00 PM</li>
 <li>Email or the contact form on our website</li>
 </ul>',
-                'seo_title_ar' => 'سياسة الخصوصية - أورا ديرما كلينك',
-                'seo_title_en' => 'Privacy Policy - Aura Derma Clinic',
-                'seo_desc_ar'  => 'سياسة الخصوصية وحماية البيانات الشخصية والطبية في عيادة أورا ديرما كلينك للأمراض الجلدية والتجميل.',
-                'seo_desc_en'  => 'Privacy policy and protection of personal and medical data at Aura Derma Clinic for dermatology and aesthetics.',
+                'seo_title_ar' => 'سياسة الخصوصية - دكتوراتو كلينك',
+                'seo_title_en' => 'Privacy Policy - Doctorato Polyclinic',
+                'seo_desc_ar'  => 'سياسة الخصوصية وحماية البيانات الشخصية والطبية في عيادة دكتوراتو كلينك للأمراض الجلدية والتجميل.',
+                'seo_desc_en'  => 'Privacy policy and protection of personal and medical data at Doctorato Polyclinic for dermatology and aesthetics.',
             ],
 
             // ── Terms of Use ────────────────────────────────────────────
@@ -245,10 +245,10 @@ class PageSeeder extends Seeder
                 'content_ar' => '<p>آخر تحديث: مارس 2026</p>
 
 <h2>مقدمة</h2>
-<p>مرحبا بكم في الموقع الإلكتروني لعيادة أورا ديرما كلينك. باستخدامكم لهذا الموقع أو الاستفادة من خدماتنا، فإنكم توافقون على الالتزام بهذه الشروط والأحكام. يرجى قراءتها بعناية قبل استخدام الموقع أو حجز أي خدمة. إذا كنتم لا توافقون على أي من هذه الشروط، يرجى عدم استخدام الموقع.</p>
+<p>مرحبا بكم في الموقع الإلكتروني لعيادة دكتوراتو كلينك. باستخدامكم لهذا الموقع أو الاستفادة من خدماتنا، فإنكم توافقون على الالتزام بهذه الشروط والأحكام. يرجى قراءتها بعناية قبل استخدام الموقع أو حجز أي خدمة. إذا كنتم لا توافقون على أي من هذه الشروط، يرجى عدم استخدام الموقع.</p>
 
 <h2>الخدمات الطبية والتجميلية</h2>
-<p>تقدم عيادة أورا ديرما كلينك خدمات متخصصة في مجال الأمراض الجلدية والتجميل والليزر. يرجى مراعاة ما يلي:</p>
+<p>تقدم عيادة دكتوراتو كلينك خدمات متخصصة في مجال الأمراض الجلدية والتجميل والليزر. يرجى مراعاة ما يلي:</p>
 <ul>
 <li>جميع الخدمات الطبية والتجميلية تقدم تحت إشراف أطباء متخصصين ومرخصين</li>
 <li>نتائج العلاجات التجميلية قد تختلف من شخص لآخر حسب طبيعة البشرة والحالة الصحية</li>
@@ -290,7 +290,7 @@ class PageSeeder extends Seeder
 <ul>
 <li>النصوص والمقالات والمحتوى التثقيفي</li>
 <li>الصور والرسومات والتصاميم</li>
-<li>شعار أورا ديرما كلينك والعلامات التجارية</li>
+<li>شعار دكتوراتو كلينك والعلامات التجارية</li>
 <li>تصميم الموقع وواجهة المستخدم</li>
 </ul>
 <p>يحظر نسخ أو إعادة نشر أو توزيع أي محتوى من هذا الموقع دون إذن خطي مسبق من العيادة.</p>
@@ -314,7 +314,7 @@ class PageSeeder extends Seeder
 <p>تخضع هذه الشروط والأحكام لقوانين جمهورية مصر العربية وتفسر وفقا لها. أي نزاع ينشأ عن استخدام هذا الموقع أو الخدمات المقدمة يخضع للاختصاص القضائي للمحاكم المصرية المختصة.</p>
 
 <h2>التعديلات على الشروط والأحكام</h2>
-<p>تحتفظ عيادة أورا ديرما كلينك بحق تعديل هذه الشروط والأحكام في أي وقت. سيتم نشر أي تعديلات على هذه الصفحة ويعتبر استمراركم في استخدام الموقع بعد التعديل موافقة على الشروط الجديدة.</p>
+<p>تحتفظ عيادة دكتوراتو كلينك بحق تعديل هذه الشروط والأحكام في أي وقت. سيتم نشر أي تعديلات على هذه الصفحة ويعتبر استمراركم في استخدام الموقع بعد التعديل موافقة على الشروط الجديدة.</p>
 
 <h2>تواصل معنا</h2>
 <p>لأي استفسارات حول هذه الشروط والأحكام، يمكنكم التواصل معنا عبر:</p>
@@ -326,10 +326,10 @@ class PageSeeder extends Seeder
                 'content_en' => '<p>Last Updated: March 2026</p>
 
 <h2>Introduction</h2>
-<p>Welcome to the Aura Derma Clinic website. By using this website or availing of our services, you agree to comply with these Terms and Conditions. Please read them carefully before using the website or booking any service. If you do not agree to any of these terms, please do not use the website.</p>
+<p>Welcome to the Doctorato Polyclinic website. By using this website or availing of our services, you agree to comply with these Terms and Conditions. Please read them carefully before using the website or booking any service. If you do not agree to any of these terms, please do not use the website.</p>
 
 <h2>Medical and Cosmetic Services</h2>
-<p>Aura Derma Clinic provides specialized services in dermatology, aesthetics, and laser treatments. Please note the following:</p>
+<p>Doctorato Polyclinic provides specialized services in dermatology, aesthetics, and laser treatments. Please note the following:</p>
 <ul>
 <li>All medical and cosmetic services are provided under the supervision of specialized and licensed physicians</li>
 <li>Results of cosmetic treatments may vary from person to person depending on skin type and health condition</li>
@@ -371,7 +371,7 @@ class PageSeeder extends Seeder
 <ul>
 <li>Texts, articles, and educational content</li>
 <li>Photos, graphics, and designs</li>
-<li>Aura Derma Clinic logo and trademarks</li>
+<li>Doctorato Polyclinic logo and trademarks</li>
 <li>Website design and user interface</li>
 </ul>
 <p>Copying, republishing, or distributing any content from this website without prior written permission from the Clinic is prohibited.</p>
@@ -395,7 +395,7 @@ class PageSeeder extends Seeder
 <p>These Terms and Conditions are governed by and construed in accordance with the laws of the Arab Republic of Egypt. Any dispute arising from the use of this website or the services provided shall be subject to the jurisdiction of the competent Egyptian courts.</p>
 
 <h2>Amendments to Terms and Conditions</h2>
-<p>Aura Derma Clinic reserves the right to modify these Terms and Conditions at any time. Any amendments will be posted on this page, and your continued use of the website after modification constitutes acceptance of the new terms.</p>
+<p>Doctorato Polyclinic reserves the right to modify these Terms and Conditions at any time. Any amendments will be posted on this page, and your continued use of the website after modification constitutes acceptance of the new terms.</p>
 
 <h2>Contact Us</h2>
 <p>For any inquiries about these Terms and Conditions, you can contact us via:</p>
@@ -404,10 +404,10 @@ class PageSeeder extends Seeder
 <li>Phone: During working hours from 10:00 AM to 10:00 PM</li>
 <li>Email or the contact form on our website</li>
 </ul>',
-                'seo_title_ar' => 'الشروط والأحكام - أورا ديرما كلينك',
-                'seo_title_en' => 'Terms & Conditions - Aura Derma Clinic',
-                'seo_desc_ar'  => 'الشروط والأحكام الخاصة باستخدام موقع وخدمات عيادة أورا ديرما كلينك للأمراض الجلدية والتجميل.',
-                'seo_desc_en'  => 'Terms and conditions for using Aura Derma Clinic website and services for dermatology and aesthetics.',
+                'seo_title_ar' => 'الشروط والأحكام - دكتوراتو كلينك',
+                'seo_title_en' => 'Terms & Conditions - Doctorato Polyclinic',
+                'seo_desc_ar'  => 'الشروط والأحكام الخاصة باستخدام موقع وخدمات عيادة دكتوراتو كلينك للأمراض الجلدية والتجميل.',
+                'seo_desc_en'  => 'Terms and conditions for using Doctorato Polyclinic website and services for dermatology and aesthetics.',
             ],
 
             // ── Booking Policy ──────────────────────────────────────────
@@ -431,10 +431,10 @@ class PageSeeder extends Seeder
 <p>Please arrive at least 10 minutes before your appointment. Delays of more than 15 minutes may result in rescheduling based on availability.</p>
 <h3>Initial Consultation</h3>
 <p>During the first visit, the doctor will comprehensively evaluate your condition and develop a customized treatment plan. Please bring any relevant previous medical reports.</p>',
-                'seo_title_ar' => 'سياسة الحجز - أورا ديرما كلينك',
-                'seo_title_en' => 'Booking Policy - Aura Derma Clinic',
-                'seo_desc_ar'  => 'تعرف على سياسة حجز المواعيد في عيادة أورا ديرما كلينك.',
-                'seo_desc_en'  => 'Learn about the appointment booking policy at Aura Derma Clinic.',
+                'seo_title_ar' => 'سياسة الحجز - دكتوراتو كلينك',
+                'seo_title_en' => 'Booking Policy - Doctorato Polyclinic',
+                'seo_desc_ar'  => 'تعرف على سياسة حجز المواعيد في عيادة دكتوراتو كلينك.',
+                'seo_desc_en'  => 'Learn about the appointment booking policy at Doctorato Polyclinic.',
             ],
         ];
 

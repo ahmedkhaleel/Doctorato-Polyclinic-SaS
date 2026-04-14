@@ -104,7 +104,7 @@ function getDoctorGradient(index) {
                     </svg>
                 </div>
                 <div>
-                    <h1 class="text-2xl font-bold tracking-tight">AURA Derma Clinic</h1>
+                    <h1 class="text-2xl font-bold tracking-tight">Doctorato Polyclinic</h1>
                     <p class="text-sm text-slate-400">Patient Queue Display</p>
                 </div>
             </div>
@@ -219,7 +219,7 @@ function getDoctorGradient(index) {
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                 </div>
-                <h2 class="text-3xl font-bold text-white mb-2">Welcome to AURA Derma Clinic</h2>
+                <h2 class="text-3xl font-bold text-white mb-2">Welcome to Doctorato Polyclinic</h2>
                 <p class="text-lg text-slate-400">No patients in queue at the moment</p>
                 <p class="text-sm text-slate-500 mt-2">The queue will update automatically</p>
             </div>

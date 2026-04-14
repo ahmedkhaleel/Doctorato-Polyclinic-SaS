@@ -124,9 +124,9 @@ const homeUrl = computed(() => `/${locale.value}`);
                 {{ goHomeLabel }}
             </Link>
 
-            <!-- AURA Branding -->
+            <!-- Doctorato Branding -->
             <div class="mt-16">
-                <p class="text-sm text-gray-300 tracking-[0.3em] uppercase">AURA Derma</p>
+                <p class="text-sm text-gray-300 tracking-[0.3em] uppercase">Doctorato</p>
             </div>
         </div>
     </div>

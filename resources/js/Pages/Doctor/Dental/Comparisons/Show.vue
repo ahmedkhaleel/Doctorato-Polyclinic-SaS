@@ -42,18 +42,30 @@ onUnmounted(() => { document.removeEventListener('mousemove', onDrag); document.
 
 <template>
     <div class="max-w-4xl mx-auto space-y-6">
-        <div class="flex items-center gap-3 flex-wrap">
-            <Link href="/doctor/dental/comparisons" class="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center text-gray-400 hover:text-gray-600 transition">
-                <svg class="w-5 h-5 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
-            </Link>
-            <div>
-                <h1 class="text-2xl font-bold text-gray-800">{{ isRtl ? (comp.title_ar || comp.title_en || `#${comp.id}`) : (comp.title_en || comp.title_ar || `#${comp.id}`) }}</h1>
-                <span class="text-xs text-[#C4A265] font-medium">{{ categoryLabel(comp.category) }}</span>
+        <!-- Hero Header -->
+        <div class="dental-hero-enter relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6 sm:p-7">
+            <div class="absolute -top-12 ltr:-right-12 rtl:-left-12 w-48 h-48 bg-[#C4A265]/10 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-8 ltr:left-20 rtl:right-20 w-32 h-32 bg-purple-500/10 rounded-full blur-2xl"></div>
+
+            <div class="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <Link href="/doctor/dental/comparisons" class="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-sm flex items-center justify-center hover:bg-white/20 transition ring-1 ring-white/15">
+                        <svg class="w-5 h-5 text-white rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                    </Link>
+                    <div>
+                        <p class="text-[#C4A265]/80 text-xs font-semibold tracking-wider uppercase">{{ categoryLabel(comp.category) }}</p>
+                        <h1 class="text-xl sm:text-2xl font-bold text-white mt-0.5">{{ isRtl ? (comp.title_ar || comp.title_en || `#${comp.id}`) : (comp.title_en || comp.title_ar || `#${comp.id}`) }}</h1>
+                    </div>
+                </div>
+                <div v-if="comp.patient" class="bg-white/5 backdrop-blur-sm rounded-xl px-4 py-2.5 border border-white/10">
+                    <p class="text-xs text-gray-400">{{ isRtl ? 'المريض' : 'Patient' }}</p>
+                    <p class="text-sm font-semibold text-white">{{ comp.patient.full_name }}</p>
+                </div>
             </div>
         </div>
 
         <!-- View Modes -->
-        <div class="flex items-center justify-center gap-1 bg-white rounded-xl p-1 border border-gray-100 shadow-sm overflow-x-auto scrollbar-none">
+        <div class="dental-card-enter flex items-center justify-center gap-1 bg-white rounded-xl p-1 border border-gray-100 shadow-sm overflow-x-auto scrollbar-none" style="animation-delay:0.1s">
             <button v-for="mode in ['slider', 'side']" :key="mode" @click="viewMode = mode"
                 :class="viewMode === mode ? 'bg-[#C4A265] text-white shadow-md' : 'text-gray-500 hover:bg-gray-100'"
                 class="px-4 py-2 rounded-lg text-xs font-medium transition-all">
@@ -62,7 +74,7 @@ onUnmounted(() => { document.removeEventListener('mousemove', onDrag); document.
         </div>
 
         <!-- Slider -->
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
+        <div class="dental-card-enter bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden" style="animation-delay:0.15s">
             <div v-if="viewMode === 'slider'" ref="sliderRef" class="relative aspect-[4/3] overflow-hidden cursor-col-resize select-none" @mousedown="startDrag" @touchstart.prevent="startDrag">
                 <div class="absolute inset-0 bg-cover bg-center" :style="{ backgroundImage: `url(${comp.after_image_url})` }"></div>
                 <div class="absolute inset-0 bg-cover bg-center" :style="{ backgroundImage: `url(${comp.before_image_url})`, clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }"></div>
@@ -81,7 +93,7 @@ onUnmounted(() => { document.removeEventListener('mousemove', onDrag); document.
         </div>
 
         <!-- Details -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="dental-card-enter grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4" style="animation-delay:0.2s">
             <div class="bg-white rounded-xl p-3 sm:p-4 border border-gray-100 shadow-sm">
                 <p class="text-xs text-gray-400">{{ isRtl ? 'المريض' : 'Patient' }}</p>
                 <p class="text-sm font-semibold text-gray-800 mt-1">{{ comp.patient?.full_name || '-' }}</p>
@@ -108,3 +120,16 @@ onUnmounted(() => { document.removeEventListener('mousemove', onDrag); document.
         </div>
     </div>
 </template>
+
+<style>
+@keyframes dentalHeroEnter {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes dentalCardEnter {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+.dental-hero-enter { animation: dentalHeroEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.dental-card-enter { animation: dentalCardEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
+</style>

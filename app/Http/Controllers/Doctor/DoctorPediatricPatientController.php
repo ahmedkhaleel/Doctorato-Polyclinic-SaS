@@ -10,12 +10,31 @@ use App\Models\PediatricFamilyHistory;
 use App\Models\PediatricNutritionRecord;
 use App\Models\PediatricChronicCondition;
 use App\Models\PediatricScreeningTest;
+use App\Models\Setting;
 use App\Models\Visit;
+use App\Notifications\PediatricGrowthAlertNotification;
+use App\Services\WhoGrowthStandardsService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class DoctorPediatricPatientController extends BaseDoctorController
 {
+    /**
+     * Verify the doctor has a pediatric relationship with this patient.
+     */
+    private function authorizePatient(Request $request, Patient $patient): void
+    {
+        $doctorId = $this->doctorId($request);
+        $hasRelationship = Visit::where('doctor_id', $doctorId)
+            ->where('patient_id', $patient->id)
+            ->where('module', 'pediatric')
+            ->exists();
+
+        if (!$hasRelationship) {
+            abort(403, 'You do not have access to this patient\'s pediatric records.');
+        }
+    }
+
     public function index(Request $request)
     {
         $doctorId = $this->doctorId($request);
@@ -51,6 +70,7 @@ class DoctorPediatricPatientController extends BaseDoctorController
 
     public function show(Request $request, Patient $patient)
     {
+        $this->authorizePatient($request, $patient);
         $doctorId = $this->doctorId($request);
         $tab = $request->input('tab', 'overview');
 
@@ -148,6 +168,7 @@ class DoctorPediatricPatientController extends BaseDoctorController
      */
     public function storeGrowth(Request $request, Patient $patient)
     {
+        $this->authorizePatient($request, $patient);
         $validated = $request->validate([
             'measurement_date' => 'required|date',
             'weight_kg' => 'nullable|numeric|min:0|max:200',
@@ -165,7 +186,17 @@ class DoctorPediatricPatientController extends BaseDoctorController
             $validated['height_cm'] ?? null
         );
 
-        PediatricGrowthRecord::create([
+        // Calculate WHO z-scores & percentiles
+        $who = WhoGrowthStandardsService::calculateAll(
+            $ageMonths,
+            $patient->gender ?? 'male',
+            $validated['weight_kg'] ?? null,
+            $validated['height_cm'] ?? null,
+            $validated['head_circumference_cm'] ?? null,
+            $bmi
+        );
+
+        $record = PediatricGrowthRecord::create([
             'patient_id' => $patient->id,
             'doctor_id' => $this->doctorId($request),
             'measurement_date' => $validated['measurement_date'],
@@ -174,10 +205,78 @@ class DoctorPediatricPatientController extends BaseDoctorController
             'height_cm' => $validated['height_cm'],
             'head_circumference_cm' => $validated['head_circumference_cm'],
             'bmi' => $bmi,
+            'weight_percentile' => $who['weight_percentile'],
+            'height_percentile' => $who['height_percentile'],
+            'head_percentile' => $who['head_percentile'],
+            'bmi_percentile' => $who['bmi_percentile'],
+            'weight_zscore' => $who['weight_zscore'],
+            'height_zscore' => $who['height_zscore'],
+            'head_zscore' => $who['head_zscore'],
+            'bmi_zscore' => $who['bmi_zscore'],
             'notes' => $validated['notes'],
         ]);
 
+        $this->checkGrowthAlerts($request, $patient, $record);
+
         return redirect()->back()->with('success', $this->msg('Growth record saved', 'تم حفظ قياسات النمو'));
+    }
+
+    /**
+     * Update growth record.
+     */
+    public function updateGrowth(Request $request, Patient $patient, PediatricGrowthRecord $record)
+    {
+        $this->authorizePatient($request, $patient);
+        if ((int) $record->patient_id !== (int) $patient->id) abort(403);
+
+        $validated = $request->validate([
+            'measurement_date' => 'required|date',
+            'weight_kg' => 'nullable|numeric|min:0|max:200',
+            'height_cm' => 'nullable|numeric|min:0|max:250',
+            'head_circumference_cm' => 'nullable|numeric|min:0|max:80',
+            'notes' => 'nullable|string|max:500',
+        ]);
+
+        $ageMonths = $patient->date_of_birth
+            ? $patient->date_of_birth->diffInMonths($validated['measurement_date'])
+            : $record->age_months;
+
+        $bmi = PediatricGrowthRecord::calculateBmi(
+            $validated['weight_kg'] ?? null,
+            $validated['height_cm'] ?? null
+        );
+
+        // Recalculate WHO z-scores & percentiles
+        $who = WhoGrowthStandardsService::calculateAll(
+            $ageMonths,
+            $patient->gender ?? 'male',
+            $validated['weight_kg'] ?? null,
+            $validated['height_cm'] ?? null,
+            $validated['head_circumference_cm'] ?? null,
+            $bmi
+        );
+
+        $record->update([
+            'measurement_date' => $validated['measurement_date'],
+            'age_months' => $ageMonths,
+            'weight_kg' => $validated['weight_kg'],
+            'height_cm' => $validated['height_cm'],
+            'head_circumference_cm' => $validated['head_circumference_cm'],
+            'bmi' => $bmi,
+            'weight_percentile' => $who['weight_percentile'],
+            'height_percentile' => $who['height_percentile'],
+            'head_percentile' => $who['head_percentile'],
+            'bmi_percentile' => $who['bmi_percentile'],
+            'weight_zscore' => $who['weight_zscore'],
+            'height_zscore' => $who['height_zscore'],
+            'head_zscore' => $who['head_zscore'],
+            'bmi_zscore' => $who['bmi_zscore'],
+            'notes' => $validated['notes'],
+        ]);
+
+        $this->checkGrowthAlerts($request, $patient, $record);
+
+        return redirect()->back()->with('success', $this->msg('Growth record updated', 'تم تحديث قياسات النمو'));
     }
 
     /**
@@ -185,13 +284,14 @@ class DoctorPediatricPatientController extends BaseDoctorController
      */
     public function storeVaccination(Request $request, Patient $patient)
     {
+        $this->authorizePatient($request, $patient);
         $validated = $request->validate([
             'id' => 'nullable|integer|exists:pediatric_vaccinations,id',
             'vaccine_name' => 'required|string|max:255',
             'vaccine_name_ar' => 'nullable|string|max:255',
             'dose_number' => 'required|string|max:100',
             'scheduled_age' => 'nullable|string|max:100',
-            'given_date' => 'nullable|date',
+            'given_date' => 'nullable|date|before_or_equal:today',
             'batch_number' => 'nullable|string|max:100',
             'manufacturer' => 'nullable|string|max:255',
             'site_of_injection' => 'nullable|string|max:100',
@@ -259,6 +359,7 @@ class DoctorPediatricPatientController extends BaseDoctorController
      */
     public function storeAllergy(Request $request, Patient $patient)
     {
+        $this->authorizePatient($request, $patient);
         $validated = $request->validate([
             'allergy_type' => 'required|in:food,drug,environmental,insect,other',
             'allergen' => 'required|string|max:255',
@@ -270,6 +371,7 @@ class DoctorPediatricPatientController extends BaseDoctorController
 
         PediatricAllergy::create(array_merge($validated, [
             'patient_id' => $patient->id,
+            'doctor_id' => $this->doctorId($request),
         ]));
 
         return redirect()->back()->with('success', $this->msg('Allergy recorded', 'تم تسجيل الحساسية'));
@@ -280,6 +382,7 @@ class DoctorPediatricPatientController extends BaseDoctorController
      */
     public function initializeVaccinations(Request $request, Patient $patient)
     {
+        $this->authorizePatient($request, $patient);
         if (!$patient->date_of_birth) {
             return redirect()->back()->with('error', $this->msg('Patient date of birth is required', 'تاريخ ميلاد المريض مطلوب'));
         }
@@ -311,6 +414,7 @@ class DoctorPediatricPatientController extends BaseDoctorController
      */
     public function storeChronicCondition(Request $request, Patient $patient)
     {
+        $this->authorizePatient($request, $patient);
         $validated = $request->validate([
             'condition_type' => 'required|in:asthma,diabetes_type1,epilepsy,congenital_heart,anemia,kidney,genetic,other',
             'condition_name' => 'required|string|max:255',
@@ -320,6 +424,7 @@ class DoctorPediatricPatientController extends BaseDoctorController
 
         PediatricChronicCondition::create(array_merge($validated, [
             'patient_id' => $patient->id,
+            'doctor_id' => $this->doctorId($request),
         ]));
 
         return redirect()->back()->with('success', $this->msg('Chronic condition recorded', 'تم تسجيل المرض المزمن'));
@@ -330,6 +435,7 @@ class DoctorPediatricPatientController extends BaseDoctorController
      */
     public function storeNutrition(Request $request, Patient $patient)
     {
+        $this->authorizePatient($request, $patient);
         $validated = $request->validate([
             'feeding_type' => 'nullable|in:breastfed,formula,mixed',
             'feeds_per_day' => 'nullable|integer|min:0|max:20',
@@ -345,6 +451,7 @@ class DoctorPediatricPatientController extends BaseDoctorController
 
         PediatricNutritionRecord::create(array_merge($validated, [
             'patient_id' => $patient->id,
+            'doctor_id' => $this->doctorId($request),
             'age_months' => $ageMonths,
         ]));
 
@@ -356,6 +463,7 @@ class DoctorPediatricPatientController extends BaseDoctorController
      */
     public function storeScreening(Request $request, Patient $patient)
     {
+        $this->authorizePatient($request, $patient);
         $validated = $request->validate([
             'test_type' => 'required|in:mchat,vanderbilt_parent,vanderbilt_teacher,phq_a,vision,hearing',
             'test_date' => 'required|date',
@@ -423,5 +531,39 @@ class DoctorPediatricPatientController extends BaseDoctorController
         if ((int) $record->patient_id !== (int) $patient->id) abort(403);
         $record->delete();
         return redirect()->back()->with('success', $this->msg('Growth record removed', 'تم حذف قياسات النمو'));
+    }
+
+    /**
+     * Check growth record for alerts and notify the doctor.
+     */
+    private function checkGrowthAlerts(Request $request, Patient $patient, PediatricGrowthRecord $record): void
+    {
+        $lowP = (float) Setting::get('pediatric_growth_alert_low_percentile', 3);
+        $highP = (float) Setting::get('pediatric_growth_alert_high_percentile', 97);
+        $alerts = [];
+
+        if ($record->weight_percentile !== null && $record->weight_percentile < $lowP) {
+            $alerts[] = 'underweight';
+        }
+        if ($record->weight_percentile !== null && $record->weight_percentile > $highP) {
+            $alerts[] = 'overweight';
+        }
+        if ($record->height_percentile !== null && $record->height_percentile < $lowP) {
+            $alerts[] = 'stunted';
+        }
+        if ($record->head_percentile !== null && $record->head_percentile < $lowP) {
+            $alerts[] = 'microcephaly';
+        }
+
+        if (!empty($alerts)) {
+            try {
+                $doctor = auth('doctor')->user();
+                if ($doctor) {
+                    $doctor->notify(new PediatricGrowthAlertNotification($patient, $record, $alerts));
+                }
+            } catch (\Throwable $e) {
+                // Silently fail — notifications should not block the main flow
+            }
+        }
     }
 }

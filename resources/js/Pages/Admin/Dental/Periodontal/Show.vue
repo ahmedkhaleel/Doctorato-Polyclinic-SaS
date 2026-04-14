@@ -21,7 +21,6 @@ const props = defineProps({
 const selectedExamDate = ref(props.examDate || '');
 const selectedDoctor = ref('');
 const saving = ref(false);
-const mounted = ref(false);
 const activeQuadrant = ref('all');
 const showDoctorDropdown = ref(false);
 const doctorSearch = ref('');
@@ -86,7 +85,6 @@ function closeDropdowns(e) {
 }
 
 onMounted(() => {
-    setTimeout(() => { mounted.value = true; }, 50);
     document.addEventListener('click', closeDropdowns);
 });
 

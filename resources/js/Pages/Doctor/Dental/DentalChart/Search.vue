@@ -40,7 +40,7 @@ function openChart(patientId) {
 <template>
     <div class="max-w-4xl mx-auto py-6 px-4 sm:px-6">
         <!-- Hero Header -->
-        <div class="relative mb-8 rounded-2xl overflow-hidden bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f3460] p-5 sm:p-8 text-white shadow-xl">
+        <div class="dental-hero-enter relative mb-8 rounded-2xl overflow-hidden bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f3460] p-5 sm:p-8 text-white shadow-xl">
             <div class="absolute inset-0 opacity-10">
                 <svg class="w-full h-full" viewBox="0 0 400 200"><path d="M200,20 C180,20 170,40 165,60 C160,80 150,90 140,100 C130,110 120,130 120,150 C120,170 135,190 155,190 C170,190 180,180 185,170 C190,160 195,155 200,155 C205,155 210,160 215,170 C220,180 230,190 245,190 C265,190 280,170 280,150 C280,130 270,110 260,100 C250,90 240,80 235,60 C230,40 220,20 200,20Z" fill="currentColor" /></svg>
             </div>
@@ -51,7 +51,7 @@ function openChart(patientId) {
         </div>
 
         <!-- Search Box -->
-        <div class="relative mb-8">
+        <div class="dental-card-enter relative mb-8" style="animation-delay:0.1s">
             <div class="relative">
                 <svg class="absolute top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" :class="isRtl ? 'right-4' : 'left-4'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                 <input v-model="searchQuery" type="text"
@@ -66,7 +66,7 @@ function openChart(patientId) {
         </div>
 
         <!-- Search Results -->
-        <div v-if="patients.length > 0" class="mb-8">
+        <div v-if="patients.length > 0" class="dental-card-enter mb-8" style="animation-delay:0.15s">
             <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">{{ isRtl ? 'نتائج البحث' : 'Search Results' }}</h3>
             <div class="space-y-2">
                 <button v-for="patient in patients" :key="patient.id"
@@ -103,7 +103,7 @@ function openChart(patientId) {
         </div>
 
         <!-- Recent Charts / Quick Access -->
-        <div v-if="recentCharts.length > 0">
+        <div v-if="recentCharts.length > 0" class="dental-card-enter" style="animation-delay:0.2s">
             <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">{{ isRtl ? 'آخر المخططات المفتوحة' : 'Recent Charts' }}</h3>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <button v-for="rc in recentCharts" :key="rc.id"
@@ -123,7 +123,7 @@ function openChart(patientId) {
         </div>
 
         <!-- Empty State (no search, no recent) -->
-        <div v-if="!searchQuery && recentCharts.length === 0" class="text-center py-16">
+        <div v-if="!searchQuery && recentCharts.length === 0" class="dental-card-enter text-center py-16" style="animation-delay:0.15s">
             <div class="w-20 h-20 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-[#C4A265]/10 to-[#C4A265]/5 flex items-center justify-center">
                 <svg class="w-10 h-10 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3C10.5 3 9 4.5 8.5 6.5C8 8.5 7 9.5 6 10.5C5 11.5 4 13 4 15C4 17 5.5 19 7.5 19C9 19 10 18 10.5 17C11 16 11.5 15.5 12 15.5C12.5 15.5 13 16 13.5 17C14 18 15 19 16.5 19C18.5 19 20 17 20 15C20 13 19 11.5 18 10.5C17 9.5 16 8.5 15.5 6.5C15 4.5 13.5 3 12 3Z" /></svg>
             </div>
@@ -132,3 +132,16 @@ function openChart(patientId) {
         </div>
     </div>
 </template>
+
+<style>
+@keyframes dentalHeroEnter {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes dentalCardEnter {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+.dental-hero-enter { animation: dentalHeroEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.dental-card-enter { animation: dentalCardEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
+</style>

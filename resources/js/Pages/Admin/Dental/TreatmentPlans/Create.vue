@@ -2,6 +2,7 @@
 import { ref, computed, onMounted, onBeforeUnmount, watch, nextTick } from 'vue';
 import { Link, router, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import ConfirmModal from '@/Components/Admin/ConfirmModal.vue';
 import { useLocale } from '@/Composables/useLocale.js';
 import { useCurrency } from '@/Composables/useCurrency.js';
 
@@ -39,7 +40,6 @@ const errors = ref({});
 const processing = ref(false);
 const showTemplatePanel = ref(false);
 const selectedTemplateId = ref(null);
-const mounted = ref(false);
 const activeStep = ref(1);
 const templateFilter = ref('all');
 
@@ -97,7 +97,6 @@ function closeDropdowns(e) {
 }
 
 onMounted(() => {
-    setTimeout(() => { mounted.value = true; }, 50);
     document.addEventListener('click', closeDropdowns);
     const params = new URLSearchParams(window.location.search);
     const templateId = params.get('template_id');
@@ -197,24 +196,37 @@ const formProgress = computed(() => {
 });
 
 // ─── Template ──────────────────────────────────────
+const showReplaceModal = ref(false);
+const pendingTemplate = ref(null);
+
 function applyTemplate(template) {
     if (form.value.treatments.length > 0) {
-        if (!confirm(isRtl.value ? 'سيتم استبدال الإجراءات الحالية. متأكد؟' : 'Current procedures will be replaced. Continue?')) return;
+        pendingTemplate.value = template;
+        showReplaceModal.value = true;
+        return;
     }
-    selectedTemplateId.value = template.id;
-    form.value.template_id = template.id;
-    form.value.title_ar = template.name_ar;
-    form.value.title_en = template.name_en;
-    form.value.description = isRtl.value ? (template.description_ar || '') : (template.description_en || '');
-    form.value.estimated_sessions = template.estimated_sessions || 1;
-    form.value.priority = template.priority || 'normal';
-    form.value.notes = template.notes || '';
-    form.value.treatments = (template.treatments || []).map(tr => ({
+    executeApplyTemplate(template);
+}
+
+function executeApplyTemplate(template) {
+    const tpl = template || pendingTemplate.value;
+    if (!tpl) return;
+    selectedTemplateId.value = tpl.id;
+    form.value.template_id = tpl.id;
+    form.value.title_ar = tpl.name_ar;
+    form.value.title_en = tpl.name_en;
+    form.value.description = isRtl.value ? (tpl.description_ar || '') : (tpl.description_en || '');
+    form.value.estimated_sessions = tpl.estimated_sessions || 1;
+    form.value.priority = tpl.priority || 'normal';
+    form.value.notes = tpl.notes || '';
+    form.value.treatments = (tpl.treatments || []).map(tr => ({
         tooth_number: tr.tooth_number || '', treatment_type: tr.treatment_type || '',
         surfaces: tr.surfaces || '', description: tr.description || '',
         cost: tr.cost || '', lab_cost: tr.lab_cost || '',
     }));
     showTemplatePanel.value = false;
+    showReplaceModal.value = false;
+    pendingTemplate.value = null;
 }
 
 function submit() {
@@ -638,6 +650,18 @@ function submit() {
                 </div>
             </form>
         </div>
+
+        <!-- Replace Procedures Confirm Modal -->
+        <ConfirmModal
+            :show="showReplaceModal"
+            :title="isRtl ? 'استبدال الإجراءات' : 'Replace Procedures'"
+            :message="isRtl ? 'سيتم استبدال الإجراءات الحالية بإجراءات القالب. هل أنت متأكد؟' : 'Current procedures will be replaced with the template procedures. Are you sure?'"
+            :confirmText="isRtl ? 'استبدال' : 'Replace'"
+            :cancelText="isRtl ? 'إلغاء' : 'Cancel'"
+            confirmColor="cyan"
+            @confirm="executeApplyTemplate(null)"
+            @cancel="showReplaceModal = false; pendingTemplate = null"
+        />
     </AdminLayout>
 </template>
 

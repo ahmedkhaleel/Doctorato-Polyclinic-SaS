@@ -23,6 +23,7 @@ const props = defineProps({
     topServices: Array,
     recentBookings: Array,
     dental: Object,
+    pediatric: Object,
 });
 
 /* ── Helpers ─────────────────────────────────────────────── */
@@ -123,7 +124,7 @@ const revenueByModule = computed(() => {
                 amount: formatCurrency(amount),
                 rawAmount: amount,
                 percent: totalRevenue > 0 ? Math.round((amount / totalRevenue) * 100) : 0,
-                color: slug === 'derma' ? 'bg-pink-500' : slug === 'dental' ? 'bg-cyan-500' : 'bg-gray-400',
+                color: slug === 'derma' ? 'bg-pink-500' : slug === 'dental' ? 'bg-cyan-500' : slug === 'pediatric' ? 'bg-green-500' : 'bg-gray-400',
             };
         });
 });
@@ -853,6 +854,64 @@ function labelX(index, total) {
                         <p class="text-2xl font-bold text-emerald-600">{{ dental.lab_ready ?? 0 }}</p>
                         <p class="text-[11px] font-medium text-gray-500 mt-1">{{ $t('a_lab_ready') }}</p>
                     </Link>
+                </div>
+            </div>
+
+            <!-- ── Row 8: Pediatric Overview ─────────────────────── -->
+            <div v-if="pediatric" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
+                <div class="px-6 py-5 border-b border-gray-100 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-xl bg-green-50 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                        </div>
+                        <div>
+                            <h2 class="text-[15px] font-semibold text-gray-900">{{ isRtl ? 'نظرة عامة على طب الأطفال' : 'Pediatric Overview' }}</h2>
+                            <p class="text-xs text-gray-400 mt-0.5">{{ isRtl ? 'مؤشرات أداء طب الأطفال' : 'Pediatric KPIs' }}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <Link
+                            href="/admin/pediatric/dashboard"
+                            class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-semibold text-green-600 bg-green-50 hover:bg-green-100 transition-colors duration-200"
+                        >
+                            {{ isRtl ? 'لوحة التحكم' : 'Dashboard' }}
+                            <svg class="w-3.5 h-3.5 ltr:rotate-0 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                        </Link>
+                    </div>
+                </div>
+
+                <!-- KPI Grid -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 divide-x rtl:divide-x-reverse divide-gray-100">
+                    <!-- Patients -->
+                    <div class="px-4 py-5 text-center">
+                        <p class="text-2xl font-bold text-green-600">{{ pediatric.total_patients ?? 0 }}</p>
+                        <p class="text-[11px] font-medium text-gray-500 mt-1">{{ isRtl ? 'إجمالي المرضى' : 'Total Patients' }}</p>
+                    </div>
+                    <!-- Visits This Month -->
+                    <div class="px-4 py-5 text-center">
+                        <p class="text-2xl font-bold text-gray-800">{{ pediatric.visits_this_month ?? 0 }}</p>
+                        <p class="text-[11px] font-medium text-gray-500 mt-1">{{ isRtl ? 'زيارات الشهر' : 'Visits This Month' }}</p>
+                    </div>
+                    <!-- Vaccinations Due -->
+                    <Link href="/admin/pediatric/vaccinations" class="px-4 py-5 text-center hover:bg-gray-50/50 transition-colors">
+                        <p class="text-2xl font-bold text-amber-600">{{ pediatric.vaccinations_due ?? 0 }}</p>
+                        <p class="text-[11px] font-medium text-gray-500 mt-1">{{ isRtl ? 'تطعيمات مستحقة' : 'Vaccinations Due' }}</p>
+                    </Link>
+                    <!-- Growth Alerts -->
+                    <Link href="/admin/pediatric/growth" class="px-4 py-5 text-center hover:bg-gray-50/50 transition-colors">
+                        <p class="text-2xl font-bold" :class="(pediatric.growth_alerts ?? 0) > 0 ? 'text-red-600' : 'text-gray-400'">{{ pediatric.growth_alerts ?? 0 }}</p>
+                        <p class="text-[11px] font-medium text-gray-500 mt-1">{{ isRtl ? 'تنبيهات النمو' : 'Growth Alerts' }}</p>
+                    </Link>
+                    <!-- Revenue -->
+                    <div class="px-4 py-5 text-center">
+                        <p class="text-xl font-bold text-green-600">{{ formatCurrency(pediatric.revenue_this_month ?? 0) }}</p>
+                        <p class="text-[11px] font-medium text-gray-500 mt-1">{{ isRtl ? 'إيرادات الشهر' : 'Revenue This Month' }}</p>
+                    </div>
+                    <!-- Screening Pending -->
+                    <div class="px-4 py-5 text-center">
+                        <p class="text-2xl font-bold text-blue-600">{{ pediatric.screening_pending ?? 0 }}</p>
+                        <p class="text-[11px] font-medium text-gray-500 mt-1">{{ isRtl ? 'فحوصات معلقة' : 'Screening Pending' }}</p>
+                    </div>
                 </div>
             </div>
 

@@ -605,7 +605,7 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handleReportsKey
             </div>
             <div class="text-right">
                 <p class="text-xs text-gray-400">{{ new Date().toLocaleDateString(isRtl ? 'ar-SA' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' }) }}</p>
-                <p class="text-xs text-gray-400">Aura Derma Clinic</p>
+                <p class="text-xs text-gray-400">Doctorato Polyclinic</p>
             </div>
         </div>
     </div>

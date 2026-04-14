@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Notifications\DentalTreatmentPlanStatusNotification;
 use App\Services\AuditLogger;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -86,40 +87,44 @@ class DoctorDentalTreatmentPlanController extends BaseDoctorController
 
         $data = $request->validated();
 
-        $plan = DentalTreatmentPlan::create([
-            'patient_id' => $data['patient_id'],
-            'doctor_id' => $doctorId,
-            'title_ar' => $data['title_ar'] ?? null,
-            'title_en' => $data['title_en'] ?? null,
-            'description' => $data['description'] ?? null,
-            'estimated_cost' => $data['estimated_cost'] ?? 0,
-            'estimated_sessions' => $data['estimated_sessions'] ?? 1,
-            'priority' => $data['priority'] ?? 'normal',
-            'status' => 'draft',
-            'start_date' => $data['start_date'] ?? null,
-            'expected_end_date' => $data['expected_end_date'] ?? null,
-            'notes' => $data['notes'] ?? null,
-        ]);
+        $plan = DB::transaction(function () use ($data, $doctorId) {
+            $plan = DentalTreatmentPlan::create([
+                'patient_id' => $data['patient_id'],
+                'doctor_id' => $doctorId,
+                'title_ar' => $data['title_ar'] ?? null,
+                'title_en' => $data['title_en'] ?? null,
+                'description' => $data['description'] ?? null,
+                'estimated_cost' => $data['estimated_cost'] ?? 0,
+                'estimated_sessions' => $data['estimated_sessions'] ?? 1,
+                'priority' => $data['priority'] ?? 'normal',
+                'status' => 'draft',
+                'start_date' => $data['start_date'] ?? null,
+                'expected_end_date' => $data['expected_end_date'] ?? null,
+                'notes' => $data['notes'] ?? null,
+            ]);
 
-        if (!empty($data['treatments'])) {
-            foreach ($data['treatments'] as $treatment) {
-                DentalTreatment::create([
-                    'patient_id' => $data['patient_id'],
-                    'doctor_id' => $doctorId,
-                    'treatment_plan_id' => $plan->id,
-                    'tooth_number' => $treatment['tooth_number'] ?? null,
-                    'treatment_type' => $treatment['treatment_type'],
-                    'surfaces' => $treatment['surfaces'] ?? null,
-                    'description' => $treatment['description'] ?? null,
-                    'cost' => $treatment['cost'] ?? 0,
-                    'lab_cost' => $treatment['lab_cost'] ?? 0,
-                    'status' => 'planned',
-                ]);
+            if (!empty($data['treatments'])) {
+                foreach ($data['treatments'] as $treatment) {
+                    DentalTreatment::create([
+                        'patient_id' => $data['patient_id'],
+                        'doctor_id' => $doctorId,
+                        'treatment_plan_id' => $plan->id,
+                        'tooth_number' => $treatment['tooth_number'] ?? null,
+                        'treatment_type' => $treatment['treatment_type'],
+                        'surfaces' => $treatment['surfaces'] ?? null,
+                        'description' => $treatment['description'] ?? null,
+                        'cost' => $treatment['cost'] ?? 0,
+                        'lab_cost' => $treatment['lab_cost'] ?? 0,
+                        'status' => 'planned',
+                    ]);
+                }
+
+                $totalCost = $plan->treatments()->sum(DB::raw('cost + lab_cost'));
+                $plan->update(['estimated_cost' => $totalCost]);
             }
 
-            $totalCost = $plan->treatments()->sum(\DB::raw('cost + lab_cost'));
-            $plan->update(['estimated_cost' => $totalCost]);
-        }
+            return $plan;
+        });
 
         AuditLogger::log('created', $plan);
 

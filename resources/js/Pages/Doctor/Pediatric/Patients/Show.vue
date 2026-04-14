@@ -3,6 +3,7 @@ import { ref, computed, onMounted, watch } from 'vue';
 import { Link, usePage, useForm, router } from '@inertiajs/vue3';
 import DoctorLayout from '@/Layouts/DoctorLayout.vue';
 import SearchableSelect from '@/Components/Doctor/SearchableSelect.vue';
+import { getAgeDisplay } from '@/Composables/usePediatricAge';
 
 defineOptions({ layout: DoctorLayout });
 
@@ -64,21 +65,7 @@ function switchTab(key) {
 }
 
 // ── Age Display ──
-const ageDisplay = computed(() => {
-    const totalMonths = props.ageMonths || 0;
-    const years = Math.floor(totalMonths / 12);
-    const months = totalMonths % 12;
-    if (totalMonths < 24) {
-        return {
-            en: `${totalMonths} month${totalMonths !== 1 ? 's' : ''}${props.ageDays ? ` & ${props.ageDays} days` : ''}`,
-            ar: `${totalMonths} شهر${props.ageDays ? ` و ${props.ageDays} يوم` : ''}`,
-        };
-    }
-    return {
-        en: `${years} year${years !== 1 ? 's' : ''} & ${months} month${months !== 1 ? 's' : ''}`,
-        ar: `${years === 2 ? 'عامين' : years + ' سنوات'} و ${months} ${months <= 2 ? 'شهر' : 'أشهر'}`,
-    };
-});
+const ageDisplay = computed(() => getAgeDisplay(props.ageMonths, props.ageDays));
 
 // ── Overview Computed ──
 const latestGrowth = computed(() => {
@@ -91,7 +78,7 @@ const upcomingVaccinations = computed(() => {
 });
 
 const activeAllergies = computed(() => {
-    return (props.allergies || []).filter(a => a.status === 'active' || !a.status);
+    return (props.allergies || []).filter(a => a.is_active === true || a.is_active === 1 || a.is_active === undefined);
 });
 
 // ── Growth Form ──
@@ -407,6 +394,18 @@ const bmi = computed(() => {
     const h = latestGrowth.value.height_cm / 100;
     return (latestGrowth.value.weight_kg / (h * h)).toFixed(1);
 });
+
+// ── WHO Percentile color helpers ──
+const percentileColor = (p) => {
+    if (p >= 15 && p <= 85) return 'bg-emerald-500';
+    if (p >= 5 && p <= 95) return 'bg-amber-500';
+    return 'bg-red-500';
+};
+const percentileTextColor = (p) => {
+    if (p >= 15 && p <= 85) return 'text-emerald-600 dark:text-emerald-400';
+    if (p >= 5 && p <= 95) return 'text-amber-600 dark:text-amber-400';
+    return 'text-red-600 dark:text-red-400';
+};
 </script>
 
 <template>
@@ -531,7 +530,7 @@ const bmi = computed(() => {
                     </a>
                 </div>
 
-                <!-- Quick Stats -->
+                <!-- Quick Stats with WHO Percentiles -->
                 <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
                     <div class="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700 shadow-sm">
                         <p class="text-xs text-gray-500 dark:text-gray-400">{{ isRtl ? 'العمر' : 'Age' }}</p>
@@ -544,22 +543,38 @@ const bmi = computed(() => {
                         <p class="text-lg font-bold text-gray-900 dark:text-white mt-1">
                             {{ latestGrowth?.weight_kg ? latestGrowth.weight_kg + ' kg' : '--' }}
                         </p>
+                        <div v-if="latestGrowth?.weight_percentile" class="flex items-center gap-1 mt-1">
+                            <span class="inline-block w-2 h-2 rounded-full" :class="percentileColor(latestGrowth.weight_percentile)"></span>
+                            <span class="text-[10px] font-semibold" :class="percentileTextColor(latestGrowth.weight_percentile)">P{{ latestGrowth.weight_percentile }}</span>
+                        </div>
                     </div>
                     <div class="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700 shadow-sm">
                         <p class="text-xs text-gray-500 dark:text-gray-400">{{ isRtl ? 'الطول' : 'Height' }}</p>
                         <p class="text-lg font-bold text-gray-900 dark:text-white mt-1">
                             {{ latestGrowth?.height_cm ? latestGrowth.height_cm + ' cm' : '--' }}
                         </p>
+                        <div v-if="latestGrowth?.height_percentile" class="flex items-center gap-1 mt-1">
+                            <span class="inline-block w-2 h-2 rounded-full" :class="percentileColor(latestGrowth.height_percentile)"></span>
+                            <span class="text-[10px] font-semibold" :class="percentileTextColor(latestGrowth.height_percentile)">P{{ latestGrowth.height_percentile }}</span>
+                        </div>
                     </div>
                     <div class="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700 shadow-sm">
                         <p class="text-xs text-gray-500 dark:text-gray-400">{{ isRtl ? 'محيط الرأس' : 'Head Circ.' }}</p>
                         <p class="text-lg font-bold text-gray-900 dark:text-white mt-1">
                             {{ latestGrowth?.head_circumference_cm ? latestGrowth.head_circumference_cm + ' cm' : '--' }}
                         </p>
+                        <div v-if="latestGrowth?.head_percentile" class="flex items-center gap-1 mt-1">
+                            <span class="inline-block w-2 h-2 rounded-full" :class="percentileColor(latestGrowth.head_percentile)"></span>
+                            <span class="text-[10px] font-semibold" :class="percentileTextColor(latestGrowth.head_percentile)">P{{ latestGrowth.head_percentile }}</span>
+                        </div>
                     </div>
                     <div class="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700 shadow-sm">
                         <p class="text-xs text-gray-500 dark:text-gray-400">BMI</p>
                         <p class="text-lg font-bold text-gray-900 dark:text-white mt-1">{{ bmi || '--' }}</p>
+                        <div v-if="latestGrowth?.bmi_percentile" class="flex items-center gap-1 mt-1">
+                            <span class="inline-block w-2 h-2 rounded-full" :class="percentileColor(latestGrowth.bmi_percentile)"></span>
+                            <span class="text-[10px] font-semibold" :class="percentileTextColor(latestGrowth.bmi_percentile)">P{{ latestGrowth.bmi_percentile }}</span>
+                        </div>
                     </div>
                 </div>
 
@@ -725,16 +740,25 @@ const bmi = computed(() => {
                                         <span v-if="idx === 0" class="text-[10px] text-emerald-600 font-medium mx-1">{{ isRtl ? 'الأحدث' : 'Latest' }}</span>
                                     </td>
                                     <td class="px-4 py-3 font-medium text-gray-900 dark:text-white">
-                                        {{ record.weight_kg ? record.weight_kg + ' kg' : '--' }}
-                                        <span v-if="record.weight_percentile" class="inline-block w-2 h-2 rounded-full mx-1" :class="record.weight_percentile >= 15 && record.weight_percentile <= 85 ? 'bg-emerald-500' : record.weight_percentile >= 5 && record.weight_percentile <= 95 ? 'bg-amber-500' : 'bg-red-500'"></span>
+                                        <div>{{ record.weight_kg ? record.weight_kg + ' kg' : '--' }}</div>
+                                        <div v-if="record.weight_percentile" class="flex items-center gap-1 mt-0.5">
+                                            <span class="inline-block w-2 h-2 rounded-full" :class="record.weight_percentile >= 15 && record.weight_percentile <= 85 ? 'bg-emerald-500' : record.weight_percentile >= 5 && record.weight_percentile <= 95 ? 'bg-amber-500' : 'bg-red-500'"></span>
+                                            <span class="text-[10px] font-medium" :class="record.weight_percentile >= 15 && record.weight_percentile <= 85 ? 'text-emerald-600 dark:text-emerald-400' : record.weight_percentile >= 5 && record.weight_percentile <= 95 ? 'text-amber-600 dark:text-amber-400' : 'text-red-600 dark:text-red-400'">P{{ record.weight_percentile }}</span>
+                                        </div>
                                     </td>
                                     <td class="px-4 py-3 font-medium text-gray-900 dark:text-white">
-                                        {{ record.height_cm ? record.height_cm + ' cm' : '--' }}
-                                        <span v-if="record.height_percentile" class="inline-block w-2 h-2 rounded-full mx-1" :class="record.height_percentile >= 15 && record.height_percentile <= 85 ? 'bg-emerald-500' : record.height_percentile >= 5 && record.height_percentile <= 95 ? 'bg-amber-500' : 'bg-red-500'"></span>
+                                        <div>{{ record.height_cm ? record.height_cm + ' cm' : '--' }}</div>
+                                        <div v-if="record.height_percentile" class="flex items-center gap-1 mt-0.5">
+                                            <span class="inline-block w-2 h-2 rounded-full" :class="record.height_percentile >= 15 && record.height_percentile <= 85 ? 'bg-emerald-500' : record.height_percentile >= 5 && record.height_percentile <= 95 ? 'bg-amber-500' : 'bg-red-500'"></span>
+                                            <span class="text-[10px] font-medium" :class="record.height_percentile >= 15 && record.height_percentile <= 85 ? 'text-emerald-600 dark:text-emerald-400' : record.height_percentile >= 5 && record.height_percentile <= 95 ? 'text-amber-600 dark:text-amber-400' : 'text-red-600 dark:text-red-400'">P{{ record.height_percentile }}</span>
+                                        </div>
                                     </td>
                                     <td class="px-4 py-3 font-medium text-gray-900 dark:text-white">
-                                        {{ record.head_circumference_cm ? record.head_circumference_cm + ' cm' : '--' }}
-                                        <span v-if="record.hc_percentile" class="inline-block w-2 h-2 rounded-full mx-1" :class="record.hc_percentile >= 15 && record.hc_percentile <= 85 ? 'bg-emerald-500' : record.hc_percentile >= 5 && record.hc_percentile <= 95 ? 'bg-amber-500' : 'bg-red-500'"></span>
+                                        <div>{{ record.head_circumference_cm ? record.head_circumference_cm + ' cm' : '--' }}</div>
+                                        <div v-if="record.head_percentile" class="flex items-center gap-1 mt-0.5">
+                                            <span class="inline-block w-2 h-2 rounded-full" :class="record.head_percentile >= 15 && record.head_percentile <= 85 ? 'bg-emerald-500' : record.head_percentile >= 5 && record.head_percentile <= 95 ? 'bg-amber-500' : 'bg-red-500'"></span>
+                                            <span class="text-[10px] font-medium" :class="record.head_percentile >= 15 && record.head_percentile <= 85 ? 'text-emerald-600 dark:text-emerald-400' : record.head_percentile >= 5 && record.head_percentile <= 95 ? 'text-amber-600 dark:text-amber-400' : 'text-red-600 dark:text-red-400'">P{{ record.head_percentile }}</span>
+                                        </div>
                                     </td>
                                     <td class="px-4 py-3 text-gray-500 dark:text-gray-400 text-xs max-w-[200px] truncate">{{ record.notes || '--' }}</td>
                                     <td class="px-4 py-3 text-center">

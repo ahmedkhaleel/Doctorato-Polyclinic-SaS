@@ -2,6 +2,7 @@
 import { ref, watch, computed } from 'vue';
 import { Link, router, usePage, useForm } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import ConfirmModal from '@/Components/Admin/ConfirmModal.vue';
 import { useLocale } from '@/Composables/useLocale.js';
 
 const { t } = useLocale();
@@ -108,10 +109,19 @@ function submitForm() {
     }
 }
 
-function deleteTemplate(tpl) {
-    if (confirm(locale.value === 'ar' ? 'هل أنت متأكد من الحذف؟' : 'Are you sure you want to delete this template?')) {
-        router.post(`/admin/dental/prescription-templates/${tpl.id}/delete`, { preserveScroll: true });
-    }
+const showDeleteConfirm = ref(false);
+const pendingDeleteTpl = ref(null);
+
+function confirmDeleteTemplate(tpl) {
+    pendingDeleteTpl.value = tpl;
+    showDeleteConfirm.value = true;
+}
+
+function executeDeleteTemplate() {
+    if (!pendingDeleteTpl.value) return;
+    router.post(`/admin/dental/prescription-templates/${pendingDeleteTpl.value.id}/delete`, { preserveScroll: true });
+    showDeleteConfirm.value = false;
+    pendingDeleteTpl.value = null;
 }
 
 const treatmentTypeLabels = {
@@ -232,7 +242,7 @@ const durations = [
                                         <button @click="openEdit(tpl)" class="text-cyan-600 hover:text-cyan-800 text-sm font-medium">
                                             {{ locale === 'ar' ? 'تعديل' : 'Edit' }}
                                         </button>
-                                        <button @click="deleteTemplate(tpl)" class="text-red-500 hover:text-red-700 text-sm font-medium">
+                                        <button @click="confirmDeleteTemplate(tpl)" class="text-red-500 hover:text-red-700 text-sm font-medium">
                                             {{ locale === 'ar' ? 'حذف' : 'Delete' }}
                                         </button>
                                     </div>
@@ -394,6 +404,17 @@ const durations = [
                 </div>
             </div>
         </Teleport>
+
+        <ConfirmModal
+            :show="showDeleteConfirm"
+            :title="locale === 'ar' ? 'حذف القالب' : 'Delete Template'"
+            :message="locale === 'ar' ? 'هل أنت متأكد من حذف هذا القالب؟' : 'Are you sure you want to delete this template?'"
+            :confirmText="locale === 'ar' ? 'حذف' : 'Delete'"
+            :cancelText="locale === 'ar' ? 'إلغاء' : 'Cancel'"
+            confirmColor="red"
+            @confirm="executeDeleteTemplate"
+            @cancel="showDeleteConfirm = false"
+        />
     </AdminLayout>
 </template>
 

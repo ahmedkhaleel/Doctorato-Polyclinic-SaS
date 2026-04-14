@@ -766,13 +766,13 @@ Route::middleware('admin.auth')->group(function () {
     Route::post('/dental/prescription-templates/{template}/delete', [DentalPrescriptionTemplateController::class, 'destroy'])->name('admin.dental.prescription-templates.destroy')->middleware(['module:dental', 'permission:dental.delete']);
 
     // ─── Pediatric Module ──────────────────────────────────────
-    Route::prefix('pediatric')->middleware('module:pediatric')->group(function () {
-        Route::get('/', [\App\Http\Controllers\Admin\AdminPediatricController::class, 'dashboard'])->name('admin.pediatric.dashboard');
-        Route::get('/patients', [\App\Http\Controllers\Admin\AdminPediatricController::class, 'patients'])->name('admin.pediatric.patients');
-        Route::get('/vaccinations', [\App\Http\Controllers\Admin\AdminPediatricController::class, 'vaccinations'])->name('admin.pediatric.vaccinations');
-        Route::get('/visits', [\App\Http\Controllers\Admin\AdminPediatricController::class, 'visits'])->name('admin.pediatric.visits');
-        Route::get('/growth', [\App\Http\Controllers\Admin\AdminPediatricController::class, 'growth'])->name('admin.pediatric.growth');
-    });
+    Route::get('/pediatric', [\App\Http\Controllers\Admin\AdminPediatricController::class, 'dashboard'])->name('admin.pediatric.dashboard')->middleware(['module:pediatric', 'permission:pediatric.view']);
+    Route::get('/pediatric/patients', [\App\Http\Controllers\Admin\AdminPediatricController::class, 'patients'])->name('admin.pediatric.patients')->middleware(['module:pediatric', 'permission:pediatric.view']);
+    Route::get('/pediatric/vaccinations', [\App\Http\Controllers\Admin\AdminPediatricController::class, 'vaccinations'])->name('admin.pediatric.vaccinations')->middleware(['module:pediatric', 'permission:pediatric.view']);
+    Route::get('/pediatric/visits', [\App\Http\Controllers\Admin\AdminPediatricController::class, 'visits'])->name('admin.pediatric.visits')->middleware(['module:pediatric', 'permission:pediatric.view']);
+    Route::get('/pediatric/growth', [\App\Http\Controllers\Admin\AdminPediatricController::class, 'growth'])->name('admin.pediatric.growth')->middleware(['module:pediatric', 'permission:pediatric.view']);
+    Route::get('/pediatric/settings', [\App\Http\Controllers\Admin\AdminPediatricController::class, 'settings'])->name('admin.pediatric.settings')->middleware(['module:pediatric', 'permission:pediatric.view']);
+    Route::post('/pediatric/settings', [\App\Http\Controllers\Admin\AdminPediatricController::class, 'updateSettings'])->name('admin.pediatric.settings.update')->middleware(['module:pediatric', 'permission:pediatric.view']);
 
     // ═══════════════════════════════════════════════════════════
     // ═══ SUPPLIERS & PURCHASE ORDERS ══════════════════════════

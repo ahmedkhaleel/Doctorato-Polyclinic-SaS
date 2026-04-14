@@ -40,7 +40,7 @@ class BookingController extends Controller
     {
         // Validate filter inputs
         $filters = $request->validate([
-            'module' => 'nullable|string|in:derma,dental',
+            'module' => 'nullable|string|in:derma,dental,pediatric',
             'status' => 'nullable|string|in:unconfirmed,confirmed,in_progress,completed,cancelled,new,contacted',
             'source' => 'nullable|string|in:website,secretary,walk_in,phone',
             'date_from' => 'nullable|date',

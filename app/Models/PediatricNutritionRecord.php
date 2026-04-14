@@ -4,13 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Traits\LogsActivity;
 
 class PediatricNutritionRecord extends Model
 {
-    use HasFactory;
+    use HasFactory, LogsActivity, SoftDeletes;
 
     protected $fillable = [
-        'patient_id', 'visit_id', 'age_months',
+        'patient_id', 'visit_id', 'doctor_id', 'age_months',
         'feeding_type', 'feeds_per_day', 'feed_duration_min',
         'formula_brand', 'formula_ml_per_feed',
         'complementary_start_age', 'introduced_foods',
@@ -35,5 +37,10 @@ class PediatricNutritionRecord extends Model
     public function visit()
     {
         return $this->belongsTo(Visit::class);
+    }
+
+    public function doctor()
+    {
+        return $this->belongsTo(Doctor::class);
     }
 }

@@ -34,7 +34,7 @@ class CrmSettingsController extends Controller
             'auto_assign_enabled'          => 'nullable|boolean',
             'auto_assign_method'           => 'nullable|string|in:round_robin,load_based',
             'default_lead_priority'        => 'nullable|integer|in:1,2,3',
-            'default_lead_module'          => 'nullable|string|in:derma,dental',
+            'default_lead_module'          => 'nullable|string|in:derma,dental,pediatric',
             'notify_on_new_lead'           => 'nullable|boolean',
             'notify_on_status_change'      => 'nullable|boolean',
             'notify_on_overdue_followup'   => 'nullable|boolean',

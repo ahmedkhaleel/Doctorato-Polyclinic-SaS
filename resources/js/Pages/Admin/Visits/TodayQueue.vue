@@ -21,7 +21,7 @@ const now = ref(new Date());
 const confirmingCancel = ref(null);
 const mounted = ref(false);
 const selectedDoctor = ref(null);
-const moduleFilter = ref('all'); // 'all' | 'dental' | 'dermatology'
+const moduleFilter = ref('all'); // 'all' | 'dental' | 'derma'
 let autoRefreshTimer = null;
 let clockTimer = null;
 
@@ -381,9 +381,9 @@ onUnmounted(() => {
                         <span class="text-[10px] opacity-70">({{ dentalCount }})</span>
                     </button>
                     <button
-                        @click="moduleFilter = 'dermatology'"
+                        @click="moduleFilter = 'derma'"
                         class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-full text-[11px] font-semibold border transition-all"
-                        :class="moduleFilter === 'dermatology' ? 'bg-pink-600 text-white border-pink-600' : 'bg-white text-pink-700 border-pink-200 hover:bg-pink-50'"
+                        :class="moduleFilter === 'derma' ? 'bg-pink-600 text-white border-pink-600' : 'bg-white text-pink-700 border-pink-200 hover:bg-pink-50'"
                     >
                         {{ $t('a_derma') }}
                         <span class="text-[10px] opacity-70">({{ dermaCount }})</span>

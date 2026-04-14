@@ -81,14 +81,22 @@ function submit() {
 <template>
     <AdminLayout :title="isRtl ? 'إضافة مقارنة' : 'Add Comparison'">
         <div class="max-w-4xl mx-auto space-y-6">
-            <!-- Header -->
-            <div class="flex items-center gap-3 dental-hero-enter">
-                <Link href="/admin/dental/comparisons" class="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center text-gray-400 hover:text-gray-600 hover:bg-gray-200 transition">
-                    <svg class="w-5 h-5 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
-                </Link>
-                <div>
-                    <h1 class="text-2xl font-bold text-gray-800">{{ isRtl ? 'إضافة مقارنة قبل / بعد' : 'Add Before & After Comparison' }}</h1>
-                    <p class="text-sm text-gray-500">{{ isRtl ? 'رفع صور قبل وبعد العلاج' : 'Upload before and after treatment photos' }}</p>
+            <!-- Hero Header -->
+            <div class="dental-hero-enter relative overflow-hidden rounded-2xl bg-gradient-to-br from-cyan-600 via-cyan-700 to-teal-800 p-6 sm:p-7">
+                <div class="absolute -top-12 ltr:-right-12 rtl:-left-12 w-48 h-48 bg-white/10 rounded-full blur-3xl"></div>
+                <div class="absolute -bottom-8 ltr:left-20 rtl:right-20 w-32 h-32 bg-teal-400/10 rounded-full blur-2xl"></div>
+
+                <div class="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <div class="flex items-center gap-3">
+                        <Link href="/admin/dental/comparisons" class="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-sm flex items-center justify-center hover:bg-white/20 transition ring-1 ring-white/15">
+                            <svg class="w-5 h-5 text-white rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                        </Link>
+                        <div>
+                            <p class="text-cyan-200/80 text-xs font-semibold tracking-wider uppercase">{{ isRtl ? 'مقارنة الصور' : 'Photo Comparison' }}</p>
+                            <h1 class="text-xl sm:text-2xl font-bold text-white mt-0.5">{{ isRtl ? 'إضافة مقارنة قبل / بعد' : 'Add Before & After' }}</h1>
+                            <p class="text-cyan-100/60 text-xs mt-0.5">{{ isRtl ? 'رفع صور قبل وبعد العلاج' : 'Upload before and after treatment photos' }}</p>
+                        </div>
+                    </div>
                 </div>
             </div>
 

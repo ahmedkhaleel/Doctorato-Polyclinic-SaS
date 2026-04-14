@@ -477,7 +477,7 @@ class LeadController extends Controller
         // Validate optional booking data
         $data = $request->validate([
             'create_booking' => 'nullable|boolean',
-            'booking_type' => 'required_if:create_booking,true|nullable|in:dermatology_consultation,cosmetic_consultation,dental_consultation,service,package_bundle',
+            'booking_type' => 'required_if:create_booking,true|nullable|in:dermatology_consultation,cosmetic_consultation,dental_consultation,pediatric_consultation,pediatric_service,service,package_bundle',
             'service_id' => 'nullable|exists:services,id',
             'doctor_id' => 'nullable|exists:doctors,id',
             'appointment_date' => 'required_if:create_booking,true|nullable|date|after_or_equal:today',

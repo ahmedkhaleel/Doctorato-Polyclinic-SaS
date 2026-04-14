@@ -26,11 +26,11 @@ class AdminManagerSeeder extends Seeder
 
         // Create the admin manager user
         User::updateOrCreate(
-            ['email' => 'manager@aura-clinic.net'],
+            ['email' => 'admin@doctorato.com'],
             [
                 'name' => 'Administrative Manager',
                 'username' => 'manager',
-                'email' => 'manager@aura-clinic.net',
+                'email' => 'admin@doctorato.com',
                 'password' => Hash::make('Manager@2026'),
                 'role_id' => $role->id,
                 'is_active' => true,

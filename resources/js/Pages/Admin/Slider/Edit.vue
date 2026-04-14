@@ -69,13 +69,13 @@ function submit() {
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_title_en') }}</label>
-                                <input v-model="form.title_en" type="text" placeholder="e.g. AURA Derma"
+                                <input v-model="form.title_en" type="text" placeholder="e.g. Doctorato"
                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
                                 <p v-if="form.errors.title_en" class="mt-1 text-sm text-red-600">{{ form.errors.title_en }}</p>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_title_ar') }}</label>
-                                <input v-model="form.title_ar" type="text" dir="rtl" placeholder="مثال: أورا ديرما"
+                                <input v-model="form.title_ar" type="text" dir="rtl" placeholder="مثال: دكتوراتو"
                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
                                 <p v-if="form.errors.title_ar" class="mt-1 text-sm text-red-600">{{ form.errors.title_ar }}</p>
                             </div>

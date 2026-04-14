@@ -1,7 +1,8 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { Link, router, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import ConfirmModal from '@/Components/Admin/ConfirmModal.vue';
 import { useLocale } from '@/Composables/useLocale.js';
 import { useCurrency } from '@/Composables/useCurrency.js';
 
@@ -69,23 +70,52 @@ const plannedTreatmentsCount = computed(() => props.plan.treatments?.filter(t =>
 
 const updatingStatus = ref(false);
 
-function updateStatus(newStatus) {
-    if (!window.confirm(t('a_confirm_status_change'))) return;
+// ─── Toast ──────────────────────────────────────────────
+const showSuccess = ref(false);
+const successMessage = ref('');
+const showError = ref(false);
+const errorMessage = ref('');
+watch(() => page.props.flash?.success, (msg) => {
+    if (msg) { successMessage.value = msg; showSuccess.value = true; setTimeout(() => { showSuccess.value = false; }, 4000); }
+});
+watch(() => page.props.flash?.error, (msg) => {
+    if (msg) { errorMessage.value = msg; showError.value = true; setTimeout(() => { showError.value = false; }, 5000); }
+});
+
+// ─── Confirm Modals ─────────────────────────────────────
+const showStatusModal = ref(false);
+const pendingStatus = ref(null);
+const showDeleteModal = ref(false);
+const showResendModal = ref(false);
+const pendingConsentId = ref(null);
+
+function confirmStatusChange(newStatus) {
+    pendingStatus.value = newStatus;
+    showStatusModal.value = true;
+}
+
+function executeStatusChange() {
+    if (!pendingStatus.value) return;
     updatingStatus.value = true;
+    showStatusModal.value = false;
     router.post(`/admin/dental/treatment-plans/${props.plan.id}/status`, {
-        status: newStatus,
+        status: pendingStatus.value,
     }, {
         preserveScroll: true,
         onFinish: () => {
             updatingStatus.value = false;
+            pendingStatus.value = null;
         },
     });
 }
 
-function deletePlan() {
-    if (window.confirm(t('a_confirm_delete'))) {
-        router.post(`/admin/dental/treatment-plans/${props.plan.id}/delete`);
-    }
+function confirmDelete() {
+    showDeleteModal.value = true;
+}
+
+function executeDelete() {
+    showDeleteModal.value = false;
+    router.post(`/admin/dental/treatment-plans/${props.plan.id}/delete`);
 }
 
 // ─── Consent ─────────────────────────────────────────────
@@ -136,36 +166,57 @@ function sendConsent() {
     });
 }
 
-function resendConsent(consentId) {
-    if (!window.confirm(locale.value === 'ar' ? 'إعادة إرسال طلب الموافقة؟' : 'Resend consent request?')) return;
-    router.post(`/admin/dental/consent/${consentId}/resend`, {}, { preserveScroll: true });
+function confirmResendConsent(consentId) {
+    pendingConsentId.value = consentId;
+    showResendModal.value = true;
+}
+
+function executeResendConsent() {
+    if (!pendingConsentId.value) return;
+    showResendModal.value = false;
+    router.post(`/admin/dental/consent/${pendingConsentId.value}/resend`, {}, { preserveScroll: true });
+    pendingConsentId.value = null;
 }
 </script>
 
 <template>
     <AdminLayout :title="$t('a_treatment_plan_details')">
         <div class="space-y-6">
-            <!-- Header -->
-            <div class="flex items-center justify-between">
-                <div>
-                    <h1 class="text-2xl font-bold text-gray-900">
-                        {{ locale === 'ar' ? (plan.title_ar || plan.title_en || `#${plan.id}`) : (plan.title_en || plan.title_ar || `#${plan.id}`) }}
-                    </h1>
-                    <p class="text-gray-500 text-sm mt-1">{{ $t('a_treatment_plan') }} #{{ plan.id }}</p>
-                </div>
-                <div class="flex items-center gap-2">
-                    <Link v-if="plan.patient" :href="`/admin/dental/chart/${plan.patient.id}`" class="inline-flex items-center px-3 py-2 text-sm font-medium text-cyan-600 bg-cyan-50 rounded-lg hover:bg-cyan-100 transition">
-                        {{ $t('a_dental_chart') }}
-                    </Link>
-                    <Link href="/admin/dental/treatment-plans" class="text-sm text-gray-500 hover:text-gray-700">
-                        {{ $t('a_back') }}
-                    </Link>
+            <!-- Hero Header -->
+            <div class="dental-hero-enter relative overflow-hidden rounded-2xl bg-gradient-to-br from-cyan-600 via-cyan-700 to-teal-800 p-6 sm:p-7">
+                <div class="absolute -top-12 ltr:-right-12 rtl:-left-12 w-48 h-48 bg-white/5 rounded-full blur-3xl"></div>
+                <div class="absolute -bottom-8 ltr:left-20 rtl:right-20 w-32 h-32 bg-cyan-400/10 rounded-full blur-2xl"></div>
+
+                <div class="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <div class="flex items-center gap-3">
+                        <Link href="/admin/dental/treatment-plans" class="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-sm flex items-center justify-center hover:bg-white/20 transition ring-1 ring-white/15">
+                            <svg class="w-5 h-5 text-white rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                        </Link>
+                        <div>
+                            <p class="text-cyan-200/80 text-xs font-semibold tracking-wider uppercase">{{ $t('a_treatment_plan') }} #{{ plan.id }}</p>
+                            <h1 class="text-xl sm:text-2xl font-bold text-white mt-0.5">
+                                {{ locale === 'ar' ? (plan.title_ar || plan.title_en || `#${plan.id}`) : (plan.title_en || plan.title_ar || `#${plan.id}`) }}
+                            </h1>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <Link v-if="plan.patient" :href="`/admin/dental/chart/${plan.patient.id}`"
+                            class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white/90 bg-white/10 backdrop-blur-sm rounded-xl hover:bg-white/20 border border-white/15 transition-all">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                            {{ $t('a_dental_chart') }}
+                        </Link>
+                        <a :href="`/admin/dental/treatment-plans/${plan.id}/pdf`" target="_blank"
+                            class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white/90 bg-white/10 backdrop-blur-sm rounded-xl hover:bg-white/20 border border-white/15 transition-all">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                            PDF
+                        </a>
+                    </div>
                 </div>
             </div>
 
             <!-- Plan Info + Progress -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border p-6 space-y-5">
+                <div class="dental-card-enter lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6 space-y-5" style="animation-delay: 0.1s">
                     <div class="flex items-start justify-between">
                         <div>
                             <span :class="[statusColors[plan.status] || 'bg-gray-100 text-gray-800', 'px-3 py-1 rounded-full text-sm font-medium']">
@@ -175,7 +226,7 @@ function resendConsent(consentId) {
                                 {{ $t('a_priority_' + (plan.priority || 'normal')) }}
                             </span>
                         </div>
-                        <button @click="deletePlan" class="text-gray-400 hover:text-red-500 transition p-1">
+                        <button @click="confirmDelete" class="text-gray-400 hover:text-red-500 transition p-1">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                             </svg>
@@ -238,13 +289,13 @@ function resendConsent(consentId) {
                 </div>
 
                 <!-- Status Actions -->
-                <div class="bg-white rounded-xl shadow-sm border p-6 space-y-4">
+                <div class="dental-card-enter bg-white rounded-xl shadow-sm border p-6 space-y-4" style="animation-delay:0.15s">
                     <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wider">{{ $t('a_actions') }}</h3>
 
                     <div class="space-y-2">
                         <button
                             v-if="plan.status === 'draft' || plan.status === 'pending'"
-                            @click="updateStatus('approved')"
+                            @click="confirmStatusChange('approved')"
                             :disabled="updatingStatus"
                             class="w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 disabled:opacity-50 transition"
                         >
@@ -252,7 +303,7 @@ function resendConsent(consentId) {
                         </button>
                         <button
                             v-if="plan.status === 'approved' && hasSignedConsent"
-                            @click="updateStatus('in_progress')"
+                            @click="confirmStatusChange('in_progress')"
                             :disabled="updatingStatus"
                             class="w-full px-4 py-2 text-sm font-medium text-white bg-cyan-600 rounded-lg hover:bg-cyan-700 disabled:opacity-50 transition"
                         >
@@ -266,7 +317,7 @@ function resendConsent(consentId) {
                         </div>
                         <button
                             v-if="plan.status === 'in_progress'"
-                            @click="updateStatus('completed')"
+                            @click="confirmStatusChange('completed')"
                             :disabled="updatingStatus"
                             class="w-full px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 disabled:opacity-50 transition"
                         >
@@ -274,7 +325,7 @@ function resendConsent(consentId) {
                         </button>
                         <button
                             v-if="plan.status !== 'completed' && plan.status !== 'cancelled'"
-                            @click="updateStatus('cancelled')"
+                            @click="confirmStatusChange('cancelled')"
                             :disabled="updatingStatus"
                             class="w-full px-4 py-2 text-sm font-medium text-red-600 bg-red-50 rounded-lg hover:bg-red-100 disabled:opacity-50 transition"
                         >
@@ -290,7 +341,7 @@ function resendConsent(consentId) {
             </div>
 
             <!-- Consent Section -->
-            <div class="bg-white rounded-xl shadow-sm border overflow-hidden">
+            <div class="dental-card-enter bg-white rounded-xl shadow-sm border overflow-hidden" style="animation-delay:0.2s">
                 <div class="px-6 py-4 border-b flex items-center justify-between">
                     <div class="flex items-center gap-3">
                         <div class="w-9 h-9 rounded-lg flex items-center justify-center"
@@ -486,7 +537,7 @@ function resendConsent(consentId) {
             </Teleport>
 
             <!-- Treatments with Visual Timeline -->
-            <div class="bg-white rounded-xl shadow-sm border overflow-hidden">
+            <div class="dental-card-enter bg-white rounded-xl shadow-sm border overflow-hidden" style="animation-delay:0.25s">
                 <div class="px-6 py-4 border-b flex items-center justify-between">
                     <h2 class="text-lg font-semibold text-gray-800">{{ $t('a_treatments') }}</h2>
                     <!-- Mini Status Summary -->
@@ -583,5 +634,84 @@ function resendConsent(consentId) {
                 </div>
             </div>
         </div>
+
+        <!-- Status Change Confirm Modal -->
+        <ConfirmModal
+            :show="showStatusModal"
+            :title="locale === 'ar' ? 'تأكيد تغيير الحالة' : 'Confirm Status Change'"
+            :message="locale === 'ar' ? 'هل أنت متأكد من تغيير حالة خطة العلاج؟' : 'Are you sure you want to change the treatment plan status?'"
+            :confirmText="locale === 'ar' ? 'تأكيد' : 'Confirm'"
+            :cancelText="locale === 'ar' ? 'إلغاء' : 'Cancel'"
+            confirmColor="cyan"
+            @confirm="executeStatusChange"
+            @cancel="showStatusModal = false"
+        />
+
+        <!-- Delete Confirm Modal -->
+        <ConfirmModal
+            :show="showDeleteModal"
+            :title="locale === 'ar' ? 'حذف خطة العلاج' : 'Delete Treatment Plan'"
+            :message="locale === 'ar' ? 'هل أنت متأكد من حذف خطة العلاج؟ سيتم حذف جميع العلاجات المرتبطة بها. لا يمكن التراجع عن هذا الإجراء.' : 'Are you sure you want to delete this treatment plan? All associated treatments will be removed. This action cannot be undone.'"
+            :confirmText="locale === 'ar' ? 'حذف' : 'Delete'"
+            :cancelText="locale === 'ar' ? 'إلغاء' : 'Cancel'"
+            confirmColor="red"
+            @confirm="executeDelete"
+            @cancel="showDeleteModal = false"
+        />
+
+        <!-- Resend Consent Confirm Modal -->
+        <ConfirmModal
+            :show="showResendModal"
+            :title="locale === 'ar' ? 'إعادة إرسال طلب الموافقة' : 'Resend Consent Request'"
+            :message="locale === 'ar' ? 'هل تريد إعادة إرسال طلب الموافقة للمريض؟' : 'Do you want to resend the consent request to the patient?'"
+            :confirmText="locale === 'ar' ? 'إعادة الإرسال' : 'Resend'"
+            :cancelText="locale === 'ar' ? 'إلغاء' : 'Cancel'"
+            confirmColor="cyan"
+            @confirm="executeResendConsent"
+            @cancel="showResendModal = false"
+        />
+
+        <!-- Success Toast -->
+        <Transition
+            enter-active-class="transition ease-out duration-300"
+            enter-from-class="translate-y-4 opacity-0"
+            enter-to-class="translate-y-0 opacity-100"
+            leave-active-class="transition ease-in duration-200"
+            leave-from-class="translate-y-0 opacity-100"
+            leave-to-class="translate-y-4 opacity-0"
+        >
+            <div v-if="showSuccess" class="fixed bottom-6 ltr:right-6 rtl:left-6 z-50 flex items-center gap-3 px-5 py-3 bg-emerald-600 text-white rounded-xl shadow-lg shadow-emerald-200/50">
+                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <span class="text-sm font-medium">{{ successMessage }}</span>
+            </div>
+        </Transition>
+
+        <!-- Error Toast -->
+        <Transition
+            enter-active-class="transition ease-out duration-300"
+            enter-from-class="translate-y-4 opacity-0"
+            enter-to-class="translate-y-0 opacity-100"
+            leave-active-class="transition ease-in duration-200"
+            leave-from-class="translate-y-0 opacity-100"
+            leave-to-class="translate-y-4 opacity-0"
+        >
+            <div v-if="showError" class="fixed bottom-6 ltr:right-6 rtl:left-6 z-50 flex items-center gap-3 px-5 py-3 bg-red-600 text-white rounded-xl shadow-lg shadow-red-200/50">
+                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <span class="text-sm font-medium">{{ errorMessage }}</span>
+            </div>
+        </Transition>
     </AdminLayout>
 </template>
+
+<style>
+@keyframes dentalHeroEnter {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes dentalCardEnter {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+.dental-hero-enter { animation: dentalHeroEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.dental-card-enter { animation: dentalCardEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
+</style>

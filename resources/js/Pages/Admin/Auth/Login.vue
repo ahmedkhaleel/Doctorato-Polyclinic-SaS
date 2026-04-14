@@ -42,9 +42,9 @@ function switchLocale() {
         <div class="w-full max-w-md">
             <!-- Logo -->
             <div class="text-center mb-8">
-                <img src="/images/logo/logo.png" alt="AURA Derma Clinic" class="mx-auto h-20 w-auto mb-3" />
-                <h1 class="text-4xl font-bold tracking-widest" style="color: #C4A265;">AURA</h1>
-                <p class="text-gray-400 text-sm uppercase tracking-widest mt-1">Derma Clinic</p>
+                <img src="/images/logo/logo.png" alt="Doctorato Polyclinic" class="mx-auto h-20 w-auto mb-3" />
+                <h1 class="text-4xl font-bold tracking-widest" style="color: var(--brand-primary);">Doctorato</h1>
+                <p class="text-gray-400 text-sm uppercase tracking-widest mt-1">Polyclinic</p>
             </div>
 
             <!-- Login Card -->
@@ -113,7 +113,7 @@ function switchLocale() {
                 </form>
             </div>
 
-            <p class="text-center text-gray-500 text-xs mt-6">AURA Derma Clinic Admin Panel</p>
+            <p class="text-center text-gray-500 text-xs mt-6">Doctorato Polyclinic Admin Panel</p>
         </div>
     </div>
 </template>

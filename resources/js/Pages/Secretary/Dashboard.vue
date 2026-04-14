@@ -15,6 +15,7 @@ const props = defineProps({
     pendingBookings: Array,
     recentPayments: Array,
     dental: Object,
+    pediatric: Object,
     medicalAlerts: Array,
     pendingFollowups: Array,
     overdueFollowups: Number,
@@ -726,6 +727,36 @@ const severityStyles = {
                         <p class="text-sm font-medium text-gray-400">{{ isRtl ? 'لا توجد مدفوعات مسجلة اليوم' : 'No payments recorded today' }}</p>
                         <p class="text-xs text-gray-300 mt-1">{{ isRtl ? 'ستظهر المدفوعات هنا عند معالجتها' : 'Payments will appear here as they are processed' }}</p>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Pediatric Overview ──────────────────────────── -->
+        <div v-if="pediatric" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gradient-to-r from-green-50/50 to-white">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-xl bg-green-50 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                    </div>
+                    <h2 class="text-sm font-bold text-gray-800">{{ isRtl ? 'ملخص طب الأطفال' : 'Pediatric Summary' }}</h2>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-4 divide-x rtl:divide-x-reverse divide-gray-100">
+                <div class="px-4 py-4 text-center">
+                    <p class="text-2xl font-bold text-green-600">{{ pediatric.total_patients ?? 0 }}</p>
+                    <p class="text-[10px] font-medium text-gray-500 mt-0.5">{{ isRtl ? 'المرضى' : 'Patients' }}</p>
+                </div>
+                <div class="px-4 py-4 text-center">
+                    <p class="text-2xl font-bold text-gray-800">{{ pediatric.visits_today ?? 0 }}</p>
+                    <p class="text-[10px] font-medium text-gray-500 mt-0.5">{{ isRtl ? 'زيارات اليوم' : 'Today Visits' }}</p>
+                </div>
+                <div class="px-4 py-4 text-center">
+                    <p class="text-2xl font-bold text-amber-600">{{ pediatric.vaccinations_due ?? 0 }}</p>
+                    <p class="text-[10px] font-medium text-gray-500 mt-0.5">{{ isRtl ? 'تطعيمات مستحقة' : 'Vacc. Due' }}</p>
+                </div>
+                <div class="px-4 py-4 text-center">
+                    <p class="text-2xl font-bold" :class="(pediatric.growth_alerts ?? 0) > 0 ? 'text-red-600' : 'text-gray-400'">{{ pediatric.growth_alerts ?? 0 }}</p>
+                    <p class="text-[10px] font-medium text-gray-500 mt-0.5">{{ isRtl ? 'تنبيهات نمو' : 'Growth Alerts' }}</p>
                 </div>
             </div>
         </div>

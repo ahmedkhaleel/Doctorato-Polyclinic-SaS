@@ -14,8 +14,8 @@ class HeroSlideSeeder extends Seeder
     {
         $slides = [
             [
-                'title_ar'       => 'عيادة أورا ديرما كلينك',
-                'title_en'       => 'Aura Derma Clinic',
+                'title_ar'       => 'عيادة دكتوراتو كلينك',
+                'title_en'       => 'Doctorato Polyclinic',
                 'subtitle_ar'    => 'للأمراض الجلدية والتجميل والليزر',
                 'subtitle_en'    => 'Dermatology, Aesthetics & Laser',
                 'description_ar' => 'نقدم أحدث تقنيات العناية بالبشرة والتجميل مع نخبة من أمهر الأطباء المتخصصين',

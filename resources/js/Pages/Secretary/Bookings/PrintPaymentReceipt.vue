@@ -100,10 +100,10 @@ onMounted(() => {
                 <div class="text-center mb-8 pb-6 border-b border-gray-200">
                     <img
                         src="/images/logo/logo.png"
-                        alt="AURA Derma Clinic"
+                        alt="Doctorato Polyclinic"
                         class="mx-auto h-20 mb-3 object-contain"
                     />
-                    <h1 class="text-xl font-bold text-gray-900 tracking-wide">{{ t('عيادة أورا ديرما', 'AURA Derma Clinic') }}</h1>
+                    <h1 class="text-xl font-bold text-gray-900 tracking-wide">{{ t('عيادة دكتوراتو', 'Doctorato Polyclinic') }}</h1>
                     <div class="mt-4 pt-3 border-t border-gray-100">
                         <h2 class="text-lg font-bold text-gray-800">{{ t('إيصال الدفع', 'Payment Receipt') }}</h2>
                         <p class="text-xs text-gray-400 mt-1">
