@@ -238,6 +238,7 @@
     "select_department": "Select Department",
     "department_derma_desc": "Skin care, cosmetics & dermatology treatments",
     "department_dental_desc": "Dental care, treatments & oral health",
+    "department_pediatric_desc": "Pediatric care, vaccinations & growth monitoring",
     "select_service_category": "Select Category",
     "all_services": "All Services",
     "no_services_in_category": "No services in this category",

@@ -238,6 +238,7 @@
     "select_department": "اختر القسم",
     "department_derma_desc": "العناية بالبشرة والتجميل وعلاج الأمراض الجلدية",
     "department_dental_desc": "العناية بالأسنان والعلاجات وصحة الفم",
+    "department_pediatric_desc": "رعاية صحة الأطفال والتطعيمات ومتابعة النمو",
     "select_service_category": "اختاري القسم",
     "all_services": "جميع الخدمات",
     "no_services_in_category": "لا توجد خدمات في هذا القسم",
