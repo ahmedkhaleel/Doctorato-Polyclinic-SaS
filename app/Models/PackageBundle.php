@@ -13,7 +13,7 @@ class PackageBundle extends Model
 
     protected $fillable = [
         'name_ar', 'name_en', 'description_ar', 'description_en',
-        'total_price', 'original_price', 'is_active', 'image', 'display_order',
+        'total_price', 'original_price', 'is_active', 'image', 'display_order', 'module',
     ];
 
     protected $casts = [

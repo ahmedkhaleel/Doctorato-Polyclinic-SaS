@@ -52,9 +52,10 @@ class HomeController extends Controller
         }
 
         $packageBundles = PackageBundle::active()
+            ->whereIn('module', $enabledMedical)
             ->with('services.service')
+            ->orderBy('module')
             ->orderBy('display_order')
-            ->limit(6)
             ->get();
 
         $testimonials = Testimonial::published()

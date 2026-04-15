@@ -89,6 +89,22 @@ let slideInterval = null;
 onMounted(() => { slideInterval = setInterval(nextSlide, 6000); });
 onUnmounted(() => { if (slideInterval) clearInterval(slideInterval); });
 
+// Package module filter
+const activePackageModule = ref('all');
+const filteredPackages = computed(() => {
+    if (activePackageModule.value === 'all') return props.packageBundles || [];
+    return (props.packageBundles || []).filter(b => b.module === activePackageModule.value);
+});
+
+// Module info for tabs
+const packageModules = computed(() => {
+    const modules = [...new Set((props.packageBundles || []).map(b => b.module))];
+    return modules.map(m => {
+        const spec = (props.medicalSpecialties || []).find(s => s.slug === m);
+        return { slug: m, name_ar: spec?.name_ar || m, name_en: spec?.name_en || m, color: spec?.color || '#C4A265' };
+    });
+});
+
 // Fallback images per module for specialties without service images
 const moduleImages = {
     derma: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=600&q=80',
@@ -484,65 +500,111 @@ const moduleImages = {
 
 
         <!-- ═══════════════════════════════════════ -->
-        <!-- PACKAGES                               -->
+        <!-- PACKAGES — Per Specialty               -->
         <!-- ═══════════════════════════════════════ -->
-        <section class="py-20 md:py-28 relative overflow-hidden" v-if="packageBundles && packageBundles.length">
-            <div class="absolute inset-0 bg-gradient-to-br from-[#1B365D] via-[#213f6b] to-[#1B365D]"></div>
-            <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(196,162,101,0.12)_0%,_transparent_50%)]"></div>
+        <section class="py-14 md:py-24 relative overflow-hidden" v-if="packageBundles && packageBundles.length">
+            <!-- Navy background with texture -->
+            <div class="absolute inset-0 bg-gradient-to-br from-[#0f2847] via-[#1B365D] to-[#264573]"></div>
+            <div class="absolute inset-0 opacity-[0.03]"
+                 style="background-image: radial-gradient(circle at 1px 1px, rgba(196,162,101,0.8) 1px, transparent 0); background-size: 30px 30px;"></div>
+            <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(196,162,101,0.08)_0%,_transparent_50%)]"></div>
+            <!-- Gold lines -->
+            <div class="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[#C4A265]/30 to-transparent"></div>
+            <div class="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[#C4A265]/30 to-transparent"></div>
 
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                <div class="text-center mb-16" v-scroll-reveal="{ type: 'fade-up' }">
+                <!-- Header -->
+                <div class="text-center mb-10 md:mb-14" v-scroll-reveal="{ type: 'fade-up' }">
                     <span class="inline-block px-4 py-1.5 rounded-full bg-[#C4A265]/10 border border-[#C4A265]/20 text-[#C4A265] text-xs font-semibold tracking-wider uppercase mb-4">
                         {{ t('packages') }}
                     </span>
-                    <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">{{ t('package_bundles_title') }}</h2>
-                    <p class="text-white/50 text-lg max-w-2xl mx-auto">{{ t('packages_hero_subtitle') }}</p>
+                    <h2 class="text-2xl sm:text-3xl lg:text-5xl font-bold text-white mb-3">{{ t('package_bundles_title') }}</h2>
+                    <div class="w-12 h-[2px] bg-[#C4A265]/50 mx-auto mb-4"></div>
+                    <p class="text-white/50 text-sm md:text-lg max-w-2xl mx-auto">{{ t('packages_hero_subtitle') }}</p>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8" v-scroll-reveal="{ type: 'stagger', staggerDelay: 150 }">
-                    <div v-for="bundle in packageBundles" :key="bundle.id"
-                         class="group bg-white/[0.06] backdrop-blur-sm rounded-2xl border border-white/10 overflow-hidden
-                                hover:border-[#C4A265]/30 transition-all duration-500 hover:shadow-xl hover:shadow-[#C4A265]/[0.08]">
-                        <div class="relative h-52 overflow-hidden">
-                            <img v-if="bundle.image_url" :src="bundle.image_url" :alt="localized(bundle, 'name')"
-                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                            <div v-else class="w-full h-full bg-gradient-to-br from-[#C4A265]/20 to-[#C4A265]/5 flex items-center justify-center">
-                                <svg class="w-16 h-16 text-[#C4A265]/30" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                                </svg>
-                            </div>
-                            <div class="absolute inset-0 bg-gradient-to-t from-[#1B365D]/80 via-transparent to-transparent"></div>
-                            <div v-if="Number(bundle.savings) > 0" class="absolute top-4 start-4 bg-green-500 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
-                                {{ t('save_amount') }} {{ formatCurrency(bundle.savings) }}
-                            </div>
-                            <div class="absolute bottom-4 start-4 flex items-center gap-1.5 bg-white/15 backdrop-blur-sm text-white text-xs font-medium px-3 py-1.5 rounded-full">
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                                </svg>
-                                {{ bundle.services?.length || 0 }} {{ t('services_included') }}
-                            </div>
-                        </div>
-                        <div class="p-6">
-                            <h3 class="text-lg font-bold text-white mb-2 group-hover:text-[#C4A265] transition-colors">{{ localized(bundle, 'name') }}</h3>
-                            <p v-if="localized(bundle, 'description')" class="text-white/40 text-sm mb-5 line-clamp-2">{{ localized(bundle, 'description') }}</p>
-                            <div class="flex items-end gap-3 mb-5">
-                                <span class="text-2xl font-bold text-[#C4A265]">{{ formatCurrency(bundle.total_price) }}</span>
-                                <span v-if="Number(bundle.original_price) > Number(bundle.total_price)" class="text-sm text-white/30 line-through pb-0.5 ms-auto">
-                                    {{ formatCurrency(bundle.original_price) }}
-                                </span>
-                            </div>
-                            <Link :href="localizedRoute(`/package-bundles/${bundle.id}`)"
-                                  class="block w-full text-center py-3 rounded-xl text-white font-semibold text-sm bg-[#C4A265] hover:bg-[#B3914F] transition-all duration-300">
-                                {{ t('view_package') }}
-                            </Link>
-                        </div>
-                    </div>
+                <!-- Module filter tabs -->
+                <div v-if="packageModules.length > 1" class="flex flex-wrap items-center justify-center gap-2 md:gap-3 mb-10">
+                    <button @click="activePackageModule = 'all'"
+                            class="px-4 md:px-5 py-2 rounded-lg text-xs md:text-sm font-semibold transition-all duration-300"
+                            :class="activePackageModule === 'all'
+                                ? 'bg-[#C4A265] text-[#1B365D] shadow-lg shadow-[#C4A265]/30'
+                                : 'bg-white/[0.06] text-white/60 border border-white/10 hover:bg-white/[0.1] hover:text-white'">
+                        {{ isRtl ? 'جميع الباقات' : 'All Packages' }}
+                    </button>
+                    <button v-for="mod in packageModules" :key="mod.slug"
+                            @click="activePackageModule = mod.slug"
+                            class="px-4 md:px-5 py-2 rounded-lg text-xs md:text-sm font-semibold transition-all duration-300"
+                            :class="activePackageModule === mod.slug
+                                ? 'bg-[#C4A265] text-[#1B365D] shadow-lg shadow-[#C4A265]/30'
+                                : 'bg-white/[0.06] text-white/60 border border-white/10 hover:bg-white/[0.1] hover:text-white'">
+                        {{ isRtl ? mod.name_ar : mod.name_en }}
+                    </button>
                 </div>
 
-                <div class="text-center mt-12" v-scroll-reveal="{ type: 'fade-up', delay: 200 }">
+                <!-- Package cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                    <TransitionGroup name="pkg-card">
+                        <div v-for="bundle in filteredPackages" :key="bundle.id"
+                             class="group bg-white/[0.05] backdrop-blur-sm rounded-xl md:rounded-2xl border border-white/[0.08]
+                                    overflow-hidden hover:border-[#C4A265]/25 transition-all duration-500
+                                    hover:shadow-xl hover:shadow-[#C4A265]/[0.06] hover:-translate-y-1">
+                            <!-- Top section -->
+                            <div class="p-5 md:p-6">
+                                <!-- Module badge + savings -->
+                                <div class="flex items-center justify-between mb-4">
+                                    <span class="px-2.5 py-1 rounded-full text-[10px] font-semibold bg-white/10 text-white/60">
+                                        {{ bundle.module === 'dental' ? (isRtl ? 'أسنان' : 'Dental') : bundle.module === 'pediatric' ? (isRtl ? 'أطفال' : 'Pediatric') : (isRtl ? 'جلدية' : 'Derma') }}
+                                    </span>
+                                    <span v-if="Number(bundle.savings) > 0"
+                                          class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-green-500/20 text-green-400">
+                                        {{ isRtl ? 'وفّر' : 'Save' }} {{ formatCurrency(bundle.savings) }}
+                                    </span>
+                                </div>
+
+                                <!-- Name -->
+                                <h3 class="text-base md:text-lg font-bold text-white mb-2 group-hover:text-[#C4A265] transition-colors leading-snug">
+                                    {{ localized(bundle, 'name') }}
+                                </h3>
+
+                                <!-- Description -->
+                                <p v-if="localized(bundle, 'description')" class="text-white/35 text-xs md:text-sm mb-5 line-clamp-2 leading-relaxed">
+                                    {{ localized(bundle, 'description') }}
+                                </p>
+
+                                <!-- Services count -->
+                                <div class="flex items-center gap-1.5 text-white/40 text-xs mb-5">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    {{ bundle.services?.length || 0 }} {{ isRtl ? 'خدمة متضمنة' : 'services included' }}
+                                </div>
+
+                                <!-- Pricing -->
+                                <div class="flex items-end gap-3 mb-5">
+                                    <span class="text-xl md:text-2xl font-bold text-[#C4A265]">{{ formatCurrency(bundle.total_price) }}</span>
+                                    <span v-if="Number(bundle.original_price) > Number(bundle.total_price)"
+                                          class="text-xs text-white/25 line-through pb-0.5">
+                                        {{ formatCurrency(bundle.original_price) }}
+                                    </span>
+                                </div>
+
+                                <!-- CTA -->
+                                <Link :href="localizedRoute(`/package-bundles/${bundle.id}`)"
+                                      class="block w-full text-center py-3 rounded-lg text-[#1B365D] font-bold text-sm
+                                             bg-[#C4A265] hover:bg-[#d4b87a] transition-all duration-300 shadow-md shadow-[#C4A265]/20">
+                                    {{ t('view_package') }}
+                                </Link>
+                            </div>
+                        </div>
+                    </TransitionGroup>
+                </div>
+
+                <!-- View all -->
+                <div class="text-center mt-10" v-scroll-reveal="{ type: 'fade-up', delay: 200 }">
                     <Link :href="localizedRoute('/package-bundles')"
-                          class="inline-flex items-center gap-2 px-8 py-3.5 border-2 border-[#C4A265] text-[#C4A265] font-semibold rounded-xl
-                                 hover:bg-[#C4A265] hover:text-white transition-all duration-300">
+                          class="inline-flex items-center gap-2 px-7 py-3 border border-[#C4A265]/40 text-[#C4A265] font-semibold rounded-lg
+                                 hover:bg-[#C4A265] hover:text-[#1B365D] transition-all duration-300 text-sm">
                         {{ t('view_all_packages') }}
                         <svg class="w-4 h-4" :class="{ 'rotate-180': isRtl }" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
@@ -731,4 +793,11 @@ const moduleImages = {
 .stats-orbit {
     animation: statsOrbit 35s linear infinite;
 }
+
+/* Package card transitions */
+.pkg-card-enter-active { transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+.pkg-card-leave-active { transition: all 0.3s ease-in; }
+.pkg-card-enter-from { opacity: 0; transform: translateY(20px) scale(0.95); }
+.pkg-card-leave-to { opacity: 0; transform: translateY(-10px) scale(0.95); }
+.pkg-card-move { transition: all 0.5s ease; }
 </style>
