@@ -52,7 +52,7 @@ class ModuleSettingController extends Controller
         } else {
             $result = ModuleManager::disable($module);
             if (!$result) {
-                return redirect()->back()->with('error', 'لا يمكن تعطيل القسم الأساسي');
+                return redirect()->back()->with('error', 'لا يمكن تعطيل آخر تخصص طبي فعّال — يجب أن يبقى تخصص واحد على الأقل');
             }
             AuditLogger::log('disabled', null, ['module' => $module], "Disabled module: {$module}");
         }

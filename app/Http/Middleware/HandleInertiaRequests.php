@@ -68,6 +68,7 @@ class HandleInertiaRequests extends Middleware
             ],
             'settings' => fn () => $this->getSettings(),
             'modules' => fn () => ModuleManager::getForFrontend(),
+            'defaultModule' => fn () => ModuleManager::getDefaultModule(),
             'notifications' => function () use ($request) {
                 if (!$request->user()) return null;
                 try {

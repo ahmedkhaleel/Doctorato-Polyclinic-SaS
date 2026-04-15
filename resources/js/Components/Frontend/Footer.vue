@@ -1,11 +1,12 @@
 <script setup>
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
 import { useLocale } from '@/Composables/useLocale';
 import { useSettings } from '@/Composables/useSettings';
-import { ref } from 'vue';
+import { computed } from 'vue';
 
 const { t, locale, isRtl, localizedRoute } = useLocale();
 const { phone1, phone2, email, facebook, instagram, tiktok, googleMaps, whatsappLink } = useSettings();
+const modules = computed(() => usePage().props.modules || {});
 
 const quickLinks = [
     { label: () => t('home'), route: '/' },
@@ -18,12 +19,31 @@ const quickLinks = [
     { label: () => t('contact'), route: '/contact' },
 ];
 
-const serviceLinks = [
-    { label: () => isRtl ? 'الجلدية والتجميل' : 'Dermatology', route: '/services?module=derma', icon: 'M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12' },
-    { label: () => isRtl ? 'طب الأسنان' : 'Dentistry', route: '/services?module=dental', icon: 'M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0' },
-    { label: () => isRtl ? 'طب الأطفال' : 'Pediatrics', route: '/services?module=pediatric', icon: 'M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z' },
-    { label: () => isRtl ? 'الحجز الإلكتروني' : 'Online Booking', route: '/booking', icon: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z' },
-];
+// Module icon mapping
+const moduleIcons = {
+    derma: 'M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12',
+    dental: 'M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0',
+    pediatric: 'M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z',
+};
+
+// Build service links dynamically from enabled modules
+const medicalSlugs = ['derma', 'dental', 'pediatric'];
+const serviceLinks = computed(() => {
+    const links = medicalSlugs
+        .filter(slug => modules.value[slug]?.enabled)
+        .map(slug => ({
+            label: () => isRtl ? modules.value[slug].name_ar : modules.value[slug].name_en,
+            route: `/services?module=${slug}`,
+            icon: moduleIcons[slug] || '',
+        }));
+    // Always add booking link
+    links.push({
+        label: () => isRtl ? 'الحجز الإلكتروني' : 'Online Booking',
+        route: '/booking',
+        icon: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2 2v12a2 2 0 002 2z',
+    });
+    return links;
+});
 
 const socialLinks = [
     { name: 'Facebook', href: facebook, icon: 'M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z' },

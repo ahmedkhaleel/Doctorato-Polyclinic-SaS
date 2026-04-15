@@ -98,7 +98,7 @@ const navGroups = computed(() => [
     },
 ]);
 
-const doctorModule = computed(() => doctor.value?.module || 'derma');
+const doctorModule = computed(() => doctor.value?.module || page.props.defaultModule || 'derma');
 
 const filteredGroups = computed(() =>
     navGroups.value.filter(g => {

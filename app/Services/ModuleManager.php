@@ -35,7 +35,7 @@ class ModuleManager
             'default_name_en' => 'Dermatology & Cosmetics',
             'icon' => 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z',
             'color' => '#8B5CF6',
-            'is_core' => true, // Cannot be disabled
+            'is_core' => false,
         ],
         'dental' => [
             'slug' => 'dental',
@@ -97,9 +97,8 @@ class ModuleManager
      */
     public static function isEnabled(string $module): bool
     {
-        // Core modules are always enabled
-        if (isset(self::MODULES[$module]) && self::MODULES[$module]['is_core']) {
-            return true;
+        if (!isset(self::MODULES[$module])) {
+            return false;
         }
 
         if (! self::tableExists()) {
@@ -144,8 +143,8 @@ class ModuleManager
                 'name_en' => $defaults['default_name_en'] ?? $module,
                 'icon' => $defaults['icon'] ?? 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4',
                 'color' => $defaults['color'] ?? '#6B7280',
-                'enabled' => $defaults['is_core'] ?? false,
-                'is_core' => $defaults['is_core'] ?? false,
+                'enabled' => false,
+                'is_core' => false,
             ];
         }
 
@@ -162,8 +161,8 @@ class ModuleManager
                 'name_en' => $settings['name_en'] ?? $defaults['default_name_en'] ?? $module,
                 'icon' => $settings['icon'] ?? $defaults['icon'] ?? 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4',
                 'color' => $settings['color'] ?? $defaults['color'] ?? '#6B7280',
-                'enabled' => ($settings['enabled'] ?? '0') === '1' || ($defaults['is_core'] ?? false),
-                'is_core' => $defaults['is_core'] ?? false,
+                'enabled' => ($settings['enabled'] ?? '0') === '1',
+                'is_core' => false,
             ];
         });
     }
@@ -203,11 +202,11 @@ class ModuleManager
     }
 
     /**
-     * Disable a module (cannot disable core modules)
+     * Disable a module — prevents disabling the last active medical module
      */
     public static function disable(string $module): bool
     {
-        if (!isset(self::MODULES[$module]) || self::MODULES[$module]['is_core']) {
+        if (!isset(self::MODULES[$module])) {
             return false;
         }
 
@@ -215,7 +214,14 @@ class ModuleManager
             return false;
         }
 
-        // Use updateOrInsert to handle modules that have no rows yet
+        // Prevent disabling the last active medical module
+        if (in_array($module, self::MEDICAL_MODULES)) {
+            $activeMedical = self::getActiveMedicalModules();
+            if (count($activeMedical) <= 1 && in_array($module, $activeMedical)) {
+                return false;
+            }
+        }
+
         DB::table('module_settings')->updateOrInsert(
             ['module' => $module, 'key' => 'enabled'],
             [
@@ -231,6 +237,30 @@ class ModuleManager
 
         self::clearCache($module);
         return true;
+    }
+
+    /**
+     * Get currently active medical modules
+     */
+    public static function getActiveMedicalModules(): array
+    {
+        $active = [];
+        foreach (self::MEDICAL_MODULES as $mod) {
+            if (self::isEnabled($mod)) {
+                $active[] = $mod;
+            }
+        }
+        return $active;
+    }
+
+    /**
+     * Get the default (first active) medical module slug.
+     * Used instead of hardcoding 'derma' as fallback.
+     */
+    public static function getDefaultModule(): string
+    {
+        $active = self::getActiveMedicalModules();
+        return $active[0] ?? 'derma'; // ultimate fallback
     }
 
     /**

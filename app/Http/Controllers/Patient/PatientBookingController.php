@@ -79,7 +79,7 @@ class PatientBookingController extends BasePatientController
         ]);
 
         // Auto-detect module from booking type
-        $module = $data['module'] ?? 'derma';
+        $module = $data['module'] ?? ModuleManager::getDefaultModule();
         if (in_array($data['booking_type'] ?? '', ['dental_consultation', 'dental_service'])) {
             $module = 'dental';
         }

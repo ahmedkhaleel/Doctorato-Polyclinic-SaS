@@ -117,36 +117,30 @@ const isPediatric = computed(() =>
     bookingType.value === 'pediatric_consultation' || bookingType.value === 'pediatric_service'
 );
 
+const defaultMod = computed(() => page.props.defaultModule || 'derma');
+
 const currentModule = computed(() => {
     if (isDental.value) return 'dental';
     if (isPediatric.value) return 'pediatric';
-    return 'derma';
+    return defaultMod.value;
 });
 
 const filteredServices = computed(() => {
-    if (isDental.value) return (props.services || []).filter(s => s.module === 'dental');
-    if (isPediatric.value) return (props.services || []).filter(s => s.module === 'pediatric');
-    return (props.services || []).filter(s => !s.module || s.module === 'derma');
+    const mod = currentModule.value;
+    return (props.services || []).filter(s => s.module === mod || (!s.module && mod === defaultMod.value));
 });
 
 const filteredServiceCategories = computed(() => {
     const mod = currentModule.value;
-    if (mod === 'dental' || mod === 'pediatric') {
-        return (props.serviceCategories || []).map(cat => ({
-            ...cat,
-            services: (cat.services || []).filter(s => s.module === mod)
-        })).filter(cat => cat.services.length > 0);
-    }
     return (props.serviceCategories || []).map(cat => ({
         ...cat,
-        services: (cat.services || []).filter(s => !s.module || s.module === 'derma')
+        services: (cat.services || []).filter(s => s.module === mod || (!s.module && mod === defaultMod.value))
     })).filter(cat => cat.services.length > 0);
 });
 
 const filteredDoctors = computed(() => {
-    if (isDental.value) return (props.doctors || []).filter(d => d.module === 'dental');
-    if (isPediatric.value) return (props.doctors || []).filter(d => d.module === 'pediatric');
-    return (props.doctors || []).filter(d => !d.module || d.module === 'derma');
+    const mod = currentModule.value;
+    return (props.doctors || []).filter(d => d.module === mod || (!d.module && mod === defaultMod.value));
 });
 
 function getConsultationFeeForDoctor(doctorId) {
