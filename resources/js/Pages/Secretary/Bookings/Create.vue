@@ -542,7 +542,12 @@ function submit() {
 /*  Step labels                                                        */
 /* ------------------------------------------------------------------ */
 
-const stepLabels = computed(() => [
+const stepLabels = computed(() => isRtl.value ? [
+    'اختر المريض',
+    isConsultation.value ? 'تفاصيل الكشف' : 'إضافة الخدمات',
+    'تحديد المواعيد',
+    'تأكيد',
+] : [
     'Select Patient',
     isConsultation.value ? 'Consultation Details' : 'Add Services',
     'Set Appointments',
@@ -671,7 +676,7 @@ const stepLabels = computed(() => [
                         <svg class="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                     </div>
                     <div class="flex-1">
-                        <p class="text-sm font-semibold text-teal-800">Follow-up Visit Detected</p>
+                        <p class="text-sm font-semibold text-teal-800">{{ isRtl ? 'تم اكتشاف زيارة متابعة' : 'Follow-up Visit Detected' }}</p>
                         <p class="text-xs text-teal-600 mt-0.5">
                             This patient had a dermatology consultation on {{ new Date(followUpInfo.last_visit_date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) }}.
                             The reduced follow-up fee of <span class="font-bold">{{ formatCurrency(props.followupFee) }}</span> has been auto-applied.
@@ -789,29 +794,29 @@ const stepLabels = computed(() => [
                     <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6">
                         <div class="border-b border-gray-100 pb-2 mb-4">
                             <h2 class="text-sm font-bold text-gray-800">
-                                {{ bookingType === 'dermatology_consultation' ? 'Dermatology Consultation' : bookingType === 'dental_consultation' ? 'Dental Consultation' : bookingType === 'pediatric_consultation' ? 'Pediatric Consultation' : 'Cosmetic Consultation' }}
+                                {{ bookingType === 'dermatology_consultation' ? (isRtl ? 'استشارة جلدية' : 'Dermatology Consultation') : bookingType === 'dental_consultation' ? (isRtl ? 'استشارة أسنان' : 'Dental Consultation') : bookingType === 'pediatric_consultation' ? (isRtl ? 'استشارة أطفال' : 'Pediatric Consultation') : (isRtl ? 'استشارة تجميلية' : 'Cosmetic Consultation') }}
                             </h2>
-                            <p class="text-xs text-gray-400 mt-1">Select the doctor and confirm the consultation fee</p>
+                            <p class="text-xs text-gray-400 mt-1">{{ isRtl ? 'اختر الطبيب وأكد رسوم الكشف' : 'Select the doctor and confirm the consultation fee' }}</p>
                         </div>
 
                         <div class="p-4 bg-gray-50/50 border border-gray-100 rounded-xl">
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <!-- Doctor Select -->
                                 <div>
-                                    <label class="block text-xs font-medium text-gray-500 mb-1">Doctor <span class="text-red-500">*</span></label>
+                                    <label class="block text-xs font-medium text-gray-500 mb-1">{{ isRtl ? 'الطبيب' : 'Doctor' }} <span class="text-red-500">*</span></label>
                                     <select
                                         v-model="serviceRows[0].doctor_id"
                                         @change="onConsultationDoctorChange(0)"
                                         class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500"
                                     >
-                                        <option value="">Select doctor</option>
+                                        <option value="">{{ isRtl ? 'اختر الطبيب' : 'Select doctor' }}</option>
                                         <option v-for="d in filteredDoctors" :key="d.id" :value="d.id">{{ d.name_en || d.name_ar }}</option>
                                     </select>
                                 </div>
 
                                 <!-- Consultation Fee -->
                                 <div>
-                                    <label class="block text-xs font-medium text-gray-500 mb-1">Consultation Fee ({{ currencyCode }}) <span class="text-red-500">*</span></label>
+                                    <label class="block text-xs font-medium text-gray-500 mb-1">{{ isRtl ? 'رسوم الكشف' : 'Consultation Fee' }} ({{ currencyCode }}) <span class="text-red-500">*</span></label>
                                     <input
                                         v-model.number="serviceRows[0].unit_price"
                                         type="number"
@@ -823,7 +828,7 @@ const stepLabels = computed(() => [
 
                                 <!-- Discount -->
                                 <div>
-                                    <label class="block text-xs font-medium text-gray-500 mb-1">Discount ({{ currencyCode }})</label>
+                                    <label class="block text-xs font-medium text-gray-500 mb-1">{{ isRtl ? 'الخصم' : 'Discount' }} ({{ currencyCode }})</label>
                                     <input
                                         v-model.number="serviceRows[0].discount_per_session"
                                         type="number"
@@ -844,7 +849,7 @@ const stepLabels = computed(() => [
 
                             <!-- Notes -->
                             <div class="mt-3">
-                                <label class="block text-xs font-medium text-gray-500 mb-1">Notes (optional)</label>
+                                <label class="block text-xs font-medium text-gray-500 mb-1">{{ isRtl ? 'ملاحظات (اختياري)' : 'Notes (optional)' }}</label>
                                 <input
                                     v-model="serviceRows[0].notes"
                                     type="text"
@@ -860,14 +865,14 @@ const stepLabels = computed(() => [
                 <template v-else>
                     <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6">
                         <div class="flex items-center justify-between border-b border-gray-100 pb-2 mb-4">
-                            <h2 class="text-sm font-bold text-gray-800">Services</h2>
+                            <h2 class="text-sm font-bold text-gray-800">{{ isRtl ? 'الخدمات' : 'Services' }}</h2>
                             <button
                                 type="button"
                                 @click="addServiceRow"
                                 class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-teal-500 text-white rounded-lg text-xs font-semibold hover:bg-teal-600 transition"
                             >
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
-                                Add Service
+                                {{ isRtl ? 'إضافة خدمة' : 'Add Service' }}
                             </button>
                         </div>
 
@@ -878,7 +883,7 @@ const stepLabels = computed(() => [
                                 class="p-4 bg-gray-50/50 border border-gray-100 rounded-xl"
                             >
                                 <div class="flex items-center justify-between mb-3">
-                                    <span class="text-xs font-semibold text-gray-500 uppercase">Service {{ index + 1 }}</span>
+                                    <span class="text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'الخدمة' : 'Service' }} {{ index + 1 }}</span>
                                     <button
                                         v-if="serviceRows.length > 1"
                                         type="button"
@@ -892,13 +897,13 @@ const stepLabels = computed(() => [
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                     <!-- Service Select -->
                                     <div>
-                                        <label class="block text-xs font-medium text-gray-500 mb-1">Service <span class="text-red-500">*</span></label>
+                                        <label class="block text-xs font-medium text-gray-500 mb-1">{{ isRtl ? 'الخدمة' : 'Service' }} <span class="text-red-500">*</span></label>
                                         <select
                                             v-model="row.service_id"
                                             @change="onServiceChange(index)"
                                             class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500"
                                         >
-                                            <option value="">Select service</option>
+                                            <option value="">{{ isRtl ? 'اختر الخدمة' : 'Select service' }}</option>
                                             <template v-if="filteredServiceCategories && filteredServiceCategories.length">
                                                 <template v-for="cat in filteredServiceCategories" :key="cat.id">
                                                     <optgroup v-if="cat.services && cat.services.length" :label="cat.name_en || cat.name_ar">
@@ -918,19 +923,19 @@ const stepLabels = computed(() => [
 
                                     <!-- Doctor Select -->
                                     <div>
-                                        <label class="block text-xs font-medium text-gray-500 mb-1">Doctor <span class="text-red-500">*</span></label>
+                                        <label class="block text-xs font-medium text-gray-500 mb-1">{{ isRtl ? 'الطبيب' : 'Doctor' }} <span class="text-red-500">*</span></label>
                                         <select
                                             v-model="row.doctor_id"
                                             class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500"
                                         >
-                                            <option value="">Select doctor</option>
+                                            <option value="">{{ isRtl ? 'اختر الطبيب' : 'Select doctor' }}</option>
                                             <option v-for="d in filteredDoctors" :key="d.id" :value="d.id">{{ d.name_en || d.name_ar }}</option>
                                         </select>
                                     </div>
 
                                     <!-- Sessions Count -->
                                     <div>
-                                        <label class="block text-xs font-medium text-gray-500 mb-1">Sessions <span class="text-red-500">*</span></label>
+                                        <label class="block text-xs font-medium text-gray-500 mb-1">{{ isRtl ? 'الجلسات' : 'Sessions' }} <span class="text-red-500">*</span></label>
                                         <input
                                             v-model.number="row.sessions_count"
                                             type="number"
@@ -941,7 +946,7 @@ const stepLabels = computed(() => [
 
                                     <!-- Unit Price -->
                                     <div>
-                                        <label class="block text-xs font-medium text-gray-500 mb-1">Unit Price ({{ currencyCode }})</label>
+                                        <label class="block text-xs font-medium text-gray-500 mb-1">{{ isRtl ? 'سعر الوحدة' : 'Unit Price' }} ({{ currencyCode }})</label>
                                         <input
                                             v-model.number="row.unit_price"
                                             type="number"
@@ -953,7 +958,7 @@ const stepLabels = computed(() => [
 
                                     <!-- Discount per Session -->
                                     <div>
-                                        <label class="block text-xs font-medium text-gray-500 mb-1">Discount / Session ({{ currencyCode }})</label>
+                                        <label class="block text-xs font-medium text-gray-500 mb-1">{{ isRtl ? 'الخصم / جلسة' : 'Discount / Session' }} ({{ currencyCode }})</label>
                                         <input
                                             v-model.number="row.discount_per_session"
                                             type="number"
@@ -974,7 +979,7 @@ const stepLabels = computed(() => [
 
                                 <!-- Service notes -->
                                 <div class="mt-3">
-                                    <label class="block text-xs font-medium text-gray-500 mb-1">Notes (optional)</label>
+                                    <label class="block text-xs font-medium text-gray-500 mb-1">{{ isRtl ? 'ملاحظات (اختياري)' : 'Notes (optional)' }}</label>
                                     <input
                                         v-model="row.notes"
                                         type="text"
@@ -987,7 +992,7 @@ const stepLabels = computed(() => [
 
                         <!-- Running Total -->
                         <div class="mt-5 pt-4 border-t border-gray-100 flex items-center justify-between">
-                            <span class="text-sm font-semibold text-gray-600">Grand Total</span>
+                            <span class="text-sm font-semibold text-gray-600">{{ isRtl ? 'الإجمالي الكلي' : 'Grand Total' }}</span>
                             <span class="text-xl font-bold text-teal-600">{{ formatCurrency(grandTotal) }}</span>
                         </div>
                     </div>
@@ -1006,13 +1011,13 @@ const stepLabels = computed(() => [
                     >
                         <h2 class="text-sm font-bold text-gray-800 mb-1">
                             {{ isConsultation
-                                ? (bookingType === 'dermatology_consultation' ? 'Dermatology Consultation' : bookingType === 'dental_consultation' ? 'Dental Consultation' : bookingType === 'pediatric_consultation' ? 'Pediatric Consultation' : 'Cosmetic Consultation')
-                                : (getService(row.service_id)?.name_en || getService(row.service_id)?.name_ar || 'Service ' + (sIndex + 1))
+                                ? (bookingType === 'dermatology_consultation' ? (isRtl ? 'استشارة جلدية' : 'Dermatology Consultation') : bookingType === 'dental_consultation' ? (isRtl ? 'استشارة أسنان' : 'Dental Consultation') : bookingType === 'pediatric_consultation' ? (isRtl ? 'استشارة أطفال' : 'Pediatric Consultation') : (isRtl ? 'استشارة تجميلية' : 'Cosmetic Consultation'))
+                                : (getService(row.service_id)?.name_en || getService(row.service_id)?.name_ar || (isRtl ? 'الخدمة' : 'Service') + ' ' + (sIndex + 1))
                             }}
                         </h2>
                         <p class="text-xs text-gray-400 mb-4">
-                            {{ row.sessions_count }} session{{ row.sessions_count > 1 ? 's' : '' }}
-                            with Dr. {{ getDoctor(row.doctor_id)?.name_en || getDoctor(row.doctor_id)?.name_ar || '-' }}
+                            {{ row.sessions_count }} {{ row.sessions_count > 1 ? (isRtl ? 'جلسات' : 'sessions') : (isRtl ? 'جلسة' : 'session') }}
+                            {{ isRtl ? 'مع د.' : 'with Dr.' }} {{ getDoctor(row.doctor_id)?.name_en || getDoctor(row.doctor_id)?.name_ar || '-' }}
                         </p>
 
                         <div class="space-y-4">
@@ -1025,7 +1030,7 @@ const stepLabels = computed(() => [
                                     <div class="w-6 h-6 rounded-full bg-teal-100 text-teal-700 flex items-center justify-center text-xs font-bold">
                                         {{ aIndex + 1 }}
                                     </div>
-                                    <span class="text-xs font-semibold text-gray-500">Session {{ aIndex + 1 }}</span>
+                                    <span class="text-xs font-semibold text-gray-500">{{ isRtl ? 'الجلسة' : 'Session' }} {{ aIndex + 1 }}</span>
                                 </div>
 
                                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -1037,14 +1042,14 @@ const stepLabels = computed(() => [
                                             @change="onAppointmentDoctorChange(sIndex, aIndex)"
                                             class="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500"
                                         >
-                                            <option value="">Select doctor</option>
+                                            <option value="">{{ isRtl ? 'اختر الطبيب' : 'Select doctor' }}</option>
                                             <option v-for="d in filteredDoctors" :key="d.id" :value="d.id">{{ d.name_en || d.name_ar }}</option>
                                         </select>
                                     </div>
 
                                     <!-- Date (Doctor Availability Calendar) -->
                                     <div>
-                                        <label class="block text-xs font-medium text-gray-500 mb-1">Date <span class="text-red-500">*</span></label>
+                                        <label class="block text-xs font-medium text-gray-500 mb-1">{{ isRtl ? 'التاريخ' : 'Date' }} <span class="text-red-500">*</span></label>
                                         <DoctorDatePicker
                                             v-model="apt.date"
                                             :doctor-id="apt.doctor_id"
@@ -1066,7 +1071,7 @@ const stepLabels = computed(() => [
                                             {{ formatTime12h(apt.start_time) }} - {{ formatTime12h(apt.end_time) }}
                                         </div>
                                         <div v-else class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-400">
-                                            Select a slot below
+                                            {{ isRtl ? 'اختر الوقت أدناه' : 'Select a slot below' }}
                                         </div>
                                     </div>
                                 </div>
@@ -1085,12 +1090,12 @@ const stepLabels = computed(() => [
                                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                     </svg>
-                                    <span class="text-xs text-gray-500">Loading available slots...</span>
+                                    <span class="text-xs text-gray-500">{{ isRtl ? 'جاري تحميل المواعيد المتاحة...' : 'Loading available slots...' }}</span>
                                 </div>
 
                                 <!-- Available Time Slots -->
                                 <div v-if="apt.availableSlots.length > 0 && !apt.loadingSlots" class="mt-3">
-                                    <p class="text-xs font-medium text-gray-500 mb-2">Available Slots</p>
+                                    <p class="text-xs font-medium text-gray-500 mb-2">{{ isRtl ? 'المواعيد المتاحة' : 'Available Slots' }}</p>
                                     <div class="flex flex-wrap gap-2">
                                         <button
                                             v-for="(slot, slotIdx) in apt.availableSlots"
@@ -1114,7 +1119,7 @@ const stepLabels = computed(() => [
                                     v-if="apt.date && apt.doctor_id && !apt.loadingSlots && !apt.scheduleWarning && apt.availableSlots.length === 0"
                                     class="mt-3 p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-center"
                                 >
-                                    <p class="text-xs text-gray-400">No available time slots for this date</p>
+                                    <p class="text-xs text-gray-400">{{ isRtl ? 'لا توجد مواعيد متاحة لهذا التاريخ' : 'No available time slots for this date' }}</p>
                                 </div>
                             </div>
                         </div>
@@ -1146,26 +1151,26 @@ const stepLabels = computed(() => [
 
                     <!-- Services Summary -->
                     <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6">
-                        <h2 class="text-sm font-bold text-gray-800 mb-4 border-b border-gray-100 pb-2">Services & Appointments</h2>
+                        <h2 class="text-sm font-bold text-gray-800 mb-4 border-b border-gray-100 pb-2">{{ isRtl ? 'الخدمات والمواعيد' : 'Services & Appointments' }}</h2>
                         <div class="space-y-5">
                             <div v-for="(row, sIndex) in serviceRows" :key="sIndex">
                                 <div class="flex items-start justify-between">
                                     <div>
                                         <p class="text-sm font-semibold text-gray-800">
                                             {{ isConsultation
-                                                ? (bookingType === 'dermatology_consultation' ? 'Dermatology Consultation' : bookingType === 'dental_consultation' ? 'Dental Consultation' : bookingType === 'pediatric_consultation' ? 'Pediatric Consultation' : 'Cosmetic Consultation')
+                                                ? (bookingType === 'dermatology_consultation' ? (isRtl ? 'استشارة جلدية' : 'Dermatology Consultation') : bookingType === 'dental_consultation' ? (isRtl ? 'استشارة أسنان' : 'Dental Consultation') : bookingType === 'pediatric_consultation' ? (isRtl ? 'استشارة أطفال' : 'Pediatric Consultation') : (isRtl ? 'استشارة تجميلية' : 'Cosmetic Consultation'))
                                                 : (getService(row.service_id)?.name_en || getService(row.service_id)?.name_ar || '-')
                                             }}
                                         </p>
                                         <p class="text-xs text-gray-400 mt-0.5">
-                                            Dr. {{ getDoctor(row.doctor_id)?.name_en || getDoctor(row.doctor_id)?.name_ar || '-' }}
-                                            &middot; {{ row.sessions_count }} session{{ row.sessions_count > 1 ? 's' : '' }}
+                                            {{ isRtl ? 'د.' : 'Dr.' }} {{ getDoctor(row.doctor_id)?.name_en || getDoctor(row.doctor_id)?.name_ar || '-' }}
+                                            &middot; {{ row.sessions_count }} {{ row.sessions_count > 1 ? (isRtl ? 'جلسات' : 'sessions') : (isRtl ? 'جلسة' : 'session') }}
                                         </p>
                                     </div>
                                     <div class="ltr:text-right rtl:text-left">
                                         <p class="text-sm font-bold text-gray-800">{{ formatCurrency(serviceRowTotal(row)) }}</p>
                                         <p v-if="row.discount_per_session > 0" class="text-xs text-red-500 mt-0.5">
-                                            -{{ formatCurrency(row.discount_per_session) }} / session
+                                            -{{ formatCurrency(row.discount_per_session) }} / {{ isRtl ? 'جلسة' : 'session' }}
                                         </p>
                                     </div>
                                 </div>
@@ -1189,7 +1194,7 @@ const stepLabels = computed(() => [
                                         </svg>
                                         <span>{{ formatTime12h(apt.start_time) }} - {{ formatTime12h(apt.end_time) }}</span>
                                         <span v-if="apt.doctor_id != row.doctor_id" class="text-teal-600 font-medium">
-                                            (Dr. {{ getDoctor(apt.doctor_id)?.name_en || getDoctor(apt.doctor_id)?.name_ar }})
+                                            ({{ isRtl ? 'د.' : 'Dr.' }} {{ getDoctor(apt.doctor_id)?.name_en || getDoctor(apt.doctor_id)?.name_ar }})
                                         </span>
                                     </div>
                                 </div>
@@ -1200,7 +1205,7 @@ const stepLabels = computed(() => [
 
                         <!-- Grand Total -->
                         <div class="mt-5 pt-4 border-t border-gray-100 flex items-center justify-between">
-                            <span class="text-sm font-semibold text-gray-600">Grand Total</span>
+                            <span class="text-sm font-semibold text-gray-600">{{ isRtl ? 'الإجمالي الكلي' : 'Grand Total' }}</span>
                             <span class="text-xl font-bold text-teal-600">{{ formatCurrency(grandTotal) }}</span>
                         </div>
                     </div>
@@ -1231,7 +1236,7 @@ const stepLabels = computed(() => [
                             <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
-                            <span class="text-sm font-semibold text-red-700">Please fix the following errors:</span>
+                            <span class="text-sm font-semibold text-red-700">{{ isRtl ? 'يرجى تصحيح الأخطاء التالية:' : 'Please fix the following errors:' }}</span>
                         </div>
                         <ul class="list-disc list-inside space-y-1">
                             <li v-for="(msg, key) in errors" :key="key" class="text-xs text-red-600">{{ msg }}</li>
@@ -1254,7 +1259,7 @@ const stepLabels = computed(() => [
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                         </svg>
-                        Previous
+                        {{ isRtl ? 'السابق' : 'Previous' }}
                     </button>
                 </div>
                 <div>
@@ -1265,7 +1270,7 @@ const stepLabels = computed(() => [
                         :disabled="!canProceed(currentStep)"
                         class="inline-flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-teal-500 to-cyan-500 text-white rounded-xl text-sm font-semibold hover:from-teal-600 hover:to-cyan-600 transition-all shadow-lg shadow-teal-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                        Next
+                        {{ isRtl ? 'التالي' : 'Next' }}
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                         </svg>
@@ -1281,7 +1286,7 @@ const stepLabels = computed(() => [
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
-                        {{ processing ? 'Creating...' : 'Create Booking' }}
+                        {{ processing ? (isRtl ? 'جاري الإنشاء...' : 'Creating...') : (isRtl ? 'تأكيد الحجز' : 'Create Booking') }}
                     </button>
                 </div>
             </div>
