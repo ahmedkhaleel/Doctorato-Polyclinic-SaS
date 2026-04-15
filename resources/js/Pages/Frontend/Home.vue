@@ -104,7 +104,7 @@ const moduleImages = {
         <!-- ═══════════════════════════════════════ -->
         <!-- HERO — 5-Slide Cinematic Carousel      -->
         <!-- ═══════════════════════════════════════ -->
-        <section class="relative h-[100vh] min-h-[600px] max-h-[900px] flex items-center overflow-hidden bg-[#0f2847]">
+        <section class="relative h-[70vh] md:h-[85vh] lg:h-[90vh] min-h-[450px] max-h-[800px] flex items-center overflow-hidden bg-[#0f2847]">
             <!-- Background Images with Ken Burns -->
             <div class="absolute inset-0">
                 <div v-for="(slide, index) in slides" :key="index"
@@ -191,79 +191,82 @@ const moduleImages = {
         <!-- ═══════════════════════════════════════ -->
         <!-- SPECIALTIES — 3 Module Cards           -->
         <!-- ═══════════════════════════════════════ -->
-        <section class="py-20 md:py-28 bg-[#FAFBFD] relative overflow-hidden" v-if="medicalSpecialties && medicalSpecialties.length">
-            <!-- Background decoration -->
-            <div class="absolute top-0 start-0 w-96 h-96 bg-[#1B365D]/[0.02] rounded-full -translate-x-1/2 -translate-y-1/2"></div>
-            <div class="absolute bottom-0 end-0 w-80 h-80 bg-[#C4A265]/[0.03] rounded-full translate-x-1/3 translate-y-1/3"></div>
-
+        <section class="py-14 md:py-24 bg-[#FAFBFD] relative overflow-hidden" v-if="medicalSpecialties && medicalSpecialties.length">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <!-- Section Header -->
-                <div class="text-center mb-16" v-scroll-reveal="{ type: 'fade-up' }">
+                <div class="text-center mb-10 md:mb-14" v-scroll-reveal="{ type: 'fade-up' }">
                     <span class="inline-block px-4 py-1.5 rounded-full bg-[#1B365D]/5 text-[#1B365D] text-xs font-semibold tracking-wider uppercase mb-4">
                         {{ isRtl ? 'تخصصاتنا الطبية' : 'Our Specialties' }}
                     </span>
-                    <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1B365D] mb-4">
+                    <h2 class="text-2xl sm:text-3xl lg:text-5xl font-bold text-[#1B365D] mb-3">
                         {{ isRtl ? 'رعاية متكاملة في مكان واحد' : 'Complete Care Under One Roof' }}
                     </h2>
-                    <div class="w-16 h-[2px] bg-[#C4A265]/50 mx-auto mb-5"></div>
-                    <p class="text-gray-500 text-lg max-w-2xl mx-auto">
+                    <div class="w-12 h-[2px] bg-[#C4A265]/50 mx-auto mb-4"></div>
+                    <p class="text-gray-500 text-sm md:text-lg max-w-2xl mx-auto">
                         {{ isRtl ? 'نجمع بين أفضل التخصصات الطبية لنقدم لك رعاية شاملة ومتكاملة' : 'We bring together the best medical specialties for comprehensive care' }}
                     </p>
                 </div>
 
-                <!-- 3 Module Cards -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8" v-scroll-reveal="{ type: 'stagger', staggerDelay: 150 }">
-                    <a v-for="spec in medicalSpecialties" :key="spec.slug"
+                <!-- 3 Module Cards — horizontal scroll on mobile, grid on desktop -->
+                <div class="flex md:grid md:grid-cols-3 gap-4 md:gap-6 lg:gap-8 overflow-x-auto md:overflow-visible snap-x snap-mandatory pb-4 md:pb-0 -mx-4 px-4 md:mx-0 md:px-0 scrollbar-hide">
+                    <a v-for="(spec, si) in medicalSpecialties" :key="spec.slug"
                        :href="localizedRoute('/services') + '?module=' + spec.slug"
-                       class="spec-card group relative rounded-2xl overflow-hidden cursor-pointer h-[420px] block">
+                       class="spec-card group relative rounded-2xl overflow-hidden cursor-pointer
+                              flex-shrink-0 w-[280px] h-[320px] md:w-auto md:h-[400px] snap-center block"
+                       v-scroll-reveal="{ type: 'fade-up', delay: si * 120 }">
                         <!-- Background image -->
                         <img :src="moduleImages[spec.slug]" :alt="isRtl ? spec.name_ar : spec.name_en"
                              class="absolute inset-0 w-full h-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-110" />
 
-                        <!-- Gradient overlay — module color -->
-                        <div class="absolute inset-0 bg-gradient-to-t from-[#1B365D] via-[#1B365D]/60 to-transparent
-                                    opacity-80 group-hover:opacity-90 transition-opacity duration-500"></div>
+                        <!-- Gradient overlay -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#1B365D] via-[#1B365D]/50 to-[#1B365D]/10
+                                    group-hover:via-[#1B365D]/60 transition-all duration-500"></div>
 
-                        <!-- Colored top accent bar -->
-                        <div class="absolute top-0 inset-x-0 h-1 transition-all duration-500 group-hover:h-1.5"
+                        <!-- Colored top accent -->
+                        <div class="absolute top-0 inset-x-0 h-1 group-hover:h-1.5 transition-all duration-500"
                              :style="{ backgroundColor: spec.color }"></div>
 
                         <!-- Content — bottom aligned -->
-                        <div class="absolute inset-0 flex flex-col justify-end p-7">
+                        <div class="absolute inset-0 flex flex-col justify-end p-5 md:p-7">
                             <!-- Icon -->
-                            <div class="w-14 h-14 rounded-2xl flex items-center justify-center mb-5 backdrop-blur-sm
+                            <div class="w-11 h-11 md:w-14 md:h-14 rounded-xl md:rounded-2xl flex items-center justify-center mb-4 backdrop-blur-sm
                                         border transition-all duration-500 group-hover:scale-110 group-hover:-translate-y-1"
                                  :style="{ backgroundColor: spec.color + '20', borderColor: spec.color + '40' }">
-                                <svg class="w-7 h-7" :style="{ color: spec.color }" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                                <svg class="w-5 h-5 md:w-7 md:h-7" :style="{ color: spec.color }" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
                                     <path stroke-linecap="round" stroke-linejoin="round" :d="spec.icon" />
                                 </svg>
                             </div>
 
                             <!-- Module name -->
-                            <h3 class="text-2xl font-bold text-white mb-2">
+                            <h3 class="text-xl md:text-2xl font-bold text-white mb-1.5">
                                 {{ isRtl ? spec.name_ar : spec.name_en }}
                             </h3>
 
                             <!-- Service count -->
-                            <p class="text-white/50 text-sm mb-4">
+                            <p class="text-white/50 text-xs md:text-sm mb-3">
                                 {{ spec.categories.reduce((sum, c) => sum + (c.services?.length || 0), 0) }} {{ isRtl ? 'خدمة متخصصة' : 'specialized services' }}
                             </p>
 
-                            <!-- Category pills — show on hover -->
-                            <div class="flex flex-wrap gap-2 max-h-0 opacity-0 group-hover:max-h-40 group-hover:opacity-100
-                                        transition-all duration-500 overflow-hidden mb-2">
-                                <span v-for="cat in spec.categories.slice(0, 4)" :key="cat.id"
-                                      class="px-3 py-1 rounded-full text-xs font-medium bg-white/10 text-white/80 border border-white/10">
+                            <!-- Category pills — always visible on mobile, hover on desktop -->
+                            <div class="flex flex-wrap gap-1.5 md:gap-2 mb-2
+                                        md:max-h-0 md:opacity-0 md:group-hover:max-h-40 md:group-hover:opacity-100
+                                        transition-all duration-500 overflow-hidden">
+                                <span v-for="cat in spec.categories.slice(0, 3)" :key="cat.id"
+                                      class="px-2.5 py-1 rounded-full text-[10px] md:text-xs font-medium bg-white/10 text-white/80 border border-white/10">
                                     {{ isRtl ? cat.name_ar : cat.name_en }}
+                                </span>
+                                <span v-if="spec.categories.length > 3"
+                                      class="px-2.5 py-1 rounded-full text-[10px] md:text-xs font-medium bg-white/10 text-white/60 border border-white/10">
+                                    +{{ spec.categories.length - 3 }}
                                 </span>
                             </div>
 
                             <!-- CTA -->
-                            <div class="flex items-center gap-2 text-[#C4A265] text-sm font-semibold
-                                        translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100
+                            <div class="flex items-center gap-2 text-[#C4A265] text-xs md:text-sm font-semibold
+                                        md:translate-y-2 md:opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100
                                         transition-all duration-500 delay-100">
                                 <span>{{ isRtl ? 'اكتشف خدماتنا' : 'Explore Services' }}</span>
-                                <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"
+                                <svg class="w-3.5 h-3.5 md:w-4 md:h-4 transition-transform duration-300 group-hover:translate-x-1"
                                      :class="{ 'rotate-180 group-hover:-translate-x-1': isRtl }"
                                      fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
@@ -277,80 +280,106 @@ const moduleImages = {
 
 
         <!-- ═══════════════════════════════════════ -->
-        <!-- ABOUT — Modern Split Layout            -->
+        <!-- ABOUT — Cinematic Split                -->
         <!-- ═══════════════════════════════════════ -->
-        <section class="py-20 md:py-28 bg-white relative overflow-hidden">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center" :class="{ 'lg:grid-flow-dense': isRtl }">
-                    <!-- Image Side -->
-                    <div class="relative" :class="{ 'lg:col-start-2': isRtl }" v-scroll-reveal="{ type: 'fade-left', delay: 100 }">
+        <section class="py-14 md:py-24 bg-white relative overflow-hidden">
+            <!-- Subtle background texture -->
+            <div class="absolute inset-0 opacity-[0.015]"
+                 style="background-image: radial-gradient(circle at 1px 1px, #1B365D 1px, transparent 0); background-size: 40px 40px;"></div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center">
+
+                    <!-- Image Side — 5 cols -->
+                    <div class="lg:col-span-5 relative" :class="{ 'lg:order-2': isRtl }" v-scroll-reveal="{ type: 'fade-up', delay: 100 }">
                         <div class="relative">
+                            <!-- Decorative frame -->
+                            <div class="absolute -top-3 -end-3 w-full h-full rounded-2xl border-2 border-[#C4A265]/15"></div>
+
                             <!-- Main image -->
-                            <div class="relative rounded-2xl overflow-hidden shadow-2xl shadow-[#1B365D]/10">
-                                <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=800&q=80"
-                                     alt="" class="w-full h-[450px] object-cover" />
+                            <div class="relative rounded-2xl overflow-hidden shadow-xl">
+                                <img src="https://images.unsplash.com/photo-1666214280557-f1b5022eb634?w=800&q=80"
+                                     alt="Doctorato Polyclinic"
+                                     class="w-full h-[300px] md:h-[420px] object-cover about-img-zoom" />
+                                <!-- Navy overlay bottom -->
+                                <div class="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[#1B365D]/60 to-transparent"></div>
                             </div>
-                            <!-- Stats card overlay -->
-                            <div class="absolute -bottom-6 -start-6 bg-[#1B365D] text-white rounded-2xl p-6 shadow-xl">
-                                <div class="text-3xl font-bold text-[#C4A265] mb-1">
-                                    <StatCounter :end="10" suffix="+" />
-                                </div>
-                                <p class="text-white/70 text-sm">{{ isRtl ? 'سنوات من الخبرة' : 'Years Experience' }}</p>
-                            </div>
-                            <!-- Quality badge -->
-                            <div class="absolute -top-4 -end-4 bg-white rounded-xl shadow-lg p-3 border border-gray-100">
-                                <div class="flex items-center gap-2">
-                                    <div class="w-10 h-10 bg-[#C4A265]/10 rounded-lg flex items-center justify-center">
-                                        <svg class="w-5 h-5 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z"/>
+
+                            <!-- Floating stats card -->
+                            <div class="absolute -bottom-4 start-4 md:-bottom-5 md:-start-5 bg-[#1B365D] text-white rounded-xl p-4 md:p-5 shadow-2xl about-float-card">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 rounded-xl bg-[#C4A265]/20 flex items-center justify-center">
+                                        <svg class="w-6 h-6 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                         </svg>
                                     </div>
                                     <div>
-                                        <p class="text-[#1B365D] font-bold text-xs">{{ isRtl ? 'جودة معتمدة' : 'Certified' }}</p>
-                                        <p class="text-gray-400 text-[10px]">{{ isRtl ? 'أعلى المعايير' : 'Highest Standards' }}</p>
+                                        <div class="text-2xl font-bold text-[#C4A265]">
+                                            <StatCounter :end="10" suffix="+" />
+                                        </div>
+                                        <p class="text-white/60 text-xs">{{ isRtl ? 'سنوات من الخبرة' : 'Years Experience' }}</p>
                                     </div>
+                                </div>
+                            </div>
+
+                            <!-- Floating badge top -->
+                            <div class="absolute -top-3 end-4 md:-top-4 md:-end-4 bg-white rounded-lg shadow-lg px-3 py-2 border border-gray-100 about-float-badge">
+                                <div class="flex items-center gap-2">
+                                    <svg class="w-4 h-4 text-[#C4A265]" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z"/>
+                                    </svg>
+                                    <span class="text-[#1B365D] font-bold text-[11px]">{{ isRtl ? 'جودة معتمدة' : 'Certified Quality' }}</span>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Text Side -->
-                    <div :class="{ 'lg:col-start-1 lg:row-start-1': isRtl }" v-scroll-reveal="{ type: 'fade-right', delay: 200 }">
-                        <span class="inline-block px-4 py-1.5 rounded-full bg-[#C4A265]/10 text-[#C4A265] text-xs font-semibold tracking-wider uppercase mb-5">
+                    <!-- Text Side — 7 cols -->
+                    <div class="lg:col-span-7" :class="{ 'lg:order-1': isRtl }" v-scroll-reveal="{ type: 'fade-up', delay: 200 }">
+                        <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#C4A265]/10 text-[#C4A265] text-xs font-semibold tracking-wider uppercase mb-5">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21"/>
+                            </svg>
                             {{ isRtl ? 'من نحن' : 'About Us' }}
                         </span>
-                        <h2 class="text-3xl sm:text-4xl font-bold text-[#1B365D] mb-6 leading-tight">
-                            {{ isRtl ? 'عيادة دكتوراتو التخصصية' : 'Doctorato Polyclinic' }}
+
+                        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#1B365D] mb-5 leading-tight">
+                            {{ isRtl ? 'عيادة دكتوراتو' : 'Doctorato' }}
+                            <span class="text-[#C4A265]">{{ isRtl ? ' التخصصية' : ' Polyclinic' }}</span>
                         </h2>
-                        <p class="text-gray-600 text-lg leading-relaxed mb-5">
+
+                        <p class="text-gray-600 text-base md:text-lg leading-relaxed mb-4">
                             {{ isRtl
                                 ? 'عيادة دكتوراتو هي عيادة متعددة التخصصات الطبية تقدم أعلى مستويات الرعاية الصحية في بيئة راقية ومريحة، مع فريق طبي متخصص يضع صحتك وراحتك في المقام الأول.'
                                 : 'Doctorato is a multi-specialty polyclinic providing the highest standards of healthcare in an elegant, comfortable environment, with a specialized medical team that puts your health and comfort first.' }}
                         </p>
-                        <p class="text-gray-400 leading-relaxed mb-8">
+                        <p class="text-gray-400 text-sm leading-relaxed mb-7">
                             {{ isRtl
                                 ? 'تأسست العيادة على يد نخبة من الأطباء المتخصصين في مختلف التخصصات الطبية، لتكون وجهتك الأولى للرعاية الصحية المتكاملة.'
                                 : 'Founded by an elite team of medical specialists across multiple disciplines, the clinic is your premier destination for comprehensive healthcare.' }}
                         </p>
 
-                        <!-- Feature checklist -->
-                        <div class="grid grid-cols-2 gap-4 mb-8">
+                        <!-- Feature grid -->
+                        <div class="grid grid-cols-2 gap-3 mb-7">
                             <div v-for="(feat, i) in [
-                                { ar: 'أحدث الأجهزة الطبية', en: 'Latest Medical Equipment' },
-                                { ar: 'أطباء معتمدون دولياً', en: 'Internationally Certified' },
-                                { ar: 'رعاية شخصية متميزة', en: 'Personalized Care' },
-                                { ar: 'بيئة مريحة وآمنة', en: 'Comfortable Environment' },
-                            ]" :key="i" class="flex items-center gap-2">
-                                <svg class="w-5 h-5 text-[#C4A265] flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                                <span class="text-sm text-gray-600">{{ isRtl ? feat.ar : feat.en }}</span>
+                                { ar: 'أحدث الأجهزة الطبية', en: 'Latest Medical Equipment', icon: 'M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5' },
+                                { ar: 'أطباء معتمدون دولياً', en: 'Internationally Certified', icon: 'M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904' },
+                                { ar: 'رعاية شخصية متميزة', en: 'Personalized Care', icon: 'M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733' },
+                                { ar: 'بيئة مريحة وآمنة', en: 'Comfortable Environment', icon: 'M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6' },
+                            ]" :key="i"
+                               class="flex items-center gap-2.5 p-3 rounded-lg bg-gray-50 hover:bg-[#C4A265]/5 transition-colors duration-300">
+                                <div class="w-8 h-8 rounded-lg bg-[#1B365D]/5 flex items-center justify-center flex-shrink-0">
+                                    <svg class="w-4 h-4 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" :d="feat.icon"/>
+                                    </svg>
+                                </div>
+                                <span class="text-xs md:text-sm text-gray-700 font-medium">{{ isRtl ? feat.ar : feat.en }}</span>
                             </div>
                         </div>
 
                         <Link :href="localizedRoute('/about')"
-                              class="inline-flex items-center gap-2 px-7 py-3.5 bg-[#1B365D] text-white font-semibold rounded-xl
-                                     hover:bg-[#264573] transition-all duration-300 shadow-md hover:shadow-lg">
+                              class="inline-flex items-center gap-2 px-6 py-3 bg-[#1B365D] text-white font-semibold rounded-lg
+                                     hover:bg-[#264573] transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5 text-sm">
                             {{ isRtl ? 'اعرف المزيد عنا' : 'Learn More About Us' }}
                             <svg class="w-4 h-4" :class="{ 'rotate-180': isRtl }" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
@@ -393,24 +422,28 @@ const moduleImages = {
         <!-- ═══════════════════════════════════════ -->
         <!-- FEATURED SERVICES                      -->
         <!-- ═══════════════════════════════════════ -->
-        <section class="py-20 md:py-28 bg-[#FAFBFD] relative" v-if="featuredServices && featuredServices.length">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center mb-16" v-scroll-reveal="{ type: 'fade-up' }">
+        <section class="py-14 md:py-24 bg-[#FAFBFD] relative overflow-hidden" v-if="featuredServices && featuredServices.length">
+            <!-- Subtle texture -->
+            <div class="absolute inset-0 opacity-[0.015]"
+                 style="background-image: radial-gradient(circle at 1px 1px, #1B365D 1px, transparent 0); background-size: 40px 40px;"></div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="text-center mb-10 md:mb-14" v-scroll-reveal="{ type: 'fade-up' }">
                     <span class="inline-block px-4 py-1.5 rounded-full bg-[#1B365D]/5 text-[#1B365D] text-xs font-semibold tracking-wider uppercase mb-4">
                         {{ isRtl ? 'خدماتنا' : 'Our Services' }}
                     </span>
-                    <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1B365D] mb-4">
+                    <h2 class="text-2xl sm:text-3xl lg:text-5xl font-bold text-[#1B365D] mb-3">
                         {{ isRtl ? 'خدمات طبية مميزة' : 'Featured Medical Services' }}
                     </h2>
-                    <p class="text-gray-500 text-lg max-w-2xl mx-auto">
+                    <div class="w-12 h-[2px] bg-[#C4A265]/50 mx-auto mb-4"></div>
+                    <p class="text-gray-500 text-sm md:text-lg max-w-2xl mx-auto">
                         {{ isRtl ? 'نقدم مجموعة شاملة من الخدمات الطبية المتخصصة بأحدث التقنيات والمعايير العالمية' : 'A comprehensive range of specialized medical services using the latest technologies' }}
                     </p>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8" v-scroll-reveal="{ type: 'stagger', staggerDelay: 120 }">
-                    <div v-for="service in featuredServices" :key="service.id" class="card-premium rounded-2xl">
-                        <ServiceCard :service="service" />
-                    </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                    <ServiceCard v-for="(service, si) in featuredServices.slice(0, 6)" :key="service.id" :service="service"
+                                 v-scroll-reveal="{ type: 'fade-up', delay: si * 80 }" />
                 </div>
 
                 <div class="text-center mt-14" v-scroll-reveal="{ type: 'fade-up', delay: 200 }">
@@ -640,5 +673,25 @@ const moduleImages = {
 }
 .hero-progress-ring {
     transform: rotate(-90deg);
+}
+
+/* About section animations */
+.about-img-zoom {
+    transition: transform 8s ease-out;
+}
+.about-img-zoom:hover {
+    transform: scale(1.05);
+}
+
+@keyframes aboutFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+.about-float-card {
+    animation: aboutFloat 4s ease-in-out infinite;
+}
+.about-float-badge {
+    animation: aboutFloat 4s ease-in-out infinite;
+    animation-delay: 1.5s;
 }
 </style>

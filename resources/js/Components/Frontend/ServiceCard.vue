@@ -3,7 +3,7 @@ import { Link } from '@inertiajs/vue3';
 import { useLocale } from '@/Composables/useLocale';
 import { sanitizeHtml } from '@/Composables/useSanitize';
 
-const { t, localized, localizedRoute } = useLocale();
+const { t, localized, isRtl, localizedRoute } = useLocale();
 
 const props = defineProps({
     service: {
@@ -14,55 +14,53 @@ const props = defineProps({
 </script>
 
 <template>
-    <div class="group animated-border bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 hover:border-[var(--brand-primary)]/30
-                card-hover-lift" @mousemove="$event.currentTarget.style.setProperty('--mouse-x', (($event.clientX - $event.currentTarget.getBoundingClientRect().left) / $event.currentTarget.getBoundingClientRect().width * 100) + '%'); $event.currentTarget.style.setProperty('--mouse-y', (($event.clientY - $event.currentTarget.getBoundingClientRect().top) / $event.currentTarget.getBoundingClientRect().height * 100) + '%')"
-    >
-        <!-- Image -->
-        <div class="relative h-52 overflow-hidden">
-            <div
-                v-if="service.image || service.featured_image"
-                class="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-                :style="{ backgroundImage: `url(${service.image || service.featured_image})` }"
-            ></div>
-            <div
-                v-else
-                class="w-full h-full bg-gradient-to-br from-[var(--brand-primary)]/20 via-[var(--brand-primary)]/10 to-[var(--brand-primary)]/5 flex items-center justify-center"
-            >
-                <svg class="w-16 h-16 text-[var(--brand-primary)]/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                </svg>
-            </div>
-            <!-- Overlay -->
-            <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-        </div>
+    <Link :href="localizedRoute(`/services/${service.slug}`)"
+          class="svc-card group relative bg-white rounded-2xl p-6 border border-gray-100
+                 hover:border-[#C4A265]/25 hover:shadow-xl hover:shadow-[#1B365D]/5
+                 hover:-translate-y-1.5 transition-all duration-500 block overflow-hidden">
 
-        <!-- Gold Icon Circle -->
-        <div class="relative flex justify-center -mt-7 z-10">
-            <div class="w-14 h-14 bg-[var(--brand-primary)] rounded-full flex items-center justify-center shadow-lg shadow-[var(--brand-primary)]/20 group-hover:shadow-[var(--brand-primary)]/40 group-hover:animate-glow-ring transition-all duration-500 group-hover:scale-110">
-                <div v-if="service.icon" v-html="sanitizeHtml(service.icon)" class="w-6 h-6 text-white"></div>
-                <svg v-else class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+        <!-- Background texture on hover -->
+        <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
+             style="background-image: radial-gradient(circle at 80% 20%, rgba(196,162,101,0.04) 0%, transparent 50%);"></div>
+
+        <!-- Top accent line -->
+        <div class="absolute top-0 inset-x-0 h-0.5 bg-gradient-to-r from-transparent via-[#C4A265]/0 to-transparent
+                    group-hover:via-[#C4A265]/50 transition-all duration-500"></div>
+
+        <!-- Icon -->
+        <div class="relative w-14 h-14 mb-5">
+            <!-- Icon background with glow -->
+            <div class="absolute inset-0 bg-[#1B365D]/5 rounded-xl group-hover:bg-[#C4A265]/10
+                        transition-all duration-500 group-hover:scale-110 group-hover:rotate-3"></div>
+            <div class="relative w-full h-full rounded-xl flex items-center justify-center">
+                <div v-if="service.icon" v-html="sanitizeHtml(service.icon)"
+                     class="w-6 h-6 text-[#1B365D] group-hover:text-[#C4A265] transition-colors duration-500"></div>
+                <svg v-else class="w-6 h-6 text-[#1B365D] group-hover:text-[#C4A265] transition-colors duration-500"
+                     fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
                 </svg>
             </div>
         </div>
 
-        <!-- Content -->
-        <div class="p-6 pt-4 text-center">
-            <h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-[var(--brand-primary)] transition-colors">
-                {{ localized(service, 'name') }}
-            </h3>
-            <p class="text-gray-500 text-sm leading-relaxed mb-4 line-clamp-3">
-                {{ localized(service, 'short_desc') }}
-            </p>
-            <Link
-                :href="localizedRoute(`/services/${service.slug}`)"
-                class="btn-shimmer inline-flex items-center gap-1.5 text-[var(--brand-primary)] font-semibold text-sm hover:gap-3 transition-all duration-300"
-            >
-                {{ t('learn_more') }}
-                <svg class="w-4 h-4 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-            </Link>
+        <!-- Title -->
+        <h3 class="text-base md:text-lg font-bold text-[#1B365D] mb-2.5 group-hover:text-[#C4A265] transition-colors duration-300 leading-snug">
+            {{ localized(service, 'name') }}
+        </h3>
+
+        <!-- Description -->
+        <p class="text-gray-500 text-sm leading-relaxed mb-5 line-clamp-2">
+            {{ localized(service, 'short_desc') }}
+        </p>
+
+        <!-- CTA -->
+        <div class="flex items-center gap-1.5 text-[#C4A265] text-sm font-semibold">
+            <span>{{ t('learn_more') }}</span>
+            <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"
+                 :class="{ 'rotate-180 group-hover:-translate-x-1': isRtl }"
+                 fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+            </svg>
         </div>
-    </div>
+    </Link>
 </template>
