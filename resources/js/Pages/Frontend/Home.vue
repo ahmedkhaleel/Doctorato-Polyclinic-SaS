@@ -392,27 +392,50 @@ const moduleImages = {
 
 
         <!-- ═══════════════════════════════════════ -->
-        <!-- STATS — Floating Bar                   -->
+        <!-- STATS — Premium Counter Bar            -->
         <!-- ═══════════════════════════════════════ -->
-        <section class="py-16 bg-[#1B365D] relative overflow-hidden">
-            <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(196,162,101,0.08)_0%,_transparent_60%)]"></div>
+        <section class="py-16 md:py-20 relative overflow-hidden">
+            <!-- Navy gradient background -->
+            <div class="absolute inset-0 bg-gradient-to-br from-[#0f2847] via-[#1B365D] to-[#264573]"></div>
+            <!-- Dot texture -->
+            <div class="absolute inset-0 opacity-[0.04]"
+                 style="background-image: radial-gradient(circle at 1px 1px, rgba(196,162,101,0.9) 1px, transparent 0); background-size: 28px 28px;"></div>
+            <!-- Gold radial glow -->
+            <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(196,162,101,0.1)_0%,_transparent_50%)]"></div>
+            <!-- Geometric circles -->
+            <div class="absolute top-[10%] start-[5%] w-40 h-40 border border-[#C4A265]/[0.06] rounded-full stats-orbit"></div>
+            <div class="absolute bottom-[10%] end-[8%] w-56 h-56 border border-white/[0.03] rounded-full stats-orbit" style="animation-duration:30s;animation-direction:reverse;"></div>
+            <!-- Top & bottom gold lines -->
+            <div class="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[#C4A265]/30 to-transparent"></div>
+            <div class="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[#C4A265]/30 to-transparent"></div>
+
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                <div class="grid grid-cols-2 lg:grid-cols-4 gap-8" v-scroll-reveal="{ type: 'stagger', staggerDelay: 120 }">
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
                     <div v-for="(stat, i) in [
-                        { end: 1000, suffix: '+', ar: 'مريض سعيد', en: 'Happy Patients', icon: 'M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
-                        { end: 10, suffix: '+', ar: 'طبيب متخصص', en: 'Specialist Doctors', icon: 'M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12' },
-                        { end: 20, suffix: '+', ar: 'خدمة طبية', en: 'Medical Services', icon: 'M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6z' },
-                        { end: 3, suffix: '', ar: 'تخصصات طبية', en: 'Medical Specialties', icon: 'M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6' },
-                    ]" :key="i" class="text-center">
-                        <div class="w-14 h-14 mx-auto mb-4 rounded-xl bg-[#C4A265]/10 flex items-center justify-center">
-                            <svg class="w-7 h-7 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-                                <path stroke-linecap="round" stroke-linejoin="round" :d="stat.icon" />
-                            </svg>
+                        { end: 1000, suffix: '+', ar: 'مريض سعيد', en: 'Happy Patients', icon: 'M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z' },
+                        { end: 10, suffix: '+', ar: 'طبيب متخصص', en: 'Specialist Doctors', icon: 'M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z' },
+                        { end: 20, suffix: '+', ar: 'خدمة طبية', en: 'Medical Services', icon: 'M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 00-6.23.693L5 14.5' },
+                        { end: 3, suffix: '', ar: 'تخصصات طبية', en: 'Medical Specialties', icon: 'M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21' },
+                    ]" :key="i"
+                       class="text-center group"
+                       v-scroll-reveal="{ type: 'fade-up', delay: i * 120 }">
+                        <!-- Card with glass effect -->
+                        <div class="relative p-5 md:p-6 rounded-2xl bg-white/[0.04] backdrop-blur-sm border border-white/[0.06]
+                                    hover:bg-white/[0.08] hover:border-[#C4A265]/20 transition-all duration-500">
+                            <!-- Icon -->
+                            <div class="w-12 h-12 md:w-14 md:h-14 mx-auto mb-4 rounded-xl bg-[#C4A265]/10 flex items-center justify-center
+                                        group-hover:bg-[#C4A265]/20 group-hover:scale-110 transition-all duration-500">
+                                <svg class="w-6 h-6 md:w-7 md:h-7 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" :d="stat.icon" />
+                                </svg>
+                            </div>
+                            <!-- Number -->
+                            <div class="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-1">
+                                <StatCounter :end="stat.end" :suffix="stat.suffix" />
+                            </div>
+                            <!-- Label -->
+                            <p class="text-[#C4A265]/70 text-xs md:text-sm font-medium">{{ isRtl ? stat.ar : stat.en }}</p>
                         </div>
-                        <div class="text-3xl sm:text-4xl font-bold text-white mb-1">
-                            <StatCounter :end="stat.end" :suffix="stat.suffix" />
-                        </div>
-                        <p class="text-[#C4A265]/80 text-sm font-medium">{{ isRtl ? stat.ar : stat.en }}</p>
                     </div>
                 </div>
             </div>
@@ -441,7 +464,7 @@ const moduleImages = {
                     </p>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                <div class="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-5">
                     <ServiceCard v-for="(service, si) in featuredServices.slice(0, 6)" :key="service.id" :service="service"
                                  v-scroll-reveal="{ type: 'fade-up', delay: si * 80 }" />
                 </div>
@@ -533,16 +556,21 @@ const moduleImages = {
         <!-- ═══════════════════════════════════════ -->
         <!-- TESTIMONIALS                           -->
         <!-- ═══════════════════════════════════════ -->
-        <section class="py-20 md:py-28 bg-white relative" v-if="testimonials && testimonials.length">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center mb-16" v-scroll-reveal="{ type: 'fade-up' }">
+        <section class="py-14 md:py-24 bg-[#FAFBFD] relative overflow-hidden" v-if="testimonials && testimonials.length">
+            <!-- Background texture -->
+            <div class="absolute inset-0 opacity-[0.015]"
+                 style="background-image: radial-gradient(circle at 1px 1px, #1B365D 1px, transparent 0); background-size: 40px 40px;"></div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="text-center mb-10 md:mb-14" v-scroll-reveal="{ type: 'fade-up' }">
                     <span class="inline-block px-4 py-1.5 rounded-full bg-[#1B365D]/5 text-[#1B365D] text-xs font-semibold tracking-wider uppercase mb-4">
                         {{ isRtl ? 'آراء المرضى' : 'Patient Reviews' }}
                     </span>
-                    <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1B365D] mb-4">
+                    <h2 class="text-2xl sm:text-3xl lg:text-5xl font-bold text-[#1B365D] mb-3">
                         {{ isRtl ? 'ماذا يقول مرضانا' : 'What Our Patients Say' }}
                     </h2>
-                    <p class="text-gray-500 text-lg max-w-2xl mx-auto">
+                    <div class="w-12 h-[2px] bg-[#C4A265]/50 mx-auto mb-4"></div>
+                    <p class="text-gray-500 text-sm md:text-lg max-w-2xl mx-auto">
                         {{ isRtl ? 'تجارب حقيقية تعكس التزامنا بتقديم أفضل رعاية صحية' : 'Real experiences reflecting our commitment to providing the best healthcare' }}
                     </p>
                 </div>
@@ -693,5 +721,14 @@ const moduleImages = {
 .about-float-badge {
     animation: aboutFloat 4s ease-in-out infinite;
     animation-delay: 1.5s;
+}
+
+/* Stats orbit */
+@keyframes statsOrbit {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+.stats-orbit {
+    animation: statsOrbit 35s linear infinite;
 }
 </style>
