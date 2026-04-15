@@ -628,68 +628,121 @@ const moduleImages = {
         <!-- ═══════════════════════════════════════ -->
         <!-- CTA BANNER                             -->
         <!-- ═══════════════════════════════════════ -->
-        <section class="relative py-20 overflow-hidden">
-            <div class="absolute inset-0 bg-gradient-to-br from-[#FAFBFD] via-[#f0ebe3] to-[#FAFBFD]"></div>
-            <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(196,162,101,0.08)_0%,_transparent_50%)]"></div>
+        <section class="relative py-16 md:py-24 overflow-hidden">
+            <!-- Navy base -->
+            <div class="absolute inset-0 bg-gradient-to-br from-[#0f2847] via-[#1B365D] to-[#162d4d]"></div>
+            <!-- Animated grid pattern -->
+            <div class="absolute inset-0 opacity-[0.03] cta-grid-move"
+                 style="background-image: linear-gradient(rgba(196,162,101,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(196,162,101,0.5) 1px, transparent 1px); background-size: 60px 60px;"></div>
+            <!-- Gold radial glow -->
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-[radial-gradient(ellipse,_rgba(196,162,101,0.07)_0%,_transparent_65%)]"></div>
+            <!-- Decorative circles -->
+            <div class="absolute -top-20 -right-20 w-72 h-72 border border-[#C4A265]/[0.06] rounded-full cta-orbit"></div>
+            <div class="absolute -bottom-32 -left-32 w-96 h-96 border border-white/[0.03] rounded-full cta-orbit" style="animation-direction: reverse; animation-duration: 50s;"></div>
+            <!-- Gold accent lines -->
+            <div class="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[#C4A265]/30 to-transparent"></div>
+            <div class="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[#C4A265]/30 to-transparent"></div>
 
-            <div class="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#C4A265]/10 border border-[#C4A265]/20 mb-6"
-                     v-scroll-reveal="{ type: 'fade-up' }">
-                    <svg class="w-4 h-4 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"/>
-                    </svg>
-                    <span class="text-[#C4A265] text-xs font-semibold tracking-wider uppercase">{{ isRtl ? 'تواصل معنا' : 'Get in Touch' }}</span>
-                </div>
+            <div class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
 
-                <h2 class="text-3xl sm:text-4xl font-bold text-[#1B365D] mb-4 leading-tight" v-scroll-reveal="{ type: 'fade-up', delay: 100 }">
-                    {{ isRtl ? 'صحتك تستحق الأفضل' : 'Your Health Deserves the Best' }}
-                    <span class="block text-[#C4A265] mt-1">{{ isRtl ? 'ابدأ رحلتك اليوم' : 'Start Your Journey Today' }}</span>
-                </h2>
+                    <!-- Left/Top: Text content -->
+                    <div class="flex-1 text-center lg:text-start">
+                        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#C4A265]/10 border border-[#C4A265]/20 mb-5"
+                             v-scroll-reveal="{ type: 'fade-up' }">
+                            <span class="relative flex h-2 w-2">
+                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#C4A265] opacity-50"></span>
+                                <span class="relative inline-flex rounded-full h-2 w-2 bg-[#C4A265]"></span>
+                            </span>
+                            <span class="text-[#C4A265] text-[11px] font-semibold tracking-wider uppercase">{{ isRtl ? 'متاح الآن' : 'Available Now' }}</span>
+                        </div>
 
-                <p class="text-gray-500 text-lg mb-10 max-w-xl mx-auto" v-scroll-reveal="{ type: 'fade-up', delay: 150 }">
-                    {{ isRtl ? 'تواصل معنا الآن واحصل على استشارة مجانية مع أفضل أطبائنا' : 'Contact us now and get a free consultation with our best doctors' }}
-                </p>
+                        <h2 class="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-white mb-4 leading-tight" v-scroll-reveal="{ type: 'fade-up', delay: 100 }">
+                            {{ isRtl ? 'صحتك تستحق' : 'Your Health' }}
+                            <span class="relative inline-block">
+                                <span class="relative z-10 text-[#C4A265]">{{ isRtl ? 'الأفضل' : 'Deserves the Best' }}</span>
+                                <span class="absolute bottom-1 inset-x-0 h-2 bg-[#C4A265]/10 rounded-full -z-0"></span>
+                            </span>
+                        </h2>
 
-                <div class="flex flex-col sm:flex-row items-center justify-center gap-4" v-scroll-reveal="{ type: 'fade-up', delay: 200 }">
-                    <a :href="whatsappLink" target="_blank" rel="noopener noreferrer"
-                       class="inline-flex items-center gap-2.5 px-8 py-4 bg-[#25D366] text-white font-semibold rounded-xl
-                              transition-all duration-300 shadow-lg shadow-[#25D366]/20 hover:shadow-xl hover:-translate-y-0.5">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-                        </svg>
-                        {{ isRtl ? 'تواصل عبر واتساب' : 'Chat on WhatsApp' }}
-                    </a>
-                    <Link :href="localizedRoute('/booking')"
-                          class="inline-flex items-center gap-2.5 px-8 py-4 bg-[#1B365D] text-white font-semibold rounded-xl
-                                 transition-all duration-300 shadow-lg shadow-[#1B365D]/20 hover:shadow-xl hover:-translate-y-0.5 hover:bg-[#264573]">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                        </svg>
-                        {{ isRtl ? 'احجز موعدك' : 'Book Appointment' }}
-                    </Link>
-                </div>
+                        <p class="text-white/45 text-sm md:text-base lg:text-lg mb-8 max-w-lg mx-auto lg:mx-0 leading-relaxed" v-scroll-reveal="{ type: 'fade-up', delay: 150 }">
+                            {{ isRtl ? 'تواصل معنا الآن واحصل على استشارة مجانية مع أفضل أطبائنا المتخصصين في مختلف المجالات الطبية' : 'Contact us now and get a free consultation with our top specialized doctors across all medical fields' }}
+                        </p>
 
-                <!-- Trust badges -->
-                <div class="flex items-center justify-center gap-6 mt-10 pt-6 border-t border-[#C4A265]/10" v-scroll-reveal="{ type: 'fade-up', delay: 300 }">
-                    <div class="flex items-center gap-1.5 text-gray-400 text-xs">
-                        <svg class="w-4 h-4 text-[#C4A265]" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622A11.99 11.99 0 0020.402 6a11.959 11.959 0 00-8.402-3.785z"/>
-                        </svg>
-                        {{ isRtl ? 'استشارة مجانية' : 'Free Consultation' }}
+                        <!-- CTA Buttons -->
+                        <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3" v-scroll-reveal="{ type: 'fade-up', delay: 200 }">
+                            <a :href="whatsappLink" target="_blank" rel="noopener noreferrer"
+                               class="group relative inline-flex items-center gap-2.5 px-7 py-3.5 bg-[#25D366] text-white font-bold text-sm rounded-xl
+                                      transition-all duration-300 shadow-lg shadow-[#25D366]/20 hover:shadow-xl hover:shadow-[#25D366]/30 hover:-translate-y-0.5 overflow-hidden">
+                                <span class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/15 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></span>
+                                <svg class="w-5 h-5 relative" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+                                </svg>
+                                <span class="relative">{{ isRtl ? 'تواصل عبر واتساب' : 'Chat on WhatsApp' }}</span>
+                            </a>
+                            <Link :href="localizedRoute('/booking')"
+                                  class="group relative inline-flex items-center gap-2.5 px-7 py-3.5 bg-gradient-to-r from-[#C4A265] to-[#d4b275] text-[#1B365D] font-bold text-sm rounded-xl
+                                         transition-all duration-300 shadow-lg shadow-[#C4A265]/20 hover:shadow-xl hover:shadow-[#C4A265]/30 hover:-translate-y-0.5 overflow-hidden">
+                                <span class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></span>
+                                <svg class="w-5 h-5 relative" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                </svg>
+                                <span class="relative">{{ isRtl ? 'احجز موعدك' : 'Book Appointment' }}</span>
+                            </Link>
+                        </div>
                     </div>
-                    <div class="w-1 h-1 rounded-full bg-[#C4A265]/30"></div>
-                    <div class="flex items-center gap-1.5 text-gray-400 text-xs">
-                        <svg class="w-4 h-4 text-[#C4A265]" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/>
-                        </svg>
-                        {{ isRtl ? 'أطباء معتمدون' : 'Certified Doctors' }}
-                    </div>
-                    <div class="w-1 h-1 rounded-full bg-[#C4A265]/30 hidden sm:block"></div>
-                    <div class="hidden sm:flex items-center gap-1.5 text-gray-400 text-xs">
-                        <svg class="w-4 h-4 text-[#C4A265]" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/>
-                        </svg>
-                        {{ isRtl ? 'نتائج مضمونة' : 'Guaranteed Results' }}
+
+                    <!-- Right/Bottom: Trust cards -->
+                    <div class="flex-shrink-0 w-full lg:w-auto" v-scroll-reveal="{ type: 'fade-up', delay: 250 }">
+                        <div class="grid grid-cols-3 lg:grid-cols-1 gap-3 lg:gap-4 max-w-sm mx-auto lg:mx-0">
+                            <!-- Free Consultation -->
+                            <div class="group flex flex-col lg:flex-row items-center lg:items-center gap-2 lg:gap-4 p-3 lg:p-4 rounded-xl
+                                        bg-white/[0.04] border border-white/[0.06] backdrop-blur-sm
+                                        hover:bg-white/[0.08] hover:border-[#C4A265]/20 transition-all duration-400">
+                                <div class="w-10 h-10 lg:w-11 lg:h-11 rounded-xl bg-emerald-500/10 border border-emerald-500/15 flex items-center justify-center flex-shrink-0
+                                            group-hover:bg-emerald-500/20 group-hover:scale-105 transition-all duration-400">
+                                    <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622A11.99 11.99 0 0020.402 6a11.959 11.959 0 00-8.402-3.785z"/>
+                                    </svg>
+                                </div>
+                                <div class="text-center lg:text-start">
+                                    <p class="text-white text-[11px] lg:text-sm font-semibold leading-tight">{{ isRtl ? 'استشارة مجانية' : 'Free Consultation' }}</p>
+                                    <p class="text-white/30 text-[10px] lg:text-xs hidden lg:block mt-0.5">{{ isRtl ? 'أول زيارة مجاناً' : 'First visit is free' }}</p>
+                                </div>
+                            </div>
+
+                            <!-- Certified Doctors -->
+                            <div class="group flex flex-col lg:flex-row items-center lg:items-center gap-2 lg:gap-4 p-3 lg:p-4 rounded-xl
+                                        bg-white/[0.04] border border-white/[0.06] backdrop-blur-sm
+                                        hover:bg-white/[0.08] hover:border-[#C4A265]/20 transition-all duration-400">
+                                <div class="w-10 h-10 lg:w-11 lg:h-11 rounded-xl bg-[#C4A265]/10 border border-[#C4A265]/15 flex items-center justify-center flex-shrink-0
+                                            group-hover:bg-[#C4A265]/20 group-hover:scale-105 transition-all duration-400">
+                                    <svg class="w-5 h-5 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/>
+                                    </svg>
+                                </div>
+                                <div class="text-center lg:text-start">
+                                    <p class="text-white text-[11px] lg:text-sm font-semibold leading-tight">{{ isRtl ? 'أطباء معتمدون' : 'Certified Doctors' }}</p>
+                                    <p class="text-white/30 text-[10px] lg:text-xs hidden lg:block mt-0.5">{{ isRtl ? 'خبرة +10 سنوات' : '10+ years experience' }}</p>
+                                </div>
+                            </div>
+
+                            <!-- Guaranteed Results -->
+                            <div class="group flex flex-col lg:flex-row items-center lg:items-center gap-2 lg:gap-4 p-3 lg:p-4 rounded-xl
+                                        bg-white/[0.04] border border-white/[0.06] backdrop-blur-sm
+                                        hover:bg-white/[0.08] hover:border-[#C4A265]/20 transition-all duration-400">
+                                <div class="w-10 h-10 lg:w-11 lg:h-11 rounded-xl bg-rose-500/10 border border-rose-500/15 flex items-center justify-center flex-shrink-0
+                                            group-hover:bg-rose-500/20 group-hover:scale-105 transition-all duration-400">
+                                    <svg class="w-5 h-5 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/>
+                                    </svg>
+                                </div>
+                                <div class="text-center lg:text-start">
+                                    <p class="text-white text-[11px] lg:text-sm font-semibold leading-tight">{{ isRtl ? 'نتائج مضمونة' : 'Guaranteed Results' }}</p>
+                                    <p class="text-white/30 text-[10px] lg:text-xs hidden lg:block mt-0.5">{{ isRtl ? 'رضا 100%' : '100% satisfaction' }}</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -774,6 +827,24 @@ const moduleImages = {
 }
 .stats-orbit {
     animation: statsOrbit 35s linear infinite;
+}
+
+/* CTA grid animation */
+@keyframes ctaGridMove {
+    0%   { background-position: 0 0; }
+    100% { background-position: 60px 60px; }
+}
+.cta-grid-move {
+    animation: ctaGridMove 12s linear infinite;
+}
+
+/* CTA orbit */
+@keyframes ctaOrbitSpin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+.cta-orbit {
+    animation: ctaOrbitSpin 40s linear infinite;
 }
 
 /* Animated package texture */
