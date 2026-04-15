@@ -296,14 +296,24 @@ class SecretaryBookingController extends BaseSecretaryController
             'start_time' => 'required',
         ]);
 
-        $appointment = $this->bookingWorkflowService->addRetouchSession($booking, $data, $request->user()->id);
+        try {
+            $appointment = $this->bookingWorkflowService->addRetouchSession($booking, $data, $request->user()->id);
 
-        AuditLogger::log('retouch_added', $booking, [
-            'appointment_id' => $appointment->id,
-            'appointment_date' => $data['appointment_date'],
-        ]);
+            AuditLogger::log('retouch_added', $booking, [
+                'appointment_id' => $appointment->id,
+                'appointment_date' => $data['appointment_date'],
+            ]);
 
-        return redirect()->back()->with('success', $this->msg('Retouch session added successfully.', 'تم إضافة جلسة المتابعة بنجاح.'));
+            return redirect()->back()->with('success', $this->msg('Retouch session added successfully.', 'تم إضافة جلسة المتابعة بنجاح.'));
+        } catch (\RuntimeException $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        } catch (\Throwable $e) {
+            report($e);
+            return redirect()->back()->with('error', $this->msg(
+                'Failed to add retouch session. Please try again.',
+                'فشل إضافة جلسة المتابعة. يرجى المحاولة مرة أخرى.'
+            ));
+        }
     }
 
     public function uploadConsent(Request $request, Booking $booking): RedirectResponse

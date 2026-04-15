@@ -371,14 +371,21 @@ class BookingController extends Controller
             'start_time' => 'required',
         ]);
 
-        $appointment = $this->bookingWorkflowService->addRetouchSession($booking, $data, $request->user()->id);
+        try {
+            $appointment = $this->bookingWorkflowService->addRetouchSession($booking, $data, $request->user()->id);
 
-        AuditLogger::log('retouch_added', $booking, [
-            'appointment_id' => $appointment->id,
-            'appointment_date' => $data['appointment_date'],
-        ]);
+            AuditLogger::log('retouch_added', $booking, [
+                'appointment_id' => $appointment->id,
+                'appointment_date' => $data['appointment_date'],
+            ]);
 
-        return redirect()->back()->with('success', 'Retouch session added successfully.');
+            return redirect()->back()->with('success', 'Retouch session added successfully.');
+        } catch (\RuntimeException $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        } catch (\Throwable $e) {
+            report($e);
+            return redirect()->back()->with('error', 'Failed to add retouch session. Please try again.');
+        }
     }
 
     public function uploadConsent(Request $request, Booking $booking): RedirectResponse
