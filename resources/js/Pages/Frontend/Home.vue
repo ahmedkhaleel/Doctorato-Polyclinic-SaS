@@ -629,43 +629,40 @@ const moduleImages = {
         <!-- CTA BANNER                             -->
         <!-- ═══════════════════════════════════════ -->
         <section class="relative py-16 md:py-24 overflow-hidden">
-            <!-- Navy base -->
-            <div class="absolute inset-0 bg-gradient-to-br from-[#0f2847] via-[#1B365D] to-[#162d4d]"></div>
-            <!-- Animated grid pattern -->
-            <div class="absolute inset-0 opacity-[0.03] cta-grid-move"
-                 style="background-image: linear-gradient(rgba(196,162,101,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(196,162,101,0.5) 1px, transparent 1px); background-size: 60px 60px;"></div>
+            <!-- Warm light background -->
+            <div class="absolute inset-0 bg-gradient-to-br from-[#f8f6f1] via-[#f0ebe0] to-[#f5f2ec]"></div>
+            <!-- Subtle dot texture -->
+            <div class="absolute inset-0 opacity-[0.03]"
+                 style="background-image: radial-gradient(circle at 1px 1px, #1B365D 1px, transparent 0); background-size: 40px 40px;"></div>
             <!-- Gold radial glow -->
-            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-[radial-gradient(ellipse,_rgba(196,162,101,0.07)_0%,_transparent_65%)]"></div>
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-[radial-gradient(ellipse,_rgba(196,162,101,0.06)_0%,_transparent_65%)]"></div>
             <!-- Decorative circles -->
-            <div class="absolute -top-20 -right-20 w-72 h-72 border border-[#C4A265]/[0.06] rounded-full cta-orbit"></div>
-            <div class="absolute -bottom-32 -left-32 w-96 h-96 border border-white/[0.03] rounded-full cta-orbit" style="animation-direction: reverse; animation-duration: 50s;"></div>
-            <!-- Gold accent lines -->
-            <div class="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[#C4A265]/30 to-transparent"></div>
-            <div class="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[#C4A265]/30 to-transparent"></div>
+            <div class="absolute -top-20 -right-20 w-72 h-72 border border-[#1B365D]/[0.04] rounded-full cta-orbit"></div>
+            <div class="absolute -bottom-32 -left-32 w-96 h-96 border border-[#C4A265]/[0.06] rounded-full cta-orbit" style="animation-direction: reverse; animation-duration: 50s;"></div>
 
             <div class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
 
                     <!-- Left/Top: Text content -->
                     <div class="flex-1 text-center lg:text-start">
-                        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#C4A265]/10 border border-[#C4A265]/20 mb-5"
+                        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#1B365D]/5 border border-[#1B365D]/10 mb-5"
                              v-scroll-reveal="{ type: 'fade-up' }">
                             <span class="relative flex h-2 w-2">
                                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#C4A265] opacity-50"></span>
                                 <span class="relative inline-flex rounded-full h-2 w-2 bg-[#C4A265]"></span>
                             </span>
-                            <span class="text-[#C4A265] text-[11px] font-semibold tracking-wider uppercase">{{ isRtl ? 'متاح الآن' : 'Available Now' }}</span>
+                            <span class="text-[#1B365D] text-[11px] font-semibold tracking-wider uppercase">{{ isRtl ? 'متاح الآن' : 'Available Now' }}</span>
                         </div>
 
-                        <h2 class="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-white mb-4 leading-tight" v-scroll-reveal="{ type: 'fade-up', delay: 100 }">
+                        <h2 class="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-[#1B365D] mb-4 leading-tight" v-scroll-reveal="{ type: 'fade-up', delay: 100 }">
                             {{ isRtl ? 'صحتك تستحق' : 'Your Health' }}
                             <span class="relative inline-block">
                                 <span class="relative z-10 text-[#C4A265]">{{ isRtl ? 'الأفضل' : 'Deserves the Best' }}</span>
-                                <span class="absolute bottom-1 inset-x-0 h-2 bg-[#C4A265]/10 rounded-full -z-0"></span>
+                                <span class="absolute bottom-1 inset-x-0 h-2 bg-[#C4A265]/15 rounded-full -z-0"></span>
                             </span>
                         </h2>
 
-                        <p class="text-white/45 text-sm md:text-base lg:text-lg mb-8 max-w-lg mx-auto lg:mx-0 leading-relaxed" v-scroll-reveal="{ type: 'fade-up', delay: 150 }">
+                        <p class="text-[#1B365D]/50 text-sm md:text-base lg:text-lg mb-8 max-w-lg mx-auto lg:mx-0 leading-relaxed" v-scroll-reveal="{ type: 'fade-up', delay: 150 }">
                             {{ isRtl ? 'تواصل معنا الآن واحصل على استشارة مجانية مع أفضل أطبائنا المتخصصين في مختلف المجالات الطبية' : 'Contact us now and get a free consultation with our top specialized doctors across all medical fields' }}
                         </p>
 
@@ -681,8 +678,8 @@ const moduleImages = {
                                 <span class="relative">{{ isRtl ? 'تواصل عبر واتساب' : 'Chat on WhatsApp' }}</span>
                             </a>
                             <Link :href="localizedRoute('/booking')"
-                                  class="group relative inline-flex items-center gap-2.5 px-7 py-3.5 bg-gradient-to-r from-[#C4A265] to-[#d4b275] text-[#1B365D] font-bold text-sm rounded-xl
-                                         transition-all duration-300 shadow-lg shadow-[#C4A265]/20 hover:shadow-xl hover:shadow-[#C4A265]/30 hover:-translate-y-0.5 overflow-hidden">
+                                  class="group relative inline-flex items-center gap-2.5 px-7 py-3.5 bg-[#1B365D] text-white font-bold text-sm rounded-xl
+                                         transition-all duration-300 shadow-lg shadow-[#1B365D]/20 hover:shadow-xl hover:shadow-[#1B365D]/30 hover:-translate-y-0.5 overflow-hidden">
                                 <span class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></span>
                                 <svg class="w-5 h-5 relative" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
@@ -697,24 +694,24 @@ const moduleImages = {
                         <div class="grid grid-cols-3 lg:grid-cols-1 gap-3 lg:gap-4 max-w-sm mx-auto lg:mx-0">
                             <!-- Free Consultation -->
                             <div class="group flex flex-col lg:flex-row items-center lg:items-center gap-2 lg:gap-4 p-3 lg:p-4 rounded-xl
-                                        bg-white/[0.04] border border-white/[0.06] backdrop-blur-sm
-                                        hover:bg-white/[0.08] hover:border-[#C4A265]/20 transition-all duration-400">
-                                <div class="w-10 h-10 lg:w-11 lg:h-11 rounded-xl bg-emerald-500/10 border border-emerald-500/15 flex items-center justify-center flex-shrink-0
-                                            group-hover:bg-emerald-500/20 group-hover:scale-105 transition-all duration-400">
-                                    <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                                        bg-white/70 border border-[#1B365D]/[0.06] shadow-sm
+                                        hover:bg-white hover:shadow-md hover:border-[#C4A265]/20 transition-all duration-400">
+                                <div class="w-10 h-10 lg:w-11 lg:h-11 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center flex-shrink-0
+                                            group-hover:bg-emerald-100 group-hover:scale-105 transition-all duration-400">
+                                    <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622A11.99 11.99 0 0020.402 6a11.959 11.959 0 00-8.402-3.785z"/>
                                     </svg>
                                 </div>
                                 <div class="text-center lg:text-start">
-                                    <p class="text-white text-[11px] lg:text-sm font-semibold leading-tight">{{ isRtl ? 'استشارة مجانية' : 'Free Consultation' }}</p>
-                                    <p class="text-white/30 text-[10px] lg:text-xs hidden lg:block mt-0.5">{{ isRtl ? 'أول زيارة مجاناً' : 'First visit is free' }}</p>
+                                    <p class="text-[#1B365D] text-[11px] lg:text-sm font-semibold leading-tight">{{ isRtl ? 'استشارة مجانية' : 'Free Consultation' }}</p>
+                                    <p class="text-[#1B365D]/35 text-[10px] lg:text-xs hidden lg:block mt-0.5">{{ isRtl ? 'أول زيارة مجاناً' : 'First visit is free' }}</p>
                                 </div>
                             </div>
 
                             <!-- Certified Doctors -->
                             <div class="group flex flex-col lg:flex-row items-center lg:items-center gap-2 lg:gap-4 p-3 lg:p-4 rounded-xl
-                                        bg-white/[0.04] border border-white/[0.06] backdrop-blur-sm
-                                        hover:bg-white/[0.08] hover:border-[#C4A265]/20 transition-all duration-400">
+                                        bg-white/70 border border-[#1B365D]/[0.06] shadow-sm
+                                        hover:bg-white hover:shadow-md hover:border-[#C4A265]/20 transition-all duration-400">
                                 <div class="w-10 h-10 lg:w-11 lg:h-11 rounded-xl bg-[#C4A265]/10 border border-[#C4A265]/15 flex items-center justify-center flex-shrink-0
                                             group-hover:bg-[#C4A265]/20 group-hover:scale-105 transition-all duration-400">
                                     <svg class="w-5 h-5 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
@@ -722,24 +719,24 @@ const moduleImages = {
                                     </svg>
                                 </div>
                                 <div class="text-center lg:text-start">
-                                    <p class="text-white text-[11px] lg:text-sm font-semibold leading-tight">{{ isRtl ? 'أطباء معتمدون' : 'Certified Doctors' }}</p>
-                                    <p class="text-white/30 text-[10px] lg:text-xs hidden lg:block mt-0.5">{{ isRtl ? 'خبرة +10 سنوات' : '10+ years experience' }}</p>
+                                    <p class="text-[#1B365D] text-[11px] lg:text-sm font-semibold leading-tight">{{ isRtl ? 'أطباء معتمدون' : 'Certified Doctors' }}</p>
+                                    <p class="text-[#1B365D]/35 text-[10px] lg:text-xs hidden lg:block mt-0.5">{{ isRtl ? 'خبرة +10 سنوات' : '10+ years experience' }}</p>
                                 </div>
                             </div>
 
                             <!-- Guaranteed Results -->
                             <div class="group flex flex-col lg:flex-row items-center lg:items-center gap-2 lg:gap-4 p-3 lg:p-4 rounded-xl
-                                        bg-white/[0.04] border border-white/[0.06] backdrop-blur-sm
-                                        hover:bg-white/[0.08] hover:border-[#C4A265]/20 transition-all duration-400">
-                                <div class="w-10 h-10 lg:w-11 lg:h-11 rounded-xl bg-rose-500/10 border border-rose-500/15 flex items-center justify-center flex-shrink-0
-                                            group-hover:bg-rose-500/20 group-hover:scale-105 transition-all duration-400">
-                                    <svg class="w-5 h-5 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                                        bg-white/70 border border-[#1B365D]/[0.06] shadow-sm
+                                        hover:bg-white hover:shadow-md hover:border-[#C4A265]/20 transition-all duration-400">
+                                <div class="w-10 h-10 lg:w-11 lg:h-11 rounded-xl bg-rose-50 border border-rose-100 flex items-center justify-center flex-shrink-0
+                                            group-hover:bg-rose-100 group-hover:scale-105 transition-all duration-400">
+                                    <svg class="w-5 h-5 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/>
                                     </svg>
                                 </div>
                                 <div class="text-center lg:text-start">
-                                    <p class="text-white text-[11px] lg:text-sm font-semibold leading-tight">{{ isRtl ? 'نتائج مضمونة' : 'Guaranteed Results' }}</p>
-                                    <p class="text-white/30 text-[10px] lg:text-xs hidden lg:block mt-0.5">{{ isRtl ? 'رضا 100%' : '100% satisfaction' }}</p>
+                                    <p class="text-[#1B365D] text-[11px] lg:text-sm font-semibold leading-tight">{{ isRtl ? 'نتائج مضمونة' : 'Guaranteed Results' }}</p>
+                                    <p class="text-[#1B365D]/35 text-[10px] lg:text-xs hidden lg:block mt-0.5">{{ isRtl ? 'رضا 100%' : '100% satisfaction' }}</p>
                                 </div>
                             </div>
                         </div>
