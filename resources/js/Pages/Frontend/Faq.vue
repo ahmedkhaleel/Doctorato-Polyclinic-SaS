@@ -5,6 +5,7 @@ import FrontendLayout from '@/Layouts/FrontendLayout.vue';
 import { useLocale } from '@/Composables/useLocale';
 import { useSettings } from '@/Composables/useSettings';
 import SeoHead from '@/Components/Frontend/SeoHead.vue';
+import PageHero from '@/Components/Frontend/PageHero.vue';
 
 defineOptions({ layout: FrontendLayout });
 
@@ -108,40 +109,7 @@ function isOpen(faqId) {
         :image="seo?.image"
     />
 
-    <!-- Page Hero -->
-    <section class="relative bg-gradient-to-br from-[#3A3A3A] via-[#3a3a3a] to-[#3A3A3A] py-20 lg:py-28 overflow-hidden">
-        <div class="absolute inset-0 pointer-events-none texture-diamond"></div>
-        <div class="absolute inset-0 opacity-10">
-            <div class="absolute top-10 left-10 w-72 h-72 bg-[var(--brand-primary)] rounded-full blur-3xl"></div>
-            <div class="absolute bottom-10 right-10 w-96 h-96 bg-[var(--brand-primary)] rounded-full blur-3xl"></div>
-        </div>
-        <!-- Floating decorative elements -->
-        <div class="absolute top-12 start-12 w-20 h-20 rounded-full bg-gold-primary/5 animate-float"></div>
-        <div class="absolute bottom-16 end-16 w-14 h-14 rounded-full bg-gold-primary/8 animate-float-slow"></div>
-        <div class="absolute top-1/2 start-1/4 w-10 h-10 rounded-full bg-gold-light/5 animate-float-delay"></div>
-        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1
-                class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4"
-                v-scroll-reveal="{ type: 'blur-in' }"
-            >
-                {{ locale === 'ar' ? 'الأسئلة الشائعة' : 'Frequently Asked Questions' }}
-            </h1>
-            <div class="w-20 h-1 bg-[var(--brand-primary)] mx-auto rounded-full mb-6" v-scroll-reveal="{ type: 'fade-up', delay: 100 }"></div>
-            <p class="text-lg text-gray-300 max-w-2xl mx-auto" v-scroll-reveal="{ type: 'fade-up', delay: 200 }">
-                {{ locale === 'ar' ? 'إجابات على أكثر الأسئلة شيوعاً حول خدماتنا وعلاجاتنا' : 'Answers to the most common questions about our services and treatments' }}
-            </p>
-            <!-- Breadcrumb -->
-            <nav class="mt-8 flex items-center justify-center gap-2 text-sm text-gray-400" v-scroll-reveal="{ type: 'fade-up', delay: 300 }">
-                <Link :href="localizedRoute('/')" class="hover:text-[var(--brand-primary)] transition-colors">
-                    {{ t('home') }}
-                </Link>
-                <svg class="w-4 h-4" :class="{ 'rotate-180': isRtl }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                </svg>
-                <span class="text-[var(--brand-primary)]">{{ locale === 'ar' ? 'الأسئلة الشائعة' : 'FAQ' }}</span>
-            </nav>
-        </div>
-    </section>
+    <PageHero :title="isRtl ? 'الأسئلة الشائعة' : 'FAQ'" :subtitle="isRtl ? 'إجابات على أكثر الأسئلة شيوعاً' : 'Answers to frequently asked questions'" :breadcrumb="isRtl ? 'الأسئلة الشائعة' : 'FAQ'" />
 
     <!-- Search Section -->
     <section class="relative py-10 bg-[#FDF8F0] overflow-hidden">

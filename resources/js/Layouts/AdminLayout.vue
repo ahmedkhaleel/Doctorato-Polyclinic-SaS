@@ -278,9 +278,9 @@ function logout()        { router.post('/admin/logout'); }
             <div class="flex items-center justify-between h-[72px] px-5 border-b border-white/[0.06]">
                 <Link href="/admin" class="flex items-center">
                     <img
-                        src="/images/logo/logo.png"
+                        src="/images/logo/logo-light.png"
                         alt="Doctorato Polyclinic"
-                        class="h-12 w-auto brightness-0 invert opacity-90"
+                        class="h-8 w-auto"
                     />
                 </Link>
                 <button class="lg:hidden text-white/40 hover:text-white p-1" @click="closeSidebar">

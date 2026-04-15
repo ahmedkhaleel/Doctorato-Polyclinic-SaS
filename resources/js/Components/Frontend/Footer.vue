@@ -18,12 +18,12 @@ const quickLinks = [
 ];
 
 const serviceLinks = [
-    { label: () => t('skin_care'), route: '/services' },
-    { label: () => t('laser_treatments'), route: '/services' },
-    { label: () => t('body_contouring'), route: '/services' },
-    { label: () => t('facial_treatments'), route: '/services' },
-    { label: () => t('hair_treatments'), route: '/services' },
-    { label: () => t('injectable_fillers'), route: '/services' },
+    { label: () => isRtl ? 'الجلدية والتجميل' : 'Dermatology', route: '/services' },
+    { label: () => isRtl ? 'طب الأسنان' : 'Dentistry', route: '/services' },
+    { label: () => isRtl ? 'طب الأطفال' : 'Pediatrics', route: '/services' },
+    { label: () => isRtl ? 'علاجات الليزر' : 'Laser Treatments', route: '/services' },
+    { label: () => isRtl ? 'العناية بالبشرة' : 'Skincare', route: '/services' },
+    { label: () => isRtl ? 'الحجز الإلكتروني' : 'Online Booking', route: '/booking' },
 ];
 </script>
 
@@ -39,9 +39,9 @@ const serviceLinks = [
                 <div class="lg:col-span-1">
                     <div class="mb-4">
                         <img
-                            src="/images/logo/logo.png"
+                            src="/images/logo/logo-light.png"
                             alt="Doctorato Polyclinic"
-                            class="h-20 w-auto brightness-0 invert opacity-90"
+                            class="h-10 w-auto"
                         />
                     </div>
                     <p class="text-gray-400 text-sm leading-relaxed mb-6">

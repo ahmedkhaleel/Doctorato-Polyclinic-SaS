@@ -4,6 +4,7 @@ import { useLocale } from '@/Composables/useLocale';
 import { sanitizeHtml } from '@/Composables/useSanitize';
 import { computed } from 'vue';
 import SeoHead from '@/Components/Frontend/SeoHead.vue';
+import PageHero from '@/Components/Frontend/PageHero.vue';
 
 const { t, localized, locale, isRtl } = useLocale();
 
@@ -27,29 +28,7 @@ const seoDescription = computed(() => localized(props.seo, 'description'));
             :image="seo?.image"
         />
 
-        <!-- Page Hero -->
-        <section class="relative bg-gradient-to-br from-[#3A3A3A] via-[#3a3a3a] to-[#3A3A3A] py-20 lg:py-28 overflow-hidden">
-            <!-- Decorative elements -->
-            <div class="absolute inset-0 opacity-10">
-                <div class="absolute top-10 left-10 w-72 h-72 bg-[var(--brand-primary)] rounded-full blur-3xl"></div>
-                <div class="absolute bottom-10 right-10 w-96 h-96 bg-[var(--brand-primary)] rounded-full blur-3xl"></div>
-            </div>
-            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[var(--brand-primary)] to-transparent"></div>
-
-            <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                <div v-scroll-reveal="{ type: 'blur-in' }">
-                    <span class="inline-block px-4 py-1.5 bg-[var(--brand-primary)]/20 text-[var(--brand-primary)] text-sm font-medium rounded-full mb-6 tracking-wide">
-                        {{ pageTitle }}
-                    </span>
-                </div>
-                <h1
-                    v-scroll-reveal="{ type: 'fade-up', delay: 100 }"
-                    class="text-3xl md:text-4xl lg:text-5xl font-bold text-white"
-                >
-                    {{ pageTitle }}
-                </h1>
-            </div>
-        </section>
+        <PageHero :title="localized(page, 'title')" :breadcrumb="localized(page, 'title')" />
 
         <!-- Page Content -->
         <section class="py-16 lg:py-24 bg-[#FDF8F0]">

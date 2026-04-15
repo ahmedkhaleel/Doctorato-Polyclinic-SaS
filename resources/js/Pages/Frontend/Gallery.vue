@@ -5,6 +5,7 @@ import FrontendLayout from '@/Layouts/FrontendLayout.vue';
 import { useLocale } from '@/Composables/useLocale';
 import { useSettings } from '@/Composables/useSettings';
 import SeoHead from '@/Components/Frontend/SeoHead.vue';
+import PageHero from '@/Components/Frontend/PageHero.vue';
 
 defineOptions({ layout: FrontendLayout });
 
@@ -118,44 +119,7 @@ if (typeof window !== 'undefined') {
             :image="seo?.image"
         />
 
-        <!-- Page Hero -->
-        <section class="relative h-64 bg-charcoal overflow-hidden">
-            <div class="absolute inset-0 bg-gradient-to-br from-black-deep/90 via-charcoal/80 to-gold-dark/30"></div>
-            <div class="absolute inset-0 pointer-events-none texture-diamond"></div>
-            <div class="absolute inset-0 opacity-10">
-                <div class="absolute top-10 end-10 w-40 h-40 border border-gold-primary/30 rounded-full"></div>
-                <div class="absolute bottom-5 start-20 w-60 h-60 border border-gold-light/20 rounded-full"></div>
-            </div>
-            <!-- Floating decorative elements -->
-            <div class="absolute top-8 start-8 w-20 h-20 rounded-full bg-gold-primary/5 animate-float"></div>
-            <div class="absolute bottom-12 end-16 w-14 h-14 rounded-full bg-gold-primary/8 animate-float-slow"></div>
-            <div class="absolute top-1/2 end-1/4 w-10 h-10 rounded-full bg-gold-light/5 animate-float-delay"></div>
-            <div class="relative z-10 flex flex-col items-center justify-center h-full text-center px-4">
-                <div class="mb-4" v-scroll-reveal="{ type: 'zoom-in' }">
-                    <div class="w-14 h-14 mx-auto rounded-full bg-gold-primary/20 flex items-center justify-center">
-                        <svg class="w-7 h-7 text-gold-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
-                    </div>
-                </div>
-                <h1
-                    class="text-4xl md:text-5xl font-bold text-white mb-4"
-                    v-scroll-reveal="{ type: 'blur-in', duration: 800 }"
-                >
-                    {{ locale === 'ar' ? 'معرض الصور' : 'Photo Gallery' }}
-                </h1>
-                <p
-                    class="text-lg text-beige/80 max-w-2xl"
-                    v-scroll-reveal="{ type: 'blur-in', delay: 200 }"
-                >
-                    {{ locale === 'ar'
-                        ? 'استعرض مرافق عيادتنا ونتائج علاجاتنا المتميزة'
-                        : 'Browse our clinic facilities and outstanding treatment results'
-                    }}
-                </p>
-                <div class="mt-4 w-20 h-1 bg-gold-primary rounded-full" v-scroll-reveal="{ type: 'zoom-in', delay: 400 }"></div>
-            </div>
-        </section>
+        <PageHero :title="isRtl ? 'معرض الصور' : 'Photo Gallery'" :subtitle="isRtl ? 'نتائج حقيقية من عيادتنا' : 'Real results from our clinic'" :breadcrumb="isRtl ? 'معرض الصور' : 'Gallery'" />
 
         <!-- Filter Tabs -->
         <section class="sticky top-0 z-30 bg-white shadow-sm border-b border-beige/30">

@@ -7,6 +7,7 @@ import { toEnglishNumbers } from '@/Composables/useArabicNumbers';
 import { usePage, Link } from '@inertiajs/vue3';
 import { computed, ref, watch, onMounted, onUnmounted } from 'vue';
 import SeoHead from '@/Components/Frontend/SeoHead.vue';
+import PageHero from '@/Components/Frontend/PageHero.vue';
 import DoctorDatePicker from '@/Components/DoctorDatePicker.vue';
 import PromoCodeInput from '@/Components/PromoCodeInput.vue';
 import axios from 'axios';
@@ -403,40 +404,7 @@ function submit() {
             :image="seo?.image"
         />
 
-        <!-- Page Hero -->
-        <section class="relative bg-gradient-to-br from-[#3A3A3A] via-[#3a3a3a] to-[#3A3A3A] py-20 lg:py-28 overflow-hidden">
-            <div class="absolute inset-0 pointer-events-none texture-wave"></div>
-            <!-- Decorative elements -->
-            <div class="absolute inset-0 opacity-10">
-                <div class="absolute top-10 left-10 w-72 h-72 bg-[var(--brand-primary)] rounded-full blur-3xl"></div>
-                <div class="absolute bottom-10 right-10 w-96 h-96 bg-[var(--brand-primary)] rounded-full blur-3xl"></div>
-            </div>
-            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[var(--brand-primary)] to-transparent"></div>
-            <!-- Floating decorative elements -->
-            <div class="absolute top-12 start-8 w-20 h-20 rounded-full bg-gold-primary/5 animate-float"></div>
-            <div class="absolute bottom-16 end-12 w-14 h-14 rounded-full bg-gold-primary/8 animate-float-slow"></div>
-            <div class="absolute top-1/3 end-1/4 w-10 h-10 rounded-full bg-gold-light/5 animate-float-delay"></div>
-
-            <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                <div v-scroll-reveal="{ type: 'blur-in' }">
-                    <span class="inline-block px-4 py-1.5 bg-[var(--brand-primary)]/20 text-[var(--brand-primary)] text-sm font-medium rounded-full mb-6 tracking-wide">
-                        {{ t('booking') }}
-                    </span>
-                </div>
-                <h1
-                    v-scroll-reveal="{ type: 'blur-in', delay: 100 }"
-                    class="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4"
-                >
-                    {{ t('book_your_appointment') }}
-                </h1>
-                <p
-                    v-scroll-reveal="{ type: 'blur-in', delay: 200 }"
-                    class="text-lg text-gray-300 max-w-2xl mx-auto"
-                >
-                    {{ t('booking_subtitle') }}
-                </p>
-            </div>
-        </section>
+        <PageHero :title="isRtl ? 'احجز موعدك' : 'Book Appointment'" :subtitle="isRtl ? 'احجز موعدك الآن واستمتع برعاية صحية متميزة' : 'Book your appointment and enjoy outstanding healthcare'" :breadcrumb="isRtl ? 'الحجز' : 'Booking'" />
 
         <!-- Booking Form Section -->
         <section class="relative py-16 lg:py-24 bg-[#FDF8F0] overflow-hidden">

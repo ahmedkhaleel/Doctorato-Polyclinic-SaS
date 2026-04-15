@@ -1,15 +1,20 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, ref, onMounted } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import FrontendLayout from '@/Layouts/FrontendLayout.vue';
 import { useLocale } from '@/Composables/useLocale';
 import { useSettings } from '@/Composables/useSettings';
 import SeoHead from '@/Components/Frontend/SeoHead.vue';
+import PageHero from '@/Components/Frontend/PageHero.vue';
 
 defineOptions({ layout: FrontendLayout });
 
 const props = defineProps({
     categories: {
+        type: Array,
+        default: () => [],
+    },
+    activeModules: {
         type: Array,
         default: () => [],
     },
@@ -21,6 +26,22 @@ const { whatsappLink } = useSettings();
 
 const seoTitle = computed(() => localized(props.seo, 'title'));
 const seoDescription = computed(() => localized(props.seo, 'description'));
+
+// Module filter — from URL query or default to 'all'
+function getModuleFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    const mod = params.get('module');
+    return (mod && props.activeModules.some(m => m.slug === mod)) ? mod : 'all';
+}
+
+const selectedModule = ref(getModuleFromUrl());
+
+onMounted(() => { selectedModule.value = getModuleFromUrl(); });
+
+const filteredCategories = computed(() => {
+    if (selectedModule.value === 'all') return props.categories;
+    return props.categories.filter(c => c.module === selectedModule.value);
+});
 
 const equipment = [
     {
@@ -70,36 +91,11 @@ const equipment = [
             :image="seo?.image"
         />
 
-        <!-- Page Hero -->
-        <section class="relative h-64 bg-charcoal overflow-hidden">
-            <div class="absolute inset-0 bg-gradient-to-br from-black-deep/90 via-charcoal/80 to-gold-dark/30"></div>
-            <div class="absolute inset-0 pointer-events-none texture-diamond"></div>
-            <div class="absolute inset-0 opacity-10">
-                <div class="absolute top-10 start-10 w-40 h-40 border border-gold-primary/30 rounded-full animate-float"></div>
-                <div class="absolute bottom-5 end-20 w-60 h-60 border border-gold-light/20 rounded-full animate-float-slow"></div>
-            </div>
-            <!-- Floating decorative elements -->
-            <div class="absolute top-6 end-[15%] w-16 h-16 rounded-full bg-gold-primary/5 animate-float-delay"></div>
-            <div class="absolute bottom-10 start-[20%] w-10 h-10 rounded-full bg-gold-primary/8 animate-float-slow"></div>
-            <div class="relative z-10 flex flex-col items-center justify-center h-full text-center px-4">
-                <h1
-                    class="text-4xl md:text-5xl font-bold text-white mb-4"
-                    v-scroll-reveal="{ type: 'blur-in', duration: 800 }"
-                >
-                    {{ t('our_services', { default: locale === 'ar' ? 'خدماتنا' : 'Our Services' }) }}
-                </h1>
-                <p
-                    class="text-lg text-beige/80 max-w-2xl"
-                    v-scroll-reveal="{ type: 'fade-up', delay: 200 }"
-                >
-                    {{ locale === 'ar'
-                        ? 'نقدم لكم أحدث التقنيات وأفضل العلاجات في عالم الجلدية والتجميل'
-                        : 'We offer the latest technologies and best treatments in dermatology and aesthetics'
-                    }}
-                </p>
-                <div class="mt-4 w-20 h-1 bg-gold-primary rounded-full" v-scroll-reveal="{ type: 'zoom-in', delay: 400 }"></div>
-            </div>
-        </section>
+        <PageHero
+            :title="isRtl ? 'خدماتنا' : 'Our Services'"
+            :subtitle="isRtl ? 'نقدم لكم أحدث التقنيات وأفضل العلاجات في مختلف التخصصات الطبية' : 'We offer the latest technologies and best treatments across all medical specialties'"
+            :breadcrumb="isRtl ? 'خدماتنا' : 'Services'"
+        />
 
         <!-- Services by Category -->
         <section class="relative py-16 md:py-24 bg-off-white overflow-hidden">
@@ -109,8 +105,28 @@ const equipment = [
             <div class="absolute bottom-20 end-10 w-14 h-14 rounded-full bg-gold-primary/8 animate-float-slow"></div>
             <div class="absolute top-1/2 end-[5%] w-8 h-8 rounded-full bg-gold-primary/6 animate-float-delay"></div>
             <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <!-- Module Filter Tabs -->
+                <div v-if="activeModules.length > 1" class="flex flex-wrap items-center justify-center gap-3 mb-12">
+                    <button @click="selectedModule = 'all'"
+                            class="px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300"
+                            :class="selectedModule === 'all'
+                                ? 'bg-[#1B365D] text-white shadow-lg'
+                                : 'bg-white text-gray-600 border border-gray-200 hover:border-[#C4A265]/30 hover:text-[#1B365D]'">
+                        {{ isRtl ? 'جميع التخصصات' : 'All Specialties' }}
+                    </button>
+                    <button v-for="mod in activeModules" :key="mod.slug"
+                            @click="selectedModule = mod.slug"
+                            class="px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300"
+                            :class="selectedModule === mod.slug
+                                ? 'text-white shadow-lg'
+                                : 'bg-white text-gray-600 border border-gray-200 hover:border-[#C4A265]/30 hover:text-[#1B365D]'"
+                            :style="selectedModule === mod.slug ? { backgroundColor: mod.color } : {}">
+                        {{ isRtl ? mod.name_ar : mod.name_en }}
+                    </button>
+                </div>
+
                 <div
-                    v-for="(category, catIndex) in categories"
+                    v-for="(category, catIndex) in filteredCategories"
                     :key="category.id"
                     class="mb-16 last:mb-0"
                     v-scroll-reveal="{ type: 'fade-up', delay: catIndex * 100 }"

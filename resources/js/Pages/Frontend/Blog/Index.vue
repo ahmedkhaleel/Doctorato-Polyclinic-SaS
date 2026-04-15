@@ -5,6 +5,7 @@ import FrontendLayout from '@/Layouts/FrontendLayout.vue';
 import { useLocale } from '@/Composables/useLocale';
 import { useSettings } from '@/Composables/useSettings';
 import SeoHead from '@/Components/Frontend/SeoHead.vue';
+import PageHero from '@/Components/Frontend/PageHero.vue';
 
 defineOptions({ layout: FrontendLayout });
 
@@ -57,40 +58,7 @@ function formatDate(dateString) {
         :image="seo?.image"
     />
 
-    <!-- Page Hero -->
-    <section class="relative bg-gradient-to-br from-[#3A3A3A] via-[#3a3a3a] to-[#3A3A3A] py-20 lg:py-28 overflow-hidden">
-        <div class="absolute inset-0 pointer-events-none texture-diamond"></div>
-        <div class="absolute inset-0 opacity-10">
-            <div class="absolute top-10 left-10 w-72 h-72 bg-[var(--brand-primary)] rounded-full blur-3xl animate-float"></div>
-            <div class="absolute bottom-10 right-10 w-96 h-96 bg-[var(--brand-primary)] rounded-full blur-3xl animate-float-slow"></div>
-        </div>
-        <!-- Floating decorative elements -->
-        <div class="absolute top-8 end-[15%] w-16 h-16 rounded-full bg-gold-primary/5 animate-float-delay"></div>
-        <div class="absolute bottom-12 start-[20%] w-10 h-10 rounded-full bg-gold-primary/8 animate-float-slow"></div>
-        <div class="absolute top-1/2 start-[8%] w-8 h-8 rounded-full bg-gold-primary/4 animate-float"></div>
-        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1
-                class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4"
-                v-scroll-reveal="{ type: 'blur-in' }"
-            >
-                {{ t('blog') }}
-            </h1>
-            <div class="w-20 h-1 bg-[var(--brand-primary)] mx-auto rounded-full mb-6" v-scroll-reveal="{ type: 'fade-up', delay: 100 }"></div>
-            <p class="text-lg text-gray-300 max-w-2xl mx-auto" v-scroll-reveal="{ type: 'fade-up', delay: 200 }">
-                {{ t('blog_subtitle', { default: locale === 'ar' ? 'مقالات ونصائح طبية من خبراء العناية بالبشرة' : 'Medical articles and skincare tips from our experts' }) }}
-            </p>
-            <!-- Breadcrumb -->
-            <nav class="mt-8 flex items-center justify-center gap-2 text-sm text-gray-400" v-scroll-reveal="{ type: 'fade-up', delay: 300 }">
-                <Link :href="localizedRoute('/')" class="hover:text-[var(--brand-primary)] transition-colors">
-                    {{ t('home') }}
-                </Link>
-                <svg class="w-4 h-4" :class="{ 'rotate-180': isRtl }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                </svg>
-                <span class="text-[var(--brand-primary)]">{{ t('blog') }}</span>
-            </nav>
-        </div>
-    </section>
+    <PageHero :title="isRtl ? 'المدونة' : 'Blog'" :subtitle="isRtl ? 'مقالات ونصائح طبية من أطبائنا المتخصصين' : 'Medical articles and tips from our specialists'" :breadcrumb="isRtl ? 'المدونة' : 'Blog'" />
 
     <!-- Featured Post -->
     <section v-if="featuredPost" class="relative py-12 lg:py-16 bg-[#FDF8F0] overflow-hidden">

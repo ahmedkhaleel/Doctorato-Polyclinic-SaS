@@ -34,8 +34,7 @@ function submit() {
         <div class="w-full max-w-md">
             <!-- Logo -->
             <div class="text-center mb-8">
-                <img src="/images/logo/logo.png" alt="Doctorato Polyclinic" class="mx-auto h-20 w-auto mb-3 drop-shadow-lg" />
-                <h1 class="text-3xl font-bold tracking-widest text-[var(--brand-primary)]">Doctorato</h1>
+                <img src="/images/logo/logo-light.png" alt="Doctorato Polyclinic" class="mx-auto h-12 w-auto mb-3 drop-shadow-lg" />
                 <p class="text-gray-400 text-sm uppercase tracking-widest mt-1">{{ isRtl ? 'بوابة المريض' : 'Patient Portal' }}</p>
             </div>
 

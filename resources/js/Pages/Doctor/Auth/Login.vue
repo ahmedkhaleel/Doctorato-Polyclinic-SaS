@@ -66,10 +66,9 @@ function submit() {
                 :style="{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }"
             >
                 <div class="relative inline-block">
-                    <div class="logo-glow absolute inset-0 w-24 h-24 mx-auto rounded-full bg-[#C4A265]/10 blur-xl"></div>
-                    <img src="/images/logo/logo.png" alt="Doctorato Polyclinic" class="relative mx-auto h-24 w-auto mb-4 drop-shadow-2xl" />
+                    <div class="logo-glow absolute inset-0 w-full h-full mx-auto rounded-full bg-[#C4A265]/10 blur-xl"></div>
+                    <img src="/images/logo/logo-light.png" alt="Doctorato Polyclinic" class="relative mx-auto h-12 w-auto mb-4 drop-shadow-2xl" />
                 </div>
-                <h1 class="text-4xl font-bold tracking-[0.25em] text-[var(--brand-primary)] mb-1.5">Doctorato</h1>
                 <div class="flex items-center justify-center gap-3">
                     <span class="w-8 h-px bg-gradient-to-r from-transparent to-[#C4A265]/40"></span>
                     <p class="text-gray-400 text-xs uppercase tracking-[0.3em] font-medium">{{ isRtl ? 'بوابة الطبيب' : 'Doctor Portal' }}</p>
