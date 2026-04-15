@@ -186,6 +186,14 @@ const bookingTypeCards = computed(() => {
     return groups;
 });
 
+const selectedTypeInfo = computed(() => {
+    for (const group of bookingTypeCards.value) {
+        const found = group.items.find(t => t.value === bookingType.value);
+        if (found) return { ...found, color: group.color };
+    }
+    return null;
+});
+
 const filteredServices = computed(() => {
     const mod = currentModule.value;
     return (props.services || []).filter(s => s.module === mod || (!s.module && mod === defaultMod.value));
@@ -631,69 +639,86 @@ const stepLabels = computed(() => isRtl.value ? [
         </div>
 
         <!-- Booking Type Selector -->
-        <div class="mb-6">
-          <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6 max-w-4xl mx-auto overflow-hidden">
-            <h3 class="text-sm font-bold text-gray-800 mb-5 flex items-center gap-2">
-              <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-teal-500 to-cyan-500 flex items-center justify-center">
-                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
-              </div>
-              {{ isRtl ? 'نوع الحجز' : 'Booking Type' }}
+        <div class="mb-6 max-w-4xl mx-auto">
+          <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-5 overflow-hidden">
+            <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4 text-center">
+              {{ isRtl ? 'اختر نوع الحجز' : 'Select Booking Type' }}
             </h3>
 
-            <!-- Loop through groups -->
-            <template v-for="(group, gIndex) in bookingTypeCards" :key="group.module">
-              <!-- Group divider label (not for first group) -->
-              <div v-if="gIndex > 0" class="flex items-center gap-3 my-4">
-                <div class="h-px flex-1 bg-gray-100"></div>
-                <span class="text-[10px] font-bold uppercase tracking-widest px-2" :style="{ color: group.color }">
-                  {{ isRtl ? group.titleAr : group.titleEn }}
-                </span>
-                <div class="h-px flex-1 bg-gray-100"></div>
-              </div>
-
-              <!-- Cards grid -->
-              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            <!-- All cards in one flat grid — 3 cols on mobile, up to 4 on desktop -->
+            <div class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-7 gap-2 sm:gap-3">
+              <template v-for="(group, gIndex) in bookingTypeCards" :key="group.module">
                 <button
                   v-for="(type, tIndex) in group.items"
                   :key="type.value"
                   @click="bookingType = type.value"
                   type="button"
-                  class="booking-card relative text-start p-4 rounded-xl border-2 transition-all duration-300 group/card"
+                  class="booking-card relative flex flex-col items-center text-center p-2.5 sm:p-3 rounded-xl border-2 transition-all duration-300 group/card cursor-pointer"
                   :class="[
                     bookingType === type.value
-                      ? 'shadow-lg scale-[1.02]'
-                      : 'border-gray-200 hover:border-gray-300 hover:-translate-y-0.5 hover:shadow-md',
+                      ? 'shadow-lg scale-[1.04] -translate-y-0.5'
+                      : 'border-gray-100 hover:border-gray-200 hover:-translate-y-0.5 hover:shadow-md',
                   ]"
                   :style="[
-                    cardsVisible ? { animationDelay: ((gIndex * 3 + tIndex) * 80) + 'ms' } : { opacity: 0 },
-                    bookingType === type.value ? { borderColor: group.color, backgroundColor: group.color + '08', boxShadow: '0 8px 25px -5px ' + group.color + '25' } : {},
+                    cardsVisible ? { animationDelay: ((gIndex * 3 + tIndex) * 70) + 'ms' } : { opacity: 0 },
+                    bookingType === type.value
+                      ? { borderColor: group.color, backgroundColor: group.color + '0A', boxShadow: '0 8px 20px -4px ' + group.color + '30' }
+                      : {},
                   ]"
                 >
-                  <!-- Active indicator dot -->
-                  <div v-if="bookingType === type.value" class="active-dot absolute top-3 end-3 w-2.5 h-2.5 rounded-full" :style="{ backgroundColor: group.color }"></div>
-
-                  <!-- Icon -->
-                  <div
-                    class="w-10 h-10 rounded-xl flex items-center justify-center mb-3 transition-all duration-300"
-                    :class="bookingType === type.value ? 'icon-pulse' : ''"
-                    :style="bookingType === type.value ? { backgroundColor: group.color + '20', color: group.color } : { backgroundColor: '#f3f4f6', color: '#9ca3af' }"
-                  >
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" :d="type.iconPath" />
-                    </svg>
+                  <!-- Glow ring behind icon when active -->
+                  <div class="relative mb-2">
+                    <div
+                      v-if="bookingType === type.value"
+                      class="absolute inset-0 rounded-xl blur-md opacity-40"
+                      :style="{ backgroundColor: group.color }"
+                    ></div>
+                    <div
+                      class="relative w-11 h-11 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center transition-all duration-300"
+                      :class="bookingType === type.value ? 'icon-pulse' : ''"
+                      :style="bookingType === type.value
+                        ? { background: `linear-gradient(135deg, ${group.color}, ${group.color}CC)`, color: '#fff' }
+                        : { backgroundColor: '#f3f4f6', color: '#9ca3af' }"
+                    >
+                      <svg class="w-5 h-5 sm:w-5.5 sm:h-5.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" :d="type.iconPath" />
+                      </svg>
+                    </div>
                   </div>
 
                   <!-- Title -->
-                  <p class="text-sm font-bold transition-colors duration-200" :style="bookingType === type.value ? { color: group.color } : { color: '#1f2937' }">
+                  <p
+                    class="text-[10px] sm:text-[11px] font-bold leading-tight transition-colors duration-200 line-clamp-2"
+                    :style="bookingType === type.value ? { color: group.color } : { color: '#374151' }"
+                  >
                     {{ isRtl ? type.titleAr : type.titleEn }}
                   </p>
-                  <!-- Description -->
-                  <p class="text-[11px] mt-1 transition-colors duration-200" :class="bookingType === type.value ? 'text-gray-600' : 'text-gray-400'">
-                    {{ isRtl ? type.descAr : type.descEn }}
-                  </p>
+
+                  <!-- Active check badge -->
+                  <div
+                    v-if="bookingType === type.value"
+                    class="active-dot absolute -top-1 -end-1 w-5 h-5 rounded-full flex items-center justify-center shadow-sm"
+                    :style="{ backgroundColor: group.color }"
+                  >
+                    <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+
+                  <!-- Module color bar at bottom -->
+                  <div
+                    class="absolute bottom-0 inset-x-0 h-0.5 rounded-b-xl transition-all duration-300"
+                    :style="{ backgroundColor: bookingType === type.value ? group.color : 'transparent' }"
+                  ></div>
                 </button>
-              </div>
-            </template>
+              </template>
+            </div>
+
+            <!-- Selected type description -->
+            <div v-if="selectedTypeInfo" class="mt-3 flex items-center justify-center gap-2 text-xs text-gray-500 transition-all duration-300">
+              <div class="w-1.5 h-1.5 rounded-full" :style="{ backgroundColor: selectedTypeInfo.color }"></div>
+              <span>{{ isRtl ? selectedTypeInfo.descAr : selectedTypeInfo.descEn }}</span>
+            </div>
           </div>
         </div>
 
