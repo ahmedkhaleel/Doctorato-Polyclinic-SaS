@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, watchEffect, nextTick } from 'vue';
+import { ref, computed, watch, onMounted, nextTick } from 'vue';
 import { Link, usePage, router } from '@inertiajs/vue3';
 import { usePermissions } from '@/Composables/usePermissions.js';
 import { useTheme } from '@/Composables/useTheme';
@@ -269,8 +269,8 @@ function isActive(href) {
     return currentUrl.value.startsWith(href);
 }
 
-/* Auto-open the group containing the active route */
-watchEffect(() => {
+/* Auto-open the group containing the active route — only on mount and route change */
+function autoOpenActiveGroup() {
     const newSet = new Set(openGroups.value);
     filteredGroups.value.forEach((group) => {
         if (group.items.some(item => isActive(item.href))) {
@@ -278,7 +278,10 @@ watchEffect(() => {
         }
     });
     openGroups.value = newSet;
-});
+}
+
+onMounted(autoOpenActiveGroup);
+watch(currentUrl, autoOpenActiveGroup);
 
 function toggleSidebar() { sidebarOpen.value = !sidebarOpen.value; }
 function closeSidebar()  { sidebarOpen.value = false; }
