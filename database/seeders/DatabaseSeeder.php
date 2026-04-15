@@ -107,6 +107,7 @@ class DatabaseSeeder extends Seeder
 
             $this->call([
                 BookingSeeder::class,
+                DemoDataSeeder::class,
                 ContactMessageSeeder::class,
                 PatientSeeder::class,
                 ClinicVisitSeeder::class,
