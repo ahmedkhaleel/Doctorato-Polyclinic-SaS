@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, computed, watch, nextTick } from 'vue';
+import { ref, reactive, computed, watch, nextTick, onMounted } from 'vue';
 import { Link, router , usePage } from '@inertiajs/vue3';
 import SecretaryLayout from '@/Layouts/SecretaryLayout.vue';
 import QuickAddPatientModal from '@/Components/QuickAddPatientModal.vue';
@@ -42,6 +42,9 @@ const errors = ref({});
 
 // Booking Type
 const bookingType = ref('service');
+
+const cardsVisible = ref(false);
+onMounted(() => { setTimeout(() => cardsVisible.value = true, 100); });
 
 // Step 1 - Patient
 const patientSearch = ref('');
@@ -124,6 +127,63 @@ const currentModule = computed(() => {
     if (isDental.value) return 'dental';
     if (isPediatric.value) return 'pediatric';
     return defaultMod.value;
+});
+
+const bookingTypeCards = computed(() => {
+    const groups = [];
+
+    if (isDermaEnabled.value) {
+        groups.push({
+            module: 'derma',
+            titleAr: 'الجلدية والتجميل',
+            titleEn: 'Dermatology & Cosmetics',
+            color: '#0d9488',
+            items: [
+                { value: 'dermatology_consultation', titleAr: 'استشارة جلدية', titleEn: 'Dermatology Consultation', descAr: 'فحص وتشخيص الأمراض الجلدية', descEn: 'Skin examination & diagnosis', iconPath: 'M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z' },
+                { value: 'cosmetic_consultation', titleAr: 'استشارة تجميلية', titleEn: 'Cosmetic Consultation', descAr: 'استشارة تجميلية متخصصة', descEn: 'Specialized cosmetic consultation', iconPath: 'M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456z' },
+                { value: 'service', titleAr: 'حجز خدمة', titleEn: 'Book Service', descAr: 'حجز جلسة علاجية أو تجميلية', descEn: 'Book a treatment session', iconPath: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z' },
+            ],
+        });
+    } else {
+        // General group always shows service even without derma
+        groups.push({
+            module: 'general',
+            titleAr: 'عام',
+            titleEn: 'General',
+            color: '#0d9488',
+            items: [
+                { value: 'service', titleAr: 'حجز خدمة', titleEn: 'Book Service', descAr: 'حجز جلسة علاجية أو تجميلية', descEn: 'Book a treatment session', iconPath: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z' },
+            ],
+        });
+    }
+
+    if (isDentalEnabled.value) {
+        groups.push({
+            module: 'dental',
+            titleAr: 'طب الأسنان',
+            titleEn: 'Dental',
+            color: '#06b6d4',
+            items: [
+                { value: 'dental_consultation', titleAr: 'استشارة أسنان', titleEn: 'Dental Consultation', descAr: 'فحص وتشخيص مشاكل الأسنان', descEn: 'Dental examination & diagnosis', iconPath: 'M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z' },
+                { value: 'dental_service', titleAr: 'خدمة أسنان', titleEn: 'Dental Service', descAr: 'حجز علاج أو إجراء للأسنان', descEn: 'Book a dental procedure', iconPath: 'M21.75 6.75a4.5 4.5 0 01-4.884 4.484c-1.076-.091-2.264.071-2.95.904l-7.152 8.684a2.548 2.548 0 11-3.586-3.586l8.684-7.152c.833-.686.995-1.874.904-2.95a4.5 4.5 0 016.336-4.486l-3.276 3.276a3.004 3.004 0 002.25 2.25l3.276-3.276c.256.565.398 1.192.398 1.852z' },
+            ],
+        });
+    }
+
+    if (isPediatricEnabled.value) {
+        groups.push({
+            module: 'pediatric',
+            titleAr: 'طب الأطفال',
+            titleEn: 'Pediatrics',
+            color: '#16a34a',
+            items: [
+                { value: 'pediatric_consultation', titleAr: 'استشارة أطفال', titleEn: 'Pediatric Consultation', descAr: 'فحص وتشخيص أمراض الأطفال', descEn: 'Pediatric examination & diagnosis', iconPath: 'M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z' },
+                { value: 'pediatric_service', titleAr: 'خدمة أطفال', titleEn: 'Pediatric Service', descAr: 'تطعيم أو متابعة نمو', descEn: 'Vaccination or growth monitoring', iconPath: 'M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5m9.5-11.396v5.714c0 .597.237 1.17.659 1.591L19 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0c.251.023.501.05.75.082M5 14.5l1.429 5.57a1.2 1.2 0 001.165.93h8.812a1.2 1.2 0 001.165-.93L19 14.5' },
+            ],
+        });
+    }
+
+    return groups;
 });
 
 const filteredServices = computed(() => {
@@ -571,103 +631,71 @@ const stepLabels = computed(() => isRtl.value ? [
         </div>
 
         <!-- Booking Type Selector -->
-            <div class="mb-6">
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-5 max-w-4xl mx-auto">
-                    <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">{{ isRtl ? 'نوع الحجز' : 'Booking Type' }}</h3>
-                    <div class="flex flex-wrap gap-3">
-                        <button
-                            v-if="isDermaEnabled"
-                            type="button"
-                            @click="bookingType = 'dermatology_consultation'"
-                            :class="[
-                                'p-3 rounded-xl border-2 transition-all text-start flex-1 min-w-[140px]',
-                                bookingType === 'dermatology_consultation'
-                                    ? 'border-teal-500 bg-teal-50/50'
-                                    : 'border-gray-200 hover:border-gray-300'
-                            ]"
-                        >
-                            <p class="text-sm font-semibold text-gray-800">{{ isRtl ? 'استشارة جلدية' : 'Dermatology Consultation' }}</p>
-                        </button>
-                        <button
-                            v-if="isDermaEnabled"
-                            type="button"
-                            @click="bookingType = 'cosmetic_consultation'"
-                            :class="[
-                                'p-3 rounded-xl border-2 transition-all text-start flex-1 min-w-[140px]',
-                                bookingType === 'cosmetic_consultation'
-                                    ? 'border-teal-500 bg-teal-50/50'
-                                    : 'border-gray-200 hover:border-gray-300'
-                            ]"
-                        >
-                            <p class="text-sm font-semibold text-gray-800">{{ isRtl ? 'استشارة تجميلية' : 'Cosmetic Consultation' }}</p>
-                        </button>
-                        <button
-                            type="button"
-                            @click="bookingType = 'service'"
-                            :class="[
-                                'p-3 rounded-xl border-2 transition-all text-start flex-1 min-w-[140px]',
-                                bookingType === 'service'
-                                    ? 'border-teal-500 bg-teal-50/50'
-                                    : 'border-gray-200 hover:border-gray-300'
-                            ]"
-                        >
-                            <p class="text-sm font-semibold text-gray-800">{{ isRtl ? 'حجز خدمة' : 'Book Service' }}</p>
-                        </button>
-                        <button
-                            v-if="isDentalEnabled"
-                            type="button"
-                            @click="bookingType = 'dental_consultation'"
-                            :class="[
-                                'p-3 rounded-xl border-2 transition-all text-start flex-1 min-w-[140px]',
-                                bookingType === 'dental_consultation'
-                                    ? 'border-cyan-500 bg-cyan-50/50'
-                                    : 'border-gray-200 hover:border-gray-300'
-                            ]"
-                        >
-                            <p class="text-sm font-semibold text-gray-800">{{ isRtl ? 'استشارة أسنان' : 'Dental Consultation' }}</p>
-                        </button>
-                        <button
-                            v-if="isDentalEnabled"
-                            type="button"
-                            @click="bookingType = 'dental_service'"
-                            :class="[
-                                'p-3 rounded-xl border-2 transition-all text-start flex-1 min-w-[140px]',
-                                bookingType === 'dental_service'
-                                    ? 'border-cyan-500 bg-cyan-50/50'
-                                    : 'border-gray-200 hover:border-gray-300'
-                            ]"
-                        >
-                            <p class="text-sm font-semibold text-gray-800">{{ isRtl ? 'خدمة أسنان' : 'Dental Service' }}</p>
-                        </button>
-                        <button
-                            v-if="isPediatricEnabled"
-                            type="button"
-                            @click="bookingType = 'pediatric_consultation'"
-                            :class="[
-                                'p-3 rounded-xl border-2 transition-all text-start flex-1 min-w-[140px]',
-                                bookingType === 'pediatric_consultation'
-                                    ? 'border-green-500 bg-green-50/50'
-                                    : 'border-gray-200 hover:border-gray-300'
-                            ]"
-                        >
-                            <p class="text-sm font-semibold text-gray-800">{{ isRtl ? 'استشارة أطفال' : 'Pediatric Consultation' }}</p>
-                        </button>
-                        <button
-                            v-if="isPediatricEnabled"
-                            type="button"
-                            @click="bookingType = 'pediatric_service'"
-                            :class="[
-                                'p-3 rounded-xl border-2 transition-all text-start flex-1 min-w-[140px]',
-                                bookingType === 'pediatric_service'
-                                    ? 'border-green-500 bg-green-50/50'
-                                    : 'border-gray-200 hover:border-gray-300'
-                            ]"
-                        >
-                            <p class="text-sm font-semibold text-gray-800">{{ isRtl ? 'خدمة أطفال' : 'Pediatric Service' }}</p>
-                        </button>
-                    </div>
-                </div>
-            </div>
+        <div class="mb-6">
+          <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6 max-w-4xl mx-auto overflow-hidden">
+            <h3 class="text-sm font-bold text-gray-800 mb-5 flex items-center gap-2">
+              <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-teal-500 to-cyan-500 flex items-center justify-center">
+                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
+              </div>
+              {{ isRtl ? 'نوع الحجز' : 'Booking Type' }}
+            </h3>
+
+            <!-- Loop through groups -->
+            <template v-for="(group, gIndex) in bookingTypeCards" :key="group.module">
+              <!-- Group divider label (not for first group) -->
+              <div v-if="gIndex > 0" class="flex items-center gap-3 my-4">
+                <div class="h-px flex-1 bg-gray-100"></div>
+                <span class="text-[10px] font-bold uppercase tracking-widest px-2" :style="{ color: group.color }">
+                  {{ isRtl ? group.titleAr : group.titleEn }}
+                </span>
+                <div class="h-px flex-1 bg-gray-100"></div>
+              </div>
+
+              <!-- Cards grid -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                <button
+                  v-for="(type, tIndex) in group.items"
+                  :key="type.value"
+                  @click="bookingType = type.value"
+                  type="button"
+                  class="booking-card relative text-start p-4 rounded-xl border-2 transition-all duration-300 group/card"
+                  :class="[
+                    bookingType === type.value
+                      ? 'shadow-lg scale-[1.02]'
+                      : 'border-gray-200 hover:border-gray-300 hover:-translate-y-0.5 hover:shadow-md',
+                  ]"
+                  :style="[
+                    cardsVisible ? { animationDelay: ((gIndex * 3 + tIndex) * 80) + 'ms' } : { opacity: 0 },
+                    bookingType === type.value ? { borderColor: group.color, backgroundColor: group.color + '08', boxShadow: '0 8px 25px -5px ' + group.color + '25' } : {},
+                  ]"
+                >
+                  <!-- Active indicator dot -->
+                  <div v-if="bookingType === type.value" class="active-dot absolute top-3 end-3 w-2.5 h-2.5 rounded-full" :style="{ backgroundColor: group.color }"></div>
+
+                  <!-- Icon -->
+                  <div
+                    class="w-10 h-10 rounded-xl flex items-center justify-center mb-3 transition-all duration-300"
+                    :class="bookingType === type.value ? 'icon-pulse' : ''"
+                    :style="bookingType === type.value ? { backgroundColor: group.color + '20', color: group.color } : { backgroundColor: '#f3f4f6', color: '#9ca3af' }"
+                  >
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" :d="type.iconPath" />
+                    </svg>
+                  </div>
+
+                  <!-- Title -->
+                  <p class="text-sm font-bold transition-colors duration-200" :style="bookingType === type.value ? { color: group.color } : { color: '#1f2937' }">
+                    {{ isRtl ? type.titleAr : type.titleEn }}
+                  </p>
+                  <!-- Description -->
+                  <p class="text-[11px] mt-1 transition-colors duration-200" :class="bookingType === type.value ? 'text-gray-600' : 'text-gray-400'">
+                    {{ isRtl ? type.descAr : type.descEn }}
+                  </p>
+                </button>
+              </div>
+            </template>
+          </div>
+        </div>
 
             <!-- Follow-up Eligibility Banner -->
             <div v-if="followUpInfo?.eligible && bookingType === 'dermatology_consultation'" class="mb-6 max-w-4xl mx-auto">
@@ -1303,3 +1331,38 @@ const stepLabels = computed(() => isRtl.value ? [
         />
     </div>
 </template>
+
+<style scoped>
+.booking-card {
+  animation: bookingCardIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes bookingCardIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.icon-pulse {
+  animation: iconPulse 2s ease-in-out infinite;
+}
+
+@keyframes iconPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+.active-dot {
+  animation: dotPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes dotPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.75); }
+}
+</style>
