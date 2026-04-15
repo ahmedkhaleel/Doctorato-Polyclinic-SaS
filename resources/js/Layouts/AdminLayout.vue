@@ -56,6 +56,8 @@ function isGroupOpen(key) {
 const navGroups = [
     {
         key: 'main', titleEn: 'Main', titleAr: 'الرئيسية',
+        color: '#C8A96E',
+        groupIcon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6',
         items: [
             { labelEn: 'Dashboard',   labelAr: 'لوحة التحكم',   href: '/admin',                 icon: 'grid',      permission: null },
             { labelEn: 'Calendar',    labelAr: 'التقويم',       href: '/admin/calendar',        icon: 'calendarView', permission: 'visits.view' },
@@ -66,6 +68,8 @@ const navGroups = [
     },
     {
         key: 'clinic', titleEn: 'Clinic', titleAr: 'العيادة',
+        color: '#8B5CF6',
+        groupIcon: 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4',
         items: [
             { labelEn: 'Patients',         labelAr: 'المرضى',           href: '/admin/patients',            icon: 'heart',     permission: 'patients.view' },
             { labelEn: 'Today Queue',      labelAr: 'طابور اليوم',      href: '/admin/visits/today-queue',  icon: 'queue',     permission: 'visits.view' },
@@ -82,6 +86,8 @@ const navGroups = [
     },
     {
         key: 'finance', titleEn: 'Finance', titleAr: 'المالية',
+        color: '#10B981',
+        groupIcon: 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z',
         items: [
             { labelEn: 'Invoices',        labelAr: 'الفواتير',         href: '/admin/invoices',           icon: 'receipt',   permission: 'invoices.view' },
             { labelEn: 'Payments',        labelAr: 'المدفوعات',        href: '/admin/payments',           icon: 'cash',      permission: 'payments.view' },
@@ -95,6 +101,8 @@ const navGroups = [
     },
     {
         key: 'inventory', titleEn: 'Inventory', titleAr: 'المخزون', moduleKey: 'inventory',
+        color: '#6366F1',
+        groupIcon: 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4',
         items: [
             { labelEn: 'Overview',         labelAr: 'نظرة عامة',      href: '/admin/inventory',          icon: 'chartPie',  permission: 'supplies.view' },
             { labelEn: 'Products',         labelAr: 'المنتجات',       href: '/admin/supplies',           icon: 'box',       permission: 'supplies.view' },
@@ -105,6 +113,8 @@ const navGroups = [
     },
     {
         key: 'crm', titleEn: 'CRM', titleAr: 'إدارة العملاء',
+        color: '#F59E0B',
+        groupIcon: 'M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z',
         items: [
             { labelEn: 'CRM Dashboard',    labelAr: 'لوحة CRM',          href: '/admin/crm',              icon: 'crm',       permission: 'leads.view' },
             { labelEn: 'Leads',            labelAr: 'العملاء المحتملين',  href: '/admin/leads',            icon: 'funnel',    permission: 'leads.view' },
@@ -124,6 +134,8 @@ const navGroups = [
     },
     {
         key: 'dental', titleEn: 'Dental', titleAr: 'الأسنان', moduleKey: 'dental',
+        color: '#06B6D4',
+        groupIcon: 'M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342',
         items: [
             { labelEn: 'Dental Dashboard',   labelAr: 'لوحة الأسنان',      href: '/admin/dental',                    icon: 'grid',      permission: null },
             { labelEn: 'Dental Chart',       labelAr: 'مخطط الأسنان',      href: '/admin/dental/chart-search',       icon: 'tooth',     permission: null },
@@ -137,6 +149,8 @@ const navGroups = [
     },
     {
         key: 'pediatric', titleEn: 'Pediatrics', titleAr: 'طب الأطفال', moduleKey: 'pediatric',
+        color: '#4CAF50',
+        groupIcon: 'M12 8.25a3.75 3.75 0 100-7.5 3.75 3.75 0 000 7.5zM6.75 12a.75.75 0 00-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 00.75-.75v-.008a.75.75 0 00-.75-.75H6.75zm10.5 0a.75.75 0 00-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 00.75-.75v-.008a.75.75 0 00-.75-.75h-.008zM12 10.5c-3.315 0-6 2.685-6 6v3a.75.75 0 00.75.75h10.5a.75.75 0 00.75-.75v-3c0-3.315-2.685-6-6-6z',
         items: [
             { labelEn: 'Dashboard',     labelAr: 'لوحة التحكم',   href: '/admin/pediatric',              icon: 'grid',      permission: null },
             { labelEn: 'Patients',      labelAr: 'المرضى',        href: '/admin/pediatric/patients',     icon: 'heart',     permission: null },
@@ -147,6 +161,8 @@ const navGroups = [
     },
     {
         key: 'hr', titleEn: 'HR', titleAr: 'الموارد البشرية', moduleKey: 'hr',
+        color: '#F59E0B',
+        groupIcon: 'M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128H5.228A2 2 0 015 17.128c0-2.4 1.272-4.536 3.214-5.706M12 6.75a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zm8.25 2.25a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z',
         items: [
             { labelEn: 'HR Dashboard',  labelAr: 'لوحة HR',         href: '/admin/hr-dashboard',       icon: 'hrDash',    permission: 'employees.view' },
             { labelEn: 'Employees',     labelAr: 'الموظفين',        href: '/admin/employees',          icon: 'users',     permission: 'employees.view' },
@@ -161,6 +177,8 @@ const navGroups = [
     },
     {
         key: 'website', titleEn: 'Website', titleAr: 'الموقع',
+        color: '#EC4899',
+        groupIcon: 'M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9',
         items: [
             { labelEn: 'Hero Slider',        labelAr: 'السلايدر الرئيسي',  href: '/admin/slider',             icon: 'slides',   permission: 'settings.view' },
             { labelEn: 'Services',           labelAr: 'الخدمات',           href: '/admin/services',           icon: 'sparkles', permission: 'services.view' },
@@ -178,6 +196,8 @@ const navGroups = [
     },
     {
         key: 'insurance', titleEn: 'Insurance', titleAr: 'التأمين', moduleKey: 'insurance',
+        color: '#10B981',
+        groupIcon: 'M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z',
         items: [
             { labelEn: 'Companies',      labelAr: 'شركات التأمين',  href: '/admin/insurance/companies', icon: 'building',  permission: 'settings.view' },
             { labelEn: 'Claims',         labelAr: 'المطالبات',      href: '/admin/insurance/claims',    icon: 'clipboard', permission: 'invoices.view' },
@@ -186,6 +206,8 @@ const navGroups = [
     },
     {
         key: 'quality', titleEn: 'Quality', titleAr: 'الجودة',
+        color: '#8B5CF6',
+        groupIcon: 'M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z',
         items: [
             { labelEn: 'Satisfaction',   labelAr: 'رضا المرضى',    href: '/admin/satisfaction',        icon: 'star',     permission: 'reports.view' },
             { labelEn: 'Referrals',      labelAr: 'التحويلات',     href: '/admin/referrals',           icon: 'switch',   permission: 'visits.view' },
@@ -193,6 +215,8 @@ const navGroups = [
     },
     {
         key: 'system', titleEn: 'System', titleAr: 'النظام',
+        color: '#64748B',
+        groupIcon: 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z',
         items: [
             { labelEn: 'Reports',        labelAr: 'التقارير',       href: '/admin/reports',            icon: 'chart',    permission: 'reports.view' },
             { labelEn: 'Revenue Analytics', labelAr: 'تحليل الإيرادات', href: '/admin/reports/revenue-analytics', icon: 'chartUp', permission: 'reports.view' },
@@ -295,13 +319,20 @@ function logout()        { router.post('/admin/logout'); }
                     <button
                         @click="toggleGroup(group.key)"
                         class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-[11px] font-semibold uppercase tracking-[0.12em] transition-all duration-200 group/header"
-                        :class="isGroupOpen(group.key) ? 'text-[var(--brand-primary)]/90 bg-white/[0.02]' : 'text-white/30 hover:text-white/50 hover:bg-white/[0.02]'"
+                        :class="isGroupOpen(group.key) ? 'bg-white/[0.04]' : 'hover:bg-white/[0.02]'"
+                        :style="{ color: isGroupOpen(group.key) ? (group.color || 'var(--brand-primary)') : undefined }"
                     >
-                        <div class="flex items-center gap-2.5">
+                        <div class="flex items-center gap-2.5" :class="!isGroupOpen(group.key) ? 'text-white/40 group-hover/header:text-white/60' : ''">
+                            <!-- Group Icon -->
                             <div
-                                class="w-1.5 h-1.5 rounded-full transition-all duration-300"
-                                :class="isGroupOpen(group.key) ? 'bg-[var(--brand-primary)] scale-100' : 'bg-white/20 scale-75'"
-                            ></div>
+                                class="w-5 h-5 rounded flex items-center justify-center transition-all duration-300 flex-shrink-0"
+                                :style="isGroupOpen(group.key) ? { backgroundColor: (group.color || '#C8A96E') + '25', color: group.color || '#C8A96E' } : {}"
+                                :class="!isGroupOpen(group.key) ? 'text-white/25' : ''"
+                            >
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path v-if="group.groupIcon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="group.groupIcon" />
+                                </svg>
+                            </div>
                             <span>{{ groupTitle(group) }}</span>
                             <span v-if="group.key === 'crm' && page.props.notifications?.crm_overdue_count > 0"
                                 class="inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 text-[9px] font-bold text-white bg-red-500 rounded-full animate-pulse"
@@ -310,9 +341,10 @@ function logout()        { router.post('/admin/logout'); }
                         <svg
                             class="w-3.5 h-3.5 transition-transform duration-300 ease-out"
                             :class="[
-                                isGroupOpen(group.key) ? 'rotate-0 text-[var(--brand-primary)]/60' : 'text-white/20',
-                                !isGroupOpen(group.key) ? (isRtl ? 'rotate-90' : '-rotate-90') : ''
+                                !isGroupOpen(group.key) ? 'text-white/20' : '',
+                                !isGroupOpen(group.key) ? (isRtl ? 'rotate-90' : '-rotate-90') : 'rotate-0'
                             ]"
+                            :style="isGroupOpen(group.key) ? { color: (group.color || 'var(--brand-primary)') + '80' } : {}"
                             fill="none" stroke="currentColor" viewBox="0 0 24 24"
                         >
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
