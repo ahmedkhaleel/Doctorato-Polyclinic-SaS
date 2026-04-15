@@ -34,7 +34,7 @@ function formatDate(date) {
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
             <div>
                 <h1 class="text-2xl font-bold text-gray-900">{{ isRtl ? 'الوصفات الطبية' : 'Prescriptions' }}</h1>
-                <p class="text-sm text-gray-500 mt-1">View patient prescriptions (read-only)</p>
+                <p class="text-sm text-gray-500 mt-1">{{ isRtl ? 'عرض وصفات المرضى (للقراءة فقط)' : 'View patient prescriptions (read-only)' }}</p>
             </div>
         </div>
 
@@ -53,8 +53,9 @@ function formatDate(date) {
                         <th class="ltr:text-left rtl:ltr:text-right rtl:text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'المريض' : 'Patient' }}</th>
                         <th class="ltr:text-left rtl:ltr:text-right rtl:text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'الطبيب' : 'Doctor' }}</th>
                         <th class="ltr:text-left rtl:ltr:text-right rtl:text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase hidden sm:table-cell">{{ isRtl ? 'التاريخ' : 'Date' }}</th>
-                        <th class="ltr:text-left rtl:ltr:text-right rtl:text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Items</th>
+                        <th class="ltr:text-left rtl:ltr:text-right rtl:text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'الأدوية' : 'Items' }}</th>
                         <th class="ltr:text-left rtl:ltr:text-right rtl:text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase hidden sm:table-cell">Diagnosis</th>
+                        <th class="px-6 py-3 text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'الإجراءات' : 'Actions' }}</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
@@ -70,10 +71,23 @@ function formatDate(date) {
                         <td class="px-6 py-3 text-gray-500 hidden sm:table-cell">{{ formatDate(rx.prescription_date || rx.created_at) }}</td>
                         <td class="px-6 py-3">
                             <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-teal-50 text-teal-700">
-                                {{ rx.items?.length || 0 }} items
+                                {{ isRtl ? (rx.items?.length || 0) + ' دواء' : (rx.items?.length || 0) + ' items' }}
                             </span>
                         </td>
                         <td class="px-6 py-3 text-gray-500 max-w-xs truncate hidden sm:table-cell">{{ rx.diagnosis || '-' }}</td>
+                        <td class="px-6 py-3">
+                            <div class="flex items-center gap-2">
+                                <Link :href="`/secretary/prescriptions/${rx.id}`" class="text-teal-600 hover:text-teal-800 transition" :title="isRtl ? 'عرض' : 'View'">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                                </Link>
+                                <Link :href="`/secretary/prescriptions/${rx.id}/print`" target="_blank" class="text-gray-400 hover:text-teal-600 transition" :title="isRtl ? 'طباعة' : 'Print'">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" /></svg>
+                                </Link>
+                                <a :href="`/secretary/prescriptions/${rx.id}/pdf`" class="text-gray-400 hover:text-green-600 transition" :title="isRtl ? 'تحميل PDF' : 'Download PDF'">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                                </a>
+                            </div>
+                        </td>
                     </tr>
                 </tbody>
             </table>

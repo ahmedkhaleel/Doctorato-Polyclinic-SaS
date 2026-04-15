@@ -117,6 +117,9 @@ Route::middleware('secretary.auth')->group(function () {
 
     // ─── Prescriptions (Read-only) ──────────────────────────
     Route::get('/prescriptions', [SecretaryPrescriptionController::class, 'index'])->name('secretary.prescriptions.index');
+    Route::get('/prescriptions/{prescription}', [SecretaryPrescriptionController::class, 'show'])->name('secretary.prescriptions.show');
+    Route::get('/prescriptions/{prescription}/print', [SecretaryPrescriptionController::class, 'print'])->name('secretary.prescriptions.print');
+    Route::get('/prescriptions/{prescription}/pdf', [SecretaryPrescriptionController::class, 'downloadPdf'])->name('secretary.prescriptions.pdf');
 
     // ─── Calendar ──────────────────────────────────────────────
     Route::get('/calendar', [SecretaryCalendarController::class, 'index'])->name('secretary.calendar.index');
