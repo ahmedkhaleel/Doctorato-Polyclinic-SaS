@@ -186,7 +186,7 @@ class AdminPediatricController extends Controller
         }
 
         // Revenue by doctor
-        $revenueByDoctor = Invoice::where('module', 'pediatric')
+        $revenueByDoctor = Invoice::where('invoices.module', 'pediatric')
             ->whereMonth('invoice_date', now()->month)
             ->whereYear('invoice_date', now()->year)
             ->join('visits', 'invoices.visit_id', '=', 'visits.id')
