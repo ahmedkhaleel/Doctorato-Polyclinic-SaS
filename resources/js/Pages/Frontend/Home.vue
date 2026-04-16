@@ -89,6 +89,47 @@ let slideInterval = null;
 onMounted(() => { slideInterval = setInterval(nextSlide, 6000); });
 onUnmounted(() => { if (slideInterval) clearInterval(slideInterval); });
 
+/* ── Specialties mobile slider ───────────────── */
+const specActiveSlide = ref(0);
+const specProgress = ref(0);
+const SPEC_DURATION = 5000; // 5 seconds per slide
+let specInterval = null;
+let specProgressInterval = null;
+
+function specGoToSlide(index) {
+    specActiveSlide.value = index;
+    specProgress.value = 0;
+    resetSpecTimer();
+}
+
+function specNextSlide() {
+    const total = props.medicalSpecialties?.length || 0;
+    if (!total) return;
+    specActiveSlide.value = (specActiveSlide.value + 1) % total;
+    specProgress.value = 0;
+}
+
+function resetSpecTimer() {
+    if (specInterval) clearInterval(specInterval);
+    if (specProgressInterval) clearInterval(specProgressInterval);
+    startSpecTimer();
+}
+
+function startSpecTimer() {
+    specInterval = setInterval(specNextSlide, SPEC_DURATION);
+    specProgressInterval = setInterval(() => {
+        specProgress.value = Math.min(specProgress.value + (100 / (SPEC_DURATION / 50)), 100);
+    }, 50);
+}
+
+onMounted(() => {
+    if (props.medicalSpecialties?.length > 1) startSpecTimer();
+});
+onUnmounted(() => {
+    if (specInterval) clearInterval(specInterval);
+    if (specProgressInterval) clearInterval(specProgressInterval);
+});
+
 // Package module filter
 const activePackageModule = ref('all');
 const filteredPackages = computed(() => {
@@ -223,66 +264,40 @@ const moduleImages = {
                     </p>
                 </div>
 
-                <!-- 3 Module Cards — horizontal scroll on mobile, grid on desktop -->
-                <div class="flex md:grid md:grid-cols-3 gap-4 md:gap-6 lg:gap-8 overflow-x-auto md:overflow-visible snap-x snap-mandatory pb-4 md:pb-0 -mx-4 px-4 md:mx-0 md:px-0 scrollbar-hide">
-                    <a v-for="(spec, si) in medicalSpecialties" :key="spec.slug"
+                <!-- Desktop: 3-column grid -->
+                <div class="hidden md:grid md:grid-cols-3 gap-6 lg:gap-8">
+                    <a v-for="(spec, si) in medicalSpecialties" :key="'desktop-' + spec.slug"
                        :href="localizedRoute('/services') + '?module=' + spec.slug"
-                       class="spec-card group relative rounded-2xl overflow-hidden cursor-pointer
-                              flex-shrink-0 w-[280px] h-[320px] md:w-auto md:h-[400px] snap-center block"
+                       class="spec-card group relative rounded-2xl overflow-hidden cursor-pointer h-[400px] block"
                        v-scroll-reveal="{ type: 'fade-up', delay: si * 120 }">
-                        <!-- Background image -->
                         <img :src="moduleImages[spec.slug]" :alt="isRtl ? spec.name_ar : spec.name_en"
                              class="absolute inset-0 w-full h-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-110" />
-
-                        <!-- Gradient overlay -->
-                        <div class="absolute inset-0 bg-gradient-to-t from-[#1B365D] via-[#1B365D]/50 to-[#1B365D]/10
-                                    group-hover:via-[#1B365D]/60 transition-all duration-500"></div>
-
-                        <!-- Colored top accent -->
-                        <div class="absolute top-0 inset-x-0 h-1 group-hover:h-1.5 transition-all duration-500"
-                             :style="{ backgroundColor: spec.color }"></div>
-
-                        <!-- Content — bottom aligned -->
-                        <div class="absolute inset-0 flex flex-col justify-end p-5 md:p-7">
-                            <!-- Icon -->
-                            <div class="w-11 h-11 md:w-14 md:h-14 rounded-xl md:rounded-2xl flex items-center justify-center mb-4 backdrop-blur-sm
-                                        border transition-all duration-500 group-hover:scale-110 group-hover:-translate-y-1"
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#1B365D] via-[#1B365D]/50 to-[#1B365D]/10 group-hover:via-[#1B365D]/60 transition-all duration-500"></div>
+                        <div class="absolute top-0 inset-x-0 h-1 group-hover:h-1.5 transition-all duration-500" :style="{ backgroundColor: spec.color }"></div>
+                        <div class="absolute inset-0 flex flex-col justify-end p-7">
+                            <div class="w-14 h-14 rounded-2xl flex items-center justify-center mb-4 backdrop-blur-sm border transition-all duration-500 group-hover:scale-110 group-hover:-translate-y-1"
                                  :style="{ backgroundColor: spec.color + '20', borderColor: spec.color + '40' }">
-                                <svg class="w-5 h-5 md:w-7 md:h-7" :style="{ color: spec.color }" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                                <svg class="w-7 h-7" :style="{ color: spec.color }" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
                                     <path stroke-linecap="round" stroke-linejoin="round" :d="spec.icon" />
                                 </svg>
                             </div>
-
-                            <!-- Module name -->
-                            <h3 class="text-xl md:text-2xl font-bold text-white mb-1.5">
-                                {{ isRtl ? spec.name_ar : spec.name_en }}
-                            </h3>
-
-                            <!-- Service count -->
-                            <p class="text-white/50 text-xs md:text-sm mb-3">
+                            <h3 class="text-2xl font-bold text-white mb-1.5">{{ isRtl ? spec.name_ar : spec.name_en }}</h3>
+                            <p class="text-white/50 text-sm mb-3">
                                 {{ spec.categories.reduce((sum, c) => sum + (c.services?.length || 0), 0) }} {{ isRtl ? 'خدمة متخصصة' : 'specialized services' }}
                             </p>
-
-                            <!-- Category pills — always visible on mobile, hover on desktop -->
-                            <div class="flex flex-wrap gap-1.5 md:gap-2 mb-2
-                                        md:max-h-0 md:opacity-0 md:group-hover:max-h-40 md:group-hover:opacity-100
-                                        transition-all duration-500 overflow-hidden">
+                            <div class="flex flex-wrap gap-2 mb-2 max-h-0 opacity-0 group-hover:max-h-40 group-hover:opacity-100 transition-all duration-500 overflow-hidden">
                                 <span v-for="cat in spec.categories.slice(0, 3)" :key="cat.id"
-                                      class="px-2.5 py-1 rounded-full text-[10px] md:text-xs font-medium bg-white/10 text-white/80 border border-white/10">
+                                      class="px-2.5 py-1 rounded-full text-xs font-medium bg-white/10 text-white/80 border border-white/10">
                                     {{ isRtl ? cat.name_ar : cat.name_en }}
                                 </span>
                                 <span v-if="spec.categories.length > 3"
-                                      class="px-2.5 py-1 rounded-full text-[10px] md:text-xs font-medium bg-white/10 text-white/60 border border-white/10">
+                                      class="px-2.5 py-1 rounded-full text-xs font-medium bg-white/10 text-white/60 border border-white/10">
                                     +{{ spec.categories.length - 3 }}
                                 </span>
                             </div>
-
-                            <!-- CTA -->
-                            <div class="flex items-center gap-2 text-[#C4A265] text-xs md:text-sm font-semibold
-                                        md:translate-y-2 md:opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100
-                                        transition-all duration-500 delay-100">
+                            <div class="flex items-center gap-2 text-[#C4A265] text-sm font-semibold translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 delay-100">
                                 <span>{{ isRtl ? 'اكتشف خدماتنا' : 'Explore Services' }}</span>
-                                <svg class="w-3.5 h-3.5 md:w-4 md:h-4 transition-transform duration-300 group-hover:translate-x-1"
+                                <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"
                                      :class="{ 'rotate-180 group-hover:-translate-x-1': isRtl }"
                                      fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
@@ -290,6 +305,76 @@ const moduleImages = {
                             </div>
                         </div>
                     </a>
+                </div>
+
+                <!-- Mobile: Animated Slider -->
+                <div class="md:hidden relative" v-scroll-reveal="{ type: 'fade-up' }">
+                    <!-- Slider viewport -->
+                    <div class="overflow-hidden rounded-2xl">
+                        <div class="flex transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]"
+                             :style="{ transform: `translateX(${isRtl ? '' : '-'}${specActiveSlide * 100}%)` }">
+                            <a v-for="(spec, si) in medicalSpecialties" :key="'mobile-' + spec.slug"
+                               :href="localizedRoute('/services') + '?module=' + spec.slug"
+                               class="spec-mobile-card group relative rounded-2xl overflow-hidden cursor-pointer w-full h-[360px] flex-shrink-0 block"
+                               :class="{ 'spec-slide-active': si === specActiveSlide }">
+                                <img :src="moduleImages[spec.slug]" :alt="isRtl ? spec.name_ar : spec.name_en"
+                                     class="absolute inset-0 w-full h-full object-cover spec-slide-img" />
+                                <div class="absolute inset-0 bg-gradient-to-t from-[#1B365D] via-[#1B365D]/50 to-[#1B365D]/10"></div>
+                                <div class="absolute top-0 inset-x-0 h-1.5" :style="{ backgroundColor: spec.color }"></div>
+                                <div class="absolute inset-0 flex flex-col justify-end p-6">
+                                    <div class="spec-slide-content">
+                                        <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-3 backdrop-blur-sm border"
+                                             :style="{ backgroundColor: spec.color + '25', borderColor: spec.color + '50' }">
+                                            <svg class="w-6 h-6" :style="{ color: spec.color }" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                                                <path stroke-linecap="round" stroke-linejoin="round" :d="spec.icon" />
+                                            </svg>
+                                        </div>
+                                        <h3 class="text-2xl font-bold text-white mb-1.5">{{ isRtl ? spec.name_ar : spec.name_en }}</h3>
+                                        <p class="text-white/60 text-xs mb-3">
+                                            {{ spec.categories.reduce((sum, c) => sum + (c.services?.length || 0), 0) }} {{ isRtl ? 'خدمة متخصصة' : 'specialized services' }}
+                                        </p>
+                                        <div class="flex flex-wrap gap-1.5 mb-3">
+                                            <span v-for="cat in spec.categories.slice(0, 2)" :key="cat.id"
+                                                  class="px-2.5 py-1 rounded-full text-[10px] font-medium bg-white/15 text-white/90 border border-white/20 backdrop-blur-sm">
+                                                {{ isRtl ? cat.name_ar : cat.name_en }}
+                                            </span>
+                                            <span v-if="spec.categories.length > 2"
+                                                  class="px-2.5 py-1 rounded-full text-[10px] font-medium bg-white/10 text-white/70 border border-white/10">
+                                                +{{ spec.categories.length - 2 }}
+                                            </span>
+                                        </div>
+                                        <div class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-white/15 backdrop-blur-md border border-white/25 text-white text-xs font-semibold">
+                                            <span>{{ isRtl ? 'اكتشف خدماتنا' : 'Explore Services' }}</span>
+                                            <svg class="w-3 h-3" :class="{ 'rotate-180': isRtl }" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Dot indicators -->
+                    <div class="flex items-center justify-center gap-2 mt-5">
+                        <button v-for="(spec, si) in medicalSpecialties" :key="'dot-' + spec.slug"
+                                @click="specGoToSlide(si)"
+                                type="button"
+                                class="spec-dot"
+                                :class="{ 'spec-dot-active': si === specActiveSlide }"
+                                :style="si === specActiveSlide ? { backgroundColor: spec.color } : {}"
+                                :aria-label="`Go to ${spec.name_en}`">
+                        </button>
+                    </div>
+
+                    <!-- Progress bar -->
+                    <div class="mt-3 mx-auto max-w-[120px] h-0.5 bg-gray-200 rounded-full overflow-hidden">
+                        <div class="h-full rounded-full transition-all duration-100 ease-linear"
+                             :style="{
+                                width: specProgress + '%',
+                                backgroundColor: medicalSpecialties[specActiveSlide]?.color || '#C4A265'
+                             }"></div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -749,6 +834,44 @@ const moduleImages = {
 </template>
 
 <style scoped>
+/* ─── Specialties mobile slider ─────────── */
+.spec-dot {
+    width: 28px;
+    height: 6px;
+    border-radius: 9999px;
+    background: rgba(27, 54, 93, 0.15);
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    cursor: pointer;
+    border: none;
+    padding: 0;
+}
+.spec-dot-active {
+    width: 40px;
+    box-shadow: 0 2px 8px -2px rgba(0, 0, 0, 0.2);
+}
+
+.spec-mobile-card {
+    box-shadow: 0 10px 40px -8px rgba(27, 54, 93, 0.25);
+}
+
+.spec-slide-img {
+    transition: transform 6s ease-out;
+    transform: scale(1);
+}
+.spec-slide-active .spec-slide-img {
+    transform: scale(1.08);
+}
+
+.spec-slide-content {
+    transform: translateY(12px);
+    opacity: 0;
+    transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.15s, opacity 0.7s ease 0.15s;
+}
+.spec-slide-active .spec-slide-content {
+    transform: translateY(0);
+    opacity: 1;
+}
+
 /* Ken Burns zoom on active slide */
 @keyframes kenBurns {
     0%   { transform: scale(1); }
