@@ -502,6 +502,152 @@ class AdminPediatricController extends Controller
     }
 
     /**
+     * Store a new growth record for a patient (admin).
+     */
+    public function storeGrowth(Request $request, Patient $patient)
+    {
+        $data = $request->validate([
+            'measurement_date' => 'required|date|before_or_equal:today',
+            'weight_kg' => 'nullable|numeric|min:0|max:200',
+            'height_cm' => 'nullable|numeric|min:0|max:250',
+            'head_circumference_cm' => 'nullable|numeric|min:0|max:100',
+            'notes' => 'nullable|string|max:1000',
+        ]);
+
+        // Calculate age in months
+        $ageMonths = null;
+        if ($patient->date_of_birth) {
+            $dob = \Carbon\Carbon::parse($patient->date_of_birth);
+            $measurementDate = \Carbon\Carbon::parse($data['measurement_date']);
+            $ageMonths = round($dob->diffInMonths($measurementDate), 2);
+        }
+
+        // Calculate BMI
+        $bmi = null;
+        if (!empty($data['weight_kg']) && !empty($data['height_cm'])) {
+            $bmi = \App\Models\PediatricGrowthRecord::calculateBmi(
+                $data['weight_kg'],
+                $data['height_cm']
+            );
+        }
+
+        $record = \App\Models\PediatricGrowthRecord::create([
+            'patient_id' => $patient->id,
+            'doctor_id' => null,
+            'measurement_date' => $data['measurement_date'],
+            'age_months' => $ageMonths,
+            'weight_kg' => $data['weight_kg'] ?? null,
+            'height_cm' => $data['height_cm'] ?? null,
+            'head_circumference_cm' => $data['head_circumference_cm'] ?? null,
+            'bmi' => $bmi,
+            'notes' => $data['notes'] ?? null,
+        ]);
+
+        // WHO percentile / z-score calculations (if service available)
+        try {
+            if ($ageMonths !== null && $patient->gender) {
+                $who = \App\Services\WhoGrowthStandardsService::calculateAll(
+                    $patient->gender,
+                    $ageMonths,
+                    $data['weight_kg'] ?? null,
+                    $data['height_cm'] ?? null,
+                    $data['head_circumference_cm'] ?? null,
+                    $bmi
+                );
+
+                $record->update([
+                    'weight_zscore' => $who['weight_zscore'] ?? null,
+                    'weight_percentile' => $who['weight_percentile'] ?? null,
+                    'height_zscore' => $who['height_zscore'] ?? null,
+                    'height_percentile' => $who['height_percentile'] ?? null,
+                    'head_zscore' => $who['head_zscore'] ?? null,
+                    'head_percentile' => $who['head_percentile'] ?? null,
+                    'bmi_zscore' => $who['bmi_zscore'] ?? null,
+                    'bmi_percentile' => $who['bmi_percentile'] ?? null,
+                ]);
+            }
+        } catch (\Throwable $e) {
+            report($e);
+        }
+
+        return redirect()->back()->with('success', 'تم تسجيل قياس النمو بنجاح');
+    }
+
+    /**
+     * Update an existing growth record.
+     */
+    public function updateGrowth(Request $request, \App\Models\PediatricGrowthRecord $record)
+    {
+        $data = $request->validate([
+            'measurement_date' => 'required|date|before_or_equal:today',
+            'weight_kg' => 'nullable|numeric|min:0|max:200',
+            'height_cm' => 'nullable|numeric|min:0|max:250',
+            'head_circumference_cm' => 'nullable|numeric|min:0|max:100',
+            'notes' => 'nullable|string|max:1000',
+        ]);
+
+        $patient = $record->patient;
+        $ageMonths = null;
+        if ($patient && $patient->date_of_birth) {
+            $ageMonths = round(
+                \Carbon\Carbon::parse($patient->date_of_birth)
+                    ->diffInMonths(\Carbon\Carbon::parse($data['measurement_date'])),
+                2
+            );
+        }
+
+        $bmi = null;
+        if (!empty($data['weight_kg']) && !empty($data['height_cm'])) {
+            $bmi = \App\Models\PediatricGrowthRecord::calculateBmi(
+                $data['weight_kg'],
+                $data['height_cm']
+            );
+        }
+
+        $record->update(array_merge($data, [
+            'age_months' => $ageMonths,
+            'bmi' => $bmi,
+        ]));
+
+        try {
+            if ($ageMonths !== null && $patient && $patient->gender) {
+                $who = \App\Services\WhoGrowthStandardsService::calculateAll(
+                    $patient->gender,
+                    $ageMonths,
+                    $data['weight_kg'] ?? null,
+                    $data['height_cm'] ?? null,
+                    $data['head_circumference_cm'] ?? null,
+                    $bmi
+                );
+
+                $record->update([
+                    'weight_zscore' => $who['weight_zscore'] ?? null,
+                    'weight_percentile' => $who['weight_percentile'] ?? null,
+                    'height_zscore' => $who['height_zscore'] ?? null,
+                    'height_percentile' => $who['height_percentile'] ?? null,
+                    'head_zscore' => $who['head_zscore'] ?? null,
+                    'head_percentile' => $who['head_percentile'] ?? null,
+                    'bmi_zscore' => $who['bmi_zscore'] ?? null,
+                    'bmi_percentile' => $who['bmi_percentile'] ?? null,
+                ]);
+            }
+        } catch (\Throwable $e) {
+            report($e);
+        }
+
+        return redirect()->back()->with('success', 'تم تحديث قياس النمو بنجاح');
+    }
+
+    /**
+     * Delete a growth record.
+     */
+    public function destroyGrowth(\App\Models\PediatricGrowthRecord $record)
+    {
+        $record->delete();
+        return redirect()->back()->with('success', 'تم حذف قياس النمو بنجاح');
+    }
+
+    /**
      * Pediatric module settings page.
      */
     public function settings()

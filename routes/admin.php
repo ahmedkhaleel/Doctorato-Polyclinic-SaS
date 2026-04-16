@@ -775,6 +775,9 @@ Route::middleware('admin.auth')->group(function () {
     Route::post('/pediatric/vaccinations/{vaccination}/delete', [\App\Http\Controllers\Admin\AdminPediatricController::class, 'destroyVaccination'])->name('admin.pediatric.vaccinations.destroy')->middleware(['module:pediatric', 'permission:pediatric.view']);
     Route::get('/pediatric/visits', [\App\Http\Controllers\Admin\AdminPediatricController::class, 'visits'])->name('admin.pediatric.visits')->middleware(['module:pediatric', 'permission:pediatric.view']);
     Route::get('/pediatric/growth', [\App\Http\Controllers\Admin\AdminPediatricController::class, 'growth'])->name('admin.pediatric.growth')->middleware(['module:pediatric', 'permission:pediatric.view']);
+    Route::post('/pediatric/patients/{patient}/growth', [\App\Http\Controllers\Admin\AdminPediatricController::class, 'storeGrowth'])->name('admin.pediatric.growth.store')->middleware(['module:pediatric', 'permission:pediatric.view']);
+    Route::post('/pediatric/growth/{record}/update', [\App\Http\Controllers\Admin\AdminPediatricController::class, 'updateGrowth'])->name('admin.pediatric.growth.update')->middleware(['module:pediatric', 'permission:pediatric.view']);
+    Route::post('/pediatric/growth/{record}/delete', [\App\Http\Controllers\Admin\AdminPediatricController::class, 'destroyGrowth'])->name('admin.pediatric.growth.destroy')->middleware(['module:pediatric', 'permission:pediatric.view']);
     Route::get('/pediatric/settings', [\App\Http\Controllers\Admin\AdminPediatricController::class, 'settings'])->name('admin.pediatric.settings')->middleware(['module:pediatric', 'permission:pediatric.view']);
     Route::post('/pediatric/settings', [\App\Http\Controllers\Admin\AdminPediatricController::class, 'updateSettings'])->name('admin.pediatric.settings.update')->middleware(['module:pediatric', 'permission:pediatric.view']);
 

@@ -38,6 +38,32 @@ function isRestricted(value) {
 
 const activeTab = ref('overview');
 
+// ── Growth recording form ──────────────────────────
+const showGrowthForm = ref(false);
+const growthForm = useForm({
+    measurement_date: new Date().toISOString().split('T')[0],
+    weight_kg: '',
+    height_cm: '',
+    head_circumference_cm: '',
+    notes: '',
+});
+
+function submitGrowth() {
+    growthForm.post(`/admin/pediatric/patients/${props.patient.id}/growth`, {
+        preserveScroll: true,
+        onSuccess: () => {
+            growthForm.reset();
+            growthForm.measurement_date = new Date().toISOString().split('T')[0];
+            showGrowthForm.value = false;
+        },
+    });
+}
+
+function deleteGrowthRecord(recordId) {
+    if (!window.confirm(isRtl.value ? 'هل أنت متأكد من حذف هذا القياس؟' : 'Are you sure you want to delete this measurement?')) return;
+    router.post(`/admin/pediatric/growth/${recordId}/delete`, {}, { preserveScroll: true });
+}
+
 const hasDentalVisits = computed(() => (props.patient?.visits || []).some(v => v.module === 'dental'));
 
 const isDentalEnabled = computed(() => page.props.modules?.dental?.enabled);
@@ -1293,9 +1319,9 @@ const dentalRiskFlags = computed(() => props.dentalData?.riskFlags || []);
                         </div>
 
                         <!-- ═══════════════════════════════════════ -->
-                        <!-- Growth Chart                            -->
+                        <!-- Growth Chart + Recording Form          -->
                         <!-- ═══════════════════════════════════════ -->
-                        <div v-if="pediatricData?.growthRecords?.length" class="bg-gradient-to-br from-teal-50/50 to-emerald-50/50 rounded-2xl border border-teal-100 p-1 overflow-hidden">
+                        <div class="bg-gradient-to-br from-teal-50/50 to-emerald-50/50 rounded-2xl border border-teal-100 p-1 overflow-hidden">
                             <div class="flex items-center justify-between px-5 py-3 mb-1">
                                 <div class="flex items-center gap-3">
                                     <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-500 to-emerald-600 flex items-center justify-center shadow-sm">
@@ -1303,15 +1329,107 @@ const dentalRiskFlags = computed(() => props.dentalData?.riskFlags || []);
                                     </div>
                                     <div>
                                         <h3 class="text-sm font-bold text-gray-800">{{ isRtl ? 'مخطط النمو' : 'Growth Chart' }}</h3>
-                                        <p class="text-xs text-gray-500">{{ pediatricData.growthRecords.length }} {{ isRtl ? 'قياس مسجّل' : 'measurements recorded' }}</p>
+                                        <p class="text-xs text-gray-500">{{ pediatricData?.growthRecords?.length || 0 }} {{ isRtl ? 'قياس مسجّل' : 'measurements recorded' }}</p>
                                     </div>
                                 </div>
+                                <button
+                                    @click="showGrowthForm = !showGrowthForm"
+                                    class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-teal-500 to-emerald-600 hover:from-teal-600 hover:to-emerald-700 shadow-sm transition"
+                                >
+                                    <svg v-if="!showGrowthForm" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4" /></svg>
+                                    <svg v-else class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" /></svg>
+                                    {{ showGrowthForm ? (isRtl ? 'إلغاء' : 'Cancel') : (isRtl ? 'تسجيل قياس' : 'Add Measurement') }}
+                                </button>
                             </div>
+
+                            <!-- Growth Recording Form (collapsible) -->
+                            <div v-if="showGrowthForm" class="bg-white mx-2 mb-2 p-4 rounded-xl border border-teal-200 shadow-sm">
+                                <form @submit.prevent="submitGrowth" class="space-y-3">
+                                    <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+                                        <div>
+                                            <label class="block text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-1">{{ isRtl ? 'التاريخ' : 'Date' }} *</label>
+                                            <input v-model="growthForm.measurement_date" type="date" :max="new Date().toISOString().split('T')[0]" required class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-teal-300 focus:border-teal-500" />
+                                            <p v-if="growthForm.errors.measurement_date" class="text-[10px] text-red-500 mt-0.5">{{ growthForm.errors.measurement_date }}</p>
+                                        </div>
+                                        <div>
+                                            <label class="block text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-1">{{ isRtl ? 'الوزن (kg)' : 'Weight (kg)' }}</label>
+                                            <input v-model="growthForm.weight_kg" type="number" step="0.01" min="0" max="200" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-teal-300 focus:border-teal-500" placeholder="0.00" />
+                                        </div>
+                                        <div>
+                                            <label class="block text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-1">{{ isRtl ? 'الطول (cm)' : 'Height (cm)' }}</label>
+                                            <input v-model="growthForm.height_cm" type="number" step="0.1" min="0" max="250" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-teal-300 focus:border-teal-500" placeholder="0.0" />
+                                        </div>
+                                        <div>
+                                            <label class="block text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-1">{{ isRtl ? 'محيط الرأس (cm)' : 'Head (cm)' }}</label>
+                                            <input v-model="growthForm.head_circumference_cm" type="number" step="0.1" min="0" max="100" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-teal-300 focus:border-teal-500" placeholder="0.0" />
+                                        </div>
+                                        <div class="flex items-end">
+                                            <button type="submit" :disabled="growthForm.processing" class="w-full px-4 py-2 bg-gradient-to-r from-teal-500 to-emerald-600 text-white text-sm font-bold rounded-lg hover:from-teal-600 hover:to-emerald-700 transition shadow-sm disabled:opacity-50">
+                                                {{ growthForm.processing ? (isRtl ? 'جاري...' : 'Saving...') : (isRtl ? 'حفظ القياس' : 'Save') }}
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="block text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-1">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
+                                        <textarea v-model="growthForm.notes" rows="2" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-teal-300 focus:border-teal-500" :placeholder="isRtl ? 'ملاحظات اختيارية...' : 'Optional notes...'"></textarea>
+                                    </div>
+                                    <p class="text-[11px] text-teal-700 bg-teal-50 px-3 py-2 rounded-lg flex items-center gap-1.5">
+                                        <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                        {{ isRtl ? 'سيتم حساب BMI ومعدلات WHO تلقائياً' : 'BMI and WHO percentiles will be calculated automatically' }}
+                                    </p>
+                                </form>
+                            </div>
+
+                            <!-- Chart -->
                             <PediatricGrowthChart
+                                v-if="pediatricData?.growthRecords?.length"
                                 :records="pediatricData.growthRecords"
                                 :gender="patient.gender"
                                 :height="340"
                             />
+
+                            <!-- Measurements Log Table -->
+                            <div v-if="pediatricData?.growthRecords?.length" class="mx-2 mb-2 mt-3 bg-white rounded-xl border border-gray-100 overflow-hidden">
+                                <div class="px-4 py-3 border-b border-gray-100 bg-gray-50/50">
+                                    <h4 class="text-xs font-bold text-gray-700">{{ isRtl ? 'سجل القياسات' : 'Measurements Log' }}</h4>
+                                </div>
+                                <div class="overflow-x-auto">
+                                    <table class="w-full text-xs">
+                                        <thead class="bg-gray-50/50">
+                                            <tr>
+                                                <th class="text-start px-4 py-2 font-semibold text-gray-500">{{ isRtl ? 'التاريخ' : 'Date' }}</th>
+                                                <th class="text-center px-4 py-2 font-semibold text-gray-500">{{ isRtl ? 'العمر' : 'Age' }}</th>
+                                                <th class="text-center px-4 py-2 font-semibold text-gray-500">{{ isRtl ? 'الوزن' : 'Weight' }}</th>
+                                                <th class="text-center px-4 py-2 font-semibold text-gray-500">{{ isRtl ? 'الطول' : 'Height' }}</th>
+                                                <th class="text-center px-4 py-2 font-semibold text-gray-500 hidden sm:table-cell">{{ isRtl ? 'الرأس' : 'Head' }}</th>
+                                                <th class="text-center px-4 py-2 font-semibold text-gray-500 hidden md:table-cell">BMI</th>
+                                                <th class="text-center px-4 py-2 font-semibold text-gray-500"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="r in [...pediatricData.growthRecords].reverse()" :key="r.id" class="border-t border-gray-50 hover:bg-teal-50/30">
+                                                <td class="px-4 py-2.5 font-medium text-gray-700">{{ r.measurement_date?.substring(0, 10) }}</td>
+                                                <td class="px-4 py-2.5 text-center text-gray-600">{{ Math.round(r.age_months || 0) }}m</td>
+                                                <td class="px-4 py-2.5 text-center">
+                                                    <span class="text-gray-800">{{ r.weight_kg || '-' }}</span>
+                                                    <span v-if="r.weight_percentile" class="ml-1 text-[9px] font-semibold" :class="r.weight_percentile < 5 || r.weight_percentile > 95 ? 'text-red-500' : r.weight_percentile < 15 || r.weight_percentile > 85 ? 'text-amber-500' : 'text-emerald-600'">P{{ Math.round(r.weight_percentile) }}</span>
+                                                </td>
+                                                <td class="px-4 py-2.5 text-center">
+                                                    <span class="text-gray-800">{{ r.height_cm || '-' }}</span>
+                                                    <span v-if="r.height_percentile" class="ml-1 text-[9px] font-semibold" :class="r.height_percentile < 5 || r.height_percentile > 95 ? 'text-red-500' : r.height_percentile < 15 || r.height_percentile > 85 ? 'text-amber-500' : 'text-emerald-600'">P{{ Math.round(r.height_percentile) }}</span>
+                                                </td>
+                                                <td class="px-4 py-2.5 text-center text-gray-600 hidden sm:table-cell">{{ r.head_circumference_cm || '-' }}</td>
+                                                <td class="px-4 py-2.5 text-center text-gray-600 hidden md:table-cell">{{ r.bmi || '-' }}</td>
+                                                <td class="px-4 py-2.5 text-center">
+                                                    <button @click="deleteGrowthRecord(r.id)" class="p-1 text-red-500 hover:bg-red-50 rounded transition" :title="isRtl ? 'حذف' : 'Delete'">
+                                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Latest Measurements Summary -->
@@ -1346,13 +1464,13 @@ const dentalRiskFlags = computed(() => props.dentalData?.riskFlags || []);
                             </div>
                         </div>
 
-                        <!-- Empty state if no growth records -->
-                        <div v-else class="bg-gradient-to-br from-gray-50 to-gray-100/50 rounded-2xl border border-gray-200 p-8 text-center">
-                            <div class="w-14 h-14 mx-auto rounded-2xl bg-white flex items-center justify-center shadow-sm mb-3">
-                                <svg class="w-7 h-7 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3v18h18M7 14l4-4 4 4 4-8" /></svg>
+                        <!-- Empty state hint if no growth records -->
+                        <div v-if="!pediatricData?.growthRecords?.length" class="bg-gradient-to-br from-teal-50/40 to-emerald-50/40 rounded-2xl border border-teal-100 p-6 text-center">
+                            <div class="w-12 h-12 mx-auto rounded-xl bg-white flex items-center justify-center shadow-sm mb-2">
+                                <svg class="w-6 h-6 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3v18h18M7 14l4-4 4 4 4-8" /></svg>
                             </div>
-                            <p class="text-sm font-semibold text-gray-700 mb-1">{{ isRtl ? 'لم يتم تسجيل قياسات نمو بعد' : 'No growth measurements yet' }}</p>
-                            <p class="text-xs text-gray-500">{{ isRtl ? 'سيتم عرض الرسم البياني عند إضافة أول قياس' : 'The chart will appear after the first measurement is recorded' }}</p>
+                            <p class="text-sm font-semibold text-gray-700 mb-1">{{ isRtl ? 'ابدأ بتسجيل أول قياس' : 'Start by recording the first measurement' }}</p>
+                            <p class="text-xs text-gray-500">{{ isRtl ? 'اضغط زر "تسجيل قياس" أعلى المخطط' : 'Click "Add Measurement" above the chart' }}</p>
                         </div>
 
                         <!-- Pediatric Visits -->
