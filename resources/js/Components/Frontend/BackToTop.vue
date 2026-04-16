@@ -38,7 +38,7 @@ onUnmounted(() => {
         <button
             v-if="isVisible"
             @click="scrollToTop"
-            class="fixed z-50 bottom-24 w-11 h-11 bg-[var(--brand-primary)] text-white rounded-full shadow-lg hover:shadow-xl hover:shadow-[var(--brand-primary)]/30 flex items-center justify-center transition-all duration-300 hover:bg-[var(--brand-primary-hover)] hover:scale-110"
+            class="fixed z-50 bottom-24 w-11 h-11 bg-[#1B365D] text-[#C4A265] border-2 border-[#C4A265] rounded-full shadow-lg hover:shadow-xl hover:shadow-[#1B365D]/40 flex items-center justify-center transition-all duration-300 hover:bg-[#C4A265] hover:text-white hover:border-[#C4A265] hover:scale-110"
             :class="isRtl ? 'left-7' : 'right-7'"
             :aria-label="t('back_to_top')"
         >
