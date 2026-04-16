@@ -124,6 +124,16 @@ class DoctorPediatricDashboardController extends BaseDoctorController
             else $ageDistribution['adolescent']++;
         }
 
+        // Recent growth records for dashboard chart
+        $recentGrowthRecords = PediatricGrowthRecord::whereHas('patient', function ($q) use ($doctorId) {
+                $q->whereHas('visits', function ($vq) use ($doctorId) {
+                    $vq->where('doctor_id', $doctorId)->where('module', 'pediatric');
+                });
+            })
+            ->orderByDesc('measurement_date')
+            ->limit(30)
+            ->get();
+
         return Inertia::render('Doctor/Pediatric/Dashboard', [
             'todayVisits' => $todayVisits,
             'stats' => [
@@ -138,6 +148,7 @@ class DoctorPediatricDashboardController extends BaseDoctorController
             'upcomingVaccinations' => $upcomingVaccinations,
             'visitTrend' => $visitTrend,
             'ageDistribution' => $ageDistribution,
+            'recentGrowthRecords' => $recentGrowthRecords,
         ]);
     }
 }

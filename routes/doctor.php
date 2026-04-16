@@ -89,6 +89,7 @@ Route::middleware('doctor.auth')->group(function () {
     Route::post('/visits/{visit}/diagnosis', [DoctorVisitController::class, 'updateDiagnosis'])->name('doctor.visits.updateDiagnosis');
     Route::post('/visits/{visit}/photos', [DoctorVisitController::class, 'uploadPhoto'])->name('doctor.visits.uploadPhoto');
     Route::post('/patients/{patient}/vitals', [DoctorVisitController::class, 'storeVitals'])->name('doctor.patients.vitals.store');
+    Route::post('/visits/{visit}/pediatric-growth', [DoctorPediatricVisitController::class, 'storeGrowthFromVisit'])->name('doctor.visits.growth.store');
 
     // ─── Prescriptions ──────────────────────────────────────
     Route::get('/prescriptions', [DoctorPrescriptionController::class, 'index'])->name('doctor.prescriptions.index');

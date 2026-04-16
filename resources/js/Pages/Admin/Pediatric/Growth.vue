@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue';
 import { Link, usePage, router } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import PediatricGrowthChart from '@/Components/PediatricGrowthChart.vue';
 
 defineOptions({ layout: AdminLayout });
 
@@ -215,6 +216,13 @@ const paginationLinks = computed(() => props.records?.links || []);
                 </transition>
             </div>
         </div>
+
+        <!-- ── System-wide Growth Analysis Chart ────────── -->
+        <section v-if="records?.data?.length" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-6 mb-6">
+            <h2 class="text-lg font-bold text-gray-800 mb-2">{{ isRtl ? 'تحليل نمو المرضى' : 'Patient Growth Analysis' }}</h2>
+            <p class="text-sm text-gray-500 mb-4">{{ isRtl ? 'يظهر الرسم البياني جميع القياسات المسجلة في النظام' : 'Chart shows all measurements recorded in the system' }}</p>
+            <PediatricGrowthChart :records="records.data" gender="male" />
+        </section>
 
         <!-- ── Growth Records Table ──────────────────────── -->
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">

@@ -3,6 +3,7 @@ import { Link, usePage } from '@inertiajs/vue3';
 import DoctorLayout from '@/Layouts/DoctorLayout.vue';
 import { ref, computed, onMounted } from 'vue';
 import { getChildAge as _getChildAge } from '@/Composables/usePediatricAge';
+import PediatricGrowthChart from '@/Components/PediatricGrowthChart.vue';
 
 defineOptions({ layout: DoctorLayout });
 
@@ -17,6 +18,7 @@ const props = defineProps({
     upcomingVaccinations: Array,
     visitTrend: Array,
     ageDistribution: Object,
+    recentGrowthRecords: { type: Array, default: () => [] },
 });
 
 // Animation state
@@ -525,5 +527,11 @@ function getChildAge(dob) {
                 </div>
             </div>
         </div>
+
+        <!-- Recent Growth Measurements Chart -->
+        <section v-if="recentGrowthRecords && recentGrowthRecords.length" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-6">
+            <h3 class="text-sm font-bold text-gray-800 mb-3">{{ isRtl ? 'أحدث قياسات النمو' : 'Recent Growth Measurements' }}</h3>
+            <PediatricGrowthChart :records="recentGrowthRecords" gender="male" :compact="true" />
+        </section>
     </div>
 </template>

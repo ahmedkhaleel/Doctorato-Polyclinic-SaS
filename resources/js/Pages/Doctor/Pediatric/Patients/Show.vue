@@ -4,6 +4,7 @@ import { Link, usePage, useForm, router } from '@inertiajs/vue3';
 import DoctorLayout from '@/Layouts/DoctorLayout.vue';
 import SearchableSelect from '@/Components/Doctor/SearchableSelect.vue';
 import { getAgeDisplay } from '@/Composables/usePediatricAge';
+import PediatricGrowthChart from '@/Components/PediatricGrowthChart.vue';
 
 defineOptions({ layout: DoctorLayout });
 
@@ -713,6 +714,14 @@ const percentileTextColor = (p) => {
                         </form>
                     </div>
                 </Transition>
+
+                <!-- Growth Chart -->
+                <PediatricGrowthChart
+                    v-if="growthRecords && growthRecords.length"
+                    :records="growthRecords"
+                    :gender="patient?.gender"
+                    class="mb-6"
+                />
 
                 <!-- Growth Table -->
                 <div v-if="growthRecords?.length" class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm overflow-hidden">

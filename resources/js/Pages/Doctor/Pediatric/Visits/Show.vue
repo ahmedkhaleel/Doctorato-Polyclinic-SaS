@@ -2,6 +2,7 @@
 import { ref, computed, onMounted } from 'vue';
 import { Link, router, useForm, usePage } from '@inertiajs/vue3';
 import DoctorLayout from '@/Layouts/DoctorLayout.vue';
+import PediatricGrowthChart from '@/Components/PediatricGrowthChart.vue';
 
 defineOptions({ layout: DoctorLayout });
 
@@ -13,8 +14,25 @@ const props = defineProps({
     visit: Object,
     allergies: Array,
     latestGrowth: Object,
+    growthRecords: { type: Array, default: () => [] },
     ageMonths: Number,
 });
+
+// ─── Pediatric Growth Record (from visit) ─────────
+const growthForm = useForm({
+    measurement_date: new Date().toISOString().split('T')[0],
+    weight_kg: '',
+    height_cm: '',
+    head_circumference_cm: '',
+    notes: '',
+});
+
+function submitGrowth() {
+    growthForm.post(`/doctor/visits/${props.visit.id}/pediatric-growth`, {
+        preserveScroll: true,
+        onSuccess: () => growthForm.reset(),
+    });
+}
 
 const mounted = ref(false);
 onMounted(() => { setTimeout(() => { mounted.value = true; }, 50); });
@@ -351,6 +369,46 @@ function severityColor(severity) {
                 </div>
             </div>
         </div>
+
+        <!-- Pediatric Growth Recording (only during active visit) -->
+        <section v-if="visit.status === 'in_progress'" class="bg-white rounded-2xl shadow-sm border border-green-100 p-4 md:p-6 mb-6">
+            <h3 class="text-sm font-bold text-green-800 mb-4 flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3v18h18M7 14l4-4 4 4 4-8" /></svg>
+                {{ isRtl ? 'تسجيل قياسات النمو' : 'Record Growth Measurements' }}
+            </h3>
+            <form @submit.prevent="submitGrowth" class="grid grid-cols-1 md:grid-cols-5 gap-3">
+                <div>
+                    <label class="block text-[11px] font-semibold text-gray-500 mb-1">{{ isRtl ? 'التاريخ' : 'Date' }}</label>
+                    <input v-model="growthForm.measurement_date" type="date" required class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-green-300 focus:border-green-500" />
+                </div>
+                <div>
+                    <label class="block text-[11px] font-semibold text-gray-500 mb-1">{{ isRtl ? 'الوزن (كجم)' : 'Weight (kg)' }}</label>
+                    <input v-model="growthForm.weight_kg" type="number" step="0.01" min="0" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-green-300 focus:border-green-500" />
+                </div>
+                <div>
+                    <label class="block text-[11px] font-semibold text-gray-500 mb-1">{{ isRtl ? 'الطول (سم)' : 'Height (cm)' }}</label>
+                    <input v-model="growthForm.height_cm" type="number" step="0.1" min="0" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-green-300 focus:border-green-500" />
+                </div>
+                <div>
+                    <label class="block text-[11px] font-semibold text-gray-500 mb-1">{{ isRtl ? 'محيط الرأس (سم)' : 'Head (cm)' }}</label>
+                    <input v-model="growthForm.head_circumference_cm" type="number" step="0.1" min="0" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-green-300 focus:border-green-500" />
+                </div>
+                <div class="flex items-end">
+                    <button type="submit" :disabled="growthForm.processing" class="w-full px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white text-sm font-bold rounded-lg hover:from-green-600 hover:to-emerald-700 transition-all shadow-sm disabled:opacity-50">
+                        {{ growthForm.processing ? (isRtl ? 'جاري الحفظ...' : 'Saving...') : (isRtl ? 'حفظ القياس' : 'Save') }}
+                    </button>
+                </div>
+            </form>
+            <div class="mt-3">
+                <label class="block text-[11px] font-semibold text-gray-500 mb-1">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
+                <textarea v-model="growthForm.notes" rows="2" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-green-300 focus:border-green-500" :placeholder="isRtl ? 'ملاحظات اختيارية...' : 'Optional notes...'"></textarea>
+            </div>
+        </section>
+
+        <!-- Growth Chart -->
+        <section v-if="growthRecords && growthRecords.length" class="mb-6">
+            <PediatricGrowthChart :records="growthRecords" :gender="visit.patient?.gender" />
+        </section>
 
         <!-- Visit Details -->
         <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden"
