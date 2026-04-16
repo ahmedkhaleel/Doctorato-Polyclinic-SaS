@@ -131,8 +131,7 @@ onUnmounted(() => {
                 <div class="flex items-center gap-3">
                     <a
                         :href="`/${locale}/patient/login`"
-                        class="hidden sm:inline-flex items-center gap-1.5 px-4 py-2.5 border-2 text-sm font-semibold rounded-full transition-all duration-300"
-                        :class="'border-[var(--brand-primary)] text-[var(--brand-primary)] hover:bg-[var(--brand-primary)] hover:text-white'"
+                        class="hidden sm:inline-flex items-center gap-1.5 px-4 py-2.5 border-2 border-[#C4A265] text-[#1B365D] text-sm font-semibold rounded-full transition-all duration-300 hover:bg-[#C4A265] hover:text-white hover:shadow-md hover:shadow-[#C4A265]/30"
                     >
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -141,7 +140,7 @@ onUnmounted(() => {
                     </a>
                     <Link
                         :href="localizedRoute('/booking')"
-                        class="hidden sm:inline-flex items-center px-5 py-2.5 bg-[var(--brand-primary)] text-white text-sm font-semibold rounded-full hover:bg-[var(--brand-primary-hover)] transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-[rgba(var(--brand-primary-rgb),0.25)]"
+                        class="hidden sm:inline-flex items-center px-5 py-2.5 bg-[#1B365D] text-white text-sm font-semibold rounded-full hover:bg-[#264573] transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-[#1B365D]/30"
                     >
                         {{ t('book_now') }}
                     </Link>
@@ -225,14 +224,14 @@ onUnmounted(() => {
                     <Link
                         :href="localizedRoute('/booking')"
                         @click="closeMobileMenu"
-                        class="block w-full text-center px-5 py-3 bg-[var(--brand-primary)] text-white font-semibold rounded-full hover:bg-[var(--brand-primary-hover)] transition-colors"
+                        class="block w-full text-center px-5 py-3 bg-[#1B365D] text-white font-semibold rounded-full hover:bg-[#264573] transition-colors shadow-md"
                     >
                         {{ t('book_now') }}
                     </Link>
                     <a
                         :href="`/${locale}/patient/login`"
                         @click="closeMobileMenu"
-                        class="flex items-center justify-center gap-2 w-full px-5 py-3 border-2 border-[var(--brand-primary)] text-[var(--brand-primary)] font-semibold rounded-full hover:bg-[var(--brand-primary)] hover:text-white transition-colors"
+                        class="flex items-center justify-center gap-2 w-full px-5 py-3 border-2 border-[#C4A265] text-[#1B365D] font-semibold rounded-full hover:bg-[#C4A265] hover:text-white transition-colors"
                     >
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
