@@ -8,6 +8,8 @@ import PediatricTab from './Tabs/PediatricTab.vue';
 import VisitsTab from './Tabs/VisitsTab.vue';
 import InvoicesTab from './Tabs/InvoicesTab.vue';
 import PrescriptionsTab from './Tabs/PrescriptionsTab.vue';
+import TimelineTab from './Tabs/TimelineTab.vue';
+import PatientSearchBar from './PatientSearchBar.vue';
 
 const props = defineProps({
     patient: { type: Object, required: true },
@@ -81,6 +83,14 @@ const availableTabs = computed(() => {
     }
 
     tabs.push({
+        id: 'timeline',
+        labelAr: 'السجل الزمني',
+        labelEn: 'Timeline',
+        icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z',
+        color: '#475569',
+        count: null,
+    });
+    tabs.push({
         id: 'invoices',
         labelAr: 'الفواتير',
         labelEn: 'Invoices',
@@ -113,12 +123,34 @@ function setTab(id) {
     activeTab.value = id;
     try { localStorage.setItem(TAB_STORAGE_KEY, id); } catch (_) { /* ignore */ }
 }
+
+const searchQuery = ref('');
+function onSearchFilter({ query, selected }) {
+    searchQuery.value = query || '';
+    if (selected && selected.tab) {
+        // Switch tab when a user clicks a result
+        setTab(selected.tab);
+    }
+}
 </script>
 
 <template>
     <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
+        <!-- Search Bar -->
+        <div class="px-3 pt-3">
+            <PatientSearchBar
+                :patient="patient"
+                :visits="visits"
+                :invoices="invoices"
+                :prescriptions="prescriptions"
+                :derma-data="dermaData"
+                :dental-data="dentalData"
+                :pediatric-data="pediatricData"
+                @filter-change="onSearchFilter"
+            />
+        </div>
         <!-- Tab Navigation -->
-        <div class="border-b border-gray-100 overflow-x-auto scrollbar-hide">
+        <div class="border-b border-gray-100 overflow-x-auto scrollbar-hide mt-3">
             <nav class="flex gap-1 px-2 pt-2 min-w-max">
                 <button
                     v-for="tab in availableTabs"
@@ -184,6 +216,16 @@ function setTab(id) {
                 :patient="patient"
                 :role="role"
                 :readonly="readonly"
+            />
+            <TimelineTab
+                v-else-if="activeTab === 'timeline'"
+                :patient="patient"
+                :visits="visits"
+                :invoices="invoices"
+                :prescriptions="prescriptions"
+                :dental-data="dentalData"
+                :pediatric-data="pediatricData"
+                :role="role"
             />
             <InvoicesTab
                 v-else-if="activeTab === 'invoices'"

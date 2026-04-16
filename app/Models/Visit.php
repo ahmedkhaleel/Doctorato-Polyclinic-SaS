@@ -20,6 +20,16 @@ class Visit extends Model
                 throw new \RuntimeException('A visit must be linked to a booking or a package bundle booking.');
             }
         });
+
+        // Bust the patient's cached active-specialties list whenever
+        // a visit is created/updated/deleted (module may have changed).
+        $forget = function (Visit $visit) {
+            if (!empty($visit->patient_id)) {
+                Patient::forgetSpecialtyCache((int) $visit->patient_id);
+            }
+        };
+        static::saved($forget);
+        static::deleted($forget);
     }
 
     /**

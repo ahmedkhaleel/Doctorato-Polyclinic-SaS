@@ -287,15 +287,41 @@ class Patient extends Model
      * Return all active medical specialties for this patient (based on actual records).
      * Used to determine which tabs to show in unified patient file.
      *
+     * Cached for 10 minutes; busted automatically by model event hooks on
+     * Visit / DentalTreatment / PediatricGrowthRecord / PediatricVaccination.
+     *
      * @return array<int, string>  e.g. ['derma', 'dental', 'pediatric']
      */
     public function getActiveSpecialties(): array
     {
-        return array_values(array_filter([
-            $this->hasDermaRecords() ? 'derma' : null,
-            $this->hasDentalRecords() ? 'dental' : null,
-            $this->hasPediatricRecords() ? 'pediatric' : null,
-        ]));
+        return \Illuminate\Support\Facades\Cache::remember(
+            "patient_{$this->id}_specialties",
+            now()->addMinutes(10),
+            fn () => array_values(array_filter([
+                $this->hasDermaRecords() ? 'derma' : null,
+                $this->hasDentalRecords() ? 'dental' : null,
+                $this->hasPediatricRecords() ? 'pediatric' : null,
+            ]))
+        );
+    }
+
+    /**
+     * Forget the cached active-specialties list for this patient.
+     * Called automatically by related-model event hooks, but also callable
+     * directly from services/admin tools that mutate records outside Eloquent.
+     */
+    public function clearSpecialtyCache(): void
+    {
+        \Illuminate\Support\Facades\Cache::forget("patient_{$this->id}_specialties");
+    }
+
+    /**
+     * Forget the cached active-specialties list for a given patient ID
+     * without needing to load the model.
+     */
+    public static function forgetSpecialtyCache(int $patientId): void
+    {
+        \Illuminate\Support\Facades\Cache::forget("patient_{$patientId}_specialties");
     }
 
     // ─── Dental Risk Helpers ─────────────────────────

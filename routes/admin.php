@@ -302,6 +302,7 @@ Route::middleware('admin.auth')->group(function () {
     Route::get('/patients/search', [PatientController::class, 'search'])->name('admin.patients.search');
     Route::get('/patients/{patient}', [PatientController::class, 'show'])->name('admin.patients.show')->middleware('permission:patients.view');
     Route::get('/patients/{patient}/timeline', [PatientController::class, 'timeline'])->name('admin.patients.timeline')->middleware('permission:patients.view');
+    Route::get('/patients/{patient}/export-file', [\App\Http\Controllers\Admin\PatientExportController::class, 'exportFullFile'])->name('admin.patients.export')->middleware('permission:patients.view');
     Route::get('/patients/{patient}/edit', [PatientController::class, 'edit'])->name('admin.patients.edit')->middleware('permission:patients.update');
     Route::post('/patients/{patient}/update', [PatientController::class, 'update'])->name('admin.patients.update')->middleware('permission:patients.update');
     Route::post('/patients/{patient}/delete', [PatientController::class, 'destroy'])->name('admin.patients.destroy')->middleware('permission:patients.delete');

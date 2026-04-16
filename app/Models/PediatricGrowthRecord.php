@@ -11,6 +11,17 @@ class PediatricGrowthRecord extends Model
 {
     use HasFactory, LogsActivity, SoftDeletes;
 
+    protected static function booted(): void
+    {
+        $forget = function (PediatricGrowthRecord $record) {
+            if (!empty($record->patient_id)) {
+                Patient::forgetSpecialtyCache((int) $record->patient_id);
+            }
+        };
+        static::saved($forget);
+        static::deleted($forget);
+    }
+
     protected $fillable = [
         'patient_id', 'visit_id', 'doctor_id', 'measurement_date', 'age_months',
         'weight_kg', 'height_cm', 'head_circumference_cm', 'bmi',

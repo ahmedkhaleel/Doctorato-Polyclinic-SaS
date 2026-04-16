@@ -11,6 +11,17 @@ class PediatricVaccination extends Model
 {
     use HasFactory, LogsActivity, SoftDeletes;
 
+    protected static function booted(): void
+    {
+        $forget = function (PediatricVaccination $record) {
+            if (!empty($record->patient_id)) {
+                Patient::forgetSpecialtyCache((int) $record->patient_id);
+            }
+        };
+        static::saved($forget);
+        static::deleted($forget);
+    }
+
     const STATUS_SCHEDULED = 'scheduled';
     const STATUS_GIVEN = 'given';
     const STATUS_MISSED = 'missed';

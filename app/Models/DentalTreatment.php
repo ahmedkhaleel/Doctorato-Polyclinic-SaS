@@ -20,12 +20,24 @@ class DentalTreatment extends Model
             Cache::forget('dental_report_monthly_revenue');
         };
 
-        static::created($bustCache);
-        static::deleted($bustCache);
+        // Bust the patient's cached active-specialties list when
+        // dental treatments change (may toggle the patient's "dental" specialty).
+        $forgetPatientCache = function (DentalTreatment $treatment) {
+            if (!empty($treatment->patient_id)) {
+                Patient::forgetSpecialtyCache((int) $treatment->patient_id);
+            }
+        };
 
-        static::updated(function (DentalTreatment $treatment) use ($bustCache) {
+        static::saved(function ($treatment) use ($bustCache, $forgetPatientCache) {
             $bustCache();
+            $forgetPatientCache($treatment);
+        });
+        static::deleted(function ($treatment) use ($bustCache, $forgetPatientCache) {
+            $bustCache();
+            $forgetPatientCache($treatment);
+        });
 
+        static::updated(function (DentalTreatment $treatment) {
             // Auto-sync treatment plan progress when a treatment status changes
             if ($treatment->isDirty('status') && $treatment->treatment_plan_id) {
                 $treatment->syncPlanProgress();
