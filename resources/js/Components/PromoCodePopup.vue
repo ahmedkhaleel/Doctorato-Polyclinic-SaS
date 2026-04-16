@@ -76,7 +76,6 @@ async function copyCode() {
         if (copyTimeout.value) clearTimeout(copyTimeout.value);
         copyTimeout.value = setTimeout(() => { copied.value = false; }, 2000);
     } catch {
-        // Fallback
         const textArea = document.createElement('textarea');
         textArea.value = promo.value.code;
         textArea.style.position = 'fixed';
@@ -97,7 +96,6 @@ function dismiss() {
 }
 
 function bookNow() {
-    // Store the code so the booking form can pick it up
     if (promo.value?.code) {
         localStorage.setItem('promo_code_applied', promo.value.code);
     }
@@ -106,7 +104,6 @@ function bookNow() {
 }
 
 onMounted(async () => {
-    // Check if already dismissed (within last 24 hours)
     const dismissedAt = localStorage.getItem(STORAGE_KEY);
     if (dismissedAt) {
         const elapsed = Date.now() - parseInt(dismissedAt);
@@ -119,18 +116,16 @@ onMounted(async () => {
 
         promo.value = data;
 
-        // Start countdown if there's an end date
         if (data.end_date) {
             updateCountdown();
             countdownTimer = setInterval(updateCountdown, 1000);
         }
 
-        // Show popup after delay
         setTimeout(() => {
             isVisible.value = true;
         }, SHOW_DELAY);
     } catch {
-        // Silently fail - promo popup is non-critical
+        // Silently fail
     }
 });
 
@@ -156,137 +151,138 @@ onUnmounted(() => {
                 @click.self="dismiss"
             >
                 <!-- Backdrop -->
-                <div class="absolute inset-0 bg-black/50 backdrop-blur-sm promoBackdropIn"></div>
+                <div class="absolute inset-0 bg-black/60 backdrop-blur-md promoBackdropIn"></div>
 
                 <!-- Card -->
                 <div
-                    class="relative w-full max-w-[420px] bg-white rounded-3xl shadow-2xl overflow-hidden promoCardIn"
+                    class="relative w-full max-w-[400px] overflow-hidden promoCardIn"
                     :dir="isRtl ? 'rtl' : 'ltr'"
                 >
-                    <!-- Top decorative bar -->
-                    <div class="h-1.5 bg-gradient-to-r from-[#C4A265] via-[#E8D5A8] to-[#C4A265]"></div>
+                    <!-- Main card with glass morphism -->
+                    <div class="relative bg-white rounded-[28px] shadow-2xl shadow-black/20 overflow-hidden">
 
-                    <!-- Close button -->
-                    <button
-                        @click="dismiss"
-                        class="absolute top-4 z-10 w-8 h-8 rounded-full bg-white/80 backdrop-blur flex items-center justify-center text-gray-400 hover:text-gray-600 hover:bg-white shadow-sm transition-all duration-200"
-                        :class="isRtl ? 'left-4' : 'right-4'"
-                    >
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-
-                    <!-- Header section with gradient background -->
-                    <div class="relative px-6 pt-8 pb-6 text-center overflow-hidden">
-                        <!-- Background decoration -->
-                        <div class="absolute inset-0 bg-gradient-to-b from-[#FBF7EE] to-white"></div>
-                        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[300px] h-[300px] rounded-full bg-[#C4A265]/[0.04] -mt-[150px]"></div>
-
-                        <!-- Animated offer icon -->
-                        <div class="relative">
-                            <div class="mx-auto w-20 h-20 rounded-2xl bg-gradient-to-br from-[#C4A265] to-[#A68B52] flex items-center justify-center shadow-xl shadow-[#C4A265]/30 promoIconBounce">
-                                <svg class="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
-                                </svg>
+                        <!-- Animated gradient header -->
+                        <div class="relative h-36 overflow-hidden promo-header-bg">
+                            <!-- Floating particles -->
+                            <div class="absolute inset-0">
+                                <div class="promo-particle promo-particle-1"></div>
+                                <div class="promo-particle promo-particle-2"></div>
+                                <div class="promo-particle promo-particle-3"></div>
+                                <div class="promo-particle promo-particle-4"></div>
                             </div>
 
+                            <!-- Close button -->
+                            <button
+                                @click="dismiss"
+                                class="absolute top-3 z-10 w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white/80 hover:text-white hover:bg-white/30 transition-all duration-200"
+                                :class="isRtl ? 'left-3' : 'right-3'"
+                            >
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+
                             <!-- Discount badge -->
-                            <div class="absolute -top-1 -right-1 left-auto mx-auto w-fit" :class="isRtl ? '-left-1 right-auto' : '-right-1 left-auto'" style="transform: translateX(50%)">
-                                <div class="bg-red-500 text-white text-xs font-bold px-2.5 py-1 rounded-full shadow-lg promoBadgePulse">
+                            <div class="absolute top-3 z-10" :class="isRtl ? 'right-3' : 'left-3'">
+                                <div class="bg-white text-[#C4A265] text-sm font-black px-3 py-1 rounded-full shadow-lg promoBadgePulse flex items-center gap-1">
+                                    <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 2a2 2 0 00-2 2v14l3.5-2 3.5 2 3.5-2 3.5 2V4a2 2 0 00-2-2H5zm2.5 3a1.5 1.5 0 100 3 1.5 1.5 0 000-3zm6.207.293a1 1 0 00-1.414 0l-6 6a1 1 0 101.414 1.414l6-6a1 1 0 000-1.414zM12.5 10a1.5 1.5 0 100 3 1.5 1.5 0 000-3z" clip-rule="evenodd" /></svg>
                                     {{ discountLabel }}
-                                    {{ locale === 'ar' ? 'خصم' : 'OFF' }}
+                                </div>
+                            </div>
+
+                            <!-- Center icon -->
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <div class="promoIconBounce">
+                                    <div class="w-20 h-20 rounded-[20px] bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30">
+                                        <svg class="w-10 h-10 text-white drop-shadow-lg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
+                                        </svg>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Title -->
-                        <h2 class="relative mt-5 text-2xl font-bold text-gray-900 leading-tight">{{ title }}</h2>
+                        <!-- Content -->
+                        <div class="px-6 pt-5 pb-2 text-center">
+                            <h2 class="text-xl font-black text-gray-900 leading-tight">{{ title }}</h2>
+                            <p class="mt-2 text-[13px] text-gray-500 leading-relaxed max-w-[300px] mx-auto">{{ description }}</p>
+                        </div>
 
-                        <!-- Description -->
-                        <p class="relative mt-2 text-sm text-gray-500 leading-relaxed max-w-[280px] mx-auto">{{ description }}</p>
-                    </div>
+                        <!-- Promo code coupon -->
+                        <div class="mx-5 my-3">
+                            <div class="relative flex items-center bg-gradient-to-r from-[#FBF7EE] to-[#F5EDD8] rounded-2xl overflow-hidden border border-[#C4A265]/20">
+                                <!-- Coupon notches -->
+                                <div class="absolute -left-2.5 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-white"></div>
+                                <div class="absolute -right-2.5 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-white"></div>
 
-                    <!-- Code display section -->
-                    <div class="px-6 pb-4">
-                        <div class="relative bg-[#FBF7EE] border-2 border-dashed border-[#C4A265]/40 rounded-2xl p-4">
-                            <!-- Scissors decoration -->
-                            <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-white px-2">
-                                <svg class="w-5 h-5 text-[#C4A265]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879M12 12L9.121 9.121m0 5.758a3 3 0 10-4.243 4.243 3 3 0 004.243-4.243zm0-5.758a3 3 0 10-4.243-4.243 3 3 0 004.243 4.243z" />
-                                </svg>
-                            </div>
+                                <!-- Code section -->
+                                <div class="flex-1 py-3.5 px-6 text-center border-e border-dashed border-[#C4A265]/30">
+                                    <p class="text-[9px] font-bold uppercase tracking-[0.2em] text-[#C4A265]/60 mb-1">
+                                        {{ locale === 'ar' ? 'كود الخصم' : 'PROMO CODE' }}
+                                    </p>
+                                    <span class="text-xl font-mono font-black tracking-[0.15em] text-gray-800 promoCodeReveal">
+                                        {{ promo.code }}
+                                    </span>
+                                </div>
 
-                            <p class="text-center text-[11px] font-semibold uppercase tracking-widest text-[#C4A265]/70 mb-2">
-                                {{ locale === 'ar' ? 'كود الخصم' : 'Discount Code' }}
-                            </p>
-
-                            <!-- Code with copy button -->
-                            <div class="flex items-center justify-center gap-3">
-                                <span class="text-2xl font-mono font-black tracking-[0.2em] text-gray-800 select-all promoCodeReveal">
-                                    {{ promo.code }}
-                                </span>
+                                <!-- Copy button -->
                                 <button
                                     @click="copyCode"
-                                    class="group flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all duration-300"
-                                    :class="copied
-                                        ? 'bg-emerald-50 text-emerald-600'
-                                        : 'bg-[#C4A265]/10 text-[#C4A265] hover:bg-[#C4A265]/20'"
+                                    class="px-4 py-3.5 flex flex-col items-center gap-1 transition-all duration-300 hover:bg-[#C4A265]/10"
+                                    :class="copied ? 'text-emerald-600' : 'text-[#C4A265]'"
                                 >
-                                    <svg v-if="!copied" class="w-4 h-4 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg v-if="!copied" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
                                     </svg>
-                                    <svg v-else class="w-4 h-4 promoCopyCheck" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg v-else class="w-5 h-5 promoCopyCheck" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
                                     </svg>
-                                    <span class="text-xs font-semibold">
-                                        {{ copied ? (locale === 'ar' ? 'تم النسخ!' : 'Copied!') : (locale === 'ar' ? 'نسخ' : 'Copy') }}
+                                    <span class="text-[10px] font-bold">
+                                        {{ copied ? (locale === 'ar' ? 'تم!' : 'Done!') : (locale === 'ar' ? 'نسخ' : 'Copy') }}
                                     </span>
                                 </button>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Countdown timer -->
-                    <div v-if="hasCountdown" class="px-6 pb-4">
-                        <div class="flex items-center justify-center gap-2">
-                            <svg class="w-4 h-4 text-red-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <!-- Countdown timer -->
+                        <div v-if="hasCountdown" class="flex items-center justify-center gap-1.5 py-2">
+                            <svg class="w-3.5 h-3.5 text-red-400 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
-                            <span class="text-xs text-gray-500 font-medium">
-                                {{ locale === 'ar' ? 'ينتهي خلال' : 'Expires in' }}
+                            <span class="text-[11px] text-gray-400 font-medium">
+                                {{ locale === 'ar' ? 'ينتهي خلال' : 'Ends in' }}
                             </span>
-                            <div class="flex items-center gap-1">
+                            <div class="flex items-center gap-0.5">
                                 <template v-if="countdown.days > 0">
-                                    <span class="inline-flex items-center justify-center bg-gray-100 text-gray-800 text-xs font-bold px-2 py-0.5 rounded min-w-[28px]">{{ countdown.days }}</span>
-                                    <span class="text-[10px] text-gray-400">{{ locale === 'ar' ? 'ي' : 'd' }}</span>
+                                    <span class="promo-timer-digit">{{ countdown.days }}</span>
+                                    <span class="text-[9px] text-gray-400 mx-0.5">{{ locale === 'ar' ? 'ي' : 'd' }}</span>
                                 </template>
-                                <span class="inline-flex items-center justify-center bg-gray-100 text-gray-800 text-xs font-bold px-2 py-0.5 rounded min-w-[28px]">{{ String(countdown.hours).padStart(2, '0') }}</span>
-                                <span class="text-gray-400 text-xs font-bold">:</span>
-                                <span class="inline-flex items-center justify-center bg-gray-100 text-gray-800 text-xs font-bold px-2 py-0.5 rounded min-w-[28px]">{{ String(countdown.minutes).padStart(2, '0') }}</span>
-                                <span class="text-gray-400 text-xs font-bold">:</span>
-                                <span class="inline-flex items-center justify-center bg-gray-100 text-gray-800 text-xs font-bold px-2 py-0.5 rounded min-w-[28px]">{{ String(countdown.seconds).padStart(2, '0') }}</span>
+                                <span class="promo-timer-digit">{{ String(countdown.hours).padStart(2, '0') }}</span>
+                                <span class="text-gray-300 text-[10px] font-bold mx-px">:</span>
+                                <span class="promo-timer-digit">{{ String(countdown.minutes).padStart(2, '0') }}</span>
+                                <span class="text-gray-300 text-[10px] font-bold mx-px">:</span>
+                                <span class="promo-timer-digit promo-timer-seconds">{{ String(countdown.seconds).padStart(2, '0') }}</span>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Action buttons -->
-                    <div class="px-6 pb-6">
-                        <button
-                            @click="bookNow"
-                            class="w-full flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-white font-bold text-base shadow-lg shadow-[#C4A265]/25 hover:shadow-xl hover:shadow-[#C4A265]/35 transition-all duration-300 hover:-translate-y-0.5 bg-gradient-to-r from-[#C4A265] to-[#A68B52]"
-                        >
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
-                            {{ locale === 'ar' ? 'احجز الان' : 'Book Now' }}
-                        </button>
-                        <button
-                            @click="dismiss"
-                            class="w-full mt-2 px-4 py-2 text-sm text-gray-400 hover:text-gray-600 transition-colors duration-200"
-                        >
-                            {{ locale === 'ar' ? 'لاحقا' : 'Maybe Later' }}
-                        </button>
+                        <!-- Action buttons -->
+                        <div class="px-5 pb-5 pt-2">
+                            <button
+                                @click="bookNow"
+                                class="promo-book-btn w-full flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-2xl text-white font-bold text-[15px] transition-all duration-300 hover:-translate-y-0.5"
+                            >
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                                {{ locale === 'ar' ? 'احجز الآن' : 'Book Now' }}
+                            </button>
+                            <button
+                                @click="dismiss"
+                                class="w-full mt-2 px-4 py-2 text-xs text-gray-400 hover:text-gray-600 transition-colors duration-200"
+                            >
+                                {{ locale === 'ar' ? 'لاحقاً' : 'Maybe Later' }}
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -295,16 +291,37 @@ onUnmounted(() => {
 </template>
 
 <style>
-/* Popup card entrance */
+/* ── Header gradient ─────────────────── */
+.promo-header-bg {
+    background: linear-gradient(135deg, #C4A265 0%, #D4B87A 30%, #A68B52 70%, #8B7340 100%);
+}
+
+/* ── Floating particles ──────────────── */
+.promo-particle {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    animation: promoFloat 6s ease-in-out infinite;
+}
+.promo-particle-1 { width: 80px; height: 80px; top: -20px; right: -10px; animation-delay: 0s; }
+.promo-particle-2 { width: 50px; height: 50px; bottom: -10px; left: 20px; animation-delay: 1.5s; }
+.promo-particle-3 { width: 30px; height: 30px; top: 30px; left: 40%; animation-delay: 3s; }
+.promo-particle-4 { width: 60px; height: 60px; bottom: 10px; right: 20%; animation-delay: 4.5s; }
+@keyframes promoFloat {
+    0%, 100% { transform: translateY(0) scale(1); opacity: 0.15; }
+    50% { transform: translateY(-12px) scale(1.1); opacity: 0.25; }
+}
+
+/* ── Card entrance ───────────────────── */
 .promoCardIn {
     animation: promoCardSlideIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 @keyframes promoCardSlideIn {
-    0% { opacity: 0; transform: scale(0.8) translateY(30px); }
+    0% { opacity: 0; transform: scale(0.85) translateY(40px); }
     100% { opacity: 1; transform: scale(1) translateY(0); }
 }
 
-/* Backdrop fade */
+/* ── Backdrop ────────────────────────── */
 .promoBackdropIn {
     animation: promoBackdropFade 0.4s ease-out both;
 }
@@ -313,47 +330,73 @@ onUnmounted(() => {
     100% { opacity: 1; }
 }
 
-/* Icon bounce entrance */
+/* ── Icon bounce ─────────────────────── */
 .promoIconBounce {
-    animation: promoIconBounceKf 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
+    animation: promoIconBounceKf 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
 }
 @keyframes promoIconBounceKf {
-    0% { opacity: 0; transform: scale(0) rotate(-20deg); }
-    60% { opacity: 1; transform: scale(1.15) rotate(5deg); }
-    80% { transform: scale(0.95) rotate(-2deg); }
+    0% { opacity: 0; transform: scale(0) rotate(-15deg); }
+    60% { opacity: 1; transform: scale(1.12) rotate(3deg); }
+    80% { transform: scale(0.95) rotate(-1deg); }
     100% { transform: scale(1) rotate(0deg); }
 }
 
-/* Discount badge pulse */
+/* ── Badge pulse ─────────────────────── */
 .promoBadgePulse {
     animation: promoBadgePulseKf 2s ease-in-out infinite;
 }
 @keyframes promoBadgePulseKf {
     0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.08); }
+    50% { transform: scale(1.06); }
 }
 
-/* Code reveal animation */
+/* ── Code reveal ─────────────────────── */
 .promoCodeReveal {
     animation: promoCodeRevealKf 0.8s ease-out 0.5s both;
 }
 @keyframes promoCodeRevealKf {
-    0% { opacity: 0; letter-spacing: 0.5em; filter: blur(4px); }
-    100% { opacity: 1; letter-spacing: 0.2em; filter: blur(0px); }
+    0% { opacity: 0; letter-spacing: 0.4em; filter: blur(4px); }
+    100% { opacity: 1; letter-spacing: 0.15em; filter: blur(0); }
 }
 
-/* Copy checkmark animation */
+/* ── Copy check animation ────────────── */
 .promoCopyCheck {
     animation: promoCopyCheckKf 0.4s ease-out both;
 }
 @keyframes promoCopyCheckKf {
     0% { transform: scale(0); opacity: 0; }
-    50% { transform: scale(1.2); }
+    50% { transform: scale(1.3); }
     100% { transform: scale(1); opacity: 1; }
 }
 
-/* Smooth transition duration */
-.duration-600 {
-    transition-duration: 600ms;
+/* ── Timer digits ────────────────────── */
+.promo-timer-digit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 26px;
+    padding: 2px 5px;
+    font-size: 11px;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    color: #374151;
+    background: #f3f4f6;
+    border-radius: 6px;
 }
+.promo-timer-seconds {
+    color: #ef4444;
+    background: #fef2f2;
+}
+
+/* ── Book Now button ─────────────────── */
+.promo-book-btn {
+    background: linear-gradient(135deg, #C4A265 0%, #A68B52 100%);
+    box-shadow: 0 8px 24px -4px rgba(196, 162, 101, 0.4);
+}
+.promo-book-btn:hover {
+    box-shadow: 0 12px 32px -4px rgba(196, 162, 101, 0.5);
+}
+
+/* ── Transition duration ─────────────── */
+.duration-600 { transition-duration: 600ms; }
 </style>
