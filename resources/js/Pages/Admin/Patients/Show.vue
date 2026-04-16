@@ -1253,16 +1253,16 @@ const dentalRiskFlags = computed(() => props.dentalData?.riskFlags || []);
 
                         <!-- Quick Links -->
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                            <Link :href="`/admin/pediatric/patients/${patient.id}`" class="flex items-center gap-3 p-4 bg-white rounded-xl border border-gray-200 hover:border-green-300 hover:bg-green-50/50 transition group">
+                            <Link :href="`/admin/pediatric/patients?search=${encodeURIComponent(patient.full_name || '')}`" class="flex items-center gap-3 p-4 bg-white rounded-xl border border-gray-200 hover:border-green-300 hover:bg-green-50/50 transition group">
                                 <div class="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center">
                                     <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                                 </div>
                                 <div>
-                                    <p class="text-xs font-semibold text-gray-800 group-hover:text-green-600">{{ isRtl ? 'ملف الطفل' : 'Child Profile' }}</p>
-                                    <p class="text-[10px] text-gray-400">{{ isRtl ? 'عرض الملف الكامل' : 'View full profile' }}</p>
+                                    <p class="text-xs font-semibold text-gray-800 group-hover:text-green-600">{{ isRtl ? 'مرضى الأطفال' : 'Pediatric Patients' }}</p>
+                                    <p class="text-[10px] text-gray-400">{{ isRtl ? 'القائمة الكاملة' : 'Full list' }}</p>
                                 </div>
                             </Link>
-                            <Link :href="`/admin/pediatric/vaccinations?patient_id=${patient.id}`" class="flex items-center gap-3 p-4 bg-white rounded-xl border border-gray-200 hover:border-emerald-300 hover:bg-emerald-50/50 transition group">
+                            <Link :href="`/admin/pediatric/vaccinations?search=${encodeURIComponent(patient.full_name || '')}`" class="flex items-center gap-3 p-4 bg-white rounded-xl border border-gray-200 hover:border-emerald-300 hover:bg-emerald-50/50 transition group">
                                 <div class="w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center">
                                     <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
                                 </div>
@@ -1271,7 +1271,7 @@ const dentalRiskFlags = computed(() => props.dentalData?.riskFlags || []);
                                     <p class="text-[10px] text-gray-400">{{ pediatricData?.stats?.total_vaccinations ?? 0 }} {{ isRtl ? 'تطعيم' : 'records' }}</p>
                                 </div>
                             </Link>
-                            <Link :href="`/admin/pediatric/growth?patient_id=${patient.id}`" class="flex items-center gap-3 p-4 bg-white rounded-xl border border-gray-200 hover:border-teal-300 hover:bg-teal-50/50 transition group">
+                            <Link :href="`/admin/pediatric/growth?search=${encodeURIComponent(patient.full_name || '')}`" class="flex items-center gap-3 p-4 bg-white rounded-xl border border-gray-200 hover:border-teal-300 hover:bg-teal-50/50 transition group">
                                 <div class="w-10 h-10 rounded-lg bg-teal-50 flex items-center justify-center">
                                     <svg class="w-5 h-5 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
                                 </div>
@@ -1280,13 +1280,13 @@ const dentalRiskFlags = computed(() => props.dentalData?.riskFlags || []);
                                     <p class="text-[10px] text-gray-400">{{ pediatricData?.stats?.growth_records ?? 0 }} {{ isRtl ? 'سجل' : 'records' }}</p>
                                 </div>
                             </Link>
-                            <Link :href="`/admin/pediatric/milestones?patient_id=${patient.id}`" class="flex items-center gap-3 p-4 bg-white rounded-xl border border-gray-200 hover:border-green-300 hover:bg-green-50/50 transition group">
+                            <Link :href="`/admin/pediatric/visits?patient_id=${patient.id}`" class="flex items-center gap-3 p-4 bg-white rounded-xl border border-gray-200 hover:border-green-300 hover:bg-green-50/50 transition group">
                                 <div class="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center">
-                                    <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" /></svg>
+                                    <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
                                 </div>
                                 <div>
-                                    <p class="text-xs font-semibold text-gray-800 group-hover:text-green-600">{{ isRtl ? 'المعالم التنموية' : 'Milestones' }}</p>
-                                    <p class="text-[10px] text-gray-400">{{ isRtl ? 'تتبع التطور' : 'Track development' }}</p>
+                                    <p class="text-xs font-semibold text-gray-800 group-hover:text-green-600">{{ isRtl ? 'الزيارات' : 'Visits' }}</p>
+                                    <p class="text-[10px] text-gray-400">{{ isRtl ? 'كل الزيارات' : 'All visits' }}</p>
                                 </div>
                             </Link>
                         </div>

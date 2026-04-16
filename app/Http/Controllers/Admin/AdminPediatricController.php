@@ -274,8 +274,10 @@ class AdminPediatricController extends Controller
     {
         $search = $request->input('search');
         $status = $request->input('status');
+        $patientId = $request->input('patient_id');
 
         $vaccinations = PediatricVaccination::with('patient:id,full_name,date_of_birth,file_number,guardian_phone')
+            ->when($patientId, fn($q) => $q->where('patient_id', $patientId))
             ->when($search, function ($q) use ($search) {
                 $q->where(function ($sq) use ($search) {
                     $sq->where('vaccine_name', 'like', "%{$search}%")
@@ -314,9 +316,11 @@ class AdminPediatricController extends Controller
         $status = $request->input('status');
         $dateFrom = $request->input('date_from');
         $dateTo = $request->input('date_to');
+        $patientId = $request->input('patient_id');
 
         $visits = Visit::where('module', 'pediatric')
             ->with(['patient:id,full_name,date_of_birth,gender,file_number,guardian_name', 'doctor:id,name_en,name_ar'])
+            ->when($patientId, fn($q) => $q->where('patient_id', $patientId))
             ->when($search, function ($q) use ($search) {
                 $q->where(function ($sq) use ($search) {
                     $sq->whereHas('patient', function ($pq) use ($search) {
@@ -355,7 +359,17 @@ class AdminPediatricController extends Controller
      */
     public function growth(Request $request)
     {
+        $search = $request->input('search');
+        $patientId = $request->input('patient_id');
+
         $records = PediatricGrowthRecord::with('patient:id,full_name,date_of_birth,gender,file_number')
+            ->when($patientId, fn($q) => $q->where('patient_id', $patientId))
+            ->when($search, function ($q) use ($search) {
+                $q->whereHas('patient', function ($pq) use ($search) {
+                    $pq->where('full_name', 'like', "%{$search}%")
+                       ->orWhere('file_number', 'like', "%{$search}%");
+                });
+            })
             ->orderByDesc('measurement_date')
             ->paginate(30)
             ->withQueryString();
