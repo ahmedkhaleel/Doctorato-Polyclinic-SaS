@@ -495,20 +495,69 @@ const moduleImages = {
         <!-- ═══════════════════════════════════════ -->
         <!-- STATS — Premium Counter Bar            -->
         <!-- ═══════════════════════════════════════ -->
-        <section class="py-16 md:py-20 relative overflow-hidden">
+        <section class="py-16 md:py-20 relative overflow-hidden stats-section">
             <!-- Navy gradient background -->
-            <div class="absolute inset-0 bg-gradient-to-br from-[#0f2847] via-[#1B365D] to-[#264573]"></div>
-            <!-- Dot texture -->
-            <div class="absolute inset-0 opacity-[0.04]"
-                 style="background-image: radial-gradient(circle at 1px 1px, rgba(196,162,101,0.9) 1px, transparent 0); background-size: 28px 28px;"></div>
-            <!-- Gold radial glow -->
-            <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(196,162,101,0.1)_0%,_transparent_50%)]"></div>
+            <div class="absolute inset-0 bg-gradient-to-br from-[#0a1f3a] via-[#1B365D] to-[#122e52]"></div>
+
+            <!-- Hexagonal pattern texture -->
+            <div class="absolute inset-0 opacity-[0.08] stats-hex-pattern"></div>
+
+            <!-- Medical cross pattern overlay -->
+            <div class="absolute inset-0 opacity-[0.04] stats-cross-pattern"></div>
+
+            <!-- Subtle dot grid -->
+            <div class="absolute inset-0 opacity-[0.05]"
+                 style="background-image: radial-gradient(circle at 1px 1px, rgba(196,162,101,0.9) 1px, transparent 0); background-size: 32px 32px;"></div>
+
+            <!-- Animated gradient blobs -->
+            <div class="absolute top-[-10%] start-[-5%] w-[400px] h-[400px] rounded-full stats-blob-1 bg-[radial-gradient(circle,_rgba(196,162,101,0.15)_0%,_transparent_60%)] blur-2xl"></div>
+            <div class="absolute bottom-[-15%] end-[-8%] w-[500px] h-[500px] rounded-full stats-blob-2 bg-[radial-gradient(circle,_rgba(147,197,253,0.08)_0%,_transparent_60%)] blur-3xl"></div>
+            <div class="absolute top-[40%] start-[40%] w-[300px] h-[300px] rounded-full stats-blob-3 bg-[radial-gradient(circle,_rgba(196,162,101,0.1)_0%,_transparent_60%)] blur-2xl"></div>
+
+            <!-- Diagonal light beams -->
+            <div class="absolute inset-0 stats-beam-bg"></div>
+
+            <!-- Animated SVG wave at top -->
+            <svg class="absolute top-0 inset-x-0 w-full h-16 opacity-20" viewBox="0 0 1440 60" preserveAspectRatio="none" fill="none">
+                <path class="stats-wave" d="M0,30 C360,60 720,0 1080,30 C1260,45 1350,15 1440,30 L1440,0 L0,0 Z" fill="url(#statsGradient1)"/>
+                <defs>
+                    <linearGradient id="statsGradient1" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="#C4A265" stop-opacity="0"/>
+                        <stop offset="50%" stop-color="#C4A265" stop-opacity="0.4"/>
+                        <stop offset="100%" stop-color="#C4A265" stop-opacity="0"/>
+                    </linearGradient>
+                </defs>
+            </svg>
+
+            <!-- Pulse rings (heartbeat feel) -->
+            <div class="absolute top-[15%] start-[8%] w-24 h-24 border border-[#C4A265]/20 rounded-full stats-pulse-ring"></div>
+            <div class="absolute top-[15%] start-[8%] w-24 h-24 border border-[#C4A265]/30 rounded-full stats-pulse-ring" style="animation-delay:1s;"></div>
+            <div class="absolute bottom-[20%] end-[10%] w-32 h-32 border border-white/10 rounded-full stats-pulse-ring" style="animation-delay:0.5s;"></div>
+
+            <!-- Floating medical icons -->
+            <div class="absolute top-[20%] end-[15%] text-[#C4A265]/[0.07] stats-float-icon" style="animation-delay:0s;">
+                <svg class="w-16 h-16" fill="currentColor" viewBox="0 0 24 24"><path d="M19 8h-2V6a4 4 0 10-8 0v2H7a1 1 0 00-1 1v11a1 1 0 001 1h12a1 1 0 001-1V9a1 1 0 00-1-1zM11 6a2 2 0 114 0v2h-4V6z"/></svg>
+            </div>
+            <div class="absolute bottom-[25%] start-[15%] text-white/[0.06] stats-float-icon" style="animation-delay:2s;">
+                <svg class="w-20 h-20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L4 6v6c0 5.5 3.8 10.7 8 12 4.2-1.3 8-6.5 8-12V6l-8-4zm0 16c-3.5 0-6.5-3.5-6.5-8V7.3l6.5-3.2 6.5 3.2V10c0 4.5-3 8-6.5 8z"/></svg>
+            </div>
+            <div class="absolute top-[45%] end-[5%] text-[#C4A265]/[0.08] stats-float-icon" style="animation-delay:4s;">
+                <svg class="w-12 h-12" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14h2v2h-2v-2zm0-10h2v8h-2V6z"/></svg>
+            </div>
+
+            <!-- Heartbeat line SVG -->
+            <svg class="absolute inset-x-0 top-1/2 -translate-y-1/2 w-full h-24 opacity-10 stats-heartbeat" viewBox="0 0 1200 100" preserveAspectRatio="none" fill="none">
+                <path d="M0,50 L200,50 L230,50 L245,20 L260,80 L275,10 L290,90 L305,50 L500,50 L530,50 L545,25 L560,75 L575,15 L590,85 L605,50 L800,50 L830,50 L845,20 L860,80 L875,10 L890,90 L905,50 L1200,50"
+                      stroke="#C4A265" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+
             <!-- Geometric circles -->
-            <div class="absolute top-[10%] start-[5%] w-40 h-40 border border-[#C4A265]/[0.06] rounded-full stats-orbit"></div>
-            <div class="absolute bottom-[10%] end-[8%] w-56 h-56 border border-white/[0.03] rounded-full stats-orbit" style="animation-duration:30s;animation-direction:reverse;"></div>
-            <!-- Top & bottom gold lines -->
-            <div class="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[#C4A265]/30 to-transparent"></div>
-            <div class="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[#C4A265]/30 to-transparent"></div>
+            <div class="absolute top-[10%] start-[5%] w-40 h-40 border border-[#C4A265]/[0.08] rounded-full stats-orbit"></div>
+            <div class="absolute bottom-[10%] end-[8%] w-56 h-56 border border-white/[0.04] rounded-full stats-orbit" style="animation-duration:30s;animation-direction:reverse;"></div>
+
+            <!-- Top & bottom gold lines with glow -->
+            <div class="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[#C4A265]/50 to-transparent"></div>
+            <div class="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[#C4A265]/50 to-transparent"></div>
 
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
@@ -834,6 +883,99 @@ const moduleImages = {
 </template>
 
 <style scoped>
+/* ═══ STATS SECTION TEXTURES ═══════════════════ */
+
+/* Hexagonal SVG pattern */
+.stats-hex-pattern {
+    background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='70' viewBox='0 0 60 70'%3E%3Cpath d='M30 0l30 17.5v35L30 70 0 52.5v-35z' fill='none' stroke='%23C4A265' stroke-width='0.5'/%3E%3C/svg%3E");
+    background-size: 60px 70px;
+}
+
+/* Medical cross pattern */
+.stats-cross-pattern {
+    background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cpath d='M36 32h8v4h-4v8h-4v-8h-4v-4h4z' fill='%23C4A265'/%3E%3C/svg%3E");
+    background-size: 80px 80px;
+}
+
+/* Animated floating blobs */
+.stats-blob-1 {
+    animation: statsBlobFloat 18s ease-in-out infinite;
+}
+.stats-blob-2 {
+    animation: statsBlobFloat 22s ease-in-out infinite reverse;
+}
+.stats-blob-3 {
+    animation: statsBlobFloat 15s ease-in-out infinite;
+    animation-delay: -5s;
+}
+@keyframes statsBlobFloat {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    25%      { transform: translate(30px, -40px) scale(1.05); }
+    50%      { transform: translate(-20px, 30px) scale(0.95); }
+    75%      { transform: translate(40px, 20px) scale(1.08); }
+}
+
+/* Diagonal light beams */
+.stats-beam-bg {
+    background: repeating-linear-gradient(
+        135deg,
+        transparent 0px,
+        transparent 80px,
+        rgba(196, 162, 101, 0.025) 80px,
+        rgba(196, 162, 101, 0.025) 82px
+    );
+}
+
+/* SVG wave animation */
+.stats-wave {
+    animation: statsWaveShift 8s ease-in-out infinite;
+}
+@keyframes statsWaveShift {
+    0%, 100% { transform: translateX(0); }
+    50%      { transform: translateX(-30px); }
+}
+
+/* Pulse ring animation */
+.stats-pulse-ring {
+    animation: statsPulseRing 3s ease-out infinite;
+    transform: scale(0.3);
+    opacity: 0;
+}
+@keyframes statsPulseRing {
+    0% { transform: scale(0.3); opacity: 0.8; }
+    100% { transform: scale(1.5); opacity: 0; }
+}
+
+/* Floating medical icons */
+.stats-float-icon {
+    animation: statsFloatIcon 8s ease-in-out infinite;
+}
+@keyframes statsFloatIcon {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    50%      { transform: translate(12px, -15px) rotate(5deg); }
+}
+
+/* Heartbeat line animation */
+.stats-heartbeat {
+    stroke-dasharray: 2500;
+    stroke-dashoffset: 2500;
+    animation: statsHeartbeat 6s ease-in-out infinite;
+}
+@keyframes statsHeartbeat {
+    0%   { stroke-dashoffset: 2500; }
+    50%  { stroke-dashoffset: 0; }
+    100% { stroke-dashoffset: -2500; }
+}
+
+/* Orbit rotation */
+.stats-orbit {
+    animation: statsOrbitKf 25s linear infinite;
+}
+@keyframes statsOrbitKf {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+
 /* ─── Specialties mobile slider ─────────── */
 .spec-dot {
     width: 28px;
