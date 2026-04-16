@@ -3,6 +3,7 @@ import { ref, computed, onMounted } from 'vue';
 import { Link, router, useForm, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import SearchableSelect from '@/Components/Admin/SearchableSelect.vue';
+import PediatricGrowthChart from '@/Components/PediatricGrowthChart.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
 import { useCurrency } from '@/Composables/useCurrency.js';
 
@@ -1289,6 +1290,69 @@ const dentalRiskFlags = computed(() => props.dentalData?.riskFlags || []);
                                     <p class="text-[10px] text-gray-400">{{ isRtl ? 'كل الزيارات' : 'All visits' }}</p>
                                 </div>
                             </Link>
+                        </div>
+
+                        <!-- ═══════════════════════════════════════ -->
+                        <!-- Growth Chart                            -->
+                        <!-- ═══════════════════════════════════════ -->
+                        <div v-if="pediatricData?.growthRecords?.length" class="bg-gradient-to-br from-teal-50/50 to-emerald-50/50 rounded-2xl border border-teal-100 p-1 overflow-hidden">
+                            <div class="flex items-center justify-between px-5 py-3 mb-1">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-500 to-emerald-600 flex items-center justify-center shadow-sm">
+                                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3v18h18M7 14l4-4 4 4 4-8" /></svg>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-sm font-bold text-gray-800">{{ isRtl ? 'مخطط النمو' : 'Growth Chart' }}</h3>
+                                        <p class="text-xs text-gray-500">{{ pediatricData.growthRecords.length }} {{ isRtl ? 'قياس مسجّل' : 'measurements recorded' }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <PediatricGrowthChart
+                                :records="pediatricData.growthRecords"
+                                :gender="patient.gender"
+                                :height="340"
+                            />
+                        </div>
+
+                        <!-- Latest Measurements Summary -->
+                        <div v-if="pediatricData?.stats?.latest_weight || pediatricData?.stats?.latest_height" class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                            <div class="bg-white rounded-xl border border-gray-100 p-4">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <svg class="w-4 h-4 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" /></svg>
+                                    <p class="text-[11px] font-semibold text-gray-500">{{ isRtl ? 'الوزن' : 'Weight' }}</p>
+                                </div>
+                                <p class="text-xl font-bold text-gray-800">{{ pediatricData.stats.latest_weight || '-' }} <span class="text-xs text-gray-400">kg</span></p>
+                            </div>
+                            <div class="bg-white rounded-xl border border-gray-100 p-4">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v10m0 0h8m-8 0l4-4 4 4M12 3v4" /></svg>
+                                    <p class="text-[11px] font-semibold text-gray-500">{{ isRtl ? 'الطول' : 'Height' }}</p>
+                                </div>
+                                <p class="text-xl font-bold text-gray-800">{{ pediatricData.stats.latest_height || '-' }} <span class="text-xs text-gray-400">cm</span></p>
+                            </div>
+                            <div class="bg-white rounded-xl border border-gray-100 p-4">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
+                                    <p class="text-[11px] font-semibold text-gray-500">BMI</p>
+                                </div>
+                                <p class="text-xl font-bold text-gray-800">{{ pediatricData.stats.latest_bmi || '-' }}</p>
+                            </div>
+                            <div class="bg-white rounded-xl border border-gray-100 p-4">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                    <p class="text-[11px] font-semibold text-gray-500">{{ isRtl ? 'آخر قياس' : 'Last' }}</p>
+                                </div>
+                                <p class="text-sm font-bold text-gray-800">{{ pediatricData.growthRecords[pediatricData.growthRecords.length - 1]?.measurement_date?.substring(0, 10) || '-' }}</p>
+                            </div>
+                        </div>
+
+                        <!-- Empty state if no growth records -->
+                        <div v-else class="bg-gradient-to-br from-gray-50 to-gray-100/50 rounded-2xl border border-gray-200 p-8 text-center">
+                            <div class="w-14 h-14 mx-auto rounded-2xl bg-white flex items-center justify-center shadow-sm mb-3">
+                                <svg class="w-7 h-7 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3v18h18M7 14l4-4 4 4 4-8" /></svg>
+                            </div>
+                            <p class="text-sm font-semibold text-gray-700 mb-1">{{ isRtl ? 'لم يتم تسجيل قياسات نمو بعد' : 'No growth measurements yet' }}</p>
+                            <p class="text-xs text-gray-500">{{ isRtl ? 'سيتم عرض الرسم البياني عند إضافة أول قياس' : 'The chart will appear after the first measurement is recorded' }}</p>
                         </div>
 
                         <!-- Pediatric Visits -->

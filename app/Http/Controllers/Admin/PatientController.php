@@ -203,6 +203,43 @@ class PatientController extends Controller
             ];
         }
 
+        // Pediatric data (only if module enabled AND patient appears to be pediatric)
+        $pediatricData = null;
+        $isPediatricPatient = $patient->guardian_name
+            || ($patient->date_of_birth && \Carbon\Carbon::parse($patient->date_of_birth)->age < 18)
+            || $patient->visits()->where('module', 'pediatric')->exists();
+
+        if (\App\Services\ModuleManager::isEnabled('pediatric') && $isPediatricPatient) {
+            $growthRecords = \App\Models\PediatricGrowthRecord::where('patient_id', $patient->id)
+                ->orderBy('measurement_date')
+                ->get();
+
+            $vaccinations = \App\Models\PediatricVaccination::where('patient_id', $patient->id)
+                ->orderBy('scheduled_date')
+                ->get();
+
+            $allergies = \App\Models\PediatricAllergy::where('patient_id', $patient->id)
+                ->where('is_active', true)
+                ->get();
+
+            $pediatricData = [
+                'is_pediatric' => true,
+                'growthRecords' => $growthRecords,
+                'vaccinations' => $vaccinations,
+                'allergies' => $allergies,
+                'stats' => [
+                    'growth_records' => $growthRecords->count(),
+                    'total_vaccinations' => $vaccinations->count(),
+                    'given_vaccinations' => $vaccinations->where('status', 'given')->count(),
+                    'scheduled_vaccinations' => $vaccinations->where('status', 'scheduled')->count(),
+                    'active_allergies' => $allergies->count(),
+                    'latest_weight' => $growthRecords->last()?->weight_kg,
+                    'latest_height' => $growthRecords->last()?->height_cm,
+                    'latest_bmi' => $growthRecords->last()?->bmi,
+                ],
+            ];
+        }
+
         // Financial summary — use single aggregation query instead of 5 separate queries
         $invoiceAggregates = $patient->invoices()
             ->selectRaw('
@@ -252,6 +289,7 @@ class PatientController extends Controller
             'patient' => $patient,
             'financialSummary' => $financialSummary,
             'dentalData' => $dentalData,
+            'pediatricData' => $pediatricData,
             'latestVitals' => $latestVitals,
             'vitalsAlerts' => $latestVitals ? $latestVitals->getAlerts() : [],
             'activeInsurance' => $activeInsurance,
