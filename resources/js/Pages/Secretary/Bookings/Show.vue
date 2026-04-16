@@ -25,16 +25,6 @@ const props = defineProps({
     medicalRiskFlags: { type: Array, default: () => [] },
 });
 
-const bookingTypeLabels = {
-    dermatology_consultation: 'Dermatology Consultation',
-    cosmetic_consultation: 'Cosmetic Consultation',
-    service: 'Service Booking',
-    dental_consultation: 'Dental Consultation',
-    dental_service: 'Dental Service',
-    pediatric_consultation: 'Pediatric Consultation',
-    pediatric_service: 'Pediatric Service',
-};
-
 const isConsultationBooking = computed(() => {
     return ['dermatology_consultation', 'cosmetic_consultation', 'dental_consultation', 'pediatric_consultation'].includes(props.booking.booking_type);
 });
@@ -51,6 +41,24 @@ const bookingTypeColors = {
 
 const page = usePage();
 const isRtl = computed(() => (page.props.dir || 'rtl') === 'rtl');
+
+const bookingTypeLabels = computed(() => isRtl.value ? {
+    dermatology_consultation: 'استشارة جلدية',
+    cosmetic_consultation: 'استشارة تجميلية',
+    service: 'خدمة',
+    dental_consultation: 'استشارة أسنان',
+    dental_service: 'خدمة أسنان',
+    pediatric_consultation: 'استشارة أطفال',
+    pediatric_service: 'خدمة أطفال',
+} : {
+    dermatology_consultation: 'Dermatology Consultation',
+    cosmetic_consultation: 'Cosmetic Consultation',
+    service: 'Service Booking',
+    dental_consultation: 'Dental Consultation',
+    dental_service: 'Dental Service',
+    pediatric_consultation: 'Pediatric Consultation',
+    pediatric_service: 'Pediatric Service',
+});
 
 /* ── Helpers ───────────────────────────────────────────── */
 function formatDate(date) {
@@ -84,13 +92,19 @@ const bookingStatusColors = {
     cancelled: 'bg-red-50 text-red-700 border-red-200',
 };
 
-const bookingStatusLabels = {
+const bookingStatusLabels = computed(() => isRtl.value ? {
+    unconfirmed: 'غير مؤكد',
+    confirmed: 'مؤكد',
+    in_progress: 'قيد التنفيذ',
+    completed: 'مكتمل',
+    cancelled: 'ملغي',
+} : {
     unconfirmed: 'Unconfirmed',
     confirmed: 'Confirmed',
     in_progress: 'In Progress',
     completed: 'Completed',
     cancelled: 'Cancelled',
-};
+});
 
 const appointmentStatusColors = {
     scheduled: 'bg-gray-50 text-gray-600 border-gray-200',
@@ -495,7 +509,7 @@ function onConsentFilesSelected(event) {
 }
 
 function deleteConsent(consentId) {
-    if (!confirm('Delete this consent document?')) return;
+    if (!confirm(isRtl.value ? 'هل تريد حذف هذا المستند؟' : 'Delete this consent document?')) return;
     router.post(`/secretary/bookings/${props.booking.id}/consents/${consentId}/delete`, {}, {
         preserveScroll: true,
     });
@@ -610,7 +624,7 @@ function submitReschedule() {
                 </Link>
                 <div>
                     <div class="flex items-center gap-3">
-                        <h1 class="text-2xl font-bold text-gray-900">Booking {{ bookingNumber }}</h1>
+                        <h1 class="text-2xl font-bold text-gray-900">{{ isRtl ? 'حجز' : 'Booking' }} {{ bookingNumber }}</h1>
                         <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold border capitalize" :class="bookingStatusColors[booking.status] || 'bg-gray-50 text-gray-600 border-gray-200'">
                             {{ bookingStatusLabels[booking.status] || booking.status }}
                         </span>
@@ -621,8 +635,8 @@ function submitReschedule() {
                             {{ bookingTypeLabels[booking.booking_type] || booking.booking_type }}
                         </span>
                     </div>
-                    <p class="text-sm text-gray-500 mt-1">Created {{ formatDateTime(booking.created_at) }}
-                        <span v-if="booking.creator"> by {{ booking.creator.name }}</span>
+                    <p class="text-sm text-gray-500 mt-1">{{ isRtl ? 'تاريخ الإنشاء' : 'Created' }} {{ formatDateTime(booking.created_at) }}
+                        <span v-if="booking.creator"> {{ isRtl ? 'بواسطة' : 'by' }} {{ booking.creator.name }}</span>
                     </p>
                 </div>
             </div>
@@ -640,10 +654,12 @@ function submitReschedule() {
                 <svg class="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
             </div>
             <div class="flex-1">
-                <p class="text-sm font-semibold text-teal-800">Eligible for Follow-up Visit</p>
+                <p class="text-sm font-semibold text-teal-800">{{ isRtl ? 'تم اكتشاف زيارة متابعة' : 'Eligible for Follow-up Visit' }}</p>
                 <p class="text-xs text-teal-600 mt-0.5">
-                    This patient had a dermatology consultation on {{ formatDate(followUpInfo.last_visit_date) }}.
-                    A follow-up within {{ followUpInfo.window_days }} days qualifies for the reduced fee of <span class="font-bold">{{ formatCurrency(followupFee) }}</span>.
+                    {{ isRtl
+                        ? `هذا المريض لديه استشارة جلدية بتاريخ ${formatDate(followUpInfo.last_visit_date)}. المتابعة خلال ${followUpInfo.window_days} يوم مؤهلة للرسوم المخفضة`
+                        : `This patient had a dermatology consultation on ${formatDate(followUpInfo.last_visit_date)}. A follow-up within ${followUpInfo.window_days} days qualifies for the reduced fee of`
+                    }} <span class="font-bold">{{ formatCurrency(followupFee) }}</span>.
                 </p>
             </div>
         </div>
@@ -692,7 +708,7 @@ function submitReschedule() {
                         </div>
                         <h2 class="text-sm font-bold text-gray-800">{{ isRtl ? 'معلومات المريض' : 'Patient Information' }}</h2>
                         <Link v-if="booking.patient" :href="`/secretary/patients/${booking.patient.id}`" class="ltr:ml-auto rtl:mr-auto text-xs font-semibold text-teal-600 hover:text-teal-800 transition">
-                            View Profile
+                            {{ isRtl ? 'عرض الملف' : 'View Profile' }}
                         </Link>
                     </div>
                     <template v-if="booking.patient">
@@ -702,7 +718,7 @@ function submitReschedule() {
                             </div>
                             <div class="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-3">
                                 <div>
-                                    <p class="text-xs text-gray-400 mb-0.5">File Number</p>
+                                    <p class="text-xs text-gray-400 mb-0.5">{{ isRtl ? 'رقم الملف' : 'File Number' }}</p>
                                     <p class="text-sm font-mono font-semibold text-teal-600">{{ booking.patient.file_number || '-' }}</p>
                                 </div>
                                 <div>
@@ -733,7 +749,7 @@ function submitReschedule() {
                         </div>
                         <div v-if="isUnconfirmed" class="mt-3 flex items-center gap-2 px-3 py-2 bg-yellow-50 rounded-lg border border-yellow-200">
                             <svg class="w-4 h-4 text-yellow-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" /></svg>
-                            <p class="text-xs text-yellow-700">No linked patient. Confirm this booking to associate a patient.</p>
+                            <p class="text-xs text-yellow-700">{{ isRtl ? 'لا يوجد مريض مرتبط. قم بتأكيد الحجز لربط مريض.' : 'No linked patient. Confirm this booking to associate a patient.' }}</p>
                         </div>
                     </template>
                 </div>
@@ -792,27 +808,27 @@ function submitReschedule() {
                         <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" /></svg>
                     </div>
                     <div>
-                        <p class="text-xs font-semibold text-teal-700 uppercase tracking-wider">Promo Code</p>
+                        <p class="text-xs font-semibold text-teal-700 uppercase tracking-wider">{{ isRtl ? 'كود الخصم' : 'Promo Code' }}</p>
                         <p class="text-base font-bold font-mono tracking-wider text-gray-900">{{ booking.promo_code }}</p>
                     </div>
                     <div v-if="booking.invoice?.discount_code_id" class="ltr:ml-auto rtl:mr-auto">
                         <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">
                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" /></svg>
-                            Applied
+                            {{ isRtl ? 'مطبق' : 'Applied' }}
                         </span>
                     </div>
                 </div>
 
                 <!-- Notes Card -->
                 <div v-if="booking.notes" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6">
-                    <h3 class="text-sm font-bold text-gray-800 mb-2">Booking Notes</h3>
+                    <h3 class="text-sm font-bold text-gray-800 mb-2">{{ isRtl ? 'ملاحظات الحجز' : 'Booking Notes' }}</h3>
                     <p class="text-sm text-gray-600 whitespace-pre-wrap">{{ booking.notes }}</p>
                 </div>
 
                 <!-- ─── Services Table ─────────────────────────────── -->
                 <div v-if="booking.booking_services?.length" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
                     <div class="px-4 sm:px-6 py-4 border-b border-gray-100">
-                        <h2 class="text-sm font-bold text-gray-800">Services</h2>
+                        <h2 class="text-sm font-bold text-gray-800">{{ isRtl ? 'الخدمات' : 'Services' }}</h2>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="w-full text-sm">
@@ -821,8 +837,8 @@ function submitReschedule() {
                                     <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase"></th>
                                     <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'الخدمة' : 'Service' }}</th>
                                     <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'الطبيب' : 'Doctor' }}</th>
-                                    <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">Sessions</th>
-                                    <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase hidden sm:table-cell">Unit Price</th>
+                                    <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'الجلسات' : 'Sessions' }}</th>
+                                    <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase hidden sm:table-cell">{{ isRtl ? 'سعر الوحدة' : 'Unit Price' }}</th>
                                     <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase hidden sm:table-cell">{{ isRtl ? 'الخصم' : 'Discount' }}</th>
                                     <th class="px-6 py-3 ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'الإجمالي' : 'Total' }}</th>
                                     <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase hidden sm:table-cell">{{ isRtl ? 'الحالة' : 'Status' }}</th>
@@ -840,20 +856,20 @@ function submitReschedule() {
                                             </button>
                                         </td>
                                         <td class="px-6 py-3">
-                                            <span class="font-semibold text-gray-800">{{ bs.service?.name_en || bs.service?.name_ar || (booking.booking_type === 'dermatology_consultation' ? 'Dermatology Consultation' : booking.booking_type === 'cosmetic_consultation' ? 'Cosmetic Consultation' : '-') }}</span>
+                                            <span class="font-semibold text-gray-800">{{ bs.service?.name_en || bs.service?.name_ar || (booking.booking_type === 'dermatology_consultation' ? (isRtl ? 'استشارة جلدية' : 'Dermatology Consultation') : booking.booking_type === 'cosmetic_consultation' ? (isRtl ? 'استشارة تجميلية' : 'Cosmetic Consultation') : '-') }}</span>
                                         </td>
                                         <td class="px-6 py-3 text-gray-600">{{ bs.doctor?.name_en || bs.doctor?.name_ar || '-' }}</td>
                                         <td class="px-6 py-3">
                                             <span class="text-teal-600 font-semibold">{{ bs.completed_sessions || 0 }}</span>
                                             <span class="text-gray-400"> / {{ bs.sessions_count }}</span>
-                                            <span v-if="retouchCount(bs) > 0" class="ltr:ml-1 rtl:mr-1 text-purple-600 text-xs font-medium">(+{{ retouchCount(bs) }} retouch)</span>
+                                            <span v-if="retouchCount(bs) > 0" class="ltr:ml-1 rtl:mr-1 text-purple-600 text-xs font-medium">(+{{ retouchCount(bs) }} {{ isRtl ? 'متابعة' : 'retouch' }})</span>
                                             <div class="mt-1 h-1.5 bg-gray-100 rounded-full overflow-hidden w-16">
                                                 <div class="h-full bg-gradient-to-r from-teal-500 to-cyan-500 rounded-full transition-all"
                                                      :style="{ width: (bs.sessions_count > 0 ? ((bs.completed_sessions || 0) / bs.sessions_count * 100) : 0) + '%' }"></div>
                                             </div>
                                         </td>
                                         <td class="px-6 py-3 text-gray-600 hidden sm:table-cell">{{ formatCurrency(bs.unit_price) }}</td>
-                                        <td class="px-6 py-3 text-gray-600 hidden sm:table-cell">{{ bs.discount_per_session > 0 ? formatCurrency(bs.discount_per_session) + '/session' : '-' }}</td>
+                                        <td class="px-6 py-3 text-gray-600 hidden sm:table-cell">{{ bs.discount_per_session > 0 ? formatCurrency(bs.discount_per_session) + (isRtl ? '/جلسة' : '/session') : '-' }}</td>
                                         <td class="px-6 py-3 ltr:text-right rtl:text-left font-bold text-gray-800">{{ formatCurrency(bs.total_price) }}</td>
                                         <td class="px-6 py-3 hidden sm:table-cell">
                                             <span class="inline-flex px-2 py-0.5 rounded-full text-xs font-semibold border capitalize" :class="serviceStatusColors[bs.status] || 'bg-gray-50 text-gray-600 border-gray-200'">
@@ -866,7 +882,7 @@ function submitReschedule() {
                                         <td colspan="8" class="p-0">
                                             <div class="bg-gray-50/60 border-t border-gray-100">
                                                 <div class="px-8 py-3">
-                                                    <p class="text-xs font-semibold text-gray-500 uppercase mb-2">Appointments</p>
+                                                    <p class="text-xs font-semibold text-gray-500 uppercase mb-2">{{ isRtl ? 'المواعيد' : 'Appointments' }}</p>
                                                     <table class="w-full text-xs">
                                                         <thead>
                                                             <tr class="text-gray-400">
@@ -882,7 +898,7 @@ function submitReschedule() {
                                                             <tr v-for="appt in bs.appointments" :key="appt.id" class="hover:bg-white/60">
                                                                 <td class="py-2 pr-3 font-medium text-gray-500">
                                                                     {{ appt.session_number || '-' }}
-                                                                    <span v-if="appt.is_retouch" class="ltr:ml-1 rtl:mr-1 inline-flex px-1.5 py-0.5 rounded text-[9px] font-bold bg-purple-50 text-purple-600 border border-purple-200">Retouch</span>
+                                                                    <span v-if="appt.is_retouch" class="ltr:ml-1 rtl:mr-1 inline-flex px-1.5 py-0.5 rounded text-[9px] font-bold bg-purple-50 text-purple-600 border border-purple-200">{{ isRtl ? 'متابعة' : 'Retouch' }}</span>
                                                                 </td>
                                                                 <td class="py-2 pr-3 text-gray-700">{{ formatDate(appt.appointment_date) }}</td>
                                                                 <td class="py-2 pr-3 text-gray-600">{{ formatTime(appt.start_time) }} - {{ formatTime(appt.end_time) }}</td>
@@ -895,10 +911,10 @@ function submitReschedule() {
                                                                 <td class="py-2">
                                                                     <div class="flex items-center gap-1.5">
                                                                         <Link v-if="appt.visit" :href="`/secretary/visits/${appt.visit.id || appt.visit}`" class="text-teal-600 hover:text-teal-800 font-semibold">
-                                                                            View
+                                                                            {{ isRtl ? 'عرض' : 'View' }}
                                                                         </Link>
                                                                         <button v-else-if="canCheckIn(appt)" @click="checkInAppointment(appt)" :disabled="checkingIn[appt.id]" class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold text-white transition-all" :class="checkingIn[appt.id] ? 'bg-gray-300' : 'bg-teal-500 hover:bg-teal-600'">
-                                                                            {{ checkingIn[appt.id] ? '...' : 'Check In' }}
+                                                                            {{ checkingIn[appt.id] ? '...' : (isRtl ? 'تسجيل حضور' : 'Check In') }}
                                                                         </button>
                                                                         <button v-if="canReschedule(appt)" @click="openRescheduleModal(appt)" class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium text-gray-400 hover:text-teal-600 hover:bg-teal-50 border border-gray-200 hover:border-teal-300 transition-all" :title="isRtl ? 'تعديل' : 'Edit'">
                                                                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
@@ -917,7 +933,7 @@ function submitReschedule() {
                                     <tr v-else-if="expandedServices[bsIndex] && (!bs.appointments || bs.appointments.length === 0)">
                                         <td colspan="8" class="p-0">
                                             <div class="bg-gray-50/60 border-t border-gray-100 px-8 py-4 text-center">
-                                                <p class="text-xs text-gray-400">No appointments scheduled for this service.</p>
+                                                <p class="text-xs text-gray-400">{{ isRtl ? 'لا توجد مواعيد مجدولة لهذه الخدمة.' : 'No appointments scheduled for this service.' }}</p>
                                             </div>
                                         </td>
                                     </tr>
@@ -935,8 +951,8 @@ function submitReschedule() {
                             <div class="w-8 h-8 rounded-lg bg-purple-100 flex items-center justify-center">
                                 <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
                             </div>
-                            <h2 class="text-sm font-bold text-purple-800">Add Retouch Session</h2>
-                            <span class="text-xs text-purple-500 font-medium">(Free follow-up)</span>
+                            <h2 class="text-sm font-bold text-purple-800">{{ isRtl ? 'إضافة جلسة متابعة' : 'Add Retouch Session' }}</h2>
+                            <span class="text-xs text-purple-500 font-medium">{{ isRtl ? '(متابعة مجانية)' : '(Free follow-up)' }}</span>
                         </div>
                         <svg class="w-5 h-5 text-purple-600 transition-transform duration-200" :class="{ 'rotate-180': showRetouchForm }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
@@ -948,12 +964,12 @@ function submitReschedule() {
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <!-- Service Selection -->
                                 <div>
-                                    <label class="block text-xs font-medium text-gray-500 mb-1.5">Service <span class="text-red-500">*</span></label>
+                                    <label class="block text-xs font-medium text-gray-500 mb-1.5">{{ isRtl ? 'الخدمة' : 'Service' }} <span class="text-red-500">*</span></label>
                                     <select v-model="retouchForm.booking_service_id" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-purple-200 focus:border-transparent bg-white">
-                                        <option value="">Select service...</option>
+                                        <option value="">{{ isRtl ? 'اختر الخدمة...' : 'Select service...' }}</option>
                                         <option v-for="bs in booking.booking_services" :key="bs.id" :value="bs.id">
-                                            {{ bs.service?.name_en || bs.service?.name_ar || (booking.booking_type === 'dermatology_consultation' ? 'Dermatology Consultation' : booking.booking_type === 'cosmetic_consultation' ? 'Cosmetic Consultation' : 'Service') }}
-                                            ({{ bs.completed_sessions || 0 }}/{{ bs.sessions_count }} sessions)
+                                            {{ bs.service?.name_en || bs.service?.name_ar || (booking.booking_type === 'dermatology_consultation' ? (isRtl ? 'استشارة جلدية' : 'Dermatology Consultation') : booking.booking_type === 'cosmetic_consultation' ? (isRtl ? 'استشارة تجميلية' : 'Cosmetic Consultation') : (isRtl ? 'خدمة' : 'Service')) }}
+                                            ({{ bs.completed_sessions || 0 }}/{{ bs.sessions_count }} {{ isRtl ? 'جلسات' : 'sessions' }})
                                         </option>
                                     </select>
                                     <p v-if="retouchForm.errors.booking_service_id" class="mt-1 text-xs text-red-600">{{ retouchForm.errors.booking_service_id }}</p>
@@ -961,9 +977,9 @@ function submitReschedule() {
 
                                 <!-- Doctor Selection -->
                                 <div>
-                                    <label class="block text-xs font-medium text-gray-500 mb-1.5">Doctor <span class="text-red-500">*</span></label>
+                                    <label class="block text-xs font-medium text-gray-500 mb-1.5">{{ isRtl ? 'الطبيب' : 'Doctor' }} <span class="text-red-500">*</span></label>
                                     <select v-model="retouchForm.doctor_id" @change="fetchRetouchTimeSlots" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-purple-200 focus:border-transparent bg-white">
-                                        <option value="">Select doctor...</option>
+                                        <option value="">{{ isRtl ? 'اختر الطبيب...' : 'Select doctor...' }}</option>
                                         <option v-for="d in doctors" :key="d.id" :value="d.id">{{ d.name_en || d.name_ar }}</option>
                                     </select>
                                     <p v-if="retouchForm.errors.doctor_id" class="mt-1 text-xs text-red-600">{{ retouchForm.errors.doctor_id }}</p>
@@ -971,17 +987,17 @@ function submitReschedule() {
 
                                 <!-- Date -->
                                 <div>
-                                    <label class="block text-xs font-medium text-gray-500 mb-1.5">Date <span class="text-red-500">*</span></label>
+                                    <label class="block text-xs font-medium text-gray-500 mb-1.5">{{ isRtl ? 'التاريخ' : 'Date' }} <span class="text-red-500">*</span></label>
                                     <input v-model="retouchForm.appointment_date" type="date" :min="new Date().toISOString().split('T')[0]" @change="fetchRetouchTimeSlots" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-purple-200 focus:border-transparent" />
                                     <p v-if="retouchForm.errors.appointment_date" class="mt-1 text-xs text-red-600">{{ retouchForm.errors.appointment_date }}</p>
                                 </div>
 
                                 <!-- Time Slot -->
                                 <div>
-                                    <label class="block text-xs font-medium text-gray-500 mb-1.5">Time Slot <span class="text-red-500">*</span></label>
-                                    <div v-if="retouchLoadingSlots" class="text-xs text-gray-400 py-2.5">Loading available slots...</div>
+                                    <label class="block text-xs font-medium text-gray-500 mb-1.5">{{ isRtl ? 'الوقت' : 'Time Slot' }} <span class="text-red-500">*</span></label>
+                                    <div v-if="retouchLoadingSlots" class="text-xs text-gray-400 py-2.5">{{ isRtl ? 'جاري تحميل المواعيد المتاحة...' : 'Loading available slots...' }}</div>
                                     <select v-else-if="retouchTimeSlots.length" v-model="retouchForm.start_time" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-purple-200 focus:border-transparent bg-white">
-                                        <option value="">Select time...</option>
+                                        <option value="">{{ isRtl ? 'اختر الوقت...' : 'Select time...' }}</option>
                                         <option v-for="slot in retouchTimeSlots" :key="slot.start || slot" :value="slot.start || slot">
                                             {{ formatTime(slot.start || slot) }} {{ slot.end ? '- ' + formatTime(slot.end) : '' }}
                                         </option>
@@ -994,13 +1010,13 @@ function submitReschedule() {
                             <!-- Info Box -->
                             <div class="flex items-start gap-2 px-4 py-3 bg-purple-50 rounded-xl border border-purple-100">
                                 <svg class="w-4 h-4 text-purple-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                <p class="text-xs text-purple-700">Retouch sessions are free of charge. The invoice will not be affected. The booking will reopen until the retouch session is completed.</p>
+                                <p class="text-xs text-purple-700">{{ isRtl ? 'جلسات المتابعة مجانية. لن تتأثر الفاتورة. سيُعاد فتح الحجز حتى اكتمال جلسة المتابعة.' : 'Retouch sessions are free of charge. The invoice will not be affected. The booking will reopen until the retouch session is completed.' }}</p>
                             </div>
 
                             <!-- Submit -->
                             <div class="flex items-center gap-3">
                                 <button type="submit" :disabled="retouchForm.processing" class="px-5 py-2.5 text-white rounded-xl text-sm font-semibold hover:opacity-90 transition-all disabled:opacity-50 shadow-sm bg-purple-600">
-                                    {{ retouchForm.processing ? 'Adding...' : 'Add Retouch Session' }}
+                                    {{ retouchForm.processing ? (isRtl ? 'جاري الإضافة...' : 'Adding...') : (isRtl ? 'إضافة جلسة متابعة' : 'Add Retouch Session') }}
                                 </button>
                                 <button type="button" @click="showRetouchForm = false; retouchForm.reset()" class="px-5 py-2.5 border border-gray-200 text-gray-600 rounded-xl text-sm font-medium hover:bg-gray-50 transition">
                                     {{ isRtl ? 'إلغاء' : 'Cancel' }}
@@ -1013,7 +1029,7 @@ function submitReschedule() {
                 <!-- ─── All Appointments (Flat List) ───────────────── -->
                 <div v-if="booking.appointments?.length" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
                     <div class="px-4 sm:px-6 py-4 border-b border-gray-100">
-                        <h2 class="text-sm font-bold text-gray-800">All Appointments</h2>
+                        <h2 class="text-sm font-bold text-gray-800">{{ isRtl ? 'كل المواعيد' : 'All Appointments' }}</h2>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="w-full text-sm">
@@ -1024,14 +1040,14 @@ function submitReschedule() {
                                     <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase hidden sm:table-cell">{{ isRtl ? 'الوقت' : 'Time' }}</th>
                                     <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase hidden sm:table-cell">{{ isRtl ? 'الطبيب' : 'Doctor' }}</th>
                                     <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'الحالة' : 'Status' }}</th>
-                                    <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">Visit / Actions</th>
+                                    <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'زيارة / إجراءات' : 'Visit / Actions' }}</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100">
                                 <tr v-for="appt in booking.appointments" :key="appt.id" class="hover:bg-gray-50/50 transition-colors">
                                     <td class="px-6 py-3 font-medium text-gray-500">
                                         {{ appt.session_number || '-' }}
-                                        <span v-if="appt.is_retouch" class="ltr:ml-1 rtl:mr-1 inline-flex px-1.5 py-0.5 rounded text-[10px] font-bold bg-purple-50 text-purple-600 border border-purple-200">Retouch</span>
+                                        <span v-if="appt.is_retouch" class="ltr:ml-1 rtl:mr-1 inline-flex px-1.5 py-0.5 rounded text-[10px] font-bold bg-purple-50 text-purple-600 border border-purple-200">{{ isRtl ? 'متابعة' : 'Retouch' }}</span>
                                     </td>
                                     <td class="px-6 py-3 text-gray-700">{{ formatDate(appt.appointment_date) }}</td>
                                     <td class="px-6 py-3 text-gray-600 hidden sm:table-cell">{{ formatTime(appt.start_time) }} - {{ formatTime(appt.end_time) }}</td>
@@ -1044,11 +1060,11 @@ function submitReschedule() {
                                     <td class="px-6 py-3">
                                         <div class="flex items-center gap-2">
                                             <Link v-if="appt.visit" :href="`/secretary/visits/${appt.visit.id || appt.visit}`" class="text-teal-600 hover:text-teal-800 text-xs font-semibold">
-                                                View Visit
+                                                {{ isRtl ? 'عرض الزيارة' : 'View Visit' }}
                                             </Link>
                                             <button v-else-if="canCheckIn(appt)" @click="checkInAppointment(appt)" :disabled="checkingIn[appt.id]" class="inline-flex items-center gap-1 px-3 py-1 rounded-lg text-xs font-semibold text-white transition-all shadow-sm" :class="checkingIn[appt.id] ? 'bg-gray-300 cursor-not-allowed' : 'bg-teal-500 hover:bg-teal-600'">
                                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                                {{ checkingIn[appt.id] ? 'Checking in...' : 'Check In' }}
+                                                {{ checkingIn[appt.id] ? (isRtl ? 'جاري التسجيل...' : 'Checking in...') : (isRtl ? 'تسجيل حضور' : 'Check In') }}
                                             </button>
                                             <button v-if="canReschedule(appt)" @click="openRescheduleModal(appt)" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium text-gray-500 hover:text-teal-600 hover:bg-teal-50 border border-gray-200 hover:border-teal-300 transition-all" :title="isRtl ? 'إعادة جدولة' : 'Reschedule'">
                                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
@@ -1075,7 +1091,7 @@ function submitReschedule() {
                             </p>
                         </div>
                         <Link :href="`/secretary/invoices/${invoice.id}`" class="text-xs font-semibold text-teal-600 hover:text-teal-800 transition">
-                            View Invoice
+                            {{ isRtl ? 'عرض الفاتورة' : 'View Invoice' }}
                         </Link>
                     </div>
 
@@ -1083,9 +1099,9 @@ function submitReschedule() {
                     <table v-if="invoice.items?.length" class="w-full text-sm">
                         <thead>
                             <tr class="bg-gray-50/80">
-                                <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">Description</th>
-                                <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">Qty</th>
-                                <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">Unit Price</th>
+                                <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'الوصف' : 'Description' }}</th>
+                                <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'الكمية' : 'Qty' }}</th>
+                                <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'سعر الوحدة' : 'Unit Price' }}</th>
                                 <th class="px-6 py-3 ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'الإجمالي' : 'Total' }}</th>
                             </tr>
                         </thead>
@@ -1107,7 +1123,7 @@ function submitReschedule() {
                         <div class="flex justify-end">
                             <dl class="space-y-2 w-64">
                                 <div class="flex justify-between text-sm">
-                                    <dt class="text-gray-500">Subtotal</dt>
+                                    <dt class="text-gray-500">{{ isRtl ? 'المجموع الفرعي' : 'Subtotal' }}</dt>
                                     <dd class="text-gray-700">{{ formatCurrency(invoice.subtotal) }}</dd>
                                 </div>
                                 <div v-if="invoice.discount_amount > 0" class="flex justify-between text-sm">
@@ -1119,11 +1135,11 @@ function submitReschedule() {
                                     <dd class="text-teal-600">{{ formatCurrency(invoice.total) }}</dd>
                                 </div>
                                 <div class="flex justify-between text-sm">
-                                    <dt class="text-gray-500">{{ isRtl ? 'المدفوع' : 'Paid' }}</dt>
+                                    <dt class="text-gray-500">{{ isRtl ? 'مدفوع' : 'Paid' }}</dt>
                                     <dd class="text-emerald-600 font-medium">{{ formatCurrency(invoice.paid_amount) }}</dd>
                                 </div>
                                 <div class="flex justify-between text-sm font-bold">
-                                    <dt class="text-gray-800">{{ isRtl ? 'الرصيد' : 'Balance' }}</dt>
+                                    <dt class="text-gray-800">{{ isRtl ? 'المتبقي' : 'Balance' }}</dt>
                                     <dd :class="invoiceBalance > 0 ? 'text-red-600' : 'text-emerald-600'">{{ formatCurrency(invoiceBalance) }}</dd>
                                 </div>
                             </dl>
@@ -1134,7 +1150,7 @@ function submitReschedule() {
                 <!-- ─── Payments History ───────────────────────────── -->
                 <div v-if="invoice?.payments?.length" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
                     <div class="px-4 sm:px-6 py-4 border-b border-gray-100 flex flex-wrap items-center justify-between gap-2">
-                        <h2 class="text-sm font-bold text-gray-800">Payments History</h2>
+                        <h2 class="text-sm font-bold text-gray-800">{{ isRtl ? 'سجل المدفوعات' : 'Payments History' }}</h2>
                         <button
                             v-if="hasInvoiceBalance"
                             type="button"
@@ -1142,7 +1158,7 @@ function submitReschedule() {
                             class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-teal-500 to-cyan-500 text-white rounded-lg text-xs font-semibold hover:from-teal-600 hover:to-cyan-600 transition shadow-sm"
                         >
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
-                            Add Payment
+                            {{ isRtl ? 'إضافة دفعة' : 'Add Payment' }}
                         </button>
                     </div>
                     <table class="w-full text-sm">
@@ -1151,9 +1167,9 @@ function submitReschedule() {
                                 <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'التاريخ' : 'Date' }}</th>
                                 <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'المبلغ' : 'Amount' }}</th>
                                 <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'الطريقة' : 'Method' }}</th>
-                                <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase hidden sm:table-cell">Reference</th>
-                                <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase hidden sm:table-cell">Received By</th>
-                                <th class="px-6 py-3 text-center text-xs font-semibold text-gray-500 uppercase">Receipt</th>
+                                <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase hidden sm:table-cell">{{ isRtl ? 'رقم المرجع' : 'Reference' }}</th>
+                                <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase hidden sm:table-cell">{{ isRtl ? 'استلم بواسطة' : 'Received By' }}</th>
+                                <th class="px-6 py-3 text-center text-xs font-semibold text-gray-500 uppercase">{{ isRtl ? 'الإيصال' : 'Receipt' }}</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100">
@@ -1198,12 +1214,12 @@ function submitReschedule() {
                                 <p v-if="paymentForm.errors.payment_method_id" class="mt-1 text-xs text-red-600">{{ paymentForm.errors.payment_method_id }}</p>
                             </div>
                             <div>
-                                <label class="block text-xs font-medium text-gray-500 mb-1.5">Amount <span class="text-red-500">*</span></label>
+                                <label class="block text-xs font-medium text-gray-500 mb-1.5">{{ isRtl ? 'المبلغ' : 'Amount' }} <span class="text-red-500">*</span></label>
                                 <input v-model.number="paymentForm.amount" type="number" min="0" step="0.01" :placeholder="`Balance: ${formatCurrency(invoiceBalance)}`" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500" />
                                 <p v-if="paymentForm.errors.amount" class="mt-1 text-xs text-red-600">{{ paymentForm.errors.amount }}</p>
                             </div>
                             <div>
-                                <label class="block text-xs font-medium text-gray-500 mb-1.5">Reference #</label>
+                                <label class="block text-xs font-medium text-gray-500 mb-1.5">{{ isRtl ? 'رقم المرجع' : 'Reference #' }}</label>
                                 <input v-model="paymentForm.reference_number" type="text" :placeholder="isRtl ? 'رقم الإيصال / المعاملة' : 'Receipt / Transaction #'" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500" />
                             </div>
                             <div>
@@ -1225,10 +1241,10 @@ function submitReschedule() {
                 <!-- Add Payment Button (when no payments yet but balance > 0) -->
                 <div v-if="hasInvoiceBalance && !showPaymentForm && (!invoice?.payments || invoice.payments.length === 0)" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6 text-center">
                     <svg class="w-10 h-10 text-gray-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
-                    <p class="text-sm text-gray-500 mb-3">No payments recorded yet. Balance: <span class="font-bold text-red-600">{{ formatCurrency(invoiceBalance) }}</span></p>
+                    <p class="text-sm text-gray-500 mb-3">{{ isRtl ? 'لا توجد مدفوعات مسجلة بعد. المتبقي:' : 'No payments recorded yet. Balance:' }} <span class="font-bold text-red-600">{{ formatCurrency(invoiceBalance) }}</span></p>
                     <button @click="openPaymentForm" type="button" class="inline-flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-teal-500 to-cyan-500 text-white rounded-xl text-sm font-semibold hover:from-teal-600 hover:to-cyan-600 transition shadow-sm">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
-                        Record First Payment
+                        {{ isRtl ? 'تسجيل أول دفعة' : 'Record First Payment' }}
                     </button>
                 </div>
 
@@ -1242,7 +1258,7 @@ function submitReschedule() {
                             <div class="w-8 h-8 rounded-lg bg-yellow-100 flex items-center justify-center">
                                 <svg class="w-4 h-4 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                             </div>
-                            <h2 class="text-sm font-bold text-yellow-800">Confirm This Booking</h2>
+                            <h2 class="text-sm font-bold text-yellow-800">{{ isRtl ? 'تأكيد هذا الحجز' : 'Confirm This Booking' }}</h2>
                         </div>
                         <svg class="w-5 h-5 text-yellow-600 transition-transform duration-200" :class="{ 'rotate-180': showConfirmSection }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
@@ -1252,7 +1268,7 @@ function submitReschedule() {
                     <div v-if="showConfirmSection" class="p-4 sm:p-6 space-y-6 border-t border-yellow-100">
                         <!-- General Validation Errors -->
                         <div v-if="Object.keys(confirmErrors).length" class="p-3 bg-red-50 border border-red-200 rounded-xl">
-                            <p class="text-xs font-semibold text-red-700 mb-1">Please fix the following errors:</p>
+                            <p class="text-xs font-semibold text-red-700 mb-1">{{ isRtl ? 'يرجى تصحيح الأخطاء التالية:' : 'Please fix the following errors:' }}</p>
                             <ul class="text-xs text-red-600 list-disc list-inside space-y-0.5">
                                 <li v-for="(err, key) in confirmErrors" :key="key">{{ err }}</li>
                             </ul>
@@ -1262,7 +1278,7 @@ function submitReschedule() {
                             <div>
                                 <h3 class="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">
                                     <span class="w-6 h-6 rounded-full bg-teal-500 text-white text-xs font-bold flex items-center justify-center">1</span>
-                                    Select Patient
+                                    {{ isRtl ? 'اختر المريض' : 'Select Patient' }}
                                 </h3>
                                 <div class="relative">
                                     <!-- Selected patient display -->
@@ -1305,7 +1321,7 @@ function submitReschedule() {
                                     <button v-if="!selectedPatient" type="button" @click="showNewPatientModal = true"
                                         class="mt-3 inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-teal-600 border border-teal-200 rounded-lg hover:bg-teal-50 transition">
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" /></svg>
-                                        Add New Patient
+                                        {{ isRtl ? 'إضافة مريض جديد' : 'Add New Patient' }}
                                     </button>
                                 </div>
                             </div>
@@ -1314,29 +1330,29 @@ function submitReschedule() {
                             <div>
                                 <h3 class="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">
                                     <span class="w-6 h-6 rounded-full bg-teal-500 text-white text-xs font-bold flex items-center justify-center">2</span>
-                                    {{ isConsultationBooking ? 'Consultation Details' : 'Services' }}
+                                    {{ isConsultationBooking ? (isRtl ? 'تفاصيل الاستشارة' : 'Consultation Details') : (isRtl ? 'ا��خدمات' : 'Services') }}
                                 </h3>
 
                                 <!-- Consultation Mode -->
                                 <div v-if="isConsultationBooking" class="space-y-3">
                                     <div class="p-4 bg-gray-50 rounded-xl border border-gray-100 space-y-3">
                                         <span class="text-xs font-semibold text-gray-500">
-                                            {{ booking.booking_type === 'dermatology_consultation' ? 'Dermatology Consultation' : 'Cosmetic Consultation' }}
+                                            {{ booking.booking_type === 'dermatology_consultation' ? (isRtl ? 'استشارة جلدية' : 'Dermatology Consultation') : (isRtl ? 'استشارة تجميل��ة' : 'Cosmetic Consultation') }}
                                         </span>
                                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                             <div>
-                                                <label class="block text-xs text-gray-500 mb-1">Doctor <span class="text-red-500">*</span></label>
+                                                <label class="block text-xs text-gray-500 mb-1">{{ isRtl ? 'الطبيب' : 'Doctor' }} <span class="text-red-500">*</span></label>
                                                 <select v-model="confirmForm.services[0].doctor_id" @change="onConfirmDoctorChange(0)" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500 bg-white">
-                                                    <option value="">Select doctor...</option>
+                                                    <option value="">{{ isRtl ? 'اختر الطبيب...' : 'Select doctor...' }}</option>
                                                     <option v-for="d in doctors" :key="d.id" :value="d.id">{{ d.name_en || d.name }}</option>
                                                 </select>
                                             </div>
                                             <div>
-                                                <label class="block text-xs text-gray-500 mb-1">Consultation Fee ({{ currencyCode }}) <span class="text-red-500">*</span></label>
+                                                <label class="block text-xs text-gray-500 mb-1">{{ isRtl ? 'رسوم الاستشارة' : 'Consultation Fee' }} ({{ currencyCode }}) <span class="text-red-500">*</span></label>
                                                 <input v-model.number="confirmForm.services[0].unit_price" type="number" min="0" step="0.01" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500" />
                                             </div>
                                             <div>
-                                                <label class="block text-xs text-gray-500 mb-1">Discount ({{ currencyCode }})</label>
+                                                <label class="block text-xs text-gray-500 mb-1">{{ isRtl ? 'الخصم' : 'Discount' }} ({{ currencyCode }})</label>
                                                 <input v-model.number="confirmForm.services[0].discount_per_session" type="number" min="0" step="0.01" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500" />
                                             </div>
                                             <div class="flex items-end">
@@ -1357,41 +1373,41 @@ function submitReschedule() {
                                     <div v-for="(svc, svcIdx) in confirmForm.services" :key="svcIdx"
                                          class="p-4 bg-gray-50 rounded-xl border border-gray-100 space-y-3">
                                         <div class="flex items-center justify-between">
-                                            <span class="text-xs font-semibold text-gray-500">Service {{ svcIdx + 1 }}</span>
+                                            <span class="text-xs font-semibold text-gray-500">{{ isRtl ? 'الخدمة' : 'Service' }} {{ svcIdx + 1 }}</span>
                                             <button v-if="confirmForm.services.length > 1" type="button" @click="removeConfirmService(svcIdx)" class="text-red-400 hover:text-red-600 transition">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                                             </button>
                                         </div>
                                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                             <div>
-                                                <label class="block text-xs text-gray-500 mb-1">Service <span class="text-red-500">*</span></label>
+                                                <label class="block text-xs text-gray-500 mb-1">{{ isRtl ? 'الخدمة' : 'Service' }} <span class="text-red-500">*</span></label>
                                                 <select v-model="svc.service_id" @change="onServiceChange(svcIdx)" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500 bg-white">
-                                                    <option value="">Select service...</option>
+                                                    <option value="">{{ isRtl ? '��ختر الخدمة...' : 'Select service...' }}</option>
                                                     <option v-for="s in services" :key="s.id" :value="s.id">{{ s.name_en || s.name_ar }} - {{ formatCurrency(s.price) }}</option>
                                                 </select>
                                             </div>
                                             <div>
-                                                <label class="block text-xs text-gray-500 mb-1">Doctor <span class="text-red-500">*</span></label>
+                                                <label class="block text-xs text-gray-500 mb-1">{{ isRtl ? 'الطبيب' : 'Doctor' }} <span class="text-red-500">*</span></label>
                                                 <select v-model="svc.doctor_id" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500 bg-white">
-                                                    <option value="">Select doctor...</option>
+                                                    <option value="">{{ isRtl ? 'اختر الطبيب...' : 'Select doctor...' }}</option>
                                                     <option v-for="d in doctors" :key="d.id" :value="d.id">{{ d.name_en || d.name }}</option>
                                                 </select>
                                             </div>
                                             <div>
-                                                <label class="block text-xs text-gray-500 mb-1">Sessions</label>
+                                                <label class="block text-xs text-gray-500 mb-1">{{ isRtl ? 'الجلسات' : 'Sessions' }}</label>
                                                 <input v-model.number="svc.sessions_count" type="number" min="1" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500" />
                                             </div>
                                             <div>
-                                                <label class="block text-xs text-gray-500 mb-1">Unit Price</label>
+                                                <label class="block text-xs text-gray-500 mb-1">{{ isRtl ? 'سعر الوحدة' : 'Unit Price' }}</label>
                                                 <input v-model.number="svc.unit_price" type="number" min="0" step="0.01" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500" />
                                             </div>
                                             <div>
-                                                <label class="block text-xs text-gray-500 mb-1">Discount/Session</label>
+                                                <label class="block text-xs text-gray-500 mb-1">{{ isRtl ? 'الخصم/الجلسة' : 'Discount/Session' }}</label>
                                                 <input v-model.number="svc.discount_per_session" type="number" min="0" step="0.01" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500" />
                                             </div>
                                             <div class="flex items-end">
                                                 <div>
-                                                    <label class="block text-xs text-gray-500 mb-1">Subtotal</label>
+                                                    <label class="block text-xs text-gray-500 mb-1">{{ isRtl ? 'المجموع الفرعي' : 'Subtotal' }}</label>
                                                     <p class="text-sm font-bold text-teal-600 py-2">
                                                         {{ formatCurrency((svc.unit_price - svc.discount_per_session) * svc.sessions_count) }}
                                                     </p>
@@ -1401,7 +1417,7 @@ function submitReschedule() {
                                     </div>
                                     <button type="button" @click="addConfirmService" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-teal-600 border border-teal-200 rounded-lg hover:bg-teal-50 transition">
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
-                                        Add Service
+                                        {{ isRtl ? 'إضافة خدمة' : 'Add Service' }}
                                     </button>
                                     <p v-if="confirmErrors.services" class="text-xs text-red-600">{{ confirmErrors.services }}</p>
                                 </div>
@@ -1411,25 +1427,25 @@ function submitReschedule() {
                             <div>
                                 <h3 class="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">
                                     <span class="w-6 h-6 rounded-full bg-teal-500 text-white text-xs font-bold flex items-center justify-center">3</span>
-                                    Appointments
+                                    {{ isRtl ? 'المواعيد' : 'Appointments' }}
                                 </h3>
                                 <div class="space-y-3">
                                     <div v-for="(appt, apptIdx) in confirmForm.appointments" :key="apptIdx"
                                          class="p-4 bg-gray-50 rounded-xl border border-gray-100 space-y-3">
                                         <div class="flex items-center justify-between">
-                                            <span class="text-xs font-semibold text-gray-500">Appointment {{ apptIdx + 1 }}</span>
+                                            <span class="text-xs font-semibold text-gray-500">{{ isRtl ? 'الموعد' : 'Appointment' }} {{ apptIdx + 1 }}</span>
                                             <button v-if="confirmForm.appointments.length > 1" type="button" @click="removeConfirmAppointment(apptIdx)" class="text-red-400 hover:text-red-600 transition">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                                             </button>
                                         </div>
                                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                             <div>
-                                                <label class="block text-xs text-gray-500 mb-1">For Service</label>
+                                                <label class="block text-xs text-gray-500 mb-1">{{ isRtl ? 'للخدمة' : 'For Service' }}</label>
                                                 <select v-model.number="appt.service_index" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500 bg-white">
                                                     <option v-for="(svc, si) in confirmForm.services" :key="si" :value="si">
                                                         {{ isConsultationBooking
-                                                            ? (booking.booking_type === 'dermatology_consultation' ? 'Dermatology Consultation' : 'Cosmetic Consultation')
-                                                            : ('Service ' + (si + 1) + ': ' + (services?.find(s => s.id == svc.service_id)?.name_en || 'Not selected'))
+                                                            ? (booking.booking_type === 'dermatology_consultation' ? (isRtl ? 'استشارة جلدية' : 'Dermatology Consultation') : (isRtl ? 'استشارة تجميلية' : 'Cosmetic Consultation'))
+                                                            : ((isRtl ? 'الخدمة ' : 'Service ') + (si + 1) + ': ' + (services?.find(s => s.id == svc.service_id)?.name_en || (isRtl ? 'غير محدد' : 'Not selected')))
                                                         }}
                                                     </option>
                                                 </select>
@@ -1437,19 +1453,19 @@ function submitReschedule() {
                                             <div>
                                                 <label class="block text-xs text-gray-500 mb-1">{{ isRtl ? 'الطبيب' : 'Doctor' }}</label>
                                                 <select v-model="appt.doctor_id" @change="fetchTimeSlots(apptIdx)" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500 bg-white">
-                                                    <option value="">Select doctor...</option>
+                                                    <option value="">{{ isRtl ? 'اختر الطبيب...' : 'Select doctor...' }}</option>
                                                     <option v-for="d in doctors" :key="d.id" :value="d.id">{{ d.name_en || d.name }}</option>
                                                 </select>
                                             </div>
                                             <div>
-                                                <label class="block text-xs text-gray-500 mb-1">Date <span class="text-red-500">*</span></label>
+                                                <label class="block text-xs text-gray-500 mb-1">{{ isRtl ? 'التاريخ' : 'Date' }} <span class="text-red-500">*</span></label>
                                                 <input v-model="appt.appointment_date" type="date" @change="fetchTimeSlots(apptIdx)" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500" />
                                             </div>
                                             <div>
-                                                <label class="block text-xs text-gray-500 mb-1">Time Slot</label>
-                                                <div v-if="loadingSlots[apptIdx]" class="text-xs text-gray-400 py-2">Loading slots...</div>
+                                                <label class="block text-xs text-gray-500 mb-1">{{ isRtl ? 'الوقت' : 'Time Slot' }}</label>
+                                                <div v-if="loadingSlots[apptIdx]" class="text-xs text-gray-400 py-2">{{ isRtl ? 'جاري تحميل المواعيد...' : 'Loading slots...' }}</div>
                                                 <select v-else-if="timeSlots[apptIdx]?.length" v-model="appt.start_time" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500 bg-white">
-                                                    <option value="">Select time...</option>
+                                                    <option value="">{{ isRtl ? 'اختر الوقت...' : 'Select time...' }}</option>
                                                     <option v-for="slot in timeSlots[apptIdx]" :key="slot.start || slot" :value="slot.start || slot">
                                                         {{ formatTime(slot.start || slot) }} {{ slot.end ? '- ' + formatTime(slot.end) : '' }}
                                                     </option>
@@ -1457,14 +1473,14 @@ function submitReschedule() {
                                                 <input v-else v-model="appt.start_time" type="time" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500" />
                                             </div>
                                             <div>
-                                                <label class="block text-xs text-gray-500 mb-1">Session #</label>
+                                                <label class="block text-xs text-gray-500 mb-1">{{ isRtl ? 'رقم الجلسة' : 'Session #' }}</label>
                                                 <input v-model.number="appt.session_number" type="number" min="1" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500" />
                                             </div>
                                         </div>
                                     </div>
                                     <button type="button" @click="addConfirmAppointment" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-teal-600 border border-teal-200 rounded-lg hover:bg-teal-50 transition">
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
-                                        Add Appointment
+                                        {{ isRtl ? 'إضافة موعد' : 'Add Appointment' }}
                                     </button>
                                     <p v-if="confirmErrors.appointments" class="text-xs text-red-600">{{ confirmErrors.appointments }}</p>
                                 </div>
@@ -1481,9 +1497,9 @@ function submitReschedule() {
                                 <button type="submit" :disabled="confirmProcessing" class="px-6 py-2.5 bg-gradient-to-r from-teal-500 to-cyan-500 text-white rounded-xl text-sm font-semibold hover:from-teal-600 hover:to-cyan-600 transition-all disabled:opacity-50 shadow-sm">
                                     <span v-if="confirmProcessing" class="flex items-center gap-2">
                                         <svg class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/></svg>
-                                        Confirming...
+                                        {{ isRtl ? 'جاري التأكيد...' : 'Confirming...' }}
                                     </span>
-                                    <span v-else>Confirm Booking</span>
+                                    <span v-else>{{ isRtl ? 'تأكيد الحجز' : 'Confirm Booking' }}</span>
                                 </button>
                                 <button type="button" @click="showConfirmSection = false" class="px-6 py-2.5 border border-gray-200 text-gray-600 rounded-xl text-sm font-medium hover:bg-gray-50 transition">
                                     {{ isRtl ? 'إلغاء' : 'Cancel' }}
@@ -1498,39 +1514,39 @@ function submitReschedule() {
             <div class="space-y-6">
                 <!-- Status Update Card -->
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6">
-                    <h3 class="text-sm font-bold text-gray-800 mb-4 border-b border-gray-100 pb-2">Update Status</h3>
+                    <h3 class="text-sm font-bold text-gray-800 mb-4 border-b border-gray-100 pb-2">{{ isRtl ? 'تحديث الحالة' : 'Update Status' }}</h3>
                     <form @submit.prevent="updateStatus" class="space-y-4">
                         <div>
                             <label class="block text-xs text-gray-500 mb-1.5">{{ isRtl ? 'الحالة' : 'Status' }}</label>
                             <select v-model="statusForm.status" class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500">
-                                <option value="unconfirmed">Unconfirmed</option>
+                                <option value="unconfirmed">{{ isRtl ? 'غير مؤكد' : 'Unconfirmed' }}</option>
                                 <option value="confirmed">{{ isRtl ? 'مؤكد' : 'Confirmed' }}</option>
-                                <option value="in_progress">{{ isRtl ? 'جاري' : 'In Progress' }}</option>
+                                <option value="in_progress">{{ isRtl ? 'قيد التنفيذ' : 'In Progress' }}</option>
                                 <option value="completed">{{ isRtl ? 'مكتمل' : 'Completed' }}</option>
-                                <option value="cancelled">Cancelled</option>
+                                <option value="cancelled">{{ isRtl ? 'ملغي' : 'Cancelled' }}</option>
                             </select>
                             <p v-if="statusForm.errors.status" class="mt-1 text-xs text-red-600">{{ statusForm.errors.status }}</p>
                         </div>
                         <div>
-                            <label class="block text-xs text-gray-500 mb-1.5">Admin Notes</label>
+                            <label class="block text-xs text-gray-500 mb-1.5">{{ isRtl ? 'ملاحظات الإدارة' : 'Admin Notes' }}</label>
                             <textarea v-model="statusForm.admin_notes" rows="3" class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500" :placeholder="isRtl ? 'ملاحظات داخلية...' : 'Internal notes...'"></textarea>
                         </div>
                         <button type="submit" :disabled="statusForm.processing" class="w-full py-2.5 px-4 rounded-xl text-white font-semibold text-sm bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-600 hover:to-cyan-600 transition-all duration-300 disabled:opacity-50 shadow-sm">
-                            {{ statusForm.processing ? 'Updating...' : 'Update Status' }}
+                            {{ statusForm.processing ? (isRtl ? 'جاري التحديث...' : 'Updating...') : (isRtl ? 'تحديث الحالة' : 'Update Status') }}
                         </button>
                     </form>
                 </div>
 
                 <!-- Invoice Summary (Sidebar) -->
                 <div v-if="invoice" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6">
-                    <h3 class="text-sm font-bold text-gray-800 mb-4 border-b border-gray-100 pb-2">Invoice Summary</h3>
+                    <h3 class="text-sm font-bold text-gray-800 mb-4 border-b border-gray-100 pb-2">{{ isRtl ? 'ملخص الفاتورة' : 'Invoice Summary' }}</h3>
                     <dl class="space-y-3">
                         <div class="flex justify-between text-sm">
-                            <dt class="text-gray-500">Invoice #</dt>
+                            <dt class="text-gray-500">{{ isRtl ? 'رقم الفاتورة' : 'Invoice #' }}</dt>
                             <dd class="font-mono font-medium text-teal-600">{{ invoice.invoice_number || invoice.id }}</dd>
                         </div>
                         <div class="flex justify-between text-sm">
-                            <dt class="text-gray-500">Subtotal</dt>
+                            <dt class="text-gray-500">{{ isRtl ? 'المجموع الفرعي' : 'Subtotal' }}</dt>
                             <dd class="text-gray-700">{{ formatCurrency(invoice.subtotal) }}</dd>
                         </div>
                         <div v-if="invoice.discount_amount > 0" class="flex justify-between text-sm">
@@ -1542,11 +1558,11 @@ function submitReschedule() {
                             <dd class="text-teal-600">{{ formatCurrency(invoice.total) }}</dd>
                         </div>
                         <div class="flex justify-between text-sm border-t border-gray-100 pt-3">
-                            <dt class="text-gray-500">{{ isRtl ? 'المدفوع' : 'Paid' }}</dt>
+                            <dt class="text-gray-500">{{ isRtl ? 'مدفوع' : 'Paid' }}</dt>
                             <dd class="text-emerald-600 font-medium">{{ formatCurrency(invoice.paid_amount) }}</dd>
                         </div>
                         <div class="flex justify-between text-sm font-bold">
-                            <dt class="text-gray-800">{{ isRtl ? 'الرصيد' : 'Balance' }}</dt>
+                            <dt class="text-gray-800">{{ isRtl ? 'المتبقي' : 'Balance' }}</dt>
                             <dd :class="invoiceBalance > 0 ? 'text-red-600' : 'text-emerald-600'">{{ formatCurrency(invoiceBalance) }}</dd>
                         </div>
                     </dl>
@@ -1557,7 +1573,7 @@ function submitReschedule() {
                     <h3 class="text-sm font-bold text-gray-800 mb-4 border-b border-gray-100 pb-2">{{ isRtl ? 'تفاصيل الحجز' : 'Booking Details' }}</h3>
                     <dl class="space-y-3">
                         <div class="flex justify-between text-sm">
-                            <dt class="text-gray-500">Booking #</dt>
+                            <dt class="text-gray-500">{{ isRtl ? 'رقم الحجز' : 'Booking #' }}</dt>
                             <dd class="font-mono font-medium text-gray-800">{{ bookingNumber }}</dd>
                         </div>
                         <div class="flex justify-between text-sm">
@@ -1577,11 +1593,11 @@ function submitReschedule() {
                             </dd>
                         </div>
                         <div class="flex justify-between text-sm">
-                            <dt class="text-gray-500">Created</dt>
+                            <dt class="text-gray-500">{{ isRtl ? 'تاريخ الإنشاء' : 'Created' }}</dt>
                             <dd class="text-gray-700">{{ formatDate(booking.created_at) }}</dd>
                         </div>
                         <div v-if="booking.creator" class="flex justify-between text-sm">
-                            <dt class="text-gray-500">Created By</dt>
+                            <dt class="text-gray-500">{{ isRtl ? 'أنشئ بواسطة' : 'Created By' }}</dt>
                             <dd class="text-gray-700">{{ booking.creator.name }}</dd>
                         </div>
                     </dl>
@@ -1589,13 +1605,13 @@ function submitReschedule() {
 
                 <!-- Admin Notes Card -->
                 <div v-if="booking.admin_notes" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6">
-                    <h3 class="text-sm font-bold text-gray-800 mb-2">Admin Notes</h3>
+                    <h3 class="text-sm font-bold text-gray-800 mb-2">{{ isRtl ? 'ملاحظات الإدارة' : 'Admin Notes' }}</h3>
                     <p class="text-sm text-gray-600 whitespace-pre-wrap">{{ booking.admin_notes }}</p>
                 </div>
 
                 <!-- Consent Documents Card -->
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6">
-                    <h3 class="text-sm font-bold text-gray-800 mb-4 border-b border-gray-100 pb-2">Consent Documents</h3>
+                    <h3 class="text-sm font-bold text-gray-800 mb-4 border-b border-gray-100 pb-2">{{ isRtl ? 'نماذج الموافقة' : 'Consent Documents' }}</h3>
 
                     <!-- Existing consents -->
                     <div v-if="booking.consents?.length" class="space-y-2 mb-4">
@@ -1614,7 +1630,7 @@ function submitReschedule() {
                     </div>
                     <div v-else class="text-center py-4 mb-3">
                         <svg class="w-8 h-8 text-gray-300 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-                        <p class="text-xs text-gray-400">No consent documents uploaded</p>
+                        <p class="text-xs text-gray-400">{{ isRtl ? 'لا توجد نماذج موافقة مرفوعة' : 'No consent documents uploaded' }}</p>
                     </div>
 
                     <!-- Upload button -->
@@ -1622,7 +1638,7 @@ function submitReschedule() {
                            style="border-color: rgba(20, 184, 166, 0.4);"
                            :class="{ 'opacity-50 pointer-events-none': consentForm.processing }">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                        {{ consentForm.processing ? 'Uploading...' : 'Upload Consent Images' }}
+                        {{ consentForm.processing ? (isRtl ? 'جاري الرفع...' : 'Uploading...') : (isRtl ? 'رفع نماذج الموافقة' : 'Upload Consent Images') }}
                         <input ref="consentFileInput" type="file" multiple accept="image/jpeg,image/png,image/webp" class="hidden" @change="onConsentFilesSelected" />
                     </label>
                     <p v-if="consentForm.errors.consents" class="mt-1.5 text-xs text-red-600">{{ consentForm.errors.consents }}</p>
@@ -1631,19 +1647,19 @@ function submitReschedule() {
 
                 <!-- Quick Actions -->
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6">
-                    <h3 class="text-sm font-bold text-gray-800 mb-3 border-b border-gray-100 pb-2">Quick Actions</h3>
+                    <h3 class="text-sm font-bold text-gray-800 mb-3 border-b border-gray-100 pb-2">{{ isRtl ? 'إجراءات سريعة' : 'Quick Actions' }}</h3>
                     <div class="space-y-2">
                         <Link href="/secretary/bookings" class="w-full flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition border border-gray-200">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" /></svg>
-                            All Bookings
+                            {{ isRtl ? 'كل الحجوزات' : 'All Bookings' }}
                         </Link>
                         <Link v-if="booking.patient" :href="`/secretary/patients/${booking.patient.id}`" class="w-full flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium text-teal-600 hover:bg-teal-50 transition border border-teal-200">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
-                            View Patient
+                            {{ isRtl ? 'عرض المريض' : 'View Patient' }}
                         </Link>
                         <Link v-if="invoice" :href="`/secretary/invoices/${invoice.id}`" class="w-full flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium text-teal-600 hover:bg-teal-50 transition border border-teal-200">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z" /></svg>
-                            View Invoice
+                            {{ isRtl ? 'عرض الفاتورة' : 'View Invoice' }}
                         </Link>
                         <a :href="`/secretary/bookings/${booking.id}/receipt`" target="_blank" class="w-full flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition border border-gray-200">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" /></svg>
@@ -1672,10 +1688,10 @@ function submitReschedule() {
                     <div class="px-4 sm:px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-teal-50 to-transparent">
                         <div class="flex items-center justify-between">
                             <div>
-                                <h3 class="text-lg font-bold text-gray-900">Edit Appointment</h3>
+                                <h3 class="text-lg font-bold text-gray-900">{{ isRtl ? 'تعديل الموعد' : 'Edit Appointment' }}</h3>
                                 <p class="text-xs text-gray-500 mt-0.5">
-                                    Session #{{ editingAppointment.session_number || '-' }}
-                                    <span v-if="editingAppointment.is_retouch" class="ltr:ml-1 rtl:mr-1 text-purple-600">(Retouch)</span>
+                                    {{ isRtl ? 'الجلسة' : 'Session' }} #{{ editingAppointment.session_number || '-' }}
+                                    <span v-if="editingAppointment.is_retouch" class="ltr:ml-1 rtl:mr-1 text-purple-600">({{ isRtl ? 'متابعة' : 'Retouch' }})</span>
                                 </p>
                             </div>
                             <button @click="closeRescheduleModal" class="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors">
@@ -1700,17 +1716,17 @@ function submitReschedule() {
 
                         <!-- Date -->
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Appointment Date</label>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1.5">{{ isRtl ? 'تاريخ الموعد' : 'Appointment Date' }}</label>
                             <input type="date" v-model="rescheduleForm.appointment_date" @change="fetchRescheduleTimeSlots" class="w-full rounded-xl border-gray-200 text-sm focus:border-teal-500 focus:ring-teal-500/20 transition" />
                             <p v-if="rescheduleForm.errors.appointment_date" class="mt-1 text-xs text-red-600">{{ rescheduleForm.errors.appointment_date }}</p>
                         </div>
 
                         <!-- Time Slots -->
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Available Time Slots</label>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1.5">{{ isRtl ? 'المواعيد المتاحة' : 'Available Time Slots' }}</label>
                             <div v-if="rescheduleLoadingSlots" class="flex items-center gap-2 text-sm text-gray-400 py-3">
                                 <svg class="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
-                                Loading available slots...
+                                {{ isRtl ? 'جاري تحميل المواعيد المتاحة...' : 'Loading available slots...' }}
                             </div>
                             <div v-else-if="rescheduleTimeSlots.length > 0" class="grid grid-cols-3 sm:grid-cols-4 gap-2 max-h-48 overflow-y-auto pr-1">
                                 <button v-for="slot in rescheduleTimeSlots" :key="slot.start" @click="selectRescheduleSlot(slot)" type="button"
@@ -1720,10 +1736,10 @@ function submitReschedule() {
                                 </button>
                             </div>
                             <p v-else-if="rescheduleForm.doctor_id && rescheduleForm.appointment_date && !rescheduleLoadingSlots" class="text-xs text-gray-400 py-3 text-center bg-gray-50 rounded-lg">
-                                No available slots for this date. Try a different date.
+                                {{ isRtl ? 'لا توجد مواعيد متاحة لهذا التاريخ. جرب تاريخ آخر.' : 'No available slots for this date. Try a different date.' }}
                             </p>
                             <p v-else class="text-xs text-gray-400 py-3 text-center">
-                                Select a doctor and date to see available slots.
+                                {{ isRtl ? 'اختر طبيب وتاريخ لعرض المواعيد المتاحة.' : 'Select a doctor and date to see available slots.' }}
                             </p>
                         </div>
 
@@ -1735,7 +1751,7 @@ function submitReschedule() {
                                     {{ formatTime(rescheduleForm.start_time) }} - {{ formatTime(rescheduleForm.end_time) }}
                                 </span>
                                 <span class="text-xs text-gray-500">
-                                    on {{ rescheduleForm.appointment_date }}
+                                    {{ isRtl ? 'في' : 'on' }} {{ rescheduleForm.appointment_date }}
                                 </span>
                             </div>
                         </div>
