@@ -195,7 +195,7 @@ const paginationLinks = computed(() => props.records?.links || []);
                             >
                                 <div>
                                     <Link
-                                        :href="`/secretary/pediatric/patients/${p.id || p.patient_id}`"
+                                        :href="`/admin/patients/${p.id || p.patient_id}`"
                                         class="font-medium text-gray-800 hover:text-green-600 transition"
                                     >
                                         {{ p.full_name || p.patient_name || '-' }}
@@ -254,7 +254,7 @@ const paginationLinks = computed(() => props.records?.links || []);
                             <td class="px-5 py-3.5">
                                 <div>
                                     <Link
-                                        :href="`/secretary/pediatric/patients/${r.patient_id || r.patient?.id}`"
+                                        :href="`/admin/patients/${r.patient_id || r.patient?.id}`"
                                         class="font-semibold text-gray-800 hover:text-green-600 transition"
                                     >
                                         {{ r.patient?.full_name || r.patient_name || '-' }}

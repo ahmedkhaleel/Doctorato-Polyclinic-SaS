@@ -130,7 +130,7 @@ const paginationLinks = computed(() => {
                             v-for="patient in (patients?.data || [])"
                             :key="patient.id"
                             class="border-b border-gray-50 hover:bg-green-50/30 transition-colors cursor-pointer"
-                            @click="router.visit(`/secretary/pediatric/patients/${patient.id}`)"
+                            @click="router.visit(`/admin/patients/${patient.id}`)"
                         >
                             <td class="px-5 py-3.5">
                                 <div class="flex items-center gap-3">
@@ -167,7 +167,7 @@ const paginationLinks = computed(() => {
                             </td>
                             <td class="px-5 py-3.5 text-center">
                                 <Link
-                                    :href="`/secretary/pediatric/patients/${patient.id}`"
+                                    :href="`/admin/patients/${patient.id}`"
                                     class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold text-green-600 bg-green-50 hover:bg-green-100 transition"
                                     @click.stop
                                 >
