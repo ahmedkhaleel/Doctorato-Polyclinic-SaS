@@ -7,6 +7,7 @@ use App\Models\DoctorPatientNote;
 use App\Models\MedicalDataAccessLog;
 use App\Models\Patient;
 use App\Models\Service;
+use App\Traits\BuildsPatientSpecialtyData;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -15,6 +16,8 @@ use Inertia\Response;
 
 class DoctorPatientController extends BaseDoctorController
 {
+    use BuildsPatientSpecialtyData;
+
     public function index(Request $request): Response
     {
         $doctorId = $this->doctorId($request);
@@ -112,53 +115,121 @@ class DoctorPatientController extends BaseDoctorController
             abort(403, 'This patient is not in your records.');
         }
 
+        // Load ALL patient data (not only this doctor's)
         $patient->load([
-            'visits' => function ($q) use ($doctorId) {
-                $q->where('doctor_id', $doctorId)
-                    ->with(['service:id,name_en,name_ar', 'prescriptions.items', 'photos'])
-                    ->latest('visit_date');
-            },
+            'visits' => fn ($q) => $q->with(['doctor:id,name_ar,name_en', 'service:id,name_ar,name_en', 'prescriptions.items', 'photos'])->latest('visit_date')->take(20),
+            'invoices' => fn ($q) => $q->latest()->take(10),
+            'prescriptions' => fn ($q) => $q->with(['doctor:id,name_ar,name_en', 'items'])->latest()->take(10),
+            'photos' => fn ($q) => $q->latest()->take(20),
         ]);
 
-        // Dental data (only if module enabled)
+        // Unified specialty detection
+        $activeSpecialties = $patient->getActiveSpecialties();
+
+        // Derma data (all — not filtered by doctor, as unified view)
+        $dermaData = $this->buildDermaData($patient);
+
+        // Dental data (only if module enabled) — show ALL dental data
         $dentalData = null;
         if (\App\Services\ModuleManager::isEnabled('dental')) {
             $dentalData = [
                 'charts' => $patient->dentalCharts()->orderBy('tooth_number')->get(),
                 'treatments' => $patient->dentalTreatments()
-                    ->where('doctor_id', $doctorId)
-                    ->with('labOrder:id,dental_treatment_id,status,item_type')
+                    ->with(['doctor:id,name_ar,name_en', 'labOrder:id,dental_treatment_id,status,item_type'])
                     ->latest()
                     ->take(15)
                     ->get(),
                 'plans' => $patient->dentalTreatmentPlans()
-                    ->where('doctor_id', $doctorId)
+                    ->with('doctor:id,name_ar,name_en')
                     ->withCount('treatments')
                     ->latest()
                     ->take(10)
                     ->get(),
                 'xrays' => $patient->dentalXrays()
-                    ->where('doctor_id', $doctorId)
+                    ->with('doctor:id,name_ar,name_en')
                     ->latest('taken_date')
                     ->take(8)
                     ->get(),
+                'labOrders' => $patient->dentalLabOrders()
+                    ->with('doctor:id,name_ar,name_en')
+                    ->latest('order_date')
+                    ->take(10)
+                    ->get(),
                 'stats' => [
-                    'total_treatments' => $patient->dentalTreatments()->where('doctor_id', $doctorId)->count(),
-                    'completed_treatments' => $patient->dentalTreatments()->where('doctor_id', $doctorId)->where('status', 'completed')->count(),
-                    'active_plans' => $patient->dentalTreatmentPlans()->where('doctor_id', $doctorId)->whereIn('status', ['approved', 'in_progress'])->count(),
+                    'total_treatments' => $patient->dentalTreatments()->count(),
+                    'completed_treatments' => $patient->dentalTreatments()->where('status', 'completed')->count(),
+                    'active_plans' => $patient->dentalTreatmentPlans()->whereIn('status', ['approved', 'in_progress'])->count(),
+                    'pending_lab_orders' => $patient->dentalLabOrders()->whereIn('status', ['ordered', 'in_production'])->count(),
+                ],
+                'riskFlags' => $patient->getDentalRiskFlags(),
+                'medicalHistory' => $patient->getDentalMedicalHistory(false),
+                'canViewSensitive' => false,
+                'canUpdateSensitive' => false,
+            ];
+        }
+
+        // Pediatric data (only if module enabled AND patient appears pediatric)
+        $pediatricData = null;
+        $isPediatricPatient = $patient->guardian_name
+            || ($patient->date_of_birth && \Carbon\Carbon::parse($patient->date_of_birth)->age < 18)
+            || $patient->visits()->where('module', 'pediatric')->exists();
+
+        if (\App\Services\ModuleManager::isEnabled('pediatric') && $isPediatricPatient) {
+            $growthRecords = \App\Models\PediatricGrowthRecord::where('patient_id', $patient->id)
+                ->orderBy('measurement_date')
+                ->get();
+
+            $vaccinations = \App\Models\PediatricVaccination::where('patient_id', $patient->id)
+                ->orderBy('scheduled_date')
+                ->get();
+
+            $allergies = \App\Models\PediatricAllergy::where('patient_id', $patient->id)
+                ->where('is_active', true)
+                ->get();
+
+            $pediatricData = [
+                'is_pediatric' => true,
+                'growthRecords' => $growthRecords,
+                'vaccinations' => $vaccinations,
+                'allergies' => $allergies,
+                'stats' => [
+                    'total_visits' => $patient->visits()->where('module', 'pediatric')->count(),
+                    'growth_records' => $growthRecords->count(),
+                    'total_vaccinations' => $vaccinations->count(),
+                    'given_vaccinations' => $vaccinations->where('status', 'given')->count(),
+                    'scheduled_vaccinations' => $vaccinations->where('status', 'scheduled')->count(),
+                    'active_allergies' => $allergies->count(),
+                    'latest_weight' => $growthRecords->last()?->weight_kg,
+                    'latest_height' => $growthRecords->last()?->height_cm,
+                    'latest_bmi' => $growthRecords->last()?->bmi,
                 ],
             ];
         }
 
-        // Add dental risk flags for doctor (safety-critical, always visible)
-        // but medical history is redacted — doctors see flags, not details
+        // Financial summary (single aggregation)
+        $invoiceAggregates = $patient->invoices()
+            ->selectRaw('
+                COALESCE(SUM(total), 0) as total_invoiced,
+                COALESCE(SUM(paid_amount), 0) as total_paid,
+                COALESCE(SUM(CASE WHEN status IN ("unpaid","partial") THEN total - paid_amount ELSE 0 END), 0) as outstanding_balance
+            ')
+            ->first();
+
+        $financialSummary = [
+            'total_invoiced' => round((float) $invoiceAggregates->total_invoiced, 2),
+            'total_paid' => round((float) $invoiceAggregates->total_paid, 2),
+            'outstanding_balance' => round((float) $invoiceAggregates->outstanding_balance, 2),
+            'total_visits' => $patient->visits()->count(),
+            'completed_visits' => $patient->visits()->where('status', 'completed')->count(),
+        ];
+
+        // Dental risk flags (always visible) and redacted medical history
         $dentalRiskFlags = [];
         $dentalMedicalHistory = null;
         if (\App\Services\ModuleManager::isEnabled('dental')) {
             $dentalRiskFlags = $patient->getDentalRiskFlags();
-            $dentalMedicalHistory = $patient->getDentalMedicalHistory(false); // Redacted
+            $dentalMedicalHistory = $patient->getDentalMedicalHistory(false);
 
-            // Log medical data access
             MedicalDataAccessLog::record(
                 $patient->id,
                 MedicalDataAccessLog::ACCESS_VIEW,
@@ -167,7 +238,7 @@ class DoctorPatientController extends BaseDoctorController
             );
         }
 
-        // Load quick notes and favorite status
+        // Quick notes and favorite status
         $quickNotes = DoctorPatientNote::where('doctor_id', $doctorId)
             ->where('patient_id', $patient->id)
             ->orderByDesc('is_pinned')
@@ -180,7 +251,11 @@ class DoctorPatientController extends BaseDoctorController
 
         return Inertia::render('Doctor/Patients/Show', [
             'patient' => $patient,
+            'activeSpecialties' => $activeSpecialties,
+            'dermaData' => $dermaData,
             'dentalData' => $dentalData,
+            'pediatricData' => $pediatricData,
+            'financialSummary' => $financialSummary,
             'dentalRiskFlags' => $dentalRiskFlags,
             'dentalMedicalHistory' => $dentalMedicalHistory,
             'quickNotes' => $quickNotes,

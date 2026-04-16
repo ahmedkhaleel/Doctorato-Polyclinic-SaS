@@ -2,14 +2,25 @@
 import { ref, computed, onMounted } from 'vue';
 import { Link, usePage, useForm } from '@inertiajs/vue3';
 import DoctorLayout from '@/Layouts/DoctorLayout.vue';
+import SpecialtyTabs from '@/Components/Patient/SpecialtyTabs.vue';
 
 defineOptions({ layout: DoctorLayout });
 
 const page = usePage();
-const locale = computed(() => page.props.locale || 'ar');
 const isRtl = computed(() => (page.props.dir || 'rtl') === 'rtl');
 
-const props = defineProps({ patient: Object, dentalData: Object, pediatricData: Object });
+const props = defineProps({
+    patient: Object,
+    activeSpecialties: { type: Array, default: () => [] },
+    dermaData: { type: Object, default: null },
+    dentalData: { type: Object, default: null },
+    pediatricData: { type: Object, default: null },
+    financialSummary: { type: Object, default: null },
+    dentalRiskFlags: { type: Array, default: () => [] },
+    dentalMedicalHistory: { type: Object, default: null },
+    quickNotes: { type: Array, default: () => [] },
+    isFavorite: { type: Boolean, default: false },
+});
 
 const headerLoaded = ref(false);
 const cardsLoaded = ref(false);
@@ -18,13 +29,6 @@ onMounted(() => {
     setTimeout(() => headerLoaded.value = true, 50);
     setTimeout(() => cardsLoaded.value = true, 200);
 });
-
-const statusConfig = {
-    waiting: { label: 'Waiting', labelAr: 'انتظار', bg: 'bg-amber-50', text: 'text-amber-700', dot: 'bg-amber-400' },
-    in_progress: { label: 'In Progress', labelAr: 'قيد التنفيذ', bg: 'bg-blue-50', text: 'text-blue-700', dot: 'bg-blue-500' },
-    completed: { label: 'Completed', labelAr: 'مكتمل', bg: 'bg-emerald-50', text: 'text-emerald-700', dot: 'bg-emerald-500' },
-    cancelled: { label: 'Cancelled', labelAr: 'ملغي', bg: 'bg-gray-50', text: 'text-gray-600', dot: 'bg-gray-400' },
-};
 
 // Doctor Notes
 const editingNotes = ref(false);
@@ -36,35 +40,20 @@ function saveNotes() {
     });
 }
 
-const expandedVisit = ref(null);
-function toggleVisit(id) { expandedVisit.value = expandedVisit.value === id ? null : id; }
-
-const allPhotos = computed(() => {
-    const photos = [];
-    for (const visit of (props.patient.visits || [])) {
-        for (const photo of (visit.photos || [])) {
-            photos.push({ ...photo, visit_date: visit.visit_date, visit_id: visit.id, service_name: visit.service?.name_en || visit.visit_type });
-        }
-    }
-    return photos;
-});
-
-const beforePhotos = computed(() => allPhotos.value.filter(p => p.type === 'before'));
-const afterPhotos = computed(() => allPhotos.value.filter(p => p.type === 'after'));
-const hasDentalVisits = computed(() => (props.patient?.visits || []).some(v => v.module === 'dental'));
-const hasPediatricVisits = computed(() => (props.patient?.visits || []).some(v => v.module === 'pediatric'));
+const visits = computed(() => props.patient?.visits || []);
+const invoices = computed(() => props.patient?.invoices || []);
+const prescriptions = computed(() => props.patient?.prescriptions || []);
 
 const visitStats = computed(() => {
-    const visits = props.patient.visits || [];
+    const all = visits.value;
+    const photos = all.reduce((sum, v) => sum + (v.photos?.length || 0), 0);
     return {
-        total: visits.length,
-        completed: visits.filter(v => v.status === 'completed').length,
-        prescriptions: visits.reduce((sum, v) => sum + (v.prescriptions?.length || 0), 0),
-        photos: allPhotos.value.length,
+        total: all.length,
+        completed: all.filter(v => v.status === 'completed').length,
+        prescriptions: all.reduce((sum, v) => sum + (v.prescriptions?.length || 0), 0),
+        photos,
     };
 });
-
-const activeTab = ref('visits');
 </script>
 
 <template>
@@ -78,7 +67,6 @@ const activeTab = ref('visits');
             <div class="absolute bottom-0 left-0 w-64 h-64 bg-gradient-radial from-purple-500/5 to-transparent rounded-full translate-y-1/2 -translate-x-1/4"></div>
 
             <div class="relative z-10 p-6 sm:p-8">
-                <!-- Back Link -->
                 <Link href="/doctor/patients" class="inline-flex items-center gap-1.5 text-xs text-[#C4A265] hover:text-[#D4B87A] transition mb-4">
                     <svg class="w-3.5 h-3.5" :class="isRtl ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
                     {{ isRtl ? 'العودة للمرضى' : 'Back to Patients' }}
@@ -117,7 +105,7 @@ const activeTab = ref('visits');
                         <p class="text-xl font-bold text-emerald-400 mt-0.5">{{ visitStats.completed }}</p>
                     </div>
                     <div class="bg-white/5 backdrop-blur-sm rounded-xl px-4 py-3 border border-white/10">
-                        <p class="text-xs text-gray-400">{{ $t('a_prescriptions') }}</p>
+                        <p class="text-xs text-gray-400">{{ isRtl ? 'الوصفات' : 'Prescriptions' }}</p>
                         <p class="text-xl font-bold text-[#C4A265] mt-0.5">{{ visitStats.prescriptions }}</p>
                     </div>
                     <div class="bg-white/5 backdrop-blur-sm rounded-xl px-4 py-3 border border-white/10">
@@ -142,294 +130,50 @@ const activeTab = ref('visits');
             </div>
         </div>
 
-        <!-- Tabs -->
-        <div
-            class="flex gap-1 bg-white rounded-xl p-1 shadow-sm border border-gray-100 transition-all duration-500 overflow-x-auto scrollbar-none"
-            :class="headerLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
-        >
-            <button @click="activeTab = 'visits'" class="flex-1 px-3 py-2.5 rounded-lg text-sm font-medium transition-all whitespace-nowrap" :class="activeTab === 'visits' ? 'bg-gray-900 text-white shadow-sm' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'">
-                {{ isRtl ? 'الزيارات' : 'Visits' }}
-            </button>
-            <button @click="activeTab = 'info'" class="flex-1 px-3 py-2.5 rounded-lg text-sm font-medium transition-all whitespace-nowrap" :class="activeTab === 'info' ? 'bg-gray-900 text-white shadow-sm' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'">
-                {{ isRtl ? 'البيانات' : 'Details' }}
-            </button>
-            <button @click="activeTab = 'notes'" class="flex-1 px-3 py-2.5 rounded-lg text-sm font-medium transition-all whitespace-nowrap" :class="activeTab === 'notes' ? 'bg-gray-900 text-white shadow-sm' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'">
-                {{ isRtl ? 'ملاحظاتي' : 'My Notes' }}
-            </button>
-            <button v-if="allPhotos.length" @click="activeTab = 'photos'" class="flex-1 px-3 py-2.5 rounded-lg text-sm font-medium transition-all whitespace-nowrap" :class="activeTab === 'photos' ? 'bg-gray-900 text-white shadow-sm' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'">
-                {{ isRtl ? 'الصور' : 'Photos' }}
-            </button>
-            <button v-if="$page.props.modules?.dental?.enabled && dentalData" @click="activeTab = 'dental'" class="flex-1 px-3 py-2.5 rounded-lg text-sm font-medium transition-all whitespace-nowrap" :class="activeTab === 'dental' ? 'bg-gray-900 text-white shadow-sm' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'">
-                {{ isRtl ? 'الأسنان' : 'Dental' }}
-            </button>
-            <button v-if="$page.props.modules?.pediatric?.enabled && pediatricData" @click="activeTab = 'pediatric'" class="flex-1 px-3 py-2.5 rounded-lg text-sm font-medium transition-all whitespace-nowrap" :class="activeTab === 'pediatric' ? 'bg-green-600 text-white shadow-sm' : 'text-gray-500 hover:text-green-600 hover:bg-green-50'">
-                {{ isRtl ? 'طب الأطفال' : 'Pediatric' }}
-            </button>
+        <!-- My Notes (doctor-only) -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6 transition-all duration-500"
+            :class="cardsLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'">
+            <div class="flex items-center justify-between mb-3">
+                <h3 class="text-sm font-bold text-gray-800 flex items-center gap-2">
+                    <svg class="w-4 h-4 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                    {{ isRtl ? 'ملاحظاتي عن المريض' : 'My Notes on Patient' }}
+                </h3>
+                <button v-if="!editingNotes" @click="editingNotes = true" class="text-xs font-medium text-[#C4A265] hover:text-[#B08D4C] transition flex items-center gap-1">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+                    {{ isRtl ? 'تعديل' : 'Edit' }}
+                </button>
+            </div>
+            <div v-if="editingNotes">
+                <textarea v-model="notesForm.doctor_notes" rows="4" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] resize-none transition" :placeholder="isRtl ? 'أضف ملاحظاتك عن هذا المريض...' : 'Add your notes about this patient...'" />
+                <div class="flex items-center gap-2 mt-3">
+                    <button @click="saveNotes" :disabled="notesForm.processing" class="px-5 py-2 bg-[#C4A265] text-white text-sm font-semibold rounded-xl hover:bg-[#B08D4C] transition disabled:opacity-50">
+                        {{ notesForm.processing ? (isRtl ? 'جار الحفظ...' : 'Saving...') : (isRtl ? 'حفظ' : 'Save') }}
+                    </button>
+                    <button @click="editingNotes = false; notesForm.doctor_notes = patient.doctor_notes || ''" class="px-5 py-2 bg-gray-100 text-gray-600 text-sm font-semibold rounded-xl hover:bg-gray-200 transition">
+                        {{ isRtl ? 'إلغاء' : 'Cancel' }}
+                    </button>
+                </div>
+            </div>
+            <div v-else>
+                <p v-if="patient.doctor_notes" class="text-sm text-gray-700 whitespace-pre-wrap bg-amber-50/50 rounded-xl p-3 border border-amber-100">{{ patient.doctor_notes }}</p>
+                <p v-else class="text-sm text-gray-400 italic">{{ isRtl ? 'لا توجد ملاحظات — اضغط تعديل لإضافة ملاحظاتك' : 'No notes yet — click Edit to add' }}</p>
+            </div>
         </div>
 
-        <!-- Tab Content -->
+        <!-- Unified Specialty Tabs -->
         <div class="transition-all duration-700" :class="cardsLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'">
-
-            <!-- Visits Tab -->
-            <div v-if="activeTab === 'visits'" class="space-y-3">
-                <div v-for="visit in (patient.visits || [])" :key="visit.id"
-                    class="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden"
-                >
-                    <div class="flex items-center gap-4 p-4 cursor-pointer" @click="toggleVisit(visit.id)">
-                        <!-- Date -->
-                        <div class="w-12 h-12 rounded-xl bg-gray-50 flex flex-col items-center justify-center flex-shrink-0">
-                            <span class="text-sm font-bold text-gray-800 leading-none">{{ visit.visit_date ? new Date(visit.visit_date).getDate() : '-' }}</span>
-                            <span class="text-[9px] text-gray-400 font-medium mt-0.5">{{ visit.visit_date ? new Date(visit.visit_date).toLocaleDateString('en', { month: 'short' }) : '' }}</span>
-                        </div>
-
-                        <!-- Info -->
-                        <div class="flex-1 min-w-0">
-                            <p class="text-sm font-semibold text-gray-800 truncate">{{ isRtl ? (visit.service?.name_ar || visit.service?.name_en) : (visit.service?.name_en || visit.service?.name_ar) || visit.visit_type || '-' }}</p>
-                            <p class="text-xs text-gray-400 mt-0.5">{{ visit.visit_date }}</p>
-                        </div>
-
-                        <!-- Status -->
-                        <span v-if="statusConfig[visit.status]" class="inline-flex items-center gap-1.5 text-[11px] font-semibold px-3 py-1 rounded-full" :class="[statusConfig[visit.status].bg, statusConfig[visit.status].text]">
-                            <span class="w-1.5 h-1.5 rounded-full" :class="statusConfig[visit.status].dot"></span>
-                            {{ isRtl ? statusConfig[visit.status].labelAr : statusConfig[visit.status].label }}
-                        </span>
-
-                        <!-- Expand -->
-                        <svg class="w-4 h-4 text-gray-400 transition-transform" :class="expandedVisit === visit.id ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
-                    </div>
-
-                    <!-- Expanded Details -->
-                    <div v-if="expandedVisit === visit.id" class="px-4 pb-4 border-t border-gray-100 pt-3 space-y-3">
-                        <div v-if="visit.diagnosis" class="bg-blue-50 rounded-lg p-3">
-                            <p class="text-[10px] font-semibold text-blue-500 uppercase mb-1">{{ isRtl ? 'التشخيص' : 'Diagnosis' }}</p>
-                            <p class="text-sm text-blue-800">{{ visit.diagnosis }}</p>
-                        </div>
-                        <div v-if="visit.doctor_notes" class="bg-amber-50 rounded-lg p-3">
-                            <p class="text-[10px] font-semibold text-amber-500 uppercase mb-1">{{ isRtl ? 'ملاحظات' : 'Notes' }}</p>
-                            <p class="text-sm text-amber-800">{{ visit.doctor_notes }}</p>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <Link :href="`/doctor/visits/${visit.id}`" class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-[#C4A265] hover:bg-[#B08D4C] rounded-lg transition">
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
-                                {{ isRtl ? 'عرض الزيارة' : 'View Visit' }}
-                            </Link>
-                        </div>
-                    </div>
-                </div>
-
-                <div v-if="!(patient.visits?.length)" class="text-center py-12 bg-white rounded-xl border border-gray-100">
-                    <p class="text-sm text-gray-400">{{ isRtl ? 'لا توجد زيارات' : 'No visits yet' }}</p>
-                </div>
-            </div>
-
-            <!-- Info Tab -->
-            <div v-if="activeTab === 'info'" class="grid md:grid-cols-2 gap-5">
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6">
-                    <h3 class="text-xs font-bold text-gray-500 uppercase mb-4 flex items-center gap-2">
-                        <svg class="w-4 h-4 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
-                        {{ isRtl ? 'بيانات المريض' : 'Patient Details' }}
-                    </h3>
-                    <div class="space-y-3 text-sm">
-                        <div class="flex justify-between py-1.5 border-b border-gray-50"><span class="text-gray-500">{{ isRtl ? 'الجنس' : 'Gender' }}</span><span class="font-medium text-gray-800 capitalize">{{ patient.gender || '-' }}</span></div>
-                        <div class="flex justify-between py-1.5 border-b border-gray-50"><span class="text-gray-500">{{ isRtl ? 'تاريخ الميلاد' : 'Date of Birth' }}</span><span class="font-medium text-gray-800">{{ patient.date_of_birth || '-' }}</span></div>
-                        <div class="flex justify-between py-1.5 border-b border-gray-50"><span class="text-gray-500">{{ isRtl ? 'فصيلة الدم' : 'Blood Type' }}</span><span class="font-medium text-gray-800">{{ patient.blood_type || '-' }}</span></div>
-                        <div class="flex justify-between py-1.5 border-b border-gray-50"><span class="text-gray-500">{{ $t('a_email') }}</span><span class="font-medium text-gray-800">{{ patient.email || '-' }}</span></div>
-                        <div class="flex justify-between py-1.5"><span class="text-gray-500">{{ isRtl ? 'العنوان' : 'Address' }}</span><span class="font-medium text-gray-800 max-w-[180px] ltr:text-right rtl:text-left">{{ patient.address || '-' }}</span></div>
-                    </div>
-                </div>
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6">
-                    <h3 class="text-xs font-bold text-gray-500 uppercase mb-4 flex items-center gap-2">
-                        <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
-                        {{ isRtl ? 'التاريخ الطبي' : 'Medical History' }}
-                    </h3>
-                    <p v-if="patient.medical_history" class="text-sm text-gray-700 whitespace-pre-wrap">{{ patient.medical_history }}</p>
-                    <p v-else class="text-sm text-gray-400 italic text-center py-4">{{ isRtl ? 'لا يوجد تاريخ طبي مسجل' : 'No medical history recorded' }}</p>
-                </div>
-            </div>
-
-            <!-- Notes Tab -->
-            <div v-if="activeTab === 'notes'">
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6">
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-sm font-bold text-gray-800 flex items-center gap-2">
-                            <svg class="w-4 h-4 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
-                            {{ isRtl ? 'ملاحظاتي عن المريض' : 'My Notes on Patient' }}
-                        </h3>
-                        <button v-if="!editingNotes" @click="editingNotes = true" class="text-xs font-medium text-[#C4A265] hover:text-[#B08D4C] transition flex items-center gap-1">
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
-                            {{ isRtl ? 'تعديل' : 'Edit' }}
-                        </button>
-                    </div>
-                    <div v-if="editingNotes">
-                        <textarea v-model="notesForm.doctor_notes" rows="5" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] resize-none transition" :placeholder="isRtl ? 'أضف ملاحظاتك عن هذا المريض...' : 'Add your notes about this patient...'" />
-                        <div class="flex items-center gap-2 mt-3">
-                            <button @click="saveNotes" :disabled="notesForm.processing" class="px-5 py-2 bg-[#C4A265] text-white text-sm font-semibold rounded-xl hover:bg-[#B08D4C] transition disabled:opacity-50">
-                                {{ notesForm.processing ? $t('a_saving') : (isRtl ? 'حفظ' : 'Save') }}
-                            </button>
-                            <button @click="editingNotes = false; notesForm.doctor_notes = patient.doctor_notes || ''" class="px-5 py-2 bg-gray-100 text-gray-600 text-sm font-semibold rounded-xl hover:bg-gray-200 transition">
-                                {{ isRtl ? 'إلغاء' : 'Cancel' }}
-                            </button>
-                        </div>
-                    </div>
-                    <div v-else>
-                        <p v-if="patient.doctor_notes" class="text-sm text-gray-700 whitespace-pre-wrap bg-amber-50/50 rounded-xl p-4 border border-amber-100">{{ patient.doctor_notes }}</p>
-                        <div v-else class="text-center py-8">
-                            <svg class="w-12 h-12 mx-auto text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
-                            <p class="text-sm text-gray-400 mt-2">{{ isRtl ? 'لا توجد ملاحظات — اضغط تعديل لإضافة ملاحظاتك' : 'No notes yet — click Edit to add' }}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Photos Tab -->
-            <div v-if="activeTab === 'photos' && allPhotos.length">
-                <div class="grid md:grid-cols-2 gap-5">
-                    <div v-if="beforePhotos.length" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6">
-                        <h3 class="text-sm font-bold text-amber-600 uppercase mb-3 flex items-center gap-2">
-                            <span class="w-6 h-6 rounded-lg bg-amber-100 flex items-center justify-center text-xs">{{ beforePhotos.length }}</span>
-                            {{ isRtl ? 'قبل' : 'Before' }}
-                        </h3>
-                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                            <div v-for="photo in beforePhotos" :key="photo.id" class="aspect-square rounded-xl overflow-hidden bg-gray-100 relative group">
-                                <img :src="'/storage/' + photo.photo_path" class="w-full h-full object-cover" />
-                                <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-2">
-                                    <p class="text-white text-[9px]">{{ photo.visit_date }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div v-if="afterPhotos.length" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6">
-                        <h3 class="text-sm font-bold text-emerald-600 uppercase mb-3 flex items-center gap-2">
-                            <span class="w-6 h-6 rounded-lg bg-emerald-100 flex items-center justify-center text-xs">{{ afterPhotos.length }}</span>
-                            {{ isRtl ? 'بعد' : 'After' }}
-                        </h3>
-                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                            <div v-for="photo in afterPhotos" :key="photo.id" class="aspect-square rounded-xl overflow-hidden bg-gray-100 relative group">
-                                <img :src="'/storage/' + photo.photo_path" class="w-full h-full object-cover" />
-                                <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-2">
-                                    <p class="text-white text-[9px]">{{ photo.visit_date }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Dental Tab -->
-            <div v-if="activeTab === 'dental' && $page.props.modules?.dental?.enabled && dentalData" class="space-y-5">
-                <!-- Dental Stats -->
-                <div v-if="dentalData?.stats" class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <div class="bg-white rounded-xl border border-cyan-100 p-4 shadow-sm">
-                        <p class="text-2xl font-bold text-cyan-700">{{ dentalData.stats.total_treatments }}</p>
-                        <p class="text-xs text-gray-500">{{ isRtl ? 'إجمالي العلاجات' : 'Total Treatments' }}</p>
-                    </div>
-                    <div class="bg-white rounded-xl border border-green-100 p-4 shadow-sm">
-                        <p class="text-2xl font-bold text-green-600">{{ dentalData.stats.completed_treatments }}</p>
-                        <p class="text-xs text-gray-500">{{ isRtl ? 'مكتمل' : 'Completed' }}</p>
-                    </div>
-                    <div class="bg-white rounded-xl border border-purple-100 p-4 shadow-sm">
-                        <p class="text-2xl font-bold text-purple-600">{{ dentalData.stats.active_plans }}</p>
-                        <p class="text-xs text-gray-500">{{ isRtl ? 'خطط نشطة' : 'Active Plans' }}</p>
-                    </div>
-                </div>
-
-                <!-- Quick Links -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                    <Link :href="`/doctor/dental/chart/${patient.id}`" class="flex items-center gap-3 p-3 bg-white rounded-xl border border-gray-200 hover:border-[#C4A265]/40 hover:bg-[#C4A265]/5 transition group shadow-sm">
-                        <div class="w-9 h-9 rounded-lg flex items-center justify-center bg-[#C4A265]/10"><svg class="w-4 h-4 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342" /></svg></div>
-                        <div><p class="text-xs font-semibold text-gray-800">{{ isRtl ? 'المخطط' : 'Chart' }}</p><p class="text-[10px] text-gray-400">{{ dentalData?.charts?.length || 0 }} {{ isRtl ? 'سن' : 'teeth' }}</p></div>
-                    </Link>
-                    <Link :href="`/doctor/dental/treatment-plans?patient_id=${patient.id}`" class="flex items-center gap-3 p-3 bg-white rounded-xl border border-gray-200 hover:border-purple-300 hover:bg-purple-50/50 transition group shadow-sm">
-                        <div class="w-9 h-9 rounded-lg bg-purple-50 flex items-center justify-center"><svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg></div>
-                        <div><p class="text-xs font-semibold text-gray-800">{{ isRtl ? 'الخطط' : 'Plans' }}</p><p class="text-[10px] text-gray-400">{{ dentalData?.plans?.length || 0 }} {{ isRtl ? 'خطة' : 'plans' }}</p></div>
-                    </Link>
-                    <Link :href="`/doctor/dental/treatments?patient_id=${patient.id}`" class="flex items-center gap-3 p-3 bg-white rounded-xl border border-gray-200 hover:border-teal-300 hover:bg-teal-50/50 transition group shadow-sm">
-                        <div class="w-9 h-9 rounded-lg bg-teal-50 flex items-center justify-center"><svg class="w-4 h-4 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg></div>
-                        <div><p class="text-xs font-semibold text-gray-800">{{ isRtl ? 'العلاجات' : 'Treatments' }}</p><p class="text-[10px] text-gray-400">{{ dentalData?.treatments?.length || 0 }} {{ isRtl ? 'أخيرة' : 'recent' }}</p></div>
-                    </Link>
-                    <Link :href="`/doctor/dental/xrays/${patient.id}`" class="flex items-center gap-3 p-3 bg-white rounded-xl border border-gray-200 hover:border-cyan-300 hover:bg-cyan-50/50 transition group shadow-sm">
-                        <div class="w-9 h-9 rounded-lg bg-cyan-50 flex items-center justify-center"><svg class="w-4 h-4 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg></div>
-                        <div><p class="text-xs font-semibold text-gray-800">{{ isRtl ? 'الأشعة' : 'X-Rays' }}</p><p class="text-[10px] text-gray-400">{{ dentalData?.xrays?.length || 0 }} {{ isRtl ? 'صورة' : 'images' }}</p></div>
-                    </Link>
-                </div>
-
-                <!-- Recent Treatments -->
-                <div v-if="dentalData?.treatments?.length" class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-                    <div class="px-5 py-3 border-b border-gray-100">
-                        <h3 class="text-sm font-semibold text-gray-700">{{ isRtl ? 'آخر العلاجات' : 'Recent Treatments' }}</h3>
-                    </div>
-                    <div class="divide-y divide-gray-50">
-                        <div v-for="t in dentalData.treatments" :key="t.id" class="px-5 py-3 flex items-center gap-3">
-                            <div class="w-8 h-8 rounded-lg bg-cyan-50 flex items-center justify-center text-xs font-bold text-cyan-600">{{ t.tooth_number }}</div>
-                            <div class="flex-1">
-                                <p class="text-sm font-medium text-gray-800">{{ t.treatment_type }}</p>
-                                <p class="text-xs text-gray-400">{{ t.created_at ? new Date(t.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : '' }}</p>
-                            </div>
-                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full" :class="t.status === 'completed' ? 'bg-emerald-50 text-emerald-600' : t.status === 'cancelled' ? 'bg-gray-50 text-gray-500' : 'bg-amber-50 text-amber-600'">{{ isRtl ? ({ completed: 'مكتمل', planned: 'مخطط', in_progress: 'جاري', cancelled: 'ملغي' }[t.status] || t.status) : t.status }}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Pediatric Tab -->
-            <div v-if="activeTab === 'pediatric' && $page.props.modules?.pediatric?.enabled && pediatricData" class="space-y-5">
-                <!-- Pediatric Stats -->
-                <div v-if="pediatricData?.stats" class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <div class="bg-white rounded-xl border border-green-100 p-4 shadow-sm">
-                        <p class="text-2xl font-bold text-green-600">{{ pediatricData.stats.total_visits ?? 0 }}</p>
-                        <p class="text-xs text-gray-500">{{ isRtl ? 'إجمالي الزيارات' : 'Total Visits' }}</p>
-                    </div>
-                    <div class="bg-white rounded-xl border border-emerald-100 p-4 shadow-sm">
-                        <p class="text-2xl font-bold text-emerald-600">{{ pediatricData.stats.total_vaccinations ?? 0 }}</p>
-                        <p class="text-xs text-gray-500">{{ isRtl ? 'التطعيمات' : 'Vaccinations' }}</p>
-                    </div>
-                    <div class="bg-white rounded-xl border border-teal-100 p-4 shadow-sm">
-                        <p class="text-2xl font-bold text-teal-600">{{ pediatricData.stats.growth_records ?? 0 }}</p>
-                        <p class="text-xs text-gray-500">{{ isRtl ? 'سجلات النمو' : 'Growth Records' }}</p>
-                    </div>
-                </div>
-
-                <!-- Quick Links -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                    <Link :href="`/doctor/pediatric/patients/${patient.id}`" class="flex items-center gap-3 p-3 bg-white rounded-xl border border-gray-200 hover:border-green-300 hover:bg-green-50/50 transition group shadow-sm">
-                        <div class="w-9 h-9 rounded-lg bg-green-50 flex items-center justify-center"><svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg></div>
-                        <div><p class="text-xs font-semibold text-gray-800">{{ isRtl ? 'ملف الطفل' : 'Child Profile' }}</p><p class="text-[10px] text-gray-400">{{ isRtl ? 'عرض الملف الكامل' : 'View full profile' }}</p></div>
-                    </Link>
-                    <Link :href="`/doctor/pediatric/vaccinations?patient_id=${patient.id}`" class="flex items-center gap-3 p-3 bg-white rounded-xl border border-gray-200 hover:border-emerald-300 hover:bg-emerald-50/50 transition group shadow-sm">
-                        <div class="w-9 h-9 rounded-lg bg-emerald-50 flex items-center justify-center"><svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg></div>
-                        <div><p class="text-xs font-semibold text-gray-800">{{ isRtl ? 'التطعيمات' : 'Vaccinations' }}</p><p class="text-[10px] text-gray-400">{{ pediatricData?.stats?.total_vaccinations ?? 0 }} {{ isRtl ? 'تطعيم' : 'records' }}</p></div>
-                    </Link>
-                    <Link :href="`/doctor/pediatric/growth?patient_id=${patient.id}`" class="flex items-center gap-3 p-3 bg-white rounded-xl border border-gray-200 hover:border-teal-300 hover:bg-teal-50/50 transition group shadow-sm">
-                        <div class="w-9 h-9 rounded-lg bg-teal-50 flex items-center justify-center"><svg class="w-4 h-4 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg></div>
-                        <div><p class="text-xs font-semibold text-gray-800">{{ isRtl ? 'سجل النمو' : 'Growth Chart' }}</p><p class="text-[10px] text-gray-400">{{ pediatricData?.stats?.growth_records ?? 0 }} {{ isRtl ? 'سجل' : 'records' }}</p></div>
-                    </Link>
-                </div>
-
-                <!-- Recent Pediatric Visits -->
-                <div v-if="patient.visits?.filter(v => v.module === 'pediatric')?.length" class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-                    <div class="px-5 py-3 border-b border-gray-100">
-                        <h3 class="text-sm font-semibold text-gray-700">{{ isRtl ? 'زيارات الأطفال الأخيرة' : 'Recent Pediatric Visits' }}</h3>
-                    </div>
-                    <div class="divide-y divide-gray-50">
-                        <div v-for="visit in patient.visits.filter(v => v.module === 'pediatric')" :key="visit.id" class="px-5 py-3 flex items-center gap-3">
-                            <div class="w-8 h-8 rounded-lg bg-green-50 flex items-center justify-center text-xs font-bold text-green-600">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
-                            </div>
-                            <div class="flex-1">
-                                <p class="text-sm font-medium text-gray-800">{{ isRtl ? (visit.service?.name_ar || visit.service?.name_en) : (visit.service?.name_en || visit.service?.name_ar) || visit.visit_type || '-' }}</p>
-                                <p class="text-xs text-gray-400">{{ visit.visit_date ? new Date(visit.visit_date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : '' }}</p>
-                            </div>
-                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full" :class="visit.status === 'completed' ? 'bg-emerald-50 text-emerald-600' : visit.status === 'cancelled' ? 'bg-gray-50 text-gray-500' : 'bg-amber-50 text-amber-600'">{{ isRtl ? ({ completed: 'مكتمل', waiting: 'انتظار', in_progress: 'جاري', cancelled: 'ملغي' }[visit.status] || visit.status) : visit.status }}</span>
-                        </div>
-                    </div>
-                </div>
-                <div v-else class="bg-white rounded-xl border border-gray-100 shadow-sm p-8 text-center">
-                    <div class="w-12 h-12 rounded-xl bg-green-50 flex items-center justify-center mx-auto mb-3">
-                        <svg class="w-6 h-6 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
-                    </div>
-                    <p class="text-sm text-gray-400">{{ isRtl ? 'لا توجد زيارات أطفال بعد' : 'No pediatric visits yet' }}</p>
-                </div>
-            </div>
+            <SpecialtyTabs
+                role="doctor"
+                :patient="patient"
+                :active-specialties="activeSpecialties"
+                :derma-data="dermaData"
+                :dental-data="dentalData"
+                :pediatric-data="pediatricData"
+                :visits="visits"
+                :invoices="invoices"
+                :prescriptions="prescriptions"
+                :financial-summary="financialSummary"
+            />
         </div>
     </div>
 </template>

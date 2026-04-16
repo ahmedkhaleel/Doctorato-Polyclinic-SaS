@@ -237,6 +237,67 @@ class Patient extends Model
         return $data;
     }
 
+    // ─── Specialty Detection Helpers ─────────────────
+
+    /**
+     * Check if patient has any dermatology records.
+     * Derma patients have visits with module = 'derma' or cosmetic/dermatology consultations.
+     */
+    public function hasDermaRecords(): bool
+    {
+        return $this->visits()->where('module', 'derma')->exists()
+            || $this->bookings()->whereIn('booking_type', ['dermatology_consultation', 'cosmetic_consultation', 'service'])->where('module', 'derma')->exists();
+    }
+
+    /**
+     * Check if patient has any dental records (visits, treatments, or charts).
+     */
+    public function hasDentalRecords(): bool
+    {
+        return $this->visits()->where('module', 'dental')->exists()
+            || $this->dentalTreatments()->exists()
+            || $this->dentalCharts()->exists();
+    }
+
+    /**
+     * Check if patient is pediatric (has guardian, is under 18, or has pediatric records).
+     */
+    public function hasPediatricRecords(): bool
+    {
+        // Guardian info → definitely pediatric
+        if (!empty($this->guardian_name)) {
+            return true;
+        }
+
+        // Under 18 → pediatric
+        if ($this->date_of_birth) {
+            try {
+                $age = \Carbon\Carbon::parse($this->date_of_birth)->age;
+                if ($age < 18) return true;
+            } catch (\Throwable) { /* ignore */ }
+        }
+
+        // Has pediatric visits or records
+        return $this->visits()->where('module', 'pediatric')->exists()
+            || $this->pediatricGrowthRecords()->exists()
+            || $this->pediatricVaccinations()->exists();
+    }
+
+    /**
+     * Return all active medical specialties for this patient (based on actual records).
+     * Used to determine which tabs to show in unified patient file.
+     *
+     * @return array<int, string>  e.g. ['derma', 'dental', 'pediatric']
+     */
+    public function getActiveSpecialties(): array
+    {
+        return array_values(array_filter([
+            $this->hasDermaRecords() ? 'derma' : null,
+            $this->hasDentalRecords() ? 'dental' : null,
+            $this->hasPediatricRecords() ? 'pediatric' : null,
+        ]));
+    }
+
     // ─── Dental Risk Helpers ─────────────────────────
 
     /**

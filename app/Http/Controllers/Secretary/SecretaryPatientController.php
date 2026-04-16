@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Secretary;
 use App\Models\Doctor;
 use App\Models\Patient;
 use App\Services\AuditLogger;
+use App\Traits\BuildsPatientSpecialtyData;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -14,6 +15,8 @@ use Inertia\Response;
 
 class SecretaryPatientController extends BaseSecretaryController
 {
+    use BuildsPatientSpecialtyData;
+
     public function index(Request $request): Response
     {
         // Validate filter inputs
@@ -92,15 +95,98 @@ class SecretaryPatientController extends BaseSecretaryController
     public function show(Patient $patient): Response
     {
         $patient->load([
-            'visits' => fn ($q) => $q->with(['doctor', 'service'])->latest('visit_date')->take(20),
+            'visits' => fn ($q) => $q->with(['doctor:id,name_ar,name_en', 'service:id,name_ar,name_en', 'photos'])->latest('visit_date')->take(20),
             'invoices' => fn ($q) => $q->latest()->take(10),
-            'prescriptions' => fn ($q) => $q->with(['doctor', 'items'])->latest()->take(10),
+            'prescriptions' => fn ($q) => $q->with(['doctor:id,name_ar,name_en', 'items'])->latest()->take(10),
             'packageBundleBookings' => fn ($q) => $q->with([
                 'packageBundle',
                 'bundleServices' => fn ($s) => $s->with(['service', 'doctor']),
                 'appointments' => fn ($a) => $a->with('doctor')->orderBy('appointment_date')->orderBy('start_time'),
             ])->latest()->take(10),
         ]);
+
+        // Unified specialty detection
+        $activeSpecialties = $patient->getActiveSpecialties();
+
+        // Derma data
+        $dermaData = $this->buildDermaData($patient);
+
+        // Dental data (only if module enabled) — read-only for secretary
+        $dentalData = null;
+        if (\App\Services\ModuleManager::isEnabled('dental')) {
+            $dentalData = [
+                'charts' => $patient->dentalCharts()->orderBy('tooth_number')->get(),
+                'treatments' => $patient->dentalTreatments()
+                    ->with(['doctor:id,name_ar,name_en', 'labOrder:id,dental_treatment_id,status,item_type'])
+                    ->latest()
+                    ->take(15)
+                    ->get(),
+                'plans' => $patient->dentalTreatmentPlans()
+                    ->with('doctor:id,name_ar,name_en')
+                    ->withCount('treatments')
+                    ->latest()
+                    ->take(10)
+                    ->get(),
+                'xrays' => $patient->dentalXrays()
+                    ->with('doctor:id,name_ar,name_en')
+                    ->latest('taken_date')
+                    ->take(8)
+                    ->get(),
+                'labOrders' => $patient->dentalLabOrders()
+                    ->with('doctor:id,name_ar,name_en')
+                    ->latest('order_date')
+                    ->take(10)
+                    ->get(),
+                'stats' => [
+                    'total_treatments' => $patient->dentalTreatments()->count(),
+                    'completed_treatments' => $patient->dentalTreatments()->where('status', 'completed')->count(),
+                    'active_plans' => $patient->dentalTreatmentPlans()->whereIn('status', ['approved', 'in_progress'])->count(),
+                    'pending_lab_orders' => $patient->dentalLabOrders()->whereIn('status', ['ordered', 'in_production'])->count(),
+                ],
+                'riskFlags' => $patient->getDentalRiskFlags(),
+                'medicalHistory' => $patient->getDentalMedicalHistory(false),
+                'canViewSensitive' => false,
+                'canUpdateSensitive' => false,
+            ];
+        }
+
+        // Pediatric data
+        $pediatricData = null;
+        $isPediatricPatient = $patient->guardian_name
+            || ($patient->date_of_birth && \Carbon\Carbon::parse($patient->date_of_birth)->age < 18)
+            || $patient->visits()->where('module', 'pediatric')->exists();
+
+        if (\App\Services\ModuleManager::isEnabled('pediatric') && $isPediatricPatient) {
+            $growthRecords = \App\Models\PediatricGrowthRecord::where('patient_id', $patient->id)
+                ->orderBy('measurement_date')
+                ->get();
+
+            $vaccinations = \App\Models\PediatricVaccination::where('patient_id', $patient->id)
+                ->orderBy('scheduled_date')
+                ->get();
+
+            $allergies = \App\Models\PediatricAllergy::where('patient_id', $patient->id)
+                ->where('is_active', true)
+                ->get();
+
+            $pediatricData = [
+                'is_pediatric' => true,
+                'growthRecords' => $growthRecords,
+                'vaccinations' => $vaccinations,
+                'allergies' => $allergies,
+                'stats' => [
+                    'total_visits' => $patient->visits()->where('module', 'pediatric')->count(),
+                    'growth_records' => $growthRecords->count(),
+                    'total_vaccinations' => $vaccinations->count(),
+                    'given_vaccinations' => $vaccinations->where('status', 'given')->count(),
+                    'scheduled_vaccinations' => $vaccinations->where('status', 'scheduled')->count(),
+                    'active_allergies' => $allergies->count(),
+                    'latest_weight' => $growthRecords->last()?->weight_kg,
+                    'latest_height' => $growthRecords->last()?->height_cm,
+                    'latest_bmi' => $growthRecords->last()?->bmi,
+                ],
+            ];
+        }
 
         $financialSummary = [
             'total_invoiced' => round((float) $patient->invoices()->sum('total'), 2),
@@ -116,6 +202,10 @@ class SecretaryPatientController extends BaseSecretaryController
         return Inertia::render('Secretary/Patients/Show', [
             'patient' => $patient,
             'financialSummary' => $financialSummary,
+            'activeSpecialties' => $activeSpecialties,
+            'dermaData' => $dermaData,
+            'dentalData' => $dentalData,
+            'pediatricData' => $pediatricData,
             'doctors' => Doctor::select('id', 'name_en', 'name_ar')->where('status', 'active')->orderBy('name_en')->get(),
         ]);
     }

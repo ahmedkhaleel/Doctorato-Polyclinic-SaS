@@ -9,6 +9,7 @@ use App\Models\Doctor;
 use App\Models\MedicalDataAccessLog;
 use App\Models\Patient;
 use App\Services\AuditLogger;
+use App\Traits\BuildsPatientSpecialtyData;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -18,6 +19,8 @@ use Inertia\Response;
 
 class PatientController extends Controller
 {
+    use BuildsPatientSpecialtyData;
+
     /**
      * JSON search for patients (used by AJAX pickers).
      */
@@ -158,6 +161,12 @@ class PatientController extends Controller
             'activeInsurance.plan:id,name_ar,name_en,class,coverage_percentage',
         ]);
 
+        // Unified specialty detection
+        $activeSpecialties = $patient->getActiveSpecialties();
+
+        // Derma data (built from visits with module=derma)
+        $dermaData = $this->buildDermaData($patient);
+
         // Dental data (only if module enabled)
         $dentalData = null;
         if (\App\Services\ModuleManager::isEnabled('dental')) {
@@ -228,6 +237,7 @@ class PatientController extends Controller
                 'vaccinations' => $vaccinations,
                 'allergies' => $allergies,
                 'stats' => [
+                    'total_visits' => $patient->visits()->where('module', 'pediatric')->count(),
                     'growth_records' => $growthRecords->count(),
                     'total_vaccinations' => $vaccinations->count(),
                     'given_vaccinations' => $vaccinations->where('status', 'given')->count(),
@@ -288,6 +298,8 @@ class PatientController extends Controller
         return Inertia::render('Admin/Patients/Show', [
             'patient' => $patient,
             'financialSummary' => $financialSummary,
+            'activeSpecialties' => $activeSpecialties,
+            'dermaData' => $dermaData,
             'dentalData' => $dentalData,
             'pediatricData' => $pediatricData,
             'latestVitals' => $latestVitals,
