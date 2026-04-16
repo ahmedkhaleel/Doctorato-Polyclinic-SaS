@@ -457,9 +457,13 @@ class DemoDataSeeder extends Seeder
     {
         $this->command->info('  → Seeding bookings with appointments...');
 
-        // Skip if demo bookings already exist (avoid duplicate appointment conflicts)
-        if (Booking::where('source', 'clinic')->whereIn('module', ['derma', 'dental', 'pediatric'])->count() >= 15) {
-            $this->command->info('    Demo bookings already exist — skipping.');
+        // Per-module idempotency: skip a module only if it already has >= 5 demo bookings
+        $dermaExists     = Booking::where('source', 'clinic')->where('module', 'derma')->count() >= 5;
+        $dentalExists    = Booking::where('source', 'clinic')->where('module', 'dental')->count() >= 5;
+        $pediatricExists = Booking::where('source', 'clinic')->where('module', 'pediatric')->count() >= 5;
+
+        if ($dermaExists && $dentalExists && $pediatricExists) {
+            $this->command->info('    Demo bookings already exist for all modules — skipping.');
             return;
         }
 
@@ -482,7 +486,7 @@ class DemoDataSeeder extends Seeder
         $baseDate = Carbon::today();
 
         // ── Derma bookings (patients 0-4) ───────────────────
-        for ($i = 0; $i < 5; $i++) {
+        for ($i = 0; $i < 5 && !$dermaExists; $i++) {
             $patient = $this->patientRecords[$i];
             $doctor  = $dermaDoctors[$i % 3];
             $status  = $statuses[$i];
@@ -545,7 +549,7 @@ class DemoDataSeeder extends Seeder
         }
 
         // ── Dental bookings (patients 5-9) ──────────────────
-        for ($i = 0; $i < 5; $i++) {
+        for ($i = 0; $i < 5 && !$dentalExists; $i++) {
             $patient = $this->patientRecords[$i + 5];
             $doctor  = $dentalDoctors[$i % 3];
             $status  = $statuses[$i];
@@ -605,7 +609,7 @@ class DemoDataSeeder extends Seeder
         }
 
         // ── Pediatric bookings (patients 10-14) ─────────────
-        for ($i = 0; $i < 5; $i++) {
+        for ($i = 0; $i < 5 && !$pediatricExists; $i++) {
             $patient = $this->patientRecords[$i + 10];
             $doctor  = $pediatricDoctors[$i % 3];
             $status  = $statuses[$i];
