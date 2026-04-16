@@ -300,11 +300,117 @@ class AdminPediatricController extends Controller
             'missed' => PediatricVaccination::where('status', 'missed')->count(),
         ];
 
+        $pediatricPatients = \App\Models\Patient::whereNotNull('date_of_birth')
+            ->where(function($q) {
+                $q->whereNotNull('guardian_name')
+                  ->orWhereHas('visits', fn($vq) => $vq->where('module', 'pediatric'));
+            })
+            ->orderBy('full_name')
+            ->get(['id', 'full_name', 'file_number', 'date_of_birth']);
+
         return Inertia::render('Admin/Pediatric/Vaccinations', [
             'vaccinations' => $vaccinations,
             'stats' => $stats,
             'filters' => ['search' => $search, 'status' => $status],
+            'pediatricPatients' => $pediatricPatients,
         ]);
+    }
+
+    /**
+     * Store or update a single vaccination record (admin).
+     */
+    public function storeVaccination(Request $request)
+    {
+        $validated = $request->validate([
+            'id' => 'nullable|integer|exists:pediatric_vaccinations,id',
+            'patient_id' => 'required|exists:patients,id',
+            'doctor_id' => 'nullable|exists:doctors,id',
+            'vaccine_name' => 'required|string|max:255',
+            'vaccine_name_ar' => 'nullable|string|max:255',
+            'dose_number' => 'required|string|max:100',
+            'scheduled_age' => 'nullable|string|max:100',
+            'scheduled_date' => 'required|date',
+            'given_date' => 'nullable|date|before_or_equal:today',
+            'batch_number' => 'nullable|string|max:100',
+            'manufacturer' => 'nullable|string|max:255',
+            'site_of_injection' => 'nullable|string|max:100',
+            'status' => 'required|in:scheduled,given,missed,postponed,contraindicated',
+            'side_effects' => 'nullable|string|max:500',
+            'notes' => 'nullable|string|max:500',
+        ]);
+
+        $data = $validated;
+        unset($data['id']);
+
+        if (!empty($validated['id'])) {
+            PediatricVaccination::where('id', $validated['id'])->update($data);
+            $msg = 'تم تحديث التطعيم بنجاح';
+        } else {
+            PediatricVaccination::create($data);
+            $msg = 'تم تسجيل التطعيم بنجاح';
+        }
+
+        return redirect()->back()->with('success', $msg);
+    }
+
+    /**
+     * Initialize WHO vaccination schedule for a patient (admin).
+     */
+    public function initializeVaccinations(Request $request, Patient $patient)
+    {
+        if (!$patient->date_of_birth) {
+            return redirect()->back()->with('error', 'تاريخ ميلاد المريض مطلوب');
+        }
+
+        $existing = PediatricVaccination::where('patient_id', $patient->id)->count();
+        if ($existing > 0) {
+            return redirect()->back()->with('error', 'جدول التطعيمات مُفعل بالفعل لهذا المريض');
+        }
+
+        $dob = \Carbon\Carbon::parse($patient->date_of_birth);
+        foreach (PediatricVaccination::VACCINE_SCHEDULE as $vaccine) {
+            PediatricVaccination::create([
+                'patient_id' => $patient->id,
+                'doctor_id' => null,
+                'vaccine_name' => $vaccine['vaccine'],
+                'vaccine_name_ar' => $vaccine['vaccine_ar'],
+                'dose_number' => $vaccine['dose'],
+                'scheduled_age' => $vaccine['age'],
+                'scheduled_date' => $dob->copy()->addMonths($vaccine['months']),
+                'status' => $dob->copy()->addMonths($vaccine['months'])->isPast() ? 'missed' : 'scheduled',
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'تم تفعيل جدول التطعيمات بنجاح');
+    }
+
+    /**
+     * Update vaccination status (admin).
+     */
+    public function updateVaccinationStatus(Request $request, PediatricVaccination $vaccination)
+    {
+        $validated = $request->validate([
+            'status' => 'required|in:scheduled,given,missed,postponed,contraindicated',
+            'given_date' => 'nullable|date|before_or_equal:today',
+            'batch_number' => 'nullable|string|max:100',
+            'manufacturer' => 'nullable|string|max:255',
+            'site_of_injection' => 'nullable|string|max:100',
+            'side_effects' => 'nullable|string|max:500',
+            'notes' => 'nullable|string|max:500',
+        ]);
+
+        $vaccination->update($validated);
+
+        return redirect()->back()->with('success', 'تم تحديث حالة التطعيم بنجاح');
+    }
+
+    /**
+     * Delete a vaccination record.
+     */
+    public function destroyVaccination(PediatricVaccination $vaccination)
+    {
+        $vaccination->delete();
+        return redirect()->back()->with('success', 'تم حذف التطعيم بنجاح');
     }
 
     /**

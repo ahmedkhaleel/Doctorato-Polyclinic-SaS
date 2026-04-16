@@ -1,6 +1,6 @@
 <script setup>
-import { ref, computed, watch } from 'vue';
-import { Link, usePage, router } from '@inertiajs/vue3';
+import { ref, computed, watch, reactive } from 'vue';
+import { Link, usePage, router, useForm } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 
 defineOptions({ layout: AdminLayout });
@@ -15,6 +15,7 @@ const props = defineProps({
     vaccinations: Object,
     stats: Object,
     filters: Object,
+    pediatricPatients: { type: Array, default: () => [] },
 });
 
 /* ── Filters ───────────────────────────────────────────── */
@@ -100,6 +101,117 @@ function formatDate(date) {
 
 /* ── Pagination ────────────────────────────────────────── */
 const paginationLinks = computed(() => props.vaccinations?.links || []);
+
+/* ── Modals & Forms ────────────────────────────────────── */
+const showNewModal = ref(false);
+const showInitModal = ref(false);
+const showStatusModal = ref(false);
+const editingVaccination = ref(null);
+
+const newForm = useForm({
+    id: null,
+    patient_id: '',
+    vaccine_name: '',
+    vaccine_name_ar: '',
+    dose_number: '',
+    scheduled_age: '',
+    scheduled_date: '',
+    given_date: '',
+    batch_number: '',
+    manufacturer: '',
+    site_of_injection: '',
+    status: 'scheduled',
+    side_effects: '',
+    notes: '',
+});
+
+const initForm = useForm({ patient_id: '' });
+
+const statusForm = useForm({
+    status: 'given',
+    given_date: new Date().toISOString().split('T')[0],
+    batch_number: '',
+    manufacturer: '',
+    site_of_injection: '',
+    side_effects: '',
+    notes: '',
+});
+
+function openNewModal() {
+    newForm.reset();
+    newForm.clearErrors();
+    newForm.status = 'scheduled';
+    newForm.scheduled_date = new Date().toISOString().split('T')[0];
+    editingVaccination.value = null;
+    showNewModal.value = true;
+}
+
+function openEditModal(v) {
+    newForm.id = v.id;
+    newForm.patient_id = v.patient_id;
+    newForm.vaccine_name = v.vaccine_name;
+    newForm.vaccine_name_ar = v.vaccine_name_ar;
+    newForm.dose_number = v.dose_number;
+    newForm.scheduled_age = v.scheduled_age;
+    newForm.scheduled_date = v.scheduled_date?.split('T')[0] || '';
+    newForm.given_date = v.given_date?.split('T')[0] || '';
+    newForm.batch_number = v.batch_number || '';
+    newForm.manufacturer = v.manufacturer || '';
+    newForm.site_of_injection = v.site_of_injection || '';
+    newForm.status = v.status;
+    newForm.side_effects = v.side_effects || '';
+    newForm.notes = v.notes || '';
+    editingVaccination.value = v;
+    showNewModal.value = true;
+}
+
+function submitNew() {
+    newForm.post('/admin/pediatric/vaccinations', {
+        preserveScroll: true,
+        onSuccess: () => {
+            showNewModal.value = false;
+            newForm.reset();
+        },
+    });
+}
+
+function openInitModal() {
+    initForm.reset();
+    showInitModal.value = true;
+}
+
+function submitInit() {
+    if (!initForm.patient_id) return;
+    initForm.post(`/admin/pediatric/patients/${initForm.patient_id}/vaccinations/initialize`, {
+        preserveScroll: true,
+        onSuccess: () => { showInitModal.value = false; },
+    });
+}
+
+function openStatusModal(v) {
+    editingVaccination.value = v;
+    statusForm.reset();
+    statusForm.status = v.status === 'scheduled' ? 'given' : v.status;
+    statusForm.given_date = new Date().toISOString().split('T')[0];
+    statusForm.batch_number = v.batch_number || '';
+    statusForm.manufacturer = v.manufacturer || '';
+    showStatusModal.value = true;
+}
+
+function submitStatus() {
+    if (!editingVaccination.value) return;
+    statusForm.post(`/admin/pediatric/vaccinations/${editingVaccination.value.id}/status`, {
+        preserveScroll: true,
+        onSuccess: () => { showStatusModal.value = false; editingVaccination.value = null; },
+    });
+}
+
+function deleteVaccination(v) {
+    if (!window.confirm(isRtl.value ? 'هل أنت متأكد من حذف هذا التطعيم؟' : 'Are you sure you want to delete this vaccination?')) return;
+    router.post(`/admin/pediatric/vaccinations/${v.id}/delete`, {}, {
+        preserveScroll: true,
+    });
+}
 </script>
 
 <template>
@@ -132,7 +244,21 @@ const paginationLinks = computed(() => props.vaccinations?.links || []);
                             </div>
                         </div>
                     </div>
-                    <div class="ped-hero-up" style="animation-delay: 0.15s">
+                    <div class="ped-hero-up flex flex-wrap items-center gap-2" style="animation-delay: 0.15s">
+                        <button
+                            @click="openNewModal"
+                            class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-emerald-700 bg-white hover:bg-green-50 shadow-lg transition-all duration-300"
+                        >
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+                            {{ isRtl ? 'تطعيم جديد' : 'New Vaccination' }}
+                        </button>
+                        <button
+                            @click="openInitModal"
+                            class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-white/15 hover:bg-white/25 ring-1 ring-white/30 shadow-lg transition-all duration-300 backdrop-blur-sm"
+                        >
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>
+                            {{ isRtl ? 'تفعيل الجدول' : 'Initialize Schedule' }}
+                        </button>
                         <Link
                             href="/admin/pediatric"
                             class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-white/15 hover:bg-white/25 ring-1 ring-white/30 hover:ring-white/50 shadow-lg transition-all duration-300 backdrop-blur-sm"
@@ -198,6 +324,7 @@ const paginationLinks = computed(() => props.vaccinations?.links || []);
                             <th class="text-start px-5 py-3.5 font-semibold text-gray-500 hidden lg:table-cell">{{ isRtl ? 'تاريخ التطعيم' : 'Given Date' }}</th>
                             <th class="text-center px-5 py-3.5 font-semibold text-gray-500">{{ isRtl ? 'الحالة' : 'Status' }}</th>
                             <th class="text-start px-5 py-3.5 font-semibold text-gray-500 hidden xl:table-cell">{{ isRtl ? 'رقم الدفعة' : 'Batch #' }}</th>
+                            <th class="text-center px-5 py-3.5 font-semibold text-gray-500">{{ isRtl ? 'إجراءات' : 'Actions' }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -229,9 +356,35 @@ const paginationLinks = computed(() => props.vaccinations?.links || []);
                                 </span>
                             </td>
                             <td class="px-5 py-3.5 text-gray-400 font-mono text-xs hidden xl:table-cell">{{ v.batch_number || '-' }}</td>
+                            <td class="px-5 py-3.5 text-center">
+                                <div class="inline-flex items-center gap-1">
+                                    <button
+                                        v-if="v.status === 'scheduled' || v.status === 'missed'"
+                                        @click="openStatusModal(v)"
+                                        :title="isRtl ? 'تسجيل التطعيم' : 'Record Given'"
+                                        class="p-1.5 rounded-lg text-emerald-600 hover:bg-emerald-50 transition"
+                                    >
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                                    </button>
+                                    <button
+                                        @click="openEditModal(v)"
+                                        :title="isRtl ? 'تعديل' : 'Edit'"
+                                        class="p-1.5 rounded-lg text-blue-600 hover:bg-blue-50 transition"
+                                    >
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                                    </button>
+                                    <button
+                                        @click="deleteVaccination(v)"
+                                        :title="isRtl ? 'حذف' : 'Delete'"
+                                        class="p-1.5 rounded-lg text-red-600 hover:bg-red-50 transition"
+                                    >
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                                    </button>
+                                </div>
+                            </td>
                         </tr>
                         <tr v-if="!vaccinations?.data?.length">
-                            <td colspan="7" class="px-5 py-12 text-center text-gray-400">
+                            <td colspan="8" class="px-5 py-12 text-center text-gray-400">
                                 <svg class="w-12 h-12 mx-auto text-gray-200 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082" /></svg>
                                 {{ isRtl ? 'لا توجد تطعيمات' : 'No vaccinations found' }}
                             </td>
@@ -258,6 +411,191 @@ const paginationLinks = computed(() => props.vaccinations?.links || []);
                         v-html="link.label"
                     />
                 </template>
+            </div>
+        </div>
+
+        <!-- Modal: New/Edit Vaccination -->
+        <div v-if="showNewModal" class="fixed inset-0 z-50 flex items-center justify-center p-4" @click.self="showNewModal = false">
+            <div class="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
+            <div class="relative bg-white rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+                <div class="sticky top-0 bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between">
+                    <h3 class="text-lg font-bold text-gray-800">
+                        {{ editingVaccination ? (isRtl ? 'تعديل تطعيم' : 'Edit Vaccination') : (isRtl ? 'تطعيم جديد' : 'New Vaccination') }}
+                    </h3>
+                    <button @click="showNewModal = false" class="text-gray-400 hover:text-gray-600">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                    </button>
+                </div>
+                <form @submit.prevent="submitNew" class="p-6 space-y-4">
+                    <!-- Patient -->
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-500 mb-1">{{ isRtl ? 'المريض' : 'Patient' }} *</label>
+                        <select v-model="newForm.patient_id" required class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-green-300 focus:border-green-500">
+                            <option value="">{{ isRtl ? 'اختر المريض' : 'Select patient' }}</option>
+                            <option v-for="p in pediatricPatients" :key="p.id" :value="p.id">{{ p.full_name }} {{ p.file_number ? `(${p.file_number})` : '' }}</option>
+                        </select>
+                        <p v-if="newForm.errors.patient_id" class="text-xs text-red-500 mt-1">{{ newForm.errors.patient_id }}</p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-500 mb-1">{{ isRtl ? 'اسم اللقاح (إنجليزي)' : 'Vaccine Name (EN)' }} *</label>
+                            <input v-model="newForm.vaccine_name" required class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-green-300" />
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-500 mb-1">{{ isRtl ? 'اسم اللقاح (عربي)' : 'Vaccine Name (AR)' }}</label>
+                            <input v-model="newForm.vaccine_name_ar" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-green-300" />
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-500 mb-1">{{ isRtl ? 'رقم الجرعة' : 'Dose Number' }} *</label>
+                            <input v-model="newForm.dose_number" required placeholder="Dose 1" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-green-300" />
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-500 mb-1">{{ isRtl ? 'العمر المجدول' : 'Scheduled Age' }}</label>
+                            <input v-model="newForm.scheduled_age" placeholder="2 months" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-green-300" />
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-500 mb-1">{{ isRtl ? 'تاريخ الجدولة' : 'Scheduled Date' }} *</label>
+                            <input v-model="newForm.scheduled_date" type="date" required class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-green-300" />
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-500 mb-1">{{ isRtl ? 'تاريخ التطعيم' : 'Given Date' }}</label>
+                            <input v-model="newForm.given_date" type="date" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-green-300" />
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-500 mb-1">{{ isRtl ? 'الحالة' : 'Status' }} *</label>
+                        <select v-model="newForm.status" required class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-green-300">
+                            <option value="scheduled">{{ isRtl ? 'مجدول' : 'Scheduled' }}</option>
+                            <option value="given">{{ isRtl ? 'تم التطعيم' : 'Given' }}</option>
+                            <option value="missed">{{ isRtl ? 'فائت' : 'Missed' }}</option>
+                            <option value="postponed">{{ isRtl ? 'مؤجل' : 'Postponed' }}</option>
+                            <option value="contraindicated">{{ isRtl ? 'موانع طبية' : 'Contraindicated' }}</option>
+                        </select>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-500 mb-1">{{ isRtl ? 'رقم الدفعة' : 'Batch #' }}</label>
+                            <input v-model="newForm.batch_number" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-green-300" />
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-500 mb-1">{{ isRtl ? 'الشركة المصنعة' : 'Manufacturer' }}</label>
+                            <input v-model="newForm.manufacturer" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-green-300" />
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-500 mb-1">{{ isRtl ? 'موقع الحقن' : 'Injection Site' }}</label>
+                        <input v-model="newForm.site_of_injection" placeholder="Left arm" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-green-300" />
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-500 mb-1">{{ isRtl ? 'الآثار الجانبية' : 'Side Effects' }}</label>
+                        <textarea v-model="newForm.side_effects" rows="2" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-green-300"></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-500 mb-1">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
+                        <textarea v-model="newForm.notes" rows="2" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-green-300"></textarea>
+                    </div>
+
+                    <div class="flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
+                        <button type="button" @click="showNewModal = false" class="px-4 py-2 rounded-xl text-sm font-semibold text-gray-600 hover:bg-gray-100 transition">
+                            {{ isRtl ? 'إلغاء' : 'Cancel' }}
+                        </button>
+                        <button type="submit" :disabled="newForm.processing" class="px-5 py-2 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 shadow-sm transition disabled:opacity-50">
+                            {{ newForm.processing ? (isRtl ? 'جاري الحفظ...' : 'Saving...') : (isRtl ? 'حفظ' : 'Save') }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal: Initialize Schedule -->
+        <div v-if="showInitModal" class="fixed inset-0 z-50 flex items-center justify-center p-4" @click.self="showInitModal = false">
+            <div class="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
+            <div class="relative bg-white rounded-3xl shadow-2xl w-full max-w-md">
+                <div class="px-6 py-5 border-b border-gray-100">
+                    <h3 class="text-lg font-bold text-gray-800">{{ isRtl ? 'تفعيل جدول التطعيمات' : 'Initialize Vaccination Schedule' }}</h3>
+                    <p class="text-xs text-gray-500 mt-1">{{ isRtl ? 'سيتم إنشاء جدول التطعيمات الكامل وفق منظمة الصحة العالمية' : 'Creates the full WHO vaccination schedule for the patient' }}</p>
+                </div>
+                <form @submit.prevent="submitInit" class="p-6 space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-500 mb-1">{{ isRtl ? 'المريض' : 'Patient' }} *</label>
+                        <select v-model="initForm.patient_id" required class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-green-300 focus:border-green-500">
+                            <option value="">{{ isRtl ? 'اختر المريض' : 'Select patient' }}</option>
+                            <option v-for="p in pediatricPatients" :key="p.id" :value="p.id">{{ p.full_name }} {{ p.file_number ? `(${p.file_number})` : '' }}</option>
+                        </select>
+                    </div>
+                    <div class="flex items-center justify-end gap-3 pt-3">
+                        <button type="button" @click="showInitModal = false" class="px-4 py-2 rounded-xl text-sm font-semibold text-gray-600 hover:bg-gray-100">
+                            {{ isRtl ? 'إلغاء' : 'Cancel' }}
+                        </button>
+                        <button type="submit" :disabled="initForm.processing" class="px-5 py-2 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-emerald-500 to-green-600 shadow-sm disabled:opacity-50">
+                            {{ initForm.processing ? '...' : (isRtl ? 'تفعيل' : 'Initialize') }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal: Quick Status Update -->
+        <div v-if="showStatusModal" class="fixed inset-0 z-50 flex items-center justify-center p-4" @click.self="showStatusModal = false">
+            <div class="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
+            <div class="relative bg-white rounded-3xl shadow-2xl w-full max-w-md">
+                <div class="px-6 py-5 border-b border-gray-100">
+                    <h3 class="text-lg font-bold text-gray-800">{{ isRtl ? 'تسجيل التطعيم' : 'Record Vaccination' }}</h3>
+                    <p v-if="editingVaccination" class="text-xs text-gray-500 mt-1">{{ editingVaccination.vaccine_name }} - {{ editingVaccination.patient?.full_name }}</p>
+                </div>
+                <form @submit.prevent="submitStatus" class="p-6 space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-500 mb-1">{{ isRtl ? 'الحالة' : 'Status' }} *</label>
+                        <select v-model="statusForm.status" required class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm">
+                            <option value="given">{{ isRtl ? 'تم التطعيم' : 'Given' }}</option>
+                            <option value="missed">{{ isRtl ? 'فائت' : 'Missed' }}</option>
+                            <option value="postponed">{{ isRtl ? 'مؤجل' : 'Postponed' }}</option>
+                            <option value="contraindicated">{{ isRtl ? 'موانع طبية' : 'Contraindicated' }}</option>
+                        </select>
+                    </div>
+                    <div v-if="statusForm.status === 'given'">
+                        <label class="block text-xs font-semibold text-gray-500 mb-1">{{ isRtl ? 'تاريخ التطعيم' : 'Given Date' }} *</label>
+                        <input v-model="statusForm.given_date" type="date" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm" />
+                    </div>
+                    <div v-if="statusForm.status === 'given'" class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-500 mb-1">{{ isRtl ? 'رقم الدفعة' : 'Batch #' }}</label>
+                            <input v-model="statusForm.batch_number" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm" />
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-500 mb-1">{{ isRtl ? 'الشركة' : 'Manufacturer' }}</label>
+                            <input v-model="statusForm.manufacturer" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm" />
+                        </div>
+                    </div>
+                    <div v-if="statusForm.status === 'given'">
+                        <label class="block text-xs font-semibold text-gray-500 mb-1">{{ isRtl ? 'موقع الحقن' : 'Injection Site' }}</label>
+                        <input v-model="statusForm.site_of_injection" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm" />
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-500 mb-1">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
+                        <textarea v-model="statusForm.notes" rows="2" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm"></textarea>
+                    </div>
+                    <div class="flex items-center justify-end gap-3 pt-3 border-t border-gray-100">
+                        <button type="button" @click="showStatusModal = false" class="px-4 py-2 rounded-xl text-sm font-semibold text-gray-600 hover:bg-gray-100">
+                            {{ isRtl ? 'إلغاء' : 'Cancel' }}
+                        </button>
+                        <button type="submit" :disabled="statusForm.processing" class="px-5 py-2 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-emerald-500 to-green-600 shadow-sm disabled:opacity-50">
+                            {{ statusForm.processing ? '...' : (isRtl ? 'حفظ' : 'Save') }}
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
