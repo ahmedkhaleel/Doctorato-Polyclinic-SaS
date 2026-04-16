@@ -184,7 +184,7 @@ onUnmounted(() => {
 
                             <!-- Discount badge -->
                             <div class="absolute top-3 z-10" :class="isRtl ? 'right-3' : 'left-3'">
-                                <div class="bg-white text-[#C4A265] text-sm font-black px-3 py-1 rounded-full shadow-lg promoBadgePulse flex items-center gap-1">
+                                <div class="bg-[#C4A265] text-white text-sm font-black px-3 py-1 rounded-full shadow-lg promoBadgePulse flex items-center gap-1">
                                     <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 2a2 2 0 00-2 2v14l3.5-2 3.5 2 3.5-2 3.5 2V4a2 2 0 00-2-2H5zm2.5 3a1.5 1.5 0 100 3 1.5 1.5 0 000-3zm6.207.293a1 1 0 00-1.414 0l-6 6a1 1 0 101.414 1.414l6-6a1 1 0 000-1.414zM12.5 10a1.5 1.5 0 100 3 1.5 1.5 0 000-3z" clip-rule="evenodd" /></svg>
                                     {{ discountLabel }}
                                 </div>
@@ -193,7 +193,7 @@ onUnmounted(() => {
                             <!-- Center icon -->
                             <div class="absolute inset-0 flex items-center justify-center">
                                 <div class="promoIconBounce">
-                                    <div class="w-20 h-20 rounded-[20px] bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30">
+                                    <div class="w-20 h-20 rounded-[20px] bg-gradient-to-br from-[#C4A265] to-[#A68B52] flex items-center justify-center shadow-xl shadow-black/30 border-2 border-[#C4A265]/60">
                                         <svg class="w-10 h-10 text-white drop-shadow-lg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
                                         </svg>
@@ -210,17 +210,17 @@ onUnmounted(() => {
 
                         <!-- Promo code coupon -->
                         <div class="mx-5 my-3">
-                            <div class="relative flex items-center bg-gradient-to-r from-[#FBF7EE] to-[#F5EDD8] rounded-2xl overflow-hidden border border-[#C4A265]/20">
+                            <div class="relative flex items-center bg-gradient-to-r from-[#0f1d3a] to-[#1a2d5a] rounded-2xl overflow-hidden border border-[#C4A265]/30">
                                 <!-- Coupon notches -->
                                 <div class="absolute -left-2.5 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-white"></div>
                                 <div class="absolute -right-2.5 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-white"></div>
 
                                 <!-- Code section -->
-                                <div class="flex-1 py-3.5 px-6 text-center border-e border-dashed border-[#C4A265]/30">
-                                    <p class="text-[9px] font-bold uppercase tracking-[0.2em] text-[#C4A265]/60 mb-1">
+                                <div class="flex-1 py-3.5 px-6 text-center border-e border-dashed border-[#C4A265]/40">
+                                    <p class="text-[9px] font-bold uppercase tracking-[0.2em] text-[#C4A265] mb-1">
                                         {{ locale === 'ar' ? 'كود الخصم' : 'PROMO CODE' }}
                                     </p>
-                                    <span class="text-xl font-mono font-black tracking-[0.15em] text-gray-800 promoCodeReveal">
+                                    <span class="text-xl font-mono font-black tracking-[0.15em] text-white promoCodeReveal">
                                         {{ promo.code }}
                                     </span>
                                 </div>
@@ -228,8 +228,8 @@ onUnmounted(() => {
                                 <!-- Copy button -->
                                 <button
                                     @click="copyCode"
-                                    class="px-4 py-3.5 flex flex-col items-center gap-1 transition-all duration-300 hover:bg-[#C4A265]/10"
-                                    :class="copied ? 'text-emerald-600' : 'text-[#C4A265]'"
+                                    class="px-4 py-3.5 flex flex-col items-center gap-1 transition-all duration-300 hover:bg-white/10"
+                                    :class="copied ? 'text-emerald-400' : 'text-[#C4A265]'"
                                 >
                                     <svg v-if="!copied" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
@@ -293,14 +293,14 @@ onUnmounted(() => {
 <style>
 /* ── Header gradient ─────────────────── */
 .promo-header-bg {
-    background: linear-gradient(135deg, #C4A265 0%, #D4B87A 30%, #A68B52 70%, #8B7340 100%);
+    background: linear-gradient(135deg, #0a1528 0%, #0f1d3a 30%, #1a2d5a 70%, #0f1d3a 100%);
 }
 
 /* ── Floating particles ──────────────── */
 .promo-particle {
     position: absolute;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.15);
+    background: radial-gradient(circle, rgba(196, 162, 101, 0.3), rgba(196, 162, 101, 0.08));
     animation: promoFloat 6s ease-in-out infinite;
 }
 .promo-particle-1 { width: 80px; height: 80px; top: -20px; right: -10px; animation-delay: 0s; }
@@ -308,8 +308,8 @@ onUnmounted(() => {
 .promo-particle-3 { width: 30px; height: 30px; top: 30px; left: 40%; animation-delay: 3s; }
 .promo-particle-4 { width: 60px; height: 60px; bottom: 10px; right: 20%; animation-delay: 4.5s; }
 @keyframes promoFloat {
-    0%, 100% { transform: translateY(0) scale(1); opacity: 0.15; }
-    50% { transform: translateY(-12px) scale(1.1); opacity: 0.25; }
+    0%, 100% { transform: translateY(0) scale(1); opacity: 0.3; }
+    50% { transform: translateY(-12px) scale(1.1); opacity: 0.55; }
 }
 
 /* ── Card entrance ───────────────────── */
@@ -390,11 +390,14 @@ onUnmounted(() => {
 
 /* ── Book Now button ─────────────────── */
 .promo-book-btn {
-    background: linear-gradient(135deg, #C4A265 0%, #A68B52 100%);
-    box-shadow: 0 8px 24px -4px rgba(196, 162, 101, 0.4);
+    background: linear-gradient(135deg, #0f1d3a 0%, #1a2d5a 100%);
+    box-shadow: 0 8px 24px -4px rgba(15, 29, 58, 0.5);
+    border: 1px solid rgba(196, 162, 101, 0.3);
 }
 .promo-book-btn:hover {
-    box-shadow: 0 12px 32px -4px rgba(196, 162, 101, 0.5);
+    background: linear-gradient(135deg, #1a2d5a 0%, #0f1d3a 100%);
+    box-shadow: 0 12px 32px -4px rgba(15, 29, 58, 0.6);
+    border-color: rgba(196, 162, 101, 0.5);
 }
 
 /* ── Transition duration ─────────────── */
