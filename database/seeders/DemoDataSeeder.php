@@ -5,13 +5,26 @@ namespace Database\Seeders;
 use App\Models\Booking;
 use App\Models\BookingAppointment;
 use App\Models\BookingService;
+use App\Models\DentalChart;
+use App\Models\DentalTreatment;
+use App\Models\DentalXray;
 use App\Models\Doctor;
 use App\Models\DoctorSchedule;
+use App\Models\Invoice;
+use App\Models\InvoiceItem;
 use App\Models\Patient;
+use App\Models\Payment;
+use App\Models\PaymentMethod;
+use App\Models\PediatricAllergy;
+use App\Models\PediatricGrowthRecord;
+use App\Models\PediatricVaccination;
+use App\Models\Prescription;
+use App\Models\PrescriptionItem;
 use App\Models\Role;
 use App\Models\Service;
 use App\Models\ServiceCategory;
 use App\Models\User;
+use App\Models\Visit;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -22,6 +35,7 @@ class DemoDataSeeder extends Seeder
     private array $doctorRecords = [];
     private array $serviceRecords = [];
     private array $patientRecords = [];
+    private array $visitRecords = [];
 
     public function run(): void
     {
@@ -31,6 +45,11 @@ class DemoDataSeeder extends Seeder
         $this->seedServices();
         $this->seedPatients();
         $this->seedBookings();
+        $this->seedVisits();
+        $this->seedInvoicesAndPayments();
+        $this->seedPrescriptions();
+        $this->seedDentalRecords();
+        $this->seedPediatricRecords();
 
         $this->command->info('Demo data seeding complete!');
     }
@@ -646,5 +665,736 @@ class DemoDataSeeder extends Seeder
         }
 
         $this->command->info("    Created {$bookingCount} bookings with appointments.");
+    }
+
+    // =========================================================================
+    //  VISITS — Created for completed/in_progress bookings
+    // =========================================================================
+
+    private function seedVisits(): void
+    {
+        $this->command->info('  → Seeding visits...');
+
+        try {
+            $bookings = Booking::with(['bookingServices', 'appointments', 'patient'])
+                ->where('source', 'clinic')
+                ->whereIn('module', ['derma', 'dental', 'pediatric'])
+                ->whereIn('status', ['in_progress', 'completed'])
+                ->get();
+
+            if ($bookings->isEmpty()) {
+                $this->command->warn('    No eligible bookings for visits.');
+                return;
+            }
+
+            $diagnosesByModule = [
+                'derma' => [
+                    ['dx' => 'التهاب جلدي تماسي', 'notes' => 'تم وصف كريم مرطب ومضاد التهاب، ومتابعة بعد أسبوع.'],
+                    ['dx' => 'حب شباب', 'notes' => 'خطة علاج موضعي مع متابعة شهرية لتقييم الاستجابة.'],
+                    ['dx' => 'الثعلبة', 'notes' => 'تم وصف محلول موضعي ومكمل غذائي مع جلسات متابعة.'],
+                    ['dx' => 'صدفية', 'notes' => 'كريم كورتيزون خفيف مع مرطب يومي وتجنب المحفزات.'],
+                ],
+                'dental' => [
+                    ['dx' => 'تسوس في الضرس العلوي الأيمن', 'notes' => 'تم تنظيف التسوس وحشوه بحشوة مركبة.'],
+                    ['dx' => 'التهاب اللثة', 'notes' => 'تم إجراء تنظيف عميق ووصف غسول فم.'],
+                    ['dx' => 'التهاب لب السن', 'notes' => 'يحتاج لعلاج عصب كامل بجلسات متعددة.'],
+                ],
+                'pediatric' => [
+                    ['dx' => 'نزلة برد', 'notes' => 'أعراض بسيطة، تم وصف علاج عرضي مع راحة ورضاعة جيدة.'],
+                    ['dx' => 'فحص نمو روتيني', 'notes' => 'النمو ضمن المعدل الطبيعي، متابعة بعد شهرين.'],
+                    ['dx' => 'تطعيمات دورية', 'notes' => 'تم إعطاء التطعيمات حسب الجدول المعتمد.'],
+                    ['dx' => 'حساسية طعام', 'notes' => 'توصية بتجنب الطعام المسبب وكتابة مضاد هستامين عند الحاجة.'],
+                ],
+            ];
+
+            $count = 0;
+            foreach ($bookings as $booking) {
+                if (Visit::where('booking_id', $booking->id)->exists()) {
+                    // Already seeded — reuse for downstream methods
+                    foreach (Visit::where('booking_id', $booking->id)->get() as $v) {
+                        $this->visitRecords[] = $v;
+                    }
+                    continue;
+                }
+
+                $module   = $booking->module;
+                $patient  = $booking->patient;
+                $services = $booking->bookingServices;
+
+                foreach ($booking->appointments as $appointment) {
+                    $bookingService = $services->firstWhere('id', $appointment->booking_service_id) ?? $services->first();
+                    $doctorId = $appointment->doctor_id ?? ($bookingService->doctor_id ?? null);
+
+                    $visitType = ($bookingService && $bookingService->service_id) ? 'session' : 'consultation';
+                    $visitStatus = $booking->status === 'completed' ? 'completed' : 'in_progress';
+
+                    $dxData = $diagnosesByModule[$module][array_rand($diagnosesByModule[$module])];
+
+                    $apptDate = Carbon::parse($appointment->appointment_date);
+                    $startedAt = $apptDate->copy()->setTimeFromTimeString(
+                        substr($appointment->start_time, 0, 8) ?: '10:00:00'
+                    );
+                    $completedAt = $visitStatus === 'completed' ? $startedAt->copy()->addMinutes(30) : null;
+
+                    $visit = Visit::create([
+                        'patient_id'             => $patient->id,
+                        'doctor_id'              => $doctorId,
+                        'booking_id'             => $booking->id,
+                        'booking_appointment_id' => $appointment->id,
+                        'module'                 => $module,
+                        'visit_type'             => $visitType,
+                        'service_id'             => $bookingService->service_id ?? null,
+                        'session_number'         => $appointment->session_number,
+                        'status'                 => $visitStatus,
+                        'visit_date'             => $apptDate->toDateString(),
+                        'scheduled_time'         => $appointment->start_time,
+                        'started_at'             => $startedAt,
+                        'completed_at'           => $completedAt,
+                        'diagnosis'              => $dxData['dx'],
+                        'doctor_notes'           => $dxData['notes'],
+                    ]);
+
+                    $appointment->update(['visit_id' => $visit->id]);
+
+                    $this->visitRecords[] = $visit;
+                    $count++;
+                }
+            }
+
+            $this->command->info("    Created {$count} visit records.");
+        } catch (\Throwable $e) {
+            $this->command->error('    Failed to seed visits: ' . $e->getMessage());
+        }
+    }
+
+    // =========================================================================
+    //  INVOICES & PAYMENTS — For each completed visit
+    // =========================================================================
+
+    private function seedInvoicesAndPayments(): void
+    {
+        $this->command->info('  → Seeding invoices and payments...');
+
+        if (empty($this->visitRecords)) {
+            // Load existing visits as fallback
+            $this->visitRecords = Visit::whereNotNull('booking_id')->get()->all();
+        }
+
+        if (empty($this->visitRecords)) {
+            $this->command->warn('    No visits available — skipping.');
+            return;
+        }
+
+        try {
+            $adminUser = User::where('email', 'admin@aura-clinic.net')->first()
+                ?? User::where('email', 'admin@aura.com')->first()
+                ?? User::whereHas('role', fn ($q) => $q->where('name', 'admin'))->first();
+            $adminId = $adminUser?->id;
+
+            $paymentMethods = PaymentMethod::active()->get();
+            if ($paymentMethods->isEmpty()) {
+                $this->command->warn('    No active payment methods — skipping payments.');
+                return;
+            }
+
+            $invoiceCount = 0;
+            $paymentCount = 0;
+            $seq = 0;
+
+            foreach ($this->visitRecords as $visit) {
+                if ($visit->status !== 'completed') continue;
+
+                if (Invoice::where('visit_id', $visit->id)->exists()) continue;
+
+                $seq++;
+                $booking = $visit->booking;
+                if (! $booking) continue;
+
+                $bookingServices = $booking->bookingServices;
+                $subtotal = (float) $bookingServices->sum('total_price');
+                if ($subtotal <= 0) {
+                    $subtotal = 200.00; // default fallback
+                }
+
+                $invoiceNumber = method_exists(Invoice::class, 'generateInvoiceNumber')
+                    ? Invoice::generateInvoiceNumber()
+                    : 'INV-' . date('Ym') . '-' . str_pad((string) $seq, 4, '0', STR_PAD_LEFT);
+
+                $invoiceDate = $visit->visit_date ? Carbon::parse($visit->visit_date) : Carbon::today();
+
+                $invoice = Invoice::create([
+                    'invoice_number'  => $invoiceNumber,
+                    'invoice_date'    => $invoiceDate,
+                    'patient_id'      => $visit->patient_id,
+                    'visit_id'        => $visit->id,
+                    'booking_id'      => $booking->id,
+                    'module'          => $visit->module,
+                    'subtotal'        => $subtotal,
+                    'discount_amount' => 0,
+                    'tax_amount'      => 0,
+                    'total'           => $subtotal,
+                    'created_by'      => $adminId,
+                    'notes'           => 'فاتورة تلقائية من الزيارة',
+                ]);
+
+                // Create invoice items — one per booking service
+                foreach ($bookingServices as $bs) {
+                    $descAr = $bs->service->name_ar ?? ($booking->booking_type === 'dermatology_consultation' ? 'كشف جلدية' :
+                              ($booking->booking_type === 'dental_consultation' ? 'كشف أسنان' :
+                              ($booking->booking_type === 'pediatric_consultation' ? 'كشف أطفال' : 'خدمة طبية')));
+                    $descEn = $bs->service->name_en ?? ($booking->booking_type ?? 'Medical Service');
+
+                    InvoiceItem::create([
+                        'invoice_id'     => $invoice->id,
+                        'description_ar' => $descAr,
+                        'description_en' => $descEn,
+                        'quantity'       => 1,
+                        'unit_price'     => (float) $bs->unit_price,
+                        'discount'       => 0,
+                        'total'          => (float) $bs->total_price,
+                    ]);
+                }
+
+                $invoiceCount++;
+
+                // Create 1-2 payments (full or partial)
+                $isFullPayment = (bool) random_int(0, 1);
+                $method = $paymentMethods->random();
+
+                if ($isFullPayment) {
+                    Payment::create([
+                        'invoice_id'        => $invoice->id,
+                        'patient_id'        => $visit->patient_id,
+                        'payment_method_id' => $method->id,
+                        'amount'            => $subtotal,
+                        'payment_date'      => $invoiceDate,
+                        'reference_number'  => 'PAY-' . strtoupper(Str::random(6)),
+                        'received_by'       => $adminId,
+                    ]);
+                    $paymentCount++;
+                } else {
+                    // Partial: 60-80% first, then remainder
+                    $firstPct   = random_int(60, 80) / 100;
+                    $firstAmount = round($subtotal * $firstPct, 2);
+                    $remaining  = round($subtotal - $firstAmount, 2);
+
+                    Payment::create([
+                        'invoice_id'        => $invoice->id,
+                        'patient_id'        => $visit->patient_id,
+                        'payment_method_id' => $method->id,
+                        'amount'            => $firstAmount,
+                        'payment_date'      => $invoiceDate,
+                        'reference_number'  => 'PAY-' . strtoupper(Str::random(6)),
+                        'received_by'       => $adminId,
+                    ]);
+                    $paymentCount++;
+
+                    if ($remaining > 0) {
+                        Payment::create([
+                            'invoice_id'        => $invoice->id,
+                            'patient_id'        => $visit->patient_id,
+                            'payment_method_id' => $paymentMethods->random()->id,
+                            'amount'            => $remaining,
+                            'payment_date'      => $invoiceDate->copy()->addDays(random_int(2, 5)),
+                            'reference_number'  => 'PAY-' . strtoupper(Str::random(6)),
+                            'received_by'       => $adminId,
+                        ]);
+                        $paymentCount++;
+                    }
+                }
+
+                // Recalculate status
+                if (method_exists($invoice, 'recalculateStatus')) {
+                    $invoice->recalculateStatus();
+                } else {
+                    $totalPaid = $invoice->payments()->sum('amount');
+                    $invoice->paid_amount = $totalPaid;
+                    $invoice->status = $totalPaid >= $invoice->total ? 'paid' : 'partial';
+                    $invoice->save();
+                }
+            }
+
+            $this->command->info("    Created {$invoiceCount} invoices and {$paymentCount} payments.");
+        } catch (\Throwable $e) {
+            $this->command->error('    Failed to seed invoices/payments: ' . $e->getMessage());
+        }
+    }
+
+    // =========================================================================
+    //  PRESCRIPTIONS — For each completed visit
+    // =========================================================================
+
+    private function seedPrescriptions(): void
+    {
+        $this->command->info('  → Seeding prescriptions...');
+
+        if (empty($this->visitRecords)) {
+            $this->visitRecords = Visit::whereNotNull('booking_id')->get()->all();
+        }
+
+        if (empty($this->visitRecords)) {
+            $this->command->warn('    No visits — skipping.');
+            return;
+        }
+
+        try {
+            $medsByModule = [
+                'derma' => [
+                    ['name' => 'Cetaphil Moisturizer', 'dosage' => '1 application', 'frequency' => 'مرتين يومياً', 'duration' => '14 يوم', 'notes' => 'استخدام موضعي على المناطق المتأثرة'],
+                    ['name' => 'Isotretinoin 20mg',    'dosage' => '1 tab',          'frequency' => 'مرة يومياً',   'duration' => 'شهر واحد', 'notes' => 'يؤخذ مع الطعام'],
+                    ['name' => 'Clindamycin Gel 1%',   'dosage' => '1 application', 'frequency' => 'مرتين يومياً', 'duration' => '10 أيام',  'notes' => 'استخدام موضعي على الوجه'],
+                    ['name' => 'Adapalene 0.1%',       'dosage' => '1 application', 'frequency' => 'ليلاً',        'duration' => 'أسبوعين',  'notes' => 'تجنب التعرض للشمس'],
+                    ['name' => 'Doxycycline 100mg',    'dosage' => '1 cap',         'frequency' => 'مرتين يومياً', 'duration' => '7 أيام',   'notes' => 'يؤخذ بعد الطعام'],
+                ],
+                'dental' => [
+                    ['name' => 'Amoxicillin 500mg',        'dosage' => '1 cap',       'frequency' => '3 مرات يومياً', 'duration' => '7 أيام',  'notes' => 'لمكافحة الالتهاب البكتيري'],
+                    ['name' => 'Ibuprofen 400mg',           'dosage' => '1 tab',       'frequency' => 'عند الحاجة',   'duration' => '5 أيام',  'notes' => 'لتسكين الألم'],
+                    ['name' => 'Chlorhexidine Mouthwash',   'dosage' => '10ml',        'frequency' => 'مرتين يومياً', 'duration' => '10 أيام', 'notes' => 'مضمضة لمدة 30 ثانية'],
+                    ['name' => 'Paracetamol 500mg',         'dosage' => '1 tab',       'frequency' => 'عند الحاجة',   'duration' => '3 أيام',  'notes' => 'لا يتجاوز 4 أقراص يومياً'],
+                    ['name' => 'Sensodyne Toothpaste',      'dosage' => 'قدر حبة بازلاء', 'frequency' => 'مرتين يومياً', 'duration' => 'أسبوعين', 'notes' => 'لتقليل حساسية الأسنان'],
+                ],
+                'pediatric' => [
+                    ['name' => 'Paracetamol Syrup 120mg/5ml', 'dosage' => '5ml',     'frequency' => 'عند الحاجة',    'duration' => '3 أيام',  'notes' => 'كل 6 ساعات عند الحرارة'],
+                    ['name' => 'Vitamin D Drops',              'dosage' => '3 drops', 'frequency' => 'مرة يومياً',    'duration' => '30 يوم',  'notes' => 'يُعطى صباحاً'],
+                    ['name' => 'Iron Syrup',                   'dosage' => '5ml',     'frequency' => 'مرة يومياً',    'duration' => 'شهر',     'notes' => 'بين الوجبات مع عصير طبيعي'],
+                    ['name' => 'Amoxicillin Syrup 250mg/5ml',  'dosage' => '5ml',     'frequency' => '3 مرات يومياً', 'duration' => '7 أيام',  'notes' => 'رج جيداً قبل الاستخدام'],
+                    ['name' => 'Cetirizine Drops',             'dosage' => '5 drops', 'frequency' => 'مرة يومياً',    'duration' => '5 أيام',  'notes' => 'للحساسية'],
+                ],
+            ];
+
+            $prescriptionCount = 0;
+            $itemCount = 0;
+
+            foreach ($this->visitRecords as $visit) {
+                if ($visit->status !== 'completed') continue;
+
+                if (Prescription::where('visit_id', $visit->id)->exists()) continue;
+
+                $module = $visit->module ?? 'derma';
+                $meds   = $medsByModule[$module] ?? $medsByModule['derma'];
+
+                $numPrescriptions = random_int(1, 2);
+                for ($p = 0; $p < $numPrescriptions; $p++) {
+                    $prescription = Prescription::create([
+                        'visit_id'   => $visit->id,
+                        'patient_id' => $visit->patient_id,
+                        'doctor_id'  => $visit->doctor_id,
+                        'diagnosis'  => $visit->diagnosis,
+                        'notes'      => 'خطة العلاج: ' . ($visit->doctor_notes ?? 'يرجى اتباع التعليمات'),
+                    ]);
+                    $prescriptionCount++;
+
+                    // 2-4 items
+                    $numItems = random_int(2, 4);
+                    $keys = array_rand($meds, min($numItems, count($meds)));
+                    $keys = is_array($keys) ? $keys : [$keys];
+
+                    $sort = 0;
+                    foreach ($keys as $k) {
+                        $med = $meds[$k];
+                        PrescriptionItem::create([
+                            'prescription_id' => $prescription->id,
+                            'medication_name' => $med['name'],
+                            'dosage'          => $med['dosage'],
+                            'frequency'       => $med['frequency'],
+                            'duration'        => $med['duration'],
+                            'instructions'    => $med['notes'],
+                            'sort_order'      => $sort++,
+                        ]);
+                        $itemCount++;
+                    }
+                }
+            }
+
+            $this->command->info("    Created {$prescriptionCount} prescriptions with {$itemCount} items.");
+        } catch (\Throwable $e) {
+            $this->command->error('    Failed to seed prescriptions: ' . $e->getMessage());
+        }
+    }
+
+    // =========================================================================
+    //  DENTAL RECORDS — Charts, Treatments, X-rays for dental patients
+    // =========================================================================
+
+    private function seedDentalRecords(): void
+    {
+        $this->command->info('  → Seeding dental records...');
+
+        try {
+            // Dental patients are indexes 5..9 (5 dental patients)
+            $dentalPatients = array_slice($this->patientRecords, 5, 5);
+            if (empty($dentalPatients)) {
+                $dentalPatients = Patient::whereHas('bookings', fn ($q) => $q->where('module', 'dental'))
+                    ->limit(5)->get()->all();
+            }
+
+            if (empty($dentalPatients)) {
+                $this->command->warn('    No dental patients — skipping.');
+                return;
+            }
+
+            $dentalDoctors = array_slice($this->doctorRecords, 3, 3);
+            if (empty($dentalDoctors)) {
+                $dentalDoctors = Doctor::where('module', 'dental')->limit(3)->get()->all();
+            }
+            if (empty($dentalDoctors)) {
+                $this->command->warn('    No dental doctors — skipping.');
+                return;
+            }
+
+            $teeth = [11, 12, 16, 17, 26, 36, 37, 46];
+            $surfaces = [DentalChart::SURFACE_MESIAL, DentalChart::SURFACE_DISTAL, DentalChart::SURFACE_OCCLUSAL, DentalChart::SURFACE_BUCCAL, DentalChart::SURFACE_LINGUAL];
+            $conditions = [
+                DentalChart::CONDITION_DECAYED,
+                DentalChart::CONDITION_FILLED,
+                DentalChart::CONDITION_CROWN,
+                DentalChart::CONDITION_ROOT_CANAL,
+                DentalChart::CONDITION_HEALTHY,
+            ];
+            $treatmentTypes = [
+                DentalTreatment::TYPE_FILLING,
+                DentalTreatment::TYPE_CLEANING,
+                DentalTreatment::TYPE_ROOT_CANAL,
+                DentalTreatment::TYPE_CROWN,
+                DentalTreatment::TYPE_EXTRACTION,
+            ];
+            $xrayTypes = [
+                DentalXray::TYPE_PANORAMIC,
+                DentalXray::TYPE_PERIAPICAL,
+                DentalXray::TYPE_BITEWING,
+            ];
+
+            $chartCount = 0;
+            $treatmentCount = 0;
+            $xrayCount = 0;
+
+            foreach ($dentalPatients as $patient) {
+                // Skip if patient already has dental records seeded
+                $hasTreatments = DentalTreatment::where('patient_id', $patient->id)->exists();
+                $hasXrays = DentalXray::where('patient_id', $patient->id)->exists();
+                if ($hasTreatments && $hasXrays) {
+                    continue;
+                }
+
+                $doctor = $dentalDoctors[array_rand($dentalDoctors)];
+
+                // Pull existing visits for this patient (dental module)
+                $patientVisits = Visit::where('patient_id', $patient->id)
+                    ->where('module', 'dental')
+                    ->get();
+
+                // ── Dental Chart entries (3-5 teeth) ──
+                $numCharts = random_int(3, 5);
+                $selectedTeeth = array_rand(array_flip($teeth), $numCharts);
+                $selectedTeeth = is_array($selectedTeeth) ? $selectedTeeth : [$selectedTeeth];
+
+                foreach ($selectedTeeth as $tooth) {
+                    if (DentalChart::where('patient_id', $patient->id)->where('tooth_number', $tooth)->exists()) {
+                        continue;
+                    }
+                    $condition = $conditions[array_rand($conditions)];
+                    $toothSurfaces = null;
+                    if (in_array($condition, [DentalChart::CONDITION_FILLED, DentalChart::CONDITION_DECAYED])) {
+                        $numSurf = random_int(1, 2);
+                        $keys = array_rand(array_flip($surfaces), $numSurf);
+                        $toothSurfaces = is_array($keys) ? $keys : [$keys];
+                    }
+
+                    DentalChart::create([
+                        'patient_id'   => $patient->id,
+                        'tooth_number' => $tooth,
+                        'condition'    => $condition,
+                        'surfaces'     => $toothSurfaces,
+                        'notes'        => 'ملاحظة: السن بحالة ' . $condition,
+                        'status'       => $condition === DentalChart::CONDITION_MISSING ? 'missing' : 'present',
+                    ]);
+                    $chartCount++;
+                }
+
+                // ── Dental Treatments (2-3 per patient, linked to visits when available) ──
+                if ($hasTreatments) {
+                    $numTreatments = 0;
+                } else {
+                    $numTreatments = random_int(2, 3);
+                }
+                for ($t = 0; $t < $numTreatments; $t++) {
+                    $tooth = $teeth[array_rand($teeth)];
+                    $type  = $treatmentTypes[array_rand($treatmentTypes)];
+                    $isCompleted = (bool) random_int(0, 1);
+                    $status = $isCompleted ? DentalTreatment::STATUS_COMPLETED : DentalTreatment::STATUS_PLANNED;
+
+                    $treatmentSurfaces = null;
+                    if ($type === DentalTreatment::TYPE_FILLING) {
+                        $numSurf = random_int(1, 2);
+                        $keys = array_rand(array_flip($surfaces), $numSurf);
+                        $treatmentSurfaces = is_array($keys) ? $keys : [$keys];
+                    }
+
+                    $linkedVisit = $patientVisits->isNotEmpty() ? $patientVisits->random() : null;
+
+                    DentalTreatment::create([
+                        'patient_id'    => $patient->id,
+                        'doctor_id'     => $doctor->id,
+                        'visit_id'      => $linkedVisit?->id,
+                        'tooth_number'  => $tooth,
+                        'treatment_type' => $type,
+                        'surfaces'      => $treatmentSurfaces,
+                        'description'   => 'علاج ' . $type . ' للسن رقم ' . $tooth,
+                        'cost'          => random_int(300, 2000),
+                        'lab_cost'      => 0,
+                        'status'        => $status,
+                        'completed_at'  => $isCompleted ? Carbon::now()->subDays(random_int(1, 60))->toDateString() : null,
+                        'notes'         => 'تمت خطة العلاج بناءً على الفحص السريري',
+                    ]);
+                    $treatmentCount++;
+                }
+
+                // ── X-rays (1-2 per patient) ──
+                if ($hasXrays) {
+                    $numXrays = 0;
+                } else {
+                    $numXrays = random_int(1, 2);
+                }
+                for ($x = 0; $x < $numXrays; $x++) {
+                    $type = $xrayTypes[array_rand($xrayTypes)];
+                    DentalXray::create([
+                        'patient_id'   => $patient->id,
+                        'doctor_id'    => $doctor->id,
+                        'type'         => $type,
+                        'image_path'   => 'demo/xrays/' . $type . '-' . $patient->id . '.jpg',
+                        'tooth_number' => $type === DentalXray::TYPE_PANORAMIC ? null : (string) $teeth[array_rand($teeth)],
+                        'findings'     => 'النتائج: لا يوجد كسور ظاهرة، توجد علامات تسوس بسيط في بعض الأسنان.',
+                        'notes'        => 'أخذت صورة بجودة عالية للمراجعة.',
+                        'taken_date'   => Carbon::now()->subDays(random_int(5, 120))->toDateString(),
+                    ]);
+                    $xrayCount++;
+                }
+            }
+
+            $this->command->info("    Created {$chartCount} chart entries, {$treatmentCount} treatments, {$xrayCount} x-rays.");
+        } catch (\Throwable $e) {
+            $this->command->error('    Failed to seed dental records: ' . $e->getMessage());
+        }
+    }
+
+    // =========================================================================
+    //  PEDIATRIC RECORDS — Vaccinations, Growth, Allergies
+    // =========================================================================
+
+    private function seedPediatricRecords(): void
+    {
+        $this->command->info('  → Seeding pediatric records...');
+
+        try {
+            // Pediatric patients are indexes 10..14
+            $pediatricPatients = array_slice($this->patientRecords, 10, 5);
+            if (empty($pediatricPatients)) {
+                $pediatricPatients = Patient::whereHas('bookings', fn ($q) => $q->where('module', 'pediatric'))
+                    ->limit(5)->get()->all();
+            }
+
+            if (empty($pediatricPatients)) {
+                $this->command->warn('    No pediatric patients — skipping.');
+                return;
+            }
+
+            $pediatricDoctors = array_slice($this->doctorRecords, 6, 3);
+            if (empty($pediatricDoctors)) {
+                $pediatricDoctors = Doctor::where('module', 'pediatric')->limit(3)->get()->all();
+            }
+
+            $manufacturers = ['GSK', 'Pfizer', 'Sanofi', 'Merck'];
+            $injectionSites = ['Left thigh', 'Right thigh', 'Left arm', 'Right arm', 'Oral'];
+
+            $vaccineCount = 0;
+            $growthCount = 0;
+            $allergyCount = 0;
+
+            foreach ($pediatricPatients as $patient) {
+                $hasVaccinations = PediatricVaccination::where('patient_id', $patient->id)->exists();
+                $hasGrowth = PediatricGrowthRecord::where('patient_id', $patient->id)->exists();
+                $hasAllergies = PediatricAllergy::where('patient_id', $patient->id)->exists();
+
+                // Skip entirely if everything seeded for this patient
+                if ($hasVaccinations && $hasGrowth) {
+                    continue;
+                }
+
+                $doctor = ! empty($pediatricDoctors) ? $pediatricDoctors[array_rand($pediatricDoctors)] : null;
+                $dob = $patient->date_of_birth ? Carbon::parse($patient->date_of_birth) : Carbon::now()->subYears(2);
+                $ageMonths = (int) $dob->diffInMonths(Carbon::now());
+
+                // ── Vaccinations ──
+                // Use VACCINE_SCHEDULE — pick those already due for this child (months <= age), plus some scheduled ones
+                if (! $hasVaccinations) {
+                $schedule = PediatricVaccination::VACCINE_SCHEDULE;
+                $dueVaccines      = array_filter($schedule, fn ($v) => $v['months'] <= $ageMonths);
+                $upcomingVaccines = array_filter($schedule, fn ($v) => $v['months'] > $ageMonths);
+
+                $numGiven = min(random_int(4, 6), count($dueVaccines));
+                $numScheduled = min(random_int(1, 2), count($upcomingVaccines));
+
+                // Shuffle and pick
+                $givenPicks = [];
+                if (! empty($dueVaccines)) {
+                    $due = array_values($dueVaccines);
+                    shuffle($due);
+                    $givenPicks = array_slice($due, 0, $numGiven);
+                }
+                $schedPicks = [];
+                if (! empty($upcomingVaccines)) {
+                    $up = array_values($upcomingVaccines);
+                    shuffle($up);
+                    $schedPicks = array_slice($up, 0, $numScheduled);
+                }
+
+                foreach ($givenPicks as $v) {
+                    $scheduledDate = $dob->copy()->addMonths($v['months']);
+                    // Don't duplicate
+                    $exists = PediatricVaccination::where('patient_id', $patient->id)
+                        ->where('vaccine_name', $v['vaccine'])
+                        ->where('dose_number', $v['dose'])
+                        ->exists();
+                    if ($exists) continue;
+
+                    $givenDate = $scheduledDate->copy()->addDays(random_int(-3, 7));
+                    if ($givenDate->isFuture()) $givenDate = Carbon::now()->subDays(random_int(1, 30));
+
+                    PediatricVaccination::create([
+                        'patient_id'        => $patient->id,
+                        'doctor_id'         => $doctor?->id,
+                        'vaccine_name'      => $v['vaccine'],
+                        'vaccine_name_ar'   => $v['vaccine_ar'],
+                        'dose_number'       => $v['dose'],
+                        'scheduled_age'     => $v['age'],
+                        'scheduled_date'    => $scheduledDate->toDateString(),
+                        'given_date'        => $givenDate->toDateString(),
+                        'batch_number'      => 'BT' . str_pad((string) random_int(1, 999999), 6, '0', STR_PAD_LEFT),
+                        'manufacturer'      => $manufacturers[array_rand($manufacturers)],
+                        'site_of_injection' => $injectionSites[array_rand($injectionSites)],
+                        'status'            => 'given',
+                    ]);
+                    $vaccineCount++;
+                }
+
+                foreach ($schedPicks as $v) {
+                    $scheduledDate = $dob->copy()->addMonths($v['months']);
+                    $exists = PediatricVaccination::where('patient_id', $patient->id)
+                        ->where('vaccine_name', $v['vaccine'])
+                        ->where('dose_number', $v['dose'])
+                        ->exists();
+                    if ($exists) continue;
+
+                    PediatricVaccination::create([
+                        'patient_id'      => $patient->id,
+                        'doctor_id'       => $doctor?->id,
+                        'vaccine_name'    => $v['vaccine'],
+                        'vaccine_name_ar' => $v['vaccine_ar'],
+                        'dose_number'     => $v['dose'],
+                        'scheduled_age'   => $v['age'],
+                        'scheduled_date'  => $scheduledDate->toDateString(),
+                        'status'          => 'scheduled',
+                    ]);
+                    $vaccineCount++;
+                }
+                } // end if (! $hasVaccinations)
+
+                // ── Growth Records ──
+                // Benchmarks used to approximate values across age points
+                if (! $hasGrowth) {
+                $benchmarks = [
+                    0  => ['w' => 3.5,  'h' => 50, 'hc' => 35],
+                    1  => ['w' => 4.5,  'h' => 54, 'hc' => 37],
+                    3  => ['w' => 6.0,  'h' => 60, 'hc' => 40],
+                    6  => ['w' => 7.5,  'h' => 66, 'hc' => 43],
+                    9  => ['w' => 8.5,  'h' => 71, 'hc' => 45],
+                    12 => ['w' => 9.0,  'h' => 76, 'hc' => 46],
+                    18 => ['w' => 10.5, 'h' => 81, 'hc' => 47.5],
+                    24 => ['w' => 12.0, 'h' => 85, 'hc' => 49],
+                    36 => ['w' => 14.0, 'h' => 95, 'hc' => 50],
+                    48 => ['w' => 16.0, 'h' => 103, 'hc' => 50.5],
+                ];
+
+                $ageCheckpoints = [0, 1, 3, 6, 9, 12, 18, 24, 36, 48];
+                $validCheckpoints = array_filter($ageCheckpoints, fn ($m) => $m <= $ageMonths);
+                // Limit 5-8 records
+                shuffle($validCheckpoints);
+                $validCheckpoints = array_slice($validCheckpoints, 0, random_int(5, 8));
+                sort($validCheckpoints);
+
+                foreach ($validCheckpoints as $m) {
+                    $bm = $benchmarks[$m] ?? $benchmarks[array_key_last($benchmarks)];
+                    $measurementDate = $dob->copy()->addMonths($m);
+                    if ($measurementDate->isFuture()) continue;
+
+                    // Avoid duplicates
+                    $exists = PediatricGrowthRecord::where('patient_id', $patient->id)
+                        ->whereDate('measurement_date', $measurementDate->toDateString())
+                        ->exists();
+                    if ($exists) continue;
+
+                    $weight = round($bm['w'] + (random_int(-5, 5) / 10), 2);
+                    $height = round($bm['h'] + (random_int(-2, 2)), 1);
+                    $hc     = round($bm['hc'] + (random_int(-5, 5) / 10), 1);
+                    $bmi    = PediatricGrowthRecord::calculateBmi($weight, $height);
+
+                    PediatricGrowthRecord::create([
+                        'patient_id'            => $patient->id,
+                        'doctor_id'             => $doctor?->id,
+                        'measurement_date'      => $measurementDate->toDateString(),
+                        'age_months'            => $m,
+                        'weight_kg'             => $weight,
+                        'height_cm'             => $height,
+                        'head_circumference_cm' => $hc,
+                        'bmi'                   => $bmi,
+                    ]);
+                    $growthCount++;
+                }
+                } // end if (! $hasGrowth)
+
+                // ── Allergies (0-2) ──
+                if (! $hasAllergies) {
+                $allergyOptions = [
+                    ['allergy_type' => 'food',        'allergen' => 'البيض',        'severity' => 'mild',     'symptoms' => ['rash', 'itching']],
+                    ['allergy_type' => 'food',        'allergen' => 'الفول السوداني', 'severity' => 'severe',   'symptoms' => ['swelling', 'breathing_difficulty']],
+                    ['allergy_type' => 'food',        'allergen' => 'الألبان',       'severity' => 'moderate', 'symptoms' => ['rash', 'vomiting']],
+                    ['allergy_type' => 'food',        'allergen' => 'القمح',        'severity' => 'mild',     'symptoms' => ['stomach_pain']],
+                    ['allergy_type' => 'drug',        'allergen' => 'Penicillin',    'severity' => 'severe',   'symptoms' => ['rash', 'swelling']],
+                    ['allergy_type' => 'drug',        'allergen' => 'Aspirin',       'severity' => 'moderate', 'symptoms' => ['rash']],
+                ];
+
+                $numAllergies = random_int(0, 2);
+                if ($numAllergies > 0) {
+                    $keys = array_rand($allergyOptions, min($numAllergies, count($allergyOptions)));
+                    $keys = is_array($keys) ? $keys : [$keys];
+
+                    foreach ($keys as $k) {
+                        $opt = $allergyOptions[$k];
+                        $exists = PediatricAllergy::where('patient_id', $patient->id)
+                            ->where('allergen', $opt['allergen'])
+                            ->exists();
+                        if ($exists) continue;
+
+                        PediatricAllergy::create([
+                            'patient_id'      => $patient->id,
+                            'doctor_id'       => $doctor?->id,
+                            'allergy_type'    => $opt['allergy_type'],
+                            'allergen'        => $opt['allergen'],
+                            'severity'        => $opt['severity'],
+                            'symptoms'        => $opt['symptoms'],
+                            'discovered_date' => Carbon::now()->subDays(random_int(30, 365))->toDateString(),
+                            'is_active'       => true,
+                            'notes'           => 'تم اكتشاف الحساسية أثناء الفحص الطبي.',
+                        ]);
+                        $allergyCount++;
+                    }
+                }
+                } // end if (! $hasAllergies)
+            }
+
+            $this->command->info("    Created {$vaccineCount} vaccinations, {$growthCount} growth records, {$allergyCount} allergies.");
+        } catch (\Throwable $e) {
+            $this->command->error('    Failed to seed pediatric records: ' . $e->getMessage());
+        }
     }
 }
