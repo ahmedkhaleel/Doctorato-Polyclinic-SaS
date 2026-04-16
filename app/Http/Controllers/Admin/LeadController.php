@@ -484,7 +484,28 @@ class LeadController extends Controller
             'start_time' => 'required_if:create_booking,true|nullable|date_format:H:i',
             'end_time' => 'required_if:create_booking,true|nullable|date_format:H:i|after:start_time',
             'booking_notes' => 'nullable|string|max:1000',
+            'department' => 'nullable|string',
         ]);
+
+        // Derive correct booking_type from department
+        if (!empty($data['create_booking'])) {
+            $bookingType = $data['booking_type'] ?? 'service';
+            if ($bookingType === 'service' && isset($data['department'])) {
+                $bookingType = match ($data['department']) {
+                    'dental' => 'dental_service',
+                    'pediatric' => 'pediatric_service',
+                    default => 'service',
+                };
+            } elseif ($bookingType === 'consultation' && isset($data['department'])) {
+                $bookingType = match ($data['department']) {
+                    'derma' => 'dermatology_consultation',
+                    'dental' => 'dental_consultation',
+                    'pediatric' => 'pediatric_consultation',
+                    default => 'dermatology_consultation',
+                };
+            }
+            $data['booking_type'] = $bookingType;
+        }
 
         // Create patient from lead data
         $patient = new Patient([

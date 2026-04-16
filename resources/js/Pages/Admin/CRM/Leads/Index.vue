@@ -74,11 +74,12 @@ const assignedFilter = ref(props.filters?.assigned_to || '');
 const moduleFilter = ref(props.filters?.module || '');
 
 const modules = computed(() => page.props.modules || {});
+const MEDICAL_SLUGS = ['derma', 'dental', 'pediatric'];
 const activeModules = computed(() => {
     const mods = [];
     if (modules.value) {
         Object.values(modules.value).forEach(m => {
-            if (m.enabled) mods.push(m);
+            if (m.enabled && MEDICAL_SLUGS.includes(m.slug)) mods.push(m);
         });
     }
     return mods;

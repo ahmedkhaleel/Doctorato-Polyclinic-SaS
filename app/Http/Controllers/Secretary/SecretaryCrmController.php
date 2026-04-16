@@ -385,10 +385,7 @@ class SecretaryCrmController extends BaseSecretaryController
      */
     public function show(Lead $lead): Response
     {
-        // Ensure the secretary can only view leads assigned to them
-        if (((int) $lead->assigned_to) !== ((int) auth()->id())) {
-            abort(403);
-        }
+        // Allow secretary to view any lead (not restricted to assigned only)
 
         $lead->load([
             'source:id,name_en,name_ar,icon,color',
@@ -542,7 +539,7 @@ class SecretaryCrmController extends BaseSecretaryController
     public function logActivity(Request $request, Lead $lead): RedirectResponse
     {
         if (((int) $lead->assigned_to) !== ((int) auth()->id())) {
-            abort(403);
+            return back()->with('error', __('يمكنك فقط إدارة العملاء المحتملين المعينين لك'));
         }
 
         $data = $request->validate([
@@ -579,7 +576,7 @@ class SecretaryCrmController extends BaseSecretaryController
     public function scheduleFollowUp(Request $request, Lead $lead): RedirectResponse
     {
         if (((int) $lead->assigned_to) !== ((int) auth()->id())) {
-            abort(403);
+            return back()->with('error', __('يمكنك فقط إدارة العملاء المحتملين المعينين لك'));
         }
 
         $data = $request->validate([
@@ -716,7 +713,7 @@ class SecretaryCrmController extends BaseSecretaryController
     public function quickSend(Request $request, Lead $lead): RedirectResponse
     {
         if (((int) $lead->assigned_to) !== ((int) auth()->id())) {
-            abort(403);
+            return back()->with('error', __('يمكنك فقط إدارة العملاء المحتملين المعينين لك'));
         }
 
         $data = $request->validate([
