@@ -12,7 +12,20 @@ import ChatIcon from '@/Components/Chat/ChatIcon.vue';
 import ChatToast from '@/Components/Chat/ChatToast.vue';
 
 const page = usePage();
-const sidebarOpen = ref(false);
+
+/* ── Sidebar state (persisted + breakpoint-aware) ─────── */
+const SIDEBAR_STORAGE_KEY = 'admin_sidebar_open';
+const getInitialSidebarState = () => {
+    if (typeof window === 'undefined') return false;
+    const stored = localStorage.getItem(SIDEBAR_STORAGE_KEY);
+    if (stored !== null) return stored === 'true';
+    // Default: open on lg+, closed on mobile
+    return window.matchMedia('(min-width: 1024px)').matches;
+};
+const sidebarOpen = ref(getInitialSidebarState());
+if (typeof window !== 'undefined') {
+    watch(sidebarOpen, (v) => localStorage.setItem(SIDEBAR_STORAGE_KEY, String(v)));
+}
 const { can } = usePermissions();
 
 const adminName = computed(() => page.props.auth?.user?.name || 'Admin');
@@ -349,6 +362,12 @@ watch(currentUrl, autoOpenActiveGroup);
 
 function toggleSidebar() { sidebarOpen.value = !sidebarOpen.value; }
 function closeSidebar()  { sidebarOpen.value = false; }
+/* Only close on mobile when a nav link is clicked — leave desktop state alone */
+function closeSidebarOnMobile() {
+    if (typeof window !== 'undefined' && !window.matchMedia('(min-width: 1024px)').matches) {
+        sidebarOpen.value = false;
+    }
+}
 function logout()        { router.post('/admin/logout'); }
 </script>
 
@@ -360,10 +379,11 @@ function logout()        { router.post('/admin/logout'); }
         <!-- ─── Sidebar ──────────────────────────────────────────── -->
         <aside
             :class="[
-                sidebarOpen ? 'translate-x-0' : (isRtl ? 'translate-x-full' : '-translate-x-full'),
-                'lg:translate-x-0'
+                sidebarOpen
+                    ? 'translate-x-0 lg:static lg:z-auto'
+                    : (isRtl ? 'translate-x-full' : '-translate-x-full'),
             ]"
-            class="fixed inset-y-0 z-40 w-[275px] transition-transform duration-300 ease-in-out lg:static lg:z-auto flex flex-col admin-sidebar-navy shadow-2xl ltr:left-0 rtl:right-0"
+            class="fixed inset-y-0 z-40 w-[275px] transition-transform duration-300 ease-in-out flex flex-col admin-sidebar-navy shadow-2xl ltr:left-0 rtl:right-0"
         >
             <!-- Ambient gold glow accent -->
             <div class="pointer-events-none absolute inset-x-0 top-0 h-40 admin-sidebar-glow"></div>
@@ -481,7 +501,7 @@ function logout()        { router.post('/admin/logout'); }
                                     : 'text-white/50 hover:bg-white/[0.04] hover:text-white/80',
                             ]"
                             class="flex items-center gap-3 px-3 py-2 rounded-lg text-[13px] font-medium transition-all duration-200"
-                            @click="closeSidebar"
+                            @click="closeSidebarOnMobile"
                         >
                             <!-- Icon wrapper -->
                             <div
@@ -658,15 +678,16 @@ function logout()        { router.post('/admin/logout'); }
         <div class="flex-1 flex flex-col min-h-screen min-w-0 w-full">
             <!-- Top Header -->
             <header class="h-[64px] md:h-[72px] bg-white/80 backdrop-blur-md border-b border-gray-200/60 flex items-center justify-between px-3 md:px-4 lg:px-8 sticky top-0 z-20 gap-2">
-                <!-- Mobile hamburger -->
+                <!-- Sidebar toggle (visible on ALL sizes) -->
                 <button
-                    class="lg:hidden inline-flex items-center justify-center w-10 h-10 rounded-xl text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors"
+                    class="inline-flex items-center justify-center w-10 h-10 rounded-xl text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors flex-shrink-0"
                     @click="toggleSidebar"
+                    :aria-label="sidebarOpen ? 'Close sidebar' : 'Open sidebar'"
                 >
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
                 </button>
-
-                <div class="hidden lg:block"></div>
 
                 <!-- Right side -->
                 <div class="flex items-center gap-1.5 md:gap-3">
