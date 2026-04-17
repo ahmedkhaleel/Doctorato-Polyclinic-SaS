@@ -276,34 +276,39 @@ function labelX(index, total) {
     <AdminLayout :title="$t('a_dashboard')">
         <div class="space-y-8">
 
-            <!-- ── Row 1: Header + Quick Actions ────────────────── -->
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                <div>
-                    <h1 class="text-xl md:text-2xl font-bold text-gray-900">{{ $t('a_dashboard') }}</h1>
-                    <p class="text-sm text-gray-500 mt-1">{{ $t('a_welcome_back') }}</p>
-                </div>
-                <div class="flex items-center gap-3 flex-wrap">
-                    <Link
-                        href="/admin/bookings/create"
-                        class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-[#C4A265] to-[#D4B87A] hover:from-[#B89555] hover:to-[#C4A265] shadow-sm hover:shadow-md transition-all duration-200"
-                    >
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
-                        {{ $t('a_new_booking') }}
-                    </Link>
-                    <Link
-                        href="/admin/patients/create"
-                        class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-700 bg-white border border-gray-200 hover:border-[#C4A265]/40 hover:bg-[#C4A265]/5 shadow-sm transition-all duration-200"
-                    >
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" /></svg>
-                        {{ $t('a_new_patient') }}
-                    </Link>
-                    <Link
-                        href="/admin/visits/today-queue"
-                        class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-700 bg-white border border-gray-200 hover:border-[#C4A265]/40 hover:bg-[#C4A265]/5 shadow-sm transition-all duration-200"
-                    >
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" /></svg>
-                        {{ $t('a_today_queue') }}
-                    </Link>
+            <!-- ═════════ Navy Hero Header ═════════ -->
+            <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] shadow-xl">
+                <div class="pointer-events-none absolute -top-16 -end-16 h-56 w-56 rounded-full bg-[#C4A265]/20 blur-3xl"></div>
+                <div class="pointer-events-none absolute -bottom-20 start-1/3 h-48 w-48 rounded-full bg-[#C4A265]/10 blur-3xl"></div>
+                <div class="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-[#C4A265] to-transparent"></div>
+                <div class="relative p-4 md:p-7 flex flex-col md:flex-row md:items-center gap-4 md:gap-5 justify-between">
+                    <div class="flex items-start gap-3 md:gap-4 min-w-0">
+                        <div class="w-12 h-12 md:w-14 md:h-14 rounded-xl bg-gradient-to-br from-[#C4A265] to-[#8B7043] flex items-center justify-center shadow-lg flex-shrink-0">
+                            <svg class="w-6 h-6 md:w-7 md:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                        </div>
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="h-[3px] w-6 bg-[#C4A265] rounded-full"></span>
+                                <span class="text-[10px] font-bold text-[#C4A265] tracking-[0.25em] uppercase">{{ isRtl ? 'نظرة عامة' : 'Overview' }}</span>
+                            </div>
+                            <h1 class="text-xl md:text-3xl font-extrabold text-white tracking-tight truncate">{{ $t('a_dashboard') }}</h1>
+                            <p class="text-xs md:text-sm text-white/70 mt-1 max-w-xl">{{ $t('a_welcome_back') }}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <Link href="/admin/bookings/create" class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#C4A265] to-[#8B7043] hover:from-[#8B7043] hover:to-[#C4A265] text-white font-bold px-4 py-2.5 shadow-md hover:shadow-lg transition text-sm">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                            {{ $t('a_new_booking') }}
+                        </Link>
+                        <Link href="/admin/patients/create" class="inline-flex items-center gap-2 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 text-white font-semibold px-4 py-2.5 transition text-sm">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
+                            {{ $t('a_new_patient') }}
+                        </Link>
+                        <Link href="/admin/visits/today-queue" class="inline-flex items-center gap-2 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 text-white font-semibold px-4 py-2.5 transition text-sm">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
+                            {{ $t('a_today_queue') }}
+                        </Link>
+                    </div>
                 </div>
             </div>
 
@@ -543,15 +548,15 @@ function labelX(index, total) {
                         </Link>
                     </div>
                     <div class="overflow-x-auto">
-                        <table class="min-w-full">
-                            <thead>
-                                <tr class="bg-gray-50/50">
-                                    <th class="px-4 md:px-6 py-3 ltr:text-left rtl:text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">#</th>
-                                    <th class="px-4 md:px-6 py-3 ltr:text-left rtl:text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_patient') }}</th>
-                                    <th class="px-4 md:px-6 py-3 ltr:text-left rtl:text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_doctor') }}</th>
-                                    <th class="px-4 md:px-6 py-3 ltr:text-left rtl:text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_service') }}</th>
-                                    <th class="px-4 md:px-6 py-3 ltr:text-left rtl:text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_status') }}</th>
-                                    <th class="px-4 md:px-6 py-3 ltr:text-left rtl:text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_wait_time') }}</th>
+                        <table class="w-full min-w-[700px]">
+                            <thead class="bg-[#1B365D]/5 text-[#1B365D]">
+                                <tr>
+                                    <th class="px-4 md:px-6 py-3 text-start text-[11px] font-bold uppercase tracking-wider">#</th>
+                                    <th class="px-4 md:px-6 py-3 text-start text-[11px] font-bold uppercase tracking-wider">{{ $t('a_patient') }}</th>
+                                    <th class="px-4 md:px-6 py-3 text-start text-[11px] font-bold uppercase tracking-wider hidden md:table-cell">{{ $t('a_doctor') }}</th>
+                                    <th class="px-4 md:px-6 py-3 text-start text-[11px] font-bold uppercase tracking-wider hidden lg:table-cell">{{ $t('a_service') }}</th>
+                                    <th class="px-4 md:px-6 py-3 text-start text-[11px] font-bold uppercase tracking-wider">{{ $t('a_status') }}</th>
+                                    <th class="px-4 md:px-6 py-3 text-start text-[11px] font-bold uppercase tracking-wider hidden sm:table-cell">{{ $t('a_wait_time') }}</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100">
@@ -564,10 +569,10 @@ function labelX(index, total) {
                                     <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">
                                         {{ visit.patient?.name ?? '-' }}
                                     </td>
-                                    <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                                    <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-600 hidden md:table-cell">
                                         {{ $localized(visit.doctor, 'name') || '-' }}
                                     </td>
-                                    <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                                    <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-600 hidden lg:table-cell">
                                         {{ $localized(visit.service, 'name') || '-' }}
                                     </td>
                                     <td class="px-4 md:px-6 py-4 whitespace-nowrap">
@@ -579,7 +584,7 @@ function labelX(index, total) {
                                             {{ visit.status === 'in_progress' ? $t('a_in_progress') : visit.status === 'waiting' ? $t('a_waiting') : visit.status }}
                                         </span>
                                     </td>
-                                    <td class="px-4 md:px-6 py-4 whitespace-nowrap">
+                                    <td class="px-4 md:px-6 py-4 whitespace-nowrap hidden sm:table-cell">
                                         <span :class="waitTimeColor(waitTime(visit.created_at))" class="text-sm font-semibold">
                                             {{ waitTime(visit.created_at) }} {{ $t('a_min') }}
                                         </span>

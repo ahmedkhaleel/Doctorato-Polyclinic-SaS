@@ -67,21 +67,25 @@ const genderConfig = {
 <template>
     <AdminLayout :title="$t('a_patients')">
         <div class="space-y-6">
-            <!-- Header -->
-            <div class="flex items-center justify-between">
-                <div>
-                    <h1 class="text-xl md:text-2xl font-bold text-gray-800">{{ $t('a_patients') }}</h1>
-                    <p class="text-sm text-gray-500 mt-0.5">
-                        <span class="font-semibold" style="color: #C4A265;">{{ patients.total }}</span> {{ $t('a_total_patients') }}
-                    </p>
+            <!-- ═════════ Compact Hero ═════════ -->
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-4">
+                <div class="flex items-start gap-3 min-w-0">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#1B365D] to-[#0F2444] flex items-center justify-center shadow-md flex-shrink-0">
+                        <svg class="w-5 h-5 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                    </div>
+                    <div class="min-w-0">
+                        <h1 class="text-xl md:text-2xl font-extrabold text-[#1B365D] truncate">{{ $t('a_patients') }}</h1>
+                        <p class="text-xs text-slate-500 mt-0.5">
+                            <span class="font-semibold text-[#C4A265]">{{ patients.total }}</span> {{ $t('a_total_patients') }}
+                        </p>
+                    </div>
                 </div>
                 <Link
                     v-if="can('patients.create')"
                     href="/admin/patients/create"
-                    class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-white text-sm font-semibold transition-all duration-200 shadow-lg hover:shadow-xl"
-                    style="background-color: #C4A265; box-shadow: 0 4px 14px rgba(196, 162, 101, 0.3);"
+                    class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#C4A265] to-[#8B7043] hover:from-[#8B7043] hover:to-[#C4A265] text-white font-bold px-4 py-2.5 shadow-md hover:shadow-lg transition text-sm"
                 >
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                     {{ $t('a_add_patient') }}
                 </Link>
             </div>

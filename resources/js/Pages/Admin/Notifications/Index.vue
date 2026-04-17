@@ -162,29 +162,39 @@ const groupedNotifications = computed(() => {
 <template>
     <AdminLayout :title="isRtl ? 'مركز الإشعارات' : 'Notification Center'">
         <div class="space-y-6">
-            <!-- Header -->
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                <div>
-                    <h1 class="text-xl md:text-2xl font-bold text-gray-900">{{ isRtl ? 'مركز الإشعارات' : 'Notification Center' }}</h1>
-                    <p class="text-sm text-gray-500 mt-1">
-                        {{ isRtl ? `${stats.unread} إشعار غير مقروء` : `${stats.unread} unread notifications` }}
-                    </p>
-                </div>
-                <div class="flex items-center gap-2">
-                    <button v-if="stats.unread > 0" @click="markAllRead"
-                        class="px-4 py-2 text-sm font-medium text-[#1B365D] bg-slate-50 rounded-lg hover:bg-slate-100 transition">
-                        <span class="flex items-center gap-1.5">
+            <!-- ═════════ Navy Hero Header ═════════ -->
+            <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] shadow-xl">
+                <div class="pointer-events-none absolute -top-16 -end-16 h-56 w-56 rounded-full bg-[#C4A265]/20 blur-3xl"></div>
+                <div class="pointer-events-none absolute -bottom-20 start-1/3 h-48 w-48 rounded-full bg-[#C4A265]/10 blur-3xl"></div>
+                <div class="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-[#C4A265] to-transparent"></div>
+                <div class="relative p-4 md:p-7 flex flex-col md:flex-row md:items-center gap-4 md:gap-5 justify-between">
+                    <div class="flex items-start gap-3 md:gap-4 min-w-0">
+                        <div class="w-12 h-12 md:w-14 md:h-14 rounded-xl bg-gradient-to-br from-[#C4A265] to-[#8B7043] flex items-center justify-center shadow-lg flex-shrink-0">
+                            <svg class="w-6 h-6 md:w-7 md:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+                        </div>
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="h-[3px] w-6 bg-[#C4A265] rounded-full"></span>
+                                <span class="text-[10px] font-bold text-[#C4A265] tracking-[0.25em] uppercase">{{ isRtl ? 'تنبيهات' : 'Alerts' }}</span>
+                            </div>
+                            <h1 class="text-xl md:text-3xl font-extrabold text-white tracking-tight truncate">{{ isRtl ? 'مركز الإشعارات' : 'Notification Center' }}</h1>
+                            <p class="text-xs md:text-sm text-white/70 mt-1 max-w-xl">
+                                {{ isRtl ? `${stats.unread} إشعار غير مقروء` : `${stats.unread} unread notifications` }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <button v-if="stats.unread > 0" @click="markAllRead"
+                            class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-white bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg hover:bg-white/20 transition">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
                             {{ isRtl ? 'تحديد الكل كمقروء' : 'Mark All Read' }}
-                        </span>
-                    </button>
-                    <button @click="clearRead"
-                        class="px-4 py-2 text-sm font-medium text-red-600 bg-red-50 rounded-lg hover:bg-red-100 transition">
-                        <span class="flex items-center gap-1.5">
+                        </button>
+                        <button @click="clearRead"
+                            class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-red-200 bg-red-500/20 border border-red-400/30 rounded-lg hover:bg-red-500/30 transition">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                             {{ isRtl ? 'حذف المقروءة' : 'Clear Read' }}
-                        </span>
-                    </button>
+                        </button>
+                    </div>
                 </div>
             </div>
 

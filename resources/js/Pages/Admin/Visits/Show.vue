@@ -297,35 +297,40 @@ function formatDateTime(date) {
 <template>
     <AdminLayout :title="`Visit: ${visit.patient?.full_name}`">
         <div class="space-y-6">
-            <!-- Header -->
-            <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-4">
-                    <div class="w-14 h-14 rounded-full flex items-center justify-center text-white text-lg font-bold flex-shrink-0" style="background-color: #C4A265;">
-                        {{ visit.patient?.full_name?.charAt(0) }}
-                    </div>
-                    <div>
-                        <div class="flex items-center space-x-3">
-                            <h1 class="text-xl md:text-2xl font-bold text-gray-800">{{ visit.patient?.full_name }}</h1>
-                            <span
-                                :class="statusColors[visit.status]"
-                                class="px-3 py-1 text-xs font-semibold rounded-full"
-                            >
-                                {{ {waiting: $t('a_waiting'), in_progress: $t('a_in_progress'), completed: $t('a_completed'), cancelled: $t('a_cancelled')}[visit.status] || visit.status }}
-                            </span>
+            <!-- ═════════ Navy Hero Header ═════════ -->
+            <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] shadow-xl">
+                <div class="pointer-events-none absolute -top-16 -end-16 h-56 w-56 rounded-full bg-[#C4A265]/20 blur-3xl"></div>
+                <div class="pointer-events-none absolute -bottom-20 start-1/3 h-48 w-48 rounded-full bg-[#C4A265]/10 blur-3xl"></div>
+                <div class="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-[#C4A265] to-transparent"></div>
+                <div class="relative p-4 md:p-6 flex flex-col md:flex-row md:items-center gap-4 md:gap-5 justify-between">
+                    <div class="flex items-start gap-3 md:gap-4 min-w-0">
+                        <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-[#C4A265] to-[#8B7043] flex items-center justify-center text-white text-xl font-extrabold flex-shrink-0 shadow-lg">
+                            {{ visit.patient?.full_name?.charAt(0) }}
                         </div>
-                        <div class="flex items-center space-x-3 text-sm text-gray-500 mt-1">
-                            <span>{{ formatDate(visit.visit_date) }}</span>
-                            <span>&middot;</span>
-                            <Link v-if="visit.doctor && can('doctors.view')" :href="`/admin/doctors/${visit.doctor.id}`" class="hover:underline" style="color: #C4A265;">Dr. {{ $localized(visit.doctor, 'name') }}</Link>
-                            <span v-else>Dr. {{ visit.doctor ? $localized(visit.doctor, 'name') : $t('a_unknown') }}</span>
-                            <span>&middot;</span>
-                            <span>{{ {consultation: $t('a_consultation'), session: $t('a_session'), follow_up: $t('a_follow_up')}[visit.visit_type] || visit.visit_type }}</span>
-                            <span v-if="visit.service">&middot; {{ $localized(visit.service, 'name') }}</span>
-                            <span v-if="visit.session_number">&middot; Session #{{ visit.session_number }}</span>
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="h-[3px] w-6 bg-[#C4A265] rounded-full"></span>
+                                <span class="text-[10px] font-bold text-[#C4A265] tracking-[0.25em] uppercase">{{ isRtl ? 'زيارة' : 'Visit' }}</span>
+                            </div>
+                            <div class="flex flex-wrap items-center gap-3">
+                                <h1 class="text-xl md:text-2xl font-extrabold text-white tracking-tight truncate">{{ visit.patient?.full_name }}</h1>
+                                <span :class="statusColors[visit.status]" class="px-3 py-1 text-xs font-semibold rounded-full ring-1 ring-white/20">
+                                    {{ {waiting: $t('a_waiting'), in_progress: $t('a_in_progress'), completed: $t('a_completed'), cancelled: $t('a_cancelled')}[visit.status] || visit.status }}
+                                </span>
+                            </div>
+                            <div class="flex items-center flex-wrap gap-x-3 gap-y-1 text-xs md:text-sm text-white/70 mt-1">
+                                <span>{{ formatDate(visit.visit_date) }}</span>
+                                <span>&middot;</span>
+                                <Link v-if="visit.doctor && can('doctors.view')" :href="`/admin/doctors/${visit.doctor.id}`" class="hover:underline text-[#C4A265]">Dr. {{ $localized(visit.doctor, 'name') }}</Link>
+                                <span v-else>Dr. {{ visit.doctor ? $localized(visit.doctor, 'name') : $t('a_unknown') }}</span>
+                                <span>&middot;</span>
+                                <span>{{ {consultation: $t('a_consultation'), session: $t('a_session'), follow_up: $t('a_follow_up')}[visit.visit_type] || visit.visit_type }}</span>
+                                <span v-if="visit.service">&middot; {{ $localized(visit.service, 'name') }}</span>
+                                <span v-if="visit.session_number">&middot; Session #{{ visit.session_number }}</span>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="flex space-x-3">
+                    <div class="flex gap-2 flex-wrap">
                     <button
                         v-if="visit.status === 'waiting' && can('visits.update')"
                         @click="startVisit"
@@ -359,11 +364,11 @@ function formatDateTime(date) {
                     </button>
                     <Link
                         :href="`/admin/patients/${visit.patient_id}`"
-                        class="inline-flex items-center px-4 py-2 rounded-lg border text-sm font-medium transition"
-                        style="border-color: #C4A265; color: #C4A265;"
+                        class="inline-flex items-center px-4 py-2 rounded-lg bg-gradient-to-r from-[#C4A265] to-[#8B7043] text-white text-sm font-semibold hover:from-[#8B7043] hover:to-[#C4A265] transition"
                     >
                         {{ $t('a_view_patient') }}
                     </Link>
+                    </div>
                 </div>
             </div>
 

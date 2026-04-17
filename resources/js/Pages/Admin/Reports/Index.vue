@@ -222,37 +222,44 @@ const maxServiceVisits = computed(() => {
                 </button>
             </div>
 
-            <!-- ── Header ──────────────────────────────────────── -->
+            <!-- ═════════ Navy Hero Header ═════════ -->
             <div
-                class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 transition-all duration-700"
+                class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] shadow-xl transition-all duration-700"
                 :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
             >
-                <div>
-                    <div class="flex items-center gap-3 mb-1">
-                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#C4A265] to-[#D4B87A] flex items-center justify-center shadow-lg shadow-[#C4A265]/20">
-                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                            </svg>
+                <div class="pointer-events-none absolute -top-16 -end-16 h-56 w-56 rounded-full bg-[#C4A265]/20 blur-3xl"></div>
+                <div class="pointer-events-none absolute -bottom-20 start-1/3 h-48 w-48 rounded-full bg-[#C4A265]/10 blur-3xl"></div>
+                <div class="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-[#C4A265] to-transparent"></div>
+                <div class="relative p-4 md:p-7 flex flex-col md:flex-row md:items-center gap-4 md:gap-5 justify-between">
+                <div class="flex items-start gap-3 md:gap-4 min-w-0">
+                    <div class="w-12 h-12 md:w-14 md:h-14 rounded-xl bg-gradient-to-br from-[#C4A265] to-[#8B7043] flex items-center justify-center shadow-lg flex-shrink-0">
+                        <svg class="w-6 h-6 md:w-7 md:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                        </svg>
+                    </div>
+                    <div class="min-w-0">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="h-[3px] w-6 bg-[#C4A265] rounded-full"></span>
+                            <span class="text-[10px] font-bold text-[#C4A265] tracking-[0.25em] uppercase">{{ isRtl ? 'التقارير' : 'Reports' }}</span>
                         </div>
-                        <div>
-                            <h1 class="text-xl md:text-2xl font-bold text-gray-900">{{ $t('a_reports') }}</h1>
-                            <p class="text-sm text-gray-500">{{ $t('a_performance_overview') }}</p>
-                        </div>
+                        <h1 class="text-xl md:text-3xl font-extrabold text-white tracking-tight truncate">{{ $t('a_reports') }}</h1>
+                        <p class="text-xs md:text-sm text-white/70 mt-1 max-w-xl">{{ $t('a_performance_overview') }}</p>
                     </div>
                 </div>
                 <!-- Mini sparkline -->
-                <div v-if="sparklinePath" class="bg-white rounded-xl px-4 py-3 border border-gray-100 shadow-sm">
-                    <p class="text-[10px] font-medium text-gray-400 uppercase tracking-wider mb-1">{{ $t('a_revenue_trend') }}</p>
-                    <svg viewBox="0 0 200 40" class="w-48 h-10">
+                <div v-if="sparklinePath" class="bg-white/10 backdrop-blur-sm rounded-xl px-4 py-3 border border-white/20 shadow-sm">
+                    <p class="text-[10px] font-medium text-[#C4A265] uppercase tracking-wider mb-1">{{ $t('a_revenue_trend') }}</p>
+                    <svg viewBox="0 0 200 40" class="w-40 md:w-48 h-10">
                         <defs>
                             <linearGradient id="sparkGrad" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="0%" stop-color="#C4A265" stop-opacity="0.3" />
+                                <stop offset="0%" stop-color="#C4A265" stop-opacity="0.4" />
                                 <stop offset="100%" stop-color="#C4A265" stop-opacity="0" />
                             </linearGradient>
                         </defs>
                         <path :d="sparklinePath + ' L200,40 L0,40 Z'" fill="url(#sparkGrad)" />
                         <path :d="sparklinePath" fill="none" stroke="#C4A265" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
+                </div>
                 </div>
             </div>
 

@@ -91,17 +91,23 @@ function statusLabel(status) {
 <template>
     <AdminLayout :title="$t('a_invoices')">
         <div class="space-y-6">
-            <div class="flex items-center justify-between">
-                <h1 class="text-xl md:text-2xl font-bold text-gray-800">{{ $t('a_invoices') }}</h1>
+            <!-- ═════════ Compact Hero ═════════ -->
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-4">
+                <div class="flex items-start gap-3 min-w-0">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#1B365D] to-[#0F2444] flex items-center justify-center shadow-md flex-shrink-0">
+                        <svg class="w-5 h-5 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    </div>
+                    <div class="min-w-0">
+                        <h1 class="text-xl md:text-2xl font-extrabold text-[#1B365D] truncate">{{ $t('a_invoices') }}</h1>
+                        <p class="text-xs text-slate-500 mt-0.5">{{ isRtl ? 'إدارة الفواتير والمدفوعات' : 'Manage invoices and billing' }}</p>
+                    </div>
+                </div>
                 <Link
                     v-if="can('invoices.create')"
                     href="/admin/invoices/create"
-                    class="inline-flex items-center px-4 py-2 rounded-lg text-white text-sm font-medium transition"
-                    style="background-color: #C4A265;"
+                    class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#C4A265] to-[#8B7043] hover:from-[#8B7043] hover:to-[#C4A265] text-white font-bold px-4 py-2.5 shadow-md hover:shadow-lg transition text-sm"
                 >
-                    <svg class="w-4 h-4 ltr:mr-2 rtl:ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                    </svg>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                     {{ $t('a_new_invoice') }}
                 </Link>
             </div>

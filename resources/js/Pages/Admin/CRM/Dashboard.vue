@@ -325,22 +325,30 @@ function missFollowUp(fuId) {
 <template>
     <AdminLayout title="CRM Dashboard">
         <div class="space-y-6">
-            <!-- Header -->
+            <!-- ═════════ Navy Hero Header ═════════ -->
             <div
-                class="card-entrance flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+                class="card-entrance relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] shadow-xl"
                 :class="{ 'card-entrance-active': mounted }"
                 :style="{ transitionDelay: '0ms' }"
             >
-                <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-[#C4A265] to-[#A8893E] flex items-center justify-center shadow-lg shadow-[#C4A265]/20">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6" /></svg>
+                <div class="pointer-events-none absolute -top-16 -end-16 h-56 w-56 rounded-full bg-[#C4A265]/20 blur-3xl"></div>
+                <div class="pointer-events-none absolute -bottom-20 start-1/3 h-48 w-48 rounded-full bg-[#C4A265]/10 blur-3xl"></div>
+                <div class="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-[#C4A265] to-transparent"></div>
+                <div class="relative p-4 md:p-7 flex flex-col md:flex-row md:items-center gap-4 md:gap-5 justify-between">
+                <div class="flex items-start gap-3 md:gap-4 min-w-0">
+                    <div class="w-12 h-12 md:w-14 md:h-14 rounded-xl bg-gradient-to-br from-[#C4A265] to-[#8B7043] flex items-center justify-center shadow-lg flex-shrink-0">
+                        <svg class="w-6 h-6 md:w-7 md:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6" /></svg>
                     </div>
-                    <div>
-                        <h1 class="text-xl md:text-2xl font-bold text-gray-800">{{ $t('a_crm_dashboard') }}</h1>
-                        <p class="text-sm text-gray-500 mt-0.5">{{ $t('a_crm_dashboard_subtitle') }}</p>
+                    <div class="min-w-0">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="h-[3px] w-6 bg-[#C4A265] rounded-full"></span>
+                            <span class="text-[10px] font-bold text-[#C4A265] tracking-[0.25em] uppercase">{{ isRtl ? 'إدارة العلاقات' : 'CRM' }}</span>
+                        </div>
+                        <h1 class="text-xl md:text-3xl font-extrabold text-white tracking-tight truncate">{{ $t('a_crm_dashboard') }}</h1>
+                        <p class="text-xs md:text-sm text-white/70 mt-1 max-w-xl">{{ $t('a_crm_dashboard_subtitle') }}</p>
                     </div>
                 </div>
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-2 md:gap-3 flex-wrap">
                     <!-- Period Selector Pills -->
                     <div class="flex bg-gray-100 rounded-xl p-1 relative">
                         <button v-for="p in ['week', 'month', 'quarter', 'year']" :key="p"
@@ -363,6 +371,7 @@ function missFollowUp(fuId) {
                         style="background: linear-gradient(135deg, #C4A265, #A8893E);"
                     >
                         <svg class="w-4 h-4 ltr:mr-1.5 rtl:ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>{{ $t('a_new_lead') }}</button>
+                </div>
                 </div>
             </div>
 

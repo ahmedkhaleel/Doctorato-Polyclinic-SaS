@@ -767,39 +767,52 @@ function submitEditServices() {
 <template>
     <div class="space-y-6">
         <!-- ─── Header ─────────────────────────────────────────── -->
-        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <div class="flex items-center gap-3">
-                <Link href="/admin/bookings" class="text-gray-400 hover:text-gray-600 transition-colors">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
-                </Link>
-                <div>
-                    <div class="flex items-center gap-3">
-                        <h1 class="text-xl md:text-2xl font-bold text-gray-900">{{ $t('a_booking') }} {{ bookingNumber }}</h1>
-                        <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold border capitalize" :class="bookingStatusColors[booking.status] || 'bg-gray-50 text-gray-600 border-gray-200'">
-                            {{ $t('a_' + booking.status) || booking.status }}
-                        </span>
-                        <span v-if="booking.source" class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold border capitalize" :class="sourceColors[booking.source] || 'bg-gray-50 text-gray-600 border-gray-200'">
-                            {{ booking.source }}
-                        </span>
-                        <span v-if="booking.booking_type" class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold border" :class="bookingTypeColors[booking.booking_type] || 'bg-gray-50 text-gray-600 border-gray-200'">
-                            {{ $t('a_' + booking.booking_type) || booking.booking_type }}
-                        </span>
+        <!-- ═════════ Navy Hero Header ═════════ -->
+        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] shadow-xl">
+            <div class="pointer-events-none absolute -top-16 -end-16 h-56 w-56 rounded-full bg-[#C4A265]/20 blur-3xl"></div>
+            <div class="pointer-events-none absolute -bottom-20 start-1/3 h-48 w-48 rounded-full bg-[#C4A265]/10 blur-3xl"></div>
+            <div class="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-[#C4A265] to-transparent"></div>
+            <div class="relative p-4 md:p-6 flex flex-col md:flex-row md:items-center gap-4 md:gap-5 justify-between">
+                <div class="flex items-start gap-3 md:gap-4 min-w-0">
+                    <Link href="/admin/bookings" class="w-10 h-10 md:w-11 md:h-11 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 flex items-center justify-center text-white transition flex-shrink-0">
+                        <svg class="w-5 h-5 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                    </Link>
+                    <div class="w-12 h-12 md:w-14 md:h-14 rounded-xl bg-gradient-to-br from-[#C4A265] to-[#8B7043] flex items-center justify-center shadow-lg flex-shrink-0">
+                        <svg class="w-6 h-6 md:w-7 md:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                     </div>
-                    <p class="text-sm text-gray-500 mt-1">{{ $t('a_created') }} {{ formatDateTime(booking.created_at) }}
-                        <span v-if="booking.creator"> {{ $t('a_by') }} {{ booking.creator.name }}</span>
-                    </p>
+                    <div class="min-w-0">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="h-[3px] w-6 bg-[#C4A265] rounded-full"></span>
+                            <span class="text-[10px] font-bold text-[#C4A265] tracking-[0.25em] uppercase">{{ $t('a_booking') || 'Booking' }}</span>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2 md:gap-3">
+                            <h1 class="text-xl md:text-2xl font-extrabold text-white tracking-tight">{{ $t('a_booking') }} {{ bookingNumber }}</h1>
+                            <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold border capitalize ring-1 ring-white/20" :class="bookingStatusColors[booking.status] || 'bg-white/10 text-white border-white/20'">
+                                {{ $t('a_' + booking.status) || booking.status }}
+                            </span>
+                            <span v-if="booking.source" class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold border capitalize ring-1 ring-white/20" :class="sourceColors[booking.source] || 'bg-white/10 text-white border-white/20'">
+                                {{ booking.source }}
+                            </span>
+                            <span v-if="booking.booking_type" class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold border ring-1 ring-white/20" :class="bookingTypeColors[booking.booking_type] || 'bg-white/10 text-white border-white/20'">
+                                {{ $t('a_' + booking.booking_type) || booking.booking_type }}
+                            </span>
+                        </div>
+                        <p class="text-xs md:text-sm text-white/70 mt-1">{{ $t('a_created') }} {{ formatDateTime(booking.created_at) }}
+                            <span v-if="booking.creator"> {{ $t('a_by') }} {{ booking.creator.name }}</span>
+                        </p>
+                    </div>
                 </div>
-            </div>
-            <div class="flex items-center gap-2 ltr:ml-8 rtl:mr-8 sm:ltr:ml-0 sm:rtl:mr-0">
-                <a :href="`/admin/bookings/${booking.id}/receipt`" target="_blank" class="inline-flex items-center gap-1.5 px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 transition-all shadow-sm">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" /></svg>
-                    {{ $t('a_print_receipt') }}
-                </a>
-                <button v-if="can('bookings.delete')" type="button" @click="deleteBooking" :disabled="deletingBooking"
-                    class="inline-flex items-center gap-1.5 px-4 py-2 bg-red-50 border border-red-200 rounded-xl text-sm font-medium text-red-600 hover:bg-red-100 transition-all shadow-sm disabled:opacity-50">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                    {{ deletingBooking ? $t('a_deleting') : $t('a_delete') }}
-                </button>
+                <div class="flex items-center gap-2 flex-wrap">
+                    <a :href="`/admin/bookings/${booking.id}/receipt`" target="_blank" class="inline-flex items-center gap-1.5 px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl text-sm font-semibold text-white hover:bg-white/20 transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+                        {{ $t('a_print_receipt') }}
+                    </a>
+                    <button v-if="can('bookings.delete')" type="button" @click="deleteBooking" :disabled="deletingBooking"
+                        class="inline-flex items-center gap-1.5 px-4 py-2 bg-red-500/20 border border-red-400/30 rounded-xl text-sm font-semibold text-red-200 hover:bg-red-500/30 transition disabled:opacity-50">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                        {{ deletingBooking ? $t('a_deleting') : $t('a_delete') }}
+                    </button>
+                </div>
             </div>
         </div>
 

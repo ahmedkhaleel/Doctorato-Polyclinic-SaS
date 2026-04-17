@@ -94,33 +94,26 @@ function getModuleColor(mod) {
 <template>
     <AdminLayout :title="$t('a_doctors')">
         <div class="doctors-page space-y-6">
-            <!-- Header -->
+            <!-- ═════════ Compact Hero ═════════ -->
             <div
-                class="header-section flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+                class="header-section flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-4"
                 :class="{ 'animate-in': mounted }"
             >
-                <div>
-                    <h1 class="text-xl md:text-2xl font-bold text-gray-800 flex items-center gap-3">
-                        <span class="header-icon w-10 h-10 rounded-xl flex items-center justify-center" style="background: linear-gradient(135deg, #C4A265, #d4b87a);">
-                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                            </svg>
-                        </span>
-                        {{ $t('a_doctors') }}
-                    </h1>
-                    <p class="text-sm text-gray-500 mt-1" :class="isRtl ? 'mr-13' : 'ml-13'">
-                        {{ $t('a_manage_doctors_description') || (isRtl ? 'إدارة الأطباء والتخصصات' : 'Manage doctors and specializations') }}
-                    </p>
+                <div class="flex items-start gap-3 min-w-0">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#1B365D] to-[#0F2444] flex items-center justify-center shadow-md flex-shrink-0">
+                        <svg class="w-5 h-5 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                    </div>
+                    <div class="min-w-0">
+                        <h1 class="text-xl md:text-2xl font-extrabold text-[#1B365D] truncate">{{ $t('a_doctors') }}</h1>
+                        <p class="text-xs text-slate-500 mt-0.5">{{ $t('a_manage_doctors_description') || (isRtl ? 'إدارة الأطباء والتخصصات' : 'Manage doctors and specializations') }}</p>
+                    </div>
                 </div>
                 <Link
                     v-if="can('doctors.create')"
                     href="/admin/doctors/create"
-                    class="add-btn inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-white text-sm font-semibold shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5"
-                    style="background: linear-gradient(135deg, #C4A265, #b8934f);"
+                    class="add-btn inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#C4A265] to-[#8B7043] hover:from-[#8B7043] hover:to-[#C4A265] text-white font-bold px-4 py-2.5 shadow-md hover:shadow-lg transition text-sm"
                 >
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                    </svg>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
                     {{ $t('a_add_doctor') || (isRtl ? 'إضافة طبيب' : 'Add Doctor') }}
                 </Link>
             </div>

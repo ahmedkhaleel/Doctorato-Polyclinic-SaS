@@ -61,16 +61,30 @@ const maxDailyTotal = computed(() => Math.max(...(props.dailyTrend?.map(d => d.t
 <template>
     <AdminLayout :title="isRtl ? 'أداء الموظفين' : 'Staff Performance'">
         <div class="space-y-6">
-            <!-- Header -->
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                <div>
-                    <h1 class="text-xl md:text-2xl font-bold text-gray-900">{{ isRtl ? 'أداء وإنتاجية الموظفين' : 'Staff Performance & Productivity' }}</h1>
-                    <p class="text-sm text-gray-500 mt-1">{{ isRtl ? 'الحضور والانصراف والإنتاجية والعمل الإضافي' : 'Attendance, productivity, and overtime analytics' }}</p>
-                </div>
-                <div class="flex items-center gap-2">
-                    <input v-model="dateFrom" type="date" class="rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]" />
-                    <span class="text-gray-400">→</span>
-                    <input v-model="dateTo" type="date" class="rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]" />
+            <!-- ═════════ Navy Hero Header ═════════ -->
+            <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] shadow-xl">
+                <div class="pointer-events-none absolute -top-16 -end-16 h-56 w-56 rounded-full bg-[#C4A265]/20 blur-3xl"></div>
+                <div class="pointer-events-none absolute -bottom-20 start-1/3 h-48 w-48 rounded-full bg-[#C4A265]/10 blur-3xl"></div>
+                <div class="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-[#C4A265] to-transparent"></div>
+                <div class="relative p-4 md:p-7 flex flex-col md:flex-row md:items-center gap-4 md:gap-5 justify-between">
+                    <div class="flex items-start gap-3 md:gap-4 min-w-0">
+                        <div class="w-12 h-12 md:w-14 md:h-14 rounded-xl bg-gradient-to-br from-[#C4A265] to-[#8B7043] flex items-center justify-center shadow-lg flex-shrink-0">
+                            <svg class="w-6 h-6 md:w-7 md:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                        </div>
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="h-[3px] w-6 bg-[#C4A265] rounded-full"></span>
+                                <span class="text-[10px] font-bold text-[#C4A265] tracking-[0.25em] uppercase">{{ isRtl ? 'إنتاجية' : 'Productivity' }}</span>
+                            </div>
+                            <h1 class="text-xl md:text-3xl font-extrabold text-white tracking-tight truncate">{{ isRtl ? 'أداء وإنتاجية الموظفين' : 'Staff Performance & Productivity' }}</h1>
+                            <p class="text-xs md:text-sm text-white/70 mt-1 max-w-xl">{{ isRtl ? 'الحضور والانصراف والإنتاجية والعمل الإضافي' : 'Attendance, productivity, and overtime analytics' }}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <input v-model="dateFrom" type="date" class="rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 text-white text-sm focus:ring-[#C4A265] focus:border-[#C4A265] [color-scheme:dark]" />
+                        <span class="text-[#C4A265]">→</span>
+                        <input v-model="dateTo" type="date" class="rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 text-white text-sm focus:ring-[#C4A265] focus:border-[#C4A265] [color-scheme:dark]" />
+                    </div>
                 </div>
             </div>
 

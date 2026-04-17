@@ -99,18 +99,17 @@ function handleDeleteConversation() {
             />
 
             <!-- Empty state -->
-            <div v-else class="flex-1 flex flex-col items-center justify-center bg-[#f8f9fb]">
-                <div class="w-20 h-20 rounded-3xl bg-gray-100 flex items-center justify-center mb-5">
-                    <svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div v-else class="flex-1 flex flex-col items-center justify-center bg-gradient-to-br from-white to-slate-50 p-6">
+                <div class="w-20 h-20 rounded-full bg-gradient-to-br from-[#1B365D]/10 to-[#C4A265]/10 flex items-center justify-center mb-5">
+                    <svg class="w-10 h-10 text-[#1B365D]/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                     </svg>
                 </div>
-                <h3 class="text-lg font-bold text-gray-700 mb-1">{{ $t('a_your_messages') }}</h3>
-                <p class="text-sm text-gray-400 mb-5">{{ $t('a_select_conversation') }}</p>
+                <h3 class="text-lg font-bold text-[#1B365D] mb-1">{{ $t('a_your_messages') }}</h3>
+                <p class="text-sm text-slate-500 mb-5">{{ $t('a_select_conversation') }}</p>
                 <button
                     @click="showNewChat = true"
-                    class="px-5 py-2.5 rounded-xl text-sm font-semibold text-white shadow-sm transition-all hover:opacity-90"
-                    :style="{ backgroundColor: accentColor }"
+                    class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#C4A265] to-[#8B7043] hover:from-[#8B7043] hover:to-[#C4A265] text-white font-bold px-5 py-2.5 shadow-md hover:shadow-lg transition text-sm"
                 >
                     {{ $t('a_start_new_chat') }}
                 </button>

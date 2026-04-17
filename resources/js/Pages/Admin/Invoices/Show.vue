@@ -95,40 +95,48 @@ function submitPayment() {
 <template>
     <AdminLayout :title="`${$t('a_invoice_number')}: ${invoice.invoice_number}`">
         <div class="space-y-6">
-            <!-- Header -->
-            <div class="flex items-center justify-between">
-                <div>
-                    <h1 class="text-xl md:text-2xl font-bold text-gray-800">{{ $t('a_invoice_number') }} {{ invoice.invoice_number }}</h1>
-                    <p class="text-sm text-gray-500 mt-1">{{ $t('a_created') }} {{ formatDate(invoice.created_at) }}</p>
-                </div>
-                <div class="flex items-center gap-3">
-                    <span
-                        :class="statusColors[invoice.status]"
-                        class="px-3 py-1 text-sm font-semibold rounded-full"
-                    >
-                        {{ statusLabel(invoice.status) }}
-                    </span>
-                    <Link
-                        :href="`/admin/invoices/${invoice.id}/print`"
-                        target="_blank"
-                        class="inline-flex items-center px-4 py-2 rounded-lg border text-sm font-medium transition"
-                        style="border-color: #C4A265; color: #C4A265;"
-                    >
-                        <svg class="w-4 h-4 ltr:mr-2 rtl:ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
-                        </svg>
-                        {{ $t('a_print') }}
-                    </Link>
-                    <a
-                        :href="`/admin/invoices/${invoice.id}/pdf`"
-                        class="inline-flex items-center px-4 py-2 rounded-lg border text-sm font-medium transition border-emerald-400 text-emerald-700 hover:bg-emerald-50"
-                    >
-                        <svg class="w-4 h-4 ltr:mr-2 rtl:ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                        </svg>
-                        PDF
-                    </a>
-                    <Link href="/admin/invoices" class="text-sm text-gray-500 hover:text-gray-700">{{ $t('a_back_to_invoices') }}</Link>
+            <!-- ═════════ Navy Hero Header ═════════ -->
+            <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] shadow-xl">
+                <div class="pointer-events-none absolute -top-16 -end-16 h-56 w-56 rounded-full bg-[#C4A265]/20 blur-3xl"></div>
+                <div class="pointer-events-none absolute -bottom-20 start-1/3 h-48 w-48 rounded-full bg-[#C4A265]/10 blur-3xl"></div>
+                <div class="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-[#C4A265] to-transparent"></div>
+                <div class="relative p-4 md:p-7 flex flex-col md:flex-row md:items-center gap-4 md:gap-5 justify-between">
+                    <div class="flex items-start gap-3 md:gap-4 min-w-0">
+                        <div class="w-12 h-12 md:w-14 md:h-14 rounded-xl bg-gradient-to-br from-[#C4A265] to-[#8B7043] flex items-center justify-center shadow-lg flex-shrink-0">
+                            <svg class="w-6 h-6 md:w-7 md:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                        </div>
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="h-[3px] w-6 bg-[#C4A265] rounded-full"></span>
+                                <span class="text-[10px] font-bold text-[#C4A265] tracking-[0.25em] uppercase">{{ $t('a_invoice') || 'Invoice' }}</span>
+                            </div>
+                            <div class="flex flex-wrap items-center gap-3">
+                                <h1 class="text-xl md:text-3xl font-extrabold text-white tracking-tight">{{ $t('a_invoice_number') }} {{ invoice.invoice_number }}</h1>
+                                <span :class="statusColors[invoice.status]" class="px-3 py-1 text-xs font-semibold rounded-full ring-1 ring-white/20">
+                                    {{ statusLabel(invoice.status) }}
+                                </span>
+                            </div>
+                            <p class="text-xs md:text-sm text-white/70 mt-1">{{ $t('a_created') }} {{ formatDate(invoice.created_at) }}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <Link
+                            :href="`/admin/invoices/${invoice.id}/print`"
+                            target="_blank"
+                            class="inline-flex items-center gap-2 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 text-white font-semibold px-4 py-2 transition text-sm"
+                        >
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+                            {{ $t('a_print') }}
+                        </Link>
+                        <a
+                            :href="`/admin/invoices/${invoice.id}/pdf`"
+                            class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#C4A265] to-[#8B7043] hover:from-[#8B7043] hover:to-[#C4A265] text-white font-bold px-4 py-2 shadow-md transition text-sm"
+                        >
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                            PDF
+                        </a>
+                        <Link href="/admin/invoices" class="text-xs text-[#C4A265] hover:text-white transition">{{ $t('a_back_to_invoices') }}</Link>
+                    </div>
                 </div>
             </div>
 

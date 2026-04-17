@@ -73,8 +73,15 @@ function formatDate(date) {
 <template>
     <AdminLayout :title="$t('a_payments')">
         <div class="space-y-6">
-            <div class="flex items-center justify-between">
-                <h1 class="text-xl md:text-2xl font-bold text-gray-800">{{ $t('a_payments') }}</h1>
+            <!-- ═════════ Compact Hero ═════════ -->
+            <div class="flex items-start gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#1B365D] to-[#0F2444] flex items-center justify-center shadow-md flex-shrink-0">
+                    <svg class="w-5 h-5 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+                <div class="min-w-0">
+                    <h1 class="text-xl md:text-2xl font-extrabold text-[#1B365D] truncate">{{ $t('a_payments') }}</h1>
+                    <p class="text-xs text-slate-500 mt-0.5">{{ isRtl ? 'سجل المدفوعات والإيصالات' : 'Payment records and receipts' }}</p>
+                </div>
             </div>
 
             <div class="bg-white rounded-lg shadow-sm p-4 flex flex-wrap gap-3">

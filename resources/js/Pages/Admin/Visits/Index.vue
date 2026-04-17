@@ -121,31 +121,34 @@ function getInitials(name) {
 <template>
     <AdminLayout :title="$t('a_visits')">
         <div class="space-y-6">
-            <!-- Header -->
-            <div class="flex items-center justify-between">
-                <div>
-                    <h1 class="text-xl md:text-2xl font-bold text-gray-800">{{ $t('a_visits') }}</h1>
-                    <p class="text-sm text-gray-500 mt-0.5">
-                        <span class="font-semibold" style="color: #C4A265;">{{ visits.total }}</span> {{ $t('a_total_visits') }}
-                    </p>
+            <!-- ═════════ Compact Hero ═════════ -->
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-4">
+                <div class="flex items-start gap-3 min-w-0">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#1B365D] to-[#0F2444] flex items-center justify-center shadow-md flex-shrink-0">
+                        <svg class="w-5 h-5 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                    </div>
+                    <div class="min-w-0">
+                        <h1 class="text-xl md:text-2xl font-extrabold text-[#1B365D] truncate">{{ $t('a_visits') }}</h1>
+                        <p class="text-xs text-slate-500 mt-0.5">
+                            <span class="font-semibold text-[#C4A265]">{{ visits.total }}</span> {{ $t('a_total_visits') }}
+                        </p>
+                    </div>
                 </div>
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-2 flex-wrap">
                     <Link
                         v-if="can('visits.view')"
                         href="/admin/visits/today-queue"
-                        class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 text-sm font-semibold transition-all duration-200 hover:shadow-md"
-                        style="border-color: #C4A265; color: #C4A265;"
+                        class="inline-flex items-center gap-2 rounded-xl bg-white border border-slate-200 text-[#1B365D] hover:bg-[#1B365D] hover:text-white font-semibold px-4 py-2.5 transition text-sm"
                     >
-                        <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
                         {{ $t('a_todays_queue') }}
                     </Link>
                     <Link
                         v-if="can('visits.create')"
                         href="/admin/bookings/create"
-                        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-white text-sm font-semibold transition-all duration-200 shadow-lg hover:shadow-xl"
-                        style="background-color: #C4A265; box-shadow: 0 4px 14px rgba(196, 162, 101, 0.3);"
+                        class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#C4A265] to-[#8B7043] hover:from-[#8B7043] hover:to-[#C4A265] text-white font-bold px-4 py-2.5 shadow-md hover:shadow-lg transition text-sm"
                     >
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                         {{ $t('a_new_booking') }}
                     </Link>
                 </div>

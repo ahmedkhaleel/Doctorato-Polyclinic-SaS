@@ -134,40 +134,40 @@ function exportBookings() {
 <template>
     <AdminLayout :title="$t('a_bookings')">
         <div class="space-y-6">
-            <div class="flex items-center justify-between">
-                <h1 class="text-xl md:text-2xl font-bold text-gray-800">{{ $t('a_bookings') }}</h1>
-                <div class="flex items-center gap-3">
+            <!-- ═════════ Compact Hero ═════════ -->
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-4">
+                <div class="flex items-start gap-3 min-w-0">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#1B365D] to-[#0F2444] flex items-center justify-center shadow-md flex-shrink-0">
+                        <svg class="w-5 h-5 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                    </div>
+                    <div class="min-w-0">
+                        <h1 class="text-xl md:text-2xl font-extrabold text-[#1B365D] truncate">{{ $t('a_bookings') }}</h1>
+                        <p class="text-xs text-slate-500 mt-0.5">{{ isRtl ? 'إدارة حجوزات المواعيد' : 'Manage appointment bookings' }}</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 flex-wrap">
                     <Link
                         v-if="can('package_bundle_bookings.create')"
                         href="/admin/package-bundle-bookings/create"
-                        class="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium transition border-2"
-                        style="border-color: #C4A265; color: #C4A265;"
+                        class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold bg-white border border-[#C4A265] text-[#8B7043] hover:bg-[#C4A265]/10 transition"
                     >
-                        <svg class="w-4 h-4 ltr:mr-2 rtl:ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                        </svg>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
                         {{ $t('a_book_package') }}
                     </Link>
                     <Link
                         v-if="can('bookings.create')"
                         href="/admin/bookings/create"
-                        class="inline-flex items-center px-4 py-2 rounded-lg text-white text-sm font-medium transition"
-                        style="background-color: #C4A265;"
+                        class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#C4A265] to-[#8B7043] hover:from-[#8B7043] hover:to-[#C4A265] text-white font-bold px-4 py-2.5 shadow-md hover:shadow-lg transition text-sm"
                     >
-                        <svg class="w-4 h-4 ltr:mr-2 rtl:ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                        </svg>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                         {{ $t('a_new_booking') }}
                     </Link>
                     <button
                         v-if="can('bookings.export')"
                         @click="exportBookings"
-                        class="inline-flex items-center px-4 py-2 rounded-lg text-white text-sm font-medium transition"
-                        style="background-color: #C4A265;"
+                        class="inline-flex items-center gap-2 rounded-xl bg-white border border-slate-200 text-[#1B365D] hover:bg-[#1B365D] hover:text-white font-semibold px-4 py-2.5 transition text-sm"
                     >
-                        <svg class="w-4 h-4 ltr:mr-2 rtl:ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                        </svg>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                         {{ $t('a_export') }}
                     </button>
                 </div>

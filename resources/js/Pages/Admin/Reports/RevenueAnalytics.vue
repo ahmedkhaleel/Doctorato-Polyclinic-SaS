@@ -65,24 +65,35 @@ const maxServiceRevenue = computed(() => Math.max(...(props.topServices?.map(s =
 <template>
     <AdminLayout :title="isRtl ? 'تحليلات الإيرادات' : 'Revenue Analytics'">
         <div class="space-y-6">
-            <!-- Header -->
-            <div class="flex items-center justify-between flex-wrap gap-3">
-                <div>
-                    <h1 class="text-xl md:text-2xl font-bold text-gray-900">{{ isRtl ? 'تحليلات الإيرادات' : 'Revenue Analytics' }}</h1>
-                    <p class="text-sm text-gray-500 mt-1">{{ isRtl ? 'مقارنة الشهر الحالي بالسابق مع توقعات' : 'Current vs previous month with forecasting' }}</p>
-                </div>
-                <div class="flex items-center gap-3">
-                    <select
-                        v-if="activeModules.length > 1"
-                        v-model="moduleFilter"
-                        class="px-4 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265]"
-                    >
-                        <option value="">{{ isRtl ? 'كل الأقسام' : 'All Departments' }}</option>
-                        <option v-for="mod in activeModules" :key="mod.slug" :value="mod.slug">{{ mod.name }}</option>
-                    </select>
-                    <Link href="/admin/reports/financial" class="px-4 py-2 text-sm font-medium text-[#1B365D] bg-slate-50 rounded-lg hover:bg-slate-100 transition">
-                        {{ isRtl ? 'التقرير المالي التفصيلي' : 'Detailed Financial Report' }} →
-                    </Link>
+            <!-- ═════════ Navy Hero Header ═════════ -->
+            <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] shadow-xl">
+                <div class="pointer-events-none absolute -top-16 -end-16 h-56 w-56 rounded-full bg-[#C4A265]/20 blur-3xl"></div>
+                <div class="pointer-events-none absolute -bottom-20 start-1/3 h-48 w-48 rounded-full bg-[#C4A265]/10 blur-3xl"></div>
+                <div class="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-[#C4A265] to-transparent"></div>
+                <div class="relative p-4 md:p-7 flex flex-col md:flex-row md:items-center gap-4 md:gap-5 justify-between">
+                    <div class="flex items-start gap-3 md:gap-4 min-w-0">
+                        <div class="w-12 h-12 md:w-14 md:h-14 rounded-xl bg-gradient-to-br from-[#C4A265] to-[#8B7043] flex items-center justify-center shadow-lg flex-shrink-0">
+                            <svg class="w-6 h-6 md:w-7 md:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+                        </div>
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="h-[3px] w-6 bg-[#C4A265] rounded-full"></span>
+                                <span class="text-[10px] font-bold text-[#C4A265] tracking-[0.25em] uppercase">{{ isRtl ? 'تحليلات' : 'Analytics' }}</span>
+                            </div>
+                            <h1 class="text-xl md:text-3xl font-extrabold text-white tracking-tight truncate">{{ isRtl ? 'تحليلات الإيرادات' : 'Revenue Analytics' }}</h1>
+                            <p class="text-xs md:text-sm text-white/70 mt-1 max-w-xl">{{ isRtl ? 'مقارنة الشهر الحالي بالسابق مع توقعات' : 'Current vs previous month with forecasting' }}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <select v-if="activeModules.length > 1" v-model="moduleFilter"
+                            class="px-3 py-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl text-sm text-white focus:ring-2 focus:ring-[#C4A265]/40 focus:border-[#C4A265]">
+                            <option value="" class="text-slate-800">{{ isRtl ? 'كل الأقسام' : 'All Departments' }}</option>
+                            <option v-for="mod in activeModules" :key="mod.slug" :value="mod.slug" class="text-slate-800">{{ mod.name }}</option>
+                        </select>
+                        <Link href="/admin/reports/financial" class="inline-flex items-center gap-2 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 text-white font-semibold px-4 py-2 transition text-sm">
+                            {{ isRtl ? 'التقرير المالي التفصيلي' : 'Detailed Financial Report' }} →
+                        </Link>
+                    </div>
                 </div>
             </div>
 

@@ -171,37 +171,43 @@ const categoryColors = ['#EF4444', '#F59E0B', '#3B82F6', '#8B5CF6', '#10B981', '
     <AdminLayout :title="$t('a_financial_report')">
         <div class="space-y-6">
 
-            <!-- ── Header ──────────────────────────────────────── -->
+            <!-- ═════════ Navy Hero Header ═════════ -->
             <div
-                class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 transition-all duration-700"
+                class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] shadow-xl transition-all duration-700"
                 :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
             >
-                <div class="flex items-center gap-3">
-                    <Link href="/admin/reports" class="w-10 h-10 rounded-xl bg-white border border-gray-200 shadow-sm flex items-center justify-center text-gray-400 hover:text-[#C4A265] hover:border-[#C4A265]/30 hover:shadow-md transition-all duration-300 group">
-                        <svg class="w-5 h-5 transition-transform duration-300" :class="isRtl ? 'group-hover:translate-x-0.5' : 'group-hover:-translate-x-0.5'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
-                    </Link>
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#C4A265] to-[#D4B87A] flex items-center justify-center shadow-lg shadow-[#C4A265]/20">
-                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="pointer-events-none absolute -top-16 -end-16 h-56 w-56 rounded-full bg-[#C4A265]/20 blur-3xl"></div>
+                <div class="pointer-events-none absolute -bottom-20 start-1/3 h-48 w-48 rounded-full bg-[#C4A265]/10 blur-3xl"></div>
+                <div class="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-[#C4A265] to-transparent"></div>
+                <div class="relative p-4 md:p-7 flex flex-col md:flex-row md:items-center gap-4 md:gap-5 justify-between">
+                    <div class="flex items-start gap-3 md:gap-4 min-w-0">
+                        <Link href="/admin/reports" class="w-10 h-10 md:w-11 md:h-11 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 flex items-center justify-center text-white transition flex-shrink-0">
+                            <svg class="w-5 h-5 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                        </Link>
+                        <div class="w-12 h-12 md:w-14 md:h-14 rounded-xl bg-gradient-to-br from-[#C4A265] to-[#8B7043] flex items-center justify-center shadow-lg flex-shrink-0">
+                            <svg class="w-6 h-6 md:w-7 md:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                         </div>
-                        <div>
-                            <h1 class="text-xl md:text-2xl font-bold text-gray-900">{{ $t('a_financial_report') }}</h1>
-                            <p class="text-sm text-gray-500">{{ isRtl ? 'الإيرادات والمصروفات والتحليلات المالية' : 'Revenue, expenses and financial analytics' }}</p>
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="h-[3px] w-6 bg-[#C4A265] rounded-full"></span>
+                                <span class="text-[10px] font-bold text-[#C4A265] tracking-[0.25em] uppercase">{{ isRtl ? 'مالي' : 'Financial' }}</span>
+                            </div>
+                            <h1 class="text-xl md:text-3xl font-extrabold text-white tracking-tight truncate">{{ $t('a_financial_report') }}</h1>
+                            <p class="text-xs md:text-sm text-white/70 mt-1 max-w-xl">{{ isRtl ? 'الإيرادات والمصروفات والتحليلات المالية' : 'Revenue, expenses and financial analytics' }}</p>
                         </div>
                     </div>
-                </div>
-
-                <!-- Quick Stats -->
-                <div class="flex items-center gap-2 flex-wrap">
-                    <div v-if="avgDailyRevenue" class="px-3 py-1.5 rounded-xl bg-white border border-gray-100 shadow-sm">
-                        <span class="text-[10px] font-medium text-gray-400 uppercase tracking-wider block">{{ isRtl ? 'المتوسط اليومي' : 'Avg Daily' }}</span>
-                        <span class="text-sm font-bold text-gray-900">{{ formatCurrency(avgDailyRevenue) }}</span>
-                    </div>
-                    <div v-if="peakDay" class="px-3 py-1.5 rounded-xl bg-white border border-gray-100 shadow-sm">
-                        <span class="text-[10px] font-medium text-gray-400 uppercase tracking-wider block">{{ isRtl ? 'أعلى يوم' : 'Peak Day' }}</span>
-                        <span class="text-sm font-bold text-gray-900">{{ peakDay }}</span>
+                    <!-- Quick Stats -->
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <div v-if="avgDailyRevenue" class="px-3 py-2 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20">
+                            <span class="text-[10px] font-medium text-[#C4A265] uppercase tracking-wider block">{{ isRtl ? 'المتوسط اليومي' : 'Avg Daily' }}</span>
+                            <span class="text-sm font-bold text-white">{{ formatCurrency(avgDailyRevenue) }}</span>
+                        </div>
+                        <div v-if="peakDay" class="px-3 py-2 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20">
+                            <span class="text-[10px] font-medium text-[#C4A265] uppercase tracking-wider block">{{ isRtl ? 'أعلى يوم' : 'Peak Day' }}</span>
+                            <span class="text-sm font-bold text-white">{{ peakDay }}</span>
+                        </div>
                     </div>
                 </div>
             </div>
