@@ -29,7 +29,7 @@ const editor = useEditor({
         }),
         Link.configure({
             openOnClick: false,
-            HTMLAttributes: { class: 'text-blue-600 underline' },
+            HTMLAttributes: { class: 'text-[#1B365D] underline' },
         }),
         Image.configure({
             inline: true,

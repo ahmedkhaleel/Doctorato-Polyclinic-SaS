@@ -65,10 +65,10 @@ const upcomingVisits = computed(() => {
                         <span v-if="patient.has_diabetes" class="inline-flex items-center px-2.5 py-1 rounded-full bg-amber-100 text-amber-700 text-xs font-semibold">
                             {{ isRtl ? 'سكري' : 'Diabetes' }}{{ patient.diabetes_type ? ` (${patient.diabetes_type})` : '' }}
                         </span>
-                        <span v-if="patient.is_pregnant" class="inline-flex items-center px-2.5 py-1 rounded-full bg-pink-100 text-pink-700 text-xs font-semibold">
+                        <span v-if="patient.is_pregnant" class="inline-flex items-center px-2.5 py-1 rounded-full bg-amber-100 text-[#C4A265] text-xs font-semibold">
                             {{ isRtl ? 'حامل' : 'Pregnant' }}
                         </span>
-                        <span v-if="patient.is_breastfeeding" class="inline-flex items-center px-2.5 py-1 rounded-full bg-pink-100 text-pink-700 text-xs font-semibold">
+                        <span v-if="patient.is_breastfeeding" class="inline-flex items-center px-2.5 py-1 rounded-full bg-amber-100 text-[#C4A265] text-xs font-semibold">
                             {{ isRtl ? 'مرضعة' : 'Breastfeeding' }}
                         </span>
                     </div>
@@ -100,16 +100,16 @@ const upcomingVisits = computed(() => {
 
             <!-- Dental -->
             <button v-if="activeSpecialties.includes('dental')" @click="emit('changeTab', 'dental')"
-                class="group relative text-start bg-gradient-to-br from-cyan-50 to-blue-50 rounded-2xl p-5 border border-cyan-200 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">
+                class="group relative text-start bg-gradient-to-br from-slate-50 to-slate-50 rounded-2xl p-5 border border-slate-200 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">
                 <div class="flex items-center justify-between mb-3">
-                    <div class="w-10 h-10 rounded-xl bg-cyan-100 flex items-center justify-center">
-                        <svg class="w-5 h-5 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 2.5c-2 0-3.5 1.5-3.5 3.5 0 1 .4 2 .8 2.8.6 1 .7 2.2.7 3.2v4c0 1 .5 2 1.5 2s1.5-1 1.5-2v-2.5c0-.3.2-.5.5-.5s.5.2.5.5V16c0 1 .5 2 1.5 2s1.5-1 1.5-2v-4c0-1 .1-2.2.7-3.2.4-.8.8-1.8.8-2.8 0-2-1.5-3.5-3.5-3.5z" /></svg>
+                    <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 2.5c-2 0-3.5 1.5-3.5 3.5 0 1 .4 2 .8 2.8.6 1 .7 2.2.7 3.2v4c0 1 .5 2 1.5 2s1.5-1 1.5-2v-2.5c0-.3.2-.5.5-.5s.5.2.5.5V16c0 1 .5 2 1.5 2s1.5-1 1.5-2v-4c0-1 .1-2.2.7-3.2.4-.8.8-1.8.8-2.8 0-2-1.5-3.5-3.5-3.5z" /></svg>
                     </div>
-                    <svg class="w-4 h-4 text-cyan-400 group-hover:translate-x-1 transition-transform" :class="{ 'rotate-180 group-hover:-translate-x-1': isRtl }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                    <svg class="w-4 h-4 text-slate-400 group-hover:translate-x-1 transition-transform" :class="{ 'rotate-180 group-hover:-translate-x-1': isRtl }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                 </div>
                 <h3 class="text-sm font-bold text-gray-800 mb-1">{{ isRtl ? 'طب الأسنان' : 'Dental' }}</h3>
                 <div class="flex items-baseline gap-3 mt-2">
-                    <span class="text-2xl font-bold text-cyan-600">{{ dentalData?.stats?.total_treatments || 0 }}</span>
+                    <span class="text-2xl font-bold text-[#1B365D]">{{ dentalData?.stats?.total_treatments || 0 }}</span>
                     <span class="text-xs text-gray-500">{{ isRtl ? 'علاج' : 'treatments' }}</span>
                 </div>
                 <p class="text-xs text-gray-500 mt-1">
@@ -120,7 +120,7 @@ const upcomingVisits = computed(() => {
 
             <!-- Pediatric -->
             <button v-if="activeSpecialties.includes('pediatric')" @click="emit('changeTab', 'pediatric')"
-                class="group relative text-start bg-gradient-to-br from-emerald-50 to-green-50 rounded-2xl p-5 border border-emerald-200 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">
+                class="group relative text-start bg-gradient-to-br from-emerald-50 to-emerald-50 rounded-2xl p-5 border border-emerald-200 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">
                 <div class="flex items-center justify-between mb-3">
                     <div class="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center">
                         <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0z" /></svg>
@@ -170,14 +170,14 @@ const upcomingVisits = computed(() => {
             <!-- Upcoming Visits -->
             <div class="bg-white rounded-2xl border border-gray-100 p-5">
                 <div class="flex items-center gap-2 mb-4">
-                    <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
-                        <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                    <div class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                     </div>
                     <h3 class="text-sm font-bold text-gray-800">{{ isRtl ? 'المواعيد القادمة' : 'Upcoming Visits' }}</h3>
                 </div>
                 <div v-if="upcomingVisits.length" class="space-y-2">
                     <div v-for="v in upcomingVisits" :key="v.id" class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 transition">
-                        <div class="w-10 h-10 rounded-lg bg-blue-100 text-blue-600 flex flex-col items-center justify-center flex-shrink-0">
+                        <div class="w-10 h-10 rounded-lg bg-slate-100 text-[#1B365D] flex flex-col items-center justify-center flex-shrink-0">
                             <span class="text-[9px] font-bold uppercase">{{ new Date(v.visit_date).toLocaleDateString('en', { month: 'short' }) }}</span>
                             <span class="text-xs font-black leading-none">{{ new Date(v.visit_date).getDate() }}</span>
                         </div>
@@ -186,7 +186,7 @@ const upcomingVisits = computed(() => {
                             <p class="text-[10px] text-gray-500">{{ v.doctor?.name_en || v.doctor?.name_ar || '-' }}</p>
                         </div>
                         <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full"
-                            :class="v.module === 'dental' ? 'bg-cyan-50 text-cyan-700' : v.module === 'pediatric' ? 'bg-emerald-50 text-emerald-700' : 'bg-[#C4A265]/10 text-[#C4A265]'">
+                            :class="v.module === 'dental' ? 'bg-slate-50 text-[#1B365D]' : v.module === 'pediatric' ? 'bg-emerald-50 text-emerald-700' : 'bg-[#C4A265]/10 text-[#C4A265]'">
                             {{ v.module === 'dental' ? (isRtl ? 'أسنان' : 'Dental') : v.module === 'pediatric' ? (isRtl ? 'أطفال' : 'Peds') : (isRtl ? 'جلدية' : 'Derma') }}
                         </span>
                     </div>

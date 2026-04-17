@@ -200,10 +200,10 @@ function clear() {
 function typeBadgeColor(type) {
     const map = {
         visit: 'bg-slate-100 text-slate-700',
-        prescription: 'bg-purple-100 text-purple-700',
-        dental_treatment: 'bg-cyan-100 text-cyan-700',
+        prescription: 'bg-slate-100 text-[#1B365D]',
+        dental_treatment: 'bg-slate-100 text-[#1B365D]',
         vaccination: 'bg-emerald-100 text-emerald-700',
-        allergy: 'bg-rose-100 text-rose-700',
+        allergy: 'bg-amber-100 text-[#C4A265]',
         invoice: 'bg-amber-100 text-amber-700',
     };
     return map[type] || 'bg-gray-100 text-gray-700';

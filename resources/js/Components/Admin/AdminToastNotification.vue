@@ -329,13 +329,13 @@ function removeToast(id) {
 
 function getNotificationIcon(notifType) {
     switch (notifType) {
-        case 'booking': return { icon: 'calendar', color: 'from-blue-500 to-blue-600' };
+        case 'booking': return { icon: 'calendar', color: 'from-[#1B365D] to-[#1B365D]' };
         case 'message': return { icon: 'envelope', color: 'from-amber-500 to-amber-600' };
         case 'new_website_lead': return { icon: 'lead', color: 'from-emerald-500 to-emerald-600' };
-        case 'lead_assigned': return { icon: 'user', color: 'from-indigo-500 to-indigo-600' };
-        case 'follow_up_reminder': return { icon: 'clock', color: 'from-amber-500 to-orange-500' };
+        case 'lead_assigned': return { icon: 'user', color: 'from-[#1B365D] to-[#1B365D]' };
+        case 'follow_up_reminder': return { icon: 'clock', color: 'from-amber-500 to-[#C4A265]' };
         case 'follow_up_overdue': return { icon: 'alert', color: 'from-red-500 to-red-600' };
-        case 'sequence_step': return { icon: 'automation', color: 'from-purple-500 to-purple-600' };
+        case 'sequence_step': return { icon: 'automation', color: 'from-[#1B365D] to-[#1B365D]' };
         case 'daily_lead_report': return { icon: 'chart', color: 'from-[#C4A265] to-[#D4B87A]' };
         default: return { icon: 'bell', color: 'from-[#C4A265] to-[#D4B87A]' };
     }
@@ -357,13 +357,13 @@ function getNotificationLabel(notifType) {
 
 function getNotificationLabelColor(notifType) {
     switch (notifType) {
-        case 'booking': return 'bg-blue-100 text-blue-700';
+        case 'booking': return 'bg-slate-100 text-[#1B365D]';
         case 'message': return 'bg-amber-100 text-amber-700';
         case 'new_website_lead': return 'bg-emerald-100 text-emerald-700';
-        case 'lead_assigned': return 'bg-indigo-100 text-indigo-700';
-        case 'follow_up_reminder': return 'bg-orange-100 text-orange-700';
+        case 'lead_assigned': return 'bg-slate-100 text-[#1B365D]';
+        case 'follow_up_reminder': return 'bg-amber-100 text-[#C4A265]';
         case 'follow_up_overdue': return 'bg-red-100 text-red-700';
-        case 'sequence_step': return 'bg-purple-100 text-purple-700';
+        case 'sequence_step': return 'bg-slate-100 text-[#1B365D]';
         case 'daily_lead_report': return 'bg-[#C4A265]/15 text-[#8B6F3A]';
         default: return 'bg-gray-100 text-gray-700';
     }

@@ -14,7 +14,7 @@ const props = defineProps({
 
 const moduleColors = {
     derma:     { bg: 'bg-[#C4A265]/10',    text: 'text-[#C4A265]',    ring: 'ring-[#C4A265]/30',    ar: 'جلدية',     en: 'Derma' },
-    dental:    { bg: 'bg-sky-50',     text: 'text-sky-700',     ring: 'ring-sky-200',     ar: 'أسنان',     en: 'Dental' },
+    dental:    { bg: 'bg-[#1B365D]/5',     text: 'text-[#1B365D]',     ring: 'ring-[#1B365D]/20',     ar: 'أسنان',     en: 'Dental' },
     pediatric: { bg: 'bg-slate-50',  text: 'text-[#1B365D]',  ring: 'ring-slate-200',  ar: 'أطفال',     en: 'Pediatric' },
 };
 

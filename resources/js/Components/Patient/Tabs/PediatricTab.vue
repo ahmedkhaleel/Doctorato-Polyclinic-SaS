@@ -67,8 +67,8 @@ const gender = computed(() => props.patient?.gender || 'male');
                 <p class="text-2xl font-bold text-teal-600">{{ stats.growth_records || 0 }}</p>
                 <p class="text-xs text-gray-500">{{ isRtl ? 'قياسات النمو' : 'Growth Records' }}</p>
             </div>
-            <div class="bg-white rounded-xl border border-green-100 p-4">
-                <p class="text-2xl font-bold text-green-600">{{ stats.given_vaccinations || 0 }}</p>
+            <div class="bg-white rounded-xl border border-emerald-100 p-4">
+                <p class="text-2xl font-bold text-emerald-600">{{ stats.given_vaccinations || 0 }}</p>
                 <p class="text-xs text-gray-500">{{ isRtl ? 'تطعيمات مأخوذة' : 'Given Vaccines' }}</p>
             </div>
             <div class="bg-white rounded-xl border border-red-100 p-4">
@@ -90,9 +90,9 @@ const gender = computed(() => props.patient?.gender || 'male');
                 </div>
             </Link>
             <Link v-if="vaccinationsLink" :href="vaccinationsLink"
-                class="flex items-center gap-3 p-3 bg-white rounded-xl border border-gray-200 hover:border-green-300 hover:bg-green-50/50 transition">
-                <div class="w-9 h-9 rounded-lg bg-green-50 flex items-center justify-center">
-                    <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+                class="flex items-center gap-3 p-3 bg-white rounded-xl border border-gray-200 hover:border-emerald-300 hover:bg-emerald-50/50 transition">
+                <div class="w-9 h-9 rounded-lg bg-emerald-50 flex items-center justify-center">
+                    <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
                 </div>
                 <div>
                     <p class="text-xs font-semibold text-gray-800">{{ isRtl ? 'التطعيمات' : 'Vaccinations' }}</p>
@@ -144,7 +144,7 @@ const gender = computed(() => props.patient?.gender || 'male');
                             <p v-if="a.reaction" class="text-xs text-gray-600 mt-0.5">{{ a.reaction }}</p>
                         </div>
                         <span v-if="a.severity" class="text-[10px] font-bold px-2 py-0.5 rounded-full uppercase"
-                            :class="a.severity === 'severe' ? 'bg-red-100 text-red-700' : a.severity === 'moderate' ? 'bg-amber-100 text-amber-700' : 'bg-yellow-50 text-yellow-700'">
+                            :class="a.severity === 'severe' ? 'bg-red-100 text-red-700' : a.severity === 'moderate' ? 'bg-amber-100 text-amber-700' : 'bg-yellow-50 text-amber-700'">
                             {{ a.severity }}
                         </span>
                     </div>

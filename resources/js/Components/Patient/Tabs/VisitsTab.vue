@@ -55,12 +55,12 @@ function statusLabel(s) {
 function statusClass(s) {
     if (s === 'completed') return 'bg-emerald-50 text-emerald-600';
     if (s === 'cancelled') return 'bg-gray-50 text-gray-500';
-    if (s === 'in_progress') return 'bg-blue-50 text-blue-600';
+    if (s === 'in_progress') return 'bg-slate-50 text-[#1B365D]';
     return 'bg-amber-50 text-amber-600';
 }
 
 function moduleBadgeClass(m) {
-    if (m === 'dental') return 'bg-cyan-50 text-cyan-700';
+    if (m === 'dental') return 'bg-slate-50 text-[#1B365D]';
     if (m === 'pediatric') return 'bg-emerald-50 text-emerald-700';
     if (m === 'derma') return 'bg-[#C4A265]/10 text-[#C4A265]';
     return 'bg-gray-50 text-gray-600';

@@ -16,18 +16,18 @@ const searchInput = ref(null)
 let searchTimeout = null
 
 const typeConfig = {
-    patient: { icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z', color: 'text-cyan-600 bg-cyan-50', label_ar: 'مريض', label_en: 'Patient' },
+    patient: { icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z', color: 'text-[#1B365D] bg-slate-50', label_ar: 'مريض', label_en: 'Patient' },
     invoice: { icon: 'M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z', color: 'text-emerald-600 bg-emerald-50', label_ar: 'فاتورة', label_en: 'Invoice' },
-    visit: { icon: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z', color: 'text-blue-600 bg-blue-50', label_ar: 'زيارة', label_en: 'Visit' },
-    supply: { icon: 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4', color: 'text-orange-600 bg-orange-50', label_ar: 'مخزون', label_en: 'Supply' },
+    visit: { icon: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z', color: 'text-[#1B365D] bg-slate-50', label_ar: 'زيارة', label_en: 'Visit' },
+    supply: { icon: 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4', color: 'text-[#C4A265] bg-amber-50', label_ar: 'مخزون', label_en: 'Supply' },
 }
 
 // Quick actions when no search query
 const quickActions = [
-    { title_ar: 'مريض جديد', title_en: 'New Patient', url: '/admin/patients/create', icon: 'M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z', color: 'text-cyan-600' },
+    { title_ar: 'مريض جديد', title_en: 'New Patient', url: '/admin/patients/create', icon: 'M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z', color: 'text-[#1B365D]' },
     { title_ar: 'فاتورة جديدة', title_en: 'New Invoice', url: '/admin/invoices/create', icon: 'M12 4v16m8-8H4', color: 'text-emerald-600' },
-    { title_ar: 'حجز جديد', title_en: 'New Booking', url: '/admin/bookings/create', icon: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z', color: 'text-blue-600' },
-    { title_ar: 'أمر شراء جديد', title_en: 'New Purchase Order', url: '/admin/purchase-orders/create', icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2', color: 'text-purple-600' },
+    { title_ar: 'حجز جديد', title_en: 'New Booking', url: '/admin/bookings/create', icon: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z', color: 'text-[#1B365D]' },
+    { title_ar: 'أمر شراء جديد', title_en: 'New Purchase Order', url: '/admin/purchase-orders/create', icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2', color: 'text-[#1B365D]' },
 ]
 
 // Grouped results by type
@@ -138,7 +138,7 @@ defineExpose({ toggle })
                             <input ref="searchInput" v-model="query" @keydown="onKeydown" type="text"
                                 :placeholder="isRtl ? 'ابحث في المرضى، الفواتير، المخزون...' : 'Search patients, invoices, supplies...'"
                                 class="flex-1 text-sm border-0 outline-none focus:ring-0 placeholder-gray-400 bg-transparent" />
-                            <div v-if="loading" class="w-4 h-4 border-2 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>
+                            <div v-if="loading" class="w-4 h-4 border-2 border-[#1B365D] border-t-transparent rounded-full animate-spin"></div>
                             <kbd class="hidden sm:flex items-center gap-0.5 text-[10px] text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded font-mono">ESC</kbd>
                         </div>
 
@@ -150,7 +150,7 @@ defineExpose({ toggle })
                                 <button v-for="(action, idx) in quickActions" :key="idx"
                                     @click="navigate(action)" @mouseenter="selectedIndex = idx"
                                     class="w-full flex items-center gap-3 px-5 py-2.5 text-start transition-colors"
-                                    :class="selectedIndex === idx ? 'bg-cyan-50' : 'hover:bg-gray-50'">
+                                    :class="selectedIndex === idx ? 'bg-slate-50' : 'hover:bg-gray-50'">
                                     <div class="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center shrink-0" :class="action.color">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="action.icon"/></svg>
                                     </div>
@@ -168,7 +168,7 @@ defineExpose({ toggle })
                                         @click="navigate(item)"
                                         @mouseenter="selectedIndex = flatResults.findIndex(r => r.id === item.id && r.type === item.type)"
                                         class="w-full flex items-center gap-3 px-5 py-2.5 text-start transition-colors"
-                                        :class="flatResults[selectedIndex]?.id === item.id && flatResults[selectedIndex]?.type === item.type ? 'bg-cyan-50' : 'hover:bg-gray-50'">
+                                        :class="flatResults[selectedIndex]?.id === item.id && flatResults[selectedIndex]?.type === item.type ? 'bg-slate-50' : 'hover:bg-gray-50'">
                                         <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" :class="typeConfig[type]?.color">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="typeConfig[type]?.icon"/></svg>
                                         </div>

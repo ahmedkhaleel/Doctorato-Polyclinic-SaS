@@ -205,7 +205,7 @@ function formatDate(d) {
                     :class="[
                         'px-3 py-1.5 text-xs font-semibold rounded-lg transition',
                         activeMetric === m.key
-                            ? 'bg-white text-green-700 shadow-sm'
+                            ? 'bg-white text-emerald-700 shadow-sm'
                             : 'text-gray-500 hover:text-gray-700',
                     ]"
                 >
@@ -219,11 +219,11 @@ function formatDate(d) {
                 :class="[
                     'flex items-center gap-2 px-3 py-1.5 text-xs font-semibold rounded-lg border transition',
                     showWhoLines
-                        ? 'bg-green-50 text-green-700 border-green-200'
+                        ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
                         : 'bg-gray-50 text-gray-500 border-gray-200',
                 ]"
             >
-                <span class="w-2 h-2 rounded-full" :class="showWhoLines ? 'bg-green-500' : 'bg-gray-400'"></span>
+                <span class="w-2 h-2 rounded-full" :class="showWhoLines ? 'bg-emerald-500' : 'bg-gray-400'"></span>
                 WHO
             </button>
         </div>
@@ -437,7 +437,7 @@ function formatDate(d) {
                 <span class="w-4 h-0.5 bg-amber-400 rounded"></span> 15% · 85%
             </div>
             <div class="flex items-center gap-1">
-                <span class="w-4 h-0.5 bg-green-500 rounded"></span>
+                <span class="w-4 h-0.5 bg-emerald-500 rounded"></span>
                 50% ({{ isRtl ? 'المتوسط' : 'Median' }})
             </div>
             <div class="flex items-center gap-1">

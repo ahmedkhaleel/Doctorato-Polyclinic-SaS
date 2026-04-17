@@ -80,7 +80,7 @@ function openImage(path) {
             <div class="flex items-center gap-1.5 mt-1 px-1" :class="isMine ? 'justify-end' : 'justify-start'">
                 <span class="text-[10px] text-gray-400">{{ formatTime(message.created_at) }}</span>
                 <!-- Read receipt for sent messages -->
-                <svg v-if="isMine && message.read_at" class="w-3.5 h-3.5 text-blue-500" fill="none" viewBox="0 0 24 24">
+                <svg v-if="isMine && message.read_at" class="w-3.5 h-3.5 text-[#1B365D]" fill="none" viewBox="0 0 24 24">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                 </svg>
                 <svg v-else-if="isMine" class="w-3.5 h-3.5 text-gray-300" fill="none" viewBox="0 0 24 24">

@@ -134,7 +134,7 @@ onUnmounted(() => {
                 :key="action.key"
                 @click="triggerAction(action)"
                 class="flex flex-col items-center justify-center gap-1.5 text-white font-semibold text-[11px] transition-transform duration-200"
-                :class="action.color || 'bg-gradient-to-b from-blue-500 to-blue-600'"
+                :class="action.color || 'bg-gradient-to-b from-[#1B365D] to-[#1B365D]'"
                 :style="{ width: actionWidth + 'px' }"
             >
                 <div class="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center backdrop-blur-sm">

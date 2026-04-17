@@ -17,10 +17,10 @@ const emit = defineEmits(['confirm', 'cancel']);
 const typeConfig = computed(() => {
     const configs = {
         info: {
-            iconBg: 'bg-blue-50',
-            iconColor: 'text-blue-500',
+            iconBg: 'bg-slate-50',
+            iconColor: 'text-[#1B365D]',
             iconPath: 'M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z',
-            btnClass: 'bg-blue-600 hover:bg-blue-700 shadow-blue-500/20',
+            btnClass: 'bg-[#1B365D] hover:bg-[#1B365D] shadow-[#1B365D]/20',
         },
         success: {
             iconBg: 'bg-emerald-50',

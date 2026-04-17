@@ -26,7 +26,7 @@ const statusColors = {
     partially_approved: 'bg-teal-50 text-teal-700',
     rejected: 'bg-red-50 text-red-700',
     paid: 'bg-emerald-100 text-emerald-800',
-    partially_paid: 'bg-sky-50 text-sky-700',
+    partially_paid: 'bg-[#1B365D]/5 text-[#1B365D]',
 }
 
 const statusLabels = {

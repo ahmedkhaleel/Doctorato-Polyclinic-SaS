@@ -138,7 +138,7 @@ function toggleVitalsHistory() {
         <!-- Header -->
         <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
             <div class="flex items-center gap-2">
-                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-rose-500 to-pink-500 flex items-center justify-center shadow-sm shadow-rose-200">
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-[#C4A265] to-[#C4A265] flex items-center justify-center shadow-sm shadow-amber-200">
                     <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
                 </div>
                 <div>
@@ -178,7 +178,7 @@ function toggleVitalsHistory() {
                     <!-- Change arrow -->
                     <div v-if="getVitalChange(metric.key)" class="absolute -top-1 -end-1">
                         <span class="text-[9px] font-bold px-1 py-0.5 rounded-full shadow-sm"
-                            :class="getVitalChange(metric.key).direction === 'up' ? 'bg-red-50 text-red-500' : getVitalChange(metric.key).direction === 'down' ? 'bg-blue-50 text-blue-500' : 'bg-gray-50 text-gray-400'">
+                            :class="getVitalChange(metric.key).direction === 'up' ? 'bg-red-50 text-red-500' : getVitalChange(metric.key).direction === 'down' ? 'bg-slate-50 text-[#1B365D]' : 'bg-gray-50 text-gray-400'">
                             {{ getVitalChange(metric.key).direction === 'up' ? '\u2191' : getVitalChange(metric.key).direction === 'down' ? '\u2193' : '\u2192' }}
                         </span>
                     </div>
@@ -214,7 +214,7 @@ function toggleVitalsHistory() {
                                     :class="getVitalChange(selectedVitalMetric).direction === 'up'
                                         ? 'bg-red-50 text-red-600 border border-red-100'
                                         : getVitalChange(selectedVitalMetric).direction === 'down'
-                                            ? 'bg-blue-50 text-blue-600 border border-blue-100'
+                                            ? 'bg-slate-50 text-[#1B365D] border border-slate-100'
                                             : 'bg-gray-50 text-gray-500 border border-gray-200'">
                                     {{ getVitalChange(selectedVitalMetric).direction === 'up' ? '\u25B2' : '\u25BC' }}
                                     {{ Math.abs(getVitalChange(selectedVitalMetric).diff) }}
@@ -326,7 +326,7 @@ function toggleVitalsHistory() {
                         <!-- BP Legend -->
                         <div v-if="selectedVitalMetric === 'bp'" class="flex items-center justify-center gap-4 mt-2 text-[10px]">
                             <div class="flex items-center gap-1"><div class="w-3 h-0.5 rounded bg-red-500"></div><span class="text-gray-500">{{ isRtl ? 'انقباضي' : 'Systolic' }}</span></div>
-                            <div class="flex items-center gap-1"><div class="w-3 h-0.5 rounded bg-blue-300"></div><span class="text-gray-500">{{ isRtl ? 'انبساطي' : 'Diastolic' }}</span></div>
+                            <div class="flex items-center gap-1"><div class="w-3 h-0.5 rounded bg-slate-300"></div><span class="text-gray-500">{{ isRtl ? 'انبساطي' : 'Diastolic' }}</span></div>
                         </div>
                     </div>
                 </div>
@@ -370,11 +370,11 @@ function toggleVitalsHistory() {
                                         <div v-if="reading.is_current" class="text-[9px] text-[#C4A265] font-semibold mt-0.5">{{ isRtl ? 'الزيارة الحالية' : 'Current visit' }}</div>
                                     </td>
                                     <td class="px-3 py-2.5 text-center font-mono">
-                                        <span v-if="reading.bp_sys" class="font-semibold" :class="reading.bp_sys >= 140 ? 'text-red-600' : reading.bp_sys >= 130 ? 'text-orange-500' : 'text-gray-700'">{{ reading.bp_sys }}/{{ reading.bp_dia }}</span>
+                                        <span v-if="reading.bp_sys" class="font-semibold" :class="reading.bp_sys >= 140 ? 'text-red-600' : reading.bp_sys >= 130 ? 'text-[#C4A265]' : 'text-gray-700'">{{ reading.bp_sys }}/{{ reading.bp_dia }}</span>
                                         <span v-else class="text-gray-300">&mdash;</span>
                                     </td>
                                     <td class="px-3 py-2.5 text-center">
-                                        <span v-if="reading.hr" :class="reading.hr > 100 || reading.hr < 60 ? 'text-orange-500 font-semibold' : 'text-gray-700'">{{ reading.hr }}</span>
+                                        <span v-if="reading.hr" :class="reading.hr > 100 || reading.hr < 60 ? 'text-[#C4A265] font-semibold' : 'text-gray-700'">{{ reading.hr }}</span>
                                         <span v-else class="text-gray-300">&mdash;</span>
                                     </td>
                                     <td class="px-3 py-2.5 text-center">

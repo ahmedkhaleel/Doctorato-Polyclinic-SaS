@@ -257,9 +257,9 @@ function removeToast(id) {
 
 function getNotificationIcon(notifType) {
     switch (notifType) {
-        case 'new_booking': return { icon: 'calendar', color: 'from-blue-500 to-blue-600' };
+        case 'new_booking': return { icon: 'calendar', color: 'from-[#1B365D] to-[#1B365D]' };
         case 'new_visit':   return { icon: 'visit',    color: 'from-emerald-500 to-emerald-600' };
-        case 'booking_reminder': return { icon: 'clock', color: 'from-amber-500 to-orange-500' };
+        case 'booking_reminder': return { icon: 'clock', color: 'from-amber-500 to-[#C4A265]' };
         default:            return { icon: 'bell',     color: 'from-[#C4A265] to-[#D4B87A]' };
     }
 }
@@ -275,7 +275,7 @@ function getNotificationLabel(notifType) {
 
 function getNotificationLabelColor(notifType) {
     switch (notifType) {
-        case 'new_booking': return 'bg-blue-100 text-blue-700';
+        case 'new_booking': return 'bg-slate-100 text-[#1B365D]';
         case 'new_visit':   return 'bg-emerald-100 text-emerald-700';
         case 'booking_reminder': return 'bg-amber-100 text-amber-700';
         default:            return 'bg-[#C4A265]/15 text-[#8B6F3A]';

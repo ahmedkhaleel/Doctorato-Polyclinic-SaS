@@ -196,9 +196,9 @@ function removeToast(id) {
 
 function getNotificationIcon(notifType) {
     switch (notifType) {
-        case 'new_booking': return { color: 'from-blue-500 to-blue-600' };
-        case 'new_message': return { color: 'from-purple-500 to-purple-600' };
-        default: return { color: 'from-teal-500 to-cyan-500' };
+        case 'new_booking': return { color: 'from-[#1B365D] to-[#1B365D]' };
+        case 'new_message': return { color: 'from-[#1B365D] to-[#1B365D]' };
+        default: return { color: 'from-teal-500 to-[#1B365D]' };
     }
 }
 function getNotificationLabel(notifType) {
@@ -210,8 +210,8 @@ function getNotificationLabel(notifType) {
 }
 function getNotificationLabelColor(notifType) {
     switch (notifType) {
-        case 'new_booking': return 'bg-blue-100 text-blue-700';
-        case 'new_message': return 'bg-purple-100 text-purple-700';
+        case 'new_booking': return 'bg-slate-100 text-[#1B365D]';
+        case 'new_message': return 'bg-slate-100 text-[#1B365D]';
         default: return 'bg-teal-100 text-teal-700';
     }
 }
@@ -232,7 +232,7 @@ function getNotificationLabelColor(notifType) {
                 <div v-for="toast in toasts" :key="toast.id" :style="{ opacity: toast.visible ? 1 : 0, transform: toast.visible ? 'translateX(0) scale(1)' : 'translateX(40px) scale(0.92)', transition: 'all 0.45s cubic-bezier(0.34, 1.56, 0.64, 1)' }">
                     <!-- Notification Type -->
                     <div v-if="toast.type === 'notification'" class="pointer-events-auto relative overflow-hidden rounded-2xl shadow-2xl shadow-black/20 border border-teal-500/30 bg-white min-w-[380px] cursor-pointer group hover:shadow-teal-500/10 hover:border-teal-500/50 transition-all duration-300" @click="goToNotification(toast)">
-                        <div class="h-1 bg-gradient-to-r from-teal-500 via-cyan-500 to-teal-500"></div>
+                        <div class="h-1 bg-gradient-to-r from-teal-500 via-[#1B365D] to-teal-500"></div>
                         <div class="flex items-start gap-3.5 px-4 pt-3.5 pb-3">
                             <div class="flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center shadow-lg bg-gradient-to-br" :class="getNotificationIcon(toast.notificationType).color">
                                 <svg v-if="toast.notificationType === 'new_booking'" class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
@@ -255,7 +255,7 @@ function getNotificationLabelColor(notifType) {
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                             </button>
                         </div>
-                        <div class="h-[3px] bg-gray-100 w-full"><div class="h-full transition-all duration-100 ease-linear rounded-full bg-gradient-to-r from-teal-500 to-cyan-500" :style="{ width: toast.progress + '%' }"></div></div>
+                        <div class="h-[3px] bg-gray-100 w-full"><div class="h-full transition-all duration-100 ease-linear rounded-full bg-gradient-to-r from-teal-500 to-[#1B365D]" :style="{ width: toast.progress + '%' }"></div></div>
                     </div>
                     <!-- Simple toast -->
                     <div v-else class="pointer-events-auto relative overflow-hidden rounded-2xl shadow-2xl shadow-black/15 border backdrop-blur-sm min-w-[340px]" :class="{ 'bg-emerald-50 border-emerald-200': toast.type === 'success', 'bg-red-50 border-red-200': toast.type === 'error', 'bg-white border-gray-200': toast.type === 'info' }">

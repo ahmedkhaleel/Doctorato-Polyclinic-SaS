@@ -336,7 +336,7 @@ function logout()        { router.post(lp('/logout')); }
             </header>
 
             <!-- Flash Messages -->
-            <div v-if="$page.props.flash?.success" class="mx-4 lg:mx-8 mt-4 p-3 bg-green-50 border border-green-200 rounded-xl text-green-700 text-sm">
+            <div v-if="$page.props.flash?.success" class="mx-4 lg:mx-8 mt-4 p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-700 text-sm">
                 {{ $page.props.flash.success }}
             </div>
             <div v-if="$page.props.flash?.error" class="mx-4 lg:mx-8 mt-4 p-3 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm">

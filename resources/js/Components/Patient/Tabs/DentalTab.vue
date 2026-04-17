@@ -79,20 +79,20 @@ function statusLabel(s) {
 
         <!-- Stats -->
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div class="bg-white rounded-xl border border-cyan-100 p-4">
-                <p class="text-2xl font-bold text-cyan-700">{{ stats.total_treatments || 0 }}</p>
+            <div class="bg-white rounded-xl border border-slate-100 p-4">
+                <p class="text-2xl font-bold text-[#1B365D]">{{ stats.total_treatments || 0 }}</p>
                 <p class="text-xs text-gray-500">{{ isRtl ? 'إجمالي العلاجات' : 'Treatments' }}</p>
             </div>
             <div class="bg-white rounded-xl border border-emerald-100 p-4">
                 <p class="text-2xl font-bold text-emerald-600">{{ stats.completed_treatments || 0 }}</p>
                 <p class="text-xs text-gray-500">{{ isRtl ? 'مكتمل' : 'Completed' }}</p>
             </div>
-            <div class="bg-white rounded-xl border border-purple-100 p-4">
-                <p class="text-2xl font-bold text-purple-600">{{ stats.active_plans || 0 }}</p>
+            <div class="bg-white rounded-xl border border-slate-100 p-4">
+                <p class="text-2xl font-bold text-[#1B365D]">{{ stats.active_plans || 0 }}</p>
                 <p class="text-xs text-gray-500">{{ isRtl ? 'خطط نشطة' : 'Active Plans' }}</p>
             </div>
-            <div class="bg-white rounded-xl border border-orange-100 p-4">
-                <p class="text-2xl font-bold text-orange-600">{{ stats.pending_lab_orders || 0 }}</p>
+            <div class="bg-white rounded-xl border border-amber-100 p-4">
+                <p class="text-2xl font-bold text-[#C4A265]">{{ stats.pending_lab_orders || 0 }}</p>
                 <p class="text-xs text-gray-500">{{ isRtl ? 'طلبات معمل' : 'Pending Lab' }}</p>
             </div>
         </div>
@@ -100,9 +100,9 @@ function statusLabel(s) {
         <!-- Quick Links -->
         <div v-if="!readonly && (chartLink || plansLink || treatmentsLink || xraysLink)" class="grid grid-cols-2 lg:grid-cols-4 gap-3">
             <Link v-if="chartLink" :href="chartLink"
-                class="flex items-center gap-3 p-3 bg-white rounded-xl border border-gray-200 hover:border-cyan-300 hover:bg-cyan-50/50 transition">
-                <div class="w-9 h-9 rounded-lg bg-cyan-50 flex items-center justify-center">
-                    <svg class="w-4 h-4 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347" /></svg>
+                class="flex items-center gap-3 p-3 bg-white rounded-xl border border-gray-200 hover:border-slate-300 hover:bg-slate-50/50 transition">
+                <div class="w-9 h-9 rounded-lg bg-slate-50 flex items-center justify-center">
+                    <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347" /></svg>
                 </div>
                 <div>
                     <p class="text-xs font-semibold text-gray-800">{{ isRtl ? 'المخطط' : 'Chart' }}</p>
@@ -110,9 +110,9 @@ function statusLabel(s) {
                 </div>
             </Link>
             <Link v-if="plansLink" :href="plansLink"
-                class="flex items-center gap-3 p-3 bg-white rounded-xl border border-gray-200 hover:border-purple-300 hover:bg-purple-50/50 transition">
-                <div class="w-9 h-9 rounded-lg bg-purple-50 flex items-center justify-center">
-                    <svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
+                class="flex items-center gap-3 p-3 bg-white rounded-xl border border-gray-200 hover:border-slate-300 hover:bg-slate-50/50 transition">
+                <div class="w-9 h-9 rounded-lg bg-slate-50 flex items-center justify-center">
+                    <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
                 </div>
                 <div>
                     <p class="text-xs font-semibold text-gray-800">{{ isRtl ? 'الخطط' : 'Plans' }}</p>
@@ -130,9 +130,9 @@ function statusLabel(s) {
                 </div>
             </Link>
             <Link v-if="xraysLink" :href="xraysLink"
-                class="flex items-center gap-3 p-3 bg-white rounded-xl border border-gray-200 hover:border-blue-300 hover:bg-blue-50/50 transition">
-                <div class="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center">
-                    <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                class="flex items-center gap-3 p-3 bg-white rounded-xl border border-gray-200 hover:border-slate-300 hover:bg-slate-50/50 transition">
+                <div class="w-9 h-9 rounded-lg bg-slate-50 flex items-center justify-center">
+                    <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                 </div>
                 <div>
                     <p class="text-xs font-semibold text-gray-800">{{ isRtl ? 'الأشعة' : 'X-Rays' }}</p>
@@ -148,7 +148,7 @@ function statusLabel(s) {
             </div>
             <div class="divide-y divide-gray-50">
                 <div v-for="t in treatments" :key="t.id" class="px-5 py-3 flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-lg bg-cyan-50 flex items-center justify-center text-xs font-bold text-cyan-600 flex-shrink-0">
+                    <div class="w-9 h-9 rounded-lg bg-slate-50 flex items-center justify-center text-xs font-bold text-[#1B365D] flex-shrink-0">
                         {{ t.tooth_number }}
                     </div>
                     <div class="flex-1 min-w-0">
@@ -183,7 +183,7 @@ function statusLabel(s) {
                             </p>
                         </div>
                         <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full"
-                            :class="p.status === 'approved' ? 'bg-emerald-50 text-emerald-600' : p.status === 'in_progress' ? 'bg-blue-50 text-blue-600' : 'bg-gray-50 text-gray-500'">
+                            :class="p.status === 'approved' ? 'bg-emerald-50 text-emerald-600' : p.status === 'in_progress' ? 'bg-slate-50 text-[#1B365D]' : 'bg-gray-50 text-gray-500'">
                             {{ statusLabel(p.status) }}
                         </span>
                     </div>
@@ -219,7 +219,7 @@ function statusLabel(s) {
                         <p class="text-[10px] text-gray-400">{{ formatDate(l.order_date) }}</p>
                     </div>
                     <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full"
-                        :class="l.status === 'delivered' ? 'bg-emerald-50 text-emerald-600' : l.status === 'in_production' ? 'bg-blue-50 text-blue-600' : 'bg-amber-50 text-amber-600'">
+                        :class="l.status === 'delivered' ? 'bg-emerald-50 text-emerald-600' : l.status === 'in_production' ? 'bg-slate-50 text-[#1B365D]' : 'bg-amber-50 text-amber-600'">
                         {{ statusLabel(l.status) }}
                     </span>
                 </div>

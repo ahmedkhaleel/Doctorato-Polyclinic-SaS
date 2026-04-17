@@ -185,7 +185,7 @@ function logout()        { router.post('/secretary/logout'); }
             <!-- Logo -->
             <div class="flex items-center justify-between h-[72px] px-5 border-b border-white/[0.06]">
                 <Link href="/secretary" class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-teal-500 to-cyan-500 flex items-center justify-center">
+                    <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-teal-500 to-[#1B365D] flex items-center justify-center">
                         <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                         </svg>
@@ -333,7 +333,7 @@ function logout()        { router.post('/secretary/logout'); }
                 </a>
 
                 <div class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-white/[0.04]">
-                    <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-teal-500 to-cyan-500 flex items-center justify-center text-white text-sm font-bold shadow-lg shadow-teal-500/10">
+                    <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-teal-500 to-[#1B365D] flex items-center justify-center text-white text-sm font-bold shadow-lg shadow-teal-500/10">
                         {{ userName.charAt(0).toUpperCase() }}
                     </div>
                     <div class="flex-1 min-w-0">
@@ -387,7 +387,7 @@ function logout()        { router.post('/secretary/logout'); }
 
                     <!-- User badge -->
                     <div class="flex items-center gap-2.5">
-                        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-teal-500 to-cyan-500 flex items-center justify-center text-white text-sm font-bold shadow-md shadow-teal-500/15">
+                        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-teal-500 to-[#1B365D] flex items-center justify-center text-white text-sm font-bold shadow-md shadow-teal-500/15">
                             {{ userName.charAt(0).toUpperCase() }}
                         </div>
                         <div class="hidden sm:flex flex-col">
@@ -451,7 +451,7 @@ function logout()        { router.post('/secretary/logout'); }
                         </Link>
                         <!-- New Booking (center, prominent) -->
                         <Link href="/secretary/bookings/create" class="flex flex-col items-center gap-0.5 -mt-5">
-                            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-teal-500 to-cyan-500 flex items-center justify-center shadow-lg shadow-teal-500/30 ring-4 ring-white">
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-teal-500 to-[#1B365D] flex items-center justify-center shadow-lg shadow-teal-500/30 ring-4 ring-white">
                                 <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
                             </div>
                             <span class="text-[10px] font-bold text-teal-600">{{ isRtl ? 'حجز' : 'Book' }}</span>

@@ -95,12 +95,12 @@ function timeAgo(isoString) {
 
 function getTypeBadge(type) {
     const badges = {
-        'new_booking': { label: 'New Booking', bg: 'bg-blue-50', text: 'text-blue-600' },
-        'new_message': { label: 'New Message', bg: 'bg-purple-50', text: 'text-purple-600' },
+        'new_booking': { label: 'New Booking', bg: 'bg-slate-50', text: 'text-[#1B365D]' },
+        'new_message': { label: 'New Message', bg: 'bg-slate-50', text: 'text-[#1B365D]' },
         'dental_lab_overdue': { label: 'Lab Overdue', bg: 'bg-red-50', text: 'text-red-600' },
-        'dental_appointment_reminder': { label: 'Dental Appt', bg: 'bg-cyan-50', text: 'text-cyan-600' },
+        'dental_appointment_reminder': { label: 'Dental Appt', bg: 'bg-slate-50', text: 'text-[#1B365D]' },
         'dental_followup_reminder': { label: 'Follow-up', bg: 'bg-amber-50', text: 'text-amber-600' },
-        'dental_plan_due': { label: 'Plan Due', bg: 'bg-orange-50', text: 'text-orange-600' },
+        'dental_plan_due': { label: 'Plan Due', bg: 'bg-amber-50', text: 'text-[#C4A265]' },
     };
     return badges[type] || { label: 'Notification', bg: 'bg-gray-50', text: 'text-gray-600' };
 }
@@ -181,12 +181,12 @@ onUnmounted(() => {
                         class="w-full flex items-start gap-3.5 px-5 py-4 hover:bg-teal-50/50 transition-all duration-200 text-left group"
                     >
                         <div class="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center mt-0.5" :class="{
-                            'bg-blue-50 text-blue-500': item.type === 'new_booking',
-                            'bg-purple-50 text-purple-500': item.type === 'new_message',
+                            'bg-slate-50 text-[#1B365D]': item.type === 'new_booking',
+                            'bg-slate-50 text-[#1B365D]': item.type === 'new_message',
                             'bg-red-50 text-red-500': item.type === 'dental_lab_overdue',
-                            'bg-cyan-50 text-cyan-500': item.type === 'dental_appointment_reminder',
+                            'bg-slate-50 text-[#1B365D]': item.type === 'dental_appointment_reminder',
                             'bg-amber-50 text-amber-500': item.type === 'dental_followup_reminder',
-                            'bg-orange-50 text-orange-500': item.type === 'dental_plan_due',
+                            'bg-amber-50 text-[#C4A265]': item.type === 'dental_plan_due',
                             'bg-gray-50 text-gray-400': !['new_booking','new_message','dental_lab_overdue','dental_appointment_reminder','dental_followup_reminder','dental_plan_due'].includes(item.type),
                         }">
                             <svg v-if="item.type === 'new_booking'" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>

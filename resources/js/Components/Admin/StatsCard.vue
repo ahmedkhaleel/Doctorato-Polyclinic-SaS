@@ -18,10 +18,10 @@ defineProps({
 
 const colorConfig = {
     gold:   { gradient: 'from-[#C4A265] to-[#D4B87A]', bg: 'bg-[#C4A265]/10', text: 'text-[#C4A265]' },
-    blue:   { gradient: 'from-blue-500 to-blue-600',    bg: 'bg-blue-50',       text: 'text-blue-600' },
+    blue:   { gradient: 'from-[#1B365D] to-[#1B365D]',    bg: 'bg-slate-50',       text: 'text-[#1B365D]' },
     green:  { gradient: 'from-emerald-500 to-emerald-600', bg: 'bg-emerald-50', text: 'text-emerald-600' },
-    red:    { gradient: 'from-rose-500 to-rose-600',    bg: 'bg-rose-50',       text: 'text-rose-600' },
-    purple: { gradient: 'from-purple-500 to-purple-600', bg: 'bg-purple-50',    text: 'text-purple-600' },
+    red:    { gradient: 'from-[#C4A265] to-[#C4A265]',    bg: 'bg-amber-50',       text: 'text-[#C4A265]' },
+    purple: { gradient: 'from-[#1B365D] to-[#1B365D]', bg: 'bg-slate-50',    text: 'text-[#1B365D]' },
 };
 </script>
 

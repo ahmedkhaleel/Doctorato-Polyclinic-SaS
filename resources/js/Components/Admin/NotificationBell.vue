@@ -114,17 +114,17 @@ function timeAgo(isoString) {
 
 function getItemIcon(type) {
     switch (type) {
-        case 'booking': return { bg: 'bg-blue-50 text-blue-500 group-hover:bg-blue-100', icon: 'calendar' };
+        case 'booking': return { bg: 'bg-slate-50 text-[#1B365D] group-hover:bg-slate-100', icon: 'calendar' };
         case 'message': return { bg: 'bg-amber-50 text-amber-500 group-hover:bg-amber-100', icon: 'envelope' };
         case 'new_website_lead': return { bg: 'bg-emerald-50 text-emerald-500 group-hover:bg-emerald-100', icon: 'lead' };
-        case 'lead_assigned': return { bg: 'bg-indigo-50 text-indigo-500 group-hover:bg-indigo-100', icon: 'user' };
-        case 'follow_up_reminder': return { bg: 'bg-orange-50 text-orange-500 group-hover:bg-orange-100', icon: 'clock' };
+        case 'lead_assigned': return { bg: 'bg-slate-50 text-[#1B365D] group-hover:bg-slate-100', icon: 'user' };
+        case 'follow_up_reminder': return { bg: 'bg-amber-50 text-[#C4A265] group-hover:bg-amber-100', icon: 'clock' };
         case 'follow_up_overdue': return { bg: 'bg-red-50 text-red-500 group-hover:bg-red-100', icon: 'alert' };
-        case 'sequence_step': return { bg: 'bg-purple-50 text-purple-500 group-hover:bg-purple-100', icon: 'automation' };
+        case 'sequence_step': return { bg: 'bg-slate-50 text-[#1B365D] group-hover:bg-slate-100', icon: 'automation' };
         case 'daily_lead_report': return { bg: 'bg-[#C4A265]/10 text-[#C4A265] group-hover:bg-[#C4A265]/20', icon: 'chart' };
         case 'dental_lab_overdue': return { bg: 'bg-red-50 text-red-500 group-hover:bg-red-100', icon: 'dental_lab' };
-        case 'dental_appointment_reminder': return { bg: 'bg-cyan-50 text-cyan-500 group-hover:bg-cyan-100', icon: 'dental_appt' };
-        case 'dental_plan_due': return { bg: 'bg-orange-50 text-orange-500 group-hover:bg-orange-100', icon: 'dental_plan' };
+        case 'dental_appointment_reminder': return { bg: 'bg-slate-50 text-[#1B365D] group-hover:bg-slate-100', icon: 'dental_appt' };
+        case 'dental_plan_due': return { bg: 'bg-amber-50 text-[#C4A265] group-hover:bg-amber-100', icon: 'dental_plan' };
         case 'dental_followup_reminder': return { bg: 'bg-amber-50 text-amber-500 group-hover:bg-amber-100', icon: 'dental_followup' };
         default: return { bg: 'bg-gray-50 text-gray-500 group-hover:bg-gray-100', icon: 'bell' };
     }
@@ -132,17 +132,17 @@ function getItemIcon(type) {
 
 function getItemBadge(type) {
     switch (type) {
-        case 'booking': return { label: 'Booking', class: 'bg-blue-50 text-blue-600' };
+        case 'booking': return { label: 'Booking', class: 'bg-slate-50 text-[#1B365D]' };
         case 'message': return { label: 'Message', class: 'bg-amber-50 text-amber-600' };
         case 'new_website_lead': return { label: 'New Lead', class: 'bg-emerald-50 text-emerald-600' };
-        case 'lead_assigned': return { label: 'Assigned', class: 'bg-indigo-50 text-indigo-600' };
-        case 'follow_up_reminder': return { label: 'Follow-up', class: 'bg-orange-50 text-orange-600' };
+        case 'lead_assigned': return { label: 'Assigned', class: 'bg-slate-50 text-[#1B365D]' };
+        case 'follow_up_reminder': return { label: 'Follow-up', class: 'bg-amber-50 text-[#C4A265]' };
         case 'follow_up_overdue': return { label: 'Overdue', class: 'bg-red-50 text-red-600' };
-        case 'sequence_step': return { label: 'Automation', class: 'bg-purple-50 text-purple-600' };
+        case 'sequence_step': return { label: 'Automation', class: 'bg-slate-50 text-[#1B365D]' };
         case 'daily_lead_report': return { label: 'Report', class: 'bg-[#C4A265]/10 text-[#C4A265]' };
         case 'dental_lab_overdue': return { label: 'Lab Overdue', class: 'bg-red-50 text-red-600' };
-        case 'dental_appointment_reminder': return { label: 'Dental Appt', class: 'bg-cyan-50 text-cyan-600' };
-        case 'dental_plan_due': return { label: 'Plan Due', class: 'bg-orange-50 text-orange-600' };
+        case 'dental_appointment_reminder': return { label: 'Dental Appt', class: 'bg-slate-50 text-[#1B365D]' };
+        case 'dental_plan_due': return { label: 'Plan Due', class: 'bg-amber-50 text-[#C4A265]' };
         case 'dental_followup_reminder': return { label: 'Follow-up', class: 'bg-amber-50 text-amber-600' };
         default: return { label: 'Notification', class: 'bg-gray-50 text-gray-600' };
     }
@@ -351,7 +351,7 @@ onUnmounted(() => {
                         <div class="flex-shrink-0 mt-2">
                             <span
                                 class="w-2 h-2 rounded-full block"
-                                :class="['follow_up_overdue', 'dental_lab_overdue'].includes(item.type) ? 'bg-red-500' : item.type === 'new_website_lead' ? 'bg-emerald-500' : ['dental_appointment_reminder', 'dental_plan_due'].includes(item.type) ? 'bg-cyan-500' : item.type === 'dental_followup_reminder' ? 'bg-amber-500' : 'bg-[#C4A265]'"
+                                :class="['follow_up_overdue', 'dental_lab_overdue'].includes(item.type) ? 'bg-red-500' : item.type === 'new_website_lead' ? 'bg-emerald-500' : ['dental_appointment_reminder', 'dental_plan_due'].includes(item.type) ? 'bg-[#1B365D]' : item.type === 'dental_followup_reminder' ? 'bg-amber-500' : 'bg-[#C4A265]'"
                             ></span>
                         </div>
                     </button>

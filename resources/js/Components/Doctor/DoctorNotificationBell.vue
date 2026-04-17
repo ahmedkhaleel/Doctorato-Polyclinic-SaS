@@ -130,17 +130,17 @@ function timeAgo(isoString) {
 
 function getTypeBadge(type) {
     const badges = {
-        'new_booking': { label: 'New Booking', bg: 'bg-blue-50', text: 'text-blue-600', icon: 'calendar' },
+        'new_booking': { label: 'New Booking', bg: 'bg-slate-50', text: 'text-[#1B365D]', icon: 'calendar' },
         'new_visit': { label: 'New Visit', bg: 'bg-emerald-50', text: 'text-emerald-600', icon: 'visit' },
         'booking_reminder': { label: 'Reminder', bg: 'bg-amber-50', text: 'text-amber-600', icon: 'reminder' },
         'dental_lab_overdue': { label: 'Lab Overdue', bg: 'bg-red-50', text: 'text-red-600', icon: 'dental_lab' },
-        'dental_appointment_reminder': { label: 'Dental Appt', bg: 'bg-cyan-50', text: 'text-cyan-600', icon: 'dental_appt' },
-        'dental_plan_due': { label: 'Plan Due', bg: 'bg-orange-50', text: 'text-orange-600', icon: 'dental_plan' },
+        'dental_appointment_reminder': { label: 'Dental Appt', bg: 'bg-slate-50', text: 'text-[#1B365D]', icon: 'dental_appt' },
+        'dental_plan_due': { label: 'Plan Due', bg: 'bg-amber-50', text: 'text-[#C4A265]', icon: 'dental_plan' },
         'dental_followup_reminder': { label: 'Follow-up', bg: 'bg-amber-50', text: 'text-amber-600', icon: 'dental_followup' },
-        'pediatric_vaccination_due': { label: 'Vaccine Due', bg: 'bg-green-50', text: 'text-green-600', icon: 'pediatric_vaccine' },
+        'pediatric_vaccination_due': { label: 'Vaccine Due', bg: 'bg-emerald-50', text: 'text-emerald-600', icon: 'pediatric_vaccine' },
         'pediatric_vaccination_overdue': { label: 'Vaccine Overdue', bg: 'bg-red-50', text: 'text-red-600', icon: 'pediatric_vaccine_overdue' },
-        'pediatric_growth_alert': { label: 'Growth Alert', bg: 'bg-rose-50', text: 'text-rose-600', icon: 'pediatric_growth' },
-        'pediatric_milestone_alert': { label: 'Milestone Alert', bg: 'bg-purple-50', text: 'text-purple-600', icon: 'pediatric_milestone' },
+        'pediatric_growth_alert': { label: 'Growth Alert', bg: 'bg-amber-50', text: 'text-[#C4A265]', icon: 'pediatric_growth' },
+        'pediatric_milestone_alert': { label: 'Milestone Alert', bg: 'bg-slate-50', text: 'text-[#1B365D]', icon: 'pediatric_milestone' },
     };
     return badges[type] || { label: 'Notification', bg: 'bg-gray-50', text: 'text-gray-600', icon: 'general' };
 }
@@ -264,17 +264,17 @@ onUnmounted(() => {
                         <div
                             class="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center mt-0.5 transition-all duration-200 group-hover:scale-110 group-hover:shadow-md"
                             :class="{
-                                'bg-blue-50 text-blue-500 group-hover:bg-blue-100': item.type === 'new_booking',
+                                'bg-slate-50 text-[#1B365D] group-hover:bg-slate-100': item.type === 'new_booking',
                                 'bg-emerald-50 text-emerald-500 group-hover:bg-emerald-100': item.type === 'new_visit',
                                 'bg-amber-50 text-amber-500 group-hover:bg-amber-100': item.type === 'booking_reminder',
                                 'bg-red-50 text-red-500 group-hover:bg-red-100': item.type === 'dental_lab_overdue',
-                                'bg-cyan-50 text-cyan-500 group-hover:bg-cyan-100': item.type === 'dental_appointment_reminder',
-                                'bg-orange-50 text-orange-500 group-hover:bg-orange-100': item.type === 'dental_plan_due',
+                                'bg-slate-50 text-[#1B365D] group-hover:bg-slate-100': item.type === 'dental_appointment_reminder',
+                                'bg-amber-50 text-[#C4A265] group-hover:bg-amber-100': item.type === 'dental_plan_due',
                                 'bg-amber-50 text-amber-500 group-hover:bg-amber-100': item.type === 'dental_followup_reminder',
-                                'bg-green-50 text-green-500 group-hover:bg-green-100': item.type === 'pediatric_vaccination_due',
+                                'bg-emerald-50 text-emerald-500 group-hover:bg-emerald-100': item.type === 'pediatric_vaccination_due',
                             'bg-red-50 text-red-500 group-hover:bg-red-100': item.type === 'pediatric_vaccination_overdue',
-                            'bg-rose-50 text-rose-500 group-hover:bg-rose-100': item.type === 'pediatric_growth_alert',
-                            'bg-purple-50 text-purple-500 group-hover:bg-purple-100': item.type === 'pediatric_milestone_alert',
+                            'bg-amber-50 text-[#C4A265] group-hover:bg-amber-100': item.type === 'pediatric_growth_alert',
+                            'bg-slate-50 text-[#1B365D] group-hover:bg-slate-100': item.type === 'pediatric_milestone_alert',
                             'bg-gray-50 text-gray-400 group-hover:bg-gray-100': !['new_booking','new_visit','booking_reminder','dental_lab_overdue','dental_appointment_reminder','dental_plan_due','dental_followup_reminder','pediatric_vaccination_due','pediatric_vaccination_overdue','pediatric_growth_alert','pediatric_milestone_alert'].includes(item.type),
                             }"
                         >
