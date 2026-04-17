@@ -664,6 +664,18 @@ Route::middleware('admin.auth')->group(function () {
     Route::post('/settings/modules/{module}/toggle', [ModuleSettingController::class, 'toggle'])->name('admin.modules.toggle')->middleware('permission:settings.update');
     Route::get('/settings/modules/{module}', [ModuleSettingController::class, 'moduleSettings'])->name('admin.modules.show')->middleware('permission:settings.view');
 
+    // Telemedicine Settings
+    Route::get('/settings/telemedicine', [\App\Http\Controllers\Admin\TelemedicineSettingsController::class, 'show'])
+        ->name('admin.settings.telemedicine')->middleware('permission:settings.view');
+    Route::post('/settings/telemedicine', [\App\Http\Controllers\Admin\TelemedicineSettingsController::class, 'update'])
+        ->name('admin.settings.telemedicine.update')->middleware('permission:settings.update');
+    Route::post('/settings/telemedicine/toggle', [\App\Http\Controllers\Admin\TelemedicineSettingsController::class, 'toggleModule'])
+        ->name('admin.settings.telemedicine.toggle')->middleware('permission:settings.update');
+    Route::post('/settings/telemedicine/test-agora', [\App\Http\Controllers\Admin\TelemedicineSettingsController::class, 'testAgora'])->middleware('permission:settings.update');
+    Route::post('/settings/telemedicine/test-paymob', [\App\Http\Controllers\Admin\TelemedicineSettingsController::class, 'testPaymob'])->middleware('permission:settings.update');
+    Route::post('/settings/telemedicine/test-stripe', [\App\Http\Controllers\Admin\TelemedicineSettingsController::class, 'testStripe'])->middleware('permission:settings.update');
+    Route::post('/settings/telemedicine/test-reverb', [\App\Http\Controllers\Admin\TelemedicineSettingsController::class, 'testReverb'])->middleware('permission:settings.update');
+
     // ═══════════════════════════════════════════════════════════
     // ═══ DENTAL MODULE ROUTES ════════════════════════════════
     // ═══════════════════════════════════════════════════════════

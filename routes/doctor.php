@@ -234,6 +234,12 @@ Route::middleware('doctor.auth')->group(function () {
         Route::get('/patients/{patient}/medical-leave', [DoctorPediatricExtraController::class, 'medicalLeavePdf'])->name('doctor.pediatric.patients.medicalLeave');
     });
 
+    // ─── Online Consultations ──────────────────────────────
+    Route::get('/online-consultations', [\App\Http\Controllers\Doctor\OnlineConsultationController::class, 'index'])
+        ->name('doctor.online-consultations.index');
+    Route::get('/online-consultations/{consultation}/room', [\App\Http\Controllers\Doctor\OnlineConsultationController::class, 'room'])
+        ->name('doctor.online-consultations.room');
+
     // ─── Exports ────────────────────────────────────────────
     Route::get('/export/visits', [DoctorExportController::class, 'exportVisits'])->name('doctor.export.visits');
     Route::get('/export/commissions', [DoctorExportController::class, 'exportCommissions'])->name('doctor.export.commissions')->middleware('module:hr');

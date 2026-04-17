@@ -21,6 +21,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
         commands: __DIR__.'/../routes/console.php',
+        channels: __DIR__.'/../routes/channels.php',
         health: '/up',
         then: function () {
             Route::middleware('web')
@@ -51,6 +52,11 @@ return Application::configure(basePath: dirname(__DIR__))
             HandleInertiaRequests::class,
             SecurityHeaders::class,
             CaptureUtmParameters::class,
+        ]);
+
+        $middleware->validateCsrfTokens(except: [
+            'webhooks/paymob',
+            'webhooks/stripe',
         ]);
 
         $middleware->alias([

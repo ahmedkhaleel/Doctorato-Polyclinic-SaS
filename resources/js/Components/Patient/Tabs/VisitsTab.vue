@@ -98,6 +98,13 @@ function moduleBadgeClass(m) {
                             <span v-if="visit.module" class="text-[9px] font-bold px-1.5 py-0.5 rounded uppercase" :class="moduleBadgeClass(visit.module)">
                                 {{ visit.module }}
                             </span>
+                            <span v-if="visit.consultation_type === 'online'"
+                                class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700 border border-emerald-200">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                </svg>
+                                {{ isRtl ? 'أونلاين' : 'Online' }}
+                            </span>
                         </div>
                         <p class="text-xs text-gray-500 truncate">
                             {{ isRtl ? (visit.doctor?.name_ar || visit.doctor?.name_en) : (visit.doctor?.name_en || visit.doctor?.name_ar) || '-' }}

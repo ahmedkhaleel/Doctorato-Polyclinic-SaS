@@ -53,15 +53,18 @@ const allEvents = computed(() => {
     // Visits
     (props.visits || []).forEach((v) => {
         const date = v.visit_date || v.created_at;
+        const isOnline = v.consultation_type === 'online';
+        const onlineTag = isOnline ? (isRtl.value ? ' · أونلاين' : ' · Online') : '';
         events.push({
             type: 'visit',
             date,
             sortKey: parseDate(date),
-            title: (isRtl.value ? 'زيارة' : 'Visit') + (v.service?.name_en || v.service?.name_ar ? ' · ' + (isRtl.value ? (v.service?.name_ar || v.service?.name_en) : (v.service?.name_en || v.service?.name_ar)) : ''),
+            title: (isRtl.value ? 'زيارة' : 'Visit') + (v.service?.name_en || v.service?.name_ar ? ' · ' + (isRtl.value ? (v.service?.name_ar || v.service?.name_en) : (v.service?.name_en || v.service?.name_ar)) : '') + onlineTag,
             subtitle: v.doctor ? (isRtl.value ? (v.doctor.name_ar || v.doctor.name_en) : (v.doctor.name_en || v.doctor.name_ar)) : '',
             extra: v.diagnosis || v.status,
             href: `${rolePath()}/visits/${v.id}`,
-            color: '#3b82f6',
+            color: isOnline ? '#10b981' : '#3b82f6',
+            online: isOnline,
         });
     });
 

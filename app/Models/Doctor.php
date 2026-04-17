@@ -28,6 +28,12 @@ class Doctor extends Model
         'pediatric_consultation_commission', 'pediatric_followup_commission',
         'pediatric_consultation_fee',
         'clinic_notes',
+        // Telemedicine
+        'online_consultation_enabled',
+        'online_consultation_fee',
+        'online_session_duration_minutes',
+        'online_consultation_bio_ar',
+        'online_consultation_bio_en',
     ];
 
     protected $casts = [
@@ -45,6 +51,8 @@ class Doctor extends Model
         'pediatric_consultation_commission' => 'decimal:2',
         'pediatric_followup_commission' => 'decimal:2',
         'pediatric_consultation_fee' => 'decimal:2',
+        'online_consultation_enabled' => 'boolean',
+        'online_consultation_fee' => 'decimal:2',
     ];
 
     protected $appends = ['photo_url'];
@@ -81,6 +89,12 @@ class Doctor extends Model
     public function scopePediatric($query)
     {
         return $query->where('module', 'pediatric');
+    }
+
+    public function scopeOnlineEnabled($query)
+    {
+        return $query->where('online_consultation_enabled', true)
+                     ->where('status', 'active');
     }
 
     // ─── Clinic Relationships ───────────────────────────
@@ -155,5 +169,12 @@ class Doctor extends Model
     public function pediatricPrescriptions()
     {
         return $this->hasMany(PediatricPrescription::class);
+    }
+
+    // ─── Telemedicine Relationships ─────────────────────
+
+    public function onlineConsultations()
+    {
+        return $this->hasMany(OnlineConsultation::class);
     }
 }

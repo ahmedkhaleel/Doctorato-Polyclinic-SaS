@@ -62,6 +62,14 @@ const navGroups = computed(() => [
         ],
     },
     {
+        title: isRtl.value ? 'عن بُعد' : 'Telemedicine',
+        key: 'telemedicine',
+        moduleKey: 'telemedicine',
+        items: [
+            { label: isRtl.value ? 'الاستشارات الأونلاين' : 'Online Consultations', href: lp('/online-consultations'), icon: 'video' },
+        ],
+    },
+    {
         title: isRtl.value ? 'طب الأسنان' : 'Dental',
         key: 'dental',
         moduleKey: 'dental',
@@ -260,6 +268,8 @@ function logout()        { router.post(lp('/logout')); }
                         <svg v-else-if="item.icon === 'followup'" class="w-[16px] h-[16px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                         <!-- User (Profile) -->
                         <svg v-else-if="item.icon === 'user'" class="w-[16px] h-[16px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                        <!-- Video (Online Consultations) -->
+                        <svg v-else-if="item.icon === 'video'" class="w-[16px] h-[16px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
                             </div>
                             <span>{{ item.label }}</span>
                             <!-- Active indicator dot -->

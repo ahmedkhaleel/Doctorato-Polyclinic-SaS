@@ -34,6 +34,22 @@ Route::post('/api/promo-code/validate', [PromoCodeController::class, 'validateCo
     ->name('api.promo-code.validate')
     ->middleware('throttle:30,1');
 
+// ─── Payment Webhooks (public, signature-verified) ───────────────────
+Route::post('/webhooks/paymob', [\App\Http\Controllers\Webhooks\PaymentWebhookController::class, 'paymob'])
+    ->name('webhooks.paymob');
+Route::post('/webhooks/stripe', [\App\Http\Controllers\Webhooks\PaymentWebhookController::class, 'stripe'])
+    ->name('webhooks.stripe');
+
+// ─── Online Consultation Room API (authorized users) ─────────────────
+Route::middleware('auth')->prefix('api/online-consultations')->group(function () {
+    Route::get('{consultation}/token', [\App\Http\Controllers\Api\OnlineConsultationRoomController::class, 'token'])
+        ->name('api.online-consultations.token');
+    Route::post('{consultation}/join', [\App\Http\Controllers\Api\OnlineConsultationRoomController::class, 'join'])
+        ->name('api.online-consultations.join');
+    Route::post('{consultation}/end', [\App\Http\Controllers\Api\OnlineConsultationRoomController::class, 'end'])
+        ->name('api.online-consultations.end');
+});
+
 // Redirect root to Arabic home page
 Route::redirect('/', '/ar');
 

@@ -16,7 +16,8 @@ class Visit extends Model
         parent::boot();
 
         static::creating(function (Visit $visit) {
-            if (empty($visit->booking_id) && empty($visit->package_bundle_booking_id)) {
+            $isOnline = ($visit->consultation_type === 'online');
+            if (empty($visit->booking_id) && empty($visit->package_bundle_booking_id) && !$isOnline) {
                 throw new \RuntimeException('A visit must be linked to a booking or a package bundle booking.');
             }
         });

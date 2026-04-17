@@ -43,6 +43,7 @@ function createUserAccount() {
 const sections = [
     { id: 'basic', label: 'Basic Info', key: 'a_basic_info', icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z' },
     { id: 'clinic', label: 'Clinic Settings', key: 'a_clinic_settings', icon: 'M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z' },
+    { id: 'online', label: 'Online Consultations', key: 'a_online_consultations', icon: 'M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z' },
     { id: 'schedule', label: 'Schedule', key: 'a_schedule', icon: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z' },
     { id: 'vacations', label: 'Vacations', key: 'a_vacations', icon: 'M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z' },
     { id: 'rates', label: 'Service Rates', key: 'a_service_rates', icon: 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
@@ -59,9 +60,25 @@ function buildSchedules() {
             // Strip seconds from time (HH:MM:SS → HH:MM)
             const st = (found.start_time || '09:00').substring(0, 5);
             const et = (found.end_time || '17:00').substring(0, 5);
-            return { day_of_week: i, start_time: st, end_time: et, is_active: !!found.is_active };
+            return {
+                day_of_week: i,
+                start_time: st,
+                end_time: et,
+                is_active: !!found.is_active,
+                mode: found.mode || 'in_person',
+                slot_duration_minutes: found.slot_duration_minutes || 30,
+                buffer_minutes: found.buffer_minutes ?? 5,
+            };
         }
-        return { day_of_week: i, start_time: '09:00', end_time: '17:00', is_active: false };
+        return {
+            day_of_week: i,
+            start_time: '09:00',
+            end_time: '17:00',
+            is_active: false,
+            mode: 'in_person',
+            slot_duration_minutes: 30,
+            buffer_minutes: 5,
+        };
     });
 }
 
@@ -116,6 +133,12 @@ const form = useForm({
     pediatric_consultation_commission: props.doctor.pediatric_consultation_commission || '',
     pediatric_followup_commission: props.doctor.pediatric_followup_commission || '',
     clinic_notes: props.doctor.clinic_notes || '',
+    // Online consultations
+    online_consultation_enabled: !!props.doctor.online_consultation_enabled,
+    online_consultation_fee: props.doctor.online_consultation_fee || '',
+    online_session_duration_minutes: props.doctor.online_session_duration_minutes || 30,
+    online_consultation_bio_ar: props.doctor.online_consultation_bio_ar || '',
+    online_consultation_bio_en: props.doctor.online_consultation_bio_en || '',
     // Nested
     schedules: buildSchedules(),
     vacations: buildVacations(),
@@ -143,6 +166,8 @@ function submit() {
                 activeSection.value = 'vacations';
             } else if (errorKeys.some(k => k.startsWith('schedules'))) {
                 activeSection.value = 'schedule';
+            } else if (errorKeys.some(k => k.startsWith('online_'))) {
+                activeSection.value = 'online';
             } else if (errorKeys.some(k => ['user_id', 'phone', 'email', 'doctor_type', 'consultation_fee', 'dermatology_fee', 'cosmetic_fee', 'default_commission_percentage', 'dermatology_commission', 'cosmetic_commission', 'followup_commission', 'clinic_notes'].includes(k))) {
                 activeSection.value = 'clinic';
             } else {
@@ -160,6 +185,7 @@ function submit() {
         }
         return {
             ...payload,
+            online_consultation_enabled: payload.online_consultation_enabled ? 1 : 0,
             schedules: safeSchedules(payload.schedules),
             service_rates: cleanServiceRates(payload.service_rates),
         };
@@ -740,6 +766,100 @@ function serviceRateOptions(currentIndex) {
                     </div>
                 </div>
 
+                <!-- ==================== ONLINE CONSULTATIONS ==================== -->
+                <div v-show="activeSection === 'online'">
+                    <div class="bg-white rounded-lg shadow-sm p-6 space-y-6">
+                        <div>
+                            <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wider mb-1">
+                                {{ locale === 'ar' ? 'الاستشارات الأونلاين' : 'Online Consultations' }}
+                            </h3>
+                            <p class="text-xs text-gray-400">
+                                {{ locale === 'ar'
+                                    ? 'فعّل هذه الخدمة ليستقبل هذا الطبيب استشارات فيديو أونلاين.'
+                                    : 'Enable this service so the doctor can accept online video consultations.' }}
+                            </p>
+                        </div>
+
+                        <!-- Toggle -->
+                        <label class="flex items-center gap-3 p-4 rounded-xl border transition cursor-pointer"
+                            :class="form.online_consultation_enabled ? 'border-emerald-300 bg-emerald-50/60' : 'border-gray-200 bg-gray-50'">
+                            <input type="checkbox" v-model="form.online_consultation_enabled"
+                                class="w-5 h-5 rounded border-gray-300 text-emerald-600 focus:ring-emerald-200" />
+                            <div class="flex-1">
+                                <span class="block text-sm font-semibold"
+                                    :class="form.online_consultation_enabled ? 'text-emerald-700' : 'text-gray-600'">
+                                    {{ locale === 'ar' ? 'تفعيل الاستشارات الأونلاين' : 'Enable online consultations for this doctor' }}
+                                </span>
+                                <span class="block text-xs text-gray-400 mt-0.5">
+                                    {{ locale === 'ar'
+                                        ? 'سيظهر الطبيب للمرضى في صفحة الحجز الأونلاين.'
+                                        : 'Doctor will be listed for patients on the online booking page.' }}
+                                </span>
+                            </div>
+                        </label>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4"
+                             :class="!form.online_consultation_enabled && 'opacity-50 pointer-events-none'">
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-600 mb-1">
+                                    {{ locale === 'ar' ? 'رسوم الاستشارة الأونلاين' : 'Online consultation fee' }}
+                                    <span class="text-gray-400 font-normal">({{ currencyCode }})</span>
+                                </label>
+                                <input v-model="form.online_consultation_fee" type="number" step="0.01" min="0" placeholder="0"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]" />
+                                <p v-if="form.errors.online_consultation_fee" class="mt-1 text-xs text-red-600">{{ form.errors.online_consultation_fee }}</p>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-600 mb-1">
+                                    {{ locale === 'ar' ? 'مدة الجلسة' : 'Session duration' }}
+                                </label>
+                                <select v-model.number="form.online_session_duration_minutes"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]">
+                                    <option :value="15">15 {{ locale === 'ar' ? 'دقيقة' : 'minutes' }}</option>
+                                    <option :value="20">20 {{ locale === 'ar' ? 'دقيقة' : 'minutes' }}</option>
+                                    <option :value="30">30 {{ locale === 'ar' ? 'دقيقة' : 'minutes' }}</option>
+                                    <option :value="45">45 {{ locale === 'ar' ? 'دقيقة' : 'minutes' }}</option>
+                                    <option :value="60">60 {{ locale === 'ar' ? 'دقيقة' : 'minutes' }}</option>
+                                </select>
+                                <p v-if="form.errors.online_session_duration_minutes" class="mt-1 text-xs text-red-600">{{ form.errors.online_session_duration_minutes }}</p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4"
+                             :class="!form.online_consultation_enabled && 'opacity-50 pointer-events-none'">
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-600 mb-1">
+                                    {{ locale === 'ar' ? 'نبذة الاستشارة (عربي)' : 'Online consultation bio (Arabic)' }}
+                                </label>
+                                <textarea v-model="form.online_consultation_bio_ar" rows="4" dir="rtl"
+                                    :placeholder="locale === 'ar' ? 'نبذة مختصرة عن الطبيب لعرضها في صفحة الحجز الأونلاين...' : 'Short doctor bio shown on the online booking page'"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]"></textarea>
+                                <p v-if="form.errors.online_consultation_bio_ar" class="mt-1 text-xs text-red-600">{{ form.errors.online_consultation_bio_ar }}</p>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-600 mb-1">
+                                    {{ locale === 'ar' ? 'نبذة الاستشارة (إنجليزي)' : 'Online consultation bio (English)' }}
+                                </label>
+                                <textarea v-model="form.online_consultation_bio_en" rows="4" dir="ltr"
+                                    placeholder="Short bio shown on the online booking page"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]"></textarea>
+                                <p v-if="form.errors.online_consultation_bio_en" class="mt-1 text-xs text-red-600">{{ form.errors.online_consultation_bio_en }}</p>
+                            </div>
+                        </div>
+
+                        <div v-if="form.online_consultation_enabled" class="p-3 rounded-lg bg-blue-50/70 border border-blue-200 text-xs text-blue-700 flex items-start gap-2">
+                            <svg class="w-4 h-4 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <span>
+                                {{ locale === 'ar'
+                                    ? 'للسماح بالحجز، تأكد أيضاً من تحديد وضع "أونلاين" أو "كلاهما" لأحد أيام الجدول الأسبوعي.'
+                                    : 'To accept online bookings, make sure at least one weekly schedule day is set to "Online" or "Both".' }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- ==================== SCHEDULE ==================== -->
                 <div v-show="activeSection === 'schedule'">
                     <div class="bg-white rounded-lg shadow-sm p-6">
@@ -749,31 +869,63 @@ function serviceRateOptions(currentIndex) {
                             <div
                                 v-for="(schedule, i) in form.schedules"
                                 :key="i"
-                                class="flex items-center gap-4 p-3 rounded-lg border transition"
+                                class="p-3 rounded-lg border transition"
                                 :class="schedule.is_active ? 'border-green-200 bg-green-50' : 'border-gray-200 bg-gray-50'"
                             >
-                                <label class="flex items-center cursor-pointer min-w-[140px]">
-                                    <input
-                                        type="checkbox"
-                                        v-model="schedule.is_active"
-                                        class="w-4 h-4 rounded border-gray-300 text-green-600 focus:ring-green-200 ltr:mr-3 rtl:ml-3"
-                                    />
-                                    <span class="text-sm font-medium" :class="schedule.is_active ? 'text-gray-900' : 'text-gray-400'">
-                                        {{ dayNames[i] }}
-                                    </span>
-                                </label>
-                                <div class="flex items-center gap-2" :class="!schedule.is_active && 'opacity-40 pointer-events-none'">
-                                    <input
-                                        v-model="schedule.start_time"
-                                        type="time"
-                                        class="px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
-                                    />
-                                    <span class="text-gray-400">{{ $t('a_to') }}</span>
-                                    <input
-                                        v-model="schedule.end_time"
-                                        type="time"
-                                        class="px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
-                                    />
+                                <div class="flex flex-wrap items-center gap-4">
+                                    <label class="flex items-center cursor-pointer min-w-[140px]">
+                                        <input
+                                            type="checkbox"
+                                            v-model="schedule.is_active"
+                                            class="w-4 h-4 rounded border-gray-300 text-green-600 focus:ring-green-200 ltr:mr-3 rtl:ml-3"
+                                        />
+                                        <span class="text-sm font-medium" :class="schedule.is_active ? 'text-gray-900' : 'text-gray-400'">
+                                            {{ dayNames[i] }}
+                                        </span>
+                                    </label>
+                                    <div class="flex items-center gap-2" :class="!schedule.is_active && 'opacity-40 pointer-events-none'">
+                                        <input
+                                            v-model="schedule.start_time"
+                                            type="time"
+                                            class="px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                                        />
+                                        <span class="text-gray-400">{{ $t('a_to') }}</span>
+                                        <input
+                                            v-model="schedule.end_time"
+                                            type="time"
+                                            class="px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                                        />
+                                    </div>
+                                </div>
+                                <div
+                                    class="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-3"
+                                    :class="!schedule.is_active && 'opacity-40 pointer-events-none'"
+                                >
+                                    <div>
+                                        <label class="block text-[11px] font-semibold uppercase tracking-wider text-gray-500 mb-1">
+                                            {{ locale === 'ar' ? 'وضع العمل' : 'Mode' }}
+                                        </label>
+                                        <select v-model="schedule.mode"
+                                            class="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]">
+                                            <option value="in_person">{{ locale === 'ar' ? 'عيادة فقط' : 'Clinic Only' }}</option>
+                                            <option value="online">{{ locale === 'ar' ? 'أونلاين فقط' : 'Online Only' }}</option>
+                                            <option value="both">{{ locale === 'ar' ? 'كلاهما' : 'Both' }}</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-[11px] font-semibold uppercase tracking-wider text-gray-500 mb-1">
+                                            {{ locale === 'ar' ? 'مدة الموعد (دقيقة)' : 'Slot duration (min)' }}
+                                        </label>
+                                        <input v-model.number="schedule.slot_duration_minutes" type="number" min="5" max="240" placeholder="30"
+                                            class="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]" />
+                                    </div>
+                                    <div>
+                                        <label class="block text-[11px] font-semibold uppercase tracking-wider text-gray-500 mb-1">
+                                            {{ locale === 'ar' ? 'الفاصل بين المواعيد (دقيقة)' : 'Buffer (min)' }}
+                                        </label>
+                                        <input v-model.number="schedule.buffer_minutes" type="number" min="0" max="120" placeholder="5"
+                                            class="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]" />
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -4,12 +4,37 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Crypt;
 use App\Traits\LogsActivity;
 
 class Setting extends Model
 {
     use LogsActivity;
     protected $fillable = ['key', 'value', 'group'];
+
+    /**
+     * Keys whose values are encrypted at rest.
+     * Accessed via get()/set() auto-(en|de)crypts transparently.
+     */
+    public const ENCRYPTED_KEYS = [
+        // Agora
+        'agora_app_id',
+        'agora_app_certificate',
+        'agora_customer_key',
+        'agora_customer_secret',
+        // Paymob
+        'paymob_api_key',
+        'paymob_hmac_secret',
+        'paymob_iframe_id',
+        'paymob_integration_id',
+        // Stripe
+        'stripe_secret_key',
+        'stripe_webhook_secret',
+        'stripe_publishable_key',
+        // Reverb
+        'reverb_app_key',
+        'reverb_app_secret',
+    ];
 
     /**
      * Cache TTL in seconds (30 minutes).
@@ -38,6 +63,15 @@ class Setting extends Model
             return static::where('key', $key)->value('value');
         });
 
+        // Auto-decrypt encrypted keys (gracefully handle legacy plain-text values)
+        if ($value !== null && $value !== '' && in_array($key, self::ENCRYPTED_KEYS, true)) {
+            try {
+                $value = Crypt::decryptString($value);
+            } catch (\Throwable) {
+                // Legacy plain-text value or corrupted payload — return as-is
+            }
+        }
+
         // Store in memory for repeated calls within same request
         static::$memoryCache[$key] = $value;
 
@@ -49,17 +83,50 @@ class Setting extends Model
      */
     public static function set(string $key, $value, string $group = 'general'): void
     {
+        $storedValue = $value;
+
+        // Auto-encrypt sensitive keys before storage
+        if (in_array($key, self::ENCRYPTED_KEYS, true) && $value !== '' && $value !== null) {
+            $storedValue = Crypt::encryptString((string) $value);
+        }
+
         static::updateOrCreate(
             ['key' => $key],
-            ['value' => $value, 'group' => $group]
+            ['value' => $storedValue, 'group' => $group]
         );
 
         // Bust caches
         Cache::forget("setting:{$key}");
+        // Keep plain (decrypted) value in memory cache for same-request reads
         static::$memoryCache[$key] = $value;
 
         // Also bust the "all settings" cache if it exists
         Cache::forget('settings:all');
+    }
+
+    /**
+     * Whether the setting has a non-empty value stored.
+     */
+    public static function hasValue(string $key): bool
+    {
+        $value = self::get($key);
+        return $value !== null && $value !== '';
+    }
+
+    /**
+     * Return a masked placeholder string when a secret is set, empty otherwise.
+     */
+    public static function maskedValue(string $key): string
+    {
+        return self::hasValue($key) ? '••••••••••••' : '';
+    }
+
+    /**
+     * Whether a given key is treated as encrypted.
+     */
+    public static function isEncryptedKey(string $key): bool
+    {
+        return in_array($key, self::ENCRYPTED_KEYS, true);
     }
 
     /**

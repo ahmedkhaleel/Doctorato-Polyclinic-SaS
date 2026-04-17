@@ -80,6 +80,9 @@ class DoctorScheduleController extends Controller
             'schedules.*.start_time' => 'required|string',
             'schedules.*.end_time' => 'required|string',
             'schedules.*.is_active' => 'required|boolean',
+            'schedules.*.mode' => 'nullable|in:in_person,online,both',
+            'schedules.*.slot_duration_minutes' => 'nullable|integer|min:5|max:240',
+            'schedules.*.buffer_minutes' => 'nullable|integer|min:0|max:120',
         ]);
 
         $doctor->schedules()->delete();
@@ -90,6 +93,9 @@ class DoctorScheduleController extends Controller
                 'start_time' => $schedule['start_time'],
                 'end_time' => $schedule['end_time'],
                 'is_active' => (bool) $schedule['is_active'],
+                'mode' => $schedule['mode'] ?? 'in_person',
+                'slot_duration_minutes' => isset($schedule['slot_duration_minutes']) ? (int) $schedule['slot_duration_minutes'] : null,
+                'buffer_minutes' => isset($schedule['buffer_minutes']) ? (int) $schedule['buffer_minutes'] : null,
             ]);
         }
 

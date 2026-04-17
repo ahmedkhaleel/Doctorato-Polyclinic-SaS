@@ -78,6 +78,14 @@ const navGroups = computed(() => [
         ],
     },
     {
+        title: isRtl.value ? 'خدمات عن بُعد' : 'Telemedicine',
+        key: 'telemedicine',
+        moduleKey: 'telemedicine',
+        items: [
+            { label: isRtl.value ? 'الاستشارات الأونلاين' : 'Online Consultations', href: '/doctor/online-consultations', icon: 'chat' },
+        ],
+    },
+    {
         title: isRtl.value ? 'الموارد البشرية' : 'HR',
         key: 'hr',
         moduleKey: 'hr',

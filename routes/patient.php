@@ -13,6 +13,7 @@ use App\Http\Controllers\Patient\PatientComparisonController;
 use App\Http\Controllers\Patient\PatientConsentController;
 use App\Http\Controllers\Patient\PatientDentalController;
 use App\Http\Controllers\Patient\PatientPediatricController;
+use App\Http\Controllers\Patient\OnlineConsultationController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -93,6 +94,25 @@ Route::middleware('patient.auth')->group(function () {
         Route::get('/pediatric/vaccination-card', [PatientPediatricController::class, 'vaccinationCard'])->name('patient.pediatric.vaccination-card');
         Route::get('/pediatric/growth-report', [PatientPediatricController::class, 'growthReport'])->name('patient.pediatric.growth-report');
     });
+
+    // ─── Online Consultations ───────────────────────────────
+    Route::get('/online-consultations', [OnlineConsultationController::class, 'index'])
+        ->name('patient.online-consultations.index');
+    Route::get('/online-consultations/doctors', [OnlineConsultationController::class, 'doctors'])
+        ->name('patient.online-consultations.doctors');
+    Route::get('/online-consultations/book/{doctor}', [OnlineConsultationController::class, 'showDoctor'])
+        ->name('patient.online-consultations.book');
+    Route::post('/online-consultations', [OnlineConsultationController::class, 'store'])
+        ->name('patient.online-consultations.store')
+        ->middleware('throttle:10,1');
+    Route::get('/online-consultation/success', [OnlineConsultationController::class, 'success'])
+        ->name('patient.online-consultations.success');
+    Route::get('/online-consultation/cancelled', [OnlineConsultationController::class, 'cancelled'])
+        ->name('patient.online-consultations.cancelled');
+    Route::post('/online-consultations/{consultation}/cancel', [OnlineConsultationController::class, 'cancel'])
+        ->name('patient.online-consultations.cancel');
+    Route::get('/online-consultations/{consultation}/room', [OnlineConsultationController::class, 'room'])
+        ->name('patient.online-consultations.room');
 
     // ─── My Profile ─────────────────────────────────────────
     Route::get('/profile', [PatientProfileController::class, 'index'])->name('patient.profile.index');

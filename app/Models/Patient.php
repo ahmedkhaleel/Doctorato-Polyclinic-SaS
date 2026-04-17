@@ -134,6 +134,11 @@ class Patient extends Model
         return $this->hasMany(PackageBundleBooking::class);
     }
 
+    public function onlineConsultations()
+    {
+        return $this->hasMany(OnlineConsultation::class);
+    }
+
     // ─── Pediatric Relationships ─────────────────────────
 
     public function pediatricGrowthRecords()

@@ -82,6 +82,9 @@ class DoctorController extends Controller
 
         $this->sanitizeFields($data, ['bio_ar', 'bio_en']);
 
+        // Cast telemedicine booleans
+        $data['online_consultation_enabled'] = (bool) ($data['online_consultation_enabled'] ?? false);
+
         // Auto-create user account if requested
         $createUser = ! empty($data['create_user_account']) && ! empty($data['create_user_password']);
         $createUserPassword = $data['create_user_password'] ?? null;
@@ -119,6 +122,9 @@ class DoctorController extends Controller
                     'start_time' => $schedule['start_time'],
                     'end_time' => $schedule['end_time'],
                     'is_active' => filter_var($schedule['is_active'] ?? false, FILTER_VALIDATE_BOOLEAN),
+                    'mode' => $schedule['mode'] ?? 'in_person',
+                    'slot_duration_minutes' => isset($schedule['slot_duration_minutes']) ? (int) $schedule['slot_duration_minutes'] : null,
+                    'buffer_minutes' => isset($schedule['buffer_minutes']) ? (int) $schedule['buffer_minutes'] : null,
                 ]);
             }
 
@@ -384,6 +390,9 @@ class DoctorController extends Controller
 
         $this->sanitizeFields($data, ['bio_ar', 'bio_en']);
 
+        // Cast telemedicine booleans
+        $data['online_consultation_enabled'] = (bool) ($data['online_consultation_enabled'] ?? false);
+
         if ($request->hasFile('photo')) {
             $data['photo'] = $request->file('photo')->store('uploads/doctors', 'public');
         }
@@ -406,6 +415,9 @@ class DoctorController extends Controller
                         'start_time' => $schedule['start_time'],
                         'end_time' => $schedule['end_time'],
                         'is_active' => filter_var($schedule['is_active'] ?? false, FILTER_VALIDATE_BOOLEAN),
+                        'mode' => $schedule['mode'] ?? 'in_person',
+                        'slot_duration_minutes' => isset($schedule['slot_duration_minutes']) ? (int) $schedule['slot_duration_minutes'] : null,
+                        'buffer_minutes' => isset($schedule['buffer_minutes']) ? (int) $schedule['buffer_minutes'] : null,
                     ]);
                 }
             }
