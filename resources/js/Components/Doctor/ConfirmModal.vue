@@ -70,8 +70,8 @@ const iconSvgPath = computed(() => props.icon || typeConfig.value.iconPath);
                     leave-from-class="opacity-100 scale-100"
                     leave-to-class="opacity-0 scale-95"
                 >
-                    <div v-if="show" class="relative w-full max-w-sm bg-white rounded-2xl shadow-2xl overflow-hidden">
-                        <div class="p-6 text-center">
+                    <div v-if="show" class="relative w-full max-w-sm bg-white rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col mx-4">
+                        <div class="p-4 md:p-6 text-center overflow-y-auto">
                             <!-- Icon -->
                             <div class="w-14 h-14 rounded-2xl mx-auto mb-4 flex items-center justify-center" :class="typeConfig.iconBg">
                                 <svg class="w-7 h-7" :class="typeConfig.iconColor" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -92,7 +92,7 @@ const iconSvgPath = computed(() => props.icon || typeConfig.value.iconPath);
                         </div>
 
                         <!-- Actions -->
-                        <div class="flex gap-3 px-6 pb-6">
+                        <div class="flex flex-col-reverse sm:flex-row gap-2 sm:gap-3 px-4 md:px-6 pb-4 md:pb-6">
                             <button
                                 type="button"
                                 @click="$emit('cancel')"

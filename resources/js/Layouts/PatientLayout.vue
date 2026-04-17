@@ -304,7 +304,7 @@ function logout()        { router.post(lp('/logout')); }
         <!-- ─── Main Content ─────────────────────────────────────── -->
         <div class="flex-1 flex flex-col min-h-screen lg:min-w-0">
             <!-- Top Header -->
-            <header class="h-[72px] bg-white/80 backdrop-blur-md border-b border-gray-200/60 flex items-center justify-between px-4 lg:px-8 sticky top-0 z-20">
+            <header class="h-[64px] md:h-[72px] bg-white/80 backdrop-blur-md border-b border-gray-200/60 flex items-center justify-between px-3 md:px-4 lg:px-8 sticky top-0 z-20 gap-2">
                 <!-- Mobile hamburger -->
                 <button
                     class="lg:hidden inline-flex items-center justify-center w-10 h-10 rounded-xl text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors"
@@ -316,7 +316,7 @@ function logout()        { router.post(lp('/logout')); }
                 <h2 class="hidden lg:block text-sm font-semibold text-gray-700">{{ activePageTitle }}</h2>
 
                 <!-- Right side -->
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-1.5 md:gap-3">
                     <!-- Patient badge -->
                     <div class="flex items-center gap-2.5">
                         <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-[var(--brand-primary)] to-[var(--brand-secondary)] flex items-center justify-center text-white text-sm font-bold shadow-md shadow-[var(--brand-primary)]/15">
@@ -344,7 +344,7 @@ function logout()        { router.post(lp('/logout')); }
             </div>
 
             <!-- Page content -->
-            <main class="flex-1 p-4 lg:p-8">
+            <main class="flex-1 p-4 md:p-6 lg:p-8 overflow-x-hidden">
                 <slot />
             </main>
 

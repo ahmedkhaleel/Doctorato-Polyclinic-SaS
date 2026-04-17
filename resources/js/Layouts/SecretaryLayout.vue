@@ -354,7 +354,7 @@ function logout()        { router.post('/secretary/logout'); }
         <!-- ─── Main Content ─────────────────────────────────────── -->
         <div class="flex-1 flex flex-col min-h-screen lg:min-w-0">
             <!-- Top Header -->
-            <header class="h-[72px] bg-white/80 backdrop-blur-md border-b border-gray-200/60 flex items-center justify-between px-4 lg:px-8 sticky top-0 z-20">
+            <header class="h-[64px] md:h-[72px] bg-white/80 backdrop-blur-md border-b border-gray-200/60 flex items-center justify-between px-3 md:px-4 lg:px-8 sticky top-0 z-20 gap-2">
                 <!-- Mobile hamburger -->
                 <button
                     class="lg:hidden inline-flex items-center justify-center w-10 h-10 rounded-xl text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors"
@@ -366,7 +366,7 @@ function logout()        { router.post('/secretary/logout'); }
                 <div class="hidden lg:block"></div>
 
                 <!-- Right side -->
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-1.5 md:gap-3">
                     <!-- Language Switcher -->
                     <button
                         @click="switchLocale"
@@ -408,7 +408,7 @@ function logout()        { router.post('/secretary/logout'); }
             </header>
 
             <!-- Page content -->
-            <main class="flex-1 p-4 lg:p-8 pb-24 md:pb-4">
+            <main class="flex-1 p-4 md:p-6 lg:p-8 pb-24 md:pb-6 overflow-x-hidden">
                 <slot />
             </main>
 

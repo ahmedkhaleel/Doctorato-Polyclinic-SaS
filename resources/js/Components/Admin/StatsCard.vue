@@ -29,23 +29,23 @@ const colorConfig = {
     <component
         :is="href ? 'a' : 'div'"
         :href="href"
-        class="group relative bg-white rounded-2xl p-5 shadow-sm hover:shadow-lg border border-gray-100/80 hover:border-gray-200/80 transition-all duration-300 overflow-hidden"
+        class="group relative bg-white rounded-2xl p-3 md:p-5 shadow-sm hover:shadow-lg border border-gray-100/80 hover:border-gray-200/80 transition-all duration-300 overflow-hidden"
         :class="{ 'cursor-pointer': href }"
     >
         <!-- Accent top bar -->
         <div :class="`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${colorConfig[color]?.gradient || colorConfig.gold.gradient} opacity-80`"></div>
 
-        <div class="flex items-start justify-between">
-            <div>
-                <p class="text-[13px] font-medium text-gray-500">{{ title }}</p>
-                <p class="text-3xl font-bold text-gray-900 mt-2">{{ value }}</p>
+        <div class="flex items-start justify-between gap-2">
+            <div class="min-w-0">
+                <p class="text-[11px] md:text-[13px] font-medium text-gray-500 truncate">{{ title }}</p>
+                <p class="text-xl md:text-3xl font-bold text-gray-900 mt-1 md:mt-2">{{ value }}</p>
             </div>
             <div
                 :class="colorConfig[color]?.bg || colorConfig.gold.bg"
-                class="w-12 h-12 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
+                class="w-9 h-9 md:w-12 md:h-12 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 flex-shrink-0"
             >
                 <slot name="icon">
-                    <svg :class="colorConfig[color]?.text || colorConfig.gold.text" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg :class="colorConfig[color]?.text || colorConfig.gold.text" class="w-4 h-4 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                     </svg>
                 </slot>

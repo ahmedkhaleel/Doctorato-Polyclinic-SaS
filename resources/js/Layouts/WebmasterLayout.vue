@@ -260,7 +260,7 @@ function switchLocale() {
         <!-- Main Content -->
         <div class="flex-1 flex flex-col min-h-screen lg:min-w-0">
             <!-- Top Header -->
-            <header class="h-[72px] bg-white/80 backdrop-blur-md border-b border-gray-200/60 flex items-center justify-between px-4 lg:px-8 sticky top-0 z-20">
+            <header class="h-[64px] md:h-[72px] bg-white/80 backdrop-blur-md border-b border-gray-200/60 flex items-center justify-between px-3 md:px-4 lg:px-8 sticky top-0 z-20 gap-2">
                 <button
                     class="lg:hidden inline-flex items-center justify-center w-10 h-10 rounded-xl text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors"
                     @click="toggleSidebar"
@@ -268,7 +268,7 @@ function switchLocale() {
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
                 </button>
                 <div class="hidden lg:block"></div>
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-1.5 md:gap-3">
                     <ChatIcon panelPrefix="webmaster" accentColor="#7C3AED" />
                     <button @click="switchLocale" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 border text-[#C4A265] border-[#C4A265]/30 hover:bg-[#C4A265]/10">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" /></svg>
@@ -303,7 +303,7 @@ function switchLocale() {
             </header>
 
             <!-- Page content -->
-            <main class="flex-1 p-4 lg:p-8">
+            <main class="flex-1 p-4 md:p-6 lg:p-8 overflow-x-hidden">
                 <slot />
             </main>
 

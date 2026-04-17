@@ -138,7 +138,7 @@ function formatDate(date) {
                 <!-- Card -->
                 <div
                     :style="{ opacity: visible ? 1 : 0, transform: visible ? 'scale(1) translateY(0)' : 'scale(0.85) translateY(20px)', transition: 'all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)' }"
-                    class="relative w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden"
+                    class="relative w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col"
                 >
                     <!-- Top accent gradient -->
                     <div class="h-1.5" :style="{ background: `linear-gradient(to right, ${accentColor}, ${accentColor}dd, ${accentColor})` }"></div>

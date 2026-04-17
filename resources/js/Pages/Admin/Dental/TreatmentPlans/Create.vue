@@ -483,7 +483,7 @@ function submit() {
                             </div>
                             <div>
                                 <label class="tp-label"><svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg> {{ isRtl ? 'الأولوية' : 'Priority' }}</label>
-                                <div class="grid grid-cols-4 gap-2">
+                                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
                                     <button v-for="(cfg, key) in priorityConfig" :key="key" type="button" @click="form.priority = key" class="tp-priority-btn flex flex-col items-center gap-1.5 px-2 py-3 rounded-2xl border-2 text-[10px] font-bold transition-all duration-300" :class="form.priority === key ? `tp-priority-active-${cfg.color}` : 'bg-gray-50/80 border-transparent text-gray-400 hover:bg-gray-100'">
                                         <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" :d="cfg.icon" /></svg>
                                         {{ cfg.label() }}
