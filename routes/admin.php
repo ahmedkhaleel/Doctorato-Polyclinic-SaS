@@ -676,6 +676,17 @@ Route::middleware('admin.auth')->group(function () {
     Route::post('/settings/telemedicine/test-stripe', [\App\Http\Controllers\Admin\TelemedicineSettingsController::class, 'testStripe'])->middleware('permission:settings.update');
     Route::post('/settings/telemedicine/test-reverb', [\App\Http\Controllers\Admin\TelemedicineSettingsController::class, 'testReverb'])->middleware('permission:settings.update');
 
+    // Admin Online Consultations Dashboard
+    Route::get('/online-consultations', [\App\Http\Controllers\Admin\OnlineConsultationController::class, 'index'])
+        ->name('admin.online-consultations.index')
+        ->middleware('permission:visits.view');
+    Route::get('/online-consultations/doctors', [\App\Http\Controllers\Admin\OnlineConsultationController::class, 'doctors'])
+        ->name('admin.online-consultations.doctors')
+        ->middleware('permission:visits.view');
+    Route::get('/online-consultations/{consultation}', [\App\Http\Controllers\Admin\OnlineConsultationController::class, 'show'])
+        ->name('admin.online-consultations.show')
+        ->middleware('permission:visits.view');
+
     // ═══════════════════════════════════════════════════════════
     // ═══ DENTAL MODULE ROUTES ════════════════════════════════
     // ═══════════════════════════════════════════════════════════

@@ -214,6 +214,18 @@ const navGroups = [
         ],
     },
     {
+        key: 'telemedicine', titleEn: 'Telemedicine', titleAr: 'الاستشارات الأونلاين', moduleKey: 'telemedicine',
+        color: '#C4A265',
+        accent: '#1B365D',
+        featured: true,
+        groupIcon: 'M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z',
+        items: [
+            { labelEn: 'Consultations',   labelAr: 'الاستشارات',        href: '/admin/online-consultations',          icon: 'video',     permission: 'visits.view' },
+            { labelEn: 'Online Doctors',  labelAr: 'الأطباء الأونلاين', href: '/admin/online-consultations/doctors',  icon: 'user',      permission: 'doctors.view' },
+            { labelEn: 'Settings & Keys', labelAr: 'الإعدادات والمفاتيح', href: '/admin/settings/telemedicine',       icon: 'cog',       permission: 'settings.view' },
+        ],
+    },
+    {
         key: 'system', titleEn: 'System', titleAr: 'النظام',
         color: '#64748B',
         groupIcon: 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z',
@@ -231,7 +243,6 @@ const navGroups = [
             { labelEn: 'Roles',          labelAr: 'الصلاحيات',     href: '/admin/roles',              icon: 'shield',   permission: 'roles.view' },
             { labelEn: 'Settings',       labelAr: 'الإعدادات',     href: '/admin/settings',           icon: 'cog',      permission: 'settings.view' },
             { labelEn: 'Modules',        labelAr: 'المديولات',     href: '/admin/settings/modules',   icon: 'layers',   permission: 'settings.view' },
-            { labelEn: 'Telemedicine',   labelAr: 'الاستشارات الأونلاين', href: '/admin/settings/telemedicine', icon: 'video', permission: 'settings.view' },
             { labelEn: 'Recycle Bin',    labelAr: 'سلة المحذوفات', href: '/admin/trash',              icon: 'trash',    permission: 'settings.update' },
         ],
     },
@@ -300,16 +311,29 @@ function logout()        { router.post('/admin/logout'); }
                 sidebarOpen ? 'translate-x-0' : (isRtl ? 'translate-x-full' : '-translate-x-full'),
                 'lg:translate-x-0'
             ]"
-            class="fixed inset-y-0 z-40 w-[270px] transition-transform duration-300 ease-in-out lg:static lg:z-auto flex flex-col brand-sidebar-bg shadow-2xl ltr:left-0 rtl:right-0"
+            class="fixed inset-y-0 z-40 w-[275px] transition-transform duration-300 ease-in-out lg:static lg:z-auto flex flex-col admin-sidebar-navy shadow-2xl ltr:left-0 rtl:right-0"
         >
+            <!-- Ambient gold glow accent -->
+            <div class="pointer-events-none absolute inset-x-0 top-0 h-40 admin-sidebar-glow"></div>
+
             <!-- Logo -->
-            <div class="flex items-center justify-between h-[72px] px-5 border-b border-white/[0.06]">
-                <Link href="/admin" class="flex items-center">
-                    <img
-                        src="/images/logo/logo-light.png"
-                        alt="Doctorato Polyclinic"
-                        class="h-8 w-auto"
-                    />
+            <div class="relative flex items-center justify-between h-[78px] px-5 border-b border-[#C4A265]/15">
+                <Link href="/admin" class="flex items-center gap-2.5 group">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#C4A265] to-[#8B7043] flex items-center justify-center shadow-lg shadow-[#C4A265]/20 group-hover:scale-105 transition-transform">
+                        <img
+                            src="/images/logo/logo-light.png"
+                            alt="Doctorato Polyclinic"
+                            class="h-6 w-6 object-contain"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='block'"
+                        />
+                        <svg class="w-6 h-6 text-white hidden" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                    </div>
+                    <div class="flex flex-col leading-tight">
+                        <span class="text-[15px] font-black text-white tracking-wide">Doctorato</span>
+                        <span class="text-[9px] text-[#C4A265]/70 uppercase tracking-[0.2em]">Admin Panel</span>
+                    </div>
                 </Link>
                 <button class="lg:hidden text-white/40 hover:text-white p-1" @click="closeSidebar">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
@@ -317,10 +341,42 @@ function logout()        { router.post('/admin/logout'); }
             </div>
 
             <!-- Navigation Groups -->
-            <nav class="flex-1 overflow-y-auto py-4 px-3 space-y-1 admin-sidebar-scroll">
+            <nav class="flex-1 overflow-y-auto py-4 px-3 space-y-1.5 admin-sidebar-scroll relative">
                 <div v-for="group in filteredGroups" :key="group.key">
-                    <!-- Group Header - Clickable -->
+                    <!-- ─── FEATURED GROUP (Telemedicine, etc.) ─── -->
+                    <template v-if="group.featured">
+                        <button
+                            @click="toggleGroup(group.key)"
+                            class="w-full flex items-center justify-between px-3 py-3 rounded-xl text-[12px] font-bold transition-all duration-300 relative overflow-hidden group/header admin-featured-card"
+                            :class="isGroupOpen(group.key) ? 'shadow-lg' : 'hover:shadow-md'"
+                        >
+                            <!-- Shimmer effect -->
+                            <div class="absolute inset-0 bg-gradient-to-r from-transparent via-[#C4A265]/10 to-transparent -translate-x-full group-hover/header:translate-x-full transition-transform duration-1000 pointer-events-none"></div>
+
+                            <div class="flex items-center gap-3 relative z-10">
+                                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-[#C4A265] to-[#8B7043] flex items-center justify-center shadow-md shadow-[#C4A265]/30 flex-shrink-0">
+                                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="group.groupIcon" />
+                                    </svg>
+                                </div>
+                                <div class="flex flex-col items-start leading-tight">
+                                    <span class="text-white font-bold tracking-wide">{{ groupTitle(group) }}</span>
+                                    <span class="text-[9px] text-[#C4A265] uppercase tracking-widest">Featured</span>
+                                </div>
+                            </div>
+                            <svg
+                                class="w-4 h-4 text-[#C4A265] transition-transform duration-300 ease-out relative z-10"
+                                :class="[!isGroupOpen(group.key) ? (isRtl ? 'rotate-90' : '-rotate-90') : 'rotate-0']"
+                                fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            >
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                    </template>
+
+                    <!-- ─── REGULAR GROUP ─── -->
                     <button
+                        v-else
                         @click="toggleGroup(group.key)"
                         class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-[11px] font-semibold uppercase tracking-[0.12em] transition-all duration-200 group/header"
                         :class="isGroupOpen(group.key) ? 'bg-white/[0.04]' : 'hover:bg-white/[0.02]'"
@@ -655,6 +711,51 @@ function logout()        { router.post('/admin/logout'); }
 </template>
 
 <style scoped>
+/* ═══ Sidebar — Premium Navy + Gold Theme ═══ */
+.admin-sidebar-navy {
+    background: linear-gradient(180deg, #0f1d3a 0%, #0a1528 100%);
+    position: relative;
+}
+
+.admin-sidebar-navy::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        radial-gradient(circle at 20% 0%, rgba(196, 162, 101, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 100%, rgba(196, 162, 101, 0.05) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+/* Ambient glow at top of sidebar */
+.admin-sidebar-glow {
+    background: radial-gradient(ellipse at top, rgba(196, 162, 101, 0.15) 0%, transparent 70%);
+}
+
+/* Featured nav card (Telemedicine, etc.) */
+.admin-featured-card {
+    background: linear-gradient(135deg, rgba(196, 162, 101, 0.14) 0%, rgba(27, 54, 93, 0.3) 100%);
+    border: 1px solid rgba(196, 162, 101, 0.25);
+    position: relative;
+}
+.admin-featured-card:hover {
+    background: linear-gradient(135deg, rgba(196, 162, 101, 0.22) 0%, rgba(27, 54, 93, 0.45) 100%);
+    border-color: rgba(196, 162, 101, 0.4);
+}
+.admin-featured-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 0.75rem;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(196, 162, 101, 0.5), transparent, rgba(196, 162, 101, 0.3));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+}
+
+/* Custom scrollbar */
 .admin-sidebar-scroll::-webkit-scrollbar {
     width: 3px;
 }
@@ -662,11 +763,11 @@ function logout()        { router.post('/admin/logout'); }
     background: transparent;
 }
 .admin-sidebar-scroll::-webkit-scrollbar-thumb {
-    background: rgba(255,255,255,0.08);
+    background: linear-gradient(180deg, rgba(196,162,101,0.3), rgba(196,162,101,0.08));
     border-radius: 10px;
 }
 .admin-sidebar-scroll::-webkit-scrollbar-thumb:hover {
-    background: rgba(255,255,255,0.15);
+    background: linear-gradient(180deg, rgba(196,162,101,0.5), rgba(196,162,101,0.2));
 }
 .nav-collapse {
     will-change: max-height, opacity;
