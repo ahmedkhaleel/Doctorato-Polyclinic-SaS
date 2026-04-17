@@ -45,11 +45,11 @@ const pipelineTotal = computed(() => Object.values(props.pipeline).reduce((a, b)
 
 const pipelineStages = computed(() => [
     { key: 'ordered', label: t('a_lab_ordered'), color: 'bg-slate-400', lightBg: 'bg-slate-50', text: 'text-slate-700' },
-    { key: 'in_production', label: t('a_lab_in_production'), color: 'bg-blue-500', lightBg: 'bg-blue-50', text: 'text-blue-700' },
+    { key: 'in_production', label: t('a_lab_in_production'), color: 'bg-[#1B365D]', lightBg: 'bg-slate-50', text: 'text-[#1B365D]' },
     { key: 'ready', label: t('a_lab_ready'), color: 'bg-emerald-500', lightBg: 'bg-emerald-50', text: 'text-emerald-700' },
-    { key: 'delivered', label: t('a_lab_delivered'), color: 'bg-cyan-500', lightBg: 'bg-cyan-50', text: 'text-cyan-700' },
-    { key: 'adjustment', label: t('a_lab_adjustment'), color: 'bg-orange-500', lightBg: 'bg-orange-50', text: 'text-orange-700' },
-    { key: 'completed', label: t('a_lab_completed'), color: 'bg-teal-500', lightBg: 'bg-teal-50', text: 'text-teal-700' },
+    { key: 'delivered', label: t('a_lab_delivered'), color: 'bg-[#1B365D]', lightBg: 'bg-slate-50', text: 'text-[#1B365D]' },
+    { key: 'adjustment', label: t('a_lab_adjustment'), color: 'bg-[#C4A265]', lightBg: 'bg-[#F5E7C8]/40', text: 'text-[#8B7043]' },
+    { key: 'completed', label: t('a_lab_completed'), color: 'bg-emerald-500', lightBg: 'bg-emerald-50', text: 'text-emerald-700' },
 ]);
 
 const deliveryGrowth = computed(() => {
@@ -84,11 +84,11 @@ const maxMonthlyOrders = computed(() => {
 
 const labStatusColors = {
     ordered: 'bg-gray-100 text-gray-700',
-    in_production: 'bg-blue-100 text-blue-700',
+    in_production: 'bg-slate-100 text-[#1B365D]',
     ready: 'bg-emerald-100 text-emerald-700',
-    delivered: 'bg-cyan-100 text-cyan-700',
-    adjustment: 'bg-orange-100 text-orange-700',
-    completed: 'bg-teal-100 text-teal-700',
+    delivered: 'bg-slate-100 text-[#1B365D]',
+    adjustment: 'bg-[#F5E7C8]/60 text-[#8B7043]',
+    completed: 'bg-emerald-100 text-emerald-700',
 };
 
 const itemTypeLabels = {
@@ -108,17 +108,18 @@ const itemTypeLabels = {
     <AdminLayout :title="$t('a_lab_dashboard')">
         <div class="lab-dashboard space-y-6">
             <!-- ═══ HEADER ═══ -->
-            <div class="dental-hero-enter relative overflow-hidden rounded-2xl bg-gradient-to-br from-cyan-600 via-cyan-700 to-teal-800 p-7">
-                <div class="absolute -top-16 ltr:-right-16 rtl:-left-16 w-56 h-56 bg-cyan-400/20 rounded-full blur-3xl"></div>
-                <div class="absolute -bottom-12 ltr:-left-12 rtl:-right-12 w-40 h-40 bg-teal-300/15 rounded-full blur-3xl"></div>
+            <div class="dental-hero-enter relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] p-7">
+                <div class="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-[#C4A265] to-transparent"></div>
+                <div class="absolute -top-16 ltr:-right-16 rtl:-left-16 w-56 h-56 bg-[#2C4E7A]/20 rounded-full blur-3xl"></div>
+                <div class="absolute -bottom-12 ltr:-left-12 rtl:-right-12 w-40 h-40 bg-emerald-300/15 rounded-full blur-3xl"></div>
                 <div class="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div class="flex items-center gap-3">
-                        <div class="w-11 h-11 rounded-xl bg-white/15 backdrop-blur-sm flex items-center justify-center ring-1 ring-white/20">
+                        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-[#C4A265] to-[#8B7043] flex items-center justify-center shadow-lg">
                             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
                         </div>
                         <div>
                             <h1 class="text-xl md:text-2xl font-bold text-white">{{ $t('a_lab_dashboard') }}</h1>
-                            <p class="text-cyan-100/80 text-sm mt-0.5">{{ $t('a_lab_dashboard_desc') }}</p>
+                            <p class="text-slate-100/80 text-sm mt-0.5">{{ $t('a_lab_dashboard_desc') }}</p>
                         </div>
                     </div>
                     <div class="flex items-center gap-3">
@@ -129,7 +130,7 @@ const itemTypeLabels = {
                         <Link href="/admin/dental/lab-orders" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium text-white/80 hover:text-white hover:bg-white/10 transition-all duration-200">
                             {{ $t('a_view_all_orders') }}
                         </Link>
-                        <Link href="/admin/dental/lab-orders/create" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-cyan-700 bg-white/90 hover:bg-white shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-sm">
+                        <Link href="/admin/dental/lab-orders/create" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-[#1B365D] bg-[#C4A265] hover:bg-[#D4B57E] shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-sm">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
                             {{ $t('a_new_lab_order') }}
                         </Link>
@@ -140,19 +141,19 @@ const itemTypeLabels = {
             <!-- ═══ KPI CARDS ═══ -->
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                 <div class="dental-card-enter group relative bg-white rounded-2xl p-5 shadow-sm hover:shadow-lg border border-gray-100/80 hover:border-gray-200/80 transition-all duration-300 overflow-hidden" style="animation-delay:0.1s">
-                    <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-500 to-cyan-600 opacity-80"></div>
-                    <div class="text-2xl font-bold text-cyan-600 tabular-nums">{{ stats.total_active }}</div>
+                    <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#1B365D] to-[#1B365D] opacity-80"></div>
+                    <div class="text-2xl font-bold text-[#1B365D] tabular-nums">{{ stats.total_active }}</div>
                     <div class="text-xs text-gray-500 mt-1 font-medium">{{ $t('a_active_orders') }}</div>
                 </div>
                 <div class="dental-card-enter group relative bg-white rounded-2xl p-5 shadow-sm hover:shadow-lg border transition-all duration-300 overflow-hidden" :class="stats.overdue > 0 ? 'border-red-200/60' : 'border-gray-100/80'" style="animation-delay:0.15s">
                     <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-red-500 to-red-600 opacity-80"></div>
-                    <div class="text-2xl font-bold tabular-nums" :class="stats.overdue > 0 ? 'text-red-600' : 'text-green-600'">{{ stats.overdue }}</div>
+                    <div class="text-2xl font-bold tabular-nums" :class="stats.overdue > 0 ? 'text-red-600' : 'text-emerald-600'">{{ stats.overdue }}</div>
                     <div class="text-xs text-gray-500 mt-1 font-medium">{{ $t('a_overdue') }}</div>
                     <span v-if="stats.overdue > 0" class="absolute top-3 ltr:right-3 rtl:left-3 w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse"></span>
                 </div>
                 <div class="dental-card-enter group relative bg-white rounded-2xl p-5 shadow-sm hover:shadow-lg border border-gray-100/80 hover:border-gray-200/80 transition-all duration-300 overflow-hidden" style="animation-delay:0.2s">
-                    <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 to-blue-600 opacity-80"></div>
-                    <div class="text-2xl font-bold text-blue-600 tabular-nums">{{ stats.this_month_ordered }}</div>
+                    <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#1B365D] to-[#1B365D] opacity-80"></div>
+                    <div class="text-2xl font-bold text-[#1B365D] tabular-nums">{{ stats.this_month_ordered }}</div>
                     <div class="text-xs text-gray-500 mt-1 font-medium">{{ $t('a_ordered_this_month') }}</div>
                 </div>
                 <div class="dental-card-enter group relative bg-white rounded-2xl p-5 shadow-sm hover:shadow-lg border border-gray-100/80 hover:border-gray-200/80 transition-all duration-300 overflow-hidden" style="animation-delay:0.25s">
@@ -166,8 +167,8 @@ const itemTypeLabels = {
                     <div class="text-xs text-gray-500 mt-1 font-medium">{{ $t('a_delivered_this_month') }}</div>
                 </div>
                 <div class="dental-card-enter group relative bg-white rounded-2xl p-5 shadow-sm hover:shadow-lg border border-gray-100/80 hover:border-gray-200/80 transition-all duration-300 overflow-hidden" style="animation-delay:0.3s">
-                    <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-violet-500 to-violet-600 opacity-80"></div>
-                    <div class="text-2xl font-bold text-violet-600 tabular-nums">{{ stats.avg_delivery_days }}</div>
+                    <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#1B365D] to-[#1B365D] opacity-80"></div>
+                    <div class="text-2xl font-bold text-[#1B365D] tabular-nums">{{ stats.avg_delivery_days }}</div>
                     <div class="text-xs text-gray-500 mt-1 font-medium">{{ $t('a_avg_delivery_days') }}</div>
                 </div>
                 <div class="dental-card-enter group relative bg-white rounded-2xl p-5 shadow-sm hover:shadow-lg border border-gray-100/80 hover:border-gray-200/80 transition-all duration-300 overflow-hidden" style="animation-delay:0.35s">
@@ -241,9 +242,9 @@ const itemTypeLabels = {
                 <div class="content-card">
                     <div class="content-card__header">
                         <h3 class="content-card__title">
-                            <svg class="w-4.5 h-4.5 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                            <svg class="w-4.5 h-4.5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                             {{ $t('a_upcoming_deliveries') }}
-                            <span v-if="upcomingDeliveries.length" class="content-card__badge bg-cyan-100 text-cyan-700">{{ upcomingDeliveries.length }}</span>
+                            <span v-if="upcomingDeliveries.length" class="content-card__badge bg-slate-100 text-[#1B365D]">{{ upcomingDeliveries.length }}</span>
                         </h3>
                     </div>
                     <div v-if="upcomingDeliveries.length === 0" class="content-card__empty">
@@ -261,7 +262,7 @@ const itemTypeLabels = {
                                 </div>
                             </div>
                             <div class="text-right shrink-0">
-                                <div class="text-xs font-semibold" :class="daysUntil(order.expected_date) <= 1 ? 'text-orange-600' : 'text-cyan-600'">
+                                <div class="text-xs font-semibold" :class="daysUntil(order.expected_date) <= 1 ? 'text-[#C4A265]' : 'text-[#1B365D]'">
                                     <template v-if="daysUntil(order.expected_date) === 0">{{ $t('a_today') }}</template>
                                     <template v-else-if="daysUntil(order.expected_date) === 1">{{ $t('a_tomorrow') }}</template>
                                     <template v-else>{{ daysUntil(order.expected_date) }} {{ $t('a_days') }}</template>
@@ -334,7 +335,7 @@ const itemTypeLabels = {
                 <div class="content-card" v-if="itemTypeBreakdown.length > 0">
                     <div class="content-card__header">
                         <h3 class="content-card__title">
-                            <svg class="w-4.5 h-4.5 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
+                            <svg class="w-4.5 h-4.5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
                             {{ $t('a_item_type_breakdown') }}
                         </h3>
                         <span class="text-xs text-gray-400">{{ $t('a_this_month') }}</span>
@@ -346,7 +347,7 @@ const itemTypeLabels = {
                             </div>
                             <div class="flex-1 h-7 bg-gray-100 rounded-lg overflow-hidden relative">
                                 <div
-                                    class="h-full bg-gradient-to-r from-cyan-500 to-cyan-400 rounded-lg flex items-center justify-end px-2"
+                                    class="h-full bg-gradient-to-r from-[#1B365D] to-[#2C4E7A] rounded-lg flex items-center justify-end px-2"
                                     :style="{ width: Math.max(15, (item.count / (itemTypeBreakdown[0]?.count || 1) * 100)) + '%' }"
                                 >
                                     <span class="text-xs font-bold text-white">{{ item.count }}</span>
@@ -373,7 +374,7 @@ const itemTypeLabels = {
                                 <div class="text-xs font-bold text-gray-600">{{ m.ordered }}</div>
                                 <div class="w-full flex gap-0.5" style="align-items: flex-end; height: 100px;">
                                     <div
-                                        class="flex-1 bg-cyan-400 rounded-t-sm transition-all"
+                                        class="flex-1 bg-[#2C4E7A] rounded-t-sm transition-all"
                                         :style="{ height: Math.max(4, m.ordered / maxMonthlyOrders * 100) + 'px' }"
                                         :title="`Ordered: ${m.ordered}`"
                                     ></div>
@@ -388,7 +389,7 @@ const itemTypeLabels = {
                         </div>
                         <div class="flex items-center justify-center gap-6 mt-4">
                             <div class="flex items-center gap-1.5">
-                                <div class="w-3 h-3 rounded-sm bg-cyan-400"></div>
+                                <div class="w-3 h-3 rounded-sm bg-[#2C4E7A]"></div>
                                 <span class="text-xs text-gray-500">{{ $t('a_lab_ordered') }}</span>
                             </div>
                             <div class="flex items-center gap-1.5">
@@ -407,7 +408,7 @@ const itemTypeLabels = {
                         <svg class="w-4.5 h-4.5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                         {{ $t('a_recent_activity') }}
                     </h3>
-                    <Link href="/admin/dental/lab-orders" class="text-xs text-cyan-600 hover:text-cyan-700 font-medium">
+                    <Link href="/admin/dental/lab-orders" class="text-xs text-[#1B365D] hover:text-[#1B365D] font-medium">
                         {{ $t('a_view_all') }} →
                     </Link>
                 </div>

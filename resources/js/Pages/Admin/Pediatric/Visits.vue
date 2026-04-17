@@ -47,8 +47,8 @@ const statCards = computed(() => [
     {
         labelEn: 'Total Visits', labelAr: 'إجمالي الزيارات',
         value: props.stats?.total ?? 0,
-        gradient: 'from-indigo-500 to-indigo-600',
-        lightBg: 'bg-indigo-50', iconColor: 'text-indigo-500',
+        gradient: 'from-[#1B365D] to-[#1B365D]',
+        lightBg: 'bg-slate-50', iconColor: 'text-[#1B365D]',
     },
     {
         labelEn: "Today's Visits", labelAr: 'زيارات اليوم',
@@ -59,8 +59,8 @@ const statCards = computed(() => [
     {
         labelEn: 'Completed', labelAr: 'مكتملة',
         value: props.stats?.completed ?? 0,
-        gradient: 'from-green-500 to-green-600',
-        lightBg: 'bg-green-50', iconColor: 'text-green-500',
+        gradient: 'from-emerald-500 to-emerald-600',
+        lightBg: 'bg-emerald-50', iconColor: 'text-emerald-500',
     },
     {
         labelEn: 'Waiting Now', labelAr: 'في الانتظار',
@@ -74,7 +74,7 @@ const statCards = computed(() => [
 /* ── Status badge ──────────────────────────────────────── */
 const statusStyles = {
     waiting:     { bg: 'bg-amber-50',   text: 'text-amber-700',   dot: 'bg-amber-500' },
-    in_progress: { bg: 'bg-blue-50',    text: 'text-blue-700',    dot: 'bg-blue-500' },
+    in_progress: { bg: 'bg-slate-50',    text: 'text-[#1B365D]',    dot: 'bg-[#1B365D]' },
     completed:   { bg: 'bg-emerald-50', text: 'text-emerald-700', dot: 'bg-emerald-500' },
     cancelled:   { bg: 'bg-gray-100',   text: 'text-gray-600',    dot: 'bg-gray-400' },
 };
@@ -110,9 +110,9 @@ const paginationLinks = computed(() => props.visits?.links || []);
 <template>
     <div class="space-y-8 pb-12">
         <!-- ── Hero ──────────────────────────────────────── -->
-        <div class="ped-hero relative overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-600 via-blue-600 to-blue-500 p-8 md:p-10">
-            <div class="absolute -top-20 ltr:-right-20 rtl:-left-20 w-72 h-72 bg-blue-400/20 rounded-full blur-3xl"></div>
-            <div class="absolute -bottom-16 ltr:-left-16 rtl:-right-16 w-56 h-56 bg-indigo-300/15 rounded-full blur-3xl"></div>
+        <div class="ped-hero relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] p-8 md:p-10">
+            <div class="absolute -top-20 ltr:-right-20 rtl:-left-20 w-72 h-72 bg-[#2C4E7A]/20 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-16 ltr:-left-16 rtl:-right-16 w-56 h-56 bg-slate-300/15 rounded-full blur-3xl"></div>
 
             <div class="absolute ltr:right-8 rtl:left-8 top-8 opacity-10">
                 <svg class="w-28 h-28 text-white ped-float" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -124,14 +124,14 @@ const paginationLinks = computed(() => props.visits?.links || []);
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div class="ped-hero-up">
                         <div class="flex items-center gap-3">
-                            <div class="w-12 h-12 rounded-2xl bg-white/15 backdrop-blur-sm flex items-center justify-center ring-1 ring-white/20">
+                            <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-[#C4A265] to-[#8B7043] flex items-center justify-center shadow-lg shadow-black/20">
                                 <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>
                             </div>
                             <div>
                                 <h1 class="text-2xl md:text-3xl font-bold text-white">
                                     {{ isRtl ? 'زيارات الأطفال' : 'Pediatric Visits' }}
                                 </h1>
-                                <p class="text-blue-100/80 text-sm mt-0.5">
+                                <p class="text-slate-100/80 text-sm mt-0.5">
                                     {{ isRtl ? 'إدارة ومتابعة زيارات الأطفال' : 'Manage and track pediatric visits' }}
                                 </p>
                             </div>
@@ -174,12 +174,12 @@ const paginationLinks = computed(() => props.visits?.links || []);
                         v-model="search"
                         type="text"
                         :placeholder="isRtl ? 'بحث بالمريض، رقم الملف، أو الطبيب...' : 'Search by patient, file number, or doctor...'"
-                        class="w-full ltr:pl-10 rtl:pr-10 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 transition"
+                        class="w-full ltr:pl-10 rtl:pr-10 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#2C4E7A] transition"
                     />
                 </div>
                 <select
                     v-model="statusFilter"
-                    class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 transition bg-white"
+                    class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#2C4E7A] transition bg-white"
                 >
                     <option value="">{{ isRtl ? 'كل الحالات' : 'All Statuses' }}</option>
                     <option value="waiting">{{ isRtl ? 'في الانتظار' : 'Waiting' }}</option>
@@ -192,7 +192,7 @@ const paginationLinks = computed(() => props.visits?.links || []);
                     <input
                         v-model="dateFrom"
                         type="date"
-                        class="px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 transition bg-white"
+                        class="px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#2C4E7A] transition bg-white"
                     />
                 </div>
                 <div class="flex items-center gap-2">
@@ -200,7 +200,7 @@ const paginationLinks = computed(() => props.visits?.links || []);
                     <input
                         v-model="dateTo"
                         type="date"
-                        class="px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 transition bg-white"
+                        class="px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#2C4E7A] transition bg-white"
                     />
                 </div>
             </div>
@@ -224,7 +224,7 @@ const paginationLinks = computed(() => props.visits?.links || []);
                         <tr
                             v-for="v in (visits?.data || [])"
                             :key="v.id"
-                            class="border-b border-gray-50 hover:bg-indigo-50/30 transition-colors"
+                            class="border-b border-gray-50 hover:bg-slate-50/30 transition-colors"
                         >
                             <td class="px-5 py-3.5">
                                 <div>
@@ -262,7 +262,7 @@ const paginationLinks = computed(() => props.visits?.links || []);
                         v-if="link.url"
                         :href="link.url"
                         class="px-3 py-1.5 rounded-lg text-sm transition"
-                        :class="link.active ? 'bg-indigo-500 text-white font-semibold shadow-sm' : 'text-gray-600 hover:bg-gray-100'"
+                        :class="link.active ? 'bg-[#1B365D] text-white font-semibold shadow-sm' : 'text-gray-600 hover:bg-gray-100'"
                         v-html="link.label"
                         preserve-state
                         preserve-scroll

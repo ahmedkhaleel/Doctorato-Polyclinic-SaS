@@ -246,20 +246,20 @@ function submit() {
             <!-- ═══ HERO ═══ -->
             <div class="tp-animate tp-animate-1 relative overflow-hidden rounded-3xl shadow-2xl">
                 <!-- Animated BG -->
-                <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-teal-900 to-cyan-900"></div>
+                <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-emerald-900 to-[#0F2444]"></div>
                 <div class="tp-hero-pattern absolute inset-0 opacity-[0.04]"></div>
-                <div class="tp-hero-glow absolute -top-24 -end-24 w-96 h-96 bg-teal-400/20 rounded-full blur-3xl"></div>
-                <div class="tp-hero-glow-2 absolute -bottom-20 -start-20 w-80 h-80 bg-cyan-400/15 rounded-full blur-3xl"></div>
+                <div class="tp-hero-glow absolute -top-24 -end-24 w-96 h-96 bg-emerald-400/20 rounded-full blur-3xl"></div>
+                <div class="tp-hero-glow-2 absolute -bottom-20 -start-20 w-80 h-80 bg-[#2C4E7A]/15 rounded-full blur-3xl"></div>
 
                 <div class="relative px-8 py-8">
                     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
                         <div class="flex items-center gap-5">
-                            <div class="tp-icon-float w-16 h-16 rounded-2xl bg-gradient-to-br from-teal-400 to-cyan-400 flex items-center justify-center shadow-lg shadow-teal-500/30">
+                            <div class="tp-icon-float w-16 h-16 rounded-2xl bg-gradient-to-br from-[#C4A265] to-[#8B7043] flex items-center justify-center shadow-lg shadow-emerald-500/30">
                                 <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z" /></svg>
                             </div>
                             <div>
                                 <h1 class="text-3xl font-black text-white tracking-tight">{{ isRtl ? 'إنشاء خطة علاج' : 'Create Treatment Plan' }}</h1>
-                                <p class="text-teal-200/70 text-sm mt-1">{{ isRtl ? 'إنشاء خطة علاج جديدة للمريض' : 'Build a comprehensive treatment plan for the patient' }}</p>
+                                <p class="text-emerald-200/70 text-sm mt-1">{{ isRtl ? 'إنشاء خطة علاج جديدة للمريض' : 'Build a comprehensive treatment plan for the patient' }}</p>
                             </div>
                         </div>
                         <div class="flex items-center gap-3">
@@ -277,19 +277,19 @@ function submit() {
                     <!-- Progress Bar -->
                     <div class="mt-6 flex items-center gap-4">
                         <div class="flex-1 h-1.5 bg-white/10 rounded-full overflow-hidden">
-                            <div class="h-full bg-gradient-to-r from-teal-400 to-cyan-300 rounded-full transition-all duration-700 ease-out" :style="{ width: formProgress + '%' }"></div>
+                            <div class="h-full bg-gradient-to-r from-emerald-400 to-slate-300 rounded-full transition-all duration-700 ease-out" :style="{ width: formProgress + '%' }"></div>
                         </div>
-                        <span class="text-xs font-bold text-teal-300 tabular-nums">{{ formProgress }}%</span>
+                        <span class="text-xs font-bold text-emerald-300 tabular-nums">{{ formProgress }}%</span>
                     </div>
                 </div>
             </div>
 
             <!-- ═══ TEMPLATES ═══ -->
             <div v-if="templates.length > 0" class="tp-animate tp-animate-2">
-                <div class="tp-glass-card rounded-3xl p-6 border border-violet-100/60">
+                <div class="tp-glass-card rounded-3xl p-6 border border-slate-100/60">
                     <div class="flex items-center justify-between mb-5">
                         <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center shadow-lg shadow-violet-500/20">
+                            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#1B365D] to-[#2C4E7A] flex items-center justify-center shadow-lg shadow-[#1B365D]/20">
                                 <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z" /></svg>
                             </div>
                             <div>
@@ -297,20 +297,20 @@ function submit() {
                                 <p class="text-xs text-gray-400 mt-0.5">{{ isRtl ? 'اختر قالباً لتعبئة البيانات تلقائياً' : 'Auto-fill with a pre-built template' }}</p>
                             </div>
                         </div>
-                        <button @click="showTemplatePanel = !showTemplatePanel" class="inline-flex items-center gap-2 text-sm font-semibold text-violet-600 hover:text-violet-800 bg-violet-50 hover:bg-violet-100 px-4 py-2.5 rounded-xl transition-all duration-300 hover:scale-[1.02]">
+                        <button @click="showTemplatePanel = !showTemplatePanel" class="inline-flex items-center gap-2 text-sm font-semibold text-[#1B365D] hover:text-[#0F2444] bg-slate-50 hover:bg-slate-100 px-4 py-2.5 rounded-xl transition-all duration-300 hover:scale-[1.02]">
                             <svg class="w-4 h-4 transition-transform duration-300" :class="showTemplatePanel ? 'rotate-180' : ''" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
                             {{ showTemplatePanel ? (isRtl ? 'إخفاء' : 'Hide') : (isRtl ? 'عرض الكل' : 'Show All') }}
-                            <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-violet-200 text-violet-700 text-[10px] font-bold">{{ templates.length }}</span>
+                            <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-slate-200 text-[#1B365D] text-[10px] font-bold">{{ templates.length }}</span>
                         </button>
                     </div>
 
                     <!-- Quick Chips -->
                     <div v-if="!showTemplatePanel" class="flex flex-wrap gap-2">
-                        <button v-for="tmpl in templates.slice(0, 6)" :key="tmpl.id" @click="applyTemplate(tmpl)" class="group inline-flex items-center gap-2.5 px-5 py-3 text-sm font-medium rounded-2xl border-2 transition-all duration-300 hover:shadow-lg hover:scale-[1.02]" :class="selectedTemplateId === tmpl.id ? 'bg-violet-600 text-white border-violet-600 shadow-lg shadow-violet-500/20' : 'bg-white text-gray-700 border-gray-100 hover:border-violet-200 hover:bg-violet-50'">
-                            <svg class="w-4 h-4 flex-shrink-0 transition-transform duration-300 group-hover:scale-110" :class="selectedTemplateId === tmpl.id ? 'text-violet-200' : 'text-violet-400'" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" :d="categorySvgIcons[tmpl.category] || categorySvgIcons.general" /></svg>
+                        <button v-for="tmpl in templates.slice(0, 6)" :key="tmpl.id" @click="applyTemplate(tmpl)" class="group inline-flex items-center gap-2.5 px-5 py-3 text-sm font-medium rounded-2xl border-2 transition-all duration-300 hover:shadow-lg hover:scale-[1.02]" :class="selectedTemplateId === tmpl.id ? 'bg-[#1B365D] text-white border-[#1B365D] shadow-lg shadow-[#1B365D]/20' : 'bg-white text-gray-700 border-gray-100 hover:border-slate-200 hover:bg-slate-50'">
+                            <svg class="w-4 h-4 flex-shrink-0 transition-transform duration-300 group-hover:scale-110" :class="selectedTemplateId === tmpl.id ? 'text-slate-200' : 'text-[#2C4E7A]'" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" :d="categorySvgIcons[tmpl.category] || categorySvgIcons.general" /></svg>
                             {{ isRtl ? tmpl.name_ar : tmpl.name_en }}
                         </button>
-                        <button v-if="templates.length > 6" @click="showTemplatePanel = true" class="inline-flex items-center px-5 py-3 text-sm font-semibold text-violet-500 bg-white border-2 border-dashed border-violet-200 rounded-2xl hover:bg-violet-50 hover:border-violet-400 transition-all duration-300">
+                        <button v-if="templates.length > 6" @click="showTemplatePanel = true" class="inline-flex items-center px-5 py-3 text-sm font-semibold text-[#1B365D] bg-white border-2 border-dashed border-slate-200 rounded-2xl hover:bg-slate-50 hover:border-[#2C4E7A] transition-all duration-300">
                             +{{ templates.length - 6 }} {{ isRtl ? 'المزيد' : 'more' }}
                         </button>
                     </div>
@@ -320,29 +320,29 @@ function submit() {
                         <div v-if="showTemplatePanel" class="overflow-hidden">
                             <!-- Category Filter Tabs -->
                             <div class="flex flex-wrap gap-2 mb-5 pb-4 border-b border-gray-100">
-                                <button v-for="cat in templateCategories" :key="cat" @click="templateFilter = cat" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200" :class="templateFilter === cat ? 'bg-violet-600 text-white shadow-sm' : 'bg-gray-50 text-gray-500 hover:bg-gray-100'">
+                                <button v-for="cat in templateCategories" :key="cat" @click="templateFilter = cat" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200" :class="templateFilter === cat ? 'bg-[#1B365D] text-white shadow-sm' : 'bg-gray-50 text-gray-500 hover:bg-gray-100'">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" :d="categorySvgIcons[cat] || categorySvgIcons.general" /></svg>
                                     {{ categoryLabels[cat] || cat }}
                                 </button>
                             </div>
 
                             <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-                                <div v-for="tmpl in filteredTemplates" :key="tmpl.id" @click="applyTemplate(tmpl)" class="group cursor-pointer bg-white rounded-2xl border-2 p-5 transition-all duration-300 hover:shadow-xl hover:scale-[1.01]" :class="selectedTemplateId === tmpl.id ? 'border-violet-500 ring-4 ring-violet-100 shadow-xl' : 'border-gray-100 hover:border-violet-200'">
+                                <div v-for="tmpl in filteredTemplates" :key="tmpl.id" @click="applyTemplate(tmpl)" class="group cursor-pointer bg-white rounded-2xl border-2 p-5 transition-all duration-300 hover:shadow-xl hover:scale-[1.01]" :class="selectedTemplateId === tmpl.id ? 'border-[#1B365D] ring-4 ring-slate-100 shadow-xl' : 'border-gray-100 hover:border-slate-200'">
                                     <div class="flex items-start gap-3 mb-3">
-                                        <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300" :class="selectedTemplateId === tmpl.id ? 'bg-violet-100' : 'bg-gray-50 group-hover:bg-violet-50'">
-                                            <svg class="w-5 h-5 transition-all duration-300" :class="selectedTemplateId === tmpl.id ? 'text-violet-600' : 'text-gray-400 group-hover:text-violet-500'" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" :d="categorySvgIcons[tmpl.category] || categorySvgIcons.general" /></svg>
+                                        <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300" :class="selectedTemplateId === tmpl.id ? 'bg-slate-100' : 'bg-gray-50 group-hover:bg-slate-50'">
+                                            <svg class="w-5 h-5 transition-all duration-300" :class="selectedTemplateId === tmpl.id ? 'text-[#1B365D]' : 'text-gray-400 group-hover:text-[#1B365D]'" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" :d="categorySvgIcons[tmpl.category] || categorySvgIcons.general" /></svg>
                                         </div>
                                         <div class="min-w-0 flex-1">
                                             <h4 class="text-sm font-bold text-gray-900 truncate">{{ isRtl ? tmpl.name_ar : tmpl.name_en }}</h4>
-                                            <span class="inline-block mt-1 text-[10px] font-bold text-violet-500 bg-violet-50 px-2 py-0.5 rounded-md uppercase tracking-wider">{{ categoryLabels[tmpl.category] }}</span>
+                                            <span class="inline-block mt-1 text-[10px] font-bold text-[#1B365D] bg-slate-50 px-2 py-0.5 rounded-md uppercase tracking-wider">{{ categoryLabels[tmpl.category] }}</span>
                                         </div>
-                                        <svg v-if="selectedTemplateId === tmpl.id" class="w-6 h-6 text-violet-500 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" /></svg>
+                                        <svg v-if="selectedTemplateId === tmpl.id" class="w-6 h-6 text-[#1B365D] flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" /></svg>
                                     </div>
                                     <p v-if="isRtl ? tmpl.description_ar : tmpl.description_en" class="text-xs text-gray-400 line-clamp-2 mb-3">{{ isRtl ? tmpl.description_ar : tmpl.description_en }}</p>
                                     <div class="flex items-center gap-3 text-[10px] text-gray-400 pt-3 border-t border-gray-50">
                                         <span class="flex items-center gap-1"><svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 12h.007v.008H3.75V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm-.375 5.25h.007v.008H3.75v-.008zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" /></svg>{{ (tmpl.treatments || []).length }} {{ isRtl ? 'إجراء' : 'procedures' }}</span>
                                         <span class="flex items-center gap-1"><svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>{{ tmpl.estimated_sessions }} {{ isRtl ? 'جلسة' : 'sessions' }}</span>
-                                        <span class="ms-auto font-bold text-sm text-violet-600">{{ formatCurrency(tmpl.estimated_cost) }}</span>
+                                        <span class="ms-auto font-bold text-sm text-[#1B365D]">{{ formatCurrency(tmpl.estimated_cost) }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -351,11 +351,11 @@ function submit() {
 
                     <!-- Applied Indicator -->
                     <Transition enter-active-class="transition-all duration-300" enter-from-class="opacity-0 scale-95" enter-to-class="opacity-100 scale-100">
-                        <div v-if="selectedTemplateId" class="mt-5 flex items-center gap-3 text-sm text-violet-700 bg-gradient-to-r from-violet-50 to-purple-50 rounded-2xl px-5 py-3 border border-violet-200/50">
-                            <svg class="w-5 h-5 text-violet-500 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" /></svg>
+                        <div v-if="selectedTemplateId" class="mt-5 flex items-center gap-3 text-sm text-[#1B365D] bg-gradient-to-r from-slate-50 to-slate-50 rounded-2xl px-5 py-3 border border-slate-200/50">
+                            <svg class="w-5 h-5 text-[#1B365D] flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" /></svg>
                             <span class="font-medium">{{ isRtl ? 'تم تطبيق القالب — يمكنك تعديل التفاصيل أدناه' : 'Template applied — customize the details below' }}</span>
-                            <button @click="selectedTemplateId = null; form.template_id = ''" class="ms-auto p-1.5 rounded-lg hover:bg-violet-200 transition-colors">
-                                <svg class="w-4 h-4 text-violet-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                            <button @click="selectedTemplateId = null; form.template_id = ''" class="ms-auto p-1.5 rounded-lg hover:bg-slate-200 transition-colors">
+                                <svg class="w-4 h-4 text-[#2C4E7A]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
                             </button>
                         </div>
                     </Transition>
@@ -368,7 +368,7 @@ function submit() {
                 <div class="tp-animate tp-animate-3 tp-glass-card rounded-3xl overflow-hidden border border-gray-100/80">
                     <div class="px-8 py-5 bg-gradient-to-r from-slate-50 via-gray-50/50 to-white border-b border-gray-100/50">
                         <div class="flex items-center gap-4">
-                            <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-cyan-500 to-teal-500 flex items-center justify-center shadow-lg shadow-cyan-500/15">
+                            <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#1B365D] to-[#2C4E7A] flex items-center justify-center shadow-lg shadow-[#1B365D]/15">
                                 <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" /></svg>
                             </div>
                             <div>
@@ -384,8 +384,8 @@ function submit() {
                             <!-- Patient Select -->
                             <div class="searchable-select">
                                 <label class="tp-label">
-                                    <svg class="w-4 h-4 text-teal-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>
-                                    {{ isRtl ? 'المريض' : 'Patient' }} <span class="text-rose-400">*</span>
+                                    <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>
+                                    {{ isRtl ? 'المريض' : 'Patient' }} <span class="text-[#D4B57E]">*</span>
                                 </label>
                                 <div class="relative">
                                     <div @click="!patient && (showPatientDropdown = !showPatientDropdown)" class="tp-input-wrapper cursor-pointer" :class="{ 'tp-input-focus': showPatientDropdown, 'tp-input-disabled': !!patient }">
@@ -397,12 +397,12 @@ function submit() {
                                     <Transition enter-active-class="transition-all duration-200 ease-out" enter-from-class="opacity-0 -translate-y-2 scale-[0.97]" enter-to-class="opacity-100 translate-y-0 scale-100" leave-active-class="transition-all duration-150 ease-in" leave-from-class="opacity-100" leave-to-class="opacity-0 -translate-y-2">
                                         <div v-if="showPatientDropdown && !patient" class="absolute z-50 mt-2 w-full bg-white rounded-2xl border border-gray-100 shadow-2xl shadow-gray-200/50 max-h-56 overflow-y-auto">
                                             <div v-if="filteredPatients.length === 0" class="p-4 text-center text-sm text-gray-300">{{ isRtl ? 'لا توجد نتائج' : 'No results' }}</div>
-                                            <button v-for="p in filteredPatients" :key="p.id" type="button" @click="selectPatient(p)" class="w-full flex items-center gap-3 px-4 py-3 text-sm hover:bg-teal-50 transition-all duration-200 text-start" :class="form.patient_id === p.id ? 'bg-teal-50 text-teal-700' : 'text-gray-700'">
+                                            <button v-for="p in filteredPatients" :key="p.id" type="button" @click="selectPatient(p)" class="w-full flex items-center gap-3 px-4 py-3 text-sm hover:bg-emerald-50 transition-all duration-200 text-start" :class="form.patient_id === p.id ? 'bg-emerald-50 text-emerald-700' : 'text-gray-700'">
                                                 <div class="w-9 h-9 rounded-xl bg-gray-50 flex items-center justify-center flex-shrink-0">
                                                     <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>
                                                 </div>
                                                 <div class="min-w-0"><div class="font-medium truncate">{{ p.full_name }}</div><div class="text-[10px] text-gray-400">{{ p.file_number }} · {{ p.phone }}</div></div>
-                                                <svg v-if="form.patient_id === p.id" class="w-5 h-5 text-teal-500 ms-auto flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" /></svg>
+                                                <svg v-if="form.patient_id === p.id" class="w-5 h-5 text-emerald-500 ms-auto flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" /></svg>
                                             </button>
                                         </div>
                                     </Transition>
@@ -413,8 +413,8 @@ function submit() {
                             <!-- Doctor Select -->
                             <div class="searchable-select">
                                 <label class="tp-label">
-                                    <svg class="w-4 h-4 text-teal-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" /></svg>
-                                    {{ isRtl ? 'الطبيب' : 'Doctor' }} <span class="text-rose-400">*</span>
+                                    <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" /></svg>
+                                    {{ isRtl ? 'الطبيب' : 'Doctor' }} <span class="text-[#D4B57E]">*</span>
                                 </label>
                                 <div class="relative">
                                     <div @click="showDoctorDropdown = !showDoctorDropdown" class="tp-input-wrapper cursor-pointer" :class="{ 'tp-input-focus': showDoctorDropdown }">
@@ -426,12 +426,12 @@ function submit() {
                                     <Transition enter-active-class="transition-all duration-200 ease-out" enter-from-class="opacity-0 -translate-y-2 scale-[0.97]" enter-to-class="opacity-100 translate-y-0 scale-100" leave-active-class="transition-all duration-150 ease-in" leave-from-class="opacity-100" leave-to-class="opacity-0 -translate-y-2">
                                         <div v-if="showDoctorDropdown" class="absolute z-50 mt-2 w-full bg-white rounded-2xl border border-gray-100 shadow-2xl shadow-gray-200/50 max-h-56 overflow-y-auto">
                                             <div v-if="filteredDoctors.length === 0" class="p-4 text-center text-sm text-gray-300">{{ isRtl ? 'لا توجد نتائج' : 'No results' }}</div>
-                                            <button v-for="d in filteredDoctors" :key="d.id" type="button" @click="selectDoctor(d)" class="w-full flex items-center gap-3 px-4 py-3 text-sm hover:bg-teal-50 transition-all duration-200 text-start" :class="form.doctor_id === d.id ? 'bg-teal-50 text-teal-700' : 'text-gray-700'">
-                                                <div class="w-9 h-9 rounded-xl bg-teal-50 flex items-center justify-center flex-shrink-0">
-                                                    <svg class="w-4 h-4 text-teal-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" /></svg>
+                                            <button v-for="d in filteredDoctors" :key="d.id" type="button" @click="selectDoctor(d)" class="w-full flex items-center gap-3 px-4 py-3 text-sm hover:bg-emerald-50 transition-all duration-200 text-start" :class="form.doctor_id === d.id ? 'bg-emerald-50 text-emerald-700' : 'text-gray-700'">
+                                                <div class="w-9 h-9 rounded-xl bg-emerald-50 flex items-center justify-center flex-shrink-0">
+                                                    <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" /></svg>
                                                 </div>
                                                 <div class="font-medium">{{ locale === 'ar' ? d.name_ar : d.name_en }}</div>
-                                                <svg v-if="form.doctor_id === d.id" class="w-5 h-5 text-teal-500 ms-auto flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" /></svg>
+                                                <svg v-if="form.doctor_id === d.id" class="w-5 h-5 text-emerald-500 ms-auto flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" /></svg>
                                             </button>
                                         </div>
                                     </Transition>
@@ -443,12 +443,12 @@ function submit() {
                         <!-- Titles -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <label class="tp-label"><svg class="w-4 h-4 text-teal-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" /></svg> {{ isRtl ? 'العنوان (عربي)' : 'Title (Arabic)' }}</label>
+                                <label class="tp-label"><svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" /></svg> {{ isRtl ? 'العنوان (عربي)' : 'Title (Arabic)' }}</label>
                                 <input v-model="form.title_ar" type="text" dir="rtl" class="tp-input" :placeholder="isRtl ? 'عنوان خطة العلاج بالعربي' : 'Arabic title'" />
                                 <p v-if="errors.title_ar" class="tp-error">{{ errors.title_ar }}</p>
                             </div>
                             <div>
-                                <label class="tp-label"><svg class="w-4 h-4 text-teal-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 21l5.25-11.25L21 21m-9-3h7.5M3 5.621a48.474 48.474 0 016-.371m0 0c1.12 0 2.233.038 3.334.114M9 5.25V3m3.334 2.364C11.176 10.658 7.69 15.08 3 17.502m9.334-12.138c.896.061 1.785.147 2.666.257m-4.589 8.495a18.023 18.023 0 01-3.827-5.802" /></svg> {{ isRtl ? 'العنوان (إنجليزي)' : 'Title (English)' }}</label>
+                                <label class="tp-label"><svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 21l5.25-11.25L21 21m-9-3h7.5M3 5.621a48.474 48.474 0 016-.371m0 0c1.12 0 2.233.038 3.334.114M9 5.25V3m3.334 2.364C11.176 10.658 7.69 15.08 3 17.502m9.334-12.138c.896.061 1.785.147 2.666.257m-4.589 8.495a18.023 18.023 0 01-3.827-5.802" /></svg> {{ isRtl ? 'العنوان (إنجليزي)' : 'Title (English)' }}</label>
                                 <input v-model="form.title_en" type="text" class="tp-input" :placeholder="isRtl ? 'عنوان خطة العلاج بالإنجليزي' : 'English title'" />
                                 <p v-if="errors.title_en" class="tp-error">{{ errors.title_en }}</p>
                             </div>
@@ -456,7 +456,7 @@ function submit() {
 
                         <!-- Description -->
                         <div>
-                            <label class="tp-label"><svg class="w-4 h-4 text-teal-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" /></svg> {{ isRtl ? 'الوصف' : 'Description' }}</label>
+                            <label class="tp-label"><svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" /></svg> {{ isRtl ? 'الوصف' : 'Description' }}</label>
                             <textarea v-model="form.description" rows="3" class="tp-input resize-none" :placeholder="isRtl ? 'وصف مختصر لخطة العلاج...' : 'Brief description of the treatment plan...'"></textarea>
                             <p v-if="errors.description" class="tp-error">{{ errors.description }}</p>
                         </div>
@@ -464,7 +464,7 @@ function submit() {
                         <!-- Cost / Sessions / Priority -->
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                             <div>
-                                <label class="tp-label"><svg class="w-4 h-4 text-teal-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z" /></svg> {{ isRtl ? 'التكلفة التقديرية' : 'Estimated Cost' }}</label>
+                                <label class="tp-label"><svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z" /></svg> {{ isRtl ? 'التكلفة التقديرية' : 'Estimated Cost' }}</label>
                                 <div class="tp-input-wrapper">
                                     <svg class="w-5 h-5 text-gray-300 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                     <input v-model="form.estimated_cost" type="number" min="0" step="0.01" class="flex-1 bg-transparent border-none outline-none text-sm text-gray-700 p-0 focus:ring-0" :placeholder="isRtl ? '0.00' : '0.00'" />
@@ -473,7 +473,7 @@ function submit() {
                                 <p v-if="errors.estimated_cost" class="tp-error">{{ errors.estimated_cost }}</p>
                             </div>
                             <div>
-                                <label class="tp-label"><svg class="w-4 h-4 text-teal-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> {{ isRtl ? 'عدد الجلسات التقديري' : 'Estimated Sessions' }}</label>
+                                <label class="tp-label"><svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> {{ isRtl ? 'عدد الجلسات التقديري' : 'Estimated Sessions' }}</label>
                                 <div class="tp-input-wrapper">
                                     <svg class="w-5 h-5 text-gray-300 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" /></svg>
                                     <input v-model="form.estimated_sessions" type="number" min="1" class="flex-1 bg-transparent border-none outline-none text-sm text-gray-700 p-0 focus:ring-0" placeholder="1" />
@@ -482,7 +482,7 @@ function submit() {
                                 <p v-if="errors.estimated_sessions" class="tp-error">{{ errors.estimated_sessions }}</p>
                             </div>
                             <div>
-                                <label class="tp-label"><svg class="w-4 h-4 text-teal-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg> {{ isRtl ? 'الأولوية' : 'Priority' }}</label>
+                                <label class="tp-label"><svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg> {{ isRtl ? 'الأولوية' : 'Priority' }}</label>
                                 <div class="grid grid-cols-4 gap-2">
                                     <button v-for="(cfg, key) in priorityConfig" :key="key" type="button" @click="form.priority = key" class="tp-priority-btn flex flex-col items-center gap-1.5 px-2 py-3 rounded-2xl border-2 text-[10px] font-bold transition-all duration-300" :class="form.priority === key ? `tp-priority-active-${cfg.color}` : 'bg-gray-50/80 border-transparent text-gray-400 hover:bg-gray-100'">
                                         <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" :d="cfg.icon" /></svg>
@@ -495,12 +495,12 @@ function submit() {
                         <!-- Dates -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <label class="tp-label"><svg class="w-4 h-4 text-teal-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z" /></svg> {{ isRtl ? 'تاريخ البدء' : 'Start Date' }}</label>
+                                <label class="tp-label"><svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z" /></svg> {{ isRtl ? 'تاريخ البدء' : 'Start Date' }}</label>
                                 <input v-model="form.start_date" type="date" class="tp-input" />
                                 <p v-if="errors.start_date" class="tp-error">{{ errors.start_date }}</p>
                             </div>
                             <div>
-                                <label class="tp-label"><svg class="w-4 h-4 text-teal-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" /></svg> {{ isRtl ? 'تاريخ الانتهاء المتوقع' : 'Expected End Date' }}</label>
+                                <label class="tp-label"><svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" /></svg> {{ isRtl ? 'تاريخ الانتهاء المتوقع' : 'Expected End Date' }}</label>
                                 <input v-model="form.expected_end_date" type="date" class="tp-input" />
                                 <p v-if="errors.expected_end_date" class="tp-error">{{ errors.expected_end_date }}</p>
                             </div>
@@ -508,7 +508,7 @@ function submit() {
 
                         <!-- Notes -->
                         <div>
-                            <label class="tp-label"><svg class="w-4 h-4 text-teal-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" /></svg> {{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
+                            <label class="tp-label"><svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" /></svg> {{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
                             <textarea v-model="form.notes" rows="2" class="tp-input resize-none" :placeholder="isRtl ? 'ملاحظات إضافية...' : 'Additional notes...'"></textarea>
                         </div>
                     </div>
@@ -519,7 +519,7 @@ function submit() {
                     <div class="px-8 py-5 bg-gradient-to-r from-slate-50 via-gray-50/50 to-white border-b border-gray-100/50">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-4">
-                                <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center shadow-lg shadow-emerald-500/15">
+                                <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-lg shadow-emerald-500/15">
                                     <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 12h.007v.008H3.75V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm-.375 5.25h.007v.008H3.75v-.008zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" /></svg>
                                 </div>
                                 <div>
@@ -527,7 +527,7 @@ function submit() {
                                     <p class="text-xs text-gray-400">{{ isRtl ? 'أضف الإجراءات المطلوبة لخطة العلاج' : 'Add required procedures for the plan' }}</p>
                                 </div>
                             </div>
-                            <button type="button" @click="addTreatment" class="group inline-flex items-center gap-2 px-5 py-3 text-sm font-bold text-white bg-gradient-to-r from-emerald-500 to-teal-500 rounded-2xl hover:from-emerald-600 hover:to-teal-600 shadow-lg shadow-emerald-500/20 hover:shadow-xl hover:shadow-emerald-500/25 transition-all duration-300 active:scale-[0.97]">
+                            <button type="button" @click="addTreatment" class="group inline-flex items-center gap-2 px-5 py-3 text-sm font-bold text-white bg-gradient-to-r from-emerald-500 to-emerald-500 rounded-2xl hover:from-emerald-600 hover:to-emerald-600 shadow-lg shadow-emerald-500/20 hover:shadow-xl hover:shadow-emerald-500/25 transition-all duration-300 active:scale-[0.97]">
                                 <svg class="w-5 h-5 transition-transform duration-300 group-hover:rotate-90" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
                                 {{ isRtl ? 'إضافة إجراء' : 'Add Procedure' }}
                             </button>
@@ -538,14 +538,14 @@ function submit() {
                         <!-- Empty State -->
                         <div v-if="form.treatments.length === 0" class="text-center py-20">
                             <div class="relative w-24 h-24 mx-auto mb-6">
-                                <div class="absolute inset-0 bg-gradient-to-br from-teal-100 to-cyan-100 rounded-3xl rotate-6"></div>
+                                <div class="absolute inset-0 bg-gradient-to-br from-emerald-100 to-slate-100 rounded-3xl rotate-6"></div>
                                 <div class="absolute inset-0 bg-white rounded-3xl shadow-sm flex items-center justify-center">
                                     <svg class="w-10 h-10 text-gray-300" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 12h.007v.008H3.75V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm-.375 5.25h.007v.008H3.75v-.008zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" /></svg>
                                 </div>
                             </div>
                             <p class="text-base font-semibold text-gray-500 mb-1">{{ isRtl ? 'لم تتم إضافة إجراءات بعد' : 'No procedures added yet' }}</p>
                             <p class="text-sm text-gray-300 mb-6">{{ isRtl ? 'اضغط الزر أعلاه لإضافة إجراء جديد' : 'Click the button above to add a new procedure' }}</p>
-                            <button type="button" @click="addTreatment" class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-teal-600 bg-teal-50 rounded-xl hover:bg-teal-100 transition-all duration-200">
+                            <button type="button" @click="addTreatment" class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-emerald-600 bg-emerald-50 rounded-xl hover:bg-emerald-100 transition-all duration-200">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
                                 {{ isRtl ? 'إضافة أول إجراء' : 'Add First Procedure' }}
                             </button>
@@ -553,17 +553,17 @@ function submit() {
 
                         <!-- Treatment Cards -->
                         <TransitionGroup enter-active-class="transition-all duration-400 ease-out" enter-from-class="opacity-0 translate-y-6 scale-[0.96]" enter-to-class="opacity-100 translate-y-0 scale-100" leave-active-class="transition-all duration-300 ease-in" leave-from-class="opacity-100 translate-y-0" leave-to-class="opacity-0 -translate-x-12 scale-90" move-class="transition-all duration-400 ease-in-out" tag="div" class="space-y-5">
-                            <div v-for="(treatment, index) in form.treatments" :key="index" :data-treatment-index="index" class="tp-treatment-card group relative rounded-2xl border-2 border-gray-100 hover:border-teal-200 p-6 transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/5">
+                            <div v-for="(treatment, index) in form.treatments" :key="index" :data-treatment-index="index" class="tp-treatment-card group relative rounded-2xl border-2 border-gray-100 hover:border-emerald-200 p-6 transition-all duration-300 hover:shadow-lg hover:shadow-emerald-500/5">
                                 <!-- Left accent bar -->
-                                <div class="absolute top-4 bottom-4 start-0 w-1 rounded-full bg-gradient-to-b from-teal-400 to-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                <div class="absolute top-4 bottom-4 start-0 w-1 rounded-full bg-gradient-to-b from-emerald-400 to-[#2C4E7A] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
                                 <!-- Remove Button -->
-                                <button type="button" @click="removeTreatment(index)" class="absolute top-4 end-4 w-8 h-8 rounded-xl flex items-center justify-center text-gray-300 hover:text-white hover:bg-rose-500 opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110">
+                                <button type="button" @click="removeTreatment(index)" class="absolute top-4 end-4 w-8 h-8 rounded-xl flex items-center justify-center text-gray-300 hover:text-white hover:bg-[#C4A265] opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" /></svg>
                                 </button>
 
                                 <!-- Badge -->
-                                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-gradient-to-r from-teal-50 to-cyan-50 text-teal-600 text-xs font-bold mb-5">
+                                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-50 to-slate-50 text-emerald-600 text-xs font-bold mb-5">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5.25 8.25h15m-16.5 7.5h15m-1.8-13.5l-3.9 19.5m-2.1-19.5l-3.9 19.5" /></svg>
                                     {{ isRtl ? 'إجراء' : 'Procedure' }} {{ index + 1 }}
                                 </div>
@@ -629,7 +629,7 @@ function submit() {
                             </div>
                             <div class="flex items-center gap-4">
                                 <span class="text-sm text-gray-500 font-medium">{{ isRtl ? 'إجمالي التكلفة' : 'Total Cost' }}</span>
-                                <span class="text-2xl font-black bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">{{ formatCurrency(totalCost) }}</span>
+                                <span class="text-2xl font-black bg-gradient-to-r from-emerald-600 to-emerald-600 bg-clip-text text-transparent">{{ formatCurrency(totalCost) }}</span>
                             </div>
                         </div>
                     </div>
@@ -637,8 +637,8 @@ function submit() {
 
                 <!-- ═══ SUBMIT ═══ -->
                 <div class="tp-animate tp-animate-5 flex items-center gap-4 pt-2">
-                    <button type="submit" :disabled="processing" class="group relative inline-flex items-center gap-3 px-10 py-4 rounded-2xl text-white font-bold text-sm overflow-hidden transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.97] hover:scale-[1.01] shadow-xl shadow-teal-500/25 hover:shadow-2xl hover:shadow-teal-500/30">
-                        <div class="absolute inset-0 bg-gradient-to-r from-teal-500 via-cyan-500 to-teal-500 bg-[length:200%_100%] tp-shimmer"></div>
+                    <button type="submit" :disabled="processing" class="group relative inline-flex items-center gap-3 px-10 py-4 rounded-2xl text-white font-bold text-sm overflow-hidden transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.97] hover:scale-[1.01] shadow-xl shadow-emerald-500/25 hover:shadow-2xl hover:shadow-emerald-500/30">
+                        <div class="absolute inset-0 bg-gradient-to-r from-emerald-500 via-[#1B365D] to-emerald-500 bg-[length:200%_100%] tp-shimmer"></div>
                         <svg v-if="!processing" class="w-5 h-5 relative transition-transform duration-300 group-hover:scale-110" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                         <svg v-else class="w-5 h-5 relative animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" /><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" /></svg>
                         <span class="relative">{{ processing ? (isRtl ? 'جارٍ الحفظ...' : 'Saving...') : (isRtl ? 'إنشاء الخطة' : 'Create Plan') }}</span>

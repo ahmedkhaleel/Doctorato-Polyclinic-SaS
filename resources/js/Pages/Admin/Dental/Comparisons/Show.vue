@@ -30,14 +30,14 @@ const categoryLabels = {
 };
 
 const categoryColors = {
-    orthodontic: 'from-violet-500 to-purple-600',
-    cosmetic: 'from-pink-500 to-rose-600',
-    implant: 'from-cyan-500 to-teal-600',
-    whitening: 'from-amber-400 to-yellow-500',
-    restoration: 'from-blue-500 to-indigo-600',
-    surgical: 'from-red-500 to-rose-600',
+    orthodontic: 'from-[#1B365D] to-[#1B365D]',
+    cosmetic: 'from-[#C4A265] to-[#C4A265]',
+    implant: 'from-[#1B365D] to-emerald-600',
+    whitening: 'from-amber-400 to-[#C4A265]',
+    restoration: 'from-[#1B365D] to-[#1B365D]',
+    surgical: 'from-red-500 to-[#C4A265]',
     xray: 'from-gray-500 to-gray-700',
-    other: 'from-emerald-500 to-green-600',
+    other: 'from-emerald-500 to-emerald-600',
 };
 
 function categoryLabel(cat) {
@@ -96,9 +96,10 @@ function executeDelete() {
     <AdminLayout :title="isRtl ? 'مقارنة قبل / بعد' : 'Before & After'">
         <div class="max-w-5xl mx-auto space-y-6">
             <!-- Hero Header -->
-            <div class="dental-hero-enter relative overflow-hidden rounded-2xl bg-gradient-to-br from-cyan-600 via-cyan-700 to-teal-800 p-6 sm:p-7">
+            <div class="dental-hero-enter relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] p-6 sm:p-7">
+                <div class="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-[#C4A265] to-transparent"></div>
                 <div class="absolute -top-12 ltr:-right-12 rtl:-left-12 w-48 h-48 bg-white/10 rounded-full blur-3xl"></div>
-                <div class="absolute -bottom-8 ltr:left-20 rtl:right-20 w-32 h-32 bg-teal-400/10 rounded-full blur-2xl"></div>
+                <div class="absolute -bottom-8 ltr:left-20 rtl:right-20 w-32 h-32 bg-emerald-400/10 rounded-full blur-2xl"></div>
 
                 <div class="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div class="flex items-center gap-3">
@@ -123,7 +124,7 @@ function executeDelete() {
                     </div>
                     <div class="flex items-center gap-2">
                         <div v-if="comp.patient" class="bg-white/10 backdrop-blur-sm rounded-xl px-4 py-2.5 border border-white/10">
-                            <p class="text-[10px] text-cyan-200/60">{{ isRtl ? 'المريض' : 'Patient' }}</p>
+                            <p class="text-[10px] text-slate-200/60">{{ isRtl ? 'المريض' : 'Patient' }}</p>
                             <p class="text-sm font-semibold text-white">{{ comp.patient.full_name }}</p>
                         </div>
                         <button @click="confirmDelete" class="w-10 h-10 rounded-xl bg-red-500/10 backdrop-blur-sm flex items-center justify-center hover:bg-red-500/20 transition ring-1 ring-red-400/20">
@@ -142,7 +143,7 @@ function executeDelete() {
                     { key: 'after', icon: 'M9 5l7 7-7 7', label: isRtl ? 'بعد فقط' : 'After Only' },
                 ]" :key="mode.key"
                     @click="viewMode = mode.key"
-                    :class="viewMode === mode.key ? 'bg-cyan-600 text-white shadow-md' : 'text-gray-500 hover:bg-gray-100'"
+                    :class="viewMode === mode.key ? 'bg-[#1B365D] text-white shadow-md' : 'text-gray-500 hover:bg-gray-100'"
                     class="flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-medium transition-all">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="mode.icon" /></svg>
                     {{ mode.label }}
@@ -167,7 +168,7 @@ function executeDelete() {
                     <div class="absolute top-0 bottom-0 w-0.5 bg-white shadow-lg z-10" :style="{ left: sliderPosition + '%' }">
                         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-xl flex items-center justify-center z-20 transition-transform"
                             :class="isDragging ? 'scale-110' : 'hover:scale-110'">
-                            <svg class="w-6 h-6 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-6 h-6 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
                             </svg>
                         </div>
@@ -218,13 +219,13 @@ function executeDelete() {
                 <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
                     <p class="text-xs text-gray-400">{{ isRtl ? 'الفترة' : 'Duration' }}</p>
                     <p class="text-sm font-semibold text-gray-800 mt-1">{{ formatDate(comp.before_date) }}</p>
-                    <p class="text-xs text-cyan-600">→ {{ formatDate(comp.after_date) }}</p>
+                    <p class="text-xs text-[#1B365D]">→ {{ formatDate(comp.after_date) }}</p>
                 </div>
                 <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
                     <p class="text-xs text-gray-400">{{ isRtl ? 'الأسنان' : 'Teeth' }}</p>
                     <div v-if="comp.tooth_numbers" class="flex flex-wrap gap-1 mt-1">
                         <span v-for="tooth in comp.tooth_numbers.split(',')" :key="tooth"
-                            class="bg-cyan-50 text-cyan-700 text-xs font-mono font-bold px-2 py-0.5 rounded">
+                            class="bg-slate-50 text-[#1B365D] text-xs font-mono font-bold px-2 py-0.5 rounded">
                             #{{ tooth.trim() }}
                         </span>
                     </div>

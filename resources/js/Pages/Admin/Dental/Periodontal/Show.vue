@@ -194,20 +194,20 @@ function toggleToothDetail(tooth) {
 
             <!-- ═══ HERO ═══ -->
             <div class="perio-animate perio-animate-1 relative overflow-hidden rounded-3xl shadow-2xl">
-                <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-rose-900 to-pink-900"></div>
+                <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-[#6B5633] to-[#6B5633]"></div>
                 <div class="perio-hero-pattern absolute inset-0 opacity-[0.04]"></div>
-                <div class="perio-glow absolute -top-24 -end-24 w-96 h-96 bg-rose-400/20 rounded-full blur-3xl"></div>
-                <div class="perio-glow-2 absolute -bottom-20 -start-20 w-80 h-80 bg-pink-400/15 rounded-full blur-3xl"></div>
+                <div class="perio-glow absolute -top-24 -end-24 w-96 h-96 bg-[#D4B57E]/20 rounded-full blur-3xl"></div>
+                <div class="perio-glow-2 absolute -bottom-20 -start-20 w-80 h-80 bg-[#D4B57E]/15 rounded-full blur-3xl"></div>
 
                 <div class="relative px-8 py-8">
                     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
                         <div class="flex items-center gap-5">
-                            <div class="perio-icon-float w-16 h-16 rounded-2xl bg-gradient-to-br from-rose-400 to-pink-500 flex items-center justify-center shadow-lg shadow-rose-500/30">
+                            <div class="perio-icon-float w-16 h-16 rounded-2xl bg-gradient-to-br from-[#D4B57E] to-[#C4A265] flex items-center justify-center shadow-lg shadow-[#C4A265]/30">
                                 <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" /></svg>
                             </div>
                             <div>
                                 <h1 class="text-3xl font-black text-white tracking-tight">{{ isRtl ? 'مخطط اللثة' : 'Periodontal Chart' }}</h1>
-                                <p class="text-rose-200/70 text-sm mt-1">{{ patient.full_name }} <span class="text-rose-300/50 mx-1">|</span> {{ patient.file_number }}</p>
+                                <p class="text-[#F5E7C8]/70 text-sm mt-1">{{ patient.full_name }} <span class="text-[#E6CF9A]/50 mx-1">|</span> {{ patient.file_number }}</p>
                             </div>
                         </div>
                         <div class="flex items-center gap-3">
@@ -225,15 +225,15 @@ function toggleToothDetail(tooth) {
                     <!-- Stats Mini Cards -->
                     <div class="grid grid-cols-3 gap-4 mt-6">
                         <div class="bg-white/10 backdrop-blur-sm rounded-2xl px-4 py-3 border border-white/10">
-                            <div class="text-xs text-rose-200/60 mb-1">{{ isRtl ? 'أسنان مفحوصة' : 'Teeth Examined' }}</div>
+                            <div class="text-xs text-[#F5E7C8]/60 mb-1">{{ isRtl ? 'أسنان مفحوصة' : 'Teeth Examined' }}</div>
                             <div class="text-2xl font-black text-white tabular-nums">{{ filledTeethCount }} <span class="text-sm font-normal text-white/40">/ 32</span></div>
                         </div>
                         <div class="bg-white/10 backdrop-blur-sm rounded-2xl px-4 py-3 border border-white/10">
-                            <div class="text-xs text-rose-200/60 mb-1">{{ isRtl ? 'جيوب عميقة' : 'Deep Pockets' }}</div>
-                            <div class="text-2xl font-black tabular-nums" :class="deepPocketsCount > 0 ? 'text-rose-300' : 'text-emerald-300'">{{ deepPocketsCount }}</div>
+                            <div class="text-xs text-[#F5E7C8]/60 mb-1">{{ isRtl ? 'جيوب عميقة' : 'Deep Pockets' }}</div>
+                            <div class="text-2xl font-black tabular-nums" :class="deepPocketsCount > 0 ? 'text-[#E6CF9A]' : 'text-emerald-300'">{{ deepPocketsCount }}</div>
                         </div>
                         <div class="bg-white/10 backdrop-blur-sm rounded-2xl px-4 py-3 border border-white/10">
-                            <div class="text-xs text-rose-200/60 mb-1">{{ isRtl ? 'مواقع نزيف' : 'Bleeding Sites' }}</div>
+                            <div class="text-xs text-[#F5E7C8]/60 mb-1">{{ isRtl ? 'مواقع نزيف' : 'Bleeding Sites' }}</div>
                             <div class="text-2xl font-black tabular-nums" :class="bleedingSitesCount > 0 ? 'text-amber-300' : 'text-emerald-300'">{{ bleedingSitesCount }}</div>
                         </div>
                     </div>
@@ -246,7 +246,7 @@ function toggleToothDetail(tooth) {
                     <!-- Exam Date -->
                     <div>
                         <label class="perio-label">
-                            <svg class="w-4 h-4 text-rose-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" /></svg>
+                            <svg class="w-4 h-4 text-[#C4A265]" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" /></svg>
                             {{ isRtl ? 'تاريخ الفحص' : 'Exam Date' }}
                         </label>
                         <div class="perio-input-wrapper">
@@ -262,7 +262,7 @@ function toggleToothDetail(tooth) {
                     <!-- Doctor - Searchable -->
                     <div class="searchable-select">
                         <label class="perio-label">
-                            <svg class="w-4 h-4 text-rose-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" /></svg>
+                            <svg class="w-4 h-4 text-[#C4A265]" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" /></svg>
                             {{ isRtl ? 'الطبيب' : 'Doctor' }}
                         </label>
                         <div class="relative">
@@ -275,12 +275,12 @@ function toggleToothDetail(tooth) {
                             <Transition enter-active-class="transition-all duration-200 ease-out" enter-from-class="opacity-0 -translate-y-2 scale-[0.97]" enter-to-class="opacity-100 translate-y-0 scale-100" leave-active-class="transition-all duration-150 ease-in" leave-from-class="opacity-100" leave-to-class="opacity-0 -translate-y-2">
                                 <div v-if="showDoctorDropdown" class="absolute z-50 mt-2 w-full bg-white rounded-2xl border border-gray-100 shadow-2xl shadow-gray-200/50 max-h-56 overflow-y-auto">
                                     <div v-if="filteredDoctors.length === 0" class="p-4 text-center text-sm text-gray-300">{{ isRtl ? 'لا توجد نتائج' : 'No results' }}</div>
-                                    <button v-for="d in filteredDoctors" :key="d.id" type="button" @click="selectDoctor(d)" class="w-full flex items-center gap-3 px-4 py-3 text-sm hover:bg-rose-50 transition-all duration-200 text-start" :class="selectedDoctor === d.id ? 'bg-rose-50 text-rose-700' : 'text-gray-700'">
-                                        <div class="w-9 h-9 rounded-xl bg-rose-50 flex items-center justify-center flex-shrink-0">
-                                            <svg class="w-4 h-4 text-rose-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" /></svg>
+                                    <button v-for="d in filteredDoctors" :key="d.id" type="button" @click="selectDoctor(d)" class="w-full flex items-center gap-3 px-4 py-3 text-sm hover:bg-[#F5E7C8]/40 transition-all duration-200 text-start" :class="selectedDoctor === d.id ? 'bg-[#F5E7C8]/40 text-[#8B7043]' : 'text-gray-700'">
+                                        <div class="w-9 h-9 rounded-xl bg-[#F5E7C8]/40 flex items-center justify-center flex-shrink-0">
+                                            <svg class="w-4 h-4 text-[#C4A265]" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" /></svg>
                                         </div>
                                         <div class="font-medium">{{ locale === 'ar' ? d.name_ar : d.name_en }}</div>
-                                        <svg v-if="selectedDoctor === d.id" class="w-5 h-5 text-rose-500 ms-auto flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" /></svg>
+                                        <svg v-if="selectedDoctor === d.id" class="w-5 h-5 text-[#C4A265] ms-auto flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" /></svg>
                                     </button>
                                 </div>
                             </Transition>
@@ -289,13 +289,13 @@ function toggleToothDetail(tooth) {
 
                     <!-- Save -->
                     <div class="flex flex-col items-stretch justify-end gap-2">
-                        <button @click="saveMeasurements" :disabled="saving" class="group relative w-full inline-flex items-center justify-center gap-3 px-6 py-3.5 rounded-2xl text-white font-bold text-sm overflow-hidden transition-all duration-300 disabled:opacity-50 active:scale-[0.97] hover:scale-[1.01] shadow-xl shadow-rose-500/20 hover:shadow-2xl hover:shadow-rose-500/25">
-                            <div class="absolute inset-0 bg-gradient-to-r from-rose-500 via-pink-500 to-rose-500 bg-[length:200%_100%] perio-shimmer"></div>
+                        <button @click="saveMeasurements" :disabled="saving" class="group relative w-full inline-flex items-center justify-center gap-3 px-6 py-3.5 rounded-2xl text-white font-bold text-sm overflow-hidden transition-all duration-300 disabled:opacity-50 active:scale-[0.97] hover:scale-[1.01] shadow-xl shadow-[#C4A265]/20 hover:shadow-2xl hover:shadow-[#C4A265]/25">
+                            <div class="absolute inset-0 bg-gradient-to-r from-[#C4A265] via-[#C4A265] to-[#C4A265] bg-[length:200%_100%] perio-shimmer"></div>
                             <svg v-if="!saving" class="w-5 h-5 relative" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                             <svg v-else class="w-5 h-5 relative animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" /><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" /></svg>
                             <span class="relative">{{ saving ? (isRtl ? 'جارٍ الحفظ...' : 'Saving...') : (isRtl ? 'حفظ القياسات' : 'Save Measurements') }}</span>
                         </button>
-                        <p v-if="saveError" class="text-xs text-rose-500 font-medium text-center">{{ saveError }}</p>
+                        <p v-if="saveError" class="text-xs text-[#C4A265] font-medium text-center">{{ saveError }}</p>
                     </div>
                 </div>
             </div>
@@ -316,7 +316,7 @@ function toggleToothDetail(tooth) {
                     {{ isRtl ? 'خطر' : 'Danger' }}
                 </span>
                 <span class="inline-flex items-center gap-1.5 text-xs font-medium text-gray-500">
-                    <span class="w-5 h-5 rounded-lg bg-rose-100 border-2 border-rose-300 flex items-center justify-center text-[9px] font-bold text-rose-700">7+</span>
+                    <span class="w-5 h-5 rounded-lg bg-[#F5E7C8]/60 border-2 border-[#E6CF9A] flex items-center justify-center text-[9px] font-bold text-[#8B7043]">7+</span>
                     {{ isRtl ? 'شديد' : 'Severe' }}
                 </span>
                 <span class="inline-flex items-center gap-1.5 text-xs font-medium text-gray-500 ms-2">
@@ -331,7 +331,7 @@ function toggleToothDetail(tooth) {
             <div class="perio-animate perio-animate-3 perio-glass-card rounded-3xl overflow-hidden border border-gray-100/80">
                 <div class="px-8 py-5 bg-gradient-to-r from-slate-50 via-gray-50/50 to-white border-b border-gray-100/50">
                     <div class="flex items-center gap-4">
-                        <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center shadow-lg shadow-blue-500/15">
+                        <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#1B365D] to-[#2C4E7A] flex items-center justify-center shadow-lg shadow-[#1B365D]/15">
                             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l7.5-7.5 7.5 7.5m-15 6l7.5-7.5 7.5 7.5" /></svg>
                         </div>
                         <div>
@@ -346,7 +346,7 @@ function toggleToothDetail(tooth) {
                             <tr>
                                 <th class="px-3 py-2 text-start text-gray-400 font-semibold w-28"></th>
                                 <th v-for="tooth in upperTeeth" :key="'uh-' + tooth" class="px-0.5 py-2 text-center">
-                                    <button @click="toggleToothDetail(tooth)" class="w-full px-1 py-1 rounded-lg font-bold transition-all duration-200" :class="expandedTooth === tooth ? 'bg-blue-100 text-blue-700' : 'text-gray-700 hover:bg-gray-50'">
+                                    <button @click="toggleToothDetail(tooth)" class="w-full px-1 py-1 rounded-lg font-bold transition-all duration-200" :class="expandedTooth === tooth ? 'bg-slate-100 text-[#1B365D]' : 'text-gray-700 hover:bg-gray-50'">
                                         {{ tooth }}
                                     </button>
                                 </th>
@@ -357,7 +357,7 @@ function toggleToothDetail(tooth) {
                             <tr>
                                 <td class="px-3 py-1.5 text-gray-500 font-semibold border-e-2 border-gray-100">
                                     <div class="flex items-center gap-1.5">
-                                        <svg class="w-3.5 h-3.5 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l7.5-7.5 7.5 7.5" /></svg>
+                                        <svg class="w-3.5 h-3.5 text-[#2C4E7A]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l7.5-7.5 7.5 7.5" /></svg>
                                         {{ isRtl ? 'دهليزي' : 'Buccal' }}
                                     </div>
                                     <div class="text-[9px] text-gray-300 mt-0.5">MB / B / DB</div>
@@ -390,7 +390,7 @@ function toggleToothDetail(tooth) {
                             <tr>
                                 <td class="px-3 py-1.5 text-gray-500 font-semibold border-e-2 border-gray-100">
                                     <div class="flex items-center gap-1.5">
-                                        <svg class="w-3.5 h-3.5 text-indigo-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 5.25l-7.5 7.5-7.5-7.5m15 6l-7.5 7.5-7.5-7.5" /></svg>
+                                        <svg class="w-3.5 h-3.5 text-[#2C4E7A]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 5.25l-7.5 7.5-7.5-7.5m15 6l-7.5 7.5-7.5-7.5" /></svg>
                                         {{ isRtl ? 'لساني' : 'Palatal' }}
                                     </div>
                                     <div class="text-[9px] text-gray-300 mt-0.5">ML / L / DL</div>
@@ -422,7 +422,7 @@ function toggleToothDetail(tooth) {
                             <tr>
                                 <td class="px-3 py-1.5 text-gray-500 font-semibold border-e-2 border-gray-100">
                                     <div class="flex items-center gap-1.5">
-                                        <svg class="w-3.5 h-3.5 text-purple-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5L7.5 3m0 0L12 7.5M7.5 3v13.5m13.5-7.5L16.5 3m0 0L12 7.5m4.5-4.5v13.5" /></svg>
+                                        <svg class="w-3.5 h-3.5 text-[#2C4E7A]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5L7.5 3m0 0L12 7.5M7.5 3v13.5m13.5-7.5L16.5 3m0 0L12 7.5m4.5-4.5v13.5" /></svg>
                                         {{ isRtl ? 'انحسار' : 'Recession' }}
                                     </div>
                                     <div class="text-[9px] text-gray-300 mt-0.5">MB / B / DB</div>
@@ -438,7 +438,7 @@ function toggleToothDetail(tooth) {
                             <tr>
                                 <td class="px-3 py-1.5 text-gray-500 font-semibold border-e-2 border-gray-100">
                                     <div class="flex items-center gap-1.5">
-                                        <svg class="w-3.5 h-3.5 text-orange-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" /></svg>
+                                        <svg class="w-3.5 h-3.5 text-[#D4B57E]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" /></svg>
                                         {{ isRtl ? 'حركة' : 'Mobility' }}
                                     </div>
                                     <div class="text-[9px] text-gray-300 mt-0.5">0-3</div>
@@ -450,7 +450,7 @@ function toggleToothDetail(tooth) {
                             <tr>
                                 <td class="px-3 py-1.5 text-gray-500 font-semibold border-e-2 border-gray-100">
                                     <div class="flex items-center gap-1.5">
-                                        <svg class="w-3.5 h-3.5 text-teal-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.348 14.651a3.75 3.75 0 010-5.303m5.304 0a3.75 3.75 0 010 5.303m-7.425 2.122a6.75 6.75 0 010-9.546m9.546 0a6.75 6.75 0 010 9.546" /></svg>
+                                        <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.348 14.651a3.75 3.75 0 010-5.303m5.304 0a3.75 3.75 0 010 5.303m-7.425 2.122a6.75 6.75 0 010-9.546m9.546 0a6.75 6.75 0 010 9.546" /></svg>
                                         {{ isRtl ? 'تفرع' : 'Furcation' }}
                                     </div>
                                     <div class="text-[9px] text-gray-300 mt-0.5">0-3</div>
@@ -468,7 +468,7 @@ function toggleToothDetail(tooth) {
             <div class="perio-animate perio-animate-4 perio-glass-card rounded-3xl overflow-hidden border border-gray-100/80">
                 <div class="px-8 py-5 bg-gradient-to-r from-slate-50 via-gray-50/50 to-white border-b border-gray-100/50">
                     <div class="flex items-center gap-4">
-                        <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center shadow-lg shadow-emerald-500/15">
+                        <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-lg shadow-emerald-500/15">
                             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 5.25l-7.5 7.5-7.5-7.5m15 6l-7.5 7.5-7.5-7.5" /></svg>
                         </div>
                         <div>
@@ -526,7 +526,7 @@ function toggleToothDetail(tooth) {
                             <tr>
                                 <td class="px-3 py-1.5 text-gray-500 font-semibold border-e-2 border-gray-100">
                                     <div class="flex items-center gap-1.5">
-                                        <svg class="w-3.5 h-3.5 text-teal-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 5.25l-7.5 7.5-7.5-7.5m15 6l-7.5 7.5-7.5-7.5" /></svg>
+                                        <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 5.25l-7.5 7.5-7.5-7.5m15 6l-7.5 7.5-7.5-7.5" /></svg>
                                         {{ isRtl ? 'لساني' : 'Lingual' }}
                                     </div>
                                     <div class="text-[9px] text-gray-300 mt-0.5">ML / L / DL</div>
@@ -558,7 +558,7 @@ function toggleToothDetail(tooth) {
                             <tr>
                                 <td class="px-3 py-1.5 text-gray-500 font-semibold border-e-2 border-gray-100">
                                     <div class="flex items-center gap-1.5">
-                                        <svg class="w-3.5 h-3.5 text-purple-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5L7.5 3m0 0L12 7.5M7.5 3v13.5m13.5-7.5L16.5 3m0 0L12 7.5m4.5-4.5v13.5" /></svg>
+                                        <svg class="w-3.5 h-3.5 text-[#2C4E7A]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5L7.5 3m0 0L12 7.5M7.5 3v13.5m13.5-7.5L16.5 3m0 0L12 7.5m4.5-4.5v13.5" /></svg>
                                         {{ isRtl ? 'انحسار' : 'Recession' }}
                                     </div>
                                     <div class="text-[9px] text-gray-300 mt-0.5">MB / B / DB</div>
@@ -574,7 +574,7 @@ function toggleToothDetail(tooth) {
                             <tr>
                                 <td class="px-3 py-1.5 text-gray-500 font-semibold border-e-2 border-gray-100">
                                     <div class="flex items-center gap-1.5">
-                                        <svg class="w-3.5 h-3.5 text-orange-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" /></svg>
+                                        <svg class="w-3.5 h-3.5 text-[#D4B57E]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" /></svg>
                                         {{ isRtl ? 'حركة' : 'Mobility' }}
                                     </div>
                                 </td>
@@ -585,7 +585,7 @@ function toggleToothDetail(tooth) {
                             <tr>
                                 <td class="px-3 py-1.5 text-gray-500 font-semibold border-e-2 border-gray-100">
                                     <div class="flex items-center gap-1.5">
-                                        <svg class="w-3.5 h-3.5 text-teal-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.348 14.651a3.75 3.75 0 010-5.303m5.304 0a3.75 3.75 0 010 5.303m-7.425 2.122a6.75 6.75 0 010-9.546m9.546 0a6.75 6.75 0 010 9.546" /></svg>
+                                        <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.348 14.651a3.75 3.75 0 010-5.303m5.304 0a3.75 3.75 0 010 5.303m-7.425 2.122a6.75 6.75 0 010-9.546m9.546 0a6.75 6.75 0 010 9.546" /></svg>
                                         {{ isRtl ? 'تفرع' : 'Furcation' }}
                                     </div>
                                 </td>
@@ -605,13 +605,13 @@ function toggleToothDetail(tooth) {
                     {{ isRtl ? 'إلغاء' : 'Cancel' }}
                 </Link>
                 <div class="flex flex-col items-end gap-2">
-                    <button @click="saveMeasurements" :disabled="saving" class="group relative inline-flex items-center gap-3 px-10 py-3.5 rounded-2xl text-white font-bold text-sm overflow-hidden transition-all duration-300 disabled:opacity-50 active:scale-[0.97] hover:scale-[1.01] shadow-xl shadow-rose-500/20">
-                        <div class="absolute inset-0 bg-gradient-to-r from-rose-500 via-pink-500 to-rose-500 bg-[length:200%_100%] perio-shimmer"></div>
+                    <button @click="saveMeasurements" :disabled="saving" class="group relative inline-flex items-center gap-3 px-10 py-3.5 rounded-2xl text-white font-bold text-sm overflow-hidden transition-all duration-300 disabled:opacity-50 active:scale-[0.97] hover:scale-[1.01] shadow-xl shadow-[#C4A265]/20">
+                        <div class="absolute inset-0 bg-gradient-to-r from-[#C4A265] via-[#C4A265] to-[#C4A265] bg-[length:200%_100%] perio-shimmer"></div>
                         <svg v-if="!saving" class="w-5 h-5 relative" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                         <svg v-else class="w-5 h-5 relative animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" /><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" /></svg>
                         <span class="relative">{{ saving ? (isRtl ? 'جارٍ الحفظ...' : 'Saving...') : (isRtl ? 'حفظ القياسات' : 'Save Measurements') }}</span>
                     </button>
-                    <p v-if="saveError" class="text-xs text-rose-500 font-medium">{{ saveError }}</p>
+                    <p v-if="saveError" class="text-xs text-[#C4A265] font-medium">{{ saveError }}</p>
                 </div>
             </div>
         </div>
@@ -728,16 +728,16 @@ function toggleToothDetail(tooth) {
 .perio-cell:focus {
     background: #ecfdf5;
     color: #059669;
-    box-shadow: inset 0 0 0 2px #a7f3d0;
+    box-shadow: inset 0 0 0 2px #F5E7C8;
     border-radius: 4px;
 }
 
 .perio-cell-recession {
-    color: #7c3aed;
+    color: #1B365D;
 }
 .perio-cell-recession:focus {
     background: #f5f3ff;
-    color: #6d28d9;
+    color: #0F2444;
     box-shadow: inset 0 0 0 2px #c4b5fd;
 }
 

@@ -66,7 +66,7 @@ function formatDate(date) {
 
 const statusConfig = {
     planned: { bg: 'bg-gray-50', text: 'text-gray-700', dot: 'bg-gray-400' },
-    in_progress: { bg: 'bg-cyan-50', text: 'text-cyan-700', dot: 'bg-cyan-500' },
+    in_progress: { bg: 'bg-slate-50', text: 'text-[#1B365D]', dot: 'bg-[#1B365D]' },
     completed: { bg: 'bg-emerald-50', text: 'text-emerald-700', dot: 'bg-emerald-500' },
     cancelled: { bg: 'bg-red-50', text: 'text-red-700', dot: 'bg-red-500' },
 };
@@ -91,18 +91,19 @@ function clearFilters() {
     <AdminLayout :title="$t('a_dental_treatments')">
         <div class="space-y-6">
             <!-- ── Hero Header ───────────────────────────────────── -->
-            <div class="dental-hero-enter relative overflow-hidden rounded-2xl bg-gradient-to-br from-cyan-600 via-cyan-700 to-teal-800 p-7">
-                <div class="absolute -top-16 ltr:-right-16 rtl:-left-16 w-56 h-56 bg-cyan-400/20 rounded-full blur-3xl"></div>
-                <div class="absolute -bottom-12 ltr:-left-12 rtl:-right-12 w-40 h-40 bg-teal-300/15 rounded-full blur-3xl"></div>
+            <div class="dental-hero-enter relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] p-7">
+                <div class="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-[#C4A265] to-transparent"></div>
+                <div class="absolute -top-16 ltr:-right-16 rtl:-left-16 w-56 h-56 bg-[#2C4E7A]/20 rounded-full blur-3xl"></div>
+                <div class="absolute -bottom-12 ltr:-left-12 rtl:-right-12 w-40 h-40 bg-emerald-300/15 rounded-full blur-3xl"></div>
 
                 <div class="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div class="flex items-center gap-3">
-                        <div class="w-11 h-11 rounded-xl bg-white/15 backdrop-blur-sm flex items-center justify-center ring-1 ring-white/20">
+                        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-[#C4A265] to-[#8B7043] flex items-center justify-center shadow-lg">
                             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
                         </div>
                         <div>
                             <h1 class="text-xl md:text-2xl font-bold text-white">{{ $t('a_dental_treatments') }}</h1>
-                            <p class="text-cyan-100/80 text-sm mt-0.5">{{ $t('a_dental_treatments_desc') }}</p>
+                            <p class="text-slate-100/80 text-sm mt-0.5">{{ $t('a_dental_treatments_desc') }}</p>
                         </div>
                     </div>
                     <Link
@@ -121,22 +122,22 @@ function clearFilters() {
                     <div class="flex items-center gap-3">
                         <div class="relative flex-1">
                             <svg v-if="!isFiltering" class="absolute top-1/2 -translate-y-1/2 ltr:left-4 rtl:right-4 w-4.5 h-4.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                            <svg v-else class="absolute top-1/2 -translate-y-1/2 ltr:left-4 rtl:right-4 w-4.5 h-4.5 text-cyan-500 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+                            <svg v-else class="absolute top-1/2 -translate-y-1/2 ltr:left-4 rtl:right-4 w-4.5 h-4.5 text-[#1B365D] animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
                             <input
                                 v-model="search"
                                 type="text"
                                 :placeholder="$t('a_search_patient_tooth_notes')"
-                                class="w-full ltr:pl-11 rtl:pr-11 ltr:pr-4 rtl:pl-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-cyan-200/60 focus:border-cyan-300 transition-all duration-200"
+                                class="w-full ltr:pl-11 rtl:pr-11 ltr:pr-4 rtl:pl-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-slate-200/60 focus:border-slate-300 transition-all duration-200"
                             />
                         </div>
                         <button
                             @click="showFilters = !showFilters"
                             class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium border transition-all duration-200"
-                            :class="showFilters || hasActiveFilters ? 'bg-cyan-50 border-cyan-200 text-cyan-700' : 'bg-white border-gray-200 text-gray-600 hover:border-gray-300'"
+                            :class="showFilters || hasActiveFilters ? 'bg-slate-50 border-slate-200 text-[#1B365D]' : 'bg-white border-gray-200 text-gray-600 hover:border-gray-300'"
                         >
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" /></svg>
                             {{ locale === 'ar' ? 'فلاتر' : 'Filters' }}
-                            <span v-if="hasActiveFilters" class="w-2 h-2 rounded-full bg-cyan-500 animate-pulse"></span>
+                            <span v-if="hasActiveFilters" class="w-2 h-2 rounded-full bg-[#1B365D] animate-pulse"></span>
                         </button>
                     </div>
 
@@ -211,11 +212,11 @@ function clearFilters() {
                             <tr
                                 v-for="(treatment, idx) in treatments.data"
                                 :key="treatment.id"
-                                class="dental-row-enter border-b border-gray-50 hover:bg-cyan-50/30 transition-colors duration-200"
+                                class="dental-row-enter border-b border-gray-50 hover:bg-slate-50/30 transition-colors duration-200"
                                 :style="{ animationDelay: `${0.3 + idx * 0.04}s` }"
                             >
                                 <td class="px-5 py-4 text-sm">
-                                    <Link v-if="treatment.patient" :href="`/admin/patients/${treatment.patient.id}`" class="font-medium text-gray-900 hover:text-cyan-600 transition-colors">
+                                    <Link v-if="treatment.patient" :href="`/admin/patients/${treatment.patient.id}`" class="font-medium text-gray-900 hover:text-[#1B365D] transition-colors">
                                         {{ treatment.patient.full_name }}
                                     </Link>
                                     <div class="text-xs text-gray-400 mt-0.5 font-mono">{{ treatment.patient?.file_number }}</div>
@@ -224,7 +225,7 @@ function clearFilters() {
                                     {{ treatment.doctor ? (locale === 'ar' ? treatment.doctor.name_ar : treatment.doctor.name_en) : '-' }}
                                 </td>
                                 <td class="px-5 py-4 text-sm text-center">
-                                    <span v-if="treatment.tooth_number" class="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-cyan-50 text-cyan-700 font-mono font-bold text-sm">
+                                    <span v-if="treatment.tooth_number" class="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-slate-50 text-[#1B365D] font-mono font-bold text-sm">
                                         {{ treatment.tooth_number }}
                                     </span>
                                     <span v-else class="text-gray-400">-</span>
@@ -268,7 +269,7 @@ function clearFilters() {
                                 :href="link.url"
                                 v-html="link.label"
                                 class="px-3 py-1.5 text-sm rounded-lg border transition-all duration-200"
-                                :class="link.active ? 'bg-cyan-600 text-white border-transparent shadow-sm' : 'text-gray-600 border-gray-200 hover:bg-cyan-50 hover:border-cyan-200 hover:text-cyan-700'"
+                                :class="link.active ? 'bg-[#1B365D] text-white border-transparent shadow-sm' : 'text-gray-600 border-gray-200 hover:bg-slate-50 hover:border-slate-200 hover:text-[#1B365D]'"
                                 preserve-state
                             />
                             <span v-else v-html="link.label" class="px-3 py-1.5 text-sm text-gray-400" />
@@ -333,6 +334,6 @@ function clearFilters() {
     background: #fff;
     outline: none;
     box-shadow: 0 0 0 2px rgba(34, 211, 238, 0.3);
-    border-color: #67e8f9;
+    border-color: #C4A265;
 }
 </style>

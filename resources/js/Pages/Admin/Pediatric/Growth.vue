@@ -74,7 +74,7 @@ function percentileColor(val) {
     if (n < 15) return 'text-amber-600 font-semibold';
     if (n > 95) return 'text-red-600 font-bold';
     if (n > 85) return 'text-amber-600 font-semibold';
-    return 'text-green-600 font-semibold';
+    return 'text-emerald-600 font-semibold';
 }
 
 function percentileBg(val) {
@@ -85,7 +85,7 @@ function percentileBg(val) {
     if (n < 15) return 'bg-amber-50';
     if (n > 95) return 'bg-red-50';
     if (n > 85) return 'bg-amber-50';
-    return 'bg-green-50';
+    return 'bg-emerald-50';
 }
 
 /* ── Helpers ────────────────────────────────────────────── */
@@ -114,8 +114,8 @@ const paginationLinks = computed(() => props.records?.links || []);
 <template>
     <div class="space-y-8 pb-12">
         <!-- ── Hero ──────────────────────────────────────── -->
-        <div class="ped-hero relative overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-600 via-green-600 to-green-500 p-8 md:p-10">
-            <div class="absolute -top-20 ltr:-right-20 rtl:-left-20 w-72 h-72 bg-green-400/20 rounded-full blur-3xl"></div>
+        <div class="ped-hero relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] p-8 md:p-10">
+            <div class="absolute -top-20 ltr:-right-20 rtl:-left-20 w-72 h-72 bg-emerald-400/20 rounded-full blur-3xl"></div>
             <div class="absolute -bottom-16 ltr:-left-16 rtl:-right-16 w-56 h-56 bg-emerald-300/15 rounded-full blur-3xl"></div>
 
             <div class="absolute ltr:right-8 rtl:left-8 top-8 opacity-10">
@@ -128,14 +128,14 @@ const paginationLinks = computed(() => props.records?.links || []);
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div class="ped-hero-up">
                         <div class="flex items-center gap-3">
-                            <div class="w-12 h-12 rounded-2xl bg-white/15 backdrop-blur-sm flex items-center justify-center ring-1 ring-white/20">
+                            <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-[#C4A265] to-[#8B7043] flex items-center justify-center shadow-lg shadow-black/20">
                                 <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg>
                             </div>
                             <div>
                                 <h1 class="text-2xl md:text-3xl font-bold text-white">
                                     {{ isRtl ? 'متابعة النمو' : 'Growth Monitoring' }}
                                 </h1>
-                                <p class="text-green-100/80 text-sm mt-0.5">
+                                <p class="text-emerald-100/80 text-sm mt-0.5">
                                     {{ isRtl ? 'مراقبة نمو الأطفال والتنبيهات' : 'Track child growth and alerts' }}
                                 </p>
                             </div>
@@ -196,7 +196,7 @@ const paginationLinks = computed(() => props.records?.links || []);
                                 <div>
                                     <Link
                                         :href="`/admin/patients/${p.id || p.patient_id}`"
-                                        class="font-medium text-gray-800 hover:text-green-600 transition"
+                                        class="font-medium text-gray-800 hover:text-emerald-600 transition"
                                     >
                                         {{ p.full_name || p.patient_name || '-' }}
                                     </Link>
@@ -249,13 +249,13 @@ const paginationLinks = computed(() => props.records?.links || []);
                         <tr
                             v-for="r in (records?.data || [])"
                             :key="r.id"
-                            class="border-b border-gray-50 hover:bg-green-50/30 transition-colors"
+                            class="border-b border-gray-50 hover:bg-emerald-50/30 transition-colors"
                         >
                             <td class="px-5 py-3.5">
                                 <div>
                                     <Link
                                         :href="`/admin/patients/${r.patient_id || r.patient?.id}`"
-                                        class="font-semibold text-gray-800 hover:text-green-600 transition"
+                                        class="font-semibold text-gray-800 hover:text-emerald-600 transition"
                                     >
                                         {{ r.patient?.full_name || r.patient_name || '-' }}
                                     </Link>
@@ -295,7 +295,7 @@ const paginationLinks = computed(() => props.records?.links || []);
                         v-if="link.url"
                         :href="link.url"
                         class="px-3 py-1.5 rounded-lg text-sm transition"
-                        :class="link.active ? 'bg-green-500 text-white font-semibold shadow-sm' : 'text-gray-600 hover:bg-gray-100'"
+                        :class="link.active ? 'bg-emerald-500 text-white font-semibold shadow-sm' : 'text-gray-600 hover:bg-gray-100'"
                         v-html="link.label"
                         preserve-state
                         preserve-scroll

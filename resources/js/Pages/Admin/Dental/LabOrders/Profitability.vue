@@ -98,12 +98,13 @@ const comparisonByItemType = computed(() => {
     <AdminLayout :title="isRtl ? 'تحليل ربحية المعامل' : 'Lab Profitability Analysis'">
         <div class="space-y-6">
             <!-- Hero -->
-            <div class="dental-hero-enter relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-800 p-7">
+            <div class="dental-hero-enter relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] p-7">
+                <div class="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-[#C4A265] to-transparent"></div>
                 <div class="absolute -top-16 ltr:-right-16 rtl:-left-16 w-56 h-56 bg-emerald-400/20 rounded-full blur-3xl"></div>
-                <div class="absolute -bottom-12 ltr:-left-12 rtl:-right-12 w-40 h-40 bg-teal-300/15 rounded-full blur-3xl"></div>
+                <div class="absolute -bottom-12 ltr:-left-12 rtl:-right-12 w-40 h-40 bg-emerald-300/15 rounded-full blur-3xl"></div>
                 <div class="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div class="flex items-center gap-3">
-                        <div class="w-11 h-11 rounded-xl bg-white/15 backdrop-blur-sm flex items-center justify-center ring-1 ring-white/20">
+                        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-[#C4A265] to-[#8B7043] flex items-center justify-center shadow-lg">
                             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
                         </div>
                         <div>
@@ -140,12 +141,12 @@ const comparisonByItemType = computed(() => {
                 </div>
                 <div class="dental-card-enter bg-white rounded-2xl p-5 shadow-sm border border-gray-100/80" style="animation-delay:0.2s">
                     <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">{{ isRtl ? 'متوسط ربح/طلب' : 'Avg Profit/Order' }}</p>
-                    <p class="text-2xl font-bold text-violet-600 mt-1">{{ formatCurrency(summary?.avg_profit_per_order || 0) }}</p>
+                    <p class="text-2xl font-bold text-[#1B365D] mt-1">{{ formatCurrency(summary?.avg_profit_per_order || 0) }}</p>
                     <p class="text-xs text-gray-400 mt-1">{{ summary?.total_labs || 0 }} {{ isRtl ? 'معمل' : 'labs' }}</p>
                 </div>
                 <div class="dental-card-enter bg-white rounded-2xl p-5 shadow-sm border border-gray-100/80" style="animation-delay:0.25s">
                     <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">{{ isRtl ? 'متوسط التسليم' : 'Avg Delivery' }}</p>
-                    <p class="text-2xl font-bold text-cyan-600 mt-1">{{ Number(summary?.avg_delivery_days || 0).toFixed(1) }} <span class="text-sm font-normal text-gray-400">{{ isRtl ? 'يوم' : 'days' }}</span></p>
+                    <p class="text-2xl font-bold text-[#1B365D] mt-1">{{ Number(summary?.avg_delivery_days || 0).toFixed(1) }} <span class="text-sm font-normal text-gray-400">{{ isRtl ? 'يوم' : 'days' }}</span></p>
                 </div>
             </div>
 

@@ -104,14 +104,14 @@ const occlusalShapes = {
 
 // ─── Condition Theming ──────────────────────────────
 const conditionTheme = {
-    healthy:    { fill: '#F0FDF4', stroke: '#86EFAC', inner: '#BBF7D0', text: '#166534', accent: '#22C55E', gradient: ['#D1FAE5','#A7F3D0'], icon: 'check' },
+    healthy:    { fill: '#F0FDF4', stroke: '#86EFAC', inner: '#BBF7D0', text: '#166534', accent: '#22C55E', gradient: ['#D1FAE5','#F5E7C8'], icon: 'check' },
     decayed:    { fill: '#FEF2F2', stroke: '#FCA5A5', inner: '#FECACA', text: '#991B1B', accent: '#EF4444', gradient: ['#FEE2E2','#FECACA'], icon: 'bacteria' },
-    filled:     { fill: '#EFF6FF', stroke: '#93C5FD', inner: '#BFDBFE', text: '#1E40AF', accent: '#3B82F6', gradient: ['#DBEAFE','#BFDBFE'], icon: 'fill' },
+    filled:     { fill: '#EFF6FF', stroke: '#93C5FD', inner: '#BFDBFE', text: '#0F2444', accent: '#1B365D', gradient: ['#F5E7C8','#BFDBFE'], icon: 'fill' },
     missing:    { fill: '#F9FAFB', stroke: '#D1D5DB', inner: '#E5E7EB', text: '#6B7280', accent: '#9CA3AF', gradient: ['#F3F4F6','#E5E7EB'], icon: 'x' },
-    crown:      { fill: '#FEFCE8', stroke: '#FDE047', inner: '#FEF08A', text: '#854D0E', accent: '#EAB308', gradient: ['#FEF9C3','#FDE68A'], icon: 'crown' },
-    bridge:     { fill: '#FAF5FF', stroke: '#C084FC', inner: '#DDD6FE', text: '#6B21A8', accent: '#A855F7', gradient: ['#EDE9FE','#DDD6FE'], icon: 'bridge' },
-    implant:    { fill: '#EEF2FF', stroke: '#A5B4FC', inner: '#C7D2FE', text: '#3730A3', accent: '#6366F1', gradient: ['#E0E7FF','#C7D2FE'], icon: 'screw' },
-    root_canal: { fill: '#FFF7ED', stroke: '#FDBA74', inner: '#FED7AA', text: '#9A3412', accent: '#F97316', gradient: ['#FFEDD5','#FED7AA'], icon: 'canal' },
+    crown:      { fill: '#FEFCE8', stroke: '#FDE047', inner: '#FEF08A', text: '#854D0E', accent: '#C4A265', gradient: ['#FEF9C3','#F5E7C8'], icon: 'crown' },
+    bridge:     { fill: '#FAF5FF', stroke: '#2C4E7A', inner: '#DDD6FE', text: '#6B21A8', accent: '#1B365D', gradient: ['#EDE9FE','#DDD6FE'], icon: 'bridge' },
+    implant:    { fill: '#EEF2FF', stroke: '#A5B4FC', inner: '#C7D2FE', text: '#3730A3', accent: '#1B365D', gradient: ['#F5E7C8','#C7D2FE'], icon: 'screw' },
+    root_canal: { fill: '#FFF7ED', stroke: '#FDBA74', inner: '#FED7AA', text: '#9A3412', accent: '#C4A265', gradient: ['#FFEDD5','#FED7AA'], icon: 'canal' },
     extracted:  { fill: '#F3F4F6', stroke: '#9CA3AF', inner: '#D1D5DB', text: '#374151', accent: '#6B7280', gradient: ['#E5E7EB','#D1D5DB'], icon: 'extracted' },
 };
 
@@ -371,13 +371,13 @@ const selectedToothTreatments = computed(() => selectedTooth.value ? getToothTre
 <AdminLayout :title="isRtl ? 'مخطط الأسنان' : 'Dental Chart'">
 <div class="space-y-5">
     <!-- ═══ HERO ═══ -->
-    <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-5 sm:p-7 dental-hero-enter">
-        <div class="absolute top-0 right-0 w-72 h-72 bg-cyan-500/10 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl"></div>
-        <div class="absolute bottom-0 left-0 w-48 h-48 bg-teal-500/8 rounded-full translate-y-1/3 -translate-x-1/4 blur-2xl"></div>
+    <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] p-5 sm:p-7 dental-hero-enter">
+        <div class="absolute top-0 right-0 w-72 h-72 bg-[#1B365D]/10 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl"></div>
+        <div class="absolute bottom-0 left-0 w-48 h-48 bg-emerald-500/8 rounded-full translate-y-1/3 -translate-x-1/4 blur-2xl"></div>
         <div class="relative z-10">
             <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
-                    <p class="text-cyan-400 text-xs font-semibold tracking-wider uppercase mb-1">{{ isRtl ? 'طب الأسنان' : 'Dental' }}</p>
+                    <p class="text-[#2C4E7A] text-xs font-semibold tracking-wider uppercase mb-1">{{ isRtl ? 'طب الأسنان' : 'Dental' }}</p>
                     <h1 class="text-2xl sm:text-3xl font-bold text-white">{{ isRtl ? 'مخطط الأسنان المحسّن' : 'Enhanced Dental Chart' }}</h1>
                     <div class="flex items-center gap-3 mt-2">
                         <span class="text-gray-300 text-sm">{{ patient.full_name }}</span>
@@ -387,10 +387,10 @@ const selectedToothTreatments = computed(() => selectedTooth.value ? getToothTre
                 <div class="flex items-center gap-2 flex-wrap">
                     <!-- Chart Mode Toggle -->
                     <div class="flex items-center bg-white/10 rounded-xl p-0.5 border border-white/10">
-                        <button @click="chartMode='adult'" class="px-3 py-1.5 text-xs font-semibold rounded-lg transition-all" :class="chartMode==='adult' ? 'bg-cyan-500 text-white shadow-lg' : 'text-gray-400 hover:text-white'">
+                        <button @click="chartMode='adult'" class="px-3 py-1.5 text-xs font-semibold rounded-lg transition-all" :class="chartMode==='adult' ? 'bg-[#1B365D] text-white shadow-lg' : 'text-gray-400 hover:text-white'">
                             {{ isRtl ? 'بالغ' : 'Adult' }} (32)
                         </button>
-                        <button @click="chartMode='deciduous'" class="px-3 py-1.5 text-xs font-semibold rounded-lg transition-all" :class="chartMode==='deciduous' ? 'bg-pink-500 text-white shadow-lg' : 'text-gray-400 hover:text-white'">
+                        <button @click="chartMode='deciduous'" class="px-3 py-1.5 text-xs font-semibold rounded-lg transition-all" :class="chartMode==='deciduous' ? 'bg-[#C4A265] text-white shadow-lg' : 'text-gray-400 hover:text-white'">
                             {{ isRtl ? 'لبنية' : 'Deciduous' }} (20)
                         </button>
                     </div>
@@ -402,13 +402,13 @@ const selectedToothTreatments = computed(() => selectedTooth.value ? getToothTre
                     <Link :href="`/admin/dental/periodontal/${patient.id}`" class="inline-flex items-center px-3 py-2 text-xs font-medium text-emerald-300 bg-emerald-500/15 rounded-xl hover:bg-emerald-500/25 border border-emerald-500/20 transition-all">
                         {{ isRtl ? 'اللثة' : 'Perio' }}
                     </Link>
-                    <Link :href="`/admin/dental/treatment-plans?patient_id=${patient.id}`" class="inline-flex items-center px-3 py-2 text-xs font-medium text-purple-300 bg-purple-500/15 rounded-xl hover:bg-purple-500/25 border border-purple-500/20 transition-all">
+                    <Link :href="`/admin/dental/treatment-plans?patient_id=${patient.id}`" class="inline-flex items-center px-3 py-2 text-xs font-medium text-slate-300 bg-[#1B365D]/15 rounded-xl hover:bg-[#1B365D]/25 border border-[#1B365D]/20 transition-all">
                         {{ isRtl ? 'خطط العلاج' : 'Plans' }}
                     </Link>
-                    <Link :href="`/admin/dental/xrays/patient/${patient.id}`" class="inline-flex items-center px-3 py-2 text-xs font-medium text-cyan-300 bg-cyan-500/15 rounded-xl hover:bg-cyan-500/25 border border-cyan-500/20 transition-all">
+                    <Link :href="`/admin/dental/xrays/patient/${patient.id}`" class="inline-flex items-center px-3 py-2 text-xs font-medium text-slate-300 bg-[#1B365D]/15 rounded-xl hover:bg-[#1B365D]/25 border border-[#1B365D]/20 transition-all">
                         {{ isRtl ? 'الأشعة' : 'X-Rays' }}
                     </Link>
-                    <button @click="confirmInitializeChart" class="inline-flex items-center px-3 py-2 text-xs font-medium text-cyan-400 bg-cyan-500/15 rounded-xl hover:bg-cyan-500/25 border border-cyan-500/20 transition-all">
+                    <button @click="confirmInitializeChart" class="inline-flex items-center px-3 py-2 text-xs font-medium text-[#2C4E7A] bg-[#1B365D]/15 rounded-xl hover:bg-[#1B365D]/25 border border-[#1B365D]/20 transition-all">
                         {{ isRtl ? 'تهيئة' : 'Init' }}
                     </button>
                 </div>
@@ -425,7 +425,7 @@ const selectedToothTreatments = computed(() => selectedTooth.value ? getToothTre
                 </template>
                 <div class="bg-white/5 backdrop-blur-sm rounded-lg px-2.5 py-1.5 border border-white/10 flex items-center gap-1.5 ms-auto">
                     <span class="text-[10px] text-gray-400">{{ isRtl ? 'مسجل' : 'Recorded' }}</span>
-                    <span class="text-xs font-bold text-cyan-400">{{ totalRecorded }}/{{ totalTeeth }}</span>
+                    <span class="text-xs font-bold text-[#2C4E7A]">{{ totalRecorded }}/{{ totalTeeth }}</span>
                 </div>
             </div>
 
@@ -455,8 +455,8 @@ const selectedToothTreatments = computed(() => selectedTooth.value ? getToothTre
                 <span class="text-[10px] text-gray-500 group-hover:text-gray-700 transition-colors">{{ conditionLabels[cond] }}</span>
             </div>
             <div v-if="chartMode === 'deciduous'" class="ms-auto flex items-center gap-1">
-                <span class="w-2 h-2 rounded-full bg-pink-400 animate-pulse"></span>
-                <span class="text-[10px] font-semibold text-pink-500">{{ isRtl ? 'أسنان لبنية' : 'Deciduous' }}</span>
+                <span class="w-2 h-2 rounded-full bg-[#D4B57E] animate-pulse"></span>
+                <span class="text-[10px] font-semibold text-[#C4A265]">{{ isRtl ? 'أسنان لبنية' : 'Deciduous' }}</span>
             </div>
         </div>
 
@@ -492,7 +492,7 @@ const selectedToothTreatments = computed(() => selectedTooth.value ? getToothTre
         <div class="px-2 sm:px-4 md:px-6 py-4">
             <!-- UPPER JAW -->
             <div class="text-center mb-2">
-                <span class="text-[10px] font-bold uppercase tracking-widest" :class="chartMode === 'deciduous' ? 'text-pink-400' : 'text-gray-400'">{{ isRtl ? 'الفك العلوي' : 'Upper Jaw' }}</span>
+                <span class="text-[10px] font-bold uppercase tracking-widest" :class="chartMode === 'deciduous' ? 'text-[#D4B57E]' : 'text-gray-400'">{{ isRtl ? 'الفك العلوي' : 'Upper Jaw' }}</span>
             </div>
 
             <!-- Upper Side View -->
@@ -516,7 +516,7 @@ const selectedToothTreatments = computed(() => selectedTooth.value ? getToothTre
                                 </g>
                             </g>
                             <!-- Entry count badge -->
-                            <g v-else-if="getToothEntries(num).length > 0"><circle cx="4" cy="4" r="4" fill="#0891B2" /><text x="4" y="5.5" text-anchor="middle" fill="white" font-size="5" font-weight="bold">{{ getToothEntries(num).length }}</text></g>
+                            <g v-else-if="getToothEntries(num).length > 0"><circle cx="4" cy="4" r="4" fill="#1B365D" /><text x="4" y="5.5" text-anchor="middle" fill="white" font-size="5" font-weight="bold">{{ getToothEntries(num).length }}</text></g>
                         </svg>
                     </div>
                 </template>
@@ -532,7 +532,7 @@ const selectedToothTreatments = computed(() => selectedTooth.value ? getToothTre
                                 <circle :cx="getSidePaths(num).width - 5" cy="28" r="5" :fill="conditionTheme[getToothData(num).condition].accent" />
                                 <g :transform="`translate(${getSidePaths(num).width - 9}, 24) scale(0.5)`"><path :d="conditionIcons[conditionTheme[getToothData(num).condition].icon]" fill="white" /></g>
                             </g>
-                            <g v-else-if="getToothEntries(num).length > 0"><circle cx="4" cy="4" r="4" fill="#0891B2" /><text x="4" y="5.5" text-anchor="middle" fill="white" font-size="5" font-weight="bold">{{ getToothEntries(num).length }}</text></g>
+                            <g v-else-if="getToothEntries(num).length > 0"><circle cx="4" cy="4" r="4" fill="#1B365D" /><text x="4" y="5.5" text-anchor="middle" fill="white" font-size="5" font-weight="bold">{{ getToothEntries(num).length }}</text></g>
                         </svg>
                     </div>
                 </template>
@@ -560,8 +560,8 @@ const selectedToothTreatments = computed(() => selectedTooth.value ? getToothTre
                             <span class="font-bold">{{ num }}</span>
                             <span class="mx-1 opacity-50">|</span>
                             {{ conditionLabels[getToothData(num).condition] }}
-                            <span v-if="getToothData(num).surfaces?.length" class="text-cyan-300 ms-1">[{{ (getToothData(num).surfaces || []).map(s => surfaceLabels[s]?.substring(0,1)).join('') }}]</span>
-                            <span v-if="getToothEntries(num).length" class="text-cyan-400 ms-1">({{ getToothEntries(num).length }})</span>
+                            <span v-if="getToothData(num).surfaces?.length" class="text-slate-300 ms-1">[{{ (getToothData(num).surfaces || []).map(s => surfaceLabels[s]?.substring(0,1)).join('') }}]</span>
+                            <span v-if="getToothEntries(num).length" class="text-[#2C4E7A] ms-1">({{ getToothEntries(num).length }})</span>
                         </div>
                     </div>
                 </template>
@@ -609,8 +609,8 @@ const selectedToothTreatments = computed(() => selectedTooth.value ? getToothTre
                             <span class="font-bold">{{ num }}</span>
                             <span class="mx-1 opacity-50">|</span>
                             {{ conditionLabels[getToothData(num).condition] }}
-                            <span v-if="getToothData(num).surfaces?.length" class="text-cyan-300 ms-1">[{{ (getToothData(num).surfaces || []).map(s => surfaceLabels[s]?.substring(0,1)).join('') }}]</span>
-                            <span v-if="getToothEntries(num).length" class="text-cyan-400 ms-1">({{ getToothEntries(num).length }})</span>
+                            <span v-if="getToothData(num).surfaces?.length" class="text-slate-300 ms-1">[{{ (getToothData(num).surfaces || []).map(s => surfaceLabels[s]?.substring(0,1)).join('') }}]</span>
+                            <span v-if="getToothEntries(num).length" class="text-[#2C4E7A] ms-1">({{ getToothEntries(num).length }})</span>
                         </div>
                     </div>
                 </template>
@@ -632,13 +632,13 @@ const selectedToothTreatments = computed(() => selectedTooth.value ? getToothTre
                                 <circle :cx="getSidePaths(num).width - 5" cy="5" r="5" :fill="conditionTheme[getToothData(num).condition].accent" />
                                 <g :transform="`translate(${getSidePaths(num).width - 9}, 1) scale(0.5)`"><path :d="conditionIcons[conditionTheme[getToothData(num).condition].icon]" fill="white" /></g>
                             </g>
-                            <g v-else-if="getToothEntries(num).length > 0"><circle cx="4" cy="32" r="4" fill="#0891B2" /><text x="4" y="33.5" text-anchor="middle" fill="white" font-size="5" font-weight="bold">{{ getToothEntries(num).length }}</text></g>
+                            <g v-else-if="getToothEntries(num).length > 0"><circle cx="4" cy="32" r="4" fill="#1B365D" /><text x="4" y="33.5" text-anchor="middle" fill="white" font-size="5" font-weight="bold">{{ getToothEntries(num).length }}</text></g>
                         </svg>
                     </div>
                 </template>
             </div>
 
-            <div class="text-center mt-2"><span class="text-[10px] font-bold uppercase tracking-widest" :class="chartMode === 'deciduous' ? 'text-pink-400' : 'text-gray-400'">{{ isRtl ? 'الفك السفلي' : 'Lower Jaw' }}</span></div>
+            <div class="text-center mt-2"><span class="text-[10px] font-bold uppercase tracking-widest" :class="chartMode === 'deciduous' ? 'text-[#D4B57E]' : 'text-gray-400'">{{ isRtl ? 'الفك السفلي' : 'Lower Jaw' }}</span></div>
             <div class="text-center mt-3 mb-1"><span class="text-[10px] text-gray-300">{{ surfaceEditMode ? (isRtl ? 'اضغط على أي سطح لتحديده' : 'Click any surface to select it') : (isRtl ? 'اضغط لعرض التفاصيل • دبل كليك لتعديل الحالة' : 'Click for details \u2022 Double-click to edit condition') }}</span></div>
         </div>
     </div>
@@ -679,11 +679,11 @@ const selectedToothTreatments = computed(() => selectedTooth.value ? getToothTre
                         </div>
                     </div>
                     <div class="flex items-center gap-2">
-                        <button @click="openEntryModal(selectedTooth)" class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-white bg-cyan-600 hover:bg-cyan-700 rounded-xl transition-all shadow-lg shadow-cyan-600/20">
+                        <button @click="openEntryModal(selectedTooth)" class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-white bg-[#1B365D] hover:bg-[#1B365D] rounded-xl transition-all shadow-lg shadow-[#1B365D]/20">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
                             {{ isRtl ? 'إضافة سجل' : 'Add Entry' }}
                         </button>
-                        <button @click="selectTooth(selectedTooth)" class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-cyan-700 bg-cyan-50 hover:bg-cyan-100 rounded-xl border border-cyan-200 transition-all">
+                        <button @click="selectTooth(selectedTooth)" class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-[#1B365D] bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200 transition-all">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
                             {{ isRtl ? 'تعديل' : 'Edit' }}
                         </button>
@@ -716,10 +716,10 @@ const selectedToothTreatments = computed(() => selectedTooth.value ? getToothTre
 
         <!-- Tabs -->
         <div class="flex border-b border-gray-100">
-            <button @click="entryTab='history'" class="flex-1 py-3 text-xs font-semibold text-center transition-all" :class="entryTab==='history' ? 'text-cyan-600 border-b-2 border-cyan-600 bg-cyan-50/30' : 'text-gray-400 hover:text-gray-600'">
+            <button @click="entryTab='history'" class="flex-1 py-3 text-xs font-semibold text-center transition-all" :class="entryTab==='history' ? 'text-[#1B365D] border-b-2 border-[#1B365D] bg-slate-50/30' : 'text-gray-400 hover:text-gray-600'">
                 {{ isRtl ? 'السجل والملفات' : 'History & Files' }} ({{ selectedToothEntries.length }})
             </button>
-            <button @click="entryTab='treatments'" class="flex-1 py-3 text-xs font-semibold text-center transition-all" :class="entryTab==='treatments' ? 'text-cyan-600 border-b-2 border-cyan-600 bg-cyan-50/30' : 'text-gray-400 hover:text-gray-600'">
+            <button @click="entryTab='treatments'" class="flex-1 py-3 text-xs font-semibold text-center transition-all" :class="entryTab==='treatments' ? 'text-[#1B365D] border-b-2 border-[#1B365D] bg-slate-50/30' : 'text-gray-400 hover:text-gray-600'">
                 {{ isRtl ? 'العلاجات' : 'Treatments' }} ({{ selectedToothTreatments.length }})
             </button>
         </div>
@@ -729,19 +729,19 @@ const selectedToothTreatments = computed(() => selectedTooth.value ? getToothTre
             <div v-if="selectedToothEntries.length === 0" class="px-5 py-10 text-center">
                 <div class="w-14 h-14 mx-auto mb-3 rounded-2xl bg-gray-50 flex items-center justify-center"><svg class="w-7 h-7 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg></div>
                 <p class="text-sm text-gray-400 mb-3">{{ isRtl ? 'لا يوجد سجلات بعد' : 'No entries yet' }}</p>
-                <button @click="openEntryModal(selectedTooth)" class="text-xs font-semibold text-cyan-600 hover:text-cyan-700">{{ isRtl ? 'إضافة أول سجل' : 'Add first entry' }}</button>
+                <button @click="openEntryModal(selectedTooth)" class="text-xs font-semibold text-[#1B365D] hover:text-[#1B365D]">{{ isRtl ? 'إضافة أول سجل' : 'Add first entry' }}</button>
             </div>
             <div v-else class="relative ps-8 pe-5 py-4">
                 <!-- Timeline line -->
                 <div class="absolute start-[18px] top-0 bottom-0 w-px bg-gradient-to-b from-gray-200 via-gray-200 to-transparent"></div>
                 <div v-for="(entry, ei) in selectedToothEntries" :key="entry.id" class="relative mb-5 last:mb-0 group">
                     <!-- Timeline dot -->
-                    <div class="absolute -start-[22px] top-1 w-3 h-3 rounded-full border-2 border-white shadow-sm" :class="{'bg-blue-500':entry.entry_type==='examination','bg-green-500':entry.entry_type==='treatment','bg-yellow-500':entry.entry_type==='note','bg-purple-500':entry.entry_type==='follow_up','bg-red-500':entry.entry_type==='complication','bg-gray-400':entry.entry_type==='media_only'}"></div>
+                    <div class="absolute -start-[22px] top-1 w-3 h-3 rounded-full border-2 border-white shadow-sm" :class="{'bg-[#1B365D]':entry.entry_type==='examination','bg-emerald-500':entry.entry_type==='treatment','bg-[#C4A265]':entry.entry_type==='note','bg-[#1B365D]':entry.entry_type==='follow_up','bg-red-500':entry.entry_type==='complication','bg-gray-400':entry.entry_type==='media_only'}"></div>
                     <div class="bg-gray-50/50 rounded-xl p-3.5 hover:bg-gray-50 transition-colors border border-transparent hover:border-gray-100">
                         <div class="flex items-center justify-between gap-2 mb-1.5">
                             <div class="flex items-center gap-2 flex-wrap">
                                 <span class="text-base">{{ entryTypeIcons[entry.entry_type] || '📋' }}</span>
-                                <span class="text-xs font-bold px-2 py-0.5 rounded-full" :class="{'bg-blue-100 text-blue-700':entry.entry_type==='examination','bg-green-100 text-green-700':entry.entry_type==='treatment','bg-yellow-100 text-yellow-700':entry.entry_type==='note','bg-purple-100 text-purple-700':entry.entry_type==='follow_up','bg-red-100 text-red-700':entry.entry_type==='complication','bg-gray-100 text-gray-600':entry.entry_type==='media_only'}">{{ entryTypeLabels[entry.entry_type] }}</span>
+                                <span class="text-xs font-bold px-2 py-0.5 rounded-full" :class="{'bg-slate-100 text-[#1B365D]':entry.entry_type==='examination','bg-emerald-100 text-emerald-700':entry.entry_type==='treatment','bg-[#F5E7C8]/60 text-[#8B7043]':entry.entry_type==='note','bg-slate-100 text-[#1B365D]':entry.entry_type==='follow_up','bg-red-100 text-red-700':entry.entry_type==='complication','bg-gray-100 text-gray-600':entry.entry_type==='media_only'}">{{ entryTypeLabels[entry.entry_type] }}</span>
                                 <span v-if="entry.title" class="text-sm font-semibold text-gray-800">{{ entry.title }}</span>
                             </div>
                             <div class="flex items-center gap-2">
@@ -767,18 +767,18 @@ const selectedToothTreatments = computed(() => selectedTooth.value ? getToothTre
                         <!-- Doctor & Cost -->
                         <div class="flex items-center gap-3 mt-1.5">
                             <span v-if="entry.doctor" class="text-[10px] text-gray-400">{{ locale==='ar' ? entry.doctor.name_ar : entry.doctor.name_en }}</span>
-                            <span v-if="entry.cost > 0" class="text-[10px] font-bold text-green-600">{{ formatCurrency(entry.cost) }}</span>
+                            <span v-if="entry.cost > 0" class="text-[10px] font-bold text-emerald-600">{{ formatCurrency(entry.cost) }}</span>
                         </div>
                         <!-- Media Gallery -->
                         <div v-if="entry.media?.length" class="flex flex-wrap gap-2 mt-2">
                             <template v-for="(m, mi) in entry.media" :key="mi">
-                                <a v-if="m.type==='image'" :href="'/storage/'+m.path" target="_blank" class="w-16 h-16 rounded-lg overflow-hidden border border-gray-200 hover:border-cyan-300 transition-all hover:shadow-md">
+                                <a v-if="m.type==='image'" :href="'/storage/'+m.path" target="_blank" class="w-16 h-16 rounded-lg overflow-hidden border border-gray-200 hover:border-slate-300 transition-all hover:shadow-md">
                                     <img :src="'/storage/'+m.path" :alt="m.original_name" class="w-full h-full object-cover" />
                                 </a>
-                                <a v-else-if="m.type==='video'" :href="'/storage/'+m.path" target="_blank" class="w-16 h-16 rounded-lg overflow-hidden border border-gray-200 bg-gray-900 flex items-center justify-center hover:border-cyan-300 transition-all">
+                                <a v-else-if="m.type==='video'" :href="'/storage/'+m.path" target="_blank" class="w-16 h-16 rounded-lg overflow-hidden border border-gray-200 bg-gray-900 flex items-center justify-center hover:border-slate-300 transition-all">
                                     <svg class="w-6 h-6 text-white/80" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
                                 </a>
-                                <a v-else :href="'/storage/'+m.path" target="_blank" class="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-gray-200 hover:border-cyan-300 transition-all bg-gray-50">
+                                <a v-else :href="'/storage/'+m.path" target="_blank" class="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-gray-200 hover:border-slate-300 transition-all bg-gray-50">
                                     <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
                                     <span class="text-[10px] text-gray-600 max-w-[80px] truncate">{{ m.original_name }}</span>
                                 </a>
@@ -797,7 +797,7 @@ const selectedToothTreatments = computed(() => selectedTooth.value ? getToothTre
             <div v-else class="divide-y divide-gray-50">
                 <div v-for="tr in selectedToothTreatments" :key="tr.id" class="px-5 py-3 flex items-center justify-between hover:bg-gray-50/50 transition-colors">
                     <div class="flex items-center gap-2.5">
-                        <div class="w-1.5 h-1.5 rounded-full flex-shrink-0" :class="{'bg-green-500':tr.status==='completed','bg-cyan-500':tr.status==='in_progress','bg-gray-300':tr.status==='planned','bg-red-400':tr.status==='cancelled'}"></div>
+                        <div class="w-1.5 h-1.5 rounded-full flex-shrink-0" :class="{'bg-emerald-500':tr.status==='completed','bg-[#1B365D]':tr.status==='in_progress','bg-gray-300':tr.status==='planned','bg-red-400':tr.status==='cancelled'}"></div>
                         <div>
                             <span class="text-sm font-medium text-gray-800">{{ tr.treatment_type?.replace?.(/_/g,' ') || '-' }}</span>
                             <div class="flex items-center gap-2 mt-0.5">
@@ -806,7 +806,7 @@ const selectedToothTreatments = computed(() => selectedTooth.value ? getToothTre
                             </div>
                         </div>
                     </div>
-                    <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full" :class="{'bg-green-50 text-green-700':tr.status==='completed','bg-cyan-50 text-cyan-700':tr.status==='in_progress','bg-gray-100 text-gray-500':tr.status==='planned','bg-red-50 text-red-600':tr.status==='cancelled'}">{{ tr.status }}</span>
+                    <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full" :class="{'bg-emerald-50 text-emerald-700':tr.status==='completed','bg-slate-50 text-[#1B365D]':tr.status==='in_progress','bg-gray-100 text-gray-500':tr.status==='planned','bg-red-50 text-red-600':tr.status==='cancelled'}">{{ tr.status }}</span>
                 </div>
             </div>
         </div>
@@ -819,15 +819,15 @@ const selectedToothTreatments = computed(() => selectedTooth.value ? getToothTre
 <Transition enter-active-class="transition-all duration-300 ease-out" enter-from-class="opacity-0" enter-to-class="opacity-100" leave-active-class="transition-all duration-200 ease-in" leave-from-class="opacity-100" leave-to-class="opacity-0">
 <div v-if="showModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4" @click.self="showModal=false">
     <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden">
-        <div class="bg-gradient-to-r from-cyan-700 to-cyan-600 px-6 py-4 flex items-center justify-between">
+        <div class="bg-gradient-to-r from-[#1B365D] to-[#1B365D] px-6 py-4 flex items-center justify-between">
             <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center"><span class="text-white font-bold font-mono text-lg">{{ selectedTooth }}</span></div>
                 <div>
                     <h3 class="text-white font-bold">{{ isRtl ? 'تعديل حالة السن' : 'Edit Tooth Condition' }}</h3>
-                    <p class="text-cyan-100 text-xs">{{ getToothName(selectedTooth) }} - {{ conditionLabels[editForm.condition] }}</p>
+                    <p class="text-slate-100 text-xs">{{ getToothName(selectedTooth) }} - {{ conditionLabels[editForm.condition] }}</p>
                 </div>
             </div>
-            <button @click="showModal=false" class="text-cyan-200 hover:text-white"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg></button>
+            <button @click="showModal=false" class="text-slate-200 hover:text-white"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg></button>
         </div>
         <div class="p-6 space-y-5">
             <!-- Condition Grid with Icons -->
@@ -861,26 +861,26 @@ const selectedToothTreatments = computed(() => selectedTooth.value ? getToothTre
                         <text x="38" y="17" text-anchor="middle" font-size="5" fill="#9CA3AF">{{ isRtl ? 'ب' : 'D' }}</text>
                     </svg>
                     <div class="flex flex-wrap gap-2">
-                        <button v-for="s in surfaces" :key="s" type="button" @click="toggleSurface(s)" class="px-4 py-2 rounded-xl text-sm font-medium border-2 transition-all" :class="editForm.surfaces.includes(s)?'bg-cyan-600 text-white border-cyan-600 shadow-md shadow-cyan-600/20':'bg-gray-50 text-gray-600 border-gray-100 hover:border-gray-200'">{{ surfaceLabels[s] || s }}</button>
+                        <button v-for="s in surfaces" :key="s" type="button" @click="toggleSurface(s)" class="px-4 py-2 rounded-xl text-sm font-medium border-2 transition-all" :class="editForm.surfaces.includes(s)?'bg-[#1B365D] text-white border-[#1B365D] shadow-md shadow-[#1B365D]/20':'bg-gray-50 text-gray-600 border-gray-100 hover:border-gray-200'">{{ surfaceLabels[s] || s }}</button>
                     </div>
                 </div>
             </div>
             <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-3">{{ isRtl ? 'وجود السن' : 'Presence' }}</label>
                 <div class="grid grid-cols-3 gap-2">
-                    <button type="button" @click="editForm.status='present'" class="px-3 py-2.5 rounded-xl text-sm font-medium border-2 transition-all" :class="editForm.status==='present'?'border-green-500 bg-green-50 text-green-700':'border-gray-100 text-gray-500'">{{ isRtl ? 'موجود' : 'Present' }}</button>
+                    <button type="button" @click="editForm.status='present'" class="px-3 py-2.5 rounded-xl text-sm font-medium border-2 transition-all" :class="editForm.status==='present'?'border-emerald-500 bg-emerald-50 text-emerald-700':'border-gray-100 text-gray-500'">{{ isRtl ? 'موجود' : 'Present' }}</button>
                     <button type="button" @click="editForm.status='missing'" class="px-3 py-2.5 rounded-xl text-sm font-medium border-2 transition-all" :class="editForm.status==='missing'?'border-gray-500 bg-gray-100 text-gray-700':'border-gray-100 text-gray-500'">{{ isRtl ? 'مفقود' : 'Missing' }}</button>
-                    <button type="button" @click="editForm.status='implant'" class="px-3 py-2.5 rounded-xl text-sm font-medium border-2 transition-all" :class="editForm.status==='implant'?'border-indigo-500 bg-indigo-50 text-indigo-700':'border-gray-100 text-gray-500'">{{ isRtl ? 'زرعة' : 'Implant' }}</button>
+                    <button type="button" @click="editForm.status='implant'" class="px-3 py-2.5 rounded-xl text-sm font-medium border-2 transition-all" :class="editForm.status==='implant'?'border-[#1B365D] bg-slate-50 text-[#1B365D]':'border-gray-100 text-gray-500'">{{ isRtl ? 'زرعة' : 'Implant' }}</button>
                 </div>
             </div>
             <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-2">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
-                <textarea v-model="editForm.notes" rows="2" class="w-full border-2 border-gray-100 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-500 transition-all resize-none" :placeholder="isRtl ? 'أضف ملاحظات...' : 'Add notes...'"></textarea>
+                <textarea v-model="editForm.notes" rows="2" class="w-full border-2 border-gray-100 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all resize-none" :placeholder="isRtl ? 'أضف ملاحظات...' : 'Add notes...'"></textarea>
             </div>
         </div>
         <div class="px-6 py-4 bg-gray-50 border-t flex gap-3 justify-end">
             <button @click="showModal=false" class="px-5 py-2.5 border-2 border-gray-200 rounded-xl text-sm font-medium text-gray-600 hover:bg-white transition-all">{{ isRtl ? 'إلغاء' : 'Cancel' }}</button>
-            <button @click="saveTooth" :disabled="saving" class="px-6 py-2.5 bg-cyan-600 text-white rounded-xl text-sm font-semibold hover:bg-cyan-700 disabled:opacity-50 transition-all shadow-lg shadow-cyan-600/20 flex items-center gap-2">
+            <button @click="saveTooth" :disabled="saving" class="px-6 py-2.5 bg-[#1B365D] text-white rounded-xl text-sm font-semibold hover:bg-[#1B365D] disabled:opacity-50 transition-all shadow-lg shadow-[#1B365D]/20 flex items-center gap-2">
                 <svg v-if="saving" class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" /><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
                 {{ isRtl ? 'حفظ' : 'Save' }}
             </button>
@@ -895,15 +895,15 @@ const selectedToothTreatments = computed(() => selectedTooth.value ? getToothTre
 <Transition enter-active-class="transition-all duration-300 ease-out" enter-from-class="opacity-0" enter-to-class="opacity-100" leave-active-class="transition-all duration-200 ease-in" leave-from-class="opacity-100" leave-to-class="opacity-0">
 <div v-if="showEntryModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-start justify-center p-4 overflow-y-auto" @click.self="showEntryModal=false">
     <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl my-8 overflow-hidden">
-        <div class="bg-gradient-to-r from-cyan-700 via-cyan-600 to-teal-600 px-6 py-5 flex items-center justify-between">
+        <div class="bg-gradient-to-r from-[#1B365D] via-[#1B365D] to-emerald-600 px-6 py-5 flex items-center justify-between">
             <div class="flex items-center gap-3">
                 <div class="w-11 h-11 rounded-xl bg-white/20 flex items-center justify-center"><span class="text-white font-bold font-mono text-lg">{{ selectedTooth }}</span></div>
                 <div>
                     <h3 class="text-white font-bold text-lg">{{ isRtl ? 'إضافة سجل جديد' : 'Add New Entry' }}</h3>
-                    <p class="text-cyan-100 text-xs">{{ getToothName(selectedTooth) }} — {{ patient.full_name }}</p>
+                    <p class="text-slate-100 text-xs">{{ getToothName(selectedTooth) }} — {{ patient.full_name }}</p>
                 </div>
             </div>
-            <button @click="showEntryModal=false" class="text-cyan-200 hover:text-white"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg></button>
+            <button @click="showEntryModal=false" class="text-slate-200 hover:text-white"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg></button>
         </div>
 
         <div class="p-6 space-y-5 max-h-[70vh] overflow-y-auto">
@@ -913,7 +913,7 @@ const selectedToothTreatments = computed(() => selectedTooth.value ? getToothTre
                 <div class="grid grid-cols-3 sm:grid-cols-6 gap-2">
                     <button v-for="(label, type) in entryTypeLabels" :key="type" type="button" @click="entryForm.entry_type=type"
                         class="flex flex-col items-center gap-1 p-3 rounded-xl border-2 text-center transition-all"
-                        :class="entryForm.entry_type===type ? 'border-cyan-500 bg-cyan-50 text-cyan-700 shadow-md' : 'border-gray-100 text-gray-500 hover:border-gray-200'">
+                        :class="entryForm.entry_type===type ? 'border-[#1B365D] bg-slate-50 text-[#1B365D] shadow-md' : 'border-gray-100 text-gray-500 hover:border-gray-200'">
                         <span class="text-lg">{{ entryTypeIcons[type] }}</span>
                         <span class="text-[10px] font-semibold">{{ label }}</span>
                     </button>
@@ -923,39 +923,39 @@ const selectedToothTreatments = computed(() => selectedTooth.value ? getToothTre
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-xs font-semibold text-gray-600 mb-1.5">{{ isRtl ? 'العنوان' : 'Title' }}</label>
-                    <input v-model="entryForm.title" type="text" class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-500 transition-all" :placeholder="isRtl ? 'مثال: فحص أولي' : 'e.g. Initial examination'" />
+                    <input v-model="entryForm.title" type="text" class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all" :placeholder="isRtl ? 'مثال: فحص أولي' : 'e.g. Initial examination'" />
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-gray-600 mb-1.5">{{ isRtl ? 'التاريخ' : 'Date' }}</label>
-                    <input v-model="entryForm.entry_date" type="date" class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-500 transition-all" />
+                    <input v-model="entryForm.entry_date" type="date" class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all" />
                 </div>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-xs font-semibold text-gray-600 mb-1.5">{{ isRtl ? 'الطبيب' : 'Doctor' }}</label>
-                    <select v-model="entryForm.doctor_id" class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-500 transition-all">
+                    <select v-model="entryForm.doctor_id" class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all">
                         <option value="">{{ isRtl ? 'اختر الطبيب' : 'Select doctor' }}</option>
                         <option v-for="doc in doctors" :key="doc.id" :value="doc.id">{{ isRtl ? doc.name_ar : doc.name_en }}</option>
                     </select>
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-gray-600 mb-1.5">{{ isRtl ? 'التكلفة' : 'Cost' }}</label>
-                    <input v-model="entryForm.cost" type="number" step="0.01" class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-500 transition-all" placeholder="0.00" />
+                    <input v-model="entryForm.cost" type="number" step="0.01" class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all" placeholder="0.00" />
                 </div>
             </div>
 
             <div v-if="entryForm.entry_type==='treatment' || entryForm.entry_type==='examination'" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-xs font-semibold text-gray-600 mb-1.5">{{ isRtl ? 'الحالة قبل' : 'Condition Before' }}</label>
-                    <select v-model="entryForm.condition_before" class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-500 transition-all">
+                    <select v-model="entryForm.condition_before" class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all">
                         <option value="">-</option>
                         <option v-for="c in conditions" :key="c" :value="c">{{ conditionLabels[c] }}</option>
                     </select>
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-gray-600 mb-1.5">{{ isRtl ? 'الحالة بعد' : 'Condition After' }}</label>
-                    <select v-model="entryForm.condition_after" class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-500 transition-all">
+                    <select v-model="entryForm.condition_after" class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all">
                         <option value="">-</option>
                         <option v-for="c in conditions" :key="c" :value="c">{{ conditionLabels[c] }}</option>
                     </select>
@@ -965,27 +965,27 @@ const selectedToothTreatments = computed(() => selectedTooth.value ? getToothTre
             <div v-if="['treatment','examination'].includes(entryForm.entry_type)">
                 <label class="block text-xs font-semibold text-gray-600 mb-1.5">{{ isRtl ? 'الأسطح المعالجة' : 'Affected Surfaces' }}</label>
                 <div class="flex flex-wrap gap-2">
-                    <button v-for="s in surfaces" :key="s" type="button" @click="toggleEntrySurface(s)" class="px-3 py-1.5 rounded-lg text-xs font-medium border-2 transition-all" :class="entryForm.surfaces.includes(s)?'bg-cyan-600 text-white border-cyan-600':'bg-gray-50 text-gray-500 border-gray-100 hover:border-gray-200'">{{ surfaceLabels[s] }}</button>
+                    <button v-for="s in surfaces" :key="s" type="button" @click="toggleEntrySurface(s)" class="px-3 py-1.5 rounded-lg text-xs font-medium border-2 transition-all" :class="entryForm.surfaces.includes(s)?'bg-[#1B365D] text-white border-[#1B365D]':'bg-gray-50 text-gray-500 border-gray-100 hover:border-gray-200'">{{ surfaceLabels[s] }}</button>
                 </div>
             </div>
 
             <div>
                 <label class="block text-xs font-semibold text-gray-600 mb-1.5">{{ isRtl ? 'الوصف / التفاصيل' : 'Description / Details' }}</label>
-                <textarea v-model="entryForm.description" rows="3" class="w-full border-2 border-gray-100 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-500 transition-all resize-none" :placeholder="isRtl ? 'اكتب تفاصيل الفحص أو العلاج...' : 'Write examination or treatment details...'"></textarea>
+                <textarea v-model="entryForm.description" rows="3" class="w-full border-2 border-gray-100 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all resize-none" :placeholder="isRtl ? 'اكتب تفاصيل الفحص أو العلاج...' : 'Write examination or treatment details...'"></textarea>
             </div>
 
             <div>
                 <label class="block text-xs font-semibold text-gray-600 mb-1.5">{{ isRtl ? 'الحالة' : 'Status' }}</label>
                 <div class="flex gap-2">
                     <button type="button" @click="entryForm.status='recorded'" class="px-4 py-2 rounded-xl text-xs font-medium border-2 transition-all" :class="entryForm.status==='recorded'?'border-gray-500 bg-gray-50 text-gray-700':'border-gray-100 text-gray-400'">{{ isRtl ? 'مسجل' : 'Recorded' }}</button>
-                    <button type="button" @click="entryForm.status='in_progress'" class="px-4 py-2 rounded-xl text-xs font-medium border-2 transition-all" :class="entryForm.status==='in_progress'?'border-blue-500 bg-blue-50 text-blue-700':'border-gray-100 text-gray-400'">{{ isRtl ? 'جاري' : 'In Progress' }}</button>
-                    <button type="button" @click="entryForm.status='completed'" class="px-4 py-2 rounded-xl text-xs font-medium border-2 transition-all" :class="entryForm.status==='completed'?'border-green-500 bg-green-50 text-green-700':'border-gray-100 text-gray-400'">{{ isRtl ? 'مكتمل' : 'Completed' }}</button>
+                    <button type="button" @click="entryForm.status='in_progress'" class="px-4 py-2 rounded-xl text-xs font-medium border-2 transition-all" :class="entryForm.status==='in_progress'?'border-[#1B365D] bg-slate-50 text-[#1B365D]':'border-gray-100 text-gray-400'">{{ isRtl ? 'جاري' : 'In Progress' }}</button>
+                    <button type="button" @click="entryForm.status='completed'" class="px-4 py-2 rounded-xl text-xs font-medium border-2 transition-all" :class="entryForm.status==='completed'?'border-emerald-500 bg-emerald-50 text-emerald-700':'border-gray-100 text-gray-400'">{{ isRtl ? 'مكتمل' : 'Completed' }}</button>
                 </div>
             </div>
 
             <div>
                 <label class="block text-xs font-semibold text-gray-600 mb-1.5">{{ isRtl ? 'الصور والملفات' : 'Images & Files' }}</label>
-                <div class="border-2 border-dashed border-gray-200 rounded-xl p-4 text-center hover:border-cyan-300 transition-all cursor-pointer relative">
+                <div class="border-2 border-dashed border-gray-200 rounded-xl p-4 text-center hover:border-slate-300 transition-all cursor-pointer relative">
                     <input type="file" multiple accept="image/*,video/*,.pdf,.doc,.docx" @change="handleFileSelect" class="absolute inset-0 opacity-0 cursor-pointer" />
                     <svg class="w-8 h-8 text-gray-300 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                     <p class="text-xs text-gray-400">{{ isRtl ? 'اسحب الملفات أو اضغط للرفع' : 'Drag files or click to upload' }}</p>
@@ -1010,7 +1010,7 @@ const selectedToothTreatments = computed(() => selectedTooth.value ? getToothTre
 
         <div class="px-6 py-4 bg-gray-50 border-t flex gap-3 justify-end">
             <button @click="showEntryModal=false" class="px-5 py-2.5 border-2 border-gray-200 rounded-xl text-sm font-medium text-gray-600 hover:bg-white transition-all">{{ isRtl ? 'إلغاء' : 'Cancel' }}</button>
-            <button @click="saveEntry" :disabled="savingEntry" class="px-6 py-2.5 bg-gradient-to-r from-cyan-600 to-teal-600 text-white rounded-xl text-sm font-semibold hover:from-cyan-700 hover:to-teal-700 disabled:opacity-50 transition-all shadow-lg shadow-cyan-600/20 flex items-center gap-2">
+            <button @click="saveEntry" :disabled="savingEntry" class="px-6 py-2.5 bg-gradient-to-r from-[#1B365D] to-emerald-600 text-white rounded-xl text-sm font-semibold hover:from-[#1B365D] hover:to-emerald-700 disabled:opacity-50 transition-all shadow-lg shadow-[#1B365D]/20 flex items-center gap-2">
                 <svg v-if="savingEntry" class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" /><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
                 {{ isRtl ? 'حفظ السجل' : 'Save Entry' }}
             </button>
@@ -1065,13 +1065,13 @@ const selectedToothTreatments = computed(() => selectedTooth.value ? getToothTre
 .dental-number-cell { width: 26px; text-align: center; font-size: 9px; font-weight: 700; font-family: ui-monospace, monospace; color: #9CA3AF; cursor: pointer; padding: 2px 0; border-radius: 4px; transition: all 0.2s; flex-shrink: 0; }
 @media (min-width: 640px) { .dental-number-cell { width: 32px; font-size: 10px; } }
 @media (min-width: 768px) { .dental-number-cell { width: 38px; font-size: 11px; } }
-.dental-number-cell:hover, .dental-number-active { color: #0891b2; background: rgba(8, 145, 178, 0.08); }
-.dental-center-line { width: 1px; align-self: stretch; background: linear-gradient(to bottom, transparent, #0891b2, transparent); opacity: 0.3; margin: 0 4px; flex-shrink: 0; }
+.dental-number-cell:hover, .dental-number-active { color: #1B365D; background: rgba(8, 145, 178, 0.08); }
+.dental-center-line { width: 1px; align-self: stretch; background: linear-gradient(to bottom, transparent, #1B365D, transparent); opacity: 0.3; margin: 0 4px; flex-shrink: 0; }
 @media (min-width: 640px) { .dental-center-line { margin: 0 6px; } }
 .dental-center-line.short { height: 20px; align-self: center; }
 .dental-gum-line { height: 3px; margin: 0 8px; border-radius: 2px; }
-.upper-gum { background: linear-gradient(90deg, transparent, #FDA4AF, #FB7185, #FDA4AF, transparent); opacity: 0.5; }
-.lower-gum { background: linear-gradient(90deg, transparent, #FDA4AF, #FB7185, #FDA4AF, transparent); opacity: 0.5; }
+.upper-gum { background: linear-gradient(90deg, transparent, #FDA4AF, #D4B57E, #FDA4AF, transparent); opacity: 0.5; }
+.lower-gum { background: linear-gradient(90deg, transparent, #FDA4AF, #D4B57E, #FDA4AF, transparent); opacity: 0.5; }
 .dental-tooltip { position: absolute; left: 50%; transform: translateX(-50%); background: #1F2937; color: white; font-size: 10px; padding: 4px 10px; border-radius: 8px; white-space: nowrap; z-index: 30; pointer-events: none; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
 .dental-tooltip.above { bottom: calc(100% + 6px); }
 .dental-tooltip.above::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 4px solid transparent; border-top-color: #1F2937; }

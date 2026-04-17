@@ -107,9 +107,10 @@ const selectedXray = ref(null);
     <AdminLayout :title="$t('a_patient_xrays')">
         <div class="space-y-6">
             <!-- Hero Header -->
-            <div class="dental-hero-enter relative overflow-hidden rounded-2xl bg-gradient-to-br from-cyan-600 via-cyan-700 to-teal-800 p-6 sm:p-7">
+            <div class="dental-hero-enter relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] p-6 sm:p-7">
+                <div class="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-[#C4A265] to-transparent"></div>
                 <div class="absolute -top-12 ltr:-right-12 rtl:-left-12 w-48 h-48 bg-white/10 rounded-full blur-3xl"></div>
-                <div class="absolute -bottom-8 ltr:left-20 rtl:right-20 w-32 h-32 bg-teal-400/10 rounded-full blur-2xl"></div>
+                <div class="absolute -bottom-8 ltr:left-20 rtl:right-20 w-32 h-32 bg-emerald-400/10 rounded-full blur-2xl"></div>
 
                 <div class="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div class="flex items-center gap-3">
@@ -117,15 +118,15 @@ const selectedXray = ref(null);
                             <svg class="w-5 h-5 text-white rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
                         </Link>
                         <div>
-                            <p class="text-cyan-200/80 text-xs font-semibold tracking-wider uppercase">{{ $t('a_patient_xrays') }}</p>
+                            <p class="text-slate-200/80 text-xs font-semibold tracking-wider uppercase">{{ $t('a_patient_xrays') }}</p>
                             <h1 class="text-xl sm:text-2xl font-bold text-white mt-0.5">{{ patient.full_name }}</h1>
-                            <p class="text-cyan-100/60 text-xs mt-0.5">{{ patient.file_number }}</p>
+                            <p class="text-slate-100/60 text-xs mt-0.5">{{ patient.file_number }}</p>
                         </div>
                     </div>
                     <div class="flex items-center gap-2">
                         <button
                             @click="showUploadForm = !showUploadForm"
-                            class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 bg-white text-cyan-700 hover:bg-cyan-50 shadow-lg shadow-black/10"
+                            class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 bg-white text-[#1B365D] hover:bg-slate-50 shadow-lg shadow-black/10"
                         >
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
@@ -134,7 +135,7 @@ const selectedXray = ref(null);
                         </button>
                         <div class="bg-white/10 backdrop-blur-sm rounded-xl px-4 py-2.5 border border-white/10 text-center">
                             <p class="text-xl font-bold text-white">{{ xrays?.length || 0 }}</p>
-                            <p class="text-[10px] text-cyan-200/60">{{ locale === 'ar' ? 'صور' : 'Images' }}</p>
+                            <p class="text-[10px] text-slate-200/60">{{ locale === 'ar' ? 'صور' : 'Images' }}</p>
                         </div>
                     </div>
                 </div>
@@ -150,7 +151,7 @@ const selectedXray = ref(null);
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_xray_type') }} *</label>
                             <select
                                 v-model="form.type"
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-cyan-200 focus:border-transparent"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent"
                             >
                                 <option value="">{{ $t('a_select_type') }}</option>
                                 <option v-for="xType in xrayTypes" :key="xType.value || xType" :value="xType.value || xType">
@@ -161,14 +162,14 @@ const selectedXray = ref(null);
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_tooth_number') }}</label>
-                            <input v-model="form.tooth_number" type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-cyan-200 focus:border-transparent" />
+                            <input v-model="form.tooth_number" type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent" />
                             <p v-if="errors.tooth_number" class="mt-1 text-sm text-red-600">{{ errors.tooth_number }}</p>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_doctor') }}</label>
                             <select
                                 v-model="form.doctor_id"
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-cyan-200 focus:border-transparent"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent"
                             >
                                 <option value="">{{ $t('a_select_doctor') }}</option>
                                 <option v-for="doc in doctors" :key="doc.id" :value="doc.id">
@@ -186,33 +187,33 @@ const selectedXray = ref(null);
                                 type="file"
                                 accept="image/*"
                                 @change="handleFileChange"
-                                class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-cyan-50 file:text-cyan-700 hover:file:bg-cyan-100"
+                                class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-slate-50 file:text-[#1B365D] hover:file:bg-slate-100"
                             />
                             <p v-if="errors.image" class="mt-1 text-sm text-red-600">{{ errors.image }}</p>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_taken_date') }}</label>
-                            <input v-model="form.taken_date" type="date" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-cyan-200 focus:border-transparent" />
+                            <input v-model="form.taken_date" type="date" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent" />
                             <p v-if="errors.taken_date" class="mt-1 text-sm text-red-600">{{ errors.taken_date }}</p>
                         </div>
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_findings') }}</label>
-                        <textarea v-model="form.findings" rows="2" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-cyan-200 focus:border-transparent"></textarea>
+                        <textarea v-model="form.findings" rows="2" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent"></textarea>
                         <p v-if="errors.findings" class="mt-1 text-sm text-red-600">{{ errors.findings }}</p>
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_notes') }}</label>
-                        <textarea v-model="form.notes" rows="2" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-cyan-200 focus:border-transparent"></textarea>
+                        <textarea v-model="form.notes" rows="2" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent"></textarea>
                     </div>
 
                     <div class="flex items-center gap-3">
                         <button
                             type="submit"
                             :disabled="processing"
-                            class="px-6 py-2.5 rounded-lg text-white font-medium text-sm transition bg-cyan-600 hover:bg-cyan-700 disabled:opacity-50"
+                            class="px-6 py-2.5 rounded-lg text-white font-medium text-sm transition bg-[#1B365D] hover:bg-[#1B365D] disabled:opacity-50"
                         >
                             {{ processing ? $t('a_uploading') : $t('a_upload_xray') }}
                         </button>
@@ -226,8 +227,8 @@ const selectedXray = ref(null);
             <!-- Gallery Grid -->
             <div v-if="!xrays || xrays.length === 0" class="dental-card-enter bg-white rounded-2xl shadow-sm border border-gray-100/80 p-12 text-center" style="animation-delay:0.15s">
                 <div class="flex flex-col items-center">
-                    <div class="w-16 h-16 rounded-2xl bg-cyan-50 flex items-center justify-center mb-3">
-                        <svg class="w-8 h-8 text-cyan-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-16 h-16 rounded-2xl bg-slate-50 flex items-center justify-center mb-3">
+                        <svg class="w-8 h-8 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
                     </div>
@@ -252,7 +253,7 @@ const selectedXray = ref(null);
                             </svg>
                         </div>
                         <div class="absolute top-2 start-2">
-                            <span class="px-2 py-1 bg-cyan-600 text-white rounded text-xs font-medium">
+                            <span class="px-2 py-1 bg-[#1B365D] text-white rounded text-xs font-medium">
                                 {{ $t('a_xray_type_' + xray.type) }}
                             </span>
                         </div>

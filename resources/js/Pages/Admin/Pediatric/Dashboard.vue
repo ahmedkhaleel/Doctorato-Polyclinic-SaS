@@ -100,7 +100,7 @@ const statCards = computed(() => [
         key: 'totalPatients',
         labelEn: 'Total Patients', labelAr: 'إجمالي المرضى',
         value: animatedStats.value.totalPatients,
-        gradient: 'from-emerald-500 to-green-600',
+        gradient: 'from-emerald-500 to-emerald-600',
         lightBg: 'bg-emerald-50 dark:bg-emerald-900/20', iconColor: 'text-emerald-500',
         icon: 'users', link: '/admin/pediatric/patients',
     },
@@ -108,16 +108,16 @@ const statCards = computed(() => [
         key: 'totalVisits',
         labelEn: 'Total Visits', labelAr: 'إجمالي الزيارات',
         value: animatedStats.value.totalVisits,
-        gradient: 'from-green-500 to-teal-600',
-        lightBg: 'bg-green-50', iconColor: 'text-green-500',
+        gradient: 'from-emerald-500 to-emerald-600',
+        lightBg: 'bg-emerald-50', iconColor: 'text-emerald-500',
         icon: 'clipboard', link: '/admin/pediatric/visits',
     },
     {
         key: 'thisMonthVisits',
         labelEn: 'This Month', labelAr: 'هذا الشهر',
         value: animatedStats.value.thisMonthVisits,
-        gradient: 'from-teal-500 to-cyan-600',
-        lightBg: 'bg-teal-50', iconColor: 'text-teal-500',
+        gradient: 'from-emerald-500 to-[#1B365D]',
+        lightBg: 'bg-emerald-50', iconColor: 'text-emerald-500',
         icon: 'calendar',
         subtitle: props.stats?.lastMonthVisits != null ? (isRtl.value ? `الشهر الماضي: ${props.stats.lastMonthVisits}` : `Last month: ${props.stats.lastMonthVisits}`) : null,
     },
@@ -125,15 +125,15 @@ const statCards = computed(() => [
         key: 'vaccineCoverage',
         labelEn: 'Vaccine Coverage', labelAr: 'تغطية التطعيم',
         value: animatedStats.value.vaccineCoverage + '%',
-        gradient: 'from-blue-500 to-indigo-600',
-        lightBg: 'bg-blue-50', iconColor: 'text-blue-500',
+        gradient: 'from-[#1B365D] to-[#1B365D]',
+        lightBg: 'bg-slate-50', iconColor: 'text-[#1B365D]',
         icon: 'shield', link: '/admin/pediatric/vaccinations',
     },
     {
         key: 'overdueVaccinations',
         labelEn: 'Overdue Vaccines', labelAr: 'تطعيمات متأخرة',
         value: animatedStats.value.overdueVaccinations,
-        gradient: 'from-red-500 to-rose-600',
+        gradient: 'from-red-500 to-[#C4A265]',
         lightBg: 'bg-red-50', iconColor: 'text-red-500',
         icon: 'alert',
         isAlert: (props.stats?.overdueVaccinations ?? 0) > 0,
@@ -142,7 +142,7 @@ const statCards = computed(() => [
         key: 'growthAlerts',
         labelEn: 'Growth Alerts', labelAr: 'تنبيهات النمو',
         value: animatedStats.value.growthAlerts,
-        gradient: 'from-amber-500 to-orange-600',
+        gradient: 'from-amber-500 to-[#C4A265]',
         lightBg: 'bg-amber-50', iconColor: 'text-amber-500',
         icon: 'chart', link: '/admin/pediatric/growth',
     },
@@ -164,12 +164,12 @@ const ageLabels = {
 };
 
 const ageColors = {
-    newborn: { bar: 'from-pink-400 to-pink-500', bg: 'bg-pink-100', text: 'text-pink-700' },
-    infant: { bar: 'from-rose-400 to-rose-500', bg: 'bg-rose-100', text: 'text-rose-700' },
+    newborn: { bar: 'from-[#D4B57E] to-[#C4A265]', bg: 'bg-[#F5E7C8]/60', text: 'text-[#8B7043]' },
+    infant: { bar: 'from-[#D4B57E] to-[#C4A265]', bg: 'bg-[#F5E7C8]/60', text: 'text-[#8B7043]' },
     toddler: { bar: 'from-amber-400 to-amber-500', bg: 'bg-amber-100', text: 'text-amber-700' },
-    preschool: { bar: 'from-green-400 to-green-500', bg: 'bg-green-100', text: 'text-green-700' },
-    school: { bar: 'from-blue-400 to-blue-500', bg: 'bg-blue-100', text: 'text-blue-700' },
-    adolescent: { bar: 'from-violet-400 to-violet-500', bg: 'bg-violet-100', text: 'text-violet-700' },
+    preschool: { bar: 'from-emerald-400 to-emerald-500', bg: 'bg-emerald-100', text: 'text-emerald-700' },
+    school: { bar: 'from-[#2C4E7A] to-[#1B365D]', bg: 'bg-slate-100', text: 'text-[#1B365D]' },
+    adolescent: { bar: 'from-[#2C4E7A] to-[#1B365D]', bg: 'bg-slate-100', text: 'text-[#1B365D]' },
 };
 
 const maxAgeCount = computed(() => {
@@ -209,10 +209,10 @@ const screeningEntries = computed(() => {
 
 /* ── Allergy color map ─────────────────────────────────── */
 const allergyColors = {
-    food: 'bg-orange-50 text-orange-700 border-orange-200 ring-orange-100',
+    food: 'bg-[#F5E7C8]/40 text-[#8B7043] border-[#F5E7C8] ring-[#F5E7C8]/60',
     drug: 'bg-red-50 text-red-700 border-red-200 ring-red-100',
-    environmental: 'bg-green-50 text-green-700 border-green-200 ring-green-100',
-    contact: 'bg-blue-50 text-blue-700 border-blue-200 ring-blue-100',
+    environmental: 'bg-emerald-50 text-emerald-700 border-emerald-200 ring-emerald-100',
+    contact: 'bg-slate-50 text-[#1B365D] border-slate-200 ring-slate-100',
     insect: 'bg-amber-50 text-amber-700 border-amber-200 ring-amber-100',
     other: 'bg-gray-50 text-gray-700 border-gray-200 ring-gray-100',
 };
@@ -248,12 +248,13 @@ const hoveredBar = ref(null);
 
 <template>
     <div class="space-y-8 pb-12">
-        <!-- ── Hero Header ───────────────────────────────────── -->
-        <div class="ped-hero relative overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-600 via-green-600 to-teal-500 p-8 md:p-10">
-            <!-- Animated background shapes -->
-            <div class="ped-shape-1 absolute -top-20 ltr:-right-20 rtl:-left-20 w-72 h-72 bg-green-400/20 rounded-full blur-3xl"></div>
-            <div class="ped-shape-2 absolute -bottom-16 ltr:-left-16 rtl:-right-16 w-56 h-56 bg-emerald-300/15 rounded-full blur-3xl"></div>
-            <div class="ped-shape-3 absolute top-1/2 ltr:right-1/4 rtl:left-1/4 w-40 h-40 bg-white/5 rounded-full blur-2xl"></div>
+        <!-- ── Hero Header (Doctorato navy/gold) ─────────────── -->
+        <div class="ped-hero relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] shadow-xl p-8 md:p-10">
+            <!-- Gold orbs -->
+            <div class="ped-shape-1 pointer-events-none absolute -top-20 -end-20 w-72 h-72 bg-[#C4A265]/20 rounded-full blur-3xl"></div>
+            <div class="ped-shape-2 pointer-events-none absolute -bottom-16 start-1/3 w-56 h-56 bg-[#C4A265]/10 rounded-full blur-3xl"></div>
+            <div class="ped-shape-3 pointer-events-none absolute top-1/2 end-1/4 w-40 h-40 bg-white/5 rounded-full blur-2xl"></div>
+            <div class="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-[#C4A265] to-transparent"></div>
 
             <!-- Decorative floating elements -->
             <div class="absolute ltr:right-8 rtl:left-8 top-6 opacity-[0.08]">
@@ -271,21 +272,25 @@ const hoveredBar = ref(null);
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div class="ped-hero-up">
                         <div class="flex items-center gap-3 mb-2">
-                            <div class="w-12 h-12 rounded-2xl bg-white/15 backdrop-blur-sm flex items-center justify-center ring-1 ring-white/20 shadow-lg">
-                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z" /></svg>
+                            <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-[#C4A265] to-[#8B7043] flex items-center justify-center shadow-lg shadow-black/20">
+                                <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z" /></svg>
                             </div>
                             <div>
-                                <h1 class="text-2xl md:text-3xl font-bold text-white tracking-tight">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <span class="h-[3px] w-6 bg-[#C4A265] rounded-full"></span>
+                                    <span class="text-[10px] font-bold text-[#C4A265] tracking-[0.25em] uppercase">{{ isRtl ? 'طب الأطفال' : 'PEDIATRICS' }}</span>
+                                </div>
+                                <h1 class="text-2xl md:text-3xl font-extrabold text-white tracking-tight">
                                     {{ isRtl ? 'إحصائيات طب الأطفال' : 'Pediatrics Analytics' }}
                                 </h1>
-                                <p class="text-green-100/70 text-sm mt-0.5">
+                                <p class="text-white/70 text-sm mt-1 max-w-xl">
                                     {{ isRtl ? 'نظرة شاملة على بيانات طب الأطفال' : 'Comprehensive overview of pediatric data' }}
                                 </p>
                             </div>
                         </div>
                     </div>
                     <div class="flex flex-wrap items-center gap-2.5 ped-hero-up" style="animation-delay: 0.15s">
-                        <Link href="/admin/pediatric/patients" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-green-700 bg-white/90 hover:bg-white shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-sm hover:-translate-y-0.5">
+                        <Link href="/admin/pediatric/patients" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-[#1B365D] bg-[#C4A265] hover:bg-[#D4B57E] shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" /></svg>
                             {{ isRtl ? 'المرضى' : 'Patients' }}
                         </Link>
@@ -355,7 +360,7 @@ const hoveredBar = ref(null);
                     {{ isRtl ? 'اتجاه الزيارات الشهرية' : 'Monthly Visits Trend' }}
                 </h2>
                 <div class="flex items-center gap-2 text-xs text-gray-400">
-                    <span class="w-3 h-3 rounded-sm bg-gradient-to-t from-emerald-500 to-green-400"></span>
+                    <span class="w-3 h-3 rounded-sm bg-gradient-to-t from-emerald-500 to-emerald-400"></span>
                     {{ isRtl ? 'الزيارات' : 'Visits' }}
                 </div>
             </div>
@@ -378,7 +383,7 @@ const hoveredBar = ref(null);
                         <div class="absolute left-1/2 -translate-x-1/2 -bottom-1 w-2 h-2 bg-gray-900 rotate-45"></div>
                     </div>
                     <div
-                        class="ped-bar w-full rounded-t-xl bg-gradient-to-t from-emerald-500 to-green-400 group-hover:from-emerald-400 group-hover:to-green-300 transition-all duration-500 relative"
+                        class="ped-bar w-full rounded-t-xl bg-gradient-to-t from-emerald-500 to-emerald-400 group-hover:from-emerald-400 group-hover:to-emerald-300 transition-all duration-500 relative"
                         :style="{ height: `${Math.max((month.count / maxMonthlyCount) * 100, 4)}%`, transitionDelay: `${i * 40}ms` }"
                     >
                         <div class="absolute inset-0 bg-white/0 group-hover:bg-white/10 rounded-t-xl transition-all duration-300"></div>
@@ -434,11 +439,11 @@ const hoveredBar = ref(null);
                         <div class="relative w-36 h-36">
                             <svg class="w-36 h-36 -rotate-90" viewBox="0 0 100 100">
                                 <circle cx="50" cy="50" r="38" fill="none" stroke="#EFF6FF" stroke-width="14" />
-                                <circle cx="50" cy="50" r="38" fill="none" stroke="#3B82F6" stroke-width="14"
+                                <circle cx="50" cy="50" r="38" fill="none" stroke="#1B365D" stroke-width="14"
                                     stroke-linecap="round"
                                     :stroke-dasharray="`${malePercent * 2.388} 238.8`"
                                     class="ped-donut-animate" />
-                                <circle cx="50" cy="50" r="38" fill="none" stroke="#EC4899" stroke-width="14"
+                                <circle cx="50" cy="50" r="38" fill="none" stroke="#C4A265" stroke-width="14"
                                     stroke-linecap="round"
                                     :stroke-dasharray="`${femalePercent * 2.388} 238.8`"
                                     :stroke-dashoffset="`${-malePercent * 2.388}`"
@@ -452,20 +457,20 @@ const hoveredBar = ref(null);
                     </div>
                     <!-- Legend -->
                     <div class="grid grid-cols-2 gap-3">
-                        <div class="text-center p-3 rounded-xl bg-blue-50/50 border border-blue-100">
+                        <div class="text-center p-3 rounded-xl bg-slate-50/50 border border-slate-100">
                             <div class="flex items-center justify-center gap-1.5 mb-1">
-                                <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
-                                <span class="text-xs font-semibold text-blue-700">{{ isRtl ? 'ذكور' : 'Male' }}</span>
+                                <span class="w-2.5 h-2.5 rounded-full bg-[#1B365D]"></span>
+                                <span class="text-xs font-semibold text-[#1B365D]">{{ isRtl ? 'ذكور' : 'Male' }}</span>
                             </div>
-                            <p class="text-lg font-bold text-blue-600">{{ malePercent }}%</p>
+                            <p class="text-lg font-bold text-[#1B365D]">{{ malePercent }}%</p>
                             <p class="text-[11px] text-gray-400">{{ genderDistribution?.male ?? 0 }}</p>
                         </div>
-                        <div class="text-center p-3 rounded-xl bg-pink-50/50 border border-pink-100">
+                        <div class="text-center p-3 rounded-xl bg-[#F5E7C8]/40/50 border border-[#F5E7C8]/60">
                             <div class="flex items-center justify-center gap-1.5 mb-1">
-                                <span class="w-2.5 h-2.5 rounded-full bg-pink-500"></span>
-                                <span class="text-xs font-semibold text-pink-700">{{ isRtl ? 'إناث' : 'Female' }}</span>
+                                <span class="w-2.5 h-2.5 rounded-full bg-[#C4A265]"></span>
+                                <span class="text-xs font-semibold text-[#8B7043]">{{ isRtl ? 'إناث' : 'Female' }}</span>
                             </div>
-                            <p class="text-lg font-bold text-pink-600">{{ femalePercent }}%</p>
+                            <p class="text-lg font-bold text-[#C4A265]">{{ femalePercent }}%</p>
                             <p class="text-[11px] text-gray-400">{{ genderDistribution?.female ?? 0 }}</p>
                         </div>
                     </div>
@@ -504,12 +509,12 @@ const hoveredBar = ref(null);
                         </div>
                     </div>
                     <div class="space-y-3 flex-1">
-                        <div class="flex items-center justify-between p-2.5 rounded-xl bg-green-50/50 border border-green-100">
+                        <div class="flex items-center justify-between p-2.5 rounded-xl bg-emerald-50/50 border border-emerald-100">
                             <div class="flex items-center gap-2">
-                                <span class="w-2.5 h-2.5 rounded-full bg-green-500"></span>
+                                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
                                 <span class="text-sm text-gray-600">{{ isRtl ? 'تم التطعيم' : 'Given' }}</span>
                             </div>
-                            <span class="text-sm font-bold text-green-700">{{ stats?.givenVaccinations ?? 0 }}</span>
+                            <span class="text-sm font-bold text-emerald-700">{{ stats?.givenVaccinations ?? 0 }}</span>
                         </div>
                         <div class="flex items-center justify-between p-2.5 rounded-xl bg-gray-50 border border-gray-100">
                             <div class="flex items-center gap-2">
@@ -549,18 +554,18 @@ const hoveredBar = ref(null);
                         </thead>
                         <tbody>
                             <tr v-for="(v, vi) in topVaccines" :key="v.vaccine_name"
-                                class="border-b border-gray-50 hover:bg-green-50/30 transition-colors duration-200 group">
-                                <td class="py-3 font-medium text-gray-800 group-hover:text-green-700 transition-colors">{{ v.vaccine_name }}</td>
-                                <td class="py-3 text-center text-green-600 font-bold tabular-nums">{{ v.given_count }}</td>
+                                class="border-b border-gray-50 hover:bg-emerald-50/30 transition-colors duration-200 group">
+                                <td class="py-3 font-medium text-gray-800 group-hover:text-emerald-700 transition-colors">{{ v.vaccine_name }}</td>
+                                <td class="py-3 text-center text-emerald-600 font-bold tabular-nums">{{ v.given_count }}</td>
                                 <td class="py-3 text-center text-gray-500 tabular-nums hidden sm:table-cell">{{ v.total }}</td>
                                 <td class="py-3 text-center">
                                     <div class="inline-flex items-center gap-1.5">
                                         <div class="w-16 h-1.5 rounded-full bg-gray-100 overflow-hidden hidden sm:block">
-                                            <div class="h-full rounded-full bg-green-500 transition-all duration-500"
+                                            <div class="h-full rounded-full bg-emerald-500 transition-all duration-500"
                                                 :style="{ width: `${v.total > 0 ? (v.given_count / v.total) * 100 : 0}%` }"></div>
                                         </div>
                                         <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold"
-                                            :class="v.total > 0 && (v.given_count / v.total) >= 0.8 ? 'bg-green-50 text-green-700' : 'bg-amber-50 text-amber-700'">
+                                            :class="v.total > 0 && (v.given_count / v.total) >= 0.8 ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'">
                                             {{ v.total > 0 ? Math.round((v.given_count / v.total) * 100) : 0 }}%
                                         </span>
                                     </div>
@@ -606,16 +611,16 @@ const hoveredBar = ref(null);
                     </div>
                 </div>
             </div>
-            <div class="group bg-white rounded-2xl shadow-sm border border-orange-100/80 p-6 hover:shadow-lg hover:border-orange-200 transition-all duration-300 relative overflow-hidden">
-                <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-orange-400 to-red-500"></div>
-                <div class="absolute -bottom-6 ltr:-right-6 rtl:-left-6 w-24 h-24 bg-orange-50 rounded-full opacity-50 group-hover:scale-125 transition-transform duration-500"></div>
+            <div class="group bg-white rounded-2xl shadow-sm border border-[#F5E7C8]/60/80 p-6 hover:shadow-lg hover:border-[#F5E7C8] transition-all duration-300 relative overflow-hidden">
+                <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#D4B57E] to-red-500"></div>
+                <div class="absolute -bottom-6 ltr:-right-6 rtl:-left-6 w-24 h-24 bg-[#F5E7C8]/40 rounded-full opacity-50 group-hover:scale-125 transition-transform duration-500"></div>
                 <div class="relative flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-2xl bg-orange-50 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                        <svg class="w-6 h-6 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 4.5h14.25M3 9h9.75M3 13.5h5.25m5.25-.75L17.25 9m0 0L21 12.75M17.25 9v12" /></svg>
+                    <div class="w-12 h-12 rounded-2xl bg-[#F5E7C8]/40 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                        <svg class="w-6 h-6 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 4.5h14.25M3 9h9.75M3 13.5h5.25m5.25-.75L17.25 9m0 0L21 12.75M17.25 9v12" /></svg>
                     </div>
                     <div>
                         <p class="text-sm font-medium text-gray-500">{{ isRtl ? 'تأخر النمو' : 'Stunted Growth' }}</p>
-                        <p class="text-3xl font-bold text-orange-600 tabular-nums">{{ growthAlerts?.stunted ?? 0 }}</p>
+                        <p class="text-3xl font-bold text-[#C4A265] tabular-nums">{{ growthAlerts?.stunted ?? 0 }}</p>
                     </div>
                 </div>
             </div>
@@ -705,12 +710,12 @@ const hoveredBar = ref(null);
                     </div>
                     <!-- Mini stacked bar -->
                     <div class="h-3 rounded-full overflow-hidden flex bg-gray-100 mb-3">
-                        <div v-if="s.normal" class="bg-green-400 transition-all duration-700" :style="{ width: `${(s.normal / s.total) * 100}%` }"></div>
+                        <div v-if="s.normal" class="bg-emerald-400 transition-all duration-700" :style="{ width: `${(s.normal / s.total) * 100}%` }"></div>
                         <div v-if="s.abnormal" class="bg-red-400 transition-all duration-700" :style="{ width: `${(s.abnormal / s.total) * 100}%` }"></div>
                         <div v-if="s.pending" class="bg-amber-300 transition-all duration-700" :style="{ width: `${(s.pending / s.total) * 100}%` }"></div>
                     </div>
                     <div class="flex items-center gap-3 text-[11px]">
-                        <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-green-400"></span> {{ s.normal }}</span>
+                        <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-400"></span> {{ s.normal }}</span>
                         <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-red-400"></span> {{ s.abnormal }}</span>
                         <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-amber-300"></span> {{ s.pending }}</span>
                     </div>
@@ -729,15 +734,15 @@ const hoveredBar = ref(null);
                 </h2>
                 <div class="space-y-3" v-if="chronicStats?.length">
                     <div v-for="(c, ci) in chronicStats" :key="c.condition_type"
-                        class="group flex items-center gap-3 p-2 rounded-xl hover:bg-violet-50/30 transition-all duration-200">
+                        class="group flex items-center gap-3 p-2 rounded-xl hover:bg-slate-50/30 transition-all duration-200">
                         <span class="text-sm text-gray-600 w-32 shrink-0 truncate capitalize font-medium">{{ c.condition_type }}</span>
                         <div class="flex-1 h-7 bg-gray-50 rounded-full overflow-hidden">
                             <div
-                                class="h-full rounded-full bg-gradient-to-r from-violet-400 to-purple-500 transition-all duration-700 ease-out group-hover:from-violet-300 group-hover:to-purple-400"
+                                class="h-full rounded-full bg-gradient-to-r from-[#2C4E7A] to-[#1B365D] transition-all duration-700 ease-out group-hover:from-slate-300 group-hover:to-[#2C4E7A]"
                                 :style="{ width: `${Math.max((c.count / maxChronicCount) * 100, 4)}%` }"
                             ></div>
                         </div>
-                        <span class="text-sm font-bold text-violet-700 tabular-nums w-10 text-center bg-violet-50 rounded-lg px-2 py-1">{{ c.count }}</span>
+                        <span class="text-sm font-bold text-[#1B365D] tabular-nums w-10 text-center bg-slate-50 rounded-lg px-2 py-1">{{ c.count }}</span>
                     </div>
                 </div>
                 <div v-else class="flex flex-col items-center justify-center py-8 text-gray-300">
@@ -755,19 +760,19 @@ const hoveredBar = ref(null);
                     <div
                         v-for="(doc, i) in topDoctors"
                         :key="doc.doctor_id"
-                        class="group flex items-center gap-3 p-3 rounded-2xl hover:bg-gradient-to-r hover:from-green-50/50 hover:to-transparent border border-transparent hover:border-green-100 transition-all duration-300"
+                        class="group flex items-center gap-3 p-3 rounded-2xl hover:bg-gradient-to-r hover:from-emerald-50/50 hover:to-transparent border border-transparent hover:border-emerald-100 transition-all duration-300"
                     >
                         <div class="w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold shrink-0 shadow-sm transition-transform duration-300 group-hover:scale-110"
-                            :class="i === 0 ? 'bg-gradient-to-br from-amber-100 to-amber-200 text-amber-700 ring-1 ring-amber-300' : i === 1 ? 'bg-gradient-to-br from-gray-100 to-gray-200 text-gray-600 ring-1 ring-gray-300' : i === 2 ? 'bg-gradient-to-br from-orange-100 to-orange-200 text-orange-700 ring-1 ring-orange-300' : 'bg-gray-50 text-gray-500 ring-1 ring-gray-200'">
+                            :class="i === 0 ? 'bg-gradient-to-br from-amber-100 to-amber-200 text-amber-700 ring-1 ring-amber-300' : i === 1 ? 'bg-gradient-to-br from-gray-100 to-gray-200 text-gray-600 ring-1 ring-gray-300' : i === 2 ? 'bg-gradient-to-br from-[#F5E7C8]/60 to-[#F5E7C8] text-[#8B7043] ring-1 ring-[#E6CF9A]' : 'bg-gray-50 text-gray-500 ring-1 ring-gray-200'">
                             {{ i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : i + 1 }}
                         </div>
                         <div class="flex-1 min-w-0">
-                            <p class="text-sm font-semibold text-gray-800 truncate group-hover:text-green-700 transition-colors">
+                            <p class="text-sm font-semibold text-gray-800 truncate group-hover:text-emerald-700 transition-colors">
                                 {{ isRtl ? doc.doctor?.name_ar : doc.doctor?.name_en }}
                             </p>
                         </div>
                         <div class="text-end shrink-0">
-                            <span class="text-sm font-bold text-green-600 tabular-nums">{{ doc.visit_count }}</span>
+                            <span class="text-sm font-bold text-emerald-600 tabular-nums">{{ doc.visit_count }}</span>
                             <span class="text-[11px] text-gray-400 block">{{ isRtl ? 'زيارة' : 'visits' }}</span>
                         </div>
                     </div>
@@ -792,7 +797,7 @@ const hoveredBar = ref(null);
 
             <!-- Revenue Stat Cards -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-                <div class="rounded-xl border border-emerald-100 bg-gradient-to-br from-emerald-50 to-green-50 p-4">
+                <div class="rounded-xl border border-emerald-100 bg-gradient-to-br from-emerald-50 to-emerald-50 p-4">
                     <p class="text-xs font-medium text-emerald-600">{{ isRtl ? 'إيرادات هذا الشهر' : 'Revenue This Month' }}</p>
                     <p class="text-2xl font-bold text-emerald-700 mt-1 tabular-nums">{{ (stats?.revenueThisMonth ?? 0).toLocaleString() }} <span class="text-sm font-normal text-emerald-500">{{ isRtl ? 'د.ع' : 'IQD' }}</span></p>
                     <div v-if="stats?.revenueLastMonth" class="mt-1.5">
@@ -804,17 +809,17 @@ const hoveredBar = ref(null);
                         </span>
                     </div>
                 </div>
-                <div class="rounded-xl border border-blue-100 bg-gradient-to-br from-blue-50 to-indigo-50 p-4">
-                    <p class="text-xs font-medium text-blue-600">{{ isRtl ? 'المحصّل هذا الشهر' : 'Collected This Month' }}</p>
-                    <p class="text-2xl font-bold text-blue-700 mt-1 tabular-nums">{{ (stats?.collectedThisMonth ?? 0).toLocaleString() }} <span class="text-sm font-normal text-blue-500">{{ isRtl ? 'د.ع' : 'IQD' }}</span></p>
+                <div class="rounded-xl border border-slate-100 bg-gradient-to-br from-slate-50 to-slate-50 p-4">
+                    <p class="text-xs font-medium text-[#1B365D]">{{ isRtl ? 'المحصّل هذا الشهر' : 'Collected This Month' }}</p>
+                    <p class="text-2xl font-bold text-[#1B365D] mt-1 tabular-nums">{{ (stats?.collectedThisMonth ?? 0).toLocaleString() }} <span class="text-sm font-normal text-[#1B365D]">{{ isRtl ? 'د.ع' : 'IQD' }}</span></p>
                     <div v-if="stats?.revenueThisMonth > 0" class="mt-1.5">
-                        <div class="w-full bg-blue-100 rounded-full h-1.5">
-                            <div class="bg-blue-500 h-1.5 rounded-full transition-all duration-700" :style="{ width: Math.min(100, Math.round((stats.collectedThisMonth / stats.revenueThisMonth) * 100)) + '%' }"></div>
+                        <div class="w-full bg-slate-100 rounded-full h-1.5">
+                            <div class="bg-[#1B365D] h-1.5 rounded-full transition-all duration-700" :style="{ width: Math.min(100, Math.round((stats.collectedThisMonth / stats.revenueThisMonth) * 100)) + '%' }"></div>
                         </div>
-                        <span class="text-[10px] text-blue-500 mt-0.5">{{ Math.round((stats.collectedThisMonth / stats.revenueThisMonth) * 100) }}% {{ isRtl ? 'محصّل' : 'collected' }}</span>
+                        <span class="text-[10px] text-[#1B365D] mt-0.5">{{ Math.round((stats.collectedThisMonth / stats.revenueThisMonth) * 100) }}% {{ isRtl ? 'محصّل' : 'collected' }}</span>
                     </div>
                 </div>
-                <div class="rounded-xl border border-amber-100 bg-gradient-to-br from-amber-50 to-orange-50 p-4">
+                <div class="rounded-xl border border-amber-100 bg-gradient-to-br from-amber-50 to-[#F5E7C8]/40 p-4">
                     <p class="text-xs font-medium text-amber-600">{{ isRtl ? 'الشهر الماضي' : 'Last Month' }}</p>
                     <p class="text-2xl font-bold text-amber-700 mt-1 tabular-nums">{{ (stats?.revenueLastMonth ?? 0).toLocaleString() }} <span class="text-sm font-normal text-amber-500">{{ isRtl ? 'د.ع' : 'IQD' }}</span></p>
                 </div>
@@ -826,7 +831,7 @@ const hoveredBar = ref(null);
                 <div class="flex items-end gap-1.5 h-32">
                     <div v-for="(m, mi) in revenueTrend" :key="mi"
                         class="flex-1 flex flex-col items-center gap-1 group relative">
-                        <div class="w-full rounded-t-md bg-gradient-to-t from-emerald-500 to-green-400 ped-bar transition-all duration-200 group-hover:from-emerald-600 group-hover:to-green-500"
+                        <div class="w-full rounded-t-md bg-gradient-to-t from-emerald-500 to-emerald-400 ped-bar transition-all duration-200 group-hover:from-emerald-600 group-hover:to-emerald-500"
                             :style="{ height: Math.max(4, (m.total / Math.max(...revenueTrend.map(r => r.total), 1)) * 100) + '%', animationDelay: `${mi * 60}ms` }">
                         </div>
                         <span class="text-[9px] text-gray-400 truncate w-full text-center">{{ m.monthShort }}</span>
@@ -875,7 +880,7 @@ const hoveredBar = ref(null);
                 <h2 class="text-lg font-bold text-gray-900">
                     {{ isRtl ? 'التسجيلات الأخيرة' : 'Recent Registrations' }}
                 </h2>
-                <Link href="/admin/pediatric/patients" class="inline-flex items-center gap-1.5 text-sm font-semibold text-green-600 hover:text-green-700 transition group">
+                <Link href="/admin/pediatric/patients" class="inline-flex items-center gap-1.5 text-sm font-semibold text-emerald-600 hover:text-emerald-700 transition group">
                     {{ isRtl ? 'عرض الكل' : 'View All' }}
                     <svg class="w-4 h-4 ltr:group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
                 </Link>
@@ -894,9 +899,9 @@ const hoveredBar = ref(null);
                     </thead>
                     <tbody>
                         <tr v-for="(p, pi) in recentPatients" :key="p.id"
-                            class="border-b border-gray-50 hover:bg-green-50/20 transition-colors duration-200 group">
+                            class="border-b border-gray-50 hover:bg-emerald-50/20 transition-colors duration-200 group">
                             <td class="py-3.5">
-                                <Link :href="`/admin/patients/${p.id}`" class="font-semibold text-gray-800 hover:text-green-600 group-hover:text-green-600 transition-colors">
+                                <Link :href="`/admin/patients/${p.id}`" class="font-semibold text-gray-800 hover:text-emerald-600 group-hover:text-emerald-600 transition-colors">
                                     {{ p.full_name }}
                                 </Link>
                             </td>
@@ -905,7 +910,7 @@ const hoveredBar = ref(null);
                             </td>
                             <td class="py-3.5 text-center hidden md:table-cell">
                                 <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold"
-                                    :class="p.gender === 'male' ? 'bg-blue-50 text-blue-600' : 'bg-pink-50 text-pink-600'">
+                                    :class="p.gender === 'male' ? 'bg-slate-50 text-[#1B365D]' : 'bg-[#F5E7C8]/40 text-[#C4A265]'">
                                     {{ p.gender === 'male' ? (isRtl ? 'ذكر' : 'M') : (isRtl ? 'أنثى' : 'F') }}
                                 </span>
                             </td>
@@ -921,7 +926,7 @@ const hoveredBar = ref(null);
             <div v-else class="flex flex-col items-center justify-center py-12 text-gray-300">
                 <svg class="w-16 h-16 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" /></svg>
                 <p class="text-sm font-medium">{{ isRtl ? 'لا يوجد مرضى مسجلين بعد' : 'No patients registered yet' }}</p>
-                <Link href="/admin/patients/create" class="mt-3 text-sm font-semibold text-green-600 hover:text-green-700 transition">
+                <Link href="/admin/patients/create" class="mt-3 text-sm font-semibold text-emerald-600 hover:text-emerald-700 transition">
                     {{ isRtl ? 'تسجيل مريض جديد' : 'Register First Patient' }} &rarr;
                 </Link>
             </div>

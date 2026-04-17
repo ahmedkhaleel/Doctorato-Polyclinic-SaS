@@ -167,20 +167,21 @@ const durations = [
     <AdminLayout :title="locale === 'ar' ? 'قوالب الوصفات الطبية' : 'Prescription Templates'">
         <div class="space-y-6">
             <!-- Hero Header -->
-            <div class="dental-hero-enter relative overflow-hidden rounded-2xl bg-gradient-to-br from-cyan-600 via-cyan-700 to-teal-800 p-7">
-                <div class="absolute -top-16 ltr:-right-16 rtl:-left-16 w-56 h-56 bg-cyan-400/20 rounded-full blur-3xl"></div>
-                <div class="absolute -bottom-12 ltr:-left-12 rtl:-right-12 w-40 h-40 bg-teal-300/15 rounded-full blur-3xl"></div>
+            <div class="dental-hero-enter relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] p-7">
+                <div class="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-[#C4A265] to-transparent"></div>
+                <div class="absolute -top-16 ltr:-right-16 rtl:-left-16 w-56 h-56 bg-[#2C4E7A]/20 rounded-full blur-3xl"></div>
+                <div class="absolute -bottom-12 ltr:-left-12 rtl:-right-12 w-40 h-40 bg-emerald-300/15 rounded-full blur-3xl"></div>
                 <div class="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div class="flex items-center gap-3">
-                        <div class="w-11 h-11 rounded-xl bg-white/15 backdrop-blur-sm flex items-center justify-center ring-1 ring-white/20">
+                        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-[#C4A265] to-[#8B7043] flex items-center justify-center shadow-lg">
                             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
                         </div>
                         <div>
                             <h1 class="text-xl md:text-2xl font-bold text-white">{{ locale === 'ar' ? 'قوالب وصفات الأسنان' : 'Dental Prescription Templates' }}</h1>
-                            <p class="text-cyan-100/80 text-sm mt-0.5">{{ locale === 'ar' ? 'إدارة قوالب الوصفات الطبية الجاهزة لعلاجات الأسنان' : 'Manage ready-made prescription templates for dental treatments' }}</p>
+                            <p class="text-slate-100/80 text-sm mt-0.5">{{ locale === 'ar' ? 'إدارة قوالب الوصفات الطبية الجاهزة لعلاجات الأسنان' : 'Manage ready-made prescription templates for dental treatments' }}</p>
                         </div>
                     </div>
-                    <button @click="openCreate" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-cyan-700 bg-white/90 hover:bg-white shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-sm">
+                    <button @click="openCreate" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-[#1B365D] bg-[#C4A265] hover:bg-[#D4B57E] shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-sm">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                         {{ locale === 'ar' ? 'قالب جديد' : 'New Template' }}
                     </button>
@@ -192,9 +193,9 @@ const durations = [
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div class="relative">
                         <svg class="absolute top-1/2 -translate-y-1/2 ltr:left-4 rtl:right-4 w-4.5 h-4.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                        <input v-model="search" type="text" :placeholder="locale === 'ar' ? 'بحث بالاسم...' : 'Search by name...'" class="w-full ltr:pl-11 rtl:pr-11 ltr:pr-4 rtl:pl-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-cyan-200/60 focus:border-cyan-300 transition-all duration-200" />
+                        <input v-model="search" type="text" :placeholder="locale === 'ar' ? 'بحث بالاسم...' : 'Search by name...'" class="w-full ltr:pl-11 rtl:pr-11 ltr:pr-4 rtl:pl-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-slate-200/60 focus:border-slate-300 transition-all duration-200" />
                     </div>
-                    <select v-model="typeFilter" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-cyan-200/60 focus:border-cyan-300 transition-all duration-200">
+                    <select v-model="typeFilter" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-slate-200/60 focus:border-slate-300 transition-all duration-200">
                         <option value="">{{ locale === 'ar' ? 'جميع أنواع العلاج' : 'All Treatment Types' }}</option>
                         <option v-for="tt in treatmentTypes" :key="tt" :value="tt">{{ getTypeLabel(tt) }}</option>
                     </select>
@@ -222,24 +223,24 @@ const durations = [
                                     <div class="text-xs text-gray-400">{{ locale === 'ar' ? tpl.name_en : tpl.name_ar }}</div>
                                 </td>
                                 <td class="px-4 py-3 text-sm">
-                                    <span v-if="tpl.treatment_type" class="px-2 py-1 bg-cyan-50 text-cyan-700 rounded-full text-xs font-medium">{{ getTypeLabel(tpl.treatment_type) }}</span>
+                                    <span v-if="tpl.treatment_type" class="px-2 py-1 bg-slate-50 text-[#1B365D] rounded-full text-xs font-medium">{{ getTypeLabel(tpl.treatment_type) }}</span>
                                     <span v-else class="text-gray-400 text-xs">-</span>
                                 </td>
                                 <td class="px-4 py-3 text-sm text-center">
                                     <span class="inline-flex items-center justify-center w-7 h-7 bg-gray-100 rounded-full text-xs font-semibold text-gray-700">{{ tpl.items_count }}</span>
                                 </td>
                                 <td class="px-4 py-3 text-center">
-                                    <span v-if="tpl.auto_apply" class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">{{ locale === 'ar' ? 'تلقائي' : 'Auto' }}</span>
+                                    <span v-if="tpl.auto_apply" class="px-2 py-1 bg-emerald-100 text-emerald-700 rounded-full text-xs font-medium">{{ locale === 'ar' ? 'تلقائي' : 'Auto' }}</span>
                                     <span v-else class="px-2 py-1 bg-gray-100 text-gray-500 rounded-full text-xs font-medium">{{ locale === 'ar' ? 'يدوي' : 'Manual' }}</span>
                                 </td>
                                 <td class="px-4 py-3 text-center">
-                                    <span :class="tpl.is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-600'" class="px-2 py-1 rounded-full text-xs font-medium">
+                                    <span :class="tpl.is_active ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-600'" class="px-2 py-1 rounded-full text-xs font-medium">
                                         {{ tpl.is_active ? (locale === 'ar' ? 'مفعّل' : 'Active') : (locale === 'ar' ? 'معطّل' : 'Inactive') }}
                                     </span>
                                 </td>
                                 <td class="px-4 py-3 text-center">
                                     <div class="flex items-center justify-center gap-2">
-                                        <button @click="openEdit(tpl)" class="text-cyan-600 hover:text-cyan-800 text-sm font-medium">
+                                        <button @click="openEdit(tpl)" class="text-[#1B365D] hover:text-[#0F2444] text-sm font-medium">
                                             {{ locale === 'ar' ? 'تعديل' : 'Edit' }}
                                         </button>
                                         <button @click="confirmDeleteTemplate(tpl)" class="text-red-500 hover:text-red-700 text-sm font-medium">
@@ -260,7 +261,7 @@ const durations = [
                     <p class="text-sm text-gray-500">{{ $t('a_showing') }} {{ templates.from }} {{ $t('a_to') }} {{ templates.to }} {{ $t('a_of') }} {{ templates.total }} {{ $t('a_results') }}</p>
                     <nav class="flex ltr:space-x-1 rtl:space-x-reverse rtl:space-x-1">
                         <template v-for="link in templates.links" :key="link.label">
-                            <Link v-if="link.url" :href="link.url" v-html="link.label" class="px-3 py-1 text-sm rounded border transition" :class="link.active ? 'bg-cyan-600 text-white border-transparent' : 'text-gray-600 border-gray-300 hover:bg-gray-50'" preserve-state />
+                            <Link v-if="link.url" :href="link.url" v-html="link.label" class="px-3 py-1 text-sm rounded border transition" :class="link.active ? 'bg-[#1B365D] text-white border-transparent' : 'text-gray-600 border-gray-300 hover:bg-gray-50'" preserve-state />
                             <span v-else v-html="link.label" class="px-3 py-1 text-sm text-gray-400" />
                         </template>
                     </nav>
@@ -288,33 +289,33 @@ const durations = [
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ locale === 'ar' ? 'الاسم (عربي)' : 'Name (Arabic)' }} *</label>
-                                <input v-model="form.name_ar" type="text" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-cyan-200 focus:border-transparent" />
+                                <input v-model="form.name_ar" type="text" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent" />
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ locale === 'ar' ? 'الاسم (إنجليزي)' : 'Name (English)' }} *</label>
-                                <input v-model="form.name_en" type="text" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-cyan-200 focus:border-transparent" />
+                                <input v-model="form.name_en" type="text" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent" />
                             </div>
                         </div>
 
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ locale === 'ar' ? 'نوع العلاج' : 'Treatment Type' }}</label>
-                                <select v-model="form.treatment_type" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-cyan-200 focus:border-transparent">
+                                <select v-model="form.treatment_type" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent">
                                     <option value="">{{ locale === 'ar' ? 'عام' : 'General' }}</option>
                                     <option v-for="tt in treatmentTypes" :key="tt" :value="tt">{{ getTypeLabel(tt) }}</option>
                                 </select>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ locale === 'ar' ? 'الترتيب' : 'Sort Order' }}</label>
-                                <input v-model="form.sort_order" type="number" min="0" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-cyan-200 focus:border-transparent" />
+                                <input v-model="form.sort_order" type="number" min="0" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent" />
                             </div>
                             <div class="flex items-end gap-6 pb-1">
                                 <label class="flex items-center gap-2 cursor-pointer">
-                                    <input v-model="form.auto_apply" type="checkbox" class="w-4 h-4 text-cyan-600 border-gray-300 rounded focus:ring-cyan-500" />
+                                    <input v-model="form.auto_apply" type="checkbox" class="w-4 h-4 text-[#1B365D] border-gray-300 rounded focus:ring-[#C4A265]" />
                                     <span class="text-sm text-gray-700">{{ locale === 'ar' ? 'تطبيق تلقائي' : 'Auto Apply' }}</span>
                                 </label>
                                 <label class="flex items-center gap-2 cursor-pointer">
-                                    <input v-model="form.is_active" type="checkbox" class="w-4 h-4 text-cyan-600 border-gray-300 rounded focus:ring-cyan-500" />
+                                    <input v-model="form.is_active" type="checkbox" class="w-4 h-4 text-[#1B365D] border-gray-300 rounded focus:ring-[#C4A265]" />
                                     <span class="text-sm text-gray-700">{{ locale === 'ar' ? 'مفعّل' : 'Active' }}</span>
                                 </label>
                             </div>
@@ -323,22 +324,22 @@ const durations = [
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ locale === 'ar' ? 'التشخيص (عربي)' : 'Diagnosis (Arabic)' }}</label>
-                                <input v-model="form.diagnosis_ar" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-cyan-200 focus:border-transparent" />
+                                <input v-model="form.diagnosis_ar" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent" />
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ locale === 'ar' ? 'التشخيص (إنجليزي)' : 'Diagnosis (English)' }}</label>
-                                <input v-model="form.diagnosis_en" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-cyan-200 focus:border-transparent" />
+                                <input v-model="form.diagnosis_en" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent" />
                             </div>
                         </div>
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ locale === 'ar' ? 'ملاحظات (عربي)' : 'Notes (Arabic)' }}</label>
-                                <textarea v-model="form.notes_ar" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-cyan-200 focus:border-transparent" />
+                                <textarea v-model="form.notes_ar" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent" />
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ locale === 'ar' ? 'ملاحظات (إنجليزي)' : 'Notes (English)' }}</label>
-                                <textarea v-model="form.notes_en" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-cyan-200 focus:border-transparent" />
+                                <textarea v-model="form.notes_en" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent" />
                             </div>
                         </div>
 
@@ -346,7 +347,7 @@ const durations = [
                         <div>
                             <div class="flex items-center justify-between mb-3">
                                 <h3 class="text-sm font-semibold text-gray-800">{{ locale === 'ar' ? 'الأدوية' : 'Medications' }} *</h3>
-                                <button type="button" @click="addItem" class="text-sm text-cyan-600 hover:text-cyan-800 font-medium">
+                                <button type="button" @click="addItem" class="text-sm text-[#1B365D] hover:text-[#0F2444] font-medium">
                                     + {{ locale === 'ar' ? 'إضافة دواء' : 'Add Medication' }}
                                 </button>
                             </div>
@@ -360,25 +361,25 @@ const durations = [
                                 </div>
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                     <div class="sm:col-span-2">
-                                        <input v-model="item.medication_name" type="text" required :placeholder="locale === 'ar' ? 'اسم الدواء *' : 'Medication Name *'" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-cyan-200 focus:border-transparent" />
+                                        <input v-model="item.medication_name" type="text" required :placeholder="locale === 'ar' ? 'اسم الدواء *' : 'Medication Name *'" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent" />
                                     </div>
                                     <div>
-                                        <input v-model="item.dosage" type="text" :placeholder="locale === 'ar' ? 'الجرعة' : 'Dosage'" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-cyan-200 focus:border-transparent" />
+                                        <input v-model="item.dosage" type="text" :placeholder="locale === 'ar' ? 'الجرعة' : 'Dosage'" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent" />
                                     </div>
                                     <div>
-                                        <select v-model="item.frequency" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-cyan-200 focus:border-transparent">
+                                        <select v-model="item.frequency" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent">
                                             <option value="">{{ locale === 'ar' ? 'التكرار' : 'Frequency' }}</option>
                                             <option v-for="f in frequencies" :key="f" :value="f">{{ f }}</option>
                                         </select>
                                     </div>
                                     <div>
-                                        <select v-model="item.duration" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-cyan-200 focus:border-transparent">
+                                        <select v-model="item.duration" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent">
                                             <option value="">{{ locale === 'ar' ? 'المدة' : 'Duration' }}</option>
                                             <option v-for="d in durations" :key="d" :value="d">{{ d }}</option>
                                         </select>
                                     </div>
                                     <div>
-                                        <input v-model="item.instructions_ar" type="text" :placeholder="locale === 'ar' ? 'تعليمات (عربي)' : 'Instructions (AR)'" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-cyan-200 focus:border-transparent" />
+                                        <input v-model="item.instructions_ar" type="text" :placeholder="locale === 'ar' ? 'تعليمات (عربي)' : 'Instructions (AR)'" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent" />
                                     </div>
                                 </div>
                             </div>
@@ -397,7 +398,7 @@ const durations = [
                         <button @click="showModal = false" type="button" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition">
                             {{ locale === 'ar' ? 'إلغاء' : 'Cancel' }}
                         </button>
-                        <button @click="submitForm" :disabled="form.processing" class="px-6 py-2 text-sm font-medium text-white bg-cyan-600 rounded-lg hover:bg-cyan-700 transition disabled:opacity-50">
+                        <button @click="submitForm" :disabled="form.processing" class="px-6 py-2 text-sm font-medium text-white bg-[#1B365D] rounded-lg hover:bg-[#1B365D] transition disabled:opacity-50">
                             {{ form.processing ? (locale === 'ar' ? 'جاري الحفظ...' : 'Saving...') : (locale === 'ar' ? 'حفظ' : 'Save') }}
                         </button>
                     </div>

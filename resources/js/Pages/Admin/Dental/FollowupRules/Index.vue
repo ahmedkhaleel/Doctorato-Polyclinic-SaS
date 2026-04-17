@@ -132,9 +132,9 @@ function executeSeedDefaults() {
 
 const followupStatusConfig = {
     pending: { bg: 'bg-amber-50', text: 'text-amber-700', label: { ar: 'معلق', en: 'Pending' } },
-    booking_created: { bg: 'bg-blue-50', text: 'text-blue-700', label: { ar: 'تم الحجز', en: 'Booked' } },
+    booking_created: { bg: 'bg-slate-50', text: 'text-[#1B365D]', label: { ar: 'تم الحجز', en: 'Booked' } },
     sms_sent: { bg: 'bg-emerald-50', text: 'text-emerald-700', label: { ar: 'تم الإرسال', en: 'SMS Sent' } },
-    completed: { bg: 'bg-green-50', text: 'text-green-700', label: { ar: 'مكتمل', en: 'Completed' } },
+    completed: { bg: 'bg-emerald-50', text: 'text-emerald-700', label: { ar: 'مكتمل', en: 'Completed' } },
     cancelled: { bg: 'bg-red-50', text: 'text-red-700', label: { ar: 'ملغي', en: 'Cancelled' } },
 };
 
@@ -154,17 +154,18 @@ const activeTab = ref('rules');
     <AdminLayout :title="isRtl ? 'جدولة المتابعة التلقائية' : 'Auto Follow-up Scheduling'">
         <div class="space-y-6">
             <!-- Hero -->
-            <div class="dental-hero-enter relative overflow-hidden rounded-2xl bg-gradient-to-br from-cyan-600 via-cyan-700 to-teal-800 p-7">
-                <div class="absolute -top-16 ltr:-right-16 rtl:-left-16 w-56 h-56 bg-cyan-400/20 rounded-full blur-3xl"></div>
-                <div class="absolute -bottom-12 ltr:-left-12 rtl:-right-12 w-40 h-40 bg-teal-300/15 rounded-full blur-3xl"></div>
+            <div class="dental-hero-enter relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] p-7">
+                <div class="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-[#C4A265] to-transparent"></div>
+                <div class="absolute -top-16 ltr:-right-16 rtl:-left-16 w-56 h-56 bg-[#2C4E7A]/20 rounded-full blur-3xl"></div>
+                <div class="absolute -bottom-12 ltr:-left-12 rtl:-right-12 w-40 h-40 bg-emerald-300/15 rounded-full blur-3xl"></div>
                 <div class="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div class="flex items-center gap-3">
-                        <div class="w-11 h-11 rounded-xl bg-white/15 backdrop-blur-sm flex items-center justify-center ring-1 ring-white/20">
+                        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-[#C4A265] to-[#8B7043] flex items-center justify-center shadow-lg">
                             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                         </div>
                         <div>
                             <h1 class="text-xl md:text-2xl font-bold text-white">{{ isRtl ? 'جدولة المتابعة التلقائية' : 'Auto Follow-up Scheduling' }}</h1>
-                            <p class="text-cyan-100/80 text-sm mt-0.5">{{ isRtl ? 'إعداد قواعد متابعة تلقائية حسب نوع العلاج' : 'Configure automatic follow-up rules per treatment type' }}</p>
+                            <p class="text-slate-100/80 text-sm mt-0.5">{{ isRtl ? 'إعداد قواعد متابعة تلقائية حسب نوع العلاج' : 'Configure automatic follow-up rules per treatment type' }}</p>
                         </div>
                     </div>
                     <div class="flex items-center gap-3">
@@ -196,7 +197,7 @@ const activeTab = ref('rules');
                 </div>
                 <div class="dental-card-enter bg-white rounded-2xl p-5 shadow-sm border border-gray-100/80" style="animation-delay:0.2s">
                     <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">{{ isRtl ? 'خلال أسبوع' : 'This Week' }}</p>
-                    <p class="text-2xl font-bold text-cyan-600 mt-1">{{ stats.upcoming_week }}</p>
+                    <p class="text-2xl font-bold text-[#1B365D] mt-1">{{ stats.upcoming_week }}</p>
                 </div>
                 <div class="dental-card-enter bg-white rounded-2xl p-5 shadow-sm border border-gray-100/80" style="animation-delay:0.25s">
                     <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">{{ isRtl ? 'الحالة' : 'Status' }}</p>
@@ -212,13 +213,13 @@ const activeTab = ref('rules');
             <!-- Tabs -->
             <div class="dental-card-enter flex items-center gap-1 bg-white rounded-xl p-1 border border-gray-100 shadow-sm" style="animation-delay:0.3s">
                 <button @click="activeTab = 'rules'"
-                    :class="activeTab === 'rules' ? 'bg-cyan-600 text-white shadow-md' : 'text-gray-500 hover:bg-gray-100'"
+                    :class="activeTab === 'rules' ? 'bg-[#1B365D] text-white shadow-md' : 'text-gray-500 hover:bg-gray-100'"
                     class="flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium transition-all">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                     {{ isRtl ? 'القواعد' : 'Rules' }} ({{ rules.length }})
                 </button>
                 <button @click="activeTab = 'upcoming'"
-                    :class="activeTab === 'upcoming' ? 'bg-cyan-600 text-white shadow-md' : 'text-gray-500 hover:bg-gray-100'"
+                    :class="activeTab === 'upcoming' ? 'bg-[#1B365D] text-white shadow-md' : 'text-gray-500 hover:bg-gray-100'"
                     class="flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium transition-all">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                     {{ isRtl ? 'المتابعات القادمة' : 'Upcoming' }} ({{ upcomingFollowups.length }})
@@ -233,8 +234,8 @@ const activeTab = ref('rules');
                     <div class="flex items-start justify-between gap-4">
                         <div class="flex items-start gap-4 flex-1 min-w-0">
                             <!-- Treatment Type Badge -->
-                            <div class="w-12 h-12 rounded-xl bg-cyan-50 flex items-center justify-center shrink-0">
-                                <svg class="w-5 h-5 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            <div class="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center shrink-0">
+                                <svg class="w-5 h-5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                             </div>
                             <div class="min-w-0 flex-1">
                                 <div class="flex items-center gap-2 flex-wrap">
@@ -246,7 +247,7 @@ const activeTab = ref('rules');
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                         {{ formatDays(rule.followup_days) }}
                                     </span>
-                                    <span v-if="rule.auto_create_booking" class="flex items-center gap-1 text-blue-500">
+                                    <span v-if="rule.auto_create_booking" class="flex items-center gap-1 text-[#1B365D]">
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                                         {{ isRtl ? 'حجز تلقائي' : 'Auto-book' }}
                                     </span>
@@ -254,7 +255,7 @@ const activeTab = ref('rules');
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
                                         SMS
                                     </span>
-                                    <span v-if="rule.notify_doctor" class="flex items-center gap-1 text-violet-500">
+                                    <span v-if="rule.notify_doctor" class="flex items-center gap-1 text-[#1B365D]">
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
                                         {{ isRtl ? 'تنبيه الطبيب' : 'Doctor' }}
                                     </span>
@@ -262,7 +263,7 @@ const activeTab = ref('rules');
                             </div>
                         </div>
                         <div class="flex items-center gap-2 shrink-0">
-                            <button @click="openEdit(rule)" class="w-8 h-8 rounded-lg bg-gray-50 hover:bg-cyan-50 flex items-center justify-center text-gray-400 hover:text-cyan-600 transition">
+                            <button @click="openEdit(rule)" class="w-8 h-8 rounded-lg bg-gray-50 hover:bg-slate-50 flex items-center justify-center text-gray-400 hover:text-[#1B365D] transition">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
                             </button>
                             <button @click="toggleRule(rule)"
@@ -291,9 +292,9 @@ const activeTab = ref('rules');
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="f in upcomingFollowups" :key="f.id" class="border-b border-gray-50 hover:bg-cyan-50/30 transition-colors">
+                            <tr v-for="f in upcomingFollowups" :key="f.id" class="border-b border-gray-50 hover:bg-slate-50/30 transition-colors">
                                 <td class="px-5 py-4">
-                                    <Link v-if="f.patient" :href="`/admin/patients/${f.patient.id}`" class="text-sm font-medium text-gray-900 hover:text-cyan-600 transition">
+                                    <Link v-if="f.patient" :href="`/admin/patients/${f.patient.id}`" class="text-sm font-medium text-gray-900 hover:text-[#1B365D] transition">
                                         {{ f.patient.full_name }}
                                     </Link>
                                     <div v-if="f.patient" class="text-xs text-gray-400 font-mono mt-0.5">{{ f.patient.file_number }}</div>
@@ -302,7 +303,7 @@ const activeTab = ref('rules');
                                     <div class="text-sm text-gray-700">{{ isRtl ? f.rule?.label_ar : f.rule?.label_en }}</div>
                                     <div v-if="f.treatment" class="text-xs text-gray-400 mt-0.5">
                                         {{ treatmentLabel(f.treatment.treatment_type) }}
-                                        <span v-if="f.treatment.tooth_number" class="text-cyan-500 font-mono"> #{{ f.treatment.tooth_number }}</span>
+                                        <span v-if="f.treatment.tooth_number" class="text-[#1B365D] font-mono"> #{{ f.treatment.tooth_number }}</span>
                                     </div>
                                 </td>
                                 <td class="px-5 py-4">
@@ -316,7 +317,7 @@ const activeTab = ref('rules');
                                     </span>
                                 </td>
                                 <td class="px-5 py-4">
-                                    <span v-if="f.booking" class="text-xs text-blue-600 font-mono">{{ f.booking.booking_number }}</span>
+                                    <span v-if="f.booking" class="text-xs text-[#1B365D] font-mono">{{ f.booking.booking_number }}</span>
                                     <span v-else class="text-xs text-gray-300">-</span>
                                 </td>
                                 <td class="px-5 py-4 text-center">
@@ -358,8 +359,8 @@ const activeTab = ref('rules');
                     <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" @click="editingRule = null"></div>
                     <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6 space-y-5 z-10 max-h-[90vh] overflow-y-auto">
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-xl bg-cyan-50 flex items-center justify-center">
-                                <svg class="w-5 h-5 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                            <div class="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center">
+                                <svg class="w-5 h-5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
                             </div>
                             <div>
                                 <h3 class="text-lg font-bold text-gray-900">{{ isRtl ? 'تعديل القاعدة' : 'Edit Rule' }}</h3>
@@ -393,22 +394,22 @@ const activeTab = ref('rules');
 
                             <div class="space-y-3 pt-2">
                                 <label class="flex items-center gap-3 cursor-pointer group">
-                                    <input v-model="editForm.auto_create_booking" type="checkbox" class="w-4 h-4 text-cyan-600 border-gray-300 rounded focus:ring-cyan-500" />
+                                    <input v-model="editForm.auto_create_booking" type="checkbox" class="w-4 h-4 text-[#1B365D] border-gray-300 rounded focus:ring-[#C4A265]" />
                                     <div>
-                                        <span class="text-sm text-gray-700 font-medium group-hover:text-cyan-600 transition">{{ isRtl ? 'إنشاء حجز تلقائي' : 'Auto-create booking' }}</span>
+                                        <span class="text-sm text-gray-700 font-medium group-hover:text-[#1B365D] transition">{{ isRtl ? 'إنشاء حجز تلقائي' : 'Auto-create booking' }}</span>
                                         <p class="text-xs text-gray-400">{{ isRtl ? 'سيتم إنشاء حجز متابعة تلقائياً عند اكتمال العلاج' : 'Automatically creates a follow-up booking when treatment completes' }}</p>
                                     </div>
                                 </label>
                                 <label class="flex items-center gap-3 cursor-pointer group">
-                                    <input v-model="editForm.sms_patient" type="checkbox" class="w-4 h-4 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500" />
+                                    <input v-model="editForm.sms_patient" type="checkbox" class="w-4 h-4 text-emerald-600 border-gray-300 rounded focus:ring-[#C4A265]" />
                                     <div>
                                         <span class="text-sm text-gray-700 font-medium group-hover:text-emerald-600 transition">{{ isRtl ? 'إرسال SMS للمريض' : 'Send SMS to patient' }}</span>
                                         <p class="text-xs text-gray-400">{{ isRtl ? 'تنبيه المريض بموعد المتابعة عبر رسالة نصية' : 'Notify patient about follow-up date via SMS' }}</p>
                                     </div>
                                 </label>
                                 <label class="flex items-center gap-3 cursor-pointer group">
-                                    <input v-model="editForm.notify_doctor" type="checkbox" class="w-4 h-4 text-violet-600 border-gray-300 rounded focus:ring-violet-500" />
-                                    <span class="text-sm text-gray-700 font-medium group-hover:text-violet-600 transition">{{ isRtl ? 'تنبيه الطبيب' : 'Notify doctor' }}</span>
+                                    <input v-model="editForm.notify_doctor" type="checkbox" class="w-4 h-4 text-[#1B365D] border-gray-300 rounded focus:ring-[#C4A265]" />
+                                    <span class="text-sm text-gray-700 font-medium group-hover:text-[#1B365D] transition">{{ isRtl ? 'تنبيه الطبيب' : 'Notify doctor' }}</span>
                                 </label>
                                 <label class="flex items-center gap-3 cursor-pointer group">
                                     <input v-model="editForm.notify_secretary" type="checkbox" class="w-4 h-4 text-amber-600 border-gray-300 rounded focus:ring-amber-500" />
@@ -427,7 +428,7 @@ const activeTab = ref('rules');
                                     {{ isRtl ? 'إلغاء' : 'Cancel' }}
                                 </button>
                                 <button type="submit" :disabled="editForm.processing"
-                                    class="px-6 py-2 text-sm font-semibold text-white bg-gradient-to-r from-cyan-500 to-teal-500 rounded-xl hover:from-cyan-600 hover:to-teal-600 disabled:opacity-50 transition-all shadow-lg shadow-cyan-200/40">
+                                    class="px-6 py-2 text-sm font-semibold text-white bg-gradient-to-r from-[#1B365D] to-emerald-500 rounded-xl hover:from-[#1B365D] hover:to-emerald-600 disabled:opacity-50 transition-all shadow-lg shadow-slate-200/40">
                                     {{ editForm.processing ? (isRtl ? 'جاري الحفظ...' : 'Saving...') : (isRtl ? 'حفظ التغييرات' : 'Save Changes') }}
                                 </button>
                             </div>
@@ -488,6 +489,6 @@ const activeTab = ref('rules');
     background: #fff;
     outline: none;
     box-shadow: 0 0 0 2px rgba(34, 211, 238, 0.3);
-    border-color: #67e8f9;
+    border-color: #C4A265;
 }
 </style>

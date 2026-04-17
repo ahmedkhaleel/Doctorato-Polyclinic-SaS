@@ -58,18 +58,19 @@ function clearFilters() {
     <AdminLayout :title="$t('a_dental_xrays')">
         <div class="space-y-6">
             <!-- ── Hero Header ───────────────────────────────────── -->
-            <div class="dental-hero-enter relative overflow-hidden rounded-2xl bg-gradient-to-br from-cyan-600 via-cyan-700 to-teal-800 p-7">
-                <div class="absolute -top-16 ltr:-right-16 rtl:-left-16 w-56 h-56 bg-cyan-400/20 rounded-full blur-3xl"></div>
-                <div class="absolute -bottom-12 ltr:-left-12 rtl:-right-12 w-40 h-40 bg-teal-300/15 rounded-full blur-3xl"></div>
+            <div class="dental-hero-enter relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] p-7">
+                <div class="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-[#C4A265] to-transparent"></div>
+                <div class="absolute -top-16 ltr:-right-16 rtl:-left-16 w-56 h-56 bg-[#2C4E7A]/20 rounded-full blur-3xl"></div>
+                <div class="absolute -bottom-12 ltr:-left-12 rtl:-right-12 w-40 h-40 bg-emerald-300/15 rounded-full blur-3xl"></div>
 
                 <div class="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div class="flex items-center gap-3">
-                        <div class="w-11 h-11 rounded-xl bg-white/15 backdrop-blur-sm flex items-center justify-center ring-1 ring-white/20">
+                        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-[#C4A265] to-[#8B7043] flex items-center justify-center shadow-lg">
                             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                         </div>
                         <div>
                             <h1 class="text-xl md:text-2xl font-bold text-white">{{ $t('a_dental_xrays') }}</h1>
-                            <p class="text-cyan-100/80 text-sm mt-0.5">{{ $t('a_dental_xrays_desc') }}</p>
+                            <p class="text-slate-100/80 text-sm mt-0.5">{{ $t('a_dental_xrays_desc') }}</p>
                         </div>
                     </div>
                     <div class="flex items-center gap-3">
@@ -84,7 +85,7 @@ function clearFilters() {
                         <div class="flex items-center bg-white/15 backdrop-blur-sm rounded-xl p-1 ring-1 ring-white/20">
                             <button
                                 @click="viewMode = 'table'"
-                                :class="viewMode === 'table' ? 'bg-white/90 text-cyan-700 shadow-sm' : 'text-white/70 hover:text-white'"
+                                :class="viewMode === 'table' ? 'bg-white/90 text-[#1B365D] shadow-sm' : 'text-white/70 hover:text-white'"
                                 class="px-3 py-1.5 text-sm rounded-lg transition-all duration-200"
                             >
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -93,7 +94,7 @@ function clearFilters() {
                             </button>
                             <button
                                 @click="viewMode = 'grid'"
-                                :class="viewMode === 'grid' ? 'bg-white/90 text-cyan-700 shadow-sm' : 'text-white/70 hover:text-white'"
+                                :class="viewMode === 'grid' ? 'bg-white/90 text-[#1B365D] shadow-sm' : 'text-white/70 hover:text-white'"
                                 class="px-3 py-1.5 text-sm rounded-lg transition-all duration-200"
                             >
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -115,17 +116,17 @@ function clearFilters() {
                                 v-model="search"
                                 type="text"
                                 :placeholder="$t('a_search_patient_tooth_notes')"
-                                class="w-full ltr:pl-11 rtl:pr-11 ltr:pr-4 rtl:pl-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-cyan-200/60 focus:border-cyan-300 transition-all duration-200"
+                                class="w-full ltr:pl-11 rtl:pr-11 ltr:pr-4 rtl:pl-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-slate-200/60 focus:border-slate-300 transition-all duration-200"
                             />
                         </div>
                         <button
                             @click="showFilters = !showFilters"
                             class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium border transition-all duration-200"
-                            :class="showFilters || hasActiveFilters ? 'bg-cyan-50 border-cyan-200 text-cyan-700' : 'bg-white border-gray-200 text-gray-600 hover:border-gray-300'"
+                            :class="showFilters || hasActiveFilters ? 'bg-slate-50 border-slate-200 text-[#1B365D]' : 'bg-white border-gray-200 text-gray-600 hover:border-gray-300'"
                         >
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" /></svg>
                             {{ locale === 'ar' ? 'فلاتر' : 'Filters' }}
-                            <span v-if="hasActiveFilters" class="w-2 h-2 rounded-full bg-cyan-500 animate-pulse"></span>
+                            <span v-if="hasActiveFilters" class="w-2 h-2 rounded-full bg-[#1B365D] animate-pulse"></span>
                         </button>
                     </div>
 
@@ -180,22 +181,22 @@ function clearFilters() {
                             <tr
                                 v-for="(xray, idx) in xrays.data"
                                 :key="xray.id"
-                                class="dental-row-enter border-b border-gray-50 hover:bg-cyan-50/30 transition-colors duration-200"
+                                class="dental-row-enter border-b border-gray-50 hover:bg-slate-50/30 transition-colors duration-200"
                                 :style="{ animationDelay: `${0.3 + idx * 0.04}s` }"
                             >
                                 <td class="px-5 py-4 text-sm">
-                                    <Link v-if="xray.patient" :href="`/admin/patients/${xray.patient.id}`" class="font-medium text-gray-900 hover:text-cyan-600 transition-colors">
+                                    <Link v-if="xray.patient" :href="`/admin/patients/${xray.patient.id}`" class="font-medium text-gray-900 hover:text-[#1B365D] transition-colors">
                                         {{ xray.patient.full_name }}
                                     </Link>
                                     <div class="text-xs text-gray-400 mt-0.5 font-mono">{{ xray.patient?.file_number }}</div>
                                 </td>
                                 <td class="px-5 py-4 text-sm">
-                                    <span class="inline-flex items-center px-2.5 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-semibold">
+                                    <span class="inline-flex items-center px-2.5 py-1 bg-slate-50 text-[#1B365D] rounded-full text-xs font-semibold">
                                         {{ $t('a_xray_type_' + xray.type) }}
                                     </span>
                                 </td>
                                 <td class="px-5 py-4 text-sm text-center">
-                                    <span v-if="xray.tooth_number" class="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-cyan-50 text-cyan-700 font-mono font-bold text-sm">
+                                    <span v-if="xray.tooth_number" class="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-slate-50 text-[#1B365D] font-mono font-bold text-sm">
                                         {{ xray.tooth_number }}
                                     </span>
                                     <span v-else class="text-gray-400">-</span>
@@ -205,7 +206,7 @@ function clearFilters() {
                                         <img
                                             :src="xray.image_url"
                                             :alt="$t('a_xray')"
-                                            class="w-14 h-14 object-cover rounded-xl border-2 border-gray-100 cursor-pointer hover:border-cyan-300 hover:shadow-lg transition-all duration-200"
+                                            class="w-14 h-14 object-cover rounded-xl border-2 border-gray-100 cursor-pointer hover:border-slate-300 hover:shadow-lg transition-all duration-200"
                                         />
                                     </div>
                                     <div v-else class="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-gray-50 border border-gray-100">
@@ -220,7 +221,7 @@ function clearFilters() {
                                     <Link
                                         v-if="xray.patient"
                                         :href="`/admin/dental/xrays/patient/${xray.patient.id}`"
-                                        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-cyan-700 bg-cyan-50 hover:bg-cyan-100 transition-colors duration-200"
+                                        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-[#1B365D] bg-slate-50 hover:bg-slate-100 transition-colors duration-200"
                                     >
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14" /></svg>
                                         {{ $t('a_view_all') }}
@@ -251,7 +252,7 @@ function clearFilters() {
                                 :href="link.url"
                                 v-html="link.label"
                                 class="px-3 py-1.5 text-sm rounded-lg border transition-all duration-200"
-                                :class="link.active ? 'bg-cyan-600 text-white border-transparent shadow-sm' : 'text-gray-600 border-gray-200 hover:bg-cyan-50 hover:border-cyan-200 hover:text-cyan-700'"
+                                :class="link.active ? 'bg-[#1B365D] text-white border-transparent shadow-sm' : 'text-gray-600 border-gray-200 hover:bg-slate-50 hover:border-slate-200 hover:text-[#1B365D]'"
                                 preserve-state
                             />
                             <span v-else v-html="link.label" class="px-3 py-1.5 text-sm text-gray-400" />
@@ -272,7 +273,7 @@ function clearFilters() {
                     <div
                         v-for="(xray, idx) in xrays.data"
                         :key="xray.id"
-                        class="dental-card-enter group bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden hover:shadow-lg hover:border-cyan-200/50 hover:-translate-y-1 transition-all duration-300"
+                        class="dental-card-enter group bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden hover:shadow-lg hover:border-slate-200/50 hover:-translate-y-1 transition-all duration-300"
                         :style="{ animationDelay: `${0.3 + idx * 0.06}s` }"
                     >
                         <div class="aspect-square bg-gray-100 relative overflow-hidden">
@@ -288,18 +289,18 @@ function clearFilters() {
                                 </svg>
                             </div>
                             <div class="absolute top-3 start-3">
-                                <span class="inline-flex items-center px-2.5 py-1 bg-cyan-600/90 backdrop-blur-sm text-white rounded-lg text-xs font-semibold shadow-sm">
+                                <span class="inline-flex items-center px-2.5 py-1 bg-[#1B365D]/90 backdrop-blur-sm text-white rounded-lg text-xs font-semibold shadow-sm">
                                     {{ $t('a_xray_type_' + xray.type) }}
                                 </span>
                             </div>
                             <div v-if="xray.tooth_number" class="absolute top-3 end-3">
-                                <span class="inline-flex items-center justify-center w-8 h-8 bg-white/90 backdrop-blur-sm text-cyan-700 rounded-lg text-xs font-bold font-mono shadow-sm">
+                                <span class="inline-flex items-center justify-center w-8 h-8 bg-white/90 backdrop-blur-sm text-[#1B365D] rounded-lg text-xs font-bold font-mono shadow-sm">
                                     {{ xray.tooth_number }}
                                 </span>
                             </div>
                         </div>
                         <div class="p-4">
-                            <div class="font-semibold text-sm text-gray-900 group-hover:text-cyan-700 transition-colors">
+                            <div class="font-semibold text-sm text-gray-900 group-hover:text-[#1B365D] transition-colors">
                                 {{ xray.patient?.full_name || '-' }}
                             </div>
                             <div class="text-xs text-gray-500 mt-1.5 flex items-center justify-between">
@@ -309,7 +310,7 @@ function clearFilters() {
                             <Link
                                 v-if="xray.patient"
                                 :href="`/admin/dental/xrays/patient/${xray.patient.id}`"
-                                class="inline-flex items-center gap-1.5 text-xs font-semibold text-cyan-600 hover:text-cyan-700 mt-3 transition-colors"
+                                class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#1B365D] hover:text-[#1B365D] mt-3 transition-colors"
                             >
                                 {{ $t('a_view_patient_xrays') }}
                                 <svg class="w-3 h-3 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
@@ -327,7 +328,7 @@ function clearFilters() {
                                 :href="link.url"
                                 v-html="link.label"
                                 class="px-3 py-1.5 text-sm rounded-lg border transition-all duration-200"
-                                :class="link.active ? 'bg-cyan-600 text-white border-transparent shadow-sm' : 'text-gray-600 border-gray-200 hover:bg-cyan-50 hover:border-cyan-200 hover:text-cyan-700'"
+                                :class="link.active ? 'bg-[#1B365D] text-white border-transparent shadow-sm' : 'text-gray-600 border-gray-200 hover:bg-slate-50 hover:border-slate-200 hover:text-[#1B365D]'"
                                 preserve-state
                             />
                             <span v-else v-html="link.label" class="px-3 py-1.5 text-sm text-gray-400" />
@@ -376,6 +377,6 @@ function clearFilters() {
     background: #fff;
     outline: none;
     box-shadow: 0 0 0 2px rgba(34, 211, 238, 0.3);
-    border-color: #67e8f9;
+    border-color: #C4A265;
 }
 </style>

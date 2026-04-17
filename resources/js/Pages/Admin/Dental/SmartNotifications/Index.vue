@@ -51,34 +51,34 @@ function clearFilters() {
 const typeConfig = {
     followup_reminder: {
         icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />`,
-        gradient: 'from-blue-500 to-cyan-500',
-        bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200',
-        dot: 'bg-blue-500',
+        gradient: 'from-[#1B365D] to-[#1B365D]',
+        bg: 'bg-slate-50', text: 'text-[#1B365D]', border: 'border-slate-200',
+        dot: 'bg-[#1B365D]',
     },
     lab_order_ready: {
         icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />`,
-        gradient: 'from-emerald-500 to-teal-500',
+        gradient: 'from-emerald-500 to-emerald-500',
         bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200',
         dot: 'bg-emerald-500',
     },
     stalled_plan_reminder: {
         icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4.5c-.77-.833-2.694-.833-3.464 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z" />`,
-        gradient: 'from-amber-500 to-orange-500',
+        gradient: 'from-amber-500 to-[#C4A265]',
         bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200',
         dot: 'bg-amber-500',
     },
     post_treatment_checkup: {
         icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />`,
-        gradient: 'from-pink-500 to-rose-500',
-        bg: 'bg-pink-50', text: 'text-pink-700', border: 'border-pink-200',
-        dot: 'bg-pink-500',
+        gradient: 'from-[#C4A265] to-[#C4A265]',
+        bg: 'bg-[#F5E7C8]/40', text: 'text-[#8B7043]', border: 'border-[#F5E7C8]',
+        dot: 'bg-[#C4A265]',
     },
 };
 
 const statusConfig = {
     pending:   { bg: 'bg-gray-50',    text: 'text-gray-700',    dot: 'bg-gray-400',    label_ar: 'قيد الانتظار', label_en: 'Pending' },
     sent:      { bg: 'bg-emerald-50', text: 'text-emerald-700', dot: 'bg-emerald-500', label_ar: 'تم الإرسال',  label_en: 'Sent' },
-    delivered: { bg: 'bg-blue-50',    text: 'text-blue-700',    dot: 'bg-blue-500',    label_ar: 'تم التسليم',  label_en: 'Delivered' },
+    delivered: { bg: 'bg-slate-50',    text: 'text-[#1B365D]',    dot: 'bg-[#1B365D]',    label_ar: 'تم التسليم',  label_en: 'Delivered' },
     failed:    { bg: 'bg-red-50',     text: 'text-red-700',     dot: 'bg-red-500',     label_ar: 'فشل',         label_en: 'Failed' },
     cancelled: { bg: 'bg-gray-50',    text: 'text-gray-500',    dot: 'bg-gray-300',    label_ar: 'ملغي',        label_en: 'Cancelled' },
 };
@@ -211,20 +211,21 @@ const responseRate = computed(() => {
         <div class="space-y-6">
 
             <!-- ── Hero Header ───────────────────────────────────── -->
-            <div class="dental-hero-enter relative overflow-hidden rounded-2xl bg-gradient-to-br from-cyan-600 via-cyan-700 to-teal-800 p-7">
-                <div class="absolute -top-16 ltr:-right-16 rtl:-left-16 w-56 h-56 bg-cyan-400/20 rounded-full blur-3xl"></div>
-                <div class="absolute -bottom-12 ltr:-left-12 rtl:-right-12 w-40 h-40 bg-teal-300/15 rounded-full blur-3xl"></div>
+            <div class="dental-hero-enter relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] p-7">
+                <div class="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-[#C4A265] to-transparent"></div>
+                <div class="absolute -top-16 ltr:-right-16 rtl:-left-16 w-56 h-56 bg-[#2C4E7A]/20 rounded-full blur-3xl"></div>
+                <div class="absolute -bottom-12 ltr:-left-12 rtl:-right-12 w-40 h-40 bg-emerald-300/15 rounded-full blur-3xl"></div>
 
                 <div class="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div class="flex items-center gap-3">
-                        <div class="w-11 h-11 rounded-xl bg-white/15 backdrop-blur-sm flex items-center justify-center ring-1 ring-white/20">
+                        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-[#C4A265] to-[#8B7043] flex items-center justify-center shadow-lg">
                             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
                         </div>
                         <div>
                             <h1 class="text-xl md:text-2xl font-bold text-white">
                                 {{ locale === 'ar' ? 'تنبيهات المريض الذكية' : 'Smart Patient Notifications' }}
                             </h1>
-                            <p class="text-cyan-100/80 text-sm mt-0.5">
+                            <p class="text-slate-100/80 text-sm mt-0.5">
                                 {{ locale === 'ar' ? 'متابعة، جاهزية معمل، خطط متوقفة، اطمئنان بعد العلاج' : 'Follow-ups, Lab Ready, Stalled Plans, Post-Treatment Checks' }}
                             </p>
                         </div>
@@ -244,7 +245,7 @@ const responseRate = computed(() => {
                         </button>
                         <button
                             @click="showManualModal = true"
-                            class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-cyan-700 bg-white/90 hover:bg-white shadow-lg hover:shadow-xl transition-all duration-300"
+                            class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-[#1B365D] bg-[#C4A265] hover:bg-[#D4B57E] shadow-lg hover:shadow-xl transition-all duration-300"
                         >
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
                             {{ locale === 'ar' ? 'إرسال يدوي' : 'Send Manual' }}
@@ -287,11 +288,11 @@ const responseRate = computed(() => {
                     <p class="text-xs text-gray-500 mt-0.5">{{ locale === 'ar' ? 'أُرسل اليوم' : 'Sent Today' }}</p>
                 </div>
                 <div class="bg-white rounded-xl p-4 border border-gray-100 text-center">
-                    <p class="text-2xl font-bold text-blue-600">{{ stats?.this_week_sent ?? 0 }}</p>
+                    <p class="text-2xl font-bold text-[#1B365D]">{{ stats?.this_week_sent ?? 0 }}</p>
                     <p class="text-xs text-gray-500 mt-0.5">{{ locale === 'ar' ? 'هذا الأسبوع' : 'This Week' }}</p>
                 </div>
                 <div class="bg-white rounded-xl p-4 border border-gray-100 text-center">
-                    <p class="text-2xl font-bold text-purple-600">{{ responseRate }}%</p>
+                    <p class="text-2xl font-bold text-[#1B365D]">{{ responseRate }}%</p>
                     <p class="text-xs text-gray-500 mt-0.5">{{ locale === 'ar' ? 'معدل الاستجابة' : 'Response Rate' }}</p>
                 </div>
             </div>
@@ -306,30 +307,30 @@ const responseRate = computed(() => {
                                 v-model="search"
                                 type="text"
                                 :placeholder="locale === 'ar' ? 'بحث بالاسم، رقم الملف، الهاتف...' : 'Search by name, file number, phone...'"
-                                class="w-full ltr:pl-10 rtl:pr-10 pr-4 py-2.5 rounded-xl border border-gray-200 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 text-sm transition-all"
+                                class="w-full ltr:pl-10 rtl:pr-10 pr-4 py-2.5 rounded-xl border border-gray-200 focus:border-[#2C4E7A] focus:ring-2 focus:ring-slate-100 text-sm transition-all"
                             />
                         </div>
-                        <button @click="showFilters = !showFilters" :class="['inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium border transition-all', hasActiveFilters ? 'bg-cyan-50 border-cyan-200 text-cyan-700' : 'bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100']">
+                        <button @click="showFilters = !showFilters" :class="['inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium border transition-all', hasActiveFilters ? 'bg-slate-50 border-slate-200 text-[#1B365D]' : 'bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100']">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" /></svg>
                             {{ locale === 'ar' ? 'فلترة' : 'Filter' }}
-                            <span v-if="hasActiveFilters" class="w-2 h-2 bg-cyan-500 rounded-full"></span>
+                            <span v-if="hasActiveFilters" class="w-2 h-2 bg-[#1B365D] rounded-full"></span>
                         </button>
                     </div>
 
                     <!-- Filter Panel -->
                     <Transition enter-active-class="transition-all duration-300 ease-out" enter-from-class="opacity-0 max-h-0" enter-to-class="opacity-100 max-h-40" leave-active-class="transition-all duration-200" leave-from-class="opacity-100 max-h-40" leave-to-class="opacity-0 max-h-0">
                         <div v-if="showFilters" class="mt-4 pt-4 border-t border-gray-100 grid grid-cols-1 sm:grid-cols-4 gap-3">
-                            <select v-model="typeFilter" class="rounded-xl border-gray-200 text-sm focus:border-cyan-400 focus:ring-cyan-100">
+                            <select v-model="typeFilter" class="rounded-xl border-gray-200 text-sm focus:border-[#2C4E7A] focus:ring-slate-100">
                                 <option value="">{{ locale === 'ar' ? 'كل الأنواع' : 'All Types' }}</option>
                                 <option v-for="(labels, key) in types" :key="key" :value="key">{{ locale === 'ar' ? labels.ar : labels.en }}</option>
                             </select>
-                            <select v-model="statusFilter" class="rounded-xl border-gray-200 text-sm focus:border-cyan-400 focus:ring-cyan-100">
+                            <select v-model="statusFilter" class="rounded-xl border-gray-200 text-sm focus:border-[#2C4E7A] focus:ring-slate-100">
                                 <option value="">{{ locale === 'ar' ? 'كل الحالات' : 'All Statuses' }}</option>
                                 <option v-for="(s, key) in statusConfig" :key="key" :value="key">{{ locale === 'ar' ? s.label_ar : s.label_en }}</option>
                             </select>
-                            <input v-model="dateFrom" type="date" class="rounded-xl border-gray-200 text-sm focus:border-cyan-400 focus:ring-cyan-100" :placeholder="locale === 'ar' ? 'من تاريخ' : 'From'" />
+                            <input v-model="dateFrom" type="date" class="rounded-xl border-gray-200 text-sm focus:border-[#2C4E7A] focus:ring-slate-100" :placeholder="locale === 'ar' ? 'من تاريخ' : 'From'" />
                             <div class="flex items-center gap-2">
-                                <input v-model="dateTo" type="date" class="flex-1 rounded-xl border-gray-200 text-sm focus:border-cyan-400 focus:ring-cyan-100" :placeholder="locale === 'ar' ? 'إلى تاريخ' : 'To'" />
+                                <input v-model="dateTo" type="date" class="flex-1 rounded-xl border-gray-200 text-sm focus:border-[#2C4E7A] focus:ring-slate-100" :placeholder="locale === 'ar' ? 'إلى تاريخ' : 'To'" />
                                 <button v-if="hasActiveFilters" @click="clearFilters" class="text-xs text-red-500 hover:text-red-700 whitespace-nowrap">
                                     {{ locale === 'ar' ? 'مسح' : 'Clear' }}
                                 </button>
@@ -442,7 +443,7 @@ const responseRate = computed(() => {
 
                                         <!-- Actions -->
                                         <div class="flex items-center gap-2 flex-wrap">
-                                            <button v-if="n.status === 'failed'" @click.stop="confirmResend(n)" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-blue-50 text-blue-700 hover:bg-blue-100 transition-colors">
+                                            <button v-if="n.status === 'failed'" @click.stop="confirmResend(n)" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-50 text-[#1B365D] hover:bg-slate-100 transition-colors">
                                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
                                                 {{ locale === 'ar' ? 'إعادة إرسال' : 'Resend' }}
                                             </button>
@@ -476,7 +477,7 @@ const responseRate = computed(() => {
                             <Link
                                 v-if="link.url"
                                 :href="link.url"
-                                :class="['px-3 py-1.5 rounded-lg text-xs font-medium transition-all', link.active ? 'bg-cyan-600 text-white' : 'text-gray-600 hover:bg-gray-100']"
+                                :class="['px-3 py-1.5 rounded-lg text-xs font-medium transition-all', link.active ? 'bg-[#1B365D] text-white' : 'text-gray-600 hover:bg-gray-100']"
                                 preserve-state
                                 v-html="link.label"
                             />
@@ -519,7 +520,7 @@ const responseRate = computed(() => {
                                     @input="searchPatients"
                                     type="text"
                                     :placeholder="locale === 'ar' ? 'ابحث عن المريض...' : 'Search patient...'"
-                                    class="w-full rounded-xl border-gray-200 text-sm focus:border-cyan-400 focus:ring-cyan-100"
+                                    class="w-full rounded-xl border-gray-200 text-sm focus:border-[#2C4E7A] focus:ring-slate-100"
                                 />
                                 <div v-if="patients.length" class="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg max-h-48 overflow-y-auto">
                                     <button
@@ -543,7 +544,7 @@ const responseRate = computed(() => {
                                 <button
                                     v-for="(labels, key) in types" :key="key"
                                     @click="manualForm.type = key"
-                                    :class="['px-3 py-2.5 rounded-xl border text-xs font-medium text-left transition-all', manualForm.type === key ? 'border-cyan-400 bg-cyan-50 text-cyan-700 ring-2 ring-cyan-100' : 'border-gray-200 text-gray-600 hover:bg-gray-50']"
+                                    :class="['px-3 py-2.5 rounded-xl border text-xs font-medium text-left transition-all', manualForm.type === key ? 'border-[#2C4E7A] bg-slate-50 text-[#1B365D] ring-2 ring-slate-100' : 'border-gray-200 text-gray-600 hover:bg-gray-50']"
                                 >
                                     <div class="flex items-center gap-2">
                                         <div :class="['w-6 h-6 rounded-md flex items-center justify-center', typeConfig[key]?.bg]">
@@ -561,7 +562,7 @@ const responseRate = computed(() => {
                             <textarea
                                 v-model="manualForm.message_ar"
                                 rows="4"
-                                class="w-full rounded-xl border-gray-200 text-sm focus:border-cyan-400 focus:ring-cyan-100"
+                                class="w-full rounded-xl border-gray-200 text-sm focus:border-[#2C4E7A] focus:ring-slate-100"
                                 dir="rtl"
                                 :placeholder="locale === 'ar' ? 'اكتب نص الرسالة...' : 'Type message text...'"
                             ></textarea>
@@ -577,7 +578,7 @@ const responseRate = computed(() => {
                             <textarea
                                 v-model="manualForm.message_en"
                                 rows="3"
-                                class="w-full rounded-xl border-gray-200 text-sm focus:border-cyan-400 focus:ring-cyan-100"
+                                class="w-full rounded-xl border-gray-200 text-sm focus:border-[#2C4E7A] focus:ring-slate-100"
                                 dir="ltr"
                                 placeholder="Optional English version..."
                             ></textarea>
@@ -592,7 +593,7 @@ const responseRate = computed(() => {
                         <button
                             @click="submitManual"
                             :disabled="manualForm.processing || !manualForm.patient_id || !manualForm.message_ar"
-                            class="px-5 py-2 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-700 hover:to-teal-700 shadow-lg disabled:opacity-50 transition-all"
+                            class="px-5 py-2 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-[#1B365D] to-emerald-600 hover:from-[#1B365D] hover:to-emerald-700 shadow-lg disabled:opacity-50 transition-all"
                         >
                             <span v-if="manualForm.processing" class="flex items-center gap-2">
                                 <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>

@@ -57,11 +57,11 @@ function formatDate(date) {
 
 const statusConfig = {
     ordered: { bg: 'bg-gray-50', text: 'text-gray-700', dot: 'bg-gray-400' },
-    in_production: { bg: 'bg-blue-50', text: 'text-blue-700', dot: 'bg-blue-500' },
+    in_production: { bg: 'bg-slate-50', text: 'text-[#1B365D]', dot: 'bg-[#1B365D]' },
     ready: { bg: 'bg-emerald-50', text: 'text-emerald-700', dot: 'bg-emerald-500' },
-    delivered: { bg: 'bg-teal-50', text: 'text-teal-700', dot: 'bg-teal-500' },
-    adjustment: { bg: 'bg-orange-50', text: 'text-orange-700', dot: 'bg-orange-500' },
-    completed: { bg: 'bg-green-50', text: 'text-green-700', dot: 'bg-green-500' },
+    delivered: { bg: 'bg-emerald-50', text: 'text-emerald-700', dot: 'bg-emerald-500' },
+    adjustment: { bg: 'bg-[#F5E7C8]/40', text: 'text-[#8B7043]', dot: 'bg-[#C4A265]' },
+    completed: { bg: 'bg-emerald-50', text: 'text-emerald-700', dot: 'bg-emerald-500' },
     cancelled: { bg: 'bg-red-50', text: 'text-red-700', dot: 'bg-red-500' },
 };
 
@@ -164,9 +164,9 @@ const statCards = computed(() => [
     {
         label: locale.value === 'ar' ? 'تكلفة هذا الشهر' : 'This Month Cost',
         value: formatCurrency(props.stats?.this_month_cost || 0),
-        gradient: 'from-cyan-500 to-cyan-600',
-        lightBg: 'bg-cyan-50',
-        iconColor: 'text-cyan-500',
+        gradient: 'from-[#1B365D] to-[#1B365D]',
+        lightBg: 'bg-slate-50',
+        iconColor: 'text-[#1B365D]',
         icon: 'cost',
     },
 ]);
@@ -493,7 +493,7 @@ function executeBulkPrint() {
                                 <th class="lo-th lo-th--check">
                                     <label class="relative inline-flex items-center cursor-pointer">
                                         <input type="checkbox" v-model="allSelected" :indeterminate="someSelected"
-                                            class="w-4 h-4 text-cyan-600 border-gray-300 rounded focus:ring-cyan-500 cursor-pointer" />
+                                            class="w-4 h-4 text-[#1B365D] border-gray-300 rounded focus:ring-[#C4A265] cursor-pointer" />
                                     </label>
                                 </th>
                                 <th class="lo-th">{{ $t('a_patient') }}</th>
@@ -522,7 +522,7 @@ function executeBulkPrint() {
                                     <label class="relative inline-flex items-center cursor-pointer">
                                         <input type="checkbox" :checked="selectedIds.includes(order.id)"
                                             @change="toggleOrder(order.id)"
-                                            class="w-4 h-4 text-cyan-600 border-gray-300 rounded focus:ring-cyan-500 cursor-pointer" />
+                                            class="w-4 h-4 text-[#1B365D] border-gray-300 rounded focus:ring-[#C4A265] cursor-pointer" />
                                     </label>
                                 </td>
                                 <td class="lo-td">
@@ -620,7 +620,7 @@ function executeBulkPrint() {
                     <div class="lo-modal-card">
                         <div class="lo-modal-header">
                             <div class="lo-modal-icon">
-                                <svg class="w-5 h-5 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                                <svg class="w-5 h-5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
                             </div>
                             <div>
                                 <h3 class="lo-modal-title">{{ locale === 'ar' ? 'تغيير الحالة دفعة واحدة' : 'Bulk Status Change' }}</h3>
@@ -759,7 +759,8 @@ function executeBulkPrint() {
     position: relative;
     overflow: hidden;
     border-radius: 1.5rem;
-    background: linear-gradient(135deg, #0f172a 0%, #164e63 50%, #0e7490 100%);
+    background: linear-gradient(135deg, #0F2444 0%, #1B365D 50%, #0F2444 100%);
+    box-shadow: 0 10px 40px -10px rgba(27, 54, 93, 0.4);
     padding: 2rem 2rem;
     animation: loReveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
@@ -775,7 +776,7 @@ function executeBulkPrint() {
     right: -4rem;
     width: 16rem;
     height: 16rem;
-    background: rgba(6, 182, 212, 0.25);
+    background: rgba(196, 162, 101, 0.25);
     animation: loOrbFloat1 8s ease-in-out infinite;
 }
 [dir="rtl"] .lo-hero-orb--1 { right: auto; left: -4rem; }
@@ -785,7 +786,7 @@ function executeBulkPrint() {
     left: -3rem;
     width: 12rem;
     height: 12rem;
-    background: rgba(20, 184, 166, 0.18);
+    background: rgba(196, 162, 101, 0.15);
     animation: loOrbFloat2 10s ease-in-out infinite;
 }
 [dir="rtl"] .lo-hero-orb--2 { left: auto; right: -3rem; }
@@ -795,7 +796,7 @@ function executeBulkPrint() {
     left: 40%;
     width: 8rem;
     height: 8rem;
-    background: rgba(34, 211, 238, 0.1);
+    background: rgba(196, 162, 101, 0.1);
     animation: loOrbFloat3 12s ease-in-out infinite;
 }
 
@@ -841,13 +842,11 @@ function executeBulkPrint() {
     width: 2.75rem;
     height: 2.75rem;
     border-radius: 0.875rem;
-    background: linear-gradient(135deg, rgba(6, 182, 212, 0.4), rgba(20, 184, 166, 0.3));
-    backdrop-filter: blur(8px);
+    background: linear-gradient(135deg, #C4A265, #8B7043);
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: 0 0 20px rgba(6, 182, 212, 0.2);
+    box-shadow: 0 0 20px rgba(196, 162, 101, 0.35);
 }
 
 .lo-hero-title {
@@ -859,7 +858,7 @@ function executeBulkPrint() {
 @media (min-width: 768px) { .lo-hero-title { font-size: 1.625rem; } }
 
 .lo-hero-subtitle {
-    color: rgba(207, 250, 254, 0.7);
+    color: rgba(255, 255, 255, 0.7);
     font-size: 0.875rem;
     margin-top: 0.25rem;
 }
@@ -897,14 +896,14 @@ function executeBulkPrint() {
     border-radius: 0.875rem;
     font-size: 0.875rem;
     font-weight: 600;
-    color: #155e75;
-    background: rgba(255, 255, 255, 0.95);
+    color: #1B365D;
+    background: #C4A265;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.1);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     overflow: hidden;
 }
 .lo-hero-cta:hover {
-    background: #fff;
+    background: #D4B57E;
     box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.2);
     transform: translateY(-1px);
 }
@@ -915,7 +914,7 @@ function executeBulkPrint() {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.1), transparent);
+    background: linear-gradient(90deg, transparent, rgba(196, 162, 101, 0.12), transparent);
     animation: loShimmer 3s ease-in-out infinite;
     pointer-events: none;
 }
@@ -1026,7 +1025,7 @@ function executeBulkPrint() {
     width: 1.75rem;
     height: 1.75rem;
     border-radius: 0.5rem;
-    background: linear-gradient(135deg, #06b6d4, #14b8a6);
+    background: linear-gradient(135deg, #1B365D, #2C4E7A);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1048,7 +1047,7 @@ function executeBulkPrint() {
     cursor: pointer;
     transition: color 0.2s;
 }
-.lo-section-clear:hover { color: #0e7490; text-decoration: underline; }
+.lo-section-clear:hover { color: #1B365D; text-decoration: underline; }
 
 /* ─── Pipeline ───────────────────────────────────────── */
 .lo-pipeline {
@@ -1139,7 +1138,7 @@ function executeBulkPrint() {
 }
 .lo-input-wrapper:focus-within {
     background-color: #fff;
-    border-color: #67e8f9;
+    border-color: #C4A265;
     box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.15);
 }
 .lo-input-wrapper--search {
@@ -1152,7 +1151,7 @@ function executeBulkPrint() {
     transition: color 0.2s;
 }
 .lo-input-wrapper:focus-within .lo-input-icon {
-    color: #06b6d4;
+    color: #1B365D;
 }
 
 .lo-input-field {
@@ -1198,9 +1197,9 @@ function executeBulkPrint() {
     color: #b91c1c;
 }
 .lo-filter-btn--active-cyan {
-    background: #ecfeff;
+    background: #F5E7C8;
     border-color: #a5f3fc;
-    color: #0e7490;
+    color: #1B365D;
 }
 
 .lo-filters-expanded {
@@ -1325,9 +1324,9 @@ function executeBulkPrint() {
 
 .lo-bulk-btn--primary {
     background: #fff;
-    color: #0e7490;
+    color: #1B365D;
 }
-.lo-bulk-btn--primary:hover { background: #ecfeff; }
+.lo-bulk-btn--primary:hover { background: #F5E7C8; }
 
 .lo-bulk-btn--sms {
     background: #10b981;
@@ -1407,8 +1406,8 @@ function executeBulkPrint() {
     width: 2.25rem;
     height: 2.25rem;
     border-radius: 0.625rem;
-    background: #ecfeff;
-    color: #0e7490;
+    background: #F5E7C8;
+    color: #1B365D;
     font-family: ui-monospace, monospace;
     font-weight: 700;
     font-size: 0.875rem;
@@ -1439,7 +1438,7 @@ function executeBulkPrint() {
     width: 1.75rem;
     height: 1.75rem;
     border-radius: 0.5rem;
-    background: #ecfeff;
+    background: #F5E7C8;
     color: #0891b2;
     display: flex;
     align-items: center;
@@ -1449,8 +1448,8 @@ function executeBulkPrint() {
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .lo-advance-btn:hover {
-    background: #cffafe;
-    color: #0e7490;
+    background: #F5E7C8;
+    color: #1B365D;
 }
 .lo-advance-btn:hover svg {
     transform: translateX(2px);
@@ -1547,9 +1546,9 @@ function executeBulkPrint() {
     text-decoration: none;
 }
 .lo-page-link:hover {
-    background: #ecfeff;
+    background: #F5E7C8;
     border-color: #a5f3fc;
-    color: #0e7490;
+    color: #1B365D;
 }
 .lo-page-link--active {
     background: #0891b2;
@@ -1614,7 +1613,7 @@ function executeBulkPrint() {
     width: 2.5rem;
     height: 2.5rem;
     border-radius: 0.875rem;
-    background: linear-gradient(135deg, #ecfeff, #cffafe);
+    background: linear-gradient(135deg, #F5E7C8, #F5E7C8);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1664,9 +1663,9 @@ function executeBulkPrint() {
     background: #f9fafb;
 }
 .lo-modal-status-btn--active {
-    border-color: #06b6d4;
-    background: #ecfeff;
-    color: #0e7490;
+    border-color: #1B365D;
+    background: #F5E7C8;
+    color: #1B365D;
 }
 
 .lo-modal-status-dot {
@@ -1719,7 +1718,7 @@ function executeBulkPrint() {
     font-size: 0.875rem;
     font-weight: 600;
     color: #fff;
-    background: linear-gradient(135deg, #06b6d4, #14b8a6);
+    background: linear-gradient(135deg, #1B365D, #2C4E7A);
     border-radius: 0.875rem;
     border: none;
     cursor: pointer;

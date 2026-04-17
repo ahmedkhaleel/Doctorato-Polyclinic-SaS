@@ -23,24 +23,24 @@ function formatDate(date) {
 
 const statusColors = {
     draft: 'bg-gray-100 text-gray-800',
-    pending: 'bg-yellow-100 text-yellow-800',
-    approved: 'bg-blue-100 text-blue-800',
-    in_progress: 'bg-cyan-100 text-cyan-800',
-    completed: 'bg-green-100 text-green-800',
+    pending: 'bg-[#F5E7C8]/60 text-[#8B7043]',
+    approved: 'bg-slate-100 text-[#0F2444]',
+    in_progress: 'bg-slate-100 text-[#0F2444]',
+    completed: 'bg-emerald-100 text-emerald-800',
     cancelled: 'bg-red-100 text-red-800',
 };
 
 const treatmentStatusColors = {
     planned: 'bg-gray-100 text-gray-700',
-    in_progress: 'bg-cyan-100 text-cyan-700',
-    completed: 'bg-green-100 text-green-700',
+    in_progress: 'bg-slate-100 text-[#1B365D]',
+    completed: 'bg-emerald-100 text-emerald-700',
     cancelled: 'bg-red-100 text-red-700',
 };
 
 const priorityColors = {
     low: 'bg-gray-100 text-gray-600',
-    normal: 'bg-blue-100 text-blue-700',
-    high: 'bg-orange-100 text-orange-700',
+    normal: 'bg-slate-100 text-[#1B365D]',
+    high: 'bg-[#F5E7C8]/60 text-[#8B7043]',
     urgent: 'bg-red-100 text-red-700',
 };
 
@@ -133,8 +133,8 @@ const needsConsent = computed(() => {
 });
 
 const consentStatusColors = {
-    pending: 'bg-yellow-100 text-yellow-700',
-    signed: 'bg-green-100 text-green-700',
+    pending: 'bg-[#F5E7C8]/60 text-[#8B7043]',
+    signed: 'bg-emerald-100 text-emerald-700',
     declined: 'bg-red-100 text-red-700',
     expired: 'bg-gray-100 text-gray-600',
 };
@@ -183,9 +183,10 @@ function executeResendConsent() {
     <AdminLayout :title="$t('a_treatment_plan_details')">
         <div class="space-y-6">
             <!-- Hero Header -->
-            <div class="dental-hero-enter relative overflow-hidden rounded-2xl bg-gradient-to-br from-cyan-600 via-cyan-700 to-teal-800 p-6 sm:p-7">
+            <div class="dental-hero-enter relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] p-6 sm:p-7">
+                <div class="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-[#C4A265] to-transparent"></div>
                 <div class="absolute -top-12 ltr:-right-12 rtl:-left-12 w-48 h-48 bg-white/5 rounded-full blur-3xl"></div>
-                <div class="absolute -bottom-8 ltr:left-20 rtl:right-20 w-32 h-32 bg-cyan-400/10 rounded-full blur-2xl"></div>
+                <div class="absolute -bottom-8 ltr:left-20 rtl:right-20 w-32 h-32 bg-[#2C4E7A]/10 rounded-full blur-2xl"></div>
 
                 <div class="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div class="flex items-center gap-3">
@@ -193,7 +194,7 @@ function executeResendConsent() {
                             <svg class="w-5 h-5 text-white rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
                         </Link>
                         <div>
-                            <p class="text-cyan-200/80 text-xs font-semibold tracking-wider uppercase">{{ $t('a_treatment_plan') }} #{{ plan.id }}</p>
+                            <p class="text-slate-200/80 text-xs font-semibold tracking-wider uppercase">{{ $t('a_treatment_plan') }} #{{ plan.id }}</p>
                             <h1 class="text-xl sm:text-2xl font-bold text-white mt-0.5">
                                 {{ locale === 'ar' ? (plan.title_ar || plan.title_en || `#${plan.id}`) : (plan.title_en || plan.title_ar || `#${plan.id}`) }}
                             </h1>
@@ -241,7 +242,7 @@ function executeResendConsent() {
                         </div>
                         <div class="w-full bg-gray-200 rounded-full h-3">
                             <div
-                                class="h-3 rounded-full transition-all bg-cyan-600"
+                                class="h-3 rounded-full transition-all bg-[#1B365D]"
                                 :style="{ width: progressPercent + '%' }"
                             ></div>
                         </div>
@@ -251,7 +252,7 @@ function executeResendConsent() {
                     <div class="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
                         <div>
                             <span class="text-gray-500 block">{{ $t('a_patient') }}</span>
-                            <Link v-if="plan.patient" :href="`/admin/patients/${plan.patient.id}`" class="font-medium text-cyan-600 hover:underline">
+                            <Link v-if="plan.patient" :href="`/admin/patients/${plan.patient.id}`" class="font-medium text-[#1B365D] hover:underline">
                                 {{ plan.patient.full_name }}
                             </Link>
                         </div>
@@ -297,7 +298,7 @@ function executeResendConsent() {
                             v-if="plan.status === 'draft' || plan.status === 'pending'"
                             @click="confirmStatusChange('approved')"
                             :disabled="updatingStatus"
-                            class="w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 disabled:opacity-50 transition"
+                            class="w-full px-4 py-2 text-sm font-medium text-white bg-[#1B365D] rounded-lg hover:bg-[#1B365D] disabled:opacity-50 transition"
                         >
                             {{ $t('a_approve_plan') }}
                         </button>
@@ -305,7 +306,7 @@ function executeResendConsent() {
                             v-if="plan.status === 'approved' && hasSignedConsent"
                             @click="confirmStatusChange('in_progress')"
                             :disabled="updatingStatus"
-                            class="w-full px-4 py-2 text-sm font-medium text-white bg-cyan-600 rounded-lg hover:bg-cyan-700 disabled:opacity-50 transition"
+                            class="w-full px-4 py-2 text-sm font-medium text-white bg-[#1B365D] rounded-lg hover:bg-[#1B365D] disabled:opacity-50 transition"
                         >
                             {{ $t('a_start_plan') }}
                         </button>
@@ -319,7 +320,7 @@ function executeResendConsent() {
                             v-if="plan.status === 'in_progress'"
                             @click="confirmStatusChange('completed')"
                             :disabled="updatingStatus"
-                            class="w-full px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 disabled:opacity-50 transition"
+                            class="w-full px-4 py-2 text-sm font-medium text-white bg-emerald-600 rounded-lg hover:bg-emerald-700 disabled:opacity-50 transition"
                         >
                             {{ $t('a_complete_plan') }}
                         </button>
@@ -335,7 +336,7 @@ function executeResendConsent() {
 
                     <div class="pt-4 border-t">
                         <div class="text-sm text-gray-500 mb-1">{{ $t('a_total_treatments_cost') }}</div>
-                        <div class="text-2xl font-bold text-cyan-600">{{ formatCurrency(totalTreatmentsCost) }}</div>
+                        <div class="text-2xl font-bold text-[#1B365D]">{{ formatCurrency(totalTreatmentsCost) }}</div>
                     </div>
                 </div>
             </div>
@@ -345,11 +346,11 @@ function executeResendConsent() {
                 <div class="px-6 py-4 border-b flex items-center justify-between">
                     <div class="flex items-center gap-3">
                         <div class="w-9 h-9 rounded-lg flex items-center justify-center"
-                             :class="hasSignedConsent ? 'bg-green-100' : hasPendingConsent ? 'bg-yellow-100' : 'bg-gray-100'">
-                            <svg v-if="hasSignedConsent" class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                             :class="hasSignedConsent ? 'bg-emerald-100' : hasPendingConsent ? 'bg-[#F5E7C8]/60' : 'bg-gray-100'">
+                            <svg v-if="hasSignedConsent" class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                             </svg>
-                            <svg v-else-if="hasPendingConsent" class="w-5 h-5 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg v-else-if="hasPendingConsent" class="w-5 h-5 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                             <svg v-else class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -374,7 +375,7 @@ function executeResendConsent() {
                         <button
                             v-if="!hasSignedConsent && plan.status !== 'draft' && plan.status !== 'cancelled' && plan.status !== 'completed'"
                             @click="showConsentModal = true"
-                            class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white bg-cyan-600 rounded-lg hover:bg-cyan-700 transition"
+                            class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white bg-[#1B365D] rounded-lg hover:bg-[#1B365D] transition"
                         >
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
@@ -401,23 +402,23 @@ function executeResendConsent() {
 
                     <!-- Signed consent details -->
                     <div v-else-if="hasSignedConsent" class="space-y-4">
-                        <div class="flex items-center gap-3 p-4 bg-green-50 rounded-xl border border-green-100">
-                            <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="flex items-center gap-3 p-4 bg-emerald-50 rounded-xl border border-emerald-100">
+                            <svg class="w-8 h-8 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                             </svg>
                             <div class="flex-1">
-                                <p class="text-sm font-medium text-green-700">
+                                <p class="text-sm font-medium text-emerald-700">
                                     {{ locale === 'ar' ? 'تم التوقيع بنجاح' : 'Consent Signed Successfully' }}
                                 </p>
-                                <p class="text-xs text-green-600">
+                                <p class="text-xs text-emerald-600">
                                     {{ locale === 'ar' ? 'تم التوقيع بتاريخ' : 'Signed on' }} {{ formatDate(latestConsent.signed_at) }}
-                                    <span v-if="latestConsent.patient_ip" class="text-green-500"> &bull; IP: {{ latestConsent.patient_ip }}</span>
+                                    <span v-if="latestConsent.patient_ip" class="text-emerald-500"> &bull; IP: {{ latestConsent.patient_ip }}</span>
                                 </p>
                             </div>
                             <div class="flex items-center gap-2">
-                                <img v-if="latestConsent.signature_url" :src="latestConsent.signature_url" alt="Signature" class="h-10 rounded border border-green-200 bg-white p-1" />
+                                <img v-if="latestConsent.signature_url" :src="latestConsent.signature_url" alt="Signature" class="h-10 rounded border border-emerald-200 bg-white p-1" />
                                 <a v-if="latestConsent.pdf_url" :href="`/admin/dental/consent/${latestConsent.id}/pdf`" target="_blank"
-                                   class="inline-flex items-center gap-1 px-2 py-1 text-xs text-cyan-600 bg-cyan-50 rounded-lg hover:bg-cyan-100 transition">
+                                   class="inline-flex items-center gap-1 px-2 py-1 text-xs text-[#1B365D] bg-slate-50 rounded-lg hover:bg-slate-100 transition">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                     </svg>
@@ -428,16 +429,16 @@ function executeResendConsent() {
                     </div>
 
                     <!-- Pending consent info -->
-                    <div v-else-if="hasPendingConsent" class="p-4 bg-yellow-50 rounded-xl border border-yellow-100">
+                    <div v-else-if="hasPendingConsent" class="p-4 bg-[#F5E7C8]/40 rounded-xl border border-[#F5E7C8]/60">
                         <div class="flex items-center gap-3">
                             <div class="flex-shrink-0">
-                                <div class="w-3 h-3 bg-yellow-400 rounded-full animate-pulse"></div>
+                                <div class="w-3 h-3 bg-[#D4B57E] rounded-full animate-pulse"></div>
                             </div>
                             <div class="flex-1">
-                                <p class="text-sm font-medium text-yellow-700">
+                                <p class="text-sm font-medium text-[#8B7043]">
                                     {{ locale === 'ar' ? 'في انتظار توقيع المريض' : 'Waiting for patient signature' }}
                                 </p>
-                                <p class="text-xs text-yellow-600">
+                                <p class="text-xs text-[#C4A265]">
                                     {{ locale === 'ar' ? 'تم الإرسال بتاريخ' : 'Sent on' }} {{ formatDate(latestConsent.sent_at) }}
                                     <span v-if="latestConsent.expires_at"> &bull; {{ locale === 'ar' ? 'ينتهي' : 'Expires' }} {{ formatDate(latestConsent.expires_at) }}</span>
                                 </p>
@@ -494,7 +495,7 @@ function executeResendConsent() {
                                 </label>
                                 <textarea
                                     v-model="consentRisksNotes"
-                                    class="w-full p-3 border border-gray-200 rounded-xl text-sm resize-none focus:outline-none focus:ring-2 focus:ring-cyan-200 focus:border-cyan-300"
+                                    class="w-full p-3 border border-gray-200 rounded-xl text-sm resize-none focus:outline-none focus:ring-2 focus:ring-slate-200 focus:border-slate-300"
                                     rows="3"
                                     :placeholder="locale === 'ar' ? 'أضف أي ملاحظات عن المخاطر المحتملة...' : 'Add any notes about potential risks...'"
                                 ></textarea>
@@ -508,7 +509,7 @@ function executeResendConsent() {
                                     type="number"
                                     min="1"
                                     max="30"
-                                    class="w-full p-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-cyan-200 focus:border-cyan-300"
+                                    class="w-full p-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-slate-200 focus:border-slate-300"
                                 />
                             </div>
                         </div>
@@ -517,7 +518,7 @@ function executeResendConsent() {
                             <button
                                 @click="sendConsent"
                                 :disabled="sendingConsent"
-                                class="flex-1 px-4 py-2.5 text-sm font-medium text-white bg-cyan-600 rounded-xl hover:bg-cyan-700 disabled:opacity-50 transition flex items-center justify-center gap-2"
+                                class="flex-1 px-4 py-2.5 text-sm font-medium text-white bg-[#1B365D] rounded-xl hover:bg-[#1B365D] disabled:opacity-50 transition flex items-center justify-center gap-2"
                             >
                                 <svg v-if="sendingConsent" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
                                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -542,11 +543,11 @@ function executeResendConsent() {
                     <h2 class="text-lg font-semibold text-gray-800">{{ $t('a_treatments') }}</h2>
                     <!-- Mini Status Summary -->
                     <div v-if="plan.treatments?.length" class="flex items-center gap-2">
-                        <span v-if="completedTreatmentsCount > 0" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-green-50 text-green-700">
-                            <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> {{ completedTreatmentsCount }}
+                        <span v-if="completedTreatmentsCount > 0" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-700">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> {{ completedTreatmentsCount }}
                         </span>
-                        <span v-if="inProgressTreatmentsCount > 0" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-cyan-50 text-cyan-700">
-                            <span class="w-1.5 h-1.5 rounded-full bg-cyan-500"></span> {{ inProgressTreatmentsCount }}
+                        <span v-if="inProgressTreatmentsCount > 0" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-slate-50 text-[#1B365D]">
+                            <span class="w-1.5 h-1.5 rounded-full bg-[#1B365D]"></span> {{ inProgressTreatmentsCount }}
                         </span>
                         <span v-if="plannedTreatmentsCount > 0" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-gray-100 text-gray-600">
                             <span class="w-1.5 h-1.5 rounded-full bg-gray-400"></span> {{ plannedTreatmentsCount }}
@@ -566,19 +567,19 @@ function executeResendConsent() {
                         <div class="flex flex-col items-center w-12 py-4 flex-shrink-0">
                             <div class="w-3 h-3 rounded-full border-2 flex-shrink-0"
                                 :class="{
-                                    'bg-green-500 border-green-500': treatment.status === 'completed',
-                                    'bg-cyan-500 border-cyan-500 animate-pulse': treatment.status === 'in_progress',
+                                    'bg-emerald-500 border-emerald-500': treatment.status === 'completed',
+                                    'bg-[#1B365D] border-[#1B365D] animate-pulse': treatment.status === 'in_progress',
                                     'bg-white border-gray-300': treatment.status === 'planned',
                                     'bg-red-400 border-red-400': treatment.status === 'cancelled',
                                 }"></div>
                             <div v-if="idx < plan.treatments.length - 1" class="flex-1 w-0.5 mt-1"
-                                :class="treatment.status === 'completed' ? 'bg-green-200' : 'bg-gray-200'"></div>
+                                :class="treatment.status === 'completed' ? 'bg-emerald-200' : 'bg-gray-200'"></div>
                         </div>
                         <!-- Card Content -->
                         <div class="flex-1 py-4 pe-5">
                             <div class="flex items-start justify-between gap-3">
                                 <div class="flex items-center gap-2.5">
-                                    <span v-if="treatment.tooth_number" class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-cyan-50 text-cyan-700 font-mono font-bold text-sm border border-cyan-100">
+                                    <span v-if="treatment.tooth_number" class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-slate-50 text-[#1B365D] font-mono font-bold text-sm border border-slate-100">
                                         {{ treatment.tooth_number }}
                                     </span>
                                     <div>
@@ -622,11 +623,11 @@ function executeResendConsent() {
                         </div>
                         <div>
                             <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider block">{{ locale === 'ar' ? 'الإجمالي' : 'Total' }}</span>
-                            <span class="text-lg font-bold text-cyan-600">{{ formatCurrency(totalTreatmentsCost) }}</span>
+                            <span class="text-lg font-bold text-[#1B365D]">{{ formatCurrency(totalTreatmentsCost) }}</span>
                         </div>
                         <div>
                             <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider block">{{ locale === 'ar' ? 'التقديري' : 'Estimated' }}</span>
-                            <span class="text-sm font-bold" :class="totalTreatmentsCost > parseFloat(plan.estimated_cost || 0) ? 'text-red-600' : 'text-green-600'">
+                            <span class="text-sm font-bold" :class="totalTreatmentsCost > parseFloat(plan.estimated_cost || 0) ? 'text-red-600' : 'text-emerald-600'">
                                 {{ formatCurrency(plan.estimated_cost) }}
                             </span>
                         </div>

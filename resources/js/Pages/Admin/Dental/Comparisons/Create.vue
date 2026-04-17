@@ -82,9 +82,10 @@ function submit() {
     <AdminLayout :title="isRtl ? 'إضافة مقارنة' : 'Add Comparison'">
         <div class="max-w-4xl mx-auto space-y-6">
             <!-- Hero Header -->
-            <div class="dental-hero-enter relative overflow-hidden rounded-2xl bg-gradient-to-br from-cyan-600 via-cyan-700 to-teal-800 p-6 sm:p-7">
+            <div class="dental-hero-enter relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] p-6 sm:p-7">
+                <div class="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-[#C4A265] to-transparent"></div>
                 <div class="absolute -top-12 ltr:-right-12 rtl:-left-12 w-48 h-48 bg-white/10 rounded-full blur-3xl"></div>
-                <div class="absolute -bottom-8 ltr:left-20 rtl:right-20 w-32 h-32 bg-teal-400/10 rounded-full blur-2xl"></div>
+                <div class="absolute -bottom-8 ltr:left-20 rtl:right-20 w-32 h-32 bg-emerald-400/10 rounded-full blur-2xl"></div>
 
                 <div class="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div class="flex items-center gap-3">
@@ -92,9 +93,9 @@ function submit() {
                             <svg class="w-5 h-5 text-white rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
                         </Link>
                         <div>
-                            <p class="text-cyan-200/80 text-xs font-semibold tracking-wider uppercase">{{ isRtl ? 'مقارنة الصور' : 'Photo Comparison' }}</p>
+                            <p class="text-slate-200/80 text-xs font-semibold tracking-wider uppercase">{{ isRtl ? 'مقارنة الصور' : 'Photo Comparison' }}</p>
                             <h1 class="text-xl sm:text-2xl font-bold text-white mt-0.5">{{ isRtl ? 'إضافة مقارنة قبل / بعد' : 'Add Before & After' }}</h1>
-                            <p class="text-cyan-100/60 text-xs mt-0.5">{{ isRtl ? 'رفع صور قبل وبعد العلاج' : 'Upload before and after treatment photos' }}</p>
+                            <p class="text-slate-100/60 text-xs mt-0.5">{{ isRtl ? 'رفع صور قبل وبعد العلاج' : 'Upload before and after treatment photos' }}</p>
                         </div>
                     </div>
                 </div>
@@ -109,10 +110,10 @@ function submit() {
                         <!-- Before Image -->
                         <div>
                             <label class="text-sm font-medium text-gray-700 mb-2 block">{{ isRtl ? 'صورة قبل العلاج *' : 'Before Image *' }}</label>
-                            <div class="relative aspect-[4/3] rounded-xl border-2 border-dashed border-gray-200 hover:border-cyan-300 transition overflow-hidden bg-gray-50 cursor-pointer group"
+                            <div class="relative aspect-[4/3] rounded-xl border-2 border-dashed border-gray-200 hover:border-slate-300 transition overflow-hidden bg-gray-50 cursor-pointer group"
                                 @click="$refs.beforeInput.click()">
                                 <img v-if="beforePreview" :src="beforePreview" class="w-full h-full object-cover" />
-                                <div v-else class="absolute inset-0 flex flex-col items-center justify-center text-gray-400 group-hover:text-cyan-500 transition">
+                                <div v-else class="absolute inset-0 flex flex-col items-center justify-center text-gray-400 group-hover:text-[#1B365D] transition">
                                     <svg class="w-10 h-10 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                                     <span class="text-sm font-medium">{{ isRtl ? 'صورة قبل' : 'Before Photo' }}</span>
                                 </div>
@@ -134,10 +135,10 @@ function submit() {
                         <!-- After Image -->
                         <div>
                             <label class="text-sm font-medium text-gray-700 mb-2 block">{{ isRtl ? 'صورة بعد العلاج *' : 'After Image *' }}</label>
-                            <div class="relative aspect-[4/3] rounded-xl border-2 border-dashed border-gray-200 hover:border-cyan-300 transition overflow-hidden bg-gray-50 cursor-pointer group"
+                            <div class="relative aspect-[4/3] rounded-xl border-2 border-dashed border-gray-200 hover:border-slate-300 transition overflow-hidden bg-gray-50 cursor-pointer group"
                                 @click="$refs.afterInput.click()">
                                 <img v-if="afterPreview" :src="afterPreview" class="w-full h-full object-cover" />
-                                <div v-else class="absolute inset-0 flex flex-col items-center justify-center text-gray-400 group-hover:text-cyan-500 transition">
+                                <div v-else class="absolute inset-0 flex flex-col items-center justify-center text-gray-400 group-hover:text-[#1B365D] transition">
                                     <svg class="w-10 h-10 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                                     <span class="text-sm font-medium">{{ isRtl ? 'صورة بعد' : 'After Photo' }}</span>
                                 </div>
@@ -206,7 +207,7 @@ function submit() {
                     <!-- Toggles -->
                     <div class="flex items-center gap-6 mt-5 pt-5 border-t border-gray-100">
                         <label class="flex items-center gap-2 cursor-pointer">
-                            <input v-model="form.is_visible_to_patient" type="checkbox" class="w-4 h-4 text-cyan-600 border-gray-300 rounded focus:ring-cyan-500" />
+                            <input v-model="form.is_visible_to_patient" type="checkbox" class="w-4 h-4 text-[#1B365D] border-gray-300 rounded focus:ring-[#C4A265]" />
                             <span class="text-sm text-gray-700">{{ isRtl ? 'مرئي للمريض' : 'Visible to patient' }}</span>
                         </label>
                         <label class="flex items-center gap-2 cursor-pointer">
@@ -222,7 +223,7 @@ function submit() {
                         {{ isRtl ? 'إلغاء' : 'Cancel' }}
                     </Link>
                     <button type="submit" :disabled="form.processing"
-                        class="px-8 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-cyan-500 to-teal-500 rounded-xl hover:from-cyan-600 hover:to-teal-600 disabled:opacity-50 transition shadow-lg shadow-cyan-200/40">
+                        class="px-8 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-[#1B365D] to-emerald-500 rounded-xl hover:from-[#1B365D] hover:to-emerald-600 disabled:opacity-50 transition shadow-lg shadow-slate-200/40">
                         {{ form.processing ? (isRtl ? 'جاري الحفظ...' : 'Saving...') : (isRtl ? 'حفظ المقارنة' : 'Save Comparison') }}
                     </button>
                 </div>
@@ -256,7 +257,7 @@ function submit() {
     background: #fff;
     outline: none;
     box-shadow: 0 0 0 2px rgba(34, 211, 238, 0.3);
-    border-color: #67e8f9;
+    border-color: #C4A265;
 }
 
 .dental-select {
@@ -272,6 +273,6 @@ function submit() {
     background: #fff;
     outline: none;
     box-shadow: 0 0 0 2px rgba(34, 211, 238, 0.3);
-    border-color: #67e8f9;
+    border-color: #C4A265;
 }
 </style>

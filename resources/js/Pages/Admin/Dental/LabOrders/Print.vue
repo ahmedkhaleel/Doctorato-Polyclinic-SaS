@@ -150,7 +150,7 @@ onMounted(() => {
 }
 
 .print-header {
-    border-bottom: 3px solid #06b6d4;
+    border-bottom: 3px solid #1B365D;
     padding-bottom: 12px;
     margin-bottom: 20px;
 }
@@ -164,7 +164,7 @@ onMounted(() => {
 .clinic-name {
     font-size: 20px;
     font-weight: 700;
-    color: #0e7490;
+    color: #1B365D;
     margin: 0;
 }
 
@@ -194,7 +194,7 @@ onMounted(() => {
 .print-count {
     font-size: 12px;
     font-weight: 600;
-    color: #0e7490;
+    color: #1B365D;
     margin: 2px 0 0 0;
 }
 
@@ -209,12 +209,12 @@ onMounted(() => {
     gap: 6px;
     font-size: 14px;
     font-weight: 700;
-    color: #0e7490;
-    background: #ecfeff;
+    color: #1B365D;
+    background: #F5E7C8;
     padding: 8px 12px;
     border-radius: 6px;
     margin-bottom: 8px;
-    border: 1px solid #cffafe;
+    border: 1px solid #F5E7C8;
 }
 
 .lab-count {
@@ -297,7 +297,7 @@ onMounted(() => {
 }
 
 .status-ordered { background: #f3f4f6; color: #4b5563; }
-.status-in_production { background: #dbeafe; color: #1d4ed8; }
+.status-in_production { background: #F5E7C8; color: #0F2444; }
 .status-ready { background: #d1fae5; color: #047857; }
 .status-delivered { background: #ccfbf1; color: #0f766e; }
 .status-adjustment { background: #fed7aa; color: #c2410c; }
@@ -333,12 +333,12 @@ onMounted(() => {
 }
 
 .print-btn {
-    background: #06b6d4;
+    background: #1B365D;
     color: white;
 }
 
 .print-btn:hover {
-    background: #0891b2;
+    background: #1B365D;
 }
 
 .close-btn {

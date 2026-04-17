@@ -153,7 +153,7 @@ onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside))
                         </div>
                         <div>
                             <h1 class="text-2xl md:text-3xl font-extrabold text-white tracking-tight">{{ $t('a_create_lab_order') }}</h1>
-                            <p class="text-cyan-200/70 text-sm mt-1 font-medium">{{ $t('a_create_lab_order_desc') }}</p>
+                            <p class="text-slate-200/70 text-sm mt-1 font-medium">{{ $t('a_create_lab_order_desc') }}</p>
                         </div>
                     </div>
                     <Link href="/admin/dental/lab-orders" class="loc-hero-back">
@@ -164,11 +164,11 @@ onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside))
                 <!-- Progress Bar -->
                 <div class="relative z-10 mt-5">
                     <div class="flex items-center justify-between mb-1.5">
-                        <span class="text-xs font-semibold text-cyan-200/70">{{ isRtl ? 'اكتمال النموذج' : 'Form Completion' }}</span>
+                        <span class="text-xs font-semibold text-slate-200/70">{{ isRtl ? 'اكتمال النموذج' : 'Form Completion' }}</span>
                         <span class="text-xs font-bold text-white">{{ progressPercent }}%</span>
                     </div>
                     <div class="w-full h-2 rounded-full bg-white/10 overflow-hidden">
-                        <div class="h-full rounded-full bg-gradient-to-r from-cyan-400 to-teal-300 transition-all duration-500 ease-out" :style="{ width: progressPercent + '%' }"></div>
+                        <div class="h-full rounded-full bg-gradient-to-r from-[#2C4E7A] to-emerald-300 transition-all duration-500 ease-out" :style="{ width: progressPercent + '%' }"></div>
                     </div>
                 </div>
             </div>
@@ -178,7 +178,7 @@ onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside))
                 <!-- ═══ ORDER DETAILS ═══ -->
                 <div class="loc-animate loc-animate-2 loc-glass-card">
                     <div class="loc-card-header">
-                        <div class="loc-section-badge bg-gradient-to-br from-cyan-500 to-teal-600">
+                        <div class="loc-section-badge bg-gradient-to-br from-[#1B365D] to-emerald-600">
                             <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15a2.25 2.25 0 012.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25z" /></svg>
                         </div>
                         <h2 class="text-base font-bold text-gray-800">{{ $t('a_order_details') }}</h2>
@@ -189,7 +189,7 @@ onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside))
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                             <!-- Patient Searchable -->
                             <div>
-                                <label class="loc-label">{{ $t('a_patient') }} <span class="text-rose-400">*</span></label>
+                                <label class="loc-label">{{ $t('a_patient') }} <span class="text-[#D4B57E]">*</span></label>
                                 <div class="loc-patient-dd relative">
                                     <div class="loc-input-wrapper" :class="{ 'loc-input-focus': showPatientDropdown, 'loc-input-error': errors.patient_id, 'loc-input-disabled': !!patient }" @click="!patient && (showPatientDropdown = !showPatientDropdown)">
                                         <svg class="w-4.5 h-4.5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>
@@ -215,7 +215,7 @@ onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside))
                                                         <div class="text-sm font-semibold text-gray-800 truncate">{{ p.full_name }}</div>
                                                         <div class="text-xs text-gray-400 font-mono">{{ p.file_number }}</div>
                                                     </div>
-                                                    <svg v-if="form.patient_id === p.id" class="w-4.5 h-4.5 text-cyan-500 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" /></svg>
+                                                    <svg v-if="form.patient_id === p.id" class="w-4.5 h-4.5 text-[#1B365D] flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" /></svg>
                                                 </button>
                                                 <div v-if="filteredPatients.length === 0" class="px-4 py-3 text-sm text-gray-400 text-center">{{ isRtl ? 'لا توجد نتائج' : 'No results' }}</div>
                                             </div>
@@ -250,7 +250,7 @@ onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside))
                                             <div class="loc-dropdown-list">
                                                 <button v-for="d in filteredDoctors" :key="d.id" type="button" @click="selectDoctor(d)" class="loc-dropdown-item">
                                                     <span class="text-sm font-semibold text-gray-800">{{ locale === 'ar' ? d.name_ar : d.name_en }}</span>
-                                                    <svg v-if="form.doctor_id === d.id" class="w-4.5 h-4.5 text-cyan-500 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" /></svg>
+                                                    <svg v-if="form.doctor_id === d.id" class="w-4.5 h-4.5 text-[#1B365D] flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" /></svg>
                                                 </button>
                                                 <div v-if="filteredDoctors.length === 0" class="px-4 py-3 text-sm text-gray-400 text-center">{{ isRtl ? 'لا توجد نتائج' : 'No results' }}</div>
                                             </div>
@@ -264,7 +264,7 @@ onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside))
                         <!-- Item Type / Tooth / Shade -->
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
                             <div>
-                                <label class="loc-label">{{ $t('a_item_type') }} <span class="text-rose-400">*</span></label>
+                                <label class="loc-label">{{ $t('a_item_type') }} <span class="text-[#D4B57E]">*</span></label>
                                 <div class="loc-input-wrapper" :class="{ 'loc-input-error': errors.item_type }">
                                     <svg class="w-4.5 h-4.5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z" /><path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6z" /></svg>
                                     <select v-model="form.item_type" class="loc-input-field">
@@ -319,7 +319,7 @@ onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside))
                                             <div class="loc-dropdown-list">
                                                 <button v-for="m in filteredMaterials" :key="m.value || m" type="button" @click="selectMaterial(m)" class="loc-dropdown-item">
                                                     <span class="text-sm font-semibold text-gray-800">{{ m.label || m }}</span>
-                                                    <svg v-if="form.material === (m.value || m)" class="w-4.5 h-4.5 text-cyan-500 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" /></svg>
+                                                    <svg v-if="form.material === (m.value || m)" class="w-4.5 h-4.5 text-[#1B365D] flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" /></svg>
                                                 </button>
                                                 <div v-if="filteredMaterials.length === 0" class="px-4 py-3 text-sm text-gray-400 text-center">{{ isRtl ? 'لا توجد نتائج' : 'No results' }}</div>
                                             </div>
@@ -343,7 +343,7 @@ onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside))
                 <!-- ═══ PRICING & DATES ═══ -->
                 <div class="loc-animate loc-animate-3 loc-glass-card">
                     <div class="loc-card-header">
-                        <div class="loc-section-badge bg-gradient-to-br from-amber-500 to-orange-600">
+                        <div class="loc-section-badge bg-gradient-to-br from-amber-500 to-[#C4A265]">
                             <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z" /></svg>
                         </div>
                         <h2 class="text-base font-bold text-gray-800">{{ $t('a_pricing_and_dates') }}</h2>
@@ -465,7 +465,7 @@ onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside))
     position: relative;
     overflow: hidden;
     border-radius: 1.75rem;
-    background: linear-gradient(135deg, #0f172a 0%, #164e63 50%, #134e4a 100%);
+    background: linear-gradient(135deg, #0F2444 0%, #1B365D 50%, #134e4a 100%);
     padding: 2rem;
 }
 .loc-hero-orb {
@@ -577,7 +577,7 @@ onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside))
 }
 .loc-input-wrapper:focus-within,
 .loc-input-focus {
-    border-color: #67e8f9;
+    border-color: #C4A265;
     background: #fff;
     box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.12);
 }
@@ -614,7 +614,7 @@ onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside))
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .loc-textarea-wrapper:focus-within {
-    border-color: #67e8f9;
+    border-color: #C4A265;
     background: #fff;
     box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.12);
 }
@@ -654,7 +654,7 @@ onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside))
     transition: all 0.2s;
 }
 .loc-dropdown-search:focus {
-    border-color: #67e8f9;
+    border-color: #C4A265;
     background: #fff;
     box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.1);
 }
@@ -719,7 +719,7 @@ onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside))
 
 .loc-shimmer {
     position: absolute; inset: 0;
-    background: linear-gradient(90deg, #0891b2, #0d9488, #0891b2);
+    background: linear-gradient(90deg, #1B365D, #059669, #1B365D);
     background-size: 200% 100%;
     animation: locShimmer 3s ease-in-out infinite;
 }

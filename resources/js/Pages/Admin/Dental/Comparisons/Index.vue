@@ -46,14 +46,14 @@ const categoryLabels = {
 };
 
 const categoryColors = {
-    orthodontic: 'from-violet-500 to-purple-600',
-    cosmetic: 'from-pink-500 to-rose-600',
-    implant: 'from-cyan-500 to-teal-600',
-    whitening: 'from-amber-400 to-yellow-500',
-    restoration: 'from-blue-500 to-indigo-600',
-    surgical: 'from-red-500 to-rose-600',
+    orthodontic: 'from-[#1B365D] to-[#1B365D]',
+    cosmetic: 'from-[#C4A265] to-[#C4A265]',
+    implant: 'from-[#1B365D] to-emerald-600',
+    whitening: 'from-amber-400 to-[#C4A265]',
+    restoration: 'from-[#1B365D] to-[#1B365D]',
+    surgical: 'from-red-500 to-[#C4A265]',
     xray: 'from-gray-500 to-gray-700',
-    other: 'from-emerald-500 to-green-600',
+    other: 'from-emerald-500 to-emerald-600',
 };
 
 function categoryLabel(cat) {
@@ -117,25 +117,32 @@ function toggleFeatured(id) {
     <AdminLayout :title="isRtl ? 'مقارنة قبل / بعد' : 'Before & After'">
         <div class="space-y-6">
             <!-- Hero Header -->
-            <div class="relative bg-gradient-to-br from-cyan-600 via-teal-600 to-emerald-700 rounded-2xl px-6 py-7 text-white overflow-hidden dental-hero-enter">
-                <div class="absolute -top-10 ltr:-right-10 rtl:-left-10 w-40 h-40 bg-white/5 rounded-full blur-2xl"></div>
-                <div class="absolute bottom-0 ltr:right-20 rtl:left-20 w-24 h-24 bg-white/5 rounded-full blur-xl"></div>
+            <div class="relative bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] rounded-2xl px-6 py-7 text-white overflow-hidden shadow-xl dental-hero-enter">
+                <div class="pointer-events-none absolute -top-10 -end-10 w-40 h-40 bg-[#C4A265]/20 rounded-full blur-2xl"></div>
+                <div class="pointer-events-none absolute bottom-0 start-1/3 w-24 h-24 bg-[#C4A265]/10 rounded-full blur-xl"></div>
+                <div class="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-[#C4A265] to-transparent"></div>
                 <div class="relative flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                    <div>
-                        <h1 class="text-2xl sm:text-3xl font-bold tracking-tight flex items-center gap-3">
-                            <span class="inline-flex items-center justify-center w-10 h-10 bg-white/10 rounded-xl backdrop-blur">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                </svg>
-                            </span>
-                            {{ isRtl ? 'مقارنة قبل / بعد' : 'Before & After' }}
-                        </h1>
-                        <p class="text-cyan-100 text-sm mt-1">
-                            {{ isRtl ? 'عرض صور قبل وبعد العلاج بمقارنة تفاعلية' : 'Interactive before & after treatment comparisons' }}
-                        </p>
+                    <div class="flex items-start gap-4">
+                        <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-[#C4A265] to-[#8B7043] flex items-center justify-center shadow-lg shadow-black/20 flex-shrink-0">
+                            <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="h-[3px] w-6 bg-[#C4A265] rounded-full"></span>
+                                <span class="text-[10px] font-bold text-[#C4A265] tracking-[0.25em] uppercase">{{ isRtl ? 'طب الأسنان' : 'DENTAL' }}</span>
+                            </div>
+                            <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight">
+                                {{ isRtl ? 'مقارنة قبل / بعد' : 'Before & After' }}
+                            </h1>
+                            <p class="text-white/70 text-sm mt-1">
+                                {{ isRtl ? 'عرض صور قبل وبعد العلاج بمقارنة تفاعلية' : 'Interactive before & after treatment comparisons' }}
+                            </p>
+                        </div>
                     </div>
                     <Link href="/admin/dental/comparisons/create"
-                        class="inline-flex items-center gap-2 px-5 py-2.5 bg-white/15 hover:bg-white/25 backdrop-blur border border-white/20 rounded-xl text-sm font-semibold transition-all">
+                        class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#C4A265] hover:bg-[#D4B57E] text-[#1B365D] rounded-xl text-sm font-semibold transition-all shadow-lg">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
                         {{ isRtl ? 'إضافة مقارنة' : 'Add Comparison' }}
                     </Link>
@@ -147,21 +154,21 @@ function toggleFeatured(id) {
                 <div class="flex flex-wrap gap-3 items-center">
                     <div class="relative flex-1 min-w-[200px]">
                         <svg v-if="!isFiltering" class="absolute top-1/2 -translate-y-1/2 ltr:left-3 rtl:right-3 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                        <svg v-else class="absolute top-1/2 -translate-y-1/2 ltr:left-3 rtl:right-3 w-4 h-4 text-cyan-600 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+                        <svg v-else class="absolute top-1/2 -translate-y-1/2 ltr:left-3 rtl:right-3 w-4 h-4 text-[#1B365D] animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
                         <input v-model="search" type="text" :placeholder="isRtl ? 'بحث بالمريض أو العنوان...' : 'Search patient or title...'"
-                            class="w-full ltr:pl-10 rtl:pr-10 pr-4 py-2.5 bg-gray-50/50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-cyan-200 focus:border-cyan-300 transition" />
+                            class="w-full ltr:pl-10 rtl:pr-10 pr-4 py-2.5 bg-gray-50/50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-slate-200 focus:border-slate-300 transition" />
                     </div>
 
                     <!-- Category pills -->
                     <div class="flex flex-wrap gap-1.5">
                         <button @click="selectedCategory = ''; applyFilters()"
-                            :class="!selectedCategory ? 'bg-cyan-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'"
+                            :class="!selectedCategory ? 'bg-[#1B365D] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'"
                             class="px-3 py-1.5 rounded-lg text-xs font-medium transition">
                             {{ isRtl ? 'الكل' : 'All' }}
                         </button>
                         <button v-for="cat in categories" :key="cat"
                             @click="selectedCategory = cat; applyFilters()"
-                            :class="selectedCategory === cat ? 'bg-cyan-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'"
+                            :class="selectedCategory === cat ? 'bg-[#1B365D] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'"
                             class="px-3 py-1.5 rounded-lg text-xs font-medium transition">
                             {{ categoryLabel(cat) }}
                         </button>
@@ -223,7 +230,7 @@ function toggleFeatured(id) {
 
                         <div v-if="comp.tooth_numbers" class="flex flex-wrap gap-1 mt-2">
                             <span v-for="tooth in comp.tooth_numbers.split(',')" :key="tooth"
-                                class="bg-cyan-50 text-cyan-700 text-[10px] font-mono font-bold px-1.5 py-0.5 rounded">
+                                class="bg-slate-50 text-[#1B365D] text-[10px] font-mono font-bold px-1.5 py-0.5 rounded">
                                 #{{ tooth.trim() }}
                             </span>
                         </div>
@@ -235,12 +242,12 @@ function toggleFeatured(id) {
                         <!-- Actions -->
                         <div class="flex items-center gap-1.5 mt-3 pt-3 border-t border-gray-100">
                             <Link :href="`/admin/dental/comparisons/${comp.id}`"
-                                class="flex-1 px-3 py-1.5 text-xs font-medium text-center text-cyan-600 bg-cyan-50 rounded-lg hover:bg-cyan-100 transition">
+                                class="flex-1 px-3 py-1.5 text-xs font-medium text-center text-[#1B365D] bg-slate-50 rounded-lg hover:bg-slate-100 transition">
                                 {{ isRtl ? 'عرض' : 'View' }}
                             </Link>
                             <button @click="toggleVisibility(comp.id)" :title="comp.is_visible_to_patient ? 'Hide from patient' : 'Show to patient'"
                                 class="p-1.5 rounded-lg transition"
-                                :class="comp.is_visible_to_patient ? 'text-green-500 bg-green-50 hover:bg-green-100' : 'text-gray-400 bg-gray-50 hover:bg-gray-100'">
+                                :class="comp.is_visible_to_patient ? 'text-emerald-500 bg-emerald-50 hover:bg-emerald-100' : 'text-gray-400 bg-gray-50 hover:bg-gray-100'">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path v-if="comp.is_visible_to_patient" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                     <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21" />
@@ -268,7 +275,7 @@ function toggleFeatured(id) {
                 </svg>
                 <p class="text-gray-500 text-sm mb-3">{{ isRtl ? 'لا توجد مقارنات بعد' : 'No comparisons yet' }}</p>
                 <Link href="/admin/dental/comparisons/create"
-                    class="inline-flex items-center gap-2 px-5 py-2.5 bg-cyan-600 text-white text-sm font-medium rounded-xl hover:bg-cyan-700 transition">
+                    class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#1B365D] text-white text-sm font-medium rounded-xl hover:bg-[#1B365D] transition">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
                     {{ isRtl ? 'إضافة أول مقارنة' : 'Add First Comparison' }}
                 </Link>
@@ -279,7 +286,7 @@ function toggleFeatured(id) {
                 <template v-for="link in comparisons.links" :key="link.label">
                     <Link v-if="link.url" :href="link.url"
                         class="px-3 py-2 rounded-lg text-sm transition-colors"
-                        :class="link.active ? 'bg-cyan-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'"
+                        :class="link.active ? 'bg-[#1B365D] text-white' : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'"
                         v-html="link.label" />
                     <span v-else class="px-3 py-2 text-sm text-gray-300" v-html="link.label" />
                 </template>
