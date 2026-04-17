@@ -168,7 +168,7 @@ const navGroups = [
     },
     {
         key: 'derma', titleEn: 'Dermatology', titleAr: 'الجلدية', moduleKey: 'derma',
-        color: '#EC4899',
+        color: '#1B365D',
         accent: '#C4A265',
         featured: true,
         groupIcon: 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z',
@@ -185,8 +185,8 @@ const navGroups = [
     },
     {
         key: 'cosmetic', titleEn: 'Cosmetic', titleAr: 'التجميل', moduleKey: 'cosmetic',
-        color: '#8B5CF6',
-        accent: '#C4A265',
+        color: '#C4A265',
+        accent: '#1B365D',
         featured: true,
         groupIcon: 'M12 2l2.39 7.36h7.74l-6.26 4.55 2.39 7.36L12 16.72l-6.26 4.55 2.39-7.36L1.87 9.36h7.74L12 2z',
         items: [

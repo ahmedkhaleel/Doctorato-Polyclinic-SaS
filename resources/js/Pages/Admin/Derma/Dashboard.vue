@@ -23,23 +23,23 @@ function fmtDate(d) { if (!d) return '-'; return new Date(d).toLocaleDateString(
 <template>
     <div class="space-y-6 pb-10">
         <!-- Hero -->
-        <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-pink-600 via-pink-500 to-rose-500 p-8 shadow-xl">
-            <div class="absolute -top-20 ltr:-right-20 rtl:-left-20 w-72 h-72 bg-pink-300/20 rounded-full blur-3xl"></div>
-            <div class="absolute -bottom-16 ltr:-left-16 rtl:-right-16 w-56 h-56 bg-rose-300/15 rounded-full blur-3xl"></div>
+        <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-amber-600 via-amber-500 to-amber-500 p-8 shadow-xl">
+            <div class="absolute -top-20 ltr:-right-20 rtl:-left-20 w-72 h-72 bg-amber-300/20 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-16 ltr:-left-16 rtl:-right-16 w-56 h-56 bg-amber-300/15 rounded-full blur-3xl"></div>
             <div class="relative z-10">
                 <h1 class="text-3xl font-bold text-white">{{ t('Dermatology Dashboard', 'لوحة الجلدية') }}</h1>
-                <p class="mt-1 text-pink-100/90">{{ t('Overview of derma module activity', 'نظرة عامة على نشاط قسم الجلدية') }}</p>
+                <p class="mt-1 text-amber-100/90">{{ t('Overview of derma module activity', 'نظرة عامة على نشاط قسم الجلدية') }}</p>
             </div>
         </div>
 
         <!-- Stats -->
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div v-for="s in [
-                { label: t('Patients', 'المرضى'), val: stats?.totalPatients ?? 0, color: 'from-pink-500 to-pink-400' },
-                { label: t('Visits', 'الزيارات'), val: stats?.totalVisits ?? 0, color: 'from-rose-500 to-rose-400' },
-                { label: t('This Month', 'هذا الشهر'), val: stats?.thisMonthVisits ?? 0, color: 'from-fuchsia-500 to-fuchsia-400' },
+                { label: t('Patients', 'المرضى'), val: stats?.totalPatients ?? 0, color: 'from-amber-500 to-amber-400' },
+                { label: t('Visits', 'الزيارات'), val: stats?.totalVisits ?? 0, color: 'from-amber-500 to-amber-400' },
+                { label: t('This Month', 'هذا الشهر'), val: stats?.thisMonthVisits ?? 0, color: 'from-amber-500 to-amber-400' },
                 { label: t('Active Conditions', 'حالات نشطة'), val: stats?.activeConditions ?? 0, color: 'from-amber-500 to-amber-400' },
-                { label: t('Sessions', 'الجلسات'), val: stats?.totalSessions ?? 0, color: 'from-purple-500 to-purple-400' },
+                { label: t('Sessions', 'الجلسات'), val: stats?.totalSessions ?? 0, color: 'from-blue-800 to-blue-700' },
                 { label: t('Sessions / month', 'جلسات الشهر'), val: stats?.sessionsThisMonth ?? 0, color: 'from-indigo-500 to-indigo-400' },
                 { label: t('Photos', 'الصور'), val: stats?.totalPhotos ?? 0, color: 'from-teal-500 to-teal-400' },
             ]" :key="s.label"
@@ -59,7 +59,7 @@ function fmtDate(d) { if (!d) return '-'; return new Date(d).toLocaleDateString(
                 <div class="space-y-2">
                     <div v-for="c in topConditions" :key="c.category" class="flex items-center justify-between px-3 py-2 rounded-lg bg-gray-50">
                         <span class="text-sm text-gray-700 capitalize">{{ c.category }}</span>
-                        <span class="text-sm font-semibold text-pink-600">{{ c.total }}</span>
+                        <span class="text-sm font-semibold text-amber-600">{{ c.total }}</span>
                     </div>
                     <p v-if="!topConditions?.length" class="text-sm text-gray-400 text-center py-6">{{ t('No data yet', 'لا توجد بيانات') }}</p>
                 </div>
@@ -69,7 +69,7 @@ function fmtDate(d) { if (!d) return '-'; return new Date(d).toLocaleDateString(
                 <div class="space-y-2">
                     <div v-for="s in sessionTypes" :key="s.session_type" class="flex items-center justify-between px-3 py-2 rounded-lg bg-gray-50">
                         <span class="text-sm text-gray-700 capitalize">{{ s.session_type }}</span>
-                        <span class="text-sm font-semibold text-rose-600">{{ s.total }}</span>
+                        <span class="text-sm font-semibold text-amber-600">{{ s.total }}</span>
                     </div>
                     <p v-if="!sessionTypes?.length" class="text-sm text-gray-400 text-center py-6">{{ t('No sessions yet', 'لا توجد جلسات') }}</p>
                 </div>
@@ -80,7 +80,7 @@ function fmtDate(d) { if (!d) return '-'; return new Date(d).toLocaleDateString(
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
             <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
                 <h3 class="text-lg font-semibold text-gray-800">{{ t('Recent Patients', 'أحدث المرضى') }}</h3>
-                <Link href="/admin/derma/patients" class="text-sm text-pink-600 font-medium">{{ t('View all →', 'عرض الكل ←') }}</Link>
+                <Link href="/admin/derma/patients" class="text-sm text-amber-600 font-medium">{{ t('View all →', 'عرض الكل ←') }}</Link>
             </div>
             <table class="w-full text-sm">
                 <thead class="bg-gray-50">

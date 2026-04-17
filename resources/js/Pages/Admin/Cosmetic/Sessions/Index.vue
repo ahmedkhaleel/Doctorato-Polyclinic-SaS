@@ -56,7 +56,7 @@ function fmt(d) { if (!d) return '-'; return new Date(d).toLocaleDateString(isRt
 
 <template>
     <div class="space-y-6 pb-10">
-        <div class="bg-gradient-to-br from-violet-600 to-fuchsia-500 rounded-2xl p-6 shadow-lg flex items-center justify-between">
+        <div class="bg-gradient-to-br from-blue-900 to-amber-500 rounded-2xl p-6 shadow-lg flex items-center justify-between">
             <h1 class="text-2xl font-bold text-white">{{ t('Client Sessions', 'جلسات العملاء') }}</h1>
             <button @click="open()" class="px-4 py-2 bg-white/15 hover:bg-white/25 text-white rounded-xl text-sm font-semibold ring-1 ring-white/30">+ {{ t('New session', 'جلسة جديدة') }}</button>
         </div>
@@ -89,7 +89,7 @@ function fmt(d) { if (!d) return '-'; return new Date(d).toLocaleDateString(isRt
                         <td class="px-5 py-3 hidden lg:table-cell">{{ s.cost }}</td>
                         <td class="px-5 py-3 hidden md:table-cell">{{ fmt(s.completed_at) }}</td>
                         <td class="px-5 py-3 text-end space-x-2 rtl:space-x-reverse">
-                            <button @click="open(s)" class="text-violet-600 text-xs font-semibold">{{ t('Edit', 'تعديل') }}</button>
+                            <button @click="open(s)" class="text-blue-900 text-xs font-semibold">{{ t('Edit', 'تعديل') }}</button>
                             <button @click="remove(s)" class="text-red-600 text-xs font-semibold">{{ t('Delete', 'حذف') }}</button>
                         </td>
                     </tr>
@@ -160,7 +160,7 @@ function fmt(d) { if (!d) return '-'; return new Date(d).toLocaleDateString(isRt
                     </div>
                     <div class="md:col-span-2 flex justify-end gap-2 pt-2">
                         <button type="button" @click="showModal = false" class="px-4 py-2 rounded-lg bg-gray-100 text-sm">{{ t('Cancel', 'إلغاء') }}</button>
-                        <button :disabled="form.processing" class="px-5 py-2 rounded-lg bg-violet-600 text-white text-sm font-semibold">{{ t('Save', 'حفظ') }}</button>
+                        <button :disabled="form.processing" class="px-5 py-2 rounded-lg bg-blue-900 text-white text-sm font-semibold">{{ t('Save', 'حفظ') }}</button>
                     </div>
                 </form>
             </div>

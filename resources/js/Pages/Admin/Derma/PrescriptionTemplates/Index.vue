@@ -54,7 +54,7 @@ function t(en, ar) { return isRtl.value ? ar : en; }
 
 <template>
     <div class="space-y-6 pb-10">
-        <div class="bg-gradient-to-br from-pink-600 to-rose-500 rounded-2xl p-6 shadow-lg flex items-center justify-between">
+        <div class="bg-gradient-to-br from-amber-600 to-amber-500 rounded-2xl p-6 shadow-lg flex items-center justify-between">
             <h1 class="text-2xl font-bold text-white">{{ t('Rx Templates', 'قوالب الوصفات') }}</h1>
             <button @click="open()" class="px-4 py-2 bg-white/15 hover:bg-white/25 text-white rounded-xl text-sm font-semibold ring-1 ring-white/30">+ {{ t('New template', 'قالب جديد') }}</button>
         </div>
@@ -85,7 +85,7 @@ function t(en, ar) { return isRtl.value ? ar : en; }
                         <td class="px-5 py-3 hidden lg:table-cell">{{ tpl.items?.length || 0 }}</td>
                         <td class="px-5 py-3 hidden lg:table-cell">{{ tpl.is_active ? '✓' : '✗' }}</td>
                         <td class="px-5 py-3 text-end space-x-2 rtl:space-x-reverse">
-                            <button @click="open(tpl)" class="text-pink-600 text-xs font-semibold">{{ t('Edit', 'تعديل') }}</button>
+                            <button @click="open(tpl)" class="text-amber-600 text-xs font-semibold">{{ t('Edit', 'تعديل') }}</button>
                             <button @click="remove(tpl)" class="text-red-600 text-xs font-semibold">{{ t('Delete', 'حذف') }}</button>
                         </td>
                     </tr>
@@ -127,7 +127,7 @@ function t(en, ar) { return isRtl.value ? ar : en; }
                     <div>
                         <div class="flex items-center justify-between mb-2">
                             <label class="text-sm font-semibold">{{ t('Medications', 'الأدوية') }}</label>
-                            <button type="button" @click="addItem" class="text-xs text-pink-600 font-semibold">+ {{ t('Add', 'إضافة') }}</button>
+                            <button type="button" @click="addItem" class="text-xs text-amber-600 font-semibold">+ {{ t('Add', 'إضافة') }}</button>
                         </div>
                         <div v-for="(it, i) in form.items" :key="i" class="grid grid-cols-1 md:grid-cols-5 gap-2 p-2 border rounded-lg mb-2">
                             <input v-model="it.medication_name" :placeholder="t('Medication', 'الدواء')" class="px-2 py-1.5 border rounded text-xs" />
@@ -147,7 +147,7 @@ function t(en, ar) { return isRtl.value ? ar : en; }
 
                     <div class="flex justify-end gap-2 pt-2 border-t">
                         <button type="button" @click="showModal = false" class="px-4 py-2 rounded-lg bg-gray-100 text-sm">{{ t('Cancel', 'إلغاء') }}</button>
-                        <button :disabled="form.processing" class="px-5 py-2 rounded-lg bg-pink-600 text-white text-sm font-semibold">{{ t('Save', 'حفظ') }}</button>
+                        <button :disabled="form.processing" class="px-5 py-2 rounded-lg bg-amber-600 text-white text-sm font-semibold">{{ t('Save', 'حفظ') }}</button>
                     </div>
                 </form>
             </div>

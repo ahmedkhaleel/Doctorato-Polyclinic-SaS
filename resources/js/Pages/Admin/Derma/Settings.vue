@@ -26,7 +26,7 @@ function t(en, ar) { return isRtl.value ? ar : en; }
 
 <template>
     <div class="space-y-6 pb-10 max-w-3xl">
-        <div class="bg-gradient-to-br from-pink-600 to-rose-500 rounded-2xl p-6 shadow-lg">
+        <div class="bg-gradient-to-br from-amber-600 to-amber-500 rounded-2xl p-6 shadow-lg">
             <h1 class="text-2xl font-bold text-white">{{ t('Derma Settings', 'إعدادات الجلدية') }}</h1>
         </div>
 
@@ -54,7 +54,7 @@ function t(en, ar) { return isRtl.value ? ar : en; }
                 </div>
             </div>
             <div class="pt-2">
-                <button :disabled="form.processing" class="px-5 py-2.5 bg-pink-600 hover:bg-pink-700 text-white rounded-xl font-semibold text-sm disabled:opacity-60">
+                <button :disabled="form.processing" class="px-5 py-2.5 bg-amber-600 hover:bg-amber-700 text-white rounded-xl font-semibold text-sm disabled:opacity-60">
                     {{ t('Save', 'حفظ') }}
                 </button>
             </div>

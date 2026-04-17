@@ -20,27 +20,27 @@ function fmtMoney(n) { return Number(n || 0).toLocaleString(); }
 
 <template>
     <div class="space-y-6 pb-10">
-        <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-violet-600 via-purple-600 to-fuchsia-500 p-8 shadow-xl">
-            <div class="absolute -top-20 ltr:-right-20 rtl:-left-20 w-72 h-72 bg-violet-300/20 rounded-full blur-3xl"></div>
-            <div class="absolute -bottom-16 ltr:-left-16 rtl:-right-16 w-56 h-56 bg-fuchsia-300/15 rounded-full blur-3xl"></div>
+        <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-900 via-blue-900 to-amber-500 p-8 shadow-xl">
+            <div class="absolute -top-20 ltr:-right-20 rtl:-left-20 w-72 h-72 bg-blue-500/20 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-16 ltr:-left-16 rtl:-right-16 w-56 h-56 bg-amber-300/15 rounded-full blur-3xl"></div>
             <div class="relative z-10 flex items-center justify-between">
                 <div>
                     <h1 class="text-3xl font-bold text-white">{{ t('Cosmetic Dashboard', 'لوحة التجميل') }}</h1>
-                    <p class="mt-1 text-purple-100/90">{{ t('Overview of cosmetic procedures and revenue', 'نظرة عامة على الإجراءات والإيرادات') }}</p>
+                    <p class="mt-1 text-blue-100/90">{{ t('Overview of cosmetic procedures and revenue', 'نظرة عامة على الإجراءات والإيرادات') }}</p>
                 </div>
                 <div class="text-right">
                     <div class="text-4xl font-bold text-white">{{ fmtMoney(stats?.totalRevenue) }}</div>
-                    <div class="text-xs text-purple-100/80">{{ t('Total Revenue', 'إجمالي الإيرادات') }}</div>
+                    <div class="text-xs text-blue-100/80">{{ t('Total Revenue', 'إجمالي الإيرادات') }}</div>
                 </div>
             </div>
         </div>
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div v-for="s in [
-                { label: t('Patients', 'المرضى'), val: stats?.totalPatients ?? 0, color: 'from-violet-500 to-violet-400' },
-                { label: t('Visits', 'الزيارات'), val: stats?.totalVisits ?? 0, color: 'from-purple-500 to-purple-400' },
-                { label: t('Sessions', 'الجلسات'), val: stats?.totalSessions ?? 0, color: 'from-fuchsia-500 to-fuchsia-400' },
-                { label: t('This Month Sessions', 'جلسات الشهر'), val: stats?.thisMonthSessions ?? 0, color: 'from-pink-500 to-pink-400' },
+                { label: t('Patients', 'المرضى'), val: stats?.totalPatients ?? 0, color: 'from-blue-800 to-blue-700' },
+                { label: t('Visits', 'الزيارات'), val: stats?.totalVisits ?? 0, color: 'from-blue-800 to-blue-700' },
+                { label: t('Sessions', 'الجلسات'), val: stats?.totalSessions ?? 0, color: 'from-amber-500 to-amber-400' },
+                { label: t('This Month Sessions', 'جلسات الشهر'), val: stats?.thisMonthSessions ?? 0, color: 'from-amber-500 to-amber-400' },
                 { label: t('This Month Revenue', 'إيرادات الشهر'), val: fmtMoney(stats?.monthRevenue ?? 0), color: 'from-amber-500 to-amber-400' },
                 { label: t('Active Procedures', 'إجراءات نشطة'), val: stats?.activeProcedures ?? 0, color: 'from-teal-500 to-teal-400' },
                 { label: t('Monthly Visits', 'زيارات الشهر'), val: stats?.thisMonthVisits ?? 0, color: 'from-indigo-500 to-indigo-400' },
@@ -60,7 +60,7 @@ function fmtMoney(n) { return Number(n || 0).toLocaleString(); }
                     <div v-for="p in topProcedures" :key="p.procedure_id" class="flex items-center justify-between px-3 py-2 rounded-lg bg-gray-50">
                         <span class="text-sm text-gray-700">{{ isRtl ? p.procedure?.name_ar : (p.procedure?.name_en || p.procedure?.name_ar) || '—' }}</span>
                         <div class="text-xs">
-                            <span class="font-semibold text-violet-600">{{ p.total }}</span>
+                            <span class="font-semibold text-blue-900">{{ p.total }}</span>
                             <span class="text-gray-400 mx-1">·</span>
                             <span class="text-gray-600">{{ fmtMoney(p.revenue) }}</span>
                         </div>
@@ -73,7 +73,7 @@ function fmtMoney(n) { return Number(n || 0).toLocaleString(); }
                 <div class="space-y-2">
                     <div v-for="c in categoryBreakdown" :key="c.category" class="flex items-center justify-between px-3 py-2 rounded-lg bg-gray-50">
                         <span class="text-sm text-gray-700 capitalize">{{ c.category }}</span>
-                        <span class="text-sm font-semibold text-purple-600">{{ c.total }}</span>
+                        <span class="text-sm font-semibold text-blue-900">{{ c.total }}</span>
                     </div>
                 </div>
             </div>
@@ -82,7 +82,7 @@ function fmtMoney(n) { return Number(n || 0).toLocaleString(); }
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
             <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
                 <h3 class="text-lg font-semibold text-gray-800">{{ t('Recent Patients', 'أحدث المرضى') }}</h3>
-                <Link href="/admin/cosmetic/patients" class="text-sm text-violet-600 font-medium">{{ t('View all →', 'عرض الكل ←') }}</Link>
+                <Link href="/admin/cosmetic/patients" class="text-sm text-blue-900 font-medium">{{ t('View all →', 'عرض الكل ←') }}</Link>
             </div>
             <table class="w-full text-sm">
                 <thead class="bg-gray-50">
