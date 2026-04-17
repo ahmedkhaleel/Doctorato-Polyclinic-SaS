@@ -91,6 +91,7 @@ const navGroups = [
         items: [
             { labelEn: 'Invoices',        labelAr: 'الفواتير',         href: '/admin/invoices',           icon: 'receipt',   permission: 'invoices.view' },
             { labelEn: 'Payments',        labelAr: 'المدفوعات',        href: '/admin/payments',           icon: 'cash',      permission: 'payments.view' },
+            { labelEn: 'Payment Methods', labelAr: 'طرق الدفع',         href: '/admin/payment-methods',    icon: 'cash',      permission: 'settings.view' },
             { labelEn: 'Discount Codes',  labelAr: 'أكواد الخصم',      href: '/admin/discount-codes',     icon: 'percent',   permission: 'discount_codes.view' },
             { labelEn: 'Expenses',          labelAr: 'المصروفات',        href: '/admin/expenses',             icon: 'wallet',    permission: 'expenses.view' },
             { labelEn: 'Expense Categories', labelAr: 'تصنيفات المصروفات', href: '/admin/expense-categories', icon: 'folder',    permission: 'expenses.view' },
@@ -145,6 +146,11 @@ const navGroups = [
             { labelEn: 'Lab Orders',         labelAr: 'طلبات المعمل',      href: '/admin/dental/lab-orders',         icon: 'box',       permission: null },
             { labelEn: 'Lab Dashboard',      labelAr: 'لوحة المعمل',       href: '/admin/dental/lab-orders/dashboard', icon: 'activity', permission: null },
             { labelEn: 'Rx Templates',      labelAr: 'قوالب الوصفات',     href: '/admin/dental/prescription-templates', icon: 'file-text', permission: null },
+            { labelEn: 'Plan Templates',    labelAr: 'قوالب خطط العلاج',  href: '/admin/dental/treatment-plan-templates', icon: 'document', permission: null },
+            { labelEn: 'Comparisons',       labelAr: 'مقارنات قبل/بعد',   href: '/admin/dental/comparisons',        icon: 'image',     permission: null },
+            { labelEn: 'Lab Profitability', labelAr: 'ربحية المعمل',      href: '/admin/dental/lab-orders/profitability', icon: 'chartUp', permission: null },
+            { labelEn: 'Follow-up Rules',   labelAr: 'قواعد المتابعة',    href: '/admin/dental/followup-rules',     icon: 'cog',       permission: null },
+            { labelEn: 'Smart Alerts',      labelAr: 'التنبيهات الذكية',  href: '/admin/dental/smart-notifications', icon: 'bellCenter', permission: null },
         ],
     },
     {
@@ -157,6 +163,7 @@ const navGroups = [
             { labelEn: 'Vaccinations',  labelAr: 'التطعيمات',     href: '/admin/pediatric/vaccinations', icon: 'checklist', permission: null },
             { labelEn: 'Visits',        labelAr: 'الزيارات',      href: '/admin/pediatric/visits',       icon: 'clipboard', permission: null },
             { labelEn: 'Growth',        labelAr: 'النمو',         href: '/admin/pediatric/growth',       icon: 'activity',  permission: null },
+            { labelEn: 'Settings',      labelAr: 'الإعدادات',     href: '/admin/pediatric/settings',     icon: 'cog',       permission: null },
         ],
     },
     {
@@ -173,6 +180,8 @@ const navGroups = [
             { labelEn: 'Shifts',        labelAr: 'الورديات',        href: '/admin/shifts',             icon: 'clock',     permission: 'shifts.view' },
             { labelEn: 'Attendance',    labelAr: 'الحضور والانصراف', href: '/admin/attendances',        icon: 'checklist', permission: 'attendances.view' },
             { labelEn: 'Leaves',        labelAr: 'الإجازات',        href: '/admin/leaves',             icon: 'logout',    permission: 'leaves.view' },
+            { labelEn: 'Documents',     labelAr: 'وثائق الموظفين',   href: '/admin/documents',          icon: 'document',  permission: 'employees.view' },
+            { labelEn: 'Expiring Docs', labelAr: 'وثائق قاربت الانتهاء', href: '/admin/documents/expiring', icon: 'bellCenter', permission: 'employees.view' },
         ],
     },
     {
@@ -240,6 +249,11 @@ const navGroups = [
             { labelEn: 'Doctor KPIs',      labelAr: 'أداء الأطباء',    href: '/admin/reports/doctor-kpi',        icon: 'user',    permission: 'reports.view', moduleKey: 'hr' },
             { labelEn: 'Staff Performance', labelAr: 'أداء الموظفين', href: '/admin/reports/staff-performance', icon: 'users',   permission: 'reports.view', moduleKey: 'hr' },
             { labelEn: 'Financial Report', labelAr: 'التقرير المالي', href: '/admin/reports/financial',          icon: 'receipt', permission: 'reports.view' },
+            { labelEn: 'Doctors Report',   labelAr: 'تقرير الأطباء',   href: '/admin/reports/doctors',           icon: 'user',    permission: 'reports.view' },
+            { labelEn: 'Patients Report',  labelAr: 'تقرير المرضى',    href: '/admin/reports/patients',          icon: 'heart',   permission: 'reports.view' },
+            { labelEn: 'Services Report',  labelAr: 'تقرير الخدمات',   href: '/admin/reports/services',          icon: 'sparkles', permission: 'reports.view' },
+            { labelEn: 'Dental Reports',   labelAr: 'تقارير الأسنان',  href: '/admin/reports/dental',            icon: 'tooth',   permission: 'reports.view', moduleKey: 'dental' },
+            { labelEn: 'Backups',         labelAr: 'النسخ الاحتياطي', href: '/admin/backups',            icon: 'shield',   permission: 'settings.update' },
             { labelEn: 'Notifications',   labelAr: 'مركز الإشعارات', href: '/admin/notification-center', icon: 'bellCenter', permission: null },
             { labelEn: 'Activity Logs',  labelAr: 'سجل النشاطات',  href: '/admin/activity-logs',      icon: 'activity', permission: 'reports.view' },
             { labelEn: 'Medical Logs',   labelAr: 'سجل الوصول الطبي', href: '/admin/medical-access-logs', icon: 'shield', permission: 'patients.view_sensitive_medical' },
