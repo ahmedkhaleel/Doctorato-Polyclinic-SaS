@@ -92,7 +92,7 @@ const statusGradients = {
     new: 'from-[#1B365D] to-[#1B365D]',
     contacted: 'from-[#1B365D] to-[#1B365D]',
     qualified: 'from-[#1B365D] to-[#1B365D]',
-    appointment_booked: 'from-amber-500 to-amber-600',
+    appointment_booked: 'from-[#C4A265] to-[#8B7043]',
     consultation_done: 'from-teal-500 to-teal-600',
     negotiation: 'from-[#C4A265] to-[#C4A265]',
     converted: 'from-emerald-500 to-emerald-600',
@@ -118,7 +118,7 @@ const sourceColors = [
     'from-slate-400 to-[#1B365D]',
     'from-emerald-400 to-emerald-600',
     'from-slate-400 to-[#1B365D]',
-    'from-amber-400 to-amber-600',
+    'from-[#C4A265] to-[#8B7043]',
     'from-amber-400 to-[#C4A265]',
     'from-slate-400 to-[#1B365D]',
     'from-slate-400 to-[#1B365D]',
@@ -428,7 +428,7 @@ function missFollowUp(fuId) {
                 >
                     <div class="flex items-center justify-between mb-4">
                         <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Today Follow-ups</p>
-                        <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center shadow-md shadow-amber-200/50 group-hover:scale-110 transition-transform duration-300">
+                        <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-[#C4A265] to-[#8B7043] flex items-center justify-center shadow-md shadow-[#C4A265]/30 group-hover:scale-110 transition-transform duration-300">
                             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                         </div>
                     </div>
@@ -937,9 +937,9 @@ function missFollowUp(fuId) {
                     :class="{ 'card-entrance-active': mounted }"
                     :style="{ transitionDelay: '560ms' }"
                 >
-                    <div class="px-4 md:px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gradient-to-r from-amber-50/80 to-transparent">
+                    <div class="px-4 md:px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gradient-to-r from-[#F5E7C8]/30 to-transparent">
                         <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center">
+                            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-[#C4A265] to-[#8B7043] flex items-center justify-center">
                                 <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                             </div>
                             <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider">{{ $t('a_todays_followups') }}</h3>
@@ -1133,9 +1133,9 @@ function missFollowUp(fuId) {
                 :style="{ transitionDelay: '780ms' }"
                 v-if="staleLeads?.length"
             >
-                <div class="px-4 md:px-6 py-4 border-b border-amber-100 flex items-center justify-between bg-gradient-to-r from-amber-50/80 to-transparent">
+                <div class="px-4 md:px-6 py-4 border-b border-amber-100 flex items-center justify-between bg-gradient-to-r from-[#F5E7C8]/30 to-transparent">
                     <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center">
+                        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-[#C4A265] to-[#8B7043] flex items-center justify-center">
                             <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.27 16.5c-.77.833.192 2.5 1.732 2.5z" /></svg>
                         </div>
                         <h3 class="text-sm font-bold text-amber-700 uppercase tracking-wider">{{ isRtl ? 'عملاء بدون متابعة' : 'Stale Leads' }}</h3>
@@ -1145,13 +1145,13 @@ function missFollowUp(fuId) {
                 <div class="divide-y divide-gray-50">
                     <Link v-for="lead in staleLeads" :key="lead.id"
                         :href="`/admin/leads/${lead.id}`"
-                        class="px-4 md:px-6 py-3.5 flex items-center gap-4 hover:bg-amber-50/40 transition-colors duration-200 block group"
+                        class="px-4 md:px-6 py-3.5 flex items-center gap-4 hover:bg-[#F5E7C8]/30 transition-colors duration-200 block group"
                     >
-                        <div class="w-9 h-9 rounded-full bg-gradient-to-br from-amber-300 to-amber-500 flex items-center justify-center flex-shrink-0">
+                        <div class="w-9 h-9 rounded-full bg-gradient-to-br from-[#C4A265] to-[#8B7043] flex items-center justify-center flex-shrink-0">
                             <span class="text-[10px] font-bold text-white">{{ getInitials(lead.full_name) }}</span>
                         </div>
                         <div class="flex-1 min-w-0">
-                            <p class="text-sm font-semibold text-gray-800 truncate group-hover:text-amber-700 transition-colors">{{ lead.full_name }}</p>
+                            <p class="text-sm font-semibold text-gray-800 truncate group-hover:text-[#1B365D] transition-colors">{{ lead.full_name }}</p>
                             <div class="flex items-center gap-2 mt-0.5">
                                 <span class="text-xs text-gray-400">{{ lead.phone || '-' }}</span>
                                 <span class="text-[10px] text-gray-300">|</span>
@@ -1159,7 +1159,7 @@ function missFollowUp(fuId) {
                             </div>
                         </div>
                         <div class="text-right flex-shrink-0">
-                            <p class="text-xs font-semibold text-amber-600">{{ timeAgo(lead.updated_at) }}</p>
+                            <p class="text-xs font-semibold text-[#C4A265]">{{ timeAgo(lead.updated_at) }}</p>
                             <p class="text-[10px] text-gray-400 mt-0.5">{{ lead.assigned_user?.name || (isRtl ? 'غير مخصص' : 'Unassigned') }}</p>
                         </div>
                     </Link>

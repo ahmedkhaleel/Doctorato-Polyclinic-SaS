@@ -415,7 +415,7 @@ function formatDateTime(date) {
                                         <input
                                             v-model="visitDateForm.visit_date"
                                             type="date"
-                                            class="px-2 py-1 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
+                                            class="px-2 py-1 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                                         />
                                         <button
                                             @click="saveVisitDate"
@@ -527,12 +527,12 @@ function formatDateTime(date) {
                         <form v-else @submit.prevent="saveDiagnosis" class="space-y-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_diagnosis') }}</label>
-                                <textarea v-model="diagnosisForm.diagnosis" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" placeholder="Enter diagnosis..."></textarea>
+                                <textarea v-model="diagnosisForm.diagnosis" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" placeholder="Enter diagnosis..."></textarea>
                                 <p v-if="diagnosisForm.errors.diagnosis" class="mt-1 text-sm text-red-600">{{ diagnosisForm.errors.diagnosis }}</p>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_notes') }}</label>
-                                <textarea v-model="diagnosisForm.doctor_notes" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" placeholder="Enter notes..."></textarea>
+                                <textarea v-model="diagnosisForm.doctor_notes" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" placeholder="Enter notes..."></textarea>
                                 <p v-if="diagnosisForm.errors.doctor_notes" class="mt-1 text-sm text-red-600">{{ diagnosisForm.errors.doctor_notes }}</p>
                             </div>
                             <div class="flex space-x-3">

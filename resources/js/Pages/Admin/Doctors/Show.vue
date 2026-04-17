@@ -474,7 +474,7 @@ onMounted(() => {
                                         <div class="text-sm text-gray-700 prose prose-sm max-w-none leading-relaxed" v-html="sanitizeHtml(doctor.bio_en)"></div>
                                     </div>
                                     <!-- Clinic Notes -->
-                                    <div v-if="doctor.clinic_notes" class="mt-4 p-4 bg-amber-50/50 rounded-xl border border-amber-100">
+                                    <div v-if="doctor.clinic_notes" class="mt-4 p-4 bg-[#F5E7C8]/30 rounded-xl border border-amber-100">
                                         <p class="text-xs font-semibold text-amber-600 uppercase tracking-wider mb-2">{{ $t('a_clinic_notes') }}</p>
                                         <p class="text-sm text-gray-700 whitespace-pre-line">{{ doctor.clinic_notes }}</p>
                                     </div>
@@ -628,7 +628,7 @@ onMounted(() => {
                                         <span v-if="item.duration" class="text-gray-400">| {{ item.duration }}</span>
                                     </div>
                                 </div>
-                                <div v-if="rx.notes" class="mt-3 p-3 bg-amber-50/50 rounded-xl border border-amber-100 text-sm text-gray-600">
+                                <div v-if="rx.notes" class="mt-3 p-3 bg-[#F5E7C8]/30 rounded-xl border border-amber-100 text-sm text-gray-600">
                                     <span class="font-semibold text-amber-700">{{ $t('a_notes') }}:</span> {{ rx.notes }}
                                 </div>
                             </div>
@@ -726,14 +726,14 @@ onMounted(() => {
                                 <p class="text-xs font-semibold text-emerald-100 uppercase tracking-wider">{{ $t('a_total_paid') }}</p>
                                 <p class="text-xl md:text-2xl font-bold mt-2">{{ formatCurrency(payoutSummary.total_paid) }}</p>
                             </div>
-                            <div class="group relative overflow-hidden bg-gradient-to-br from-amber-500 to-amber-600 rounded-2xl p-4 md:p-6 text-white shadow-lg shadow-amber-500/20 hover:shadow-amber-500/30 hover:scale-[1.02] transition-all duration-500">
+                            <div class="group relative overflow-hidden bg-gradient-to-br from-[#C4A265] to-[#8B7043] rounded-2xl p-4 md:p-6 text-white shadow-lg shadow-[#C4A265]/30 hover:shadow-[#C4A265]/40 hover:scale-[1.02] transition-all duration-500">
                                 <div class="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
-                                <p class="text-xs font-semibold text-amber-100 uppercase tracking-wider">{{ $t('a_pending_payment') }}</p>
+                                <p class="text-xs font-semibold text-[#F5E7C8] uppercase tracking-wider">{{ $t('a_pending_payment') }}</p>
                                 <p class="text-xl md:text-2xl font-bold mt-2">{{ formatCurrency(payoutSummary.total_pending) }}</p>
                             </div>
                             <div class="group relative overflow-hidden bg-gradient-to-br from-[#C4A265] to-[#C4A265] rounded-2xl p-4 md:p-6 text-white shadow-lg shadow-[#C4A265]/20 hover:shadow-[#C4A265]/30 hover:scale-[1.02] transition-all duration-500">
                                 <div class="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
-                                <p class="text-xs font-semibold text-amber-100 uppercase tracking-wider">{{ $t('a_unpaid_commission') }}</p>
+                                <p class="text-xs font-semibold text-[#F5E7C8] uppercase tracking-wider">{{ $t('a_unpaid_commission') }}</p>
                                 <p class="text-xl md:text-2xl font-bold mt-2">{{ formatCurrency(payoutSummary.total_unpaid) }}</p>
                             </div>
                         </div>
@@ -925,7 +925,7 @@ onMounted(() => {
                         <div v-if="doctor.vacations && doctor.vacations.length > 0">
                             <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider mb-4">{{ $t('a_vacations') }}</h3>
                             <div class="space-y-3">
-                                <div v-for="vacation in doctor.vacations" :key="vacation.id" class="bg-gradient-to-r from-amber-50 to-white rounded-2xl px-5 py-4 border border-amber-100 flex items-center gap-4 hover:shadow-md transition-shadow">
+                                <div v-for="vacation in doctor.vacations" :key="vacation.id" class="bg-gradient-to-r from-[#F5E7C8]/40 to-white rounded-2xl px-5 py-4 border border-amber-100 flex items-center gap-4 hover:shadow-md transition-shadow">
                                     <div class="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center shrink-0">
                                         <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" /></svg>
                                     </div>
@@ -1027,8 +1027,8 @@ onMounted(() => {
                                     <p class="text-2xl md:text-3xl font-bold text-red-700 mt-1">{{ attendanceSummary?.absent ?? 0 }}</p>
                                 </div>
                             </div>
-                            <div class="group relative overflow-hidden bg-gradient-to-br from-amber-50 to-white rounded-2xl p-5 border border-amber-100 hover:shadow-lg hover:shadow-amber-500/10 hover:scale-[1.02] transition-all duration-500">
-                                <div class="absolute top-0 right-0 w-16 h-16 bg-amber-500/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:scale-150 transition-transform duration-700"></div>
+                            <div class="group relative overflow-hidden bg-gradient-to-br from-[#F5E7C8]/40 to-white rounded-2xl p-5 border border-amber-100 hover:shadow-lg hover:shadow-[#C4A265]/20 hover:scale-[1.02] transition-all duration-500">
+                                <div class="absolute top-0 right-0 w-16 h-16 bg-[#C4A265]/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:scale-150 transition-transform duration-700"></div>
                                 <div class="relative">
                                     <div class="w-8 h-8 rounded-lg bg-amber-100 flex items-center justify-center mb-3">
                                         <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>

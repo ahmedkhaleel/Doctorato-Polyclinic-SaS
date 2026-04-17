@@ -847,7 +847,7 @@ function submitEditServices() {
                     </div>
                     <template v-if="booking.patient">
                         <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-amber-500 to-amber-400 flex items-center justify-center text-white text-lg font-bold flex-shrink-0">
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#C4A265] to-[#8B7043] flex items-center justify-center text-white text-lg font-bold flex-shrink-0">
                                 {{ booking.patient.full_name?.charAt(0) || '?' }}
                             </div>
                             <div class="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -937,7 +937,7 @@ function submitEditServices() {
                 </div>
 
                 <!-- Promo Code Badge -->
-                <div v-if="booking.promo_code" class="bg-amber-50/70 rounded-2xl border border-amber-200/60 p-4 flex items-center gap-3">
+                <div v-if="booking.promo_code" class="bg-[#F5E7C8]/50 rounded-2xl border border-amber-200/60 p-4 flex items-center gap-3">
                     <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#C4A265] to-[#A68B52] flex items-center justify-center flex-shrink-0">
                         <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" /></svg>
                     </div>
@@ -964,7 +964,7 @@ function submitEditServices() {
                     <div class="px-4 md:px-6 py-4 border-b border-gray-100 flex items-center justify-between">
                         <h2 class="text-sm font-bold text-gray-800">{{ $t('a_services') }}</h2>
                         <button v-if="can('bookings.edit_services') && !isUnconfirmed && !showEditServices" type="button" @click="initEditServices"
-                            class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold border rounded-lg hover:bg-amber-50 transition"
+                            class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold border rounded-lg hover:bg-[#F5E7C8]/40 transition"
                             style="color: #C4A265; border-color: rgba(196, 162, 101, 0.4);">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
                             {{ $t('a_edit_services') }}
@@ -1086,7 +1086,7 @@ function submitEditServices() {
 
                 <!-- ─── Edit Services ─────────────────────────────────── -->
                 <div v-if="showEditServices && can('bookings.edit_services')" class="bg-white rounded-2xl shadow-sm border overflow-hidden" style="border-color: #C4A265;">
-                    <div class="px-4 md:px-6 py-4 border-b bg-amber-50/50 flex items-center justify-between" style="border-color: rgba(196, 162, 101, 0.3);">
+                    <div class="px-4 md:px-6 py-4 border-b bg-[#F5E7C8]/30 flex items-center justify-between" style="border-color: rgba(196, 162, 101, 0.3);">
                         <h2 class="text-sm font-bold" style="color: #9a7d3a;">{{ $t('a_edit_services') }}</h2>
                         <button type="button" @click="showEditServices = false" class="text-gray-400 hover:text-gray-600 transition">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
@@ -1110,7 +1110,7 @@ function submitEditServices() {
                                 <div class="relative ss-dropdown">
                                     <label class="block text-xs text-gray-500 mb-1">{{ $t('a_service') }}</label>
                                     <button type="button" @click.stop="toggleDropdown('ed-svc-' + idx)"
-                                        class="w-full flex items-center justify-between px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white hover:border-gray-300 focus:ring-2 focus:ring-amber-200 focus:border-transparent transition">
+                                        class="w-full flex items-center justify-between px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white hover:border-gray-300 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent transition">
                                         <span class="truncate" :class="svc.service_id ? 'text-gray-800' : 'text-gray-400'">
                                             {{ getServiceName(svc.service_id) || $t('a_select_service') }}
                                         </span>
@@ -1121,14 +1121,14 @@ function submitEditServices() {
                                             <div class="p-2 border-b border-gray-100">
                                                 <div class="relative">
                                                     <svg class="absolute ltr:left-2.5 rtl:right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                                                    <input v-model="dropdownSearches['ed-svc-' + idx]" type="text" :placeholder="$t('a_search') + '...'" class="w-full ltr:pl-8 rtl:pr-8 ltr:pr-3 rtl:pl-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-amber-200 focus:border-transparent" @click.stop />
+                                                    <input v-model="dropdownSearches['ed-svc-' + idx]" type="text" :placeholder="$t('a_search') + '...'" class="w-full ltr:pl-8 rtl:pr-8 ltr:pr-3 rtl:pl-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#C4A265]/30 focus:border-transparent" @click.stop />
                                                 </div>
                                             </div>
                                             <div class="max-h-48 overflow-y-auto">
                                                 <button v-for="s in filteredServicesList('ed-svc-' + idx)" :key="s.id" type="button"
                                                     @click="svc.service_id = s.id; onEditServiceChange(idx); openDropdown = null"
-                                                    class="w-full flex items-center justify-between px-3 py-2 text-sm text-start hover:bg-amber-50 transition"
-                                                    :class="svc.service_id == s.id ? 'bg-amber-50/60 font-semibold' : ''">
+                                                    class="w-full flex items-center justify-between px-3 py-2 text-sm text-start hover:bg-[#F5E7C8]/40 transition"
+                                                    :class="svc.service_id == s.id ? 'bg-[#F5E7C8]/40 font-semibold' : ''">
                                                     <span class="truncate">{{ s.name_en || s.name_ar }}</span>
                                                     <span class="text-xs text-gray-400 flex-shrink-0 ltr:ml-2 rtl:mr-2">{{ formatCurrency(s.price) }}</span>
                                                 </button>
@@ -1140,7 +1140,7 @@ function submitEditServices() {
                                 <div class="relative ss-dropdown">
                                     <label class="block text-xs text-gray-500 mb-1">{{ $t('a_doctor') }}</label>
                                     <button type="button" @click.stop="toggleDropdown('ed-doc-' + idx)"
-                                        class="w-full flex items-center justify-between px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white hover:border-gray-300 focus:ring-2 focus:ring-amber-200 focus:border-transparent transition">
+                                        class="w-full flex items-center justify-between px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white hover:border-gray-300 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent transition">
                                         <span :class="svc.doctor_id ? 'text-gray-800' : 'text-gray-400'">
                                             {{ getDoctorName(svc.doctor_id) || $t('a_select_doctor') }}
                                         </span>
@@ -1151,14 +1151,14 @@ function submitEditServices() {
                                             <div class="p-2 border-b border-gray-100">
                                                 <div class="relative">
                                                     <svg class="absolute ltr:left-2.5 rtl:right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                                                    <input v-model="dropdownSearches['ed-doc-' + idx]" type="text" :placeholder="$t('a_search') + '...'" class="w-full ltr:pl-8 rtl:pr-8 ltr:pr-3 rtl:pl-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-amber-200 focus:border-transparent" @click.stop />
+                                                    <input v-model="dropdownSearches['ed-doc-' + idx]" type="text" :placeholder="$t('a_search') + '...'" class="w-full ltr:pl-8 rtl:pr-8 ltr:pr-3 rtl:pl-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#C4A265]/30 focus:border-transparent" @click.stop />
                                                 </div>
                                             </div>
                                             <div class="max-h-48 overflow-y-auto">
                                                 <button v-for="d in filteredDoctorsList('ed-doc-' + idx)" :key="d.id" type="button"
                                                     @click="svc.doctor_id = d.id; openDropdown = null"
-                                                    class="w-full flex items-center gap-2 px-3 py-2 text-sm text-start hover:bg-amber-50 transition"
-                                                    :class="svc.doctor_id == d.id ? 'bg-amber-50/60 font-semibold' : ''">
+                                                    class="w-full flex items-center gap-2 px-3 py-2 text-sm text-start hover:bg-[#F5E7C8]/40 transition"
+                                                    :class="svc.doctor_id == d.id ? 'bg-[#F5E7C8]/40 font-semibold' : ''">
                                                     <span class="w-6 h-6 rounded-full bg-gradient-to-br from-[#1B365D] to-[#1B365D] flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0">{{ (d.name_en || d.name_ar || '?').charAt(0) }}</span>
                                                     <span>{{ d.name_en || d.name_ar }}</span>
                                                 </button>
@@ -1169,15 +1169,15 @@ function submitEditServices() {
                                 </div>
                                 <div>
                                     <label class="block text-xs text-gray-500 mb-1">{{ $t('a_sessions') }}</label>
-                                    <input v-model.number="svc.sessions_count" type="number" min="1" max="50" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
+                                    <input v-model.number="svc.sessions_count" type="number" min="1" max="50" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                 </div>
                                 <div>
                                     <label class="block text-xs text-gray-500 mb-1">{{ $t('a_unit_price') }} ({{ currencyCode }})</label>
-                                    <input v-model.number="svc.unit_price" type="number" min="0" step="0.01" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
+                                    <input v-model.number="svc.unit_price" type="number" min="0" step="0.01" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                 </div>
                                 <div>
                                     <label class="block text-xs text-gray-500 mb-1">{{ $t('a_discount_per_session') }} ({{ currencyCode }})</label>
-                                    <input v-model.number="svc.discount_per_session" type="number" min="0" step="0.01" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
+                                    <input v-model.number="svc.discount_per_session" type="number" min="0" step="0.01" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                 </div>
                                 <div class="flex items-end">
                                     <div>
@@ -1187,12 +1187,12 @@ function submitEditServices() {
                                 </div>
                                 <div class="sm:col-span-2">
                                     <label class="block text-xs text-gray-500 mb-1">{{ $t('a_notes') }}</label>
-                                    <input v-model="svc.notes" type="text" :placeholder="$t('a_optional_notes')" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
+                                    <input v-model="svc.notes" type="text" :placeholder="$t('a_optional_notes')" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                 </div>
                             </div>
                         </div>
 
-                        <button type="button" @click="addEditService" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold border rounded-lg hover:bg-amber-50 transition" style="color: #C4A265; border-color: rgba(196, 162, 101, 0.4);">
+                        <button type="button" @click="addEditService" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold border rounded-lg hover:bg-[#F5E7C8]/40 transition" style="color: #C4A265; border-color: rgba(196, 162, 101, 0.4);">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
                             {{ $t('a_add_service') }}
                         </button>
@@ -1483,7 +1483,7 @@ function submitEditServices() {
 
                 <!-- ─── Payment Form (Inline) ─────────────────────── -->
                 <div v-if="showPaymentForm" class="bg-white rounded-2xl shadow-sm border overflow-hidden" style="border-color: #C4A265;">
-                    <div class="px-4 md:px-6 py-4 border-b bg-amber-50/50" style="border-color: rgba(196, 162, 101, 0.3);">
+                    <div class="px-4 md:px-6 py-4 border-b bg-[#F5E7C8]/30" style="border-color: rgba(196, 162, 101, 0.3);">
                         <div class="flex items-center justify-between">
                             <h2 class="text-sm font-bold" style="color: #9a7d3a;">{{ $t('a_record_payment') }}</h2>
                             <button type="button" @click="showPaymentForm = false" class="text-gray-400 hover:text-gray-600 transition">
@@ -1495,7 +1495,7 @@ function submitEditServices() {
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-xs font-medium text-gray-500 mb-1.5">{{ $t('a_payment_method') }} <span class="text-red-500">*</span></label>
-                                <select v-model="paymentForm.payment_method_id" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent bg-white">
+                                <select v-model="paymentForm.payment_method_id" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent bg-white">
                                     <option value="">{{ $t('a_select_method') }}</option>
                                     <option v-for="method in paymentMethods" :key="method.id" :value="method.id">{{ method.name_en }}</option>
                                 </select>
@@ -1503,16 +1503,16 @@ function submitEditServices() {
                             </div>
                             <div>
                                 <label class="block text-xs font-medium text-gray-500 mb-1.5">{{ $t('a_amount') }} <span class="text-red-500">*</span></label>
-                                <input v-model.number="paymentForm.amount" type="number" min="0" step="0.01" :placeholder="`Balance: ${formatCurrency(invoiceBalance)}`" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
+                                <input v-model.number="paymentForm.amount" type="number" min="0" step="0.01" :placeholder="`Balance: ${formatCurrency(invoiceBalance)}`" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                 <p v-if="paymentForm.errors.amount" class="mt-1 text-xs text-red-600">{{ paymentForm.errors.amount }}</p>
                             </div>
                             <div>
                                 <label class="block text-xs font-medium text-gray-500 mb-1.5">{{ $t('a_reference') }} #</label>
-                                <input v-model="paymentForm.reference_number" type="text" :placeholder="$t('a_reference_placeholder')" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
+                                <input v-model="paymentForm.reference_number" type="text" :placeholder="$t('a_reference_placeholder')" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                             </div>
                             <div>
                                 <label class="block text-xs font-medium text-gray-500 mb-1.5">{{ $t('a_notes') }}</label>
-                                <input v-model="paymentForm.notes" type="text" :placeholder="$t('a_optional_notes')" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
+                                <input v-model="paymentForm.notes" type="text" :placeholder="$t('a_optional_notes')" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                             </div>
                         </div>
                         <div class="flex items-center gap-3 mt-5">
@@ -1541,7 +1541,7 @@ function submitEditServices() {
                 <!-- ═══════════════════════════════════════════════════════ -->
                 <div v-if="isUnconfirmed && patients" class="bg-white rounded-2xl shadow-sm border border-amber-200 overflow-hidden">
                     <button type="button" @click="showConfirmSection = !showConfirmSection"
-                        class="w-full px-4 md:px-6 py-4 flex items-center justify-between bg-amber-50/80 hover:bg-amber-50 transition-colors">
+                        class="w-full px-4 md:px-6 py-4 flex items-center justify-between bg-[#F5E7C8]/50 hover:bg-[#F5E7C8]/40 transition-colors">
                         <div class="flex items-center gap-3">
                             <div class="w-8 h-8 rounded-lg bg-amber-100 flex items-center justify-center">
                                 <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -1570,9 +1570,9 @@ function submitEditServices() {
                                 </h3>
                                 <div class="relative">
                                     <!-- Selected patient display -->
-                                    <div v-if="selectedPatient" class="flex items-center justify-between px-4 py-3 border rounded-xl bg-amber-50/50" style="border-color: rgba(196, 162, 101, 0.4);">
+                                    <div v-if="selectedPatient" class="flex items-center justify-between px-4 py-3 border rounded-xl bg-[#F5E7C8]/30" style="border-color: rgba(196, 162, 101, 0.4);">
                                         <div class="flex items-center gap-3">
-                                            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-amber-500 to-amber-400 flex items-center justify-center text-white text-xs font-bold">
+                                            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-[#C4A265] to-[#8B7043] flex items-center justify-center text-white text-xs font-bold">
                                                 {{ selectedPatient.full_name?.charAt(0) }}
                                             </div>
                                             <div>
@@ -1588,12 +1588,12 @@ function submitEditServices() {
                                     <div v-else class="relative patient-search-wrapper">
                                         <svg class="absolute ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                                         <input v-model="patientSearch" type="text" :placeholder="$t('a_search_patient_placeholder')"
-                                            class="w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent transition"
+                                            class="w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent transition"
                                             @focus="showPatientDropdown = true" />
                                         <div v-if="showPatientDropdown && filteredPatients.length > 0" class="absolute z-30 left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-lg max-h-48 overflow-y-auto">
                                             <button v-for="p in filteredPatients" :key="p.id" type="button" @click="selectPatient(p)"
-                                                class="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-amber-50 transition text-start border-b border-gray-50 last:border-b-0">
-                                                <div class="w-7 h-7 rounded-full bg-gradient-to-br from-amber-500 to-amber-400 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                                                class="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-[#F5E7C8]/40 transition text-start border-b border-gray-50 last:border-b-0">
+                                                <div class="w-7 h-7 rounded-full bg-gradient-to-br from-[#C4A265] to-[#8B7043] flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
                                                     {{ p.full_name?.charAt(0) }}
                                                 </div>
                                                 <div>
@@ -1632,7 +1632,7 @@ function submitEditServices() {
                                             <div class="relative ss-dropdown">
                                                 <label class="block text-xs text-gray-500 mb-1">{{ $t('a_doctor') }} <span class="text-red-500">*</span></label>
                                                 <button type="button" @click.stop="toggleDropdown('consult-doctor')"
-                                                    class="w-full flex items-center justify-between px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white hover:border-gray-300 focus:ring-2 focus:ring-amber-200 focus:border-transparent transition">
+                                                    class="w-full flex items-center justify-between px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white hover:border-gray-300 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent transition">
                                                     <span :class="confirmForm.services[0].doctor_id ? 'text-gray-800' : 'text-gray-400'">
                                                         {{ getDoctorName(confirmForm.services[0].doctor_id) || $t('a_select_doctor') }}
                                                     </span>
@@ -1643,14 +1643,14 @@ function submitEditServices() {
                                                         <div class="p-2 border-b border-gray-100">
                                                             <div class="relative">
                                                                 <svg class="absolute ltr:left-2.5 rtl:right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                                                                <input v-model="dropdownSearches['consult-doctor']" type="text" :placeholder="$t('a_search') + '...'" class="w-full ltr:pl-8 rtl:pr-8 ltr:pr-3 rtl:pl-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-amber-200 focus:border-transparent" @click.stop />
+                                                                <input v-model="dropdownSearches['consult-doctor']" type="text" :placeholder="$t('a_search') + '...'" class="w-full ltr:pl-8 rtl:pr-8 ltr:pr-3 rtl:pl-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#C4A265]/30 focus:border-transparent" @click.stop />
                                                             </div>
                                                         </div>
                                                         <div class="max-h-48 overflow-y-auto">
                                                             <button v-for="d in filteredDoctorsList('consult-doctor')" :key="d.id" type="button"
                                                                 @click="confirmForm.services[0].doctor_id = d.id; onConfirmDoctorChange(0); openDropdown = null"
-                                                                class="w-full flex items-center gap-2 px-3 py-2 text-sm text-start hover:bg-amber-50 transition"
-                                                                :class="confirmForm.services[0].doctor_id == d.id ? 'bg-amber-50/60 font-semibold' : ''">
+                                                                class="w-full flex items-center gap-2 px-3 py-2 text-sm text-start hover:bg-[#F5E7C8]/40 transition"
+                                                                :class="confirmForm.services[0].doctor_id == d.id ? 'bg-[#F5E7C8]/40 font-semibold' : ''">
                                                                 <span class="w-6 h-6 rounded-full bg-gradient-to-br from-[#1B365D] to-[#1B365D] flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0">{{ (d.name_en || d.name_ar || '?').charAt(0) }}</span>
                                                                 <span>{{ d.name_en || d.name_ar || d.name }}</span>
                                                             </button>
@@ -1661,11 +1661,11 @@ function submitEditServices() {
                                             </div>
                                             <div>
                                                 <label class="block text-xs text-gray-500 mb-1">{{ $t('a_consultation_fee') }} ({{ currencyCode }}) <span class="text-red-500">*</span></label>
-                                                <input v-model.number="confirmForm.services[0].unit_price" type="number" min="0" step="0.01" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
+                                                <input v-model.number="confirmForm.services[0].unit_price" type="number" min="0" step="0.01" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                             </div>
                                             <div>
                                                 <label class="block text-xs text-gray-500 mb-1">{{ $t('a_discount') }} ({{ currencyCode }})</label>
-                                                <input v-model.number="confirmForm.services[0].discount_per_session" type="number" min="0" step="0.01" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
+                                                <input v-model.number="confirmForm.services[0].discount_per_session" type="number" min="0" step="0.01" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                             </div>
                                             <div class="flex items-end">
                                                 <div>
@@ -1694,7 +1694,7 @@ function submitEditServices() {
                                             <div class="relative ss-dropdown">
                                                 <label class="block text-xs text-gray-500 mb-1">{{ $t('a_service') }} <span class="text-red-500">*</span></label>
                                                 <button type="button" @click.stop="toggleDropdown('cf-svc-' + svcIdx)"
-                                                    class="w-full flex items-center justify-between px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white hover:border-gray-300 focus:ring-2 focus:ring-amber-200 focus:border-transparent transition">
+                                                    class="w-full flex items-center justify-between px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white hover:border-gray-300 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent transition">
                                                     <span class="truncate" :class="svc.service_id ? 'text-gray-800' : 'text-gray-400'">
                                                         {{ getServiceName(svc.service_id) || $t('a_select_service') }}
                                                     </span>
@@ -1705,14 +1705,14 @@ function submitEditServices() {
                                                         <div class="p-2 border-b border-gray-100">
                                                             <div class="relative">
                                                                 <svg class="absolute ltr:left-2.5 rtl:right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                                                                <input v-model="dropdownSearches['cf-svc-' + svcIdx]" type="text" :placeholder="$t('a_search') + '...'" class="w-full ltr:pl-8 rtl:pr-8 ltr:pr-3 rtl:pl-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-amber-200 focus:border-transparent" @click.stop />
+                                                                <input v-model="dropdownSearches['cf-svc-' + svcIdx]" type="text" :placeholder="$t('a_search') + '...'" class="w-full ltr:pl-8 rtl:pr-8 ltr:pr-3 rtl:pl-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#C4A265]/30 focus:border-transparent" @click.stop />
                                                             </div>
                                                         </div>
                                                         <div class="max-h-48 overflow-y-auto">
                                                             <button v-for="s in filteredServicesList('cf-svc-' + svcIdx)" :key="s.id" type="button"
                                                                 @click="svc.service_id = s.id; onServiceChange(svcIdx); openDropdown = null"
-                                                                class="w-full flex items-center justify-between px-3 py-2 text-sm text-start hover:bg-amber-50 transition"
-                                                                :class="svc.service_id == s.id ? 'bg-amber-50/60 font-semibold' : ''">
+                                                                class="w-full flex items-center justify-between px-3 py-2 text-sm text-start hover:bg-[#F5E7C8]/40 transition"
+                                                                :class="svc.service_id == s.id ? 'bg-[#F5E7C8]/40 font-semibold' : ''">
                                                                 <span class="truncate">{{ s.name_en || s.name_ar }}</span>
                                                                 <span class="text-xs text-gray-400 flex-shrink-0 ltr:ml-2 rtl:mr-2">{{ formatCurrency(s.price) }}</span>
                                                             </button>
@@ -1724,7 +1724,7 @@ function submitEditServices() {
                                             <div class="relative ss-dropdown">
                                                 <label class="block text-xs text-gray-500 mb-1">{{ $t('a_doctor') }} <span class="text-red-500">*</span></label>
                                                 <button type="button" @click.stop="toggleDropdown('cf-doc-' + svcIdx)"
-                                                    class="w-full flex items-center justify-between px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white hover:border-gray-300 focus:ring-2 focus:ring-amber-200 focus:border-transparent transition">
+                                                    class="w-full flex items-center justify-between px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white hover:border-gray-300 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent transition">
                                                     <span :class="svc.doctor_id ? 'text-gray-800' : 'text-gray-400'">
                                                         {{ getDoctorName(svc.doctor_id) || $t('a_select_doctor') }}
                                                     </span>
@@ -1735,14 +1735,14 @@ function submitEditServices() {
                                                         <div class="p-2 border-b border-gray-100">
                                                             <div class="relative">
                                                                 <svg class="absolute ltr:left-2.5 rtl:right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                                                                <input v-model="dropdownSearches['cf-doc-' + svcIdx]" type="text" :placeholder="$t('a_search') + '...'" class="w-full ltr:pl-8 rtl:pr-8 ltr:pr-3 rtl:pl-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-amber-200 focus:border-transparent" @click.stop />
+                                                                <input v-model="dropdownSearches['cf-doc-' + svcIdx]" type="text" :placeholder="$t('a_search') + '...'" class="w-full ltr:pl-8 rtl:pr-8 ltr:pr-3 rtl:pl-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#C4A265]/30 focus:border-transparent" @click.stop />
                                                             </div>
                                                         </div>
                                                         <div class="max-h-48 overflow-y-auto">
                                                             <button v-for="d in filteredDoctorsList('cf-doc-' + svcIdx)" :key="d.id" type="button"
                                                                 @click="svc.doctor_id = d.id; openDropdown = null"
-                                                                class="w-full flex items-center gap-2 px-3 py-2 text-sm text-start hover:bg-amber-50 transition"
-                                                                :class="svc.doctor_id == d.id ? 'bg-amber-50/60 font-semibold' : ''">
+                                                                class="w-full flex items-center gap-2 px-3 py-2 text-sm text-start hover:bg-[#F5E7C8]/40 transition"
+                                                                :class="svc.doctor_id == d.id ? 'bg-[#F5E7C8]/40 font-semibold' : ''">
                                                                 <span class="w-6 h-6 rounded-full bg-gradient-to-br from-[#1B365D] to-[#1B365D] flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0">{{ (d.name_en || d.name_ar || '?').charAt(0) }}</span>
                                                                 <span>{{ d.name_en || d.name_ar || d.name }}</span>
                                                             </button>
@@ -1753,15 +1753,15 @@ function submitEditServices() {
                                             </div>
                                             <div>
                                                 <label class="block text-xs text-gray-500 mb-1">{{ $t('a_sessions') }}</label>
-                                                <input v-model.number="svc.sessions_count" type="number" min="1" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
+                                                <input v-model.number="svc.sessions_count" type="number" min="1" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                             </div>
                                             <div>
                                                 <label class="block text-xs text-gray-500 mb-1">{{ $t('a_unit_price') }}</label>
-                                                <input v-model.number="svc.unit_price" type="number" min="0" step="0.01" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
+                                                <input v-model.number="svc.unit_price" type="number" min="0" step="0.01" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                             </div>
                                             <div>
                                                 <label class="block text-xs text-gray-500 mb-1">{{ $t('a_discount_per_session') }}</label>
-                                                <input v-model.number="svc.discount_per_session" type="number" min="0" step="0.01" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
+                                                <input v-model.number="svc.discount_per_session" type="number" min="0" step="0.01" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                             </div>
                                             <div class="flex items-end">
                                                 <div>
@@ -1773,7 +1773,7 @@ function submitEditServices() {
                                             </div>
                                         </div>
                                     </div>
-                                    <button type="button" @click="addConfirmService" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold border rounded-lg hover:bg-amber-50 transition" style="color: #C4A265; border-color: rgba(196, 162, 101, 0.4);">
+                                    <button type="button" @click="addConfirmService" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold border rounded-lg hover:bg-[#F5E7C8]/40 transition" style="color: #C4A265; border-color: rgba(196, 162, 101, 0.4);">
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
                                         {{ $t('a_add_service') }}
                                     </button>
@@ -1800,7 +1800,7 @@ function submitEditServices() {
                                             <div class="relative ss-dropdown">
                                                 <label class="block text-xs text-gray-500 mb-1">{{ $t('a_for_service') }}</label>
                                                 <button type="button" @click.stop="toggleDropdown('appt-svc-' + apptIdx)"
-                                                    class="w-full flex items-center justify-between px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white hover:border-gray-300 focus:ring-2 focus:ring-amber-200 focus:border-transparent transition">
+                                                    class="w-full flex items-center justify-between px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white hover:border-gray-300 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent transition">
                                                     <span class="truncate text-gray-800">
                                                         {{ isConsultationBooking
                                                             ? $t('a_' + booking.booking_type)
@@ -1814,8 +1814,8 @@ function submitEditServices() {
                                                         <div class="max-h-48 overflow-y-auto">
                                                             <button v-for="(svc, si) in confirmForm.services" :key="si" type="button"
                                                                 @click="appt.service_index = si; openDropdown = null"
-                                                                class="w-full px-3 py-2.5 text-sm text-start hover:bg-amber-50 transition"
-                                                                :class="appt.service_index === si ? 'bg-amber-50/60 font-semibold' : ''">
+                                                                class="w-full px-3 py-2.5 text-sm text-start hover:bg-[#F5E7C8]/40 transition"
+                                                                :class="appt.service_index === si ? 'bg-[#F5E7C8]/40 font-semibold' : ''">
                                                                 {{ isConsultationBooking
                                                                     ? $t('a_' + booking.booking_type)
                                                                     : ($t('a_service') + ' ' + (si + 1) + ': ' + (getServiceName(svc.service_id) || $t('a_not_selected')))
@@ -1828,7 +1828,7 @@ function submitEditServices() {
                                             <div class="relative ss-dropdown">
                                                 <label class="block text-xs text-gray-500 mb-1">{{ $t('a_doctor') }}</label>
                                                 <button type="button" @click.stop="toggleDropdown('appt-doc-' + apptIdx)"
-                                                    class="w-full flex items-center justify-between px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white hover:border-gray-300 focus:ring-2 focus:ring-amber-200 focus:border-transparent transition">
+                                                    class="w-full flex items-center justify-between px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white hover:border-gray-300 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent transition">
                                                     <span :class="appt.doctor_id ? 'text-gray-800' : 'text-gray-400'">
                                                         {{ getDoctorName(appt.doctor_id) || $t('a_select_doctor') }}
                                                     </span>
@@ -1839,14 +1839,14 @@ function submitEditServices() {
                                                         <div class="p-2 border-b border-gray-100">
                                                             <div class="relative">
                                                                 <svg class="absolute ltr:left-2.5 rtl:right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                                                                <input v-model="dropdownSearches['appt-doc-' + apptIdx]" type="text" :placeholder="$t('a_search') + '...'" class="w-full ltr:pl-8 rtl:pr-8 ltr:pr-3 rtl:pl-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-amber-200 focus:border-transparent" @click.stop />
+                                                                <input v-model="dropdownSearches['appt-doc-' + apptIdx]" type="text" :placeholder="$t('a_search') + '...'" class="w-full ltr:pl-8 rtl:pr-8 ltr:pr-3 rtl:pl-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#C4A265]/30 focus:border-transparent" @click.stop />
                                                             </div>
                                                         </div>
                                                         <div class="max-h-48 overflow-y-auto">
                                                             <button v-for="d in filteredDoctorsList('appt-doc-' + apptIdx)" :key="d.id" type="button"
                                                                 @click="appt.doctor_id = d.id; appt.start_time = ''; fetchTimeSlots(apptIdx); openDropdown = null"
-                                                                class="w-full flex items-center gap-2 px-3 py-2 text-sm text-start hover:bg-amber-50 transition"
-                                                                :class="appt.doctor_id == d.id ? 'bg-amber-50/60 font-semibold' : ''">
+                                                                class="w-full flex items-center gap-2 px-3 py-2 text-sm text-start hover:bg-[#F5E7C8]/40 transition"
+                                                                :class="appt.doctor_id == d.id ? 'bg-[#F5E7C8]/40 font-semibold' : ''">
                                                                 <span class="w-6 h-6 rounded-full bg-gradient-to-br from-[#1B365D] to-[#1B365D] flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0">{{ (d.name_en || d.name_ar || '?').charAt(0) }}</span>
                                                                 <span>{{ d.name_en || d.name_ar || d.name }}</span>
                                                             </button>
@@ -1884,17 +1884,17 @@ function submitEditServices() {
                                                     </button>
                                                 </div>
                                                 <div v-else-if="appt.appointment_date && appt.doctor_id" class="text-xs text-gray-400 py-2">
-                                                    <input v-model="appt.start_time" type="time" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
+                                                    <input v-model="appt.start_time" type="time" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                                 </div>
                                                 <p v-else class="text-xs text-gray-400 py-2">{{ $t('a_select_doctor_and_date') }}</p>
                                             </div>
                                             <div>
                                                 <label class="block text-xs text-gray-500 mb-1">{{ $t('a_session') }} #</label>
-                                                <input v-model.number="appt.session_number" type="number" min="1" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
+                                                <input v-model.number="appt.session_number" type="number" min="1" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                             </div>
                                         </div>
                                     </div>
-                                    <button type="button" @click="addConfirmAppointment" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold border rounded-lg hover:bg-amber-50 transition" style="color: #C4A265; border-color: rgba(196, 162, 101, 0.4);">
+                                    <button type="button" @click="addConfirmAppointment" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold border rounded-lg hover:bg-[#F5E7C8]/40 transition" style="color: #C4A265; border-color: rgba(196, 162, 101, 0.4);">
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
                                         {{ $t('a_add_appointment') }}
                                     </button>
@@ -1905,7 +1905,7 @@ function submitEditServices() {
                             <!-- Notes -->
                             <div>
                                 <label class="block text-xs font-medium text-gray-500 mb-1.5">{{ $t('a_notes') }}</label>
-                                <textarea v-model="confirmForm.notes" rows="2" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" :placeholder="$t('a_optional_notes')"></textarea>
+                                <textarea v-model="confirmForm.notes" rows="2" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" :placeholder="$t('a_optional_notes')"></textarea>
                             </div>
 
                             <!-- Submit -->
@@ -1936,7 +1936,7 @@ function submitEditServices() {
                             <label class="block text-xs text-gray-500 mb-1.5">{{ $t('a_status') }}</label>
                             <div class="relative ss-dropdown">
                                 <button type="button" @click.stop="toggleDropdown('status')"
-                                    class="w-full flex items-center justify-between px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm hover:border-gray-300 focus:ring-2 focus:ring-amber-200 focus:border-amber-400 transition">
+                                    class="w-full flex items-center justify-between px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm hover:border-gray-300 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition">
                                     <span class="flex items-center gap-2">
                                         <span class="w-2.5 h-2.5 rounded-full" :class="getStatusOption(statusForm.status).color"></span>
                                         <span class="font-medium text-gray-700">{{ $t('a_' + statusForm.status) }}</span>
@@ -1945,7 +1945,7 @@ function submitEditServices() {
                                 </button>
                                 <div v-if="openDropdown === 'status'" class="absolute z-40 left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-xl overflow-hidden">
                                     <div class="p-2 border-b border-gray-100">
-                                        <input v-model="dropdownSearches['status']" type="text" :placeholder="locale === 'ar' ? 'بحث...' : 'Search...'" class="w-full px-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-amber-200 focus:border-amber-300" @click.stop />
+                                        <input v-model="dropdownSearches['status']" type="text" :placeholder="locale === 'ar' ? 'بحث...' : 'Search...'" class="w-full px-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#C4A265]/30 focus:border-[#C4A265]/60" @click.stop />
                                     </div>
                                     <div class="max-h-48 overflow-y-auto">
                                         <button v-for="opt in filteredStatusOptions('status')" :key="opt.value" type="button"
@@ -1964,7 +1964,7 @@ function submitEditServices() {
                         </div>
                         <div>
                             <label class="block text-xs text-gray-500 mb-1.5">{{ $t('a_admin_notes') }}</label>
-                            <textarea v-model="statusForm.admin_notes" rows="3" class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" :placeholder="$t('a_internal_notes')"></textarea>
+                            <textarea v-model="statusForm.admin_notes" rows="3" class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" :placeholder="$t('a_internal_notes')"></textarea>
                         </div>
                         <button type="submit" :disabled="statusForm.processing" class="w-full py-2.5 px-4 rounded-xl text-white font-semibold text-sm hover:opacity-90 transition-all duration-300 disabled:opacity-50 shadow-sm" style="background-color: #C4A265;">
                             {{ statusForm.processing ? $t('a_updating') : $t('a_update_status') }}
@@ -2088,11 +2088,11 @@ function submitEditServices() {
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" /></svg>
                             {{ $t('a_all_bookings') }}
                         </Link>
-                        <Link v-if="booking.patient" :href="`/admin/patients/${booking.patient.id}`" class="w-full flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium hover:bg-amber-50 transition border" style="color: #C4A265; border-color: rgba(196, 162, 101, 0.4);">
+                        <Link v-if="booking.patient" :href="`/admin/patients/${booking.patient.id}`" class="w-full flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium hover:bg-[#F5E7C8]/40 transition border" style="color: #C4A265; border-color: rgba(196, 162, 101, 0.4);">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                             {{ $t('a_view_patient') }}
                         </Link>
-                        <Link v-if="invoice" :href="`/admin/invoices/${invoice.id}`" class="w-full flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium hover:bg-amber-50 transition border" style="color: #C4A265; border-color: rgba(196, 162, 101, 0.4);">
+                        <Link v-if="invoice" :href="`/admin/invoices/${invoice.id}`" class="w-full flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium hover:bg-[#F5E7C8]/40 transition border" style="color: #C4A265; border-color: rgba(196, 162, 101, 0.4);">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z" /></svg>
                             {{ $t('a_view_invoice') }}
                         </Link>

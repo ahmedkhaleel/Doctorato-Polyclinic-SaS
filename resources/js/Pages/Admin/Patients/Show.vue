@@ -49,7 +49,7 @@ const prescriptions = computed(() => props.patient?.prescriptions || []);
                     <div class="flex flex-col sm:flex-row items-start sm:items-center gap-6">
                         <!-- Avatar -->
                         <div class="relative group">
-                            <div class="absolute -inset-1 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 opacity-60 blur group-hover:opacity-80 transition-opacity duration-300"></div>
+                            <div class="absolute -inset-1 rounded-2xl bg-gradient-to-br from-[#C4A265] to-[#8B7043] opacity-60 blur group-hover:opacity-80 transition-opacity duration-300"></div>
                             <div v-if="patient.photo" class="relative w-20 h-20 rounded-2xl overflow-hidden ring-2 ring-white/20">
                                 <img :src="patient.photo.startsWith('http') ? patient.photo : `/storage/${patient.photo}`" class="w-full h-full object-cover" />
                             </div>
@@ -73,7 +73,7 @@ const prescriptions = computed(() => props.patient?.prescriptions || []);
                                 </span>
                             </div>
                             <div class="flex items-center gap-4 text-sm text-white/50">
-                                <span class="font-mono font-semibold text-amber-400/80">{{ patient.file_number }}</span>
+                                <span class="font-mono font-semibold text-[#C4A265]/80">{{ patient.file_number }}</span>
                                 <span v-if="patient.phone" class="flex items-center gap-1">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
                                     {{ patient.phone }}
@@ -132,7 +132,7 @@ const prescriptions = computed(() => props.patient?.prescriptions || []);
                         </div>
                         <div class="bg-white/5 backdrop-blur-sm rounded-xl px-4 py-3 border border-white/10 hover:bg-white/10 transition-all duration-200">
                             <p class="text-[10px] font-semibold text-white/40 uppercase tracking-wider">{{ $t('a_total_invoiced') }}</p>
-                            <p class="text-xl font-bold text-amber-400 mt-0.5">{{ formatCurrency(financialSummary.total_invoiced) }}</p>
+                            <p class="text-xl font-bold text-[#C4A265] mt-0.5">{{ formatCurrency(financialSummary.total_invoiced) }}</p>
                         </div>
                         <div class="bg-white/5 backdrop-blur-sm rounded-xl px-4 py-3 border border-white/10 hover:bg-white/10 transition-all duration-200">
                             <p class="text-[10px] font-semibold text-white/40 uppercase tracking-wider">{{ $t('a_total_paid') }}</p>

@@ -106,9 +106,9 @@ const kpiCards = computed(() => [
         extra: `${props.summary?.total_patients || 0} ${t('a_total')}`,
         icon: 'patients',
         color: 'amber',
-        gradient: 'from-amber-500 to-[#C4A265]',
-        bg: 'bg-amber-500/10',
-        ring: 'ring-amber-500/20',
+        gradient: 'from-[#C4A265] to-[#8B7043]',
+        bg: 'bg-[#C4A265]/10',
+        ring: 'ring-[#C4A265]/20',
     },
     {
         label: t('a_unpaid_invoices'),

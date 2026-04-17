@@ -337,14 +337,14 @@ function formatStatus(status) {
                     <!-- Revenue by Treatment Type -->
                     <div class="bg-white rounded-2xl border border-gray-200/80 p-4 md:p-6 shadow-sm">
                         <h3 class="text-sm font-bold text-gray-800 mb-4">{{ isRtl ? 'الإيرادات حسب نوع العلاج' : 'Revenue by Treatment Type' }}</h3>
-                        <BarChart v-if="revenueTypeData.length > 0" :data="revenueTypeData" color="#06B6D4" :height="220" />
+                        <BarChart v-if="revenueTypeData.length > 0" :data="revenueTypeData" color="#C4A265" :height="220" />
                         <div v-else class="flex items-center justify-center h-48 text-sm text-gray-400">{{ isRtl ? 'لا توجد بيانات' : 'No data available' }}</div>
                     </div>
 
                     <!-- Monthly Revenue Trend -->
                     <div class="bg-white rounded-2xl border border-gray-200/80 p-4 md:p-6 shadow-sm">
                         <h3 class="text-sm font-bold text-gray-800 mb-4">{{ isRtl ? 'اتجاه الإيرادات الشهرية' : 'Monthly Revenue Trend' }}</h3>
-                        <BarChart v-if="monthlyData.length > 0" :data="monthlyData" color="#06B6D4" :height="220" />
+                        <BarChart v-if="monthlyData.length > 0" :data="monthlyData" color="#C4A265" :height="220" />
                         <div v-else class="flex items-center justify-center h-48 text-sm text-gray-400">{{ isRtl ? 'لا توجد بيانات' : 'No data available' }}</div>
                     </div>
                 </div>

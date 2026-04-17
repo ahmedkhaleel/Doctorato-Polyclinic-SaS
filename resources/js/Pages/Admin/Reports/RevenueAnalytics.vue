@@ -134,7 +134,7 @@ const maxServiceRevenue = computed(() => Math.max(...(props.topServices?.map(s =
                                 <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                                     fill="none" stroke="#e5e7eb" stroke-width="3" />
                                 <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                                    fill="none" stroke="#06b6d4" stroke-width="3"
+                                    fill="none" stroke="#C4A265" stroke-width="3"
                                     :stroke-dasharray="`${collectionRate}, 100`" stroke-linecap="round" />
                             </svg>
                             <div class="absolute inset-0 flex items-center justify-center">

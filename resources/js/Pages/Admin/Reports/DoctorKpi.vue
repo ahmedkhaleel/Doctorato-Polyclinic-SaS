@@ -92,9 +92,9 @@ function stars(rating) {
                     <div class="text-xs text-gray-500">{{ isRtl ? 'إجمالي الزيارات' : 'Total Visits' }}</div>
                     <div class="text-xl md:text-2xl font-bold text-gray-900 mt-1">{{ totals.visits }}</div>
                 </div>
-                <div class="bg-white rounded-xl border border-amber-200 p-5">
+                <div class="bg-white rounded-xl border border-[#C4A265]/30 p-5">
                     <div class="text-xs text-gray-500">{{ isRtl ? 'متوسط التقييم' : 'Avg Rating' }}</div>
-                    <div class="text-xl md:text-2xl font-bold text-amber-600 mt-1">{{ totals.avg_rating || '—' }} <span class="text-sm">/ 5</span></div>
+                    <div class="text-xl md:text-2xl font-bold text-[#C4A265] mt-1">{{ totals.avg_rating || '—' }} <span class="text-sm">/ 5</span></div>
                 </div>
                 <div class="bg-white rounded-xl border border-emerald-200 p-5">
                     <div class="text-xs text-gray-500">{{ isRtl ? 'متوسط الاحتفاظ' : 'Avg Retention' }}</div>
@@ -139,7 +139,7 @@ function stars(rating) {
                             <p class="text-xs text-gray-500">{{ isRtl ? doc.specialty_ar : doc.specialty_en }}</p>
                         </div>
                         <div v-if="doc.rating > 0" class="text-end">
-                            <div class="text-amber-400 text-xs tracking-wider">{{ stars(doc.rating) }}</div>
+                            <div class="text-[#C4A265] text-xs tracking-wider">{{ stars(doc.rating) }}</div>
                             <div class="text-[10px] text-gray-400">{{ doc.rating }}/5 ({{ doc.rating_count }})</div>
                         </div>
                     </div>

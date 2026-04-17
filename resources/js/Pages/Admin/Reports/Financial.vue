@@ -136,7 +136,7 @@ const kpiCards = computed(() => [
         icon: 'expenses',
         bg: 'bg-[#C4A265]/10',
         iconColor: 'text-[#C4A265]',
-        accentColor: 'from-amber-400 to-[#C4A265]',
+        accentColor: 'from-[#C4A265] to-[#8B7043]',
         badgeLabel: `${expenseRatio.value}% ${isRtl.value ? 'من الإيرادات' : 'of revenue'}`,
         badgeClass: expenseRatio.value > 70 ? 'bg-red-50 text-red-500' : 'bg-amber-50 text-amber-600',
     },
@@ -154,9 +154,9 @@ const kpiCards = computed(() => [
         label: isRtl.value ? 'المبالغ غير المدفوعة' : 'Unpaid Amount',
         value: formatCurrency(props.unpaidInvoices),
         icon: 'unpaid',
-        bg: 'bg-amber-500/10',
+        bg: 'bg-[#C4A265]/10',
         iconColor: 'text-amber-600',
-        accentColor: 'from-amber-500 to-amber-600',
+        accentColor: 'from-[#C4A265] to-[#8B7043]',
         badgeLabel: isRtl.value ? 'معلقة' : 'Outstanding',
         badgeClass: 'bg-amber-50 text-amber-600',
     },
@@ -324,7 +324,7 @@ const categoryColors = ['#EF4444', '#F59E0B', '#3B82F6', '#8B5CF6', '#10B981', '
                     </div>
                     <div
                         v-if="totalRevenue > 0 || totalExpenses > 0"
-                        class="absolute inset-y-0 end-0 bg-gradient-to-r from-amber-400 to-[#C4A265] transition-all duration-1000 ease-out rounded-xl"
+                        class="absolute inset-y-0 end-0 bg-gradient-to-r from-[#C4A265] to-[#8B7043] transition-all duration-1000 ease-out rounded-xl"
                         :style="{ width: mounted ? `${Math.max(totalExpenses / (totalRevenue + totalExpenses) * 100, 2)}%` : '0%' }"
                     >
                         <span class="absolute inset-0 flex items-center justify-center text-[11px] font-bold text-white whitespace-nowrap px-2">

@@ -98,7 +98,7 @@ const statusIcons = {
     negotiation: 'M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z',
 };
 const priorityLabels = computed(() => ({ 1: t('a_hot'), 2: t('a_warm'), 3: t('a_cold') }));
-const priorityBorderColors = { 1: 'border-l-red-500', 2: 'border-l-amber-400', 3: 'border-l-blue-400' };
+const priorityBorderColors = { 1: 'border-l-red-500', 2: 'border-l-amber-400', 3: 'border-l-[#1B365D]' };
 const priorityDots = { 1: 'bg-red-500', 2: 'bg-amber-400', 3: 'bg-slate-400' };
 const priorityBadgeBg = { 1: 'bg-red-50 text-red-700', 2: 'bg-amber-50 text-amber-700', 3: 'bg-slate-50 text-[#1B365D]' };
 

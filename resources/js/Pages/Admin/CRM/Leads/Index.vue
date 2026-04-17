@@ -322,7 +322,7 @@ function quickChangePriority(leadId, newPriority) {
                     <p class="text-xl font-bold text-[#1B365D]">{{ stats.new }}</p>
                     <p class="text-[10px] text-gray-500 uppercase mt-1 font-semibold tracking-wide">{{ $t('a_new') }}</p>
                 </div>
-                <div class="group bg-white rounded-2xl shadow-sm hover:shadow-md p-4 border border-gray-100 text-center transition-all duration-300 hover:-translate-y-0.5 cursor-default border-t-[3px] border-t-indigo-400">
+                <div class="group bg-white rounded-2xl shadow-sm hover:shadow-md p-4 border border-gray-100 text-center transition-all duration-300 hover:-translate-y-0.5 cursor-default border-t-[3px] border-t-[#C4A265]">
                     <div class="w-9 h-9 mx-auto rounded-lg bg-slate-50 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform duration-300">
                         <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
                     </div>
