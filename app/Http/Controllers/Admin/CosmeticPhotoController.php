@@ -14,7 +14,7 @@ class CosmeticPhotoController extends Controller
 {
     public function index(Request $request)
     {
-        $query = CosmeticPhoto::with(['patient:id,name,phone', 'procedure:id,name_ar,name_en']);
+        $query = CosmeticPhoto::with(['patient:id,full_name,phone', 'procedure:id,name_ar,name_en']);
         if ($request->filled('patient_id')) $query->where('patient_id', $request->patient_id);
         if ($request->filled('category')) $query->where('category', $request->category);
         if ($request->filled('procedure_id')) $query->where('procedure_id', $request->procedure_id);
@@ -23,7 +23,7 @@ class CosmeticPhotoController extends Controller
             'photos' => $query->latest('taken_at')->latest()->paginate(24)->withQueryString(),
             'filters' => $request->only(['patient_id', 'category', 'procedure_id']),
             'categories' => CosmeticPhoto::CATEGORIES,
-            'patients' => Patient::orderBy('name')->limit(500)->get(['id', 'name', 'phone']),
+            'patients' => Patient::orderBy('full_name')->limit(500)->get(['id', 'full_name', 'phone']),
             'procedures' => CosmeticProcedure::where('is_active', true)->orderBy('name_ar')->get(['id', 'name_ar', 'name_en']),
         ]);
     }

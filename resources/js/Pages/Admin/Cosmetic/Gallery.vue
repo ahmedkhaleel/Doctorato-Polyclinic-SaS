@@ -41,7 +41,7 @@ function t(en, ar) { return isRtl.value ? ar : en; }
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-wrap gap-3">
             <select v-model="pid" class="px-4 py-2.5 border rounded-xl text-sm">
                 <option value="">{{ t('All patients', 'كل المرضى') }}</option>
-                <option v-for="p in patients" :key="p.id" :value="p.id">{{ p.name }}</option>
+                <option v-for="p in patients" :key="p.id" :value="p.id">{{ p.full_name }}</option>
             </select>
             <select v-model="procId" class="px-4 py-2.5 border rounded-xl text-sm">
                 <option value="">{{ t('All procedures', 'كل الإجراءات') }}</option>
@@ -57,7 +57,7 @@ function t(en, ar) { return isRtl.value ? ar : en; }
             <div v-for="p in photos.data" :key="p.id" class="bg-white rounded-xl border border-gray-100 overflow-hidden">
                 <img :src="`/storage/${p.image_path}`" class="w-full h-40 object-cover" />
                 <div class="p-3">
-                    <div class="text-xs font-semibold text-gray-800">{{ p.patient?.name }}</div>
+                    <div class="text-xs font-semibold text-gray-800">{{ p.patient?.full_name }}</div>
                     <div class="text-[10px] text-violet-600 uppercase mt-1">{{ p.category }} · {{ p.procedure?.name_ar || '' }}</div>
                     <button @click="remove(p)" class="text-[10px] text-red-600 mt-2">{{ t('Delete', 'حذف') }}</button>
                 </div>
@@ -71,7 +71,7 @@ function t(en, ar) { return isRtl.value ? ar : en; }
                 <form @submit.prevent="submit" class="space-y-3">
                     <select v-model="form.patient_id" required class="w-full px-3 py-2 border rounded-lg text-sm">
                         <option value="">{{ t('Select patient', 'اختر المريض') }}</option>
-                        <option v-for="p in patients" :key="p.id" :value="p.id">{{ p.name }}</option>
+                        <option v-for="p in patients" :key="p.id" :value="p.id">{{ p.full_name }}</option>
                     </select>
                     <select v-model="form.procedure_id" class="w-full px-3 py-2 border rounded-lg text-sm">
                         <option value="">{{ t('Procedure (optional)', 'الإجراء (اختياري)') }}</option>

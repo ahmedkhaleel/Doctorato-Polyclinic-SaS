@@ -57,8 +57,8 @@ function fmt(d) { if (!d) return '-'; return new Date(d).toLocaleDateString(isRt
                 <tbody>
                     <tr v-for="v in visits.data" :key="v.id" class="border-t border-gray-100 hover:bg-gray-50">
                         <td class="px-5 py-3 text-gray-700">{{ fmt(v.visit_date) }}</td>
-                        <td class="px-5 py-3 font-medium text-gray-800">{{ v.patient?.name || '-' }}</td>
-                        <td class="px-5 py-3 text-gray-600 hidden md:table-cell">{{ v.doctor?.name || '-' }}</td>
+                        <td class="px-5 py-3 font-medium text-gray-800">{{ v.patient?.full_name || '-' }}</td>
+                        <td class="px-5 py-3 text-gray-600 hidden md:table-cell">{{ v.doctor?.name_ar || v.doctor?.name_en_ar || v.doctor?.name_ar || v.doctor?.name_en_en || '-' }}</td>
                         <td class="px-5 py-3 text-gray-600 hidden lg:table-cell">{{ v.status }}</td>
                         <td class="px-5 py-3 text-end">
                             <Link :href="`/admin/visits/${v.id}`" class="text-pink-600 text-xs font-semibold">{{ t('Open', 'فتح') }}</Link>

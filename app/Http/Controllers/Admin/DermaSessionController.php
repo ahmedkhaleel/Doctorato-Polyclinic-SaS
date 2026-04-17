@@ -13,11 +13,11 @@ class DermaSessionController extends Controller
 {
     public function index(Request $request)
     {
-        $query = DermaSession::with(['patient:id,name,phone', 'doctor:id,name']);
+        $query = DermaSession::with(['patient:id,full_name,phone', 'doctor:id,name_ar,name_en']);
 
         if ($request->filled('search')) {
             $s = $request->search;
-            $query->whereHas('patient', fn($q) => $q->where('name', 'like', "%$s%"));
+            $query->whereHas('patient', fn($q) => $q->where('full_name', 'like', "%$s%"));
         }
         if ($request->filled('type')) $query->where('session_type', $request->type);
         if ($request->filled('patient_id')) $query->where('patient_id', $request->patient_id);
@@ -28,8 +28,8 @@ class DermaSessionController extends Controller
             'sessions' => $sessions,
             'filters' => $request->only(['search', 'type', 'patient_id']),
             'types' => DermaSession::TYPES,
-            'patients' => Patient::orderBy('name')->limit(500)->get(['id', 'name', 'phone']),
-            'doctors' => Doctor::orderBy('name')->get(['id', 'name']),
+            'patients' => Patient::orderBy('full_name')->limit(500)->get(['id', 'full_name', 'phone']),
+            'doctors' => Doctor::orderBy('name_ar')->get(['id', 'name_ar', 'name_en']),
         ]);
     }
 

@@ -93,7 +93,7 @@ function fmtDate(d) { if (!d) return '-'; return new Date(d).toLocaleDateString(
                 </thead>
                 <tbody>
                     <tr v-for="p in recentPatients" :key="p.id" class="border-t border-gray-100 hover:bg-gray-50">
-                        <td class="px-6 py-3 font-medium text-gray-800">{{ p.name }}</td>
+                        <td class="px-6 py-3 font-medium text-gray-800">{{ p.full_name }}</td>
                         <td class="px-6 py-3 text-gray-600">{{ p.phone || '-' }}</td>
                         <td class="px-6 py-3 text-gray-600">{{ p.file_number || '-' }}</td>
                         <td class="px-6 py-3 text-gray-500">{{ fmtDate(p.updated_at) }}</td>

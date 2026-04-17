@@ -12,14 +12,14 @@ class SkinConditionController extends Controller
 {
     public function index(Request $request)
     {
-        $query = SkinCondition::with('patient:id,name,phone');
+        $query = SkinCondition::with('patient:id,full_name,phone');
 
         if ($request->filled('search')) {
             $s = $request->search;
             $query->where(function ($q) use ($s) {
                 $q->where('name_ar', 'like', "%$s%")
                   ->orWhere('name_en', 'like', "%$s%")
-                  ->orWhereHas('patient', fn($q) => $q->where('name', 'like', "%$s%"));
+                  ->orWhereHas('patient', fn($q) => $q->where('full_name', 'like', "%$s%"));
             });
         }
         if ($request->filled('category')) $query->where('category', $request->category);
@@ -33,7 +33,7 @@ class SkinConditionController extends Controller
             'categories' => SkinCondition::CATEGORIES,
             'severities' => SkinCondition::SEVERITIES,
             'statuses' => SkinCondition::STATUSES,
-            'patients' => Patient::orderBy('name')->limit(500)->get(['id', 'name', 'phone']),
+            'patients' => Patient::orderBy('full_name')->limit(500)->get(['id', 'full_name', 'phone']),
         ]);
     }
 

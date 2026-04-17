@@ -11,13 +11,13 @@ class DermaVisitController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Visit::with(['patient:id,name,phone,file_number', 'doctor:id,name'])
+        $query = Visit::with(['patient:id,full_name,phone,file_number', 'doctor:id,name_ar,name_en'])
             ->where('module', 'derma');
 
         if ($request->filled('search')) {
             $s = $request->search;
             $query->whereHas('patient', function ($q) use ($s) {
-                $q->where('name', 'like', "%$s%")->orWhere('phone', 'like', "%$s%");
+                $q->where('full_name', 'like', "%$s%")->orWhere('phone', 'like', "%$s%");
             });
         }
         if ($request->filled('status')) {

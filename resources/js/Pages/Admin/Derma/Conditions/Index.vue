@@ -90,7 +90,7 @@ function t(en, ar) { return isRtl.value ? ar : en; }
                 </thead>
                 <tbody>
                     <tr v-for="c in conditions.data" :key="c.id" class="border-t hover:bg-gray-50">
-                        <td class="px-5 py-3 font-medium text-gray-800">{{ c.patient?.name || '-' }}</td>
+                        <td class="px-5 py-3 font-medium text-gray-800">{{ c.patient?.full_name || '-' }}</td>
                         <td class="px-5 py-3">{{ isRtl ? c.name_ar : (c.name_en || c.name_ar) }}</td>
                         <td class="px-5 py-3 text-gray-600 hidden md:table-cell capitalize">{{ c.category }}</td>
                         <td class="px-5 py-3 text-gray-600 hidden lg:table-cell capitalize">{{ c.severity }}</td>
@@ -114,7 +114,7 @@ function t(en, ar) { return isRtl.value ? ar : en; }
                         <label class="block text-xs font-medium mb-1">{{ t('Patient', 'المريض') }} *</label>
                         <select v-model="form.patient_id" required class="w-full px-3 py-2 border rounded-lg text-sm">
                             <option value="">—</option>
-                            <option v-for="p in patients" :key="p.id" :value="p.id">{{ p.name }} ({{ p.phone }})</option>
+                            <option v-for="p in patients" :key="p.id" :value="p.id">{{ p.full_name }} ({{ p.phone }})</option>
                         </select>
                     </div>
                     <div>

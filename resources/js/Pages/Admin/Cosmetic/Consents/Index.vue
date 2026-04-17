@@ -65,7 +65,7 @@ function fmt(d) { if (!d) return '-'; return new Date(d).toLocaleDateString(isRt
                 </thead>
                 <tbody>
                     <tr v-for="c in consents.data" :key="c.id" class="border-t hover:bg-gray-50">
-                        <td class="px-5 py-3 font-medium">{{ c.patient?.name || '-' }}</td>
+                        <td class="px-5 py-3 font-medium">{{ c.patient?.full_name || '-' }}</td>
                         <td class="px-5 py-3 hidden md:table-cell">{{ c.procedure?.name_ar || '-' }}</td>
                         <td class="px-5 py-3 hidden lg:table-cell">{{ fmt(c.signed_at) }}</td>
                         <td class="px-5 py-3 hidden lg:table-cell">{{ c.witnessed_by || '-' }}</td>
@@ -85,7 +85,7 @@ function fmt(d) { if (!d) return '-'; return new Date(d).toLocaleDateString(isRt
                 <form @submit.prevent="submit" class="space-y-3">
                     <select v-model="form.patient_id" required class="w-full px-3 py-2 border rounded-lg text-sm">
                         <option value="">{{ t('Select patient', 'اختر المريض') }}</option>
-                        <option v-for="p in patients" :key="p.id" :value="p.id">{{ p.name }}</option>
+                        <option v-for="p in patients" :key="p.id" :value="p.id">{{ p.full_name }}</option>
                     </select>
                     <select v-model="form.procedure_id" class="w-full px-3 py-2 border rounded-lg text-sm">
                         <option value="">{{ t('Procedure', 'الإجراء') }}</option>

@@ -40,7 +40,7 @@ function t(en, ar) { return isRtl.value ? ar : en; }
                 </thead>
                 <tbody>
                     <tr v-for="p in patients.data" :key="p.id" class="border-t hover:bg-gray-50">
-                        <td class="px-5 py-3 font-medium">{{ p.name }}</td>
+                        <td class="px-5 py-3 font-medium">{{ p.full_name }}</td>
                         <td class="px-5 py-3 text-gray-600 hidden sm:table-cell">{{ p.phone || '-' }}</td>
                         <td class="px-5 py-3 text-gray-600 hidden md:table-cell">{{ p.file_number || '-' }}</td>
                         <td class="px-5 py-3 text-end">

@@ -83,7 +83,7 @@ function fmt(d) { if (!d) return '-'; return new Date(d).toLocaleDateString(isRt
                 </thead>
                 <tbody>
                     <tr v-for="s in sessions.data" :key="s.id" class="border-t hover:bg-gray-50">
-                        <td class="px-5 py-3 font-medium">{{ s.patient?.name || '-' }}</td>
+                        <td class="px-5 py-3 font-medium">{{ s.patient?.full_name || '-' }}</td>
                         <td class="px-5 py-3 hidden md:table-cell">{{ s.procedure?.name_ar || '-' }}</td>
                         <td class="px-5 py-3 hidden lg:table-cell">{{ s.area_treated || '-' }}</td>
                         <td class="px-5 py-3 hidden lg:table-cell">{{ s.cost }}</td>
@@ -106,7 +106,7 @@ function fmt(d) { if (!d) return '-'; return new Date(d).toLocaleDateString(isRt
                         <label class="block text-xs font-medium mb-1">{{ t('Patient', 'المريض') }} *</label>
                         <select v-model="form.patient_id" required class="w-full px-3 py-2 border rounded-lg text-sm">
                             <option value="">—</option>
-                            <option v-for="p in patients" :key="p.id" :value="p.id">{{ p.name }}</option>
+                            <option v-for="p in patients" :key="p.id" :value="p.id">{{ p.full_name }}</option>
                         </select>
                     </div>
                     <div>
@@ -127,7 +127,7 @@ function fmt(d) { if (!d) return '-'; return new Date(d).toLocaleDateString(isRt
                         <label class="block text-xs font-medium mb-1">{{ t('Doctor', 'الطبيب') }}</label>
                         <select v-model="form.doctor_id" class="w-full px-3 py-2 border rounded-lg text-sm">
                             <option value="">—</option>
-                            <option v-for="d in doctors" :key="d.id" :value="d.id">{{ d.name }}</option>
+                            <option v-for="d in doctors" :key="d.id" :value="d.id">{{ d.name_ar || d.name_en }}</option>
                         </select>
                     </div>
                     <div>

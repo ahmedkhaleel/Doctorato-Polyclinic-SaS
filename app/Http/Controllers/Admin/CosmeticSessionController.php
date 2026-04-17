@@ -16,15 +16,15 @@ class CosmeticSessionController extends Controller
     public function index(Request $request)
     {
         $query = CosmeticSession::with([
-            'patient:id,name,phone',
-            'doctor:id,name',
+            'patient:id,full_name,phone',
+            'doctor:id,name_ar,name_en',
             'procedure:id,name_ar,name_en,category',
             'package:id,name_ar,name_en',
         ]);
 
         if ($request->filled('search')) {
             $s = $request->search;
-            $query->whereHas('patient', fn($q) => $q->where('name', 'like', "%$s%"));
+            $query->whereHas('patient', fn($q) => $q->where('full_name', 'like', "%$s%"));
         }
         if ($request->filled('procedure_id')) $query->where('procedure_id', $request->procedure_id);
         if ($request->filled('patient_id')) $query->where('patient_id', $request->patient_id);
@@ -34,8 +34,8 @@ class CosmeticSessionController extends Controller
             'filters' => $request->only(['search', 'procedure_id', 'patient_id']),
             'procedures' => CosmeticProcedure::where('is_active', true)->orderBy('name_ar')->get(['id', 'name_ar', 'name_en', 'category', 'default_price']),
             'packages' => CosmeticPackage::where('is_active', true)->orderBy('name_ar')->get(['id', 'name_ar', 'name_en', 'procedure_id']),
-            'patients' => Patient::orderBy('name')->limit(500)->get(['id', 'name', 'phone']),
-            'doctors' => Doctor::orderBy('name')->get(['id', 'name']),
+            'patients' => Patient::orderBy('full_name')->limit(500)->get(['id', 'full_name', 'phone']),
+            'doctors' => Doctor::orderBy('name_ar')->get(['id', 'name_ar', 'name_en']),
         ]);
     }
 

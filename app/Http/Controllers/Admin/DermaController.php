@@ -50,7 +50,7 @@ class DermaController extends Controller
             ->groupBy('session_type')->orderByDesc('total')->get();
 
         $recentPatients = Patient::whereIn('id', $patientIds)
-            ->latest('updated_at')->limit(10)->get(['id', 'name', 'phone', 'file_number', 'updated_at']);
+            ->latest('updated_at')->limit(10)->get(['id', 'full_name', 'phone', 'file_number', 'updated_at']);
 
         return Inertia::render('Admin/Derma/Dashboard', [
             'stats' => [

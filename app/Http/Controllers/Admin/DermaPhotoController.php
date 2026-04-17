@@ -13,7 +13,7 @@ class DermaPhotoController extends Controller
 {
     public function index(Request $request)
     {
-        $query = DermaPhoto::with('patient:id,name,phone');
+        $query = DermaPhoto::with('patient:id,full_name,phone');
 
         if ($request->filled('patient_id')) $query->where('patient_id', $request->patient_id);
         if ($request->filled('category')) $query->where('category', $request->category);
@@ -24,7 +24,7 @@ class DermaPhotoController extends Controller
             'photos' => $photos,
             'filters' => $request->only(['patient_id', 'category']),
             'categories' => DermaPhoto::CATEGORIES,
-            'patients' => Patient::orderBy('name')->limit(500)->get(['id', 'name', 'phone']),
+            'patients' => Patient::orderBy('full_name')->limit(500)->get(['id', 'full_name', 'phone']),
         ]);
     }
 

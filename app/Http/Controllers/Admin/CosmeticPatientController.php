@@ -18,7 +18,7 @@ class CosmeticPatientController extends Controller
         if ($request->filled('search')) {
             $s = $request->search;
             $query->where(function ($q) use ($s) {
-                $q->where('name', 'like', "%$s%")
+                $q->where('full_name', 'like', "%$s%")
                   ->orWhere('phone', 'like', "%$s%")
                   ->orWhere('file_number', 'like', "%$s%");
             });

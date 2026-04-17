@@ -47,7 +47,7 @@ class CosmeticController extends Controller
             ->groupBy('category')->get();
 
         $recentPatients = Patient::whereIn('id', $patientIds)
-            ->latest('updated_at')->limit(10)->get(['id', 'name', 'phone', 'file_number', 'updated_at']);
+            ->latest('updated_at')->limit(10)->get(['id', 'full_name', 'phone', 'file_number', 'updated_at']);
 
         return Inertia::render('Admin/Cosmetic/Dashboard', [
             'stats' => [

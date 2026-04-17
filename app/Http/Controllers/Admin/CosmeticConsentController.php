@@ -14,10 +14,10 @@ class CosmeticConsentController extends Controller
 {
     public function index(Request $request)
     {
-        $query = CosmeticConsent::with(['patient:id,name,phone', 'procedure:id,name_ar,name_en']);
+        $query = CosmeticConsent::with(['patient:id,full_name,phone', 'procedure:id,name_ar,name_en']);
         if ($request->filled('search')) {
             $s = $request->search;
-            $query->whereHas('patient', fn($q) => $q->where('name', 'like', "%$s%"));
+            $query->whereHas('patient', fn($q) => $q->where('full_name', 'like', "%$s%"));
         }
         if ($request->filled('procedure_id')) $query->where('procedure_id', $request->procedure_id);
 
@@ -25,7 +25,7 @@ class CosmeticConsentController extends Controller
             'consents' => $query->latest()->paginate(20)->withQueryString(),
             'filters' => $request->only(['search', 'procedure_id']),
             'procedures' => CosmeticProcedure::where('is_active', true)->orderBy('name_ar')->get(['id', 'name_ar', 'name_en']),
-            'patients' => Patient::orderBy('name')->limit(500)->get(['id', 'name', 'phone']),
+            'patients' => Patient::orderBy('full_name')->limit(500)->get(['id', 'full_name', 'phone']),
         ]);
     }
 
