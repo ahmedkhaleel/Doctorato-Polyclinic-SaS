@@ -66,11 +66,11 @@ const colorMap = {
                     v-for="card in statCards"
                     :key="card.label"
                     :href="card.href"
-                    class="relative bg-white rounded-xl border border-[#C4A265]/20 p-5 hover:shadow-lg transition-all duration-200 group overflow-hidden"
+                    class="relative bg-white rounded-xl border border-[#C4A265]/20 p-3 md:p-5 hover:shadow-lg transition-all duration-200 group overflow-hidden"
                 >
                     <div class="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-[#C4A265] to-[#8B7043]"></div>
                     <div class="flex items-center justify-between mb-3">
-                        <div :class="[colorMap[card.color].icon]" class="w-10 h-10 rounded-lg flex items-center justify-center">
+                        <div :class="[colorMap[card.color].icon]" class="w-8 h-8 md:w-10 md:h-10 rounded-lg flex items-center justify-center flex-shrink-0">
                             <svg v-if="card.icon === 'sparkles'" :class="[colorMap[card.color].text]" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>
                             <svg v-else-if="card.icon === 'user'" :class="[colorMap[card.color].text]" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                             <svg v-else-if="card.icon === 'image'" :class="[colorMap[card.color].text]" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
@@ -82,14 +82,14 @@ const colorMap = {
                         </div>
                         <svg class="w-4 h-4 text-gray-300 group-hover:text-slate-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
                     </div>
-                    <p class="text-2xl font-bold text-gray-900">{{ card.value }}</p>
-                    <p class="text-xs text-gray-500 mt-0.5">{{ card.label }}</p>
+                    <p class="text-xl md:text-2xl font-bold text-gray-900">{{ card.value }}</p>
+                    <p class="text-[11px] md:text-xs text-gray-500 mt-0.5 line-clamp-1">{{ card.label }}</p>
                 </Link>
             </div>
 
             <!-- Recent Posts -->
             <div class="bg-white rounded-xl border border-gray-200/60 overflow-hidden">
-                <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+                <div class="px-4 md:px-6 py-3 md:py-4 border-b border-gray-100 flex items-center justify-between gap-2 flex-wrap">
                     <h2 class="text-lg font-semibold text-gray-900">{{ $t('a_recent_blog_posts') }}</h2>
                     <Link href="/webmaster/posts" class="text-sm text-[#1B365D] hover:text-[#1B365D] font-medium">{{ $t('a_view_all') }}</Link>
                 </div>
@@ -98,10 +98,10 @@ const colorMap = {
                         v-for="post in recentPosts"
                         :key="post.id"
                         :href="`/webmaster/posts/${post.id}/edit`"
-                        class="flex items-center justify-between px-6 py-3 hover:bg-gray-50/50 transition-colors"
+                        class="flex items-center justify-between gap-3 px-4 md:px-6 py-3 hover:bg-gray-50/50 transition-colors"
                     >
-                        <div>
-                            <p class="text-sm font-medium text-gray-800">{{ post.title_en || post.title_ar }}</p>
+                        <div class="min-w-0 flex-1">
+                            <p class="text-sm font-medium text-gray-800 truncate">{{ post.title_en || post.title_ar }}</p>
                             <p class="text-xs text-gray-400 mt-0.5">{{ new Date(post.created_at).toLocaleDateString() }}</p>
                         </div>
                         <span
@@ -112,33 +112,33 @@ const colorMap = {
                         </span>
                     </Link>
                 </div>
-                <div v-else class="px-6 py-8 text-center text-gray-400 text-sm">
+                <div v-else class="px-4 md:px-6 py-8 text-center text-gray-400 text-sm">
                     No blog posts yet.
                 </div>
             </div>
 
             <!-- Quick Actions -->
             <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                <Link href="/webmaster/posts/create" class="bg-white rounded-xl border border-gray-200/60 p-4 text-center hover:shadow-md hover:border-slate-200 transition-all duration-200 group">
-                    <div class="w-10 h-10 mx-auto mb-2 rounded-lg bg-slate-50 flex items-center justify-center group-hover:bg-slate-100 transition-colors">
+                <Link href="/webmaster/posts/create" class="bg-white rounded-xl border border-gray-200/60 p-3 md:p-4 text-center hover:shadow-md hover:border-slate-200 transition-all duration-200 group">
+                    <div class="w-9 h-9 md:w-10 md:h-10 mx-auto mb-2 rounded-lg bg-slate-50 flex items-center justify-center group-hover:bg-slate-100 transition-colors">
                         <svg class="w-5 h-5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v16m8-8H4" /></svg>
                     </div>
                     <p class="text-xs font-medium text-gray-700">{{ $t('a_new_post') }}</p>
                 </Link>
-                <Link href="/webmaster/services/create" class="bg-white rounded-xl border border-gray-200/60 p-4 text-center hover:shadow-md hover:border-slate-200 transition-all duration-200 group">
-                    <div class="w-10 h-10 mx-auto mb-2 rounded-lg bg-slate-50 flex items-center justify-center group-hover:bg-slate-100 transition-colors">
+                <Link href="/webmaster/services/create" class="bg-white rounded-xl border border-gray-200/60 p-3 md:p-4 text-center hover:shadow-md hover:border-slate-200 transition-all duration-200 group">
+                    <div class="w-9 h-9 md:w-10 md:h-10 mx-auto mb-2 rounded-lg bg-slate-50 flex items-center justify-center group-hover:bg-slate-100 transition-colors">
                         <svg class="w-5 h-5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v16m8-8H4" /></svg>
                     </div>
                     <p class="text-xs font-medium text-gray-700">{{ $t('a_new_service') }}</p>
                 </Link>
-                <Link href="/webmaster/gallery/create" class="bg-white rounded-xl border border-gray-200/60 p-4 text-center hover:shadow-md hover:border-slate-200 transition-all duration-200 group">
-                    <div class="w-10 h-10 mx-auto mb-2 rounded-lg bg-amber-50 flex items-center justify-center group-hover:bg-amber-100 transition-colors">
+                <Link href="/webmaster/gallery/create" class="bg-white rounded-xl border border-gray-200/60 p-3 md:p-4 text-center hover:shadow-md hover:border-slate-200 transition-all duration-200 group">
+                    <div class="w-9 h-9 md:w-10 md:h-10 mx-auto mb-2 rounded-lg bg-amber-50 flex items-center justify-center group-hover:bg-amber-100 transition-colors">
                         <svg class="w-5 h-5 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v16m8-8H4" /></svg>
                     </div>
                     <p class="text-xs font-medium text-gray-700">{{ $t('a_add_gallery') }}</p>
                 </Link>
-                <Link href="/webmaster/seo-pages" class="bg-white rounded-xl border border-gray-200/60 p-4 text-center hover:shadow-md hover:border-slate-200 transition-all duration-200 group">
-                    <div class="w-10 h-10 mx-auto mb-2 rounded-lg bg-slate-50 flex items-center justify-center group-hover:bg-slate-100 transition-colors">
+                <Link href="/webmaster/seo-pages" class="bg-white rounded-xl border border-gray-200/60 p-3 md:p-4 text-center hover:shadow-md hover:border-slate-200 transition-all duration-200 group">
+                    <div class="w-9 h-9 md:w-10 md:h-10 mx-auto mb-2 rounded-lg bg-slate-50 flex items-center justify-center group-hover:bg-slate-100 transition-colors">
                         <svg class="w-5 h-5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                     </div>
                     <p class="text-xs font-medium text-gray-700">{{ $t('a_manage_seo') }}</p>

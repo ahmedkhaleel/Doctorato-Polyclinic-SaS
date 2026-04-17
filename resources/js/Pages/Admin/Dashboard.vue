@@ -295,16 +295,16 @@ function labelX(index, total) {
                             <p class="text-xs md:text-sm text-white/70 mt-1 max-w-xl">{{ $t('a_welcome_back') }}</p>
                         </div>
                     </div>
-                    <div class="flex items-center gap-2 flex-wrap">
-                        <Link href="/admin/bookings/create" class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#C4A265] to-[#8B7043] hover:from-[#8B7043] hover:to-[#C4A265] text-white font-bold px-4 py-2.5 shadow-md hover:shadow-lg transition text-sm">
+                    <div class="flex flex-wrap items-stretch md:items-center gap-2 w-full md:w-auto">
+                        <Link href="/admin/bookings/create" class="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#C4A265] to-[#8B7043] hover:from-[#8B7043] hover:to-[#C4A265] text-white font-bold px-3 md:px-4 py-2 md:py-2.5 flex-1 md:flex-none shadow-md hover:shadow-lg transition text-sm">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                             {{ $t('a_new_booking') }}
                         </Link>
-                        <Link href="/admin/patients/create" class="inline-flex items-center gap-2 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 text-white font-semibold px-4 py-2.5 transition text-sm">
+                        <Link href="/admin/patients/create" class="inline-flex items-center justify-center gap-2 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 text-white font-semibold px-3 md:px-4 py-2 md:py-2.5 transition text-sm flex-1 md:flex-none">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
                             {{ $t('a_new_patient') }}
                         </Link>
-                        <Link href="/admin/visits/today-queue" class="inline-flex items-center gap-2 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 text-white font-semibold px-4 py-2.5 transition text-sm">
+                        <Link href="/admin/visits/today-queue" class="inline-flex items-center justify-center gap-2 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 text-white font-semibold px-3 md:px-4 py-2 md:py-2.5 transition text-sm flex-1 md:flex-none">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
                             {{ $t('a_today_queue') }}
                         </Link>
@@ -313,7 +313,7 @@ function labelX(index, total) {
             </div>
 
             <!-- ── Row 2: Financial KPI Cards ───────────────────── -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
                 <component
                     :is="card.href ? Link : 'div'"
                     v-for="card in financialCards"
@@ -371,7 +371,7 @@ function labelX(index, total) {
             </div>
 
             <!-- ── Row 3: Clinic KPI Cards ──────────────────────── -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
                 <div
                     v-for="card in clinicCards"
                     :key="card.labelKey"
@@ -400,7 +400,7 @@ function labelX(index, total) {
             </div>
 
             <!-- ── Row 4: SVG Bar Charts ────────────────────────── -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-5">
 
                 <!-- Revenue Trend Chart -->
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6">
@@ -530,11 +530,11 @@ function labelX(index, total) {
             </div>
 
             <!-- ── Row 5: Today Queue + Alerts ──────────────────── -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
 
                 <!-- Today Queue Table (2/3) -->
                 <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
-                    <div class="px-4 md:px-6 py-5 border-b border-gray-100 flex items-center justify-between">
+                    <div class="px-3 md:px-6 py-3 md:py-5 border-b border-gray-100 flex items-center justify-between gap-2 flex-wrap">
                         <div>
                             <h2 class="text-[15px] font-semibold text-gray-900">{{ $t('a_todays_queue') }}</h2>
                             <p class="text-xs text-gray-400 mt-0.5">{{ $t('a_patients_waiting') }}</p>
@@ -548,7 +548,7 @@ function labelX(index, total) {
                         </Link>
                     </div>
                     <div class="overflow-x-auto">
-                        <table class="w-full min-w-[700px]">
+                        <table class="w-full min-w-[600px]">
                             <thead class="bg-[#1B365D]/5 text-[#1B365D]">
                                 <tr>
                                     <th class="px-4 md:px-6 py-3 text-start text-[11px] font-bold uppercase tracking-wider">#</th>
@@ -645,7 +645,7 @@ function labelX(index, total) {
 
             <!-- ── Row 5b: CRM Summary Widget ──────────────────── -->
             <div v-if="crm" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
-                <div class="px-4 md:px-6 py-5 border-b border-gray-100 flex items-center justify-between">
+                <div class="px-3 md:px-6 py-3 md:py-5 border-b border-gray-100 flex items-center justify-between gap-2 flex-wrap">
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 rounded-xl bg-[#C4A265]/10 flex items-center justify-center">
                             <svg class="w-5 h-5 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
@@ -663,28 +663,28 @@ function labelX(index, total) {
                         <svg class="w-3.5 h-3.5 ltr:rotate-0 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
                     </Link>
                 </div>
-                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 divide-x divide-gray-100">
-                    <Link href="/admin/leads?status=new" class="group px-4 py-5 text-center hover:bg-slate-50/30 transition-colors">
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 divide-y sm:divide-y-0 sm:divide-x rtl:sm:divide-x-reverse divide-gray-100">
+                    <Link href="/admin/leads?status=new" class="group px-3 md:px-4 py-4 md:py-5 text-center hover:bg-slate-50/30 transition-colors">
                         <p class="text-xl md:text-2xl font-bold text-[#1B365D]">{{ crm.new_leads ?? 0 }}</p>
                         <p class="text-[11px] font-medium text-gray-500 mt-1 group-hover:text-[#1B365D] transition-colors">{{ $t('a_new_leads') }}</p>
                     </Link>
-                    <div class="px-4 py-5 text-center">
+                    <div class="px-3 md:px-4 py-4 md:py-5 text-center">
                         <p class="text-xl md:text-2xl font-bold text-red-600">{{ crm.hot_leads ?? 0 }}</p>
                         <p class="text-[11px] font-medium text-gray-500 mt-1">{{ $t('a_hot_leads') }}</p>
                     </div>
-                    <div class="px-4 py-5 text-center">
+                    <div class="px-3 md:px-4 py-4 md:py-5 text-center">
                         <p class="text-xl md:text-2xl font-bold text-gray-800">{{ crm.month_leads ?? 0 }}</p>
                         <p class="text-[11px] font-medium text-gray-500 mt-1">{{ $t('a_this_month') }}</p>
                     </div>
-                    <div class="px-4 py-5 text-center">
+                    <div class="px-3 md:px-4 py-4 md:py-5 text-center">
                         <p class="text-xl md:text-2xl font-bold text-emerald-600">{{ crm.month_conversions ?? 0 }}</p>
                         <p class="text-[11px] font-medium text-gray-500 mt-1">{{ $t('a_conversions') }}</p>
                     </div>
-                    <Link href="/admin/leads?follow_up=overdue" class="group px-4 py-5 text-center hover:bg-red-50/30 transition-colors">
+                    <Link href="/admin/leads?follow_up=overdue" class="group px-3 md:px-4 py-4 md:py-5 text-center hover:bg-red-50/30 transition-colors">
                         <p class="text-xl md:text-2xl font-bold" :class="crm.overdue_follow_ups > 0 ? 'text-red-600' : 'text-gray-400'">{{ crm.overdue_follow_ups ?? 0 }}</p>
                         <p class="text-[11px] font-medium text-gray-500 mt-1 group-hover:text-red-600 transition-colors">{{ $t('a_overdue_follow_ups') }}</p>
                     </Link>
-                    <div class="px-4 py-5 text-center">
+                    <div class="px-3 md:px-4 py-4 md:py-5 text-center">
                         <p class="text-xl md:text-2xl font-bold text-amber-600">{{ crm.today_follow_ups ?? 0 }}</p>
                         <p class="text-[11px] font-medium text-gray-500 mt-1">{{ $t('a_today_follow_ups') }}</p>
                     </div>
@@ -692,11 +692,11 @@ function labelX(index, total) {
             </div>
 
             <!-- ── Row 6: Unpaid Invoices + Top Services ────────── -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-5">
 
                 <!-- Unpaid Invoices Table -->
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
-                    <div class="px-4 md:px-6 py-5 border-b border-gray-100 flex items-center justify-between">
+                    <div class="px-3 md:px-6 py-3 md:py-5 border-b border-gray-100 flex items-center justify-between gap-2 flex-wrap">
                         <div>
                             <h2 class="text-[15px] font-semibold text-gray-900">{{ $t('a_unpaid_invoices') }}</h2>
                             <p class="text-xs text-gray-400 mt-0.5">{{ $t('a_outstanding_balances') }}</p>
@@ -789,7 +789,7 @@ function labelX(index, total) {
 
             <!-- ── Row 7: Dental Overview ────────────────────────── -->
             <div v-if="dental" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
-                <div class="px-4 md:px-6 py-5 border-b border-gray-100 flex items-center justify-between">
+                <div class="px-3 md:px-6 py-3 md:py-5 border-b border-gray-100 flex items-center justify-between gap-2 flex-wrap">
                     <div class="flex items-center gap-3">
                         <div class="w-9 h-9 rounded-xl bg-slate-50 flex items-center justify-center">
                             <svg class="w-5 h-5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3C10.5 3 9 4.5 8.5 6.5C8 8.5 7 9.5 6 10.5C5 11.5 4 13 4 15C4 17 5.5 19 7.5 19C9 19 10 18 10.5 17C11 16 11.5 15.5 12 15.5C12.5 15.5 13 16 13.5 17C14 18 15 19 16.5 19C18.5 19 20 17 20 15C20 13 19 11.5 18 10.5C17 9.5 16 8.5 15.5 6.5C15 4.5 13.5 3 12 3Z" /></svg>
@@ -818,44 +818,44 @@ function labelX(index, total) {
                 </div>
 
                 <!-- KPI Grid -->
-                <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 divide-x rtl:divide-x-reverse divide-gray-100">
+                <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 divide-y sm:divide-y-0 sm:divide-x rtl:sm:divide-x-reverse divide-gray-100">
                     <!-- Revenue -->
-                    <div class="px-4 py-5 text-center">
+                    <div class="px-3 md:px-4 py-4 md:py-5 text-center">
                         <p class="text-xl font-bold text-[#1B365D]">{{ formatCurrency(dental.revenue_this_month) }}</p>
                         <p class="text-[11px] font-medium text-gray-500 mt-1">{{ $t('a_dental_revenue_month') }}</p>
                     </div>
                     <!-- Treatments Today -->
-                    <div class="px-4 py-5 text-center">
+                    <div class="px-3 md:px-4 py-4 md:py-5 text-center">
                         <p class="text-xl md:text-2xl font-bold text-gray-800">{{ dental.treatments_today ?? 0 }}</p>
                         <p class="text-[11px] font-medium text-gray-500 mt-1">{{ $t('a_treatments_today') }}</p>
                     </div>
                     <!-- Completed Today -->
-                    <div class="px-4 py-5 text-center">
+                    <div class="px-3 md:px-4 py-4 md:py-5 text-center">
                         <p class="text-xl md:text-2xl font-bold text-emerald-600">{{ dental.completed_today ?? 0 }}</p>
                         <p class="text-[11px] font-medium text-gray-500 mt-1">{{ $t('a_completed_today') }}</p>
                     </div>
                     <!-- Active Plans -->
-                    <Link href="/admin/dental/treatment-plans?status=in_progress" class="px-4 py-5 text-center hover:bg-gray-50/50 transition-colors">
+                    <Link href="/admin/dental/treatment-plans?status=in_progress" class="px-3 md:px-4 py-4 md:py-5 text-center hover:bg-gray-50/50 transition-colors">
                         <p class="text-xl md:text-2xl font-bold text-[#1B365D]">{{ dental.active_plans ?? 0 }}</p>
                         <p class="text-[11px] font-medium text-gray-500 mt-1">{{ $t('a_active_plans') }}</p>
                     </Link>
                     <!-- Overdue Plans -->
-                    <Link href="/admin/dental/treatment-plans" class="px-4 py-5 text-center hover:bg-gray-50/50 transition-colors">
+                    <Link href="/admin/dental/treatment-plans" class="px-3 md:px-4 py-4 md:py-5 text-center hover:bg-gray-50/50 transition-colors">
                         <p class="text-xl md:text-2xl font-bold" :class="(dental.overdue_plans ?? 0) > 0 ? 'text-red-600' : 'text-gray-400'">{{ dental.overdue_plans ?? 0 }}</p>
                         <p class="text-[11px] font-medium text-gray-500 mt-1">{{ $t('a_overdue_plans') }}</p>
                     </Link>
                     <!-- Pending Lab -->
-                    <Link href="/admin/dental/lab-orders" class="px-4 py-5 text-center hover:bg-gray-50/50 transition-colors">
+                    <Link href="/admin/dental/lab-orders" class="px-3 md:px-4 py-4 md:py-5 text-center hover:bg-gray-50/50 transition-colors">
                         <p class="text-xl md:text-2xl font-bold text-amber-600">{{ dental.pending_lab_orders ?? 0 }}</p>
                         <p class="text-[11px] font-medium text-gray-500 mt-1">{{ $t('a_pending_lab') }}</p>
                     </Link>
                     <!-- Overdue Lab -->
-                    <Link href="/admin/dental/lab-orders?overdue=1" class="px-4 py-5 text-center hover:bg-gray-50/50 transition-colors">
+                    <Link href="/admin/dental/lab-orders?overdue=1" class="px-3 md:px-4 py-4 md:py-5 text-center hover:bg-gray-50/50 transition-colors">
                         <p class="text-xl md:text-2xl font-bold" :class="(dental.overdue_lab_orders ?? 0) > 0 ? 'text-red-600' : 'text-gray-400'">{{ dental.overdue_lab_orders ?? 0 }}</p>
                         <p class="text-[11px] font-medium text-gray-500 mt-1">{{ $t('a_overdue_lab') }}</p>
                     </Link>
                     <!-- Lab Ready -->
-                    <Link href="/admin/dental/lab-orders?status=ready" class="px-4 py-5 text-center hover:bg-gray-50/50 transition-colors">
+                    <Link href="/admin/dental/lab-orders?status=ready" class="px-3 md:px-4 py-4 md:py-5 text-center hover:bg-gray-50/50 transition-colors">
                         <p class="text-xl md:text-2xl font-bold text-emerald-600">{{ dental.lab_ready ?? 0 }}</p>
                         <p class="text-[11px] font-medium text-gray-500 mt-1">{{ $t('a_lab_ready') }}</p>
                     </Link>
@@ -864,7 +864,7 @@ function labelX(index, total) {
 
             <!-- ── Row 8: Pediatric Overview ─────────────────────── -->
             <div v-if="pediatric" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
-                <div class="px-4 md:px-6 py-5 border-b border-gray-100 flex items-center justify-between">
+                <div class="px-3 md:px-6 py-3 md:py-5 border-b border-gray-100 flex items-center justify-between gap-2 flex-wrap">
                     <div class="flex items-center gap-3">
                         <div class="w-9 h-9 rounded-xl bg-emerald-50 flex items-center justify-center">
                             <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
@@ -886,34 +886,34 @@ function labelX(index, total) {
                 </div>
 
                 <!-- KPI Grid -->
-                <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 divide-x rtl:divide-x-reverse divide-gray-100">
+                <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 divide-y sm:divide-y-0 sm:divide-x rtl:sm:divide-x-reverse divide-gray-100">
                     <!-- Patients -->
-                    <div class="px-4 py-5 text-center">
+                    <div class="px-3 md:px-4 py-4 md:py-5 text-center">
                         <p class="text-xl md:text-2xl font-bold text-emerald-600">{{ pediatric.total_patients ?? 0 }}</p>
                         <p class="text-[11px] font-medium text-gray-500 mt-1">{{ isRtl ? 'إجمالي المرضى' : 'Total Patients' }}</p>
                     </div>
                     <!-- Visits This Month -->
-                    <div class="px-4 py-5 text-center">
+                    <div class="px-3 md:px-4 py-4 md:py-5 text-center">
                         <p class="text-xl md:text-2xl font-bold text-gray-800">{{ pediatric.visits_this_month ?? 0 }}</p>
                         <p class="text-[11px] font-medium text-gray-500 mt-1">{{ isRtl ? 'زيارات الشهر' : 'Visits This Month' }}</p>
                     </div>
                     <!-- Vaccinations Due -->
-                    <Link href="/admin/pediatric/vaccinations" class="px-4 py-5 text-center hover:bg-gray-50/50 transition-colors">
+                    <Link href="/admin/pediatric/vaccinations" class="px-3 md:px-4 py-4 md:py-5 text-center hover:bg-gray-50/50 transition-colors">
                         <p class="text-xl md:text-2xl font-bold text-amber-600">{{ pediatric.vaccinations_due ?? 0 }}</p>
                         <p class="text-[11px] font-medium text-gray-500 mt-1">{{ isRtl ? 'تطعيمات مستحقة' : 'Vaccinations Due' }}</p>
                     </Link>
                     <!-- Growth Alerts -->
-                    <Link href="/admin/pediatric/growth" class="px-4 py-5 text-center hover:bg-gray-50/50 transition-colors">
+                    <Link href="/admin/pediatric/growth" class="px-3 md:px-4 py-4 md:py-5 text-center hover:bg-gray-50/50 transition-colors">
                         <p class="text-xl md:text-2xl font-bold" :class="(pediatric.growth_alerts ?? 0) > 0 ? 'text-red-600' : 'text-gray-400'">{{ pediatric.growth_alerts ?? 0 }}</p>
                         <p class="text-[11px] font-medium text-gray-500 mt-1">{{ isRtl ? 'تنبيهات النمو' : 'Growth Alerts' }}</p>
                     </Link>
                     <!-- Revenue -->
-                    <div class="px-4 py-5 text-center">
+                    <div class="px-3 md:px-4 py-4 md:py-5 text-center">
                         <p class="text-xl font-bold text-emerald-600">{{ formatCurrency(pediatric.revenue_this_month ?? 0) }}</p>
                         <p class="text-[11px] font-medium text-gray-500 mt-1">{{ isRtl ? 'إيرادات الشهر' : 'Revenue This Month' }}</p>
                     </div>
                     <!-- Screening Pending -->
-                    <div class="px-4 py-5 text-center">
+                    <div class="px-3 md:px-4 py-4 md:py-5 text-center">
                         <p class="text-xl md:text-2xl font-bold text-[#1B365D]">{{ pediatric.screening_pending ?? 0 }}</p>
                         <p class="text-[11px] font-medium text-gray-500 mt-1">{{ isRtl ? 'فحوصات معلقة' : 'Screening Pending' }}</p>
                     </div>
