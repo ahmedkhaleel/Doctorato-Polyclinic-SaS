@@ -197,7 +197,7 @@ function daysRemainingColor(days) {
 
 <template>
     <AdminLayout :title="$t('a_hr_dashboard')">
-        <div class="space-y-8">
+        <div class="space-y-4 md:space-y-6 lg:space-y-8">
 
             <!-- ═════════ Navy Hero Header ═════════ -->
             <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] shadow-xl">
@@ -535,7 +535,7 @@ function daysRemainingColor(days) {
             <div>
                 <Link
                     href="/admin/advances"
-                    class="group flex items-center gap-5 bg-white rounded-2xl p-5 shadow-sm hover:shadow-lg border border-gray-100/80 hover:border-[#C4A265]/30 transition-all duration-300"
+                    class="group flex items-center gap-3 md:gap-4 lg:gap-5 bg-white rounded-2xl p-5 shadow-sm hover:shadow-lg border border-gray-100/80 hover:border-[#C4A265]/30 transition-all duration-300"
                 >
                     <div class="w-14 h-14 rounded-xl bg-[#C4A265]/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                         <svg class="w-7 h-7 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" /></svg>

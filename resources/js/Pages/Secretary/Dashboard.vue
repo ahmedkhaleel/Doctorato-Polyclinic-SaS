@@ -139,7 +139,7 @@ const severityStyles = {
 </script>
 
 <template>
-    <div class="space-y-8">
+    <div class="space-y-4 md:space-y-6 lg:space-y-8">
 
         <!-- Doctorato Navy Hero -->
         <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] shadow-xl">

@@ -403,7 +403,7 @@ onUnmounted(() => { document.removeEventListener('keydown', handleGlobalKey); })
         </aside>
 
         <!-- ─── Main Content ─────────────────────────────────────── -->
-        <div class="flex-1 flex flex-col min-h-screen lg:min-w-0">
+        <div class="flex-1 flex flex-col min-h-screen min-w-0 w-full">
             <!-- Top Header -->
             <header class="h-[64px] md:h-[72px] bg-white/80 backdrop-blur-md border-b border-gray-200/60 flex items-center justify-between px-3 md:px-4 lg:px-8 sticky top-0 z-20 gap-2">
                 <!-- Mobile hamburger -->

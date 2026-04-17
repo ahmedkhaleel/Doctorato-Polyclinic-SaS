@@ -38,7 +38,7 @@ const colorMap = {
 
 <template>
     <WebmasterLayout>
-        <div class="space-y-6">
+        <div class="space-y-4 md:space-y-6">
             <!-- Doctorato Navy Hero -->
             <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] shadow-xl">
                 <div class="pointer-events-none absolute -top-16 -end-16 h-56 w-56 rounded-full bg-[#C4A265]/20 blur-3xl"></div>
