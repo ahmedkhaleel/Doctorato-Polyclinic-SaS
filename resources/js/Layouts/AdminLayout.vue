@@ -14,7 +14,7 @@ import ChatToast from '@/Components/Chat/ChatToast.vue';
 const page = usePage();
 
 /* ── Sidebar state (persisted + breakpoint-aware) ─────── */
-const SIDEBAR_STORAGE_KEY = 'admin_sidebar_open';
+const SIDEBAR_STORAGE_KEY = 'admin_sidebar_open_v2';
 const getInitialSidebarState = () => {
     if (typeof window === 'undefined') return false;
     const stored = localStorage.getItem(SIDEBAR_STORAGE_KEY);

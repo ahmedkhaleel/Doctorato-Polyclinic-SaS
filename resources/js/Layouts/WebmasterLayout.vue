@@ -11,7 +11,7 @@ const page = usePage();
 const locale = computed(() => page.props.locale || 'ar');
 const dir = computed(() => page.props.dir || 'rtl');
 const isRtl = computed(() => dir.value === 'rtl');
-const SIDEBAR_STORAGE_KEY = 'WebmasterLayout_sidebar_open';
+const SIDEBAR_STORAGE_KEY = 'WebmasterLayout_sidebar_open_v2';
 const getInitialSidebarState = () => {
     if (typeof window === 'undefined') return false;
     const stored = localStorage.getItem(SIDEBAR_STORAGE_KEY);

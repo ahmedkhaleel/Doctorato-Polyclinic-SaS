@@ -7,7 +7,7 @@ import ChatIcon from '@/Components/Chat/ChatIcon.vue';
 import ChatToast from '@/Components/Chat/ChatToast.vue';
 
 const page = usePage();
-const SIDEBAR_STORAGE_KEY = 'SecretaryLayout_sidebar_open';
+const SIDEBAR_STORAGE_KEY = 'SecretaryLayout_sidebar_open_v2';
 const getInitialSidebarState = () => {
     if (typeof window === 'undefined') return false;
     const stored = localStorage.getItem(SIDEBAR_STORAGE_KEY);

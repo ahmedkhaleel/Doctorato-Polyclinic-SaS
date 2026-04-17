@@ -10,7 +10,7 @@ const props = defineProps({
 });
 
 const page = usePage();
-const SIDEBAR_STORAGE_KEY = 'PatientLayout_sidebar_open';
+const SIDEBAR_STORAGE_KEY = 'PatientLayout_sidebar_open_v2';
 const getInitialSidebarState = () => {
     if (typeof window === 'undefined') return false;
     const stored = localStorage.getItem(SIDEBAR_STORAGE_KEY);
