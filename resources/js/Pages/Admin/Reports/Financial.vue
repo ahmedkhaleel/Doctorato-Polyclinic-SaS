@@ -134,9 +134,9 @@ const kpiCards = computed(() => [
         label: isRtl.value ? 'إجمالي المصروفات' : 'Total Expenses',
         value: formatCurrency(props.totalExpenses),
         icon: 'expenses',
-        bg: 'bg-rose-500/10',
-        iconColor: 'text-rose-600',
-        accentColor: 'from-rose-400 to-rose-500',
+        bg: 'bg-[#C4A265]/10',
+        iconColor: 'text-[#C4A265]',
+        accentColor: 'from-amber-400 to-[#C4A265]',
         badgeLabel: `${expenseRatio.value}% ${isRtl.value ? 'من الإيرادات' : 'of revenue'}`,
         badgeClass: expenseRatio.value > 70 ? 'bg-red-50 text-red-500' : 'bg-amber-50 text-amber-600',
     },
@@ -144,9 +144,9 @@ const kpiCards = computed(() => [
         label: isRtl.value ? 'صافي الدخل' : 'Net Income',
         value: formatCurrency(props.netIncome),
         icon: 'net',
-        bg: props.netIncome >= 0 ? 'bg-blue-500/10' : 'bg-red-500/10',
-        iconColor: props.netIncome >= 0 ? 'text-blue-600' : 'text-red-600',
-        accentColor: props.netIncome >= 0 ? 'from-blue-500 to-indigo-600' : 'from-red-400 to-red-500',
+        bg: props.netIncome >= 0 ? 'bg-[#1B365D]/10' : 'bg-red-500/10',
+        iconColor: props.netIncome >= 0 ? 'text-[#1B365D]' : 'text-red-600',
+        accentColor: props.netIncome >= 0 ? 'from-[#1B365D] to-[#1B365D]' : 'from-red-400 to-red-500',
         badgeLabel: `${profitMargin.value}% ${isRtl.value ? 'هامش ربح' : 'margin'}`,
         badgeClass: profitMargin.value >= 30 ? 'bg-emerald-50 text-emerald-600' : profitMargin.value >= 0 ? 'bg-amber-50 text-amber-600' : 'bg-red-50 text-red-500',
     },
@@ -187,7 +187,7 @@ const categoryColors = ['#EF4444', '#F59E0B', '#3B82F6', '#8B5CF6', '#10B981', '
                             </svg>
                         </div>
                         <div>
-                            <h1 class="text-2xl font-bold text-gray-900">{{ $t('a_financial_report') }}</h1>
+                            <h1 class="text-xl md:text-2xl font-bold text-gray-900">{{ $t('a_financial_report') }}</h1>
                             <p class="text-sm text-gray-500">{{ isRtl ? 'الإيرادات والمصروفات والتحليلات المالية' : 'Revenue, expenses and financial analytics' }}</p>
                         </div>
                     </div>
@@ -258,7 +258,7 @@ const categoryColors = ['#EF4444', '#F59E0B', '#3B82F6', '#8B5CF6', '#10B981', '
                     <div class="relative flex items-start justify-between">
                         <div class="flex-1 min-w-0">
                             <p class="text-[12px] font-semibold text-gray-400 uppercase tracking-wider">{{ card.label }}</p>
-                            <p class="text-2xl font-bold text-gray-900 mt-1.5 leading-none truncate">{{ card.value }}</p>
+                            <p class="text-xl md:text-2xl font-bold text-gray-900 mt-1.5 leading-none truncate">{{ card.value }}</p>
                             <div class="mt-2.5">
                                 <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold" :class="card.badgeClass">
                                     {{ card.badgeLabel }}
@@ -285,7 +285,7 @@ const categoryColors = ['#EF4444', '#F59E0B', '#3B82F6', '#8B5CF6', '#10B981', '
 
             <!-- ── Revenue vs Expenses Bar ─────────────────────── -->
             <div
-                class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6 transition-all duration-700"
+                class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 md:p-6 transition-all duration-700"
                 :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'"
                 :style="{ transitionDelay: '500ms' }"
             >
@@ -300,7 +300,7 @@ const categoryColors = ['#EF4444', '#F59E0B', '#3B82F6', '#8B5CF6', '#10B981', '
                             <span class="text-[11px] text-gray-500">{{ isRtl ? 'الإيرادات' : 'Revenue' }}</span>
                         </div>
                         <div class="flex items-center gap-1.5">
-                            <div class="w-3 h-3 rounded-full bg-rose-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-[#C4A265]"></div>
                             <span class="text-[11px] text-gray-500">{{ isRtl ? 'المصروفات' : 'Expenses' }}</span>
                         </div>
                     </div>
@@ -318,7 +318,7 @@ const categoryColors = ['#EF4444', '#F59E0B', '#3B82F6', '#8B5CF6', '#10B981', '
                     </div>
                     <div
                         v-if="totalRevenue > 0 || totalExpenses > 0"
-                        class="absolute inset-y-0 end-0 bg-gradient-to-r from-rose-400 to-rose-500 transition-all duration-1000 ease-out rounded-xl"
+                        class="absolute inset-y-0 end-0 bg-gradient-to-r from-amber-400 to-[#C4A265] transition-all duration-1000 ease-out rounded-xl"
                         :style="{ width: mounted ? `${Math.max(totalExpenses / (totalRevenue + totalExpenses) * 100, 2)}%` : '0%' }"
                     >
                         <span class="absolute inset-0 flex items-center justify-center text-[11px] font-bold text-white whitespace-nowrap px-2">
@@ -329,7 +329,7 @@ const categoryColors = ['#EF4444', '#F59E0B', '#3B82F6', '#8B5CF6', '#10B981', '
 
                 <div class="mt-3 flex items-center justify-between flex-wrap gap-2">
                     <div class="flex items-center gap-2">
-                        <div :class="netIncome >= 0 ? 'bg-blue-50 text-blue-600' : 'bg-red-50 text-red-500'" class="px-3 py-1 rounded-lg text-[12px] font-bold">
+                        <div :class="netIncome >= 0 ? 'bg-slate-50 text-[#1B365D]' : 'bg-red-50 text-red-500'" class="px-3 py-1 rounded-lg text-[12px] font-bold">
                             {{ isRtl ? 'الصافي' : 'Net' }}: {{ formatCurrency(netIncome) }}
                         </div>
                         <div :class="profitMargin >= 30 ? 'bg-emerald-50 text-emerald-600' : profitMargin >= 0 ? 'bg-amber-50 text-amber-600' : 'bg-red-50 text-red-500'" class="px-2.5 py-1 rounded-lg text-[11px] font-semibold">
@@ -344,7 +344,7 @@ const categoryColors = ['#EF4444', '#F59E0B', '#3B82F6', '#8B5CF6', '#10B981', '
 
             <!-- ── Daily Revenue BarChart ──────────────────────── -->
             <div
-                class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6 transition-all duration-700"
+                class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 md:p-6 transition-all duration-700"
                 :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'"
                 :style="{ transitionDelay: '600ms' }"
             >
@@ -390,7 +390,7 @@ const categoryColors = ['#EF4444', '#F59E0B', '#3B82F6', '#8B5CF6', '#10B981', '
                     :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'"
                     :style="{ transitionDelay: '700ms' }"
                 >
-                    <div class="p-6 pb-4">
+                    <div class="p-4 md:p-6 pb-4">
                         <div class="flex items-center justify-between">
                             <div>
                                 <h2 class="text-[15px] font-semibold text-gray-900">{{ $t('a_revenue_by_method') }}</h2>
@@ -402,7 +402,7 @@ const categoryColors = ['#EF4444', '#F59E0B', '#3B82F6', '#8B5CF6', '#10B981', '
                         </div>
                     </div>
 
-                    <div v-if="revenueMethodChartData.length" class="px-6 pb-4">
+                    <div v-if="revenueMethodChartData.length" class="px-4 md:px-6 pb-4">
                         <DonutChart
                             :data="revenueMethodChartData"
                             :size="160"
@@ -416,7 +416,7 @@ const categoryColors = ['#EF4444', '#F59E0B', '#3B82F6', '#8B5CF6', '#10B981', '
                             <div
                                 v-for="(item, i) in revenueByMethod"
                                 :key="item.label"
-                                class="px-6 py-3 hover:bg-gray-50/50 transition-colors duration-200"
+                                class="px-4 md:px-6 py-3 hover:bg-gray-50/50 transition-colors duration-200"
                             >
                                 <div class="flex items-center justify-between mb-1.5">
                                     <div class="flex items-center gap-2.5">
@@ -440,9 +440,9 @@ const categoryColors = ['#EF4444', '#F59E0B', '#3B82F6', '#8B5CF6', '#10B981', '
                                 </div>
                             </div>
                         </div>
-                        <div v-else class="px-6 py-10 text-center text-sm text-gray-400">{{ isRtl ? 'لا توجد بيانات إيرادات' : 'No revenue data found' }}</div>
+                        <div v-else class="px-4 md:px-6 py-10 text-center text-sm text-gray-400">{{ isRtl ? 'لا توجد بيانات إيرادات' : 'No revenue data found' }}</div>
 
-                        <div v-if="revenueByMethod?.length" class="px-6 py-3 bg-gray-50/80 border-t border-gray-100">
+                        <div v-if="revenueByMethod?.length" class="px-4 md:px-6 py-3 bg-gray-50/80 border-t border-gray-100">
                             <div class="flex items-center justify-between">
                                 <span class="text-sm font-bold text-gray-700">{{ isRtl ? 'الإجمالي' : 'Total' }}</span>
                                 <div class="flex items-center gap-3">
@@ -460,19 +460,19 @@ const categoryColors = ['#EF4444', '#F59E0B', '#3B82F6', '#8B5CF6', '#10B981', '
                     :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'"
                     :style="{ transitionDelay: '800ms' }"
                 >
-                    <div class="p-6 pb-4">
+                    <div class="p-4 md:p-6 pb-4">
                         <div class="flex items-center justify-between">
                             <div>
                                 <h2 class="text-[15px] font-semibold text-gray-900">{{ $t('a_expenses_by_category') }}</h2>
                                 <p class="text-xs text-gray-400 mt-0.5">{{ isRtl ? 'توزيع الإنفاق حسب الفئة' : 'Spending breakdown by category' }}</p>
                             </div>
-                            <div class="w-10 h-10 rounded-xl bg-rose-500/10 flex items-center justify-center">
-                                <svg class="w-5 h-5 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z" /></svg>
+                            <div class="w-10 h-10 rounded-xl bg-[#C4A265]/10 flex items-center justify-center">
+                                <svg class="w-5 h-5 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z" /></svg>
                             </div>
                         </div>
                     </div>
 
-                    <div v-if="expenseCategoryChartData.length" class="px-6 pb-4">
+                    <div v-if="expenseCategoryChartData.length" class="px-4 md:px-6 pb-4">
                         <DonutChart
                             :data="expenseCategoryChartData"
                             :size="160"
@@ -486,7 +486,7 @@ const categoryColors = ['#EF4444', '#F59E0B', '#3B82F6', '#8B5CF6', '#10B981', '
                             <div
                                 v-for="(item, i) in expensesByCategory"
                                 :key="item.label"
-                                class="px-6 py-3 hover:bg-gray-50/50 transition-colors duration-200"
+                                class="px-4 md:px-6 py-3 hover:bg-gray-50/50 transition-colors duration-200"
                             >
                                 <div class="flex items-center justify-between mb-1.5">
                                     <div class="flex items-center gap-2.5">
@@ -495,7 +495,7 @@ const categoryColors = ['#EF4444', '#F59E0B', '#3B82F6', '#8B5CF6', '#10B981', '
                                     </div>
                                     <div class="flex items-center gap-3">
                                         <span class="text-[11px] text-gray-400">{{ item.count || 0 }} {{ isRtl ? 'عنصر' : 'items' }}</span>
-                                        <span class="text-sm font-bold text-rose-600">{{ formatCurrency(item.value) }}</span>
+                                        <span class="text-sm font-bold text-[#C4A265]">{{ formatCurrency(item.value) }}</span>
                                     </div>
                                 </div>
                                 <div class="h-1 bg-gray-100 rounded-full overflow-hidden">
@@ -510,14 +510,14 @@ const categoryColors = ['#EF4444', '#F59E0B', '#3B82F6', '#8B5CF6', '#10B981', '
                                 </div>
                             </div>
                         </div>
-                        <div v-else class="px-6 py-10 text-center text-sm text-gray-400">{{ isRtl ? 'لا توجد بيانات مصروفات' : 'No expense data found' }}</div>
+                        <div v-else class="px-4 md:px-6 py-10 text-center text-sm text-gray-400">{{ isRtl ? 'لا توجد بيانات مصروفات' : 'No expense data found' }}</div>
 
-                        <div v-if="expensesByCategory?.length" class="px-6 py-3 bg-gray-50/80 border-t border-gray-100">
+                        <div v-if="expensesByCategory?.length" class="px-4 md:px-6 py-3 bg-gray-50/80 border-t border-gray-100">
                             <div class="flex items-center justify-between">
                                 <span class="text-sm font-bold text-gray-700">{{ isRtl ? 'الإجمالي' : 'Total' }}</span>
                                 <div class="flex items-center gap-3">
                                     <span class="text-[11px] text-gray-400">{{ expensesByCategory.reduce((s, d) => s + (d.count || 0), 0) }} {{ isRtl ? 'عنصر' : 'items' }}</span>
-                                    <span class="text-sm font-bold text-rose-600">{{ formatCurrency(totalExpensesByCategory) }}</span>
+                                    <span class="text-sm font-bold text-[#C4A265]">{{ formatCurrency(totalExpensesByCategory) }}</span>
                                 </div>
                             </div>
                         </div>
@@ -528,7 +528,7 @@ const categoryColors = ['#EF4444', '#F59E0B', '#3B82F6', '#8B5CF6', '#10B981', '
 
             <!-- ── Financial Summary ──────────────────────────── -->
             <div
-                class="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl p-6 text-white transition-all duration-700 overflow-hidden relative"
+                class="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl p-4 md:p-6 text-white transition-all duration-700 overflow-hidden relative"
                 :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'"
                 :style="{ transitionDelay: '950ms' }"
             >
@@ -558,11 +558,11 @@ const categoryColors = ['#EF4444', '#F59E0B', '#3B82F6', '#8B5CF6', '#10B981', '
                         </div>
                         <div class="bg-white/5 backdrop-blur rounded-xl p-4 border border-white/10">
                             <p class="text-[10px] font-medium text-gray-400 uppercase tracking-wider mb-1">{{ isRtl ? 'المصروفات' : 'Expenses' }}</p>
-                            <p class="text-lg font-bold text-rose-400">{{ formatCurrency(totalExpenses) }}</p>
+                            <p class="text-lg font-bold text-amber-400">{{ formatCurrency(totalExpenses) }}</p>
                         </div>
                         <div class="bg-white/5 backdrop-blur rounded-xl p-4 border border-white/10">
                             <p class="text-[10px] font-medium text-gray-400 uppercase tracking-wider mb-1">{{ $t('a_net_income') }}</p>
-                            <p class="text-lg font-bold" :class="netIncome >= 0 ? 'text-blue-400' : 'text-red-400'">{{ formatCurrency(netIncome) }}</p>
+                            <p class="text-lg font-bold" :class="netIncome >= 0 ? 'text-slate-400' : 'text-red-400'">{{ formatCurrency(netIncome) }}</p>
                         </div>
                         <div class="bg-white/5 backdrop-blur rounded-xl p-4 border border-white/10">
                             <p class="text-[10px] font-medium text-gray-400 uppercase tracking-wider mb-1">{{ isRtl ? 'غير مدفوع' : 'Unpaid' }}</p>

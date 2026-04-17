@@ -43,7 +43,7 @@ function toggleModule(mod) {
             <!-- Header -->
             <div class="flex items-center justify-between">
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-900">{{ isRtl ? 'إدارة المديولات' : 'Module Management' }}</h1>
+                    <h1 class="text-xl md:text-2xl font-bold text-gray-900">{{ isRtl ? 'إدارة المديولات' : 'Module Management' }}</h1>
                     <p class="text-gray-500 text-sm mt-1">{{ isRtl ? 'تفعيل وتعطيل وإعداد أقسام النظام' : 'Enable, disable and configure system modules' }}</p>
                 </div>
                 <Link href="/admin/settings" class="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 transition">
@@ -115,7 +115,7 @@ function toggleModule(mod) {
                             </div>
 
                             <div class="mt-4 flex items-center justify-between">
-                                <span class="px-2.5 py-1 rounded-full text-xs font-semibold" :class="mod.enabled ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'">
+                                <span class="px-2.5 py-1 rounded-full text-xs font-semibold" :class="mod.enabled ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-500'">
                                     {{ mod.enabled ? (isRtl ? 'مفعّل' : 'Enabled') : (isRtl ? 'معطّل' : 'Disabled') }}
                                 </span>
                                 <Link v-if="mod.enabled" :href="`/admin/settings/modules/${mod.slug}`" class="inline-flex items-center gap-1.5 text-sm font-medium hover:underline transition" :style="{ color: mod.color || '#0891b2' }">
@@ -139,7 +139,7 @@ function toggleModule(mod) {
             <!-- ═══════════════════════════════════════════════════════ -->
             <section>
                 <div class="flex items-center gap-3 mb-4">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-sm">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#1B365D] to-[#1B365D] flex items-center justify-center shadow-sm">
                         <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                         </svg>
@@ -197,7 +197,7 @@ function toggleModule(mod) {
                             </div>
 
                             <div class="mt-4 flex items-center justify-between">
-                                <span class="px-2.5 py-1 rounded-full text-xs font-semibold" :class="mod.enabled ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'">
+                                <span class="px-2.5 py-1 rounded-full text-xs font-semibold" :class="mod.enabled ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-500'">
                                     {{ mod.enabled ? (isRtl ? 'مفعّل' : 'Enabled') : (isRtl ? 'معطّل' : 'Disabled') }}
                                 </span>
                                 <Link v-if="mod.enabled" :href="`/admin/settings/modules/${mod.slug}`" class="inline-flex items-center gap-1.5 text-sm font-medium hover:underline transition" :style="{ color: mod.color || '#0891b2' }">

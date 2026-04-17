@@ -78,51 +78,51 @@ const statusLabels = {
 };
 
 const statusColors = {
-    new: 'bg-blue-500',
-    contacted: 'bg-indigo-500',
-    qualified: 'bg-purple-500',
+    new: 'bg-[#1B365D]',
+    contacted: 'bg-[#1B365D]',
+    qualified: 'bg-[#1B365D]',
     appointment_booked: 'bg-amber-500',
     consultation_done: 'bg-teal-500',
-    negotiation: 'bg-orange-500',
-    converted: 'bg-green-500',
+    negotiation: 'bg-[#C4A265]',
+    converted: 'bg-emerald-500',
     lost: 'bg-red-500',
 };
 
 const statusGradients = {
-    new: 'from-blue-500 to-blue-600',
-    contacted: 'from-indigo-500 to-indigo-600',
-    qualified: 'from-purple-500 to-purple-600',
+    new: 'from-[#1B365D] to-[#1B365D]',
+    contacted: 'from-[#1B365D] to-[#1B365D]',
+    qualified: 'from-[#1B365D] to-[#1B365D]',
     appointment_booked: 'from-amber-500 to-amber-600',
     consultation_done: 'from-teal-500 to-teal-600',
-    negotiation: 'from-orange-500 to-orange-600',
-    converted: 'from-green-500 to-green-600',
+    negotiation: 'from-[#C4A265] to-[#C4A265]',
+    converted: 'from-emerald-500 to-emerald-600',
     lost: 'from-red-500 to-red-600',
 };
 
 const priorityLabels = { 1: 'Hot', 2: 'Warm', 3: 'Cold' };
-const priorityColors = { 1: 'text-red-600 bg-red-50', 2: 'text-amber-600 bg-amber-50', 3: 'text-blue-600 bg-blue-50' };
+const priorityColors = { 1: 'text-red-600 bg-red-50', 2: 'text-amber-600 bg-amber-50', 3: 'text-[#1B365D] bg-slate-50' };
 
 const leadStatusColors = {
-    new: 'bg-blue-100 text-blue-700',
-    contacted: 'bg-indigo-100 text-indigo-700',
-    qualified: 'bg-purple-100 text-purple-700',
+    new: 'bg-slate-100 text-[#1B365D]',
+    contacted: 'bg-slate-100 text-[#1B365D]',
+    qualified: 'bg-slate-100 text-[#1B365D]',
     appointment_booked: 'bg-amber-100 text-amber-700',
     consultation_done: 'bg-teal-100 text-teal-700',
-    negotiation: 'bg-orange-100 text-orange-700',
-    converted: 'bg-green-100 text-green-700',
+    negotiation: 'bg-amber-100 text-[#C4A265]',
+    converted: 'bg-emerald-100 text-emerald-700',
     lost: 'bg-red-100 text-red-700',
     dormant: 'bg-gray-100 text-gray-600',
 };
 
 const sourceColors = [
-    'from-blue-400 to-blue-600',
+    'from-slate-400 to-[#1B365D]',
     'from-emerald-400 to-emerald-600',
-    'from-purple-400 to-purple-600',
+    'from-slate-400 to-[#1B365D]',
     'from-amber-400 to-amber-600',
-    'from-rose-400 to-rose-600',
-    'from-cyan-400 to-cyan-600',
-    'from-indigo-400 to-indigo-600',
-    'from-orange-400 to-orange-600',
+    'from-amber-400 to-[#C4A265]',
+    'from-slate-400 to-[#1B365D]',
+    'from-slate-400 to-[#1B365D]',
+    'from-amber-400 to-[#C4A265]',
 ];
 
 function formatDate(date) {
@@ -336,7 +336,7 @@ function missFollowUp(fuId) {
                         <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6" /></svg>
                     </div>
                     <div>
-                        <h1 class="text-2xl font-bold text-gray-800">{{ $t('a_crm_dashboard') }}</h1>
+                        <h1 class="text-xl md:text-2xl font-bold text-gray-800">{{ $t('a_crm_dashboard') }}</h1>
                         <p class="text-sm text-gray-500 mt-0.5">{{ $t('a_crm_dashboard_subtitle') }}</p>
                     </div>
                 </div>
@@ -370,17 +370,17 @@ function missFollowUp(fuId) {
             <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
                 <!-- Total Leads -->
                 <Link href="/admin/leads"
-                    class="card-entrance group bg-white rounded-2xl shadow-sm hover:shadow-md p-6 border border-gray-100 transition-all duration-300 hover:-translate-y-1 cursor-pointer block"
+                    class="card-entrance group bg-white rounded-2xl shadow-sm hover:shadow-md p-4 md:p-6 border border-gray-100 transition-all duration-300 hover:-translate-y-1 cursor-pointer block"
                     :class="{ 'card-entrance-active': mounted }"
                     :style="{ transitionDelay: '80ms' }"
                 >
                     <div class="flex items-center justify-between mb-4">
                         <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_total_leads') }}</p>
-                        <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center shadow-md shadow-blue-200/50 group-hover:scale-110 transition-transform duration-300">
+                        <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-slate-400 to-[#1B365D] flex items-center justify-center shadow-md shadow-slate-200/50 group-hover:scale-110 transition-transform duration-300">
                             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" /></svg>
                         </div>
                     </div>
-                    <p class="text-3xl font-bold text-gray-800 tracking-tight">{{ metrics.total_leads }}</p>
+                    <p class="text-2xl md:text-3xl font-bold text-gray-800 tracking-tight">{{ metrics.total_leads }}</p>
                     <div class="flex items-center gap-1.5 mt-2">
                         <span class="inline-flex items-center gap-0.5 text-xs font-medium text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded-md">
                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" /></svg>
@@ -392,7 +392,7 @@ function missFollowUp(fuId) {
 
                 <!-- Converted -->
                 <Link href="/admin/leads?status=converted"
-                    class="card-entrance group bg-white rounded-2xl shadow-sm hover:shadow-md p-6 border border-gray-100 transition-all duration-300 hover:-translate-y-1 cursor-pointer block"
+                    class="card-entrance group bg-white rounded-2xl shadow-sm hover:shadow-md p-4 md:p-6 border border-gray-100 transition-all duration-300 hover:-translate-y-1 cursor-pointer block"
                     :class="{ 'card-entrance-active': mounted }"
                     :style="{ transitionDelay: '160ms' }"
                 >
@@ -402,7 +402,7 @@ function missFollowUp(fuId) {
                             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                         </div>
                     </div>
-                    <p class="text-3xl font-bold text-gray-800 tracking-tight">{{ metrics.converted_period }}</p>
+                    <p class="text-2xl md:text-3xl font-bold text-gray-800 tracking-tight">{{ metrics.converted_period }}</p>
                     <div class="flex items-center gap-1.5 mt-2">
                         <span class="inline-flex items-center gap-0.5 text-xs font-medium text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded-md">
                             {{ metrics.conversion_rate }}%
@@ -413,7 +413,7 @@ function missFollowUp(fuId) {
 
                 <!-- Today Follow-ups -->
                 <div
-                    class="card-entrance group bg-white rounded-2xl shadow-sm hover:shadow-md p-6 border border-gray-100 transition-all duration-300 hover:-translate-y-1 cursor-default"
+                    class="card-entrance group bg-white rounded-2xl shadow-sm hover:shadow-md p-4 md:p-6 border border-gray-100 transition-all duration-300 hover:-translate-y-1 cursor-default"
                     :class="{ 'card-entrance-active': mounted }"
                     :style="{ transitionDelay: '240ms' }"
                 >
@@ -423,7 +423,7 @@ function missFollowUp(fuId) {
                             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                         </div>
                     </div>
-                    <p class="text-3xl font-bold text-gray-800 tracking-tight">{{ metrics.today_follow_ups }}</p>
+                    <p class="text-2xl md:text-3xl font-bold text-gray-800 tracking-tight">{{ metrics.today_follow_ups }}</p>
                     <div class="flex items-center gap-1.5 mt-2">
                         <span v-if="metrics.overdue_follow_ups > 0" class="inline-flex items-center gap-0.5 text-xs font-medium text-red-600 bg-red-50 px-1.5 py-0.5 rounded-md">
                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.27 16.5c-.77.833.192 2.5 1.732 2.5z" /></svg>
@@ -438,17 +438,17 @@ function missFollowUp(fuId) {
 
                 <!-- SLA: Avg Response Time -->
                 <div
-                    class="card-entrance group bg-white rounded-2xl shadow-sm hover:shadow-md p-6 border border-gray-100 transition-all duration-300 hover:-translate-y-1 cursor-default"
+                    class="card-entrance group bg-white rounded-2xl shadow-sm hover:shadow-md p-4 md:p-6 border border-gray-100 transition-all duration-300 hover:-translate-y-1 cursor-default"
                     :class="{ 'card-entrance-active': mounted }"
                     :style="{ transitionDelay: '320ms' }"
                 >
                     <div class="flex items-center justify-between mb-4">
                         <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'سرعة الاستجابة' : 'Avg. Response' }}</p>
-                        <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center shadow-md shadow-purple-200/50 group-hover:scale-110 transition-transform duration-300">
+                        <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-slate-400 to-[#1B365D] flex items-center justify-center shadow-md shadow-slate-200/50 group-hover:scale-110 transition-transform duration-300">
                             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                         </div>
                     </div>
-                    <p class="text-3xl font-bold text-gray-800 tracking-tight">{{ slaMetrics?.avg_response_display || '-' }}</p>
+                    <p class="text-2xl md:text-3xl font-bold text-gray-800 tracking-tight">{{ slaMetrics?.avg_response_display || '-' }}</p>
                     <div class="flex items-center gap-1.5 mt-2">
                         <span v-if="slaMetrics?.awaiting_contact > 0" class="inline-flex items-center gap-0.5 text-xs font-medium text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded-md">
                             {{ slaMetrics.awaiting_contact }} {{ isRtl ? 'بانتظار التواصل' : 'awaiting contact' }}
@@ -465,9 +465,9 @@ function missFollowUp(fuId) {
             <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
                 <!-- This Week vs Last Week Cards -->
                 <div v-for="(item, idx) in [
-                    { key: 'leads', label: isRtl ? 'عملاء هذا الاسبوع' : 'Leads This Week', icon: 'M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z', gradient: 'from-blue-500 to-blue-600', shadow: 'shadow-blue-200/50' },
+                    { key: 'leads', label: isRtl ? 'عملاء هذا الاسبوع' : 'Leads This Week', icon: 'M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z', gradient: 'from-[#1B365D] to-[#1B365D]', shadow: 'shadow-slate-200/50' },
                     { key: 'converted', label: isRtl ? 'تحويلات هذا الاسبوع' : 'Converted This Week', icon: 'M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z', gradient: 'from-emerald-500 to-emerald-600', shadow: 'shadow-emerald-200/50' },
-                    { key: 'activities', label: isRtl ? 'انشطة هذا الاسبوع' : 'Activities This Week', icon: 'M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z', gradient: 'from-violet-500 to-violet-600', shadow: 'shadow-violet-200/50' },
+                    { key: 'activities', label: isRtl ? 'انشطة هذا الاسبوع' : 'Activities This Week', icon: 'M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z', gradient: 'from-[#1B365D] to-[#1B365D]', shadow: 'shadow-slate-200/50' },
                 ]" :key="item.key"
                     class="card-entrance group bg-white rounded-2xl shadow-sm hover:shadow-md p-5 border border-gray-100 transition-all duration-300 hover:-translate-y-0.5"
                     :class="{ 'card-entrance-active': mounted }"
@@ -481,7 +481,7 @@ function missFollowUp(fuId) {
                         <span class="text-xs font-semibold text-gray-500 uppercase tracking-wider leading-tight">{{ item.label }}</span>
                     </div>
                     <div class="flex items-end justify-between">
-                        <p class="text-2xl font-bold text-gray-800">{{ weeklyComparison?.this_week?.[item.key] || 0 }}</p>
+                        <p class="text-xl md:text-2xl font-bold text-gray-800">{{ weeklyComparison?.this_week?.[item.key] || 0 }}</p>
                         <div class="flex items-center gap-1">
                             <span v-if="weekDelta(item.key) > 0" class="inline-flex items-center gap-0.5 text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md">
                                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" /></svg>
@@ -502,7 +502,7 @@ function missFollowUp(fuId) {
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <!-- Lead Trend Chart -->
                 <div
-                    class="card-entrance lg:col-span-2 bg-white rounded-2xl shadow-sm hover:shadow-md p-6 border border-gray-100 transition-all duration-300"
+                    class="card-entrance lg:col-span-2 bg-white rounded-2xl shadow-sm hover:shadow-md p-4 md:p-6 border border-gray-100 transition-all duration-300"
                     :class="{ 'card-entrance-active': mounted }"
                     :style="{ transitionDelay: '580ms' }"
                 >
@@ -537,18 +537,18 @@ function missFollowUp(fuId) {
 
                 <!-- Module Distribution -->
                 <div
-                    class="card-entrance bg-white rounded-2xl shadow-sm hover:shadow-md p-6 border border-gray-100 transition-all duration-300"
+                    class="card-entrance bg-white rounded-2xl shadow-sm hover:shadow-md p-4 md:p-6 border border-gray-100 transition-all duration-300"
                     :class="{ 'card-entrance-active': mounted }"
                     :style="{ transitionDelay: '640ms' }"
                 >
                     <div class="flex items-center gap-3 mb-6">
-                        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center">
+                        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-slate-400 to-[#1B365D] flex items-center justify-center">
                             <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z" /></svg>
                         </div>
                         <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider">{{ isRtl ? 'توزيع الاقسام' : 'Module Split' }}</h3>
                     </div>
                     <div class="space-y-5">
-                        <Link v-for="(mod, key) in { derma: { label: isRtl ? 'جلدية' : 'Derma', color: 'from-teal-400 to-teal-600', bg: 'bg-teal-100', text: 'text-teal-700' }, dental: { label: isRtl ? 'اسنان' : 'Dental', color: 'from-sky-400 to-sky-600', bg: 'bg-sky-100', text: 'text-sky-700' }, pediatric: { label: isRtl ? 'أطفال' : 'Pediatric', color: 'from-green-400 to-green-600', bg: 'bg-green-100', text: 'text-green-700' } }" :key="key"
+                        <Link v-for="(mod, key) in { derma: { label: isRtl ? 'جلدية' : 'Derma', color: 'from-teal-400 to-teal-600', bg: 'bg-teal-100', text: 'text-teal-700' }, dental: { label: isRtl ? 'اسنان' : 'Dental', color: 'from-slate-400 to-[#1B365D]', bg: 'bg-slate-100', text: 'text-[#1B365D]' }, pediatric: { label: isRtl ? 'أطفال' : 'Pediatric', color: 'from-emerald-400 to-emerald-600', bg: 'bg-emerald-100', text: 'text-emerald-700' } }" :key="key"
                             :href="`/admin/leads?module=${key}`"
                             class="block hover:bg-gray-50/50 -mx-2 px-2 py-1 rounded-lg transition-colors"
                         >
@@ -584,7 +584,7 @@ function missFollowUp(fuId) {
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <!-- Pipeline Overview -->
                 <div
-                    class="card-entrance lg:col-span-2 bg-white rounded-2xl shadow-sm hover:shadow-md p-6 border border-gray-100 transition-all duration-300"
+                    class="card-entrance lg:col-span-2 bg-white rounded-2xl shadow-sm hover:shadow-md p-4 md:p-6 border border-gray-100 transition-all duration-300"
                     :class="{ 'card-entrance-active': mounted }"
                     :style="{ transitionDelay: '400ms' }"
                 >
@@ -630,12 +630,12 @@ function missFollowUp(fuId) {
 
                 <!-- Leads by Source -->
                 <div
-                    class="card-entrance bg-white rounded-2xl shadow-sm hover:shadow-md p-6 border border-gray-100 transition-all duration-300"
+                    class="card-entrance bg-white rounded-2xl shadow-sm hover:shadow-md p-4 md:p-6 border border-gray-100 transition-all duration-300"
                     :class="{ 'card-entrance-active': mounted }"
                     :style="{ transitionDelay: '480ms' }"
                 >
                     <div class="flex items-center gap-3 mb-6">
-                        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-400 to-indigo-600 flex items-center justify-center">
+                        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-slate-400 to-[#1B365D] flex items-center justify-center">
                             <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" /></svg>
                         </div>
                         <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider">{{ $t('a_leads_by_source') }}</h3>
@@ -674,7 +674,7 @@ function missFollowUp(fuId) {
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <!-- Conversion Funnel Chart -->
                 <div
-                    class="card-entrance lg:col-span-2 bg-white rounded-2xl shadow-sm hover:shadow-md p-6 border border-gray-100 transition-all duration-300"
+                    class="card-entrance lg:col-span-2 bg-white rounded-2xl shadow-sm hover:shadow-md p-4 md:p-6 border border-gray-100 transition-all duration-300"
                     :class="{ 'card-entrance-active': mounted }"
                     :style="{ transitionDelay: '500ms' }"
                 >
@@ -742,7 +742,7 @@ function missFollowUp(fuId) {
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                             </svg>
                             <div class="text-center">
-                                <div class="text-lg font-bold text-green-600">{{ funnelStages[funnelStages.length - 1]?.count || 0 }}</div>
+                                <div class="text-lg font-bold text-emerald-600">{{ funnelStages[funnelStages.length - 1]?.count || 0 }}</div>
                                 <div class="text-[10px] text-gray-400 uppercase">Converted</div>
                             </div>
                         </div>
@@ -757,7 +757,7 @@ function missFollowUp(fuId) {
 
                 <!-- Mini Calendar Widget -->
                 <div
-                    class="card-entrance bg-white rounded-2xl shadow-sm hover:shadow-md p-6 border border-gray-100 transition-all duration-300"
+                    class="card-entrance bg-white rounded-2xl shadow-sm hover:shadow-md p-4 md:p-6 border border-gray-100 transition-all duration-300"
                     :class="{ 'card-entrance-active': mounted }"
                     :style="{ transitionDelay: '520ms' }"
                 >
@@ -808,7 +808,7 @@ function missFollowUp(fuId) {
                             <!-- Follow-up count dot -->
                             <div v-if="day.followUpCount > 0"
                                 class="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold text-white"
-                                :class="day.isToday ? 'bg-[#C4A265]' : 'bg-blue-400'"
+                                :class="day.isToday ? 'bg-[#C4A265]' : 'bg-slate-400'"
                             >
                                 {{ day.followUpCount }}
                             </div>
@@ -844,7 +844,7 @@ function missFollowUp(fuId) {
                         </div>
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-2">
-                                <span class="w-2.5 h-2.5 rounded-full bg-blue-400"></span>
+                                <span class="w-2.5 h-2.5 rounded-full bg-slate-400"></span>
                                 <span class="text-xs text-gray-500">This week total</span>
                             </div>
                             <span class="text-xs font-bold text-gray-700">{{ calendarDays.reduce((s, d) => s + d.followUpCount, 0) }}</span>
@@ -856,7 +856,7 @@ function missFollowUp(fuId) {
             <!-- Time in Stage Analytics -->
             <div
                 v-if="stageAnalytics && Object.keys(stageAnalytics).length > 0"
-                class="card-entrance bg-white rounded-2xl shadow-sm hover:shadow-md p-6 border border-gray-100 transition-all duration-300"
+                class="card-entrance bg-white rounded-2xl shadow-sm hover:shadow-md p-4 md:p-6 border border-gray-100 transition-all duration-300"
                 :class="{ 'card-entrance-active': mounted }"
                 :style="{ transitionDelay: '540ms' }"
             >
@@ -928,7 +928,7 @@ function missFollowUp(fuId) {
                     :class="{ 'card-entrance-active': mounted }"
                     :style="{ transitionDelay: '560ms' }"
                 >
-                    <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gradient-to-r from-amber-50/80 to-transparent">
+                    <div class="px-4 md:px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gradient-to-r from-amber-50/80 to-transparent">
                         <div class="flex items-center gap-3">
                             <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center">
                                 <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -938,7 +938,7 @@ function missFollowUp(fuId) {
                         <span class="text-xs font-bold px-2.5 py-1 rounded-full bg-amber-100 text-amber-700">{{ todayFollowUps?.length || 0 }}</span>
                     </div>
                     <div class="divide-y divide-gray-50">
-                        <div v-for="fu in todayFollowUps" :key="fu.id" class="px-6 py-4 flex items-center gap-4 hover:bg-gray-50/70 transition-colors duration-200 group">
+                        <div v-for="fu in todayFollowUps" :key="fu.id" class="px-4 md:px-6 py-4 flex items-center gap-4 hover:bg-gray-50/70 transition-colors duration-200 group">
                             <!-- Avatar initials -->
                             <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#C4A265] to-[#A8893E] flex items-center justify-center flex-shrink-0 shadow-sm">
                                 <span class="text-xs font-bold text-white">{{ getInitials(fu.lead?.full_name) }}</span>
@@ -967,7 +967,7 @@ function missFollowUp(fuId) {
                                 </button>
                             </div>
                         </div>
-                        <div v-if="!todayFollowUps?.length" class="px-6 py-12 text-center">
+                        <div v-if="!todayFollowUps?.length" class="px-4 md:px-6 py-12 text-center">
                             <div class="w-14 h-14 mx-auto rounded-full bg-gray-50 flex items-center justify-center mb-3">
                                 <svg class="w-7 h-7 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                             </div>
@@ -983,7 +983,7 @@ function missFollowUp(fuId) {
                     :style="{ transitionDelay: '640ms' }"
                     v-if="overdueFollowUps?.length"
                 >
-                    <div class="px-6 py-4 border-b border-red-100 flex items-center justify-between bg-gradient-to-r from-red-50/80 to-transparent">
+                    <div class="px-4 md:px-6 py-4 border-b border-red-100 flex items-center justify-between bg-gradient-to-r from-red-50/80 to-transparent">
                         <div class="flex items-center gap-3">
                             <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-red-400 to-red-600 flex items-center justify-center">
                                 <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.27 16.5c-.77.833.192 2.5 1.732 2.5z" /></svg>
@@ -993,7 +993,7 @@ function missFollowUp(fuId) {
                         <span class="text-xs font-bold px-2.5 py-1 rounded-full bg-red-100 text-red-700 animate-pulse">{{ overdueFollowUps.length }}</span>
                     </div>
                     <div class="divide-y divide-gray-50">
-                        <div v-for="fu in overdueFollowUps" :key="fu.id" class="px-6 py-4 flex items-center gap-4 hover:bg-red-50/30 transition-colors duration-200 group">
+                        <div v-for="fu in overdueFollowUps" :key="fu.id" class="px-4 md:px-6 py-4 flex items-center gap-4 hover:bg-red-50/30 transition-colors duration-200 group">
                             <div class="w-10 h-10 rounded-full bg-gradient-to-br from-red-400 to-red-600 flex items-center justify-center flex-shrink-0 shadow-sm">
                                 <span class="text-xs font-bold text-white">{{ getInitials(fu.lead?.full_name) }}</span>
                             </div>
@@ -1027,7 +1027,7 @@ function missFollowUp(fuId) {
                     :style="{ transitionDelay: '640ms' }"
                     v-if="!overdueFollowUps?.length"
                 >
-                    <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gradient-to-r from-gray-50/80 to-transparent">
+                    <div class="px-4 md:px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gradient-to-r from-gray-50/80 to-transparent">
                         <div class="flex items-center gap-3">
                             <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-gray-400 to-gray-600 flex items-center justify-center">
                                 <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
@@ -1037,7 +1037,7 @@ function missFollowUp(fuId) {
                     </div>
                     <div class="divide-y divide-gray-50">
                         <Link v-for="lead in recentLeads" :key="lead.id" :href="`/admin/leads/${lead.id}`"
-                            class="px-6 py-4 flex items-center gap-4 hover:bg-gray-50/70 transition-colors duration-200 block group"
+                            class="px-4 md:px-6 py-4 flex items-center gap-4 hover:bg-gray-50/70 transition-colors duration-200 block group"
                         >
                             <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#C4A265] to-[#A8893E] flex items-center justify-center flex-shrink-0 shadow-sm group-hover:shadow-md transition-shadow">
                                 <span class="text-xs font-bold text-white">{{ getInitials(lead.full_name) }}</span>
@@ -1051,7 +1051,7 @@ function missFollowUp(fuId) {
                             </span>
                             <span class="text-xs text-gray-400 whitespace-nowrap">{{ timeAgo(lead.created_at) }}</span>
                         </Link>
-                        <div v-if="!recentLeads?.length" class="px-6 py-12 text-center">
+                        <div v-if="!recentLeads?.length" class="px-4 md:px-6 py-12 text-center">
                             <div class="w-14 h-14 mx-auto rounded-full bg-gray-50 flex items-center justify-center mb-3">
                                 <svg class="w-7 h-7 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" /></svg>
                             </div>
@@ -1068,7 +1068,7 @@ function missFollowUp(fuId) {
                 :style="{ transitionDelay: '720ms' }"
                 v-if="activeCampaigns?.length"
             >
-                <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gradient-to-r from-[#C4A265]/5 to-transparent">
+                <div class="px-4 md:px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gradient-to-r from-[#C4A265]/5 to-transparent">
                     <div class="flex items-center gap-3">
                         <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-[#C4A265] to-[#A8893E] flex items-center justify-center">
                             <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" /></svg>
@@ -1084,32 +1084,32 @@ function missFollowUp(fuId) {
                     <table class="w-full text-sm">
                         <thead>
                             <tr class="ltr:text-left rtl:text-right text-[11px] text-gray-400 uppercase border-b border-gray-100 bg-gray-50/40">
-                                <th class="px-6 py-3.5 font-semibold tracking-wider">{{ $t('a_campaign') }}</th>
-                                <th class="px-6 py-3.5 font-semibold tracking-wider">{{ $t('a_source') }}</th>
-                                <th class="px-6 py-3.5 font-semibold tracking-wider text-center">{{ $t('a_leads') }}</th>
-                                <th class="px-6 py-3.5 font-semibold tracking-wider text-center">{{ $t('a_conversions') }}</th>
-                                <th class="px-6 py-3.5 font-semibold tracking-wider ltr:text-right rtl:text-left">{{ $t('a_budget') }}</th>
+                                <th class="px-4 md:px-6 py-3.5 font-semibold tracking-wider">{{ $t('a_campaign') }}</th>
+                                <th class="px-4 md:px-6 py-3.5 font-semibold tracking-wider">{{ $t('a_source') }}</th>
+                                <th class="px-4 md:px-6 py-3.5 font-semibold tracking-wider text-center">{{ $t('a_leads') }}</th>
+                                <th class="px-4 md:px-6 py-3.5 font-semibold tracking-wider text-center">{{ $t('a_conversions') }}</th>
+                                <th class="px-4 md:px-6 py-3.5 font-semibold tracking-wider ltr:text-right rtl:text-left">{{ $t('a_budget') }}</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-50">
                             <tr v-for="(c, index) in activeCampaigns" :key="c.id" class="hover:bg-gray-50/70 transition-colors duration-150" :class="index % 2 === 1 ? 'bg-gray-50/30' : ''">
-                                <td class="px-6 py-4">
+                                <td class="px-4 md:px-6 py-4">
                                     <Link :href="`/admin/campaigns/${c.id}`" class="font-semibold text-gray-800 hover:text-[#C4A265] transition-colors">{{ c.name }}</Link>
                                 </td>
-                                <td class="px-6 py-4">
+                                <td class="px-4 md:px-6 py-4">
                                     <span v-if="c.lead_source" class="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full" :style="{ backgroundColor: c.lead_source.color + '15', color: c.lead_source.color, border: '1px solid ' + c.lead_source.color + '25' }">
                                         <span class="w-1.5 h-1.5 rounded-full" :style="{ backgroundColor: c.lead_source.color }"></span>
                                         {{ c.lead_source.name_en }}
                                     </span>
                                     <span v-else class="text-gray-400">-</span>
                                 </td>
-                                <td class="px-6 py-4 text-center">
-                                    <span class="inline-flex items-center justify-center min-w-[2rem] px-2 py-0.5 rounded-lg bg-blue-50 text-blue-700 text-xs font-bold">{{ c.leads_count }}</span>
+                                <td class="px-4 md:px-6 py-4 text-center">
+                                    <span class="inline-flex items-center justify-center min-w-[2rem] px-2 py-0.5 rounded-lg bg-slate-50 text-[#1B365D] text-xs font-bold">{{ c.leads_count }}</span>
                                 </td>
-                                <td class="px-6 py-4 text-center">
+                                <td class="px-4 md:px-6 py-4 text-center">
                                     <span class="inline-flex items-center justify-center min-w-[2rem] px-2 py-0.5 rounded-lg bg-emerald-50 text-emerald-700 text-xs font-bold">{{ c.conversions_count }}</span>
                                 </td>
-                                <td class="px-6 py-4 ltr:text-right rtl:text-left">
+                                <td class="px-4 md:px-6 py-4 ltr:text-right rtl:text-left">
                                     <span class="text-sm font-medium text-gray-700">{{ formatCurrency(c.budget) }}</span>
                                 </td>
                             </tr>
@@ -1124,7 +1124,7 @@ function missFollowUp(fuId) {
                 :style="{ transitionDelay: '780ms' }"
                 v-if="staleLeads?.length"
             >
-                <div class="px-6 py-4 border-b border-amber-100 flex items-center justify-between bg-gradient-to-r from-amber-50/80 to-transparent">
+                <div class="px-4 md:px-6 py-4 border-b border-amber-100 flex items-center justify-between bg-gradient-to-r from-amber-50/80 to-transparent">
                     <div class="flex items-center gap-3">
                         <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center">
                             <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.27 16.5c-.77.833.192 2.5 1.732 2.5z" /></svg>
@@ -1136,7 +1136,7 @@ function missFollowUp(fuId) {
                 <div class="divide-y divide-gray-50">
                     <Link v-for="lead in staleLeads" :key="lead.id"
                         :href="`/admin/leads/${lead.id}`"
-                        class="px-6 py-3.5 flex items-center gap-4 hover:bg-amber-50/40 transition-colors duration-200 block group"
+                        class="px-4 md:px-6 py-3.5 flex items-center gap-4 hover:bg-amber-50/40 transition-colors duration-200 block group"
                     >
                         <div class="w-9 h-9 rounded-full bg-gradient-to-br from-amber-300 to-amber-500 flex items-center justify-center flex-shrink-0">
                             <span class="text-[10px] font-bold text-white">{{ getInitials(lead.full_name) }}</span>
@@ -1164,7 +1164,7 @@ function missFollowUp(fuId) {
                 :style="{ transitionDelay: '800ms' }"
                 v-if="teamPerformance?.length"
             >
-                <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gradient-to-r from-[#C4A265]/5 to-transparent">
+                <div class="px-4 md:px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gradient-to-r from-[#C4A265]/5 to-transparent">
                     <div class="flex items-center gap-3">
                         <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-[#C4A265] to-[#A8893E] flex items-center justify-center">
                             <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
@@ -1180,7 +1180,7 @@ function missFollowUp(fuId) {
                     <table class="w-full text-sm">
                         <thead>
                             <tr class="ltr:text-left rtl:text-right text-[11px] text-gray-400 uppercase border-b border-gray-100 bg-gray-50/40">
-                                <th class="px-6 py-3.5 font-semibold tracking-wider">{{ isRtl ? 'الموظف' : 'Staff' }}</th>
+                                <th class="px-4 md:px-6 py-3.5 font-semibold tracking-wider">{{ isRtl ? 'الموظف' : 'Staff' }}</th>
                                 <th class="px-4 py-3.5 font-semibold tracking-wider text-center">{{ isRtl ? 'نشط' : 'Active' }}</th>
                                 <th class="px-4 py-3.5 font-semibold tracking-wider text-center">{{ isRtl ? 'محول' : 'Conv.' }}</th>
                                 <th class="px-4 py-3.5 font-semibold tracking-wider text-center hidden sm:table-cell">{{ isRtl ? 'نسبة' : 'Rate' }}</th>
@@ -1195,7 +1195,7 @@ function missFollowUp(fuId) {
                                 :class="idx % 2 === 1 ? 'bg-gray-50/30' : ''"
                                 @click="router.get('/admin/leads', { assigned_to: member.id })"
                             >
-                                <td class="px-6 py-4">
+                                <td class="px-4 md:px-6 py-4">
                                     <div class="flex items-center gap-3">
                                         <div class="w-8 h-8 rounded-full bg-gradient-to-br from-[#C4A265] to-[#A8893E] flex items-center justify-center flex-shrink-0">
                                             <span class="text-[10px] font-bold text-white">{{ getInitials(member.name) }}</span>
@@ -1207,7 +1207,7 @@ function missFollowUp(fuId) {
                                     </div>
                                 </td>
                                 <td class="px-4 py-4 text-center">
-                                    <span class="inline-flex items-center justify-center min-w-[2rem] px-2 py-0.5 rounded-lg bg-blue-50 text-blue-700 text-xs font-bold">{{ member.active_leads }}</span>
+                                    <span class="inline-flex items-center justify-center min-w-[2rem] px-2 py-0.5 rounded-lg bg-slate-50 text-[#1B365D] text-xs font-bold">{{ member.active_leads }}</span>
                                 </td>
                                 <td class="px-4 py-4 text-center">
                                     <span class="inline-flex items-center justify-center min-w-[2rem] px-2 py-0.5 rounded-lg bg-emerald-50 text-emerald-700 text-xs font-bold">{{ member.converted_leads }}</span>
@@ -1301,7 +1301,7 @@ function missFollowUp(fuId) {
                                     <div>
                                         <label class="block text-xs font-semibold text-gray-600 mb-1.5">{{ isRtl ? 'الأولوية' : 'Priority' }}</label>
                                         <div class="flex gap-2">
-                                            <button v-for="p in [{v:1,l:'Hot',c:'border-red-300 bg-red-50 text-red-700'},{v:2,l:'Warm',c:'border-amber-300 bg-amber-50 text-amber-700'},{v:3,l:'Cold',c:'border-blue-300 bg-blue-50 text-blue-700'}]"
+                                            <button v-for="p in [{v:1,l:'Hot',c:'border-red-300 bg-red-50 text-red-700'},{v:2,l:'Warm',c:'border-amber-300 bg-amber-50 text-amber-700'},{v:3,l:'Cold',c:'border-slate-300 bg-slate-50 text-[#1B365D]'}]"
                                                 :key="p.v" type="button" @click="quickAddForm.priority = p.v"
                                                 class="flex-1 py-2 text-xs font-semibold rounded-lg border transition-all"
                                                 :class="quickAddForm.priority === p.v ? p.c + ' ring-2 ring-offset-1 ring-[#C4A265]/40' : 'border-gray-200 text-gray-500 hover:bg-gray-50'">

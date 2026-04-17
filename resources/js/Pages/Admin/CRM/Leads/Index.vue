@@ -123,13 +123,13 @@ const statusLabels = {
 };
 
 const statusColors = {
-    new: 'bg-blue-100 text-blue-700 ring-blue-600/10',
-    contacted: 'bg-indigo-100 text-indigo-700 ring-indigo-600/10',
-    qualified: 'bg-purple-100 text-purple-700 ring-purple-600/10',
+    new: 'bg-slate-100 text-[#1B365D] ring-[#1B365D]/10',
+    contacted: 'bg-slate-100 text-[#1B365D] ring-[#1B365D]/10',
+    qualified: 'bg-slate-100 text-[#1B365D] ring-[#1B365D]/10',
     appointment_booked: 'bg-amber-100 text-amber-700 ring-amber-600/10',
     consultation_done: 'bg-teal-100 text-teal-700 ring-teal-600/10',
-    negotiation: 'bg-orange-100 text-orange-700 ring-orange-600/10',
-    converted: 'bg-green-100 text-green-700 ring-green-600/10',
+    negotiation: 'bg-amber-100 text-[#C4A265] ring-[#C4A265]/10',
+    converted: 'bg-emerald-100 text-emerald-700 ring-emerald-600/10',
     lost: 'bg-red-100 text-red-700 ring-red-600/10',
     dormant: 'bg-gray-100 text-gray-600 ring-gray-500/10',
 };
@@ -138,13 +138,13 @@ const priorityLabels = { 1: 'Hot', 2: 'Warm', 3: 'Cold' };
 const priorityBadges = {
     1: 'bg-red-100 text-red-700 ring-red-600/10',
     2: 'bg-amber-100 text-amber-700 ring-amber-600/10',
-    3: 'bg-blue-100 text-blue-700 ring-blue-600/10',
+    3: 'bg-slate-100 text-[#1B365D] ring-[#1B365D]/10',
 };
 
 const priorityDots = {
     1: 'bg-red-500',
     2: 'bg-amber-500',
-    3: 'bg-blue-500',
+    3: 'bg-[#1B365D]',
 };
 
 function formatDate(date) {
@@ -166,9 +166,9 @@ function leadAge(date) {
     const days = Math.floor((new Date() - new Date(date)) / 86400000);
     if (days === 0) return { days, label: 'Today', color: 'text-emerald-600' };
     if (days === 1) return { days, label: '1d', color: 'text-emerald-600' };
-    if (days <= 7) return { days, label: days + 'd', color: 'text-blue-600' };
+    if (days <= 7) return { days, label: days + 'd', color: 'text-[#1B365D]' };
     if (days <= 14) return { days, label: days + 'd', color: 'text-amber-600' };
-    if (days <= 30) return { days, label: days + 'd', color: 'text-orange-600' };
+    if (days <= 30) return { days, label: days + 'd', color: 'text-[#C4A265]' };
     return { days, label: days + 'd', color: 'text-red-600' };
 }
 
@@ -266,7 +266,7 @@ function quickChangePriority(leadId, newPriority) {
                         <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" /></svg>
                     </div>
                     <div>
-                        <h1 class="text-2xl font-bold text-gray-800">{{ $t('a_leads') }}</h1>
+                        <h1 class="text-xl md:text-2xl font-bold text-gray-800">{{ $t('a_leads') }}</h1>
                         <p class="text-sm text-gray-500 mt-0.5">{{ $t('a_leads_subtitle') }}</p>
                     </div>
                 </div>
@@ -316,24 +316,24 @@ function quickChangePriority(leadId, newPriority) {
                     <p class="text-[10px] text-gray-500 uppercase mt-1 font-semibold tracking-wide">{{ $t('a_total') }}</p>
                 </div>
                 <div class="group bg-white rounded-2xl shadow-sm hover:shadow-md p-4 border border-gray-100 text-center transition-all duration-300 hover:-translate-y-0.5 cursor-default border-t-[3px] border-t-blue-400">
-                    <div class="w-9 h-9 mx-auto rounded-lg bg-blue-50 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform duration-300">
-                        <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
+                    <div class="w-9 h-9 mx-auto rounded-lg bg-slate-50 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform duration-300">
+                        <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
                     </div>
-                    <p class="text-xl font-bold text-blue-600">{{ stats.new }}</p>
+                    <p class="text-xl font-bold text-[#1B365D]">{{ stats.new }}</p>
                     <p class="text-[10px] text-gray-500 uppercase mt-1 font-semibold tracking-wide">{{ $t('a_new') }}</p>
                 </div>
                 <div class="group bg-white rounded-2xl shadow-sm hover:shadow-md p-4 border border-gray-100 text-center transition-all duration-300 hover:-translate-y-0.5 cursor-default border-t-[3px] border-t-indigo-400">
-                    <div class="w-9 h-9 mx-auto rounded-lg bg-indigo-50 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform duration-300">
-                        <svg class="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
+                    <div class="w-9 h-9 mx-auto rounded-lg bg-slate-50 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform duration-300">
+                        <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
                     </div>
-                    <p class="text-xl font-bold text-indigo-600">{{ stats.in_pipeline }}</p>
+                    <p class="text-xl font-bold text-[#1B365D]">{{ stats.in_pipeline }}</p>
                     <p class="text-[10px] text-gray-500 uppercase mt-1 font-semibold tracking-wide">{{ $t('a_in_pipeline') }}</p>
                 </div>
                 <div class="group bg-white rounded-2xl shadow-sm hover:shadow-md p-4 border border-gray-100 text-center transition-all duration-300 hover:-translate-y-0.5 cursor-default border-t-[3px] border-t-emerald-400">
                     <div class="w-9 h-9 mx-auto rounded-lg bg-emerald-50 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform duration-300">
                         <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                     </div>
-                    <p class="text-xl font-bold text-green-600">{{ stats.converted }}</p>
+                    <p class="text-xl font-bold text-emerald-600">{{ stats.converted }}</p>
                     <p class="text-[10px] text-gray-500 uppercase mt-1 font-semibold tracking-wide">{{ $t('a_converted') }}</p>
                 </div>
                 <div class="group bg-white rounded-2xl shadow-sm hover:shadow-md p-4 border border-gray-100 text-center transition-all duration-300 hover:-translate-y-0.5 cursor-default border-t-[3px] border-t-red-400">
@@ -344,8 +344,8 @@ function quickChangePriority(leadId, newPriority) {
                     <p class="text-[10px] text-gray-500 uppercase mt-1 font-semibold tracking-wide">{{ $t('a_lost') }}</p>
                 </div>
                 <div class="group bg-white rounded-2xl shadow-sm hover:shadow-md p-4 border border-gray-100 text-center transition-all duration-300 hover:-translate-y-0.5 cursor-default border-t-[3px] border-t-orange-400">
-                    <div class="w-9 h-9 mx-auto rounded-lg bg-orange-50 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform duration-300">
-                        <svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z" /></svg>
+                    <div class="w-9 h-9 mx-auto rounded-lg bg-amber-50 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform duration-300">
+                        <svg class="w-4 h-4 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z" /></svg>
                     </div>
                     <p class="text-xl font-bold text-red-500">{{ stats.hot }}</p>
                     <p class="text-[10px] text-gray-500 uppercase mt-1 font-semibold tracking-wide">{{ $t('a_hot_leads') }}</p>
@@ -567,7 +567,7 @@ function quickChangePriority(leadId, newPriority) {
                                                 <Link :href="`/admin/leads/${lead.id}`" class="font-semibold text-gray-800 hover:text-[#C4A265] transition-colors duration-200">
                                                     {{ lead.full_name }}
                                                 </Link>
-                                                <span v-if="lead.module === 'dental'" class="px-1.5 py-0.5 text-[8px] font-bold rounded bg-sky-50 text-sky-600 border border-sky-200 uppercase">D</span>
+                                                <span v-if="lead.module === 'dental'" class="px-1.5 py-0.5 text-[8px] font-bold rounded bg-slate-50 text-[#1B365D] border border-slate-200 uppercase">D</span>
                                             </div>
                                             <p class="text-xs text-gray-400 mt-0.5" v-if="lead.city">{{ lead.city }}</p>
                                         </div>
@@ -736,7 +736,7 @@ function quickChangePriority(leadId, newPriority) {
                                 :style="{ backgroundColor: lead.source.color + '12', color: lead.source.color }">
                                 {{ lead.source.name_en }}
                             </span>
-                            <span v-if="lead.module === 'dental'" class="px-1.5 py-0.5 text-[8px] font-bold rounded bg-sky-50 text-sky-600 border border-sky-200 uppercase">D</span>
+                            <span v-if="lead.module === 'dental'" class="px-1.5 py-0.5 text-[8px] font-bold rounded bg-slate-50 text-[#1B365D] border border-slate-200 uppercase">D</span>
                         </div>
                         <!-- Info rows -->
                         <div class="space-y-2 text-xs">
@@ -817,7 +817,7 @@ function quickChangePriority(leadId, newPriority) {
                                         <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                                         {{ lead.assigned_user.name }}
                                     </span>
-                                    <span v-if="lead.module === 'dental'" class="px-1 py-0.5 text-[7px] font-bold rounded bg-sky-50 text-sky-600 border border-sky-200 uppercase">D</span>
+                                    <span v-if="lead.module === 'dental'" class="px-1 py-0.5 text-[7px] font-bold rounded bg-slate-50 text-[#1B365D] border border-slate-200 uppercase">D</span>
                                 </div>
                                 <div class="flex items-center justify-between mt-2 pt-2 border-t border-gray-50 text-[9px] text-gray-400">
                                     <span :class="leadAge(lead.created_at).color" class="font-bold">{{ leadAge(lead.created_at).label }}</span>
@@ -847,7 +847,7 @@ function quickChangePriority(leadId, newPriority) {
                 :class="{ 'card-entrance-active': mounted }"
                 :style="{ transitionDelay: '240ms' }"
             >
-                <div class="px-6 py-20 text-center">
+                <div class="px-4 md:px-6 py-20 text-center">
                     <div class="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center mb-5 shadow-inner">
                         <svg class="w-10 h-10 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" /></svg>
                     </div>
@@ -866,7 +866,7 @@ function quickChangePriority(leadId, newPriority) {
                 :class="{ 'card-entrance-active': mounted }"
                 :style="{ transitionDelay: '280ms' }"
             >
-                <div class="px-6 py-4 flex items-center justify-between">
+                <div class="px-4 md:px-6 py-4 flex items-center justify-between">
                     <p class="text-xs font-medium text-gray-500">
                         {{ $t('a_showing') }} <span class="text-gray-700">{{ leads.from }}</span> {{ $t('a_to') }} <span class="text-gray-700">{{ leads.to }}</span> {{ $t('a_of') }} <span class="text-gray-700">{{ leads.total }}</span>
                     </p>

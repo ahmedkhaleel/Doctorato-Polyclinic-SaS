@@ -75,8 +75,8 @@ function selectChannel(val) {
 
 const channelOptions = [
     { value: 'whatsapp', label: 'WhatsApp', desc: 'Rich messaging with media', color: '#25D366', bgClass: 'bg-emerald-50', borderClass: 'border-emerald-200', ringClass: 'ring-emerald-300', textClass: 'text-emerald-600' },
-    { value: 'sms', label: 'SMS', desc: 'Direct text messages', color: '#3B82F6', bgClass: 'bg-blue-50', borderClass: 'border-blue-200', ringClass: 'ring-blue-300', textClass: 'text-blue-600' },
-    { value: 'email', label: 'Email', desc: 'Professional campaigns', color: '#8B5CF6', bgClass: 'bg-purple-50', borderClass: 'border-purple-200', ringClass: 'ring-purple-300', textClass: 'text-purple-600' },
+    { value: 'sms', label: 'SMS', desc: 'Direct text messages', color: '#3B82F6', bgClass: 'bg-slate-50', borderClass: 'border-slate-200', ringClass: 'ring-slate-300', textClass: 'text-[#1B365D]' },
+    { value: 'email', label: 'Email', desc: 'Professional campaigns', color: '#8B5CF6', bgClass: 'bg-slate-50', borderClass: 'border-slate-200', ringClass: 'ring-slate-300', textClass: 'text-[#1B365D]' },
 ];
 
 /* ---- floating label focus state ---- */
@@ -138,7 +138,7 @@ function handleToggleVariable(v) {
                 class="transition-all duration-700 ease-out mb-8"
             >
                 <!-- Gradient header band -->
-                <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 p-6 shadow-xl">
+                <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 p-4 md:p-6 shadow-xl">
                     <!-- Gold accent lines -->
                     <div class="absolute inset-0 opacity-10">
                         <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#C4A265] to-transparent"></div>
@@ -156,7 +156,7 @@ function handleToggleVariable(v) {
                             </svg>
                         </Link>
                         <div class="flex-1">
-                            <h1 class="text-2xl font-bold text-white tracking-tight">{{ $t('a_create_template') }}</h1>
+                            <h1 class="text-xl md:text-2xl font-bold text-white tracking-tight">{{ $t('a_create_template') }}</h1>
                             <p class="text-sm text-gray-400 mt-1">{{ $t('a_configure_template_description') }}</p>
                         </div>
                         <!-- Decorative template icon -->
@@ -266,7 +266,7 @@ function handleToggleVariable(v) {
                                     <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-3 ltr:ml-1 rtl:mr-1">
                                         {{ $t('a_channel') }} <span class="text-red-400">*</span>
                                     </label>
-                                    <div class="grid grid-cols-3 gap-3">
+                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                                         <button
                                             v-for="ch in channelOptions" :key="ch.value"
                                             type="button"
@@ -541,7 +541,7 @@ function handleToggleVariable(v) {
                                                     <p class="text-sm text-gray-800 leading-relaxed whitespace-pre-wrap" :dir="activeTab === 'ar' ? 'rtl' : 'ltr'">{{ previewText }}</p>
                                                     <div class="flex items-center justify-end gap-1 mt-1">
                                                         <span class="text-[10px] text-gray-500">10:30 AM</span>
-                                                        <svg class="w-4 h-3 text-blue-500" fill="currentColor" viewBox="0 0 24 16"><path d="M2 8l5 5L18 2" stroke="currentColor" stroke-width="2" fill="none"/><path d="M7 8l5 5L23 2" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+                                                        <svg class="w-4 h-3 text-[#1B365D]" fill="currentColor" viewBox="0 0 24 16"><path d="M2 8l5 5L18 2" stroke="currentColor" stroke-width="2" fill="none"/><path d="M7 8l5 5L23 2" stroke="currentColor" stroke-width="2" fill="none"/></svg>
                                                     </div>
                                                 </div>
                                             </div>
@@ -555,7 +555,7 @@ function handleToggleVariable(v) {
                                         </div>
                                         <div class="bg-white px-4 py-5 rounded-b-xl">
                                             <div class="max-w-[80%] ltr:ml-auto rtl:mr-auto">
-                                                <div class="bg-blue-500 rounded-2xl rounded-br-sm px-4 py-3 shadow-sm">
+                                                <div class="bg-[#1B365D] rounded-2xl rounded-br-sm px-4 py-3 shadow-sm">
                                                     <p class="text-sm text-white leading-relaxed whitespace-pre-wrap" :dir="activeTab === 'ar' ? 'rtl' : 'ltr'">{{ previewText }}</p>
                                                 </div>
                                                 <p class="text-[10px] text-gray-400 mt-1.5 ltr:text-right rtl:text-left">Delivered</p>
@@ -569,7 +569,7 @@ function handleToggleVariable(v) {
                                             <div class="flex gap-1.5">
                                                 <div class="w-2.5 h-2.5 rounded-full bg-red-400"></div>
                                                 <div class="w-2.5 h-2.5 rounded-full bg-amber-400"></div>
-                                                <div class="w-2.5 h-2.5 rounded-full bg-green-400"></div>
+                                                <div class="w-2.5 h-2.5 rounded-full bg-emerald-400"></div>
                                             </div>
                                             <span class="text-xs text-gray-400 flex-1 text-center">New Message</span>
                                         </div>
@@ -714,7 +714,7 @@ function handleToggleVariable(v) {
                         <div class="space-y-3">
                             <!-- Submit button -->
                             <button type="submit" :disabled="form.processing"
-                                class="group relative w-full px-6 py-3.5 rounded-xl text-white text-sm font-bold transition-all duration-300 overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2.5 shadow-lg shadow-[#C4A265]/20 hover:shadow-xl hover:shadow-[#C4A265]/30 hover:scale-[1.02] active:scale-[0.98]"
+                                class="group relative w-full px-4 md:px-6 py-3.5 rounded-xl text-white text-sm font-bold transition-all duration-300 overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2.5 shadow-lg shadow-[#C4A265]/20 hover:shadow-xl hover:shadow-[#C4A265]/30 hover:scale-[1.02] active:scale-[0.98]"
                                 style="background: linear-gradient(135deg, #C4A265 0%, #D4B87A 50%, #C4A265 100%); background-size: 200% 200%;">
                                 <!-- Shimmer effect -->
                                 <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
@@ -732,7 +732,7 @@ function handleToggleVariable(v) {
 
                             <!-- Cancel button -->
                             <Link href="/admin/templates"
-                                class="group block w-full px-6 py-3 text-center rounded-xl text-sm font-semibold text-gray-500 hover:text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300 transition-all duration-300 hover:shadow-sm hover:scale-[1.01] active:scale-[0.99]">
+                                class="group block w-full px-4 md:px-6 py-3 text-center rounded-xl text-sm font-semibold text-gray-500 hover:text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300 transition-all duration-300 hover:shadow-sm hover:scale-[1.01] active:scale-[0.99]">
                                 {{ $t('a_cancel') }}
                             </Link>
                         </div>
@@ -752,7 +752,7 @@ function handleToggleVariable(v) {
                             <div class="flex items-center justify-between">
                                 <span class="text-[11px] text-gray-400">Channel</span>
                                 <span class="text-[11px] font-semibold capitalize"
-                                    :class="form.channel === 'whatsapp' ? 'text-emerald-600' : form.channel === 'sms' ? 'text-blue-600' : 'text-purple-600'">
+                                    :class="form.channel === 'whatsapp' ? 'text-emerald-600' : form.channel === 'sms' ? 'text-[#1B365D]' : 'text-[#1B365D]'">
                                     {{ form.channel }}
                                 </span>
                             </div>

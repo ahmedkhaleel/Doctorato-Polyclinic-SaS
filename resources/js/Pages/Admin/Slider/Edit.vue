@@ -55,7 +55,7 @@ function submit() {
     <AdminLayout :title="$t('a_edit_slide')">
         <div class="space-y-6">
             <div class="flex items-center justify-between">
-                <h1 class="text-2xl font-bold text-gray-800">{{ $t('a_edit_slide') }}</h1>
+                <h1 class="text-xl md:text-2xl font-bold text-gray-800">{{ $t('a_edit_slide') }}</h1>
                 <Link href="/admin/slider" class="text-sm text-gray-500 hover:text-gray-700">{{ $t('a_back_to_slider') }}</Link>
             </div>
 
@@ -63,20 +63,20 @@ function submit() {
                 <!-- Main Content -->
                 <div class="lg:col-span-2 space-y-6">
                     <!-- Titles -->
-                    <div class="bg-white rounded-lg shadow-sm p-6 space-y-5">
+                    <div class="bg-white rounded-lg shadow-sm p-4 md:p-6 space-y-5">
                         <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wider">{{ $t('a_slide_text') }}</h3>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_title_en') }}</label>
                                 <input v-model="form.title_en" type="text" placeholder="e.g. Doctorato"
-                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
                                 <p v-if="form.errors.title_en" class="mt-1 text-sm text-red-600">{{ form.errors.title_en }}</p>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_title_ar') }}</label>
                                 <input v-model="form.title_ar" type="text" dir="rtl" placeholder="مثال: دكتوراتو"
-                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
                                 <p v-if="form.errors.title_ar" class="mt-1 text-sm text-red-600">{{ form.errors.title_ar }}</p>
                             </div>
                         </div>
@@ -85,13 +85,13 @@ function submit() {
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_subtitle_en') }}</label>
                                 <input v-model="form.subtitle_en" type="text" placeholder="e.g. Where Advanced Technology Meets Natural Beauty"
-                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
                                 <p v-if="form.errors.subtitle_en" class="mt-1 text-sm text-red-600">{{ form.errors.subtitle_en }}</p>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_subtitle_ar') }}</label>
                                 <input v-model="form.subtitle_ar" type="text" dir="rtl" placeholder="مثال: حيث تلتقي التكنولوجيا المتقدمة بالجمال الطبيعي"
-                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
                                 <p v-if="form.errors.subtitle_ar" class="mt-1 text-sm text-red-600">{{ form.errors.subtitle_ar }}</p>
                             </div>
                         </div>
@@ -100,33 +100,33 @@ function submit() {
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_description_en') }}</label>
                                 <textarea v-model="form.description_en" rows="3" placeholder="Short description..."
-                                          class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent resize-none"></textarea>
+                                          class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent resize-none"></textarea>
                                 <p v-if="form.errors.description_en" class="mt-1 text-sm text-red-600">{{ form.errors.description_en }}</p>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_description_ar') }}</label>
                                 <textarea v-model="form.description_ar" rows="3" dir="rtl" placeholder="وصف قصير..."
-                                          class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent resize-none"></textarea>
+                                          class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent resize-none"></textarea>
                                 <p v-if="form.errors.description_ar" class="mt-1 text-sm text-red-600">{{ form.errors.description_ar }}</p>
                             </div>
                         </div>
                     </div>
 
                     <!-- Button -->
-                    <div class="bg-white rounded-lg shadow-sm p-6 space-y-5">
+                    <div class="bg-white rounded-lg shadow-sm p-4 md:p-6 space-y-5">
                         <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wider">{{ $t('a_cta_button') }}</h3>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_button_text_en') }}</label>
                                 <input v-model="form.button_text_en" type="text" placeholder="e.g. Book Appointment"
-                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
                                 <p v-if="form.errors.button_text_en" class="mt-1 text-sm text-red-600">{{ form.errors.button_text_en }}</p>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_button_text_ar') }}</label>
                                 <input v-model="form.button_text_ar" type="text" dir="rtl" placeholder="مثال: احجزي موعدك"
-                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
                                 <p v-if="form.errors.button_text_ar" class="mt-1 text-sm text-red-600">{{ form.errors.button_text_ar }}</p>
                             </div>
                         </div>
@@ -134,7 +134,7 @@ function submit() {
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_button_link') }}</label>
                             <input v-model="form.button_link" type="text" placeholder="e.g. /booking or https://..."
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
                             <p class="mt-1 text-xs text-gray-400">Use relative path like /booking or full URL</p>
                             <p v-if="form.errors.button_link" class="mt-1 text-sm text-red-600">{{ form.errors.button_link }}</p>
                         </div>
@@ -144,7 +144,7 @@ function submit() {
                 <!-- Sidebar -->
                 <div class="space-y-6">
                     <!-- Image Upload -->
-                    <div class="bg-white rounded-lg shadow-sm p-6 space-y-5">
+                    <div class="bg-white rounded-lg shadow-sm p-4 md:p-6 space-y-5">
                         <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wider">{{ $t('a_slide_image') }}</h3>
 
                         <div
@@ -171,19 +171,19 @@ function submit() {
                     </div>
 
                     <!-- Settings -->
-                    <div class="bg-white rounded-lg shadow-sm p-6 space-y-5">
+                    <div class="bg-white rounded-lg shadow-sm p-4 md:p-6 space-y-5">
                         <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wider">{{ $t('a_settings') }}</h3>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_display_order') }}</label>
                             <input v-model="form.display_order" type="number" min="0"
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
                         </div>
 
                         <div class="flex items-center gap-3">
                             <label class="relative inline-flex items-center cursor-pointer">
                                 <input type="checkbox" v-model="form.is_active" class="sr-only peer" />
-                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-yellow-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#C4A265]"></div>
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-amber-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#C4A265]"></div>
                             </label>
                             <span class="text-sm text-gray-700">{{ $t('a_active') }}</span>
                         </div>

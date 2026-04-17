@@ -49,46 +49,46 @@ function submit() {
     <AdminLayout :title="$t('a_create_post')">
         <div class="space-y-6">
             <div class="flex items-center justify-between">
-                <h1 class="text-2xl font-bold text-gray-800">{{ $t('a_create_post') }}</h1>
+                <h1 class="text-xl md:text-2xl font-bold text-gray-800">{{ $t('a_create_post') }}</h1>
                 <Link href="/admin/posts" class="text-sm text-gray-500 hover:text-gray-700">{{ $t('a_back_to_posts') }}</Link>
             </div>
 
             <form @submit.prevent="submit" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <!-- Main Content (Left) -->
                 <div class="lg:col-span-2 space-y-6">
-                    <div class="bg-white rounded-lg shadow-sm p-6 space-y-5">
+                    <div class="bg-white rounded-lg shadow-sm p-4 md:p-6 space-y-5">
                         <!-- Title EN -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_title_en') }}</label>
-                            <input v-model="form.title_en" type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                            <input v-model="form.title_en" type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
                             <p v-if="form.errors.title_en" class="mt-1 text-sm text-red-600">{{ form.errors.title_en }}</p>
                         </div>
 
                         <!-- Title AR -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_title_ar') }}</label>
-                            <input v-model="form.title_ar" type="text" dir="rtl" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                            <input v-model="form.title_ar" type="text" dir="rtl" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
                             <p v-if="form.errors.title_ar" class="mt-1 text-sm text-red-600">{{ form.errors.title_ar }}</p>
                         </div>
 
                         <!-- Slug -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_slug') }}</label>
-                            <input v-model="form.slug" type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm bg-gray-50 focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                            <input v-model="form.slug" type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm bg-gray-50 focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
                             <p v-if="form.errors.slug" class="mt-1 text-sm text-red-600">{{ form.errors.slug }}</p>
                         </div>
 
                         <!-- Excerpt EN -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_excerpt_en') }}</label>
-                            <textarea v-model="form.excerpt_en" rows="2" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"></textarea>
+                            <textarea v-model="form.excerpt_en" rows="2" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"></textarea>
                             <p v-if="form.errors.excerpt_en" class="mt-1 text-sm text-red-600">{{ form.errors.excerpt_en }}</p>
                         </div>
 
                         <!-- Excerpt AR -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_excerpt_ar') }}</label>
-                            <textarea v-model="form.excerpt_ar" rows="2" dir="rtl" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"></textarea>
+                            <textarea v-model="form.excerpt_ar" rows="2" dir="rtl" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"></textarea>
                             <p v-if="form.errors.excerpt_ar" class="mt-1 text-sm text-red-600">{{ form.errors.excerpt_ar }}</p>
                         </div>
 
@@ -111,12 +111,12 @@ function submit() {
                 <!-- Sidebar (Right) -->
                 <div class="space-y-6">
                     <!-- Status -->
-                    <div class="bg-white rounded-lg shadow-sm p-6 space-y-5">
+                    <div class="bg-white rounded-lg shadow-sm p-4 md:p-6 space-y-5">
                         <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wider">{{ $t('a_publish') }}</h3>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_status') }}</label>
-                            <select v-model="form.status" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent">
+                            <select v-model="form.status" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent">
                                 <option value="draft">{{ $t('a_draft') }}</option>
                                 <option value="published">{{ $t('a_published') }}</option>
                                 <option value="scheduled">{{ $t('a_scheduled') }}</option>
@@ -126,7 +126,7 @@ function submit() {
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_published_at_label') }}</label>
-                            <input v-model="form.published_at" type="datetime-local" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                            <input v-model="form.published_at" type="datetime-local" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
                             <p v-if="form.errors.published_at" class="mt-1 text-sm text-red-600">{{ form.errors.published_at }}</p>
                         </div>
 
@@ -137,10 +137,10 @@ function submit() {
                     </div>
 
                     <!-- Category -->
-                    <div class="bg-white rounded-lg shadow-sm p-6 space-y-5">
+                    <div class="bg-white rounded-lg shadow-sm p-4 md:p-6 space-y-5">
                         <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wider">{{ $t('a_category') }}</h3>
                         <div>
-                            <select v-model="form.category_id" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent">
+                            <select v-model="form.category_id" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent">
                                 <option value="">{{ $t('a_select_category') }}</option>
                                 <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ cat.name_en }}</option>
                             </select>
@@ -149,7 +149,7 @@ function submit() {
                     </div>
 
                     <!-- Featured Image -->
-                    <div class="bg-white rounded-lg shadow-sm p-6 space-y-5">
+                    <div class="bg-white rounded-lg shadow-sm p-4 md:p-6 space-y-5">
                         <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wider">{{ $t('a_featured_image') }}</h3>
                         <div>
                             <input

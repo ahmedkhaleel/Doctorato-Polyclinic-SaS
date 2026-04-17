@@ -70,8 +70,8 @@ function formatDate(date) {
 }
 
 const statusColors = {
-    paid: 'bg-green-100 text-green-800',
-    partial: 'bg-yellow-100 text-yellow-800',
+    paid: 'bg-emerald-100 text-emerald-800',
+    partial: 'bg-amber-100 text-amber-800',
     unpaid: 'bg-red-100 text-red-800',
     cancelled: 'bg-gray-100 text-gray-800',
 };
@@ -92,7 +92,7 @@ function statusLabel(status) {
     <AdminLayout :title="$t('a_invoices')">
         <div class="space-y-6">
             <div class="flex items-center justify-between">
-                <h1 class="text-2xl font-bold text-gray-800">{{ $t('a_invoices') }}</h1>
+                <h1 class="text-xl md:text-2xl font-bold text-gray-800">{{ $t('a_invoices') }}</h1>
                 <Link
                     v-if="can('invoices.create')"
                     href="/admin/invoices/create"
@@ -111,11 +111,11 @@ function statusLabel(status) {
                     v-model="search"
                     type="text"
                     :placeholder="$t('a_search_invoices_placeholder')"
-                    class="w-full sm:w-80 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                    class="w-full sm:w-80 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                 />
                 <select
                     v-model="statusFilter"
-                    class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                    class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                 >
                     <option value="">{{ $t('a_all_status') }}</option>
                     <option value="paid">{{ $t('a_paid') }}</option>
@@ -126,7 +126,7 @@ function statusLabel(status) {
                 <select
                     v-if="activeModules.length > 1"
                     v-model="moduleFilter"
-                    class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                    class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                 >
                     <option value="">{{ isRtl ? 'كل الأقسام' : 'All Departments' }}</option>
                     <option v-for="mod in activeModules" :key="mod.slug" :value="mod.slug">{{ mod.name }}</option>
@@ -135,14 +135,14 @@ function statusLabel(status) {
                     v-model="dateFrom"
                     type="date"
                     :max="dateTo || undefined"
-                    class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                    class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                     :placeholder="$t('a_from_date')"
                 />
                 <input
                     v-model="dateTo"
                     type="date"
                     :min="dateFrom || undefined"
-                    class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                    class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                     :placeholder="$t('a_to_date')"
                 />
             </div>
@@ -152,32 +152,32 @@ function statusLabel(status) {
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_invoice_number') }}</th>
-                                <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_patient') }}</th>
-                                <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_date') }}</th>
-                                <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_total') }}</th>
-                                <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_paid') }}</th>
-                                <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_balance') }}</th>
-                                <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_status') }}</th>
-                                <th class="px-6 py-3 text-end text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_actions') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_invoice_number') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_patient') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_date') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_total') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_paid') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_balance') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_status') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-end text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_actions') }}</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
                             <tr v-for="invoice in invoices.data" :key="invoice.id" class="hover:bg-gray-50">
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-mono" style="color: #C4A265;">{{ invoice.invoice_number }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm font-mono" style="color: #C4A265;">{{ invoice.invoice_number }}</td>
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                     <div>
                                         <div class="text-sm font-medium text-gray-900">{{ invoice.patient?.full_name }}</div>
                                         <div class="text-xs text-gray-400">{{ invoice.patient?.phone }}</div>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ formatDate(invoice.invoice_date || invoice.created_at) }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ formatCurrency(invoice.total) }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ formatCurrency(invoice.paid_amount) }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium" :class="(invoice.total - invoice.paid_amount) > 0 ? 'text-red-600' : 'text-green-600'">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ formatDate(invoice.invoice_date || invoice.created_at) }}</td>
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ formatCurrency(invoice.total) }}</td>
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ formatCurrency(invoice.paid_amount) }}</td>
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm font-medium" :class="(invoice.total - invoice.paid_amount) > 0 ? 'text-red-600' : 'text-emerald-600'">
                                     {{ formatCurrency(invoice.total - invoice.paid_amount) }}
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                     <span
                                         :class="statusColors[invoice.status]"
                                         class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
@@ -185,21 +185,21 @@ function statusLabel(status) {
                                         {{ statusLabel(invoice.status) }}
                                     </span>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-end text-sm space-x-3 rtl:space-x-reverse">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-end text-sm space-x-3 rtl:space-x-reverse">
                                     <Link v-if="can('invoices.view')" :href="`/admin/invoices/${invoice.id}`" class="font-medium hover:underline" style="color: #C4A265;">{{ $t('a_view') }}</Link>
-                                    <Link v-if="can('invoices.view')" :href="`/admin/invoices/${invoice.id}/print`" target="_blank" class="font-medium text-blue-600 hover:underline">{{ $t('a_print') }}</Link>
-                                    <a v-if="can('invoices.view')" :href="`/admin/invoices/${invoice.id}/pdf`" class="font-medium text-green-600 hover:underline">PDF</a>
+                                    <Link v-if="can('invoices.view')" :href="`/admin/invoices/${invoice.id}/print`" target="_blank" class="font-medium text-[#1B365D] hover:underline">{{ $t('a_print') }}</Link>
+                                    <a v-if="can('invoices.view')" :href="`/admin/invoices/${invoice.id}/pdf`" class="font-medium text-emerald-600 hover:underline">PDF</a>
                                     <button v-if="can('invoices.delete') && invoice.status !== 'paid'" @click="deleteInvoice(invoice.id)" class="font-medium text-red-600 hover:underline">{{ $t('a_delete') }}</button>
                                 </td>
                             </tr>
                             <tr v-if="!invoices.data || invoices.data.length === 0">
-                                <td colspan="8" class="px-6 py-8 text-center text-sm text-gray-500">{{ $t('a_no_invoices_found') }}</td>
+                                <td colspan="8" class="px-4 md:px-6 py-8 text-center text-sm text-gray-500">{{ $t('a_no_invoices_found') }}</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
 
-                <div v-if="invoices.links && invoices.links.length > 3" class="px-6 py-3 border-t border-gray-200 flex items-center justify-between">
+                <div v-if="invoices.links && invoices.links.length > 3" class="px-4 md:px-6 py-3 border-t border-gray-200 flex items-center justify-between">
                     <p class="text-sm text-gray-500">{{ $t('a_showing') }} {{ invoices.from }} {{ $t('a_to') }} {{ invoices.to }} {{ $t('a_of') }} {{ invoices.total }} {{ $t('a_results') }}</p>
                     <nav class="flex gap-1 ltr:space-x-1 rtl:space-x-reverse">
                         <template v-for="link in invoices.links" :key="link.label">

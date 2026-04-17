@@ -80,7 +80,7 @@ const channelIcons = {
             <!-- Header -->
             <div :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'" class="transition-all duration-500 flex items-center justify-between">
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-800">{{ $t('a_lead_sources') }}</h1>
+                    <h1 class="text-xl md:text-2xl font-bold text-gray-800">{{ $t('a_lead_sources') }}</h1>
                     <p class="text-sm text-gray-500 mt-1">{{ $t('a_manage_sources_description') }}</p>
                 </div>
                 <button v-if="can('lead_sources.create')" @click="openCreate"
@@ -177,7 +177,7 @@ const channelIcons = {
                         <button type="button" @click="showForm = false"
                             class="px-5 py-2.5 text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-xl transition-all duration-200">{{ $t('a_cancel') }}</button>
                         <button type="submit" :disabled="form.processing"
-                            class="px-6 py-2.5 rounded-xl text-white text-sm font-semibold transition-all duration-200 shadow-lg shadow-[#C4A265]/20 hover:shadow-xl hover:shadow-[#C4A265]/30 disabled:opacity-50 disabled:cursor-not-allowed"
+                            class="px-4 md:px-6 py-2.5 rounded-xl text-white text-sm font-semibold transition-all duration-200 shadow-lg shadow-[#C4A265]/20 hover:shadow-xl hover:shadow-[#C4A265]/30 disabled:opacity-50 disabled:cursor-not-allowed"
                             style="background: linear-gradient(135deg, #C4A265, #D4B87A);">
                             <span class="flex items-center gap-2">
                                 <svg v-if="form.processing" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
@@ -194,13 +194,13 @@ const channelIcons = {
                     <table class="w-full text-sm">
                         <thead>
                             <tr class="ltr:text-left rtl:text-right text-[10px] text-gray-400 uppercase tracking-wider border-b border-gray-100 bg-gray-50/80">
-                                <th class="px-6 py-4 font-semibold w-12">#</th>
-                                <th class="px-6 py-4 font-semibold">{{ $t('a_source') }}</th>
-                                <th class="px-6 py-4 font-semibold">{{ $t('a_slug') }}</th>
-                                <th class="px-6 py-4 font-semibold text-center">{{ $t('a_channel') }}</th>
-                                <th class="px-6 py-4 font-semibold text-center">{{ $t('a_leads') }}</th>
-                                <th class="px-6 py-4 font-semibold text-center">{{ $t('a_status') }}</th>
-                                <th class="px-6 py-4 font-semibold ltr:text-right rtl:text-left">{{ $t('a_actions') }}</th>
+                                <th class="px-4 md:px-6 py-4 font-semibold w-12">#</th>
+                                <th class="px-4 md:px-6 py-4 font-semibold">{{ $t('a_source') }}</th>
+                                <th class="px-4 md:px-6 py-4 font-semibold">{{ $t('a_slug') }}</th>
+                                <th class="px-4 md:px-6 py-4 font-semibold text-center">{{ $t('a_channel') }}</th>
+                                <th class="px-4 md:px-6 py-4 font-semibold text-center">{{ $t('a_leads') }}</th>
+                                <th class="px-4 md:px-6 py-4 font-semibold text-center">{{ $t('a_status') }}</th>
+                                <th class="px-4 md:px-6 py-4 font-semibold ltr:text-right rtl:text-left">{{ $t('a_actions') }}</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-50">
@@ -208,10 +208,10 @@ const channelIcons = {
                                 :style="{ transitionDelay: (idx * 30) + 'ms' }"
                                 :class="mounted ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4'"
                                 class="transition-all duration-300 hover:bg-gradient-to-r hover:from-[#C4A265]/[0.02] hover:to-transparent group">
-                                <td class="px-6 py-4">
+                                <td class="px-4 md:px-6 py-4">
                                     <span class="text-xs font-mono text-gray-300 group-hover:text-gray-400 transition">{{ s.sort_order }}</span>
                                 </td>
-                                <td class="px-6 py-4">
+                                <td class="px-4 md:px-6 py-4">
                                     <div class="flex items-center gap-3">
                                         <div class="w-10 h-10 rounded-xl flex items-center justify-center shadow-sm"
                                             :style="{ background: `linear-gradient(135deg, ${s.color}20, ${s.color}40)` }">
@@ -223,32 +223,32 @@ const channelIcons = {
                                         </div>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4">
+                                <td class="px-4 md:px-6 py-4">
                                     <code class="text-xs bg-gray-100 px-2.5 py-1 rounded-lg font-mono text-gray-500">{{ s.slug }}</code>
                                 </td>
-                                <td class="px-6 py-4 text-center">
+                                <td class="px-4 md:px-6 py-4 text-center">
                                     <span class="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full font-semibold capitalize"
-                                        :class="s.channel_type === 'online' ? 'bg-blue-50 text-blue-600 ring-1 ring-blue-100' : s.channel_type === 'referral' ? 'bg-amber-50 text-amber-600 ring-1 ring-amber-100' : 'bg-gray-50 text-gray-500 ring-1 ring-gray-200'">
+                                        :class="s.channel_type === 'online' ? 'bg-slate-50 text-[#1B365D] ring-1 ring-slate-100' : s.channel_type === 'referral' ? 'bg-amber-50 text-amber-600 ring-1 ring-amber-100' : 'bg-gray-50 text-gray-500 ring-1 ring-gray-200'">
                                         <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" v-html="channelIcons[s.channel_type]"></svg>
                                         {{ s.channel_type }}
                                     </span>
                                 </td>
-                                <td class="px-6 py-4 text-center">
+                                <td class="px-4 md:px-6 py-4 text-center">
                                     <span class="inline-flex items-center justify-center min-w-[2rem] h-7 px-2 rounded-lg text-xs font-bold"
                                         :class="s.leads_count > 0 ? 'bg-[#C4A265]/10 text-[#C4A265]' : 'bg-gray-50 text-gray-300'">
                                         {{ s.leads_count }}
                                     </span>
                                 </td>
-                                <td class="px-6 py-4 text-center">
+                                <td class="px-4 md:px-6 py-4 text-center">
                                     <div class="inline-flex items-center gap-2">
                                         <span class="relative flex h-2.5 w-2.5">
-                                            <span v-if="s.is_active" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                                            <span class="relative inline-flex rounded-full h-2.5 w-2.5" :class="s.is_active ? 'bg-green-500' : 'bg-gray-300'"></span>
+                                            <span v-if="s.is_active" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                            <span class="relative inline-flex rounded-full h-2.5 w-2.5" :class="s.is_active ? 'bg-emerald-500' : 'bg-gray-300'"></span>
                                         </span>
-                                        <span class="text-xs font-semibold" :class="s.is_active ? 'text-green-600' : 'text-gray-400'">{{ s.is_active ? $t('a_active') : $t('a_inactive') }}</span>
+                                        <span class="text-xs font-semibold" :class="s.is_active ? 'text-emerald-600' : 'text-gray-400'">{{ s.is_active ? $t('a_active') : $t('a_inactive') }}</span>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 ltr:text-right rtl:text-left">
+                                <td class="px-4 md:px-6 py-4 ltr:text-right rtl:text-left">
                                     <div class="flex items-center justify-end gap-1">
                                         <button v-if="can('lead_sources.update')" @click="openEdit(s)"
                                             class="p-2 rounded-lg text-gray-400 hover:text-[#C4A265] hover:bg-[#C4A265]/5 transition-all duration-200" :title="$t('a_edit')">
@@ -264,7 +264,7 @@ const channelIcons = {
                         </tbody>
                     </table>
                 </div>
-                <div v-if="!sources?.length" class="px-6 py-20 text-center">
+                <div v-if="!sources?.length" class="px-4 md:px-6 py-20 text-center">
                     <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gray-50 flex items-center justify-center">
                         <svg class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
                     </div>

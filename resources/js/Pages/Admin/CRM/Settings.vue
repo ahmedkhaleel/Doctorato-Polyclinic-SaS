@@ -61,9 +61,9 @@ const pipelineStages = computed(() => {
 
 // Priority options
 const priorities = [
-    { value: 1, label: 'Hot',  labelAr: 'ساخن',  color: 'from-red-500 to-orange-500',  ring: 'ring-red-400' },
-    { value: 2, label: 'Warm', labelAr: 'دافئ', color: 'from-amber-400 to-yellow-500', ring: 'ring-amber-400' },
-    { value: 3, label: 'Cold', labelAr: 'بارد', color: 'from-blue-400 to-cyan-500',    ring: 'ring-blue-400' },
+    { value: 1, label: 'Hot',  labelAr: 'ساخن',  color: 'from-red-500 to-[#C4A265]',  ring: 'ring-red-400' },
+    { value: 2, label: 'Warm', labelAr: 'دافئ', color: 'from-amber-400 to-amber-500', ring: 'ring-amber-400' },
+    { value: 3, label: 'Cold', labelAr: 'بارد', color: 'from-slate-400 to-[#1B365D]',    ring: 'ring-slate-400' },
 ];
 
 // SLA gauge percentage
@@ -88,7 +88,7 @@ const slaGaugePercent = computed(() => {
                 leave-to-class="opacity-0 translate-y-[-1rem]"
             >
                 <div v-if="showSuccess" class="fixed top-6 inset-x-0 z-50 flex justify-center pointer-events-none">
-                    <div class="bg-emerald-600 text-white px-6 py-3 rounded-xl shadow-2xl flex items-center gap-3 pointer-events-auto">
+                    <div class="bg-emerald-600 text-white px-4 md:px-6 py-3 rounded-xl shadow-2xl flex items-center gap-3 pointer-events-auto">
                         <svg class="w-5 h-5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                         </svg>
@@ -112,7 +112,7 @@ const slaGaugePercent = computed(() => {
                         </svg>
                     </div>
                     <div>
-                        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{{ isRtl ? 'اعدادات CRM' : 'CRM Settings' }}</h1>
+                        <h1 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">{{ isRtl ? 'اعدادات CRM' : 'CRM Settings' }}</h1>
                         <p class="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{{ isRtl ? 'تكوين وادارة اعدادات نظام ادارة العملاء' : 'Configure and manage your CRM system preferences' }}</p>
                     </div>
                 </div>
@@ -152,7 +152,7 @@ const slaGaugePercent = computed(() => {
                         <!-- Auto-Assign -->
                         <div
                             :class="[
-                                'bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 transition-all duration-700 delay-150',
+                                'bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 md:p-6 transition-all duration-700 delay-150',
                                 mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
                             ]"
                         >
@@ -246,7 +246,7 @@ const slaGaugePercent = computed(() => {
                         <!-- Default Lead Priority -->
                         <div
                             :class="[
-                                'bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 transition-all duration-700 delay-200',
+                                'bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 md:p-6 transition-all duration-700 delay-200',
                                 mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
                             ]"
                         >
@@ -261,7 +261,7 @@ const slaGaugePercent = computed(() => {
                                     <p class="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{{ isRtl ? 'اولوية العملاء المحتملين الجدد' : 'Priority assigned to newly created leads' }}</p>
                                 </div>
                             </div>
-                            <div class="grid grid-cols-3 gap-3">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                                 <button
                                     v-for="p in priorities"
                                     :key="p.value"
@@ -292,7 +292,7 @@ const slaGaugePercent = computed(() => {
                         <!-- Default Module -->
                         <div
                             :class="[
-                                'bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 transition-all duration-700 delay-[250ms]',
+                                'bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 md:p-6 transition-all duration-700 delay-[250ms]',
                                 mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
                             ]"
                         >
@@ -321,7 +321,7 @@ const slaGaugePercent = computed(() => {
                                             : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
                                     ]"
                                 >
-                                    <div class="w-10 h-10 mx-auto rounded-full bg-gradient-to-br from-pink-400 to-rose-500 flex items-center justify-center mb-2">
+                                    <div class="w-10 h-10 mx-auto rounded-full bg-gradient-to-br from-amber-400 to-[#C4A265] flex items-center justify-center mb-2">
                                         <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                             <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
                                         </svg>
@@ -338,7 +338,7 @@ const slaGaugePercent = computed(() => {
                                             : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
                                     ]"
                                 >
-                                    <div class="w-10 h-10 mx-auto rounded-full bg-gradient-to-br from-sky-400 to-blue-500 flex items-center justify-center mb-2">
+                                    <div class="w-10 h-10 mx-auto rounded-full bg-gradient-to-br from-slate-400 to-[#1B365D] flex items-center justify-center mb-2">
                                         <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                             <path d="M12 2C8 2 6 5 6 8c0 3 1 5 1 8 0 2 2 6 5 6s5-4 5-6c0-3 1-5 1-8 0-3-2-6-6-6z"/>
                                         </svg>
@@ -357,7 +357,7 @@ const slaGaugePercent = computed(() => {
                         <!-- SLA Response Target -->
                         <div
                             :class="[
-                                'bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 transition-all duration-700 delay-150',
+                                'bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 md:p-6 transition-all duration-700 delay-150',
                                 mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
                             ]"
                         >
@@ -392,7 +392,7 @@ const slaGaugePercent = computed(() => {
                                             />
                                         </svg>
                                         <div class="absolute inset-0 flex flex-col items-center justify-center">
-                                            <span class="text-2xl font-bold text-gray-900 dark:text-white">{{ form.sla_response_target_minutes }}</span>
+                                            <span class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">{{ form.sla_response_target_minutes }}</span>
                                             <span class="text-xs text-gray-500 dark:text-gray-400">{{ isRtl ? 'دقيقة' : 'min' }}</span>
                                         </div>
                                     </div>
@@ -428,7 +428,7 @@ const slaGaugePercent = computed(() => {
                         <!-- Follow-Up Target -->
                         <div
                             :class="[
-                                'bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 transition-all duration-700 delay-200',
+                                'bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 md:p-6 transition-all duration-700 delay-200',
                                 mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
                             ]"
                         >
@@ -462,7 +462,7 @@ const slaGaugePercent = computed(() => {
                         <!-- Stale Lead Threshold -->
                         <div
                             :class="[
-                                'bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 transition-all duration-700 delay-[250ms]',
+                                'bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 md:p-6 transition-all duration-700 delay-[250ms]',
                                 mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
                             ]"
                         >
@@ -502,14 +502,14 @@ const slaGaugePercent = computed(() => {
                         <!-- New Lead -->
                         <div
                             :class="[
-                                'bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 transition-all duration-700 delay-150',
+                                'bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 md:p-6 transition-all duration-700 delay-150',
                                 mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
                             ]"
                         >
                             <div class="flex items-center justify-between gap-4">
                                 <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 rounded-lg bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center flex-shrink-0">
-                                        <svg class="w-5 h-5 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <div class="w-10 h-10 rounded-lg bg-slate-50 dark:bg-[#1B365D]/20 flex items-center justify-center flex-shrink-0">
+                                        <svg class="w-5 h-5 text-[#1B365D]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                             <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
                                             <circle cx="8.5" cy="7" r="4"/>
                                             <line x1="20" y1="8" x2="20" y2="14"/>
@@ -542,7 +542,7 @@ const slaGaugePercent = computed(() => {
                         <!-- Status Change -->
                         <div
                             :class="[
-                                'bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 transition-all duration-700 delay-200',
+                                'bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 md:p-6 transition-all duration-700 delay-200',
                                 mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
                             ]"
                         >
@@ -580,7 +580,7 @@ const slaGaugePercent = computed(() => {
                         <!-- Overdue Follow-Up -->
                         <div
                             :class="[
-                                'bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 transition-all duration-700 delay-[250ms]',
+                                'bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 md:p-6 transition-all duration-700 delay-[250ms]',
                                 mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
                             ]"
                         >
@@ -622,7 +622,7 @@ const slaGaugePercent = computed(() => {
                 <div v-show="activeTab === 'pipeline'">
                     <div
                         :class="[
-                            'bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 transition-all duration-700 delay-150',
+                            'bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 md:p-6 transition-all duration-700 delay-150',
                             mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
                         ]"
                     >

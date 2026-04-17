@@ -68,7 +68,7 @@ const maxServiceRevenue = computed(() => Math.max(...(props.topServices?.map(s =
             <!-- Header -->
             <div class="flex items-center justify-between flex-wrap gap-3">
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-900">{{ isRtl ? 'تحليلات الإيرادات' : 'Revenue Analytics' }}</h1>
+                    <h1 class="text-xl md:text-2xl font-bold text-gray-900">{{ isRtl ? 'تحليلات الإيرادات' : 'Revenue Analytics' }}</h1>
                     <p class="text-sm text-gray-500 mt-1">{{ isRtl ? 'مقارنة الشهر الحالي بالسابق مع توقعات' : 'Current vs previous month with forecasting' }}</p>
                 </div>
                 <div class="flex items-center gap-3">
@@ -80,7 +80,7 @@ const maxServiceRevenue = computed(() => Math.max(...(props.topServices?.map(s =
                         <option value="">{{ isRtl ? 'كل الأقسام' : 'All Departments' }}</option>
                         <option v-for="mod in activeModules" :key="mod.slug" :value="mod.slug">{{ mod.name }}</option>
                     </select>
-                    <Link href="/admin/reports/financial" class="px-4 py-2 text-sm font-medium text-cyan-700 bg-cyan-50 rounded-lg hover:bg-cyan-100 transition">
+                    <Link href="/admin/reports/financial" class="px-4 py-2 text-sm font-medium text-[#1B365D] bg-slate-50 rounded-lg hover:bg-slate-100 transition">
                         {{ isRtl ? 'التقرير المالي التفصيلي' : 'Detailed Financial Report' }} →
                     </Link>
                 </div>
@@ -127,7 +127,7 @@ const maxServiceRevenue = computed(() => Math.max(...(props.topServices?.map(s =
                                     :stroke-dasharray="`${collectionRate}, 100`" stroke-linecap="round" />
                             </svg>
                             <div class="absolute inset-0 flex items-center justify-center">
-                                <span class="text-2xl font-bold text-gray-900">{{ collectionRate }}%</span>
+                                <span class="text-xl md:text-2xl font-bold text-gray-900">{{ collectionRate }}%</span>
                             </div>
                         </div>
                         <div class="space-y-2 flex-1">
@@ -148,11 +148,11 @@ const maxServiceRevenue = computed(() => Math.max(...(props.topServices?.map(s =
                 </div>
 
                 <!-- Forecast -->
-                <div class="bg-gradient-to-br from-cyan-50 to-blue-50 rounded-xl border border-cyan-200 p-6">
-                    <h3 class="text-sm font-semibold text-cyan-700 uppercase mb-4">
+                <div class="bg-gradient-to-br from-slate-50 to-slate-50 rounded-xl border border-slate-200 p-6">
+                    <h3 class="text-sm font-semibold text-[#1B365D] uppercase mb-4">
                         {{ isRtl ? 'توقعات الشهر القادم' : 'Next Month Forecast' }}
                     </h3>
-                    <div class="text-3xl font-bold text-cyan-800">{{ formatCurrency(forecast.next_month_revenue) }}</div>
+                    <div class="text-2xl md:text-3xl font-bold text-[#1B365D]">{{ formatCurrency(forecast.next_month_revenue) }}</div>
                     <div class="flex items-center gap-2 mt-2">
                         <span class="text-sm" :class="forecast.growth_rate >= 0 ? 'text-emerald-600' : 'text-red-600'">
                             {{ forecast.growth_rate >= 0 ? '↑' : '↓' }} {{ Math.abs(forecast.growth_rate) }}% {{ isRtl ? 'معدل النمو' : 'growth rate' }}
@@ -181,7 +181,7 @@ const maxServiceRevenue = computed(() => Math.max(...(props.topServices?.map(s =
                                 {{ (month.revenue / 1000).toFixed(0) }}k
                             </div>
                             <div class="w-full max-w-[30px] flex flex-col justify-end" style="flex: 1;">
-                                <div class="bg-cyan-400 rounded-t transition-all duration-500 relative group"
+                                <div class="bg-slate-400 rounded-t transition-all duration-500 relative group"
                                     :style="{ height: `${(month.revenue / maxMonthlyRevenue) * 100}%`, minHeight: month.revenue > 0 ? '4px' : '0' }">
                                     <!-- Expense overlay -->
                                     <div class="absolute bottom-0 left-0 right-0 bg-red-300 rounded-t opacity-60"
@@ -194,7 +194,7 @@ const maxServiceRevenue = computed(() => Math.max(...(props.topServices?.map(s =
                 </div>
                 <div class="flex items-center gap-4 mt-3 justify-center">
                     <div class="flex items-center gap-1.5">
-                        <div class="w-3 h-3 rounded bg-cyan-400"></div>
+                        <div class="w-3 h-3 rounded bg-slate-400"></div>
                         <span class="text-xs text-gray-500">{{ isRtl ? 'الإيرادات' : 'Revenue' }}</span>
                     </div>
                     <div class="flex items-center gap-1.5">
@@ -211,7 +211,7 @@ const maxServiceRevenue = computed(() => Math.max(...(props.topServices?.map(s =
                     <div class="space-y-3">
                         <div v-for="(service, i) in topServices" :key="i" class="flex items-center gap-3">
                             <span class="w-6 text-center text-xs font-bold"
-                                :class="i < 3 ? 'text-cyan-600' : 'text-gray-400'">{{ i + 1 }}</span>
+                                :class="i < 3 ? 'text-[#1B365D]' : 'text-gray-400'">{{ i + 1 }}</span>
                             <div class="flex-1 min-w-0">
                                 <div class="flex justify-between items-center mb-1">
                                     <span class="text-sm font-medium text-gray-900 truncate">
@@ -220,7 +220,7 @@ const maxServiceRevenue = computed(() => Math.max(...(props.topServices?.map(s =
                                     <span class="text-sm font-bold text-gray-700 flex-shrink-0">{{ formatCurrency(service.total_revenue) }}</span>
                                 </div>
                                 <div class="w-full bg-gray-100 rounded-full h-1.5">
-                                    <div class="bg-cyan-500 h-1.5 rounded-full transition-all duration-500"
+                                    <div class="bg-[#1B365D] h-1.5 rounded-full transition-all duration-500"
                                         :style="{ width: `${(Number(service.total_revenue) / maxServiceRevenue) * 100}%` }"></div>
                                 </div>
                                 <div class="text-xs text-gray-400 mt-0.5">
@@ -239,7 +239,7 @@ const maxServiceRevenue = computed(() => Math.max(...(props.topServices?.map(s =
                     <div class="space-y-3">
                         <div v-for="(doc, i) in doctorRevenue" :key="i"
                             class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 transition">
-                            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-400 to-cyan-600 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-slate-400 to-[#1B365D] flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
                                 {{ (isRtl ? doc.name_ar : doc.name_en)?.charAt(0) || 'D' }}
                             </div>
                             <div class="flex-1 min-w-0">
@@ -270,7 +270,7 @@ const maxServiceRevenue = computed(() => Math.max(...(props.topServices?.map(s =
                         </div>
                         <div class="w-12 rounded-t transition-all duration-500"
                             :class="day.avg_revenue === Math.max(...weekdayRevenue.map(d => d.avg_revenue))
-                                ? 'bg-cyan-500' : 'bg-cyan-200'"
+                                ? 'bg-[#1B365D]' : 'bg-slate-200'"
                             :style="{ height: `${(day.avg_revenue / maxWeekdayRevenue) * 100}px`, minHeight: day.avg_revenue > 0 ? '4px' : '0' }">
                         </div>
                         <div class="text-xs font-medium text-gray-600">{{ isRtl ? day.day_ar : day.day_en }}</div>

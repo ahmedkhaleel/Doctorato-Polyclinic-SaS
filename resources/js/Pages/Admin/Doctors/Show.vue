@@ -244,7 +244,7 @@ onMounted(() => {
                             />
                             <div
                                 v-else
-                                class="relative w-28 h-28 rounded-full flex items-center justify-center text-white text-4xl font-bold border-4 border-white/20 shadow-2xl bg-gradient-to-br from-[#C4A265] to-[#A08245]"
+                                class="relative w-28 h-28 rounded-full flex items-center justify-center text-white text-2xl md:text-4xl font-bold border-4 border-white/20 shadow-2xl bg-gradient-to-br from-[#C4A265] to-[#A08245]"
                             >
                                 {{ $localized(doctor, 'name')?.charAt(0) }}
                             </div>
@@ -255,7 +255,7 @@ onMounted(() => {
                         <!-- Doctor Info -->
                         <div class="flex-1 hero-info">
                             <div class="flex flex-wrap items-center gap-3 mb-1">
-                                <h1 class="text-3xl font-bold text-white tracking-tight">
+                                <h1 class="text-2xl md:text-3xl font-bold text-white tracking-tight">
                                     {{ $t('a_doctor') }} {{ $localized(doctor, 'name') }}
                                 </h1>
                                 <StatusBadge :status="doctor.status" />
@@ -279,8 +279,8 @@ onMounted(() => {
                                     <span class="font-semibold text-emerald-400">{{ formatCurrency(performanceStats?.total_revenue || 0) }}</span>
                                 </div>
                                 <div v-if="doctor.consultation_fee" class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 text-sm text-white/90 border border-white/10">
-                                    <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" /></svg>
-                                    {{ $t('a_fee') }}: <span class="font-semibold text-blue-400">{{ formatCurrency(doctor.consultation_fee) }}</span>
+                                    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" /></svg>
+                                    {{ $t('a_fee') }}: <span class="font-semibold text-slate-400">{{ formatCurrency(doctor.consultation_fee) }}</span>
                                 </div>
                             </div>
                         </div>
@@ -289,7 +289,7 @@ onMounted(() => {
                         <Link
                             v-if="can('doctors.update')"
                             :href="`/admin/doctors/${doctor.id}/edit`"
-                            class="group inline-flex items-center gap-2 px-6 py-3 rounded-xl text-gray-900 text-sm font-semibold transition-all duration-300 bg-gradient-to-r from-[#C4A265] to-[#D4B275] hover:from-[#D4B275] hover:to-[#E4C285] shadow-lg shadow-[#C4A265]/20 hover:shadow-[#C4A265]/40 hover:scale-105"
+                            class="group inline-flex items-center gap-2 px-4 md:px-6 py-3 rounded-xl text-gray-900 text-sm font-semibold transition-all duration-300 bg-gradient-to-r from-[#C4A265] to-[#D4B275] hover:from-[#D4B275] hover:to-[#E4C285] shadow-lg shadow-[#C4A265]/20 hover:shadow-[#C4A265]/40 hover:scale-105"
                         >
                             <svg class="w-4 h-4 transition-transform group-hover:rotate-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
                             {{ $t('a_edit_doctor') }}
@@ -337,7 +337,7 @@ onMounted(() => {
                                         </div>
                                         <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">{{ $t('a_total_visits') }}</p>
                                     </div>
-                                    <p class="text-3xl font-bold text-gray-800 counter-number">{{ performanceStats.total_visits }}</p>
+                                    <p class="text-2xl md:text-3xl font-bold text-gray-800 counter-number">{{ performanceStats.total_visits }}</p>
                                 </div>
                             </div>
 
@@ -350,7 +350,7 @@ onMounted(() => {
                                         </div>
                                         <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">{{ $t('a_completed') }}</p>
                                     </div>
-                                    <p class="text-3xl font-bold text-emerald-700 counter-number">{{ performanceStats.completed_visits }}</p>
+                                    <p class="text-2xl md:text-3xl font-bold text-emerald-700 counter-number">{{ performanceStats.completed_visits }}</p>
                                 </div>
                             </div>
 
@@ -363,20 +363,20 @@ onMounted(() => {
                                         </div>
                                         <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">{{ $t('a_consultations') }}</p>
                                     </div>
-                                    <p class="text-3xl font-bold text-[#C4A265] counter-number">{{ performanceStats.consultations }}</p>
+                                    <p class="text-2xl md:text-3xl font-bold text-[#C4A265] counter-number">{{ performanceStats.consultations }}</p>
                                 </div>
                             </div>
 
-                            <div class="kpi-card group relative overflow-hidden bg-gradient-to-br from-white to-blue-50/30 rounded-2xl p-5 border border-gray-100 hover:border-blue-200 hover:shadow-lg hover:shadow-blue-500/5 transition-all duration-500" style="animation-delay: 240ms">
-                                <div class="absolute top-0 right-0 w-20 h-20 bg-blue-500/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:scale-150 transition-transform duration-700"></div>
+                            <div class="kpi-card group relative overflow-hidden bg-gradient-to-br from-white to-slate-50/30 rounded-2xl p-5 border border-gray-100 hover:border-slate-200 hover:shadow-lg hover:shadow-[#1B365D]/5 transition-all duration-500" style="animation-delay: 240ms">
+                                <div class="absolute top-0 right-0 w-20 h-20 bg-[#1B365D]/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:scale-150 transition-transform duration-700"></div>
                                 <div class="relative">
                                     <div class="flex items-center gap-2 mb-3">
-                                        <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
-                                            <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" /></svg>
+                                        <div class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center">
+                                            <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" /></svg>
                                         </div>
                                         <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">{{ $t('a_sessions') }}</p>
                                     </div>
-                                    <p class="text-3xl font-bold text-blue-700 counter-number">{{ performanceStats.sessions }}</p>
+                                    <p class="text-2xl md:text-3xl font-bold text-[#1B365D] counter-number">{{ performanceStats.sessions }}</p>
                                 </div>
                             </div>
                         </div>
@@ -386,36 +386,36 @@ onMounted(() => {
                             <div class="kpi-card group relative overflow-hidden bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl p-5 text-white shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/30 hover:scale-[1.02] transition-all duration-500" style="animation-delay: 320ms">
                                 <div class="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
                                 <p class="text-xs font-semibold text-emerald-100 uppercase tracking-wider">{{ $t('a_total_revenue') }}</p>
-                                <p class="text-2xl font-bold mt-2">{{ formatCurrency(performanceStats.total_revenue) }}</p>
+                                <p class="text-xl md:text-2xl font-bold mt-2">{{ formatCurrency(performanceStats.total_revenue) }}</p>
                             </div>
                             <div class="kpi-card group relative overflow-hidden bg-gradient-to-br from-[#C4A265] to-[#A08245] rounded-2xl p-5 text-white shadow-lg shadow-[#C4A265]/20 hover:shadow-[#C4A265]/30 hover:scale-[1.02] transition-all duration-500" style="animation-delay: 400ms">
                                 <div class="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
                                 <p class="text-xs font-semibold text-[#E4D2A5] uppercase tracking-wider">{{ $t('a_total_commission') }}</p>
-                                <p class="text-2xl font-bold mt-2">{{ formatCurrency(performanceStats.total_commission) }}</p>
+                                <p class="text-xl md:text-2xl font-bold mt-2">{{ formatCurrency(performanceStats.total_commission) }}</p>
                             </div>
-                            <div class="kpi-card group relative overflow-hidden bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-5 text-white shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 hover:scale-[1.02] transition-all duration-500" style="animation-delay: 480ms">
+                            <div class="kpi-card group relative overflow-hidden bg-gradient-to-br from-[#1B365D] to-[#1B365D] rounded-2xl p-5 text-white shadow-lg shadow-[#1B365D]/20 hover:shadow-[#1B365D]/30 hover:scale-[1.02] transition-all duration-500" style="animation-delay: 480ms">
                                 <div class="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
-                                <p class="text-xs font-semibold text-blue-100 uppercase tracking-wider">{{ $t('a_this_month_revenue') }}</p>
-                                <p class="text-2xl font-bold mt-2">{{ formatCurrency(performanceStats.this_month_revenue) }}</p>
+                                <p class="text-xs font-semibold text-slate-100 uppercase tracking-wider">{{ $t('a_this_month_revenue') }}</p>
+                                <p class="text-xl md:text-2xl font-bold mt-2">{{ formatCurrency(performanceStats.this_month_revenue) }}</p>
                             </div>
-                            <div class="kpi-card group relative overflow-hidden bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl p-5 text-white shadow-lg shadow-purple-500/20 hover:shadow-purple-500/30 hover:scale-[1.02] transition-all duration-500" style="animation-delay: 560ms">
+                            <div class="kpi-card group relative overflow-hidden bg-gradient-to-br from-[#1B365D] to-[#1B365D] rounded-2xl p-5 text-white shadow-lg shadow-[#1B365D]/20 hover:shadow-[#1B365D]/30 hover:scale-[1.02] transition-all duration-500" style="animation-delay: 560ms">
                                 <div class="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
-                                <p class="text-xs font-semibold text-purple-100 uppercase tracking-wider">{{ $t('a_this_month_commission') }}</p>
-                                <p class="text-2xl font-bold mt-2">{{ formatCurrency(performanceStats.this_month_commission) }}</p>
+                                <p class="text-xs font-semibold text-slate-100 uppercase tracking-wider">{{ $t('a_this_month_commission') }}</p>
+                                <p class="text-xl md:text-2xl font-bold mt-2">{{ formatCurrency(performanceStats.this_month_commission) }}</p>
                             </div>
                         </div>
 
                         <!-- Donut + Personal Info -->
                         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                             <!-- Donut Chart Card -->
-                            <div v-if="visitTypeDistribution.length > 0" class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col items-center justify-center">
+                            <div v-if="visitTypeDistribution.length > 0" class="bg-white rounded-2xl p-4 md:p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col items-center justify-center">
                                 <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4 self-start">{{ $t('a_type') }} {{ $t('a_visits') }}</h3>
                                 <DonutChart :data="visitTypeDistribution" :size="140" />
                             </div>
 
                             <!-- Personal Information -->
                             <div class="lg:col-span-2 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden">
-                                <div class="px-6 py-4 border-b border-gray-50 bg-gradient-to-r from-gray-50 to-white">
+                                <div class="px-4 md:px-6 py-4 border-b border-gray-50 bg-gradient-to-r from-gray-50 to-white">
                                     <h3 class="text-sm font-bold text-gray-700 flex items-center gap-2">
                                         <div class="w-6 h-6 rounded-lg bg-[#C4A265]/10 flex items-center justify-center">
                                             <svg class="w-3.5 h-3.5 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
@@ -426,8 +426,8 @@ onMounted(() => {
                                 <div class="p-6">
                                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                         <div class="flex items-center gap-3 p-3 rounded-xl bg-gray-50/50 hover:bg-gray-50 transition-colors">
-                                            <div class="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center shrink-0">
-                                                <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
+                                            <div class="w-9 h-9 rounded-lg bg-slate-50 flex items-center justify-center shrink-0">
+                                                <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
                                             </div>
                                             <div>
                                                 <p class="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">{{ $t('a_phone') }}</p>
@@ -435,8 +435,8 @@ onMounted(() => {
                                             </div>
                                         </div>
                                         <div class="flex items-center gap-3 p-3 rounded-xl bg-gray-50/50 hover:bg-gray-50 transition-colors">
-                                            <div class="w-9 h-9 rounded-lg bg-purple-50 flex items-center justify-center shrink-0">
-                                                <svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                                            <div class="w-9 h-9 rounded-lg bg-slate-50 flex items-center justify-center shrink-0">
+                                                <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
                                             </div>
                                             <div>
                                                 <p class="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">{{ $t('a_email') }}</p>
@@ -508,7 +508,7 @@ onMounted(() => {
 
                         <!-- Visits Table -->
                         <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-                            <div class="px-6 py-4 border-b border-gray-50 bg-gradient-to-r from-gray-50 to-white">
+                            <div class="px-4 md:px-6 py-4 border-b border-gray-50 bg-gradient-to-r from-gray-50 to-white">
                                 <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider">{{ $t('a_all_visits') }}</h3>
                             </div>
                             <div class="overflow-x-auto">
@@ -606,7 +606,7 @@ onMounted(() => {
                                 </div>
                                 <div class="flex items-center gap-2">
                                     <Link v-if="can('prescriptions.view')" :href="`/admin/prescriptions/${rx.id}`" class="inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition">View</Link>
-                                    <a v-if="can('prescriptions.view')" :href="`/admin/prescriptions/${rx.id}/print`" target="_blank" class="inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-lg border text-blue-600 border-blue-200 hover:bg-blue-50 transition">
+                                    <a v-if="can('prescriptions.view')" :href="`/admin/prescriptions/${rx.id}/print`" target="_blank" class="inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-lg border text-[#1B365D] border-slate-200 hover:bg-slate-50 transition">
                                         <svg class="w-3.5 h-3.5 ltr:mr-1 rtl:ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" /></svg>
                                         {{ $t('a_print') }}
                                     </a>
@@ -649,7 +649,7 @@ onMounted(() => {
                                 {{ $t('a_new_prescription') }}
                             </button>
 
-                            <div v-if="showNewPrescription" class="border border-gray-200 rounded-2xl p-6 bg-gray-50/50 mt-3">
+                            <div v-if="showNewPrescription" class="border border-gray-200 rounded-2xl p-4 md:p-6 bg-gray-50/50 mt-3">
                                 <h4 class="text-sm font-bold text-gray-700 mb-5">{{ $t('a_create_prescription_for') }} {{ $localized(doctor, 'name') }}</h4>
                                 <form @submit.prevent="submitPrescription" class="space-y-5">
                                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -721,26 +721,26 @@ onMounted(() => {
                     <div v-if="activeTab === 'finance'" class="space-y-8">
                         <!-- Payout Summary -->
                         <div v-if="payoutSummary" class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                            <div class="group relative overflow-hidden bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl p-6 text-white shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/30 hover:scale-[1.02] transition-all duration-500">
+                            <div class="group relative overflow-hidden bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl p-4 md:p-6 text-white shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/30 hover:scale-[1.02] transition-all duration-500">
                                 <div class="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
                                 <p class="text-xs font-semibold text-emerald-100 uppercase tracking-wider">{{ $t('a_total_paid') }}</p>
-                                <p class="text-2xl font-bold mt-2">{{ formatCurrency(payoutSummary.total_paid) }}</p>
+                                <p class="text-xl md:text-2xl font-bold mt-2">{{ formatCurrency(payoutSummary.total_paid) }}</p>
                             </div>
-                            <div class="group relative overflow-hidden bg-gradient-to-br from-amber-500 to-amber-600 rounded-2xl p-6 text-white shadow-lg shadow-amber-500/20 hover:shadow-amber-500/30 hover:scale-[1.02] transition-all duration-500">
+                            <div class="group relative overflow-hidden bg-gradient-to-br from-amber-500 to-amber-600 rounded-2xl p-4 md:p-6 text-white shadow-lg shadow-amber-500/20 hover:shadow-amber-500/30 hover:scale-[1.02] transition-all duration-500">
                                 <div class="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
                                 <p class="text-xs font-semibold text-amber-100 uppercase tracking-wider">{{ $t('a_pending_payment') }}</p>
-                                <p class="text-2xl font-bold mt-2">{{ formatCurrency(payoutSummary.total_pending) }}</p>
+                                <p class="text-xl md:text-2xl font-bold mt-2">{{ formatCurrency(payoutSummary.total_pending) }}</p>
                             </div>
-                            <div class="group relative overflow-hidden bg-gradient-to-br from-rose-500 to-rose-600 rounded-2xl p-6 text-white shadow-lg shadow-rose-500/20 hover:shadow-rose-500/30 hover:scale-[1.02] transition-all duration-500">
+                            <div class="group relative overflow-hidden bg-gradient-to-br from-[#C4A265] to-[#C4A265] rounded-2xl p-4 md:p-6 text-white shadow-lg shadow-[#C4A265]/20 hover:shadow-[#C4A265]/30 hover:scale-[1.02] transition-all duration-500">
                                 <div class="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
-                                <p class="text-xs font-semibold text-rose-100 uppercase tracking-wider">{{ $t('a_unpaid_commission') }}</p>
-                                <p class="text-2xl font-bold mt-2">{{ formatCurrency(payoutSummary.total_unpaid) }}</p>
+                                <p class="text-xs font-semibold text-amber-100 uppercase tracking-wider">{{ $t('a_unpaid_commission') }}</p>
+                                <p class="text-xl md:text-2xl font-bold mt-2">{{ formatCurrency(payoutSummary.total_unpaid) }}</p>
                             </div>
                         </div>
 
                         <!-- Recent Payouts -->
                         <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm">
-                            <div class="px-6 py-4 border-b border-gray-50 bg-gradient-to-r from-gray-50 to-white flex items-center justify-between">
+                            <div class="px-4 md:px-6 py-4 border-b border-gray-50 bg-gradient-to-r from-gray-50 to-white flex items-center justify-between">
                                 <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider">{{ $t('a_recent_payouts') }}</h3>
                                 <div class="flex items-center gap-2">
                                     <Link v-if="can('doctor_payouts.create')" :href="`/admin/doctor-payouts/create?doctor_id=${doctor.id}`"
@@ -786,7 +786,7 @@ onMounted(() => {
 
                         <!-- Commission Settings -->
                         <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm">
-                            <div class="px-6 py-4 border-b border-gray-50 bg-gradient-to-r from-gray-50 to-white">
+                            <div class="px-4 md:px-6 py-4 border-b border-gray-50 bg-gradient-to-r from-gray-50 to-white">
                                 <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider">{{ $t('a_commission_settings') }}</h3>
                             </div>
                             <div class="p-6">
@@ -822,23 +822,23 @@ onMounted(() => {
                                 <p class="text-xs text-gray-400 uppercase tracking-wider font-semibold">{{ $t('a_total_commission') }}</p>
                                 <p class="text-xl font-bold text-[#C4A265] mt-2">{{ formatCurrency(performanceStats.total_commission) }}</p>
                             </div>
-                            <div class="bg-gradient-to-br from-blue-50 to-white rounded-2xl p-5 border border-blue-100">
+                            <div class="bg-gradient-to-br from-slate-50 to-white rounded-2xl p-5 border border-slate-100">
                                 <p class="text-xs text-gray-400 uppercase tracking-wider font-semibold">{{ $t('a_this_month_revenue') }}</p>
-                                <p class="text-xl font-bold text-blue-700 mt-2">{{ formatCurrency(performanceStats.this_month_revenue) }}</p>
+                                <p class="text-xl font-bold text-[#1B365D] mt-2">{{ formatCurrency(performanceStats.this_month_revenue) }}</p>
                             </div>
-                            <div class="bg-gradient-to-br from-purple-50 to-white rounded-2xl p-5 border border-purple-100">
+                            <div class="bg-gradient-to-br from-slate-50 to-white rounded-2xl p-5 border border-slate-100">
                                 <p class="text-xs text-gray-400 uppercase tracking-wider font-semibold">{{ $t('a_this_month_commission') }}</p>
-                                <p class="text-xl font-bold text-purple-700 mt-2">{{ formatCurrency(performanceStats.this_month_commission) }}</p>
+                                <p class="text-xl font-bold text-[#1B365D] mt-2">{{ formatCurrency(performanceStats.this_month_commission) }}</p>
                             </div>
                         </div>
 
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                            <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
+                            <div class="bg-white rounded-2xl p-4 md:p-6 border border-gray-100 shadow-sm">
                                 <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider mb-4">{{ $t('a_monthly_commission') }}</h3>
                                 <BarChart v-if="commissionChartData.length > 0" :data="commissionChartData" :height="220" color="#C4A265" />
                                 <p v-else class="text-sm text-gray-400 text-center py-8">{{ $t('a_no_commission_data') }}</p>
                             </div>
-                            <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
+                            <div class="bg-white rounded-2xl p-4 md:p-6 border border-gray-100 shadow-sm">
                                 <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider mb-4">{{ $t('a_monthly_revenue') }}</h3>
                                 <BarChart v-if="revenueChartData.length > 0" :data="revenueChartData" :height="220" color="#3B82F6" />
                                 <p v-else class="text-sm text-gray-400 text-center py-8">{{ $t('a_no_revenue_data_chart') }}</p>
@@ -847,7 +847,7 @@ onMounted(() => {
 
                         <!-- Commission Statement -->
                         <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm">
-                            <div class="px-6 py-4 border-b border-gray-50 bg-gradient-to-r from-gray-50 to-white">
+                            <div class="px-4 md:px-6 py-4 border-b border-gray-50 bg-gradient-to-r from-gray-50 to-white">
                                 <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider">{{ $t('a_commission_statement') }}</h3>
                             </div>
                             <div v-if="commissionStatement && commissionStatement.length > 0" class="overflow-x-auto">
@@ -939,7 +939,7 @@ onMounted(() => {
 
                         <!-- Leave Requests -->
                         <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm">
-                            <div class="px-6 py-4 border-b border-gray-50 bg-gradient-to-r from-gray-50 to-white">
+                            <div class="px-4 md:px-6 py-4 border-b border-gray-50 bg-gradient-to-r from-gray-50 to-white">
                                 <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider">{{ $t('a_leave_requests') }}</h3>
                             </div>
                             <div v-if="leaves && leaves.length > 0" class="overflow-x-auto">
@@ -1014,7 +1014,7 @@ onMounted(() => {
                                         <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                     </div>
                                     <p class="text-[10px] font-bold text-emerald-500 uppercase tracking-wider">{{ isRtl ? 'حاضر' : 'Present' }}</p>
-                                    <p class="text-3xl font-bold text-emerald-700 mt-1">{{ attendanceSummary?.present ?? 0 }}</p>
+                                    <p class="text-2xl md:text-3xl font-bold text-emerald-700 mt-1">{{ attendanceSummary?.present ?? 0 }}</p>
                                 </div>
                             </div>
                             <div class="group relative overflow-hidden bg-gradient-to-br from-red-50 to-white rounded-2xl p-5 border border-red-100 hover:shadow-lg hover:shadow-red-500/10 hover:scale-[1.02] transition-all duration-500">
@@ -1024,7 +1024,7 @@ onMounted(() => {
                                         <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                     </div>
                                     <p class="text-[10px] font-bold text-red-500 uppercase tracking-wider">{{ isRtl ? 'غائب' : 'Absent' }}</p>
-                                    <p class="text-3xl font-bold text-red-700 mt-1">{{ attendanceSummary?.absent ?? 0 }}</p>
+                                    <p class="text-2xl md:text-3xl font-bold text-red-700 mt-1">{{ attendanceSummary?.absent ?? 0 }}</p>
                                 </div>
                             </div>
                             <div class="group relative overflow-hidden bg-gradient-to-br from-amber-50 to-white rounded-2xl p-5 border border-amber-100 hover:shadow-lg hover:shadow-amber-500/10 hover:scale-[1.02] transition-all duration-500">
@@ -1034,27 +1034,27 @@ onMounted(() => {
                                         <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                     </div>
                                     <p class="text-[10px] font-bold text-amber-500 uppercase tracking-wider">{{ isRtl ? 'متأخر' : 'Late' }}</p>
-                                    <p class="text-3xl font-bold text-amber-700 mt-1">{{ attendanceSummary?.late ?? 0 }}</p>
+                                    <p class="text-2xl md:text-3xl font-bold text-amber-700 mt-1">{{ attendanceSummary?.late ?? 0 }}</p>
                                 </div>
                             </div>
-                            <div class="group relative overflow-hidden bg-gradient-to-br from-blue-50 to-white rounded-2xl p-5 border border-blue-100 hover:shadow-lg hover:shadow-blue-500/10 hover:scale-[1.02] transition-all duration-500">
-                                <div class="absolute top-0 right-0 w-16 h-16 bg-blue-500/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:scale-150 transition-transform duration-700"></div>
+                            <div class="group relative overflow-hidden bg-gradient-to-br from-slate-50 to-white rounded-2xl p-5 border border-slate-100 hover:shadow-lg hover:shadow-[#1B365D]/10 hover:scale-[1.02] transition-all duration-500">
+                                <div class="absolute top-0 right-0 w-16 h-16 bg-[#1B365D]/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:scale-150 transition-transform duration-700"></div>
                                 <div class="relative">
-                                    <div class="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center mb-3">
-                                        <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" /></svg>
+                                    <div class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center mb-3">
+                                        <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" /></svg>
                                     </div>
-                                    <p class="text-[10px] font-bold text-blue-500 uppercase tracking-wider">{{ isRtl ? 'إجازة' : 'Leave' }}</p>
-                                    <p class="text-3xl font-bold text-blue-700 mt-1">{{ attendanceSummary?.leave ?? 0 }}</p>
+                                    <p class="text-[10px] font-bold text-[#1B365D] uppercase tracking-wider">{{ isRtl ? 'إجازة' : 'Leave' }}</p>
+                                    <p class="text-2xl md:text-3xl font-bold text-[#1B365D] mt-1">{{ attendanceSummary?.leave ?? 0 }}</p>
                                 </div>
                             </div>
-                            <div class="group relative overflow-hidden bg-gradient-to-br from-purple-50 to-white rounded-2xl p-5 border border-purple-100 hover:shadow-lg hover:shadow-purple-500/10 hover:scale-[1.02] transition-all duration-500">
-                                <div class="absolute top-0 right-0 w-16 h-16 bg-purple-500/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:scale-150 transition-transform duration-700"></div>
+                            <div class="group relative overflow-hidden bg-gradient-to-br from-slate-50 to-white rounded-2xl p-5 border border-slate-100 hover:shadow-lg hover:shadow-[#1B365D]/10 hover:scale-[1.02] transition-all duration-500">
+                                <div class="absolute top-0 right-0 w-16 h-16 bg-[#1B365D]/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:scale-150 transition-transform duration-700"></div>
                                 <div class="relative">
-                                    <div class="w-8 h-8 rounded-lg bg-purple-100 flex items-center justify-center mb-3">
-                                        <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                                    <div class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center mb-3">
+                                        <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
                                     </div>
-                                    <p class="text-[10px] font-bold text-purple-500 uppercase tracking-wider">{{ isRtl ? 'إضافي' : 'Overtime' }}</p>
-                                    <p class="text-3xl font-bold text-purple-700 mt-1">{{ attendanceSummary?.overtime_hours ?? 0 }}<span class="text-sm font-normal text-purple-400">h</span></p>
+                                    <p class="text-[10px] font-bold text-[#1B365D] uppercase tracking-wider">{{ isRtl ? 'إضافي' : 'Overtime' }}</p>
+                                    <p class="text-2xl md:text-3xl font-bold text-[#1B365D] mt-1">{{ attendanceSummary?.overtime_hours ?? 0 }}<span class="text-sm font-normal text-slate-400">h</span></p>
                                 </div>
                             </div>
                         </div>
@@ -1082,14 +1082,14 @@ onMounted(() => {
                                                         'bg-emerald-50 text-emerald-700': record.status === 'present',
                                                         'bg-red-50 text-red-700': record.status === 'absent',
                                                         'bg-amber-50 text-amber-700': record.status === 'late',
-                                                        'bg-blue-50 text-blue-700': record.status === 'leave',
+                                                        'bg-slate-50 text-[#1B365D]': record.status === 'leave',
                                                     }">
                                                     <span class="w-1.5 h-1.5 rounded-full"
                                                         :class="{
                                                             'bg-emerald-500': record.status === 'present',
                                                             'bg-red-500': record.status === 'absent',
                                                             'bg-amber-500': record.status === 'late',
-                                                            'bg-blue-500': record.status === 'leave',
+                                                            'bg-[#1B365D]': record.status === 'leave',
                                                         }"></span>
                                                     {{ record.status === 'present' ? (isRtl ? 'حاضر' : 'Present') :
                                                        record.status === 'absent' ? (isRtl ? 'غائب' : 'Absent') :

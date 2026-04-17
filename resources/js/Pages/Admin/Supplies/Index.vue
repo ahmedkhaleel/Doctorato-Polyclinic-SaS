@@ -148,25 +148,25 @@ const moduleOptions = [
         <div class="space-y-6">
 
             <!-- Hero Header -->
-            <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-900 via-indigo-800 to-purple-900 p-6 sm:p-8">
-                <div class="absolute top-0 right-0 w-72 h-72 bg-indigo-400/10 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl"></div>
-                <div class="absolute bottom-0 left-0 w-48 h-48 bg-purple-500/10 rounded-full translate-y-1/2 -translate-x-1/4 blur-2xl"></div>
+            <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#1B365D] p-4 md:p-6 sm:p-8">
+                <div class="absolute top-0 right-0 w-72 h-72 bg-slate-400/10 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl"></div>
+                <div class="absolute bottom-0 left-0 w-48 h-48 bg-[#1B365D]/10 rounded-full translate-y-1/2 -translate-x-1/4 blur-2xl"></div>
                 <div class="absolute inset-0 opacity-[0.03]" style="background-image: url('data:image/svg+xml,%3Csvg width=&quot;40&quot; height=&quot;40&quot; viewBox=&quot;0 0 40 40&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;%3E%3Cg fill=&quot;%23fff&quot;%3E%3Ccircle cx=&quot;1&quot; cy=&quot;1&quot; r=&quot;1&quot;/%3E%3C/g%3E%3C/svg%3E')"></div>
                 <div class="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                     <div>
                         <div class="flex items-center gap-2 mb-2">
-                            <div class="w-8 h-8 rounded-lg bg-indigo-400/20 flex items-center justify-center">
-                                <svg class="w-4 h-4 text-indigo-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
+                            <div class="w-8 h-8 rounded-lg bg-slate-400/20 flex items-center justify-center">
+                                <svg class="w-4 h-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
                             </div>
-                            <p class="text-indigo-300 text-xs font-semibold tracking-wider uppercase">{{ isRtl ? 'المخزون' : 'Inventory' }}</p>
+                            <p class="text-slate-300 text-xs font-semibold tracking-wider uppercase">{{ isRtl ? 'المخزون' : 'Inventory' }}</p>
                         </div>
-                        <h1 class="text-2xl sm:text-3xl font-bold text-white">{{ isRtl ? 'المنتجات' : 'Products' }}</h1>
-                        <p class="text-indigo-200/70 text-sm mt-1">{{ isRtl ? 'إدارة المستلزمات والمنتجات الطبية' : 'Manage medical supplies and products' }}</p>
+                        <h1 class="text-xl md:text-2xl sm:text-3xl font-bold text-white">{{ isRtl ? 'المنتجات' : 'Products' }}</h1>
+                        <p class="text-slate-200/70 text-sm mt-1">{{ isRtl ? 'إدارة المستلزمات والمنتجات الطبية' : 'Manage medical supplies and products' }}</p>
                     </div>
                     <div class="flex items-center gap-3">
                         <div class="bg-white/5 backdrop-blur-sm rounded-xl px-5 py-3.5 border border-white/10 text-center min-w-[80px]">
-                            <p class="text-2xl font-bold text-white leading-none tabular-nums">{{ supplies.total }}</p>
-                            <p class="text-[10px] text-indigo-300 mt-1 font-medium uppercase tracking-wide">{{ isRtl ? 'إجمالي' : 'Total' }}</p>
+                            <p class="text-xl md:text-2xl font-bold text-white leading-none tabular-nums">{{ supplies.total }}</p>
+                            <p class="text-[10px] text-slate-300 mt-1 font-medium uppercase tracking-wide">{{ isRtl ? 'إجمالي' : 'Total' }}</p>
                         </div>
                         <a
                             :href="`/admin/exports/supplies?${new URLSearchParams(Object.fromEntries(Object.entries(buildParams()).filter(([,v]) => v))).toString()}`"
@@ -197,7 +197,7 @@ const moduleOptions = [
                             v-model="search"
                             type="text"
                             :placeholder="$t('a_search_products')"
-                            class="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-colors"
+                            class="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-colors"
                         />
                     </div>
 
@@ -205,7 +205,7 @@ const moduleOptions = [
                         <!-- Category -->
                         <select
                             v-model="categoryFilter"
-                            class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-colors min-w-[160px]"
+                            class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-colors min-w-[160px]"
                         >
                             <option value="">{{ $t('a_all_categories') }}</option>
                             <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ cat.name_en }}</option>
@@ -214,7 +214,7 @@ const moduleOptions = [
                         <!-- Module -->
                         <select
                             v-model="moduleFilter"
-                            class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-colors min-w-[140px]"
+                            class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-colors min-w-[140px]"
                         >
                             <option v-for="opt in moduleOptions" :key="opt.value" :value="opt.value">{{ isRtl ? opt.label.ar : opt.label.en }}</option>
                         </select>
@@ -222,7 +222,7 @@ const moduleOptions = [
                         <!-- Stock Status -->
                         <select
                             v-model="stockFilter"
-                            class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-colors min-w-[140px]"
+                            class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-colors min-w-[140px]"
                         >
                             <option value="">{{ $t('a_all_stock') }}</option>
                             <option value="low">{{ $t('a_low_stock') }}</option>
@@ -249,7 +249,7 @@ const moduleOptions = [
                         <div class="flex items-center bg-gray-100 rounded-xl p-1">
                             <button
                                 @click="viewMode = 'grid'"
-                                :class="viewMode === 'grid' ? 'bg-white text-indigo-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'"
+                                :class="viewMode === 'grid' ? 'bg-white text-[#1B365D] shadow-sm' : 'text-gray-400 hover:text-gray-600'"
                                 class="p-2 rounded-lg transition-all duration-200"
                                 title="Grid View"
                             >
@@ -259,7 +259,7 @@ const moduleOptions = [
                             </button>
                             <button
                                 @click="viewMode = 'table'"
-                                :class="viewMode === 'table' ? 'bg-white text-indigo-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'"
+                                :class="viewMode === 'table' ? 'bg-white text-[#1B365D] shadow-sm' : 'text-gray-400 hover:text-gray-600'"
                                 class="p-2 rounded-lg transition-all duration-200"
                                 title="Table View"
                             >
@@ -339,11 +339,11 @@ const moduleOptions = [
 
                                 <!-- SKU & Module -->
                                 <div class="flex items-center gap-2 mb-4">
-                                    <p class="text-xs font-mono text-indigo-600 tracking-wide">SKU: {{ supply.sku || 'N/A' }}</p>
+                                    <p class="text-xs font-mono text-[#1B365D] tracking-wide">SKU: {{ supply.sku || 'N/A' }}</p>
                                     <span
                                         v-if="supply.module && supply.module !== 'shared'"
                                         class="px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider"
-                                        :class="supply.module === 'dental' ? 'bg-sky-100 text-sky-700' : 'bg-rose-100 text-rose-700'"
+                                        :class="supply.module === 'dental' ? 'bg-slate-100 text-[#1B365D]' : 'bg-amber-100 text-[#C4A265]'"
                                     >
                                         {{ supply.module }}
                                     </span>
@@ -396,7 +396,7 @@ const moduleOptions = [
                                         <Link
                                             v-if="can('supplies.view')"
                                             :href="`/admin/supplies/${supply.id}/transactions`"
-                                            class="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium text-indigo-600 bg-indigo-50 hover:bg-indigo-100 border border-indigo-100 transition-colors duration-200"
+                                            class="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium text-[#1B365D] bg-slate-50 hover:bg-slate-100 border border-slate-100 transition-colors duration-200"
                                         >
                                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -407,7 +407,7 @@ const moduleOptions = [
                                         <Link
                                             v-if="can('supplies.update')"
                                             :href="`/admin/supplies/${supply.id}/edit`"
-                                            class="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 border border-blue-100 transition-colors duration-200"
+                                            class="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium text-[#1B365D] bg-slate-50 hover:bg-slate-100 border border-slate-100 transition-colors duration-200"
                                         >
                                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -439,7 +439,7 @@ const moduleOptions = [
                         </div>
                         <h3 class="text-sm font-semibold text-gray-900 mb-1">{{ $t('a_no_products_found') }}</h3>
                         <p class="text-sm text-gray-500 mb-4">{{ $t('a_adjust_search') }}</p>
-                        <button v-if="hasActiveFilters" @click="clearFilters" class="text-sm font-medium text-indigo-600 hover:underline">
+                        <button v-if="hasActiveFilters" @click="clearFilters" class="text-sm font-medium text-[#1B365D] hover:underline">
                             {{ $t('a_clear_all_filters') }}
                         </button>
                     </div>
@@ -452,13 +452,13 @@ const moduleOptions = [
                             <table class="min-w-full divide-y divide-gray-100">
                                 <thead>
                                     <tr class="bg-gray-50/80">
-                                        <th class="px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">SKU</th>
-                                        <th class="px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_name') }}</th>
-                                        <th class="px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_category') }}</th>
-                                        <th class="px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_quantity') }}</th>
-                                        <th class="px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_status') }}</th>
-                                        <th class="px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_supplier') }}</th>
-                                        <th class="px-6 py-3.5 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_actions') }}</th>
+                                        <th class="px-4 md:px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">SKU</th>
+                                        <th class="px-4 md:px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_name') }}</th>
+                                        <th class="px-4 md:px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_category') }}</th>
+                                        <th class="px-4 md:px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_quantity') }}</th>
+                                        <th class="px-4 md:px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_status') }}</th>
+                                        <th class="px-4 md:px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_supplier') }}</th>
+                                        <th class="px-4 md:px-6 py-3.5 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_actions') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-gray-50">
@@ -468,14 +468,14 @@ const moduleOptions = [
                                         class="hover:bg-gray-50/50 transition-colors duration-150"
                                         :class="{ 'bg-red-50/50': isLowStock(supply) }"
                                     >
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="text-sm font-mono text-indigo-600 font-medium">{{ supply.sku || '-' }}</span>
+                                        <td class="px-4 md:px-6 py-4 whitespace-nowrap">
+                                            <span class="text-sm font-mono text-[#1B365D] font-medium">{{ supply.sku || '-' }}</span>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
+                                        <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                             <div class="text-sm font-semibold text-gray-900">{{ supply.name_en }}</div>
                                             <div v-if="supply.name_ar" class="text-xs text-gray-400 mt-0.5" dir="rtl">{{ supply.name_ar }}</div>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
+                                        <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                             <span
                                                 v-if="supply.supply_category"
                                                 class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-xs font-medium"
@@ -488,7 +488,7 @@ const moduleOptions = [
                                             </span>
                                             <span v-else class="text-sm text-gray-400">-</span>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
+                                        <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                             <div class="flex items-center gap-3">
                                                 <div class="w-20">
                                                     <div class="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
@@ -505,7 +505,7 @@ const moduleOptions = [
                                                 <span class="text-xs text-gray-400">{{ supply.unit || '' }}</span>
                                             </div>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
+                                        <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                             <span
                                                 class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold"
                                                 :class="statusBadge(supply).classes"
@@ -513,15 +513,15 @@ const moduleOptions = [
                                                 {{ statusBadge(supply).text }}
                                             </span>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                             {{ supply.supplier || '-' }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                                        <td class="px-4 md:px-6 py-4 whitespace-nowrap text-right">
                                             <div class="flex items-center justify-end gap-1">
                                                 <Link
                                                     v-if="can('supplies.view')"
                                                     :href="`/admin/supplies/${supply.id}/transactions`"
-                                                    class="p-2 rounded-lg text-indigo-600 hover:bg-indigo-50 transition-colors duration-200"
+                                                    class="p-2 rounded-lg text-[#1B365D] hover:bg-slate-50 transition-colors duration-200"
                                                     title="View"
                                                 >
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -532,7 +532,7 @@ const moduleOptions = [
                                                 <Link
                                                     v-if="can('supplies.update')"
                                                     :href="`/admin/supplies/${supply.id}/edit`"
-                                                    class="p-2 rounded-lg text-blue-600 hover:bg-blue-50 transition-colors duration-200"
+                                                    class="p-2 rounded-lg text-[#1B365D] hover:bg-slate-50 transition-colors duration-200"
                                                     title="Edit"
                                                 >
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -553,7 +553,7 @@ const moduleOptions = [
                                         </td>
                                     </tr>
                                     <tr v-if="!supplies.data || supplies.data.length === 0">
-                                        <td colspan="7" class="px-6 py-12 text-center">
+                                        <td colspan="7" class="px-4 md:px-6 py-12 text-center">
                                             <div class="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center mx-auto mb-3">
                                                 <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
@@ -571,7 +571,7 @@ const moduleOptions = [
             </Transition>
 
             <!-- Pagination -->
-            <div v-if="supplies.links && supplies.links.length > 3" class="bg-white rounded-2xl shadow-sm border border-gray-100 px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div v-if="supplies.links && supplies.links.length > 3" class="bg-white rounded-2xl shadow-sm border border-gray-100 px-4 md:px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-3">
                 <p class="text-sm text-gray-500">
                     {{ $t('a_showing') }} <span class="font-semibold text-gray-700">{{ supplies.from }}</span>
                     {{ $t('a_to') }} <span class="font-semibold text-gray-700">{{ supplies.to }}</span>

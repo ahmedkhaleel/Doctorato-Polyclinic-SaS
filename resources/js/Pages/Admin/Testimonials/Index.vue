@@ -37,13 +37,13 @@ function deleteTestimonial(id) {
 }
 
 const statusColors = {
-    approved: 'bg-green-100 text-green-800',
-    pending: 'bg-yellow-100 text-yellow-800',
+    approved: 'bg-emerald-100 text-emerald-800',
+    pending: 'bg-amber-100 text-amber-800',
     rejected: 'bg-red-100 text-red-800',
 };
 
 function renderStars(rating) {
-    return Array.from({ length: 5 }, (_, i) => i < rating ? 'text-yellow-400' : 'text-gray-300');
+    return Array.from({ length: 5 }, (_, i) => i < rating ? 'text-amber-400' : 'text-gray-300');
 }
 </script>
 
@@ -51,7 +51,7 @@ function renderStars(rating) {
     <AdminLayout :title="$t('a_testimonials')">
         <div class="space-y-6">
             <div class="flex items-center justify-between">
-                <h1 class="text-2xl font-bold text-gray-800">{{ $t('a_testimonials') }}</h1>
+                <h1 class="text-xl md:text-2xl font-bold text-gray-800">{{ $t('a_testimonials') }}</h1>
                 <Link
                     v-if="can('testimonials.create')"
                     href="/admin/testimonials/create"
@@ -70,7 +70,7 @@ function renderStars(rating) {
                     v-model="search"
                     type="text"
                     :placeholder="$t('a_search_testimonials')"
-                    class="w-full sm:w-80 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                    class="w-full sm:w-80 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                 />
             </div>
 
@@ -79,16 +79,16 @@ function renderStars(rating) {
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_client') }}</th>
-                                <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_rating') }}</th>
-                                <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_status') }}</th>
-                                <th class="px-6 py-3 ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_actions') }}</th>
+                                <th class="px-4 md:px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_client') }}</th>
+                                <th class="px-4 md:px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_rating') }}</th>
+                                <th class="px-4 md:px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_status') }}</th>
+                                <th class="px-4 md:px-6 py-3 ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_actions') }}</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
                             <tr v-for="t in testimonials.data" :key="t.id" class="hover:bg-gray-50">
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $localized(t, 'client_name') }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $localized(t, 'client_name') }}</td>
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                     <div class="flex space-x-0.5">
                                         <svg
                                             v-for="(cls, i) in renderStars(t.rating)"
@@ -102,7 +102,7 @@ function renderStars(rating) {
                                         </svg>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                     <span
                                         :class="statusColors[t.status] || 'bg-gray-100 text-gray-800'"
                                         class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
@@ -110,19 +110,19 @@ function renderStars(rating) {
                                         {{ t.status }}
                                     </span>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap ltr:text-right rtl:text-left text-sm ltr:space-x-3 rtl:space-x-reverse rtl:space-x-3">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap ltr:text-right rtl:text-left text-sm ltr:space-x-3 rtl:space-x-reverse rtl:space-x-3">
                                     <Link v-if="can('testimonials.update')" :href="`/admin/testimonials/${t.id}/edit`" class="font-medium hover:underline" style="color: #C4A265;">{{ $t('a_edit') }}</Link>
                                     <button v-if="can('testimonials.delete')" @click="deleteTestimonial(t.id)" class="font-medium text-red-600 hover:underline">{{ $t('a_delete') }}</button>
                                 </td>
                             </tr>
                             <tr v-if="!testimonials.data || testimonials.data.length === 0">
-                                <td colspan="4" class="px-6 py-8 text-center text-sm text-gray-500">{{ $t('a_no_testimonials_found') }}</td>
+                                <td colspan="4" class="px-4 md:px-6 py-8 text-center text-sm text-gray-500">{{ $t('a_no_testimonials_found') }}</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
 
-                <div v-if="testimonials.links && testimonials.links.length > 3" class="px-6 py-3 border-t border-gray-200 flex items-center justify-between">
+                <div v-if="testimonials.links && testimonials.links.length > 3" class="px-4 md:px-6 py-3 border-t border-gray-200 flex items-center justify-between">
                     <p class="text-sm text-gray-500">{{ $t('a_showing') }} {{ testimonials.from }} {{ $t('a_to') }} {{ testimonials.to }} {{ $t('a_of') }} {{ testimonials.total }} {{ $t('a_results') }}</p>
                     <nav class="flex space-x-1">
                         <template v-for="link in testimonials.links" :key="link.label">

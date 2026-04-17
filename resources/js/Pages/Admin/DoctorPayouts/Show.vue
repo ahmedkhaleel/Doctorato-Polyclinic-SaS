@@ -81,7 +81,7 @@ function cancelPayout() {
                     <Link href="/admin/doctor-payouts" class="text-sm text-gray-400 hover:text-[#C4A265]">&larr; {{ $t('a_all_payouts') }}</Link>
                 </div>
                 <div class="flex items-center gap-3">
-                    <h1 class="text-2xl font-bold text-gray-900">{{ payout.payout_number }}</h1>
+                    <h1 class="text-xl md:text-2xl font-bold text-gray-900">{{ payout.payout_number }}</h1>
                     <span class="text-xs font-semibold px-3 py-1 rounded-full ring-1" :class="[statusConfig[payout.status]?.bg, statusConfig[payout.status]?.text, statusConfig[payout.status]?.ring]">
                         {{ statusConfig[payout.status]?.label }}
                     </span>
@@ -142,7 +142,7 @@ function cancelPayout() {
                         <p class="text-[10px] text-gray-400 uppercase tracking-wide font-semibold mb-1">{{ $t('a_notes') }}</p>
                         <p class="text-sm text-gray-600">{{ payout.notes }}</p>
                     </div>
-                    <div v-if="payout.status === 'cancelled'" class="mt-4 pt-4 border-t border-red-100 bg-red-50/50 -mx-6 -mb-6 px-6 pb-6 rounded-b-2xl">
+                    <div v-if="payout.status === 'cancelled'" class="mt-4 pt-4 border-t border-red-100 bg-red-50/50 -mx-6 -mb-6 px-4 md:px-6 pb-6 rounded-b-2xl">
                         <p class="text-[10px] text-red-500 uppercase tracking-wide font-semibold mb-1">{{ $t('a_cancellation_reason') }}</p>
                         <p class="text-sm text-red-600">{{ payout.cancellation_reason }}</p>
                         <p class="text-xs text-red-400 mt-1">Cancelled by {{ payout.cancelled_by_user?.name }} at {{ formatDateTime(payout.cancelled_at) }}</p>
@@ -151,24 +151,24 @@ function cancelPayout() {
 
                 <!-- Visits Table -->
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
-                    <div class="px-6 py-4 border-b border-gray-100">
+                    <div class="px-4 md:px-6 py-4 border-b border-gray-100">
                         <h2 class="text-sm font-bold text-gray-800">{{ $t('a_included_visits') }} ({{ payout.total_visits }})</h2>
                     </div>
                     <table class="w-full text-sm">
                         <thead>
                             <tr class="bg-gray-50/80 border-b border-gray-100">
-                                <th class="px-6 py-2.5 text-left text-[10px] font-semibold text-gray-400 uppercase">#</th>
+                                <th class="px-4 md:px-6 py-2.5 text-left text-[10px] font-semibold text-gray-400 uppercase">#</th>
                                 <th class="px-3 py-2.5 text-start text-[10px] font-semibold text-gray-400 uppercase">{{ $t('a_date') }}</th>
                                 <th class="px-3 py-2.5 text-start text-[10px] font-semibold text-gray-400 uppercase">{{ $t('a_patient') }}</th>
                                 <th class="px-3 py-2.5 text-start text-[10px] font-semibold text-gray-400 uppercase">{{ $t('a_service') }}</th>
                                 <th class="px-3 py-2.5 text-end text-[10px] font-semibold text-gray-400 uppercase">{{ $t('a_amount') }}</th>
                                 <th class="px-3 py-2.5 text-end text-[10px] font-semibold text-gray-400 uppercase">{{ $t('a_rate') }}</th>
-                                <th class="px-6 py-2.5 text-end text-[10px] font-semibold text-gray-400 uppercase">{{ $t('a_commission') }}</th>
+                                <th class="px-4 md:px-6 py-2.5 text-end text-[10px] font-semibold text-gray-400 uppercase">{{ $t('a_commission') }}</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-50">
                             <tr v-for="(visit, i) in payout.visits" :key="visit.id" class="hover:bg-gray-50/50">
-                                <td class="px-6 py-3 text-xs text-gray-400">{{ i + 1 }}</td>
+                                <td class="px-4 md:px-6 py-3 text-xs text-gray-400">{{ i + 1 }}</td>
                                 <td class="px-3 py-3 text-xs text-gray-600">{{ formatDate(visit.visit_date) }}</td>
                                 <td class="px-3 py-3 text-xs font-medium text-gray-800">{{ visit.patient?.full_name }}</td>
                                 <td class="px-3 py-3 text-xs text-gray-600">
@@ -176,7 +176,7 @@ function cancelPayout() {
                                 </td>
                                 <td class="px-3 py-3 text-xs text-right text-gray-600">{{ formatCurrency(visit.pivot?.visit_amount) }}</td>
                                 <td class="px-3 py-3 text-xs text-right text-gray-600">{{ visit.pivot?.commission_rate }}%</td>
-                                <td class="px-6 py-3 text-xs text-right font-semibold text-[#C4A265]">{{ formatCurrency(visit.pivot?.commission_amount) }}</td>
+                                <td class="px-4 md:px-6 py-3 text-xs text-right font-semibold text-[#C4A265]">{{ formatCurrency(visit.pivot?.commission_amount) }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -264,7 +264,7 @@ function cancelPayout() {
         <!-- Mark as Paid Modal -->
         <Teleport to="body">
             <div v-if="showPayModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50" @click.self="showPayModal = false">
-                <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md">
+                <div class="bg-white rounded-2xl shadow-2xl p-4 md:p-6 w-full max-w-md">
                     <h3 class="text-lg font-bold text-gray-900 mb-4">{{ $t('a_mark_as_paid') }}</h3>
                     <div class="space-y-4">
                         <div>
@@ -303,7 +303,7 @@ function cancelPayout() {
         <!-- Cancel Modal -->
         <Teleport to="body">
             <div v-if="showCancelModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50" @click.self="showCancelModal = false">
-                <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md">
+                <div class="bg-white rounded-2xl shadow-2xl p-4 md:p-6 w-full max-w-md">
                     <h3 class="text-lg font-bold text-gray-900 mb-4">{{ $t('a_cancel_payout') }}</h3>
                     <p class="text-sm text-gray-500 mb-4">{{ $t('a_cancel_payout_warning') }}</p>
                     <div>

@@ -46,9 +46,9 @@ const statusLabels = {
 };
 
 const statusColors = {
-    waiting: 'bg-yellow-100 text-yellow-800',
-    in_progress: 'bg-blue-100 text-blue-800',
-    completed: 'bg-green-100 text-green-800',
+    waiting: 'bg-amber-100 text-amber-800',
+    in_progress: 'bg-slate-100 text-[#1B365D]',
+    completed: 'bg-emerald-100 text-emerald-800',
     cancelled: 'bg-red-100 text-red-800',
 };
 
@@ -59,8 +59,8 @@ const visitTypeLabels = {
 };
 
 const invoiceStatusColors = {
-    paid: 'bg-green-100 text-green-800',
-    partial: 'bg-yellow-100 text-yellow-800',
+    paid: 'bg-emerald-100 text-emerald-800',
+    partial: 'bg-amber-100 text-amber-800',
     unpaid: 'bg-red-100 text-red-800',
 };
 
@@ -305,7 +305,7 @@ function formatDateTime(date) {
                     </div>
                     <div>
                         <div class="flex items-center space-x-3">
-                            <h1 class="text-2xl font-bold text-gray-800">{{ visit.patient?.full_name }}</h1>
+                            <h1 class="text-xl md:text-2xl font-bold text-gray-800">{{ visit.patient?.full_name }}</h1>
                             <span
                                 :class="statusColors[visit.status]"
                                 class="px-3 py-1 text-xs font-semibold rounded-full"
@@ -329,7 +329,7 @@ function formatDateTime(date) {
                     <button
                         v-if="visit.status === 'waiting' && can('visits.update')"
                         @click="startVisit"
-                        class="inline-flex items-center px-4 py-2 rounded-lg text-white text-sm font-medium transition bg-blue-600 hover:bg-blue-700"
+                        class="inline-flex items-center px-4 py-2 rounded-lg text-white text-sm font-medium transition bg-[#1B365D] hover:bg-[#1B365D]"
                     >
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
@@ -340,7 +340,7 @@ function formatDateTime(date) {
                     <button
                         v-if="visit.status === 'in_progress' && can('visits.update')"
                         @click="completeVisit"
-                        class="inline-flex items-center px-4 py-2 rounded-lg text-white text-sm font-medium transition bg-green-600 hover:bg-green-700"
+                        class="inline-flex items-center px-4 py-2 rounded-lg text-white text-sm font-medium transition bg-emerald-600 hover:bg-emerald-700"
                     >
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -375,7 +375,7 @@ function formatDateTime(date) {
                             v-for="tab in tabs"
                             :key="tab.id"
                             @click="activeTab = tab.id"
-                            class="px-6 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition"
+                            class="px-4 md:px-6 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition"
                             :class="activeTab === tab.id ? 'border-current' : 'border-transparent text-gray-500 hover:text-gray-700'"
                             :style="activeTab === tab.id ? 'color: #C4A265;' : ''"
                         >
@@ -410,7 +410,7 @@ function formatDateTime(date) {
                                         <input
                                             v-model="visitDateForm.visit_date"
                                             type="date"
-                                            class="px-2 py-1 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                                            class="px-2 py-1 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                                         />
                                         <button
                                             @click="saveVisitDate"
@@ -442,7 +442,7 @@ function formatDateTime(date) {
                                 <div v-if="visit.session_number" class="flex justify-between text-sm"><dt class="text-gray-500">{{ $t('a_session_number') }}</dt><dd class="text-gray-900">#{{ visit.session_number }}</dd></div>
                                 <div v-if="visit.started_at" class="flex justify-between text-sm"><dt class="text-gray-500">{{ $t('a_started_at') }}</dt><dd class="text-gray-900">{{ formatDateTime(visit.started_at) }}</dd></div>
                                 <div v-if="visit.completed_at" class="flex justify-between text-sm"><dt class="text-gray-500">{{ $t('a_completed_at') }}</dt><dd class="text-gray-900">{{ formatDateTime(visit.completed_at) }}</dd></div>
-                                <div v-if="visit.commission_amount" class="flex justify-between text-sm"><dt class="text-gray-500">{{ $t('a_commission') }}</dt><dd class="text-blue-600 font-medium">{{ formatCurrency(visit.commission_amount) }} ({{ visit.commission_rate }}%)</dd></div>
+                                <div v-if="visit.commission_amount" class="flex justify-between text-sm"><dt class="text-gray-500">{{ $t('a_commission') }}</dt><dd class="text-[#1B365D] font-medium">{{ formatCurrency(visit.commission_amount) }} ({{ visit.commission_rate }}%)</dd></div>
                                 <div class="flex justify-between text-sm"><dt class="text-gray-500">{{ $t('a_created') }}</dt><dd class="text-gray-900">{{ formatDateTime(visit.created_at) }}</dd></div>
                             </dl>
                         </div>
@@ -469,10 +469,10 @@ function formatDateTime(date) {
                                     <div class="flex items-center justify-between">
                                         <p class="text-sm font-semibold text-gray-900 group-hover:text-[#C4A265]">{{ visit.booking.booking_number || `#${visit.booking.id}` }}</p>
                                         <span class="inline-flex px-2 py-0.5 rounded-full text-[10px] font-semibold capitalize" :class="{
-                                            'bg-yellow-100 text-yellow-700': visit.booking.status === 'unconfirmed',
-                                            'bg-blue-100 text-blue-700': visit.booking.status === 'confirmed',
-                                            'bg-indigo-100 text-indigo-700': visit.booking.status === 'in_progress',
-                                            'bg-green-100 text-green-700': visit.booking.status === 'completed',
+                                            'bg-amber-100 text-amber-700': visit.booking.status === 'unconfirmed',
+                                            'bg-slate-100 text-[#1B365D]': visit.booking.status === 'confirmed',
+                                            'bg-slate-100 text-[#1B365D]': visit.booking.status === 'in_progress',
+                                            'bg-emerald-100 text-emerald-700': visit.booking.status === 'completed',
                                             'bg-red-100 text-red-700': visit.booking.status === 'cancelled',
                                         }">{{ visit.booking.status?.replace('_', ' ') }}</span>
                                     </div>
@@ -522,12 +522,12 @@ function formatDateTime(date) {
                         <form v-else @submit.prevent="saveDiagnosis" class="space-y-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_diagnosis') }}</label>
-                                <textarea v-model="diagnosisForm.diagnosis" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" placeholder="Enter diagnosis..."></textarea>
+                                <textarea v-model="diagnosisForm.diagnosis" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" placeholder="Enter diagnosis..."></textarea>
                                 <p v-if="diagnosisForm.errors.diagnosis" class="mt-1 text-sm text-red-600">{{ diagnosisForm.errors.diagnosis }}</p>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_notes') }}</label>
-                                <textarea v-model="diagnosisForm.doctor_notes" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" placeholder="Enter notes..."></textarea>
+                                <textarea v-model="diagnosisForm.doctor_notes" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" placeholder="Enter notes..."></textarea>
                                 <p v-if="diagnosisForm.errors.doctor_notes" class="mt-1 text-sm text-red-600">{{ diagnosisForm.errors.doctor_notes }}</p>
                             </div>
                             <div class="flex space-x-3">
@@ -579,9 +579,9 @@ function formatDateTime(date) {
                                             <td class="py-2 px-3 text-gray-600">{{ t.description || '-' }}</td>
                                             <td class="py-2 px-3">
                                                 <span class="px-2 py-0.5 text-xs font-semibold rounded-full" :class="{
-                                                    'bg-green-100 text-green-700': t.status === 'completed',
-                                                    'bg-blue-100 text-blue-700': t.status === 'in_progress',
-                                                    'bg-yellow-100 text-yellow-700': t.status === 'planned',
+                                                    'bg-emerald-100 text-emerald-700': t.status === 'completed',
+                                                    'bg-slate-100 text-[#1B365D]': t.status === 'in_progress',
+                                                    'bg-amber-100 text-amber-700': t.status === 'planned',
                                                     'bg-red-100 text-red-700': t.status === 'cancelled',
                                                 }">{{ t.status }}</span>
                                             </td>
@@ -596,7 +596,7 @@ function formatDateTime(date) {
                         <!-- Mini Dental Chart -->
                         <div v-if="dentalChart && Object.keys(dentalChart).length > 0">
                             <h3 class="text-lg font-semibold text-gray-700 mb-4 flex items-center gap-2">
-                                <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7" /></svg>
+                                <svg class="w-5 h-5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7" /></svg>
                                 {{ isRtl ? 'مخطط الأسنان' : 'Dental Chart' }}
                             </h3>
                             <div class="grid grid-cols-16 gap-1">
@@ -626,7 +626,7 @@ function formatDateTime(date) {
                         <!-- Treatment Plans -->
                         <div v-if="dentalPlans?.length > 0">
                             <h3 class="text-lg font-semibold text-gray-700 mb-4 flex items-center gap-2">
-                                <svg class="w-5 h-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" /></svg>
+                                <svg class="w-5 h-5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" /></svg>
                                 {{ isRtl ? 'خطط العلاج' : 'Treatment Plans' }}
                             </h3>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -636,10 +636,10 @@ function formatDateTime(date) {
                                     <div class="flex items-center justify-between mb-2">
                                         <p class="text-sm font-semibold text-gray-800 group-hover:text-[#C4A265]">{{ plan.title || (isRtl ? 'خطة علاج' : 'Treatment Plan') }} #{{ plan.id }}</p>
                                         <span class="px-2 py-0.5 text-[10px] font-semibold rounded-full capitalize" :class="{
-                                            'bg-yellow-100 text-yellow-700': plan.status === 'draft',
-                                            'bg-blue-100 text-blue-700': plan.status === 'approved',
-                                            'bg-indigo-100 text-indigo-700': plan.status === 'in_progress',
-                                            'bg-green-100 text-green-700': plan.status === 'completed',
+                                            'bg-amber-100 text-amber-700': plan.status === 'draft',
+                                            'bg-slate-100 text-[#1B365D]': plan.status === 'approved',
+                                            'bg-slate-100 text-[#1B365D]': plan.status === 'in_progress',
+                                            'bg-emerald-100 text-emerald-700': plan.status === 'completed',
                                         }">{{ plan.status?.replace('_', ' ') }}</span>
                                     </div>
                                     <div class="flex items-center gap-3 text-xs text-gray-500">
@@ -653,9 +653,9 @@ function formatDateTime(date) {
                         <!-- X-rays -->
                         <div v-if="dentalXrays?.length > 0">
                             <h3 class="text-lg font-semibold text-gray-700 mb-4 flex items-center gap-2">
-                                <svg class="w-5 h-5 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                                <svg class="w-5 h-5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                                 {{ isRtl ? 'صور الأشعة' : 'X-Rays' }}
-                                <span class="text-xs font-medium px-2 py-0.5 rounded-full bg-cyan-50 text-cyan-600 border border-cyan-100">{{ dentalXrays.length }}</span>
+                                <span class="text-xs font-medium px-2 py-0.5 rounded-full bg-slate-50 text-[#1B365D] border border-slate-100">{{ dentalXrays.length }}</span>
                             </h3>
                             <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
                                 <div v-for="xray in dentalXrays" :key="xray.id" class="relative group rounded-lg overflow-hidden border border-gray-200 hover:border-gray-300 transition">
@@ -736,11 +736,11 @@ function formatDateTime(date) {
                                             <Link v-if="can('prescriptions.view')" :href="`/admin/prescriptions/${rx.id}`" class="inline-flex items-center px-2.5 py-1 text-xs font-medium rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-50 transition">
                                                 View
                                             </Link>
-                                            <a v-if="can('prescriptions.view')" :href="`/admin/prescriptions/${rx.id}/print`" target="_blank" class="inline-flex items-center px-2.5 py-1 text-xs font-medium rounded-lg border text-blue-600 border-blue-300 hover:bg-blue-50 transition">
+                                            <a v-if="can('prescriptions.view')" :href="`/admin/prescriptions/${rx.id}/print`" target="_blank" class="inline-flex items-center px-2.5 py-1 text-xs font-medium rounded-lg border text-[#1B365D] border-slate-300 hover:bg-slate-50 transition">
                                                 <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" /></svg>
                                                 Print
                                             </a>
-                                            <a v-if="can('prescriptions.view')" :href="`/admin/prescriptions/${rx.id}/pdf`" class="inline-flex items-center px-2.5 py-1 text-xs font-medium rounded-lg border text-green-600 border-green-300 hover:bg-green-50 transition">
+                                            <a v-if="can('prescriptions.view')" :href="`/admin/prescriptions/${rx.id}/pdf`" class="inline-flex items-center px-2.5 py-1 text-xs font-medium rounded-lg border text-emerald-600 border-emerald-300 hover:bg-emerald-50 transition">
                                                 <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
                                                 PDF
                                             </a>
@@ -773,7 +773,7 @@ function formatDateTime(date) {
                                                 </tr>
                                             </tbody>
                                         </table>
-                                        <div v-if="rx.notes" class="mt-3 p-3 bg-yellow-50 rounded-lg">
+                                        <div v-if="rx.notes" class="mt-3 p-3 bg-amber-50 rounded-lg">
                                             <p class="text-xs text-gray-500 font-medium mb-1">Notes</p>
                                             <p class="text-sm text-gray-700 whitespace-pre-wrap">{{ rx.notes }}</p>
                                         </div>
@@ -945,7 +945,7 @@ function formatDateTime(date) {
                     <div v-if="activeTab === 'invoice'">
                         <div v-if="visit.invoice">
                             <div class="border rounded-lg overflow-hidden">
-                                <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between" style="background-color: rgba(196, 162, 101, 0.08);">
+                                <div class="px-4 md:px-6 py-4 border-b border-gray-200 flex items-center justify-between" style="background-color: rgba(196, 162, 101, 0.08);">
                                     <div>
                                         <p class="text-sm font-mono font-bold" style="color: #C4A265;">{{ visit.invoice.invoice_number }}</p>
                                         <p class="text-xs text-gray-500">{{ formatDate(visit.invoice.created_at) }}</p>
@@ -1003,7 +1003,7 @@ function formatDateTime(date) {
                                         </div>
                                         <div class="flex justify-between text-sm">
                                             <span class="text-gray-500">Paid</span>
-                                            <span class="text-green-600">{{ formatCurrency(visit.invoice.paid_amount) }}</span>
+                                            <span class="text-emerald-600">{{ formatCurrency(visit.invoice.paid_amount) }}</span>
                                         </div>
                                         <div v-if="visit.invoice.total - visit.invoice.paid_amount > 0" class="flex justify-between text-sm">
                                             <span class="text-gray-500">Remaining</span>

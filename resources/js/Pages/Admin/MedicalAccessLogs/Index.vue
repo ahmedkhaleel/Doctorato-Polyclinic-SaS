@@ -30,9 +30,9 @@ function applyFilters() {
 watch([dateFrom, dateTo, accessType, dataCategory], applyFilters);
 
 const accessTypeLabels = {
-    view_medical: { en: 'View', ar: 'عرض', color: 'bg-blue-100 text-blue-700' },
+    view_medical: { en: 'View', ar: 'عرض', color: 'bg-slate-100 text-[#1B365D]' },
     update_medical: { en: 'Update', ar: 'تعديل', color: 'bg-amber-100 text-amber-700' },
-    export_medical: { en: 'Export', ar: 'تصدير', color: 'bg-purple-100 text-purple-700' },
+    export_medical: { en: 'Export', ar: 'تصدير', color: 'bg-slate-100 text-[#1B365D]' },
     print_medical: { en: 'Print', ar: 'طباعة', color: 'bg-gray-100 text-gray-700' },
 };
 
@@ -68,11 +68,11 @@ function formatDate(dateStr) {
 
 <template>
     <AdminLayout :title="locale === 'ar' ? 'سجل الوصول للبيانات الطبية' : 'Medical Data Access Log'">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 md:py-6 space-y-6">
             <!-- Header -->
             <div class="flex items-center justify-between">
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-900">
+                    <h1 class="text-xl md:text-2xl font-bold text-gray-900">
                         {{ locale === 'ar' ? 'سجل الوصول للبيانات الطبية' : 'Medical Data Access Log' }}
                     </h1>
                     <p class="text-sm text-gray-500 mt-1">
@@ -89,19 +89,19 @@ function formatDate(dateStr) {
             <!-- Stats Cards -->
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div class="bg-white rounded-xl border border-gray-200 p-4">
-                    <div class="text-2xl font-bold text-blue-600">{{ stats.total_today }}</div>
+                    <div class="text-xl md:text-2xl font-bold text-[#1B365D]">{{ stats.total_today }}</div>
                     <div class="text-xs text-gray-500 mt-1">{{ locale === 'ar' ? 'عمليات وصول اليوم' : 'Accesses Today' }}</div>
                 </div>
                 <div class="bg-white rounded-xl border border-red-200 p-4">
-                    <div class="text-2xl font-bold text-red-600">{{ stats.sensitive_today }}</div>
+                    <div class="text-xl md:text-2xl font-bold text-red-600">{{ stats.sensitive_today }}</div>
                     <div class="text-xs text-gray-500 mt-1">{{ locale === 'ar' ? 'وصول لبيانات حساسة' : 'Sensitive Accesses' }}</div>
                 </div>
                 <div class="bg-white rounded-xl border border-gray-200 p-4">
-                    <div class="text-2xl font-bold text-gray-700">{{ stats.unique_patients_accessed }}</div>
+                    <div class="text-xl md:text-2xl font-bold text-gray-700">{{ stats.unique_patients_accessed }}</div>
                     <div class="text-xs text-gray-500 mt-1">{{ locale === 'ar' ? 'مرضى تم الوصول لسجلاتهم' : 'Patients Accessed' }}</div>
                 </div>
                 <div class="bg-white rounded-xl border border-amber-200 p-4">
-                    <div class="text-2xl font-bold text-amber-600">{{ stats.updates_this_week }}</div>
+                    <div class="text-xl md:text-2xl font-bold text-amber-600">{{ stats.updates_this_week }}</div>
                     <div class="text-xs text-gray-500 mt-1">{{ locale === 'ar' ? 'تعديلات هذا الأسبوع' : 'Updates This Week' }}</div>
                 </div>
             </div>
@@ -111,15 +111,15 @@ function formatDate(dateStr) {
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
                     <div>
                         <label class="block text-xs font-medium text-gray-500 mb-1">{{ locale === 'ar' ? 'من تاريخ' : 'From' }}</label>
-                        <input v-model="dateFrom" type="date" class="w-full rounded-lg border-gray-300 text-sm focus:ring-cyan-500 focus:border-cyan-500" />
+                        <input v-model="dateFrom" type="date" class="w-full rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]" />
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-gray-500 mb-1">{{ locale === 'ar' ? 'إلى تاريخ' : 'To' }}</label>
-                        <input v-model="dateTo" type="date" class="w-full rounded-lg border-gray-300 text-sm focus:ring-cyan-500 focus:border-cyan-500" />
+                        <input v-model="dateTo" type="date" class="w-full rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]" />
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-gray-500 mb-1">{{ locale === 'ar' ? 'نوع الوصول' : 'Access Type' }}</label>
-                        <select v-model="accessType" class="w-full rounded-lg border-gray-300 text-sm focus:ring-cyan-500 focus:border-cyan-500">
+                        <select v-model="accessType" class="w-full rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]">
                             <option value="">{{ locale === 'ar' ? 'الكل' : 'All' }}</option>
                             <option value="view_medical">{{ locale === 'ar' ? 'عرض' : 'View' }}</option>
                             <option value="update_medical">{{ locale === 'ar' ? 'تعديل' : 'Update' }}</option>
@@ -129,7 +129,7 @@ function formatDate(dateStr) {
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-gray-500 mb-1">{{ locale === 'ar' ? 'التصنيف' : 'Category' }}</label>
-                        <select v-model="dataCategory" class="w-full rounded-lg border-gray-300 text-sm focus:ring-cyan-500 focus:border-cyan-500">
+                        <select v-model="dataCategory" class="w-full rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]">
                             <option value="">{{ locale === 'ar' ? 'الكل' : 'All' }}</option>
                             <option value="dental_medical">{{ locale === 'ar' ? 'طب أسنان' : 'Dental Medical' }}</option>
                             <option value="risk_flags">{{ locale === 'ar' ? 'أعلام الخطورة' : 'Risk Flags' }}</option>
@@ -159,7 +159,7 @@ function formatDate(dateStr) {
                                 <td class="px-4 py-3 whitespace-nowrap text-gray-600">{{ formatDate(log.created_at) }}</td>
                                 <td class="px-4 py-3 whitespace-nowrap font-medium text-gray-900">{{ log.user?.name || '-' }}</td>
                                 <td class="px-4 py-3 whitespace-nowrap">
-                                    <Link v-if="log.patient" :href="`/admin/patients/${log.patient_id}`" class="text-cyan-600 hover:underline">
+                                    <Link v-if="log.patient" :href="`/admin/patients/${log.patient_id}`" class="text-[#1B365D] hover:underline">
                                         {{ log.patient.full_name }}
                                         <span class="text-gray-400 text-xs ms-1">{{ log.patient.file_number }}</span>
                                     </Link>
@@ -196,7 +196,7 @@ function formatDate(dateStr) {
                     <div class="flex gap-1">
                         <Link v-for="link in logs.links" :key="link.label"
                             :href="link.url || '#'"
-                            :class="['px-3 py-1 text-xs rounded-lg border', link.active ? 'bg-cyan-600 text-white border-cyan-600' : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50']"
+                            :class="['px-3 py-1 text-xs rounded-lg border', link.active ? 'bg-[#1B365D] text-white border-[#1B365D]' : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50']"
                             v-html="link.label"
                             preserve-state
                         />

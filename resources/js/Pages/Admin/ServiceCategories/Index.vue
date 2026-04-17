@@ -68,7 +68,7 @@ function deleteCategory(id) {
     <AdminLayout :title="$t('a_service_categories')">
         <div class="space-y-6">
             <div class="flex items-center justify-between">
-                <h1 class="text-2xl font-bold text-gray-800">{{ $t('a_service_categories') }}</h1>
+                <h1 class="text-xl md:text-2xl font-bold text-gray-800">{{ $t('a_service_categories') }}</h1>
                 <Link
                     v-if="can('service_categories.create')"
                     href="/admin/service-categories/create"
@@ -109,7 +109,7 @@ function deleteCategory(id) {
                     v-model="search"
                     type="text"
                     :placeholder="$t('a_search_categories')"
-                    class="w-full sm:w-80 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                    class="w-full sm:w-80 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                 />
             </div>
 
@@ -118,37 +118,37 @@ function deleteCategory(id) {
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_id') }}</th>
-                                <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_module') }}</th>
-                                <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_name_en_header') }}</th>
-                                <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_name_ar_header') }}</th>
-                                <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_services_count') }}</th>
-                                <th class="px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_display_order') }}</th>
-                                <th class="px-6 py-3 ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_actions') }}</th>
+                                <th class="px-4 md:px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_id') }}</th>
+                                <th class="px-4 md:px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_module') }}</th>
+                                <th class="px-4 md:px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_name_en_header') }}</th>
+                                <th class="px-4 md:px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_name_ar_header') }}</th>
+                                <th class="px-4 md:px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_services_count') }}</th>
+                                <th class="px-4 md:px-6 py-3 ltr:text-left rtl:ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_display_order') }}</th>
+                                <th class="px-4 md:px-6 py-3 ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_actions') }}</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
                             <tr v-for="category in categories.data" :key="category.id" class="hover:bg-gray-50">
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ category.id }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ category.id }}</td>
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                     <span
                                         class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium"
-                                        :class="category.module === 'dental' ? 'bg-cyan-50 text-cyan-700' : 'bg-purple-50 text-purple-700'"
+                                        :class="category.module === 'dental' ? 'bg-slate-50 text-[#1B365D]' : 'bg-slate-50 text-[#1B365D]'"
                                     >
                                         <svg v-if="category.module === 'dental'" class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342" /></svg>
                                         <svg v-else class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
                                         {{ category.module === 'dental' ? $t('a_dental') : $t('a_derma') }}
                                     </span>
                                 </td>
-                                <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ category.name_en }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-500" dir="rtl">{{ category.name_ar }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ category.services_count }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ category.display_order ?? '-' }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
+                                <td class="px-4 md:px-6 py-4 text-sm font-medium text-gray-900">{{ category.name_en }}</td>
+                                <td class="px-4 md:px-6 py-4 text-sm text-gray-500" dir="rtl">{{ category.name_ar }}</td>
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ category.services_count }}</td>
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ category.display_order ?? '-' }}</td>
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-right text-sm">
                                     <div class="flex items-center justify-end gap-1">
                                         <!-- View -->
                                         <Link :href="`/admin/service-categories/${category.id}`"
-                                              class="p-2 rounded-lg text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200"
+                                              class="p-2 rounded-lg text-gray-400 hover:text-[#1B365D] hover:bg-slate-50 transition-all duration-200"
                                               :title="$t('a_view_details')">
                                             <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -177,13 +177,13 @@ function deleteCategory(id) {
                                 </td>
                             </tr>
                             <tr v-if="!categories.data || categories.data.length === 0">
-                                <td colspan="7" class="px-6 py-8 text-center text-sm text-gray-500">{{ $t('a_no_service_categories_found') }}</td>
+                                <td colspan="7" class="px-4 md:px-6 py-8 text-center text-sm text-gray-500">{{ $t('a_no_service_categories_found') }}</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
 
-                <div v-if="categories.links && categories.links.length > 3" class="px-6 py-3 border-t border-gray-200 flex items-center justify-between">
+                <div v-if="categories.links && categories.links.length > 3" class="px-4 md:px-6 py-3 border-t border-gray-200 flex items-center justify-between">
                     <p class="text-sm text-gray-500">{{ $t('a_showing') }} {{ categories.from }} {{ $t('a_to') }} {{ categories.to }} {{ $t('a_of') }} {{ categories.total }} {{ $t('a_results') }}</p>
                     <nav class="flex space-x-1">
                         <template v-for="link in categories.links" :key="link.label">

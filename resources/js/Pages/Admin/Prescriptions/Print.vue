@@ -25,7 +25,7 @@ function printPage() {
 <template>
     <div class="print-page">
         <!-- Screen-only toolbar -->
-        <div class="no-print fixed top-0 left-0 right-0 bg-gray-800 text-white px-6 py-3 flex items-center justify-between z-50">
+        <div class="no-print fixed top-0 left-0 right-0 bg-gray-800 text-white px-4 md:px-6 py-3 flex items-center justify-between z-50">
             <span class="text-sm">Prescription Preview</span>
             <div class="flex space-x-3 rtl:space-x-reverse">
                 <button
@@ -40,7 +40,7 @@ function printPage() {
                 </button>
                 <a
                     :href="`/admin/prescriptions/${rx.id}/pdf`"
-                    class="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium bg-green-600 hover:bg-green-500 transition"
+                    class="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium bg-emerald-600 hover:bg-emerald-500 transition"
                 >
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -62,11 +62,11 @@ function printPage() {
             <!-- Clinic Header -->
             <div class="text-center border-b-2 pb-4 mb-6" style="border-color: #C4A265;">
                 <div class="flex items-center justify-center mb-2">
-                    <div class="w-16 h-16 rounded-full flex items-center justify-center text-white text-2xl font-bold mr-4" style="background-color: #C4A265;">
+                    <div class="w-16 h-16 rounded-full flex items-center justify-center text-white text-xl md:text-2xl font-bold mr-4" style="background-color: #C4A265;">
                         A
                     </div>
                     <div>
-                        <h1 class="text-3xl font-bold tracking-wide" style="color: #C4A265;">Doctorato Polyclinic</h1>
+                        <h1 class="text-2xl md:text-3xl font-bold tracking-wide" style="color: #C4A265;">Doctorato Polyclinic</h1>
                         <p class="text-sm text-gray-500">Doctorato Polyclinic</p>
                     </div>
                 </div>

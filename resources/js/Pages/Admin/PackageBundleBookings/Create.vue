@@ -316,7 +316,7 @@ function submit() {
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                         </svg>
                     </Link>
-                    <h1 class="text-2xl font-bold text-gray-800">{{ $t('a_new_bundle_booking') }}</h1>
+                    <h1 class="text-xl md:text-2xl font-bold text-gray-800">{{ $t('a_new_bundle_booking') }}</h1>
                 </div>
             </div>
 
@@ -372,7 +372,7 @@ function submit() {
                             @blur="setTimeout(() => showPatientDropdown = false, 200)"
                             type="text"
                             placeholder="Search patient by name, phone, or file number..."
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                         />
                         <div v-if="showPatientDropdown && filteredPatients.length > 0"
                              class="absolute z-20 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
@@ -468,7 +468,7 @@ function submit() {
                                 </div>
                                 <div class="text-right">
                                     <span class="font-semibold" style="color: #C4A265;">{{ formatCurrency(bs.bundle_price) }}</span>
-                                    <span v-if="Number(bs.discount_percentage) > 0" class="text-xs text-green-600 ml-2">-{{ bs.discount_percentage }}%</span>
+                                    <span v-if="Number(bs.discount_percentage) > 0" class="text-xs text-emerald-600 ml-2">-{{ bs.discount_percentage }}%</span>
                                 </div>
                             </div>
                         </div>
@@ -490,12 +490,12 @@ function submit() {
                                 <div class="flex items-center gap-3 mt-1 text-xs text-gray-500">
                                     <span>{{ sa.sessions_count }} {{ sa.sessions_count === 1 ? 'session' : 'sessions' }}</span>
                                     <span>{{ formatCurrency(sa.bundle_price) }}</span>
-                                    <span v-if="Number(sa.discount_percentage) > 0" class="text-green-600">-{{ sa.discount_percentage }}% off</span>
+                                    <span v-if="Number(sa.discount_percentage) > 0" class="text-emerald-600">-{{ sa.discount_percentage }}% off</span>
                                 </div>
                             </div>
                             <div class="w-full sm:w-64">
                                 <select v-model="sa.doctor_id"
-                                        class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                                        class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                                         :class="!sa.doctor_id ? 'text-gray-400' : 'text-gray-800'">
                                     <option :value="null" disabled>{{ $t('a_select_doctor') }}</option>
                                     <option v-for="doc in doctors" :key="doc.id" :value="doc.id">
@@ -546,7 +546,7 @@ function submit() {
                                     <label class="block text-xs font-medium text-gray-500 mb-1">Doctor</label>
                                     <select v-model="apt.doctor_id"
                                             @change="onAppointmentDoctorChange(sIndex, aIndex)"
-                                            class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent">
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent">
                                         <option v-for="doc in doctors" :key="doc.id" :value="doc.id">{{ doc.name_en }}</option>
                                     </select>
                                 </div>
@@ -634,7 +634,7 @@ function submit() {
                             </div>
                             <div class="text-right">
                                 <div class="text-lg font-bold" style="color: #C4A265;">{{ formatCurrency(selectedBundle?.total_price) }}</div>
-                                <div v-if="Number(selectedBundle?.savings) > 0" class="text-xs text-green-600">You save {{ formatCurrency(selectedBundle?.savings) }}</div>
+                                <div v-if="Number(selectedBundle?.savings) > 0" class="text-xs text-emerald-600">You save {{ formatCurrency(selectedBundle?.savings) }}</div>
                             </div>
                         </div>
                     </div>
@@ -673,7 +673,7 @@ function submit() {
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_notes_optional') }}</label>
                         <textarea v-model="notes" rows="3" placeholder="Any additional notes..."
-                                  class="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent resize-none"></textarea>
+                                  class="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent resize-none"></textarea>
                         <p v-if="errors.notes" class="text-red-500 text-xs mt-1">{{ errors.notes }}</p>
                     </div>
 
@@ -712,7 +712,7 @@ function submit() {
                 <button v-if="currentStep < totalSteps"
                         @click="nextStep"
                         :disabled="!canGoToStep(currentStep + 1)"
-                        class="inline-flex items-center px-6 py-2.5 rounded-lg text-sm font-medium text-white transition disabled:opacity-40 disabled:cursor-not-allowed"
+                        class="inline-flex items-center px-4 md:px-6 py-2.5 rounded-lg text-sm font-medium text-white transition disabled:opacity-40 disabled:cursor-not-allowed"
                         style="background-color: #C4A265;">
                     {{ $t('a_next') }}
                     <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -723,7 +723,7 @@ function submit() {
                 <button v-else
                         @click="submit"
                         :disabled="processing || !canGoToStep(4)"
-                        class="inline-flex items-center px-6 py-2.5 rounded-lg text-sm font-medium text-white transition disabled:opacity-40 disabled:cursor-not-allowed"
+                        class="inline-flex items-center px-4 md:px-6 py-2.5 rounded-lg text-sm font-medium text-white transition disabled:opacity-40 disabled:cursor-not-allowed"
                         style="background-color: #C4A265;">
                     <svg v-if="processing" class="w-4 h-4 mr-2 animate-spin" fill="none" viewBox="0 0 24 24">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />

@@ -31,9 +31,9 @@ const availableVariables = [
 ];
 
 const channelOptions = [
-    { value: 'whatsapp', label: 'WhatsApp', desc: 'Rich messaging', iconColor: 'text-green-500', bg: 'bg-green-50 border-green-200 ring-green-100', dotColor: 'bg-green-500' },
-    { value: 'sms', label: 'SMS', desc: 'Text messages', iconColor: 'text-blue-500', bg: 'bg-blue-50 border-blue-200 ring-blue-100', dotColor: 'bg-blue-500' },
-    { value: 'email', label: 'Email', desc: 'Email campaigns', iconColor: 'text-purple-500', bg: 'bg-purple-50 border-purple-200 ring-purple-100', dotColor: 'bg-purple-500' },
+    { value: 'whatsapp', label: 'WhatsApp', desc: 'Rich messaging', iconColor: 'text-emerald-500', bg: 'bg-emerald-50 border-emerald-200 ring-emerald-100', dotColor: 'bg-emerald-500' },
+    { value: 'sms', label: 'SMS', desc: 'Text messages', iconColor: 'text-[#1B365D]', bg: 'bg-slate-50 border-slate-200 ring-slate-100', dotColor: 'bg-[#1B365D]' },
+    { value: 'email', label: 'Email', desc: 'Email campaigns', iconColor: 'text-[#1B365D]', bg: 'bg-slate-50 border-slate-200 ring-slate-100', dotColor: 'bg-[#1B365D]' },
 ];
 
 const categoryLabels = {
@@ -92,7 +92,7 @@ function submit() {
                             <svg class="w-5 h-5 transition-transform duration-200 group-hover:ltr:-translate-x-0.5 group-hover:rtl:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
                         </Link>
                         <div>
-                            <h1 class="text-2xl font-bold text-gray-800">{{ $t('a_edit_template') }}</h1>
+                            <h1 class="text-xl md:text-2xl font-bold text-gray-800">{{ $t('a_edit_template') }}</h1>
                             <p class="text-sm text-gray-400 mt-0.5">{{ template.name }}</p>
                         </div>
                     </div>
@@ -129,7 +129,7 @@ function submit() {
                 <div class="lg:col-span-3 space-y-6">
                     <!-- Template Details Card -->
                     <div :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
-                        class="transition-all duration-500 delay-100 bg-white rounded-2xl shadow-sm border border-gray-100 p-8 relative overflow-hidden hover:shadow-md">
+                        class="transition-all duration-500 delay-100 bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-8 relative overflow-hidden hover:shadow-md">
                         <div class="absolute top-0 ltr:left-0 rtl:right-0 ltr:right-0 rtl:left-0 h-1 bg-gradient-to-r from-[#C4A265] via-[#D4B87A] to-[#C4A265]"></div>
                         <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-6">{{ $t('a_template_details') }}</h3>
 
@@ -146,7 +146,7 @@ function submit() {
                             <!-- Channel Selection -->
                             <div>
                                 <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">{{ $t('a_channel') }}<span class="text-red-400 ltr:ml-0.5 rtl:mr-0.5">*</span></label>
-                                <div class="grid grid-cols-3 gap-3">
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                                     <button v-for="ch in channelOptions" :key="ch.value" type="button"
                                         @click="form.channel = ch.value"
                                         :class="form.channel === ch.value ? `${ch.bg} ring-2 scale-[1.02]` : 'bg-gray-50/80 border-gray-200/80 hover:bg-gray-100 hover:scale-[1.01]'"
@@ -231,7 +231,7 @@ function submit() {
 
                     <!-- Message Content Card -->
                     <div :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
-                        class="transition-all duration-500 delay-200 bg-white rounded-2xl shadow-sm border border-gray-100 p-8 hover:shadow-md">
+                        class="transition-all duration-500 delay-200 bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-8 hover:shadow-md">
                         <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-6">{{ $t('a_message_content') }}</h3>
 
                         <!-- Language Tabs with Sliding Indicator -->
@@ -310,7 +310,7 @@ function submit() {
                                         </p>
                                         <div class="flex items-center justify-end gap-1 mt-1">
                                             <span class="text-[10px] text-gray-500">{{ new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }) }}</span>
-                                            <svg class="w-4 h-4 text-blue-500" fill="currentColor" viewBox="0 0 24 24"><path d="M18 7l-1.41-1.41-6.34 6.34 1.41 1.41L18 7zm4.24-1.41L11.66 16.17 7.48 12l-1.41 1.41L11.66 19l12-12-1.42-1.41zM.41 13.41L6 19l1.41-1.41L1.83 12 .41 13.41z"/></svg>
+                                            <svg class="w-4 h-4 text-[#1B365D]" fill="currentColor" viewBox="0 0 24 24"><path d="M18 7l-1.41-1.41-6.34 6.34 1.41 1.41L18 7zm4.24-1.41L11.66 16.17 7.48 12l-1.41 1.41L11.66 19l12-12-1.42-1.41zM.41 13.41L6 19l1.41-1.41L1.83 12 .41 13.41z"/></svg>
                                         </div>
                                     </div>
                                 </div>
@@ -319,7 +319,7 @@ function submit() {
                             <!-- SMS Preview -->
                             <div v-else-if="form.channel === 'sms'" class="bg-gray-50 rounded-xl p-4 border border-gray-200" :key="'sms-' + previewKey">
                                 <div class="max-w-[85%] ltr:ml-auto rtl:mr-auto">
-                                    <div class="bg-blue-500 rounded-2xl ltr:rounded-tr-sm rtl:rounded-tl-sm px-4 py-2.5 shadow-sm">
+                                    <div class="bg-[#1B365D] rounded-2xl ltr:rounded-tr-sm rtl:rounded-tl-sm px-4 py-2.5 shadow-sm">
                                         <p class="text-sm text-white leading-relaxed whitespace-pre-wrap" :dir="activeTab === 'ar' ? 'rtl' : 'ltr'">
                                             {{ activeTab === 'en' ? form.body_en : form.body_ar }}
                                         </p>
@@ -336,7 +336,7 @@ function submit() {
                                     <div class="flex items-center gap-1.5 mb-2">
                                         <span class="w-3 h-3 rounded-full bg-red-400"></span>
                                         <span class="w-3 h-3 rounded-full bg-amber-400"></span>
-                                        <span class="w-3 h-3 rounded-full bg-green-400"></span>
+                                        <span class="w-3 h-3 rounded-full bg-emerald-400"></span>
                                     </div>
                                     <div class="space-y-1">
                                         <p class="text-[10px] text-gray-400"><span class="font-semibold text-gray-500">From:</span> Doctorato Polyclinic</p>
@@ -360,7 +360,7 @@ function submit() {
                 <div class="lg:col-span-2 space-y-6">
                     <!-- Variables Panel -->
                     <div :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
-                        class="transition-all duration-500 delay-150 bg-white rounded-2xl shadow-sm border border-gray-100 p-8 hover:shadow-md">
+                        class="transition-all duration-500 delay-150 bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-8 hover:shadow-md">
                         <div class="flex items-center justify-between mb-5">
                             <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider">{{ $t('a_available_variables') }}</h3>
                             <span class="text-[10px] font-semibold text-[#C4A265] bg-[#C4A265]/10 px-2 py-0.5 rounded-full">
@@ -385,11 +385,11 @@ function submit() {
 
                     <!-- Actions Card -->
                     <div :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
-                        class="transition-all duration-500 delay-200 bg-white rounded-2xl shadow-sm border border-gray-100 p-8 hover:shadow-md">
+                        class="transition-all duration-500 delay-200 bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-8 hover:shadow-md">
                         <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-5">Actions</h3>
                         <div class="space-y-3">
                             <button type="submit" :disabled="form.processing"
-                                class="w-full px-6 py-3.5 rounded-xl text-white text-sm font-semibold transition-all duration-200 shadow-lg shadow-[#C4A265]/20 hover:shadow-xl hover:shadow-[#C4A265]/30 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-lg flex items-center justify-center gap-2"
+                                class="w-full px-4 md:px-6 py-3.5 rounded-xl text-white text-sm font-semibold transition-all duration-200 shadow-lg shadow-[#C4A265]/20 hover:shadow-xl hover:shadow-[#C4A265]/30 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-lg flex items-center justify-center gap-2"
                                 style="background: linear-gradient(135deg, #C4A265, #D4B87A);">
                                 <svg v-if="form.processing" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
                                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
@@ -399,7 +399,7 @@ function submit() {
                                 {{ $t('a_update_template') }}
                             </button>
                             <Link href="/admin/templates"
-                                class="block w-full px-6 py-3 text-center rounded-xl text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50 border border-gray-200 transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0">
+                                class="block w-full px-4 md:px-6 py-3 text-center rounded-xl text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50 border border-gray-200 transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0">
                                 {{ $t('a_cancel') }}
                             </Link>
                         </div>

@@ -94,7 +94,7 @@ function runCleanup() {
                     <button
                         @click="runDatabaseBackup"
                         :disabled="loading.db"
-                        class="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow hover:bg-blue-700 disabled:opacity-50 transition"
+                        class="inline-flex items-center gap-2 rounded-lg bg-[#1B365D] px-4 py-2 text-sm font-medium text-white shadow hover:bg-[#1B365D] disabled:opacity-50 transition"
                     >
                         <svg v-if="loading.db" class="h-4 w-4 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
@@ -124,7 +124,7 @@ function runCleanup() {
         </template>
 
         <!-- Flash Messages -->
-        <div v-if="$page.props.flash?.success" class="mb-4 rounded-lg bg-green-50 border border-green-200 p-4 text-green-800">
+        <div v-if="$page.props.flash?.success" class="mb-4 rounded-lg bg-emerald-50 border border-emerald-200 p-4 text-emerald-800">
             {{ $page.props.flash.success }}
         </div>
         <div v-if="$page.props.flash?.error" class="mb-4 rounded-lg bg-red-50 border border-red-200 p-4 text-red-800">
@@ -132,10 +132,10 @@ function runCleanup() {
         </div>
 
         <!-- Info Card -->
-        <div class="mb-6 rounded-xl bg-white p-6 shadow-sm border">
+        <div class="mb-6 rounded-xl bg-white p-4 md:p-6 shadow-sm border">
             <div class="flex items-start gap-3">
-                <div class="flex-shrink-0 rounded-lg bg-blue-100 p-2">
-                    <svg class="h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="flex-shrink-0 rounded-lg bg-slate-100 p-2">
+                    <svg class="h-6 w-6 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                 </div>
@@ -153,7 +153,7 @@ function runCleanup() {
 
         <!-- Backups Table -->
         <div class="rounded-xl bg-white shadow-sm border overflow-hidden">
-            <div class="flex items-center justify-between border-b px-6 py-4">
+            <div class="flex items-center justify-between border-b px-4 md:px-6 py-4">
                 <h3 class="font-semibold text-gray-800">{{ isRtl ? 'النسخ الاحتياطية المتوفرة' : 'Available Backups' }}</h3>
                 <button
                     @click="runCleanup"
@@ -164,7 +164,7 @@ function runCleanup() {
                 </button>
             </div>
 
-            <div v-if="props.backups.length === 0" class="px-6 py-12 text-center text-gray-500">
+            <div v-if="props.backups.length === 0" class="px-4 md:px-6 py-12 text-center text-gray-500">
                 <svg class="mx-auto h-12 w-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
                 </svg>
@@ -175,15 +175,15 @@ function runCleanup() {
             <table v-else class="w-full text-sm">
                 <thead class="bg-gray-50 text-gray-600">
                     <tr>
-                        <th class="px-6 py-3 font-medium" :class="isRtl ? 'text-right' : 'text-left'">{{ isRtl ? 'اسم الملف' : 'Filename' }}</th>
-                        <th class="px-6 py-3 font-medium" :class="isRtl ? 'text-right' : 'text-left'">{{ isRtl ? 'الحجم' : 'Size' }}</th>
-                        <th class="px-6 py-3 font-medium" :class="isRtl ? 'text-right' : 'text-left'">{{ isRtl ? 'التاريخ' : 'Date' }}</th>
-                        <th class="px-6 py-3 text-center font-medium">{{ isRtl ? 'إجراءات' : 'Actions' }}</th>
+                        <th class="px-4 md:px-6 py-3 font-medium" :class="isRtl ? 'text-right' : 'text-left'">{{ isRtl ? 'اسم الملف' : 'Filename' }}</th>
+                        <th class="px-4 md:px-6 py-3 font-medium" :class="isRtl ? 'text-right' : 'text-left'">{{ isRtl ? 'الحجم' : 'Size' }}</th>
+                        <th class="px-4 md:px-6 py-3 font-medium" :class="isRtl ? 'text-right' : 'text-left'">{{ isRtl ? 'التاريخ' : 'Date' }}</th>
+                        <th class="px-4 md:px-6 py-3 text-center font-medium">{{ isRtl ? 'إجراءات' : 'Actions' }}</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y">
                     <tr v-for="backup in props.backups" :key="backup.path" class="hover:bg-gray-50 transition">
-                        <td class="px-6 py-3">
+                        <td class="px-4 md:px-6 py-3">
                             <div class="flex items-center gap-2">
                                 <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
@@ -191,14 +191,14 @@ function runCleanup() {
                                 <span class="font-mono text-xs">{{ backup.filename }}</span>
                             </div>
                         </td>
-                        <td class="px-6 py-3 text-gray-600">{{ backup.size }}</td>
-                        <td class="px-6 py-3 text-gray-600" dir="ltr">{{ backup.date }}</td>
-                        <td class="px-6 py-3 text-center">
+                        <td class="px-4 md:px-6 py-3 text-gray-600">{{ backup.size }}</td>
+                        <td class="px-4 md:px-6 py-3 text-gray-600" dir="ltr">{{ backup.date }}</td>
+                        <td class="px-4 md:px-6 py-3 text-center">
                             <div class="flex items-center justify-center gap-2">
                                 <button
                                     @click="downloadBackup(backup.path)"
                                     :disabled="loading.download === backup.path"
-                                    class="rounded-lg bg-blue-50 px-3 py-1 text-xs font-medium text-blue-700 hover:bg-blue-100 disabled:opacity-50 transition"
+                                    class="rounded-lg bg-slate-50 px-3 py-1 text-xs font-medium text-[#1B365D] hover:bg-slate-100 disabled:opacity-50 transition"
                                 >
                                     {{ loading.download === backup.path ? '...' : (isRtl ? 'تحميل' : 'Download') }}
                                 </button>

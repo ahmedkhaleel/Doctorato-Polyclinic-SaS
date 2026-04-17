@@ -46,7 +46,7 @@ function submit() { form.post('/admin/commissions'); }
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
                 </Link>
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-900 tracking-tight">{{ $t('a_add_commission') }}</h1>
+                    <h1 class="text-xl md:text-2xl font-bold text-gray-900 tracking-tight">{{ $t('a_add_commission') }}</h1>
                     <p class="text-xs text-gray-400 mt-0.5">{{ $t('a_record_commission_description') }}</p>
                 </div>
             </div>
@@ -164,7 +164,7 @@ function submit() { form.post('/admin/commissions'); }
                         <div class="absolute top-1/2 ltr:right-8 rtl:left-8 w-16 h-16 rounded-full bg-white/5 -translate-y-1/2"></div>
                         <div class="relative">
                             <p class="text-sm text-white/70 font-semibold uppercase tracking-wider">{{ $t('a_calculated_commission') }}</p>
-                            <p class="text-4xl font-bold text-white mt-3 tracking-tight font-mono">{{ formatCurrency(calculatedCommission) }}</p>
+                            <p class="text-2xl md:text-4xl font-bold text-white mt-3 tracking-tight font-mono">{{ formatCurrency(calculatedCommission) }}</p>
                             <div class="mt-5 pt-4 border-t border-white/20 space-y-2">
                                 <div class="flex items-center justify-between text-sm">
                                     <span class="text-white/50">{{ $t('a_type') }}</span>
@@ -184,7 +184,7 @@ function submit() { form.post('/admin/commissions'); }
 
                     <!-- Selected Lead Info -->
                     <div :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
-                        class="transition-all duration-500 delay-200 ease-out bg-white rounded-2xl shadow-sm border border-gray-100 p-8 relative overflow-hidden">
+                        class="transition-all duration-500 delay-200 ease-out bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-8 relative overflow-hidden">
                         <div class="absolute top-0 ltr:left-0 rtl:right-0 ltr:right-0 rtl:left-0 h-1" style="background: linear-gradient(90deg, #C4A265, #D4B87A, #C4A265);"></div>
                         <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">{{ $t('a_selected_lead') }}</h3>
                         <div v-if="selectedLead" class="flex items-center gap-4">
@@ -209,19 +209,19 @@ function submit() { form.post('/admin/commissions'); }
 
                     <!-- Actions -->
                     <div :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
-                        class="transition-all duration-500 delay-[250ms] ease-out bg-white rounded-2xl shadow-sm border border-gray-100 p-8 flex flex-col justify-between">
+                        class="transition-all duration-500 delay-[250ms] ease-out bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-8 flex flex-col justify-between">
                         <div>
                             <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">{{ $t('a_actions') }}</h3>
                             <p class="text-xs text-gray-400 mb-6">Review the details and submit when ready.</p>
                         </div>
                         <div class="space-y-3">
                             <button type="submit" :disabled="form.processing"
-                                class="w-full px-6 py-3.5 rounded-xl text-white text-sm font-semibold transition-all duration-300 shadow-lg shadow-[#C4A265]/25 hover:shadow-xl hover:shadow-[#C4A265]/35 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-lg flex items-center justify-center gap-2"
+                                class="w-full px-4 md:px-6 py-3.5 rounded-xl text-white text-sm font-semibold transition-all duration-300 shadow-lg shadow-[#C4A265]/25 hover:shadow-xl hover:shadow-[#C4A265]/35 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-lg flex items-center justify-center gap-2"
                                 style="background: linear-gradient(135deg, #C4A265, #D4B87A);">
                                 <svg v-if="form.processing" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
                                 <svg v-else class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>{{ $t('a_create_commission') }}</button>
                             <Link href="/admin/commissions"
-                                class="block w-full px-6 py-3 text-center rounded-xl text-sm font-semibold text-gray-500 hover:text-gray-700 hover:bg-gray-50 border border-gray-200 transition-all duration-200">{{ $t('a_cancel') }}</Link>
+                                class="block w-full px-4 md:px-6 py-3 text-center rounded-xl text-sm font-semibold text-gray-500 hover:text-gray-700 hover:bg-gray-50 border border-gray-200 transition-all duration-200">{{ $t('a_cancel') }}</Link>
                         </div>
                     </div>
                 </div>

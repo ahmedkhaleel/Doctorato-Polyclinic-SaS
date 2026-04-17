@@ -83,7 +83,7 @@ const totalRevenue = computed(() =>
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
                 </Link>
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-900">{{ $t('a_service_analytics') }}</h1>
+                    <h1 class="text-xl md:text-2xl font-bold text-gray-900">{{ $t('a_service_analytics') }}</h1>
                     <p class="text-sm text-gray-500 mt-0.5">{{ $t('a_service_analytics_subtitle') }}</p>
                 </div>
             </div>
@@ -147,7 +147,7 @@ const totalRevenue = computed(() =>
 
             <!-- Services Table -->
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
-                <div class="px-6 py-5 border-b border-gray-100">
+                <div class="px-4 md:px-6 py-5 border-b border-gray-100">
                     <h2 class="text-[15px] font-semibold text-gray-900">{{ $t('a_service_details') }}</h2>
                     <p class="text-xs text-gray-400 mt-0.5">{{ $t('a_service_details_desc') }}</p>
                 </div>
@@ -155,19 +155,19 @@ const totalRevenue = computed(() =>
                     <table class="min-w-full">
                         <thead>
                             <tr class="bg-gray-50/50">
-                                <th class="px-6 py-3 ltr:text-left rtl:text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_service_name') }}</th>
-                                <th class="px-6 py-3 text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_usage_count') }}</th>
-                                <th class="px-6 py-3 text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_revenue') }}</th>
+                                <th class="px-4 md:px-6 py-3 ltr:text-left rtl:text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_service_name') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_usage_count') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_revenue') }}</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100">
                             <tr v-for="service in serviceRevenue" :key="service.id" class="hover:bg-gray-50/50 transition-colors duration-150">
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">{{ service.name_en }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-900 font-medium">{{ service.visit_count || 0 }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-semibold text-[#C4A265]">{{ formatCurrency(service.total_revenue) }}</td>
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">{{ service.name_en }}</td>
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-right text-gray-900 font-medium">{{ service.visit_count || 0 }}</td>
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-right font-semibold text-[#C4A265]">{{ formatCurrency(service.total_revenue) }}</td>
                             </tr>
                             <tr v-if="!serviceRevenue?.length">
-                                <td colspan="3" class="px-6 py-16 text-center">
+                                <td colspan="3" class="px-4 md:px-6 py-16 text-center">
                                     <div class="flex flex-col items-center">
                                         <div class="w-16 h-16 rounded-2xl bg-gray-50 flex items-center justify-center mb-3">
                                             <svg class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>
@@ -179,9 +179,9 @@ const totalRevenue = computed(() =>
                         </tbody>
                         <tfoot v-if="serviceRevenue?.length" class="bg-gray-50/80 border-t border-gray-200">
                             <tr class="font-semibold">
-                                <td class="px-6 py-3.5 text-sm text-gray-700">{{ $t('a_totals') }}</td>
-                                <td class="px-6 py-3.5 text-sm text-right text-gray-700">{{ totalUsage }}</td>
-                                <td class="px-6 py-3.5 text-sm text-right text-[#C4A265] font-bold">{{ formatCurrency(totalRevenue) }}</td>
+                                <td class="px-4 md:px-6 py-3.5 text-sm text-gray-700">{{ $t('a_totals') }}</td>
+                                <td class="px-4 md:px-6 py-3.5 text-sm text-right text-gray-700">{{ totalUsage }}</td>
+                                <td class="px-4 md:px-6 py-3.5 text-sm text-right text-[#C4A265] font-bold">{{ formatCurrency(totalRevenue) }}</td>
                             </tr>
                         </tfoot>
                     </table>

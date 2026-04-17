@@ -46,15 +46,15 @@ const totalPerms = computed(() => {
 
 /* ── Role color mapping ──────────────────────────── */
 const roleColors = {
-    super_admin:     { bg: 'bg-purple-500/10', text: 'text-purple-600', border: 'border-purple-200', gradient: 'from-purple-500 to-violet-600', dot: 'bg-purple-500' },
-    admin:           { bg: 'bg-blue-500/10', text: 'text-blue-600', border: 'border-blue-200', gradient: 'from-blue-500 to-indigo-600', dot: 'bg-blue-500' },
+    super_admin:     { bg: 'bg-[#1B365D]/10', text: 'text-[#1B365D]', border: 'border-slate-200', gradient: 'from-[#1B365D] to-[#1B365D]', dot: 'bg-[#1B365D]' },
+    admin:           { bg: 'bg-[#1B365D]/10', text: 'text-[#1B365D]', border: 'border-slate-200', gradient: 'from-[#1B365D] to-[#1B365D]', dot: 'bg-[#1B365D]' },
     doctor:          { bg: 'bg-emerald-500/10', text: 'text-emerald-600', border: 'border-emerald-200', gradient: 'from-emerald-500 to-teal-600', dot: 'bg-emerald-500' },
-    secretary:       { bg: 'bg-sky-500/10', text: 'text-sky-600', border: 'border-sky-200', gradient: 'from-sky-500 to-cyan-600', dot: 'bg-sky-500' },
-    receptionist:    { bg: 'bg-cyan-500/10', text: 'text-cyan-600', border: 'border-cyan-200', gradient: 'from-cyan-500 to-teal-500', dot: 'bg-cyan-500' },
-    accountant:      { bg: 'bg-green-500/10', text: 'text-green-600', border: 'border-green-200', gradient: 'from-green-500 to-emerald-600', dot: 'bg-green-500' },
-    marketing:       { bg: 'bg-amber-500/10', text: 'text-amber-600', border: 'border-amber-200', gradient: 'from-amber-500 to-orange-500', dot: 'bg-amber-500' },
-    webmaster:       { bg: 'bg-indigo-500/10', text: 'text-indigo-600', border: 'border-indigo-200', gradient: 'from-indigo-500 to-blue-600', dot: 'bg-indigo-500' },
-    admin_manager:   { bg: 'bg-rose-500/10', text: 'text-rose-600', border: 'border-rose-200', gradient: 'from-rose-500 to-pink-600', dot: 'bg-rose-500' },
+    secretary:       { bg: 'bg-[#1B365D]/10', text: 'text-[#1B365D]', border: 'border-slate-200', gradient: 'from-[#1B365D] to-[#1B365D]', dot: 'bg-[#1B365D]' },
+    receptionist:    { bg: 'bg-[#1B365D]/10', text: 'text-[#1B365D]', border: 'border-slate-200', gradient: 'from-[#1B365D] to-teal-500', dot: 'bg-[#1B365D]' },
+    accountant:      { bg: 'bg-emerald-500/10', text: 'text-emerald-600', border: 'border-emerald-200', gradient: 'from-emerald-500 to-emerald-600', dot: 'bg-emerald-500' },
+    marketing:       { bg: 'bg-amber-500/10', text: 'text-amber-600', border: 'border-amber-200', gradient: 'from-amber-500 to-[#C4A265]', dot: 'bg-amber-500' },
+    webmaster:       { bg: 'bg-[#1B365D]/10', text: 'text-[#1B365D]', border: 'border-slate-200', gradient: 'from-[#1B365D] to-[#1B365D]', dot: 'bg-[#1B365D]' },
+    admin_manager:   { bg: 'bg-[#C4A265]/10', text: 'text-[#C4A265]', border: 'border-amber-200', gradient: 'from-[#C4A265] to-[#C4A265]', dot: 'bg-[#C4A265]' },
 };
 
 const defaultColor = { bg: 'bg-gray-500/10', text: 'text-gray-600', border: 'border-gray-200', gradient: 'from-gray-500 to-gray-600', dot: 'bg-gray-500' };
@@ -119,7 +119,7 @@ function deleteRole(id) {
                         </svg>
                     </div>
                     <div>
-                        <h1 class="text-2xl font-bold text-gray-900">{{ $t('a_roles_permissions') }}</h1>
+                        <h1 class="text-xl md:text-2xl font-bold text-gray-900">{{ $t('a_roles_permissions') }}</h1>
                         <p class="text-sm text-gray-500 mt-0.5">{{ isRtl ? 'إدارة الأدوار وصلاحيات المستخدمين' : 'Manage roles and user permissions' }}</p>
                     </div>
                 </div>
@@ -148,25 +148,25 @@ function deleteRole(id) {
                         <svg class="w-5 h-5 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
                     </div>
                     <div>
-                        <p class="text-2xl font-bold text-gray-900">{{ roles?.length || 0 }}</p>
+                        <p class="text-xl md:text-2xl font-bold text-gray-900">{{ roles?.length || 0 }}</p>
                         <p class="text-[11px] text-gray-400 font-medium">{{ isRtl ? 'إجمالي الأدوار' : 'Total Roles' }}</p>
                     </div>
                 </div>
                 <div class="bg-white rounded-2xl border border-gray-100 p-4 flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center">
-                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                    <div class="w-10 h-10 rounded-xl bg-[#1B365D]/10 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
                     </div>
                     <div>
-                        <p class="text-2xl font-bold text-gray-900">{{ totalUsers }}</p>
+                        <p class="text-xl md:text-2xl font-bold text-gray-900">{{ totalUsers }}</p>
                         <p class="text-[11px] text-gray-400 font-medium">{{ isRtl ? 'إجمالي المستخدمين' : 'Total Users' }}</p>
                     </div>
                 </div>
                 <div class="bg-white rounded-2xl border border-gray-100 p-4 flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center">
-                        <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+                    <div class="w-10 h-10 rounded-xl bg-[#1B365D]/10 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
                     </div>
                     <div>
-                        <p class="text-2xl font-bold text-gray-900">{{ systemRoles.length + customRoles.length > 0 ? (roles || []).filter(r => r.is_system).length : 0 }}</p>
+                        <p class="text-xl md:text-2xl font-bold text-gray-900">{{ systemRoles.length + customRoles.length > 0 ? (roles || []).filter(r => r.is_system).length : 0 }}</p>
                         <p class="text-[11px] text-gray-400 font-medium">{{ isRtl ? 'أدوار النظام' : 'System Roles' }}</p>
                     </div>
                 </div>
@@ -175,7 +175,7 @@ function deleteRole(id) {
                         <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" /></svg>
                     </div>
                     <div>
-                        <p class="text-2xl font-bold text-gray-900">{{ (roles || []).filter(r => !r.is_system).length }}</p>
+                        <p class="text-xl md:text-2xl font-bold text-gray-900">{{ (roles || []).filter(r => !r.is_system).length }}</p>
                         <p class="text-[11px] text-gray-400 font-medium">{{ isRtl ? 'أدوار مخصصة' : 'Custom Roles' }}</p>
                     </div>
                 </div>
@@ -205,7 +205,7 @@ function deleteRole(id) {
                     :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
                     :style="{ transitionDelay: '250ms' }"
                 >
-                    <div class="w-1.5 h-5 rounded-full bg-purple-500"></div>
+                    <div class="w-1.5 h-5 rounded-full bg-[#1B365D]"></div>
                     <h2 class="text-sm font-bold text-gray-700 uppercase tracking-wider">{{ isRtl ? 'أدوار النظام' : 'System Roles' }}</h2>
                     <span class="text-[10px] text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full font-medium">{{ systemRoles.length }}</span>
                 </div>
@@ -238,7 +238,7 @@ function deleteRole(id) {
                                         <p class="text-[11px] text-gray-400 mt-0.5" :dir="isRtl ? 'ltr' : 'rtl'">{{ isRtl ? role.display_name_en : role.display_name_ar }}</p>
                                     </div>
                                 </div>
-                                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-purple-50 text-purple-600 border border-purple-100">
+                                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-slate-50 text-[#1B365D] border border-slate-100">
                                     {{ isRtl ? 'نظام' : 'System' }}
                                 </span>
                             </div>
@@ -250,8 +250,8 @@ function deleteRole(id) {
                                     {{ getUsersLabel(role.users_count) }}
                                 </div>
                                 <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-medium"
-                                    :class="role.permissions?.includes('*') ? 'bg-purple-50 text-purple-600' : 'bg-gray-50 text-gray-600'">
-                                    <svg class="w-3.5 h-3.5" :class="role.permissions?.includes('*') ? 'text-purple-400' : 'text-gray-400'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" /></svg>
+                                    :class="role.permissions?.includes('*') ? 'bg-slate-50 text-[#1B365D]' : 'bg-gray-50 text-gray-600'">
+                                    <svg class="w-3.5 h-3.5" :class="role.permissions?.includes('*') ? 'text-slate-400' : 'text-gray-400'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" /></svg>
                                     {{ getPermissionLabel(role) }}
                                 </div>
                             </div>

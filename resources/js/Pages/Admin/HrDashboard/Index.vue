@@ -111,8 +111,8 @@ const salaryCards = computed(() => [
         tKey: 'a_total_slips',
         value: props.salaryOverview?.slips_count ?? 0,
         borderColor: 'border-l-blue-500',
-        iconBg: 'bg-blue-50',
-        iconColor: 'text-blue-500',
+        iconBg: 'bg-slate-50',
+        iconColor: 'text-[#1B365D]',
         icon: 'document',
     },
 ]);
@@ -148,8 +148,8 @@ const attendanceCards = computed(() => [
         tKey: 'a_on_leave',
         value: props.todayAttendance?.on_leave ?? 0,
         borderColor: 'border-l-blue-500',
-        iconBg: 'bg-blue-50',
-        iconColor: 'text-blue-500',
+        iconBg: 'bg-slate-50',
+        iconColor: 'text-[#1B365D]',
         icon: 'calendar',
     },
 ]);
@@ -202,7 +202,7 @@ function daysRemainingColor(days) {
             <!-- ── Page Header ──────────────────────────────────── -->
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-900">{{ $t('a_hr_dashboard') }}</h1>
+                    <h1 class="text-xl md:text-2xl font-bold text-gray-900">{{ $t('a_hr_dashboard') }}</h1>
                     <p class="text-sm text-gray-500 mt-1">{{ $t('a_hr_dashboard_subtitle') }}</p>
                 </div>
                 <div class="flex items-center gap-3 flex-wrap">
@@ -241,7 +241,7 @@ function daysRemainingColor(days) {
                     <div class="flex items-start justify-between">
                         <div>
                             <p class="text-[13px] font-medium text-gray-500">{{ $t(card.tKey) }}</p>
-                            <p class="text-3xl font-bold text-gray-900 mt-2">{{ card.value }}</p>
+                            <p class="text-2xl md:text-3xl font-bold text-gray-900 mt-2">{{ card.value }}</p>
                         </div>
                         <div :class="card.iconBg" class="w-12 h-12 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                             <!-- Users -->
@@ -270,7 +270,7 @@ function daysRemainingColor(days) {
                         <div class="flex items-start justify-between">
                             <div>
                                 <p class="text-[13px] font-medium text-gray-500">{{ $t(card.tKey) }}</p>
-                                <p class="text-2xl font-bold text-gray-900 mt-2">{{ card.value }}</p>
+                                <p class="text-xl md:text-2xl font-bold text-gray-900 mt-2">{{ card.value }}</p>
                             </div>
                             <div :class="card.iconBg" class="w-12 h-12 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                                 <!-- Currency -->
@@ -300,7 +300,7 @@ function daysRemainingColor(days) {
                         <div class="flex items-start justify-between">
                             <div>
                                 <p class="text-[13px] font-medium text-gray-500">{{ $t(card.tKey) }}</p>
-                                <p class="text-3xl font-bold text-gray-900 mt-2">{{ card.value }}</p>
+                                <p class="text-2xl md:text-3xl font-bold text-gray-900 mt-2">{{ card.value }}</p>
                             </div>
                             <div :class="card.iconBg" class="w-12 h-12 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                                 <!-- Check Circle -->
@@ -396,7 +396,7 @@ function daysRemainingColor(days) {
 
                 <!-- Pending Leave Requests Table -->
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
-                    <div class="px-6 py-5 border-b border-gray-100 flex items-center justify-between">
+                    <div class="px-4 md:px-6 py-5 border-b border-gray-100 flex items-center justify-between">
                         <div>
                             <h2 class="text-[15px] font-semibold text-gray-900">{{ $t('a_pending_leave_requests') }}</h2>
                             <p class="text-xs text-gray-400 mt-0.5">{{ $t('a_awaiting_approval') }}</p>
@@ -413,10 +413,10 @@ function daysRemainingColor(days) {
                         <table class="min-w-full">
                             <thead>
                                 <tr class="bg-gray-50/50">
-                                    <th class="px-6 py-3 ltr:text-left rtl:text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_employee') }}</th>
-                                    <th class="px-6 py-3 ltr:text-left rtl:text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_type') }}</th>
-                                    <th class="px-6 py-3 ltr:text-left rtl:text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_dates') }}</th>
-                                    <th class="px-6 py-3 ltr:text-left rtl:text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_status') }}</th>
+                                    <th class="px-4 md:px-6 py-3 ltr:text-left rtl:text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_employee') }}</th>
+                                    <th class="px-4 md:px-6 py-3 ltr:text-left rtl:text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_type') }}</th>
+                                    <th class="px-4 md:px-6 py-3 ltr:text-left rtl:text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_dates') }}</th>
+                                    <th class="px-4 md:px-6 py-3 ltr:text-left rtl:text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_status') }}</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100">
@@ -425,16 +425,16 @@ function daysRemainingColor(days) {
                                     :key="leave.id"
                                     class="hover:bg-gray-50/50 transition-colors duration-150"
                                 >
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">
+                                    <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">
                                         {{ leave.user?.name ?? '-' }}
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 capitalize">
+                                    <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-600 capitalize">
                                         {{ $t(leaveTypeKeys[leave.leave_type]) || leave.leave_type?.replace(/_/g, ' ') }}
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                                    <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                                         {{ formatDate(leave.start_date) }} - {{ formatDate(leave.end_date) }}
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
+                                    <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                         <span
                                             :class="[getLeaveStatusStyle(leave.status).bg, getLeaveStatusStyle(leave.status).text]"
                                             class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold capitalize"
@@ -445,7 +445,7 @@ function daysRemainingColor(days) {
                                     </td>
                                 </tr>
                                 <tr v-if="!pendingLeaves || pendingLeaves.length === 0">
-                                    <td colspan="4" class="px-6 py-16 text-center">
+                                    <td colspan="4" class="px-4 md:px-6 py-16 text-center">
                                         <div class="flex flex-col items-center">
                                             <div class="w-16 h-16 rounded-2xl bg-emerald-50 flex items-center justify-center mb-3">
                                                 <svg class="w-8 h-8 text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -462,7 +462,7 @@ function daysRemainingColor(days) {
 
                 <!-- Expiring Contracts Table -->
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
-                    <div class="px-6 py-5 border-b border-gray-100 flex items-center justify-between">
+                    <div class="px-4 md:px-6 py-5 border-b border-gray-100 flex items-center justify-between">
                         <div>
                             <h2 class="text-[15px] font-semibold text-gray-900">{{ $t('a_expiring_contracts') }}</h2>
                             <p class="text-xs text-gray-400 mt-0.5">{{ $t('a_contracts_nearing_end') }}</p>
@@ -479,10 +479,10 @@ function daysRemainingColor(days) {
                         <table class="min-w-full">
                             <thead>
                                 <tr class="bg-gray-50/50">
-                                    <th class="px-6 py-3 ltr:text-left rtl:text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_employee') }}</th>
-                                    <th class="px-6 py-3 ltr:text-left rtl:text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_department') }}</th>
-                                    <th class="px-6 py-3 ltr:text-left rtl:text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_end_date') }}</th>
-                                    <th class="px-6 py-3 ltr:text-left rtl:text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_remaining') }}</th>
+                                    <th class="px-4 md:px-6 py-3 ltr:text-left rtl:text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_employee') }}</th>
+                                    <th class="px-4 md:px-6 py-3 ltr:text-left rtl:text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_department') }}</th>
+                                    <th class="px-4 md:px-6 py-3 ltr:text-left rtl:text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_end_date') }}</th>
+                                    <th class="px-4 md:px-6 py-3 ltr:text-left rtl:text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_remaining') }}</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100">
@@ -491,16 +491,16 @@ function daysRemainingColor(days) {
                                     :key="contract.id"
                                     class="hover:bg-gray-50/50 transition-colors duration-150"
                                 >
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">
+                                    <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">
                                         {{ contract.user?.name ?? '-' }}
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                                    <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                                         {{ contract.department?.name_en ?? '-' }}
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                                    <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                                         {{ formatDate(contract.contract_end_date) }}
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
+                                    <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                         <span
                                             :class="daysRemainingColor(daysUntil(contract.contract_end_date))"
                                             class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold"
@@ -510,7 +510,7 @@ function daysRemainingColor(days) {
                                     </td>
                                 </tr>
                                 <tr v-if="!expiringContracts || expiringContracts.length === 0">
-                                    <td colspan="4" class="px-6 py-16 text-center">
+                                    <td colspan="4" class="px-4 md:px-6 py-16 text-center">
                                         <div class="flex flex-col items-center">
                                             <div class="w-16 h-16 rounded-2xl bg-emerald-50 flex items-center justify-center mb-3">
                                                 <svg class="w-8 h-8 text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -537,7 +537,7 @@ function daysRemainingColor(days) {
                     </div>
                     <div class="flex-1">
                         <p class="text-[13px] font-medium text-gray-500">{{ $t('a_pending_salary_advances') }}</p>
-                        <p class="text-2xl font-bold text-gray-900 mt-0.5">{{ pendingAdvances ?? 0 }}</p>
+                        <p class="text-xl md:text-2xl font-bold text-gray-900 mt-0.5">{{ pendingAdvances ?? 0 }}</p>
                     </div>
                     <div :class="['flex items-center gap-1.5 text-[#C4A265] opacity-0 group-hover:opacity-100 transition-opacity duration-200']">
                         <span class="text-sm font-semibold">{{ $t('a_view_all') }}</span>

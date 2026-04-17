@@ -56,15 +56,15 @@ function actionColor(action) {
     if (a === 'login') return 'bg-emerald-50 text-emerald-700 border border-emerald-200';
     if (a === 'logout') return 'bg-slate-50 text-slate-700 border border-slate-200';
     if (a === 'failed_login') return 'bg-red-50 text-red-700 border border-red-200';
-    if (a === 'started') return 'bg-cyan-50 text-cyan-700 border border-cyan-200';
-    if (a === 'completed') return 'bg-green-50 text-green-700 border border-green-200';
-    if (a === 'cancelled') return 'bg-orange-50 text-orange-700 border border-orange-200';
-    if (a === 'password_changed') return 'bg-rose-50 text-rose-700 border border-rose-200';
-    if (a === 'photo_uploaded') return 'bg-violet-50 text-violet-700 border border-violet-200';
-    if (a === 'duplicated') return 'bg-indigo-50 text-indigo-700 border border-indigo-200';
+    if (a === 'started') return 'bg-slate-50 text-[#1B365D] border border-slate-200';
+    if (a === 'completed') return 'bg-emerald-50 text-emerald-700 border border-emerald-200';
+    if (a === 'cancelled') return 'bg-amber-50 text-[#C4A265] border border-amber-200';
+    if (a === 'password_changed') return 'bg-amber-50 text-[#C4A265] border border-amber-200';
+    if (a === 'photo_uploaded') return 'bg-slate-50 text-[#1B365D] border border-slate-200';
+    if (a === 'duplicated') return 'bg-slate-50 text-[#1B365D] border border-slate-200';
     if (a === 'updated_diagnosis') return 'bg-teal-50 text-teal-700 border border-teal-200';
     if (a.includes('created') || a.includes('create') || a.includes('store')) return 'bg-emerald-50 text-emerald-700 border border-emerald-200';
-    if (a.includes('updated') || a.includes('update')) return 'bg-blue-50 text-blue-700 border border-blue-200';
+    if (a.includes('updated') || a.includes('update')) return 'bg-slate-50 text-[#1B365D] border border-slate-200';
     if (a.includes('deleted') || a.includes('delete') || a.includes('destroy')) return 'bg-red-50 text-red-700 border border-red-200';
     if (a.includes('export') || a.includes('download')) return 'bg-amber-50 text-amber-700 border border-amber-200';
     return 'bg-gray-50 text-gray-700 border border-gray-200';
@@ -76,7 +76,7 @@ function panelColor(panel) {
         case 'admin': return 'bg-[#C4A265]/10 text-[#C4A265] border border-[#C4A265]/30';
         case 'secretary': return 'bg-teal-50 text-teal-700 border border-teal-200';
         case 'doctor': return 'bg-amber-50 text-amber-700 border border-amber-200';
-        case 'webmaster': return 'bg-purple-50 text-purple-700 border border-purple-200';
+        case 'webmaster': return 'bg-slate-50 text-[#1B365D] border border-slate-200';
         default: return 'bg-gray-50 text-gray-700 border border-gray-200';
     }
 }
@@ -106,7 +106,7 @@ function exportUrl() {
             <!-- Header -->
             <div class="flex items-center justify-between">
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-900">{{ $t('a_activity_logs') }}</h1>
+                    <h1 class="text-xl md:text-2xl font-bold text-gray-900">{{ $t('a_activity_logs') }}</h1>
                     <p class="text-sm text-gray-500 mt-1">{{ $t('a_activity_logs_desc') }}</p>
                 </div>
                 <a

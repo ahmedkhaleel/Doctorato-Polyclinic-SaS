@@ -37,20 +37,20 @@ const maxPeakCount = computed(() => Math.max(...(props.peakHours?.map(h => h.cou
 
 function waitColor(minutes) {
     if (minutes <= 10) return 'text-emerald-600';
-    if (minutes <= 20) return 'text-cyan-600';
+    if (minutes <= 20) return 'text-[#1B365D]';
     if (minutes <= 30) return 'text-amber-600';
     return 'text-red-600';
 }
 
 function waitBg(minutes) {
     if (minutes <= 10) return 'bg-emerald-500';
-    if (minutes <= 20) return 'bg-cyan-500';
+    if (minutes <= 20) return 'bg-[#1B365D]';
     if (minutes <= 30) return 'bg-amber-500';
     return 'bg-red-500';
 }
 
 function distColor(index) {
-    const colors = ['bg-emerald-400', 'bg-cyan-400', 'bg-blue-400', 'bg-amber-400', 'bg-orange-400', 'bg-red-400'];
+    const colors = ['bg-emerald-400', 'bg-slate-400', 'bg-slate-400', 'bg-amber-400', 'bg-amber-400', 'bg-red-400'];
     return colors[index] || 'bg-gray-400';
 }
 
@@ -73,40 +73,40 @@ function formatHourAr(h) {
             <!-- Header + Date Filter -->
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-900">{{ isRtl ? 'تحليلات أداء الانتظار' : 'Queue Performance Analytics' }}</h1>
+                    <h1 class="text-xl md:text-2xl font-bold text-gray-900">{{ isRtl ? 'تحليلات أداء الانتظار' : 'Queue Performance Analytics' }}</h1>
                     <p class="text-sm text-gray-500 mt-1">{{ isRtl ? 'أوقات الانتظار وأداء الطابور والساعات المزدحمة' : 'Wait times, queue performance, and peak hours' }}</p>
                 </div>
                 <div class="flex items-center gap-2">
                     <input v-model="dateFrom" type="date"
-                        class="rounded-lg border-gray-300 text-sm focus:ring-cyan-500 focus:border-cyan-500" />
+                        class="rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]" />
                     <span class="text-gray-400">→</span>
                     <input v-model="dateTo" type="date"
-                        class="rounded-lg border-gray-300 text-sm focus:ring-cyan-500 focus:border-cyan-500" />
+                        class="rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]" />
                 </div>
             </div>
 
             <!-- KPI Cards -->
             <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
                 <div class="bg-white rounded-xl border border-gray-200 p-4">
-                    <div class="text-2xl font-bold text-gray-900">{{ stats.total_visits }}</div>
+                    <div class="text-xl md:text-2xl font-bold text-gray-900">{{ stats.total_visits }}</div>
                     <div class="text-xs text-gray-500 mt-1">{{ isRtl ? 'إجمالي الزيارات' : 'Total Visits' }}</div>
                 </div>
                 <div class="bg-white rounded-xl border p-4"
                     :class="stats.avg_wait <= 15 ? 'border-emerald-200' : stats.avg_wait <= 30 ? 'border-amber-200' : 'border-red-200'">
-                    <div class="text-2xl font-bold" :class="waitColor(stats.avg_wait)">
+                    <div class="text-xl md:text-2xl font-bold" :class="waitColor(stats.avg_wait)">
                         {{ stats.avg_wait }} <span class="text-sm font-normal text-gray-400">{{ isRtl ? 'دقيقة' : 'min' }}</span>
                     </div>
                     <div class="text-xs text-gray-500 mt-1">{{ isRtl ? 'متوسط الانتظار' : 'Avg Wait Time' }}</div>
                 </div>
-                <div class="bg-white rounded-xl border border-cyan-200 p-4">
-                    <div class="text-2xl font-bold text-cyan-600">
+                <div class="bg-white rounded-xl border border-slate-200 p-4">
+                    <div class="text-xl md:text-2xl font-bold text-[#1B365D]">
                         {{ stats.avg_service }} <span class="text-sm font-normal text-gray-400">{{ isRtl ? 'دقيقة' : 'min' }}</span>
                     </div>
                     <div class="text-xs text-gray-500 mt-1">{{ isRtl ? 'متوسط مدة الخدمة' : 'Avg Service Duration' }}</div>
                 </div>
                 <div class="bg-white rounded-xl border p-4"
                     :class="stats.no_show_rate < 5 ? 'border-emerald-200' : stats.no_show_rate < 15 ? 'border-amber-200' : 'border-red-200'">
-                    <div class="text-2xl font-bold"
+                    <div class="text-xl md:text-2xl font-bold"
                         :class="stats.no_show_rate < 5 ? 'text-emerald-600' : stats.no_show_rate < 15 ? 'text-amber-600' : 'text-red-600'">
                         {{ stats.no_show_rate }}%
                     </div>
@@ -114,7 +114,7 @@ function formatHourAr(h) {
                 </div>
                 <div class="bg-white rounded-xl border p-4"
                     :class="stats.long_wait_pct < 10 ? 'border-emerald-200' : 'border-red-200'">
-                    <div class="text-2xl font-bold"
+                    <div class="text-xl md:text-2xl font-bold"
                         :class="stats.long_wait_pct < 10 ? 'text-emerald-600' : 'text-red-600'">
                         {{ stats.long_wait_pct }}%
                     </div>
@@ -149,7 +149,7 @@ function formatHourAr(h) {
                             <div class="w-full flex justify-center" style="height: 120px;">
                                 <div class="w-full max-w-[24px] flex flex-col justify-end">
                                     <div class="rounded-t transition-all duration-500"
-                                        :class="h.avg_wait > 30 ? 'bg-red-400' : h.avg_wait > 15 ? 'bg-amber-400' : 'bg-cyan-400'"
+                                        :class="h.avg_wait > 30 ? 'bg-red-400' : h.avg_wait > 15 ? 'bg-amber-400' : 'bg-slate-400'"
                                         :style="{ height: `${(h.count / maxPeakCount) * 100}%`, minHeight: h.count > 0 ? '4px' : '0' }">
                                     </div>
                                 </div>
@@ -161,7 +161,7 @@ function formatHourAr(h) {
                     </div>
                     <p v-else class="text-sm text-gray-400 text-center py-8">{{ isRtl ? 'لا توجد بيانات' : 'No data' }}</p>
                     <div class="flex items-center gap-4 mt-3 justify-center text-xs">
-                        <div class="flex items-center gap-1"><div class="w-3 h-3 rounded bg-cyan-400"></div>{{ isRtl ? '≤ 15 دقيقة' : '≤ 15 min' }}</div>
+                        <div class="flex items-center gap-1"><div class="w-3 h-3 rounded bg-slate-400"></div>{{ isRtl ? '≤ 15 دقيقة' : '≤ 15 min' }}</div>
                         <div class="flex items-center gap-1"><div class="w-3 h-3 rounded bg-amber-400"></div>{{ isRtl ? '16-30 دقيقة' : '16-30 min' }}</div>
                         <div class="flex items-center gap-1"><div class="w-3 h-3 rounded bg-red-400"></div>{{ isRtl ? '> 30 دقيقة' : '> 30 min' }}</div>
                     </div>
@@ -208,7 +208,7 @@ function formatHourAr(h) {
                             <tr v-for="(doc, i) in byDoctor" :key="i" class="hover:bg-gray-50/50">
                                 <td class="px-3 py-3">
                                     <div class="flex items-center gap-2">
-                                        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-400 to-cyan-600 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                                        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-slate-400 to-[#1B365D] flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
                                             {{ (isRtl ? doc.name_ar : doc.name_en)?.charAt(0) || 'D' }}
                                         </div>
                                         <span class="text-sm font-medium text-gray-900">{{ isRtl ? doc.name_ar : doc.name_en }}</span>

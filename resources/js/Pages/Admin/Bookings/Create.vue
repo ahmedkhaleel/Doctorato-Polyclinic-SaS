@@ -622,7 +622,7 @@ function getServiceLabel(id) {
                     </svg>
                 </Link>
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-900">{{ $t('a_new_booking') }}</h1>
+                    <h1 class="text-xl md:text-2xl font-bold text-gray-900">{{ $t('a_new_booking') }}</h1>
                     <p class="text-sm text-gray-500 mt-1">{{ $t('a_create_booking_subtitle') }}</p>
                 </div>
             </div>
@@ -675,7 +675,7 @@ function getServiceLabel(id) {
                             :class="[
                                 'p-3 rounded-xl border-2 transition-all text-start',
                                 bookingType === 'dental_consultation'
-                                    ? 'border-cyan-500 bg-cyan-50/50'
+                                    ? 'border-[#1B365D] bg-slate-50/50'
                                     : 'border-gray-200 hover:border-gray-300'
                             ]"
                         >
@@ -688,7 +688,7 @@ function getServiceLabel(id) {
                             :class="[
                                 'p-3 rounded-xl border-2 transition-all text-start',
                                 bookingType === 'dental_service'
-                                    ? 'border-cyan-500 bg-cyan-50/50'
+                                    ? 'border-[#1B365D] bg-slate-50/50'
                                     : 'border-gray-200 hover:border-gray-300'
                             ]"
                         >
@@ -701,7 +701,7 @@ function getServiceLabel(id) {
                             :class="[
                                 'p-3 rounded-xl border-2 transition-all text-start',
                                 bookingType === 'pediatric_consultation'
-                                    ? 'border-green-500 bg-green-50/50'
+                                    ? 'border-emerald-500 bg-emerald-50/50'
                                     : 'border-gray-200 hover:border-gray-300'
                             ]"
                         >
@@ -714,7 +714,7 @@ function getServiceLabel(id) {
                             :class="[
                                 'p-3 rounded-xl border-2 transition-all text-start',
                                 bookingType === 'pediatric_service'
-                                    ? 'border-green-500 bg-green-50/50'
+                                    ? 'border-emerald-500 bg-emerald-50/50'
                                     : 'border-gray-200 hover:border-gray-300'
                             ]"
                         >
@@ -810,7 +810,7 @@ function getServiceLabel(id) {
                                     @blur="setTimeout(() => showPatientDropdown = false, 200)"
                                     type="text"
                                     :placeholder="$t('a_search_patient_placeholder')"
-                                    class="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                                    class="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                                 />
                                 <button
                                     v-if="selectedPatient"
@@ -918,7 +918,7 @@ function getServiceLabel(id) {
                                         <label class="block text-xs font-medium text-gray-500 mb-1">{{ $t('a_doctor') }} <span class="text-red-500">*</span></label>
                                         <button type="button" @click.stop="toggleDropdown('cons_doc')"
                                             class="w-full flex items-center justify-between px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm transition-all"
-                                            :class="openDropdown === 'cons_doc' ? 'ring-2 ring-yellow-200 border-transparent' : 'hover:border-gray-300'">
+                                            :class="openDropdown === 'cons_doc' ? 'ring-2 ring-amber-200 border-transparent' : 'hover:border-gray-300'">
                                             <span :class="serviceRows[0].doctor_id ? 'text-gray-800' : 'text-gray-400'">
                                                 {{ serviceRows[0].doctor_id ? getDoctorLabel(serviceRows[0].doctor_id) : $t('a_select_doctor') }}
                                             </span>
@@ -927,7 +927,7 @@ function getServiceLabel(id) {
                                         <Transition enter-active-class="transition duration-150" enter-from-class="opacity-0 -translate-y-1" enter-to-class="opacity-100 translate-y-0" leave-active-class="transition duration-100" leave-from-class="opacity-100" leave-to-class="opacity-0">
                                             <div v-if="openDropdown === 'cons_doc'" class="absolute z-40 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden">
                                                 <div class="p-2 border-b border-gray-100">
-                                                    <input type="text" v-model="ddSearch['cons_doc']" class="bk-dd-search-cons_doc w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-yellow-200 focus:border-transparent" :placeholder="isRtl ? 'بحث عن طبيب...' : 'Search doctor...'" />
+                                                    <input type="text" v-model="ddSearch['cons_doc']" class="bk-dd-search-cons_doc w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-200 focus:border-transparent" :placeholder="isRtl ? 'بحث عن طبيب...' : 'Search doctor...'" />
                                                 </div>
                                                 <div class="max-h-48 overflow-y-auto">
                                                     <button v-for="d in searchedDoctors('cons_doc')" :key="d.id" type="button"
@@ -954,7 +954,7 @@ function getServiceLabel(id) {
                                             type="number"
                                             min="0"
                                             step="0.01"
-                                            class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                                            class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                                         />
                                     </div>
 
@@ -966,7 +966,7 @@ function getServiceLabel(id) {
                                             type="number"
                                             min="0"
                                             step="0.01"
-                                            class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                                            class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                                         />
                                     </div>
 
@@ -986,7 +986,7 @@ function getServiceLabel(id) {
                                         v-model="serviceRows[0].notes"
                                         type="text"
                                         placeholder="Consultation notes..."
-                                        class="w-full px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                                        class="w-full px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                                     />
                                 </div>
                             </div>
@@ -1031,7 +1031,7 @@ function getServiceLabel(id) {
                                             <label class="block text-xs font-medium text-gray-500 mb-1">{{ $t('a_service') }} <span class="text-red-500">*</span></label>
                                             <button type="button" @click.stop="toggleDropdown('svc_' + index)"
                                                 class="w-full flex items-center justify-between px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm transition-all"
-                                                :class="openDropdown === 'svc_' + index ? 'ring-2 ring-yellow-200 border-transparent' : 'hover:border-gray-300'">
+                                                :class="openDropdown === 'svc_' + index ? 'ring-2 ring-amber-200 border-transparent' : 'hover:border-gray-300'">
                                                 <span class="truncate" :class="row.service_id ? 'text-gray-800' : 'text-gray-400'">
                                                     {{ row.service_id ? getServiceLabel(row.service_id) : $t('a_select_service') }}
                                                 </span>
@@ -1040,7 +1040,7 @@ function getServiceLabel(id) {
                                             <Transition enter-active-class="transition duration-150" enter-from-class="opacity-0 -translate-y-1" enter-to-class="opacity-100 translate-y-0" leave-active-class="transition duration-100" leave-from-class="opacity-100" leave-to-class="opacity-0">
                                                 <div v-if="openDropdown === 'svc_' + index" class="absolute z-40 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden">
                                                     <div class="p-2 border-b border-gray-100">
-                                                        <input type="text" v-model="ddSearch['svc_' + index]" :class="'bk-dd-search-svc_' + index" class="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-yellow-200 focus:border-transparent" :placeholder="isRtl ? 'بحث عن خدمة...' : 'Search service...'" />
+                                                        <input type="text" v-model="ddSearch['svc_' + index]" :class="'bk-dd-search-svc_' + index" class="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-200 focus:border-transparent" :placeholder="isRtl ? 'بحث عن خدمة...' : 'Search service...'" />
                                                     </div>
                                                     <div class="max-h-56 overflow-y-auto">
                                                         <template v-if="searchedServiceCategories('svc_' + index).length">
@@ -1081,7 +1081,7 @@ function getServiceLabel(id) {
                                             <label class="block text-xs font-medium text-gray-500 mb-1">{{ $t('a_doctor') }} <span class="text-red-500">*</span></label>
                                             <button type="button" @click.stop="toggleDropdown('doc_' + index)"
                                                 class="w-full flex items-center justify-between px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm transition-all"
-                                                :class="openDropdown === 'doc_' + index ? 'ring-2 ring-yellow-200 border-transparent' : 'hover:border-gray-300'">
+                                                :class="openDropdown === 'doc_' + index ? 'ring-2 ring-amber-200 border-transparent' : 'hover:border-gray-300'">
                                                 <span :class="row.doctor_id ? 'text-gray-800' : 'text-gray-400'">
                                                     {{ row.doctor_id ? getDoctorLabel(row.doctor_id) : $t('a_select_doctor') }}
                                                 </span>
@@ -1090,7 +1090,7 @@ function getServiceLabel(id) {
                                             <Transition enter-active-class="transition duration-150" enter-from-class="opacity-0 -translate-y-1" enter-to-class="opacity-100 translate-y-0" leave-active-class="transition duration-100" leave-from-class="opacity-100" leave-to-class="opacity-0">
                                                 <div v-if="openDropdown === 'doc_' + index" class="absolute z-40 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden">
                                                     <div class="p-2 border-b border-gray-100">
-                                                        <input type="text" v-model="ddSearch['doc_' + index]" :class="'bk-dd-search-doc_' + index" class="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-yellow-200 focus:border-transparent" :placeholder="isRtl ? 'بحث عن طبيب...' : 'Search doctor...'" />
+                                                        <input type="text" v-model="ddSearch['doc_' + index]" :class="'bk-dd-search-doc_' + index" class="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-200 focus:border-transparent" :placeholder="isRtl ? 'بحث عن طبيب...' : 'Search doctor...'" />
                                                     </div>
                                                     <div class="max-h-48 overflow-y-auto">
                                                         <button v-for="d in searchedDoctors('doc_' + index)" :key="d.id" type="button"
@@ -1116,7 +1116,7 @@ function getServiceLabel(id) {
                                                 v-model.number="row.sessions_count"
                                                 type="number"
                                                 min="1"
-                                                class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                                                class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                                             />
                                         </div>
 
@@ -1128,7 +1128,7 @@ function getServiceLabel(id) {
                                                 type="number"
                                                 min="0"
                                                 step="0.01"
-                                                class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                                                class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                                             />
                                         </div>
 
@@ -1140,7 +1140,7 @@ function getServiceLabel(id) {
                                                 type="number"
                                                 min="0"
                                                 step="0.01"
-                                                class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                                                class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                                             />
                                         </div>
 
@@ -1160,7 +1160,7 @@ function getServiceLabel(id) {
                                             v-model="row.notes"
                                             type="text"
                                             :placeholder="$t('a_service_notes_placeholder')"
-                                            class="w-full px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                                            class="w-full px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                                         />
                                     </div>
                                 </div>
@@ -1215,7 +1215,7 @@ function getServiceLabel(id) {
                                             <label class="block text-xs font-medium text-gray-500 mb-1">{{ $t('a_doctor') }}</label>
                                             <button type="button" @click.stop="toggleDropdown('apt_doc_' + sIndex + '_' + aIndex)"
                                                 class="w-full flex items-center justify-between px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm transition-all"
-                                                :class="openDropdown === 'apt_doc_' + sIndex + '_' + aIndex ? 'ring-2 ring-yellow-200 border-transparent' : 'hover:border-gray-300'">
+                                                :class="openDropdown === 'apt_doc_' + sIndex + '_' + aIndex ? 'ring-2 ring-amber-200 border-transparent' : 'hover:border-gray-300'">
                                                 <span :class="apt.doctor_id ? 'text-gray-800' : 'text-gray-400'">
                                                     {{ apt.doctor_id ? getDoctorLabel(apt.doctor_id) : $t('a_select_doctor') }}
                                                 </span>
@@ -1224,7 +1224,7 @@ function getServiceLabel(id) {
                                             <Transition enter-active-class="transition duration-150" enter-from-class="opacity-0 -translate-y-1" enter-to-class="opacity-100 translate-y-0" leave-active-class="transition duration-100" leave-from-class="opacity-100" leave-to-class="opacity-0">
                                                 <div v-if="openDropdown === 'apt_doc_' + sIndex + '_' + aIndex" class="absolute z-40 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden">
                                                     <div class="p-2 border-b border-gray-100">
-                                                        <input type="text" v-model="ddSearch['apt_doc_' + sIndex + '_' + aIndex]" :class="'bk-dd-search-apt_doc_' + sIndex + '_' + aIndex" class="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-yellow-200 focus:border-transparent" :placeholder="isRtl ? 'بحث عن طبيب...' : 'Search doctor...'" />
+                                                        <input type="text" v-model="ddSearch['apt_doc_' + sIndex + '_' + aIndex]" :class="'bk-dd-search-apt_doc_' + sIndex + '_' + aIndex" class="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-200 focus:border-transparent" :placeholder="isRtl ? 'بحث عن طبيب...' : 'Search doctor...'" />
                                                     </div>
                                                     <div class="max-h-48 overflow-y-auto">
                                                         <button v-for="d in searchedDoctors('apt_doc_' + sIndex + '_' + aIndex)" :key="d.id" type="button"
@@ -1414,7 +1414,7 @@ function getServiceLabel(id) {
                                 v-model="notes"
                                 rows="3"
                                 placeholder="Optional booking notes..."
-                                class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                                class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                             ></textarea>
                         </div>
 
@@ -1465,7 +1465,7 @@ function getServiceLabel(id) {
                             type="button"
                             @click="nextStep"
                             :disabled="!canProceed(currentStep)"
-                            class="inline-flex items-center gap-2 px-6 py-2.5 text-white rounded-xl text-sm font-semibold hover:opacity-90 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                            class="inline-flex items-center gap-2 px-4 md:px-6 py-2.5 text-white rounded-xl text-sm font-semibold hover:opacity-90 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                             style="background-color: #C4A265;"
                         >
                             {{ $t('a_next') }}
@@ -1478,7 +1478,7 @@ function getServiceLabel(id) {
                             type="button"
                             @click="submit"
                             :disabled="processing"
-                            class="inline-flex items-center gap-2 px-6 py-2.5 text-white rounded-xl text-sm font-semibold hover:opacity-90 transition-all shadow-lg disabled:opacity-50"
+                            class="inline-flex items-center gap-2 px-4 md:px-6 py-2.5 text-white rounded-xl text-sm font-semibold hover:opacity-90 transition-all shadow-lg disabled:opacity-50"
                             style="background-color: #C4A265;"
                         >
                             <svg v-if="processing" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">

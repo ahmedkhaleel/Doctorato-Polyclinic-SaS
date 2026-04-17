@@ -102,13 +102,13 @@ const expectedColumns = [
                 class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-700 ease-out"
             >
                 <div class="h-1 bg-gradient-to-r from-[#C4A265] via-[#D4B87A] to-[#C4A265]"></div>
-                <div class="px-6 py-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div class="px-4 md:px-6 py-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div class="flex items-center gap-4">
                         <div class="w-12 h-12 rounded-2xl flex items-center justify-center shadow-sm" style="background: linear-gradient(135deg, #C4A265, #D4B87A);">
                             <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
                         </div>
                         <div>
-                            <h1 class="text-2xl font-bold text-gray-900">{{ $t('a_import_leads_from_csv') }}</h1>
+                            <h1 class="text-xl md:text-2xl font-bold text-gray-900">{{ $t('a_import_leads_from_csv') }}</h1>
                             <p class="text-sm text-gray-500 mt-0.5">{{ $t('a_import_leads_description') }}</p>
                         </div>
                     </div>
@@ -130,7 +130,7 @@ const expectedColumns = [
                     style="transition-delay: 100ms;"
                 >
                     <div class="h-1 bg-gradient-to-r from-[#C4A265] via-[#D4B87A] to-[#C4A265]"></div>
-                    <div class="px-6 py-4 border-b border-gray-100 flex items-center gap-3">
+                    <div class="px-4 md:px-6 py-4 border-b border-gray-100 flex items-center gap-3">
                         <div class="w-8 h-8 rounded-xl bg-gray-100 flex items-center justify-center">
                             <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
                         </div>
@@ -200,7 +200,7 @@ const expectedColumns = [
                     style="transition-delay: 200ms;"
                 >
                     <div class="h-1 bg-gradient-to-r from-[#C4A265] via-[#D4B87A] to-[#C4A265]"></div>
-                    <div class="px-6 py-4 border-b border-gray-100 flex items-center gap-3">
+                    <div class="px-4 md:px-6 py-4 border-b border-gray-100 flex items-center gap-3">
                         <div class="w-8 h-8 rounded-xl bg-gray-100 flex items-center justify-center">
                             <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                         </div>
@@ -214,8 +214,8 @@ const expectedColumns = [
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                             <div>
                                 <label class="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
-                                    <div class="w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center">
-                                        <svg class="w-3.5 h-3.5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
+                                    <div class="w-7 h-7 rounded-lg bg-slate-50 flex items-center justify-center">
+                                        <svg class="w-3.5 h-3.5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
                                     </div>{{ $t('a_default_lead_source') }}</label>
                                 <select v-model="form.lead_source_id" class="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] bg-gray-50/50 transition-all duration-200">
                                     <option value="">{{ $t('a_none') }}</option>
@@ -225,8 +225,8 @@ const expectedColumns = [
                             </div>
                             <div>
                                 <label class="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
-                                    <div class="w-7 h-7 rounded-lg bg-purple-50 flex items-center justify-center">
-                                        <svg class="w-3.5 h-3.5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" /></svg>
+                                    <div class="w-7 h-7 rounded-lg bg-slate-50 flex items-center justify-center">
+                                        <svg class="w-3.5 h-3.5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" /></svg>
                                     </div>{{ $t('a_default_campaign') }}</label>
                                 <select v-model="form.campaign_id" class="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] bg-gray-50/50 transition-all duration-200">
                                     <option value="">{{ $t('a_none') }}</option>
@@ -273,7 +273,7 @@ const expectedColumns = [
                     style="transition-delay: 300ms;"
                 >
                     <div class="h-1 bg-gradient-to-r from-[#C4A265] via-[#D4B87A] to-[#C4A265]"></div>
-                    <div class="px-6 py-4 border-b border-gray-100 flex items-center gap-3">
+                    <div class="px-4 md:px-6 py-4 border-b border-gray-100 flex items-center gap-3">
                         <div class="w-8 h-8 rounded-xl bg-gray-100 flex items-center justify-center">
                             <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" /></svg>
                         </div>
@@ -296,15 +296,15 @@ const expectedColumns = [
                             </div>
                         </div>
 
-                        <div class="mt-5 bg-blue-50/50 rounded-xl p-4 border border-blue-100/60">
+                        <div class="mt-5 bg-slate-50/50 rounded-xl p-4 border border-slate-100/60">
                             <div class="flex items-start gap-3">
-                                <div class="w-7 h-7 rounded-lg bg-blue-100 flex items-center justify-center shrink-0 mt-0.5">
-                                    <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                <div class="w-7 h-7 rounded-lg bg-slate-100 flex items-center justify-center shrink-0 mt-0.5">
+                                    <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                 </div>
                                 <div>
-                                    <p class="text-xs font-semibold text-blue-800 mb-1.5">{{ $t('a_additional_notes') }}</p>
-                                    <ul class="text-[11px] text-blue-700 space-y-1">
-                                        <li>-- Alternative column names accepted: <code class="bg-blue-100 px-1 py-0.5 rounded text-blue-800 font-semibold">name</code>, <code class="bg-blue-100 px-1 py-0.5 rounded text-blue-800 font-semibold">mobile</code>, <code class="bg-blue-100 px-1 py-0.5 rounded text-blue-800 font-semibold">e-mail</code>, <code class="bg-blue-100 px-1 py-0.5 rounded text-blue-800 font-semibold">phone2</code></li>
+                                    <p class="text-xs font-semibold text-[#1B365D] mb-1.5">{{ $t('a_additional_notes') }}</p>
+                                    <ul class="text-[11px] text-[#1B365D] space-y-1">
+                                        <li>-- Alternative column names accepted: <code class="bg-slate-100 px-1 py-0.5 rounded text-[#1B365D] font-semibold">name</code>, <code class="bg-slate-100 px-1 py-0.5 rounded text-[#1B365D] font-semibold">mobile</code>, <code class="bg-slate-100 px-1 py-0.5 rounded text-[#1B365D] font-semibold">e-mail</code>, <code class="bg-slate-100 px-1 py-0.5 rounded text-[#1B365D] font-semibold">phone2</code></li>
                                         <li>-- Duplicate detection matches by phone number or email address</li>
                                         <li>-- Lead scoring rules will be automatically applied to each imported lead</li>
                                     </ul>
@@ -320,7 +320,7 @@ const expectedColumns = [
                     class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-700 ease-out"
                     style="transition-delay: 400ms;"
                 >
-                    <div class="px-6 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <div class="px-4 md:px-6 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                         <div class="flex items-center gap-3">
                             <div class="w-8 h-8 rounded-xl flex items-center justify-center" :class="form.file ? 'bg-emerald-50' : 'bg-gray-50'">
                                 <svg v-if="form.file" class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
@@ -336,7 +336,7 @@ const expectedColumns = [
                             <button
                                 type="submit"
                                 :disabled="form.processing || !form.file"
-                                class="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-white text-sm font-semibold transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+                                class="inline-flex items-center gap-2 px-4 md:px-6 py-2.5 rounded-xl text-white text-sm font-semibold transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
                                 style="background: linear-gradient(135deg, #C4A265, #D4B87A);"
                             >
                                 <svg v-if="form.processing" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>

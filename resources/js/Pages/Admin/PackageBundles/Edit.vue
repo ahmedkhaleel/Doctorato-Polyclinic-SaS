@@ -128,11 +128,11 @@ function submit() {
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
                         Back to Bundles
                     </Link>
-                    <h1 class="text-2xl font-bold text-gray-800 mt-1">{{ $t('a_edit_bundle') }}</h1>
+                    <h1 class="text-xl md:text-2xl font-bold text-gray-800 mt-1">{{ $t('a_edit_bundle') }}</h1>
                 </div>
                 <div class="flex items-center gap-2">
-                    <span v-if="form.is_active" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-green-50 text-green-700 border border-green-200">
-                        <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+                    <span v-if="form.is_active" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                         Active
                     </span>
                     <span v-else class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-gray-50 text-gray-500 border border-gray-200">
@@ -147,18 +147,18 @@ function submit() {
                 <div class="lg:col-span-2 space-y-6">
 
                     <!-- Names -->
-                    <div class="bg-white rounded-lg shadow-sm p-6 space-y-5">
+                    <div class="bg-white rounded-lg shadow-sm p-4 md:p-6 space-y-5">
                         <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wider">{{ $t('a_bundle_information') }}</h3>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_name_en') }} *</label>
-                                <input v-model="form.name_en" type="text" placeholder="e.g. Bride Glow Package" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent transition" />
+                                <input v-model="form.name_en" type="text" placeholder="e.g. Bride Glow Package" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent transition" />
                                 <p v-if="form.errors.name_en" class="mt-1 text-sm text-red-600">{{ form.errors.name_en }}</p>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_name_ar') }} *</label>
-                                <input v-model="form.name_ar" type="text" dir="rtl" placeholder="مثال: باقة عروس متالقة" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent transition" />
+                                <input v-model="form.name_ar" type="text" dir="rtl" placeholder="مثال: باقة عروس متالقة" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent transition" />
                                 <p v-if="form.errors.name_ar" class="mt-1 text-sm text-red-600">{{ form.errors.name_ar }}</p>
                             </div>
                         </div>
@@ -166,12 +166,12 @@ function submit() {
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_description_en') }}</label>
-                                <textarea v-model="form.description_en" rows="4" :placeholder="$t('a_bundle_desc_placeholder')" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent transition"></textarea>
+                                <textarea v-model="form.description_en" rows="4" :placeholder="$t('a_bundle_desc_placeholder')" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent transition"></textarea>
                                 <p v-if="form.errors.description_en" class="mt-1 text-sm text-red-600">{{ form.errors.description_en }}</p>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_description_ar') }}</label>
-                                <textarea v-model="form.description_ar" rows="4" dir="rtl" placeholder="اكتب وصف الباقة..." class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent transition"></textarea>
+                                <textarea v-model="form.description_ar" rows="4" dir="rtl" placeholder="اكتب وصف الباقة..." class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent transition"></textarea>
                                 <p v-if="form.errors.description_ar" class="mt-1 text-sm text-red-600">{{ form.errors.description_ar }}</p>
                             </div>
                         </div>
@@ -230,7 +230,7 @@ function submit() {
                                         <select
                                             v-model="item.service_id"
                                             @change="onServiceChange(index)"
-                                            class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent transition"
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent transition"
                                         >
                                             <option value="">Select service...</option>
                                             <option v-for="svc in availableServices(index)" :key="svc.id" :value="svc.id">
@@ -247,7 +247,7 @@ function submit() {
                                             type="number"
                                             min="1"
                                             @change="recalcBundlePrice(index)"
-                                            class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent transition"
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent transition"
                                         />
                                     </div>
 
@@ -261,7 +261,7 @@ function submit() {
                                             max="100"
                                             step="0.01"
                                             @input="recalcBundlePrice(index)"
-                                            class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent transition"
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent transition"
                                         />
                                     </div>
 
@@ -273,7 +273,7 @@ function submit() {
                                             type="number"
                                             step="0.01"
                                             min="0"
-                                            class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm font-semibold focus:ring-2 focus:ring-yellow-200 focus:border-transparent transition"
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm font-semibold focus:ring-2 focus:ring-amber-200 focus:border-transparent transition"
                                             style="color: #C4A265;"
                                         />
                                     </div>
@@ -286,7 +286,7 @@ function submit() {
                                         &times; {{ item.sessions_count }} session{{ item.sessions_count !== 1 ? 's' : '' }}
                                         = {{ formatCurrency(getServiceById(item.service_id)?.price * item.sessions_count) }}
                                     </span>
-                                    <span v-if="item.discount_percentage > 0" class="inline-flex items-center gap-1 text-green-600 font-medium">
+                                    <span v-if="item.discount_percentage > 0" class="inline-flex items-center gap-1 text-emerald-600 font-medium">
                                         <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A2 2 0 013 12V7a4 4 0 014-4z" /></svg>
                                         {{ item.discount_percentage }}% off
                                     </span>
@@ -302,7 +302,7 @@ function submit() {
                 <div class="space-y-6">
 
                     <!-- Pricing Summary Card -->
-                    <div class="bg-white rounded-lg shadow-sm p-6 space-y-4">
+                    <div class="bg-white rounded-lg shadow-sm p-4 md:p-6 space-y-4">
                         <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wider">{{ $t('a_pricing_summary') }}</h3>
 
                         <div class="space-y-3">
@@ -334,7 +334,7 @@ function submit() {
                                         type="number"
                                         step="0.01"
                                         min="0"
-                                        class="w-full px-4 py-2.5 border-2 rounded-lg text-lg font-bold text-center focus:ring-2 focus:ring-yellow-200 focus:border-transparent transition"
+                                        class="w-full px-4 py-2.5 border-2 rounded-lg text-lg font-bold text-center focus:ring-2 focus:ring-amber-200 focus:border-transparent transition"
                                         style="border-color: #C4A265; color: #C4A265;"
                                     />
                                     <p v-if="form.errors.total_price" class="mt-1 text-sm text-red-600">{{ form.errors.total_price }}</p>
@@ -342,23 +342,23 @@ function submit() {
                             </div>
 
                             <!-- Savings badge -->
-                            <div v-if="savingsAmount > 0" class="p-3 rounded-lg bg-green-50 border border-green-200">
+                            <div v-if="savingsAmount > 0" class="p-3 rounded-lg bg-emerald-50 border border-emerald-200">
                                 <div class="flex items-center justify-between">
-                                    <span class="text-xs font-medium text-green-700">Customer Savings</span>
-                                    <span class="text-sm font-bold text-green-700">{{ savingsPercentage }}%</span>
+                                    <span class="text-xs font-medium text-emerald-700">Customer Savings</span>
+                                    <span class="text-sm font-bold text-emerald-700">{{ savingsPercentage }}%</span>
                                 </div>
-                                <p class="text-lg font-bold text-green-700 mt-0.5">{{ formatCurrency(savingsAmount) }}</p>
+                                <p class="text-lg font-bold text-emerald-700 mt-0.5">{{ formatCurrency(savingsAmount) }}</p>
                             </div>
                         </div>
                     </div>
 
                     <!-- Settings Card -->
-                    <div class="bg-white rounded-lg shadow-sm p-6 space-y-5">
+                    <div class="bg-white rounded-lg shadow-sm p-4 md:p-6 space-y-5">
                         <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wider">{{ $t('a_settings') }}</h3>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_display_order') }}</label>
-                            <input v-model="form.display_order" type="number" min="0" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent transition" />
+                            <input v-model="form.display_order" type="number" min="0" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent transition" />
                             <p class="text-xs text-gray-400 mt-1">Lower numbers appear first</p>
                         </div>
 
@@ -374,7 +374,7 @@ function submit() {
                     </div>
 
                     <!-- Featured Image Card -->
-                    <div class="bg-white rounded-lg shadow-sm p-6 space-y-4">
+                    <div class="bg-white rounded-lg shadow-sm p-4 md:p-6 space-y-4">
                         <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wider">{{ $t('a_featured_image') }}</h3>
 
                         <!-- Image preview -->

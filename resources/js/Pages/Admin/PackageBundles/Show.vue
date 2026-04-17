@@ -74,8 +74,8 @@ const totalSessions = computed(() => {
 
 const statusColors = {
     pending: { bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200', dot: 'bg-amber-500' },
-    confirmed: { bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200', dot: 'bg-blue-500' },
-    in_progress: { bg: 'bg-indigo-50', text: 'text-indigo-700', border: 'border-indigo-200', dot: 'bg-indigo-500' },
+    confirmed: { bg: 'bg-slate-50', text: 'text-[#1B365D]', border: 'border-slate-200', dot: 'bg-[#1B365D]' },
+    in_progress: { bg: 'bg-slate-50', text: 'text-[#1B365D]', border: 'border-slate-200', dot: 'bg-[#1B365D]' },
     completed: { bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200', dot: 'bg-emerald-500' },
     cancelled: { bg: 'bg-red-50', text: 'text-red-700', border: 'border-red-200', dot: 'bg-red-500' },
 };
@@ -120,7 +120,7 @@ function getStatusStyle(status) {
                             </div>
 
                             <div>
-                                <h1 class="text-2xl font-bold text-gray-900 tracking-tight">{{ bundle.name_en }}</h1>
+                                <h1 class="text-xl md:text-2xl font-bold text-gray-900 tracking-tight">{{ bundle.name_en }}</h1>
                                 <p class="text-sm text-gray-400 mt-0.5" dir="rtl">{{ bundle.name_ar }}</p>
                                 <div class="flex items-center gap-2.5 mt-2">
                                     <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold transition-all duration-300"
@@ -172,7 +172,7 @@ function getStatusStyle(status) {
                         </div>
                         <div class="flex-1 min-w-0">
                             <p class="text-xs font-medium text-gray-400 uppercase tracking-widest">Bundle Price</p>
-                            <p class="text-2xl font-extrabold mt-1 tabular-nums" style="color: #C4A265;">
+                            <p class="text-xl md:text-2xl font-extrabold mt-1 tabular-nums" style="color: #C4A265;">
                                 {{ formatCurrency(animatedPrice) }}
                             </p>
                         </div>
@@ -188,7 +188,7 @@ function getStatusStyle(status) {
                         </div>
                         <div class="flex-1 min-w-0">
                             <p class="text-xs font-medium text-gray-400 uppercase tracking-widest">Original Price</p>
-                            <p class="text-2xl font-extrabold text-gray-300 mt-1 line-through decoration-2 tabular-nums">
+                            <p class="text-xl md:text-2xl font-extrabold text-gray-300 mt-1 line-through decoration-2 tabular-nums">
                                 {{ formatCurrency(bundle.original_price) }}
                             </p>
                         </div>
@@ -205,7 +205,7 @@ function getStatusStyle(status) {
                         </div>
                         <div class="flex-1 min-w-0">
                             <p class="text-xs font-medium text-gray-400 uppercase tracking-widest">Savings</p>
-                            <p class="text-2xl font-extrabold text-emerald-600 mt-1 tabular-nums">
+                            <p class="text-xl md:text-2xl font-extrabold text-emerald-600 mt-1 tabular-nums">
                                 {{ formatCurrency(animatedSavings) }}
                             </p>
                         </div>
@@ -218,15 +218,15 @@ function getStatusStyle(status) {
 
                 <!-- Total Sessions -->
                 <div class="stats-card group">
-                    <div class="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br from-indigo-50/50 to-transparent"></div>
-                    <div class="stats-card__accent bg-indigo-400"></div>
+                    <div class="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br from-slate-50/50 to-transparent"></div>
+                    <div class="stats-card__accent bg-slate-400"></div>
                     <div class="relative flex items-start gap-4">
-                        <div class="w-12 h-12 rounded-xl flex items-center justify-center bg-indigo-50 shadow-sm transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
-                            <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+                        <div class="w-12 h-12 rounded-xl flex items-center justify-center bg-slate-50 shadow-sm transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
+                            <svg class="w-6 h-6 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
                         </div>
                         <div class="flex-1 min-w-0">
                             <p class="text-xs font-medium text-gray-400 uppercase tracking-widest">Total Sessions</p>
-                            <p class="text-2xl font-extrabold text-indigo-600 mt-1 tabular-nums">{{ animatedSessions }}</p>
+                            <p class="text-xl md:text-2xl font-extrabold text-[#1B365D] mt-1 tabular-nums">{{ animatedSessions }}</p>
                             <p class="text-[11px] text-gray-400 mt-0.5">across {{ bundle.services?.length || 0 }} services</p>
                         </div>
                     </div>
@@ -242,7 +242,7 @@ function getStatusStyle(status) {
                     <!-- Included Services -->
                     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden show-item"
                          :class="{ 'show-item--visible': isVisible('services') }">
-                        <div class="px-6 py-5 border-b border-gray-100 flex items-center justify-between">
+                        <div class="px-4 md:px-6 py-5 border-b border-gray-100 flex items-center justify-between">
                             <div class="flex items-center gap-3">
                                 <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background-color: rgba(196,162,101,0.1);">
                                     <svg class="w-4 h-4" style="color: #C4A265;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
@@ -257,7 +257,7 @@ function getStatusStyle(status) {
 
                         <div class="divide-y divide-gray-50">
                             <div v-for="(bs, index) in bundle.services" :key="bs.id"
-                                 class="service-row px-6 py-4 flex items-center justify-between group cursor-default"
+                                 class="service-row px-4 md:px-6 py-4 flex items-center justify-between group cursor-default"
                                  :style="{ animationDelay: `${index * 80 + 400}ms` }"
                                  :class="{ 'service-row--visible': isVisible('services') }">
                                 <div class="flex items-center gap-4">
@@ -289,7 +289,7 @@ function getStatusStyle(status) {
                         </div>
 
                         <!-- Total Footer -->
-                        <div class="px-6 py-4 border-t border-gray-100 flex items-center justify-between"
+                        <div class="px-4 md:px-6 py-4 border-t border-gray-100 flex items-center justify-between"
                              style="background: linear-gradient(135deg, rgba(196,162,101,0.03), rgba(196,162,101,0.08));">
                             <div class="flex items-center gap-2">
                                 <svg class="w-4 h-4" style="color: #C4A265;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
@@ -302,10 +302,10 @@ function getStatusStyle(status) {
                     <!-- Recent Bookings -->
                     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden show-item"
                          :class="{ 'show-item--visible': isVisible('bookings') }">
-                        <div class="px-6 py-5 border-b border-gray-100 flex items-center justify-between">
+                        <div class="px-4 md:px-6 py-5 border-b border-gray-100 flex items-center justify-between">
                             <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 rounded-lg flex items-center justify-center bg-indigo-50">
-                                    <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
+                                <div class="w-8 h-8 rounded-lg flex items-center justify-center bg-slate-50">
+                                    <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
                                 </div>
                                 <h2 class="text-sm font-semibold text-gray-700 uppercase tracking-wider">{{ $t('a_recent_bookings') }}</h2>
                             </div>
@@ -318,7 +318,7 @@ function getStatusStyle(status) {
                         <div v-if="bundle.bundle_bookings && bundle.bundle_bookings.length > 0" class="divide-y divide-gray-50">
                             <Link v-for="booking in bundle.bundle_bookings" :key="booking.id"
                                   :href="`/admin/package-bundle-bookings/${booking.id}`"
-                                  class="px-6 py-4 flex items-center justify-between hover:bg-gray-50/80 transition-all duration-200 group">
+                                  class="px-4 md:px-6 py-4 flex items-center justify-between hover:bg-gray-50/80 transition-all duration-200 group">
                                 <div class="flex items-center gap-3">
                                     <div class="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 border border-gray-100 group-hover:border-[#C4A265]/30 group-hover:bg-[#C4A265]/5 group-hover:text-[#C4A265] transition-all duration-300">
                                         <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
@@ -338,7 +338,7 @@ function getStatusStyle(status) {
                                 </div>
                             </Link>
                         </div>
-                        <div v-else class="px-6 py-16 text-center">
+                        <div v-else class="px-4 md:px-6 py-16 text-center">
                             <div class="w-16 h-16 mx-auto rounded-2xl bg-gray-50 flex items-center justify-center mb-4">
                                 <svg class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
                             </div>
@@ -354,13 +354,13 @@ function getStatusStyle(status) {
                     <!-- Bundle Details -->
                     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden show-item"
                          :class="{ 'show-item--visible': isVisible('sidebar-details') }">
-                        <div class="px-6 py-4 border-b border-gray-100 flex items-center gap-2">
+                        <div class="px-4 md:px-6 py-4 border-b border-gray-100 flex items-center gap-2">
                             <div class="w-7 h-7 rounded-lg flex items-center justify-center bg-gray-50">
                                 <svg class="w-3.5 h-3.5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                             </div>
                             <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wider">{{ $t('a_details') }}</h3>
                         </div>
-                        <div class="p-6 space-y-0">
+                        <div class="p-4 md:p-6 space-y-0">
                             <div class="detail-row flex items-center justify-between py-3 border-b border-gray-50 group">
                                 <span class="text-xs text-gray-400 font-medium">Status</span>
                                 <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold"
@@ -395,7 +395,7 @@ function getStatusStyle(status) {
                     <!-- Pricing Breakdown -->
                     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden show-item"
                          :class="{ 'show-item--visible': isVisible('sidebar-pricing') }">
-                        <div class="px-6 py-4 border-b border-gray-100 flex items-center gap-2">
+                        <div class="px-4 md:px-6 py-4 border-b border-gray-100 flex items-center gap-2">
                             <div class="w-7 h-7 rounded-lg flex items-center justify-center" style="background-color: rgba(196,162,101,0.1);">
                                 <svg class="w-3.5 h-3.5" style="color: #C4A265;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
                             </div>
@@ -441,9 +441,9 @@ function getStatusStyle(status) {
                     <div v-if="bundle.description_en || bundle.description_ar"
                          class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden show-item"
                          :class="{ 'show-item--visible': isVisible('sidebar-desc') }">
-                        <div class="px-6 py-4 border-b border-gray-100 flex items-center gap-2">
-                            <div class="w-7 h-7 rounded-lg flex items-center justify-center bg-blue-50">
-                                <svg class="w-3.5 h-3.5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" /></svg>
+                        <div class="px-4 md:px-6 py-4 border-b border-gray-100 flex items-center gap-2">
+                            <div class="w-7 h-7 rounded-lg flex items-center justify-center bg-slate-50">
+                                <svg class="w-3.5 h-3.5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" /></svg>
                             </div>
                             <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wider">{{ $t('a_description') }}</h3>
                         </div>
@@ -457,9 +457,9 @@ function getStatusStyle(status) {
                     <div v-if="bundle.image_url"
                          class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden show-item"
                          :class="{ 'show-item--visible': isVisible('sidebar-image') }">
-                        <div class="px-6 py-4 border-b border-gray-100 flex items-center gap-2">
-                            <div class="w-7 h-7 rounded-lg flex items-center justify-center bg-purple-50">
-                                <svg class="w-3.5 h-3.5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                        <div class="px-4 md:px-6 py-4 border-b border-gray-100 flex items-center gap-2">
+                            <div class="w-7 h-7 rounded-lg flex items-center justify-center bg-slate-50">
+                                <svg class="w-3.5 h-3.5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                             </div>
                             <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wider">{{ $t('a_image') }}</h3>
                         </div>

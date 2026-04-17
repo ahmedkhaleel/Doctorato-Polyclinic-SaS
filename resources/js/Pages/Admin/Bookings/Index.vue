@@ -74,21 +74,21 @@ watch(moduleFilter, () => {
 });
 
 const statusColors = {
-    unconfirmed: 'bg-yellow-50 text-yellow-700 border-yellow-200',
-    confirmed: 'bg-blue-50 text-blue-700 border-blue-200',
-    in_progress: 'bg-indigo-50 text-indigo-700 border-indigo-200',
+    unconfirmed: 'bg-amber-50 text-amber-700 border-amber-200',
+    confirmed: 'bg-slate-50 text-[#1B365D] border-slate-200',
+    in_progress: 'bg-slate-50 text-[#1B365D] border-slate-200',
     completed: 'bg-emerald-50 text-emerald-700 border-emerald-200',
     cancelled: 'bg-red-50 text-red-700 border-red-200',
     // Legacy statuses
-    new: 'bg-yellow-50 text-yellow-700 border-yellow-200',
-    pending: 'bg-yellow-50 text-yellow-700 border-yellow-200',
-    contacted: 'bg-sky-50 text-sky-700 border-sky-200',
+    new: 'bg-amber-50 text-amber-700 border-amber-200',
+    pending: 'bg-amber-50 text-amber-700 border-amber-200',
+    contacted: 'bg-slate-50 text-[#1B365D] border-slate-200',
 };
 
 /* statusLabels is now computed so it reacts to locale changes */
 
 const sourceColors = {
-    website: 'bg-blue-50 text-blue-600 border-blue-200',
+    website: 'bg-slate-50 text-[#1B365D] border-slate-200',
     secretary: 'bg-teal-50 text-teal-600 border-teal-200',
     admin: 'bg-amber-50 text-amber-600 border-amber-200',
 };
@@ -135,7 +135,7 @@ function exportBookings() {
     <AdminLayout :title="$t('a_bookings')">
         <div class="space-y-6">
             <div class="flex items-center justify-between">
-                <h1 class="text-2xl font-bold text-gray-800">{{ $t('a_bookings') }}</h1>
+                <h1 class="text-xl md:text-2xl font-bold text-gray-800">{{ $t('a_bookings') }}</h1>
                 <div class="flex items-center gap-3">
                     <Link
                         v-if="can('package_bundle_bookings.create')"
@@ -202,11 +202,11 @@ function exportBookings() {
                         v-model="search"
                         type="text"
                         :placeholder="$t('a_search_bookings_placeholder')"
-                        class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                        class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                     />
                     <select
                         v-model="statusFilter"
-                        class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                        class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                     >
                         <option value="">{{ $t('a_all_statuses') }}</option>
                         <option value="unconfirmed">{{ $t('a_unconfirmed') }}</option>
@@ -217,7 +217,7 @@ function exportBookings() {
                     </select>
                     <select
                         v-model="source"
-                        class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                        class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                     >
                         <option value="">{{ $t('a_all_sources') }}</option>
                         <option value="website">{{ $t('a_website') }}</option>
@@ -228,14 +228,14 @@ function exportBookings() {
                         v-model="dateFrom"
                         type="date"
                         :max="dateTo || undefined"
-                        class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                        class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                         :placeholder="$t('a_from_date')"
                     />
                     <input
                         v-model="dateTo"
                         type="date"
                         :min="dateFrom || undefined"
-                        class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                        class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                         :placeholder="$t('a_to_date')"
                     />
                 </div>
@@ -247,31 +247,31 @@ function exportBookings() {
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_booking_number') }}</th>
-                                <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_patient') }}</th>
-                                <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_phone') }}</th>
-                                <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_services') }}</th>
-                                <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_source') }}</th>
-                                <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_status') }}</th>
-                                <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_invoice') }}</th>
-                                <th class="px-6 py-3 text-end text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_actions') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_booking_number') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_patient') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_phone') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_services') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_source') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_status') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_invoice') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-end text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_actions') }}</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
                             <tr v-for="booking in bookings.data" :key="booking.id" class="hover:bg-gray-50">
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center gap-1.5">
-                                        <svg v-if="booking.module === 'dental'" class="w-3.5 h-3.5 text-cyan-500 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24" title="Dental"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342" /></svg>
+                                        <svg v-if="booking.module === 'dental'" class="w-3.5 h-3.5 text-[#1B365D] inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24" title="Dental"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342" /></svg>
                                         <span class="font-mono text-xs text-gray-600">{{ booking.booking_number || `#${booking.id}` }}</span>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">{{ getPatientName(booking) }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" dir="ltr">{{ getPatientPhone(booking) }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-500">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">{{ getPatientName(booking) }}</td>
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500" dir="ltr">{{ getPatientPhone(booking) }}</td>
+                                <td class="px-4 md:px-6 py-4 text-sm text-gray-500">
                                     <span class="max-w-[200px] truncate block">{{ getServicesText(booking) }}</span>
                                     <span v-if="booking.booking_services_count > 0" class="text-xs text-gray-400">({{ booking.booking_services_count }} {{ $t('a_services') }})</span>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                     <span
                                         v-if="booking.source"
                                         class="inline-flex px-2 py-0.5 rounded-full text-xs font-medium border"
@@ -281,7 +281,7 @@ function exportBookings() {
                                     </span>
                                     <span v-else class="text-xs text-gray-400">-</span>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                     <span
                                         class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold border"
                                         :class="statusColors[booking.status] || 'bg-gray-50 text-gray-600 border-gray-200'"
@@ -289,7 +289,7 @@ function exportBookings() {
                                         {{ $t('a_' + booking.status) || booking.status }}
                                     </span>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                     <span
                                         v-if="getInvoiceStatus(booking)"
                                         class="inline-flex px-2 py-0.5 rounded-full text-xs font-medium border"
@@ -299,18 +299,18 @@ function exportBookings() {
                                     </span>
                                     <span v-else class="text-xs text-gray-400">-</span>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-end text-sm">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-end text-sm">
                                     <Link :href="`/admin/bookings/${booking.id}`" class="font-medium hover:underline" style="color: #C4A265;">{{ $t('a_view') }}</Link>
                                 </td>
                             </tr>
                             <tr v-if="!bookings.data || bookings.data.length === 0">
-                                <td colspan="8" class="px-6 py-8 text-center text-sm text-gray-500">{{ $t('a_no_bookings_found') }}</td>
+                                <td colspan="8" class="px-4 md:px-6 py-8 text-center text-sm text-gray-500">{{ $t('a_no_bookings_found') }}</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
 
-                <div v-if="bookings.links && bookings.links.length > 3" class="px-6 py-3 border-t border-gray-200 flex items-center justify-between">
+                <div v-if="bookings.links && bookings.links.length > 3" class="px-4 md:px-6 py-3 border-t border-gray-200 flex items-center justify-between">
                     <p class="text-sm text-gray-500">{{ $t('a_showing') }} {{ bookings.from }} {{ $t('a_to') }} {{ bookings.to }} {{ $t('a_of') }} {{ bookings.total }} {{ $t('a_results') }}</p>
                     <nav class="flex gap-1">
                         <template v-for="link in bookings.links" :key="link.label">

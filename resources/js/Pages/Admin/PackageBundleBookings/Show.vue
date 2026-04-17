@@ -42,30 +42,30 @@ function jsToSystemDay(jsDay) {
 
 /* ── Status Colors ─────────────────────────────────────── */
 const bookingStatusColors = {
-    pending: 'bg-yellow-100 text-yellow-800',
-    confirmed: 'bg-blue-100 text-blue-800',
-    in_progress: 'bg-indigo-100 text-indigo-800',
-    completed: 'bg-green-100 text-green-800',
+    pending: 'bg-amber-100 text-amber-800',
+    confirmed: 'bg-slate-100 text-[#1B365D]',
+    in_progress: 'bg-slate-100 text-[#1B365D]',
+    completed: 'bg-emerald-100 text-emerald-800',
     cancelled: 'bg-red-100 text-red-800',
 };
 const serviceStatusColors = {
-    pending: 'bg-yellow-50 text-yellow-700 border-yellow-200',
-    in_progress: 'bg-indigo-50 text-indigo-700 border-indigo-200',
-    completed: 'bg-green-50 text-green-700 border-green-200',
+    pending: 'bg-amber-50 text-amber-700 border-amber-200',
+    in_progress: 'bg-slate-50 text-[#1B365D] border-slate-200',
+    completed: 'bg-emerald-50 text-emerald-700 border-emerald-200',
     cancelled: 'bg-red-50 text-red-700 border-red-200',
 };
 const visitStatusColors = {
-    waiting: 'bg-yellow-100 text-yellow-800',
-    in_progress: 'bg-blue-100 text-blue-800',
-    completed: 'bg-green-100 text-green-800',
+    waiting: 'bg-amber-100 text-amber-800',
+    in_progress: 'bg-slate-100 text-[#1B365D]',
+    completed: 'bg-emerald-100 text-emerald-800',
     cancelled: 'bg-red-100 text-red-800',
 };
 const appointmentStatusColors = {
-    scheduled: 'bg-blue-100 text-blue-800',
-    confirmed: 'bg-indigo-100 text-indigo-800',
-    checked_in: 'bg-yellow-100 text-yellow-800',
-    in_progress: 'bg-purple-100 text-purple-800',
-    completed: 'bg-green-100 text-green-800',
+    scheduled: 'bg-slate-100 text-[#1B365D]',
+    confirmed: 'bg-slate-100 text-[#1B365D]',
+    checked_in: 'bg-amber-100 text-amber-800',
+    in_progress: 'bg-slate-100 text-[#1B365D]',
+    completed: 'bg-emerald-100 text-emerald-800',
     cancelled: 'bg-red-100 text-red-800',
     no_show: 'bg-gray-100 text-gray-800',
 };
@@ -340,7 +340,7 @@ function toggleSection(key) {
                         </svg>
                     </Link>
                     <div>
-                        <h1 class="text-2xl font-bold text-gray-800">{{ $t('a_booking_details') }}</h1>
+                        <h1 class="text-xl md:text-2xl font-bold text-gray-800">{{ $t('a_booking_details') }}</h1>
                         <span class="text-sm font-mono" style="color: #C4A265;">{{ b.booking_number }}</span>
                     </div>
                 </div>
@@ -406,7 +406,7 @@ function toggleSection(key) {
                 </div>
                 <div class="bg-white rounded-lg shadow-sm p-5">
                     <div class="text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">{{ $t('a_remaining') }}</div>
-                    <div class="text-xl font-bold" :class="Number(b.balance_due) > 0 ? 'text-red-600' : 'text-green-600'">
+                    <div class="text-xl font-bold" :class="Number(b.balance_due) > 0 ? 'text-red-600' : 'text-emerald-600'">
                         {{ Number(b.balance_due) > 0 ? formatCurrency(b.balance_due) : 'Paid' }}
                     </div>
                     <div class="text-xs text-gray-400 mt-1">Paid: {{ formatCurrency(b.total_paid) }}</div>
@@ -453,7 +453,7 @@ function toggleSection(key) {
                         </div>
                         <div v-if="b.completed_at">
                             <span class="text-gray-400">Completed</span>
-                            <div class="font-medium text-green-600">{{ formatDateTime(b.completed_at) }}</div>
+                            <div class="font-medium text-emerald-600">{{ formatDateTime(b.completed_at) }}</div>
                         </div>
                     </div>
                     <div v-if="b.promo_code" class="mt-4 pt-3 border-t border-amber-100 flex items-center gap-2">
@@ -481,7 +481,7 @@ function toggleSection(key) {
                     <div class="space-y-4">
                         <div v-for="bs in b.bundle_services" :key="bs.id"
                              class="border rounded-xl p-4"
-                             :class="bs.status === 'completed' ? 'border-green-200 bg-green-50/30' : bs.status === 'cancelled' ? 'border-red-200 bg-red-50/30' : 'border-gray-200'">
+                             :class="bs.status === 'completed' ? 'border-emerald-200 bg-emerald-50/30' : bs.status === 'cancelled' ? 'border-red-200 bg-red-50/30' : 'border-gray-200'">
                             <div class="flex items-start justify-between mb-3">
                                 <div>
                                     <div class="font-medium text-gray-900">{{ bs.service?.name_en }}</div>
@@ -537,7 +537,7 @@ function toggleSection(key) {
                                 <tr v-for="apt in b.appointments" :key="apt.id" class="hover:bg-gray-50">
                                     <td class="px-3 py-2.5 font-medium text-gray-800">
                                         {{ apt.bundle_booking_service?.service?.name_en || '-' }}
-                                        <span v-if="apt.is_retouch" class="ml-1 text-xs text-purple-600 font-semibold">(Retouch)</span>
+                                        <span v-if="apt.is_retouch" class="ml-1 text-xs text-[#1B365D] font-semibold">(Retouch)</span>
                                     </td>
                                     <td class="px-3 py-2.5 text-center text-gray-600">{{ apt.session_number }}</td>
                                     <td class="px-3 py-2.5 text-gray-600">{{ apt.doctor?.name_en || '-' }}</td>
@@ -614,7 +614,7 @@ function toggleSection(key) {
                             </tbody>
                         </table>
                     </div>
-                    <div v-else class="text-center py-6 text-sm text-gray-500">
+                    <div v-else class="text-center py-4 md:py-6 text-sm text-gray-500">
                         No visits created yet. Visits are created when patients check in for their appointments.
                     </div>
                 </div>
@@ -644,14 +644,14 @@ function toggleSection(key) {
                                 <tr v-for="payment in payments" :key="payment.id" class="hover:bg-gray-50">
                                     <td class="px-3 py-2.5 text-gray-600">{{ formatDate(payment.payment_date) }}</td>
                                     <td class="px-3 py-2.5 text-gray-600">{{ payment.payment_method?.name_en || '-' }}</td>
-                                    <td class="px-3 py-2.5 text-right font-semibold text-green-600">{{ formatCurrency(payment.amount) }}</td>
+                                    <td class="px-3 py-2.5 text-right font-semibold text-emerald-600">{{ formatCurrency(payment.amount) }}</td>
                                     <td class="px-3 py-2.5 text-gray-500 font-mono text-xs">{{ payment.reference_number || '-' }}</td>
                                     <td class="px-3 py-2.5 text-gray-500">{{ payment.notes || '-' }}</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                    <div v-else class="text-center py-6 text-sm text-gray-500">No payments recorded yet.</div>
+                    <div v-else class="text-center py-4 md:py-6 text-sm text-gray-500">No payments recorded yet.</div>
 
                     <div class="mt-4 border-t border-gray-200 pt-4">
                         <div class="max-w-xs ml-auto space-y-2 text-sm">
@@ -669,11 +669,11 @@ function toggleSection(key) {
                             </div>
                             <div class="flex justify-between">
                                 <span class="font-bold text-gray-700">Paid</span>
-                                <span class="font-bold text-green-600">{{ formatCurrency(totalPaid) }}</span>
+                                <span class="font-bold text-emerald-600">{{ formatCurrency(totalPaid) }}</span>
                             </div>
                             <div class="flex justify-between border-t border-gray-200 pt-2">
                                 <span class="font-bold text-gray-700">Balance Due</span>
-                                <span class="font-bold" :class="remainingBalance > 0 ? 'text-red-600' : 'text-green-600'">{{ formatCurrency(remainingBalance) }}</span>
+                                <span class="font-bold" :class="remainingBalance > 0 ? 'text-red-600' : 'text-emerald-600'">{{ formatCurrency(remainingBalance) }}</span>
                             </div>
                         </div>
                     </div>
@@ -719,7 +719,7 @@ function toggleSection(key) {
         <Teleport to="body">
             <div v-if="showPaymentModal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
                 <div class="fixed inset-0 bg-black/40" @click="showPaymentModal = false"></div>
-                <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 z-10">
+                <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md p-4 md:p-6 z-10">
                     <div class="flex items-center justify-between mb-6">
                         <h3 class="text-lg font-semibold text-gray-800">Record Payment</h3>
                         <button @click="showPaymentModal = false" class="p-1 text-gray-400 hover:text-gray-600 transition">
@@ -729,7 +729,7 @@ function toggleSection(key) {
                     <form @submit.prevent="submitPayment" class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Payment Method *</label>
-                            <select v-model="paymentForm.payment_method_id" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent">
+                            <select v-model="paymentForm.payment_method_id" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent">
                                 <option :value="null" disabled>Select method</option>
                                 <option v-for="pm in paymentMethods" :key="pm.id" :value="pm.id">{{ pm.name_en }}</option>
                             </select>
@@ -737,17 +737,17 @@ function toggleSection(key) {
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Amount ({{ currencyCode }}) *</label>
-                            <input v-model="paymentForm.amount" type="number" step="0.01" min="0.01" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" placeholder="0.00" />
+                            <input v-model="paymentForm.amount" type="number" step="0.01" min="0.01" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" placeholder="0.00" />
                             <p v-if="paymentForm.errors.amount" class="text-red-500 text-xs mt-1">{{ paymentForm.errors.amount }}</p>
                             <p v-if="remainingBalance > 0" class="text-xs text-gray-400 mt-1">Remaining: {{ formatCurrency(remainingBalance) }}</p>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Reference Number</label>
-                            <input v-model="paymentForm.reference_number" type="text" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" placeholder="Optional" />
+                            <input v-model="paymentForm.reference_number" type="text" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" placeholder="Optional" />
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Notes</label>
-                            <textarea v-model="paymentForm.notes" rows="2" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent resize-none" placeholder="Optional"></textarea>
+                            <textarea v-model="paymentForm.notes" rows="2" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent resize-none" placeholder="Optional"></textarea>
                         </div>
                         <div class="flex gap-3 pt-2">
                             <button type="button" @click="showPaymentModal = false" class="flex-1 px-4 py-2.5 rounded-lg text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 transition">Cancel</button>
@@ -764,7 +764,7 @@ function toggleSection(key) {
         <Teleport to="body">
             <div v-if="showRescheduleModal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
                 <div class="fixed inset-0 bg-black/40" @click="showRescheduleModal = false"></div>
-                <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6 z-10 max-h-[90vh] overflow-y-auto">
+                <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg p-4 md:p-6 z-10 max-h-[90vh] overflow-y-auto">
                     <div class="flex items-center justify-between mb-6">
                         <h3 class="text-lg font-semibold text-gray-800">Reschedule Appointment</h3>
                         <button @click="showRescheduleModal = false" class="p-1 text-gray-400 hover:text-gray-600 transition">
@@ -775,7 +775,7 @@ function toggleSection(key) {
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Doctor</label>
                             <select v-model="rescheduleForm.doctor_id" @change="rescheduleForm.date = ''; rescheduleForm.availableSlots = []; rescheduleForm.start_time = ''; rescheduleForm.end_time = '';"
-                                    class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent">
+                                    class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent">
                                 <option v-for="doc in doctors" :key="doc.id" :value="doc.id">{{ doc.name_en }}</option>
                             </select>
                         </div>
@@ -834,7 +834,7 @@ function toggleSection(key) {
         <Teleport to="body">
             <div v-if="showRetouchModal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
                 <div class="fixed inset-0 bg-black/40" @click="showRetouchModal = false"></div>
-                <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6 z-10 max-h-[90vh] overflow-y-auto">
+                <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg p-4 md:p-6 z-10 max-h-[90vh] overflow-y-auto">
                     <div class="flex items-center justify-between mb-6">
                         <h3 class="text-lg font-semibold text-gray-800">Add Retouch Session</h3>
                         <button @click="showRetouchModal = false" class="p-1 text-gray-400 hover:text-gray-600 transition">
@@ -845,7 +845,7 @@ function toggleSection(key) {
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Service *</label>
                             <select v-model="retouchForm.package_bundle_booking_service_id"
-                                    class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent">
+                                    class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent">
                                 <option :value="null" disabled>Select service</option>
                                 <option v-for="bs in b.bundle_services" :key="bs.id" :value="bs.id">
                                     {{ bs.service?.name_en }} ({{ bs.completed_sessions }}/{{ bs.sessions_count }} sessions)
@@ -855,7 +855,7 @@ function toggleSection(key) {
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Doctor *</label>
                             <select v-model="retouchForm.doctor_id" @change="retouchForm.date = ''; retouchForm.availableSlots = []; retouchForm.start_time = ''; retouchForm.end_time = '';"
-                                    class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent">
+                                    class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent">
                                 <option :value="null" disabled>Select doctor</option>
                                 <option v-for="doc in doctors" :key="doc.id" :value="doc.id">{{ doc.name_en }}</option>
                             </select>
@@ -915,7 +915,7 @@ function toggleSection(key) {
         <Teleport to="body">
             <div v-if="showCancelConfirm" class="fixed inset-0 z-50 flex items-center justify-center p-4">
                 <div class="fixed inset-0 bg-black/40" @click="showCancelConfirm = false"></div>
-                <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6 z-10">
+                <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-sm p-4 md:p-6 z-10">
                     <div class="text-center mb-6">
                         <div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-3">
                             <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">

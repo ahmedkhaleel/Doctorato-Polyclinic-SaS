@@ -60,18 +60,18 @@ const statCards = computed(() => [
         value: formatNumber(props.stats?.totalVisits),
         sub: `${formatNumber(props.stats?.totalBookings)} bookings`,
         icon: 'visits',
-        gradient: 'from-blue-500 to-blue-400',
-        iconBg: 'bg-blue-50',
-        iconColor: 'text-blue-600',
+        gradient: 'from-[#1B365D] to-slate-400',
+        iconBg: 'bg-slate-50',
+        iconColor: 'text-[#1B365D]',
     },
     {
         label: 'Avg. Price',
         value: formatCurrency(props.stats?.avgPrice),
         sub: null,
         icon: 'price',
-        gradient: 'from-purple-500 to-purple-400',
-        iconBg: 'bg-purple-50',
-        iconColor: 'text-purple-600',
+        gradient: 'from-[#1B365D] to-slate-400',
+        iconBg: 'bg-slate-50',
+        iconColor: 'text-[#1B365D]',
     },
 ]);
 
@@ -94,11 +94,11 @@ function statusColor(status) {
     const map = {
         active: 'bg-emerald-100 text-emerald-700',
         inactive: 'bg-gray-100 text-gray-600',
-        completed: 'bg-blue-100 text-blue-700',
+        completed: 'bg-slate-100 text-[#1B365D]',
         in_progress: 'bg-amber-100 text-amber-700',
-        checked_in: 'bg-cyan-100 text-cyan-700',
+        checked_in: 'bg-slate-100 text-[#1B365D]',
         cancelled: 'bg-red-100 text-red-700',
-        scheduled: 'bg-indigo-100 text-indigo-700',
+        scheduled: 'bg-slate-100 text-[#1B365D]',
     };
     return map[status] || 'bg-gray-100 text-gray-600';
 }
@@ -131,7 +131,7 @@ const pieColors = ['#C4A265', '#3B82F6', '#10B981', '#8B5CF6', '#F59E0B', '#EF44
                             </svg>
                         </div>
                         <div>
-                            <h1 class="text-2xl font-bold text-gray-900">{{ $localized(category, 'name') }}</h1>
+                            <h1 class="text-xl md:text-2xl font-bold text-gray-900">{{ $localized(category, 'name') }}</h1>
                             <p class="text-sm text-gray-500" :dir="isRtl ? 'ltr' : 'rtl'">{{ locale === 'ar' ? category.name_en : category.name_ar }}</p>
                         </div>
                     </div>
@@ -167,7 +167,7 @@ const pieColors = ['#C4A265', '#3B82F6', '#10B981', '#8B5CF6', '#F59E0B', '#EF44
                     <div class="flex items-start justify-between">
                         <div class="space-y-2">
                             <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">{{ card.label }}</p>
-                            <p class="text-2xl font-bold text-gray-900 leading-none">{{ card.value }}</p>
+                            <p class="text-xl md:text-2xl font-bold text-gray-900 leading-none">{{ card.value }}</p>
                             <p v-if="card.sub" class="text-xs text-gray-500 mt-1">{{ card.sub }}</p>
                         </div>
                         <div :class="[card.iconBg, 'w-11 h-11 rounded-xl flex items-center justify-center']">
@@ -235,7 +235,7 @@ const pieColors = ['#C4A265', '#3B82F6', '#10B981', '#8B5CF6', '#F59E0B', '#EF44
                         <div v-for="(m, idx) in monthlyVisits" :key="idx" class="flex items-center gap-3">
                             <span class="w-12 text-xs font-medium text-gray-500 ltr:text-right rtl:text-left">{{ m.short }}</span>
                             <div class="flex-1 h-8 bg-gray-50 rounded-lg overflow-hidden relative">
-                                <div class="h-full rounded-lg transition-all duration-1000 ease-out bg-blue-500"
+                                <div class="h-full rounded-lg transition-all duration-1000 ease-out bg-[#1B365D]"
                                      :style="{ width: mounted ? `${Math.max((m.count / maxVisits) * 100, 2)}%` : '0%' }">
                                 </div>
                                 <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-semibold text-gray-600">
@@ -296,7 +296,7 @@ const pieColors = ['#C4A265', '#3B82F6', '#10B981', '#8B5CF6', '#F59E0B', '#EF44
                         <div v-for="(svc, idx) in topByRevenue" :key="svc.id"
                              class="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors">
                             <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold"
-                                 :class="idx === 0 ? 'bg-[#C4A265]/10 text-[#C4A265]' : idx === 1 ? 'bg-blue-50 text-blue-600' : 'bg-gray-100 text-gray-500'">
+                                 :class="idx === 0 ? 'bg-[#C4A265]/10 text-[#C4A265]' : idx === 1 ? 'bg-slate-50 text-[#1B365D]' : 'bg-gray-100 text-gray-500'">
                                 {{ idx + 1 }}
                             </div>
                             <div class="flex-1 min-w-0">
@@ -306,15 +306,15 @@ const pieColors = ['#C4A265', '#3B82F6', '#10B981', '#8B5CF6', '#F59E0B', '#EF44
                             <span class="text-sm font-bold text-emerald-600">{{ formatCurrency(svc.total_revenue) }}</span>
                         </div>
                         <div v-if="!topByRevenue || topByRevenue.length === 0"
-                             class="text-center py-6 text-sm text-gray-400">{{ $t('a_no_revenue_data_available') }}</div>
+                             class="text-center py-4 md:py-6 text-sm text-gray-400">{{ $t('a_no_revenue_data_available') }}</div>
                     </div>
                 </div>
 
                 <!-- Top by Visits -->
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                     <div class="flex items-center gap-2 mb-5">
-                        <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
-                            <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center">
+                            <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                             </svg>
                         </div>
@@ -324,7 +324,7 @@ const pieColors = ['#C4A265', '#3B82F6', '#10B981', '#8B5CF6', '#F59E0B', '#EF44
                         <div v-for="(svc, idx) in topByVisits" :key="svc.id"
                              class="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors">
                             <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold"
-                                 :class="idx === 0 ? 'bg-[#C4A265]/10 text-[#C4A265]' : idx === 1 ? 'bg-blue-50 text-blue-600' : 'bg-gray-100 text-gray-500'">
+                                 :class="idx === 0 ? 'bg-[#C4A265]/10 text-[#C4A265]' : idx === 1 ? 'bg-slate-50 text-[#1B365D]' : 'bg-gray-100 text-gray-500'">
                                 {{ idx + 1 }}
                             </div>
                             <div class="flex-1 min-w-0">
@@ -332,12 +332,12 @@ const pieColors = ['#C4A265', '#3B82F6', '#10B981', '#8B5CF6', '#F59E0B', '#EF44
                                 <p class="text-xs text-gray-400">{{ formatCurrency(svc.total_revenue) }} revenue</p>
                             </div>
                             <div class="flex items-center gap-1.5">
-                                <span class="text-sm font-bold text-blue-600">{{ svc.visits_count }}</span>
+                                <span class="text-sm font-bold text-[#1B365D]">{{ svc.visits_count }}</span>
                                 <span class="text-xs text-gray-400">visits</span>
                             </div>
                         </div>
                         <div v-if="!topByVisits || topByVisits.length === 0"
-                             class="text-center py-6 text-sm text-gray-400">{{ $t('a_no_visit_data_available') }}</div>
+                             class="text-center py-4 md:py-6 text-sm text-gray-400">{{ $t('a_no_visit_data_available') }}</div>
                     </div>
                 </div>
             </div>
@@ -345,7 +345,7 @@ const pieColors = ['#C4A265', '#3B82F6', '#10B981', '#8B5CF6', '#F59E0B', '#EF44
             <!-- ═══ ALL SERVICES TABLE ═══ -->
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden"
                  :class="mounted ? 'animate-fade-in-up' : 'opacity-0'" style="animation-delay: 0.35s;">
-                <div class="px-6 py-5 border-b border-gray-100 flex items-center justify-between">
+                <div class="px-4 md:px-6 py-5 border-b border-gray-100 flex items-center justify-between">
                     <div class="flex items-center gap-2">
                         <div class="w-8 h-8 rounded-lg flex items-center justify-center"
                              style="background: linear-gradient(135deg, #C4A265, #D4B87A);">
@@ -362,20 +362,20 @@ const pieColors = ['#C4A265', '#3B82F6', '#10B981', '#8B5CF6', '#F59E0B', '#EF44
                     <table class="min-w-full">
                         <thead>
                             <tr class="bg-gray-50/80">
-                                <th class="px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_service') }}</th>
-                                <th class="px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_price') }}</th>
-                                <th class="px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_cost_breakdown') }}</th>
-                                <th class="px-6 py-3.5 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_visits') }}</th>
-                                <th class="px-6 py-3.5 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_bookings') }}</th>
-                                <th class="px-6 py-3.5 ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_revenue') }}</th>
-                                <th class="px-6 py-3.5 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_status') }}</th>
-                                <th class="px-6 py-3.5 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_actions') }}</th>
+                                <th class="px-4 md:px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_service') }}</th>
+                                <th class="px-4 md:px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_price') }}</th>
+                                <th class="px-4 md:px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_cost_breakdown') }}</th>
+                                <th class="px-4 md:px-6 py-3.5 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_visits') }}</th>
+                                <th class="px-4 md:px-6 py-3.5 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_bookings') }}</th>
+                                <th class="px-4 md:px-6 py-3.5 ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_revenue') }}</th>
+                                <th class="px-4 md:px-6 py-3.5 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_status') }}</th>
+                                <th class="px-4 md:px-6 py-3.5 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_actions') }}</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100">
                             <tr v-for="svc in services" :key="svc.id"
                                 class="hover:bg-[#C4A265]/[0.02] transition-colors duration-150">
-                                <td class="px-6 py-4">
+                                <td class="px-4 md:px-6 py-4">
                                     <div class="flex items-center gap-3">
                                         <div v-if="svc.image"
                                              class="w-10 h-10 rounded-lg bg-cover bg-center border border-gray-200"
@@ -389,20 +389,20 @@ const pieColors = ['#C4A265', '#3B82F6', '#10B981', '#8B5CF6', '#F59E0B', '#EF44
                                         <div>
                                             <p class="text-sm font-semibold text-gray-800">{{ $localized(svc, 'name') }}</p>
                                             <div class="flex items-center gap-2 mt-0.5">
-                                                <span v-if="svc.bookable" class="text-[10px] px-1.5 py-0.5 rounded bg-blue-50 text-blue-600 font-medium">{{ $t('a_bookable') }}</span>
-                                                <span v-if="svc.show_on_website" class="text-[10px] px-1.5 py-0.5 rounded bg-green-50 text-green-600 font-medium">{{ $t('a_website') }}</span>
+                                                <span v-if="svc.bookable" class="text-[10px] px-1.5 py-0.5 rounded bg-slate-50 text-[#1B365D] font-medium">{{ $t('a_bookable') }}</span>
+                                                <span v-if="svc.show_on_website" class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-600 font-medium">{{ $t('a_website') }}</span>
                                                 <span v-if="svc.session_duration_minutes" class="text-[10px] text-gray-400">{{ svc.session_duration_minutes }}min</span>
                                             </div>
                                         </div>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4">
+                                <td class="px-4 md:px-6 py-4">
                                     <div class="text-sm font-bold text-gray-800">{{ formatCurrency(svc.price) }}</div>
                                     <div v-if="svc.price_after_discount && svc.price_after_discount < svc.price" class="text-xs text-emerald-600 font-medium">
                                         {{ $t('a_after_discount') }}: {{ formatCurrency(svc.price_after_discount) }}
                                     </div>
                                 </td>
-                                <td class="px-6 py-4">
+                                <td class="px-4 md:px-6 py-4">
                                     <div class="space-y-0.5">
                                         <div class="flex items-center justify-between text-xs">
                                             <span class="text-gray-400">{{ $t('a_supply_cost') }}:</span>
@@ -414,27 +414,27 @@ const pieColors = ['#C4A265', '#3B82F6', '#10B981', '#8B5CF6', '#F59E0B', '#EF44
                                         </div>
                                         <div v-if="svc.doctor_commission_percentage" class="flex items-center justify-between text-xs">
                                             <span class="text-gray-400">{{ $t('a_commission') }}:</span>
-                                            <span class="font-medium text-purple-600">{{ svc.doctor_commission_percentage }}%</span>
+                                            <span class="font-medium text-[#1B365D]">{{ svc.doctor_commission_percentage }}%</span>
                                         </div>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 text-center">
+                                <td class="px-4 md:px-6 py-4 text-center">
                                     <span class="text-sm font-bold text-gray-800">{{ formatNumber(svc.visits_count) }}</span>
                                 </td>
-                                <td class="px-6 py-4 text-center">
+                                <td class="px-4 md:px-6 py-4 text-center">
                                     <span class="text-sm font-bold text-gray-800">{{ formatNumber(svc.total_bookings) }}</span>
                                     <p v-if="svc.completed_sessions" class="text-xs text-gray-400">{{ svc.completed_sessions }} sessions</p>
                                 </td>
-                                <td class="px-6 py-4 ltr:text-right rtl:text-left">
+                                <td class="px-4 md:px-6 py-4 ltr:text-right rtl:text-left">
                                     <span class="text-sm font-bold text-emerald-600">{{ formatCurrency(svc.total_revenue) }}</span>
                                 </td>
-                                <td class="px-6 py-4 text-center">
+                                <td class="px-4 md:px-6 py-4 text-center">
                                     <span class="inline-flex px-2.5 py-1 text-xs font-semibold rounded-full capitalize"
                                           :class="statusColor(svc.status)">
                                         {{ svc.status }}
                                     </span>
                                 </td>
-                                <td class="px-6 py-4 text-center">
+                                <td class="px-4 md:px-6 py-4 text-center">
                                     <Link v-if="can('services.update')"
                                           :href="`/admin/services/${svc.id}/edit`"
                                           class="text-xs font-medium text-[#C4A265] hover:underline">
@@ -443,7 +443,7 @@ const pieColors = ['#C4A265', '#3B82F6', '#10B981', '#8B5CF6', '#F59E0B', '#EF44
                                 </td>
                             </tr>
                             <tr v-if="!services || services.length === 0">
-                                <td colspan="8" class="px-6 py-12 text-center">
+                                <td colspan="8" class="px-4 md:px-6 py-12 text-center">
                                     <div class="flex flex-col items-center gap-2">
                                         <svg class="w-12 h-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
@@ -460,10 +460,10 @@ const pieColors = ['#C4A265', '#3B82F6', '#10B981', '#8B5CF6', '#F59E0B', '#EF44
             <!-- ═══ RECENT VISITS ═══ -->
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden"
                  :class="mounted ? 'animate-fade-in-up' : 'opacity-0'" style="animation-delay: 0.4s;">
-                <div class="px-6 py-5 border-b border-gray-100">
+                <div class="px-4 md:px-6 py-5 border-b border-gray-100">
                     <div class="flex items-center gap-2">
-                        <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
-                            <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center">
+                            <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                         </div>
@@ -475,35 +475,35 @@ const pieColors = ['#C4A265', '#3B82F6', '#10B981', '#8B5CF6', '#F59E0B', '#EF44
                     <table class="min-w-full">
                         <thead>
                             <tr class="bg-gray-50/80">
-                                <th class="px-6 py-3 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase">{{ $t('a_visit_number') }}</th>
-                                <th class="px-6 py-3 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase">{{ $t('a_patient') }}</th>
-                                <th class="px-6 py-3 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase">{{ $t('a_doctor') }}</th>
-                                <th class="px-6 py-3 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase">{{ $t('a_service') }}</th>
-                                <th class="px-6 py-3 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase">{{ $t('a_date') }}</th>
-                                <th class="px-6 py-3 text-center text-xs font-semibold text-gray-500 uppercase">{{ $t('a_status') }}</th>
-                                <th class="px-6 py-3 ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">{{ $t('a_commission') }}</th>
+                                <th class="px-4 md:px-6 py-3 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase">{{ $t('a_visit_number') }}</th>
+                                <th class="px-4 md:px-6 py-3 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase">{{ $t('a_patient') }}</th>
+                                <th class="px-4 md:px-6 py-3 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase">{{ $t('a_doctor') }}</th>
+                                <th class="px-4 md:px-6 py-3 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase">{{ $t('a_service') }}</th>
+                                <th class="px-4 md:px-6 py-3 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase">{{ $t('a_date') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-center text-xs font-semibold text-gray-500 uppercase">{{ $t('a_status') }}</th>
+                                <th class="px-4 md:px-6 py-3 ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">{{ $t('a_commission') }}</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100">
                             <tr v-for="visit in recentVisits" :key="visit.id"
                                 class="hover:bg-gray-50/50 transition-colors">
-                                <td class="px-6 py-3.5 text-sm font-mono text-[#C4A265] font-medium">{{ visit.visit_number }}</td>
-                                <td class="px-6 py-3.5 text-sm font-medium text-gray-800">{{ visit.patient_name || '-' }}</td>
-                                <td class="px-6 py-3.5 text-sm text-gray-600">{{ visit.doctor_name || '-' }}</td>
-                                <td class="px-6 py-3.5 text-sm text-gray-600">{{ visit.service_name || '-' }}</td>
-                                <td class="px-6 py-3.5 text-sm text-gray-500">{{ visit.visit_date }}</td>
-                                <td class="px-6 py-3.5 text-center">
+                                <td class="px-4 md:px-6 py-3.5 text-sm font-mono text-[#C4A265] font-medium">{{ visit.visit_number }}</td>
+                                <td class="px-4 md:px-6 py-3.5 text-sm font-medium text-gray-800">{{ visit.patient_name || '-' }}</td>
+                                <td class="px-4 md:px-6 py-3.5 text-sm text-gray-600">{{ visit.doctor_name || '-' }}</td>
+                                <td class="px-4 md:px-6 py-3.5 text-sm text-gray-600">{{ visit.service_name || '-' }}</td>
+                                <td class="px-4 md:px-6 py-3.5 text-sm text-gray-500">{{ visit.visit_date }}</td>
+                                <td class="px-4 md:px-6 py-3.5 text-center">
                                     <span class="inline-flex px-2 py-0.5 text-xs font-semibold rounded-full capitalize"
                                           :class="statusColor(visit.status)">
                                         {{ visit.status?.replace('_', ' ') }}
                                     </span>
                                 </td>
-                                <td class="px-6 py-3.5 ltr:text-right rtl:text-left text-sm font-medium text-purple-600">
+                                <td class="px-4 md:px-6 py-3.5 ltr:text-right rtl:text-left text-sm font-medium text-[#1B365D]">
                                     {{ visit.commission_amount ? formatCurrency(visit.commission_amount) : '-' }}
                                 </td>
                             </tr>
                             <tr v-if="!recentVisits || recentVisits.length === 0">
-                                <td colspan="7" class="px-6 py-8 text-center text-sm text-gray-400">{{ $t('a_no_recent_visits') }}</td>
+                                <td colspan="7" class="px-4 md:px-6 py-8 text-center text-sm text-gray-400">{{ $t('a_no_recent_visits') }}</td>
                             </tr>
                         </tbody>
                     </table>

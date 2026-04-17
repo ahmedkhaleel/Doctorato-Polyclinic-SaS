@@ -18,29 +18,29 @@ const statusColors = {
     draft: 'bg-gray-100 text-gray-600 border-gray-200',
     active: 'bg-emerald-50 text-emerald-700 border-emerald-200',
     paused: 'bg-amber-50 text-amber-700 border-amber-200',
-    completed: 'bg-blue-50 text-blue-700 border-blue-200',
+    completed: 'bg-slate-50 text-[#1B365D] border-slate-200',
 };
 
 const statusDotColors = {
     draft: 'bg-gray-400',
     active: 'bg-emerald-500',
     paused: 'bg-amber-500',
-    completed: 'bg-blue-500',
+    completed: 'bg-[#1B365D]',
 };
 
 const leadStatusColors = {
-    new: 'bg-blue-50 text-blue-700 border-blue-200',
-    contacted: 'bg-indigo-50 text-indigo-700 border-indigo-200',
-    qualified: 'bg-purple-50 text-purple-700 border-purple-200',
-    converted: 'bg-green-50 text-green-700 border-green-200',
+    new: 'bg-slate-50 text-[#1B365D] border-slate-200',
+    contacted: 'bg-slate-50 text-[#1B365D] border-slate-200',
+    qualified: 'bg-slate-50 text-[#1B365D] border-slate-200',
+    converted: 'bg-emerald-50 text-emerald-700 border-emerald-200',
     lost: 'bg-red-50 text-red-700 border-red-200',
 };
 
 const leadStatusDotColors = {
-    new: 'bg-blue-500',
-    contacted: 'bg-indigo-500',
-    qualified: 'bg-purple-500',
-    converted: 'bg-green-500',
+    new: 'bg-[#1B365D]',
+    contacted: 'bg-[#1B365D]',
+    qualified: 'bg-[#1B365D]',
+    converted: 'bg-emerald-500',
     lost: 'bg-red-500',
 };
 
@@ -65,12 +65,12 @@ function getInitials(name) {
 }
 
 const initialsColors = [
-    'bg-blue-100 text-blue-700',
+    'bg-slate-100 text-[#1B365D]',
     'bg-emerald-100 text-emerald-700',
-    'bg-purple-100 text-purple-700',
+    'bg-slate-100 text-[#1B365D]',
     'bg-amber-100 text-amber-700',
-    'bg-rose-100 text-rose-700',
-    'bg-indigo-100 text-indigo-700',
+    'bg-amber-100 text-[#C4A265]',
+    'bg-slate-100 text-[#1B365D]',
     'bg-teal-100 text-teal-700',
 ];
 
@@ -112,7 +112,7 @@ onMounted(() => {
                                 </Link>
                                 <div>
                                     <div class="flex items-center gap-3 flex-wrap">
-                                        <h1 class="text-2xl font-bold text-gray-900 tracking-tight">{{ campaign.name }}</h1>
+                                        <h1 class="text-xl md:text-2xl font-bold text-gray-900 tracking-tight">{{ campaign.name }}</h1>
                                         <span :class="statusColors[campaign.status]" class="inline-flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-semibold rounded-full capitalize border">
                                             <span :class="statusDotColors[campaign.status]" class="w-1.5 h-1.5 rounded-full"></span>
                                             {{ campaign.status }}
@@ -150,14 +150,14 @@ onMounted(() => {
             >
                 <!-- Leads -->
                 <div class="relative bg-white rounded-xl shadow-sm p-5 border border-gray-100 overflow-hidden group hover:shadow-md hover:-translate-y-0.5 transition-all duration-300">
-                    <div class="absolute top-0 ltr:left-0 rtl:right-0 ltr:right-0 rtl:left-0 h-1 bg-gradient-to-r from-blue-400 to-blue-500"></div>
+                    <div class="absolute top-0 ltr:left-0 rtl:right-0 ltr:right-0 rtl:left-0 h-1 bg-gradient-to-r from-slate-400 to-[#1B365D]"></div>
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-[11px] text-gray-500 uppercase tracking-wider font-semibold mb-1">{{ $t('a_total_leads') }}</p>
-                            <p class="text-3xl font-bold text-gray-900">{{ campaign.leads_count }}</p>
+                            <p class="text-2xl md:text-3xl font-bold text-gray-900">{{ campaign.leads_count }}</p>
                         </div>
-                        <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center">
-                            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+                        <div class="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
                         </div>
                     </div>
                 </div>
@@ -168,7 +168,7 @@ onMounted(() => {
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-[11px] text-gray-500 uppercase tracking-wider font-semibold mb-1">{{ $t('a_conversions') }}</p>
-                            <p class="text-3xl font-bold text-emerald-600">{{ campaign.conversions_count }}</p>
+                            <p class="text-2xl md:text-3xl font-bold text-emerald-600">{{ campaign.conversions_count }}</p>
                         </div>
                         <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center">
                             <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -182,7 +182,7 @@ onMounted(() => {
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-[11px] text-gray-500 uppercase tracking-wider font-semibold mb-1">{{ $t('a_budget') }}</p>
-                            <p class="text-3xl font-bold text-gray-900">{{ formatCurrency(campaign.budget) }}</p>
+                            <p class="text-2xl md:text-3xl font-bold text-gray-900">{{ formatCurrency(campaign.budget) }}</p>
                         </div>
                         <div class="w-12 h-12 rounded-xl flex items-center justify-center" style="background-color: rgba(196, 162, 101, 0.1);">
                             <svg class="w-6 h-6" style="color: #C4A265;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -196,7 +196,7 @@ onMounted(() => {
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-[11px] text-gray-500 uppercase tracking-wider font-semibold mb-1">{{ $t('a_actual_cost') }}</p>
-                            <p class="text-3xl font-bold text-gray-900">{{ formatCurrency(campaign.actual_cost) }}</p>
+                            <p class="text-2xl md:text-3xl font-bold text-gray-900">{{ formatCurrency(campaign.actual_cost) }}</p>
                         </div>
                         <div class="w-12 h-12 rounded-xl bg-gray-50 flex items-center justify-center">
                             <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2zM10 8.5a.5.5 0 11-1 0 .5.5 0 011 0zm5 5a.5.5 0 11-1 0 .5.5 0 011 0z" /></svg>
@@ -256,10 +256,10 @@ onMounted(() => {
                 :class="showLeads ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
                 class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-500 ease-out"
             >
-                <div class="px-6 py-4 border-b border-gray-100 bg-gray-50/50 flex items-center justify-between">
+                <div class="px-4 md:px-6 py-4 border-b border-gray-100 bg-gray-50/50 flex items-center justify-between">
                     <div class="flex items-center gap-2.5">
-                        <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
-                            <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+                        <div class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center">
+                            <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
                         </div>
                         <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wider">{{ $t('a_campaign_leads') }}</h3>
                     </div>
@@ -335,7 +335,7 @@ onMounted(() => {
                 </div>
 
                 <!-- Empty State -->
-                <div v-if="!leads.data?.length" class="px-6 py-20 text-center">
+                <div v-if="!leads.data?.length" class="px-4 md:px-6 py-20 text-center">
                     <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-4">
                         <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
                     </div>

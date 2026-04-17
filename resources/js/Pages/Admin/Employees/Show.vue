@@ -20,7 +20,7 @@ const props = defineProps({
 });
 
 const statusColors = {
-    active: 'bg-green-100 text-green-700',
+    active: 'bg-emerald-100 text-emerald-700',
     on_leave: 'bg-amber-100 text-amber-700',
     suspended: 'bg-red-100 text-red-700',
     terminated: 'bg-gray-100 text-gray-600',
@@ -34,15 +34,15 @@ const statusKeys = {
 };
 
 const leaveTypeColors = {
-    annual: 'bg-blue-100 text-blue-700',
+    annual: 'bg-slate-100 text-[#1B365D]',
     sick: 'bg-red-100 text-red-700',
-    personal: 'bg-purple-100 text-purple-700',
+    personal: 'bg-slate-100 text-[#1B365D]',
     unpaid: 'bg-gray-100 text-gray-600',
 };
 
 const leaveStatusColors = {
     pending: 'bg-amber-100 text-amber-700',
-    approved: 'bg-green-100 text-green-700',
+    approved: 'bg-emerald-100 text-emerald-700',
     rejected: 'bg-red-100 text-red-700',
 };
 
@@ -72,8 +72,8 @@ function formatDate(date) {
                     </Link>
                     <div>
                         <div class="flex items-center gap-3">
-                            <h1 class="text-2xl font-bold text-gray-800">{{ employee.user?.name }}</h1>
-                            <span class="text-xs font-mono px-2.5 py-1 rounded-full bg-yellow-50" style="color: #C4A265;">
+                            <h1 class="text-xl md:text-2xl font-bold text-gray-800">{{ employee.user?.name }}</h1>
+                            <span class="text-xs font-mono px-2.5 py-1 rounded-full bg-amber-50" style="color: #C4A265;">
                                 {{ employee.employee_number }}
                             </span>
                             <span
@@ -188,7 +188,7 @@ function formatDate(date) {
                                 <span class="text-sm text-gray-500">{{ $t('a_other_allowances') }}</span>
                                 <span class="text-sm font-medium text-gray-800">{{ formatCurrency(employee.other_allowances) }}</span>
                             </div>
-                            <div class="flex justify-between py-3 bg-gray-50 -mx-6 px-6 rounded-b-lg mt-2">
+                            <div class="flex justify-between py-3 bg-gray-50 -mx-6 px-4 md:px-6 rounded-b-lg mt-2">
                                 <span class="text-sm font-semibold text-gray-700">{{ $t('a_total_gross_salary') }}</span>
                                 <span class="text-sm font-bold" style="color: #C4A265;">{{ formatCurrency(Number(employee.basic_salary || 0) + Number(employee.housing_allowance || 0) + Number(employee.transport_allowance || 0) + Number(employee.other_allowances || 0)) }}</span>
                             </div>
@@ -202,20 +202,20 @@ function formatDate(date) {
                     <div class="bg-white rounded-lg shadow-sm p-6">
                         <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">{{ $t('a_attendance_current_month') }}</h3>
                         <div class="grid grid-cols-2 gap-4">
-                            <div class="text-center p-3 bg-green-50 rounded-lg">
-                                <p class="text-2xl font-bold text-green-700">{{ attendanceSummary?.present ?? 0 }}</p>
+                            <div class="text-center p-3 bg-emerald-50 rounded-lg">
+                                <p class="text-xl md:text-2xl font-bold text-emerald-700">{{ attendanceSummary?.present ?? 0 }}</p>
                                 <p class="text-xs text-gray-500 mt-1">{{ $t('a_present') }}</p>
                             </div>
                             <div class="text-center p-3 bg-red-50 rounded-lg">
-                                <p class="text-2xl font-bold text-red-600">{{ attendanceSummary?.absent ?? 0 }}</p>
+                                <p class="text-xl md:text-2xl font-bold text-red-600">{{ attendanceSummary?.absent ?? 0 }}</p>
                                 <p class="text-xs text-gray-500 mt-1">{{ $t('a_absent') }}</p>
                             </div>
                             <div class="text-center p-3 bg-amber-50 rounded-lg">
-                                <p class="text-2xl font-bold text-amber-600">{{ attendanceSummary?.late ?? 0 }}</p>
+                                <p class="text-xl md:text-2xl font-bold text-amber-600">{{ attendanceSummary?.late ?? 0 }}</p>
                                 <p class="text-xs text-gray-500 mt-1">{{ $t('a_late') }}</p>
                             </div>
-                            <div class="text-center p-3 bg-blue-50 rounded-lg">
-                                <p class="text-2xl font-bold text-blue-600">{{ attendanceSummary?.overtime_hours ?? 0 }}</p>
+                            <div class="text-center p-3 bg-slate-50 rounded-lg">
+                                <p class="text-xl md:text-2xl font-bold text-[#1B365D]">{{ attendanceSummary?.overtime_hours ?? 0 }}</p>
                                 <p class="text-xs text-gray-500 mt-1">{{ $t('a_overtime_hrs') }}</p>
                             </div>
                         </div>

@@ -21,11 +21,11 @@ const receiveItems = ref([])
 
 const statusLabels = {
     draft: { ar: 'مسودة', en: 'Draft', color: 'bg-gray-100 text-gray-700' },
-    pending_approval: { ar: 'بانتظار الموافقة', en: 'Pending Approval', color: 'bg-yellow-100 text-yellow-700' },
-    approved: { ar: 'معتمد', en: 'Approved', color: 'bg-blue-100 text-blue-700' },
-    ordered: { ar: 'تم الطلب', en: 'Ordered', color: 'bg-indigo-100 text-indigo-700' },
-    partially_received: { ar: 'استلام جزئي', en: 'Partially Received', color: 'bg-orange-100 text-orange-700' },
-    received: { ar: 'مستلم', en: 'Received', color: 'bg-green-100 text-green-700' },
+    pending_approval: { ar: 'بانتظار الموافقة', en: 'Pending Approval', color: 'bg-amber-100 text-amber-700' },
+    approved: { ar: 'معتمد', en: 'Approved', color: 'bg-slate-100 text-[#1B365D]' },
+    ordered: { ar: 'تم الطلب', en: 'Ordered', color: 'bg-slate-100 text-[#1B365D]' },
+    partially_received: { ar: 'استلام جزئي', en: 'Partially Received', color: 'bg-amber-100 text-[#C4A265]' },
+    received: { ar: 'مستلم', en: 'Received', color: 'bg-emerald-100 text-emerald-700' },
     cancelled: { ar: 'ملغي', en: 'Cancelled', color: 'bg-red-100 text-red-700' },
 }
 
@@ -114,7 +114,7 @@ const receivedPercentage = computed(() => {
 </script>
 
 <template>
-    <div class="p-6 max-w-5xl mx-auto">
+    <div class="p-4 md:p-6 max-w-5xl mx-auto">
         <!-- Header -->
         <div class="flex items-center justify-between mb-6">
             <div class="flex items-center gap-3">
@@ -123,7 +123,7 @@ const receivedPercentage = computed(() => {
                 </Link>
                 <div>
                     <div class="flex items-center gap-3">
-                        <h1 class="text-2xl font-bold text-gray-800 font-mono">{{ order.po_number }}</h1>
+                        <h1 class="text-xl md:text-2xl font-bold text-gray-800 font-mono">{{ order.po_number }}</h1>
                         <span :class="statusLabel(order.status).color" class="px-3 py-1 rounded-full text-xs font-medium">{{ statusLabel(order.status).text }}</span>
                     </div>
                     <p class="text-gray-500 text-sm mt-1">{{ isRtl ? 'تاريخ الأمر:' : 'Order Date:' }} {{ formatDate(order.order_date) }}</p>
@@ -133,13 +133,13 @@ const receivedPercentage = computed(() => {
             <div class="flex items-center gap-2">
                 <!-- Receive Items Button -->
                 <button v-if="['ordered', 'partially_received'].includes(order.status)" @click="openReceive"
-                    class="inline-flex items-center gap-2 px-4 py-2.5 bg-green-600 text-white rounded-xl hover:bg-green-700 transition text-sm font-medium">
+                    class="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 transition text-sm font-medium">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                     {{ isRtl ? 'استلام أصناف' : 'Receive Items' }}
                 </button>
                 <!-- Status Actions -->
                 <button v-for="ns in nextStatuses" :key="ns" @click="openStatusChange(ns)"
-                    :class="ns === 'cancelled' ? 'border-red-200 text-red-600 hover:bg-red-50' : 'border-indigo-200 text-indigo-700 hover:bg-indigo-50'"
+                    :class="ns === 'cancelled' ? 'border-red-200 text-red-600 hover:bg-red-50' : 'border-slate-200 text-[#1B365D] hover:bg-slate-50'"
                     class="px-4 py-2.5 border rounded-xl text-sm font-medium transition">
                     {{ statusLabel(ns).text }}
                 </button>
@@ -171,7 +171,7 @@ const receivedPercentage = computed(() => {
                     </div>
                     <div class="flex justify-between text-sm font-bold pt-2 border-t">
                         <span class="text-gray-700">{{ isRtl ? 'الإجمالي' : 'Total' }}</span>
-                        <span class="text-indigo-700">{{ formatCurrency(order.total) }}</span>
+                        <span class="text-[#1B365D]">{{ formatCurrency(order.total) }}</span>
                     </div>
                 </div>
             </div>
@@ -181,9 +181,9 @@ const receivedPercentage = computed(() => {
                 <h3 class="text-xs font-semibold text-gray-500 uppercase mb-3">{{ isRtl ? 'تقدم الاستلام' : 'Receiving Progress' }}</h3>
                 <div class="flex items-center gap-3 mb-3">
                     <div class="flex-1 bg-gray-100 rounded-full h-3 overflow-hidden">
-                        <div class="h-full rounded-full transition-all duration-500" :class="receivedPercentage === 100 ? 'bg-green-500' : receivedPercentage > 0 ? 'bg-indigo-500' : 'bg-gray-200'" :style="{ width: receivedPercentage + '%' }"></div>
+                        <div class="h-full rounded-full transition-all duration-500" :class="receivedPercentage === 100 ? 'bg-emerald-500' : receivedPercentage > 0 ? 'bg-[#1B365D]' : 'bg-gray-200'" :style="{ width: receivedPercentage + '%' }"></div>
                     </div>
-                    <span class="text-sm font-bold" :class="receivedPercentage === 100 ? 'text-green-600' : 'text-gray-700'">{{ receivedPercentage }}%</span>
+                    <span class="text-sm font-bold" :class="receivedPercentage === 100 ? 'text-emerald-600' : 'text-gray-700'">{{ receivedPercentage }}%</span>
                 </div>
                 <div class="space-y-1 text-xs text-gray-500">
                     <div v-if="order.expected_delivery_date" class="flex justify-between">
@@ -192,7 +192,7 @@ const receivedPercentage = computed(() => {
                     </div>
                     <div v-if="order.received_date" class="flex justify-between">
                         <span>{{ isRtl ? 'تاريخ الاستلام' : 'Received' }}</span>
-                        <span class="text-green-600 font-medium">{{ formatDate(order.received_date) }}</span>
+                        <span class="text-emerald-600 font-medium">{{ formatDate(order.received_date) }}</span>
                     </div>
                     <div v-if="order.creator" class="flex justify-between">
                         <span>{{ isRtl ? 'أنشأ بواسطة' : 'Created by' }}</span>
@@ -207,9 +207,9 @@ const receivedPercentage = computed(() => {
         </div>
 
         <!-- Notes -->
-        <div v-if="order.notes || order.delivery_notes" class="bg-yellow-50 border border-yellow-100 rounded-2xl p-4 mb-6">
-            <p v-if="order.notes" class="text-sm text-yellow-800"><strong>{{ isRtl ? 'ملاحظات:' : 'Notes:' }}</strong> {{ order.notes }}</p>
-            <p v-if="order.delivery_notes" class="text-sm text-yellow-800 mt-1"><strong>{{ isRtl ? 'ملاحظات التسليم:' : 'Delivery Notes:' }}</strong> {{ order.delivery_notes }}</p>
+        <div v-if="order.notes || order.delivery_notes" class="bg-amber-50 border border-amber-100 rounded-2xl p-4 mb-6">
+            <p v-if="order.notes" class="text-sm text-amber-800"><strong>{{ isRtl ? 'ملاحظات:' : 'Notes:' }}</strong> {{ order.notes }}</p>
+            <p v-if="order.delivery_notes" class="text-sm text-amber-800 mt-1"><strong>{{ isRtl ? 'ملاحظات التسليم:' : 'Delivery Notes:' }}</strong> {{ order.delivery_notes }}</p>
         </div>
 
         <!-- Items Table -->
@@ -238,12 +238,12 @@ const receivedPercentage = computed(() => {
                         </td>
                         <td class="px-4 py-3 text-center text-gray-700">{{ parseFloat(item.quantity_ordered) }} {{ item.supply?.unit }}</td>
                         <td class="px-4 py-3 text-center">
-                            <span :class="parseFloat(item.quantity_received) >= parseFloat(item.quantity_ordered) ? 'text-green-600 font-medium' : parseFloat(item.quantity_received) > 0 ? 'text-orange-600' : 'text-gray-400'">
+                            <span :class="parseFloat(item.quantity_received) >= parseFloat(item.quantity_ordered) ? 'text-emerald-600 font-medium' : parseFloat(item.quantity_received) > 0 ? 'text-[#C4A265]' : 'text-gray-400'">
                                 {{ parseFloat(item.quantity_received || 0) }}
                             </span>
                         </td>
                         <td class="px-4 py-3 text-center">
-                            <span :class="item.remaining_quantity > 0 ? 'text-red-600 font-medium' : 'text-green-600'">
+                            <span :class="item.remaining_quantity > 0 ? 'text-red-600 font-medium' : 'text-emerald-600'">
                                 {{ item.remaining_quantity }}
                             </span>
                         </td>
@@ -282,7 +282,7 @@ const receivedPercentage = computed(() => {
                     <div class="flex justify-end gap-3 pt-4 border-t">
                         <button @click="showStatusModal = false" class="px-5 py-2.5 text-gray-600 hover:bg-gray-100 rounded-xl text-sm font-medium">{{ isRtl ? 'إلغاء' : 'Cancel' }}</button>
                         <button @click="submitStatusChange" :disabled="processing"
-                            :class="newStatus === 'cancelled' ? 'bg-red-600 hover:bg-red-700' : 'bg-indigo-600 hover:bg-indigo-700'"
+                            :class="newStatus === 'cancelled' ? 'bg-red-600 hover:bg-red-700' : 'bg-[#1B365D] hover:bg-[#1B365D]'"
                             class="px-5 py-2.5 text-white rounded-xl text-sm font-medium transition disabled:opacity-50">
                             {{ isRtl ? 'تأكيد' : 'Confirm' }}
                         </button>
@@ -298,7 +298,7 @@ const receivedPercentage = computed(() => {
                 <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto p-6">
                     <div class="flex items-center justify-between mb-5">
                         <h2 class="text-lg font-bold text-gray-800">{{ isRtl ? 'استلام الأصناف' : 'Receive Items' }}</h2>
-                        <button @click="receiveAll" class="text-sm text-indigo-600 hover:text-indigo-700 font-medium">
+                        <button @click="receiveAll" class="text-sm text-[#1B365D] hover:text-[#1B365D] font-medium">
                             {{ isRtl ? 'استلام الكل' : 'Receive All' }}
                         </button>
                     </div>
@@ -323,7 +323,7 @@ const receivedPercentage = computed(() => {
                                 <td class="px-3 py-2.5 text-center text-gray-600">{{ item.quantity_ordered }} {{ item.unit }}</td>
                                 <td class="px-3 py-2.5 text-center text-gray-400">{{ item.quantity_received }}</td>
                                 <td class="px-3 py-2.5 text-center">
-                                    <input v-model.number="item.new_received" type="number" :min="0" :max="item.quantity_ordered" step="0.01" class="w-full px-2 py-1.5 border border-gray-200 rounded-lg text-sm text-center focus:ring-indigo-500 focus:border-indigo-500" />
+                                    <input v-model.number="item.new_received" type="number" :min="0" :max="item.quantity_ordered" step="0.01" class="w-full px-2 py-1.5 border border-gray-200 rounded-lg text-sm text-center focus:ring-[#1B365D] focus:border-[#1B365D]" />
                                 </td>
                                 <td class="px-3 py-2.5 text-center">
                                     <input v-model="item.batch_number" type="text" class="w-full px-2 py-1.5 border border-gray-200 rounded-lg text-sm text-center" :placeholder="isRtl ? 'اختياري' : 'Optional'" />
@@ -337,7 +337,7 @@ const receivedPercentage = computed(() => {
 
                     <div class="flex justify-end gap-3 pt-4 border-t">
                         <button @click="showReceiveModal = false" class="px-5 py-2.5 text-gray-600 hover:bg-gray-100 rounded-xl text-sm font-medium">{{ isRtl ? 'إلغاء' : 'Cancel' }}</button>
-                        <button @click="submitReceive" :disabled="processing" class="px-5 py-2.5 bg-green-600 text-white rounded-xl hover:bg-green-700 text-sm font-medium transition disabled:opacity-50">
+                        <button @click="submitReceive" :disabled="processing" class="px-5 py-2.5 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 text-sm font-medium transition disabled:opacity-50">
                             {{ isRtl ? 'تأكيد الاستلام' : 'Confirm Receiving' }}
                         </button>
                     </div>

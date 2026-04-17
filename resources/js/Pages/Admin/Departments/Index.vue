@@ -75,7 +75,7 @@ function deleteDepartment(dept) {
     <AdminLayout :title="$t('a_departments')">
         <div class="space-y-6">
             <div class="flex items-center justify-between">
-                <h1 class="text-2xl font-bold text-gray-800">{{ $t('a_departments') }}</h1>
+                <h1 class="text-xl md:text-2xl font-bold text-gray-800">{{ $t('a_departments') }}</h1>
                 <button
                     v-if="can('departments.create')"
                     @click="openCreate"
@@ -101,7 +101,7 @@ function deleteDepartment(dept) {
                                 <p class="text-sm text-gray-500" dir="rtl">{{ dept.name_ar }}</p>
                             </div>
                             <span
-                                :class="dept.is_active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'"
+                                :class="dept.is_active ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-600'"
                                 class="px-2 py-0.5 text-xs font-medium rounded-full"
                             >
                                 {{ dept.is_active ? $t('a_active') : $t('a_inactive') }}
@@ -138,7 +138,7 @@ function deleteDepartment(dept) {
                 </div>
             </div>
 
-            <div v-if="!departments || departments.length === 0" class="bg-white rounded-lg shadow-sm p-8 text-center text-gray-500">
+            <div v-if="!departments || departments.length === 0" class="bg-white rounded-lg shadow-sm p-4 md:p-8 text-center text-gray-500">
                 {{ $t('a_no_departments_found') }}
             </div>
 
@@ -146,7 +146,7 @@ function deleteDepartment(dept) {
             <Teleport to="body">
                 <div v-if="showModal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
                     <div class="fixed inset-0 bg-black/50" @click="showModal = false"></div>
-                    <div class="relative bg-white rounded-xl shadow-xl w-full max-w-lg p-6 z-10">
+                    <div class="relative bg-white rounded-xl shadow-xl w-full max-w-lg p-4 md:p-6 z-10">
                         <h2 class="text-lg font-semibold text-gray-800 mb-4">
                             {{ editingDepartment ? $t('a_edit_department') : $t('a_add_department') }}
                         </h2>
@@ -155,37 +155,37 @@ function deleteDepartment(dept) {
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_name_en') }} <span class="text-red-500">*</span></label>
-                                    <input v-model="form.name_en" type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                    <input v-model="form.name_en" type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
                                     <p v-if="form.errors.name_en" class="mt-1 text-sm text-red-600">{{ form.errors.name_en }}</p>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_name_ar') }} <span class="text-red-500">*</span></label>
-                                    <input v-model="form.name_ar" type="text" dir="rtl" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                    <input v-model="form.name_ar" type="text" dir="rtl" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
                                     <p v-if="form.errors.name_ar" class="mt-1 text-sm text-red-600">{{ form.errors.name_ar }}</p>
                                 </div>
                             </div>
 
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_description') }}</label>
-                                <textarea v-model="form.description" rows="2" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"></textarea>
+                                <textarea v-model="form.description" rows="2" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"></textarea>
                             </div>
 
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_manager') }}</label>
-                                    <select v-model="form.manager_id" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent">
+                                    <select v-model="form.manager_id" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent">
                                         <option value="">{{ $t('a_none') }}</option>
                                         <option v-for="mgr in managers" :key="mgr.id" :value="mgr.id">{{ mgr.name }}</option>
                                     </select>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_display_order') }}</label>
-                                    <input v-model="form.display_order" type="number" min="0" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                    <input v-model="form.display_order" type="number" min="0" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
                                 </div>
                             </div>
 
                             <div class="flex items-center gap-2">
-                                <input v-model="form.is_active" type="checkbox" id="is_active" class="rounded border-gray-300 text-yellow-600 focus:ring-yellow-200" />
+                                <input v-model="form.is_active" type="checkbox" id="is_active" class="rounded border-gray-300 text-amber-600 focus:ring-amber-200" />
                                 <label for="is_active" class="text-sm text-gray-700">{{ $t('a_active') }}</label>
                             </div>
 

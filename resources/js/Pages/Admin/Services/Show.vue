@@ -76,9 +76,9 @@ const statCards = computed(() => [
         value: formatNumber(props.stats?.totalVisits),
         sub: `${props.stats?.completedVisits ?? 0} completed (${props.stats?.completionRate ?? 0}%)`,
         icon: 'visits',
-        gradient: 'from-blue-500 to-blue-400',
-        iconBg: 'bg-blue-50',
-        iconColor: 'text-blue-600',
+        gradient: 'from-[#1B365D] to-slate-400',
+        iconBg: 'bg-slate-50',
+        iconColor: 'text-[#1B365D]',
     },
     {
         label: 'Bookings',
@@ -94,9 +94,9 @@ const statCards = computed(() => [
         value: formatCurrency(props.stats?.totalCommission),
         sub: `Avg ${formatCurrency(props.stats?.avgRevenuePerVisit)} / visit`,
         icon: 'commission',
-        gradient: 'from-purple-500 to-purple-400',
-        iconBg: 'bg-purple-50',
-        iconColor: 'text-purple-600',
+        gradient: 'from-[#1B365D] to-slate-400',
+        iconBg: 'bg-slate-50',
+        iconColor: 'text-[#1B365D]',
     },
 ]);
 
@@ -117,14 +117,14 @@ const maxChartValue = computed(() => {
 const statusColorMap = {
     completed: { bg: 'bg-emerald-100', text: 'text-emerald-700', dot: 'bg-emerald-500' },
     in_progress: { bg: 'bg-amber-100', text: 'text-amber-700', dot: 'bg-amber-500' },
-    checked_in: { bg: 'bg-cyan-100', text: 'text-cyan-700', dot: 'bg-cyan-500' },
-    scheduled: { bg: 'bg-indigo-100', text: 'text-indigo-700', dot: 'bg-indigo-500' },
+    checked_in: { bg: 'bg-slate-100', text: 'text-[#1B365D]', dot: 'bg-[#1B365D]' },
+    scheduled: { bg: 'bg-slate-100', text: 'text-[#1B365D]', dot: 'bg-[#1B365D]' },
     cancelled: { bg: 'bg-red-100', text: 'text-red-700', dot: 'bg-red-500' },
     no_show: { bg: 'bg-gray-100', text: 'text-gray-600', dot: 'bg-gray-400' },
     active: { bg: 'bg-emerald-100', text: 'text-emerald-700', dot: 'bg-emerald-500' },
     inactive: { bg: 'bg-gray-100', text: 'text-gray-600', dot: 'bg-gray-400' },
-    confirmed: { bg: 'bg-blue-100', text: 'text-blue-700', dot: 'bg-blue-500' },
-    pending: { bg: 'bg-yellow-100', text: 'text-yellow-700', dot: 'bg-yellow-500' },
+    confirmed: { bg: 'bg-slate-100', text: 'text-[#1B365D]', dot: 'bg-[#1B365D]' },
+    pending: { bg: 'bg-amber-100', text: 'text-amber-700', dot: 'bg-amber-500' },
     paid: { bg: 'bg-emerald-100', text: 'text-emerald-700', dot: 'bg-emerald-500' },
     partial: { bg: 'bg-amber-100', text: 'text-amber-700', dot: 'bg-amber-500' },
     unpaid: { bg: 'bg-red-100', text: 'text-red-700', dot: 'bg-red-500' },
@@ -183,7 +183,7 @@ const statusLabels = {
                             </svg>
                         </div>
                         <div>
-                            <h1 class="text-2xl font-bold text-gray-900">{{ $localized(service, 'name') }}</h1>
+                            <h1 class="text-xl md:text-2xl font-bold text-gray-900">{{ $localized(service, 'name') }}</h1>
                             <p class="text-sm text-gray-500" :dir="isRtl ? 'ltr' : 'rtl'">{{ locale === 'ar' ? service.name_en : service.name_ar }}</p>
                             <div class="flex items-center gap-2 mt-1.5">
                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold capitalize"
@@ -193,7 +193,7 @@ const statusLabels = {
                                 <span v-if="service.category" class="text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">
                                     {{ $localized(service.category, 'name') }}
                                 </span>
-                                <span v-if="service.bookable" class="text-xs text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full font-medium">
+                                <span v-if="service.bookable" class="text-xs text-[#1B365D] bg-slate-50 px-2 py-0.5 rounded-full font-medium">
                                     {{ $t('a_bookable') }}
                                 </span>
                                 <span v-if="service.session_duration_minutes" class="text-xs text-gray-400">
@@ -268,7 +268,7 @@ const statusLabels = {
                     <div class="flex items-start justify-between">
                         <div class="space-y-2">
                             <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">{{ card.label }}</p>
-                            <p class="text-2xl font-bold text-gray-900 leading-none">{{ card.value }}</p>
+                            <p class="text-xl md:text-2xl font-bold text-gray-900 leading-none">{{ card.value }}</p>
                             <p v-if="card.sub" class="text-xs text-gray-500 mt-1">{{ card.sub }}</p>
                         </div>
                         <div :class="[card.iconBg, 'w-11 h-11 rounded-xl flex items-center justify-center']">
@@ -317,7 +317,7 @@ const statusLabels = {
                         <div class="border-t border-gray-100 pt-3 space-y-3">
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center gap-2">
-                                    <div class="w-2 h-2 rounded-full bg-blue-400"></div>
+                                    <div class="w-2 h-2 rounded-full bg-slate-400"></div>
                                     <span class="text-xs text-gray-500">{{ $t('a_supply_cost') }}</span>
                                 </div>
                                 <span class="text-sm font-semibold text-gray-700">{{ formatCurrency(priceInfo.supply_cost) }}</span>
@@ -331,10 +331,10 @@ const statusLabels = {
                             </div>
                             <div v-if="priceInfo.doctor_commission_percentage" class="flex items-center justify-between">
                                 <div class="flex items-center gap-2">
-                                    <div class="w-2 h-2 rounded-full bg-purple-400"></div>
+                                    <div class="w-2 h-2 rounded-full bg-slate-400"></div>
                                     <span class="text-xs text-gray-500">{{ $t('a_dr_commission') }}</span>
                                 </div>
-                                <span class="text-sm font-semibold text-purple-600">{{ priceInfo.doctor_commission_percentage }}%</span>
+                                <span class="text-sm font-semibold text-[#1B365D]">{{ priceInfo.doctor_commission_percentage }}%</span>
                             </div>
                         </div>
                         <div class="border-t border-gray-100 pt-3">
@@ -356,8 +356,8 @@ const statusLabels = {
                 <!-- Visit Status Distribution -->
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                     <div class="flex items-center gap-2 mb-5">
-                        <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
-                            <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center">
+                            <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" />
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
                             </svg>
@@ -397,8 +397,8 @@ const statusLabels = {
                 <!-- Doctor Performance -->
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                     <div class="flex items-center gap-2 mb-5">
-                        <div class="w-8 h-8 rounded-lg bg-purple-50 flex items-center justify-center">
-                            <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center">
+                            <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                             </svg>
                         </div>
@@ -416,7 +416,7 @@ const statusLabels = {
                                 <p class="text-sm font-semibold text-gray-800 truncate">{{ doc.doctor_name }}</p>
                                 <p class="text-xs text-gray-400">{{ doc.visit_count }} visits</p>
                             </div>
-                            <span class="text-xs font-bold text-purple-600">{{ formatCurrency(doc.total_commission) }}</span>
+                            <span class="text-xs font-bold text-[#1B365D]">{{ formatCurrency(doc.total_commission) }}</span>
                         </div>
                     </div>
                     <div v-else class="flex flex-col items-center justify-center py-8 text-gray-400">
@@ -461,12 +461,12 @@ const statusLabels = {
                         </button>
                         <button @click="activeChart = 'visits'"
                                 class="px-3 py-1.5 text-xs font-medium rounded-md transition-all duration-200"
-                                :class="activeChart === 'visits' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-500 hover:text-gray-700'">
+                                :class="activeChart === 'visits' ? 'bg-white text-[#1B365D] shadow-sm' : 'text-gray-500 hover:text-gray-700'">
                             {{ $t('a_visits_tab') }}
                         </button>
                         <button @click="activeChart = 'commission'"
                                 class="px-3 py-1.5 text-xs font-medium rounded-md transition-all duration-200"
-                                :class="activeChart === 'commission' ? 'bg-white text-purple-600 shadow-sm' : 'text-gray-500 hover:text-gray-700'">
+                                :class="activeChart === 'commission' ? 'bg-white text-[#1B365D] shadow-sm' : 'text-gray-500 hover:text-gray-700'">
                             {{ $t('a_commission') }}
                         </button>
                     </div>
@@ -484,12 +484,12 @@ const statusLabels = {
                             </div>
                             <!-- Visits bar -->
                             <div v-else-if="activeChart === 'visits'"
-                                 class="h-full rounded-lg transition-all duration-1000 ease-out bg-blue-500"
+                                 class="h-full rounded-lg transition-all duration-1000 ease-out bg-[#1B365D]"
                                  :style="{ width: mounted ? `${Math.max((m.visits / maxChartValue) * 100, 2)}%` : '0%' }">
                             </div>
                             <!-- Commission bar -->
                             <div v-else
-                                 class="h-full rounded-lg transition-all duration-1000 ease-out bg-purple-500"
+                                 class="h-full rounded-lg transition-all duration-1000 ease-out bg-[#1B365D]"
                                  :style="{ width: mounted ? `${Math.max((m.commission / maxChartValue) * 100, 2)}%` : '0%' }">
                             </div>
                             <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-semibold text-gray-600">
@@ -505,14 +505,14 @@ const statusLabels = {
             <!-- ============ VISITS & BOOKINGS TABS ============ -->
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden"
                  :class="mounted ? 'animate-fade-in-up' : 'opacity-0'" style="animation-delay: 0.3s;">
-                <div class="px-6 py-4 border-b border-gray-100">
+                <div class="px-4 md:px-6 py-4 border-b border-gray-100">
                     <div class="flex items-center gap-1 bg-gray-100 rounded-lg p-0.5 w-fit">
                         <button @click="activeTab = 'visits'"
                                 class="px-4 py-2 text-sm font-medium rounded-md transition-all duration-200"
                                 :class="activeTab === 'visits' ? 'bg-white text-gray-800 shadow-sm' : 'text-gray-500 hover:text-gray-700'">
                             {{ $t('a_recent_visits') }}
                             <span class="ltr:ml-1.5 rtl:mr-1.5 px-1.5 py-0.5 text-xs rounded-full"
-                                  :class="activeTab === 'visits' ? 'bg-blue-100 text-blue-700' : 'bg-gray-200 text-gray-500'">
+                                  :class="activeTab === 'visits' ? 'bg-slate-100 text-[#1B365D]' : 'bg-gray-200 text-gray-500'">
                                 {{ recentVisits?.length || 0 }}
                             </span>
                         </button>
@@ -533,47 +533,47 @@ const statusLabels = {
                     <table class="min-w-full">
                         <thead>
                             <tr class="bg-gray-50/80">
-                                <th class="px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase">{{ $t('a_date') }}</th>
-                                <th class="px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase">{{ $t('a_patient') }}</th>
-                                <th class="px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase">{{ $t('a_doctor') }}</th>
-                                <th class="px-6 py-3.5 text-center text-xs font-semibold text-gray-500 uppercase">{{ $t('a_session') }}</th>
-                                <th class="px-6 py-3.5 text-center text-xs font-semibold text-gray-500 uppercase">{{ $t('a_time') }}</th>
-                                <th class="px-6 py-3.5 text-center text-xs font-semibold text-gray-500 uppercase">{{ $t('a_status') }}</th>
-                                <th class="px-6 py-3.5 ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">{{ $t('a_invoice_total') }}</th>
-                                <th class="px-6 py-3.5 ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">{{ $t('a_commission') }}</th>
+                                <th class="px-4 md:px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase">{{ $t('a_date') }}</th>
+                                <th class="px-4 md:px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase">{{ $t('a_patient') }}</th>
+                                <th class="px-4 md:px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase">{{ $t('a_doctor') }}</th>
+                                <th class="px-4 md:px-6 py-3.5 text-center text-xs font-semibold text-gray-500 uppercase">{{ $t('a_session') }}</th>
+                                <th class="px-4 md:px-6 py-3.5 text-center text-xs font-semibold text-gray-500 uppercase">{{ $t('a_time') }}</th>
+                                <th class="px-4 md:px-6 py-3.5 text-center text-xs font-semibold text-gray-500 uppercase">{{ $t('a_status') }}</th>
+                                <th class="px-4 md:px-6 py-3.5 ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">{{ $t('a_invoice_total') }}</th>
+                                <th class="px-4 md:px-6 py-3.5 ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">{{ $t('a_commission') }}</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100">
                             <tr v-for="visit in recentVisits" :key="visit.id"
                                 class="hover:bg-[#C4A265]/[0.02] transition-colors duration-150">
-                                <td class="px-6 py-3.5">
+                                <td class="px-4 md:px-6 py-3.5">
                                     <div class="text-sm font-medium text-gray-800">{{ visit.visit_date }}</div>
                                 </td>
-                                <td class="px-6 py-3.5">
+                                <td class="px-4 md:px-6 py-3.5">
                                     <div class="text-sm font-semibold text-gray-800">{{ visit.patient_name || '-' }}</div>
                                     <div v-if="visit.patient_phone" class="text-xs text-gray-400">{{ visit.patient_phone }}</div>
                                 </td>
-                                <td class="px-6 py-3.5 text-sm text-gray-600">{{ visit.doctor_name || '-' }}</td>
-                                <td class="px-6 py-3.5 text-center">
+                                <td class="px-4 md:px-6 py-3.5 text-sm text-gray-600">{{ visit.doctor_name || '-' }}</td>
+                                <td class="px-4 md:px-6 py-3.5 text-center">
                                     <span v-if="visit.session_number" class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#C4A265]/10 text-[#C4A265] text-xs font-bold">
                                         {{ visit.session_number }}
                                     </span>
                                     <span v-else class="text-gray-400">-</span>
                                 </td>
-                                <td class="px-6 py-3.5 text-center">
+                                <td class="px-4 md:px-6 py-3.5 text-center">
                                     <div v-if="visit.started_at" class="text-xs text-gray-500">
                                         {{ visit.started_at }}
                                         <span v-if="visit.completed_at"> - {{ visit.completed_at }}</span>
                                     </div>
                                     <span v-else class="text-gray-400">-</span>
                                 </td>
-                                <td class="px-6 py-3.5 text-center">
+                                <td class="px-4 md:px-6 py-3.5 text-center">
                                     <span class="inline-flex px-2.5 py-1 text-xs font-semibold rounded-full capitalize"
                                           :class="`${statusColor(visit.status).bg} ${statusColor(visit.status).text}`">
                                         {{ visit.status?.replace('_', ' ') }}
                                     </span>
                                 </td>
-                                <td class="px-6 py-3.5 ltr:text-right rtl:text-left">
+                                <td class="px-4 md:px-6 py-3.5 ltr:text-right rtl:text-left">
                                     <div v-if="visit.invoice_total !== null">
                                         <span class="text-sm font-semibold text-gray-800">{{ formatCurrency(visit.invoice_total) }}</span>
                                         <div>
@@ -585,12 +585,12 @@ const statusLabels = {
                                     </div>
                                     <span v-else class="text-xs text-gray-400">{{ $t('a_no_invoice') }}</span>
                                 </td>
-                                <td class="px-6 py-3.5 ltr:text-right rtl:text-left text-sm font-medium text-purple-600">
+                                <td class="px-4 md:px-6 py-3.5 ltr:text-right rtl:text-left text-sm font-medium text-[#1B365D]">
                                     {{ visit.commission_amount ? formatCurrency(visit.commission_amount) : '-' }}
                                 </td>
                             </tr>
                             <tr v-if="!recentVisits || recentVisits.length === 0">
-                                <td colspan="8" class="px-6 py-12 text-center">
+                                <td colspan="8" class="px-4 md:px-6 py-12 text-center">
                                     <div class="flex flex-col items-center gap-2">
                                         <svg class="w-12 h-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -609,23 +609,23 @@ const statusLabels = {
                     <table class="min-w-full">
                         <thead>
                             <tr class="bg-gray-50/80">
-                                <th class="px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase">{{ $t('a_booking_number') }}</th>
-                                <th class="px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase">{{ $t('a_patient') }}</th>
-                                <th class="px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase">{{ $t('a_doctor') }}</th>
-                                <th class="px-6 py-3.5 text-center text-xs font-semibold text-gray-500 uppercase">{{ $t('a_sessions') }}</th>
-                                <th class="px-6 py-3.5 ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">{{ $t('a_unit_price') }}</th>
-                                <th class="px-6 py-3.5 ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">{{ $t('a_total') }}</th>
-                                <th class="px-6 py-3.5 text-center text-xs font-semibold text-gray-500 uppercase">{{ $t('a_status') }}</th>
-                                <th class="px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase">{{ $t('a_date') }}</th>
+                                <th class="px-4 md:px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase">{{ $t('a_booking_number') }}</th>
+                                <th class="px-4 md:px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase">{{ $t('a_patient') }}</th>
+                                <th class="px-4 md:px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase">{{ $t('a_doctor') }}</th>
+                                <th class="px-4 md:px-6 py-3.5 text-center text-xs font-semibold text-gray-500 uppercase">{{ $t('a_sessions') }}</th>
+                                <th class="px-4 md:px-6 py-3.5 ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">{{ $t('a_unit_price') }}</th>
+                                <th class="px-4 md:px-6 py-3.5 ltr:text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase">{{ $t('a_total') }}</th>
+                                <th class="px-4 md:px-6 py-3.5 text-center text-xs font-semibold text-gray-500 uppercase">{{ $t('a_status') }}</th>
+                                <th class="px-4 md:px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase">{{ $t('a_date') }}</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100">
                             <tr v-for="booking in recentBookings" :key="booking.id"
                                 class="hover:bg-[#C4A265]/[0.02] transition-colors duration-150">
-                                <td class="px-6 py-3.5 text-sm font-mono text-[#C4A265] font-medium">{{ booking.booking_number || '-' }}</td>
-                                <td class="px-6 py-3.5 text-sm font-semibold text-gray-800">{{ booking.patient_name || '-' }}</td>
-                                <td class="px-6 py-3.5 text-sm text-gray-600">{{ booking.doctor_name || '-' }}</td>
-                                <td class="px-6 py-3.5 text-center">
+                                <td class="px-4 md:px-6 py-3.5 text-sm font-mono text-[#C4A265] font-medium">{{ booking.booking_number || '-' }}</td>
+                                <td class="px-4 md:px-6 py-3.5 text-sm font-semibold text-gray-800">{{ booking.patient_name || '-' }}</td>
+                                <td class="px-4 md:px-6 py-3.5 text-sm text-gray-600">{{ booking.doctor_name || '-' }}</td>
+                                <td class="px-4 md:px-6 py-3.5 text-center">
                                     <div class="flex items-center justify-center gap-1">
                                         <span class="text-sm font-bold text-emerald-600">{{ booking.completed_sessions }}</span>
                                         <span class="text-xs text-gray-400">/</span>
@@ -636,18 +636,18 @@ const statusLabels = {
                                              :style="{ width: `${booking.sessions_count > 0 ? (booking.completed_sessions / booking.sessions_count) * 100 : 0}%` }"></div>
                                     </div>
                                 </td>
-                                <td class="px-6 py-3.5 ltr:text-right rtl:text-left text-sm text-gray-600">{{ formatCurrency(booking.unit_price) }}</td>
-                                <td class="px-6 py-3.5 ltr:text-right rtl:text-left text-sm font-bold text-gray-800">{{ formatCurrency(booking.total_price) }}</td>
-                                <td class="px-6 py-3.5 text-center">
+                                <td class="px-4 md:px-6 py-3.5 ltr:text-right rtl:text-left text-sm text-gray-600">{{ formatCurrency(booking.unit_price) }}</td>
+                                <td class="px-4 md:px-6 py-3.5 ltr:text-right rtl:text-left text-sm font-bold text-gray-800">{{ formatCurrency(booking.total_price) }}</td>
+                                <td class="px-4 md:px-6 py-3.5 text-center">
                                     <span class="inline-flex px-2.5 py-1 text-xs font-semibold rounded-full capitalize"
                                           :class="`${statusColor(booking.status).bg} ${statusColor(booking.status).text}`">
                                         {{ booking.status?.replace('_', ' ') || '-' }}
                                     </span>
                                 </td>
-                                <td class="px-6 py-3.5 text-sm text-gray-500">{{ booking.created_at }}</td>
+                                <td class="px-4 md:px-6 py-3.5 text-sm text-gray-500">{{ booking.created_at }}</td>
                             </tr>
                             <tr v-if="!recentBookings || recentBookings.length === 0">
-                                <td colspan="8" class="px-6 py-12 text-center">
+                                <td colspan="8" class="px-4 md:px-6 py-12 text-center">
                                     <div class="flex flex-col items-center gap-2">
                                         <svg class="w-12 h-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -714,7 +714,7 @@ const statusLabels = {
                             <div class="flex items-center justify-between">
                                 <span class="text-xs text-gray-500">Bookable</span>
                                 <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold"
-                                      :class="service.bookable ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-500'">
+                                      :class="service.bookable ? 'bg-slate-100 text-[#1B365D]' : 'bg-gray-100 text-gray-500'">
                                     {{ service.bookable ? $t('a_yes') : $t('a_no') }}
                                 </span>
                             </div>

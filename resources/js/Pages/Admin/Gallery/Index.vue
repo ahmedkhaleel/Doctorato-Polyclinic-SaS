@@ -42,7 +42,7 @@ function deleteItem(id) {
     <AdminLayout :title="$t('a_gallery')">
         <div class="space-y-6">
             <div class="flex items-center justify-between">
-                <h1 class="text-2xl font-bold text-gray-800">{{ $t('a_gallery') }}</h1>
+                <h1 class="text-xl md:text-2xl font-bold text-gray-800">{{ $t('a_gallery') }}</h1>
                 <Link
                     v-if="can('gallery.create')"
                     href="/admin/gallery/create"
@@ -61,7 +61,7 @@ function deleteItem(id) {
                     v-model="search"
                     type="text"
                     :placeholder="$t('a_search_gallery')"
-                    class="w-full sm:w-80 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                    class="w-full sm:w-80 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                 />
             </div>
 
@@ -87,7 +87,7 @@ function deleteItem(id) {
                         <!-- Before/After badge -->
                         <span
                             v-if="item.is_before_after"
-                            class="absolute top-2 left-2 px-2 py-0.5 text-xs font-medium bg-blue-100 text-blue-800 rounded-full"
+                            class="absolute top-2 left-2 px-2 py-0.5 text-xs font-medium bg-slate-100 text-[#1B365D] rounded-full"
                         >
                             Before/After
                         </span>
@@ -116,7 +116,7 @@ function deleteItem(id) {
                 </div>
             </div>
 
-            <div v-if="!galleryItems.data || galleryItems.data.length === 0" class="bg-white rounded-lg shadow-sm p-8 text-center text-sm text-gray-500">
+            <div v-if="!galleryItems.data || galleryItems.data.length === 0" class="bg-white rounded-lg shadow-sm p-4 md:p-8 text-center text-sm text-gray-500">
                 {{ $t('a_no_gallery_found') }}
             </div>
 

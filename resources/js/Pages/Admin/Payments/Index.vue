@@ -74,7 +74,7 @@ function formatDate(date) {
     <AdminLayout :title="$t('a_payments')">
         <div class="space-y-6">
             <div class="flex items-center justify-between">
-                <h1 class="text-2xl font-bold text-gray-800">{{ $t('a_payments') }}</h1>
+                <h1 class="text-xl md:text-2xl font-bold text-gray-800">{{ $t('a_payments') }}</h1>
             </div>
 
             <div class="bg-white rounded-lg shadow-sm p-4 flex flex-wrap gap-3">
@@ -82,12 +82,12 @@ function formatDate(date) {
                     v-model="search"
                     type="text"
                     :placeholder="$t('a_search_payments_placeholder')"
-                    class="w-full sm:w-80 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                    class="w-full sm:w-80 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                 />
                 <select
                     v-if="activeModules.length > 1"
                     v-model="moduleFilter"
-                    class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                    class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                 >
                     <option value="">{{ isRtl ? 'كل الأقسام' : 'All Departments' }}</option>
                     <option v-for="mod in activeModules" :key="mod.slug" :value="mod.slug">{{ mod.name }}</option>
@@ -96,14 +96,14 @@ function formatDate(date) {
                     v-model="dateFrom"
                     type="date"
                     :max="dateTo || undefined"
-                    class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                    class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                     :placeholder="$t('a_from')"
                 />
                 <input
                     v-model="dateTo"
                     type="date"
                     :min="dateFrom || undefined"
-                    class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                    class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                     :placeholder="$t('a_to_date')"
                 />
             </div>
@@ -113,20 +113,20 @@ function formatDate(date) {
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_date') }}</th>
-                                <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_invoice_number') }}</th>
-                                <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_patient') }}</th>
-                                <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_method') }}</th>
-                                <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_amount') }}</th>
-                                <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_reference') }}</th>
-                                <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_received_by') }}</th>
-                                <th class="px-6 py-3 text-end text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_actions') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_date') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_invoice_number') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_patient') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_method') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_amount') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_reference') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_received_by') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-end text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_actions') }}</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
                             <tr v-for="payment in payments.data" :key="payment.id" class="hover:bg-gray-50">
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ formatDate(payment.payment_date) }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ formatDate(payment.payment_date) }}</td>
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                     <Link
                                         v-if="payment.invoice"
                                         :href="`/admin/invoices/${payment.invoice.id}`"
@@ -137,17 +137,17 @@ function formatDate(date) {
                                     </Link>
                                     <span v-else class="text-sm text-gray-400">-</span>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                     <div>
                                         <div class="text-sm font-medium text-gray-900">{{ payment.invoice?.patient?.full_name || '-' }}</div>
                                         <div class="text-xs text-gray-400">{{ payment.invoice?.patient?.phone || '' }}</div>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ payment.payment_method?.name_en || '-' }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-green-600">{{ formatCurrency(payment.amount) }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-mono">{{ payment.reference_number || '-' }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ payment.receiver?.name || payment.received_by_user?.name || '-' }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm space-x-3">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ payment.payment_method?.name_en || '-' }}</td>
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm font-medium text-emerald-600">{{ formatCurrency(payment.amount) }}</td>
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-mono">{{ payment.reference_number || '-' }}</td>
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ payment.receiver?.name || payment.received_by_user?.name || '-' }}</td>
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-right text-sm space-x-3">
                                     <Link
                                         v-if="payment.invoice && can('invoices.view')"
                                         :href="`/admin/invoices/${payment.invoice.id}`"
@@ -166,13 +166,13 @@ function formatDate(date) {
                                 </td>
                             </tr>
                             <tr v-if="!payments.data || payments.data.length === 0">
-                                <td colspan="8" class="px-6 py-8 text-center text-sm text-gray-500">{{ $t('a_no_payments_found') }}</td>
+                                <td colspan="8" class="px-4 md:px-6 py-8 text-center text-sm text-gray-500">{{ $t('a_no_payments_found') }}</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
 
-                <div v-if="payments.links && payments.links.length > 3" class="px-6 py-3 border-t border-gray-200 flex items-center justify-between">
+                <div v-if="payments.links && payments.links.length > 3" class="px-4 md:px-6 py-3 border-t border-gray-200 flex items-center justify-between">
                     <p class="text-sm text-gray-500">{{ $t('a_showing') }} {{ payments.from }} {{ $t('a_to') }} {{ payments.to }} {{ $t('a_of') }} {{ payments.total }} {{ $t('a_results') }}</p>
                     <nav class="flex space-x-1">
                         <template v-for="link in payments.links" :key="link.label">

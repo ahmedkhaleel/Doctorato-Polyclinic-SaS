@@ -39,13 +39,13 @@ function submit() {
         <div class="space-y-6">
             <!-- Header -->
             <div class="flex items-center justify-between">
-                <h1 class="text-2xl font-bold text-gray-800">{{ $t('a_generate_payroll') }}</h1>
+                <h1 class="text-xl md:text-2xl font-bold text-gray-800">{{ $t('a_generate_payroll') }}</h1>
                 <Link href="/admin/payroll" class="text-sm text-gray-500 hover:underline">{{ isRtl ? '&rarr;' : '&larr;' }} {{ $t('a_back_to_payroll') }}</Link>
             </div>
 
             <!-- Form -->
             <form @submit.prevent="submit" class="max-w-lg">
-                <div class="bg-white rounded-lg shadow-sm p-6 space-y-5">
+                <div class="bg-white rounded-lg shadow-sm p-4 md:p-6 space-y-5">
                     <h2 class="text-lg font-semibold text-gray-700 border-b pb-2">{{ $t('a_payroll_period') }}</h2>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -53,7 +53,7 @@ function submit() {
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_month') }} <span class="text-red-500">*</span></label>
                             <select
                                 v-model="month"
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                             >
                                 <option v-for="(name, index) in months" :key="index" :value="index + 1">{{ name }}</option>
                             </select>
@@ -66,7 +66,7 @@ function submit() {
                                 type="number"
                                 min="2020"
                                 max="2099"
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                             />
                         </div>
                     </div>
@@ -80,14 +80,14 @@ function submit() {
                     <div :class="['flex pt-2', isRtl ? 'justify-start space-x-reverse space-x-3' : 'justify-end space-x-3']">
                         <Link
                             href="/admin/payroll"
-                            class="px-6 py-3 rounded-lg border border-gray-300 text-gray-600 font-medium text-sm hover:bg-gray-50 transition"
+                            class="px-4 md:px-6 py-3 rounded-lg border border-gray-300 text-gray-600 font-medium text-sm hover:bg-gray-50 transition"
                         >
                             {{ $t('a_cancel') }}
                         </Link>
                         <button
                             type="submit"
                             :disabled="processing"
-                            class="px-6 py-3 rounded-lg text-white font-medium text-sm transition disabled:opacity-50"
+                            class="px-4 md:px-6 py-3 rounded-lg text-white font-medium text-sm transition disabled:opacity-50"
                             style="background-color: #C4A265;"
                         >
                             {{ processing ? $t('a_generating') : $t('a_generate_payroll') }}

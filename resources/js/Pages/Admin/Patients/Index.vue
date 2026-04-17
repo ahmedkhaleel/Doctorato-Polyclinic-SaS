@@ -59,8 +59,8 @@ function getInitials(name) {
 }
 
 const genderConfig = {
-    male: { classes: 'text-blue-700 bg-blue-50 border-blue-100' },
-    female: { classes: 'text-pink-700 bg-pink-50 border-pink-100' },
+    male: { classes: 'text-[#1B365D] bg-slate-50 border-slate-100' },
+    female: { classes: 'text-[#C4A265] bg-amber-50 border-amber-100' },
 };
 </script>
 
@@ -70,7 +70,7 @@ const genderConfig = {
             <!-- Header -->
             <div class="flex items-center justify-between">
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-800">{{ $t('a_patients') }}</h1>
+                    <h1 class="text-xl md:text-2xl font-bold text-gray-800">{{ $t('a_patients') }}</h1>
                     <p class="text-sm text-gray-500 mt-0.5">
                         <span class="font-semibold" style="color: #C4A265;">{{ patients.total }}</span> {{ $t('a_total_patients') }}
                     </p>
@@ -98,7 +98,7 @@ const genderConfig = {
                             v-model="search"
                             type="text"
                             :placeholder="$t('a_search_patients_placeholder')"
-                            class="w-full ltr:pl-10 ltr:pr-9 rtl:pr-10 rtl:pl-9 py-2.5 border border-gray-200 bg-gray-50/50 rounded-xl text-sm focus:ring-2 focus:ring-yellow-100 focus:border-yellow-300 focus:bg-white hover:border-gray-300 transition-all duration-200"
+                            class="w-full ltr:pl-10 ltr:pr-9 rtl:pr-10 rtl:pl-9 py-2.5 border border-gray-200 bg-gray-50/50 rounded-xl text-sm focus:ring-2 focus:ring-amber-100 focus:border-amber-300 focus:bg-white hover:border-gray-300 transition-all duration-200"
                         />
                         <button v-if="search" @click="clearSearch" class="absolute inset-y-0 ltr:right-0 rtl:left-0 ltr:pr-3 rtl:pl-3 flex items-center text-gray-400 hover:text-gray-600 transition">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
@@ -112,7 +112,7 @@ const genderConfig = {
                         </div>
                         <select
                             v-model="statusFilter"
-                            class="pl-10 pr-9 py-2.5 border border-gray-200 bg-gray-50/50 rounded-xl text-sm focus:ring-2 focus:ring-yellow-100 focus:border-yellow-300 focus:bg-white hover:border-gray-300 transition-all duration-200 appearance-none cursor-pointer"
+                            class="pl-10 pr-9 py-2.5 border border-gray-200 bg-gray-50/50 rounded-xl text-sm focus:ring-2 focus:ring-amber-100 focus:border-amber-300 focus:bg-white hover:border-gray-300 transition-all duration-200 appearance-none cursor-pointer"
                         >
                             <option value="">{{ $t('a_all_status') }}</option>
                             <option value="active">{{ $t('a_active') }}</option>
@@ -131,12 +131,12 @@ const genderConfig = {
                     <table class="min-w-full">
                         <thead>
                             <tr class="border-b border-gray-100 bg-gray-50/50">
-                                <th class="px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_patients') }}</th>
-                                <th class="px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_file_number') }}</th>
-                                <th class="px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_phone') }}</th>
-                                <th class="px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_gender') }}</th>
-                                <th class="px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_status') }}</th>
-                                <th class="px-6 py-3.5 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_actions') }}</th>
+                                <th class="px-4 md:px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_patients') }}</th>
+                                <th class="px-4 md:px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_file_number') }}</th>
+                                <th class="px-4 md:px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_phone') }}</th>
+                                <th class="px-4 md:px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_gender') }}</th>
+                                <th class="px-4 md:px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_status') }}</th>
+                                <th class="px-4 md:px-6 py-3.5 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_actions') }}</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-50">
@@ -146,7 +146,7 @@ const genderConfig = {
                                 class="group hover:bg-gray-50/60 transition-colors duration-150"
                             >
                                 <!-- Patient -->
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center gap-3">
                                         <div v-if="getPatientPhoto(patient)" class="w-10 h-10 rounded-xl overflow-hidden flex-shrink-0 border border-gray-100 shadow-sm">
                                             <img :src="getPatientPhoto(patient)" :alt="patient.full_name" class="w-full h-full object-cover" />
@@ -164,14 +164,14 @@ const genderConfig = {
                                 </td>
 
                                 <!-- File # -->
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="text-xs font-mono font-bold px-2.5 py-1 rounded-lg bg-yellow-50 border border-yellow-100" style="color: #C4A265;">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap">
+                                    <span class="text-xs font-mono font-bold px-2.5 py-1 rounded-lg bg-amber-50 border border-amber-100" style="color: #C4A265;">
                                         {{ patient.file_number }}
                                     </span>
                                 </td>
 
                                 <!-- Phone -->
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center gap-1.5 text-sm text-gray-600">
                                         <svg class="w-3.5 h-3.5 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
                                         <span dir="ltr">{{ patient.phone }}</span>
@@ -179,7 +179,7 @@ const genderConfig = {
                                 </td>
 
                                 <!-- Gender -->
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                     <span v-if="patient.gender && genderConfig[patient.gender]"
                                         :class="genderConfig[patient.gender].classes"
                                         class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium border">
@@ -191,26 +191,26 @@ const genderConfig = {
                                 </td>
 
                                 <!-- Status -->
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center gap-2">
-                                        <span :class="patient.is_active ? 'bg-green-400' : 'bg-gray-300'" class="w-2 h-2 rounded-full shrink-0"></span>
-                                        <span class="text-sm font-medium" :class="patient.is_active ? 'text-green-700' : 'text-gray-500'">
+                                        <span :class="patient.is_active ? 'bg-emerald-400' : 'bg-gray-300'" class="w-2 h-2 rounded-full shrink-0"></span>
+                                        <span class="text-sm font-medium" :class="patient.is_active ? 'text-emerald-700' : 'text-gray-500'">
                                             {{ patient.is_active ? $t('a_active') : $t('a_inactive') }}
                                         </span>
                                     </div>
                                 </td>
 
                                 <!-- Actions -->
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center justify-center gap-1">
                                         <!-- View -->
                                         <Link v-if="can('patients.view')" :href="`/admin/patients/${patient.id}`"
-                                            class="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:bg-yellow-50 transition-all duration-200" style="--tw-hover-text-opacity:1;" :title="$t('a_view')">
+                                            class="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:bg-amber-50 transition-all duration-200" style="--tw-hover-text-opacity:1;" :title="$t('a_view')">
                                             <svg class="w-4 h-4 hover-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
                                         </Link>
                                         <!-- Edit -->
                                         <Link v-if="can('patients.update')" :href="`/admin/patients/${patient.id}/edit`"
-                                            class="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200" :title="$t('a_edit')">
+                                            class="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:text-[#1B365D] hover:bg-slate-50 transition-all duration-200" :title="$t('a_edit')">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                                         </Link>
                                         <!-- Delete -->
@@ -224,7 +224,7 @@ const genderConfig = {
 
                             <!-- Empty State -->
                             <tr v-if="!patients.data || patients.data.length === 0">
-                                <td colspan="6" class="px-6 py-16 text-center">
+                                <td colspan="6" class="px-4 md:px-6 py-16 text-center">
                                     <div class="flex flex-col items-center">
                                         <div class="w-16 h-16 rounded-2xl bg-gray-50 border border-gray-100 flex items-center justify-center mb-4">
                                             <svg class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
@@ -242,7 +242,7 @@ const genderConfig = {
                 </div>
 
                 <!-- Pagination -->
-                <div v-if="patients.links && patients.links.length > 3" class="px-6 py-4 border-t border-gray-100 flex items-center justify-between">
+                <div v-if="patients.links && patients.links.length > 3" class="px-4 md:px-6 py-4 border-t border-gray-100 flex items-center justify-between">
                     <p class="text-sm text-gray-500">
                         {{ $t('a_showing') }} <span class="font-semibold text-gray-700">{{ patients.from }}</span>
                         {{ $t('a_to') }} <span class="font-semibold text-gray-700">{{ patients.to }}</span>

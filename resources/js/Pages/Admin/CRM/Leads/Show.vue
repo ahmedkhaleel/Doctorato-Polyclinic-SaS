@@ -374,18 +374,18 @@ const statusLabels = computed(() => ({
     dormant: isRtl.value ? 'خامل' : 'Dormant',
 }));
 const statusColors = {
-    new: 'bg-blue-100 text-blue-700 ring-blue-600/10',
-    contacted: 'bg-indigo-100 text-indigo-700 ring-indigo-600/10',
-    qualified: 'bg-purple-100 text-purple-700 ring-purple-600/10',
+    new: 'bg-slate-100 text-[#1B365D] ring-[#1B365D]/10',
+    contacted: 'bg-slate-100 text-[#1B365D] ring-[#1B365D]/10',
+    qualified: 'bg-slate-100 text-[#1B365D] ring-[#1B365D]/10',
     appointment_booked: 'bg-amber-100 text-amber-700 ring-amber-600/10',
     consultation_done: 'bg-teal-100 text-teal-700 ring-teal-600/10',
-    negotiation: 'bg-orange-100 text-orange-700 ring-orange-600/10',
-    converted: 'bg-green-100 text-green-700 ring-green-600/10',
+    negotiation: 'bg-amber-100 text-[#C4A265] ring-[#C4A265]/10',
+    converted: 'bg-emerald-100 text-emerald-700 ring-emerald-600/10',
     lost: 'bg-red-100 text-red-700 ring-red-600/10',
     dormant: 'bg-gray-100 text-gray-600 ring-gray-500/10',
 };
 const priorityLabels = computed(() => ({ 1: isRtl.value ? 'ساخن' : 'Hot', 2: isRtl.value ? 'دافئ' : 'Warm', 3: isRtl.value ? 'بارد' : 'Cold' }));
-const priorityColors = { 1: 'bg-red-100 text-red-700', 2: 'bg-amber-100 text-amber-700', 3: 'bg-blue-100 text-blue-700' };
+const priorityColors = { 1: 'bg-red-100 text-red-700', 2: 'bg-amber-100 text-amber-700', 3: 'bg-slate-100 text-[#1B365D]' };
 const priorityDotColors = { 1: '#ef4444', 2: '#f59e0b', 3: '#3b82f6' };
 
 // Only show enabled medical departments (derma/dental) in convert modal
@@ -424,36 +424,36 @@ const activityTypeIcons = {
 
 const activityTypeColors = {
     note: 'bg-gray-100 text-gray-600',
-    call: 'bg-green-100 text-green-600',
+    call: 'bg-emerald-100 text-emerald-600',
     whatsapp: 'bg-emerald-100 text-emerald-600',
-    email: 'bg-blue-100 text-blue-600',
-    sms: 'bg-purple-100 text-purple-600',
+    email: 'bg-slate-100 text-[#1B365D]',
+    sms: 'bg-slate-100 text-[#1B365D]',
     meeting: 'bg-amber-100 text-amber-600',
-    status_change: 'bg-indigo-100 text-indigo-600',
-    assignment: 'bg-pink-100 text-pink-600',
+    status_change: 'bg-slate-100 text-[#1B365D]',
+    assignment: 'bg-amber-100 text-[#C4A265]',
     system: 'bg-gray-100 text-gray-500',
     follow_up_scheduled: 'bg-amber-100 text-amber-600',
-    follow_up_completed: 'bg-green-100 text-green-600',
-    booking_created: 'bg-blue-100 text-blue-600',
+    follow_up_completed: 'bg-emerald-100 text-emerald-600',
+    booking_created: 'bg-slate-100 text-[#1B365D]',
     visit_completed: 'bg-teal-100 text-teal-600',
-    payment_received: 'bg-green-100 text-green-700',
+    payment_received: 'bg-emerald-100 text-emerald-700',
 };
 
 const activityTypeBorderColors = {
     note: 'border-gray-300',
-    call: 'border-green-300',
+    call: 'border-emerald-300',
     whatsapp: 'border-emerald-300',
-    email: 'border-blue-300',
-    sms: 'border-purple-300',
+    email: 'border-slate-300',
+    sms: 'border-slate-300',
     meeting: 'border-amber-300',
-    status_change: 'border-indigo-300',
-    assignment: 'border-pink-300',
+    status_change: 'border-slate-300',
+    assignment: 'border-amber-300',
     system: 'border-gray-200',
     follow_up_scheduled: 'border-amber-300',
-    follow_up_completed: 'border-green-300',
-    booking_created: 'border-blue-300',
+    follow_up_completed: 'border-emerald-300',
+    booking_created: 'border-slate-300',
     visit_completed: 'border-teal-300',
-    payment_received: 'border-green-400',
+    payment_received: 'border-emerald-400',
 };
 
 function formatDate(date) {
@@ -652,7 +652,7 @@ function translateDescription(desc) {
                 <!-- Gold gradient top bar -->
                 <div class="h-1 bg-gradient-to-r from-[#C4A265] via-[#D4B87A] to-[#C4A265]"></div>
 
-                <div class="p-6 lg:p-8">
+                <div class="p-4 md:p-6 lg:p-8">
                     <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
                         <!-- Left: Avatar + Info -->
                         <div class="flex items-start gap-4">
@@ -666,7 +666,7 @@ function translateDescription(desc) {
                             </div>
                             <div class="min-w-0">
                                 <div class="flex items-center gap-3 flex-wrap">
-                                    <h1 class="text-2xl font-bold text-gray-900 tracking-tight">{{ lead.full_name }}</h1>
+                                    <h1 class="text-xl md:text-2xl font-bold text-gray-900 tracking-tight">{{ lead.full_name }}</h1>
                                     <span :class="statusColors[lead.status]" class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full ring-1 ring-inset">
                                         {{ statusLabels[lead.status] }}
                                     </span>
@@ -725,7 +725,7 @@ function translateDescription(desc) {
                             <div class="flex items-center gap-2.5 flex-wrap">
                                 <button v-if="can('leads.update') && templates?.length && lead.status !== 'converted'"
                                     @click="showQuickSend = !showQuickSend"
-                                    class="inline-flex items-center px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 shadow-sm bg-green-600 hover:bg-green-700 hover:shadow-md hover:-translate-y-0.5 text-white"
+                                    class="inline-flex items-center px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 shadow-sm bg-emerald-600 hover:bg-emerald-700 hover:shadow-md hover:-translate-y-0.5 text-white"
                                 >
                                     <svg class="w-4 h-4 ltr:mr-2 rtl:ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
                                     {{ $t('a_quick_send') }}
@@ -753,11 +753,11 @@ function translateDescription(desc) {
                 enter-from-class="opacity-0 -translate-y-3 scale-[0.98]" enter-to-class="opacity-100 translate-y-0 scale-100"
                 leave-from-class="opacity-100 translate-y-0 scale-100" leave-to-class="opacity-0 -translate-y-3 scale-[0.98]">
                 <div v-if="showQuickSend" class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-                    <div class="h-1 bg-gradient-to-r from-green-400 via-emerald-400 to-green-400"></div>
-                    <div class="border-b border-gray-100 px-6 py-4 flex items-center justify-between bg-gradient-to-r from-gray-50 to-white">
+                    <div class="h-1 bg-gradient-to-r from-emerald-400 via-emerald-400 to-emerald-400"></div>
+                    <div class="border-b border-gray-100 px-4 md:px-6 py-4 flex items-center justify-between bg-gradient-to-r from-gray-50 to-white">
                         <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 rounded-lg bg-green-100 flex items-center justify-center">
-                                <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg>
+                            <div class="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center">
+                                <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg>
                             </div>
                             <h3 class="text-sm font-bold text-gray-800 uppercase tracking-wider">{{ $t('a_quick_send_message') }}</h3>
                         </div>
@@ -773,17 +773,17 @@ function translateDescription(desc) {
                                     <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">{{ $t('a_channel') }}</label>
                                     <div class="flex gap-1.5 bg-gray-100 p-1 rounded-xl">
                                         <button type="button" @click="quickSendForm.channel = 'whatsapp'"
-                                            :class="quickSendForm.channel === 'whatsapp' ? 'bg-white text-green-700 shadow-sm' : 'text-gray-500 hover:text-gray-700'"
+                                            :class="quickSendForm.channel === 'whatsapp' ? 'bg-white text-emerald-700 shadow-sm' : 'text-gray-500 hover:text-gray-700'"
                                             class="flex-1 px-3 py-2.5 rounded-lg text-xs font-semibold transition-all duration-200">
                                             WhatsApp
                                         </button>
                                         <button type="button" @click="quickSendForm.channel = 'sms'"
-                                            :class="quickSendForm.channel === 'sms' ? 'bg-white text-purple-700 shadow-sm' : 'text-gray-500 hover:text-gray-700'"
+                                            :class="quickSendForm.channel === 'sms' ? 'bg-white text-[#1B365D] shadow-sm' : 'text-gray-500 hover:text-gray-700'"
                                             class="flex-1 px-3 py-2.5 rounded-lg text-xs font-semibold transition-all duration-200">
                                             SMS
                                         </button>
                                         <button type="button" @click="quickSendForm.channel = 'email'"
-                                            :class="quickSendForm.channel === 'email' ? 'bg-white text-blue-700 shadow-sm' : 'text-gray-500 hover:text-gray-700'"
+                                            :class="quickSendForm.channel === 'email' ? 'bg-white text-[#1B365D] shadow-sm' : 'text-gray-500 hover:text-gray-700'"
                                             class="flex-1 px-3 py-2.5 rounded-lg text-xs font-semibold transition-all duration-200">{{ $t('a_email') }}</button>
                                     </div>
                                 </div>
@@ -833,8 +833,8 @@ function translateDescription(desc) {
                             </transition>
                             <div class="flex justify-end">
                                 <button type="submit" :disabled="quickSendForm.processing || !quickSendForm.template_id"
-                                    class="inline-flex items-center px-6 py-2.5 text-sm font-medium text-white rounded-xl transition-all duration-200 disabled:opacity-50 shadow-sm hover:shadow-md hover:-translate-y-0.5"
-                                    :class="quickSendForm.channel === 'whatsapp' ? 'bg-green-600 hover:bg-green-700' : quickSendForm.channel === 'sms' ? 'bg-purple-600 hover:bg-purple-700' : 'bg-blue-600 hover:bg-blue-700'"
+                                    class="inline-flex items-center px-4 md:px-6 py-2.5 text-sm font-medium text-white rounded-xl transition-all duration-200 disabled:opacity-50 shadow-sm hover:shadow-md hover:-translate-y-0.5"
+                                    :class="quickSendForm.channel === 'whatsapp' ? 'bg-emerald-600 hover:bg-emerald-700' : quickSendForm.channel === 'sms' ? 'bg-[#1B365D] hover:bg-[#1B365D]' : 'bg-[#1B365D] hover:bg-[#1B365D]'"
                                 >
                                     <svg class="w-4 h-4 ltr:mr-2 rtl:ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg>
                                     {{ quickSendForm.channel === 'whatsapp' ? $t('a_send_via_whatsapp') : quickSendForm.channel === 'sms' ? $t('a_log_sms') : $t('a_log_email') }}
@@ -851,7 +851,7 @@ function translateDescription(desc) {
                 class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-700 delay-100 ease-out hover:-translate-y-0.5 hover:shadow-md"
             >
                 <div class="h-1 bg-gradient-to-r from-[#C4A265] via-[#D4B87A] to-[#C4A265]"></div>
-                <div class="px-6 py-5">
+                <div class="px-4 md:px-6 py-5">
                     <div class="flex items-center">
                         <template v-for="(status, idx) in pipelineStatuses" :key="status">
                             <div class="flex flex-col items-center relative group">
@@ -884,13 +884,13 @@ function translateDescription(desc) {
 
             <!-- ===================== CONVERTED INFO ===================== -->
             <transition enter-active-class="transition-all duration-500" enter-from-class="opacity-0 scale-95" enter-to-class="opacity-100 scale-100">
-                <div v-if="lead.status === 'converted' && lead.patient" class="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-6 flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-2xl bg-green-100 flex items-center justify-center shrink-0">
-                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                <div v-if="lead.status === 'converted' && lead.patient" class="bg-gradient-to-r from-emerald-50 to-emerald-50 border border-emerald-200 rounded-2xl p-4 md:p-6 flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-100 flex items-center justify-center shrink-0">
+                        <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                     </div>
                     <div class="flex-1 min-w-0">
-                        <p class="text-sm font-bold text-green-800">{{ $t('a_lead_converted_patient') }}</p>
-                        <p class="text-xs text-green-600 mt-0.5">{{ $t('a_patient') }}: {{ lead.patient.full_name }} ({{ lead.patient.file_number }})</p>
+                        <p class="text-sm font-bold text-emerald-800">{{ $t('a_lead_converted_patient') }}</p>
+                        <p class="text-xs text-emerald-600 mt-0.5">{{ $t('a_patient') }}: {{ lead.patient.full_name }} ({{ lead.patient.file_number }})</p>
                     </div>
                     <Link :href="`/admin/patients/${lead.patient.id}`"
                         class="px-5 py-2.5 text-sm font-medium text-white rounded-xl hover:shadow-md transition-all duration-200 shrink-0"
@@ -901,7 +901,7 @@ function translateDescription(desc) {
             </transition>
 
             <!-- ===================== LOST INFO ===================== -->
-            <div v-if="lead.status === 'lost' || lead.status === 'dormant'" class="bg-gradient-to-r from-red-50 to-rose-50 border border-red-200 rounded-2xl p-6">
+            <div v-if="lead.status === 'lost' || lead.status === 'dormant'" class="bg-gradient-to-r from-red-50 to-amber-50 border border-red-200 rounded-2xl p-6">
                 <div class="flex items-center justify-between gap-4">
                     <div class="flex items-center gap-4">
                         <div class="w-12 h-12 rounded-2xl bg-red-100 flex items-center justify-center shrink-0">
@@ -916,7 +916,7 @@ function translateDescription(desc) {
                     <button v-if="can('leads.update')"
                         @click="reactivateLead"
                         :disabled="reactivating"
-                        class="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-semibold rounded-xl border border-green-300 bg-white text-green-700 hover:bg-green-50 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 shrink-0">
+                        class="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-semibold rounded-xl border border-emerald-300 bg-white text-emerald-700 hover:bg-emerald-50 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 shrink-0">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                         </svg>
@@ -964,7 +964,7 @@ function translateDescription(desc) {
                         <div class="h-1 bg-gradient-to-r from-[#C4A265] via-[#D4B87A] to-[#C4A265]"></div>
 
                         <!-- Tab Headers -->
-                        <div class="border-b border-gray-100 px-6 flex gap-0 bg-gray-50/50">
+                        <div class="border-b border-gray-100 px-4 md:px-6 flex gap-0 bg-gray-50/50">
                             <button @click="activeTab = 'activity'"
                                 :class="activeTab === 'activity' ? 'border-[#C4A265] text-[#C4A265] bg-white' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
                                 class="py-4 px-5 text-sm font-semibold border-b-2 transition-all duration-200 -mb-px rounded-t-lg"
@@ -988,7 +988,7 @@ function translateDescription(desc) {
                         </div>
 
                         <!-- ======== ACTIVITY TAB ======== -->
-                        <div v-show="activeTab === 'activity'" class="p-6 space-y-6">
+                        <div v-show="activeTab === 'activity'" class="p-4 md:p-6 space-y-6">
                             <!-- Log Activity Form -->
                             <form @submit.prevent="submitActivity" class="bg-gradient-to-br from-gray-50 to-gray-100/30 rounded-2xl p-5 space-y-4 border border-gray-100">
                                 <p class="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-2">
@@ -1044,7 +1044,7 @@ function translateDescription(desc) {
                                 </div>
                                 <div class="flex justify-end">
                                     <button type="submit" :disabled="activityForm.processing"
-                                        class="px-6 py-2.5 text-xs font-semibold text-white rounded-xl transition-all duration-200 shadow-sm hover:shadow-md hover:-translate-y-0.5 disabled:opacity-50"
+                                        class="px-4 md:px-6 py-2.5 text-xs font-semibold text-white rounded-xl transition-all duration-200 shadow-sm hover:shadow-md hover:-translate-y-0.5 disabled:opacity-50"
                                         style="background: linear-gradient(135deg, #C4A265, #D4B87A);">
                                         {{ $t('a_log_activity') }}
                                     </button>
@@ -1094,7 +1094,7 @@ function translateDescription(desc) {
                         </div>
 
                         <!-- ======== FOLLOW-UPS TAB ======== -->
-                        <div v-show="activeTab === 'followups'" class="p-6 space-y-5">
+                        <div v-show="activeTab === 'followups'" class="p-4 md:p-6 space-y-5">
                             <div class="flex justify-between items-center">
                                 <p class="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-2">
                                     <svg class="w-4 h-4 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
@@ -1169,7 +1169,7 @@ function translateDescription(desc) {
                                     </div>
                                     <div class="flex justify-end">
                                         <button type="submit" :disabled="followUpForm.processing"
-                                            class="px-6 py-2.5 text-xs font-semibold text-white rounded-xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all disabled:opacity-50"
+                                            class="px-4 md:px-6 py-2.5 text-xs font-semibold text-white rounded-xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all disabled:opacity-50"
                                             style="background: linear-gradient(135deg, #C4A265, #D4B87A);">
                                             {{ $t('a_schedule') }}
                                         </button>
@@ -1188,7 +1188,7 @@ function translateDescription(desc) {
                                     <div class="flex items-start gap-4">
                                         <div :class="{
                                             'bg-amber-100 text-amber-600': fu.status === 'pending',
-                                            'bg-green-100 text-green-600': fu.status === 'completed',
+                                            'bg-emerald-100 text-emerald-600': fu.status === 'completed',
                                             'bg-red-100 text-red-600': fu.status === 'missed',
                                             'bg-gray-100 text-gray-500': fu.status === 'cancelled' || fu.status === 'rescheduled',
                                         }" class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0">
@@ -1200,7 +1200,7 @@ function translateDescription(desc) {
                                                 <span class="text-[10px] px-2.5 py-0.5 rounded-full font-semibold ring-1 ring-inset"
                                                     :class="{
                                                         'bg-amber-100 text-amber-700 ring-amber-600/10': fu.status === 'pending',
-                                                        'bg-green-100 text-green-700 ring-green-600/10': fu.status === 'completed',
+                                                        'bg-emerald-100 text-emerald-700 ring-emerald-600/10': fu.status === 'completed',
                                                         'bg-red-100 text-red-700 ring-red-600/10': fu.status === 'missed',
                                                         'bg-gray-100 text-gray-600 ring-gray-500/10': fu.status === 'cancelled' || fu.status === 'rescheduled',
                                                     }"
@@ -1212,7 +1212,7 @@ function translateDescription(desc) {
                                                 {{ formatDateTime(fu.scheduled_at) }}
                                             </p>
                                             <p v-if="fu.notes" class="text-xs text-gray-400 mt-1.5 leading-relaxed">{{ fu.notes }}</p>
-                                            <p v-if="fu.result" class="text-xs text-green-600 mt-1.5 font-medium flex items-center gap-1">
+                                            <p v-if="fu.result" class="text-xs text-emerald-600 mt-1.5 font-medium flex items-center gap-1">
                                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4" /></svg>
                                                 {{ $t('a_result') }}: {{ fu.result }}
                                             </p>
@@ -1224,7 +1224,7 @@ function translateDescription(desc) {
                                             </span>
                                             <!-- Action buttons for pending -->
                                             <template v-if="fu.status === 'pending' && can('leads.update')">
-                                                <button @click="openComplete(fu)" :title="$t('a_mark_complete')" class="p-2 rounded-xl text-green-500 hover:bg-green-50 hover:shadow-sm transition-all duration-200">
+                                                <button @click="openComplete(fu)" :title="$t('a_mark_complete')" class="p-2 rounded-xl text-emerald-500 hover:bg-emerald-50 hover:shadow-sm transition-all duration-200">
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
                                                 </button>
                                                 <button @click="missFollowUp(fu.id)" :title="$t('a_mark_missed')" class="p-2 rounded-xl text-red-500 hover:bg-red-50 hover:shadow-sm transition-all duration-200">
@@ -1248,10 +1248,10 @@ function translateDescription(desc) {
                                                             <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4" /></svg>
                                                         </div>
                                                         <input v-model="completeForm.result" type="text" :placeholder="$t('a_complete_result_placeholder')"
-                                                            class="w-full pl-10 pr-4 text-sm border border-gray-200 rounded-xl py-2.5 focus:ring-2 focus:ring-green-300 focus:border-green-400 transition-all" />
+                                                            class="w-full pl-10 pr-4 text-sm border border-gray-200 rounded-xl py-2.5 focus:ring-2 focus:ring-emerald-300 focus:border-emerald-400 transition-all" />
                                                     </div>
                                                 </div>
-                                                <button type="submit" :disabled="completeForm.processing" class="px-5 py-2.5 text-xs font-semibold text-white bg-green-600 rounded-xl hover:bg-green-700 hover:-translate-y-0.5 transition-all shadow-sm">{{ $t('a_done') }}</button>
+                                                <button type="submit" :disabled="completeForm.processing" class="px-5 py-2.5 text-xs font-semibold text-white bg-emerald-600 rounded-xl hover:bg-emerald-700 hover:-translate-y-0.5 transition-all shadow-sm">{{ $t('a_done') }}</button>
                                                 <button type="button" @click="completingFollowUp = null" class="px-4 py-2.5 text-xs text-gray-500 hover:text-gray-700 rounded-xl hover:bg-gray-100 transition-all">{{ $t('a_cancel') }}</button>
                                             </form>
                                         </div>
@@ -1326,7 +1326,7 @@ function translateDescription(desc) {
                             </h3>
                             <div class="grid grid-cols-2 gap-2.5">
                                 <a :href="`tel:${lead.phone}`" class="flex items-center justify-center gap-2 px-4 py-3.5 text-xs font-semibold rounded-xl border hover:shadow-sm hover:-translate-y-0.5 transition-all duration-200"
-                                    :class="isLateHour && !lateHourDismissed ? 'text-gray-400 bg-gray-50 border-gray-200' : 'text-green-700 bg-green-50 border-green-100 hover:bg-green-100'">
+                                    :class="isLateHour && !lateHourDismissed ? 'text-gray-400 bg-gray-50 border-gray-200' : 'text-emerald-700 bg-emerald-50 border-emerald-100 hover:bg-emerald-100'">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
                                     {{ $t('a_call') }}
                                 </a>
@@ -1334,7 +1334,7 @@ function translateDescription(desc) {
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
                                     {{ $t('a_whatsapp') }}
                                 </a>
-                                <a v-if="lead.email" :href="`mailto:${lead.email}`" class="flex items-center justify-center gap-2 px-4 py-3.5 text-xs font-semibold text-blue-700 bg-blue-50 rounded-xl border border-blue-100 hover:bg-blue-100 hover:shadow-sm hover:-translate-y-0.5 transition-all duration-200 col-span-2">
+                                <a v-if="lead.email" :href="`mailto:${lead.email}`" class="flex items-center justify-center gap-2 px-4 py-3.5 text-xs font-semibold text-[#1B365D] bg-slate-50 rounded-xl border border-slate-100 hover:bg-slate-100 hover:shadow-sm hover:-translate-y-0.5 transition-all duration-200 col-span-2">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
                                     {{ $t('a_email') }}
                                 </a>
@@ -1347,10 +1347,10 @@ function translateDescription(desc) {
                         :class="mounted ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'"
                         class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-700 delay-[380ms] ease-out hover:-translate-y-0.5 hover:shadow-md"
                     >
-                        <div class="h-1 bg-gradient-to-r from-indigo-400 via-purple-400 to-indigo-400"></div>
+                        <div class="h-1 bg-gradient-to-r from-slate-400 via-slate-400 to-slate-400"></div>
                         <div class="p-5">
                             <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4 flex items-center gap-2">
-                                <svg class="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>
+                                <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>
                                 {{ $t('a_smart_contact') }}
                             </h3>
 
@@ -1360,18 +1360,18 @@ function translateDescription(desc) {
                                     <p class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider mb-1.5">{{ $t('a_best_time_to_call') }}</p>
                                     <div class="flex flex-wrap gap-1.5">
                                         <span v-for="h in smartContact.best_hours" :key="h.hour"
-                                            class="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-indigo-50 text-indigo-700 border border-indigo-100">
-                                            <svg class="w-3 h-3 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                            class="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-slate-50 text-[#1B365D] border border-slate-100">
+                                            <svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                             {{ h.label }}
-                                            <span class="text-[9px] text-indigo-400">({{ h.successful }}x)</span>
+                                            <span class="text-[9px] text-slate-400">({{ h.successful }}x)</span>
                                         </span>
                                     </div>
                                 </div>
 
                                 <!-- Best Day -->
                                 <div v-if="smartContact.best_day" class="flex items-center gap-2">
-                                    <div class="w-7 h-7 rounded-lg bg-purple-50 flex items-center justify-center">
-                                        <svg class="w-3.5 h-3.5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                                    <div class="w-7 h-7 rounded-lg bg-slate-50 flex items-center justify-center">
+                                        <svg class="w-3.5 h-3.5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                                     </div>
                                     <div>
                                         <p class="text-[10px] text-gray-400 font-medium">{{ $t('a_best_day') }}</p>
@@ -1396,9 +1396,9 @@ function translateDescription(desc) {
                                         <p class="text-lg font-bold text-gray-800">{{ smartContact.total_attempts }}</p>
                                         <p class="text-[9px] text-gray-400 font-semibold uppercase">{{ $t('a_attempts') }}</p>
                                     </div>
-                                    <div class="text-center p-2 rounded-lg bg-green-50">
-                                        <p class="text-lg font-bold text-green-700">{{ smartContact.successful_attempts }}</p>
-                                        <p class="text-[9px] text-green-500 font-semibold uppercase">{{ $t('a_successful') }}</p>
+                                    <div class="text-center p-2 rounded-lg bg-emerald-50">
+                                        <p class="text-lg font-bold text-emerald-700">{{ smartContact.successful_attempts }}</p>
+                                        <p class="text-[9px] text-emerald-500 font-semibold uppercase">{{ $t('a_successful') }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -1418,8 +1418,8 @@ function translateDescription(desc) {
                             </h3>
                             <div class="space-y-3.5">
                                 <div class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-gray-50 transition-all duration-200 -mx-2.5">
-                                    <div class="w-9 h-9 rounded-xl bg-green-50 flex items-center justify-center shrink-0">
-                                        <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
+                                    <div class="w-9 h-9 rounded-xl bg-emerald-50 flex items-center justify-center shrink-0">
+                                        <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
                                     </div>
                                     <div class="flex-1 min-w-0">
                                         <p class="text-[10px] text-gray-400 font-medium uppercase tracking-wider">{{ $t('a_phone') }}</p>
@@ -1428,8 +1428,8 @@ function translateDescription(desc) {
                                     </div>
                                 </div>
                                 <div v-if="lead.phone2" class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-gray-50 transition-all duration-200 -mx-2.5">
-                                    <div class="w-9 h-9 rounded-xl bg-green-50 flex items-center justify-center shrink-0">
-                                        <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
+                                    <div class="w-9 h-9 rounded-xl bg-emerald-50 flex items-center justify-center shrink-0">
+                                        <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
                                     </div>
                                     <div class="flex-1 min-w-0">
                                         <p class="text-[10px] text-gray-400 font-medium uppercase tracking-wider">{{ $t('a_phone2') }}</p>
@@ -1437,8 +1437,8 @@ function translateDescription(desc) {
                                     </div>
                                 </div>
                                 <div class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-gray-50 transition-all duration-200 -mx-2.5">
-                                    <div class="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
-                                        <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                                    <div class="w-9 h-9 rounded-xl bg-slate-50 flex items-center justify-center shrink-0">
+                                        <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
                                     </div>
                                     <div class="flex-1 min-w-0">
                                         <p class="text-[10px] text-gray-400 font-medium uppercase tracking-wider">{{ $t('a_email') }}</p>
@@ -1447,8 +1447,8 @@ function translateDescription(desc) {
                                     </div>
                                 </div>
                                 <div class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-gray-50 transition-all duration-200 -mx-2.5">
-                                    <div class="w-9 h-9 rounded-xl bg-purple-50 flex items-center justify-center shrink-0">
-                                        <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                                    <div class="w-9 h-9 rounded-xl bg-slate-50 flex items-center justify-center shrink-0">
+                                        <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                                     </div>
                                     <div class="flex-1 min-w-0">
                                         <p class="text-[10px] text-gray-400 font-medium uppercase tracking-wider">{{ $t('a_gender') }}</p>
@@ -1465,8 +1465,8 @@ function translateDescription(desc) {
                                     </div>
                                 </div>
                                 <div class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-gray-50 transition-all duration-200 -mx-2.5">
-                                    <div class="w-9 h-9 rounded-xl bg-indigo-50 flex items-center justify-center shrink-0">
-                                        <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                    <div class="w-9 h-9 rounded-xl bg-slate-50 flex items-center justify-center shrink-0">
+                                        <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                     </div>
                                     <div class="flex-1 min-w-0">
                                         <p class="text-[10px] text-gray-400 font-medium uppercase tracking-wider">{{ $t('a_nationality') }}</p>
@@ -1730,7 +1730,7 @@ function translateDescription(desc) {
                                                 <div v-else-if="availableDates.length === 0" class="text-xs text-amber-600 bg-amber-50 rounded-xl p-4 text-center border border-amber-200">
                                                     {{ $t('a_no_available_dates') }}
                                                 </div>
-                                                <div v-else class="grid grid-cols-3 sm:grid-cols-4 gap-2 max-h-52 overflow-y-auto">
+                                                <div v-else class="grid grid-cols-1 md:grid-cols-3 sm:grid-cols-4 gap-2 max-h-52 overflow-y-auto">
                                                     <button v-for="d in availableDates" :key="d" type="button"
                                                         @click="convertForm.appointment_date = d"
                                                         class="px-2 py-2.5 text-xs font-medium rounded-lg border transition-all duration-150 text-center"
@@ -1755,7 +1755,7 @@ function translateDescription(desc) {
                                                 <div v-else-if="slotsError" class="text-xs text-amber-600 bg-amber-50 rounded-xl p-4 text-center border border-amber-200">
                                                     {{ slotsError }}
                                                 </div>
-                                                <div v-else class="grid grid-cols-3 sm:grid-cols-4 gap-2 max-h-48 overflow-y-auto">
+                                                <div v-else class="grid grid-cols-1 md:grid-cols-3 sm:grid-cols-4 gap-2 max-h-48 overflow-y-auto">
                                                     <button v-for="slot in availableSlots" :key="slot.start" type="button"
                                                         @click="selectSlot(slot)"
                                                         class="px-2 py-2 text-xs font-medium rounded-lg border transition-all duration-150 text-center"

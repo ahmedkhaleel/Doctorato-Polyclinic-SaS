@@ -76,7 +76,7 @@ const recurringLabels = computed(() => ({
     <AdminLayout :title="$t('a_expenses')">
         <div class="space-y-6">
             <div class="flex items-center justify-between">
-                <h1 class="text-2xl font-bold text-gray-800">{{ $t('a_expenses') }}</h1>
+                <h1 class="text-xl md:text-2xl font-bold text-gray-800">{{ $t('a_expenses') }}</h1>
                 <Link
                     v-if="can('expenses.create')"
                     href="/admin/expenses/create"
@@ -95,11 +95,11 @@ const recurringLabels = computed(() => ({
                     v-model="search"
                     type="text"
                     :placeholder="$t('a_search_expenses')"
-                    class="w-full sm:w-64 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                    class="w-full sm:w-64 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                 />
                 <select
                     v-model="categoryFilter"
-                    class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                    class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                 >
                     <option value="">{{ $t('a_all_categories') }}</option>
                     <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ cat.name_en }}</option>
@@ -108,14 +108,14 @@ const recurringLabels = computed(() => ({
                     v-model="dateFrom"
                     type="date"
                     :max="dateTo || undefined"
-                    class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                    class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                     :placeholder="$t('a_from')"
                 />
                 <input
                     v-model="dateTo"
                     type="date"
                     :min="dateFrom || undefined"
-                    class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                    class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                     :placeholder="$t('a_to_date')"
                 />
             </div>
@@ -125,41 +125,41 @@ const recurringLabels = computed(() => ({
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_date') }}</th>
-                                <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_category') }}</th>
-                                <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_item') }}</th>
-                                <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_amount') }}</th>
-                                <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_description') }}</th>
-                                <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_recurring') }}</th>
-                                <th class="px-6 py-3 text-end text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_actions') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_date') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_category') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_item') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_amount') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_description') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_recurring') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-end text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_actions') }}</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
                             <tr v-for="expense in expenses.data" :key="expense.id" class="hover:bg-gray-50">
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ formatDate(expense.expense_date) }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ expense.category?.name_en || '-' }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">{{ expense.item?.name_en || '-' }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold" style="color: #C4A265;">{{ formatCurrency(expense.amount) }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">{{ expense.description || '-' }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span v-if="expense.is_recurring" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ formatDate(expense.expense_date) }}</td>
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ expense.category?.name_en || '-' }}</td>
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">{{ expense.item?.name_en || '-' }}</td>
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm font-semibold" style="color: #C4A265;">{{ formatCurrency(expense.amount) }}</td>
+                                <td class="px-4 md:px-6 py-4 text-sm text-gray-500 max-w-xs truncate">{{ expense.description || '-' }}</td>
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap">
+                                    <span v-if="expense.is_recurring" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-slate-100 text-[#1B365D]">
                                         {{ recurringLabels[expense.recurring_period] || expense.recurring_period }}
                                     </span>
                                     <span v-else class="text-xs text-gray-400">-</span>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-end text-sm space-x-3 rtl:space-x-reverse">
-                                    <Link v-if="can('expenses.update')" :href="`/admin/expenses/${expense.id}/edit`" class="font-medium text-blue-600 hover:underline">{{ $t('a_edit') }}</Link>
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-end text-sm space-x-3 rtl:space-x-reverse">
+                                    <Link v-if="can('expenses.update')" :href="`/admin/expenses/${expense.id}/edit`" class="font-medium text-[#1B365D] hover:underline">{{ $t('a_edit') }}</Link>
                                     <button v-if="can('expenses.delete')" @click="deleteExpense(expense.id)" class="font-medium text-red-600 hover:underline">{{ $t('a_delete') }}</button>
                                 </td>
                             </tr>
                             <tr v-if="!expenses.data || expenses.data.length === 0">
-                                <td colspan="7" class="px-6 py-8 text-center text-sm text-gray-500">{{ $t('a_no_expenses_found') }}</td>
+                                <td colspan="7" class="px-4 md:px-6 py-8 text-center text-sm text-gray-500">{{ $t('a_no_expenses_found') }}</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
 
-                <div v-if="expenses.links && expenses.links.length > 3" class="px-6 py-3 border-t border-gray-200 flex items-center justify-between">
+                <div v-if="expenses.links && expenses.links.length > 3" class="px-4 md:px-6 py-3 border-t border-gray-200 flex items-center justify-between">
                     <p class="text-sm text-gray-500">{{ $t('a_showing') }} {{ expenses.from }} {{ $t('a_to') }} {{ expenses.to }} {{ $t('a_of') }} {{ expenses.total }} {{ $t('a_results') }}</p>
                     <nav class="flex space-x-1">
                         <template v-for="link in expenses.links" :key="link.label">

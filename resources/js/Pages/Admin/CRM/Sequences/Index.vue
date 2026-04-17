@@ -50,13 +50,13 @@ function toggleActive(seq) {
 }
 
 const actionColors = {
-    create_follow_up: 'bg-blue-100 text-blue-700',
-    send_whatsapp: 'bg-green-100 text-green-700',
-    send_email: 'bg-purple-100 text-purple-700',
-    send_sms: 'bg-cyan-100 text-cyan-700',
+    create_follow_up: 'bg-slate-100 text-[#1B365D]',
+    send_whatsapp: 'bg-emerald-100 text-emerald-700',
+    send_email: 'bg-slate-100 text-[#1B365D]',
+    send_sms: 'bg-slate-100 text-[#1B365D]',
     notify_staff: 'bg-amber-100 text-amber-700',
-    change_status: 'bg-indigo-100 text-indigo-700',
-    add_score: 'bg-pink-100 text-pink-700',
+    change_status: 'bg-slate-100 text-[#1B365D]',
+    add_score: 'bg-amber-100 text-[#C4A265]',
 };
 
 const actionIcons = {
@@ -87,7 +87,7 @@ function formatDelay(minutes) {
                  :class="{ 'translate-y-0 opacity-100': mounted, '-translate-y-4 opacity-0': !mounted }"
                  style="transition: all 0.5s ease-out">
                 <div>
-                    <h1 class="text-2xl font-bold text-[#3A3A3A]">{{ $t('a_automation_sequences') }}</h1>
+                    <h1 class="text-xl md:text-2xl font-bold text-[#3A3A3A]">{{ $t('a_automation_sequences') }}</h1>
                     <p class="text-sm text-gray-500 mt-1">{{ $t('a_sequences_description') }}</p>
                 </div>
                 <Link v-if="can('leads.create')"
@@ -127,9 +127,9 @@ function formatDelay(minutes) {
                             <div class="flex-1 min-w-0">
                                 <div class="flex items-center gap-2.5 mb-1.5">
                                     <h3 class="text-base font-semibold text-[#3A3A3A] truncate">{{ seq.name }}</h3>
-                                    <span :class="seq.is_active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'"
+                                    <span :class="seq.is_active ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-500'"
                                         class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium whitespace-nowrap">
-                                        <span :class="seq.is_active ? 'bg-green-500' : 'bg-gray-400'" class="w-1.5 h-1.5 rounded-full"></span>
+                                        <span :class="seq.is_active ? 'bg-emerald-500' : 'bg-gray-400'" class="w-1.5 h-1.5 rounded-full"></span>
                                         {{ seq.is_active ? $t('a_active') : $t('a_inactive') }}
                                     </span>
                                 </div>
@@ -146,7 +146,7 @@ function formatDelay(minutes) {
                                     <svg v-if="seq.is_active" class="w-4.5 h-4.5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                     </svg>
-                                    <svg v-else class="w-4.5 h-4.5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg v-else class="w-4.5 h-4.5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                     </svg>
@@ -173,7 +173,7 @@ function formatDelay(minutes) {
                                 <span>{{ seq.total_enrollments_count || 0 }} enrolled</span>
                             </div>
                             <div class="flex items-center gap-1.5 text-xs text-gray-500">
-                                <span class="w-1.5 h-1.5 rounded-full bg-green-400"></span>
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
                                 <span>{{ seq.active_enrollments_count || 0 }} active</span>
                             </div>
                             <div class="flex items-center gap-1.5 text-xs text-gray-500">

@@ -58,33 +58,33 @@ function stars(rating) {
             <!-- Header -->
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-900">{{ isRtl ? 'مؤشرات أداء الأطباء' : 'Doctor Performance KPIs' }}</h1>
+                    <h1 class="text-xl md:text-2xl font-bold text-gray-900">{{ isRtl ? 'مؤشرات أداء الأطباء' : 'Doctor Performance KPIs' }}</h1>
                     <p class="text-sm text-gray-500 mt-1">{{ isRtl ? 'مقارنة شاملة للإنتاجية والجودة والإيرادات' : 'Comprehensive productivity, quality, and revenue comparison' }}</p>
                 </div>
                 <div class="flex items-center gap-2">
-                    <input v-model="dateFrom" type="date" class="rounded-lg border-gray-300 text-sm focus:ring-cyan-500 focus:border-cyan-500" />
+                    <input v-model="dateFrom" type="date" class="rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]" />
                     <span class="text-gray-400">→</span>
-                    <input v-model="dateTo" type="date" class="rounded-lg border-gray-300 text-sm focus:ring-cyan-500 focus:border-cyan-500" />
+                    <input v-model="dateTo" type="date" class="rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]" />
                 </div>
             </div>
 
             <!-- Summary Cards -->
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div class="bg-gradient-to-br from-cyan-500 to-cyan-600 rounded-xl p-5 text-white">
+                <div class="bg-gradient-to-br from-[#1B365D] to-[#1B365D] rounded-xl p-5 text-white">
                     <div class="text-sm opacity-80">{{ isRtl ? 'إجمالي الإيرادات' : 'Total Revenue' }}</div>
-                    <div class="text-2xl font-bold mt-1">{{ formatCurrency(totals.revenue) }}</div>
+                    <div class="text-xl md:text-2xl font-bold mt-1">{{ formatCurrency(totals.revenue) }}</div>
                 </div>
                 <div class="bg-white rounded-xl border border-gray-200 p-5">
                     <div class="text-xs text-gray-500">{{ isRtl ? 'إجمالي الزيارات' : 'Total Visits' }}</div>
-                    <div class="text-2xl font-bold text-gray-900 mt-1">{{ totals.visits }}</div>
+                    <div class="text-xl md:text-2xl font-bold text-gray-900 mt-1">{{ totals.visits }}</div>
                 </div>
                 <div class="bg-white rounded-xl border border-amber-200 p-5">
                     <div class="text-xs text-gray-500">{{ isRtl ? 'متوسط التقييم' : 'Avg Rating' }}</div>
-                    <div class="text-2xl font-bold text-amber-600 mt-1">{{ totals.avg_rating || '—' }} <span class="text-sm">/ 5</span></div>
+                    <div class="text-xl md:text-2xl font-bold text-amber-600 mt-1">{{ totals.avg_rating || '—' }} <span class="text-sm">/ 5</span></div>
                 </div>
                 <div class="bg-white rounded-xl border border-emerald-200 p-5">
                     <div class="text-xs text-gray-500">{{ isRtl ? 'متوسط الاحتفاظ' : 'Avg Retention' }}</div>
-                    <div class="text-2xl font-bold text-emerald-600 mt-1">{{ totals.avg_retention }}%</div>
+                    <div class="text-xl md:text-2xl font-bold text-emerald-600 mt-1">{{ totals.avg_retention }}%</div>
                 </div>
             </div>
 
@@ -100,7 +100,7 @@ function stars(rating) {
                 ]" :key="opt.key"
                     @click="sortBy = opt.key"
                     class="px-3 py-1.5 text-xs font-medium rounded-full border transition"
-                    :class="sortBy === opt.key ? 'bg-cyan-600 text-white border-cyan-600' : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'">
+                    :class="sortBy === opt.key ? 'bg-[#1B365D] text-white border-[#1B365D]' : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'">
                     {{ isRtl ? opt.ar : opt.en }}
                 </button>
             </div>
@@ -112,11 +112,11 @@ function stars(rating) {
                     <!-- Doctor Header -->
                     <div class="flex items-center gap-3 mb-4">
                         <div class="relative">
-                            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-400 to-cyan-600 flex items-center justify-center text-white text-lg font-bold">
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-slate-400 to-[#1B365D] flex items-center justify-center text-white text-lg font-bold">
                                 {{ (isRtl ? doc.name_ar : doc.name_en)?.charAt(0) || 'D' }}
                             </div>
                             <span v-if="i < 3" class="absolute -top-1 -right-1 w-5 h-5 rounded-full text-[10px] font-bold flex items-center justify-center"
-                                :class="i === 0 ? 'bg-amber-400 text-white' : i === 1 ? 'bg-gray-300 text-gray-700' : 'bg-orange-300 text-white'">
+                                :class="i === 0 ? 'bg-amber-400 text-white' : i === 1 ? 'bg-gray-300 text-gray-700' : 'bg-amber-300 text-white'">
                                 {{ i + 1 }}
                             </span>
                         </div>
@@ -131,7 +131,7 @@ function stars(rating) {
                     </div>
 
                     <!-- KPI Grid -->
-                    <div class="grid grid-cols-3 gap-3 mb-3">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
                         <!-- Revenue -->
                         <div class="text-center p-2 rounded-lg bg-gray-50">
                             <div class="text-xs text-gray-500 mb-1">{{ isRtl ? 'الإيراد' : 'Revenue' }}</div>
@@ -155,7 +155,7 @@ function stars(rating) {
                         <!-- Avg / Visit -->
                         <div class="text-center p-2 rounded-lg bg-gray-50">
                             <div class="text-xs text-gray-500 mb-1">{{ isRtl ? 'متوسط/زيارة' : 'Avg/Visit' }}</div>
-                            <div class="text-sm font-bold text-cyan-600">{{ formatCurrency(doc.avg_revenue_per_visit) }}</div>
+                            <div class="text-sm font-bold text-[#1B365D]">{{ formatCurrency(doc.avg_revenue_per_visit) }}</div>
                         </div>
                     </div>
 

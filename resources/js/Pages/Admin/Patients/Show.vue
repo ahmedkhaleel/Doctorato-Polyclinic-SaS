@@ -45,7 +45,7 @@ const prescriptions = computed(() => props.patient?.prescriptions || []);
                     <div class="absolute -bottom-10 -start-10 w-48 h-48 rounded-full" style="background: radial-gradient(circle, #C4A265, transparent 70%);"></div>
                 </div>
 
-                <div class="relative p-6 sm:p-8">
+                <div class="relative p-4 md:p-6 sm:p-8">
                     <div class="flex flex-col sm:flex-row items-start sm:items-center gap-6">
                         <!-- Avatar -->
                         <div class="relative group">
@@ -53,7 +53,7 @@ const prescriptions = computed(() => props.patient?.prescriptions || []);
                             <div v-if="patient.photo" class="relative w-20 h-20 rounded-2xl overflow-hidden ring-2 ring-white/20">
                                 <img :src="patient.photo.startsWith('http') ? patient.photo : `/storage/${patient.photo}`" class="w-full h-full object-cover" />
                             </div>
-                            <div v-else class="relative w-20 h-20 rounded-2xl flex items-center justify-center text-2xl font-bold text-white ring-2 ring-white/20" style="background: linear-gradient(135deg, #C4A265, #A68B52);">
+                            <div v-else class="relative w-20 h-20 rounded-2xl flex items-center justify-center text-xl md:text-2xl font-bold text-white ring-2 ring-white/20" style="background: linear-gradient(135deg, #C4A265, #A68B52);">
                                 {{ patient.full_name?.charAt(0) }}
                             </div>
                             <div class="absolute -bottom-1 -end-1 w-6 h-6 rounded-full flex items-center justify-center text-[10px]"
@@ -66,7 +66,7 @@ const prescriptions = computed(() => props.patient?.prescriptions || []);
                         <!-- Info -->
                         <div class="flex-1 min-w-0">
                             <div class="flex items-center gap-3 mb-1.5">
-                                <h1 class="text-2xl sm:text-3xl font-bold text-white tracking-tight truncate">{{ patient.full_name }}</h1>
+                                <h1 class="text-xl md:text-2xl sm:text-3xl font-bold text-white tracking-tight truncate">{{ patient.full_name }}</h1>
                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider"
                                     :class="patient.is_active ? 'bg-emerald-500/20 text-emerald-300 ring-1 ring-emerald-500/30' : 'bg-gray-500/20 text-gray-400 ring-1 ring-gray-500/30'">
                                     {{ patient.is_active ? $t('a_active') : $t('a_inactive') }}

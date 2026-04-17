@@ -74,7 +74,7 @@ function applicableCount(code) {
     <AdminLayout :title="$t('a_discount_codes')">
         <div class="space-y-6">
             <div class="flex items-center justify-between">
-                <h1 class="text-2xl font-bold text-gray-800">{{ $t('a_discount_codes') }}</h1>
+                <h1 class="text-xl md:text-2xl font-bold text-gray-800">{{ $t('a_discount_codes') }}</h1>
                 <Link
                     v-if="can('discount_codes.create')"
                     href="/admin/discount-codes/create"
@@ -94,7 +94,7 @@ function applicableCount(code) {
                     v-model="search"
                     type="text"
                     :placeholder="$t('a_search_by_code')"
-                    class="w-full sm:w-80 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                    class="w-full sm:w-80 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                 />
                 <div class="flex gap-2">
                     <button
@@ -106,7 +106,7 @@ function applicableCount(code) {
                     <button
                         @click="filterByStatus('active')"
                         class="px-3 py-1.5 text-xs font-medium rounded-full border transition"
-                        :class="statusFilter === 'active' ? 'bg-green-500 text-white border-transparent' : 'text-gray-600 border-gray-300 hover:bg-gray-50'"
+                        :class="statusFilter === 'active' ? 'bg-emerald-500 text-white border-transparent' : 'text-gray-600 border-gray-300 hover:bg-gray-50'"
                     >{{ $t('a_active') }}</button>
                     <button
                         @click="filterByStatus('inactive')"
@@ -116,7 +116,7 @@ function applicableCount(code) {
                     <button
                         @click="filterByStatus('popup')"
                         class="px-3 py-1.5 text-xs font-medium rounded-full border transition"
-                        :class="statusFilter === 'popup' ? 'bg-purple-500 text-white border-transparent' : 'text-gray-600 border-gray-300 hover:bg-gray-50'"
+                        :class="statusFilter === 'popup' ? 'bg-[#1B365D] text-white border-transparent' : 'text-gray-600 border-gray-300 hover:bg-gray-50'"
                     >{{ $t('a_website_popup') }}</button>
                 </div>
             </div>
@@ -127,22 +127,22 @@ function applicableCount(code) {
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_code') }}</th>
-                                <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_discount') }}</th>
-                                <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_usage') }}</th>
-                                <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_valid_period') }}</th>
-                                <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_scope') }}</th>
-                                <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_status') }}</th>
-                                <th class="px-6 py-3 text-end text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_actions') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_code') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_discount') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_usage') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_valid_period') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_scope') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_status') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-end text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_actions') }}</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
                             <tr v-for="code in discountCodes.data" :key="code.id" class="hover:bg-gray-50">
                                 <!-- Code -->
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center space-x-2">
                                         <span class="text-sm font-mono font-semibold" style="color: #C4A265;">{{ code.code }}</span>
-                                        <span v-if="code.show_on_website" class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-purple-100 text-purple-700" title="Shown as website popup">
+                                        <span v-if="code.show_on_website" class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-slate-100 text-[#1B365D]" title="Shown as website popup">
                                             <svg class="w-3 h-3 mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
                                             {{ $t('a_popup') }}
                                         </span>
@@ -150,7 +150,7 @@ function applicableCount(code) {
                                 </td>
 
                                 <!-- Discount -->
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                     <span class="text-sm font-medium text-gray-900">
                                         {{ code.discount_type === 'percentage' ? code.discount_value + '%' : code.discount_value + ' ' + currencyCode }}
                                     </span>
@@ -158,7 +158,7 @@ function applicableCount(code) {
                                 </td>
 
                                 <!-- Usage -->
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center space-x-2">
                                         <span class="text-sm text-gray-700 font-medium">{{ code.used_count ?? 0 }}</span>
                                         <span class="text-xs text-gray-400">/ {{ code.max_uses ?? $t('a_unlimited') }}</span>
@@ -172,15 +172,15 @@ function applicableCount(code) {
                                 </td>
 
                                 <!-- Valid Period -->
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                     {{ formatDate(code.start_date) }} - {{ formatDate(code.end_date) }}
                                 </td>
 
                                 <!-- Scope -->
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                     <span v-if="applicableCount(code) === 0" class="text-xs text-gray-400">{{ $t('a_all') }}</span>
                                     <div v-else class="flex flex-wrap gap-1">
-                                        <span v-if="Array.isArray(code.applicable_services) && code.applicable_services.length" class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-blue-50 text-blue-700">
+                                        <span v-if="Array.isArray(code.applicable_services) && code.applicable_services.length" class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-slate-50 text-[#1B365D]">
                                             {{ code.applicable_services.length }} {{ code.applicable_services.length > 1 ? $t('a_services_plural') : $t('a_service') }}
                                         </span>
                                         <span v-if="Array.isArray(code.applicable_packages) && code.applicable_packages.length" class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-teal-50 text-teal-700">
@@ -193,9 +193,9 @@ function applicableCount(code) {
                                 </td>
 
                                 <!-- Status -->
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                     <span
-                                        :class="code.is_active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'"
+                                        :class="code.is_active ? 'bg-emerald-100 text-emerald-800' : 'bg-gray-100 text-gray-800'"
                                         class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
                                     >
                                         {{ code.is_active ? $t('a_active') : $t('a_inactive') }}
@@ -203,20 +203,20 @@ function applicableCount(code) {
                                 </td>
 
                                 <!-- Actions -->
-                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm space-x-3">
-                                    <Link v-if="can('discount_codes.update')" :href="`/admin/discount-codes/${code.id}/edit`" class="font-medium text-blue-600 hover:underline">{{ $t('a_edit') }}</Link>
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-right text-sm space-x-3">
+                                    <Link v-if="can('discount_codes.update')" :href="`/admin/discount-codes/${code.id}/edit`" class="font-medium text-[#1B365D] hover:underline">{{ $t('a_edit') }}</Link>
                                     <button v-if="can('discount_codes.delete')" @click="deleteCode(code.id)" class="font-medium text-red-600 hover:underline">{{ $t('a_delete') }}</button>
                                 </td>
                             </tr>
                             <tr v-if="!discountCodes.data || discountCodes.data.length === 0">
-                                <td colspan="7" class="px-6 py-8 text-center text-sm text-gray-500">{{ $t('a_no_discount_codes_found') }}</td>
+                                <td colspan="7" class="px-4 md:px-6 py-8 text-center text-sm text-gray-500">{{ $t('a_no_discount_codes_found') }}</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
 
                 <!-- Pagination -->
-                <div v-if="discountCodes.links && discountCodes.links.length > 3" class="px-6 py-3 border-t border-gray-200 flex items-center justify-between">
+                <div v-if="discountCodes.links && discountCodes.links.length > 3" class="px-4 md:px-6 py-3 border-t border-gray-200 flex items-center justify-between">
                     <p class="text-sm text-gray-500">{{ $t('a_showing') }} {{ discountCodes.from }} {{ $t('a_to') }} {{ discountCodes.to }} {{ $t('a_of') }} {{ discountCodes.total }} {{ $t('a_results') }}</p>
                     <nav class="flex space-x-1">
                         <template v-for="link in discountCodes.links" :key="link.label">

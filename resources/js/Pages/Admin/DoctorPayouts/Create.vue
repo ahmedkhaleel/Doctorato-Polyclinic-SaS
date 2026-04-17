@@ -122,8 +122,8 @@ function submit() {
 }
 
 const visitTypeConfig = {
-    consultation: { label: 'Consultation', bg: 'bg-sky-50', text: 'text-sky-600', icon: 'stethoscope' },
-    session: { label: 'Session', bg: 'bg-violet-50', text: 'text-violet-600', icon: 'session' },
+    consultation: { label: 'Consultation', bg: 'bg-slate-50', text: 'text-[#1B365D]', icon: 'stethoscope' },
+    session: { label: 'Session', bg: 'bg-slate-50', text: 'text-[#1B365D]', icon: 'session' },
     follow_up: { label: 'Follow Up', bg: 'bg-teal-50', text: 'text-teal-600', icon: 'follow-up' },
 };
 </script>
@@ -140,7 +140,7 @@ const visitTypeConfig = {
             </div>
             <div class="flex items-start justify-between">
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-900">{{ $t('a_create_doctor_payout') }}</h1>
+                    <h1 class="text-xl md:text-2xl font-bold text-gray-900">{{ $t('a_create_doctor_payout') }}</h1>
                     <p class="text-sm text-gray-500 mt-1">{{ $t('a_create_payout_description') }}</p>
                 </div>
             </div>
@@ -196,7 +196,7 @@ const visitTypeConfig = {
 
                 <!-- Step 1: Doctor & Date Selection -->
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
-                    <div class="px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white">
+                    <div class="px-4 md:px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white">
                         <div class="flex items-center gap-3">
                             <div class="w-7 h-7 rounded-lg bg-[#C4A265]/10 flex items-center justify-center">
                                 <svg class="w-4 h-4 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -264,7 +264,7 @@ const visitTypeConfig = {
 
                 <!-- Step 2: Visit Selection Table -->
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
-                    <div class="px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white">
+                    <div class="px-4 md:px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-3">
                                 <div class="w-7 h-7 rounded-lg bg-[#C4A265]/10 flex items-center justify-center">
@@ -423,7 +423,7 @@ const visitTypeConfig = {
                             </div>
                             <div class="flex justify-between items-center text-sm">
                                 <span class="text-gray-500 flex items-center gap-2">
-                                    <span class="w-2 h-2 rounded-full bg-blue-400/50"></span>
+                                    <span class="w-2 h-2 rounded-full bg-slate-400/50"></span>
                                     {{ $t('a_period') }}
                                 </span>
                                 <span class="text-xs font-medium text-gray-600 tabular-nums">

@@ -94,14 +94,14 @@ function deleteVisit(id) {
 
 const statusConfig = {
     waiting: { label: 'Waiting', dot: 'bg-amber-400', text: 'text-amber-700', bg: 'bg-amber-50', border: 'border-amber-100' },
-    in_progress: { label: 'In Progress', dot: 'bg-blue-400', text: 'text-blue-700', bg: 'bg-blue-50', border: 'border-blue-100' },
+    in_progress: { label: 'In Progress', dot: 'bg-slate-400', text: 'text-[#1B365D]', bg: 'bg-slate-50', border: 'border-slate-100' },
     completed: { label: 'Completed', dot: 'bg-emerald-400', text: 'text-emerald-700', bg: 'bg-emerald-50', border: 'border-emerald-100' },
     cancelled: { label: 'Cancelled', dot: 'bg-red-400', text: 'text-red-700', bg: 'bg-red-50', border: 'border-red-100' },
 };
 
 const visitTypeConfig = {
-    consultation: { label: 'Consultation', icon: 'chat', classes: 'text-violet-700 bg-violet-50 border-violet-100' },
-    session: { label: 'Session', icon: 'bolt', classes: 'text-sky-700 bg-sky-50 border-sky-100' },
+    consultation: { label: 'Consultation', icon: 'chat', classes: 'text-[#1B365D] bg-slate-50 border-slate-100' },
+    session: { label: 'Session', icon: 'bolt', classes: 'text-[#1B365D] bg-slate-50 border-slate-100' },
 };
 
 function formatDate(date) {
@@ -124,7 +124,7 @@ function getInitials(name) {
             <!-- Header -->
             <div class="flex items-center justify-between">
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-800">{{ $t('a_visits') }}</h1>
+                    <h1 class="text-xl md:text-2xl font-bold text-gray-800">{{ $t('a_visits') }}</h1>
                     <p class="text-sm text-gray-500 mt-0.5">
                         <span class="font-semibold" style="color: #C4A265;">{{ visits.total }}</span> {{ $t('a_total_visits') }}
                     </p>
@@ -185,7 +185,7 @@ function getInitials(name) {
                             v-model="search"
                             type="text"
                             :placeholder="$t('a_search_visits_placeholder')"
-                            class="w-full pl-10 pr-9 py-2.5 border border-gray-200 bg-gray-50/50 rounded-xl text-sm focus:ring-2 focus:ring-yellow-100 focus:border-yellow-300 focus:bg-white hover:border-gray-300 transition-all duration-200"
+                            class="w-full pl-10 pr-9 py-2.5 border border-gray-200 bg-gray-50/50 rounded-xl text-sm focus:ring-2 focus:ring-amber-100 focus:border-amber-300 focus:bg-white hover:border-gray-300 transition-all duration-200"
                         />
                         <button v-if="search" @click="clearSearch" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 transition">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
@@ -199,7 +199,7 @@ function getInitials(name) {
                         </div>
                         <select
                             v-model="statusFilter"
-                            class="pl-10 pr-9 py-2.5 border border-gray-200 bg-gray-50/50 rounded-xl text-sm focus:ring-2 focus:ring-yellow-100 focus:border-yellow-300 focus:bg-white hover:border-gray-300 transition-all duration-200 appearance-none cursor-pointer"
+                            class="pl-10 pr-9 py-2.5 border border-gray-200 bg-gray-50/50 rounded-xl text-sm focus:ring-2 focus:ring-amber-100 focus:border-amber-300 focus:bg-white hover:border-gray-300 transition-all duration-200 appearance-none cursor-pointer"
                         >
                             <option value="">{{ $t('a_all_status') }}</option>
                             <option value="waiting">{{ $t('a_waiting') }}</option>
@@ -219,7 +219,7 @@ function getInitials(name) {
                         </div>
                         <select
                             v-model="visitTypeFilter"
-                            class="pl-10 pr-9 py-2.5 border border-gray-200 bg-gray-50/50 rounded-xl text-sm focus:ring-2 focus:ring-yellow-100 focus:border-yellow-300 focus:bg-white hover:border-gray-300 transition-all duration-200 appearance-none cursor-pointer"
+                            class="pl-10 pr-9 py-2.5 border border-gray-200 bg-gray-50/50 rounded-xl text-sm focus:ring-2 focus:ring-amber-100 focus:border-amber-300 focus:bg-white hover:border-gray-300 transition-all duration-200 appearance-none cursor-pointer"
                         >
                             <option value="">{{ $t('a_all_types') }}</option>
                             <option value="consultation">{{ $t('a_consultation') }}</option>
@@ -239,7 +239,7 @@ function getInitials(name) {
                             v-model="dateFrom"
                             type="date"
                             :max="dateTo || undefined"
-                            class="pl-10 pr-3 py-2.5 border border-gray-200 bg-gray-50/50 rounded-xl text-sm focus:ring-2 focus:ring-yellow-100 focus:border-yellow-300 focus:bg-white hover:border-gray-300 transition-all duration-200"
+                            class="pl-10 pr-3 py-2.5 border border-gray-200 bg-gray-50/50 rounded-xl text-sm focus:ring-2 focus:ring-amber-100 focus:border-amber-300 focus:bg-white hover:border-gray-300 transition-all duration-200"
                         />
                     </div>
 
@@ -252,7 +252,7 @@ function getInitials(name) {
                             v-model="dateTo"
                             type="date"
                             :min="dateFrom || undefined"
-                            class="pl-10 pr-3 py-2.5 border border-gray-200 bg-gray-50/50 rounded-xl text-sm focus:ring-2 focus:ring-yellow-100 focus:border-yellow-300 focus:bg-white hover:border-gray-300 transition-all duration-200"
+                            class="pl-10 pr-3 py-2.5 border border-gray-200 bg-gray-50/50 rounded-xl text-sm focus:ring-2 focus:ring-amber-100 focus:border-amber-300 focus:bg-white hover:border-gray-300 transition-all duration-200"
                         />
                     </div>
 
@@ -273,14 +273,14 @@ function getInitials(name) {
                     <table class="min-w-full">
                         <thead>
                             <tr class="border-b border-gray-100 bg-gray-50/50">
-                                <th class="px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_date') }}</th>
-                                <th class="px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_patients') }}</th>
-                                <th class="px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_doctor') }}</th>
-                                <th class="px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_type') }}</th>
-                                <th class="px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_service') }}</th>
-                                <th class="px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_booking') }}</th>
-                                <th class="px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_status') }}</th>
-                                <th class="px-6 py-3.5 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_actions') }}</th>
+                                <th class="px-4 md:px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_date') }}</th>
+                                <th class="px-4 md:px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_patients') }}</th>
+                                <th class="px-4 md:px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_doctor') }}</th>
+                                <th class="px-4 md:px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_type') }}</th>
+                                <th class="px-4 md:px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_service') }}</th>
+                                <th class="px-4 md:px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_booking') }}</th>
+                                <th class="px-4 md:px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_status') }}</th>
+                                <th class="px-4 md:px-6 py-3.5 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_actions') }}</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-50">
@@ -290,7 +290,7 @@ function getInitials(name) {
                                 class="group hover:bg-gray-50/60 transition-colors duration-150"
                             >
                                 <!-- Date -->
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center gap-2">
                                         <div class="w-8 h-8 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center flex-shrink-0">
                                             <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
@@ -300,7 +300,7 @@ function getInitials(name) {
                                 </td>
 
                                 <!-- Patient -->
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center gap-3">
                                         <div class="w-9 h-9 rounded-xl flex-shrink-0 flex items-center justify-center text-white text-xs font-bold shadow-sm" style="background-color: #C4A265;">
                                             {{ getInitials(visit.patient?.full_name) }}
@@ -318,10 +318,10 @@ function getInitials(name) {
                                 </td>
 
                                 <!-- Doctor -->
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                     <div v-if="visit.doctor?.name_en || visit.doctor?.name_ar" class="flex items-center gap-2">
-                                        <div class="w-6 h-6 rounded-lg bg-indigo-50 border border-indigo-100 flex items-center justify-center flex-shrink-0">
-                                            <svg class="w-3.5 h-3.5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                        <div class="w-6 h-6 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-center flex-shrink-0">
+                                            <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                                         </div>
                                         <span class="text-sm text-gray-600">{{ $localized(visit.doctor, 'name') }}</span>
                                     </div>
@@ -329,7 +329,7 @@ function getInitials(name) {
                                 </td>
 
                                 <!-- Type -->
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                     <span v-if="visit.visit_type && visitTypeConfig[visit.visit_type]"
                                         :class="visitTypeConfig[visit.visit_type].classes"
                                         class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium border">
@@ -343,15 +343,15 @@ function getInitials(name) {
                                 </td>
 
                                 <!-- Service -->
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                     <span v-if="visit.service?.name_en || visit.service?.name_ar" class="text-sm text-gray-600">{{ $localized(visit.service, 'name') }}</span>
                                     <span v-else class="text-sm text-gray-300">-</span>
                                 </td>
 
                                 <!-- Booking -->
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                     <Link v-if="visit.booking" :href="`/admin/bookings/${visit.booking.id}`"
-                                        class="inline-flex items-center gap-1 text-xs font-mono font-bold px-2.5 py-1 rounded-lg bg-yellow-50 border border-yellow-100 hover:bg-yellow-100 transition-colors duration-150" style="color: #C4A265;">
+                                        class="inline-flex items-center gap-1 text-xs font-mono font-bold px-2.5 py-1 rounded-lg bg-amber-50 border border-amber-100 hover:bg-amber-100 transition-colors duration-150" style="color: #C4A265;">
                                         <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
                                         {{ visit.booking.booking_number || `#${visit.booking.id}` }}
                                     </Link>
@@ -359,7 +359,7 @@ function getInitials(name) {
                                 </td>
 
                                 <!-- Status -->
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                     <span v-if="statusConfig[visit.status]"
                                         :class="[statusConfig[visit.status].bg, statusConfig[visit.status].text, statusConfig[visit.status].border]"
                                         class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold border">
@@ -370,11 +370,11 @@ function getInitials(name) {
                                 </td>
 
                                 <!-- Actions -->
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center justify-center gap-1">
                                         <!-- View -->
                                         <Link v-if="can('visits.view')" :href="`/admin/visits/${visit.id}`"
-                                            class="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:bg-yellow-50 transition-all duration-200" :title="$t('a_view')">
+                                            class="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:bg-amber-50 transition-all duration-200" :title="$t('a_view')">
                                             <svg class="w-4 h-4 hover-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
                                         </Link>
                                         <!-- Delete -->
@@ -388,7 +388,7 @@ function getInitials(name) {
 
                             <!-- Empty State -->
                             <tr v-if="!visits.data || visits.data.length === 0">
-                                <td colspan="8" class="px-6 py-16 text-center">
+                                <td colspan="8" class="px-4 md:px-6 py-16 text-center">
                                     <div class="flex flex-col items-center">
                                         <div class="w-16 h-16 rounded-2xl bg-gray-50 border border-gray-100 flex items-center justify-center mb-4">
                                             <svg class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
@@ -406,7 +406,7 @@ function getInitials(name) {
                 </div>
 
                 <!-- Pagination -->
-                <div v-if="visits.links && visits.links.length > 3" class="px-6 py-4 border-t border-gray-100 flex items-center justify-between">
+                <div v-if="visits.links && visits.links.length > 3" class="px-4 md:px-6 py-4 border-t border-gray-100 flex items-center justify-between">
                     <p class="text-sm text-gray-500">
                         {{ $t('a_showing') }} <span class="font-semibold text-gray-700">{{ visits.from }}</span>
                         {{ $t('a_to') }} <span class="font-semibold text-gray-700">{{ visits.to }}</span>

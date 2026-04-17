@@ -96,7 +96,7 @@ function onSourceBlur() {
                             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
                         </div>
                         <div>
-                            <h1 class="text-2xl font-bold text-gray-900 tracking-tight">{{ $t('a_edit_campaign') }}</h1>
+                            <h1 class="text-xl md:text-2xl font-bold text-gray-900 tracking-tight">{{ $t('a_edit_campaign') }}</h1>
                             <p class="text-sm text-gray-500 mt-0.5">Update campaign details and tracking parameters for <span class="font-medium text-gray-700">{{ campaign.name }}</span></p>
                         </div>
                     </div>
@@ -112,7 +112,7 @@ function onSourceBlur() {
                 >
                     <!-- Gold gradient top bar -->
                     <div class="h-1 w-full" style="background: linear-gradient(135deg, #C4A265, #D4B87A);"></div>
-                    <div class="px-6 py-4 border-b border-gray-100 bg-gray-50/50">
+                    <div class="px-4 md:px-6 py-4 border-b border-gray-100 bg-gray-50/50">
                         <div class="flex items-center gap-2.5">
                             <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background-color: rgba(196, 162, 101, 0.1);">
                                 <svg class="w-4 h-4" style="color: #C4A265;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
@@ -120,7 +120,7 @@ function onSourceBlur() {
                             <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wider">{{ $t('a_campaign_details') }}</h3>
                         </div>
                     </div>
-                    <div class="p-6 space-y-5">
+                    <div class="p-4 md:p-6 space-y-5">
                         <!-- Name + Lead Source Row -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                             <!-- Name -->
@@ -302,19 +302,19 @@ function onSourceBlur() {
                     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                         <!-- Gold gradient top bar -->
                         <div class="h-1 w-full" style="background: linear-gradient(135deg, #C4A265, #D4B87A);"></div>
-                        <div class="px-6 py-4 border-b border-gray-100 bg-gray-50/50">
+                        <div class="px-4 md:px-6 py-4 border-b border-gray-100 bg-gray-50/50">
                             <div class="flex items-center gap-2.5">
-                                <div class="w-8 h-8 rounded-lg flex items-center justify-center bg-blue-50">
-                                    <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
+                                <div class="w-8 h-8 rounded-lg flex items-center justify-center bg-slate-50">
+                                    <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
                                 </div>
                                 <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wider">{{ $t('a_utm_tracking') }}</h3>
                             </div>
                         </div>
-                        <div class="p-6 space-y-5">
-                            <div class="bg-blue-50/50 border border-blue-100 rounded-xl p-3.5">
+                        <div class="p-4 md:p-6 space-y-5">
+                            <div class="bg-slate-50/50 border border-slate-100 rounded-xl p-3.5">
                                 <div class="flex gap-2.5">
-                                    <svg class="w-4 h-4 text-blue-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                    <p class="text-xs text-blue-700 leading-relaxed">
+                                    <svg class="w-4 h-4 text-[#1B365D] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                    <p class="text-xs text-[#1B365D] leading-relaxed">
                                         UTM parameters help track the effectiveness of your campaign across different marketing channels. These values will be appended to your campaign URLs.
                                     </p>
                                 </div>
@@ -375,7 +375,7 @@ function onSourceBlur() {
                             <div v-if="form.utm_source || form.utm_medium || form.utm_campaign" class="mt-4">
                                 <label class="block text-[11px] font-semibold text-gray-500 uppercase tracking-wider mb-2">{{ $t('a_url_preview') }}</label>
                                 <div class="bg-gray-900 rounded-xl p-3.5 overflow-x-auto">
-                                    <code class="text-[11px] text-green-400 whitespace-nowrap">
+                                    <code class="text-[11px] text-emerald-400 whitespace-nowrap">
                                         ?{{ form.utm_source ? `utm_source=${form.utm_source}` : '' }}{{ form.utm_medium ? `&utm_medium=${form.utm_medium}` : '' }}{{ form.utm_campaign ? `&utm_campaign=${form.utm_campaign}` : '' }}
                                     </code>
                                 </div>
@@ -401,7 +401,7 @@ function onSourceBlur() {
                             <button
                                 type="submit"
                                 :disabled="form.processing"
-                                class="px-6 py-2.5 rounded-xl text-white text-sm font-semibold transition-all duration-200 shadow-lg shadow-[#C4A265]/25 hover:shadow-xl hover:shadow-[#C4A265]/30 hover:-translate-y-0.5 disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:shadow-lg"
+                                class="px-4 md:px-6 py-2.5 rounded-xl text-white text-sm font-semibold transition-all duration-200 shadow-lg shadow-[#C4A265]/25 hover:shadow-xl hover:shadow-[#C4A265]/30 hover:-translate-y-0.5 disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:shadow-lg"
                                 style="background: linear-gradient(135deg, #C4A265, #D4B87A);"
                             >
                                 <span v-if="form.processing" class="flex items-center gap-2">

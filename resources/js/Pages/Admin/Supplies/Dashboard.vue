@@ -73,9 +73,9 @@ const statCards = computed(() => [
         label: isRtl.value ? 'إجمالي المنتجات' : 'Total Products',
         value: props.stats?.totalProducts ?? 0,
         sub: `${props.stats?.activeProducts ?? 0} ${isRtl.value ? 'نشط' : 'active'}`,
-        gradient: 'from-indigo-500 to-indigo-600',
-        iconBg: 'bg-indigo-50',
-        iconColor: 'text-indigo-600',
+        gradient: 'from-[#1B365D] to-[#1B365D]',
+        iconBg: 'bg-slate-50',
+        iconColor: 'text-[#1B365D]',
         icon: 'box',
         pulse: false,
     },
@@ -93,9 +93,9 @@ const statCards = computed(() => [
         label: isRtl.value ? 'تنبيهات النقص' : 'Low Stock Alerts',
         value: props.stats?.lowStockCount ?? 0,
         sub: isRtl.value ? 'أقل من الحد الأدنى' : 'Below minimum',
-        gradient: 'from-rose-500 to-rose-600',
-        iconBg: 'bg-rose-50',
-        iconColor: 'text-rose-600',
+        gradient: 'from-[#C4A265] to-[#C4A265]',
+        iconBg: 'bg-amber-50',
+        iconColor: 'text-[#C4A265]',
         icon: 'warning',
         pulse: (props.stats?.lowStockCount ?? 0) > 0,
     },
@@ -103,7 +103,7 @@ const statCards = computed(() => [
         label: isRtl.value ? 'قريبة الانتهاء' : 'Expiring Soon',
         value: (props.stats?.expiringSoonCount ?? 0) + (props.stats?.expiredCount ?? 0),
         sub: props.stats?.expiredCount ? `${props.stats.expiredCount} ${isRtl.value ? 'منتهية' : 'expired'}` : (isRtl.value ? 'خلال 30 يوم' : 'Within 30 days'),
-        gradient: 'from-amber-500 to-orange-500',
+        gradient: 'from-amber-500 to-[#C4A265]',
         iconBg: 'bg-amber-50',
         iconColor: 'text-amber-600',
         icon: 'calendar',
@@ -114,9 +114,9 @@ const statCards = computed(() => [
 /* ── Transaction type helpers ── */
 const typeConfig = {
     purchase: { label: () => isRtl.value ? 'شراء' : 'Purchase', bg: 'bg-emerald-50', text: 'text-emerald-700', dot: 'bg-emerald-500', border: 'border-emerald-200' },
-    usage: { label: () => isRtl.value ? 'استخدام' : 'Usage', bg: 'bg-blue-50', text: 'text-blue-700', dot: 'bg-blue-500', border: 'border-blue-200' },
+    usage: { label: () => isRtl.value ? 'استخدام' : 'Usage', bg: 'bg-slate-50', text: 'text-[#1B365D]', dot: 'bg-[#1B365D]', border: 'border-slate-200' },
     adjustment: { label: () => isRtl.value ? 'تعديل' : 'Adjustment', bg: 'bg-amber-50', text: 'text-amber-700', dot: 'bg-amber-500', border: 'border-amber-200' },
-    return: { label: () => isRtl.value ? 'إرجاع' : 'Return', bg: 'bg-purple-50', text: 'text-purple-700', dot: 'bg-purple-500', border: 'border-purple-200' },
+    return: { label: () => isRtl.value ? 'إرجاع' : 'Return', bg: 'bg-slate-50', text: 'text-[#1B365D]', dot: 'bg-[#1B365D]', border: 'border-slate-200' },
 };
 
 /* ── Stock helpers ── */
@@ -128,7 +128,7 @@ function stockPercent(item) {
 function stockBarColor(item) {
     const pct = stockPercent(item);
     if (pct <= 25) return 'bg-red-500';
-    if (pct <= 50) return 'bg-orange-500';
+    if (pct <= 50) return 'bg-[#C4A265]';
     if (pct <= 75) return 'bg-amber-400';
     return 'bg-emerald-500';
 }
@@ -136,7 +136,7 @@ function stockBarColor(item) {
 function stockTextColor(item) {
     const pct = stockPercent(item);
     if (pct <= 25) return 'text-red-600';
-    if (pct <= 50) return 'text-orange-600';
+    if (pct <= 50) return 'text-[#C4A265]';
     return 'text-amber-600';
 }
 
@@ -150,7 +150,7 @@ function expiryBadge(dateStr) {
     const days = daysUntilExpiry(dateStr);
     if (days < 0) return { text: isRtl.value ? 'منتهي' : 'Expired', cls: 'bg-red-100 text-red-700 border border-red-200' };
     if (days <= 7) return { text: `${days}${isRtl.value ? ' يوم' : 'd'}`, cls: 'bg-red-50 text-red-600 border border-red-200' };
-    if (days <= 30) return { text: `${days}${isRtl.value ? ' يوم' : 'd'}`, cls: 'bg-orange-50 text-orange-600 border border-orange-200' };
+    if (days <= 30) return { text: `${days}${isRtl.value ? ' يوم' : 'd'}`, cls: 'bg-amber-50 text-[#C4A265] border border-amber-200' };
     return { text: `${days}${isRtl.value ? ' يوم' : 'd'}`, cls: 'bg-amber-50 text-amber-600 border border-amber-200' };
 }
 
@@ -240,14 +240,14 @@ const quickLinks = computed(() => [
         <div class="space-y-6">
 
             <!-- ═══ Hero Header ═══ -->
-            <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-900 via-indigo-800 to-purple-900 p-6 sm:p-8"
+            <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#1B365D] p-4 md:p-6 sm:p-8"
                 :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
                 style="transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1)"
             >
                 <!-- Decorative elements -->
-                <div class="absolute top-0 right-0 w-80 h-80 bg-indigo-400/10 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl"></div>
-                <div class="absolute bottom-0 left-0 w-56 h-56 bg-purple-500/10 rounded-full translate-y-1/2 -translate-x-1/4 blur-2xl"></div>
-                <div class="absolute top-1/2 left-1/3 w-40 h-40 bg-indigo-300/5 rounded-full blur-2xl"></div>
+                <div class="absolute top-0 right-0 w-80 h-80 bg-slate-400/10 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl"></div>
+                <div class="absolute bottom-0 left-0 w-56 h-56 bg-[#1B365D]/10 rounded-full translate-y-1/2 -translate-x-1/4 blur-2xl"></div>
+                <div class="absolute top-1/2 left-1/3 w-40 h-40 bg-slate-300/5 rounded-full blur-2xl"></div>
                 <!-- Grid pattern -->
                 <div class="absolute inset-0 opacity-[0.03]" style="background-image: url('data:image/svg+xml,%3Csvg width=&quot;40&quot; height=&quot;40&quot; viewBox=&quot;0 0 40 40&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;%3E%3Cg fill=&quot;%23fff&quot;%3E%3Ccircle cx=&quot;1&quot; cy=&quot;1&quot; r=&quot;1&quot;/%3E%3C/g%3E%3C/svg%3E')"></div>
 
@@ -255,15 +255,15 @@ const quickLinks = computed(() => [
                     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
                         <div>
                             <div class="flex items-center gap-2 mb-2">
-                                <div class="w-8 h-8 rounded-lg bg-indigo-400/20 flex items-center justify-center">
-                                    <svg class="w-4 h-4 text-indigo-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <div class="w-8 h-8 rounded-lg bg-slate-400/20 flex items-center justify-center">
+                                    <svg class="w-4 h-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                                     </svg>
                                 </div>
-                                <p class="text-indigo-300 text-xs font-semibold tracking-wider uppercase">{{ isRtl ? 'إدارة المخزون' : 'Inventory Management' }}</p>
+                                <p class="text-slate-300 text-xs font-semibold tracking-wider uppercase">{{ isRtl ? 'إدارة المخزون' : 'Inventory Management' }}</p>
                             </div>
-                            <h1 class="text-2xl sm:text-3xl font-bold text-white">{{ isRtl ? 'نظرة عامة' : 'Overview' }}</h1>
-                            <p class="text-indigo-200/70 text-sm mt-1">{{ isRtl ? 'تتبع المخزون والمستلزمات الطبية' : 'Track medical supplies and inventory' }}</p>
+                            <h1 class="text-xl md:text-2xl sm:text-3xl font-bold text-white">{{ isRtl ? 'نظرة عامة' : 'Overview' }}</h1>
+                            <p class="text-slate-200/70 text-sm mt-1">{{ isRtl ? 'تتبع المخزون والمستلزمات الطبية' : 'Track medical supplies and inventory' }}</p>
                         </div>
                         <div class="flex items-center gap-3">
                             <Link v-if="can('supplies.create')" href="/admin/supplies/create"
@@ -286,7 +286,7 @@ const quickLinks = computed(() => [
                             @click="switchModule(tab.value)"
                             class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold transition-all duration-200 border"
                             :class="activeModule === tab.value
-                                ? 'bg-white text-indigo-900 border-white/80 shadow-lg shadow-white/10'
+                                ? 'bg-white text-[#1B365D] border-white/80 shadow-lg shadow-white/10'
                                 : 'bg-white/5 text-white/70 border-white/10 hover:bg-white/10 hover:text-white'"
                         >
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -321,7 +321,7 @@ const quickLinks = computed(() => [
                 style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1)"
             >
                 <div v-for="(card, idx) in statCards" :key="idx"
-                    class="group relative bg-white rounded-2xl p-5 shadow-sm hover:shadow-lg border border-gray-100/80 hover:border-indigo-100 transition-all duration-300 overflow-hidden"
+                    class="group relative bg-white rounded-2xl p-5 shadow-sm hover:shadow-lg border border-gray-100/80 hover:border-slate-100 transition-all duration-300 overflow-hidden"
                     :style="{ transitionDelay: `${idx * 0.06}s` }"
                 >
                     <div :class="`absolute top-0 inset-x-0 h-1 bg-gradient-to-r ${card.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300`"></div>
@@ -329,7 +329,7 @@ const quickLinks = computed(() => [
                     <div class="flex items-start justify-between">
                         <div class="min-w-0">
                             <p class="text-[12px] font-semibold text-gray-400 uppercase tracking-wider">{{ card.label }}</p>
-                            <p class="text-2xl sm:text-3xl font-bold text-gray-900 mt-2 truncate tabular-nums">{{ card.value }}</p>
+                            <p class="text-xl md:text-2xl sm:text-3xl font-bold text-gray-900 mt-2 truncate tabular-nums">{{ card.value }}</p>
                             <p v-if="card.sub" class="text-xs text-gray-400 mt-1.5">{{ card.sub }}</p>
                         </div>
                         <div :class="[card.iconBg, card.pulse ? 'animate-alert-pulse' : '']"
@@ -351,7 +351,7 @@ const quickLinks = computed(() => [
             >
                 <!-- Low Stock Items -->
                 <div v-if="lowStockItems?.length" class="bg-white rounded-2xl shadow-sm border border-red-100/60 overflow-hidden">
-                    <div class="px-6 py-4 border-b border-red-50 flex items-center justify-between bg-gradient-to-r from-red-50/50 to-transparent">
+                    <div class="px-4 md:px-6 py-4 border-b border-red-50 flex items-center justify-between bg-gradient-to-r from-red-50/50 to-transparent">
                         <div class="flex items-center gap-2.5">
                             <div class="w-8 h-8 rounded-lg bg-red-100 flex items-center justify-center">
                                 <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
@@ -385,7 +385,7 @@ const quickLinks = computed(() => [
 
                 <!-- Expiring Soon -->
                 <div v-if="expiringSoonItems?.length" class="bg-white rounded-2xl shadow-sm border border-amber-100/60 overflow-hidden">
-                    <div class="px-6 py-4 border-b border-amber-50 flex items-center justify-between bg-gradient-to-r from-amber-50/50 to-transparent">
+                    <div class="px-4 md:px-6 py-4 border-b border-amber-50 flex items-center justify-between bg-gradient-to-r from-amber-50/50 to-transparent">
                         <div class="flex items-center gap-2.5">
                             <div class="w-8 h-8 rounded-lg bg-amber-100 flex items-center justify-center">
                                 <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -425,12 +425,12 @@ const quickLinks = computed(() => [
             >
                 <!-- Category Distribution -->
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
-                    <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+                    <div class="px-4 md:px-6 py-4 border-b border-gray-100 flex items-center justify-between">
                         <div>
                             <h2 class="text-sm font-bold text-gray-800">{{ isRtl ? 'توزيع الفئات' : 'Category Distribution' }}</h2>
                             <p class="text-xs text-gray-400 mt-0.5">{{ totalCategoryItems }} {{ isRtl ? 'منتج' : 'products' }}</p>
                         </div>
-                        <Link href="/admin/supply-categories" class="text-xs font-semibold text-indigo-600 hover:text-indigo-700 transition-colors">{{ isRtl ? 'إدارة' : 'Manage' }}</Link>
+                        <Link href="/admin/supply-categories" class="text-xs font-semibold text-[#1B365D] hover:text-[#1B365D] transition-colors">{{ isRtl ? 'إدارة' : 'Manage' }}</Link>
                     </div>
                     <div v-if="categoryDistribution?.length" class="p-5 space-y-3">
                         <div v-for="(cat, idx) in categoryDistribution" :key="cat.name"
@@ -454,7 +454,7 @@ const quickLinks = computed(() => [
                             </div>
                         </div>
                     </div>
-                    <div v-else class="px-6 py-14 text-center">
+                    <div v-else class="px-4 md:px-6 py-14 text-center">
                         <div class="w-14 h-14 rounded-2xl bg-gray-50 border border-gray-100 flex items-center justify-center mx-auto mb-3">
                             <svg class="w-7 h-7 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
                         </div>
@@ -464,7 +464,7 @@ const quickLinks = computed(() => [
 
                 <!-- Monthly Trends - SVG Line Chart -->
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
-                    <div class="px-6 py-4 border-b border-gray-100">
+                    <div class="px-4 md:px-6 py-4 border-b border-gray-100">
                         <div class="flex items-center justify-between">
                             <h2 class="text-sm font-bold text-gray-800">{{ isRtl ? 'الاتجاهات الشهرية' : 'Monthly Trends' }}</h2>
                             <div class="flex items-center gap-4">
@@ -472,7 +472,7 @@ const quickLinks = computed(() => [
                                     <span class="w-2.5 h-1 rounded-full bg-emerald-500"></span> {{ isRtl ? 'شراء' : 'Purchases' }}
                                 </span>
                                 <span class="flex items-center gap-1.5 text-[11px] text-gray-500 font-medium">
-                                    <span class="w-2.5 h-1 rounded-full bg-indigo-500"></span> {{ isRtl ? 'استخدام' : 'Usage' }}
+                                    <span class="w-2.5 h-1 rounded-full bg-[#1B365D]"></span> {{ isRtl ? 'استخدام' : 'Usage' }}
                                 </span>
                             </div>
                         </div>
@@ -521,7 +521,7 @@ const quickLinks = computed(() => [
                             </defs>
                         </svg>
                     </div>
-                    <div v-else class="px-6 py-14 text-center">
+                    <div v-else class="px-4 md:px-6 py-14 text-center">
                         <div class="w-14 h-14 rounded-2xl bg-gray-50 border border-gray-100 flex items-center justify-center mx-auto mb-3">
                             <svg class="w-7 h-7 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
                         </div>
@@ -537,9 +537,9 @@ const quickLinks = computed(() => [
             >
                 <!-- Recent Transactions -->
                 <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
-                    <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+                    <div class="px-4 md:px-6 py-4 border-b border-gray-100 flex items-center justify-between">
                         <h2 class="text-sm font-bold text-gray-800">{{ isRtl ? 'آخر الحركات' : 'Recent Transactions' }}</h2>
-                        <Link href="/admin/supplies" class="text-xs font-semibold text-indigo-600 hover:text-indigo-700 transition-colors">{{ isRtl ? 'عرض الكل' : 'View All' }}</Link>
+                        <Link href="/admin/supplies" class="text-xs font-semibold text-[#1B365D] hover:text-[#1B365D] transition-colors">{{ isRtl ? 'عرض الكل' : 'View All' }}</Link>
                     </div>
                     <div v-if="recentTransactions?.length" class="divide-y divide-gray-50">
                         <div v-for="txn in recentTransactions" :key="txn.id"
@@ -570,7 +570,7 @@ const quickLinks = computed(() => [
                             </div>
                         </div>
                     </div>
-                    <div v-else class="px-6 py-16 text-center">
+                    <div v-else class="px-4 md:px-6 py-16 text-center">
                         <div class="w-14 h-14 rounded-2xl bg-gray-50 border border-gray-100 flex items-center justify-center mx-auto mb-3">
                             <svg class="w-7 h-7 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
                         </div>
@@ -581,7 +581,7 @@ const quickLinks = computed(() => [
 
                 <!-- Top Used Products -->
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
-                    <div class="px-6 py-4 border-b border-gray-100">
+                    <div class="px-4 md:px-6 py-4 border-b border-gray-100">
                         <h2 class="text-sm font-bold text-gray-800">{{ isRtl ? 'الأكثر استخداما' : 'Most Used (30d)' }}</h2>
                         <p class="text-xs text-gray-400 mt-0.5">{{ isRtl ? 'آخر 30 يوم' : 'Last 30 days' }}</p>
                     </div>
@@ -593,7 +593,7 @@ const quickLinks = computed(() => [
                                 :class="{
                                     'bg-gradient-to-br from-amber-100 to-amber-50 text-amber-600 ring-1 ring-amber-200/50': idx === 0,
                                     'bg-gradient-to-br from-gray-100 to-gray-50 text-gray-500 ring-1 ring-gray-200/50': idx === 1,
-                                    'bg-gradient-to-br from-orange-50 to-amber-50 text-orange-500 ring-1 ring-orange-200/50': idx === 2,
+                                    'bg-gradient-to-br from-amber-50 to-amber-50 text-[#C4A265] ring-1 ring-amber-200/50': idx === 2,
                                     'bg-gray-50 text-gray-400': idx > 2,
                                 }"
                             >{{ idx + 1 }}</span>
@@ -602,11 +602,11 @@ const quickLinks = computed(() => [
                                 <p class="text-[10px] text-gray-400 mt-0.5">{{ item.supply?.unit || 'units' }}</p>
                             </div>
                             <div class="flex-shrink-0">
-                                <span class="text-sm font-bold text-indigo-600 tabular-nums">{{ item.total_used }}</span>
+                                <span class="text-sm font-bold text-[#1B365D] tabular-nums">{{ item.total_used }}</span>
                             </div>
                         </div>
                     </div>
-                    <div v-else class="px-6 py-16 text-center">
+                    <div v-else class="px-4 md:px-6 py-16 text-center">
                         <div class="w-14 h-14 rounded-2xl bg-gray-50 border border-gray-100 flex items-center justify-center mx-auto mb-3">
                             <svg class="w-7 h-7 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
                         </div>

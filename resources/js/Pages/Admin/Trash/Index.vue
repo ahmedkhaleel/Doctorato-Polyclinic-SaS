@@ -96,7 +96,7 @@ const currentItems = computed(() => getItemsForType(activeTab.value));
             <!-- Header -->
             <div class="flex items-center justify-between">
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-800 flex items-center gap-3">
+                    <h1 class="text-xl md:text-2xl font-bold text-gray-800 flex items-center gap-3">
                         <div class="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center">
                             <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
@@ -195,13 +195,13 @@ const currentItems = computed(() => getItemsForType(activeTab.value));
                             <!-- Type Badge -->
                             <div class="flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center"
                                 :class="{
-                                    'bg-blue-50 text-blue-600': item.type === 'patients',
-                                    'bg-indigo-50 text-indigo-600': item.type === 'doctors',
+                                    'bg-slate-50 text-[#1B365D]': item.type === 'patients',
+                                    'bg-slate-50 text-[#1B365D]': item.type === 'doctors',
                                     'bg-amber-50 text-amber-600': item.type === 'bookings',
                                     'bg-teal-50 text-teal-600': item.type === 'visits',
-                                    'bg-purple-50 text-purple-600': item.type === 'invoices',
+                                    'bg-slate-50 text-[#1B365D]': item.type === 'invoices',
                                     'bg-emerald-50 text-emerald-600': item.type === 'payments',
-                                    'bg-pink-50 text-pink-600': item.type === 'prescriptions',
+                                    'bg-amber-50 text-[#C4A265]': item.type === 'prescriptions',
                                 }"
                             >
                                 <span class="text-xs font-bold uppercase">{{ item.type.slice(0, 2) }}</span>

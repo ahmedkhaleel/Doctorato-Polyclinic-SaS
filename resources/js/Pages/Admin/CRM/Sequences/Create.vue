@@ -83,13 +83,13 @@ const delayPresets = [
 ];
 
 const actionColors = {
-    create_follow_up: 'border-blue-200 bg-blue-50/50',
-    send_whatsapp: 'border-green-200 bg-green-50/50',
-    send_email: 'border-purple-200 bg-purple-50/50',
-    send_sms: 'border-cyan-200 bg-cyan-50/50',
+    create_follow_up: 'border-slate-200 bg-slate-50/50',
+    send_whatsapp: 'border-emerald-200 bg-emerald-50/50',
+    send_email: 'border-slate-200 bg-slate-50/50',
+    send_sms: 'border-slate-200 bg-slate-50/50',
     notify_staff: 'border-amber-200 bg-amber-50/50',
-    change_status: 'border-indigo-200 bg-indigo-50/50',
-    add_score: 'border-pink-200 bg-pink-50/50',
+    change_status: 'border-slate-200 bg-slate-50/50',
+    add_score: 'border-amber-200 bg-amber-50/50',
 };
 
 function formatDelay(minutes) {
@@ -122,7 +122,7 @@ const filteredTemplates = computed(() => (actionType) => {
                     <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
                 </Link>
                 <div>
-                    <h1 class="text-2xl font-bold text-[#3A3A3A]">{{ $t('a_create_automation_sequence') }}</h1>
+                    <h1 class="text-xl md:text-2xl font-bold text-[#3A3A3A]">{{ $t('a_create_automation_sequence') }}</h1>
                     <p class="text-sm text-gray-500 mt-0.5">{{ $t('a_define_sequence_description') }}</p>
                 </div>
             </div>
@@ -356,7 +356,7 @@ const filteredTemplates = computed(() => (actionType) => {
                      style="transition: all 0.5s ease-out 0.25s">
                     <Link href="/admin/sequences" class="px-5 py-2.5 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors">{{ $t('a_cancel') }}</Link>
                     <button type="submit" :disabled="form.processing"
-                        class="px-6 py-2.5 text-sm font-medium text-white bg-gradient-to-r from-[#C4A265] to-[#D4B87A] rounded-xl shadow-md hover:shadow-lg transition-all disabled:opacity-50">
+                        class="px-4 md:px-6 py-2.5 text-sm font-medium text-white bg-gradient-to-r from-[#C4A265] to-[#D4B87A] rounded-xl shadow-md hover:shadow-lg transition-all disabled:opacity-50">
                         {{ form.processing ? $t('a_saving') : $t('a_create_sequence') }}
                     </button>
                 </div>

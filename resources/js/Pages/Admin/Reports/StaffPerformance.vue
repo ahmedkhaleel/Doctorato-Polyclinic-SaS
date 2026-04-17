@@ -43,14 +43,14 @@ const sortedStaff = computed(() => {
 
 function attendanceColor(rate) {
     if (rate >= 95) return 'text-emerald-600';
-    if (rate >= 80) return 'text-cyan-600';
+    if (rate >= 80) return 'text-[#1B365D]';
     if (rate >= 60) return 'text-amber-600';
     return 'text-red-600';
 }
 
 function attendanceBg(rate) {
     if (rate >= 95) return 'bg-emerald-500';
-    if (rate >= 80) return 'bg-cyan-500';
+    if (rate >= 80) return 'bg-[#1B365D]';
     if (rate >= 60) return 'bg-amber-500';
     return 'bg-red-500';
 }
@@ -64,33 +64,33 @@ const maxDailyTotal = computed(() => Math.max(...(props.dailyTrend?.map(d => d.t
             <!-- Header -->
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-900">{{ isRtl ? 'أداء وإنتاجية الموظفين' : 'Staff Performance & Productivity' }}</h1>
+                    <h1 class="text-xl md:text-2xl font-bold text-gray-900">{{ isRtl ? 'أداء وإنتاجية الموظفين' : 'Staff Performance & Productivity' }}</h1>
                     <p class="text-sm text-gray-500 mt-1">{{ isRtl ? 'الحضور والانصراف والإنتاجية والعمل الإضافي' : 'Attendance, productivity, and overtime analytics' }}</p>
                 </div>
                 <div class="flex items-center gap-2">
-                    <input v-model="dateFrom" type="date" class="rounded-lg border-gray-300 text-sm focus:ring-cyan-500 focus:border-cyan-500" />
+                    <input v-model="dateFrom" type="date" class="rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]" />
                     <span class="text-gray-400">→</span>
-                    <input v-model="dateTo" type="date" class="rounded-lg border-gray-300 text-sm focus:ring-cyan-500 focus:border-cyan-500" />
+                    <input v-model="dateTo" type="date" class="rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]" />
                 </div>
             </div>
 
             <!-- KPI Cards -->
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div class="bg-white rounded-xl border border-gray-200 p-4">
-                    <div class="text-2xl font-bold text-gray-900">{{ totals.employees }}</div>
+                    <div class="text-xl md:text-2xl font-bold text-gray-900">{{ totals.employees }}</div>
                     <div class="text-xs text-gray-500 mt-1">{{ isRtl ? 'إجمالي الموظفين' : 'Active Employees' }}</div>
                 </div>
                 <div class="bg-white rounded-xl border p-4"
                     :class="totals.avg_attendance >= 90 ? 'border-emerald-200' : 'border-amber-200'">
-                    <div class="text-2xl font-bold" :class="attendanceColor(totals.avg_attendance)">{{ totals.avg_attendance }}%</div>
+                    <div class="text-xl md:text-2xl font-bold" :class="attendanceColor(totals.avg_attendance)">{{ totals.avg_attendance }}%</div>
                     <div class="text-xs text-gray-500 mt-1">{{ isRtl ? 'متوسط الحضور' : 'Avg Attendance' }}</div>
                 </div>
                 <div class="bg-white rounded-xl border border-red-200 p-4">
-                    <div class="text-2xl font-bold text-red-600">{{ totals.total_absent }}</div>
+                    <div class="text-xl md:text-2xl font-bold text-red-600">{{ totals.total_absent }}</div>
                     <div class="text-xs text-gray-500 mt-1">{{ isRtl ? 'إجمالي الغياب' : 'Total Absent Days' }}</div>
                 </div>
-                <div class="bg-white rounded-xl border border-cyan-200 p-4">
-                    <div class="text-2xl font-bold text-cyan-600">{{ totals.total_overtime }}h</div>
+                <div class="bg-white rounded-xl border border-slate-200 p-4">
+                    <div class="text-xl md:text-2xl font-bold text-[#1B365D]">{{ totals.total_overtime }}h</div>
                     <div class="text-xs text-gray-500 mt-1">{{ isRtl ? 'إجمالي العمل الإضافي' : 'Total Overtime' }}</div>
                 </div>
             </div>
@@ -108,7 +108,7 @@ const maxDailyTotal = computed(() => Math.max(...(props.dailyTrend?.map(d => d.t
                             { key: 'absent', en: 'Absences', ar: 'الغياب' },
                         ]" :key="opt.key" @click="sortBy = opt.key"
                             class="px-3 py-1 text-xs font-medium rounded-full border transition"
-                            :class="sortBy === opt.key ? 'bg-cyan-600 text-white border-cyan-600' : 'bg-white text-gray-600 border-gray-300'">
+                            :class="sortBy === opt.key ? 'bg-[#1B365D] text-white border-[#1B365D]' : 'bg-white text-gray-600 border-gray-300'">
                             {{ isRtl ? opt.ar : opt.en }}
                         </button>
                     </div>
@@ -135,7 +135,7 @@ const maxDailyTotal = computed(() => Math.max(...(props.dailyTrend?.map(d => d.t
                                     <td class="px-3 py-3 text-center text-sm font-medium text-emerald-600">{{ emp.present_days }}</td>
                                     <td class="px-3 py-3 text-center text-sm font-medium" :class="emp.absent_days > 0 ? 'text-red-600' : 'text-gray-400'">{{ emp.absent_days }}</td>
                                     <td class="px-3 py-3 text-center text-sm font-medium" :class="emp.late_days > 0 ? 'text-amber-600' : 'text-gray-400'">{{ emp.late_days }}</td>
-                                    <td class="px-3 py-3 text-center text-sm font-medium text-cyan-600">{{ emp.overtime_hours }}h</td>
+                                    <td class="px-3 py-3 text-center text-sm font-medium text-[#1B365D]">{{ emp.overtime_hours }}h</td>
                                     <td class="px-3 py-3 text-center text-sm text-gray-600">{{ emp.activity_count }}</td>
                                     <td class="px-3 py-3">
                                         <div class="flex items-center gap-2">

@@ -101,13 +101,13 @@ function isDifferent(key) {
                 class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-700 ease-out"
             >
                 <div class="h-1 bg-gradient-to-r from-[#C4A265] via-[#D4B87A] to-[#C4A265]"></div>
-                <div class="px-6 py-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div class="px-4 md:px-6 py-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div class="flex items-center gap-4">
                         <div class="w-12 h-12 rounded-2xl flex items-center justify-center shadow-sm" style="background: linear-gradient(135deg, #C4A265, #D4B87A);">
                             <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
                         </div>
                         <div>
-                            <h1 class="text-2xl font-bold text-gray-900">{{ $t('a_merge_leads') }}</h1>
+                            <h1 class="text-xl md:text-2xl font-bold text-gray-900">{{ $t('a_merge_leads') }}</h1>
                             <p class="text-sm text-gray-500 mt-0.5">Select which data to keep from the secondary lead, then merge into the primary</p>
                         </div>
                     </div>
@@ -132,7 +132,7 @@ function isDifferent(key) {
                     style="transition-delay: 100ms;"
                 >
                     <div class="h-1 bg-gradient-to-r from-emerald-400 via-emerald-500 to-emerald-400"></div>
-                    <div class="px-6 py-4 bg-emerald-50/50 border-b border-emerald-100/50 flex items-center gap-3">
+                    <div class="px-4 md:px-6 py-4 bg-emerald-50/50 border-b border-emerald-100/50 flex items-center gap-3">
                         <div class="w-9 h-9 rounded-xl bg-emerald-500 flex items-center justify-center shadow-sm">
                             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                         </div>
@@ -142,7 +142,7 @@ function isDifferent(key) {
                         </div>
                         <span class="ml-auto text-xs text-emerald-600 font-mono bg-emerald-100 px-2.5 py-1 rounded-lg">#{{ primary.id }}</span>
                     </div>
-                    <div class="p-6 space-y-4">
+                    <div class="p-4 md:p-6 space-y-4">
                         <div>
                             <p class="text-xl font-bold text-gray-900">{{ primary.full_name }}</p>
                             <div class="flex items-center gap-3 mt-2">
@@ -185,7 +185,7 @@ function isDifferent(key) {
                     style="transition-delay: 200ms;"
                 >
                     <div class="h-1 bg-gradient-to-r from-red-400 via-red-500 to-red-400"></div>
-                    <div class="px-6 py-4 bg-red-50/50 border-b border-red-100/50 flex items-center gap-3">
+                    <div class="px-4 md:px-6 py-4 bg-red-50/50 border-b border-red-100/50 flex items-center gap-3">
                         <div class="w-9 h-9 rounded-xl bg-red-500 flex items-center justify-center shadow-sm">
                             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                         </div>
@@ -195,7 +195,7 @@ function isDifferent(key) {
                         </div>
                         <span class="ml-auto text-xs text-red-600 font-mono bg-red-100 px-2.5 py-1 rounded-lg">#{{ secondary.id }}</span>
                     </div>
-                    <div class="p-6 space-y-4">
+                    <div class="p-4 md:p-6 space-y-4">
                         <div>
                             <p class="text-xl font-bold text-gray-900">{{ secondary.full_name }}</p>
                             <div class="flex items-center gap-3 mt-2">
@@ -240,7 +240,7 @@ function isDifferent(key) {
                 style="transition-delay: 300ms;"
             >
                 <div class="h-1 bg-gradient-to-r from-[#C4A265] via-[#D4B87A] to-[#C4A265]"></div>
-                <div class="px-6 py-4 bg-gray-50/50 border-b border-gray-100 flex items-center gap-3">
+                <div class="px-4 md:px-6 py-4 bg-gray-50/50 border-b border-gray-100 flex items-center gap-3">
                     <div class="w-9 h-9 rounded-xl flex items-center justify-center" style="background: linear-gradient(135deg, #C4A265, #D4B87A);">
                         <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>
                     </div>
@@ -259,7 +259,7 @@ function isDifferent(key) {
                         :key="field.key"
                         @click="toggleField(field.key)"
                         :class="selectedFields.includes(field.key) ? 'bg-[#C4A265]/5 border-l-[#C4A265]' : 'hover:bg-gray-50/80 border-l-transparent'"
-                        class="flex items-center px-6 py-4 cursor-pointer transition-all duration-200 border-l-[3px]"
+                        class="flex items-center px-4 md:px-6 py-4 cursor-pointer transition-all duration-200 border-l-[3px]"
                     >
                         <!-- Toggle Switch -->
                         <div class="relative shrink-0">
@@ -330,7 +330,7 @@ function isDifferent(key) {
                 style="transition-delay: 400ms;"
             >
                 <div class="h-1 bg-gradient-to-r from-amber-400 via-amber-500 to-amber-400"></div>
-                <div class="px-6 py-4 flex items-start gap-4">
+                <div class="px-4 md:px-6 py-4 flex items-start gap-4">
                     <div class="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center shrink-0 mt-0.5">
                         <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                     </div>
@@ -368,7 +368,7 @@ function isDifferent(key) {
                 class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-700 ease-out"
                 style="transition-delay: 500ms;"
             >
-                <div class="px-6 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div class="px-4 md:px-6 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <p class="text-sm text-gray-500">
                         <span class="font-semibold text-gray-700">{{ primary.full_name }}</span> will be the surviving lead record
                     </p>
@@ -377,7 +377,7 @@ function isDifferent(key) {
                         <button
                             @click="submitMerge"
                             :disabled="submitting"
-                            class="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-white text-sm font-semibold transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+                            class="inline-flex items-center gap-2 px-4 md:px-6 py-2.5 rounded-xl text-white text-sm font-semibold transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
                             style="background: linear-gradient(135deg, #C4A265, #D4B87A);"
                         >
                             <svg v-if="submitting" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>

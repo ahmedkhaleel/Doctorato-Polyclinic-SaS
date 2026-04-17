@@ -39,8 +39,8 @@ function setStatus(s) { statusFilter.value = statusFilter.value === s ? '' : s; 
 const typeConfig = {
     sick_leave:      { en: 'Sick Leave',      ar: 'إجازة مرضية',  color: 'bg-red-100 text-red-700' },
     fitness:         { en: 'Fitness',          ar: 'لياقة طبية',   color: 'bg-emerald-100 text-emerald-700' },
-    medical_report:  { en: 'Medical Report',   ar: 'تقرير طبي',    color: 'bg-blue-100 text-blue-700' },
-    referral_letter: { en: 'Referral Letter',  ar: 'خطاب تحويل',   color: 'bg-purple-100 text-purple-700' },
+    medical_report:  { en: 'Medical Report',   ar: 'تقرير طبي',    color: 'bg-slate-100 text-[#1B365D]' },
+    referral_letter: { en: 'Referral Letter',  ar: 'خطاب تحويل',   color: 'bg-slate-100 text-[#1B365D]' },
     follow_up:       { en: 'Follow-up',        ar: 'متابعة',       color: 'bg-amber-100 text-amber-700' },
 };
 
@@ -119,11 +119,11 @@ watch([() => form.start_date, () => form.end_date], ([s, e]) => {
             <!-- Header -->
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-900">{{ isRtl ? 'الشهادات الطبية' : 'Medical Certificates' }}</h1>
+                    <h1 class="text-xl md:text-2xl font-bold text-gray-900">{{ isRtl ? 'الشهادات الطبية' : 'Medical Certificates' }}</h1>
                     <p class="text-sm text-gray-500 mt-1">{{ isRtl ? 'إجازات مرضية وتقارير طبية وشهادات لياقة' : 'Sick leaves, medical reports, and fitness certificates' }}</p>
                 </div>
                 <button @click="showCreateModal = true"
-                    class="px-4 py-2 text-sm font-medium text-white bg-cyan-600 rounded-lg hover:bg-cyan-700 transition">
+                    class="px-4 py-2 text-sm font-medium text-white bg-[#1B365D] rounded-lg hover:bg-[#1B365D] transition">
                     {{ isRtl ? '+ شهادة جديدة' : '+ New Certificate' }}
                 </button>
             </div>
@@ -131,19 +131,19 @@ watch([() => form.start_date, () => form.end_date], ([s, e]) => {
             <!-- Stats -->
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div class="bg-white rounded-xl border border-gray-200 p-4">
-                    <div class="text-2xl font-bold text-gray-900">{{ stats.total }}</div>
+                    <div class="text-xl md:text-2xl font-bold text-gray-900">{{ stats.total }}</div>
                     <div class="text-xs text-gray-500 mt-1">{{ isRtl ? 'إجمالي الشهادات' : 'Total Certificates' }}</div>
                 </div>
-                <div class="bg-white rounded-xl border border-cyan-200 p-4">
-                    <div class="text-2xl font-bold text-cyan-600">{{ stats.this_month }}</div>
+                <div class="bg-white rounded-xl border border-slate-200 p-4">
+                    <div class="text-xl md:text-2xl font-bold text-[#1B365D]">{{ stats.this_month }}</div>
                     <div class="text-xs text-gray-500 mt-1">{{ isRtl ? 'هذا الشهر' : 'This Month' }}</div>
                 </div>
                 <div class="bg-white rounded-xl border border-red-200 p-4">
-                    <div class="text-2xl font-bold text-red-600">{{ stats.sick_leaves }}</div>
+                    <div class="text-xl md:text-2xl font-bold text-red-600">{{ stats.sick_leaves }}</div>
                     <div class="text-xs text-gray-500 mt-1">{{ isRtl ? 'إجازات مرضية' : 'Sick Leaves' }}</div>
                 </div>
                 <div class="bg-white rounded-xl border border-emerald-200 p-4">
-                    <div class="text-2xl font-bold text-emerald-600">{{ stats.issued }}</div>
+                    <div class="text-xl md:text-2xl font-bold text-emerald-600">{{ stats.issued }}</div>
                     <div class="text-xs text-gray-500 mt-1">{{ isRtl ? 'صادرة' : 'Issued' }}</div>
                 </div>
             </div>
@@ -155,20 +155,20 @@ watch([() => form.start_date, () => form.end_date], ([s, e]) => {
                         <svg class="absolute top-2.5 w-4 h-4 text-gray-400" :class="isRtl ? 'right-3' : 'left-3'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" stroke-width="2"/><path stroke-linecap="round" stroke-width="2" d="m21 21-4.35-4.35"/></svg>
                         <input v-model="search" type="text"
                             :placeholder="isRtl ? 'بحث بالرقم أو اسم المريض...' : 'Search by number or patient name...'"
-                            class="w-full rounded-lg border-gray-300 text-sm focus:ring-cyan-500 focus:border-cyan-500"
+                            class="w-full rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]"
                             :class="isRtl ? 'pr-10 pl-3' : 'pl-10 pr-3'" />
                     </div>
                 </div>
                 <div class="flex flex-wrap gap-2">
                     <button v-for="(cfg, key) in typeConfig" :key="key" @click="setType(key)"
                         class="px-3 py-1 text-xs font-medium rounded-full border transition"
-                        :class="typeFilter === key ? 'bg-cyan-600 text-white border-cyan-600' : `${cfg.color} border-transparent`">
+                        :class="typeFilter === key ? 'bg-[#1B365D] text-white border-[#1B365D]' : `${cfg.color} border-transparent`">
                         {{ isRtl ? cfg.ar : cfg.en }}
                     </button>
                     <span class="mx-1 border-l border-gray-200"></span>
                     <button v-for="(cfg, key) in statusConfig" :key="key" @click="setStatus(key)"
                         class="px-3 py-1 text-xs font-medium rounded-full border transition"
-                        :class="statusFilter === key ? 'bg-cyan-600 text-white border-cyan-600' : `${cfg.color} border-transparent`">
+                        :class="statusFilter === key ? 'bg-[#1B365D] text-white border-[#1B365D]' : `${cfg.color} border-transparent`">
                         {{ isRtl ? cfg.ar : cfg.en }}
                     </button>
                 </div>
@@ -191,7 +191,7 @@ watch([() => form.start_date, () => form.end_date], ([s, e]) => {
                     </thead>
                     <tbody class="divide-y divide-gray-100">
                         <tr v-for="cert in certificates.data" :key="cert.id" class="hover:bg-gray-50/50">
-                            <td class="px-4 py-3 text-sm font-mono text-cyan-600">{{ cert.certificate_number }}</td>
+                            <td class="px-4 py-3 text-sm font-mono text-[#1B365D]">{{ cert.certificate_number }}</td>
                             <td class="px-4 py-3">
                                 <div class="text-sm font-medium text-gray-900">{{ cert.patient?.full_name }}</div>
                                 <div class="text-xs text-gray-400">{{ cert.patient?.file_number }}</div>
@@ -241,7 +241,7 @@ watch([() => form.start_date, () => form.end_date], ([s, e]) => {
                 <template v-for="link in certificates.links" :key="link.label">
                     <Link v-if="link.url" :href="link.url"
                         class="px-3 py-1.5 text-sm rounded-lg border transition"
-                        :class="link.active ? 'bg-cyan-600 text-white border-cyan-600' : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'"
+                        :class="link.active ? 'bg-[#1B365D] text-white border-[#1B365D]' : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'"
                         v-html="link.label" preserve-state />
                     <span v-else class="px-3 py-1.5 text-sm text-gray-400" v-html="link.label" />
                 </template>
@@ -252,20 +252,20 @@ watch([() => form.start_date, () => form.end_date], ([s, e]) => {
         <Teleport to="body">
             <div v-if="showCreateModal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
                 <div class="fixed inset-0 bg-black/40" @click="showCreateModal = false"></div>
-                <div class="relative bg-white rounded-2xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6 space-y-4">
+                <div class="relative bg-white rounded-2xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-4 md:p-6 space-y-4">
                     <h3 class="text-lg font-bold text-gray-900">{{ isRtl ? 'شهادة طبية جديدة' : 'New Medical Certificate' }}</h3>
                     <form @submit.prevent="submitCreate" class="space-y-4">
                         <!-- Patient Search -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'المريض' : 'Patient' }} *</label>
                             <div v-if="form.patient_id" class="flex items-center gap-2 mb-2">
-                                <span class="px-3 py-1.5 bg-cyan-50 text-cyan-700 rounded-lg text-sm font-medium">{{ selectedPatientName }}</span>
+                                <span class="px-3 py-1.5 bg-slate-50 text-[#1B365D] rounded-lg text-sm font-medium">{{ selectedPatientName }}</span>
                                 <button type="button" @click="form.patient_id = ''; selectedPatientName = ''" class="text-gray-400 hover:text-red-500">&times;</button>
                             </div>
                             <div v-else class="relative">
                                 <input v-model="patientSearch" type="text"
                                     :placeholder="isRtl ? 'ابحث عن مريض...' : 'Search patient...'"
-                                    class="w-full rounded-lg border-gray-300 text-sm focus:ring-cyan-500 focus:border-cyan-500" />
+                                    class="w-full rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]" />
                                 <div v-if="patientResults.length" class="absolute z-10 w-full mt-1 bg-white rounded-lg shadow-lg border max-h-48 overflow-y-auto">
                                     <button v-for="p in patientResults" :key="p.id" type="button" @click="selectPatient(p)"
                                         class="w-full text-start px-4 py-2 text-sm hover:bg-gray-50">
@@ -281,7 +281,7 @@ watch([() => form.start_date, () => form.end_date], ([s, e]) => {
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'الطبيب' : 'Doctor' }} *</label>
                                 <select v-model="form.doctor_id" required
-                                    class="w-full rounded-lg border-gray-300 text-sm focus:ring-cyan-500 focus:border-cyan-500">
+                                    class="w-full rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]">
                                     <option value="">{{ isRtl ? '— اختر —' : '— Select —' }}</option>
                                     <option v-for="doc in doctors" :key="doc.id" :value="doc.id">
                                         {{ isRtl ? doc.name_ar : doc.name_en }}
@@ -292,7 +292,7 @@ watch([() => form.start_date, () => form.end_date], ([s, e]) => {
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'النوع' : 'Type' }} *</label>
                                 <select v-model="form.type" required
-                                    class="w-full rounded-lg border-gray-300 text-sm focus:ring-cyan-500 focus:border-cyan-500">
+                                    class="w-full rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]">
                                     <option v-for="(cfg, key) in typeConfig" :key="key" :value="key">
                                         {{ isRtl ? cfg.ar : cfg.en }}
                                     </option>
@@ -300,44 +300,44 @@ watch([() => form.start_date, () => form.end_date], ([s, e]) => {
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-3 gap-4">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'تاريخ الإصدار' : 'Issue Date' }} *</label>
                                 <input v-model="form.issue_date" type="date" required
-                                    class="w-full rounded-lg border-gray-300 text-sm focus:ring-cyan-500 focus:border-cyan-500" />
+                                    class="w-full rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]" />
                             </div>
                             <div v-if="form.type === 'sick_leave'">
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'من' : 'From' }}</label>
                                 <input v-model="form.start_date" type="date"
-                                    class="w-full rounded-lg border-gray-300 text-sm focus:ring-cyan-500 focus:border-cyan-500" />
+                                    class="w-full rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]" />
                             </div>
                             <div v-if="form.type === 'sick_leave'">
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'إلى' : 'To' }}</label>
                                 <input v-model="form.end_date" type="date"
-                                    class="w-full rounded-lg border-gray-300 text-sm focus:ring-cyan-500 focus:border-cyan-500" />
+                                    class="w-full rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]" />
                             </div>
                         </div>
 
-                        <div v-if="form.type === 'sick_leave' && form.days" class="text-sm text-cyan-600 font-medium">
+                        <div v-if="form.type === 'sick_leave' && form.days" class="text-sm text-[#1B365D] font-medium">
                             {{ isRtl ? `مدة الإجازة: ${form.days} يوم` : `Leave duration: ${form.days} days` }}
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'التشخيص' : 'Diagnosis' }}</label>
                             <input v-model="form.diagnosis" type="text" maxlength="500"
-                                class="w-full rounded-lg border-gray-300 text-sm focus:ring-cyan-500 focus:border-cyan-500" />
+                                class="w-full rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]" />
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
                             <textarea v-model="form.notes" rows="2"
-                                class="w-full rounded-lg border-gray-300 text-sm focus:ring-cyan-500 focus:border-cyan-500"></textarea>
+                                class="w-full rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]"></textarea>
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'التوصيات' : 'Recommendations' }}</label>
                             <textarea v-model="form.recommendations" rows="2"
-                                class="w-full rounded-lg border-gray-300 text-sm focus:ring-cyan-500 focus:border-cyan-500"></textarea>
+                                class="w-full rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]"></textarea>
                         </div>
 
                         <div class="flex justify-end gap-2 pt-2">
@@ -346,7 +346,7 @@ watch([() => form.start_date, () => form.end_date], ([s, e]) => {
                                 {{ isRtl ? 'إلغاء' : 'Cancel' }}
                             </button>
                             <button type="submit" :disabled="form.processing || !form.patient_id"
-                                class="px-4 py-2 text-sm font-medium text-white bg-cyan-600 rounded-lg hover:bg-cyan-700 disabled:opacity-50">
+                                class="px-4 py-2 text-sm font-medium text-white bg-[#1B365D] rounded-lg hover:bg-[#1B365D] disabled:opacity-50">
                                 {{ isRtl ? 'إنشاء الشهادة' : 'Create Certificate' }}
                             </button>
                         </div>

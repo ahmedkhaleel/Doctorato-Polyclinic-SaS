@@ -63,7 +63,7 @@ function deleteService(id) {
 }
 
 const statusColors = {
-    active: 'bg-green-100 text-green-800',
+    active: 'bg-emerald-100 text-emerald-800',
     inactive: 'bg-gray-100 text-gray-800',
 };
 </script>
@@ -72,7 +72,7 @@ const statusColors = {
     <AdminLayout :title="$t('a_services')">
         <div class="space-y-6">
             <div class="flex items-center justify-between">
-                <h1 class="text-2xl font-bold text-gray-800">{{ $t('a_services') }}</h1>
+                <h1 class="text-xl md:text-2xl font-bold text-gray-800">{{ $t('a_services') }}</h1>
                 <Link
                     v-if="can('services.create')"
                     href="/admin/services/create"
@@ -113,7 +113,7 @@ const statusColors = {
                     v-model="search"
                     type="text"
                     :placeholder="$t('a_search_services')"
-                    class="w-full sm:w-80 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                    class="w-full sm:w-80 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                 />
             </div>
 
@@ -122,31 +122,31 @@ const statusColors = {
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th class="px-6 py-3 ltr:text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_name') }}</th>
-                                <th class="px-6 py-3 ltr:text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_module') }}</th>
-                                <th class="px-6 py-3 ltr:text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_category') }}</th>
-                                <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_website') }}</th>
-                                <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_bookable') }}</th>
-                                <th class="px-6 py-3 ltr:text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_status') }}</th>
-                                <th class="px-6 py-3 ltr:text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_order') }}</th>
-                                <th class="px-6 py-3 ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_actions') }}</th>
+                                <th class="px-4 md:px-6 py-3 ltr:text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_name') }}</th>
+                                <th class="px-4 md:px-6 py-3 ltr:text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_module') }}</th>
+                                <th class="px-4 md:px-6 py-3 ltr:text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_category') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_website') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_bookable') }}</th>
+                                <th class="px-4 md:px-6 py-3 ltr:text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_status') }}</th>
+                                <th class="px-4 md:px-6 py-3 ltr:text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_order') }}</th>
+                                <th class="px-4 md:px-6 py-3 ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_actions') }}</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
                             <tr v-for="service in services.data" :key="service.id" class="hover:bg-gray-50">
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $localized(service, 'name') }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $localized(service, 'name') }}</td>
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                     <span
                                         class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium"
-                                        :class="service.module === 'dental' ? 'bg-cyan-50 text-cyan-700' : 'bg-purple-50 text-purple-700'"
+                                        :class="service.module === 'dental' ? 'bg-slate-50 text-[#1B365D]' : 'bg-slate-50 text-[#1B365D]'"
                                     >
                                         <svg v-if="service.module === 'dental'" class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342" /></svg>
                                         <svg v-else class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
                                         {{ service.module === 'dental' ? $t('a_dental') : $t('a_derma') }}
                                     </span>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ service.category ? $localized(service.category, 'name') : '-' }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-center">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ service.category ? $localized(service.category, 'name') : '-' }}</td>
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-center">
                                     <span v-if="service.show_on_website" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">
                                         <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
                                         {{ $t('a_yes') }}
@@ -156,8 +156,8 @@ const statusColors = {
                                         {{ $t('a_no') }}
                                     </span>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-center">
-                                    <span v-if="service.bookable" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-700">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-center">
+                                    <span v-if="service.bookable" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-[#1B365D]">
                                         <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
                                         {{ $t('a_yes') }}
                                     </span>
@@ -166,7 +166,7 @@ const statusColors = {
                                         {{ $t('a_no') }}
                                     </span>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                     <span
                                         :class="statusColors[service.status] || 'bg-gray-100 text-gray-800'"
                                         class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
@@ -174,12 +174,12 @@ const statusColors = {
                                         {{ service.status === 'active' ? $t('a_active') : $t('a_inactive') }}
                                     </span>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ service.display_order ?? '-' }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap ltr:text-right rtl:text-left text-sm">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ service.display_order ?? '-' }}</td>
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap ltr:text-right rtl:text-left text-sm">
                                     <div class="flex items-center ltr:justify-end rtl:justify-start gap-1">
                                         <!-- View -->
                                         <Link :href="`/admin/services/${service.id}`"
-                                              class="p-2 rounded-lg text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200"
+                                              class="p-2 rounded-lg text-gray-400 hover:text-[#1B365D] hover:bg-slate-50 transition-all duration-200"
                                               :title="$t('a_view_details')">
                                             <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -208,13 +208,13 @@ const statusColors = {
                                 </td>
                             </tr>
                             <tr v-if="!services.data || services.data.length === 0">
-                                <td colspan="8" class="px-6 py-8 text-center text-sm text-gray-500">{{ $t('a_no_services_found') }}</td>
+                                <td colspan="8" class="px-4 md:px-6 py-8 text-center text-sm text-gray-500">{{ $t('a_no_services_found') }}</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
 
-                <div v-if="services.links && services.links.length > 3" class="px-6 py-3 border-t border-gray-200 flex items-center justify-between">
+                <div v-if="services.links && services.links.length > 3" class="px-4 md:px-6 py-3 border-t border-gray-200 flex items-center justify-between">
                     <p class="text-sm text-gray-500">{{ $t('a_showing') }} {{ services.from }} {{ $t('a_to') }} {{ services.to }} {{ $t('a_of') }} {{ services.total }} {{ $t('a_results') }}</p>
                     <nav class="flex ltr:space-x-1 rtl:space-x-reverse rtl:space-x-1">
                         <template v-for="link in services.links" :key="link.label">

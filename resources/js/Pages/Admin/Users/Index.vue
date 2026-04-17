@@ -59,12 +59,12 @@ function toggleActive(user) {
 
 const roleColorMap = {
     1: { bg: 'bg-red-50', text: 'text-red-700', border: 'border-red-200', dot: 'bg-red-500' },
-    2: { bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200', dot: 'bg-blue-500' },
+    2: { bg: 'bg-slate-50', text: 'text-[#1B365D]', border: 'border-slate-200', dot: 'bg-[#1B365D]' },
     3: { bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200', dot: 'bg-emerald-500' },
-    4: { bg: 'bg-purple-50', text: 'text-purple-700', border: 'border-purple-200', dot: 'bg-purple-500' },
+    4: { bg: 'bg-slate-50', text: 'text-[#1B365D]', border: 'border-slate-200', dot: 'bg-[#1B365D]' },
     5: { bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200', dot: 'bg-amber-500' },
-    6: { bg: 'bg-indigo-50', text: 'text-indigo-700', border: 'border-indigo-200', dot: 'bg-indigo-500' },
-    7: { bg: 'bg-pink-50', text: 'text-pink-700', border: 'border-pink-200', dot: 'bg-pink-500' },
+    6: { bg: 'bg-slate-50', text: 'text-[#1B365D]', border: 'border-slate-200', dot: 'bg-[#1B365D]' },
+    7: { bg: 'bg-amber-50', text: 'text-[#C4A265]', border: 'border-amber-200', dot: 'bg-[#C4A265]' },
 };
 
 function getRoleColors(roleId) {
@@ -73,11 +73,11 @@ function getRoleColors(roleId) {
 
 const avatarGradients = [
     'from-[#C4A265] to-[#A08245]',
-    'from-blue-500 to-blue-600',
+    'from-[#1B365D] to-[#1B365D]',
     'from-emerald-500 to-emerald-600',
-    'from-purple-500 to-purple-600',
-    'from-rose-500 to-rose-600',
-    'from-indigo-500 to-indigo-600',
+    'from-[#1B365D] to-[#1B365D]',
+    'from-[#C4A265] to-[#C4A265]',
+    'from-[#1B365D] to-[#1B365D]',
     'from-amber-500 to-amber-600',
 ];
 
@@ -130,7 +130,7 @@ function copyAllCredentials() {
                         <div class="hero-dots"></div>
                     </div>
                     <div class="absolute top-0 ltr:right-0 rtl:left-0 w-80 h-80 bg-[#C4A265] opacity-10 rounded-full blur-3xl floating-orb"></div>
-                    <div class="absolute bottom-0 ltr:left-0 rtl:right-0 w-48 h-48 bg-blue-500 opacity-5 rounded-full blur-2xl floating-orb-delayed"></div>
+                    <div class="absolute bottom-0 ltr:left-0 rtl:right-0 w-48 h-48 bg-[#1B365D] opacity-5 rounded-full blur-2xl floating-orb-delayed"></div>
                 </div>
 
                 <div class="relative z-10 px-8 py-8">
@@ -141,7 +141,7 @@ function copyAllCredentials() {
                                     <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
                                 </div>
                                 <div>
-                                    <h1 class="text-2xl font-bold text-white tracking-tight">{{ $t('a_users') }}</h1>
+                                    <h1 class="text-xl md:text-2xl font-bold text-white tracking-tight">{{ $t('a_users') }}</h1>
                                     <p class="text-gray-400 text-sm">{{ isRtl ? 'إدارة المستخدمين والصلاحيات' : 'Manage users & permissions' }}</p>
                                 </div>
                             </div>
@@ -150,7 +150,7 @@ function copyAllCredentials() {
                         <Link
                             v-if="can('users.create')"
                             href="/admin/users/create"
-                            class="group inline-flex items-center gap-2 px-6 py-3 rounded-xl text-gray-900 text-sm font-semibold transition-all duration-300 bg-gradient-to-r from-[#C4A265] to-[#D4B275] hover:from-[#D4B275] hover:to-[#E4C285] shadow-lg shadow-[#C4A265]/20 hover:shadow-[#C4A265]/40 hover:scale-105"
+                            class="group inline-flex items-center gap-2 px-4 md:px-6 py-3 rounded-xl text-gray-900 text-sm font-semibold transition-all duration-300 bg-gradient-to-r from-[#C4A265] to-[#D4B275] hover:from-[#D4B275] hover:to-[#E4C285] shadow-lg shadow-[#C4A265]/20 hover:shadow-[#C4A265]/40 hover:scale-105"
                         >
                             <svg class="w-4 h-4 transition-transform group-hover:rotate-90 duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -167,7 +167,7 @@ function copyAllCredentials() {
                                     <svg class="w-4.5 h-4.5 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                                 </div>
                                 <div>
-                                    <p class="text-2xl font-bold text-white">{{ totalUsers }}</p>
+                                    <p class="text-xl md:text-2xl font-bold text-white">{{ totalUsers }}</p>
                                     <p class="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">{{ isRtl ? 'إجمالي' : 'Total' }}</p>
                                 </div>
                             </div>
@@ -178,7 +178,7 @@ function copyAllCredentials() {
                                     <svg class="w-4.5 h-4.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                 </div>
                                 <div>
-                                    <p class="text-2xl font-bold text-emerald-400">{{ activeUsers }}</p>
+                                    <p class="text-xl md:text-2xl font-bold text-emerald-400">{{ activeUsers }}</p>
                                     <p class="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">{{ isRtl ? 'نشط' : 'Active' }}</p>
                                 </div>
                             </div>
@@ -189,18 +189,18 @@ function copyAllCredentials() {
                                     <svg class="w-4.5 h-4.5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" /></svg>
                                 </div>
                                 <div>
-                                    <p class="text-2xl font-bold text-red-400">{{ inactiveUsers }}</p>
+                                    <p class="text-xl md:text-2xl font-bold text-red-400">{{ inactiveUsers }}</p>
                                     <p class="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">{{ isRtl ? 'غير نشط' : 'Inactive' }}</p>
                                 </div>
                             </div>
                         </div>
                         <div class="stat-card bg-white/10 backdrop-blur-sm rounded-xl px-4 py-3 border border-white/10 hover:bg-white/15 transition-all duration-300" style="--delay: 240ms">
                             <div class="flex items-center gap-3">
-                                <div class="w-9 h-9 rounded-lg bg-purple-500/20 flex items-center justify-center">
-                                    <svg class="w-4.5 h-4.5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
+                                <div class="w-9 h-9 rounded-lg bg-[#1B365D]/20 flex items-center justify-center">
+                                    <svg class="w-4.5 h-4.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
                                 </div>
                                 <div>
-                                    <p class="text-2xl font-bold text-purple-400">{{ rolesCount }}</p>
+                                    <p class="text-xl md:text-2xl font-bold text-slate-400">{{ rolesCount }}</p>
                                     <p class="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">{{ isRtl ? 'أدوار' : 'Roles' }}</p>
                                 </div>
                             </div>
@@ -237,11 +237,11 @@ function copyAllCredentials() {
                     <table class="w-full">
                         <thead>
                             <tr class="bg-gradient-to-r from-gray-50 to-white border-b border-gray-100">
-                                <th class="px-6 py-4 ltr:text-left rtl:text-right text-[10px] font-bold text-gray-400 uppercase tracking-widest">{{ $t('a_name') }}</th>
-                                <th class="px-6 py-4 ltr:text-left rtl:text-right text-[10px] font-bold text-gray-400 uppercase tracking-widest">{{ $t('a_email') }}</th>
-                                <th class="px-6 py-4 ltr:text-left rtl:text-right text-[10px] font-bold text-gray-400 uppercase tracking-widest">{{ $t('a_role') }}</th>
-                                <th class="px-6 py-4 ltr:text-left rtl:text-right text-[10px] font-bold text-gray-400 uppercase tracking-widest">{{ $t('a_status') }}</th>
-                                <th class="px-6 py-4 ltr:text-right rtl:text-left text-[10px] font-bold text-gray-400 uppercase tracking-widest">{{ $t('a_actions') }}</th>
+                                <th class="px-4 md:px-6 py-4 ltr:text-left rtl:text-right text-[10px] font-bold text-gray-400 uppercase tracking-widest">{{ $t('a_name') }}</th>
+                                <th class="px-4 md:px-6 py-4 ltr:text-left rtl:text-right text-[10px] font-bold text-gray-400 uppercase tracking-widest">{{ $t('a_email') }}</th>
+                                <th class="px-4 md:px-6 py-4 ltr:text-left rtl:text-right text-[10px] font-bold text-gray-400 uppercase tracking-widest">{{ $t('a_role') }}</th>
+                                <th class="px-4 md:px-6 py-4 ltr:text-left rtl:text-right text-[10px] font-bold text-gray-400 uppercase tracking-widest">{{ $t('a_status') }}</th>
+                                <th class="px-4 md:px-6 py-4 ltr:text-right rtl:text-left text-[10px] font-bold text-gray-400 uppercase tracking-widest">{{ $t('a_actions') }}</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-50">
@@ -252,7 +252,7 @@ function copyAllCredentials() {
                                 :style="{ '--row-delay': (index * 50) + 'ms' }"
                             >
                                 <!-- Name + Avatar -->
-                                <td class="px-6 py-4">
+                                <td class="px-4 md:px-6 py-4">
                                     <div class="flex items-center gap-3">
                                         <div class="relative">
                                             <div
@@ -273,7 +273,7 @@ function copyAllCredentials() {
                                 </td>
 
                                 <!-- Email -->
-                                <td class="px-6 py-4 hidden sm:table-cell">
+                                <td class="px-4 md:px-6 py-4 hidden sm:table-cell">
                                     <div class="flex items-center gap-2">
                                         <svg class="w-3.5 h-3.5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
                                         <span class="text-sm text-gray-500">{{ user.email }}</span>
@@ -281,7 +281,7 @@ function copyAllCredentials() {
                                 </td>
 
                                 <!-- Role Badge -->
-                                <td class="px-6 py-4">
+                                <td class="px-4 md:px-6 py-4">
                                     <span
                                         class="inline-flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-bold rounded-lg border"
                                         :class="[getRoleColors(user.role_id).bg, getRoleColors(user.role_id).text, getRoleColors(user.role_id).border]"
@@ -292,7 +292,7 @@ function copyAllCredentials() {
                                 </td>
 
                                 <!-- Status Toggle -->
-                                <td class="px-6 py-4">
+                                <td class="px-4 md:px-6 py-4">
                                     <button
                                         v-if="can('users.update')"
                                         @click="toggleActive(user)"
@@ -315,7 +315,7 @@ function copyAllCredentials() {
                                 </td>
 
                                 <!-- Actions -->
-                                <td class="px-6 py-4">
+                                <td class="px-4 md:px-6 py-4">
                                     <div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-all duration-300">
                                         <Link
                                             v-if="can('users.update')"
@@ -419,7 +419,7 @@ function copyAllCredentials() {
                     >
                         <div v-if="showCredentials" class="relative bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden" @click.stop>
                             <!-- Header -->
-                            <div class="bg-gradient-to-br from-emerald-500 to-teal-600 px-6 py-5 text-white relative overflow-hidden">
+                            <div class="bg-gradient-to-br from-emerald-500 to-teal-600 px-4 md:px-6 py-5 text-white relative overflow-hidden">
                                 <div class="absolute inset-0 opacity-10">
                                     <svg class="w-full h-full" viewBox="0 0 400 200"><defs><pattern id="credDots" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="15" cy="15" r="1.5" fill="white" /></pattern></defs><rect fill="url(#credDots)" width="400" height="200" /></svg>
                                 </div>
@@ -438,11 +438,11 @@ function copyAllCredentials() {
                             </div>
 
                             <!-- Credential Fields -->
-                            <div class="p-6 space-y-3">
+                            <div class="p-4 md:p-6 space-y-3">
                                 <!-- Login URL -->
                                 <div class="group flex items-center gap-3 p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer" @click="copyToClipboard(credentials.login_url, 'url')">
-                                    <div class="w-9 h-9 rounded-lg bg-blue-100 flex items-center justify-center flex-shrink-0">
-                                        <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
+                                    <div class="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center flex-shrink-0">
+                                        <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
                                     </div>
                                     <div class="flex-1 min-w-0">
                                         <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">{{ isRtl ? 'رابط الدخول' : 'Login URL' }}</p>
@@ -456,8 +456,8 @@ function copyAllCredentials() {
 
                                 <!-- Username -->
                                 <div v-if="credentials.username" class="group flex items-center gap-3 p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer" @click="copyToClipboard(credentials.username, 'username')">
-                                    <div class="w-9 h-9 rounded-lg bg-purple-100 flex items-center justify-center flex-shrink-0">
-                                        <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                                    <div class="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center flex-shrink-0">
+                                        <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                                     </div>
                                     <div class="flex-1 min-w-0">
                                         <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">{{ isRtl ? 'اسم المستخدم' : 'Username' }}</p>
@@ -509,7 +509,7 @@ function copyAllCredentials() {
                             </div>
 
                             <!-- Footer -->
-                            <div class="px-6 pb-5 flex gap-3">
+                            <div class="px-4 md:px-6 pb-5 flex gap-3">
                                 <button @click="copyAllCredentials"
                                     class="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-white transition-all duration-200 hover:shadow-lg"
                                     style="background: linear-gradient(135deg, #C4A265, #a8884f);">

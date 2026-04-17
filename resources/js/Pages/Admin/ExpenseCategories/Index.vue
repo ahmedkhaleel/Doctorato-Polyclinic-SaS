@@ -96,13 +96,13 @@ function deleteCategory(id) {
 function getCategoryColor(index) {
     const colors = [
         { bg: 'bg-amber-50', border: 'border-amber-200', icon: 'text-amber-600', badge: 'bg-amber-100 text-amber-700' },
-        { bg: 'bg-blue-50', border: 'border-blue-200', icon: 'text-blue-600', badge: 'bg-blue-100 text-blue-700' },
+        { bg: 'bg-slate-50', border: 'border-slate-200', icon: 'text-[#1B365D]', badge: 'bg-slate-100 text-[#1B365D]' },
         { bg: 'bg-emerald-50', border: 'border-emerald-200', icon: 'text-emerald-600', badge: 'bg-emerald-100 text-emerald-700' },
-        { bg: 'bg-purple-50', border: 'border-purple-200', icon: 'text-purple-600', badge: 'bg-purple-100 text-purple-700' },
-        { bg: 'bg-rose-50', border: 'border-rose-200', icon: 'text-rose-600', badge: 'bg-rose-100 text-rose-700' },
-        { bg: 'bg-cyan-50', border: 'border-cyan-200', icon: 'text-cyan-600', badge: 'bg-cyan-100 text-cyan-700' },
-        { bg: 'bg-orange-50', border: 'border-orange-200', icon: 'text-orange-600', badge: 'bg-orange-100 text-orange-700' },
-        { bg: 'bg-indigo-50', border: 'border-indigo-200', icon: 'text-indigo-600', badge: 'bg-indigo-100 text-indigo-700' },
+        { bg: 'bg-slate-50', border: 'border-slate-200', icon: 'text-[#1B365D]', badge: 'bg-slate-100 text-[#1B365D]' },
+        { bg: 'bg-amber-50', border: 'border-amber-200', icon: 'text-[#C4A265]', badge: 'bg-amber-100 text-[#C4A265]' },
+        { bg: 'bg-slate-50', border: 'border-slate-200', icon: 'text-[#1B365D]', badge: 'bg-slate-100 text-[#1B365D]' },
+        { bg: 'bg-amber-50', border: 'border-amber-200', icon: 'text-[#C4A265]', badge: 'bg-amber-100 text-[#C4A265]' },
+        { bg: 'bg-slate-50', border: 'border-slate-200', icon: 'text-[#1B365D]', badge: 'bg-slate-100 text-[#1B365D]' },
     ];
     return colors[index % colors.length];
 }
@@ -113,7 +113,7 @@ function getCategoryColor(index) {
         <div class="space-y-6">
             <!-- Hero Header -->
             <div
-                class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-8 transition-all duration-700"
+                class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-4 md:p-8 transition-all duration-700"
                 :class="headerLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
             >
                 <!-- Decorative -->
@@ -129,7 +129,7 @@ function getCategoryColor(index) {
                                 </svg>
                             </div>
                             <div>
-                                <h1 class="text-2xl font-bold text-white">{{ $t('a_expense_categories') }}</h1>
+                                <h1 class="text-xl md:text-2xl font-bold text-white">{{ $t('a_expense_categories') }}</h1>
                                 <p class="text-sm text-gray-400 mt-0.5">{{ locale === 'ar' ? 'إدارة وتنظيم تصنيفات المصروفات' : 'Manage and organize expense categories' }}</p>
                             </div>
                         </div>
@@ -146,7 +146,7 @@ function getCategoryColor(index) {
                     </div>
 
                     <!-- Stats Row -->
-                    <div class="grid grid-cols-3 gap-4 mt-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
                         <div class="bg-white/5 backdrop-blur-sm rounded-xl px-4 py-3 border border-white/10">
                             <p class="text-xs text-gray-400">{{ locale === 'ar' ? 'إجمالي التصنيفات' : 'Total Categories' }}</p>
                             <p class="text-xl font-bold text-white mt-0.5">{{ allCategories.length }}</p>
@@ -234,7 +234,7 @@ function getCategoryColor(index) {
                                 <button
                                     v-if="can('expense_categories.update')"
                                     @click="openEdit(category)"
-                                    class="flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 text-xs font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 transition"
+                                    class="flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#1B365D] bg-slate-50 rounded-lg hover:bg-slate-100 transition"
                                 >
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -304,7 +304,7 @@ function getCategoryColor(index) {
                     >
                         <div class="relative bg-white rounded-2xl shadow-2xl z-10 w-full max-w-md overflow-hidden">
                             <!-- Modal Header -->
-                            <div class="bg-gradient-to-r from-gray-900 to-gray-800 px-6 py-4">
+                            <div class="bg-gradient-to-r from-gray-900 to-gray-800 px-4 md:px-6 py-4">
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center gap-3">
                                         <div class="w-9 h-9 rounded-lg bg-amber-500/20 flex items-center justify-center">
@@ -325,7 +325,7 @@ function getCategoryColor(index) {
                             </div>
 
                             <!-- Modal Body -->
-                            <form @submit.prevent="submit" class="p-6 space-y-5">
+                            <form @submit.prevent="submit" class="p-4 md:p-6 space-y-5">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1.5">
                                         {{ $t('a_name_ar') }}

@@ -147,7 +147,7 @@ function serviceRateOptions(currentIndex) {
     <AdminLayout :title="$t('a_create_doctor')">
         <div class="space-y-6">
             <div class="flex items-center justify-between">
-                <h1 class="text-2xl font-bold text-gray-800">{{ $t('a_create_doctor') }}</h1>
+                <h1 class="text-xl md:text-2xl font-bold text-gray-800">{{ $t('a_create_doctor') }}</h1>
                 <Link href="/admin/doctors" class="text-sm text-gray-500 hover:text-gray-700">{{ $t('a_back_to_doctors') }}</Link>
             </div>
 
@@ -174,7 +174,7 @@ function serviceRateOptions(currentIndex) {
                 <!-- ==================== BASIC INFO ==================== -->
                 <div v-show="activeSection === 'basic'" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <div class="lg:col-span-2 space-y-6">
-                        <div class="bg-white rounded-lg shadow-sm p-6 space-y-5">
+                        <div class="bg-white rounded-lg shadow-sm p-4 md:p-6 space-y-5">
                             <!-- Module Selector -->
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">{{ $t('a_module') }}</label>
@@ -199,30 +199,30 @@ function serviceRateOptions(currentIndex) {
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_name_en') }} <span class="text-red-500">*</span></label>
-                                    <input v-model="form.name_en" type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                    <input v-model="form.name_en" type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
                                     <p v-if="form.errors.name_en" class="mt-1 text-sm text-red-600">{{ form.errors.name_en }}</p>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_name_ar') }} <span class="text-red-500">*</span></label>
-                                    <input v-model="form.name_ar" type="text" dir="rtl" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                    <input v-model="form.name_ar" type="text" dir="rtl" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
                                     <p v-if="form.errors.name_ar" class="mt-1 text-sm text-red-600">{{ form.errors.name_ar }}</p>
                                 </div>
                             </div>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_specialization_en') }} <span class="text-red-500">*</span></label>
-                                    <input v-model="form.specialization_en" type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                    <input v-model="form.specialization_en" type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
                                     <p v-if="form.errors.specialization_en" class="mt-1 text-sm text-red-600">{{ form.errors.specialization_en }}</p>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_specialization_ar') }} <span class="text-red-500">*</span></label>
-                                    <input v-model="form.specialization_ar" type="text" dir="rtl" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                    <input v-model="form.specialization_ar" type="text" dir="rtl" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
                                     <p v-if="form.errors.specialization_ar" class="mt-1 text-sm text-red-600">{{ form.errors.specialization_ar }}</p>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="bg-white rounded-lg shadow-sm p-6 space-y-5">
+                        <div class="bg-white rounded-lg shadow-sm p-4 md:p-6 space-y-5">
                             <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wider">{{ $t('a_bio_qualifications') }}</h3>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_bio_en') }}</label>
@@ -237,12 +237,12 @@ function serviceRateOptions(currentIndex) {
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_qualifications_en') }}</label>
-                                    <textarea v-model="form.qualifications_en" rows="4" :placeholder="$t('a_one_qualification_per_line')" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"></textarea>
+                                    <textarea v-model="form.qualifications_en" rows="4" :placeholder="$t('a_one_qualification_per_line')" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"></textarea>
                                     <p v-if="form.errors.qualifications_en" class="mt-1 text-sm text-red-600">{{ form.errors.qualifications_en }}</p>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_qualifications_ar') }}</label>
-                                    <textarea v-model="form.qualifications_ar" rows="4" dir="rtl" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"></textarea>
+                                    <textarea v-model="form.qualifications_ar" rows="4" dir="rtl" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"></textarea>
                                     <p v-if="form.errors.qualifications_ar" class="mt-1 text-sm text-red-600">{{ form.errors.qualifications_ar }}</p>
                                 </div>
                             </div>
@@ -250,22 +250,22 @@ function serviceRateOptions(currentIndex) {
                     </div>
 
                     <div class="space-y-6">
-                        <div class="bg-white rounded-lg shadow-sm p-6 space-y-5">
+                        <div class="bg-white rounded-lg shadow-sm p-4 md:p-6 space-y-5">
                             <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wider">{{ $t('a_status_order') }}</h3>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_status') }}</label>
-                                <select v-model="form.status" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent">
+                                <select v-model="form.status" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent">
                                     <option value="active">{{ $t('a_active') }}</option>
                                     <option value="inactive">{{ $t('a_inactive') }}</option>
                                 </select>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_display_order') }}</label>
-                                <input v-model="form.display_order" type="number" min="0" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                <input v-model="form.display_order" type="number" min="0" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
                             </div>
                         </div>
 
-                        <div class="bg-white rounded-lg shadow-sm p-6 space-y-5">
+                        <div class="bg-white rounded-lg shadow-sm p-4 md:p-6 space-y-5">
                             <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wider">{{ $t('a_photo') }}</h3>
                             <input
                                 type="file"
@@ -280,7 +280,7 @@ function serviceRateOptions(currentIndex) {
 
                 <!-- ==================== CLINIC SETTINGS ==================== -->
                 <div v-show="activeSection === 'clinic'" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div class="bg-white rounded-lg shadow-sm p-6 space-y-5">
+                    <div class="bg-white rounded-lg shadow-sm p-4 md:p-6 space-y-5">
                         <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wider">{{ $t('a_contact_account') }}</h3>
 
                         <!-- Option: Link existing user OR Create new -->
@@ -294,20 +294,20 @@ function serviceRateOptions(currentIndex) {
                         </div>
 
                         <div v-else>
-                            <div class="p-4 bg-blue-50 border border-blue-200 rounded-lg space-y-3">
+                            <div class="p-4 bg-slate-50 border border-slate-200 rounded-lg space-y-3">
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center gap-2">
-                                        <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" /></svg>
-                                        <span class="text-sm font-medium text-blue-700">{{ $t('a_create_new_user_account') }}</span>
+                                        <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" /></svg>
+                                        <span class="text-sm font-medium text-[#1B365D]">{{ $t('a_create_new_user_account') }}</span>
                                     </div>
                                     <button type="button" @click="createNewUser = false; form.create_user_account = false; form.create_user_password = ''" class="text-xs text-gray-500 hover:text-gray-700">
                                         Cancel — Use Existing
                                     </button>
                                 </div>
-                                <p class="text-xs text-blue-600">{{ $t('a_new_user_hint') }}</p>
+                                <p class="text-xs text-[#1B365D]">{{ $t('a_new_user_hint') }}</p>
                                 <div>
                                     <label class="block text-xs font-medium text-gray-600 mb-1">{{ $t('a_login_password') }}</label>
-                                    <input v-model="form.create_user_password" @input="form.create_user_account = !!form.create_user_password" type="text" :placeholder="$t('a_enter_password_for_doctor')" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                    <input v-model="form.create_user_password" @input="form.create_user_account = !!form.create_user_password" type="text" :placeholder="$t('a_enter_password_for_doctor')" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
                                     <p v-if="form.errors.create_user_password" class="mt-1 text-xs text-red-600">{{ form.errors.create_user_password }}</p>
                                 </div>
                             </div>
@@ -316,18 +316,18 @@ function serviceRateOptions(currentIndex) {
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_phone') }}</label>
-                                <input v-model="form.phone" type="text" placeholder="01xxxxxxxxx" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                <input v-model="form.phone" type="text" placeholder="01xxxxxxxxx" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_email') }}</label>
-                                <input v-model="form.email" type="email" placeholder="doctor@clinic.com" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                <input v-model="form.email" type="email" placeholder="doctor@clinic.com" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
                             </div>
                         </div>
                     </div>
 
                     <div class="space-y-6">
                         <!-- Doctor Type & Applicable Fees -->
-                        <div class="bg-white rounded-lg shadow-sm p-6 space-y-5">
+                        <div class="bg-white rounded-lg shadow-sm p-4 md:p-6 space-y-5">
                             <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wider">{{ $t('a_doctor_type_fees') }}</h3>
 
                             <div>
@@ -354,19 +354,19 @@ function serviceRateOptions(currentIndex) {
                                     <label
                                         class="relative flex items-center gap-3 p-4 rounded-xl border-2 cursor-pointer transition-all"
                                         :class="form.doctor_type === 'specialist'
-                                            ? 'border-blue-500 bg-blue-50/50 shadow-sm'
+                                            ? 'border-[#1B365D] bg-slate-50/50 shadow-sm'
                                             : 'border-gray-200 hover:border-gray-300'"
                                     >
                                         <input type="radio" v-model="form.doctor_type" value="specialist" class="sr-only" />
-                                        <div class="w-10 h-10 rounded-xl flex items-center justify-center" :class="form.doctor_type === 'specialist' ? 'bg-blue-100' : 'bg-gray-100'">
-                                            <svg class="w-5 h-5" :class="form.doctor_type === 'specialist' ? 'text-blue-600' : 'text-gray-400'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                                        <div class="w-10 h-10 rounded-xl flex items-center justify-center" :class="form.doctor_type === 'specialist' ? 'bg-slate-100' : 'bg-gray-100'">
+                                            <svg class="w-5 h-5" :class="form.doctor_type === 'specialist' ? 'text-[#1B365D]' : 'text-gray-400'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                                         </div>
                                         <div>
-                                            <span class="text-sm font-bold" :class="form.doctor_type === 'specialist' ? 'text-blue-600' : 'text-gray-700'">{{ $t('a_specialist') }}</span>
+                                            <span class="text-sm font-bold" :class="form.doctor_type === 'specialist' ? 'text-[#1B365D]' : 'text-gray-700'">{{ $t('a_specialist') }}</span>
                                             <span class="block text-xs text-gray-400">اخصائي</span>
                                         </div>
                                         <div v-if="form.doctor_type === 'specialist'" class="absolute top-2 right-2">
-                                            <svg class="w-4 h-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
+                                            <svg class="w-4 h-4 text-[#1B365D]" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
                                         </div>
                                     </label>
                                 </div>
@@ -375,20 +375,20 @@ function serviceRateOptions(currentIndex) {
 
                             <!-- Applicable Fees from Settings (read-only info) -->
                             <div v-if="form.doctor_type && form.module === 'derma'" class="p-4 rounded-xl border border-dashed space-y-2"
-                                 :class="form.doctor_type === 'consultant' ? 'border-[#C4A265]/40 bg-[#C4A265]/5' : 'border-blue-300 bg-blue-50/30'">
-                                <h4 class="text-xs font-semibold uppercase tracking-wider" :class="form.doctor_type === 'consultant' ? 'text-[#C4A265]' : 'text-blue-600'">
+                                 :class="form.doctor_type === 'consultant' ? 'border-[#C4A265]/40 bg-[#C4A265]/5' : 'border-slate-300 bg-slate-50/30'">
+                                <h4 class="text-xs font-semibold uppercase tracking-wider" :class="form.doctor_type === 'consultant' ? 'text-[#C4A265]' : 'text-[#1B365D]'">
                                     Applicable Consultation Fees (from Settings)
                                 </h4>
-                                <div class="grid grid-cols-3 gap-3">
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                                     <div class="text-center p-2 bg-white/80 rounded-lg">
                                         <p class="text-xs text-gray-400 mb-0.5">{{ $t('a_derm_consultation') }}</p>
                                         <p class="text-xs text-gray-400">كشف جلدية</p>
-                                        <p class="text-lg font-bold" :class="form.doctor_type === 'consultant' ? 'text-[#C4A265]' : 'text-blue-600'">{{ dermatologyFeeForType }} <span class="text-xs font-normal text-gray-400">{{ currencyCode }}</span></p>
+                                        <p class="text-lg font-bold" :class="form.doctor_type === 'consultant' ? 'text-[#C4A265]' : 'text-[#1B365D]'">{{ dermatologyFeeForType }} <span class="text-xs font-normal text-gray-400">{{ currencyCode }}</span></p>
                                     </div>
                                     <div class="text-center p-2 bg-white/80 rounded-lg">
                                         <p class="text-xs text-gray-400 mb-0.5">{{ $t('a_cosmetic_consult') }}</p>
                                         <p class="text-xs text-gray-400">استشارة تجميل</p>
-                                        <p class="text-lg font-bold text-purple-600">{{ pricingSettings?.cosmetic_consultation_fee || 0 }} <span class="text-xs font-normal text-gray-400">{{ currencyCode }}</span></p>
+                                        <p class="text-lg font-bold text-[#1B365D]">{{ pricingSettings?.cosmetic_consultation_fee || 0 }} <span class="text-xs font-normal text-gray-400">{{ currencyCode }}</span></p>
                                     </div>
                                     <div class="text-center p-2 bg-white/80 rounded-lg">
                                         <p class="text-xs text-gray-400 mb-0.5">{{ $t('a_follow_up_type') }}</p>
@@ -399,21 +399,21 @@ function serviceRateOptions(currentIndex) {
                                 <p class="text-[10px] text-gray-400 text-center">{{ $t('a_fees_managed_in_settings') }}</p>
                             </div>
                             <!-- Dental Fees -->
-                            <div v-if="form.module === 'dental' && form.doctor_type" class="p-4 rounded-xl border border-dashed border-cyan-300 bg-cyan-50/30 space-y-3">
-                                <h4 class="text-xs font-semibold uppercase tracking-wider text-cyan-600">
+                            <div v-if="form.module === 'dental' && form.doctor_type" class="p-4 rounded-xl border border-dashed border-slate-300 bg-slate-50/30 space-y-3">
+                                <h4 class="text-xs font-semibold uppercase tracking-wider text-[#1B365D]">
                                     {{ locale === 'ar' ? 'رسوم استشارات الأسنان المطبقة (من الإعدادات)' : 'Applicable Dental Consultation Fees (from Settings)' }}
                                 </h4>
                                 <div class="grid grid-cols-2 gap-3">
                                     <div class="text-center p-2 bg-white/80 rounded-lg">
                                         <p class="text-xs text-gray-400 mb-0.5">{{ locale === 'ar' ? 'كشف أسنان' : 'Dental Consultation' }}</p>
                                         <p class="text-xs text-gray-400">{{ form.doctor_type === 'consultant' ? (locale === 'ar' ? 'استشاري' : 'Consultant') : (locale === 'ar' ? 'أخصائي' : 'Specialist') }}</p>
-                                        <p class="text-lg font-bold text-cyan-600">{{ dentalFeeForType }} <span class="text-xs font-normal text-gray-400">{{ currencyCode }}</span></p>
+                                        <p class="text-lg font-bold text-[#1B365D]">{{ dentalFeeForType }} <span class="text-xs font-normal text-gray-400">{{ currencyCode }}</span></p>
                                     </div>
                                     <div class="text-center p-2 bg-white/80 rounded-lg">
                                         <p class="text-xs text-gray-400 mb-0.5">{{ locale === 'ar' ? 'رسم خدمة الأسنان' : 'Dental Service Fee' }}</p>
                                         <p class="text-xs text-gray-400">&nbsp;</p>
                                         <div class="relative">
-                                            <input v-model="form.dental_service_fee" type="number" step="0.01" min="0" placeholder="0" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm font-semibold text-center focus:ring-2 focus:ring-cyan-300 focus:border-cyan-400" />
+                                            <input v-model="form.dental_service_fee" type="number" step="0.01" min="0" placeholder="0" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm font-semibold text-center focus:ring-2 focus:ring-slate-300 focus:border-slate-400" />
                                             <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400">{{ currencyCode }}</span>
                                         </div>
                                     </div>
@@ -421,20 +421,20 @@ function serviceRateOptions(currentIndex) {
                                 <p class="text-[10px] text-gray-400 text-center">{{ locale === 'ar' ? 'رسوم الكشف تُدار من الإعدادات العامة' : 'Consultation fees are managed in general settings' }}</p>
                             </div>
                             <!-- Pediatric Fees -->
-                            <div v-if="form.module === 'pediatric' && form.doctor_type" class="p-4 rounded-xl border border-dashed border-green-300 bg-green-50/30 space-y-3">
-                                <h4 class="text-xs font-semibold uppercase tracking-wider text-green-600">
+                            <div v-if="form.module === 'pediatric' && form.doctor_type" class="p-4 rounded-xl border border-dashed border-emerald-300 bg-emerald-50/30 space-y-3">
+                                <h4 class="text-xs font-semibold uppercase tracking-wider text-emerald-600">
                                     {{ locale === 'ar' ? 'رسوم استشارات الأطفال المطبقة (من الإعدادات)' : 'Applicable Pediatric Consultation Fees (from Settings)' }}
                                 </h4>
                                 <div class="grid grid-cols-2 gap-3">
                                     <div class="text-center p-2 bg-white/80 rounded-lg">
                                         <p class="text-xs text-gray-400 mb-0.5">{{ locale === 'ar' ? 'كشف أطفال' : 'Pediatric Consultation' }}</p>
                                         <p class="text-xs text-gray-400">{{ form.doctor_type === 'consultant' ? (locale === 'ar' ? 'استشاري' : 'Consultant') : (locale === 'ar' ? 'أخصائي' : 'Specialist') }}</p>
-                                        <p class="text-lg font-bold text-green-600">{{ pediatricFeeForType }} <span class="text-xs font-normal text-gray-400">{{ currencyCode }}</span></p>
+                                        <p class="text-lg font-bold text-emerald-600">{{ pediatricFeeForType }} <span class="text-xs font-normal text-gray-400">{{ currencyCode }}</span></p>
                                     </div>
                                     <div class="text-center p-2 bg-white/80 rounded-lg">
                                         <p class="text-xs text-gray-400 mb-0.5">{{ locale === 'ar' ? 'رسوم المتابعة' : 'Follow-up Fee' }}</p>
                                         <p class="text-xs text-gray-400">&nbsp;</p>
-                                        <p class="text-lg font-bold text-green-600">{{ pricingSettings?.pediatric_followup_fee || 0 }} <span class="text-xs font-normal text-gray-400">{{ currencyCode }}</span></p>
+                                        <p class="text-lg font-bold text-emerald-600">{{ pricingSettings?.pediatric_followup_fee || 0 }} <span class="text-xs font-normal text-gray-400">{{ currencyCode }}</span></p>
                                     </div>
                                 </div>
                                 <p class="text-[10px] text-gray-400 text-center">{{ locale === 'ar' ? 'رسوم الكشف تُدار من الإعدادات العامة' : 'Consultation fees are managed in general settings' }}</p>
@@ -448,7 +448,7 @@ function serviceRateOptions(currentIndex) {
                         </div>
 
                         <!-- Commission Rates -->
-                        <div class="bg-white rounded-lg shadow-sm p-6 space-y-5">
+                        <div class="bg-white rounded-lg shadow-sm p-4 md:p-6 space-y-5">
                             <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wider">{{ $t('a_commission_rates') }}</h3>
                             <p class="text-xs text-gray-400 -mt-3">{{ $t('a_commission_desc') }}</p>
 
@@ -472,8 +472,8 @@ function serviceRateOptions(currentIndex) {
                                 </div>
 
                                 <div class="flex items-center gap-4 p-4 rounded-xl border border-gray-200 bg-gray-50/50">
-                                    <div class="w-10 h-10 rounded-xl bg-purple-100 flex items-center justify-center flex-shrink-0">
-                                        <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>
+                                    <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center flex-shrink-0">
+                                        <svg class="w-5 h-5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>
                                     </div>
                                     <div class="flex-1">
                                         <label class="block text-sm font-semibold text-gray-700">{{ $t('a_cosmetic_consultation') }}</label>
@@ -507,8 +507,8 @@ function serviceRateOptions(currentIndex) {
                                 <!-- Dental Commission Rates -->
                                 <template v-if="form.module === 'dental'">
                                     <div class="flex items-center gap-4 p-4 rounded-xl border border-gray-200 bg-gray-50/50">
-                                        <div class="w-10 h-10 rounded-xl bg-cyan-100 flex items-center justify-center flex-shrink-0">
-                                            <svg class="w-5 h-5 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342" /></svg>
+                                        <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center flex-shrink-0">
+                                            <svg class="w-5 h-5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342" /></svg>
                                         </div>
                                         <div class="flex-1">
                                             <label class="block text-sm font-semibold text-gray-700">{{ $t('a_dental_consultation') }}</label>
@@ -516,7 +516,7 @@ function serviceRateOptions(currentIndex) {
                                         </div>
                                         <div class="w-28">
                                             <div class="relative">
-                                                <input v-model="form.dental_consultation_commission" type="number" step="0.01" min="0" max="100" placeholder="0" class="w-full px-3 py-2 pr-8 border border-gray-300 rounded-lg text-sm ltr:text-right rtl:text-left font-semibold focus:ring-2 focus:ring-cyan-300 focus:border-cyan-400" />
+                                                <input v-model="form.dental_consultation_commission" type="number" step="0.01" min="0" max="100" placeholder="0" class="w-full px-3 py-2 pr-8 border border-gray-300 rounded-lg text-sm ltr:text-right rtl:text-left font-semibold focus:ring-2 focus:ring-slate-300 focus:border-slate-400" />
                                                 <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400 font-medium">%</span>
                                             </div>
                                         </div>
@@ -531,7 +531,7 @@ function serviceRateOptions(currentIndex) {
                                         </div>
                                         <div class="w-28">
                                             <div class="relative">
-                                                <input v-model="form.dental_service_commission" type="number" step="0.01" min="0" max="100" placeholder="0" class="w-full px-3 py-2 pr-8 border border-gray-300 rounded-lg text-sm ltr:text-right rtl:text-left font-semibold focus:ring-2 focus:ring-cyan-300 focus:border-cyan-400" />
+                                                <input v-model="form.dental_service_commission" type="number" step="0.01" min="0" max="100" placeholder="0" class="w-full px-3 py-2 pr-8 border border-gray-300 rounded-lg text-sm ltr:text-right rtl:text-left font-semibold focus:ring-2 focus:ring-slate-300 focus:border-slate-400" />
                                                 <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400 font-medium">%</span>
                                             </div>
                                         </div>
@@ -541,8 +541,8 @@ function serviceRateOptions(currentIndex) {
                                 <!-- Pediatric Commission Rates -->
                                 <template v-if="form.module === 'pediatric'">
                                     <div class="flex items-center gap-4 p-4 rounded-xl border border-gray-200 bg-gray-50/50">
-                                        <div class="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center flex-shrink-0">
-                                            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8.25a3.75 3.75 0 100-7.5 3.75 3.75 0 000 7.5zM6.75 12a.75.75 0 00-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 00.75-.75v-.008a.75.75 0 00-.75-.75H6.75zm10.5 0a.75.75 0 00-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 00.75-.75v-.008a.75.75 0 00-.75-.75h-.008zM12 10.5c-3.315 0-6 2.685-6 6v3a.75.75 0 00.75.75h10.5a.75.75 0 00.75-.75v-3c0-3.315-2.685-6-6-6z" /></svg>
+                                        <div class="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center flex-shrink-0">
+                                            <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8.25a3.75 3.75 0 100-7.5 3.75 3.75 0 000 7.5zM6.75 12a.75.75 0 00-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 00.75-.75v-.008a.75.75 0 00-.75-.75H6.75zm10.5 0a.75.75 0 00-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 00.75-.75v-.008a.75.75 0 00-.75-.75h-.008zM12 10.5c-3.315 0-6 2.685-6 6v3a.75.75 0 00.75.75h10.5a.75.75 0 00.75-.75v-3c0-3.315-2.685-6-6-6z" /></svg>
                                         </div>
                                         <div class="flex-1">
                                             <label class="block text-sm font-semibold text-gray-700">{{ locale === 'ar' ? 'عمولة استشارة الأطفال' : 'Pediatric Consultation Commission' }}</label>
@@ -550,7 +550,7 @@ function serviceRateOptions(currentIndex) {
                                         </div>
                                         <div class="w-28">
                                             <div class="relative">
-                                                <input v-model="form.pediatric_consultation_commission" type="number" step="0.01" min="0" max="100" placeholder="0" class="w-full px-3 py-2 pr-8 border border-gray-300 rounded-lg text-sm ltr:text-right rtl:text-left font-semibold focus:ring-2 focus:ring-green-300 focus:border-green-400" />
+                                                <input v-model="form.pediatric_consultation_commission" type="number" step="0.01" min="0" max="100" placeholder="0" class="w-full px-3 py-2 pr-8 border border-gray-300 rounded-lg text-sm ltr:text-right rtl:text-left font-semibold focus:ring-2 focus:ring-emerald-300 focus:border-emerald-400" />
                                                 <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400 font-medium">%</span>
                                             </div>
                                         </div>
@@ -565,7 +565,7 @@ function serviceRateOptions(currentIndex) {
                                         </div>
                                         <div class="w-28">
                                             <div class="relative">
-                                                <input v-model="form.pediatric_followup_commission" type="number" step="0.01" min="0" max="100" placeholder="0" class="w-full px-3 py-2 pr-8 border border-gray-300 rounded-lg text-sm ltr:text-right rtl:text-left font-semibold focus:ring-2 focus:ring-green-300 focus:border-green-400" />
+                                                <input v-model="form.pediatric_followup_commission" type="number" step="0.01" min="0" max="100" placeholder="0" class="w-full px-3 py-2 pr-8 border border-gray-300 rounded-lg text-sm ltr:text-right rtl:text-left font-semibold focus:ring-2 focus:ring-emerald-300 focus:border-emerald-400" />
                                                 <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400 font-medium">%</span>
                                             </div>
                                         </div>
@@ -590,9 +590,9 @@ function serviceRateOptions(currentIndex) {
                             </div>
                         </div>
 
-                        <div class="bg-white rounded-lg shadow-sm p-6 space-y-5">
+                        <div class="bg-white rounded-lg shadow-sm p-4 md:p-6 space-y-5">
                             <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wider">{{ $t('a_clinic_notes') }}</h3>
-                            <textarea v-model="form.clinic_notes" rows="5" :placeholder="$t('a_internal_notes_hint')" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"></textarea>
+                            <textarea v-model="form.clinic_notes" rows="5" :placeholder="$t('a_internal_notes_hint')" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"></textarea>
                         </div>
                     </div>
                 </div>
@@ -607,18 +607,18 @@ function serviceRateOptions(currentIndex) {
                                 v-for="(schedule, i) in form.schedules"
                                 :key="i"
                                 class="flex items-center gap-4 p-3 rounded-lg border transition"
-                                :class="schedule.is_active ? 'border-green-200 bg-green-50' : 'border-gray-200 bg-gray-50'"
+                                :class="schedule.is_active ? 'border-emerald-200 bg-emerald-50' : 'border-gray-200 bg-gray-50'"
                             >
                                 <label class="flex items-center cursor-pointer min-w-[140px]">
-                                    <input type="checkbox" v-model="schedule.is_active" class="w-4 h-4 rounded border-gray-300 text-green-600 focus:ring-green-200 ltr:mr-3 rtl:ml-3" />
+                                    <input type="checkbox" v-model="schedule.is_active" class="w-4 h-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-200 ltr:mr-3 rtl:ml-3" />
                                     <span class="text-sm font-medium" :class="schedule.is_active ? 'text-gray-900' : 'text-gray-400'">
                                         {{ ['Saturday','Sunday','Monday','Tuesday','Wednesday','Thursday','Friday'][i] }}
                                     </span>
                                 </label>
                                 <div class="flex items-center gap-2" :class="!schedule.is_active && 'opacity-40 pointer-events-none'">
-                                    <input v-model="schedule.start_time" type="time" class="px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                    <input v-model="schedule.start_time" type="time" class="px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
                                     <span class="text-gray-400">{{ $t('a_to') }}</span>
-                                    <input v-model="schedule.end_time" type="time" class="px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                    <input v-model="schedule.end_time" type="time" class="px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
                                 </div>
                             </div>
                         </div>
@@ -647,7 +647,7 @@ function serviceRateOptions(currentIndex) {
                                     </div>
                                     <div>
                                         <label class="block text-xs font-medium text-gray-500 mb-1">{{ $t('a_commission_rate') }} (%)</label>
-                                        <input v-model="rate.commission_percentage" type="number" step="0.01" min="0" max="100" placeholder="0.00" class="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                        <input v-model="rate.commission_percentage" type="number" step="0.01" min="0" max="100" placeholder="0.00" class="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
                                     </div>
                                 </div>
                                 <button type="button" @click="removeServiceRate(i)" class="mt-5 p-1.5 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition" title="Remove">
@@ -667,7 +667,7 @@ function serviceRateOptions(currentIndex) {
                     <span v-else></span>
                     <div class="flex ltr:space-x-3 rtl:space-x-reverse rtl:space-x-3">
                         <Link href="/admin/doctors" class="px-4 py-2.5 rounded-lg bg-gray-200 text-gray-700 text-sm font-medium hover:bg-gray-300 transition">{{ $t('a_cancel') }}</Link>
-                        <button type="submit" :disabled="form.processing" class="px-6 py-2.5 rounded-lg text-white font-medium text-sm transition disabled:opacity-50" style="background-color: #C4A265;">
+                        <button type="submit" :disabled="form.processing" class="px-4 md:px-6 py-2.5 rounded-lg text-white font-medium text-sm transition disabled:opacity-50" style="background-color: #C4A265;">
                             {{ form.processing ? $t('a_creating_dots') : $t('a_create_doctor') }}
                         </button>
                     </div>

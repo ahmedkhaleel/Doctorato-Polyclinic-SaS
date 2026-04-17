@@ -111,8 +111,8 @@ function selectDay(day) {
 function statusColor(status, type) {
     if (type === 'booking') {
         const colors = {
-            new: 'bg-blue-100 text-blue-700',
-            contacted: 'bg-yellow-100 text-yellow-700',
+            new: 'bg-slate-100 text-[#1B365D]',
+            contacted: 'bg-amber-100 text-amber-700',
             confirmed: 'bg-emerald-100 text-emerald-700',
             completed: 'bg-gray-100 text-gray-600',
             cancelled: 'bg-red-100 text-red-600',
@@ -121,7 +121,7 @@ function statusColor(status, type) {
     }
     const colors = {
         waiting: 'bg-amber-100 text-amber-700',
-        in_progress: 'bg-blue-100 text-blue-700',
+        in_progress: 'bg-slate-100 text-[#1B365D]',
         completed: 'bg-emerald-100 text-emerald-700',
         cancelled: 'bg-red-100 text-red-600',
     };
@@ -129,10 +129,10 @@ function statusColor(status, type) {
 }
 
 function eventDotColor(event) {
-    if (event.type === 'booking') return 'bg-blue-400';
+    if (event.type === 'booking') return 'bg-slate-400';
     const colors = {
         waiting: 'bg-amber-400',
-        in_progress: 'bg-blue-500',
+        in_progress: 'bg-[#1B365D]',
         completed: 'bg-emerald-400',
         cancelled: 'bg-red-400',
     };
@@ -153,7 +153,7 @@ function formatSelectedDate(dateStr) {
             <!-- Header -->
             <div class="flex items-center justify-between flex-wrap gap-4">
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-900">{{ $t('a_appointment_calendar') }}</h1>
+                    <h1 class="text-xl md:text-2xl font-bold text-gray-900">{{ $t('a_appointment_calendar') }}</h1>
                     <p class="text-sm text-gray-500 mt-1">{{ $t('a_calendar_subtitle') }}</p>
                 </div>
                 <div class="flex items-center gap-3">
@@ -179,11 +179,11 @@ function formatSelectedDate(dateStr) {
                     <p class="text-[10px] text-gray-500 uppercase tracking-wide">{{ $t('a_waiting') }}</p>
                 </div>
                 <div class="bg-white rounded-xl p-3 border border-gray-100 shadow-sm text-center">
-                    <p class="text-lg font-bold text-blue-600">{{ stats?.total_bookings || 0 }}</p>
+                    <p class="text-lg font-bold text-[#1B365D]">{{ stats?.total_bookings || 0 }}</p>
                     <p class="text-[10px] text-gray-500 uppercase tracking-wide">{{ $t('a_bookings') }}</p>
                 </div>
                 <div class="bg-white rounded-xl p-3 border border-gray-100 shadow-sm text-center">
-                    <p class="text-lg font-bold text-blue-500">{{ stats?.pending_bookings || 0 }}</p>
+                    <p class="text-lg font-bold text-[#1B365D]">{{ stats?.pending_bookings || 0 }}</p>
                     <p class="text-[10px] text-gray-500 uppercase tracking-wide">{{ $t('a_pending') }}</p>
                 </div>
                 <div class="bg-white rounded-xl p-3 border border-gray-100 shadow-sm text-center">
@@ -215,7 +215,7 @@ function formatSelectedDate(dateStr) {
                     </select>
                     <div class="flex items-center gap-3 text-xs text-gray-500">
                         <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>{{ $t('a_visit') }}</span>
-                        <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-blue-400"></span>{{ $t('a_booking') }}</span>
+                        <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-slate-400"></span>{{ $t('a_booking') }}</span>
                     </div>
                 </div>
             </div>
@@ -274,12 +274,12 @@ function formatSelectedDate(dateStr) {
                                 v-for="ev in selectedDayEvents"
                                 :key="ev.type + '-' + ev.id"
                                 class="p-3 rounded-xl border transition-colors duration-150"
-                                :class="ev.type === 'visit' ? 'border-emerald-100 bg-emerald-50/30 hover:bg-emerald-50' : 'border-blue-100 bg-blue-50/30 hover:bg-blue-50'"
+                                :class="ev.type === 'visit' ? 'border-emerald-100 bg-emerald-50/30 hover:bg-emerald-50' : 'border-slate-100 bg-slate-50/30 hover:bg-slate-50'"
                             >
                                 <div class="flex items-start justify-between gap-2">
                                     <div class="min-w-0 flex-1">
                                         <div class="flex items-center gap-2 mb-1">
-                                            <span class="text-xs font-semibold uppercase tracking-wide" :class="ev.type === 'visit' ? 'text-emerald-600' : 'text-blue-600'">{{ ev.type }}</span>
+                                            <span class="text-xs font-semibold uppercase tracking-wide" :class="ev.type === 'visit' ? 'text-emerald-600' : 'text-[#1B365D]'">{{ ev.type }}</span>
                                             <span :class="statusColor(ev.status, ev.type)" class="text-[10px] px-1.5 py-0.5 rounded-full font-medium">{{ ev.status }}</span>
                                         </div>
                                         <p class="text-sm font-medium text-gray-900 truncate">{{ ev.title }}</p>
@@ -294,7 +294,7 @@ function formatSelectedDate(dateStr) {
                                     <Link
                                         v-else
                                         :href="'/admin/bookings/' + ev.id"
-                                        class="text-xs text-blue-600 hover:underline flex-shrink-0"
+                                        class="text-xs text-[#1B365D] hover:underline flex-shrink-0"
                                     >{{ $t('a_view') }}</Link>
                                 </div>
                             </div>

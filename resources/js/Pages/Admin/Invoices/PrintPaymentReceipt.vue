@@ -85,7 +85,7 @@ onMounted(() => {
 
         <!-- Receipt Content -->
         <div class="receipt-container mx-auto max-w-[800px] bg-white rounded-2xl shadow-sm border border-gray-100/80 print:shadow-none print:border-0 print:rounded-none">
-            <div class="p-8 print:p-0">
+            <div class="p-4 md:p-8 print:p-0">
 
                 <!-- Header -->
                 <div class="text-center mb-8 pb-6 border-b border-gray-200">
@@ -139,14 +139,14 @@ onMounted(() => {
 
                 <!-- This Payment (Highlighted) -->
                 <div class="mb-8 border-2 rounded-xl overflow-hidden" style="border-color: #C4A265;">
-                    <div class="px-6 py-4" style="background-color: rgba(196, 162, 101, 0.08);">
+                    <div class="px-4 md:px-6 py-4" style="background-color: rgba(196, 162, 101, 0.08);">
                         <h3 class="text-sm font-bold" style="color: #9a7d3a;">{{ $t('a_payment_details') }}</h3>
                     </div>
-                    <div class="px-6 py-5">
+                    <div class="px-4 md:px-6 py-5">
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <p class="text-xs text-gray-400 mb-1">{{ $t('a_amount_paid') }}</p>
-                                <p class="text-2xl font-bold text-emerald-600">{{ formatCurrency(payment.amount) }}</p>
+                                <p class="text-xl md:text-2xl font-bold text-emerald-600">{{ formatCurrency(payment.amount) }}</p>
                             </div>
                             <div>
                                 <p class="text-xs text-gray-400 mb-1">{{ $t('a_payment_method') }}</p>

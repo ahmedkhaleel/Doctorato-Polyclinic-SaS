@@ -74,9 +74,9 @@ const kpiCards = computed(() => [
         invertGrowth: true,
         icon: 'expenses',
         color: 'rose',
-        gradient: 'from-rose-500 to-pink-600',
-        bg: 'bg-rose-500/10',
-        ring: 'ring-rose-500/20',
+        gradient: 'from-[#C4A265] to-[#C4A265]',
+        bg: 'bg-[#C4A265]/10',
+        ring: 'ring-[#C4A265]/20',
     },
     {
         label: t('a_net_income'),
@@ -84,9 +84,9 @@ const kpiCards = computed(() => [
         subtitle: props.summary?.net_income >= 0 ? t('a_profit') : t('a_loss'),
         icon: 'net',
         color: props.summary?.net_income >= 0 ? 'blue' : 'red',
-        gradient: props.summary?.net_income >= 0 ? 'from-blue-500 to-indigo-600' : 'from-red-500 to-rose-600',
-        bg: props.summary?.net_income >= 0 ? 'bg-blue-500/10' : 'bg-red-500/10',
-        ring: props.summary?.net_income >= 0 ? 'ring-blue-500/20' : 'ring-red-500/20',
+        gradient: props.summary?.net_income >= 0 ? 'from-[#1B365D] to-[#1B365D]' : 'from-red-500 to-[#C4A265]',
+        bg: props.summary?.net_income >= 0 ? 'bg-[#1B365D]/10' : 'bg-red-500/10',
+        ring: props.summary?.net_income >= 0 ? 'ring-[#1B365D]/20' : 'ring-red-500/20',
     },
     {
         label: t('a_patient_visits'),
@@ -95,9 +95,9 @@ const kpiCards = computed(() => [
         extra: `${props.summary?.completed_visits || 0} ${t('a_completed')}`,
         icon: 'visits',
         color: 'violet',
-        gradient: 'from-violet-500 to-purple-600',
-        bg: 'bg-violet-500/10',
-        ring: 'ring-violet-500/20',
+        gradient: 'from-[#1B365D] to-[#1B365D]',
+        bg: 'bg-[#1B365D]/10',
+        ring: 'ring-[#1B365D]/20',
     },
     {
         label: t('a_new_patients'),
@@ -106,7 +106,7 @@ const kpiCards = computed(() => [
         extra: `${props.summary?.total_patients || 0} ${t('a_total')}`,
         icon: 'patients',
         color: 'amber',
-        gradient: 'from-amber-500 to-orange-600',
+        gradient: 'from-amber-500 to-[#C4A265]',
         bg: 'bg-amber-500/10',
         ring: 'ring-amber-500/20',
     },
@@ -116,7 +116,7 @@ const kpiCards = computed(() => [
         extra: formatCurrency(props.summary?.unpaid_amount),
         icon: 'unpaid',
         color: 'red',
-        gradient: 'from-red-400 to-rose-500',
+        gradient: 'from-red-400 to-[#C4A265]',
         bg: 'bg-red-500/10',
         ring: 'ring-red-500/20',
     },
@@ -136,8 +136,8 @@ const reportLinks = computed(() => [
         title: t('a_doctor_performance'),
         description: t('a_doctor_performance_desc'),
         href: '/admin/reports/doctors',
-        gradient: 'from-blue-500 to-indigo-600',
-        bg: 'bg-blue-500',
+        gradient: 'from-[#1B365D] to-[#1B365D]',
+        bg: 'bg-[#1B365D]',
         icon: 'doctor',
     },
     {
@@ -152,16 +152,16 @@ const reportLinks = computed(() => [
         title: t('a_service_analytics'),
         description: t('a_service_analytics_desc'),
         href: '/admin/reports/services',
-        gradient: 'from-violet-500 to-purple-600',
-        bg: 'bg-violet-500',
+        gradient: 'from-[#1B365D] to-[#1B365D]',
+        bg: 'bg-[#1B365D]',
         icon: 'service',
     },
     ...(props.modules?.dental?.enabled ? [{
         title: isRtl.value ? 'تقارير الأسنان' : 'Dental Reports',
         description: isRtl.value ? 'إيرادات، أداء المعمل، تقدم العلاج' : 'Revenue, lab performance, treatment progress',
         href: '/admin/reports/dental',
-        gradient: 'from-cyan-500 to-teal-600',
-        bg: 'bg-cyan-500',
+        gradient: 'from-[#1B365D] to-teal-600',
+        bg: 'bg-[#1B365D]',
         icon: 'dental',
     }] : []),
 ]);
@@ -235,7 +235,7 @@ const maxServiceVisits = computed(() => {
                             </svg>
                         </div>
                         <div>
-                            <h1 class="text-2xl font-bold text-gray-900">{{ $t('a_reports') }}</h1>
+                            <h1 class="text-xl md:text-2xl font-bold text-gray-900">{{ $t('a_reports') }}</h1>
                             <p class="text-sm text-gray-500">{{ $t('a_performance_overview') }}</p>
                         </div>
                     </div>
@@ -261,7 +261,7 @@ const maxServiceVisits = computed(() => {
                 <div
                     v-for="(card, index) in kpiCards"
                     :key="card.label"
-                    class="group relative bg-white rounded-2xl p-6 border border-gray-100/80 hover:border-gray-200 transition-all duration-500 overflow-hidden hover:shadow-lg hover:-translate-y-0.5"
+                    class="group relative bg-white rounded-2xl p-4 md:p-6 border border-gray-100/80 hover:border-gray-200 transition-all duration-500 overflow-hidden hover:shadow-lg hover:-translate-y-0.5"
                     :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'"
                     :style="{ transitionDelay: `${100 + index * 80}ms` }"
                 >
@@ -307,15 +307,15 @@ const maxServiceVisits = computed(() => {
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z" />
                             </svg>
                             <!-- Expenses -->
-                            <svg v-else-if="card.icon === 'expenses'" class="w-7 h-7 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg v-else-if="card.icon === 'expenses'" class="w-7 h-7 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6" />
                             </svg>
                             <!-- Net -->
-                            <svg v-else-if="card.icon === 'net'" class="w-7 h-7" :class="summary?.net_income >= 0 ? 'text-blue-600' : 'text-red-600'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg v-else-if="card.icon === 'net'" class="w-7 h-7" :class="summary?.net_income >= 0 ? 'text-[#1B365D]' : 'text-red-600'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                             <!-- Visits -->
-                            <svg v-else-if="card.icon === 'visits'" class="w-7 h-7 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg v-else-if="card.icon === 'visits'" class="w-7 h-7 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z" />
                             </svg>
                             <!-- Patients -->
@@ -334,12 +334,12 @@ const maxServiceVisits = computed(() => {
             <!-- ── Module Comparison (Dermatology vs Dental vs Pediatric) ──── -->
             <div
                 v-if="moduleComparison && !moduleFilter"
-                class="bg-white rounded-2xl border border-gray-100/80 p-6 transition-all duration-700"
+                class="bg-white rounded-2xl border border-gray-100/80 p-4 md:p-6 transition-all duration-700"
                 :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'"
                 :style="{ transitionDelay: '600ms' }"
             >
                 <div class="flex items-center gap-3 mb-6">
-                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-500 to-violet-500 flex items-center justify-center">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-[#1B365D] to-[#1B365D] flex items-center justify-center">
                         <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
                     </div>
                     <div>
@@ -356,37 +356,37 @@ const maxServiceVisits = computed(() => {
                             <div>
                                 <div class="flex items-center justify-between mb-1">
                                     <span class="text-xs font-medium text-gray-600 flex items-center gap-1.5">
-                                        <span class="w-2.5 h-2.5 rounded-full bg-violet-500"></span>
+                                        <span class="w-2.5 h-2.5 rounded-full bg-[#1B365D]"></span>
                                         {{ isRtl ? 'الجلدية' : 'Dermatology' }}
                                     </span>
                                     <span class="text-xs font-bold text-gray-900">{{ formatCurrency(moduleComparison.derma?.revenue || 0) }}</span>
                                 </div>
                                 <div class="h-2.5 bg-gray-100 rounded-full overflow-hidden">
-                                    <div class="h-full bg-gradient-to-r from-violet-400 to-violet-600 rounded-full transition-all duration-1000" :style="{ width: mounted ? `${Math.min(((moduleComparison.derma?.revenue || 0) / Math.max((moduleComparison.derma?.revenue || 0) + (moduleComparison.dental?.revenue || 0) + (moduleComparison.pediatric?.revenue || 0), 1)) * 100, 100)}%` : '0%' }"></div>
+                                    <div class="h-full bg-gradient-to-r from-slate-400 to-[#1B365D] rounded-full transition-all duration-1000" :style="{ width: mounted ? `${Math.min(((moduleComparison.derma?.revenue || 0) / Math.max((moduleComparison.derma?.revenue || 0) + (moduleComparison.dental?.revenue || 0) + (moduleComparison.pediatric?.revenue || 0), 1)) * 100, 100)}%` : '0%' }"></div>
                                 </div>
                             </div>
                             <div>
                                 <div class="flex items-center justify-between mb-1">
                                     <span class="text-xs font-medium text-gray-600 flex items-center gap-1.5">
-                                        <span class="w-2.5 h-2.5 rounded-full bg-cyan-500"></span>
+                                        <span class="w-2.5 h-2.5 rounded-full bg-[#1B365D]"></span>
                                         {{ isRtl ? 'الأسنان' : 'Dental' }}
                                     </span>
                                     <span class="text-xs font-bold text-gray-900">{{ formatCurrency(moduleComparison.dental?.revenue || 0) }}</span>
                                 </div>
                                 <div class="h-2.5 bg-gray-100 rounded-full overflow-hidden">
-                                    <div class="h-full bg-gradient-to-r from-cyan-400 to-cyan-600 rounded-full transition-all duration-1000" :style="{ width: mounted ? `${Math.min(((moduleComparison.dental?.revenue || 0) / Math.max((moduleComparison.derma?.revenue || 0) + (moduleComparison.dental?.revenue || 0) + (moduleComparison.pediatric?.revenue || 0), 1)) * 100, 100)}%` : '0%' }"></div>
+                                    <div class="h-full bg-gradient-to-r from-slate-400 to-[#1B365D] rounded-full transition-all duration-1000" :style="{ width: mounted ? `${Math.min(((moduleComparison.dental?.revenue || 0) / Math.max((moduleComparison.derma?.revenue || 0) + (moduleComparison.dental?.revenue || 0) + (moduleComparison.pediatric?.revenue || 0), 1)) * 100, 100)}%` : '0%' }"></div>
                                 </div>
                             </div>
                             <div>
                                 <div class="flex items-center justify-between mb-1">
                                     <span class="text-xs font-medium text-gray-600 flex items-center gap-1.5">
-                                        <span class="w-2.5 h-2.5 rounded-full bg-green-500"></span>
+                                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
                                         {{ isRtl ? 'أطفال' : 'Pediatric' }}
                                     </span>
                                     <span class="text-xs font-bold text-gray-900">{{ formatCurrency(moduleComparison.pediatric?.revenue || 0) }}</span>
                                 </div>
                                 <div class="h-2.5 bg-gray-100 rounded-full overflow-hidden">
-                                    <div class="h-full bg-gradient-to-r from-green-400 to-green-600 rounded-full transition-all duration-1000" :style="{ width: mounted ? `${Math.min(((moduleComparison.pediatric?.revenue || 0) / Math.max((moduleComparison.derma?.revenue || 0) + (moduleComparison.dental?.revenue || 0) + (moduleComparison.pediatric?.revenue || 0), 1)) * 100, 100)}%` : '0%' }"></div>
+                                    <div class="h-full bg-gradient-to-r from-emerald-400 to-emerald-600 rounded-full transition-all duration-1000" :style="{ width: mounted ? `${Math.min(((moduleComparison.pediatric?.revenue || 0) / Math.max((moduleComparison.derma?.revenue || 0) + (moduleComparison.dental?.revenue || 0) + (moduleComparison.pediatric?.revenue || 0), 1)) * 100, 100)}%` : '0%' }"></div>
                                 </div>
                             </div>
                         </div>
@@ -399,7 +399,7 @@ const maxServiceVisits = computed(() => {
                             <div>
                                 <div class="flex items-center justify-between mb-1">
                                     <span class="text-xs font-medium text-gray-600 flex items-center gap-1.5">
-                                        <span class="w-2.5 h-2.5 rounded-full bg-violet-500"></span>
+                                        <span class="w-2.5 h-2.5 rounded-full bg-[#1B365D]"></span>
                                         {{ isRtl ? 'الجلدية' : 'Dermatology' }}
                                     </span>
                                     <div class="flex items-center gap-2">
@@ -408,13 +408,13 @@ const maxServiceVisits = computed(() => {
                                     </div>
                                 </div>
                                 <div class="h-2.5 bg-gray-100 rounded-full overflow-hidden">
-                                    <div class="h-full bg-gradient-to-r from-violet-400 to-violet-600 rounded-full transition-all duration-1000" :style="{ width: mounted ? `${Math.min(((moduleComparison.derma?.visits || 0) / Math.max((moduleComparison.derma?.visits || 0) + (moduleComparison.dental?.visits || 0) + (moduleComparison.pediatric?.visits || 0), 1)) * 100, 100)}%` : '0%' }"></div>
+                                    <div class="h-full bg-gradient-to-r from-slate-400 to-[#1B365D] rounded-full transition-all duration-1000" :style="{ width: mounted ? `${Math.min(((moduleComparison.derma?.visits || 0) / Math.max((moduleComparison.derma?.visits || 0) + (moduleComparison.dental?.visits || 0) + (moduleComparison.pediatric?.visits || 0), 1)) * 100, 100)}%` : '0%' }"></div>
                                 </div>
                             </div>
                             <div>
                                 <div class="flex items-center justify-between mb-1">
                                     <span class="text-xs font-medium text-gray-600 flex items-center gap-1.5">
-                                        <span class="w-2.5 h-2.5 rounded-full bg-cyan-500"></span>
+                                        <span class="w-2.5 h-2.5 rounded-full bg-[#1B365D]"></span>
                                         {{ isRtl ? 'الأسنان' : 'Dental' }}
                                     </span>
                                     <div class="flex items-center gap-2">
@@ -423,13 +423,13 @@ const maxServiceVisits = computed(() => {
                                     </div>
                                 </div>
                                 <div class="h-2.5 bg-gray-100 rounded-full overflow-hidden">
-                                    <div class="h-full bg-gradient-to-r from-cyan-400 to-cyan-600 rounded-full transition-all duration-1000" :style="{ width: mounted ? `${Math.min(((moduleComparison.dental?.visits || 0) / Math.max((moduleComparison.derma?.visits || 0) + (moduleComparison.dental?.visits || 0) + (moduleComparison.pediatric?.visits || 0), 1)) * 100, 100)}%` : '0%' }"></div>
+                                    <div class="h-full bg-gradient-to-r from-slate-400 to-[#1B365D] rounded-full transition-all duration-1000" :style="{ width: mounted ? `${Math.min(((moduleComparison.dental?.visits || 0) / Math.max((moduleComparison.derma?.visits || 0) + (moduleComparison.dental?.visits || 0) + (moduleComparison.pediatric?.visits || 0), 1)) * 100, 100)}%` : '0%' }"></div>
                                 </div>
                             </div>
                             <div>
                                 <div class="flex items-center justify-between mb-1">
                                     <span class="text-xs font-medium text-gray-600 flex items-center gap-1.5">
-                                        <span class="w-2.5 h-2.5 rounded-full bg-green-500"></span>
+                                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
                                         {{ isRtl ? 'أطفال' : 'Pediatric' }}
                                     </span>
                                     <div class="flex items-center gap-2">
@@ -438,7 +438,7 @@ const maxServiceVisits = computed(() => {
                                     </div>
                                 </div>
                                 <div class="h-2.5 bg-gray-100 rounded-full overflow-hidden">
-                                    <div class="h-full bg-gradient-to-r from-green-400 to-green-600 rounded-full transition-all duration-1000" :style="{ width: mounted ? `${Math.min(((moduleComparison.pediatric?.visits || 0) / Math.max((moduleComparison.derma?.visits || 0) + (moduleComparison.dental?.visits || 0) + (moduleComparison.pediatric?.visits || 0), 1)) * 100, 100)}%` : '0%' }"></div>
+                                    <div class="h-full bg-gradient-to-r from-emerald-400 to-emerald-600 rounded-full transition-all duration-1000" :style="{ width: mounted ? `${Math.min(((moduleComparison.pediatric?.visits || 0) / Math.max((moduleComparison.derma?.visits || 0) + (moduleComparison.dental?.visits || 0) + (moduleComparison.pediatric?.visits || 0), 1)) * 100, 100)}%` : '0%' }"></div>
                                 </div>
                             </div>
                         </div>
@@ -451,37 +451,37 @@ const maxServiceVisits = computed(() => {
                             <div>
                                 <div class="flex items-center justify-between mb-1">
                                     <span class="text-xs font-medium text-gray-600 flex items-center gap-1.5">
-                                        <span class="w-2.5 h-2.5 rounded-full bg-violet-500"></span>
+                                        <span class="w-2.5 h-2.5 rounded-full bg-[#1B365D]"></span>
                                         {{ isRtl ? 'الجلدية' : 'Dermatology' }}
                                     </span>
                                     <span class="text-xs font-bold text-gray-900">{{ moduleComparison.derma?.patients || 0 }}</span>
                                 </div>
                                 <div class="h-2.5 bg-gray-100 rounded-full overflow-hidden">
-                                    <div class="h-full bg-gradient-to-r from-violet-400 to-violet-600 rounded-full transition-all duration-1000" :style="{ width: mounted ? `${Math.min(((moduleComparison.derma?.patients || 0) / Math.max((moduleComparison.derma?.patients || 0) + (moduleComparison.dental?.patients || 0) + (moduleComparison.pediatric?.patients || 0), 1)) * 100, 100)}%` : '0%' }"></div>
+                                    <div class="h-full bg-gradient-to-r from-slate-400 to-[#1B365D] rounded-full transition-all duration-1000" :style="{ width: mounted ? `${Math.min(((moduleComparison.derma?.patients || 0) / Math.max((moduleComparison.derma?.patients || 0) + (moduleComparison.dental?.patients || 0) + (moduleComparison.pediatric?.patients || 0), 1)) * 100, 100)}%` : '0%' }"></div>
                                 </div>
                             </div>
                             <div>
                                 <div class="flex items-center justify-between mb-1">
                                     <span class="text-xs font-medium text-gray-600 flex items-center gap-1.5">
-                                        <span class="w-2.5 h-2.5 rounded-full bg-cyan-500"></span>
+                                        <span class="w-2.5 h-2.5 rounded-full bg-[#1B365D]"></span>
                                         {{ isRtl ? 'الأسنان' : 'Dental' }}
                                     </span>
                                     <span class="text-xs font-bold text-gray-900">{{ moduleComparison.dental?.patients || 0 }}</span>
                                 </div>
                                 <div class="h-2.5 bg-gray-100 rounded-full overflow-hidden">
-                                    <div class="h-full bg-gradient-to-r from-cyan-400 to-cyan-600 rounded-full transition-all duration-1000" :style="{ width: mounted ? `${Math.min(((moduleComparison.dental?.patients || 0) / Math.max((moduleComparison.derma?.patients || 0) + (moduleComparison.dental?.patients || 0) + (moduleComparison.pediatric?.patients || 0), 1)) * 100, 100)}%` : '0%' }"></div>
+                                    <div class="h-full bg-gradient-to-r from-slate-400 to-[#1B365D] rounded-full transition-all duration-1000" :style="{ width: mounted ? `${Math.min(((moduleComparison.dental?.patients || 0) / Math.max((moduleComparison.derma?.patients || 0) + (moduleComparison.dental?.patients || 0) + (moduleComparison.pediatric?.patients || 0), 1)) * 100, 100)}%` : '0%' }"></div>
                                 </div>
                             </div>
                             <div>
                                 <div class="flex items-center justify-between mb-1">
                                     <span class="text-xs font-medium text-gray-600 flex items-center gap-1.5">
-                                        <span class="w-2.5 h-2.5 rounded-full bg-green-500"></span>
+                                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
                                         {{ isRtl ? 'أطفال' : 'Pediatric' }}
                                     </span>
                                     <span class="text-xs font-bold text-gray-900">{{ moduleComparison.pediatric?.patients || 0 }}</span>
                                 </div>
                                 <div class="h-2.5 bg-gray-100 rounded-full overflow-hidden">
-                                    <div class="h-full bg-gradient-to-r from-green-400 to-green-600 rounded-full transition-all duration-1000" :style="{ width: mounted ? `${Math.min(((moduleComparison.pediatric?.patients || 0) / Math.max((moduleComparison.derma?.patients || 0) + (moduleComparison.dental?.patients || 0) + (moduleComparison.pediatric?.patients || 0), 1)) * 100, 100)}%` : '0%' }"></div>
+                                    <div class="h-full bg-gradient-to-r from-emerald-400 to-emerald-600 rounded-full transition-all duration-1000" :style="{ width: mounted ? `${Math.min(((moduleComparison.pediatric?.patients || 0) / Math.max((moduleComparison.derma?.patients || 0) + (moduleComparison.dental?.patients || 0) + (moduleComparison.pediatric?.patients || 0), 1)) * 100, 100)}%` : '0%' }"></div>
                                 </div>
                             </div>
                         </div>
@@ -509,7 +509,7 @@ const maxServiceVisits = computed(() => {
                             <!-- Color accent side -->
                             <div :class="`bg-gradient-to-b ${report.gradient} w-1.5 group-hover:w-2 transition-all duration-300`"></div>
 
-                            <div class="flex-1 p-6 flex items-center gap-5">
+                            <div class="flex-1 p-4 md:p-6 flex items-center gap-5">
                                 <!-- Icon circle -->
                                 <div :class="`${report.bg} w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-current/10 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500`">
                                     <svg v-if="report.icon === 'financial'" class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -551,7 +551,7 @@ const maxServiceVisits = computed(() => {
 
                 <!-- Top Services -->
                 <div
-                    class="bg-white rounded-2xl border border-gray-100/80 p-6 transition-all duration-700"
+                    class="bg-white rounded-2xl border border-gray-100/80 p-4 md:p-6 transition-all duration-700"
                     :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'"
                     :style="{ transitionDelay: '1100ms' }"
                 >
@@ -581,7 +581,7 @@ const maxServiceVisits = computed(() => {
 
                 <!-- Top Doctors -->
                 <div
-                    class="bg-white rounded-2xl border border-gray-100/80 p-6 transition-all duration-700"
+                    class="bg-white rounded-2xl border border-gray-100/80 p-4 md:p-6 transition-all duration-700"
                     :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'"
                     :style="{ transitionDelay: '1200ms' }"
                 >
@@ -613,7 +613,7 @@ const maxServiceVisits = computed(() => {
 
                 <!-- Export Section -->
                 <div
-                    class="bg-white rounded-2xl border border-gray-100/80 p-6 transition-all duration-700"
+                    class="bg-white rounded-2xl border border-gray-100/80 p-4 md:p-6 transition-all duration-700"
                     :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'"
                     :style="{ transitionDelay: '1300ms' }"
                 >

@@ -111,13 +111,13 @@ const sections = [
         <div class="space-y-6 max-w-4xl">
             <!-- Header -->
             <div>
-                <h1 class="text-2xl font-bold text-gray-800">{{ $t('a_tracking_pixels') }}</h1>
+                <h1 class="text-xl md:text-2xl font-bold text-gray-800">{{ $t('a_tracking_pixels') }}</h1>
                 <p class="text-sm text-gray-500 mt-1">{{ $t('a_configure_tracking') }}</p>
             </div>
 
             <form @submit.prevent="submit" class="space-y-6">
                 <!-- Pixel Sections -->
-                <div v-for="section in sections" :key="section.title" class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-5">
+                <div v-for="section in sections" :key="section.title" class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 md:p-6 space-y-5">
                     <div class="flex items-center gap-3 border-b border-gray-200 pb-3">
                         <div class="w-8 h-8 rounded-lg flex items-center justify-center" :style="{ backgroundColor: section.color + '15' }">
                             <!-- Google -->
@@ -153,7 +153,7 @@ const sections = [
                             v-model="form[field.key]"
                             type="text"
                             :placeholder="field.placeholder"
-                            class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm font-mono focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                            class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm font-mono focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                         />
                         <p class="text-xs text-gray-400">{{ field.description }}</p>
                         <p v-if="form.errors[field.key]" class="text-sm text-red-600">{{ form.errors[field.key] }}</p>
@@ -161,10 +161,10 @@ const sections = [
                 </div>
 
                 <!-- Custom Scripts -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-5">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 md:p-6 space-y-5">
                     <div class="flex items-center gap-3 border-b border-gray-200 pb-3">
-                        <div class="w-8 h-8 rounded-lg flex items-center justify-center bg-purple-50">
-                            <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="w-8 h-8 rounded-lg flex items-center justify-center bg-slate-50">
+                            <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
                             </svg>
                         </div>
@@ -185,7 +185,7 @@ const sections = [
                         <textarea
                             v-model="form.tracking_head_scripts"
                             rows="4"
-                            class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-xs font-mono focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                            class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-xs font-mono focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                             placeholder="<!-- Paste your head scripts here -->"
                         ></textarea>
                         <p class="mt-1 text-xs text-gray-400">Injected before &lt;/head&gt; tag</p>
@@ -196,7 +196,7 @@ const sections = [
                         <textarea
                             v-model="form.tracking_body_start_scripts"
                             rows="4"
-                            class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-xs font-mono focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                            class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-xs font-mono focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                             placeholder="<!-- Paste your body start scripts here -->"
                         ></textarea>
                         <p class="mt-1 text-xs text-gray-400">Injected right after &lt;body&gt; tag</p>
@@ -207,7 +207,7 @@ const sections = [
                         <textarea
                             v-model="form.tracking_body_end_scripts"
                             rows="4"
-                            class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-xs font-mono focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                            class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-xs font-mono focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                             placeholder="<!-- Paste your body end scripts here -->"
                         ></textarea>
                         <p class="mt-1 text-xs text-gray-400">Injected before &lt;/body&gt; tag</p>

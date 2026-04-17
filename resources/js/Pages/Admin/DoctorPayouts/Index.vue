@@ -94,7 +94,7 @@ const statusDistribution = computed(() => {
         <!-- Header -->
         <div class="flex items-start justify-between mb-8">
             <div>
-                <h1 class="text-2xl font-bold text-gray-900 flex items-center gap-3">
+                <h1 class="text-xl md:text-2xl font-bold text-gray-900 flex items-center gap-3">
                     {{ $t('a_doctor_payouts') }}
                     <span v-if="summary.count_confirmed > 0" class="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full bg-amber-50 text-amber-600 border border-amber-100">
                         <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
@@ -117,7 +117,7 @@ const statusDistribution = computed(() => {
                 <div class="flex items-start justify-between">
                     <div>
                         <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">{{ $t('a_draft') }}</p>
-                        <p class="text-2xl font-bold text-gray-800 mt-1.5 tabular-nums">{{ formatCurrency(summary.total_draft) }}</p>
+                        <p class="text-xl md:text-2xl font-bold text-gray-800 mt-1.5 tabular-nums">{{ formatCurrency(summary.total_draft) }}</p>
                         <p class="text-[10px] text-gray-400 mt-0.5">{{ currencyCode }}</p>
                     </div>
                     <div class="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center">
@@ -136,7 +136,7 @@ const statusDistribution = computed(() => {
                 <div class="flex items-start justify-between">
                     <div>
                         <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">{{ $t('a_pending_payment') }}</p>
-                        <p class="text-2xl font-bold text-amber-600 mt-1.5 tabular-nums">{{ formatCurrency(summary.total_confirmed) }}</p>
+                        <p class="text-xl md:text-2xl font-bold text-amber-600 mt-1.5 tabular-nums">{{ formatCurrency(summary.total_confirmed) }}</p>
                         <p class="text-[10px] text-gray-400 mt-0.5">{{ currencyCode }}</p>
                     </div>
                     <div class="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center">
@@ -155,7 +155,7 @@ const statusDistribution = computed(() => {
                 <div class="flex items-start justify-between">
                     <div>
                         <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">{{ $t('a_paid_this_month') }}</p>
-                        <p class="text-2xl font-bold text-emerald-600 mt-1.5 tabular-nums">{{ formatCurrency(summary.total_paid_this_month) }}</p>
+                        <p class="text-xl md:text-2xl font-bold text-emerald-600 mt-1.5 tabular-nums">{{ formatCurrency(summary.total_paid_this_month) }}</p>
                         <p class="text-[10px] text-gray-400 mt-0.5">{{ currencyCode }}</p>
                     </div>
                     <div class="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center">
@@ -174,7 +174,7 @@ const statusDistribution = computed(() => {
                 <div class="flex items-start justify-between">
                     <div>
                         <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">{{ $t('a_outstanding') }}</p>
-                        <p class="text-2xl font-bold text-[#C4A265] mt-1.5 tabular-nums">{{ formatCurrency(summary.total_outstanding) }}</p>
+                        <p class="text-xl md:text-2xl font-bold text-[#C4A265] mt-1.5 tabular-nums">{{ formatCurrency(summary.total_outstanding) }}</p>
                         <p class="text-[10px] text-gray-400 mt-0.5">{{ currencyCode }}</p>
                     </div>
                     <div class="w-10 h-10 rounded-xl bg-[#C4A265]/10 flex items-center justify-center">
@@ -270,7 +270,7 @@ const statusDistribution = computed(() => {
                 <!-- Payouts Table -->
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
                     <!-- Table Header -->
-                    <div class="px-6 py-3.5 border-b border-gray-100 bg-gradient-to-r from-gray-50/80 to-white flex items-center justify-between">
+                    <div class="px-4 md:px-6 py-3.5 border-b border-gray-100 bg-gradient-to-r from-gray-50/80 to-white flex items-center justify-between">
                         <div class="flex items-center gap-2">
                             <h2 class="text-sm font-bold text-gray-700">{{ $t('a_all_payouts') }}</h2>
                             <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-gray-100 text-gray-500">{{ payouts.total || 0 }}</span>
@@ -284,21 +284,21 @@ const statusDistribution = computed(() => {
                         <table class="w-full text-sm">
                             <thead>
                                 <tr class="border-b border-gray-100">
-                                    <th class="text-start px-6 py-3 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">{{ $t('a_payout') }}</th>
+                                    <th class="text-start px-4 md:px-6 py-3 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">{{ $t('a_payout') }}</th>
                                     <th class="text-start px-4 py-3 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">{{ $t('a_doctor') }}</th>
                                     <th class="text-start px-4 py-3 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">{{ $t('a_period') }}</th>
                                     <th class="text-center px-4 py-3 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">{{ $t('a_visits') }}</th>
                                     <th class="text-end px-4 py-3 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">{{ $t('a_commission') }}</th>
                                     <th class="text-end px-4 py-3 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">{{ $t('a_net_amount') }}</th>
                                     <th class="text-center px-4 py-3 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">{{ $t('a_status') }}</th>
-                                    <th class="text-center px-6 py-3 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">{{ $t('a_actions') }}</th>
+                                    <th class="text-center px-4 md:px-6 py-3 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">{{ $t('a_actions') }}</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-50">
                                 <tr v-for="p in payouts.data" :key="p.id"
                                     class="group hover:bg-gray-50/60 transition-colors cursor-pointer"
                                     @click="router.visit(`/admin/doctor-payouts/${p.id}`)">
-                                    <td class="px-6 py-3.5">
+                                    <td class="px-4 md:px-6 py-3.5">
                                         <div class="flex items-center gap-2.5">
                                             <div class="w-8 h-8 rounded-lg flex items-center justify-center text-xs" :class="[statusConfig[p.status]?.bg]">
                                                 <span class="w-2 h-2 rounded-full" :class="[statusConfig[p.status]?.dot]"></span>
@@ -342,7 +342,7 @@ const statusDistribution = computed(() => {
                                             {{ statusConfig[p.status]?.label || p.status }}
                                         </span>
                                     </td>
-                                    <td class="px-6 py-3.5 text-center" @click.stop>
+                                    <td class="px-4 md:px-6 py-3.5 text-center" @click.stop>
                                         <div class="flex items-center justify-center gap-1">
                                             <Link :href="`/admin/doctor-payouts/${p.id}`"
                                                 class="inline-flex items-center gap-1 text-[11px] font-semibold text-[#C4A265] hover:text-[#B3914F] px-2 py-1 rounded-lg hover:bg-[#C4A265]/5 transition-all">
@@ -380,7 +380,7 @@ const statusDistribution = computed(() => {
                     </div>
 
                     <!-- Pagination -->
-                    <div v-if="payouts.links?.length > 3" class="flex items-center justify-between px-6 py-3 border-t border-gray-100 bg-gray-50/40">
+                    <div v-if="payouts.links?.length > 3" class="flex items-center justify-between px-4 md:px-6 py-3 border-t border-gray-100 bg-gray-50/40">
                         <p class="text-[11px] text-gray-400">Page {{ payouts.current_page }} of {{ payouts.last_page }}</p>
                         <div class="flex gap-1">
                             <template v-for="link in payouts.links" :key="link.label">
@@ -417,7 +417,7 @@ const statusDistribution = computed(() => {
                         </div>
                         <div class="flex items-center justify-between">
                             <span class="text-xs text-gray-500 flex items-center gap-2">
-                                <span class="w-2 h-2 rounded-full bg-blue-400"></span>
+                                <span class="w-2 h-2 rounded-full bg-slate-400"></span>
                                 {{ $t('a_avg_payout') }}
                             </span>
                             <span class="text-xs font-bold text-gray-800 tabular-nums">{{ formatCurrency(summary.avg_payout_amount) }}</span>

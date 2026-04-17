@@ -169,11 +169,11 @@ const currentPhotoUrl = props.patient.photo
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
                     </Link>
                     <div>
-                        <h1 class="text-2xl font-bold text-gray-800">{{ $t('a_edit_patient') }}</h1>
+                        <h1 class="text-xl md:text-2xl font-bold text-gray-800">{{ $t('a_edit_patient') }}</h1>
                         <p class="text-sm text-gray-500 mt-0.5">{{ patient.full_name }}</p>
                     </div>
                 </div>
-                <span class="text-sm font-mono px-4 py-1.5 rounded-xl bg-yellow-50 border border-yellow-100 font-semibold" style="color: #C4A265;">{{ patient.file_number }}</span>
+                <span class="text-sm font-mono px-4 py-1.5 rounded-xl bg-amber-50 border border-amber-100 font-semibold" style="color: #C4A265;">{{ patient.file_number }}</span>
             </div>
 
             <form @submit.prevent="submit" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -181,7 +181,7 @@ const currentPhotoUrl = props.patient.photo
                 <div class="lg:col-span-2 space-y-6">
                     <!-- Personal Information -->
                     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                        <div class="px-6 py-4 border-b border-gray-100 flex items-center gap-3">
+                        <div class="px-4 md:px-6 py-4 border-b border-gray-100 flex items-center gap-3">
                             <div class="w-9 h-9 rounded-xl flex items-center justify-center" style="background-color: rgba(196, 162, 101, 0.1);">
                                 <svg class="w-5 h-5" style="color: #C4A265;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
                             </div>
@@ -191,7 +191,7 @@ const currentPhotoUrl = props.patient.photo
                             </div>
                         </div>
 
-                        <div class="p-6 space-y-5">
+                        <div class="p-4 md:p-6 space-y-5">
                             <!-- Full Name -->
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $t('a_full_name') }} <span class="text-red-400">*</span></label>
@@ -201,7 +201,7 @@ const currentPhotoUrl = props.patient.photo
                                     </div>
                                     <input v-model="form.full_name" type="text"
                                         class="w-full pl-10 pr-4 py-2.5 border rounded-xl text-sm transition-all duration-200"
-                                        :class="getError('full_name') ? 'border-red-300 bg-red-50 focus:ring-red-200 focus:border-red-400' : 'border-gray-200 bg-gray-50/50 focus:ring-2 focus:ring-yellow-100 focus:border-yellow-300 focus:bg-white hover:border-gray-300'" />
+                                        :class="getError('full_name') ? 'border-red-300 bg-red-50 focus:ring-red-200 focus:border-red-400' : 'border-gray-200 bg-gray-50/50 focus:ring-2 focus:ring-amber-100 focus:border-amber-300 focus:bg-white hover:border-gray-300'" />
                                 </div>
                                 <p v-if="getError('full_name')" class="mt-1.5 text-xs text-red-500 flex items-center gap-1">
                                     <svg class="w-3.5 h-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
@@ -219,7 +219,7 @@ const currentPhotoUrl = props.patient.photo
                                         </div>
                                         <input v-model="form.phone" type="tel" dir="ltr" @input="filterPhoneInput('phone')"
                                             class="w-full pl-10 pr-4 py-2.5 border rounded-xl text-sm transition-all duration-200"
-                                            :class="getError('phone') ? 'border-red-300 bg-red-50 focus:ring-red-200 focus:border-red-400' : 'border-gray-200 bg-gray-50/50 focus:ring-2 focus:ring-yellow-100 focus:border-yellow-300 focus:bg-white hover:border-gray-300'" />
+                                            :class="getError('phone') ? 'border-red-300 bg-red-50 focus:ring-red-200 focus:border-red-400' : 'border-gray-200 bg-gray-50/50 focus:ring-2 focus:ring-amber-100 focus:border-amber-300 focus:bg-white hover:border-gray-300'" />
                                     </div>
                                     <p v-if="getError('phone')" class="mt-1.5 text-xs text-red-500 flex items-center gap-1">
                                         <svg class="w-3.5 h-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
@@ -234,7 +234,7 @@ const currentPhotoUrl = props.patient.photo
                                         </div>
                                         <input v-model="form.phone2" type="tel" dir="ltr" @input="filterPhoneInput('phone2')"
                                             class="w-full pl-10 pr-4 py-2.5 border rounded-xl text-sm transition-all duration-200"
-                                            :class="getError('phone2') ? 'border-red-300 bg-red-50 focus:ring-red-200 focus:border-red-400' : 'border-gray-200 bg-gray-50/50 focus:ring-2 focus:ring-yellow-100 focus:border-yellow-300 focus:bg-white hover:border-gray-300'" />
+                                            :class="getError('phone2') ? 'border-red-300 bg-red-50 focus:ring-red-200 focus:border-red-400' : 'border-gray-200 bg-gray-50/50 focus:ring-2 focus:ring-amber-100 focus:border-amber-300 focus:bg-white hover:border-gray-300'" />
                                     </div>
                                     <p v-if="getError('phone2')" class="mt-1.5 text-xs text-red-500 flex items-center gap-1">
                                         <svg class="w-3.5 h-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
@@ -253,7 +253,7 @@ const currentPhotoUrl = props.patient.photo
                                         </div>
                                         <input v-model="form.email" type="email"
                                             class="w-full pl-10 pr-4 py-2.5 border rounded-xl text-sm transition-all duration-200"
-                                            :class="getError('email') ? 'border-red-300 bg-red-50 focus:ring-red-200 focus:border-red-400' : 'border-gray-200 bg-gray-50/50 focus:ring-2 focus:ring-yellow-100 focus:border-yellow-300 focus:bg-white hover:border-gray-300'" />
+                                            :class="getError('email') ? 'border-red-300 bg-red-50 focus:ring-red-200 focus:border-red-400' : 'border-gray-200 bg-gray-50/50 focus:ring-2 focus:ring-amber-100 focus:border-amber-300 focus:bg-white hover:border-gray-300'" />
                                     </div>
                                     <p v-if="getError('email')" class="mt-1.5 text-xs text-red-500 flex items-center gap-1">
                                         <svg class="w-3.5 h-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
@@ -267,7 +267,7 @@ const currentPhotoUrl = props.patient.photo
                                             <svg class="w-4.5 h-4.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                                         </div>
                                         <input v-model="form.date_of_birth" type="date"
-                                            class="w-full pl-10 pr-4 py-2.5 border border-gray-200 bg-gray-50/50 rounded-xl text-sm focus:ring-2 focus:ring-yellow-100 focus:border-yellow-300 focus:bg-white hover:border-gray-300 transition-all duration-200" />
+                                            class="w-full pl-10 pr-4 py-2.5 border border-gray-200 bg-gray-50/50 rounded-xl text-sm focus:ring-2 focus:ring-amber-100 focus:border-amber-300 focus:bg-white hover:border-gray-300 transition-all duration-200" />
                                     </div>
                                 </div>
                             </div>
@@ -279,14 +279,14 @@ const currentPhotoUrl = props.patient.photo
                                     <div class="flex gap-2">
                                         <label class="flex-1 cursor-pointer">
                                             <input type="radio" v-model="form.gender" value="female" class="sr-only peer" />
-                                            <div class="flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl border text-sm font-medium transition-all peer-checked:border-pink-300 peer-checked:bg-pink-50 peer-checked:text-pink-700 border-gray-200 text-gray-500 hover:border-gray-300">
+                                            <div class="flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl border text-sm font-medium transition-all peer-checked:border-amber-300 peer-checked:bg-amber-50 peer-checked:text-[#C4A265] border-gray-200 text-gray-500 hover:border-gray-300">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" stroke-width="1.5"/><path stroke-linecap="round" stroke-width="1.5" d="M12 12v8m-3-3h6"/></svg>
                                                 {{ $t('a_female') }}
                                             </div>
                                         </label>
                                         <label class="flex-1 cursor-pointer">
                                             <input type="radio" v-model="form.gender" value="male" class="sr-only peer" />
-                                            <div class="flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl border text-sm font-medium transition-all peer-checked:border-blue-300 peer-checked:bg-blue-50 peer-checked:text-blue-700 border-gray-200 text-gray-500 hover:border-gray-300">
+                                            <div class="flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl border text-sm font-medium transition-all peer-checked:border-slate-300 peer-checked:bg-slate-50 peer-checked:text-[#1B365D] border-gray-200 text-gray-500 hover:border-gray-300">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="10" cy="14" r="4" stroke-width="1.5"/><path stroke-linecap="round" stroke-width="1.5" d="M14 10l6-6m0 0h-5m5 0v5"/></svg>
                                                 {{ $t('a_male') }}
                                             </div>
@@ -300,7 +300,7 @@ const currentPhotoUrl = props.patient.photo
                                             <svg class="w-4.5 h-4.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
                                         </div>
                                         <select v-model="form.blood_type"
-                                            class="w-full pl-10 pr-9 py-2.5 border border-gray-200 bg-gray-50/50 rounded-xl text-sm focus:ring-2 focus:ring-yellow-100 focus:border-yellow-300 focus:bg-white hover:border-gray-300 transition-all duration-200 appearance-none">
+                                            class="w-full pl-10 pr-9 py-2.5 border border-gray-200 bg-gray-50/50 rounded-xl text-sm focus:ring-2 focus:ring-amber-100 focus:border-amber-300 focus:bg-white hover:border-gray-300 transition-all duration-200 appearance-none">
                                             <option value="">Not specified</option>
                                             <option v-for="bt in bloodTypes" :key="bt" :value="bt">{{ bt }}</option>
                                         </select>
@@ -316,7 +316,7 @@ const currentPhotoUrl = props.patient.photo
                                             <svg class="w-4.5 h-4.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
                                         </div>
                                         <select v-model="form.marital_status"
-                                            class="w-full pl-10 pr-9 py-2.5 border border-gray-200 bg-gray-50/50 rounded-xl text-sm focus:ring-2 focus:ring-yellow-100 focus:border-yellow-300 focus:bg-white hover:border-gray-300 transition-all duration-200 appearance-none">
+                                            class="w-full pl-10 pr-9 py-2.5 border border-gray-200 bg-gray-50/50 rounded-xl text-sm focus:ring-2 focus:ring-amber-100 focus:border-amber-300 focus:bg-white hover:border-gray-300 transition-all duration-200 appearance-none">
                                             <option v-for="ms in maritalOptions" :key="ms.value" :value="ms.value">{{ ms.label }}</option>
                                         </select>
                                         <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
@@ -335,7 +335,7 @@ const currentPhotoUrl = props.patient.photo
                                             <svg class="w-4.5 h-4.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                                         </div>
                                         <select v-model="form.nationality"
-                                            class="w-full pl-10 pr-9 py-2.5 border border-gray-200 bg-gray-50/50 rounded-xl text-sm focus:ring-2 focus:ring-yellow-100 focus:border-yellow-300 focus:bg-white hover:border-gray-300 transition-all duration-200 appearance-none">
+                                            class="w-full pl-10 pr-9 py-2.5 border border-gray-200 bg-gray-50/50 rounded-xl text-sm focus:ring-2 focus:ring-amber-100 focus:border-amber-300 focus:bg-white hover:border-gray-300 transition-all duration-200 appearance-none">
                                             <option value="">Not specified</option>
                                             <option v-for="nat in nationalities" :key="nat" :value="nat">{{ nat }}</option>
                                         </select>
@@ -351,7 +351,7 @@ const currentPhotoUrl = props.patient.photo
                                             <svg class="w-4.5 h-4.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                                         </div>
                                         <input v-model="form.occupation" type="text"
-                                            class="w-full pl-10 pr-4 py-2.5 border border-gray-200 bg-gray-50/50 rounded-xl text-sm focus:ring-2 focus:ring-yellow-100 focus:border-yellow-300 focus:bg-white hover:border-gray-300 transition-all duration-200" />
+                                            class="w-full pl-10 pr-4 py-2.5 border border-gray-200 bg-gray-50/50 rounded-xl text-sm focus:ring-2 focus:ring-amber-100 focus:border-amber-300 focus:bg-white hover:border-gray-300 transition-all duration-200" />
                                     </div>
                                 </div>
                             </div>
@@ -364,7 +364,7 @@ const currentPhotoUrl = props.patient.photo
                                         <svg class="w-4.5 h-4.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                                     </div>
                                     <input v-model="form.address" type="text"
-                                        class="w-full pl-10 pr-4 py-2.5 border border-gray-200 bg-gray-50/50 rounded-xl text-sm focus:ring-2 focus:ring-yellow-100 focus:border-yellow-300 focus:bg-white hover:border-gray-300 transition-all duration-200" />
+                                        class="w-full pl-10 pr-4 py-2.5 border border-gray-200 bg-gray-50/50 rounded-xl text-sm focus:ring-2 focus:ring-amber-100 focus:border-amber-300 focus:bg-white hover:border-gray-300 transition-all duration-200" />
                                 </div>
                             </div>
                         </div>
@@ -372,7 +372,7 @@ const currentPhotoUrl = props.patient.photo
 
                     <!-- Emergency Contact -->
                     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                        <div class="px-6 py-4 border-b border-gray-100 flex items-center gap-3">
+                        <div class="px-4 md:px-6 py-4 border-b border-gray-100 flex items-center gap-3">
                             <div class="w-9 h-9 rounded-xl bg-red-50 flex items-center justify-center">
                                 <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M18.364 5.636a9 9 0 11-12.728 0M12 9v4m0 4h.01"/></svg>
                             </div>
@@ -386,7 +386,7 @@ const currentPhotoUrl = props.patient.photo
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $t('a_contact_name') }}</label>
                                     <input v-model="form.emergency_contact_name" type="text"
-                                        class="w-full px-4 py-2.5 border border-gray-200 bg-gray-50/50 rounded-xl text-sm focus:ring-2 focus:ring-yellow-100 focus:border-yellow-300 focus:bg-white hover:border-gray-300 transition-all duration-200" />
+                                        class="w-full px-4 py-2.5 border border-gray-200 bg-gray-50/50 rounded-xl text-sm focus:ring-2 focus:ring-amber-100 focus:border-amber-300 focus:bg-white hover:border-gray-300 transition-all duration-200" />
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $t('a_contact_phone') }}</label>
@@ -396,7 +396,7 @@ const currentPhotoUrl = props.patient.photo
                                         </div>
                                         <input v-model="form.emergency_contact_phone" type="tel" dir="ltr" @input="filterPhoneInput('emergency_contact_phone')"
                                             class="w-full pl-10 pr-4 py-2.5 border rounded-xl text-sm transition-all duration-200"
-                                            :class="getError('emergency_contact_phone') ? 'border-red-300 bg-red-50 focus:ring-red-200 focus:border-red-400' : 'border-gray-200 bg-gray-50/50 focus:ring-2 focus:ring-yellow-100 focus:border-yellow-300 focus:bg-white hover:border-gray-300'" />
+                                            :class="getError('emergency_contact_phone') ? 'border-red-300 bg-red-50 focus:ring-red-200 focus:border-red-400' : 'border-gray-200 bg-gray-50/50 focus:ring-2 focus:ring-amber-100 focus:border-amber-300 focus:bg-white hover:border-gray-300'" />
                                     </div>
                                     <p v-if="getError('emergency_contact_phone')" class="mt-1.5 text-xs text-red-500 flex items-center gap-1">
                                         <svg class="w-3.5 h-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
@@ -409,7 +409,7 @@ const currentPhotoUrl = props.patient.photo
 
                     <!-- Medical Information -->
                     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                        <div class="px-6 py-4 border-b border-gray-100 flex items-center gap-3">
+                        <div class="px-4 md:px-6 py-4 border-b border-gray-100 flex items-center gap-3">
                             <div class="w-9 h-9 rounded-xl bg-teal-50 flex items-center justify-center">
                                 <svg class="w-5 h-5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                             </div>
@@ -418,28 +418,28 @@ const currentPhotoUrl = props.patient.photo
                                 <p class="text-xs text-gray-400">{{ $t('a_important_medical_history') }}</p>
                             </div>
                         </div>
-                        <div class="p-6 space-y-4">
+                        <div class="p-4 md:p-6 space-y-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $t('a_allergies') }}</label>
                                 <textarea v-model="form.allergies" rows="2" placeholder="Drug allergies, food allergies, etc."
-                                    class="w-full px-4 py-2.5 border border-gray-200 bg-gray-50/50 rounded-xl text-sm focus:ring-2 focus:ring-yellow-100 focus:border-yellow-300 focus:bg-white hover:border-gray-300 transition-all duration-200 resize-none"></textarea>
+                                    class="w-full px-4 py-2.5 border border-gray-200 bg-gray-50/50 rounded-xl text-sm focus:ring-2 focus:ring-amber-100 focus:border-amber-300 focus:bg-white hover:border-gray-300 transition-all duration-200 resize-none"></textarea>
                             </div>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $t('a_chronic_conditions') }}</label>
                                     <textarea v-model="form.chronic_conditions" rows="2" placeholder="Diabetes, hypertension, etc."
-                                        class="w-full px-4 py-2.5 border border-gray-200 bg-gray-50/50 rounded-xl text-sm focus:ring-2 focus:ring-yellow-100 focus:border-yellow-300 focus:bg-white hover:border-gray-300 transition-all duration-200 resize-none"></textarea>
+                                        class="w-full px-4 py-2.5 border border-gray-200 bg-gray-50/50 rounded-xl text-sm focus:ring-2 focus:ring-amber-100 focus:border-amber-300 focus:bg-white hover:border-gray-300 transition-all duration-200 resize-none"></textarea>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $t('a_current_medications') }}</label>
                                     <textarea v-model="form.current_medications" rows="2" placeholder="List current medications"
-                                        class="w-full px-4 py-2.5 border border-gray-200 bg-gray-50/50 rounded-xl text-sm focus:ring-2 focus:ring-yellow-100 focus:border-yellow-300 focus:bg-white hover:border-gray-300 transition-all duration-200 resize-none"></textarea>
+                                        class="w-full px-4 py-2.5 border border-gray-200 bg-gray-50/50 rounded-xl text-sm focus:ring-2 focus:ring-amber-100 focus:border-amber-300 focus:bg-white hover:border-gray-300 transition-all duration-200 resize-none"></textarea>
                                 </div>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $t('a_additional_medical_notes') }}</label>
                                 <textarea v-model="form.medical_notes" rows="3" placeholder="Any additional notes relevant to treatment..."
-                                    class="w-full px-4 py-2.5 border border-gray-200 bg-gray-50/50 rounded-xl text-sm focus:ring-2 focus:ring-yellow-100 focus:border-yellow-300 focus:bg-white hover:border-gray-300 transition-all duration-200 resize-none"></textarea>
+                                    class="w-full px-4 py-2.5 border border-gray-200 bg-gray-50/50 rounded-xl text-sm focus:ring-2 focus:ring-amber-100 focus:border-amber-300 focus:bg-white hover:border-gray-300 transition-all duration-200 resize-none"></textarea>
                             </div>
                         </div>
                     </div>
@@ -449,9 +449,9 @@ const currentPhotoUrl = props.patient.photo
                 <div class="space-y-6">
                     <!-- Status -->
                     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                        <div class="px-6 py-4 border-b border-gray-100 flex items-center gap-3">
-                            <div class="w-9 h-9 rounded-xl bg-green-50 flex items-center justify-center">
-                                <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <div class="px-4 md:px-6 py-4 border-b border-gray-100 flex items-center gap-3">
+                            <div class="w-9 h-9 rounded-xl bg-emerald-50 flex items-center justify-center">
+                                <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                             </div>
                             <h2 class="text-base font-semibold text-gray-800">{{ $t('a_status') }}</h2>
                         </div>
@@ -460,7 +460,7 @@ const currentPhotoUrl = props.patient.photo
                                 <span class="text-sm font-medium text-gray-700">{{ $t('a_active_patient') }}</span>
                                 <div class="relative">
                                     <input type="checkbox" v-model="form.is_active" class="sr-only peer" />
-                                    <div class="w-11 h-6 bg-gray-200 rounded-full peer-checked:bg-green-500 transition-colors duration-200"></div>
+                                    <div class="w-11 h-6 bg-gray-200 rounded-full peer-checked:bg-emerald-500 transition-colors duration-200"></div>
                                     <div class="absolute left-0.5 top-0.5 w-5 h-5 bg-white rounded-full shadow-sm transition-transform duration-200 peer-checked:translate-x-5"></div>
                                 </div>
                             </label>
@@ -469,9 +469,9 @@ const currentPhotoUrl = props.patient.photo
 
                     <!-- Photo Upload -->
                     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                        <div class="px-6 py-4 border-b border-gray-100 flex items-center gap-3">
-                            <div class="w-9 h-9 rounded-xl bg-indigo-50 flex items-center justify-center">
-                                <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                        <div class="px-4 md:px-6 py-4 border-b border-gray-100 flex items-center gap-3">
+                            <div class="w-9 h-9 rounded-xl bg-slate-50 flex items-center justify-center">
+                                <svg class="w-5 h-5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                             </div>
                             <h2 class="text-base font-semibold text-gray-800">{{ $t('a_patient_photo') }}</h2>
                         </div>
@@ -487,8 +487,8 @@ const currentPhotoUrl = props.patient.photo
                                 <p v-if="!photoPreview && currentPhotoUrl" class="text-xs text-gray-400 mt-2">{{ $t('a_current_photo') }}</p>
                             </div>
                             <label class="group cursor-pointer block">
-                                <div class="border-2 border-dashed border-gray-200 rounded-xl p-6 text-center hover:border-yellow-300 hover:bg-yellow-50/30 transition-all duration-200">
-                                    <svg class="w-8 h-8 mx-auto text-gray-300 group-hover:text-yellow-400 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+                                <div class="border-2 border-dashed border-gray-200 rounded-xl p-4 md:p-6 text-center hover:border-amber-300 hover:bg-amber-50/30 transition-all duration-200">
+                                    <svg class="w-8 h-8 mx-auto text-gray-300 group-hover:text-amber-400 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
                                     <p class="mt-2 text-xs text-gray-500">{{ $t('a_click_to_upload_photo') }}</p>
                                     <p class="text-xs text-gray-400">JPG, PNG or WebP (max 5MB)</p>
                                 </div>
@@ -500,18 +500,18 @@ const currentPhotoUrl = props.patient.photo
 
                     <!-- Referral -->
                     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                        <div class="px-6 py-4 border-b border-gray-100 flex items-center gap-3">
+                        <div class="px-4 md:px-6 py-4 border-b border-gray-100 flex items-center gap-3">
                             <div class="w-9 h-9 rounded-xl flex items-center justify-center" style="background-color: rgba(196, 162, 101, 0.1);">
                                 <svg class="w-5 h-5" style="color: #C4A265;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
                             </div>
                             <h2 class="text-base font-semibold text-gray-800">{{ $t('a_referral_source') }}</h2>
                         </div>
-                        <div class="p-6 space-y-3">
+                        <div class="p-4 md:p-6 space-y-3">
                             <div class="grid grid-cols-2 gap-2">
                                 <label v-for="opt in referralOptions" :key="opt.value" class="cursor-pointer">
                                     <input type="radio" v-model="form.referral_source" :value="opt.value" class="sr-only peer" />
                                     <div class="flex items-center gap-2 px-3 py-2.5 rounded-xl border text-xs font-medium transition-all peer-checked:shadow-sm border-gray-200 text-gray-500 hover:border-gray-300"
-                                         :class="form.referral_source === opt.value ? 'border-yellow-300 bg-yellow-50 text-yellow-800' : ''">
+                                         :class="form.referral_source === opt.value ? 'border-amber-300 bg-amber-50 text-amber-800' : ''">
                                         <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" :d="opt.icon"/></svg>
                                         <span class="truncate">{{ opt.label }}</span>
                                     </div>
@@ -521,7 +521,7 @@ const currentPhotoUrl = props.patient.photo
                             <div v-if="form.referral_source === 'friend' || form.referral_source === 'doctor'" class="pt-2">
                                 <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $t('a_referred_by') }}</label>
                                 <input v-model="form.referred_by" type="text"
-                                    class="w-full px-4 py-2.5 border border-gray-200 bg-gray-50/50 rounded-xl text-sm focus:ring-2 focus:ring-yellow-100 focus:border-yellow-300 focus:bg-white hover:border-gray-300 transition-all duration-200" />
+                                    class="w-full px-4 py-2.5 border border-gray-200 bg-gray-50/50 rounded-xl text-sm focus:ring-2 focus:ring-amber-100 focus:border-amber-300 focus:bg-white hover:border-gray-300 transition-all duration-200" />
                             </div>
                         </div>
                     </div>
@@ -531,14 +531,14 @@ const currentPhotoUrl = props.patient.photo
                         <button
                             type="submit"
                             :disabled="form.processing"
-                            class="w-full flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-white font-semibold text-sm transition-all duration-200 shadow-lg shadow-yellow-500/20 hover:shadow-xl hover:shadow-yellow-500/30 disabled:opacity-50 disabled:cursor-not-allowed"
+                            class="w-full flex items-center justify-center gap-2 px-4 md:px-6 py-3.5 rounded-xl text-white font-semibold text-sm transition-all duration-200 shadow-lg shadow-amber-500/20 hover:shadow-xl hover:shadow-amber-500/30 disabled:opacity-50 disabled:cursor-not-allowed"
                             style="background-color: #C4A265;">
                             <svg v-if="!form.processing" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                             <svg v-else class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
                             {{ form.processing ? $t('a_saving') : $t('a_update_patient') }}
                         </button>
                         <Link :href="`/admin/patients/${patient.id}`"
-                            class="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-gray-600 font-medium text-sm border border-gray-200 hover:bg-gray-50 hover:border-gray-300 transition-all duration-200">
+                            class="w-full flex items-center justify-center gap-2 px-4 md:px-6 py-3 rounded-xl text-gray-600 font-medium text-sm border border-gray-200 hover:bg-gray-50 hover:border-gray-300 transition-all duration-200">
                             {{ $t('a_cancel') }}
                         </Link>
                     </div>

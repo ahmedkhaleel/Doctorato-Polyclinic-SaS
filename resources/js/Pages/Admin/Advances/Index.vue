@@ -102,9 +102,9 @@ const statusKeys = {
 
 const statusColors = {
     pending: 'bg-amber-100 text-amber-800',
-    approved: 'bg-blue-100 text-blue-800',
-    active: 'bg-green-100 text-green-800',
-    completed: 'bg-blue-100 text-blue-800',
+    approved: 'bg-slate-100 text-[#1B365D]',
+    active: 'bg-emerald-100 text-emerald-800',
+    completed: 'bg-slate-100 text-[#1B365D]',
     rejected: 'bg-red-100 text-red-800',
 };
 
@@ -129,7 +129,7 @@ const months = [
         <div class="space-y-6">
             <!-- Header -->
             <div class="flex items-center justify-between">
-                <h1 class="text-2xl font-bold text-gray-800">{{ $t('a_advances') }}</h1>
+                <h1 class="text-xl md:text-2xl font-bold text-gray-800">{{ $t('a_advances') }}</h1>
                 <button
                     v-if="can('advances.create')"
                     @click="openModal"
@@ -149,7 +149,7 @@ const months = [
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-sm font-medium text-gray-500">{{ $t('a_pending_requests') }}</p>
-                            <p class="text-2xl font-bold text-amber-600">{{ stats?.pending || 0 }}</p>
+                            <p class="text-xl md:text-2xl font-bold text-amber-600">{{ stats?.pending || 0 }}</p>
                         </div>
                         <div class="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center">
                             <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -158,14 +158,14 @@ const months = [
                         </div>
                     </div>
                 </div>
-                <div class="bg-white rounded-lg shadow-sm p-5 ltr:border-l-4 rtl:border-r-4 border-green-400">
+                <div class="bg-white rounded-lg shadow-sm p-5 ltr:border-l-4 rtl:border-r-4 border-emerald-400">
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-sm font-medium text-gray-500">{{ $t('a_active_advances') }}</p>
-                            <p class="text-2xl font-bold text-green-600">{{ stats?.active || 0 }}</p>
+                            <p class="text-xl md:text-2xl font-bold text-emerald-600">{{ stats?.active || 0 }}</p>
                         </div>
-                        <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
-                            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                         </div>
@@ -175,7 +175,7 @@ const months = [
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-sm font-medium text-gray-500">{{ $t('a_total_outstanding') }}</p>
-                            <p class="text-2xl font-bold" style="color: #C4A265;">{{ formatCurrency(stats?.total_outstanding) }}</p>
+                            <p class="text-xl md:text-2xl font-bold" style="color: #C4A265;">{{ formatCurrency(stats?.total_outstanding) }}</p>
                         </div>
                         <div class="w-10 h-10 rounded-full flex items-center justify-center" style="background-color: rgba(196, 162, 101, 0.15);">
                             <svg class="w-5 h-5" style="color: #C4A265;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -214,17 +214,17 @@ const months = [
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th class="px-6 py-3 ltr:text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_employee') }}</th>
-                                <th class="px-6 py-3 ltr:text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_amount') }}</th>
-                                <th class="px-6 py-3 ltr:text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_monthly_installment') }}</th>
-                                <th class="px-6 py-3 ltr:text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_remaining_balance') }}</th>
-                                <th class="px-6 py-3 ltr:text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_status') }}</th>
-                                <th class="px-6 py-3 ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_actions') }}</th>
+                                <th class="px-4 md:px-6 py-3 ltr:text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_employee') }}</th>
+                                <th class="px-4 md:px-6 py-3 ltr:text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_amount') }}</th>
+                                <th class="px-4 md:px-6 py-3 ltr:text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_monthly_installment') }}</th>
+                                <th class="px-4 md:px-6 py-3 ltr:text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_remaining_balance') }}</th>
+                                <th class="px-4 md:px-6 py-3 ltr:text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_status') }}</th>
+                                <th class="px-4 md:px-6 py-3 ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_actions') }}</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
                             <tr v-for="advance in advances.data" :key="advance.id" class="hover:bg-gray-50">
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center">
                                         <div :class="['w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center text-white text-xs font-bold', isRtl ? 'ml-3' : 'mr-3']" style="background-color: #C4A265;">
                                             {{ advance.employee?.user?.name?.charAt(0) }}
@@ -235,10 +235,10 @@ const months = [
                                         </div>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold" style="color: #C4A265;">{{ formatCurrency(advance.amount) }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ formatCurrency(advance.monthly_installment) }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ formatCurrency(advance.remaining_balance) }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm font-semibold" style="color: #C4A265;">{{ formatCurrency(advance.amount) }}</td>
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ formatCurrency(advance.monthly_installment) }}</td>
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ formatCurrency(advance.remaining_balance) }}</td>
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                     <span
                                         :class="statusColors[advance.status] || 'bg-gray-100 text-gray-800'"
                                         class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
@@ -246,11 +246,11 @@ const months = [
                                         {{ $t(statusKeys[advance.status]) || advance.status }}
                                     </span>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap ltr:text-right rtl:text-left text-sm space-x-2 rtl:space-x-reverse">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap ltr:text-right rtl:text-left text-sm space-x-2 rtl:space-x-reverse">
                                     <template v-if="advance.status === 'pending' && can('advances.update')">
                                         <button
                                             @click="approveAdvance(advance.id)"
-                                            class="px-3 py-1 rounded text-white text-xs font-medium bg-green-600 hover:bg-green-700 transition"
+                                            class="px-3 py-1 rounded text-white text-xs font-medium bg-emerald-600 hover:bg-emerald-700 transition"
                                         >
                                             {{ $t('a_approve') }}
                                         </button>
@@ -264,14 +264,14 @@ const months = [
                                 </td>
                             </tr>
                             <tr v-if="!advances.data || advances.data.length === 0">
-                                <td colspan="6" class="px-6 py-8 text-center text-sm text-gray-500">{{ $t('a_no_advances_found') }}</td>
+                                <td colspan="6" class="px-4 md:px-6 py-8 text-center text-sm text-gray-500">{{ $t('a_no_advances_found') }}</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
 
                 <!-- Pagination -->
-                <div v-if="advances.links && advances.links.length > 3" class="px-6 py-3 border-t border-gray-200 flex items-center justify-between">
+                <div v-if="advances.links && advances.links.length > 3" class="px-4 md:px-6 py-3 border-t border-gray-200 flex items-center justify-between">
                     <p class="text-sm text-gray-500">{{ $t('a_showing') }} {{ advances.from }} {{ $t('a_to') }} {{ advances.to }} {{ $t('a_of') }} {{ advances.total }} {{ $t('a_results') }}</p>
                     <nav :class="['flex', isRtl ? 'space-x-reverse space-x-1' : 'space-x-1']">
                         <template v-for="link in advances.links" :key="link.label">
@@ -297,7 +297,7 @@ const months = [
                 <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
                     <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" @click="closeModal"></div>
                     <div class="relative bg-white rounded-lg shadow-xl w-full max-w-lg mx-auto z-10">
-                        <div class="px-6 py-4 border-b border-gray-200">
+                        <div class="px-4 md:px-6 py-4 border-b border-gray-200">
                             <div class="flex items-center justify-between">
                                 <h3 class="text-lg font-semibold text-gray-800">{{ $t('a_new_advance') }}</h3>
                                 <button @click="closeModal" class="text-gray-400 hover:text-gray-600">
@@ -307,12 +307,12 @@ const months = [
                                 </button>
                             </div>
                         </div>
-                        <form @submit.prevent="submitAdvance" class="px-6 py-4 space-y-4">
+                        <form @submit.prevent="submitAdvance" class="px-4 md:px-6 py-4 space-y-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_employee') }} <span class="text-red-500">*</span></label>
                                 <select
                                     v-model="form.employee_id"
-                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                                 >
                                     <option value="">{{ $t('a_select_employee') }}</option>
                                     <option v-for="emp in employees" :key="emp.id" :value="emp.id">{{ emp.name }}</option>
@@ -327,7 +327,7 @@ const months = [
                                         type="number"
                                         step="0.01"
                                         min="0"
-                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                                         placeholder="0.00"
                                     />
                                     <p v-if="formErrors.amount" class="mt-1 text-sm text-red-600">{{ formErrors.amount }}</p>
@@ -339,7 +339,7 @@ const months = [
                                         type="number"
                                         step="0.01"
                                         min="0"
-                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                                         placeholder="0.00"
                                     />
                                     <p v-if="formErrors.monthly_installment" class="mt-1 text-sm text-red-600">{{ formErrors.monthly_installment }}</p>
@@ -350,7 +350,7 @@ const months = [
                                 <textarea
                                     v-model="form.reason"
                                     rows="3"
-                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                                     :placeholder="$t('a_reason_for_advance')"
                                 ></textarea>
                                 <p v-if="formErrors.reason" class="mt-1 text-sm text-red-600">{{ formErrors.reason }}</p>
@@ -360,7 +360,7 @@ const months = [
                                     <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_start_month') }} <span class="text-red-500">*</span></label>
                                     <select
                                         v-model="form.start_month"
-                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                                     >
                                         <option value="">{{ $t('a_select_month') }}</option>
                                         <option v-for="m in months" :key="m.value" :value="m.value">{{ m.label }}</option>
@@ -374,7 +374,7 @@ const months = [
                                         type="number"
                                         min="2024"
                                         max="2030"
-                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                                         placeholder="2026"
                                     />
                                     <p v-if="formErrors.start_year" class="mt-1 text-sm text-red-600">{{ formErrors.start_year }}</p>
@@ -391,7 +391,7 @@ const months = [
                                 <button
                                     type="submit"
                                     :disabled="formProcessing"
-                                    class="px-6 py-2 rounded-lg text-white text-sm font-medium transition disabled:opacity-50"
+                                    class="px-4 md:px-6 py-2 rounded-lg text-white text-sm font-medium transition disabled:opacity-50"
                                     style="background-color: #C4A265;"
                                 >
                                     {{ formProcessing ? $t('a_saving') : $t('a_create_advance') }}

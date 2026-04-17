@@ -79,7 +79,7 @@ onMounted(() => {
 
         <!-- Receipt Content -->
         <div class="receipt-container mx-auto max-w-[800px] bg-white rounded-2xl shadow-sm border border-gray-100/80 print:shadow-none print:border-0 print:rounded-none">
-            <div class="p-8 print:p-0">
+            <div class="p-4 md:p-8 print:p-0">
 
                 <!-- Header -->
                 <div class="text-center mb-8 pb-6 border-b border-gray-200">

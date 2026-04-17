@@ -80,7 +80,7 @@ const totals = computed(() => {
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
                 </Link>
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-900">{{ $t('a_doctor_performance') }}</h1>
+                    <h1 class="text-xl md:text-2xl font-bold text-gray-900">{{ $t('a_doctor_performance') }}</h1>
                     <p class="text-sm text-gray-500 mt-0.5">{{ $t('a_doctor_performance_subtitle') }}</p>
                 </div>
             </div>
@@ -135,7 +135,7 @@ const totals = computed(() => {
 
             <!-- Doctors Table -->
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
-                <div class="px-6 py-5 border-b border-gray-100">
+                <div class="px-4 md:px-6 py-5 border-b border-gray-100">
                     <h2 class="text-[15px] font-semibold text-gray-900">{{ $t('a_doctor_details') }}</h2>
                     <p class="text-xs text-gray-400 mt-0.5">{{ $t('a_doctor_details_desc') }}</p>
                 </div>
@@ -143,18 +143,18 @@ const totals = computed(() => {
                     <table class="min-w-full">
                         <thead>
                             <tr class="bg-gray-50/50">
-                                <th class="px-6 py-3 ltr:text-left rtl:text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_doctor') }}</th>
-                                <th class="px-6 py-3 text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_total_visits') }}</th>
-                                <th class="px-6 py-3 text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_completed') }}</th>
-                                <th class="px-6 py-3 text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_consultations') }}</th>
-                                <th class="px-6 py-3 text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_sessions') }}</th>
-                                <th class="px-6 py-3 text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_revenue') }}</th>
-                                <th class="px-6 py-3 text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_commission') }}</th>
+                                <th class="px-4 md:px-6 py-3 ltr:text-left rtl:text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_doctor') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_total_visits') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_completed') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_consultations') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_sessions') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_revenue') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_commission') }}</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100">
                             <tr v-for="doctor in doctors" :key="doctor.id" class="hover:bg-gray-50/50 transition-colors duration-150">
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center gap-3">
                                         <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-[#C4A265] to-[#D4B87A] flex items-center justify-center text-white text-sm font-bold shadow-sm flex-shrink-0">
                                             {{ doctor.name_en?.charAt(0)?.toUpperCase() || '?' }}
@@ -162,15 +162,15 @@ const totals = computed(() => {
                                         <span class="text-sm font-semibold text-gray-900">{{ doctor.name_en }}</span>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-900 font-medium">{{ doctor.visits_count || 0 }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-emerald-600 font-medium">{{ doctor.completed_visits_count || 0 }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-500">{{ doctor.consultation_count || 0 }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-500">{{ doctor.session_count || 0 }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-semibold text-[#C4A265]">{{ formatCurrency(doctorRevenue?.[doctor.id]) }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-medium text-blue-600">{{ formatCurrency(doctorCommission?.[doctor.id]) }}</td>
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-right text-gray-900 font-medium">{{ doctor.visits_count || 0 }}</td>
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-right text-emerald-600 font-medium">{{ doctor.completed_visits_count || 0 }}</td>
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-right text-gray-500">{{ doctor.consultation_count || 0 }}</td>
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-right text-gray-500">{{ doctor.session_count || 0 }}</td>
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-right font-semibold text-[#C4A265]">{{ formatCurrency(doctorRevenue?.[doctor.id]) }}</td>
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-right font-medium text-[#1B365D]">{{ formatCurrency(doctorCommission?.[doctor.id]) }}</td>
                             </tr>
                             <tr v-if="!doctors?.length">
-                                <td colspan="7" class="px-6 py-16 text-center">
+                                <td colspan="7" class="px-4 md:px-6 py-16 text-center">
                                     <div class="flex flex-col items-center">
                                         <div class="w-16 h-16 rounded-2xl bg-gray-50 flex items-center justify-center mb-3">
                                             <svg class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
@@ -182,13 +182,13 @@ const totals = computed(() => {
                         </tbody>
                         <tfoot v-if="doctors?.length" class="bg-gray-50/80 border-t border-gray-200">
                             <tr class="font-semibold">
-                                <td class="px-6 py-3.5 text-sm text-gray-700">{{ $t('a_totals') }}</td>
-                                <td class="px-6 py-3.5 text-sm text-right text-gray-700">{{ totals.visits }}</td>
-                                <td class="px-6 py-3.5 text-sm text-right text-gray-700">{{ totals.completed }}</td>
-                                <td class="px-6 py-3.5 text-sm text-right text-gray-700">{{ totals.consultations }}</td>
-                                <td class="px-6 py-3.5 text-sm text-right text-gray-700">{{ totals.sessions }}</td>
-                                <td class="px-6 py-3.5 text-sm text-right text-[#C4A265] font-bold">{{ formatCurrency(totals.revenue) }}</td>
-                                <td class="px-6 py-3.5 text-sm text-right text-blue-600 font-bold">{{ formatCurrency(totals.commission) }}</td>
+                                <td class="px-4 md:px-6 py-3.5 text-sm text-gray-700">{{ $t('a_totals') }}</td>
+                                <td class="px-4 md:px-6 py-3.5 text-sm text-right text-gray-700">{{ totals.visits }}</td>
+                                <td class="px-4 md:px-6 py-3.5 text-sm text-right text-gray-700">{{ totals.completed }}</td>
+                                <td class="px-4 md:px-6 py-3.5 text-sm text-right text-gray-700">{{ totals.consultations }}</td>
+                                <td class="px-4 md:px-6 py-3.5 text-sm text-right text-gray-700">{{ totals.sessions }}</td>
+                                <td class="px-4 md:px-6 py-3.5 text-sm text-right text-[#C4A265] font-bold">{{ formatCurrency(totals.revenue) }}</td>
+                                <td class="px-4 md:px-6 py-3.5 text-sm text-right text-[#1B365D] font-bold">{{ formatCurrency(totals.commission) }}</td>
                             </tr>
                         </tfoot>
                     </table>

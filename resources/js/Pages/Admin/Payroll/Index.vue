@@ -102,8 +102,8 @@ function bulkMarkPaid() {
 
 const statusColors = {
     draft: 'bg-gray-100 text-gray-600',
-    approved: 'bg-blue-100 text-blue-700',
-    paid: 'bg-green-100 text-green-700',
+    approved: 'bg-slate-100 text-[#1B365D]',
+    paid: 'bg-emerald-100 text-emerald-700',
 };
 
 const statusKeys = {
@@ -118,7 +118,7 @@ const statusKeys = {
         <div class="space-y-6">
             <!-- Header -->
             <div class="flex items-center justify-between">
-                <h1 class="text-2xl font-bold text-gray-800">{{ $t('a_payroll') }}</h1>
+                <h1 class="text-xl md:text-2xl font-bold text-gray-800">{{ $t('a_payroll') }}</h1>
                 <Link
                     v-if="can('salary_slips.create')"
                     href="/admin/payroll/create"
@@ -136,7 +136,7 @@ const statusKeys = {
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div class="bg-white rounded-lg shadow-sm p-5 ltr:border-l-4 rtl:border-r-4" style="border-left-color: #C4A265;">
                     <p class="text-sm font-medium text-gray-500">{{ $t('a_total_slips') }}</p>
-                    <p class="mt-1 text-2xl font-bold text-gray-800">{{ summary?.total_slips ?? 0 }}</p>
+                    <p class="mt-1 text-xl md:text-2xl font-bold text-gray-800">{{ summary?.total_slips ?? 0 }}</p>
                     <div :class="['mt-2 flex items-center text-xs text-gray-400', isRtl ? 'space-x-reverse space-x-3' : 'space-x-3']">
                         <span>{{ summary?.draft ?? 0 }} {{ $t('a_draft') }}</span>
                         <span>{{ summary?.approved ?? 0 }} {{ $t('a_approved') }}</span>
@@ -145,15 +145,15 @@ const statusKeys = {
                 </div>
                 <div class="bg-white rounded-lg shadow-sm p-5 ltr:border-l-4 rtl:border-r-4" style="border-left-color: #C4A265;">
                     <p class="text-sm font-medium text-gray-500">{{ $t('a_total_earnings') }}</p>
-                    <p class="mt-1 text-2xl font-bold text-gray-800">{{ formatCurrency(summary?.total_earnings) }}</p>
+                    <p class="mt-1 text-xl md:text-2xl font-bold text-gray-800">{{ formatCurrency(summary?.total_earnings) }}</p>
                 </div>
                 <div class="bg-white rounded-lg shadow-sm p-5 ltr:border-l-4 rtl:border-r-4" style="border-left-color: #C4A265;">
                     <p class="text-sm font-medium text-gray-500">{{ $t('a_total_deductions') }}</p>
-                    <p class="mt-1 text-2xl font-bold text-gray-800">{{ formatCurrency(summary?.total_deductions) }}</p>
+                    <p class="mt-1 text-xl md:text-2xl font-bold text-gray-800">{{ formatCurrency(summary?.total_deductions) }}</p>
                 </div>
                 <div class="bg-white rounded-lg shadow-sm p-5 ltr:border-l-4 rtl:border-r-4" style="border-left-color: #C4A265;">
                     <p class="text-sm font-medium text-gray-500">{{ $t('a_net_payroll') }}</p>
-                    <p class="mt-1 text-2xl font-bold text-gray-800">{{ formatCurrency(summary?.total_net) }}</p>
+                    <p class="mt-1 text-xl md:text-2xl font-bold text-gray-800">{{ formatCurrency(summary?.total_net) }}</p>
                 </div>
             </div>
 
@@ -163,7 +163,7 @@ const statusKeys = {
                     <label class="block text-xs font-medium text-gray-500 mb-1">{{ $t('a_month') }}</label>
                     <select
                         v-model="monthFilter"
-                        class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                        class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                     >
                         <option value="">{{ $t('a_all_months') }}</option>
                         <option v-for="(name, index) in months" :key="index" :value="index + 1">{{ name }}</option>
@@ -177,14 +177,14 @@ const statusKeys = {
                         min="2020"
                         max="2099"
                         :placeholder="$t('a_year')"
-                        class="w-28 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                        class="w-28 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                     />
                 </div>
                 <div>
                     <label class="block text-xs font-medium text-gray-500 mb-1">{{ $t('a_status') }}</label>
                     <select
                         v-model="statusFilter"
-                        class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                        class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                     >
                         <option value="">{{ $t('a_all_status') }}</option>
                         <option value="draft">{{ $t('a_draft') }}</option>
@@ -212,17 +212,17 @@ const statusKeys = {
                                         type="checkbox"
                                         v-model="selectAll"
                                         @change="toggleSelectAll"
-                                        class="rounded border-gray-300 text-yellow-600 focus:ring-yellow-200"
+                                        class="rounded border-gray-300 text-amber-600 focus:ring-amber-200"
                                     />
                                 </th>
-                                <th class="px-6 py-3 ltr:text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_slip_number') }}</th>
-                                <th class="px-6 py-3 ltr:text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_employee') }}</th>
-                                <th class="px-6 py-3 ltr:text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_department') }}</th>
-                                <th class="px-6 py-3 ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_earnings') }}</th>
-                                <th class="px-6 py-3 ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_deductions') }}</th>
-                                <th class="px-6 py-3 ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_net_salary') }}</th>
-                                <th class="px-6 py-3 ltr:text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_status') }}</th>
-                                <th class="px-6 py-3 ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_actions') }}</th>
+                                <th class="px-4 md:px-6 py-3 ltr:text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_slip_number') }}</th>
+                                <th class="px-4 md:px-6 py-3 ltr:text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_employee') }}</th>
+                                <th class="px-4 md:px-6 py-3 ltr:text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_department') }}</th>
+                                <th class="px-4 md:px-6 py-3 ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_earnings') }}</th>
+                                <th class="px-4 md:px-6 py-3 ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_deductions') }}</th>
+                                <th class="px-4 md:px-6 py-3 ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_net_salary') }}</th>
+                                <th class="px-4 md:px-6 py-3 ltr:text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_status') }}</th>
+                                <th class="px-4 md:px-6 py-3 ltr:text-right rtl:text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_actions') }}</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
@@ -233,13 +233,13 @@ const statusKeys = {
                                         :value="slip.id"
                                         :checked="selectedIds.includes(slip.id)"
                                         @change="toggleSlip(slip.id)"
-                                        class="rounded border-gray-300 text-yellow-600 focus:ring-yellow-200"
+                                        class="rounded border-gray-300 text-amber-600 focus:ring-amber-200"
                                     />
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                     {{ slip.slip_number }}
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center">
                                         <div
                                             :class="['w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center text-white text-xs font-bold', isRtl ? 'ml-3' : 'mr-3']"
@@ -253,19 +253,19 @@ const statusKeys = {
                                         </div>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                     {{ slip.employee?.department?.name_en || '-' }}
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 ltr:text-right rtl:text-left">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-700 ltr:text-right rtl:text-left">
                                     {{ formatCurrency(slip.total_earnings) }}
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 ltr:text-right rtl:text-left">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-700 ltr:text-right rtl:text-left">
                                     {{ formatCurrency(slip.total_deductions) }}
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900 ltr:text-right rtl:text-left">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900 ltr:text-right rtl:text-left">
                                     {{ formatCurrency(slip.net_salary) }}
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                     <span
                                         :class="statusColors[slip.status] || 'bg-gray-100 text-gray-600'"
                                         class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
@@ -273,7 +273,7 @@ const statusKeys = {
                                         {{ $t(statusKeys[slip.status]) || slip.status }}
                                     </span>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap ltr:text-right rtl:text-left text-sm">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap ltr:text-right rtl:text-left text-sm">
                                     <Link
                                         v-if="can('salary_slips.view')"
                                         :href="`/admin/payroll/${slip.id}`"
@@ -285,7 +285,7 @@ const statusKeys = {
                                 </td>
                             </tr>
                             <tr v-if="!slips.data || slips.data.length === 0">
-                                <td colspan="9" class="px-6 py-8 text-center text-sm text-gray-500">
+                                <td colspan="9" class="px-4 md:px-6 py-8 text-center text-sm text-gray-500">
                                     {{ $t('a_no_payroll_slips_found') }}
                                 </td>
                             </tr>
@@ -294,7 +294,7 @@ const statusKeys = {
                 </div>
 
                 <!-- Pagination -->
-                <div v-if="slips.links && slips.links.length > 3" class="px-6 py-3 border-t border-gray-200 flex items-center justify-between">
+                <div v-if="slips.links && slips.links.length > 3" class="px-4 md:px-6 py-3 border-t border-gray-200 flex items-center justify-between">
                     <p class="text-sm text-gray-500">{{ $t('a_showing') }} {{ slips.from }} {{ $t('a_to') }} {{ slips.to }} {{ $t('a_of') }} {{ slips.total }} {{ $t('a_results') }}</p>
                     <nav :class="['flex', isRtl ? 'space-x-reverse space-x-1' : 'space-x-1']">
                         <template v-for="link in slips.links" :key="link.label">
@@ -324,21 +324,21 @@ const statusKeys = {
             >
                 <div
                     v-if="hasSelection"
-                    class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-gray-900 text-white rounded-xl shadow-2xl px-6 py-3 flex items-center space-x-4 rtl:space-x-reverse"
+                    class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-gray-900 text-white rounded-xl shadow-2xl px-4 md:px-6 py-3 flex items-center space-x-4 rtl:space-x-reverse"
                 >
                     <span class="text-sm font-medium">{{ selectedIds.length }} {{ $t('a_slips_selected') }}</span>
                     <div class="h-5 border-l border-gray-600"></div>
                     <button
                         @click="bulkApprove"
                         :disabled="bulkProcessing"
-                        class="px-4 py-1.5 text-sm font-medium rounded-lg bg-blue-600 hover:bg-blue-700 transition disabled:opacity-50"
+                        class="px-4 py-1.5 text-sm font-medium rounded-lg bg-[#1B365D] hover:bg-[#1B365D] transition disabled:opacity-50"
                     >
                         {{ $t('a_approve_selected') }}
                     </button>
                     <button
                         @click="bulkMarkPaid"
                         :disabled="bulkProcessing"
-                        class="px-4 py-1.5 text-sm font-medium rounded-lg bg-green-600 hover:bg-green-700 transition disabled:opacity-50"
+                        class="px-4 py-1.5 text-sm font-medium rounded-lg bg-emerald-600 hover:bg-emerald-700 transition disabled:opacity-50"
                     >
                         {{ $t('a_mark_paid_selected') }}
                     </button>

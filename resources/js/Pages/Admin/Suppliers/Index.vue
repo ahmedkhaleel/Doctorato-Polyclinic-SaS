@@ -55,28 +55,28 @@ const activeCount = computed(() => props.suppliers?.data?.filter(s => s.is_activ
 <template>
     <div class="space-y-6">
         <!-- Hero Header -->
-        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-900 via-indigo-800 to-purple-900 p-6 sm:p-8"
+        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#1B365D] p-4 md:p-6 sm:p-8"
             :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
             style="transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1)"
         >
-            <div class="absolute top-0 right-0 w-72 h-72 bg-indigo-400/10 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl"></div>
-            <div class="absolute bottom-0 left-0 w-48 h-48 bg-purple-500/10 rounded-full translate-y-1/2 -translate-x-1/4 blur-2xl"></div>
+            <div class="absolute top-0 right-0 w-72 h-72 bg-slate-400/10 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl"></div>
+            <div class="absolute bottom-0 left-0 w-48 h-48 bg-[#1B365D]/10 rounded-full translate-y-1/2 -translate-x-1/4 blur-2xl"></div>
             <div class="absolute inset-0 opacity-[0.03]" style="background-image: url('data:image/svg+xml,%3Csvg width=&quot;40&quot; height=&quot;40&quot; viewBox=&quot;0 0 40 40&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;%3E%3Cg fill=&quot;%23fff&quot;%3E%3Ccircle cx=&quot;1&quot; cy=&quot;1&quot; r=&quot;1&quot;/%3E%3C/g%3E%3C/svg%3E')"></div>
             <div class="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
                     <div class="flex items-center gap-2 mb-2">
-                        <div class="w-8 h-8 rounded-lg bg-indigo-400/20 flex items-center justify-center">
-                            <svg class="w-4 h-4 text-indigo-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" /></svg>
+                        <div class="w-8 h-8 rounded-lg bg-slate-400/20 flex items-center justify-center">
+                            <svg class="w-4 h-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" /></svg>
                         </div>
-                        <p class="text-indigo-300 text-xs font-semibold tracking-wider uppercase">{{ isRtl ? 'إدارة المخزون' : 'Inventory' }}</p>
+                        <p class="text-slate-300 text-xs font-semibold tracking-wider uppercase">{{ isRtl ? 'إدارة المخزون' : 'Inventory' }}</p>
                     </div>
-                    <h1 class="text-2xl sm:text-3xl font-bold text-white">{{ isRtl ? 'الموردين' : 'Suppliers' }}</h1>
-                    <p class="text-indigo-200/70 text-sm mt-1">{{ isRtl ? 'إدارة الموردين ومعلومات التواصل' : 'Manage suppliers and contact information' }}</p>
+                    <h1 class="text-xl md:text-2xl sm:text-3xl font-bold text-white">{{ isRtl ? 'الموردين' : 'Suppliers' }}</h1>
+                    <p class="text-slate-200/70 text-sm mt-1">{{ isRtl ? 'إدارة الموردين ومعلومات التواصل' : 'Manage suppliers and contact information' }}</p>
                 </div>
                 <div class="flex items-center gap-3">
                     <div class="bg-white/5 backdrop-blur-sm rounded-xl px-5 py-3.5 border border-white/10 text-center min-w-[80px]">
-                        <p class="text-2xl font-bold text-white leading-none tabular-nums">{{ totalSuppliers }}</p>
-                        <p class="text-[10px] text-indigo-300 mt-1 font-medium uppercase tracking-wide">{{ isRtl ? 'مورد' : 'Total' }}</p>
+                        <p class="text-xl md:text-2xl font-bold text-white leading-none tabular-nums">{{ totalSuppliers }}</p>
+                        <p class="text-[10px] text-slate-300 mt-1 font-medium uppercase tracking-wide">{{ isRtl ? 'مورد' : 'Total' }}</p>
                     </div>
                     <button @click="openCreate"
                         class="inline-flex items-center gap-2 px-5 py-2.5 bg-white/10 backdrop-blur-sm text-white text-sm font-semibold rounded-xl border border-white/20 hover:bg-white/20 transition-all duration-200 shadow-lg shadow-black/10"
@@ -96,9 +96,9 @@ const activeCount = computed(() => props.suppliers?.data?.filter(s => s.is_activ
             <div class="flex flex-wrap items-center gap-3">
                 <div class="relative flex-1 min-w-[200px]">
                     <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                    <input v-model="search" @input="applyFilters" type="text" :placeholder="isRtl ? 'بحث بالاسم أو الكود...' : 'Search by name or code...'" class="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-colors" />
+                    <input v-model="search" @input="applyFilters" type="text" :placeholder="isRtl ? 'بحث بالاسم أو الكود...' : 'Search by name or code...'" class="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-colors" />
                 </div>
-                <select v-model="statusFilter" @change="applyFilters()" class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 min-w-[130px]">
+                <select v-model="statusFilter" @change="applyFilters()" class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] min-w-[130px]">
                     <option value="">{{ isRtl ? 'كل الحالات' : 'All Status' }}</option>
                     <option value="active">{{ isRtl ? 'نشط' : 'Active' }}</option>
                     <option value="inactive">{{ isRtl ? 'غير نشط' : 'Inactive' }}</option>
@@ -128,8 +128,8 @@ const activeCount = computed(() => props.suppliers?.data?.filter(s => s.is_activ
                         <tr v-for="s in suppliers.data" :key="s.id" class="hover:bg-gray-50/50 transition-colors duration-150">
                             <td class="px-5 py-4">
                                 <div class="flex items-center gap-3">
-                                    <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-indigo-100 to-indigo-50 flex items-center justify-center flex-shrink-0">
-                                        <svg class="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+                                    <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-slate-100 to-slate-50 flex items-center justify-center flex-shrink-0">
+                                        <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
                                     </div>
                                     <div>
                                         <p class="font-semibold text-gray-800">{{ displayName(s) }}</p>
@@ -150,7 +150,7 @@ const activeCount = computed(() => props.suppliers?.data?.filter(s => s.is_activ
                                 <span v-else class="text-xs text-gray-300">-</span>
                             </td>
                             <td class="px-5 py-4 text-center">
-                                <span class="inline-flex items-center justify-center min-w-[28px] h-6 px-2 rounded-full bg-indigo-50 text-indigo-600 text-xs font-bold tabular-nums">{{ s.supplies_count || 0 }}</span>
+                                <span class="inline-flex items-center justify-center min-w-[28px] h-6 px-2 rounded-full bg-slate-50 text-[#1B365D] text-xs font-bold tabular-nums">{{ s.supplies_count || 0 }}</span>
                             </td>
                             <td class="px-5 py-4 text-center">
                                 <span class="text-xs text-gray-500">{{ s.payment_terms || '-' }}</span>
@@ -163,7 +163,7 @@ const activeCount = computed(() => props.suppliers?.data?.filter(s => s.is_activ
                             </td>
                             <td class="px-5 py-4 text-center">
                                 <div class="flex items-center justify-center gap-0.5">
-                                    <button @click="openEdit(s)" class="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all" :title="isRtl ? 'تعديل' : 'Edit'">
+                                    <button @click="openEdit(s)" class="p-2 text-gray-400 hover:text-[#1B365D] hover:bg-slate-50 rounded-lg transition-all" :title="isRtl ? 'تعديل' : 'Edit'">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                                     </button>
                                     <button @click="remove(s)" class="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all" :title="isRtl ? 'حذف' : 'Delete'">
@@ -188,7 +188,7 @@ const activeCount = computed(() => props.suppliers?.data?.filter(s => s.is_activ
             <template v-for="link in suppliers.links" :key="link.label">
                 <Link v-if="link.url" :href="link.url" v-html="link.label" preserve-state
                     class="px-3.5 py-2 rounded-lg text-xs font-medium transition-all duration-200"
-                    :class="link.active ? 'bg-indigo-600 text-white shadow-sm shadow-indigo-200' : 'text-gray-500 bg-white border border-gray-100 hover:bg-gray-50 hover:border-gray-200'"
+                    :class="link.active ? 'bg-[#1B365D] text-white shadow-sm shadow-slate-200' : 'text-gray-500 bg-white border border-gray-100 hover:bg-gray-50 hover:border-gray-200'"
                 />
                 <span v-else v-html="link.label" class="px-3.5 py-2 text-xs text-gray-300" />
             </template>
@@ -216,10 +216,10 @@ const activeCount = computed(() => props.suppliers?.data?.filter(s => s.is_activ
                     >
                         <div v-if="showModal" class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
                             <!-- Modal Header -->
-                            <div class="sticky top-0 bg-white border-b border-gray-100 px-6 py-4 rounded-t-2xl z-10">
+                            <div class="sticky top-0 bg-white border-b border-gray-100 px-4 md:px-6 py-4 rounded-t-2xl z-10">
                                 <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center">
-                                        <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+                                    <div class="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center">
+                                        <svg class="w-5 h-5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
                                     </div>
                                     <div>
                                         <h2 class="text-base font-bold text-gray-900">{{ editing ? (isRtl ? 'تعديل المورد' : 'Edit Supplier') : (isRtl ? 'إضافة مورد جديد' : 'Add New Supplier') }}</h2>
@@ -228,58 +228,58 @@ const activeCount = computed(() => props.suppliers?.data?.filter(s => s.is_activ
                                 </div>
                             </div>
                             <!-- Modal Body -->
-                            <form @submit.prevent="submit" class="p-6 space-y-4">
+                            <form @submit.prevent="submit" class="p-4 md:p-6 space-y-4">
                                 <div class="grid grid-cols-2 gap-4">
                                     <div>
                                         <label class="block text-[11px] font-semibold text-gray-500 uppercase tracking-wider mb-1.5">{{ isRtl ? 'الاسم بالعربي' : 'Name (AR)' }} <span class="text-red-400">*</span></label>
-                                        <input v-model="form.name_ar" required dir="rtl" class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-colors" />
+                                        <input v-model="form.name_ar" required dir="rtl" class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-colors" />
                                     </div>
                                     <div>
                                         <label class="block text-[11px] font-semibold text-gray-500 uppercase tracking-wider mb-1.5">{{ isRtl ? 'الاسم بالإنجليزي' : 'Name (EN)' }} <span class="text-red-400">*</span></label>
-                                        <input v-model="form.name_en" required class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-colors" />
+                                        <input v-model="form.name_en" required class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-colors" />
                                     </div>
                                 </div>
-                                <div class="grid grid-cols-3 gap-4">
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                     <div>
                                         <label class="block text-[11px] font-semibold text-gray-500 uppercase tracking-wider mb-1.5">{{ isRtl ? 'الرمز' : 'Code' }}</label>
-                                        <input v-model="form.code" class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm font-mono focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-colors" />
+                                        <input v-model="form.code" class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm font-mono focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-colors" />
                                     </div>
                                     <div>
                                         <label class="block text-[11px] font-semibold text-gray-500 uppercase tracking-wider mb-1.5">{{ isRtl ? 'الهاتف' : 'Phone' }}</label>
-                                        <input v-model="form.phone" dir="ltr" class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-colors" />
+                                        <input v-model="form.phone" dir="ltr" class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-colors" />
                                     </div>
                                     <div>
                                         <label class="block text-[11px] font-semibold text-gray-500 uppercase tracking-wider mb-1.5">{{ isRtl ? 'البريد' : 'Email' }}</label>
-                                        <input v-model="form.email" type="email" dir="ltr" class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-colors" />
+                                        <input v-model="form.email" type="email" dir="ltr" class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-colors" />
                                     </div>
                                 </div>
-                                <div class="grid grid-cols-3 gap-4">
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                     <div>
                                         <label class="block text-[11px] font-semibold text-gray-500 uppercase tracking-wider mb-1.5">{{ isRtl ? 'جهة التواصل' : 'Contact Person' }}</label>
-                                        <input v-model="form.contact_person" class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-colors" />
+                                        <input v-model="form.contact_person" class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-colors" />
                                     </div>
                                     <div>
                                         <label class="block text-[11px] font-semibold text-gray-500 uppercase tracking-wider mb-1.5">{{ isRtl ? 'شروط الدفع' : 'Payment Terms' }}</label>
-                                        <input v-model="form.payment_terms" placeholder="Net 30" class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-colors" />
+                                        <input v-model="form.payment_terms" placeholder="Net 30" class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-colors" />
                                     </div>
                                     <div>
                                         <label class="block text-[11px] font-semibold text-gray-500 uppercase tracking-wider mb-1.5">{{ isRtl ? 'مدة التوصيل' : 'Lead Time' }}</label>
                                         <div class="relative">
-                                            <input v-model="form.lead_time_days" type="number" min="0" class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-colors" />
+                                            <input v-model="form.lead_time_days" type="number" min="0" class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-colors" />
                                             <span class="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-gray-400">{{ isRtl ? 'يوم' : 'days' }}</span>
                                         </div>
                                     </div>
                                 </div>
                                 <div>
                                     <label class="block text-[11px] font-semibold text-gray-500 uppercase tracking-wider mb-1.5">{{ isRtl ? 'الرقم الضريبي' : 'Tax Number' }}</label>
-                                    <input v-model="form.tax_number" dir="ltr" class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm font-mono focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-colors" />
+                                    <input v-model="form.tax_number" dir="ltr" class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm font-mono focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-colors" />
                                 </div>
                                 <div>
                                     <label class="block text-[11px] font-semibold text-gray-500 uppercase tracking-wider mb-1.5">{{ isRtl ? 'العنوان' : 'Address' }}</label>
-                                    <textarea v-model="form.address" rows="2" class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-colors resize-none" />
+                                    <textarea v-model="form.address" rows="2" class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-colors resize-none" />
                                 </div>
                                 <label class="flex items-center gap-2.5 cursor-pointer">
-                                    <input v-model="form.is_active" type="checkbox" class="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500" />
+                                    <input v-model="form.is_active" type="checkbox" class="w-4 h-4 rounded text-[#1B365D] focus:ring-[#1B365D]" />
                                     <span class="text-sm font-medium text-gray-700">{{ isRtl ? 'نشط' : 'Active' }}</span>
                                 </label>
                                 <!-- Actions -->
@@ -289,7 +289,7 @@ const activeCount = computed(() => props.suppliers?.data?.filter(s => s.is_activ
                                         {{ isRtl ? 'إلغاء' : 'Cancel' }}
                                     </button>
                                     <button type="submit" :disabled="processing"
-                                        class="flex-1 py-2.5 px-4 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl transition-all shadow-lg shadow-indigo-600/20 disabled:opacity-50 inline-flex items-center justify-center gap-2">
+                                        class="flex-1 py-2.5 px-4 text-sm font-semibold text-white bg-[#1B365D] hover:bg-[#1B365D] rounded-xl transition-all shadow-lg shadow-[#1B365D]/20 disabled:opacity-50 inline-flex items-center justify-center gap-2">
                                         <svg v-if="processing" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" /><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
                                         {{ editing ? (isRtl ? 'تحديث' : 'Update') : (isRtl ? 'إضافة' : 'Create') }}
                                     </button>

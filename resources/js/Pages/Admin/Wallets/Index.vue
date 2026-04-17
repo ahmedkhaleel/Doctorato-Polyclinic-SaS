@@ -42,26 +42,26 @@ function setFilter(f) {
         <div class="space-y-6">
             <!-- Header -->
             <div>
-                <h1 class="text-2xl font-bold text-gray-900">{{ isRtl ? 'محافظ المرضى' : 'Patient Wallets' }}</h1>
+                <h1 class="text-xl md:text-2xl font-bold text-gray-900">{{ isRtl ? 'محافظ المرضى' : 'Patient Wallets' }}</h1>
                 <p class="text-sm text-gray-500 mt-1">{{ isRtl ? 'إدارة أرصدة المرضى والمعاملات المالية' : 'Manage patient balances and financial transactions' }}</p>
             </div>
 
             <!-- Stats -->
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div class="bg-white rounded-xl border border-gray-200 p-4">
-                    <div class="text-2xl font-bold text-gray-900">{{ stats.total_wallets }}</div>
+                    <div class="text-xl md:text-2xl font-bold text-gray-900">{{ stats.total_wallets }}</div>
                     <div class="text-xs text-gray-500 mt-1">{{ isRtl ? 'إجمالي المحافظ' : 'Total Wallets' }}</div>
                 </div>
                 <div class="bg-white rounded-xl border border-emerald-200 p-4">
-                    <div class="text-2xl font-bold text-emerald-600">{{ formatCurrency(stats.total_balance) }}</div>
+                    <div class="text-xl md:text-2xl font-bold text-emerald-600">{{ formatCurrency(stats.total_balance) }}</div>
                     <div class="text-xs text-gray-500 mt-1">{{ isRtl ? 'إجمالي الأرصدة' : 'Total Balance' }}</div>
                 </div>
-                <div class="bg-white rounded-xl border border-cyan-200 p-4">
-                    <div class="text-2xl font-bold text-cyan-600">{{ stats.positive_wallets }}</div>
+                <div class="bg-white rounded-xl border border-slate-200 p-4">
+                    <div class="text-xl md:text-2xl font-bold text-[#1B365D]">{{ stats.positive_wallets }}</div>
                     <div class="text-xs text-gray-500 mt-1">{{ isRtl ? 'محافظ نشطة' : 'Active Wallets' }}</div>
                 </div>
                 <div class="bg-white rounded-xl border border-gray-200 p-4">
-                    <div class="text-2xl font-bold text-gray-900">{{ stats.transactions_today }}</div>
+                    <div class="text-xl md:text-2xl font-bold text-gray-900">{{ stats.transactions_today }}</div>
                     <div class="text-xs text-gray-500 mt-1">{{ isRtl ? 'معاملات اليوم' : 'Today\'s Transactions' }}</div>
                 </div>
             </div>
@@ -73,7 +73,7 @@ function setFilter(f) {
                         <svg class="absolute top-2.5 w-4 h-4 text-gray-400" :class="isRtl ? 'right-3' : 'left-3'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" stroke-width="2"/><path stroke-linecap="round" stroke-width="2" d="m21 21-4.35-4.35"/></svg>
                         <input v-model="search" type="text"
                             :placeholder="isRtl ? 'بحث بالاسم أو الهاتف أو رقم الملف...' : 'Search by name, phone, or file number...'"
-                            class="w-full rounded-lg border-gray-300 text-sm focus:ring-cyan-500 focus:border-cyan-500"
+                            class="w-full rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]"
                             :class="isRtl ? 'pr-10 pl-3' : 'pl-10 pr-3'" />
                     </div>
                     <div class="flex gap-2">
@@ -108,7 +108,7 @@ function setFilter(f) {
                         <tr v-for="wallet in wallets.data" :key="wallet.id" class="hover:bg-gray-50/50">
                             <td class="px-4 py-3">
                                 <Link :href="`/admin/wallets/${wallet.patient?.id}`"
-                                    class="text-sm font-semibold text-gray-900 hover:text-cyan-600 transition">
+                                    class="text-sm font-semibold text-gray-900 hover:text-[#1B365D] transition">
                                     {{ wallet.patient?.full_name }}
                                 </Link>
                             </td>
@@ -125,7 +125,7 @@ function setFilter(f) {
                             </td>
                             <td class="px-4 py-3 text-center">
                                 <Link :href="`/admin/wallets/${wallet.patient?.id}`"
-                                    class="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-cyan-700 bg-cyan-50 rounded-lg hover:bg-cyan-100 transition">
+                                    class="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-[#1B365D] bg-slate-50 rounded-lg hover:bg-slate-100 transition">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
                                     {{ isRtl ? 'عرض' : 'View' }}
                                 </Link>
@@ -145,7 +145,7 @@ function setFilter(f) {
                 <template v-for="link in wallets.links" :key="link.label">
                     <Link v-if="link.url" :href="link.url"
                         class="px-3 py-1.5 text-sm rounded-lg border transition"
-                        :class="link.active ? 'bg-cyan-600 text-white border-cyan-600' : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'"
+                        :class="link.active ? 'bg-[#1B365D] text-white border-[#1B365D]' : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'"
                         v-html="link.label" preserve-state />
                     <span v-else class="px-3 py-1.5 text-sm text-gray-400" v-html="link.label" />
                 </template>

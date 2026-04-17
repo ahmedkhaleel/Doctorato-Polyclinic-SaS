@@ -177,7 +177,7 @@ function toggleActive(bundle) {
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 idx-item"
                  :class="{ 'idx-item--visible': isVisible('header') }">
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-900 tracking-tight">{{ $t('a_bundle_packages') }}</h1>
+                    <h1 class="text-xl md:text-2xl font-bold text-gray-900 tracking-tight">{{ $t('a_bundle_packages') }}</h1>
                     <p class="text-sm text-gray-400 mt-1">{{ isRtl ? 'إدارة حزم الخدمات وباقات الأسعار' : 'Manage your service packages and pricing bundles' }}</p>
                 </div>
                 <div class="flex items-center gap-3">
@@ -234,26 +234,26 @@ function toggleActive(bundle) {
                     </div>
                 </div>
                 <div class="mini-stat group">
-                    <div class="mini-stat__bar bg-blue-400"></div>
+                    <div class="mini-stat__bar bg-slate-400"></div>
                     <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-blue-50 shadow-sm transition-transform duration-300 group-hover:scale-110">
-                            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
+                        <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-slate-50 shadow-sm transition-transform duration-300 group-hover:scale-110">
+                            <svg class="w-5 h-5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
                         </div>
                         <div>
                             <p class="text-xs text-gray-400 font-medium">{{ isRtl ? 'الحجوزات' : 'Bookings' }}</p>
-                            <p class="text-lg font-extrabold text-blue-600">{{ totalBookings }}</p>
+                            <p class="text-lg font-extrabold text-[#1B365D]">{{ totalBookings }}</p>
                         </div>
                     </div>
                 </div>
                 <div class="mini-stat group">
-                    <div class="mini-stat__bar bg-purple-400"></div>
+                    <div class="mini-stat__bar bg-slate-400"></div>
                     <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-purple-50 shadow-sm transition-transform duration-300 group-hover:scale-110">
-                            <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-slate-50 shadow-sm transition-transform duration-300 group-hover:scale-110">
+                            <svg class="w-5 h-5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                         </div>
                         <div>
                             <p class="text-xs text-gray-400 font-medium">{{ isRtl ? 'القيمة الإجمالية' : 'Combined Value' }}</p>
-                            <p class="text-lg font-extrabold text-purple-600 tabular-nums">{{ formatCurrency(totalRevenue) }}</p>
+                            <p class="text-lg font-extrabold text-[#1B365D] tabular-nums">{{ formatCurrency(totalRevenue) }}</p>
                         </div>
                     </div>
                 </div>
@@ -390,13 +390,13 @@ function toggleActive(bundle) {
                     <table class="min-w-full">
                         <thead>
                             <tr class="border-b border-gray-100">
-                                <th class="px-6 py-4 ltr:text-left rtl:text-right text-[11px] font-bold text-gray-400 uppercase tracking-widest">{{ $t('a_bundle') }}</th>
-                                <th class="px-6 py-4 text-center text-[11px] font-bold text-gray-400 uppercase tracking-widest">{{ $t('a_services') }}</th>
-                                <th class="px-6 py-4 ltr:text-left rtl:text-right text-[11px] font-bold text-gray-400 uppercase tracking-widest">{{ $t('a_price') }}</th>
-                                <th class="px-6 py-4 text-center text-[11px] font-bold text-gray-400 uppercase tracking-widest">{{ $t('a_savings') }}</th>
-                                <th class="px-6 py-4 text-center text-[11px] font-bold text-gray-400 uppercase tracking-widest">{{ $t('a_bookings') }}</th>
-                                <th class="px-6 py-4 text-center text-[11px] font-bold text-gray-400 uppercase tracking-widest">{{ $t('a_status') }}</th>
-                                <th class="px-6 py-4 text-right text-[11px] font-bold text-gray-400 uppercase tracking-widest">{{ $t('a_actions') }}</th>
+                                <th class="px-4 md:px-6 py-4 ltr:text-left rtl:text-right text-[11px] font-bold text-gray-400 uppercase tracking-widest">{{ $t('a_bundle') }}</th>
+                                <th class="px-4 md:px-6 py-4 text-center text-[11px] font-bold text-gray-400 uppercase tracking-widest">{{ $t('a_services') }}</th>
+                                <th class="px-4 md:px-6 py-4 ltr:text-left rtl:text-right text-[11px] font-bold text-gray-400 uppercase tracking-widest">{{ $t('a_price') }}</th>
+                                <th class="px-4 md:px-6 py-4 text-center text-[11px] font-bold text-gray-400 uppercase tracking-widest">{{ $t('a_savings') }}</th>
+                                <th class="px-4 md:px-6 py-4 text-center text-[11px] font-bold text-gray-400 uppercase tracking-widest">{{ $t('a_bookings') }}</th>
+                                <th class="px-4 md:px-6 py-4 text-center text-[11px] font-bold text-gray-400 uppercase tracking-widest">{{ $t('a_status') }}</th>
+                                <th class="px-4 md:px-6 py-4 text-right text-[11px] font-bold text-gray-400 uppercase tracking-widest">{{ $t('a_actions') }}</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-50">
@@ -406,7 +406,7 @@ function toggleActive(bundle) {
                                 :style="{ animationDelay: `${index * 60 + 400}ms` }">
 
                                 <!-- Bundle Name -->
-                                <td class="px-6 py-4">
+                                <td class="px-4 md:px-6 py-4">
                                     <div class="flex items-center gap-3.5">
                                         <div class="relative">
                                             <div v-if="bundle.image_url"
@@ -428,15 +428,15 @@ function toggleActive(bundle) {
                                 </td>
 
                                 <!-- Services -->
-                                <td class="px-6 py-4 text-center">
-                                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-100">
+                                <td class="px-4 md:px-6 py-4 text-center">
+                                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-50 text-[#1B365D] border border-slate-100">
                                         <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
                                         {{ bundle.services_count }}
                                     </span>
                                 </td>
 
                                 <!-- Price -->
-                                <td class="px-6 py-4">
+                                <td class="px-4 md:px-6 py-4">
                                     <div>
                                         <p class="text-sm font-bold tabular-nums" style="color: #C4A265;">{{ formatCurrency(bundle.total_price) }}</p>
                                         <p class="text-xs text-gray-300 line-through tabular-nums mt-0.5">{{ formatCurrency(bundle.original_price) }}</p>
@@ -444,7 +444,7 @@ function toggleActive(bundle) {
                                 </td>
 
                                 <!-- Savings -->
-                                <td class="px-6 py-4 text-center">
+                                <td class="px-4 md:px-6 py-4 text-center">
                                     <span v-if="savingsPercent(bundle) > 0"
                                           class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-100">
                                         <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 14l-7 7m0 0l-7-7m7 7V3" /></svg>
@@ -454,14 +454,14 @@ function toggleActive(bundle) {
                                 </td>
 
                                 <!-- Bookings -->
-                                <td class="px-6 py-4 text-center">
+                                <td class="px-4 md:px-6 py-4 text-center">
                                     <span class="text-sm font-semibold tabular-nums" :class="bundle.bundle_bookings_count > 0 ? 'text-gray-700' : 'text-gray-300'">
                                         {{ bundle.bundle_bookings_count }}
                                     </span>
                                 </td>
 
                                 <!-- Status -->
-                                <td class="px-6 py-4 text-center">
+                                <td class="px-4 md:px-6 py-4 text-center">
                                     <button v-if="can('package_bundles.update')"
                                             @click="toggleActive(bundle)"
                                             class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold cursor-pointer transition-all duration-300 border"
@@ -479,10 +479,10 @@ function toggleActive(bundle) {
                                 </td>
 
                                 <!-- Actions -->
-                                <td class="px-6 py-4">
+                                <td class="px-4 md:px-6 py-4">
                                     <div class="flex items-center justify-end gap-1">
                                         <Link :href="`/admin/package-bundles/${bundle.id}`"
-                                              class="action-btn text-gray-400 hover:text-blue-600 hover:bg-blue-50 hover:border-blue-200"
+                                              class="action-btn text-gray-400 hover:text-[#1B365D] hover:bg-slate-50 hover:border-slate-200"
                                               :title="$t('a_view')">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -509,7 +509,7 @@ function toggleActive(bundle) {
                                 </td>
                             </tr>
                             <tr v-if="!bundles.data || bundles.data.length === 0">
-                                <td colspan="7" class="px-6 py-16 text-center">
+                                <td colspan="7" class="px-4 md:px-6 py-16 text-center">
                                     <div class="w-16 h-16 mx-auto rounded-2xl bg-gray-50 flex items-center justify-center mb-4">
                                         <svg class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
                                     </div>
@@ -523,7 +523,7 @@ function toggleActive(bundle) {
 
                 <!-- Pagination -->
                 <div v-if="bundles.links && bundles.links.length > 3"
-                     class="px-6 py-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-3">
+                     class="px-4 md:px-6 py-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-3">
                     <p class="text-xs text-gray-400 font-medium">
                         <template v-if="isRtl">
                             عرض <span class="font-semibold text-gray-600">{{ bundles.from }}</span> إلى

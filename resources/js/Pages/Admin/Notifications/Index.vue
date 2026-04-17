@@ -22,18 +22,18 @@ const typeFilter = ref(props.filters?.type || '');
 
 /* ── Type Config ────────────────────────────────── */
 const typeConfig = {
-    new_website_lead:       { labelEn: 'New Lead',          labelAr: 'عميل جديد',         color: 'bg-blue-100 text-blue-700',    icon: 'user-plus' },
-    lead_assigned:          { labelEn: 'Lead Assigned',     labelAr: 'تعيين عميل',        color: 'bg-indigo-100 text-indigo-700', icon: 'user-check' },
+    new_website_lead:       { labelEn: 'New Lead',          labelAr: 'عميل جديد',         color: 'bg-slate-100 text-[#1B365D]',    icon: 'user-plus' },
+    lead_assigned:          { labelEn: 'Lead Assigned',     labelAr: 'تعيين عميل',        color: 'bg-slate-100 text-[#1B365D]', icon: 'user-check' },
     follow_up_reminder:     { labelEn: 'Follow-up',         labelAr: 'متابعة',            color: 'bg-amber-100 text-amber-700',  icon: 'clock' },
     follow_up_overdue:      { labelEn: 'Overdue',           labelAr: 'متأخر',             color: 'bg-red-100 text-red-700',      icon: 'alert' },
-    sequence_step:          { labelEn: 'Automation',        labelAr: 'أتمتة',             color: 'bg-purple-100 text-purple-700', icon: 'zap' },
+    sequence_step:          { labelEn: 'Automation',        labelAr: 'أتمتة',             color: 'bg-slate-100 text-[#1B365D]', icon: 'zap' },
     daily_lead_report:      { labelEn: 'Report',            labelAr: 'تقرير',             color: 'bg-emerald-100 text-emerald-700', icon: 'chart' },
     dental_lab_overdue:     { labelEn: 'Lab Overdue',       labelAr: 'معمل متأخر',        color: 'bg-red-100 text-red-700',      icon: 'alert' },
-    dental_appointment_reminder: { labelEn: 'Appointment',  labelAr: 'موعد',              color: 'bg-cyan-100 text-cyan-700',    icon: 'calendar' },
-    dental_plan_due:        { labelEn: 'Plan Due',          labelAr: 'خطة مستحقة',        color: 'bg-orange-100 text-orange-700', icon: 'clipboard' },
+    dental_appointment_reminder: { labelEn: 'Appointment',  labelAr: 'موعد',              color: 'bg-slate-100 text-[#1B365D]',    icon: 'calendar' },
+    dental_plan_due:        { labelEn: 'Plan Due',          labelAr: 'خطة مستحقة',        color: 'bg-amber-100 text-[#C4A265]', icon: 'clipboard' },
     dental_followup_reminder: { labelEn: 'Dental Follow-up', labelAr: 'متابعة أسنان',    color: 'bg-teal-100 text-teal-700',    icon: 'tooth' },
-    booking:                { labelEn: 'Booking',           labelAr: 'حجز',               color: 'bg-green-100 text-green-700',  icon: 'calendar' },
-    message:                { labelEn: 'Message',           labelAr: 'رسالة',             color: 'bg-sky-100 text-sky-700',      icon: 'mail' },
+    booking:                { labelEn: 'Booking',           labelAr: 'حجز',               color: 'bg-emerald-100 text-emerald-700',  icon: 'calendar' },
+    message:                { labelEn: 'Message',           labelAr: 'رسالة',             color: 'bg-slate-100 text-[#1B365D]',      icon: 'mail' },
     general:                { labelEn: 'General',           labelAr: 'عام',               color: 'bg-gray-100 text-gray-700',    icon: 'bell' },
 };
 
@@ -165,14 +165,14 @@ const groupedNotifications = computed(() => {
             <!-- Header -->
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-900">{{ isRtl ? 'مركز الإشعارات' : 'Notification Center' }}</h1>
+                    <h1 class="text-xl md:text-2xl font-bold text-gray-900">{{ isRtl ? 'مركز الإشعارات' : 'Notification Center' }}</h1>
                     <p class="text-sm text-gray-500 mt-1">
                         {{ isRtl ? `${stats.unread} إشعار غير مقروء` : `${stats.unread} unread notifications` }}
                     </p>
                 </div>
                 <div class="flex items-center gap-2">
                     <button v-if="stats.unread > 0" @click="markAllRead"
-                        class="px-4 py-2 text-sm font-medium text-cyan-700 bg-cyan-50 rounded-lg hover:bg-cyan-100 transition">
+                        class="px-4 py-2 text-sm font-medium text-[#1B365D] bg-slate-50 rounded-lg hover:bg-slate-100 transition">
                         <span class="flex items-center gap-1.5">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
                             {{ isRtl ? 'تحديد الكل كمقروء' : 'Mark All Read' }}
@@ -191,23 +191,23 @@ const groupedNotifications = computed(() => {
             <!-- Stats Cards -->
             <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
                 <div class="bg-white rounded-xl border border-gray-200 p-4">
-                    <div class="text-2xl font-bold text-gray-900">{{ stats.total }}</div>
+                    <div class="text-xl md:text-2xl font-bold text-gray-900">{{ stats.total }}</div>
                     <div class="text-xs text-gray-500 mt-1">{{ isRtl ? 'إجمالي الإشعارات' : 'Total' }}</div>
                 </div>
-                <div class="bg-white rounded-xl border border-cyan-200 p-4">
-                    <div class="text-2xl font-bold text-cyan-600">{{ stats.unread }}</div>
+                <div class="bg-white rounded-xl border border-slate-200 p-4">
+                    <div class="text-xl md:text-2xl font-bold text-[#1B365D]">{{ stats.unread }}</div>
                     <div class="text-xs text-gray-500 mt-1">{{ isRtl ? 'غير مقروء' : 'Unread' }}</div>
                 </div>
-                <div class="bg-white rounded-xl border border-green-200 p-4">
-                    <div class="text-2xl font-bold text-green-600">{{ stats.unread_bookings }}</div>
+                <div class="bg-white rounded-xl border border-emerald-200 p-4">
+                    <div class="text-xl md:text-2xl font-bold text-emerald-600">{{ stats.unread_bookings }}</div>
                     <div class="text-xs text-gray-500 mt-1">{{ isRtl ? 'حجوزات جديدة' : 'New Bookings' }}</div>
                 </div>
-                <div class="bg-white rounded-xl border border-sky-200 p-4">
-                    <div class="text-2xl font-bold text-sky-600">{{ stats.unread_messages }}</div>
+                <div class="bg-white rounded-xl border border-slate-200 p-4">
+                    <div class="text-xl md:text-2xl font-bold text-[#1B365D]">{{ stats.unread_messages }}</div>
                     <div class="text-xs text-gray-500 mt-1">{{ isRtl ? 'رسائل جديدة' : 'New Messages' }}</div>
                 </div>
                 <div class="bg-white rounded-xl border border-gray-200 p-4">
-                    <div class="text-2xl font-bold text-gray-900">{{ stats.today }}</div>
+                    <div class="text-xl md:text-2xl font-bold text-gray-900">{{ stats.today }}</div>
                     <div class="text-xs text-gray-500 mt-1">{{ isRtl ? 'اليوم' : 'Today' }}</div>
                 </div>
             </div>
@@ -220,7 +220,7 @@ const groupedNotifications = computed(() => {
                         <svg class="absolute top-2.5 w-4 h-4 text-gray-400" :class="isRtl ? 'right-3' : 'left-3'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" stroke-width="2"/><path stroke-linecap="round" stroke-width="2" d="m21 21-4.35-4.35"/></svg>
                         <input v-model="search" type="text"
                             :placeholder="isRtl ? 'بحث في الإشعارات...' : 'Search notifications...'"
-                            class="w-full rounded-lg border-gray-300 text-sm focus:ring-cyan-500 focus:border-cyan-500"
+                            class="w-full rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]"
                             :class="isRtl ? 'pr-10 pl-3' : 'pl-10 pr-3'" />
                     </div>
                     <div class="flex rounded-lg border border-gray-300 overflow-hidden">
@@ -232,7 +232,7 @@ const groupedNotifications = computed(() => {
                             @click="setFilter(f.key)"
                             class="px-4 py-2 text-sm font-medium transition"
                             :class="filter === f.key
-                                ? 'bg-cyan-600 text-white'
+                                ? 'bg-[#1B365D] text-white'
                                 : 'bg-white text-gray-600 hover:bg-gray-50'">
                             {{ isRtl ? f.labelAr : f.labelEn }}
                         </button>
@@ -245,7 +245,7 @@ const groupedNotifications = computed(() => {
                         @click="setTypeFilter(t)"
                         class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium transition border"
                         :class="typeFilter === t
-                            ? 'bg-cyan-600 text-white border-cyan-600'
+                            ? 'bg-[#1B365D] text-white border-[#1B365D]'
                             : `${getTypeConfig(t).color} border-transparent hover:opacity-80`">
                         {{ isRtl ? getTypeConfig(t).labelAr : getTypeConfig(t).labelEn }}
                         <span class="font-bold">({{ count }})</span>
@@ -269,11 +269,11 @@ const groupedNotifications = computed(() => {
                                 class="group flex items-start gap-3 p-4 rounded-xl border cursor-pointer transition-all duration-150"
                                 :class="item.read_at
                                     ? 'bg-white border-gray-100 hover:border-gray-200 hover:bg-gray-50'
-                                    : 'bg-cyan-50/50 border-cyan-100 hover:border-cyan-200 hover:bg-cyan-50'">
+                                    : 'bg-slate-50/50 border-slate-100 hover:border-slate-200 hover:bg-slate-50'">
 
                                 <!-- Unread dot -->
                                 <div class="flex-shrink-0 mt-1.5">
-                                    <div v-if="!item.read_at" class="w-2.5 h-2.5 rounded-full bg-cyan-500 ring-2 ring-cyan-100"></div>
+                                    <div v-if="!item.read_at" class="w-2.5 h-2.5 rounded-full bg-[#1B365D] ring-2 ring-slate-100"></div>
                                     <div v-else class="w-2.5 h-2.5 rounded-full bg-gray-200"></div>
                                 </div>
 
@@ -333,7 +333,7 @@ const groupedNotifications = computed(() => {
                                 <!-- Actions -->
                                 <div class="flex-shrink-0 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition">
                                     <button v-if="!item.read_at" @click.stop="markRead(item)"
-                                        class="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-cyan-600" :title="isRtl ? 'تحديد كمقروء' : 'Mark as read'">
+                                        class="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-[#1B365D]" :title="isRtl ? 'تحديد كمقروء' : 'Mark as read'">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
                                     </button>
                                     <button v-if="!String(item.id).startsWith('booking_') && !String(item.id).startsWith('message_')"
@@ -360,7 +360,7 @@ const groupedNotifications = computed(() => {
                         <Link v-if="link.url"
                             :href="link.url"
                             class="px-3 py-1.5 text-sm rounded-lg border transition"
-                            :class="link.active ? 'bg-cyan-600 text-white border-cyan-600' : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'"
+                            :class="link.active ? 'bg-[#1B365D] text-white border-[#1B365D]' : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'"
                             v-html="link.label" preserve-state />
                         <span v-else class="px-3 py-1.5 text-sm text-gray-400" v-html="link.label" />
                     </template>

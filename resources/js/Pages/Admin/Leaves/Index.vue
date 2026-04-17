@@ -53,9 +53,9 @@ function deleteLeave(id) {
 }
 
 const typeConfig = {
-    annual:   { key: 'a_annual',   icon: '☀️', bg: 'bg-sky-50',     text: 'text-sky-700',    border: 'border-sky-200',    dot: 'bg-sky-500' },
-    sick:     { key: 'a_sick',     icon: '🏥', bg: 'bg-rose-50',    text: 'text-rose-700',   border: 'border-rose-200',   dot: 'bg-rose-500' },
-    personal: { key: 'a_personal', icon: '👤', bg: 'bg-violet-50',  text: 'text-violet-700', border: 'border-violet-200', dot: 'bg-violet-500' },
+    annual:   { key: 'a_annual',   icon: '☀️', bg: 'bg-slate-50',     text: 'text-[#1B365D]',    border: 'border-slate-200',    dot: 'bg-[#1B365D]' },
+    sick:     { key: 'a_sick',     icon: '🏥', bg: 'bg-amber-50',    text: 'text-[#C4A265]',   border: 'border-amber-200',   dot: 'bg-[#C4A265]' },
+    personal: { key: 'a_personal', icon: '👤', bg: 'bg-slate-50',  text: 'text-[#1B365D]', border: 'border-slate-200', dot: 'bg-[#1B365D]' },
     unpaid:   { key: 'a_unpaid',   icon: '📋', bg: 'bg-slate-50',   text: 'text-slate-700',  border: 'border-slate-200',  dot: 'bg-slate-500' },
 };
 
@@ -98,7 +98,7 @@ const stats = computed(() => {
             <!-- ═══════════ HEADER ═══════════ -->
             <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-900">{{ $t('a_leave_requests') }}</h1>
+                    <h1 class="text-xl md:text-2xl font-bold text-gray-900">{{ $t('a_leave_requests') }}</h1>
                     <p class="text-sm text-gray-500 mt-1">{{ isRtl ? 'إدارة طلبات الإجازات والموافقات' : 'Manage leave requests and approvals' }}</p>
                 </div>
                 <Link
@@ -123,7 +123,7 @@ const stats = computed(() => {
                             <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
                         </div>
                     </div>
-                    <p class="text-2xl font-bold text-gray-900">{{ stats.total }}</p>
+                    <p class="text-xl md:text-2xl font-bold text-gray-900">{{ stats.total }}</p>
                 </div>
                 <div class="bg-white rounded-2xl border border-amber-100 p-4 shadow-sm">
                     <div class="flex items-center justify-between mb-2">
@@ -132,7 +132,7 @@ const stats = computed(() => {
                             <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                         </div>
                     </div>
-                    <p class="text-2xl font-bold text-amber-600">{{ stats.pending }}</p>
+                    <p class="text-xl md:text-2xl font-bold text-amber-600">{{ stats.pending }}</p>
                 </div>
                 <div class="bg-white rounded-2xl border border-emerald-100 p-4 shadow-sm">
                     <div class="flex items-center justify-between mb-2">
@@ -141,7 +141,7 @@ const stats = computed(() => {
                             <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                         </div>
                     </div>
-                    <p class="text-2xl font-bold text-emerald-600">{{ stats.approved }}</p>
+                    <p class="text-xl md:text-2xl font-bold text-emerald-600">{{ stats.approved }}</p>
                 </div>
                 <div class="bg-white rounded-2xl border border-red-100 p-4 shadow-sm">
                     <div class="flex items-center justify-between mb-2">
@@ -150,7 +150,7 @@ const stats = computed(() => {
                             <svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                         </div>
                     </div>
-                    <p class="text-2xl font-bold text-red-500">{{ stats.rejected }}</p>
+                    <p class="text-xl md:text-2xl font-bold text-red-500">{{ stats.rejected }}</p>
                 </div>
             </div>
 

@@ -80,11 +80,11 @@ function applyFilters() {
 watch(moduleFilter, () => applyFilters());
 
 const funnelStages = [
-    { key: 'total', label: 'Total Leads', color: '#3B82F6', gradient: 'from-blue-500 to-blue-600' },
-    { key: 'contacted', label: 'Contacted', color: '#6366F1', gradient: 'from-indigo-500 to-indigo-600' },
-    { key: 'qualified', label: 'Qualified', color: '#8B5CF6', gradient: 'from-purple-500 to-purple-600' },
+    { key: 'total', label: 'Total Leads', color: '#3B82F6', gradient: 'from-[#1B365D] to-[#1B365D]' },
+    { key: 'contacted', label: 'Contacted', color: '#6366F1', gradient: 'from-[#1B365D] to-[#1B365D]' },
+    { key: 'qualified', label: 'Qualified', color: '#8B5CF6', gradient: 'from-[#1B365D] to-[#1B365D]' },
     { key: 'appointment', label: 'Appointment', color: '#C4A265', gradient: 'from-[#C4A265] to-[#D4B87A]' },
-    { key: 'converted', label: 'Converted', color: '#22C55E', gradient: 'from-green-500 to-green-600' },
+    { key: 'converted', label: 'Converted', color: '#22C55E', gradient: 'from-emerald-500 to-emerald-600' },
     { key: 'lost', label: 'Lost', color: '#EF4444', gradient: 'from-red-500 to-red-600' },
 ];
 
@@ -149,9 +149,9 @@ const maxBucketCount = computed(() => {
 });
 
 const kpiCards = [
-    { key: 'total', label: 'Total Leads', gradient: 'from-blue-500 to-blue-600', bgLight: 'bg-blue-50', iconPath: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z' },
-    { key: 'contacted', label: 'Contacted', gradient: 'from-indigo-500 to-indigo-600', bgLight: 'bg-indigo-50', iconPath: 'M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z' },
-    { key: 'converted', label: 'Converted', gradient: 'from-green-500 to-green-600', bgLight: 'bg-green-50', iconPath: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' },
+    { key: 'total', label: 'Total Leads', gradient: 'from-[#1B365D] to-[#1B365D]', bgLight: 'bg-slate-50', iconPath: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z' },
+    { key: 'contacted', label: 'Contacted', gradient: 'from-[#1B365D] to-[#1B365D]', bgLight: 'bg-slate-50', iconPath: 'M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z' },
+    { key: 'converted', label: 'Converted', gradient: 'from-emerald-500 to-emerald-600', bgLight: 'bg-emerald-50', iconPath: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' },
     { key: 'lost', label: 'Lost', gradient: 'from-red-500 to-red-600', bgLight: 'bg-red-50', iconPath: 'M6 18L18 6M6 6l12 12' },
 ];
 </script>
@@ -182,7 +182,7 @@ const kpiCards = [
                 :class="mounted ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'"
             >
                 <div class="absolute top-0 ltr:left-0 rtl:right-0 ltr:right-0 rtl:left-0 h-1" style="background: linear-gradient(135deg, #C4A265, #D4B87A, #C4A265);"></div>
-                <div class="p-6 sm:p-8">
+                <div class="p-4 md:p-6 sm:p-8">
                     <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
                         <!-- Title -->
                         <div class="flex items-center gap-4">
@@ -192,7 +192,7 @@ const kpiCards = [
                                 </svg>
                             </div>
                             <div>
-                                <h1 class="text-2xl font-bold text-gray-800">{{ $t('a_crm_reports') }}</h1>
+                                <h1 class="text-xl md:text-2xl font-bold text-gray-800">{{ $t('a_crm_reports') }}</h1>
                                 <p class="text-sm text-gray-500 mt-0.5">Lead funnel, source performance, team metrics, and commissions</p>
                             </div>
                         </div>
@@ -247,7 +247,7 @@ const kpiCards = [
                         </div>
                         <button
                             @click="applyFilters"
-                            class="px-6 py-2.5 text-sm font-semibold text-white rounded-xl shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0"
+                            class="px-4 md:px-6 py-2.5 text-sm font-semibold text-white rounded-xl shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0"
                             style="background: linear-gradient(135deg, #C4A265, #D4B87A);"
                         >
                             <span class="flex items-center gap-2">
@@ -283,14 +283,14 @@ const kpiCards = [
                             </svg>
                         </div>
                         <!-- Trend indicator for converted -->
-                        <div v-if="kpi.key === 'converted' && funnel?.total > 0" class="flex items-center gap-1 text-[10px] font-bold text-green-600 bg-green-50 px-2 py-1 rounded-lg">
+                        <div v-if="kpi.key === 'converted' && funnel?.total > 0" class="flex items-center gap-1 text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-lg">
                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 10l7-7m0 0l7 7m-7-7v18" />
                             </svg>
                             {{ conversionRate() }}%
                         </div>
                     </div>
-                    <p class="text-2xl sm:text-3xl font-bold text-gray-800 tracking-tight">{{ funnel?.[kpi.key] ?? 0 }}</p>
+                    <p class="text-xl md:text-2xl sm:text-3xl font-bold text-gray-800 tracking-tight">{{ funnel?.[kpi.key] ?? 0 }}</p>
                     <p class="text-xs text-gray-400 mt-1 font-semibold uppercase tracking-wider">{{ kpi.label }}</p>
 
                     <!-- Subtle bottom accent -->
@@ -306,7 +306,7 @@ const kpiCards = [
                 :style="{ transitionDelay: '320ms' }"
             >
                 <div class="absolute top-0 ltr:left-0 rtl:right-0 ltr:right-0 rtl:left-0 h-1" style="background: linear-gradient(135deg, #C4A265, #D4B87A, #C4A265);"></div>
-                <div class="p-6 sm:p-8">
+                <div class="p-4 md:p-6 sm:p-8">
                     <div class="flex items-center gap-3 mb-8">
                         <div class="w-9 h-9 rounded-lg flex items-center justify-center" style="background: linear-gradient(135deg, #C4A265, #D4B87A);">
                             <svg class="w-4.5 h-4.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -359,7 +359,7 @@ const kpiCards = [
                     :style="{ transitionDelay: '400ms' }"
                 >
                     <div class="absolute top-0 ltr:left-0 rtl:right-0 ltr:right-0 rtl:left-0 h-1" style="background: linear-gradient(135deg, #C4A265, #D4B87A, #C4A265);"></div>
-                    <div class="p-6 sm:p-8">
+                    <div class="p-4 md:p-6 sm:p-8">
                         <div class="flex items-center gap-3 mb-6">
                             <div class="w-9 h-9 rounded-lg flex items-center justify-center" style="background: linear-gradient(135deg, #C4A265, #D4B87A);">
                                 <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -384,7 +384,7 @@ const kpiCards = [
                                         <span class="text-gray-400">{{ s.total }} leads</span>
                                         <span
                                             class="font-bold px-2 py-0.5 rounded-full"
-                                            :class="s.rate >= 30 ? 'text-green-700 bg-green-50' : s.rate >= 15 ? 'text-amber-700 bg-amber-50' : 'text-gray-500 bg-gray-50'"
+                                            :class="s.rate >= 30 ? 'text-emerald-700 bg-emerald-50' : s.rate >= 15 ? 'text-amber-700 bg-amber-50' : 'text-gray-500 bg-gray-50'"
                                         >{{ s.rate }}%</span>
                                     </div>
                                 </div>
@@ -399,7 +399,7 @@ const kpiCards = [
                                     ></div>
                                 </div>
                                 <div class="flex items-center gap-4 mt-1">
-                                    <span class="text-[10px] text-green-600 font-semibold">{{ s.converted }} converted</span>
+                                    <span class="text-[10px] text-emerald-600 font-semibold">{{ s.converted }} converted</span>
                                     <span class="text-[10px] text-red-400">{{ s.lost }} lost</span>
                                 </div>
                             </div>
@@ -428,10 +428,10 @@ const kpiCards = [
                                                 </div>
                                             </td>
                                             <td class="py-2.5 text-center text-gray-600 text-xs font-medium">{{ s.total }}</td>
-                                            <td class="py-2.5 text-center text-green-600 font-semibold text-xs">{{ s.converted }}</td>
+                                            <td class="py-2.5 text-center text-emerald-600 font-semibold text-xs">{{ s.converted }}</td>
                                             <td class="py-2.5 text-center text-red-500 text-xs">{{ s.lost }}</td>
                                             <td class="py-2.5 ltr:text-right rtl:text-left">
-                                                <span class="text-xs font-bold" :class="s.rate >= 30 ? 'text-green-600' : s.rate >= 15 ? 'text-amber-600' : 'text-gray-500'">{{ s.rate }}%</span>
+                                                <span class="text-xs font-bold" :class="s.rate >= 30 ? 'text-emerald-600' : s.rate >= 15 ? 'text-amber-600' : 'text-gray-500'">{{ s.rate }}%</span>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -457,7 +457,7 @@ const kpiCards = [
                     :style="{ transitionDelay: '460ms' }"
                 >
                     <div class="absolute top-0 ltr:left-0 rtl:right-0 ltr:right-0 rtl:left-0 h-1" style="background: linear-gradient(135deg, #C4A265, #D4B87A, #C4A265);"></div>
-                    <div class="p-6 sm:p-8">
+                    <div class="p-4 md:p-6 sm:p-8">
                         <div class="flex items-center gap-3 mb-6">
                             <div class="w-9 h-9 rounded-lg flex items-center justify-center" style="background: linear-gradient(135deg, #C4A265, #D4B87A);">
                                 <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -480,13 +480,13 @@ const kpiCards = [
                                 <div class="flex items-center justify-between mb-3">
                                     <span class="text-sm font-semibold text-gray-700">{{ c.name }}</span>
                                     <div class="flex items-center gap-1.5">
-                                        <svg v-if="c.rate >= 20" class="w-3.5 h-3.5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg v-if="c.rate >= 20" class="w-3.5 h-3.5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 10l7-7m0 0l7 7m-7-7v18" />
                                         </svg>
                                         <svg v-else class="w-3.5 h-3.5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
                                         </svg>
-                                        <span class="text-sm font-bold" :class="c.rate >= 20 ? 'text-green-600' : 'text-gray-500'">{{ c.rate }}%</span>
+                                        <span class="text-sm font-bold" :class="c.rate >= 20 ? 'text-emerald-600' : 'text-gray-500'">{{ c.rate }}%</span>
                                     </div>
                                 </div>
                                 <!-- Progress bar -->
@@ -503,7 +503,7 @@ const kpiCards = [
                                 <div class="flex items-center justify-between text-xs">
                                     <div class="flex items-center gap-3">
                                         <span class="text-gray-400">{{ c.total }} leads</span>
-                                        <span class="text-green-600 font-semibold">{{ c.converted }} conv.</span>
+                                        <span class="text-emerald-600 font-semibold">{{ c.converted }} conv.</span>
                                     </div>
                                     <span class="text-gray-400 font-mono">CPL {{ formatCurrency(c.cost_per_lead) }}</span>
                                 </div>
@@ -532,7 +532,7 @@ const kpiCards = [
                     :style="{ transitionDelay: '520ms' }"
                 >
                     <div class="absolute top-0 ltr:left-0 rtl:right-0 ltr:right-0 rtl:left-0 h-1" style="background: linear-gradient(135deg, #C4A265, #D4B87A, #C4A265);"></div>
-                    <div class="p-6 sm:p-8">
+                    <div class="p-4 md:p-6 sm:p-8">
                         <div class="flex items-center gap-3 mb-6">
                             <div class="w-9 h-9 rounded-lg flex items-center justify-center" style="background: linear-gradient(135deg, #C4A265, #D4B87A);">
                                 <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -560,7 +560,7 @@ const kpiCards = [
                                         </div>
                                         <div
                                             class="absolute -bottom-1 -ltr:right-1 rtl:left-1 w-5 h-5 rounded-full flex items-center justify-center text-[8px] font-bold border-2 border-white shadow-sm"
-                                            :class="idx === 0 ? 'bg-amber-400 text-amber-900' : idx === 1 ? 'bg-gray-300 text-gray-700' : idx === 2 ? 'bg-orange-300 text-orange-800' : 'bg-gray-100 text-gray-500'"
+                                            :class="idx === 0 ? 'bg-amber-400 text-amber-900' : idx === 1 ? 'bg-gray-300 text-gray-700' : idx === 2 ? 'bg-amber-300 text-[#C4A265]' : 'bg-gray-100 text-gray-500'"
                                         >{{ idx + 1 }}</div>
                                     </div>
                                     <div class="flex-1 min-w-0">
@@ -571,13 +571,13 @@ const kpiCards = [
                                 <div class="flex items-center justify-between mb-2">
                                     <span class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider">{{ $t('a_conversion') }}</span>
                                     <div class="flex items-center gap-1.5">
-                                        <svg v-if="u.rate >= 30" class="w-3 h-3 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg v-if="u.rate >= 30" class="w-3 h-3 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 10l7-7m0 0l7 7m-7-7v18" />
                                         </svg>
                                         <svg v-else-if="u.rate < 15" class="w-3 h-3 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
                                         </svg>
-                                        <span class="text-sm font-bold" :class="u.rate >= 30 ? 'text-green-600' : u.rate >= 15 ? 'text-amber-600' : 'text-gray-500'">{{ u.rate }}%</span>
+                                        <span class="text-sm font-bold" :class="u.rate >= 30 ? 'text-emerald-600' : u.rate >= 15 ? 'text-amber-600' : 'text-gray-500'">{{ u.rate }}%</span>
                                     </div>
                                 </div>
                                 <div class="h-1.5 bg-gray-50 rounded-full overflow-hidden border border-gray-100">
@@ -587,7 +587,7 @@ const kpiCards = [
                                     ></div>
                                 </div>
                                 <div class="flex items-center justify-between mt-2">
-                                    <span class="text-[10px] text-green-600 font-semibold">{{ u.converted }} converted</span>
+                                    <span class="text-[10px] text-emerald-600 font-semibold">{{ u.converted }} converted</span>
                                     <span class="text-[10px] text-gray-400">{{ u.total - u.converted }} remaining</span>
                                 </div>
                             </div>
@@ -611,7 +611,7 @@ const kpiCards = [
                     :style="{ transitionDelay: '580ms' }"
                 >
                     <div class="absolute top-0 ltr:left-0 rtl:right-0 ltr:right-0 rtl:left-0 h-1" style="background: linear-gradient(135deg, #C4A265, #D4B87A, #C4A265);"></div>
-                    <div class="p-6 sm:p-8">
+                    <div class="p-4 md:p-6 sm:p-8">
                         <div class="flex items-center gap-3 mb-6">
                             <div class="w-9 h-9 rounded-lg flex items-center justify-center" style="background: linear-gradient(135deg, #C4A265, #D4B87A);">
                                 <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -657,8 +657,8 @@ const kpiCards = [
                         </div>
 
                         <div v-if="!lossReasons?.length" class="py-16 text-center">
-                            <div class="w-14 h-14 mx-auto mb-3 rounded-2xl bg-green-50 flex items-center justify-center">
-                                <svg class="w-7 h-7 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="w-14 h-14 mx-auto mb-3 rounded-2xl bg-emerald-50 flex items-center justify-center">
+                                <svg class="w-7 h-7 text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
                             </div>
@@ -687,25 +687,25 @@ const kpiCards = [
                     </div>
 
                     <!-- Total Card (Gold Gradient) -->
-                    <div class="relative overflow-hidden rounded-2xl p-6 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300" style="background: linear-gradient(135deg, #C4A265, #D4B87A);">
+                    <div class="relative overflow-hidden rounded-2xl p-4 md:p-6 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300" style="background: linear-gradient(135deg, #C4A265, #D4B87A);">
                         <div class="absolute top-0 ltr:right-0 rtl:left-0 w-28 h-28 rounded-full bg-white/10 -translate-y-8 translate-x-8"></div>
                         <div class="absolute bottom-0 ltr:left-0 rtl:right-0 w-16 h-16 rounded-full bg-white/5 translate-y-6 -translate-x-4"></div>
                         <div class="relative">
                             <p class="text-sm text-white/70 font-semibold uppercase tracking-wider">{{ $t('a_total_earned') }}</p>
-                            <p class="text-3xl font-bold text-white mt-2 tracking-tight">{{ formatCurrency(commissionsSummary?.total) }}</p>
+                            <p class="text-2xl md:text-3xl font-bold text-white mt-2 tracking-tight">{{ formatCurrency(commissionsSummary?.total) }}</p>
                         </div>
                     </div>
 
                     <!-- Paid + Pending -->
                     <div class="grid grid-cols-2 gap-3">
                         <div class="relative bg-white rounded-2xl border border-gray-100 p-5 shadow-sm overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group">
-                            <div class="absolute bottom-0 ltr:left-0 rtl:right-0 ltr:right-0 rtl:left-0 h-0.5 bg-gradient-to-r from-green-400 to-green-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                            <div class="w-9 h-9 rounded-xl bg-green-50 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
-                                <svg class="w-4.5 h-4.5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="absolute bottom-0 ltr:left-0 rtl:right-0 ltr:right-0 rtl:left-0 h-0.5 bg-gradient-to-r from-emerald-400 to-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                            <div class="w-9 h-9 rounded-xl bg-emerald-50 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
+                                <svg class="w-4.5 h-4.5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                 </svg>
                             </div>
-                            <p class="text-lg font-bold text-green-600">{{ formatCurrency(commissionsSummary?.paid) }}</p>
+                            <p class="text-lg font-bold text-emerald-600">{{ formatCurrency(commissionsSummary?.paid) }}</p>
                             <p class="text-[10px] text-gray-400 mt-1 font-semibold uppercase tracking-wider">{{ $t('a_paid_out') }}</p>
                         </div>
                         <div class="relative bg-white rounded-2xl border border-gray-100 p-5 shadow-sm overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group">
@@ -728,7 +728,7 @@ const kpiCards = [
                     :style="{ transitionDelay: '700ms' }"
                 >
                     <div class="absolute top-0 ltr:left-0 rtl:right-0 ltr:right-0 rtl:left-0 h-1" style="background: linear-gradient(135deg, #C4A265, #D4B87A, #C4A265);"></div>
-                    <div class="p-6 sm:p-8">
+                    <div class="p-4 md:p-6 sm:p-8">
                         <div class="flex items-center gap-3 mb-6">
                             <div class="w-9 h-9 rounded-lg flex items-center justify-center" style="background: linear-gradient(135deg, #C4A265, #D4B87A);">
                                 <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -791,9 +791,9 @@ const kpiCards = [
                 :style="{ transitionDelay: '760ms' }"
             >
                 <div class="absolute top-0 ltr:left-0 rtl:right-0 ltr:right-0 rtl:left-0 h-1" style="background: linear-gradient(135deg, #22C55E, #16A34A);"></div>
-                <div class="p-6 sm:p-8">
+                <div class="p-4 md:p-6 sm:p-8">
                     <div class="flex items-center gap-3 mb-6">
-                        <div class="w-9 h-9 rounded-lg flex items-center justify-center bg-gradient-to-br from-green-500 to-green-600">
+                        <div class="w-9 h-9 rounded-lg flex items-center justify-center bg-gradient-to-br from-emerald-500 to-emerald-600">
                             <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
@@ -824,15 +824,15 @@ const kpiCards = [
                                         <span class="font-semibold text-gray-700 text-xs">{{ c.name }}</span>
                                     </td>
                                     <td class="py-3 text-center text-gray-600 text-xs font-medium">{{ c.total_leads }}</td>
-                                    <td class="py-3 text-center text-green-600 font-semibold text-xs">{{ c.converted_leads }}</td>
+                                    <td class="py-3 text-center text-emerald-600 font-semibold text-xs">{{ c.converted_leads }}</td>
                                     <td class="py-3 ltr:text-right rtl:text-left text-gray-600 text-xs font-mono">{{ formatCurrency(c.actual_cost || c.budget) }}</td>
-                                    <td class="py-3 ltr:text-right rtl:text-left text-green-600 font-semibold text-xs font-mono">{{ formatCurrency(c.revenue) }}</td>
+                                    <td class="py-3 ltr:text-right rtl:text-left text-emerald-600 font-semibold text-xs font-mono">{{ formatCurrency(c.revenue) }}</td>
                                     <td class="py-3 ltr:text-right rtl:text-left text-gray-500 text-xs font-mono">{{ formatCurrency(c.cost_per_lead) }}</td>
                                     <td class="py-3 ltr:text-right rtl:text-left text-gray-500 text-xs font-mono">{{ formatCurrency(c.cost_per_conversion) }}</td>
                                     <td class="py-3 ltr:text-right rtl:text-left">
                                         <span
                                             class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold"
-                                            :class="c.roi > 0 ? 'bg-green-50 text-green-700' : c.roi === 0 ? 'bg-gray-50 text-gray-500' : 'bg-red-50 text-red-600'"
+                                            :class="c.roi > 0 ? 'bg-emerald-50 text-emerald-700' : c.roi === 0 ? 'bg-gray-50 text-gray-500' : 'bg-red-50 text-red-600'"
                                         >
                                             <svg v-if="c.roi > 0" class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 10l7-7m0 0l7 7m-7-7v18" />
@@ -869,9 +869,9 @@ const kpiCards = [
                     :style="{ transitionDelay: '820ms' }"
                 >
                     <div class="absolute top-0 ltr:left-0 rtl:right-0 ltr:right-0 rtl:left-0 h-1" style="background: linear-gradient(135deg, #6366F1, #818CF8);"></div>
-                    <div class="p-6 sm:p-8">
+                    <div class="p-4 md:p-6 sm:p-8">
                         <div class="flex items-center gap-3 mb-6">
-                            <div class="w-9 h-9 rounded-lg flex items-center justify-center bg-gradient-to-br from-indigo-500 to-indigo-600">
+                            <div class="w-9 h-9 rounded-lg flex items-center justify-center bg-gradient-to-br from-[#1B365D] to-[#1B365D]">
                                 <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
@@ -885,20 +885,20 @@ const kpiCards = [
                         <div v-if="conversionTimeData?.total_converted > 0">
                             <!-- KPI Cards -->
                             <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
-                                <div class="p-3 rounded-xl bg-indigo-50 text-center">
-                                    <p class="text-2xl font-bold text-indigo-700">{{ conversionTimeData.avg }}</p>
-                                    <p class="text-[10px] text-indigo-500 font-semibold uppercase tracking-wider mt-1">{{ $t('a_avg_days') }}</p>
+                                <div class="p-3 rounded-xl bg-slate-50 text-center">
+                                    <p class="text-xl md:text-2xl font-bold text-[#1B365D]">{{ conversionTimeData.avg }}</p>
+                                    <p class="text-[10px] text-[#1B365D] font-semibold uppercase tracking-wider mt-1">{{ $t('a_avg_days') }}</p>
                                 </div>
-                                <div class="p-3 rounded-xl bg-green-50 text-center">
-                                    <p class="text-2xl font-bold text-green-700">{{ conversionTimeData.min }}</p>
-                                    <p class="text-[10px] text-green-500 font-semibold uppercase tracking-wider mt-1">{{ $t('a_fastest') }}</p>
+                                <div class="p-3 rounded-xl bg-emerald-50 text-center">
+                                    <p class="text-xl md:text-2xl font-bold text-emerald-700">{{ conversionTimeData.min }}</p>
+                                    <p class="text-[10px] text-emerald-500 font-semibold uppercase tracking-wider mt-1">{{ $t('a_fastest') }}</p>
                                 </div>
-                                <div class="p-3 rounded-xl bg-purple-50 text-center">
-                                    <p class="text-2xl font-bold text-purple-700">{{ conversionTimeData.median }}</p>
-                                    <p class="text-[10px] text-purple-500 font-semibold uppercase tracking-wider mt-1">{{ $t('a_median') }}</p>
+                                <div class="p-3 rounded-xl bg-slate-50 text-center">
+                                    <p class="text-xl md:text-2xl font-bold text-[#1B365D]">{{ conversionTimeData.median }}</p>
+                                    <p class="text-[10px] text-[#1B365D] font-semibold uppercase tracking-wider mt-1">{{ $t('a_median') }}</p>
                                 </div>
                                 <div class="p-3 rounded-xl bg-amber-50 text-center">
-                                    <p class="text-2xl font-bold text-amber-700">{{ conversionTimeData.max }}</p>
+                                    <p class="text-xl md:text-2xl font-bold text-amber-700">{{ conversionTimeData.max }}</p>
                                     <p class="text-[10px] text-amber-500 font-semibold uppercase tracking-wider mt-1">{{ $t('a_slowest') }}</p>
                                 </div>
                             </div>
@@ -943,7 +943,7 @@ const kpiCards = [
                     :style="{ transitionDelay: '880ms' }"
                 >
                     <div class="absolute top-0 ltr:left-0 rtl:right-0 ltr:right-0 rtl:left-0 h-1" style="background: linear-gradient(135deg, #F59E0B, #D97706);"></div>
-                    <div class="p-6 sm:p-8">
+                    <div class="p-4 md:p-6 sm:p-8">
                         <div class="flex items-center gap-3 mb-6">
                             <div class="w-9 h-9 rounded-lg flex items-center justify-center bg-gradient-to-br from-amber-500 to-amber-600">
                                 <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1009,7 +1009,7 @@ const kpiCards = [
                                     <span class="text-[10px] text-gray-500 font-semibold">{{ $t('a_total_leads') }}</span>
                                 </div>
                                 <div class="flex items-center gap-2">
-                                    <span class="w-3 h-3 rounded-sm bg-green-500"></span>
+                                    <span class="w-3 h-3 rounded-sm bg-emerald-500"></span>
                                     <span class="text-[10px] text-gray-500 font-semibold">{{ $t('a_converted') }}</span>
                                 </div>
                             </div>
@@ -1034,9 +1034,9 @@ const kpiCards = [
                 :style="{ transitionDelay: '940ms' }"
             >
                 <div class="absolute top-0 ltr:left-0 rtl:right-0 ltr:right-0 rtl:left-0 h-1" style="background: linear-gradient(135deg, #8B5CF6, #A78BFA);"></div>
-                <div class="p-6 sm:p-8">
+                <div class="p-4 md:p-6 sm:p-8">
                     <div class="flex items-center gap-3 mb-6">
-                        <div class="w-9 h-9 rounded-lg flex items-center justify-center bg-gradient-to-br from-purple-500 to-purple-600">
+                        <div class="w-9 h-9 rounded-lg flex items-center justify-center bg-gradient-to-br from-[#1B365D] to-[#1B365D]">
                             <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
                             </svg>
@@ -1078,7 +1078,7 @@ const kpiCards = [
                                     <td class="py-3 text-center">
                                         <span
                                             class="text-xs font-bold px-2 py-0.5 rounded-full"
-                                            :class="s.response_rate >= 80 ? 'text-green-700 bg-green-50' : s.response_rate >= 50 ? 'text-amber-700 bg-amber-50' : 'text-red-600 bg-red-50'"
+                                            :class="s.response_rate >= 80 ? 'text-emerald-700 bg-emerald-50' : s.response_rate >= 50 ? 'text-amber-700 bg-amber-50' : 'text-red-600 bg-red-50'"
                                         >{{ s.response_rate }}%</span>
                                     </td>
                                     <td class="py-3 text-center text-gray-500 text-xs font-mono">{{ s.avg_response_hours }}h</td>
@@ -1088,14 +1088,14 @@ const kpiCards = [
                                     <td class="py-3 text-center">
                                         <span
                                             class="text-xs font-bold px-2 py-0.5 rounded-full"
-                                            :class="s.follow_up_completion_rate >= 80 ? 'text-green-700 bg-green-50' : s.follow_up_completion_rate >= 50 ? 'text-amber-700 bg-amber-50' : 'text-red-600 bg-red-50'"
+                                            :class="s.follow_up_completion_rate >= 80 ? 'text-emerald-700 bg-emerald-50' : s.follow_up_completion_rate >= 50 ? 'text-amber-700 bg-amber-50' : 'text-red-600 bg-red-50'"
                                         >{{ s.follow_up_completion_rate }}%</span>
                                     </td>
-                                    <td class="py-3 text-center text-green-600 font-semibold text-xs">{{ s.converted_leads }}</td>
+                                    <td class="py-3 text-center text-emerald-600 font-semibold text-xs">{{ s.converted_leads }}</td>
                                     <td class="py-3 ltr:text-right rtl:text-left">
                                         <span
                                             class="text-xs font-bold px-2.5 py-1 rounded-full"
-                                            :class="s.conversion_rate >= 30 ? 'text-green-700 bg-green-50' : s.conversion_rate >= 15 ? 'text-amber-700 bg-amber-50' : 'text-gray-500 bg-gray-50'"
+                                            :class="s.conversion_rate >= 30 ? 'text-emerald-700 bg-emerald-50' : s.conversion_rate >= 15 ? 'text-amber-700 bg-amber-50' : 'text-gray-500 bg-gray-50'"
                                         >{{ s.conversion_rate }}%</span>
                                     </td>
                                 </tr>

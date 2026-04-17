@@ -375,7 +375,7 @@ onUnmounted(() => {
                     <button
                         @click="moduleFilter = 'dental'"
                         class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-full text-[11px] font-semibold border transition-all"
-                        :class="moduleFilter === 'dental' ? 'bg-cyan-600 text-white border-cyan-600' : 'bg-white text-cyan-700 border-cyan-200 hover:bg-cyan-50'"
+                        :class="moduleFilter === 'dental' ? 'bg-[#1B365D] text-white border-[#1B365D]' : 'bg-white text-[#1B365D] border-slate-200 hover:bg-slate-50'"
                     >
                         <svg class="w-3.5 h-3.5 inline -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342" /></svg> {{ $t('a_dental') }}
                         <span class="text-[10px] opacity-70">({{ dentalCount }})</span>
@@ -383,7 +383,7 @@ onUnmounted(() => {
                     <button
                         @click="moduleFilter = 'derma'"
                         class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-full text-[11px] font-semibold border transition-all"
-                        :class="moduleFilter === 'derma' ? 'bg-pink-600 text-white border-pink-600' : 'bg-white text-pink-700 border-pink-200 hover:bg-pink-50'"
+                        :class="moduleFilter === 'derma' ? 'bg-[#C4A265] text-white border-[#C4A265]' : 'bg-white text-[#C4A265] border-amber-200 hover:bg-amber-50'"
                     >
                         {{ $t('a_derma') }}
                         <span class="text-[10px] opacity-70">({{ dermaCount }})</span>
@@ -471,15 +471,15 @@ onUnmounted(() => {
                                                     {{ visit.patient?.full_name }}
                                                 </Link>
                                                 <div class="tq-visit-meta">
-                                                    <span v-if="visit.module === 'dental'" class="inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] font-semibold rounded-full bg-cyan-50 text-cyan-700 border border-cyan-200"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342" /></svg> {{ $t('a_dental') }}</span>
-                                                    <span v-else class="inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] font-semibold rounded-full bg-pink-50 text-pink-700 border border-pink-200">{{ $t('a_derma') }}</span>
+                                                    <span v-if="visit.module === 'dental'" class="inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] font-semibold rounded-full bg-slate-50 text-[#1B365D] border border-slate-200"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342" /></svg> {{ $t('a_dental') }}</span>
+                                                    <span v-else class="inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] font-semibold rounded-full bg-amber-50 text-[#C4A265] border border-amber-200">{{ $t('a_derma') }}</span>
                                                     <span class="tq-visit-type">
                                                         <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="visitTypeIcons[visit.visit_type] || visitTypeIcons.consultation" />
                                                         </svg>
                                                         {{ {consultation: $t('a_consultation'), session: $t('a_session'), follow_up: $t('a_follow_up')}[visit.visit_type] || visit.visit_type }}
                                                     </span>
-                                                    <span v-if="getDentalDescription(visit)" class="text-[10px] font-medium text-cyan-600">{{ getDentalDescription(visit) }}</span>
+                                                    <span v-if="getDentalDescription(visit)" class="text-[10px] font-medium text-[#1B365D]">{{ getDentalDescription(visit) }}</span>
                                                     <span v-if="visit.service" class="tq-visit-service">{{ $localized(visit.service, 'name') }}</span>
                                                     <span v-if="visit.session_number" class="tq-visit-session">#{{ visit.session_number }}</span>
                                                     <span v-if="visit.package_bundle_booking_id" class="tq-visit-bundle-badge" title="Package Bundle">

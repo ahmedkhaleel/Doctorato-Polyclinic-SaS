@@ -25,18 +25,18 @@ const hoveredCard = ref(null);
 const expandedCard = ref(null);
 
 const channels = [
-    { value: 'whatsapp', label: 'WhatsApp', gradient: 'from-emerald-500 to-green-600', bg: 'bg-emerald-50', text: 'text-emerald-700', ring: 'ring-emerald-200', glow: 'shadow-emerald-500/30', strip: 'from-emerald-400 to-green-500', iconFill: true, icon: 'M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z' },
-    { value: 'sms', label: 'SMS', gradient: 'from-blue-500 to-indigo-600', bg: 'bg-blue-50', text: 'text-blue-700', ring: 'ring-blue-200', glow: 'shadow-blue-500/30', strip: 'from-blue-400 to-indigo-500', iconFill: false, icon: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z' },
-    { value: 'email', label: 'Email', gradient: 'from-violet-500 to-purple-600', bg: 'bg-violet-50', text: 'text-violet-700', ring: 'ring-violet-200', glow: 'shadow-violet-500/30', strip: 'from-violet-400 to-purple-500', iconFill: false, icon: 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z' },
+    { value: 'whatsapp', label: 'WhatsApp', gradient: 'from-emerald-500 to-emerald-600', bg: 'bg-emerald-50', text: 'text-emerald-700', ring: 'ring-emerald-200', glow: 'shadow-emerald-500/30', strip: 'from-emerald-400 to-emerald-500', iconFill: true, icon: 'M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z' },
+    { value: 'sms', label: 'SMS', gradient: 'from-[#1B365D] to-[#1B365D]', bg: 'bg-slate-50', text: 'text-[#1B365D]', ring: 'ring-slate-200', glow: 'shadow-[#1B365D]/30', strip: 'from-slate-400 to-[#1B365D]', iconFill: false, icon: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z' },
+    { value: 'email', label: 'Email', gradient: 'from-[#1B365D] to-[#1B365D]', bg: 'bg-slate-50', text: 'text-[#1B365D]', ring: 'ring-slate-200', glow: 'shadow-[#1B365D]/30', strip: 'from-slate-400 to-[#1B365D]', iconFill: false, icon: 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z' },
 ];
 
 const categories = [
-    { value: 'welcome', label: 'Welcome', gradient: 'from-amber-400 to-orange-500', icon: 'M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z' },
-    { value: 'follow_up', label: 'Follow Up', gradient: 'from-cyan-400 to-teal-500', icon: 'M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15' },
-    { value: 'appointment_reminder', label: 'Reminder', gradient: 'from-rose-400 to-pink-500', icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' },
-    { value: 'promotion', label: 'Promotion', gradient: 'from-fuchsia-400 to-purple-500', icon: 'M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z' },
-    { value: 're_engagement', label: 'Re-engage', gradient: 'from-lime-400 to-green-500', icon: 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z' },
-    { value: 'thank_you', label: 'Thank You', gradient: 'from-yellow-400 to-amber-500', icon: 'M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z' },
+    { value: 'welcome', label: 'Welcome', gradient: 'from-amber-400 to-[#C4A265]', icon: 'M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z' },
+    { value: 'follow_up', label: 'Follow Up', gradient: 'from-slate-400 to-teal-500', icon: 'M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15' },
+    { value: 'appointment_reminder', label: 'Reminder', gradient: 'from-amber-400 to-[#C4A265]', icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' },
+    { value: 'promotion', label: 'Promotion', gradient: 'from-slate-400 to-[#1B365D]', icon: 'M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z' },
+    { value: 're_engagement', label: 'Re-engage', gradient: 'from-lime-400 to-emerald-500', icon: 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z' },
+    { value: 'thank_you', label: 'Thank You', gradient: 'from-amber-400 to-amber-500', icon: 'M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z' },
     { value: 'custom', label: 'Custom', gradient: 'from-slate-400 to-gray-500', icon: 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z' },
 ];
 
@@ -107,7 +107,7 @@ function deleteTemplate(id) {
         <div class="space-y-8">
 
             <!-- ===== HERO HEADER ===== -->
-            <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-8 md:p-10"
+            <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-4 md:p-8 md:p-10"
                 :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'"
                 style="transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);">
 
@@ -163,20 +163,20 @@ function deleteTemplate(id) {
                                 <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
                             </div>
                         </div>
-                        <p class="text-3xl font-bold text-gray-900 tabular-nums">{{ animatedValues.total }}</p>
+                        <p class="text-2xl md:text-3xl font-bold text-gray-900 tabular-nums">{{ animatedValues.total }}</p>
                         <p class="text-xs text-gray-400 font-medium mt-1">{{ $t('a_total') }}</p>
                     </div>
                 </div>
                 <!-- Active -->
-                <div class="relative overflow-hidden rounded-2xl bg-white border border-gray-100 p-5 group hover:shadow-lg hover:shadow-green-100/50 hover:-translate-y-0.5 transition-all duration-300">
-                    <div class="absolute inset-0 bg-gradient-to-br from-green-50/50 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="relative overflow-hidden rounded-2xl bg-white border border-gray-100 p-5 group hover:shadow-lg hover:shadow-emerald-100/50 hover:-translate-y-0.5 transition-all duration-300">
+                    <div class="absolute inset-0 bg-gradient-to-br from-emerald-50/50 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     <div class="relative">
                         <div class="flex items-center justify-between mb-3">
-                            <div class="w-10 h-10 rounded-xl bg-green-50 flex items-center justify-center">
-                                <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            <div class="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center">
+                                <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                             </div>
                         </div>
-                        <p class="text-3xl font-bold text-green-600 tabular-nums">{{ animatedValues.active }}</p>
+                        <p class="text-2xl md:text-3xl font-bold text-emerald-600 tabular-nums">{{ animatedValues.active }}</p>
                         <p class="text-xs text-gray-400 font-medium mt-1">{{ $t('a_active') }}</p>
                     </div>
                 </div>
@@ -189,33 +189,33 @@ function deleteTemplate(id) {
                                 <svg class="w-5 h-5 text-emerald-600" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>
                             </div>
                         </div>
-                        <p class="text-3xl font-bold text-emerald-600 tabular-nums">{{ animatedValues.whatsapp }}</p>
+                        <p class="text-2xl md:text-3xl font-bold text-emerald-600 tabular-nums">{{ animatedValues.whatsapp }}</p>
                         <p class="text-xs text-gray-400 font-medium mt-1">WhatsApp</p>
                     </div>
                 </div>
                 <!-- SMS -->
-                <div class="relative overflow-hidden rounded-2xl bg-white border border-gray-100 p-5 group hover:shadow-lg hover:shadow-blue-100/50 hover:-translate-y-0.5 transition-all duration-300">
-                    <div class="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="relative overflow-hidden rounded-2xl bg-white border border-gray-100 p-5 group hover:shadow-lg hover:shadow-slate-100/50 hover:-translate-y-0.5 transition-all duration-300">
+                    <div class="absolute inset-0 bg-gradient-to-br from-slate-50/50 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     <div class="relative">
                         <div class="flex items-center justify-between mb-3">
-                            <div class="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
-                                <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
+                            <div class="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center">
+                                <svg class="w-5 h-5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
                             </div>
                         </div>
-                        <p class="text-3xl font-bold text-blue-600 tabular-nums">{{ animatedValues.sms }}</p>
+                        <p class="text-2xl md:text-3xl font-bold text-[#1B365D] tabular-nums">{{ animatedValues.sms }}</p>
                         <p class="text-xs text-gray-400 font-medium mt-1">SMS</p>
                     </div>
                 </div>
                 <!-- Email -->
-                <div class="col-span-2 md:col-span-1 relative overflow-hidden rounded-2xl bg-white border border-gray-100 p-5 group hover:shadow-lg hover:shadow-violet-100/50 hover:-translate-y-0.5 transition-all duration-300">
-                    <div class="absolute inset-0 bg-gradient-to-br from-violet-50/50 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="col-span-2 md:col-span-1 relative overflow-hidden rounded-2xl bg-white border border-gray-100 p-5 group hover:shadow-lg hover:shadow-slate-100/50 hover:-translate-y-0.5 transition-all duration-300">
+                    <div class="absolute inset-0 bg-gradient-to-br from-slate-50/50 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     <div class="relative">
                         <div class="flex items-center justify-between mb-3">
-                            <div class="w-10 h-10 rounded-xl bg-violet-50 flex items-center justify-center">
-                                <svg class="w-5 h-5 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                            <div class="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center">
+                                <svg class="w-5 h-5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
                             </div>
                         </div>
-                        <p class="text-3xl font-bold text-violet-600 tabular-nums">{{ animatedValues.email }}</p>
+                        <p class="text-2xl md:text-3xl font-bold text-[#1B365D] tabular-nums">{{ animatedValues.email }}</p>
                         <p class="text-xs text-gray-400 font-medium mt-1">Email</p>
                     </div>
                 </div>
@@ -344,7 +344,7 @@ function deleteTemplate(id) {
                                 <div class="flex items-center gap-4">
                                     <!-- Usage count -->
                                     <div class="flex items-center gap-1.5">
-                                        <svg class="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z" /></svg>
+                                        <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z" /></svg>
                                         <span class="text-xs font-bold text-gray-600 tabular-nums">{{ tpl.usage_count || 0 }}</span>
                                         <span class="text-[10px] text-gray-400">uses</span>
                                     </div>
@@ -354,9 +354,9 @@ function deleteTemplate(id) {
                                         <span class="relative flex h-2.5 w-2.5">
                                             <span v-if="tpl.is_active" class="absolute inline-flex h-full w-full rounded-full opacity-75 animate-ping"
                                                 style="background-color: #22c55e; animation-duration: 2s;"></span>
-                                            <span class="relative inline-flex rounded-full h-2.5 w-2.5" :class="tpl.is_active ? 'bg-green-500' : 'bg-gray-300'"></span>
+                                            <span class="relative inline-flex rounded-full h-2.5 w-2.5" :class="tpl.is_active ? 'bg-emerald-500' : 'bg-gray-300'"></span>
                                         </span>
-                                        <span class="text-xs font-semibold" :class="tpl.is_active ? 'text-green-600' : 'text-gray-400'">
+                                        <span class="text-xs font-semibold" :class="tpl.is_active ? 'text-emerald-600' : 'text-gray-400'">
                                             {{ tpl.is_active ? $t('a_active') : $t('a_inactive') }}
                                         </span>
                                     </div>
@@ -388,7 +388,7 @@ function deleteTemplate(id) {
                 <!-- Decorative background elements -->
                 <div class="absolute inset-0 overflow-hidden">
                     <div class="absolute top-10 left-10 w-32 h-32 rounded-full bg-[#C4A265]/5 animate-pulse" style="animation-duration: 4s;"></div>
-                    <div class="absolute bottom-10 right-10 w-24 h-24 rounded-full bg-violet-500/5 animate-pulse" style="animation-duration: 3s; animation-delay: 1s;"></div>
+                    <div class="absolute bottom-10 right-10 w-24 h-24 rounded-full bg-[#1B365D]/5 animate-pulse" style="animation-duration: 3s; animation-delay: 1s;"></div>
                     <div class="absolute top-1/2 left-1/4 w-16 h-16 rounded-full bg-emerald-500/5 animate-pulse" style="animation-duration: 5s; animation-delay: 0.5s;"></div>
                     <svg class="absolute top-6 right-1/4 w-6 h-6 text-gray-200 animate-bounce" style="animation-duration: 3s;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>
                     <svg class="absolute bottom-8 left-1/3 w-5 h-5 text-gray-200 animate-bounce" style="animation-duration: 4s; animation-delay: 1.5s;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
@@ -404,7 +404,7 @@ function deleteTemplate(id) {
                     <h3 class="text-lg font-bold text-gray-700">{{ $t('a_no_templates_found') }}</h3>
                     <p class="text-sm text-gray-400 mt-2 max-w-sm mx-auto leading-relaxed">{{ $t('a_no_templates_hint') }}</p>
                     <Link v-if="can('communication_templates.create')" href="/admin/templates/create"
-                        class="inline-flex items-center gap-2 mt-6 px-6 py-3 rounded-xl text-white text-sm font-bold shadow-lg shadow-[#C4A265]/20 hover:shadow-xl hover:shadow-[#C4A265]/30 hover:-translate-y-0.5 transition-all duration-300"
+                        class="inline-flex items-center gap-2 mt-6 px-4 md:px-6 py-3 rounded-xl text-white text-sm font-bold shadow-lg shadow-[#C4A265]/20 hover:shadow-xl hover:shadow-[#C4A265]/30 hover:-translate-y-0.5 transition-all duration-300"
                         style="background: linear-gradient(135deg, #C4A265, #D4B87A);">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" /></svg>
                         {{ $t('a_new_template') }}
@@ -416,7 +416,7 @@ function deleteTemplate(id) {
             <div v-if="templates.links?.length > 3"
                 :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'"
                 style="transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 500ms;"
-                class="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white rounded-2xl border border-gray-100 px-6 py-4">
+                class="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white rounded-2xl border border-gray-100 px-4 md:px-6 py-4">
                 <p class="text-xs text-gray-400 font-medium">
                     {{ $t('a_showing') }}
                     <span class="text-gray-700 font-bold">{{ templates.from }}-{{ templates.to }}</span>

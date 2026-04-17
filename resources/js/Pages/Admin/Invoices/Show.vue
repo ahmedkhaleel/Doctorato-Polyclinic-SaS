@@ -57,8 +57,8 @@ function formatDate(date) {
 }
 
 const statusColors = {
-    paid: 'bg-green-100 text-green-800',
-    partial: 'bg-yellow-100 text-yellow-800',
+    paid: 'bg-emerald-100 text-emerald-800',
+    partial: 'bg-amber-100 text-amber-800',
     unpaid: 'bg-red-100 text-red-800',
     cancelled: 'bg-gray-100 text-gray-800',
 };
@@ -98,7 +98,7 @@ function submitPayment() {
             <!-- Header -->
             <div class="flex items-center justify-between">
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-800">{{ $t('a_invoice_number') }} {{ invoice.invoice_number }}</h1>
+                    <h1 class="text-xl md:text-2xl font-bold text-gray-800">{{ $t('a_invoice_number') }} {{ invoice.invoice_number }}</h1>
                     <p class="text-sm text-gray-500 mt-1">{{ $t('a_created') }} {{ formatDate(invoice.created_at) }}</p>
                 </div>
                 <div class="flex items-center gap-3">
@@ -121,7 +121,7 @@ function submitPayment() {
                     </Link>
                     <a
                         :href="`/admin/invoices/${invoice.id}/pdf`"
-                        class="inline-flex items-center px-4 py-2 rounded-lg border text-sm font-medium transition border-green-400 text-green-700 hover:bg-green-50"
+                        class="inline-flex items-center px-4 py-2 rounded-lg border text-sm font-medium transition border-emerald-400 text-emerald-700 hover:bg-emerald-50"
                     >
                         <svg class="w-4 h-4 ltr:mr-2 rtl:ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -177,7 +177,7 @@ function submitPayment() {
                                             <input
                                                 v-model="invoiceEditForm.invoice_date"
                                                 type="date"
-                                                class="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                                                class="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                                             />
                                             <p v-if="invoiceEditForm.errors.invoice_date" class="mt-1 text-xs text-red-600">{{ invoiceEditForm.errors.invoice_date }}</p>
                                         </div>
@@ -186,7 +186,7 @@ function submitPayment() {
                                             <textarea
                                                 v-model="invoiceEditForm.notes"
                                                 rows="3"
-                                                class="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                                                class="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                                                 :placeholder="$t('a_invoice_notes')"
                                             ></textarea>
                                             <p v-if="invoiceEditForm.errors.notes" class="mt-1 text-xs text-red-600">{{ invoiceEditForm.errors.notes }}</p>
@@ -223,30 +223,30 @@ function submitPayment() {
 
                     <!-- Items Table -->
                     <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-                        <div class="px-6 py-4 border-b border-gray-200">
+                        <div class="px-4 md:px-6 py-4 border-b border-gray-200">
                             <h2 class="text-lg font-semibold text-gray-700">{{ $t('a_items') }}</h2>
                         </div>
                         <div class="overflow-x-auto">
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
-                                        <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_description') }}</th>
-                                        <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_qty') }}</th>
-                                        <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_unit_price') }}</th>
-                                        <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_discount') }}</th>
-                                        <th class="px-6 py-3 text-end text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_total') }}</th>
+                                        <th class="px-4 md:px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_description') }}</th>
+                                        <th class="px-4 md:px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_qty') }}</th>
+                                        <th class="px-4 md:px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_unit_price') }}</th>
+                                        <th class="px-4 md:px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_discount') }}</th>
+                                        <th class="px-4 md:px-6 py-3 text-end text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_total') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
                                     <tr v-for="item in invoice.items" :key="item.id" class="hover:bg-gray-50">
-                                        <td class="px-6 py-4">
+                                        <td class="px-4 md:px-6 py-4">
                                             <div class="text-sm font-medium text-gray-900">{{ item.description_en }}</div>
                                             <div v-if="item.description_ar" class="text-sm text-gray-400" dir="rtl">{{ item.description_ar }}</div>
                                         </td>
-                                        <td class="px-6 py-4 text-sm text-gray-500">{{ item.quantity }}</td>
-                                        <td class="px-6 py-4 text-sm text-gray-500">{{ formatCurrency(item.unit_price) }}</td>
-                                        <td class="px-6 py-4 text-sm text-gray-500">{{ item.discount > 0 ? formatCurrency(item.discount) : '-' }}</td>
-                                        <td class="px-6 py-4 text-sm font-medium text-gray-900 text-end">{{ formatCurrency(item.total) }}</td>
+                                        <td class="px-4 md:px-6 py-4 text-sm text-gray-500">{{ item.quantity }}</td>
+                                        <td class="px-4 md:px-6 py-4 text-sm text-gray-500">{{ formatCurrency(item.unit_price) }}</td>
+                                        <td class="px-4 md:px-6 py-4 text-sm text-gray-500">{{ item.discount > 0 ? formatCurrency(item.discount) : '-' }}</td>
+                                        <td class="px-4 md:px-6 py-4 text-sm font-medium text-gray-900 text-end">{{ formatCurrency(item.total) }}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -255,7 +255,7 @@ function submitPayment() {
 
                     <!-- Payments Table -->
                     <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-                        <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+                        <div class="px-4 md:px-6 py-4 border-b border-gray-200 flex items-center justify-between">
                             <h2 class="text-lg font-semibold text-gray-700">{{ $t('a_payments') }}</h2>
                             <button
                                 v-if="can('payments.create') && invoice.status !== 'paid' && invoice.status !== 'cancelled'"
@@ -272,13 +272,13 @@ function submitPayment() {
                         </div>
 
                         <!-- Add Payment Form -->
-                        <div v-if="showPaymentForm" class="px-6 py-4 bg-yellow-50 border-b border-yellow-100">
+                        <div v-if="showPaymentForm" class="px-4 md:px-6 py-4 bg-amber-50 border-b border-amber-100">
                             <form @submit.prevent="submitPayment" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_payment_method') }} <span class="text-red-500">*</span></label>
                                     <select
                                         v-model="paymentForm.payment_method_id"
-                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                                     >
                                         <option value="">{{ $t('a_select_method') }}</option>
                                         <option v-for="method in paymentMethods" :key="method.id" :value="method.id">{{ method.name_en }}</option>
@@ -293,7 +293,7 @@ function submitPayment() {
                                         min="0"
                                         step="0.01"
                                         :placeholder="`${$t('a_balance')}: ${formatCurrency(balance)}`"
-                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                                     />
                                     <p v-if="paymentForm.errors.amount" class="mt-1 text-xs text-red-600">{{ paymentForm.errors.amount }}</p>
                                 </div>
@@ -302,7 +302,7 @@ function submitPayment() {
                                     <input
                                         v-model="paymentForm.payment_date"
                                         type="date"
-                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                                     />
                                     <p v-if="paymentForm.errors.payment_date" class="mt-1 text-xs text-red-600">{{ paymentForm.errors.payment_date }}</p>
                                 </div>
@@ -312,7 +312,7 @@ function submitPayment() {
                                         v-model="paymentForm.reference_number"
                                         type="text"
                                         :placeholder="$t('a_transaction_receipt')"
-                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                                     />
                                 </div>
                                 <div>
@@ -321,7 +321,7 @@ function submitPayment() {
                                         v-model="paymentForm.notes"
                                         type="text"
                                         :placeholder="$t('a_optional_notes')"
-                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                                     />
                                 </div>
                                 <div class="flex items-end gap-2">
@@ -348,22 +348,22 @@ function submitPayment() {
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
-                                        <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_date') }}</th>
-                                        <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_method') }}</th>
-                                        <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_amount') }}</th>
-                                        <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_reference') }}</th>
-                                        <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_received_by') }}</th>
-                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_receipt') }}</th>
+                                        <th class="px-4 md:px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_date') }}</th>
+                                        <th class="px-4 md:px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_method') }}</th>
+                                        <th class="px-4 md:px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_amount') }}</th>
+                                        <th class="px-4 md:px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_reference') }}</th>
+                                        <th class="px-4 md:px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_received_by') }}</th>
+                                        <th class="px-4 md:px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_receipt') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
                                     <tr v-for="payment in invoice.payments" :key="payment.id" class="hover:bg-gray-50">
-                                        <td class="px-6 py-4 text-sm text-gray-500">{{ formatDate(payment.payment_date) }}</td>
-                                        <td class="px-6 py-4 text-sm text-gray-500">{{ payment.payment_method?.name_en || '-' }}</td>
-                                        <td class="px-6 py-4 text-sm font-medium text-green-600">{{ formatCurrency(payment.amount) }}</td>
-                                        <td class="px-6 py-4 text-sm text-gray-500 font-mono">{{ payment.reference_number || '-' }}</td>
-                                        <td class="px-6 py-4 text-sm text-gray-500">{{ payment.receiver?.name || '-' }}</td>
-                                        <td class="px-6 py-4 text-center">
+                                        <td class="px-4 md:px-6 py-4 text-sm text-gray-500">{{ formatDate(payment.payment_date) }}</td>
+                                        <td class="px-4 md:px-6 py-4 text-sm text-gray-500">{{ payment.payment_method?.name_en || '-' }}</td>
+                                        <td class="px-4 md:px-6 py-4 text-sm font-medium text-emerald-600">{{ formatCurrency(payment.amount) }}</td>
+                                        <td class="px-4 md:px-6 py-4 text-sm text-gray-500 font-mono">{{ payment.reference_number || '-' }}</td>
+                                        <td class="px-4 md:px-6 py-4 text-sm text-gray-500">{{ payment.receiver?.name || '-' }}</td>
+                                        <td class="px-4 md:px-6 py-4 text-center">
                                             <a :href="`/admin/invoices/${invoice.id}/payments/${payment.id}/receipt`"
                                                target="_blank"
                                                class="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold rounded-lg border transition-all hover:opacity-80"
@@ -375,7 +375,7 @@ function submitPayment() {
                                         </td>
                                     </tr>
                                     <tr v-if="!invoice.payments || invoice.payments.length === 0">
-                                        <td colspan="6" class="px-6 py-6 text-center text-sm text-gray-500">{{ $t('a_no_payments_recorded') }}</td>
+                                        <td colspan="6" class="px-4 md:px-6 py-4 md:py-6 text-center text-sm text-gray-500">{{ $t('a_no_payments_recorded') }}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -405,11 +405,11 @@ function submitPayment() {
                             </div>
                             <div class="flex justify-between text-sm border-t pt-3">
                                 <dt class="text-gray-500">{{ $t('a_paid_amount') }}</dt>
-                                <dd class="text-green-600 font-medium">{{ formatCurrency(invoice.paid_amount) }}</dd>
+                                <dd class="text-emerald-600 font-medium">{{ formatCurrency(invoice.paid_amount) }}</dd>
                             </div>
                             <div class="flex justify-between text-sm font-bold">
                                 <dt class="text-gray-800">{{ $t('a_balance') }}</dt>
-                                <dd :class="balance > 0 ? 'text-red-600' : 'text-green-600'">{{ formatCurrency(balance) }}</dd>
+                                <dd :class="balance > 0 ? 'text-red-600' : 'text-emerald-600'">{{ formatCurrency(balance) }}</dd>
                             </div>
                         </dl>
                     </div>

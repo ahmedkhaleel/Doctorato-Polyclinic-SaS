@@ -204,14 +204,14 @@ const notesLength = computed(() => form.notes.length);
                         <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7" /></svg>
                         <span class="text-gray-600">{{ $t('a_new_lead') }}</span>
                     </div>
-                    <h1 class="text-2xl font-bold text-gray-800">{{ $t('a_create_new_lead') }}</h1>
+                    <h1 class="text-xl md:text-2xl font-bold text-gray-800">{{ $t('a_create_new_lead') }}</h1>
                 </div>
             </div>
 
             <form @submit.prevent="submit" class="space-y-6">
                 <!-- Contact Information -->
                 <div
-                    class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 lg:p-8 transition-all duration-500 ease-out"
+                    class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-6 lg:p-8 transition-all duration-500 ease-out"
                     :class="sectionsVisible[1] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
                 >
                     <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-6 flex items-center gap-2">
@@ -323,7 +323,7 @@ const notesLength = computed(() => form.notes.length);
                     leave-from-class="opacity-100 translate-y-0 scale-100"
                     leave-to-class="opacity-0 -translate-y-3 scale-[0.98]"
                 >
-                    <div v-if="duplicates.length" class="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-2xl p-6 shadow-sm">
+                    <div v-if="duplicates.length" class="bg-gradient-to-r from-amber-50 to-amber-50 border border-amber-200 rounded-2xl p-4 md:p-6 shadow-sm">
                         <div class="flex items-start gap-4">
                             <div class="flex items-center justify-center w-10 h-10 rounded-xl bg-amber-100 shrink-0">
                                 <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" /></svg>
@@ -350,7 +350,7 @@ const notesLength = computed(() => form.notes.length);
 
                 <!-- Lead Details -->
                 <div
-                    class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 lg:p-8 transition-all duration-500 ease-out"
+                    class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-6 lg:p-8 transition-all duration-500 ease-out"
                     :class="sectionsVisible[2] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
                 >
                     <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-6 flex items-center gap-2">
@@ -495,7 +495,7 @@ const notesLength = computed(() => form.notes.length);
                         <!-- Priority - Card Style -->
                         <div class="lg:col-span-3 md:col-span-2">
                             <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">{{ $t('a_priority') }}<span class="text-red-400">*</span></label>
-                            <div class="grid grid-cols-3 gap-3">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                                 <label
                                     v-for="(config, val) in {
                                         '1': { label: $t('a_priority_hot'), color: 'red', icon: 'M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z' },
@@ -505,16 +505,16 @@ const notesLength = computed(() => form.notes.length);
                                     :key="val"
                                     :class="[
                                         form.priority === val
-                                            ? (val === '1' ? 'border-red-400 bg-red-50 ring-2 ring-red-100' : val === '2' ? 'border-amber-400 bg-amber-50 ring-2 ring-amber-100' : 'border-blue-400 bg-blue-50 ring-2 ring-blue-100')
+                                            ? (val === '1' ? 'border-red-400 bg-red-50 ring-2 ring-red-100' : val === '2' ? 'border-amber-400 bg-amber-50 ring-2 ring-amber-100' : 'border-slate-400 bg-slate-50 ring-2 ring-slate-100')
                                             : 'border-gray-200 bg-white hover:bg-gray-50 hover:border-gray-300'
                                     ]"
                                     class="relative flex flex-col items-center gap-2 p-4 rounded-xl border-2 cursor-pointer transition-all duration-200"
                                 >
                                     <input type="radio" v-model="form.priority" :value="val" class="sr-only" />
-                                    <svg class="w-5 h-5" :class="val === '1' ? 'text-red-500' : val === '2' ? 'text-amber-500' : 'text-blue-500'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="config.icon" /></svg>
-                                    <span class="text-sm font-semibold" :class="val === '1' ? 'text-red-700' : val === '2' ? 'text-amber-700' : 'text-blue-700'">{{ config.label }}</span>
+                                    <svg class="w-5 h-5" :class="val === '1' ? 'text-red-500' : val === '2' ? 'text-amber-500' : 'text-[#1B365D]'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="config.icon" /></svg>
+                                    <span class="text-sm font-semibold" :class="val === '1' ? 'text-red-700' : val === '2' ? 'text-amber-700' : 'text-[#1B365D]'">{{ config.label }}</span>
                                     <div v-if="form.priority === val" class="absolute top-2 ltr:right-2 rtl:left-2">
-                                        <svg class="w-4 h-4" :class="val === '1' ? 'text-red-500' : val === '2' ? 'text-amber-500' : 'text-blue-500'" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
+                                        <svg class="w-4 h-4" :class="val === '1' ? 'text-red-500' : val === '2' ? 'text-amber-500' : 'text-[#1B365D]'" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
                                     </div>
                                 </label>
                             </div>
@@ -525,7 +525,7 @@ const notesLength = computed(() => form.notes.length);
                 <!-- Interested Services -->
                 <div
                     v-if="services?.length"
-                    class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 lg:p-8 transition-all duration-500 ease-out"
+                    class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-6 lg:p-8 transition-all duration-500 ease-out"
                     :class="sectionsVisible[3] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
                 >
                     <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-6 flex items-center gap-2">
@@ -559,7 +559,7 @@ const notesLength = computed(() => form.notes.length);
 
                 <!-- Notes -->
                 <div
-                    class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 lg:p-8 transition-all duration-500 ease-out"
+                    class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-6 lg:p-8 transition-all duration-500 ease-out"
                     :class="sectionsVisible[4] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
                 >
                     <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-6 flex items-center gap-2">
@@ -585,7 +585,7 @@ const notesLength = computed(() => form.notes.length);
         <!-- Sticky Bottom Actions Bar -->
         <div class="fixed bottom-0 ltr:left-0 rtl:right-0 ltr:right-0 rtl:left-0 z-40">
             <div class="backdrop-blur-xl bg-white/80 border-t border-gray-200 shadow-[0_-4px_20px_rgba(0,0,0,0.06)]">
-                <div class="flex items-center justify-between px-6 lg:px-8 py-4 max-w-screen-2xl mx-auto">
+                <div class="flex items-center justify-between px-4 md:px-6 lg:px-8 py-4 max-w-screen-2xl mx-auto">
                     <div class="flex items-center gap-2 text-sm text-gray-500">
                         <div v-if="checkingDuplicates" class="flex items-center gap-2">
                             <svg class="w-4 h-4 animate-spin text-[#C4A265]" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" /><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" /></svg>

@@ -90,31 +90,31 @@ onMounted(() => { requestAnimationFrame(() => { mounted.value = true; }); });
     <div class="space-y-6">
         <!-- Hero Header -->
         <div
-            class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-900 via-indigo-800 to-purple-900 p-6 sm:p-8 transition-all duration-700"
+            class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#1B365D] p-4 md:p-6 sm:p-8 transition-all duration-700"
             :style="{ opacity: mounted ? 1 : 0, transform: mounted ? 'translateY(0)' : 'translateY(12px)', transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }"
         >
-            <div class="absolute top-0 right-0 w-64 h-64 bg-indigo-400/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl"></div>
-            <div class="absolute bottom-0 left-0 w-48 h-48 bg-purple-400/10 rounded-full translate-y-1/2 -translate-x-1/4 blur-2xl"></div>
+            <div class="absolute top-0 right-0 w-64 h-64 bg-slate-400/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl"></div>
+            <div class="absolute bottom-0 left-0 w-48 h-48 bg-slate-400/10 rounded-full translate-y-1/2 -translate-x-1/4 blur-2xl"></div>
             <div class="absolute inset-0 opacity-[0.03]" style="background-image: radial-gradient(circle, white 1px, transparent 1px); background-size: 24px 24px;"></div>
 
             <div class="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
-                    <h1 class="text-2xl sm:text-3xl font-bold text-white">
+                    <h1 class="text-xl md:text-2xl sm:text-3xl font-bold text-white">
                         {{ isRtl ? 'الأدوية' : 'Medications' }}
                     </h1>
-                    <p class="text-sm text-indigo-200/70 mt-1">
+                    <p class="text-sm text-slate-200/70 mt-1">
                         {{ isRtl ? 'إدارة قاعدة بيانات الأدوية والجرعات الافتراضية' : 'Manage medications database and default dosages' }}
                     </p>
                 </div>
                 <div class="flex items-center gap-3">
                     <div class="bg-white/10 backdrop-blur-sm rounded-xl px-4 py-3 text-center">
-                        <p class="text-2xl font-bold text-white">{{ medications.total }}</p>
-                        <p class="text-[10px] text-indigo-200/60 uppercase tracking-wide">{{ isRtl ? 'الأدوية' : 'Medications' }}</p>
+                        <p class="text-xl md:text-2xl font-bold text-white">{{ medications.total }}</p>
+                        <p class="text-[10px] text-slate-200/60 uppercase tracking-wide">{{ isRtl ? 'الأدوية' : 'Medications' }}</p>
                     </div>
                     <button
                         v-if="can('medications.create')"
                         @click="openCreate"
-                        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-indigo-900 bg-white shadow-lg shadow-white/20 hover:bg-indigo-50 transition-all duration-200"
+                        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-[#1B365D] bg-white shadow-lg shadow-white/20 hover:bg-slate-50 transition-all duration-200"
                     >
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -135,7 +135,7 @@ onMounted(() => { requestAnimationFrame(() => { mounted.value = true; }); });
                     v-model="search"
                     type="text"
                     :placeholder="isRtl ? 'بحث بالاسم أو الفئة...' : 'Search by name or category...'"
-                    class="w-full ps-10 pe-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-colors"
+                    class="w-full ps-10 pe-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-colors"
                 />
             </div>
         </div>
@@ -145,7 +145,7 @@ onMounted(() => { requestAnimationFrame(() => { mounted.value = true; }); });
             <div
                 v-for="(med, index) in medications.data"
                 :key="med.id"
-                class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-500 hover:shadow-md hover:border-indigo-100 group"
+                class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-500 hover:shadow-md hover:border-slate-100 group"
                 :style="{ opacity: mounted ? 1 : 0, transform: mounted ? 'translateY(0)' : 'translateY(16px)', transitionDelay: `${100 + index * 40}ms`, transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }"
             >
                 <div class="p-5">
@@ -166,7 +166,7 @@ onMounted(() => { requestAnimationFrame(() => { mounted.value = true; }); });
                         </div>
                         <span
                             class="px-1.5 py-0.5 rounded text-[9px] font-bold uppercase flex-shrink-0 ms-2"
-                            :class="med.is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'"
+                            :class="med.is_active ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'"
                         >
                             {{ med.is_active ? (isRtl ? 'فعال' : 'Active') : (isRtl ? 'معطل' : 'Inactive') }}
                         </span>
@@ -196,7 +196,7 @@ onMounted(() => { requestAnimationFrame(() => { mounted.value = true; }); });
                         <button
                             v-if="can('medications.update')"
                             @click="openEdit(med)"
-                            class="px-2.5 py-1 rounded-lg text-[11px] font-medium bg-indigo-50 text-indigo-700 hover:bg-indigo-100 transition-colors"
+                            class="px-2.5 py-1 rounded-lg text-[11px] font-medium bg-slate-50 text-[#1B365D] hover:bg-slate-100 transition-colors"
                         >
                             {{ isRtl ? 'تعديل' : 'Edit' }}
                         </button>
@@ -214,8 +214,8 @@ onMounted(() => { requestAnimationFrame(() => { mounted.value = true; }); });
 
         <!-- Empty State -->
         <div v-if="medications.data.length === 0" class="text-center py-16">
-            <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-indigo-50 flex items-center justify-center">
-                <svg class="w-8 h-8 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-slate-50 flex items-center justify-center">
+                <svg class="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.5 12.75l6-6a4.243 4.243 0 016.01 6.01l-6 6a4.243 4.243 0 01-6.01-6.01zM12 9l-3 3" />
                 </svg>
             </div>
@@ -262,7 +262,7 @@ onMounted(() => { requestAnimationFrame(() => { mounted.value = true; }); });
                     >
                         <div v-if="showModal" class="relative w-full max-w-lg bg-white rounded-2xl shadow-2xl overflow-hidden">
                             <!-- Modal Header -->
-                            <div class="bg-gradient-to-r from-indigo-600 to-indigo-500 px-6 py-4">
+                            <div class="bg-gradient-to-r from-[#1B365D] to-[#1B365D] px-4 md:px-6 py-4">
                                 <h3 class="text-lg font-bold text-white">
                                     {{ editingMedication
                                         ? (isRtl ? 'تعديل الدواء' : 'Edit Medication')
@@ -272,7 +272,7 @@ onMounted(() => { requestAnimationFrame(() => { mounted.value = true; }); });
                             </div>
 
                             <!-- Modal Body -->
-                            <form @submit.prevent="submit" class="p-6 space-y-4">
+                            <form @submit.prevent="submit" class="p-4 md:p-6 space-y-4">
                                 <!-- Name -->
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">
@@ -281,7 +281,7 @@ onMounted(() => { requestAnimationFrame(() => { mounted.value = true; }); });
                                     <input
                                         v-model="form.name"
                                         type="text"
-                                        class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"
+                                        class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D]"
                                         :placeholder="isRtl ? 'مثال: أموكسيسيلين' : 'e.g., Amoxicillin'"
                                     />
                                     <p v-if="form.errors.name" class="mt-1 text-xs text-red-600">{{ form.errors.name }}</p>
@@ -293,7 +293,7 @@ onMounted(() => { requestAnimationFrame(() => { mounted.value = true; }); });
                                     <input
                                         v-model="form.category"
                                         type="text"
-                                        class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"
+                                        class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D]"
                                         :placeholder="isRtl ? 'مثال: مضاد حيوي' : 'e.g., Antibiotic'"
                                     />
                                     <p v-if="form.errors.category" class="mt-1 text-xs text-red-600">{{ form.errors.category }}</p>
@@ -306,7 +306,7 @@ onMounted(() => { requestAnimationFrame(() => { mounted.value = true; }); });
                                         <input
                                             v-model="form.default_dosage"
                                             type="text"
-                                            class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"
+                                            class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D]"
                                             :placeholder="isRtl ? '500mg' : '500mg'"
                                         />
                                         <p v-if="form.errors.default_dosage" class="mt-1 text-xs text-red-600">{{ form.errors.default_dosage }}</p>
@@ -316,7 +316,7 @@ onMounted(() => { requestAnimationFrame(() => { mounted.value = true; }); });
                                         <input
                                             v-model="form.default_frequency"
                                             type="text"
-                                            class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"
+                                            class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D]"
                                             :placeholder="isRtl ? '3 مرات/يوم' : '3x daily'"
                                         />
                                         <p v-if="form.errors.default_frequency" class="mt-1 text-xs text-red-600">{{ form.errors.default_frequency }}</p>
@@ -326,7 +326,7 @@ onMounted(() => { requestAnimationFrame(() => { mounted.value = true; }); });
                                         <input
                                             v-model="form.default_duration"
                                             type="text"
-                                            class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"
+                                            class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D]"
                                             :placeholder="isRtl ? '7 أيام' : '7 days'"
                                         />
                                         <p v-if="form.errors.default_duration" class="mt-1 text-xs text-red-600">{{ form.errors.default_duration }}</p>
@@ -339,7 +339,7 @@ onMounted(() => { requestAnimationFrame(() => { mounted.value = true; }); });
                                         type="button"
                                         @click="form.is_active = !form.is_active"
                                         class="relative w-10 h-5 rounded-full transition-colors duration-200"
-                                        :class="form.is_active ? 'bg-indigo-500' : 'bg-gray-300'"
+                                        :class="form.is_active ? 'bg-[#1B365D]' : 'bg-gray-300'"
                                     >
                                         <span
                                             class="absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform duration-200"

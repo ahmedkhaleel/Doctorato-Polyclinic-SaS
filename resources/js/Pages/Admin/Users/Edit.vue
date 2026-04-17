@@ -85,13 +85,13 @@ const initials = computed(() => {
 const roleColor = computed(() => {
     const colors = {
         super_admin: { bg: 'bg-amber-100', text: 'text-amber-700', ring: 'ring-amber-200' },
-        doctor: { bg: 'bg-blue-100', text: 'text-blue-700', ring: 'ring-blue-200' },
-        secretary: { bg: 'bg-purple-100', text: 'text-purple-700', ring: 'ring-purple-200' },
+        doctor: { bg: 'bg-slate-100', text: 'text-[#1B365D]', ring: 'ring-slate-200' },
+        secretary: { bg: 'bg-slate-100', text: 'text-[#1B365D]', ring: 'ring-slate-200' },
         receptionist: { bg: 'bg-teal-100', text: 'text-teal-700', ring: 'ring-teal-200' },
         accountant: { bg: 'bg-emerald-100', text: 'text-emerald-700', ring: 'ring-emerald-200' },
-        editor: { bg: 'bg-pink-100', text: 'text-pink-700', ring: 'ring-pink-200' },
-        moderator: { bg: 'bg-orange-100', text: 'text-orange-700', ring: 'ring-orange-200' },
-        webmaster: { bg: 'bg-indigo-100', text: 'text-indigo-700', ring: 'ring-indigo-200' },
+        editor: { bg: 'bg-amber-100', text: 'text-[#C4A265]', ring: 'ring-amber-200' },
+        moderator: { bg: 'bg-amber-100', text: 'text-[#C4A265]', ring: 'ring-amber-200' },
+        webmaster: { bg: 'bg-slate-100', text: 'text-[#1B365D]', ring: 'ring-slate-200' },
     };
     return colors[selectedRole.value?.name] || { bg: 'bg-gray-100', text: 'text-gray-700', ring: 'ring-gray-200' };
 });
@@ -113,7 +113,7 @@ const strengthLabel = computed(() => {
 });
 
 const strengthColor = computed(() => {
-    const colors = ['', 'bg-red-500', 'bg-orange-500', 'bg-yellow-500', 'bg-blue-500', 'bg-emerald-500'];
+    const colors = ['', 'bg-red-500', 'bg-[#C4A265]', 'bg-amber-500', 'bg-[#1B365D]', 'bg-emerald-500'];
     return colors[passwordStrength.value] || '';
 });
 
@@ -280,16 +280,16 @@ function copyEmail() {
                     <div class="lg:col-span-2 space-y-5">
                         <!-- Basic Info Section -->
                         <div class="bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden">
-                            <div class="px-6 py-4 border-b border-gray-100 flex items-center gap-3">
-                                <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
-                                    <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                            <div class="px-4 md:px-6 py-4 border-b border-gray-100 flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center">
+                                    <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                                 </div>
                                 <div>
                                     <h3 class="text-sm font-semibold text-gray-800">{{ $t('a_basic_information') }}</h3>
                                     <p class="text-xs text-gray-400">{{ $t('a_user_identity_desc') }}</p>
                                 </div>
                             </div>
-                            <div class="p-6 space-y-5">
+                            <div class="p-4 md:p-6 space-y-5">
                                 <!-- Name -->
                                 <div>
                                     <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">{{ $t('a_full_name') }}</label>
@@ -345,16 +345,16 @@ function copyEmail() {
 
                         <!-- Role & Permissions Section -->
                         <div class="bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden">
-                            <div class="px-6 py-4 border-b border-gray-100 flex items-center gap-3">
-                                <div class="w-8 h-8 rounded-lg bg-purple-50 flex items-center justify-center">
-                                    <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+                            <div class="px-4 md:px-6 py-4 border-b border-gray-100 flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center">
+                                    <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
                                 </div>
                                 <div>
                                     <h3 class="text-sm font-semibold text-gray-800">{{ isRtl ? 'الدور والصلاحيات' : 'Role & Access' }}</h3>
                                     <p class="text-xs text-gray-400">{{ isRtl ? 'اختر دور المستخدم وتحقق من صلاحياته' : 'Select user role and review permissions' }}</p>
                                 </div>
                             </div>
-                            <div class="p-6 space-y-4">
+                            <div class="p-4 md:p-6 space-y-4">
                                 <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ isRtl ? 'اختر الدور' : 'Select Role' }}</label>
                                 <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
                                     <div v-for="role in roles" :key="role.id"
@@ -384,11 +384,11 @@ function copyEmail() {
                                 <div v-if="selectedRole" class="mt-4">
                                     <button type="button" @click="showPermissions = !showPermissions"
                                             class="flex items-center gap-2 w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 hover:bg-gray-100 transition-colors">
-                                        <svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+                                        <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
                                         <span class="text-sm font-medium text-gray-700">
                                             {{ isRtl ? 'صلاحيات الدور' : 'Role Permissions' }}
                                         </span>
-                                        <span class="text-xs px-2 py-0.5 rounded-full bg-purple-100 text-purple-700 font-semibold">
+                                        <span class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-[#1B365D] font-semibold">
                                             {{ permissionCount }}
                                         </span>
                                         <svg class="w-4 h-4 text-gray-400 transition-transform duration-200" :class="isRtl ? 'mr-auto' : 'ml-auto'" :style="showPermissions ? 'transform: rotate(180deg)' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
@@ -416,7 +416,7 @@ function copyEmail() {
                                                 <div v-for="(mod, modKey) in selectedRolePermissions" :key="modKey"
                                                      class="border border-gray-100 rounded-xl p-3 bg-white">
                                                     <h5 class="text-xs font-bold text-gray-700 mb-2 flex items-center gap-1.5">
-                                                        <span class="w-1.5 h-1.5 rounded-full bg-purple-400"></span>
+                                                        <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
                                                         {{ isRtl ? mod.label_ar : mod.label_en }}
                                                     </h5>
                                                     <div class="flex flex-wrap gap-1">
@@ -438,7 +438,7 @@ function copyEmail() {
 
                         <!-- Security Section -->
                         <div class="bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden">
-                            <div class="px-6 py-4 border-b border-gray-100 flex items-center gap-3">
+                            <div class="px-4 md:px-6 py-4 border-b border-gray-100 flex items-center gap-3">
                                 <div class="w-8 h-8 rounded-lg bg-amber-50 flex items-center justify-center">
                                     <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
                                 </div>
@@ -447,7 +447,7 @@ function copyEmail() {
                                     <p class="text-xs text-gray-400">{{ isRtl ? 'اتركه فارغاً للإبقاء على كلمة المرور الحالية' : 'Leave empty to keep the current password' }}</p>
                                 </div>
                             </div>
-                            <div class="p-6 space-y-5">
+                            <div class="p-4 md:p-6 space-y-5">
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                                     <!-- New Password -->
                                     <div>
@@ -472,9 +472,9 @@ function copyEmail() {
                                             </div>
                                             <p class="text-[10px] font-medium" :class="{
                                                 'text-red-500': passwordStrength <= 1,
-                                                'text-orange-500': passwordStrength === 2,
-                                                'text-yellow-600': passwordStrength === 3,
-                                                'text-blue-600': passwordStrength === 4,
+                                                'text-[#C4A265]': passwordStrength === 2,
+                                                'text-amber-600': passwordStrength === 3,
+                                                'text-[#1B365D]': passwordStrength === 4,
                                                 'text-emerald-600': passwordStrength === 5,
                                             }">{{ strengthLabel }}</p>
                                         </div>
@@ -513,7 +513,7 @@ function copyEmail() {
                         </div>
 
                         <!-- Submit Bar -->
-                        <div class="bg-white rounded-2xl border border-gray-200/80 shadow-sm px-6 py-4 flex items-center justify-between">
+                        <div class="bg-white rounded-2xl border border-gray-200/80 shadow-sm px-4 md:px-6 py-4 flex items-center justify-between">
                             <div class="flex items-center gap-2">
                                 <Transition
                                     enter-active-class="transition-all duration-300"
@@ -535,7 +535,7 @@ function copyEmail() {
                                     {{ isRtl ? 'إلغاء' : 'Cancel' }}
                                 </Link>
                                 <button type="submit" :disabled="form.processing"
-                                        class="px-6 py-2.5 rounded-xl text-sm font-semibold text-white transition-all duration-200 disabled:opacity-50 shadow-sm hover:shadow-md flex items-center gap-2"
+                                        class="px-4 md:px-6 py-2.5 rounded-xl text-sm font-semibold text-white transition-all duration-200 disabled:opacity-50 shadow-sm hover:shadow-md flex items-center gap-2"
                                         style="background: linear-gradient(135deg, #C4A265, #a8884f);">
                                     <svg v-if="form.processing" class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
                                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />

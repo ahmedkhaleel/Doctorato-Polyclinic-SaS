@@ -230,9 +230,9 @@ const filterPickerRef = ref(null);
 const filterSearchRef = ref(null);
 
 const avatarColors = [
-    'from-rose-400 to-pink-500', 'from-violet-400 to-purple-500', 'from-blue-400 to-indigo-500',
-    'from-cyan-400 to-teal-500', 'from-emerald-400 to-green-500', 'from-amber-400 to-orange-500',
-    'from-red-400 to-rose-500', 'from-fuchsia-400 to-pink-500', 'from-sky-400 to-blue-500',
+    'from-amber-400 to-[#C4A265]', 'from-slate-400 to-[#1B365D]', 'from-slate-400 to-[#1B365D]',
+    'from-slate-400 to-teal-500', 'from-emerald-400 to-emerald-500', 'from-amber-400 to-[#C4A265]',
+    'from-red-400 to-[#C4A265]', 'from-slate-400 to-[#C4A265]', 'from-slate-400 to-[#1B365D]',
     'from-lime-400 to-emerald-500',
 ];
 function getUserColor(id) { return avatarColors[(id || 0) % avatarColors.length]; }
@@ -292,7 +292,7 @@ const statusConfig = {
     present: { key: 'a_present',  label_ar: 'حاضر',   label_en: 'Present', bg: 'bg-emerald-50',  text: 'text-emerald-700', border: 'border-emerald-200', dot: 'bg-emerald-500', icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z',          gradient: 'from-emerald-500 to-emerald-600' },
     absent:  { key: 'a_absent',   label_ar: 'غائب',   label_en: 'Absent',  bg: 'bg-red-50',      text: 'text-red-700',     border: 'border-red-200',     dot: 'bg-red-500',     icon: 'M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z', gradient: 'from-red-500 to-red-600' },
     late:    { key: 'a_late',     label_ar: 'متأخر',  label_en: 'Late',    bg: 'bg-amber-50',    text: 'text-amber-700',   border: 'border-amber-200',   dot: 'bg-amber-500',   icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z',          gradient: 'from-amber-500 to-amber-600' },
-    leave:   { key: 'a_leave',    label_ar: 'إجازة',  label_en: 'Leave',   bg: 'bg-sky-50',      text: 'text-sky-700',     border: 'border-sky-200',     dot: 'bg-sky-500',     icon: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z', gradient: 'from-sky-500 to-sky-600' },
+    leave:   { key: 'a_leave',    label_ar: 'إجازة',  label_en: 'Leave',   bg: 'bg-slate-50',      text: 'text-[#1B365D]',     border: 'border-slate-200',     dot: 'bg-[#1B365D]',     icon: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z', gradient: 'from-[#1B365D] to-[#1B365D]' },
 };
 
 function getStatus(s) { return statusConfig[s] || { key: s, label_ar: s, label_en: s, bg: 'bg-gray-50', text: 'text-gray-700', border: 'border-gray-200', dot: 'bg-gray-500', icon: '', gradient: 'from-gray-500 to-gray-600' }; }
@@ -433,7 +433,7 @@ onMounted(() => {
                 :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'"
             >
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-900">{{ $t('a_attendance') }}</h1>
+                    <h1 class="text-xl md:text-2xl font-bold text-gray-900">{{ $t('a_attendance') }}</h1>
                     <p class="text-sm text-gray-500 mt-1">{{ isRtl ? 'إدارة سجلات الحضور والانصراف للموظفين' : 'Manage employee attendance and time tracking' }}</p>
                 </div>
                 <button
@@ -485,7 +485,7 @@ onMounted(() => {
                             </svg>
                         </div>
                     </div>
-                    <p class="text-2xl font-bold" :class="stat.color === 'gray' ? 'text-gray-900' : `text-${stat.color}-600`">{{ stat.value }}</p>
+                    <p class="text-xl md:text-2xl font-bold" :class="stat.color === 'gray' ? 'text-gray-900' : `text-${stat.color}-600`">{{ stat.value }}</p>
                 </div>
             </div>
 
@@ -496,7 +496,7 @@ onMounted(() => {
                 :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
             >
                 <!-- Panel Header -->
-                <div class="px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white">
+                <div class="px-4 md:px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-3">
                             <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-sm">
@@ -538,7 +538,7 @@ onMounted(() => {
                             {{ $page.props.flash.error }}
                         </div>
 
-                        <div class="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                        <div class="p-4 md:p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                             <div
                                 v-for="user in users"
                                 :key="user.id"
@@ -640,7 +640,7 @@ onMounted(() => {
             >
                 <div v-if="showForm" class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
                     <!-- Form Header -->
-                    <div class="px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white">
+                    <div class="px-4 md:px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white">
                         <div class="flex items-center gap-3">
                             <div class="w-9 h-9 rounded-xl flex items-center justify-center text-white" style="background: linear-gradient(135deg, #C4A265 0%, #B08D4C 100%);">
                                 <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -729,7 +729,7 @@ onMounted(() => {
                                                 <span class="text-sm font-medium text-gray-700 truncate flex-1">{{ user.name }}</span>
                                                 <svg v-if="form.user_id == user.id" class="w-4 h-4 text-amber-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
                                             </button>
-                                            <div v-if="formFilteredUsers.length === 0" class="px-4 py-6 text-center">
+                                            <div v-if="formFilteredUsers.length === 0" class="px-4 py-4 md:py-6 text-center">
                                                 <svg class="w-8 h-8 text-gray-200 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v2m22-4h.01M12 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
                                                 <p class="text-xs text-gray-400">{{ isRtl ? 'لا توجد نتائج' : 'No results found' }}</p>
                                             </div>
@@ -865,7 +865,7 @@ onMounted(() => {
                                 </label>
                                 <div class="relative">
                                     <div class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3">
-                                        <svg class="w-4 h-4 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                        <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                     </div>
                                     <input
                                         v-model="form.overtime_hours"
@@ -873,7 +873,7 @@ onMounted(() => {
                                         step="0.5"
                                         min="0"
                                         :placeholder="isRtl ? 'ساعات إضافية' : 'Hours'"
-                                        class="w-full bg-gray-50/80 border border-gray-200 rounded-xl ps-10 pe-4 py-2.5 text-sm text-gray-700 font-medium focus:bg-white focus:ring-2 focus:ring-violet-200/50 focus:border-violet-300 transition-all duration-200 placeholder:text-gray-300"
+                                        class="w-full bg-gray-50/80 border border-gray-200 rounded-xl ps-10 pe-4 py-2.5 text-sm text-gray-700 font-medium focus:bg-white focus:ring-2 focus:ring-slate-200/50 focus:border-slate-300 transition-all duration-200 placeholder:text-gray-300"
                                     />
                                 </div>
                             </div>
@@ -902,7 +902,7 @@ onMounted(() => {
                             <button
                                 type="submit"
                                 :disabled="form.processing"
-                                class="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-white text-sm font-semibold shadow-sm hover:shadow-md transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:hover:scale-100"
+                                class="inline-flex items-center gap-2 px-4 md:px-6 py-2.5 rounded-xl text-white text-sm font-semibold shadow-sm hover:shadow-md transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:hover:scale-100"
                                 style="background: linear-gradient(135deg, #C4A265 0%, #B08D4C 100%);"
                             >
                                 <svg v-if="form.processing" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
@@ -1009,7 +1009,7 @@ onMounted(() => {
                                         <span class="text-sm font-medium text-gray-700 truncate flex-1">{{ user.name }}</span>
                                         <svg v-if="employeeFilter == user.id" class="w-4 h-4 text-amber-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
                                     </button>
-                                    <div v-if="filterFilteredUsers.length === 0" class="px-4 py-6 text-center">
+                                    <div v-if="filterFilteredUsers.length === 0" class="px-4 py-4 md:py-6 text-center">
                                         <p class="text-xs text-gray-400">{{ isRtl ? 'لا توجد نتائج' : 'No results found' }}</p>
                                     </div>
                                 </div>
@@ -1165,7 +1165,7 @@ onMounted(() => {
                                     <!-- Overtime -->
                                     <div>
                                         <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1">{{ $t('a_overtime') }}</p>
-                                        <span v-if="record.overtime_hours && parseFloat(record.overtime_hours) > 0" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-violet-50 text-violet-700 text-[11px] font-bold border border-violet-200">
+                                        <span v-if="record.overtime_hours && parseFloat(record.overtime_hours) > 0" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-slate-50 text-[#1B365D] text-[11px] font-bold border border-slate-200">
                                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3" /></svg>
                                             {{ record.overtime_hours }} {{ isRtl ? 'ساعة' : 'hrs' }}
                                         </span>
@@ -1178,11 +1178,11 @@ onMounted(() => {
                                     <button
                                         v-if="hasLocation(record)"
                                         @click="openMap(record)"
-                                        class="p-2 rounded-xl text-blue-400 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200 relative"
+                                        class="p-2 rounded-xl text-slate-400 hover:text-[#1B365D] hover:bg-slate-50 transition-all duration-200 relative"
                                         :title="isRtl ? 'عرض الموقع على الخريطة' : 'View on map'"
                                     >
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-                                        <span class="absolute -top-0.5 -end-0.5 w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
+                                        <span class="absolute -top-0.5 -end-0.5 w-2 h-2 bg-[#1B365D] rounded-full animate-pulse" />
                                     </button>
                                     <button
                                         v-if="can('attendances.update')"
@@ -1276,10 +1276,10 @@ onMounted(() => {
                     <!-- Modal -->
                     <div class="relative w-full max-w-2xl bg-white rounded-2xl shadow-2xl overflow-hidden animate-[modalIn_0.3s_ease-out]">
                         <!-- Header -->
-                        <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+                        <div class="px-4 md:px-6 py-4 border-b border-gray-100 flex items-center justify-between">
                             <div class="flex items-center gap-3">
-                                <div class="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center">
-                                    <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                                <div class="w-9 h-9 rounded-xl bg-slate-50 flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                                 </div>
                                 <div>
                                     <h3 class="text-base font-bold text-gray-900">{{ isRtl ? 'موقع الحضور والانصراف' : 'Attendance Location' }}</h3>
@@ -1295,7 +1295,7 @@ onMounted(() => {
                         <div ref="mapContainerRef" class="w-full h-[400px]" />
 
                         <!-- Legend -->
-                        <div class="px-6 py-3 border-t border-gray-100 flex flex-wrap items-center gap-4">
+                        <div class="px-4 md:px-6 py-3 border-t border-gray-100 flex flex-wrap items-center gap-4">
                             <div v-if="mapRecord?.check_in_lat" class="flex items-center gap-2">
                                 <div class="w-4 h-4 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 border-2 border-white shadow" />
                                 <span class="text-xs font-medium text-gray-600">{{ isRtl ? 'الحضور' : 'Check-in' }} {{ formatTime(mapRecord?.check_in) }}</span>

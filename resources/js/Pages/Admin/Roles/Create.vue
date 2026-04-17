@@ -167,7 +167,7 @@ function submit() {
             <!-- Header -->
             <div class="flex items-center justify-between mb-6">
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-800">{{ $t('a_add_role') }}</h1>
+                    <h1 class="text-xl md:text-2xl font-bold text-gray-800">{{ $t('a_add_role') }}</h1>
                     <p class="text-sm text-gray-400 mt-1">{{ isRtl ? 'إنشاء دور جديد وتحديد الصلاحيات' : 'Create a new role and define permissions' }}</p>
                 </div>
                 <Link href="/admin/roles" class="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 transition">
@@ -179,9 +179,9 @@ function submit() {
             <form @submit.prevent="submit">
                 <!-- Basic Info Card -->
                 <div class="bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden mb-6">
-                    <div class="px-6 py-4 border-b border-gray-100 flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
-                            <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+                    <div class="px-4 md:px-6 py-4 border-b border-gray-100 flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center">
+                            <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
                         </div>
                         <h2 class="text-sm font-semibold text-gray-800">{{ $t('a_role_information') }}</h2>
                     </div>
@@ -210,7 +210,7 @@ function submit() {
                 </div>
 
                 <!-- Permission Summary Bar -->
-                <div class="bg-white rounded-2xl border border-gray-200/80 shadow-sm px-6 py-4 mb-6 flex items-center justify-between">
+                <div class="bg-white rounded-2xl border border-gray-200/80 shadow-sm px-4 md:px-6 py-4 mb-6 flex items-center justify-between">
                     <div class="flex items-center gap-4">
                         <div class="flex items-center gap-2">
                             <div class="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-white text-sm" style="background: linear-gradient(135deg, #C4A265, #a8884f);">
@@ -308,7 +308,7 @@ function submit() {
                                         </thead>
                                         <tbody>
                                             <tr v-for="mod in groupedModules[groupKey]" :key="mod.key"
-                                                class="border-t border-gray-50 hover:bg-blue-50/30 transition-colors duration-150">
+                                                class="border-t border-gray-50 hover:bg-slate-50/30 transition-colors duration-150">
                                                 <td class="px-5 py-3">
                                                     <p class="text-sm font-medium text-gray-700">{{ isRtl ? mod.label_ar : mod.label_en }}</p>
                                                     <p class="text-[10px] text-gray-400" :dir="isRtl ? 'ltr' : 'rtl'">{{ isRtl ? mod.label_en : mod.label_ar }}</p>
@@ -345,7 +345,7 @@ function submit() {
                 </div>
 
                 <!-- Submit Bar -->
-                <div class="bg-white rounded-2xl border border-gray-200/80 shadow-sm px-6 py-4 flex items-center justify-between sticky bottom-4">
+                <div class="bg-white rounded-2xl border border-gray-200/80 shadow-sm px-4 md:px-6 py-4 flex items-center justify-between sticky bottom-4">
                     <p class="text-xs text-gray-400">
                         {{ form.permissions.length }} {{ isRtl ? 'صلاحية محددة' : 'permissions selected' }}
                     </p>
@@ -354,7 +354,7 @@ function submit() {
                             {{ $t('a_cancel') }}
                         </Link>
                         <button type="submit" :disabled="form.processing"
-                            class="px-6 py-2.5 rounded-xl text-sm font-semibold text-white transition-all duration-200 disabled:opacity-50 shadow-sm hover:shadow-md flex items-center gap-2"
+                            class="px-4 md:px-6 py-2.5 rounded-xl text-sm font-semibold text-white transition-all duration-200 disabled:opacity-50 shadow-sm hover:shadow-md flex items-center gap-2"
                             style="background: linear-gradient(135deg, #C4A265, #a8884f);">
                             <svg v-if="form.processing" class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />

@@ -31,12 +31,12 @@ function cancelEnrollment(enrollment) {
 }
 
 const statusColors = {
-    active: 'bg-green-100 text-green-700',
+    active: 'bg-emerald-100 text-emerald-700',
     paused: 'bg-amber-100 text-amber-700',
-    completed: 'bg-blue-100 text-blue-700',
+    completed: 'bg-slate-100 text-[#1B365D]',
     cancelled: 'bg-gray-100 text-gray-500',
-    stopped_reply: 'bg-purple-100 text-purple-700',
-    stopped_conversion: 'bg-indigo-100 text-indigo-700',
+    stopped_reply: 'bg-slate-100 text-[#1B365D]',
+    stopped_conversion: 'bg-slate-100 text-[#1B365D]',
 };
 
 function formatDate(d) {
@@ -55,7 +55,7 @@ function formatDate(d) {
                     <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
                 </Link>
                 <div>
-                    <h1 class="text-2xl font-bold text-[#3A3A3A]">{{ $t('a_enrollments') }}</h1>
+                    <h1 class="text-xl md:text-2xl font-bold text-[#3A3A3A]">{{ $t('a_enrollments') }}</h1>
                     <p class="text-sm text-gray-500">{{ sequence.name }}</p>
                 </div>
             </div>

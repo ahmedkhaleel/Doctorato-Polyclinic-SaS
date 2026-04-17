@@ -75,10 +75,10 @@ function submitCreate() {
 
 const statusLabels = {
     draft: { ar: 'مسودة', en: 'Draft', color: 'bg-gray-100 text-gray-700' },
-    pending_approval: { ar: 'بانتظار الموافقة', en: 'Pending Approval', color: 'bg-yellow-100 text-yellow-700' },
-    approved: { ar: 'معتمد', en: 'Approved', color: 'bg-blue-100 text-blue-700' },
+    pending_approval: { ar: 'بانتظار الموافقة', en: 'Pending Approval', color: 'bg-amber-100 text-amber-700' },
+    approved: { ar: 'معتمد', en: 'Approved', color: 'bg-slate-100 text-[#1B365D]' },
     rejected: { ar: 'مرفوض', en: 'Rejected', color: 'bg-red-100 text-red-700' },
-    refunded: { ar: 'تم الاسترداد', en: 'Refunded', color: 'bg-green-100 text-green-700' },
+    refunded: { ar: 'تم الاسترداد', en: 'Refunded', color: 'bg-emerald-100 text-emerald-700' },
 }
 
 const typeLabels = {
@@ -127,14 +127,14 @@ function formatDate(d) {
 </script>
 
 <template>
-    <div class="p-6 max-w-7xl mx-auto">
+    <div class="p-4 md:p-6 max-w-7xl mx-auto">
         <!-- Header -->
         <div class="flex items-center justify-between mb-6">
             <div>
-                <h1 class="text-2xl font-bold text-gray-800">{{ isRtl ? 'إشعارات دائنة / استرداد' : 'Credit Notes / Refunds' }}</h1>
+                <h1 class="text-xl md:text-2xl font-bold text-gray-800">{{ isRtl ? 'إشعارات دائنة / استرداد' : 'Credit Notes / Refunds' }}</h1>
                 <p class="text-gray-500 text-sm mt-1">{{ isRtl ? 'إدارة المبالغ المستردة والتعديلات' : 'Manage refunds, adjustments & cancellations' }}</p>
             </div>
-            <button @click="showCreateModal = true" class="inline-flex items-center gap-2 px-5 py-2.5 bg-cyan-600 text-white rounded-xl hover:bg-cyan-700 transition font-medium text-sm">
+            <button @click="showCreateModal = true" class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#1B365D] text-white rounded-xl hover:bg-[#1B365D] transition font-medium text-sm">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                 {{ isRtl ? 'إشعار دائن جديد' : 'New Credit Note' }}
             </button>
@@ -144,7 +144,7 @@ function formatDate(d) {
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
             <div class="bg-white rounded-2xl border border-gray-100 p-4">
                 <p class="text-xs text-gray-500">{{ isRtl ? 'قيد الانتظار' : 'Pending' }}</p>
-                <p class="text-xl font-bold text-yellow-600 mt-1">{{ stats.pending }}</p>
+                <p class="text-xl font-bold text-amber-600 mt-1">{{ stats.pending }}</p>
             </div>
             <div class="bg-white rounded-2xl border border-gray-100 p-4">
                 <p class="text-xs text-gray-500">{{ isRtl ? 'مبلغ معلق' : 'Pending Amount' }}</p>
@@ -152,7 +152,7 @@ function formatDate(d) {
             </div>
             <div class="bg-white rounded-2xl border border-gray-100 p-4">
                 <p class="text-xs text-gray-500">{{ isRtl ? 'معتمد هذا الشهر' : 'Approved (Month)' }}</p>
-                <p class="text-xl font-bold text-blue-600 mt-1">{{ stats.approved_month }}</p>
+                <p class="text-xl font-bold text-[#1B365D] mt-1">{{ stats.approved_month }}</p>
             </div>
             <div class="bg-white rounded-2xl border border-gray-100 p-4">
                 <p class="text-xs text-gray-500">{{ isRtl ? 'مسترد هذا الشهر' : 'Refunded (Month)' }}</p>
@@ -162,7 +162,7 @@ function formatDate(d) {
 
         <!-- Filters -->
         <div class="flex flex-wrap gap-3 mb-6">
-            <input v-model="search" @keyup.enter="applyFilters" type="text" :placeholder="isRtl ? 'بحث...' : 'Search...'" class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm w-64 focus:ring-cyan-500 focus:border-cyan-500" />
+            <input v-model="search" @keyup.enter="applyFilters" type="text" :placeholder="isRtl ? 'بحث...' : 'Search...'" class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm w-64 focus:ring-[#1B365D] focus:border-[#1B365D]" />
             <select v-model="statusFilter" @change="applyFilters" class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm">
                 <option value="">{{ isRtl ? 'كل الحالات' : 'All Statuses' }}</option>
                 <option v-for="(l, k) in statusLabels" :key="k" :value="k">{{ isRtl ? l.ar : l.en }}</option>
@@ -195,13 +195,13 @@ function formatDate(d) {
                 </thead>
                 <tbody class="divide-y divide-gray-50">
                     <tr v-for="cn in creditNotes.data" :key="cn.id" class="hover:bg-gray-50/50">
-                        <td class="px-4 py-3"><span class="font-mono text-xs font-medium text-cyan-600">{{ cn.credit_note_number }}</span></td>
+                        <td class="px-4 py-3"><span class="font-mono text-xs font-medium text-[#1B365D]">{{ cn.credit_note_number }}</span></td>
                         <td class="px-4 py-3">
                             <div class="font-medium text-gray-800">{{ cn.patient?.full_name }}</div>
                             <div class="text-xs text-gray-400">{{ cn.patient?.file_number }}</div>
                         </td>
                         <td class="px-4 py-3 text-center">
-                            <Link v-if="cn.invoice" :href="`/admin/invoices/${cn.invoice.id}`" class="font-mono text-xs text-blue-600 hover:underline">{{ cn.invoice.invoice_number }}</Link>
+                            <Link v-if="cn.invoice" :href="`/admin/invoices/${cn.invoice.id}`" class="font-mono text-xs text-[#1B365D] hover:underline">{{ cn.invoice.invoice_number }}</Link>
                         </td>
                         <td class="px-4 py-3 text-center text-xs text-gray-600">{{ isRtl ? typeLabels[cn.type]?.ar : typeLabels[cn.type]?.en }}</td>
                         <td class="px-4 py-3 text-center font-bold text-red-600">{{ formatCurrency(cn.amount) }}</td>
@@ -213,7 +213,7 @@ function formatDate(d) {
                         </td>
                         <td class="px-4 py-3 text-center text-xs text-gray-500">{{ formatDate(cn.created_at) }}</td>
                         <td class="px-4 py-3 text-center">
-                            <button v-if="allowedTransitions[cn.status]?.length" @click="openStatusChange(cn)" class="p-1.5 text-gray-400 hover:text-cyan-600 hover:bg-cyan-50 rounded-lg transition">
+                            <button v-if="allowedTransitions[cn.status]?.length" @click="openStatusChange(cn)" class="p-1.5 text-gray-400 hover:text-[#1B365D] hover:bg-slate-50 rounded-lg transition">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                             </button>
                         </td>
@@ -233,7 +233,7 @@ function formatDate(d) {
                         <!-- Invoice Search -->
                         <div>
                             <label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'الفاتورة' : 'Invoice' }} *</label>
-                            <div v-if="selectedInvoice" class="flex items-center justify-between px-3 py-2 bg-cyan-50 border border-cyan-200 rounded-xl">
+                            <div v-if="selectedInvoice" class="flex items-center justify-between px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl">
                                 <span class="text-sm font-mono text-gray-800">{{ selectedInvoice.title }}</span>
                                 <button type="button" @click="selectedInvoice = null; createForm.invoice_id = ''" class="text-gray-400 hover:text-red-500"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
                             </div>
@@ -273,7 +273,7 @@ function formatDate(d) {
 
                         <div class="flex justify-end gap-3 pt-4 border-t">
                             <button type="button" @click="showCreateModal = false" class="px-5 py-2.5 text-gray-600 hover:bg-gray-100 rounded-xl text-sm font-medium">{{ isRtl ? 'إلغاء' : 'Cancel' }}</button>
-                            <button type="submit" :disabled="submitting || !createForm.invoice_id" class="px-5 py-2.5 bg-cyan-600 text-white rounded-xl hover:bg-cyan-700 text-sm font-medium disabled:opacity-50">
+                            <button type="submit" :disabled="submitting || !createForm.invoice_id" class="px-5 py-2.5 bg-[#1B365D] text-white rounded-xl hover:bg-[#1B365D] text-sm font-medium disabled:opacity-50">
                                 {{ isRtl ? 'إنشاء' : 'Create' }}
                             </button>
                         </div>
@@ -318,7 +318,7 @@ function formatDate(d) {
                     <div class="flex justify-end gap-3 pt-4 mt-4 border-t">
                         <button @click="showStatusModal = false" class="px-5 py-2.5 text-gray-600 hover:bg-gray-100 rounded-xl text-sm font-medium">{{ isRtl ? 'إلغاء' : 'Cancel' }}</button>
                         <button @click="submitStatusChange" :disabled="submitting || !statusForm.status"
-                            :class="statusForm.status === 'rejected' ? 'bg-red-600 hover:bg-red-700' : 'bg-cyan-600 hover:bg-cyan-700'"
+                            :class="statusForm.status === 'rejected' ? 'bg-red-600 hover:bg-red-700' : 'bg-[#1B365D] hover:bg-[#1B365D]'"
                             class="px-5 py-2.5 text-white rounded-xl text-sm font-medium disabled:opacity-50">
                             {{ isRtl ? 'تحديث' : 'Update' }}
                         </button>

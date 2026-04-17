@@ -89,7 +89,7 @@ function formatDate(date) {
                         {{ rx.patient?.full_name?.charAt(0) }}
                     </div>
                     <div>
-                        <h1 class="text-2xl font-bold text-gray-800">Prescription</h1>
+                        <h1 class="text-xl md:text-2xl font-bold text-gray-800">Prescription</h1>
                         <p class="text-sm text-gray-500">
                             <Link v-if="can('patients.view')" :href="`/admin/patients/${rx.patient?.id}`" class="hover:underline" style="color: #C4A265;">{{ rx.patient?.full_name }}</Link>
                             <span v-else>{{ rx.patient?.full_name }}</span>
@@ -112,7 +112,7 @@ function formatDate(date) {
                     </Link>
                     <a
                         :href="`/admin/prescriptions/${rx.id}/pdf`"
-                        class="inline-flex items-center px-4 py-2 rounded-lg border text-sm font-medium transition border-green-400 text-green-700 hover:bg-green-50"
+                        class="inline-flex items-center px-4 py-2 rounded-lg border text-sm font-medium transition border-emerald-400 text-emerald-700 hover:bg-emerald-50"
                     >
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -193,7 +193,7 @@ function formatDate(date) {
                                 </div>
                                 <div v-if="rx.notes">
                                     <dt class="text-sm text-gray-500 mb-1">Notes</dt>
-                                    <dd class="text-sm text-gray-700 bg-yellow-50 p-3 rounded-lg whitespace-pre-wrap">{{ rx.notes }}</dd>
+                                    <dd class="text-sm text-gray-700 bg-amber-50 p-3 rounded-lg whitespace-pre-wrap">{{ rx.notes }}</dd>
                                 </div>
                             </dl>
                         </div>
@@ -201,7 +201,7 @@ function formatDate(date) {
                 </div>
 
                 <!-- Medications Table -->
-                <div class="bg-white rounded-lg shadow-sm p-6 mt-6">
+                <div class="bg-white rounded-lg shadow-sm p-4 md:p-6 mt-6">
                     <h2 class="text-lg font-semibold text-gray-700 mb-4">{{ $t('a_medications') }}</h2>
                     <div class="overflow-x-auto">
                         <table v-if="rx.items?.length" class="min-w-full divide-y divide-gray-200">

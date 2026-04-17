@@ -183,7 +183,7 @@ function submit() {
                         <svg class="w-4 h-4 transition-transform duration-300 group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
                         Back to Bundles
                     </Link>
-                    <h1 class="text-2xl font-bold text-gray-800 mt-1 flex items-center gap-3">
+                    <h1 class="text-xl md:text-2xl font-bold text-gray-800 mt-1 flex items-center gap-3">
                         <span class="cb-icon-wrap inline-flex items-center justify-center w-10 h-10 rounded-xl text-white" style="background: linear-gradient(135deg, #C4A265, #D4B87A);">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
                         </span>
@@ -219,7 +219,7 @@ function submit() {
 
                     <!-- ---- Bundle Information Card ---- -->
                     <div class="cb-card bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                        <div class="cb-card-header px-6 py-4 border-b border-gray-50" style="background: linear-gradient(135deg, rgba(196,162,101,0.04), rgba(196,162,101,0.01));">
+                        <div class="cb-card-header px-4 md:px-6 py-4 border-b border-gray-50" style="background: linear-gradient(135deg, rgba(196,162,101,0.04), rgba(196,162,101,0.01));">
                             <div class="flex items-center gap-2.5">
                                 <span class="flex items-center justify-center w-7 h-7 rounded-lg text-white text-xs font-bold" style="background: linear-gradient(135deg, #C4A265, #D4B87A);">1</span>
                                 <div>
@@ -228,7 +228,7 @@ function submit() {
                                 </div>
                             </div>
                         </div>
-                        <div class="p-6 space-y-5">
+                        <div class="p-4 md:p-6 space-y-5">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                                 <div class="cb-field">
                                     <label class="cb-label">
@@ -271,7 +271,7 @@ function submit() {
 
                     <!-- ---- Included Services Card ---- -->
                     <div class="cb-card bg-white rounded-xl shadow-sm border border-gray-100">
-                        <div class="cb-card-header px-6 py-4 border-b border-gray-50 flex items-center justify-between rounded-t-xl" style="background: linear-gradient(135deg, rgba(196,162,101,0.04), rgba(196,162,101,0.01));">
+                        <div class="cb-card-header px-4 md:px-6 py-4 border-b border-gray-50 flex items-center justify-between rounded-t-xl" style="background: linear-gradient(135deg, rgba(196,162,101,0.04), rgba(196,162,101,0.01));">
                             <div class="flex items-center gap-2.5">
                                 <span class="flex items-center justify-center w-7 h-7 rounded-lg text-white text-xs font-bold" style="background: linear-gradient(135deg, #C4A265, #D4B87A);">2</span>
                                 <div>
@@ -338,7 +338,7 @@ function submit() {
                                                 </p>
                                                 <p v-if="getServiceById(item.service_id)" class="text-xs text-gray-400 mt-0.5">
                                                     {{ item.sessions_count }} session{{ item.sessions_count !== 1 ? 's' : '' }}
-                                                    <span v-if="item.discount_percentage > 0" class="inline-flex items-center ml-1.5 text-green-600">
+                                                    <span v-if="item.discount_percentage > 0" class="inline-flex items-center ml-1.5 text-emerald-600">
                                                         &middot; {{ item.discount_percentage }}% off
                                                     </span>
                                                 </p>
@@ -423,7 +423,7 @@ function submit() {
                                                         x {{ item.sessions_count }} session{{ item.sessions_count !== 1 ? 's' : '' }}
                                                         = <span class="font-medium text-gray-600">{{ formatCurrency(getServiceById(item.service_id)?.price * item.sessions_count) }}</span>
                                                     </span>
-                                                    <span v-if="item.discount_percentage > 0" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-green-100 text-green-700 font-semibold">
+                                                    <span v-if="item.discount_percentage > 0" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 font-semibold">
                                                         <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A2 2 0 013 12V7a4 4 0 014-4z" /></svg>
                                                         -{{ item.discount_percentage }}%
                                                     </span>
@@ -434,7 +434,7 @@ function submit() {
                                 </div>
                             </TransitionGroup>
                         </div>
-                        <p v-if="form.errors.services" class="px-6 pb-4 text-sm text-red-600">{{ form.errors.services }}</p>
+                        <p v-if="form.errors.services" class="px-4 md:px-6 pb-4 text-sm text-red-600">{{ form.errors.services }}</p>
                     </div>
                 </div>
 
@@ -443,21 +443,21 @@ function submit() {
 
                     <!-- ---- Pricing Summary Card ---- -->
                     <div class="cb-card cb-pricing-card bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                        <div class="px-6 py-4 text-white" style="background: linear-gradient(135deg, #1E1E1E, #2d2d2d);">
+                        <div class="px-4 md:px-6 py-4 text-white" style="background: linear-gradient(135deg, #1E1E1E, #2d2d2d);">
                             <div class="flex items-center justify-between">
                                 <h3 class="text-sm font-semibold uppercase tracking-wider opacity-80">{{ $t('a_pricing_summary') }}</h3>
                                 <svg class="w-5 h-5 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
                             </div>
                         </div>
-                        <div class="p-6 space-y-4">
+                        <div class="p-4 md:p-6 space-y-4">
                             <!-- Stats Row -->
                             <div class="grid grid-cols-2 gap-3">
                                 <div class="cb-stat-box text-center p-3 rounded-lg border border-gray-100 transition-all duration-300 hover:border-[#C4A265]/20 hover:shadow-sm">
-                                    <p class="text-2xl font-bold text-gray-800 cb-counter">{{ form.services.length }}</p>
+                                    <p class="text-xl md:text-2xl font-bold text-gray-800 cb-counter">{{ form.services.length }}</p>
                                     <p class="text-[10px] uppercase tracking-wider text-gray-400 font-medium mt-0.5">Services</p>
                                 </div>
                                 <div class="cb-stat-box text-center p-3 rounded-lg border border-gray-100 transition-all duration-300 hover:border-[#C4A265]/20 hover:shadow-sm">
-                                    <p class="text-2xl font-bold text-gray-800 cb-counter">{{ totalSessions }}</p>
+                                    <p class="text-xl md:text-2xl font-bold text-gray-800 cb-counter">{{ totalSessions }}</p>
                                     <p class="text-[10px] uppercase tracking-wider text-gray-400 font-medium mt-0.5">Sessions</p>
                                 </div>
                             </div>
@@ -488,19 +488,19 @@ function submit() {
 
                             <!-- Savings badge -->
                             <Transition name="cb-fade">
-                                <div v-if="savingsAmount > 0" class="cb-savings p-4 rounded-xl border border-green-200 overflow-hidden relative" style="background: linear-gradient(135deg, #ecfdf5, #f0fdf4);">
-                                    <div class="absolute top-0 right-0 w-16 h-16 rounded-full bg-green-400/5 -translate-y-1/2 translate-x-1/2"></div>
+                                <div v-if="savingsAmount > 0" class="cb-savings p-4 rounded-xl border border-emerald-200 overflow-hidden relative" style="background: linear-gradient(135deg, #ecfdf5, #f0fdf4);">
+                                    <div class="absolute top-0 right-0 w-16 h-16 rounded-full bg-emerald-400/5 -translate-y-1/2 translate-x-1/2"></div>
                                     <div class="flex items-center justify-between relative">
                                         <div class="flex items-center gap-2">
-                                            <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-green-100">
-                                                <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
+                                            <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-100">
+                                                <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
                                             </span>
                                             <div>
-                                                <p class="text-[10px] uppercase tracking-wider text-green-600 font-semibold">Customer Saves</p>
-                                                <p class="text-lg font-bold text-green-700">{{ formatCurrency(savingsAmount) }}</p>
+                                                <p class="text-[10px] uppercase tracking-wider text-emerald-600 font-semibold">Customer Saves</p>
+                                                <p class="text-lg font-bold text-emerald-700">{{ formatCurrency(savingsAmount) }}</p>
                                             </div>
                                         </div>
-                                        <span class="cb-savings-badge inline-flex items-center justify-center w-12 h-12 rounded-full bg-green-100 text-green-700 font-bold text-sm">
+                                        <span class="cb-savings-badge inline-flex items-center justify-center w-12 h-12 rounded-full bg-emerald-100 text-emerald-700 font-bold text-sm">
                                             {{ savingsPercentage }}%
                                         </span>
                                     </div>
@@ -511,13 +511,13 @@ function submit() {
 
                     <!-- ---- Settings Card ---- -->
                     <div class="cb-card bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                        <div class="cb-card-header px-6 py-4 border-b border-gray-50" style="background: linear-gradient(135deg, rgba(196,162,101,0.04), rgba(196,162,101,0.01));">
+                        <div class="cb-card-header px-4 md:px-6 py-4 border-b border-gray-50" style="background: linear-gradient(135deg, rgba(196,162,101,0.04), rgba(196,162,101,0.01));">
                             <div class="flex items-center gap-2.5">
                                 <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                                 <h3 class="text-sm font-semibold text-gray-800">{{ $t('a_settings') }}</h3>
                             </div>
                         </div>
-                        <div class="p-6 space-y-5">
+                        <div class="p-4 md:p-6 space-y-5">
                             <div class="cb-field">
                                 <label class="cb-label">
                                     <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
@@ -548,13 +548,13 @@ function submit() {
 
                     <!-- ---- Featured Image Card ---- -->
                     <div class="cb-card bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                        <div class="cb-card-header px-6 py-4 border-b border-gray-50" style="background: linear-gradient(135deg, rgba(196,162,101,0.04), rgba(196,162,101,0.01));">
+                        <div class="cb-card-header px-4 md:px-6 py-4 border-b border-gray-50" style="background: linear-gradient(135deg, rgba(196,162,101,0.04), rgba(196,162,101,0.01));">
                             <div class="flex items-center gap-2.5">
                                 <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                                 <h3 class="text-sm font-semibold text-gray-800">{{ $t('a_featured_image') }}</h3>
                             </div>
                         </div>
-                        <div class="p-6 space-y-4">
+                        <div class="p-4 md:p-6 space-y-4">
                             <!-- Image preview -->
                             <div v-if="imagePreview" class="relative group rounded-xl overflow-hidden">
                                 <img :src="imagePreview" alt="Bundle image" class="w-full h-44 object-cover transition-transform duration-500 group-hover:scale-105" />

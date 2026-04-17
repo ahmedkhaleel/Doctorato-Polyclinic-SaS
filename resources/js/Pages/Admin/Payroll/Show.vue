@@ -26,7 +26,7 @@ function formatDateTime(dt) {
 
 const statusConfig = {
     draft: { key: 'a_draft', bg: 'bg-gray-100', text: 'text-gray-600', ring: 'ring-gray-200' },
-    approved: { key: 'a_approved', bg: 'bg-blue-100', text: 'text-blue-700', ring: 'ring-blue-200' },
+    approved: { key: 'a_approved', bg: 'bg-slate-100', text: 'text-[#1B365D]', ring: 'ring-slate-200' },
     paid: { key: 'a_paid', bg: 'bg-emerald-100', text: 'text-emerald-700', ring: 'ring-emerald-200' },
 };
 
@@ -105,7 +105,7 @@ function submitMarkPaid() {
                         </Link>
                     </div>
                     <div class="flex items-center gap-3 flex-wrap">
-                        <h1 class="text-2xl font-bold text-gray-900">{{ slip.slip_number }}</h1>
+                        <h1 class="text-xl md:text-2xl font-bold text-gray-900">{{ slip.slip_number }}</h1>
                         <span
                             class="text-xs font-semibold px-3 py-1 rounded-full ring-1"
                             :class="[
@@ -138,7 +138,7 @@ function submitMarkPaid() {
                         v-if="slip.status === 'draft' && can('salary_slips.update')"
                         @click="approveSlip"
                         :disabled="approving"
-                        class="px-5 py-2.5 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 transition disabled:opacity-50"
+                        class="px-5 py-2.5 bg-[#1B365D] text-white text-sm font-semibold rounded-xl hover:bg-[#1B365D] transition disabled:opacity-50"
                     >
                         {{ approving ? $t('a_approving') : $t('a_approve') }}
                     </button>
@@ -181,26 +181,26 @@ function submitMarkPaid() {
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <!-- Earnings Card -->
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
-                    <div class="px-6 py-4 border-b border-gray-100">
+                    <div class="px-4 md:px-6 py-4 border-b border-gray-100">
                         <h2 class="text-sm font-bold text-gray-800">{{ $t('a_earnings') }}</h2>
                     </div>
                     <table class="w-full text-sm">
                         <thead>
                             <tr class="bg-gray-50/80 border-b border-gray-100">
-                                <th class="px-6 py-2.5 ltr:text-left rtl:text-right text-[10px] font-semibold text-gray-400 uppercase tracking-wide">{{ $t('a_description') }}</th>
-                                <th class="px-6 py-2.5 ltr:text-right rtl:text-left text-[10px] font-semibold text-gray-400 uppercase tracking-wide">{{ $t('a_amount') }} ({{ currencyCode }})</th>
+                                <th class="px-4 md:px-6 py-2.5 ltr:text-left rtl:text-right text-[10px] font-semibold text-gray-400 uppercase tracking-wide">{{ $t('a_description') }}</th>
+                                <th class="px-4 md:px-6 py-2.5 ltr:text-right rtl:text-left text-[10px] font-semibold text-gray-400 uppercase tracking-wide">{{ $t('a_amount') }} ({{ currencyCode }})</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-50">
                             <tr v-for="item in earningKeys" :key="item.key" class="hover:bg-gray-50/50">
-                                <td class="px-6 py-3 text-gray-700">{{ $t(item.tKey) }}</td>
-                                <td class="px-6 py-3 ltr:text-right rtl:text-left font-medium text-gray-800">{{ formatCurrency(slip[item.key]) }}</td>
+                                <td class="px-4 md:px-6 py-3 text-gray-700">{{ $t(item.tKey) }}</td>
+                                <td class="px-4 md:px-6 py-3 ltr:text-right rtl:text-left font-medium text-gray-800">{{ formatCurrency(slip[item.key]) }}</td>
                             </tr>
                         </tbody>
                         <tfoot>
                             <tr class="border-t-2" style="border-color: #C4A265;">
-                                <td class="px-6 py-3 font-bold text-gray-800">{{ $t('a_total_earnings') }}</td>
-                                <td class="px-6 py-3 ltr:text-right rtl:text-left font-bold" style="color: #C4A265;">{{ formatCurrency(slip.total_earnings) }}</td>
+                                <td class="px-4 md:px-6 py-3 font-bold text-gray-800">{{ $t('a_total_earnings') }}</td>
+                                <td class="px-4 md:px-6 py-3 ltr:text-right rtl:text-left font-bold" style="color: #C4A265;">{{ formatCurrency(slip.total_earnings) }}</td>
                             </tr>
                         </tfoot>
                     </table>
@@ -208,26 +208,26 @@ function submitMarkPaid() {
 
                 <!-- Deductions Card -->
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
-                    <div class="px-6 py-4 border-b border-gray-100">
+                    <div class="px-4 md:px-6 py-4 border-b border-gray-100">
                         <h2 class="text-sm font-bold text-gray-800">{{ $t('a_deductions') }}</h2>
                     </div>
                     <table class="w-full text-sm">
                         <thead>
                             <tr class="bg-gray-50/80 border-b border-gray-100">
-                                <th class="px-6 py-2.5 ltr:text-left rtl:text-right text-[10px] font-semibold text-gray-400 uppercase tracking-wide">{{ $t('a_description') }}</th>
-                                <th class="px-6 py-2.5 ltr:text-right rtl:text-left text-[10px] font-semibold text-gray-400 uppercase tracking-wide">{{ $t('a_amount') }} ({{ currencyCode }})</th>
+                                <th class="px-4 md:px-6 py-2.5 ltr:text-left rtl:text-right text-[10px] font-semibold text-gray-400 uppercase tracking-wide">{{ $t('a_description') }}</th>
+                                <th class="px-4 md:px-6 py-2.5 ltr:text-right rtl:text-left text-[10px] font-semibold text-gray-400 uppercase tracking-wide">{{ $t('a_amount') }} ({{ currencyCode }})</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-50">
                             <tr v-for="item in deductionKeys" :key="item.key" class="hover:bg-gray-50/50">
-                                <td class="px-6 py-3 text-gray-700">{{ $t(item.tKey) }}</td>
-                                <td class="px-6 py-3 ltr:text-right rtl:text-left font-medium text-red-600">{{ formatCurrency(slip[item.key]) }}</td>
+                                <td class="px-4 md:px-6 py-3 text-gray-700">{{ $t(item.tKey) }}</td>
+                                <td class="px-4 md:px-6 py-3 ltr:text-right rtl:text-left font-medium text-red-600">{{ formatCurrency(slip[item.key]) }}</td>
                             </tr>
                         </tbody>
                         <tfoot>
                             <tr class="border-t-2 border-red-200">
-                                <td class="px-6 py-3 font-bold text-gray-800">{{ $t('a_total_deductions') }}</td>
-                                <td class="px-6 py-3 ltr:text-right rtl:text-left font-bold text-red-600">{{ formatCurrency(slip.total_deductions) }}</td>
+                                <td class="px-4 md:px-6 py-3 font-bold text-gray-800">{{ $t('a_total_deductions') }}</td>
+                                <td class="px-4 md:px-6 py-3 ltr:text-right rtl:text-left font-bold text-red-600">{{ formatCurrency(slip.total_deductions) }}</td>
                             </tr>
                         </tfoot>
                     </table>
@@ -242,7 +242,7 @@ function submitMarkPaid() {
                         <p class="text-sm text-gray-500 mt-1">{{ months[slip.month] || slip.month }} {{ slip.year }}</p>
                     </div>
                     <div :class="isRtl ? 'text-left' : 'text-right'">
-                        <p class="text-3xl font-bold" style="color: #C4A265;">{{ formatCurrency(slip.net_salary) }}</p>
+                        <p class="text-2xl md:text-3xl font-bold" style="color: #C4A265;">{{ formatCurrency(slip.net_salary) }}</p>
                     </div>
                 </div>
             </div>
@@ -292,7 +292,7 @@ function submitMarkPaid() {
                 class="fixed inset-0 z-50 flex items-center justify-center"
             >
                 <div class="absolute inset-0 bg-black/40" @click="closePaidModal"></div>
-                <div class="relative bg-white rounded-2xl shadow-xl max-w-md w-full mx-4 p-6 z-10">
+                <div class="relative bg-white rounded-2xl shadow-xl max-w-md w-full mx-4 p-4 md:p-6 z-10">
                     <h3 class="text-lg font-bold text-gray-900 mb-1">{{ $t('a_mark_as_paid') }}</h3>
                     <p class="text-sm text-gray-500 mb-5">
                         {{ $t('a_enter_payment_details') }} <span class="font-mono font-semibold" style="color: #C4A265;">{{ slip.slip_number }}</span>

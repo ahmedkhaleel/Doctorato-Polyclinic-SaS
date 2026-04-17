@@ -24,7 +24,7 @@ function truncate(text, length = 60) {
             <!-- Header -->
             <div class="flex items-center justify-between">
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-800">{{ $t('a_seo_pages') }}</h1>
+                    <h1 class="text-xl md:text-2xl font-bold text-gray-800">{{ $t('a_seo_pages') }}</h1>
                     <p class="text-sm text-gray-500 mt-1">{{ $t('a_manage_seo') }}</p>
                 </div>
                 <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-amber-50 border border-amber-200">
@@ -40,16 +40,16 @@ function truncate(text, length = 60) {
                 <table class="w-full text-sm">
                     <thead>
                         <tr class="bg-gray-50 border-b border-gray-200">
-                            <th class="px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_page') }}</th>
-                            <th class="px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_title_en') }}</th>
-                            <th class="px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_description_en') }}</th>
-                            <th class="px-6 py-3.5 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_indexable') }}</th>
-                            <th class="px-6 py-3.5 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_actions') }}</th>
+                            <th class="px-4 md:px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_page') }}</th>
+                            <th class="px-4 md:px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_title_en') }}</th>
+                            <th class="px-4 md:px-6 py-3.5 ltr:text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_description_en') }}</th>
+                            <th class="px-4 md:px-6 py-3.5 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_indexable') }}</th>
+                            <th class="px-4 md:px-6 py-3.5 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">{{ $t('a_actions') }}</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
                         <tr v-for="page in seoPages" :key="page.id" class="hover:bg-gray-50/50 transition-colors">
-                            <td class="px-6 py-4">
+                            <td class="px-4 md:px-6 py-4">
                                 <div class="flex items-center gap-3">
                                     <div class="w-8 h-8 rounded-lg flex items-center justify-center text-white text-xs font-bold" style="background-color: #C4A265;">
                                         {{ page.page_identifier?.charAt(0)?.toUpperCase() }}
@@ -60,19 +60,19 @@ function truncate(text, length = 60) {
                                     </div>
                                 </div>
                             </td>
-                            <td class="px-6 py-4">
+                            <td class="px-4 md:px-6 py-4">
                                 <p class="text-gray-700">{{ truncate(page.title_en, 45) }}</p>
                                 <p class="text-xs mt-0.5" :class="(page.title_en?.length || 0) > 60 ? 'text-red-500' : 'text-gray-400'">
                                     {{ page.title_en?.length || 0 }} / 60 chars
                                 </p>
                             </td>
-                            <td class="px-6 py-4">
+                            <td class="px-4 md:px-6 py-4">
                                 <p class="text-gray-600 text-xs leading-relaxed">{{ truncate(page.description_en, 80) }}</p>
                                 <p class="text-xs mt-0.5" :class="(page.description_en?.length || 0) > 160 ? 'text-red-500' : 'text-gray-400'">
                                     {{ page.description_en?.length || 0 }} / 160 chars
                                 </p>
                             </td>
-                            <td class="px-6 py-4 text-center">
+                            <td class="px-4 md:px-6 py-4 text-center">
                                 <span v-if="page.is_indexable" class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700">
                                     <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
                                     {{ $t('a_yes') }}
@@ -82,7 +82,7 @@ function truncate(text, length = 60) {
                                     {{ $t('a_no') }}
                                 </span>
                             </td>
-                            <td class="px-6 py-4 text-center">
+                            <td class="px-4 md:px-6 py-4 text-center">
                                 <Link
                                     :href="`/admin/seo-pages/${page.id}/edit`"
                                     class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg border transition-all hover:opacity-80"

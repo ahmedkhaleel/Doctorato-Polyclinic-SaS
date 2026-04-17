@@ -177,7 +177,7 @@ function submitPrescription() {
     <AdminLayout :title="$t('a_prescriptions')">
         <div class="space-y-6">
             <div class="flex items-center justify-between">
-                <h1 class="text-2xl font-bold text-gray-800">{{ $t('a_prescriptions') }}</h1>
+                <h1 class="text-xl md:text-2xl font-bold text-gray-800">{{ $t('a_prescriptions') }}</h1>
                 <button
                     v-if="can('prescriptions.create')"
                     @click="showNewPrescription = !showNewPrescription"
@@ -328,13 +328,13 @@ function submitPrescription() {
                     v-model="search"
                     type="text"
                     :placeholder="$t('a_search_prescriptions')"
-                    class="w-full sm:w-80 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                    class="w-full sm:w-80 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                 />
                 <select
                     v-if="activeModules.length > 1"
                     v-model="moduleFilter"
                     @change="applyFilters"
-                    class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                    class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                 >
                     <option value="">{{ $t('a_all_departments') }}</option>
                     <option v-for="m in activeModules" :key="m.slug" :value="m.slug">{{ m.name }}</option>
@@ -343,14 +343,14 @@ function submitPrescription() {
                     v-model="dateFrom"
                     type="date"
                     :max="dateTo || undefined"
-                    class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                    class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                     :placeholder="$t('a_from')"
                 />
                 <input
                     v-model="dateTo"
                     type="date"
                     :min="dateFrom || undefined"
-                    class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                    class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                     :placeholder="$t('a_to_date')"
                 />
             </div>
@@ -361,19 +361,19 @@ function submitPrescription() {
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th class="px-6 py-3 ltr:text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_date') }}</th>
-                                <th class="px-6 py-3 ltr:text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_patient') }}</th>
-                                <th class="px-6 py-3 ltr:text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_doctor') }}</th>
-                                <th class="px-6 py-3 ltr:text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_diagnosis') }}</th>
-                                <th class="px-6 py-3 ltr:text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_medications') }}</th>
-                                <th class="px-6 py-3 ltr:text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_visit_date') }}</th>
-                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_actions') }}</th>
+                                <th class="px-4 md:px-6 py-3 ltr:text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_date') }}</th>
+                                <th class="px-4 md:px-6 py-3 ltr:text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_patient') }}</th>
+                                <th class="px-4 md:px-6 py-3 ltr:text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_doctor') }}</th>
+                                <th class="px-4 md:px-6 py-3 ltr:text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_diagnosis') }}</th>
+                                <th class="px-4 md:px-6 py-3 ltr:text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_medications') }}</th>
+                                <th class="px-4 md:px-6 py-3 ltr:text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_visit_date') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_actions') }}</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
                             <tr v-for="rx in prescriptions.data" :key="rx.id" class="hover:bg-gray-50">
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ formatDate(rx.created_at) }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ formatDate(rx.created_at) }}</td>
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center">
                                         <div class="w-8 h-8 rounded-full mr-3 flex-shrink-0 flex items-center justify-center text-white text-xs font-bold" style="background-color: #C4A265;">
                                             {{ rx.patient?.full_name?.charAt(0) }}
@@ -384,30 +384,30 @@ function submitPrescription() {
                                         </div>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ rx.doctor?.name_en || '-' }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-500" :title="rx.diagnosis">{{ truncate(rx.diagnosis) }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ rx.doctor?.name_en || '-' }}</td>
+                                <td class="px-4 md:px-6 py-4 text-sm text-gray-500" :title="rx.diagnosis">{{ truncate(rx.diagnosis) }}</td>
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-[#1B365D]">
                                         {{ rx.items?.length || 0 }} {{ $t('a_items') }}
                                     </span>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ formatDate(rx.visit?.visit_date) }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm space-x-3 rtl:space-x-reverse">
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ formatDate(rx.visit?.visit_date) }}</td>
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-right text-sm space-x-3 rtl:space-x-reverse">
                                     <Link v-if="can('prescriptions.view')" :href="`/admin/prescriptions/${rx.id}`" class="font-medium hover:underline" style="color: #C4A265;">{{ $t('a_view') }}</Link>
-                                    <a v-if="can('prescriptions.view')" :href="`/admin/prescriptions/${rx.id}/print`" target="_blank" class="font-medium text-blue-600 hover:underline">{{ $t('a_print') }}</a>
-                                    <a v-if="can('prescriptions.view')" :href="`/admin/prescriptions/${rx.id}/pdf`" class="font-medium text-green-600 hover:underline">{{ $t('a_pdf') }}</a>
+                                    <a v-if="can('prescriptions.view')" :href="`/admin/prescriptions/${rx.id}/print`" target="_blank" class="font-medium text-[#1B365D] hover:underline">{{ $t('a_print') }}</a>
+                                    <a v-if="can('prescriptions.view')" :href="`/admin/prescriptions/${rx.id}/pdf`" class="font-medium text-emerald-600 hover:underline">{{ $t('a_pdf') }}</a>
                                     <button v-if="can('prescriptions.delete')" @click="deletePrescription(rx.id)" class="font-medium text-red-600 hover:underline">{{ $t('a_delete') }}</button>
                                 </td>
                             </tr>
                             <tr v-if="!prescriptions.data || prescriptions.data.length === 0">
-                                <td colspan="7" class="px-6 py-8 text-center text-sm text-gray-500">{{ $t('a_no_prescriptions_found') }}</td>
+                                <td colspan="7" class="px-4 md:px-6 py-8 text-center text-sm text-gray-500">{{ $t('a_no_prescriptions_found') }}</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
 
                 <!-- Pagination -->
-                <div v-if="prescriptions.links && prescriptions.links.length > 3" class="px-6 py-3 border-t border-gray-200 flex items-center justify-between">
+                <div v-if="prescriptions.links && prescriptions.links.length > 3" class="px-4 md:px-6 py-3 border-t border-gray-200 flex items-center justify-between">
                     <p class="text-sm text-gray-500">{{ $t('a_showing') }} {{ prescriptions.from }} {{ $t('a_to') }} {{ prescriptions.to }} {{ $t('a_of') }} {{ prescriptions.total }} {{ $t('a_results') }}</p>
                     <nav class="flex space-x-1 rtl:space-x-reverse">
                         <template v-for="link in prescriptions.links" :key="link.label">

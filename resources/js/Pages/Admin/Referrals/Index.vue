@@ -28,17 +28,17 @@ const departments = [
 ]
 
 const statusLabels = {
-    pending: { ar: 'معلق', en: 'Pending', color: 'bg-yellow-100 text-yellow-700' },
-    accepted: { ar: 'مقبول', en: 'Accepted', color: 'bg-blue-100 text-blue-700' },
-    scheduled: { ar: 'مجدول', en: 'Scheduled', color: 'bg-indigo-100 text-indigo-700' },
-    completed: { ar: 'مكتمل', en: 'Completed', color: 'bg-green-100 text-green-700' },
+    pending: { ar: 'معلق', en: 'Pending', color: 'bg-amber-100 text-amber-700' },
+    accepted: { ar: 'مقبول', en: 'Accepted', color: 'bg-slate-100 text-[#1B365D]' },
+    scheduled: { ar: 'مجدول', en: 'Scheduled', color: 'bg-slate-100 text-[#1B365D]' },
+    completed: { ar: 'مكتمل', en: 'Completed', color: 'bg-emerald-100 text-emerald-700' },
     declined: { ar: 'مرفوض', en: 'Declined', color: 'bg-red-100 text-red-700' },
     cancelled: { ar: 'ملغي', en: 'Cancelled', color: 'bg-gray-100 text-gray-500' },
 }
 
 const urgencyLabels = {
     routine: { ar: 'عادي', en: 'Routine', color: 'text-gray-600' },
-    urgent: { ar: 'عاجل', en: 'Urgent', color: 'text-orange-600' },
+    urgent: { ar: 'عاجل', en: 'Urgent', color: 'text-[#C4A265]' },
     emergency: { ar: 'طوارئ', en: 'Emergency', color: 'text-red-600' },
 }
 
@@ -136,14 +136,14 @@ function formatDate(d) {
 </script>
 
 <template>
-    <div class="p-6 max-w-7xl mx-auto">
+    <div class="p-4 md:p-6 max-w-7xl mx-auto">
         <!-- Header -->
         <div class="flex items-center justify-between mb-6">
             <div>
-                <h1 class="text-2xl font-bold text-gray-800">{{ isRtl ? 'التحويلات بين الأقسام' : 'Inter-department Referrals' }}</h1>
+                <h1 class="text-xl md:text-2xl font-bold text-gray-800">{{ isRtl ? 'التحويلات بين الأقسام' : 'Inter-department Referrals' }}</h1>
                 <p class="text-gray-500 text-sm mt-1">{{ isRtl ? 'إدارة تحويلات المرضى بين الأقسام' : 'Manage patient referrals between departments' }}</p>
             </div>
-            <button @click="showCreateModal = true" class="inline-flex items-center gap-2 px-5 py-2.5 bg-cyan-600 text-white rounded-xl hover:bg-cyan-700 transition font-medium text-sm">
+            <button @click="showCreateModal = true" class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#1B365D] text-white rounded-xl hover:bg-[#1B365D] transition font-medium text-sm">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                 {{ isRtl ? 'تحويل جديد' : 'New Referral' }}
             </button>
@@ -153,8 +153,8 @@ function formatDate(d) {
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
             <div class="bg-white rounded-2xl border border-gray-100 p-4">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-yellow-50 rounded-xl flex items-center justify-center">
-                        <svg class="w-5 h-5 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <div class="w-10 h-10 bg-amber-50 rounded-xl flex items-center justify-center">
+                        <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                     </div>
                     <div>
                         <p class="text-xs text-gray-500">{{ isRtl ? 'معلق' : 'Pending' }}</p>
@@ -164,8 +164,8 @@ function formatDate(d) {
             </div>
             <div class="bg-white rounded-2xl border border-gray-100 p-4">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center">
-                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+                    <div class="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center">
+                        <svg class="w-5 h-5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
                     </div>
                     <div>
                         <p class="text-xs text-gray-500">{{ isRtl ? 'نشط' : 'Active' }}</p>
@@ -175,8 +175,8 @@ function formatDate(d) {
             </div>
             <div class="bg-white rounded-2xl border border-gray-100 p-4">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-green-50 rounded-xl flex items-center justify-center">
-                        <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <div class="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center">
+                        <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                     </div>
                     <div>
                         <p class="text-xs text-gray-500">{{ isRtl ? 'مكتمل هذا الشهر' : 'Completed (Month)' }}</p>
@@ -199,7 +199,7 @@ function formatDate(d) {
 
         <!-- Filters -->
         <div class="flex flex-wrap gap-3 mb-6">
-            <input v-model="search" @keyup.enter="applyFilters" type="text" :placeholder="isRtl ? 'بحث...' : 'Search...'" class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm w-64 focus:ring-cyan-500 focus:border-cyan-500" />
+            <input v-model="search" @keyup.enter="applyFilters" type="text" :placeholder="isRtl ? 'بحث...' : 'Search...'" class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm w-64 focus:ring-[#1B365D] focus:border-[#1B365D]" />
             <select v-model="statusFilter" @change="applyFilters" class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm">
                 <option value="">{{ isRtl ? 'كل الحالات' : 'All Statuses' }}</option>
                 <option v-for="(lbl, key) in statusLabels" :key="key" :value="key">{{ isRtl ? lbl.ar : lbl.en }}</option>
@@ -229,7 +229,7 @@ function formatDate(d) {
                 <tbody class="divide-y divide-gray-50">
                     <tr v-for="r in referrals.data" :key="r.id" class="hover:bg-gray-50/50">
                         <td class="px-4 py-3">
-                            <span class="font-mono text-xs font-medium text-cyan-600">{{ r.referral_number }}</span>
+                            <span class="font-mono text-xs font-medium text-[#1B365D]">{{ r.referral_number }}</span>
                         </td>
                         <td class="px-4 py-3">
                             <div class="font-medium text-gray-800">{{ r.patient?.full_name }}</div>
@@ -243,7 +243,7 @@ function formatDate(d) {
                         </td>
                         <td class="px-4 py-3 text-center">
                             <div class="text-xs">
-                                <span class="px-2 py-0.5 bg-cyan-50 rounded-full text-cyan-700">{{ deptLabel(r.to_department) }}</span>
+                                <span class="px-2 py-0.5 bg-slate-50 rounded-full text-[#1B365D]">{{ deptLabel(r.to_department) }}</span>
                                 <div class="text-gray-400 mt-0.5">{{ r.referred_to_doctor?.name || '-' }}</div>
                             </div>
                         </td>
@@ -260,7 +260,7 @@ function formatDate(d) {
                         </td>
                         <td class="px-4 py-3 text-center text-xs text-gray-500">{{ formatDate(r.created_at) }}</td>
                         <td class="px-4 py-3 text-center">
-                            <button v-if="allowedTransitions[r.status]?.length" @click="openStatusChange(r)" class="p-1.5 text-gray-400 hover:text-cyan-600 hover:bg-cyan-50 rounded-lg transition">
+                            <button v-if="allowedTransitions[r.status]?.length" @click="openStatusChange(r)" class="p-1.5 text-gray-400 hover:text-[#1B365D] hover:bg-slate-50 rounded-lg transition">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                             </button>
                         </td>
@@ -272,7 +272,7 @@ function formatDate(d) {
 
         <!-- Pagination -->
         <div v-if="referrals.links && referrals.last_page > 1" class="flex justify-center gap-1 mt-6">
-            <Link v-for="link in referrals.links" :key="link.label" :href="link.url || '#'" class="px-3 py-1.5 rounded-lg text-sm" :class="link.active ? 'bg-cyan-600 text-white' : 'text-gray-500 hover:bg-gray-100'" v-html="link.label" preserve-state />
+            <Link v-for="link in referrals.links" :key="link.label" :href="link.url || '#'" class="px-3 py-1.5 rounded-lg text-sm" :class="link.active ? 'bg-[#1B365D] text-white' : 'text-gray-500 hover:bg-gray-100'" v-html="link.label" preserve-state />
         </div>
 
         <!-- Create Referral Modal -->
@@ -285,7 +285,7 @@ function formatDate(d) {
                         <!-- Patient Search -->
                         <div>
                             <label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'المريض' : 'Patient' }} *</label>
-                            <div v-if="selectedPatient" class="flex items-center justify-between px-3 py-2 bg-cyan-50 border border-cyan-200 rounded-xl">
+                            <div v-if="selectedPatient" class="flex items-center justify-between px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl">
                                 <div><span class="font-medium text-sm text-gray-800">{{ selectedPatient.full_name }}</span><span class="text-xs text-gray-400 ms-2">{{ selectedPatient.file_number }}</span></div>
                                 <button type="button" @click="selectedPatient = null; createForm.patient_id = ''" class="text-gray-400 hover:text-red-500"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
                             </div>
@@ -341,7 +341,7 @@ function formatDate(d) {
                             <label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'الأولوية' : 'Urgency' }} *</label>
                             <div class="flex gap-3">
                                 <label v-for="u in ['routine','urgent','emergency']" :key="u" class="flex items-center gap-1.5 cursor-pointer">
-                                    <input v-model="createForm.urgency" type="radio" :value="u" class="text-cyan-600" />
+                                    <input v-model="createForm.urgency" type="radio" :value="u" class="text-[#1B365D]" />
                                     <span class="text-sm" :class="urgencyLabels[u].color">{{ isRtl ? urgencyLabels[u].ar : urgencyLabels[u].en }}</span>
                                 </label>
                             </div>
@@ -367,7 +367,7 @@ function formatDate(d) {
 
                         <div class="flex justify-end gap-3 pt-4 border-t">
                             <button type="button" @click="showCreateModal = false" class="px-5 py-2.5 text-gray-600 hover:bg-gray-100 rounded-xl text-sm font-medium">{{ isRtl ? 'إلغاء' : 'Cancel' }}</button>
-                            <button type="submit" :disabled="submitting || !createForm.patient_id" class="px-5 py-2.5 bg-cyan-600 text-white rounded-xl hover:bg-cyan-700 text-sm font-medium disabled:opacity-50">
+                            <button type="submit" :disabled="submitting || !createForm.patient_id" class="px-5 py-2.5 bg-[#1B365D] text-white rounded-xl hover:bg-[#1B365D] text-sm font-medium disabled:opacity-50">
                                 {{ isRtl ? 'إنشاء التحويل' : 'Create Referral' }}
                             </button>
                         </div>
@@ -416,7 +416,7 @@ function formatDate(d) {
 
                     <div class="flex justify-end gap-3 pt-4 mt-4 border-t">
                         <button @click="showStatusModal = false" class="px-5 py-2.5 text-gray-600 hover:bg-gray-100 rounded-xl text-sm font-medium">{{ isRtl ? 'إلغاء' : 'Cancel' }}</button>
-                        <button @click="submitStatusChange" :disabled="submitting || !statusForm.status" class="px-5 py-2.5 bg-cyan-600 text-white rounded-xl hover:bg-cyan-700 text-sm font-medium disabled:opacity-50">
+                        <button @click="submitStatusChange" :disabled="submitting || !statusForm.status" class="px-5 py-2.5 bg-[#1B365D] text-white rounded-xl hover:bg-[#1B365D] text-sm font-medium disabled:opacity-50">
                             {{ isRtl ? 'تحديث' : 'Update' }}
                         </button>
                     </div>

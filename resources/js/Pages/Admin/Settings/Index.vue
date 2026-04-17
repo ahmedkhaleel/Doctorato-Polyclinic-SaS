@@ -356,7 +356,7 @@ function submit() {
                                                 <div class="h-6 rounded-lg mb-2 text-white text-[9px] font-bold flex items-center px-3" :style="{ background: `linear-gradient(135deg, ${form.brand_sidebar_bg}, ${form.brand_sidebar_bg}dd)` }">
                                                     {{ isRtl ? 'مرحباً' : 'Welcome' }}
                                                 </div>
-                                                <div class="grid grid-cols-3 gap-1.5">
+                                                <div class="grid grid-cols-1 md:grid-cols-3 gap-1.5">
                                                     <div class="h-8 rounded-md bg-white border border-gray-100 flex items-center justify-center">
                                                         <div class="w-4 h-4 rounded" :style="{ background: form.brand_primary + '20' }"></div>
                                                     </div>
@@ -736,7 +736,7 @@ function submit() {
 
                                 <div class="field-group">
                                     <h3 class="field-group__title">
-                                        <svg class="w-4 h-4 text-cyan-500 inline -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342" /></svg>
+                                        <svg class="w-4 h-4 text-[#1B365D] inline -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342" /></svg>
                                         {{ $t('a_dental_consultation') }}
                                     </h3>
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -930,8 +930,8 @@ function submit() {
                                             <div class="w-11 h-6 bg-gray-200 peer-focus:ring-4 peer-focus:ring-[#C4A265]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#C4A265]"></div>
                                         </label>
                                     </div>
-                                    <div class="mt-4 p-4 bg-blue-50 rounded-xl border border-blue-100">
-                                        <p class="text-xs text-blue-700">
+                                    <div class="mt-4 p-4 bg-slate-50 rounded-xl border border-slate-100">
+                                        <p class="text-xs text-[#1B365D]">
                                             <strong>Manage sequences:</strong> Go to CRM → Automation Sequences to create, edit, and manage your automated workflows.
                                             The system processes pending steps every 5 minutes during working hours (8 AM - 10 PM).
                                         </p>
@@ -1092,7 +1092,7 @@ function submit() {
                                 <!-- Scheduled Reminders -->
                                 <div class="field-group">
                                     <h3 class="field-group__title">
-                                        <svg class="w-4 h-4 text-cyan-500 inline -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                        <svg class="w-4 h-4 text-[#1B365D] inline -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                         {{ $t('a_sms_scheduled_reminders') }}
                                     </h3>
                                     <p class="text-xs text-gray-500 mb-3">{{ $t('a_sms_scheduled_reminders_desc') }}</p>
@@ -1123,7 +1123,7 @@ function submit() {
                                 <!-- Recall System -->
                                 <div class="field-group">
                                     <h3 class="field-group__title">
-                                        <svg class="w-4 h-4 text-purple-500 inline -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                                        <svg class="w-4 h-4 text-[#1B365D] inline -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
                                         {{ $t('a_sms_recall_system') }}
                                     </h3>
                                     <p class="text-xs text-gray-500 mb-3">{{ $t('a_sms_recall_system_desc') }}</p>

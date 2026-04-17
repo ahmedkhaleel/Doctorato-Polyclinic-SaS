@@ -95,9 +95,9 @@ function toggleActive(rule) {
 }
 
 const eventCategories = {
-    call: { label: 'Calls', color: 'bg-blue-50 text-blue-700 ring-1 ring-blue-200/60' },
-    appointment: { label: 'Appointments', color: 'bg-purple-50 text-purple-700 ring-1 ring-purple-200/60' },
-    booking: { label: 'Bookings', color: 'bg-indigo-50 text-indigo-700 ring-1 ring-indigo-200/60' },
+    call: { label: 'Calls', color: 'bg-slate-50 text-[#1B365D] ring-1 ring-slate-200/60' },
+    appointment: { label: 'Appointments', color: 'bg-slate-50 text-[#1B365D] ring-1 ring-slate-200/60' },
+    booking: { label: 'Bookings', color: 'bg-slate-50 text-[#1B365D] ring-1 ring-slate-200/60' },
     conversion: { label: 'Conversions', color: 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200/60' },
     engagement: { label: 'Engagement', color: 'bg-amber-50 text-amber-700 ring-1 ring-amber-200/60' },
     default: { label: 'Other', color: 'bg-gray-50 text-gray-600 ring-1 ring-gray-200/60' },
@@ -122,11 +122,11 @@ function getEventCategory(event) {
             <div :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
                 class="transition-all duration-500 ease-out flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-900 tracking-tight">{{ $t('a_scoring_rules') }}</h1>
+                    <h1 class="text-xl md:text-2xl font-bold text-gray-900 tracking-tight">{{ $t('a_scoring_rules') }}</h1>
                     <p class="text-sm text-gray-500 mt-1">{{ $t('a_scoring_rules_description') }}</p>
                 </div>
                 <button v-if="can('leads.update')" @click="openCreate"
-                    class="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-white text-sm font-semibold transition-all duration-300 shadow-lg shadow-[#C4A265]/25 hover:shadow-xl hover:shadow-[#C4A265]/35 hover:-translate-y-0.5 active:translate-y-0"
+                    class="inline-flex items-center gap-2 px-4 md:px-6 py-2.5 rounded-xl text-white text-sm font-semibold transition-all duration-300 shadow-lg shadow-[#C4A265]/25 hover:shadow-xl hover:shadow-[#C4A265]/35 hover:-translate-y-0.5 active:translate-y-0"
                     style="background: linear-gradient(135deg, #C4A265, #D4B87A);">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>{{ $t('a_add_rule') }}</button>
             </div>
@@ -208,7 +208,7 @@ function getEventCategory(event) {
                                 <button type="button" @click="cancel"
                                     class="px-5 py-2.5 text-sm font-semibold text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-xl transition-all duration-200">{{ $t('a_cancel') }}</button>
                                 <button type="submit" :disabled="form.processing"
-                                    class="px-6 py-2.5 rounded-xl text-white text-sm font-semibold transition-all duration-300 shadow-lg shadow-[#C4A265]/20 hover:shadow-xl hover:shadow-[#C4A265]/30 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                                    class="px-4 md:px-6 py-2.5 rounded-xl text-white text-sm font-semibold transition-all duration-300 shadow-lg shadow-[#C4A265]/20 hover:shadow-xl hover:shadow-[#C4A265]/30 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                                     style="background: linear-gradient(135deg, #C4A265, #D4B87A);">
                                     <svg v-if="form.processing" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
                                     {{ editingId ? $t('a_update_rule') : $t('a_create_rule') }}
@@ -228,13 +228,13 @@ function getEventCategory(event) {
                     <table class="w-full text-sm">
                         <thead>
                             <tr class="ltr:text-left rtl:text-right text-[10px] text-gray-400 uppercase tracking-wider border-b border-gray-100 bg-gray-50/60">
-                                <th class="px-6 py-4 font-semibold">{{ $t('a_event') }}</th>
-                                <th class="px-6 py-4 font-semibold">{{ $t('a_name_en') }}</th>
-                                <th class="px-6 py-4 font-semibold">{{ $t('a_name_ar') }}</th>
-                                <th class="px-6 py-4 font-semibold">{{ $t('a_category') }}</th>
-                                <th class="px-6 py-4 font-semibold text-center">{{ $t('a_points') }}</th>
-                                <th class="px-6 py-4 font-semibold text-center">{{ $t('a_status') }}</th>
-                                <th class="px-6 py-4 font-semibold ltr:text-right rtl:text-left">{{ $t('a_actions') }}</th>
+                                <th class="px-4 md:px-6 py-4 font-semibold">{{ $t('a_event') }}</th>
+                                <th class="px-4 md:px-6 py-4 font-semibold">{{ $t('a_name_en') }}</th>
+                                <th class="px-4 md:px-6 py-4 font-semibold">{{ $t('a_name_ar') }}</th>
+                                <th class="px-4 md:px-6 py-4 font-semibold">{{ $t('a_category') }}</th>
+                                <th class="px-4 md:px-6 py-4 font-semibold text-center">{{ $t('a_points') }}</th>
+                                <th class="px-4 md:px-6 py-4 font-semibold text-center">{{ $t('a_status') }}</th>
+                                <th class="px-4 md:px-6 py-4 font-semibold ltr:text-right rtl:text-left">{{ $t('a_actions') }}</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-50">
@@ -242,21 +242,21 @@ function getEventCategory(event) {
                                 :style="{ transitionDelay: (idx * 30) + 'ms' }"
                                 :class="mounted ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4'"
                                 class="transition-all duration-300 hover:bg-gradient-to-r hover:from-[#C4A265]/[0.03] hover:to-transparent group">
-                                <td class="px-6 py-4">
+                                <td class="px-4 md:px-6 py-4">
                                     <code class="inline-flex items-center gap-1.5 text-xs bg-gray-800 text-gray-300 px-3 py-1.5 rounded-lg font-mono">
                                         <svg class="w-3 h-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
                                         {{ rule.event }}
                                     </code>
                                 </td>
-                                <td class="px-6 py-4 font-semibold text-gray-800">{{ rule.name_en }}</td>
-                                <td class="px-6 py-4 text-gray-600" dir="rtl">{{ rule.name_ar }}</td>
-                                <td class="px-6 py-4">
+                                <td class="px-4 md:px-6 py-4 font-semibold text-gray-800">{{ rule.name_en }}</td>
+                                <td class="px-4 md:px-6 py-4 text-gray-600" dir="rtl">{{ rule.name_ar }}</td>
+                                <td class="px-4 md:px-6 py-4">
                                     <span :class="getEventCategory(rule.event).color"
                                         class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold">
                                         {{ getEventCategory(rule.event).label }}
                                     </span>
                                 </td>
-                                <td class="px-6 py-4">
+                                <td class="px-4 md:px-6 py-4">
                                     <div class="flex flex-col items-center gap-1.5">
                                         <span :class="pointsColor(rule.points)"
                                             class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold font-mono min-w-[3rem] justify-center">
@@ -270,7 +270,7 @@ function getEventCategory(event) {
                                         </div>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 text-center">
+                                <td class="px-4 md:px-6 py-4 text-center">
                                     <!-- Toggle Switch -->
                                     <button v-if="can('leads.update')" @click="toggleActive(rule)"
                                         :class="rule.is_active ? 'bg-[#C4A265]' : 'bg-gray-300'"
@@ -285,7 +285,7 @@ function getEventCategory(event) {
                                         {{ rule.is_active ? $t('a_active') : $t('a_inactive') }}
                                     </span>
                                 </td>
-                                <td class="px-6 py-4 ltr:text-right rtl:text-left">
+                                <td class="px-4 md:px-6 py-4 ltr:text-right rtl:text-left">
                                     <div class="flex items-center justify-end gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                                         <button v-if="can('leads.update')" @click="openEdit(rule)"
                                             class="p-2 rounded-lg text-gray-400 hover:text-[#C4A265] hover:bg-[#C4A265]/5 transition-all duration-200" :title="$t('a_edit')">
@@ -314,7 +314,7 @@ function getEventCategory(event) {
                 </div>
 
                 <!-- Empty State -->
-                <div v-if="!rules?.length" class="px-6 py-24 text-center">
+                <div v-if="!rules?.length" class="px-4 md:px-6 py-24 text-center">
                     <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gray-50 flex items-center justify-center">
                         <svg class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
                     </div>

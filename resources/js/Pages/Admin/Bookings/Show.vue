@@ -48,12 +48,12 @@ const isConsultationBooking = computed(() => {
 });
 
 const bookingTypeColors = {
-    dermatology_consultation: 'bg-blue-50 text-blue-700 border-blue-200',
-    cosmetic_consultation: 'bg-pink-50 text-pink-700 border-pink-200',
+    dermatology_consultation: 'bg-slate-50 text-[#1B365D] border-slate-200',
+    cosmetic_consultation: 'bg-amber-50 text-[#C4A265] border-amber-200',
     service: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-    dental_consultation: 'bg-cyan-50 text-cyan-700 border-cyan-200',
+    dental_consultation: 'bg-slate-50 text-[#1B365D] border-slate-200',
     dental_service: 'bg-teal-50 text-teal-700 border-teal-200',
-    pediatric_consultation: 'bg-green-50 text-green-700 border-green-200',
+    pediatric_consultation: 'bg-emerald-50 text-emerald-700 border-emerald-200',
     pediatric_service: 'bg-lime-50 text-lime-700 border-lime-200',
 };
 
@@ -80,9 +80,9 @@ function formatTime(time) {
 
 /* ── Status Colors ─────────────────────────────────────── */
 const bookingStatusColors = {
-    unconfirmed: 'bg-yellow-50 text-yellow-700 border-yellow-200',
-    confirmed: 'bg-blue-50 text-blue-700 border-blue-200',
-    in_progress: 'bg-indigo-50 text-indigo-700 border-indigo-200',
+    unconfirmed: 'bg-amber-50 text-amber-700 border-amber-200',
+    confirmed: 'bg-slate-50 text-[#1B365D] border-slate-200',
+    in_progress: 'bg-slate-50 text-[#1B365D] border-slate-200',
     completed: 'bg-emerald-50 text-emerald-700 border-emerald-200',
     cancelled: 'bg-red-50 text-red-700 border-red-200',
 };
@@ -97,24 +97,24 @@ const bookingStatusLabels = {
 
 const appointmentStatusColors = {
     scheduled: 'bg-gray-50 text-gray-600 border-gray-200',
-    confirmed: 'bg-blue-50 text-blue-700 border-blue-200',
-    checked_in: 'bg-indigo-50 text-indigo-700 border-indigo-200',
+    confirmed: 'bg-slate-50 text-[#1B365D] border-slate-200',
+    checked_in: 'bg-slate-50 text-[#1B365D] border-slate-200',
     in_progress: 'bg-amber-50 text-amber-700 border-amber-200',
-    completed: 'bg-green-50 text-green-700 border-green-200',
+    completed: 'bg-emerald-50 text-emerald-700 border-emerald-200',
     cancelled: 'bg-red-50 text-red-700 border-red-200',
-    no_show: 'bg-orange-50 text-orange-700 border-orange-200',
+    no_show: 'bg-amber-50 text-[#C4A265] border-amber-200',
 };
 
 const sourceColors = {
-    website: 'bg-blue-50 text-blue-700 border-blue-200',
+    website: 'bg-slate-50 text-[#1B365D] border-slate-200',
     secretary: 'bg-amber-50 text-amber-700 border-amber-200',
     admin: 'bg-amber-50 text-amber-700 border-amber-200',
 };
 
 const serviceStatusColors = {
     active: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-    pending: 'bg-yellow-50 text-yellow-700 border-yellow-200',
-    completed: 'bg-blue-50 text-blue-700 border-blue-200',
+    pending: 'bg-amber-50 text-amber-700 border-amber-200',
+    completed: 'bg-slate-50 text-[#1B365D] border-slate-200',
     cancelled: 'bg-red-50 text-red-700 border-red-200',
 };
 
@@ -245,9 +245,9 @@ function filteredDoctorsList(key) {
 
 /* ── Status Dropdown Options ──────────────────────────── */
 const statusOptions = [
-    { value: 'unconfirmed', color: 'bg-yellow-400', bg: 'bg-yellow-50 text-yellow-700' },
-    { value: 'confirmed', color: 'bg-blue-400', bg: 'bg-blue-50 text-blue-700' },
-    { value: 'in_progress', color: 'bg-purple-400', bg: 'bg-purple-50 text-purple-700' },
+    { value: 'unconfirmed', color: 'bg-amber-400', bg: 'bg-amber-50 text-amber-700' },
+    { value: 'confirmed', color: 'bg-slate-400', bg: 'bg-slate-50 text-[#1B365D]' },
+    { value: 'in_progress', color: 'bg-slate-400', bg: 'bg-slate-50 text-[#1B365D]' },
     { value: 'completed', color: 'bg-emerald-400', bg: 'bg-emerald-50 text-emerald-700' },
     { value: 'cancelled', color: 'bg-red-400', bg: 'bg-red-50 text-red-700' },
 ];
@@ -774,7 +774,7 @@ function submitEditServices() {
                 </Link>
                 <div>
                     <div class="flex items-center gap-3">
-                        <h1 class="text-2xl font-bold text-gray-900">{{ $t('a_booking') }} {{ bookingNumber }}</h1>
+                        <h1 class="text-xl md:text-2xl font-bold text-gray-900">{{ $t('a_booking') }} {{ bookingNumber }}</h1>
                         <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold border capitalize" :class="bookingStatusColors[booking.status] || 'bg-gray-50 text-gray-600 border-gray-200'">
                             {{ $t('a_' + booking.status) || booking.status }}
                         </span>
@@ -834,7 +834,7 @@ function submitEditServices() {
                     </div>
                     <template v-if="booking.patient">
                         <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-amber-500 to-yellow-400 flex items-center justify-center text-white text-lg font-bold flex-shrink-0">
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-amber-500 to-amber-400 flex items-center justify-center text-white text-lg font-bold flex-shrink-0">
                                 {{ booking.patient.full_name?.charAt(0) || '?' }}
                             </div>
                             <div class="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -868,9 +868,9 @@ function submitEditServices() {
                                 <p class="text-sm text-gray-600">{{ booking.email || '-' }}</p>
                             </div>
                         </div>
-                        <div v-if="isUnconfirmed" class="mt-3 flex items-center gap-2 px-3 py-2 bg-yellow-50 rounded-lg border border-yellow-200">
-                            <svg class="w-4 h-4 text-yellow-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" /></svg>
-                            <p class="text-xs text-yellow-700">{{ $t('a_no_linked_patient') }}</p>
+                        <div v-if="isUnconfirmed" class="mt-3 flex items-center gap-2 px-3 py-2 bg-amber-50 rounded-lg border border-amber-200">
+                            <svg class="w-4 h-4 text-amber-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" /></svg>
+                            <p class="text-xs text-amber-700">{{ $t('a_no_linked_patient') }}</p>
                         </div>
                     </template>
                 </div>
@@ -896,7 +896,7 @@ function submitEditServices() {
                         <div v-if="booking.doctor">
                             <p class="text-xs text-gray-400 mb-1">{{ $t('a_requested_doctor') }}</p>
                             <div class="flex items-center gap-2">
-                                <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-blue-50 text-blue-600">
+                                <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-slate-50 text-[#1B365D]">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                                 </span>
                                 <span class="text-sm font-semibold text-gray-800">{{ booking.doctor.name_en || booking.doctor.name_ar }}</span>
@@ -914,7 +914,7 @@ function submitEditServices() {
                         <div v-if="booking.preferred_time">
                             <p class="text-xs text-gray-400 mb-1">{{ $t('a_preferred_time') }}</p>
                             <div class="flex items-center gap-2">
-                                <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-purple-50 text-purple-600">
+                                <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-slate-50 text-[#1B365D]">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                 </span>
                                 <span class="text-sm font-semibold text-gray-800">{{ formatTime(booking.preferred_time) }}</span>
@@ -948,7 +948,7 @@ function submitEditServices() {
 
                 <!-- ─── Services Table ─────────────────────────────── -->
                 <div v-if="booking.booking_services?.length" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
-                    <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+                    <div class="px-4 md:px-6 py-4 border-b border-gray-100 flex items-center justify-between">
                         <h2 class="text-sm font-bold text-gray-800">{{ $t('a_services') }}</h2>
                         <button v-if="can('bookings.edit_services') && !isUnconfirmed && !showEditServices" type="button" @click="initEditServices"
                             class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold border rounded-lg hover:bg-amber-50 transition"
@@ -961,45 +961,45 @@ function submitEditServices() {
                         <table class="w-full text-sm">
                             <thead>
                                 <tr class="bg-gray-50/80">
-                                    <th class="px-6 py-3 text-start text-xs font-semibold text-gray-500 uppercase"></th>
-                                    <th class="px-6 py-3 text-start text-xs font-semibold text-gray-500 uppercase">{{ $t('a_service') }}</th>
-                                    <th class="px-6 py-3 text-start text-xs font-semibold text-gray-500 uppercase">{{ $t('a_doctor') }}</th>
-                                    <th class="px-6 py-3 text-start text-xs font-semibold text-gray-500 uppercase">{{ $t('a_sessions') }}</th>
-                                    <th class="px-6 py-3 text-start text-xs font-semibold text-gray-500 uppercase">{{ $t('a_unit_price') }}</th>
-                                    <th class="px-6 py-3 text-start text-xs font-semibold text-gray-500 uppercase">{{ $t('a_discount') }}</th>
-                                    <th class="px-6 py-3 text-end text-xs font-semibold text-gray-500 uppercase">{{ $t('a_total') }}</th>
-                                    <th class="px-6 py-3 text-start text-xs font-semibold text-gray-500 uppercase">{{ $t('a_status') }}</th>
+                                    <th class="px-4 md:px-6 py-3 text-start text-xs font-semibold text-gray-500 uppercase"></th>
+                                    <th class="px-4 md:px-6 py-3 text-start text-xs font-semibold text-gray-500 uppercase">{{ $t('a_service') }}</th>
+                                    <th class="px-4 md:px-6 py-3 text-start text-xs font-semibold text-gray-500 uppercase">{{ $t('a_doctor') }}</th>
+                                    <th class="px-4 md:px-6 py-3 text-start text-xs font-semibold text-gray-500 uppercase">{{ $t('a_sessions') }}</th>
+                                    <th class="px-4 md:px-6 py-3 text-start text-xs font-semibold text-gray-500 uppercase">{{ $t('a_unit_price') }}</th>
+                                    <th class="px-4 md:px-6 py-3 text-start text-xs font-semibold text-gray-500 uppercase">{{ $t('a_discount') }}</th>
+                                    <th class="px-4 md:px-6 py-3 text-end text-xs font-semibold text-gray-500 uppercase">{{ $t('a_total') }}</th>
+                                    <th class="px-4 md:px-6 py-3 text-start text-xs font-semibold text-gray-500 uppercase">{{ $t('a_status') }}</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100">
                                 <template v-for="(bs, bsIndex) in booking.booking_services" :key="bs.id || bsIndex">
                                     <!-- Service Row -->
                                     <tr class="hover:bg-gray-50/50 transition-colors cursor-pointer" @click="toggleServiceExpand(bsIndex)">
-                                        <td class="px-6 py-3">
+                                        <td class="px-4 md:px-6 py-3">
                                             <button type="button" class="text-gray-400 hover:text-gray-600 transition">
                                                 <svg class="w-4 h-4 transition-transform duration-200" :class="{ 'rotate-90': expandedServices[bsIndex] }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                                                 </svg>
                                             </button>
                                         </td>
-                                        <td class="px-6 py-3">
+                                        <td class="px-4 md:px-6 py-3">
                                             <span class="font-semibold text-gray-800">{{ bs.service?.name_en || bs.service?.name_ar || (booking.booking_type ? $t('a_' + booking.booking_type) : '-') }}</span>
                                         </td>
-                                        <td class="px-6 py-3 text-gray-600">{{ bs.doctor?.name_en || bs.doctor?.name_ar || '-' }}</td>
-                                        <td class="px-6 py-3">
+                                        <td class="px-4 md:px-6 py-3 text-gray-600">{{ bs.doctor?.name_en || bs.doctor?.name_ar || '-' }}</td>
+                                        <td class="px-4 md:px-6 py-3">
                                             <span class="font-semibold" style="color: #C4A265;">{{ bs.completed_sessions || 0 }}</span>
                                             <span class="text-gray-400"> / {{ bs.sessions_count }}</span>
-                                            <span v-if="retouchCount(bs) > 0" class="ltr:ml-1 rtl:mr-1 text-purple-600 text-xs font-medium">(+{{ retouchCount(bs) }} {{ $t('a_retouch') }})</span>
+                                            <span v-if="retouchCount(bs) > 0" class="ltr:ml-1 rtl:mr-1 text-[#1B365D] text-xs font-medium">(+{{ retouchCount(bs) }} {{ $t('a_retouch') }})</span>
                                             <div class="mt-1 h-1.5 bg-gray-100 rounded-full overflow-hidden w-16">
                                                 <div class="h-full rounded-full transition-all"
                                                      style="background-color: #C4A265;"
                                                      :style="{ width: (bs.sessions_count > 0 ? ((bs.completed_sessions || 0) / bs.sessions_count * 100) : 0) + '%' }"></div>
                                             </div>
                                         </td>
-                                        <td class="px-6 py-3 text-gray-600">{{ formatCurrency(bs.unit_price) }}</td>
-                                        <td class="px-6 py-3 text-gray-600">{{ bs.discount_per_session > 0 ? formatCurrency(bs.discount_per_session) + '/' + $t('a_session') : '-' }}</td>
-                                        <td class="px-6 py-3 text-end font-bold text-gray-800">{{ formatCurrency(bs.total_price) }}</td>
-                                        <td class="px-6 py-3">
+                                        <td class="px-4 md:px-6 py-3 text-gray-600">{{ formatCurrency(bs.unit_price) }}</td>
+                                        <td class="px-4 md:px-6 py-3 text-gray-600">{{ bs.discount_per_session > 0 ? formatCurrency(bs.discount_per_session) + '/' + $t('a_session') : '-' }}</td>
+                                        <td class="px-4 md:px-6 py-3 text-end font-bold text-gray-800">{{ formatCurrency(bs.total_price) }}</td>
+                                        <td class="px-4 md:px-6 py-3">
                                             <span class="inline-flex px-2 py-0.5 rounded-full text-xs font-semibold border capitalize" :class="serviceStatusColors[bs.status] || 'bg-gray-50 text-gray-600 border-gray-200'">
                                                 {{ bs.status || '-' }}
                                             </span>
@@ -1026,7 +1026,7 @@ function submitEditServices() {
                                                             <tr v-for="appt in bs.appointments" :key="appt.id" class="hover:bg-white/60">
                                                                 <td class="py-2 ltr:pr-3 rtl:pl-3 font-medium text-gray-500">
                                                                     {{ appt.session_number || '-' }}
-                                                                    <span v-if="appt.is_retouch" class="ltr:ml-1 rtl:mr-1 inline-flex px-1.5 py-0.5 rounded text-[9px] font-bold bg-purple-50 text-purple-600 border border-purple-200">{{ $t('a_retouch') }}</span>
+                                                                    <span v-if="appt.is_retouch" class="ltr:ml-1 rtl:mr-1 inline-flex px-1.5 py-0.5 rounded text-[9px] font-bold bg-slate-50 text-[#1B365D] border border-slate-200">{{ $t('a_retouch') }}</span>
                                                                 </td>
                                                                 <td class="py-2 ltr:pr-3 rtl:pl-3 text-gray-700">{{ formatDate(appt.appointment_date) }}</td>
                                                                 <td class="py-2 ltr:pr-3 rtl:pl-3 text-gray-600">{{ formatTime(appt.start_time) }} - {{ formatTime(appt.end_time) }}</td>
@@ -1073,13 +1073,13 @@ function submitEditServices() {
 
                 <!-- ─── Edit Services ─────────────────────────────────── -->
                 <div v-if="showEditServices && can('bookings.edit_services')" class="bg-white rounded-2xl shadow-sm border overflow-hidden" style="border-color: #C4A265;">
-                    <div class="px-6 py-4 border-b bg-amber-50/50 flex items-center justify-between" style="border-color: rgba(196, 162, 101, 0.3);">
+                    <div class="px-4 md:px-6 py-4 border-b bg-amber-50/50 flex items-center justify-between" style="border-color: rgba(196, 162, 101, 0.3);">
                         <h2 class="text-sm font-bold" style="color: #9a7d3a;">{{ $t('a_edit_services') }}</h2>
                         <button type="button" @click="showEditServices = false" class="text-gray-400 hover:text-gray-600 transition">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                         </button>
                     </div>
-                    <form @submit.prevent="submitEditServices" class="p-6 space-y-4">
+                    <form @submit.prevent="submitEditServices" class="p-4 md:p-6 space-y-4">
                         <div v-for="(svc, idx) in editServicesForm.services" :key="idx"
                              class="p-4 rounded-xl border space-y-3 transition-all"
                              :class="svc._delete ? 'bg-red-50/50 border-red-200 opacity-60' : 'bg-gray-50 border-gray-100'">
@@ -1097,7 +1097,7 @@ function submitEditServices() {
                                 <div class="relative ss-dropdown">
                                     <label class="block text-xs text-gray-500 mb-1">{{ $t('a_service') }}</label>
                                     <button type="button" @click.stop="toggleDropdown('ed-svc-' + idx)"
-                                        class="w-full flex items-center justify-between px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white hover:border-gray-300 focus:ring-2 focus:ring-yellow-200 focus:border-transparent transition">
+                                        class="w-full flex items-center justify-between px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white hover:border-gray-300 focus:ring-2 focus:ring-amber-200 focus:border-transparent transition">
                                         <span class="truncate" :class="svc.service_id ? 'text-gray-800' : 'text-gray-400'">
                                             {{ getServiceName(svc.service_id) || $t('a_select_service') }}
                                         </span>
@@ -1108,7 +1108,7 @@ function submitEditServices() {
                                             <div class="p-2 border-b border-gray-100">
                                                 <div class="relative">
                                                     <svg class="absolute ltr:left-2.5 rtl:right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                                                    <input v-model="dropdownSearches['ed-svc-' + idx]" type="text" :placeholder="$t('a_search') + '...'" class="w-full ltr:pl-8 rtl:pr-8 ltr:pr-3 rtl:pl-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-yellow-200 focus:border-transparent" @click.stop />
+                                                    <input v-model="dropdownSearches['ed-svc-' + idx]" type="text" :placeholder="$t('a_search') + '...'" class="w-full ltr:pl-8 rtl:pr-8 ltr:pr-3 rtl:pl-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-amber-200 focus:border-transparent" @click.stop />
                                                 </div>
                                             </div>
                                             <div class="max-h-48 overflow-y-auto">
@@ -1127,7 +1127,7 @@ function submitEditServices() {
                                 <div class="relative ss-dropdown">
                                     <label class="block text-xs text-gray-500 mb-1">{{ $t('a_doctor') }}</label>
                                     <button type="button" @click.stop="toggleDropdown('ed-doc-' + idx)"
-                                        class="w-full flex items-center justify-between px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white hover:border-gray-300 focus:ring-2 focus:ring-yellow-200 focus:border-transparent transition">
+                                        class="w-full flex items-center justify-between px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white hover:border-gray-300 focus:ring-2 focus:ring-amber-200 focus:border-transparent transition">
                                         <span :class="svc.doctor_id ? 'text-gray-800' : 'text-gray-400'">
                                             {{ getDoctorName(svc.doctor_id) || $t('a_select_doctor') }}
                                         </span>
@@ -1138,7 +1138,7 @@ function submitEditServices() {
                                             <div class="p-2 border-b border-gray-100">
                                                 <div class="relative">
                                                     <svg class="absolute ltr:left-2.5 rtl:right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                                                    <input v-model="dropdownSearches['ed-doc-' + idx]" type="text" :placeholder="$t('a_search') + '...'" class="w-full ltr:pl-8 rtl:pr-8 ltr:pr-3 rtl:pl-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-yellow-200 focus:border-transparent" @click.stop />
+                                                    <input v-model="dropdownSearches['ed-doc-' + idx]" type="text" :placeholder="$t('a_search') + '...'" class="w-full ltr:pl-8 rtl:pr-8 ltr:pr-3 rtl:pl-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-amber-200 focus:border-transparent" @click.stop />
                                                 </div>
                                             </div>
                                             <div class="max-h-48 overflow-y-auto">
@@ -1146,7 +1146,7 @@ function submitEditServices() {
                                                     @click="svc.doctor_id = d.id; openDropdown = null"
                                                     class="w-full flex items-center gap-2 px-3 py-2 text-sm text-start hover:bg-amber-50 transition"
                                                     :class="svc.doctor_id == d.id ? 'bg-amber-50/60 font-semibold' : ''">
-                                                    <span class="w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0">{{ (d.name_en || d.name_ar || '?').charAt(0) }}</span>
+                                                    <span class="w-6 h-6 rounded-full bg-gradient-to-br from-[#1B365D] to-[#1B365D] flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0">{{ (d.name_en || d.name_ar || '?').charAt(0) }}</span>
                                                     <span>{{ d.name_en || d.name_ar }}</span>
                                                 </button>
                                                 <p v-if="!filteredDoctorsList('ed-doc-' + idx).length" class="text-xs text-gray-400 text-center py-3">{{ $t('a_no_results') }}</p>
@@ -1156,15 +1156,15 @@ function submitEditServices() {
                                 </div>
                                 <div>
                                     <label class="block text-xs text-gray-500 mb-1">{{ $t('a_sessions') }}</label>
-                                    <input v-model.number="svc.sessions_count" type="number" min="1" max="50" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                    <input v-model.number="svc.sessions_count" type="number" min="1" max="50" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
                                 </div>
                                 <div>
                                     <label class="block text-xs text-gray-500 mb-1">{{ $t('a_unit_price') }} ({{ currencyCode }})</label>
-                                    <input v-model.number="svc.unit_price" type="number" min="0" step="0.01" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                    <input v-model.number="svc.unit_price" type="number" min="0" step="0.01" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
                                 </div>
                                 <div>
                                     <label class="block text-xs text-gray-500 mb-1">{{ $t('a_discount_per_session') }} ({{ currencyCode }})</label>
-                                    <input v-model.number="svc.discount_per_session" type="number" min="0" step="0.01" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                    <input v-model.number="svc.discount_per_session" type="number" min="0" step="0.01" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
                                 </div>
                                 <div class="flex items-end">
                                     <div>
@@ -1174,7 +1174,7 @@ function submitEditServices() {
                                 </div>
                                 <div class="sm:col-span-2">
                                     <label class="block text-xs text-gray-500 mb-1">{{ $t('a_notes') }}</label>
-                                    <input v-model="svc.notes" type="text" :placeholder="$t('a_optional_notes')" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                    <input v-model="svc.notes" type="text" :placeholder="$t('a_optional_notes')" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
                                 </div>
                             </div>
                         </div>
@@ -1217,28 +1217,28 @@ function submitEditServices() {
                 </div>
 
                 <!-- ─── Add Retouch Session ──────────────────────────── -->
-                <div v-if="canAddRetouch" class="bg-white rounded-2xl shadow-sm border border-purple-200 overflow-hidden">
+                <div v-if="canAddRetouch" class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
                     <button type="button" @click="showRetouchForm = !showRetouchForm"
-                        class="w-full px-6 py-4 flex items-center justify-between bg-purple-50/80 hover:bg-purple-50 transition-colors">
+                        class="w-full px-4 md:px-6 py-4 flex items-center justify-between bg-slate-50/80 hover:bg-slate-50 transition-colors">
                         <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 rounded-lg bg-purple-100 flex items-center justify-center">
-                                <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                            <div class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center">
+                                <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
                             </div>
-                            <h2 class="text-sm font-bold text-purple-800">{{ $t('a_add_retouch_session') }}</h2>
-                            <span class="text-xs text-purple-500 font-medium">({{ $t('a_free_followup') }})</span>
+                            <h2 class="text-sm font-bold text-[#1B365D]">{{ $t('a_add_retouch_session') }}</h2>
+                            <span class="text-xs text-[#1B365D] font-medium">({{ $t('a_free_followup') }})</span>
                         </div>
-                        <svg class="w-5 h-5 text-purple-600 transition-transform duration-200" :class="{ 'rotate-180': showRetouchForm }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-5 h-5 text-[#1B365D] transition-transform duration-200" :class="{ 'rotate-180': showRetouchForm }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
 
-                    <div v-if="showRetouchForm" class="p-6 space-y-4 border-t border-purple-100">
+                    <div v-if="showRetouchForm" class="p-4 md:p-6 space-y-4 border-t border-slate-100">
                         <form @submit.prevent="submitRetouch" class="space-y-4">
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <!-- Service Selection -->
                                 <div>
                                     <label class="block text-xs font-medium text-gray-500 mb-1.5">{{ $t('a_service') }} <span class="text-red-500">*</span></label>
-                                    <select v-model="retouchForm.booking_service_id" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-purple-200 focus:border-transparent bg-white">
+                                    <select v-model="retouchForm.booking_service_id" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent bg-white">
                                         <option value="">{{ $t('a_select_service') }}</option>
                                         <option v-for="bs in booking.booking_services" :key="bs.id" :value="bs.id">
                                             {{ bs.service?.name_en || bs.service?.name_ar || (booking.booking_type ? $t('a_' + booking.booking_type) : $t('a_service')) }}
@@ -1251,7 +1251,7 @@ function submitEditServices() {
                                 <!-- Doctor Selection -->
                                 <div>
                                     <label class="block text-xs font-medium text-gray-500 mb-1.5">{{ $t('a_doctor') }} <span class="text-red-500">*</span></label>
-                                    <select v-model="retouchForm.doctor_id" @change="fetchRetouchTimeSlots" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-purple-200 focus:border-transparent bg-white">
+                                    <select v-model="retouchForm.doctor_id" @change="fetchRetouchTimeSlots" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent bg-white">
                                         <option value="">{{ $t('a_select_doctor') }}</option>
                                         <option v-for="d in doctors" :key="d.id" :value="d.id">{{ d.name_en || d.name_ar }}</option>
                                     </select>
@@ -1261,7 +1261,7 @@ function submitEditServices() {
                                 <!-- Date -->
                                 <div>
                                     <label class="block text-xs font-medium text-gray-500 mb-1.5">{{ $t('a_date') }} <span class="text-red-500">*</span></label>
-                                    <input v-model="retouchForm.appointment_date" type="date" :min="new Date().toISOString().split('T')[0]" @change="fetchRetouchTimeSlots" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-purple-200 focus:border-transparent" />
+                                    <input v-model="retouchForm.appointment_date" type="date" :min="new Date().toISOString().split('T')[0]" @change="fetchRetouchTimeSlots" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent" />
                                     <p v-if="retouchForm.errors.appointment_date" class="mt-1 text-xs text-red-600">{{ retouchForm.errors.appointment_date }}</p>
                                 </div>
 
@@ -1269,26 +1269,26 @@ function submitEditServices() {
                                 <div>
                                     <label class="block text-xs font-medium text-gray-500 mb-1.5">{{ $t('a_time_slot') }} <span class="text-red-500">*</span></label>
                                     <div v-if="retouchLoadingSlots" class="text-xs text-gray-400 py-2.5">{{ $t('a_loading_slots') }}</div>
-                                    <select v-else-if="retouchTimeSlots.length" v-model="retouchForm.start_time" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-purple-200 focus:border-transparent bg-white">
+                                    <select v-else-if="retouchTimeSlots.length" v-model="retouchForm.start_time" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent bg-white">
                                         <option value="">{{ $t('a_select_time') }}</option>
                                         <option v-for="slot in retouchTimeSlots" :key="slot.start || slot" :value="slot.start || slot">
                                             {{ formatTime(slot.start || slot) }} {{ slot.end ? '- ' + formatTime(slot.end) : '' }}
                                         </option>
                                     </select>
-                                    <input v-else v-model="retouchForm.start_time" type="time" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-purple-200 focus:border-transparent" />
+                                    <input v-else v-model="retouchForm.start_time" type="time" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent" />
                                     <p v-if="retouchForm.errors.start_time" class="mt-1 text-xs text-red-600">{{ retouchForm.errors.start_time }}</p>
                                 </div>
                             </div>
 
                             <!-- Info Box -->
-                            <div class="flex items-start gap-2 px-4 py-3 bg-purple-50 rounded-xl border border-purple-100">
-                                <svg class="w-4 h-4 text-purple-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                <p class="text-xs text-purple-700">{{ $t('a_retouch_info') }}</p>
+                            <div class="flex items-start gap-2 px-4 py-3 bg-slate-50 rounded-xl border border-slate-100">
+                                <svg class="w-4 h-4 text-[#1B365D] mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                <p class="text-xs text-[#1B365D]">{{ $t('a_retouch_info') }}</p>
                             </div>
 
                             <!-- Submit -->
                             <div class="flex items-center gap-3">
-                                <button type="submit" :disabled="retouchForm.processing" class="px-5 py-2.5 text-white rounded-xl text-sm font-semibold hover:opacity-90 transition-all disabled:opacity-50 shadow-sm bg-purple-600">
+                                <button type="submit" :disabled="retouchForm.processing" class="px-5 py-2.5 text-white rounded-xl text-sm font-semibold hover:opacity-90 transition-all disabled:opacity-50 shadow-sm bg-[#1B365D]">
                                     {{ retouchForm.processing ? $t('a_adding') : $t('a_add_retouch_session') }}
                                 </button>
                                 <button type="button" @click="showRetouchForm = false; retouchForm.reset()" class="px-5 py-2.5 border border-gray-200 text-gray-600 rounded-xl text-sm font-medium hover:bg-gray-50 transition">
@@ -1301,36 +1301,36 @@ function submitEditServices() {
 
                 <!-- ─── All Appointments (Flat List) ───────────────── -->
                 <div v-if="booking.appointments?.length" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
-                    <div class="px-6 py-4 border-b border-gray-100">
+                    <div class="px-4 md:px-6 py-4 border-b border-gray-100">
                         <h2 class="text-sm font-bold text-gray-800">{{ $t('a_all_appointments') }}</h2>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="w-full text-sm">
                             <thead>
                                 <tr class="bg-gray-50/80">
-                                    <th class="px-6 py-3 text-start text-xs font-semibold text-gray-500 uppercase">#</th>
-                                    <th class="px-6 py-3 text-start text-xs font-semibold text-gray-500 uppercase">{{ $t('a_date') }}</th>
-                                    <th class="px-6 py-3 text-start text-xs font-semibold text-gray-500 uppercase">{{ $t('a_time') }}</th>
-                                    <th class="px-6 py-3 text-start text-xs font-semibold text-gray-500 uppercase">{{ $t('a_doctor') }}</th>
-                                    <th class="px-6 py-3 text-start text-xs font-semibold text-gray-500 uppercase">{{ $t('a_status') }}</th>
-                                    <th class="px-6 py-3 text-start text-xs font-semibold text-gray-500 uppercase">{{ $t('a_actions') }}</th>
+                                    <th class="px-4 md:px-6 py-3 text-start text-xs font-semibold text-gray-500 uppercase">#</th>
+                                    <th class="px-4 md:px-6 py-3 text-start text-xs font-semibold text-gray-500 uppercase">{{ $t('a_date') }}</th>
+                                    <th class="px-4 md:px-6 py-3 text-start text-xs font-semibold text-gray-500 uppercase">{{ $t('a_time') }}</th>
+                                    <th class="px-4 md:px-6 py-3 text-start text-xs font-semibold text-gray-500 uppercase">{{ $t('a_doctor') }}</th>
+                                    <th class="px-4 md:px-6 py-3 text-start text-xs font-semibold text-gray-500 uppercase">{{ $t('a_status') }}</th>
+                                    <th class="px-4 md:px-6 py-3 text-start text-xs font-semibold text-gray-500 uppercase">{{ $t('a_actions') }}</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100">
                                 <tr v-for="appt in booking.appointments" :key="appt.id" class="hover:bg-gray-50/50 transition-colors">
-                                    <td class="px-6 py-3 font-medium text-gray-500">
+                                    <td class="px-4 md:px-6 py-3 font-medium text-gray-500">
                                         {{ appt.session_number || '-' }}
-                                        <span v-if="appt.is_retouch" class="ltr:ml-1 rtl:mr-1 inline-flex px-1.5 py-0.5 rounded text-[10px] font-bold bg-purple-50 text-purple-600 border border-purple-200">{{ $t('a_retouch') }}</span>
+                                        <span v-if="appt.is_retouch" class="ltr:ml-1 rtl:mr-1 inline-flex px-1.5 py-0.5 rounded text-[10px] font-bold bg-slate-50 text-[#1B365D] border border-slate-200">{{ $t('a_retouch') }}</span>
                                     </td>
-                                    <td class="px-6 py-3 text-gray-700">{{ formatDate(appt.appointment_date) }}</td>
-                                    <td class="px-6 py-3 text-gray-600">{{ formatTime(appt.start_time) }} - {{ formatTime(appt.end_time) }}</td>
-                                    <td class="px-6 py-3 text-gray-600">{{ appt.doctor?.name_en || appt.doctor?.name_ar || '-' }}</td>
-                                    <td class="px-6 py-3">
+                                    <td class="px-4 md:px-6 py-3 text-gray-700">{{ formatDate(appt.appointment_date) }}</td>
+                                    <td class="px-4 md:px-6 py-3 text-gray-600">{{ formatTime(appt.start_time) }} - {{ formatTime(appt.end_time) }}</td>
+                                    <td class="px-4 md:px-6 py-3 text-gray-600">{{ appt.doctor?.name_en || appt.doctor?.name_ar || '-' }}</td>
+                                    <td class="px-4 md:px-6 py-3">
                                         <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold border capitalize" :class="appointmentStatusColors[appt.status] || 'bg-gray-50 text-gray-600 border-gray-200'">
                                             {{ appt.status?.replace('_', ' ') || '-' }}
                                         </span>
                                     </td>
-                                    <td class="px-6 py-3">
+                                    <td class="px-4 md:px-6 py-3">
                                         <div class="flex items-center gap-2">
                                             <Link v-if="appt.visit" :href="`/admin/visits/${appt.visit.id || appt.visit}`" class="text-xs font-semibold hover:opacity-80" style="color: #C4A265;">
                                                 {{ $t('a_view_visit') }}
@@ -1354,7 +1354,7 @@ function submitEditServices() {
 
                 <!-- ─── Invoice Section ────────────────────────────── -->
                 <div v-if="invoice" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
-                    <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+                    <div class="px-4 md:px-6 py-4 border-b border-gray-100 flex items-center justify-between">
                         <div>
                             <h2 class="text-sm font-bold text-gray-800">{{ $t('a_invoice') }}</h2>
                             <p class="text-xs text-gray-400 mt-0.5">
@@ -1372,27 +1372,27 @@ function submitEditServices() {
                     <table v-if="invoice.items?.length" class="w-full text-sm">
                         <thead>
                             <tr class="bg-gray-50/80">
-                                <th class="px-6 py-3 text-start text-xs font-semibold text-gray-500 uppercase">{{ $t('a_description') }}</th>
-                                <th class="px-6 py-3 text-start text-xs font-semibold text-gray-500 uppercase">{{ $t('a_qty') }}</th>
-                                <th class="px-6 py-3 text-start text-xs font-semibold text-gray-500 uppercase">{{ $t('a_unit_price') }}</th>
-                                <th class="px-6 py-3 text-end text-xs font-semibold text-gray-500 uppercase">{{ $t('a_total') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-start text-xs font-semibold text-gray-500 uppercase">{{ $t('a_description') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-start text-xs font-semibold text-gray-500 uppercase">{{ $t('a_qty') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-start text-xs font-semibold text-gray-500 uppercase">{{ $t('a_unit_price') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-end text-xs font-semibold text-gray-500 uppercase">{{ $t('a_total') }}</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100">
                             <tr v-for="item in invoice.items" :key="item.id" class="hover:bg-gray-50/50">
-                                <td class="px-6 py-3">
+                                <td class="px-4 md:px-6 py-3">
                                     <div class="font-medium text-gray-900">{{ item.description_en || item.description }}</div>
                                     <div v-if="item.description_ar" class="text-gray-400 text-xs" dir="rtl">{{ item.description_ar }}</div>
                                 </td>
-                                <td class="px-6 py-3 text-gray-500">{{ item.quantity }}</td>
-                                <td class="px-6 py-3 text-gray-500">{{ formatCurrency(item.unit_price) }}</td>
-                                <td class="px-6 py-3 text-end font-bold text-gray-800">{{ formatCurrency(item.total) }}</td>
+                                <td class="px-4 md:px-6 py-3 text-gray-500">{{ item.quantity }}</td>
+                                <td class="px-4 md:px-6 py-3 text-gray-500">{{ formatCurrency(item.unit_price) }}</td>
+                                <td class="px-4 md:px-6 py-3 text-end font-bold text-gray-800">{{ formatCurrency(item.total) }}</td>
                             </tr>
                         </tbody>
                     </table>
 
                     <!-- Invoice Summary -->
-                    <div class="px-6 py-4 bg-gray-50/50 border-t border-gray-100">
+                    <div class="px-4 md:px-6 py-4 bg-gray-50/50 border-t border-gray-100">
                         <div class="flex justify-end">
                             <dl class="space-y-2 w-64">
                                 <div class="flex justify-between text-sm">
@@ -1422,7 +1422,7 @@ function submitEditServices() {
 
                 <!-- ─── Payments History ───────────────────────────── -->
                 <div v-if="invoice?.payments?.length" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
-                    <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+                    <div class="px-4 md:px-6 py-4 border-b border-gray-100 flex items-center justify-between">
                         <h2 class="text-sm font-bold text-gray-800">{{ $t('a_payments_history') }}</h2>
                         <button
                             v-if="hasInvoiceBalance"
@@ -1438,22 +1438,22 @@ function submitEditServices() {
                     <table class="w-full text-sm">
                         <thead>
                             <tr class="bg-gray-50/80">
-                                <th class="px-6 py-3 text-start text-xs font-semibold text-gray-500 uppercase">{{ $t('a_date') }}</th>
-                                <th class="px-6 py-3 text-start text-xs font-semibold text-gray-500 uppercase">{{ $t('a_amount') }}</th>
-                                <th class="px-6 py-3 text-start text-xs font-semibold text-gray-500 uppercase">{{ $t('a_method') }}</th>
-                                <th class="px-6 py-3 text-start text-xs font-semibold text-gray-500 uppercase">{{ $t('a_reference') }}</th>
-                                <th class="px-6 py-3 text-start text-xs font-semibold text-gray-500 uppercase">{{ $t('a_received_by') }}</th>
-                                <th class="px-6 py-3 text-center text-xs font-semibold text-gray-500 uppercase">{{ $t('a_receipt') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-start text-xs font-semibold text-gray-500 uppercase">{{ $t('a_date') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-start text-xs font-semibold text-gray-500 uppercase">{{ $t('a_amount') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-start text-xs font-semibold text-gray-500 uppercase">{{ $t('a_method') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-start text-xs font-semibold text-gray-500 uppercase">{{ $t('a_reference') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-start text-xs font-semibold text-gray-500 uppercase">{{ $t('a_received_by') }}</th>
+                                <th class="px-4 md:px-6 py-3 text-center text-xs font-semibold text-gray-500 uppercase">{{ $t('a_receipt') }}</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100">
                             <tr v-for="payment in invoice.payments" :key="payment.id" class="hover:bg-gray-50/50">
-                                <td class="px-6 py-3 text-gray-500">{{ formatDate(payment.payment_date || payment.created_at) }}</td>
-                                <td class="px-6 py-3 font-bold text-emerald-600">{{ formatCurrency(payment.amount) }}</td>
-                                <td class="px-6 py-3 text-gray-500">{{ payment.payment_method?.name_en || payment.paymentMethod?.name_en || '-' }}</td>
-                                <td class="px-6 py-3 text-gray-500 font-mono">{{ payment.reference_number || '-' }}</td>
-                                <td class="px-6 py-3 text-gray-500">{{ payment.receiver?.name || '-' }}</td>
-                                <td class="px-6 py-3 text-center">
+                                <td class="px-4 md:px-6 py-3 text-gray-500">{{ formatDate(payment.payment_date || payment.created_at) }}</td>
+                                <td class="px-4 md:px-6 py-3 font-bold text-emerald-600">{{ formatCurrency(payment.amount) }}</td>
+                                <td class="px-4 md:px-6 py-3 text-gray-500">{{ payment.payment_method?.name_en || payment.paymentMethod?.name_en || '-' }}</td>
+                                <td class="px-4 md:px-6 py-3 text-gray-500 font-mono">{{ payment.reference_number || '-' }}</td>
+                                <td class="px-4 md:px-6 py-3 text-gray-500">{{ payment.receiver?.name || '-' }}</td>
+                                <td class="px-4 md:px-6 py-3 text-center">
                                     <a :href="`/admin/bookings/${booking.id}/payments/${payment.id}/receipt`"
                                        target="_blank"
                                        class="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold rounded-lg border transition-all hover:opacity-80"
@@ -1470,7 +1470,7 @@ function submitEditServices() {
 
                 <!-- ─── Payment Form (Inline) ─────────────────────── -->
                 <div v-if="showPaymentForm" class="bg-white rounded-2xl shadow-sm border overflow-hidden" style="border-color: #C4A265;">
-                    <div class="px-6 py-4 border-b bg-amber-50/50" style="border-color: rgba(196, 162, 101, 0.3);">
+                    <div class="px-4 md:px-6 py-4 border-b bg-amber-50/50" style="border-color: rgba(196, 162, 101, 0.3);">
                         <div class="flex items-center justify-between">
                             <h2 class="text-sm font-bold" style="color: #9a7d3a;">{{ $t('a_record_payment') }}</h2>
                             <button type="button" @click="showPaymentForm = false" class="text-gray-400 hover:text-gray-600 transition">
@@ -1482,7 +1482,7 @@ function submitEditServices() {
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-xs font-medium text-gray-500 mb-1.5">{{ $t('a_payment_method') }} <span class="text-red-500">*</span></label>
-                                <select v-model="paymentForm.payment_method_id" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent bg-white">
+                                <select v-model="paymentForm.payment_method_id" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent bg-white">
                                     <option value="">{{ $t('a_select_method') }}</option>
                                     <option v-for="method in paymentMethods" :key="method.id" :value="method.id">{{ method.name_en }}</option>
                                 </select>
@@ -1490,16 +1490,16 @@ function submitEditServices() {
                             </div>
                             <div>
                                 <label class="block text-xs font-medium text-gray-500 mb-1.5">{{ $t('a_amount') }} <span class="text-red-500">*</span></label>
-                                <input v-model.number="paymentForm.amount" type="number" min="0" step="0.01" :placeholder="`Balance: ${formatCurrency(invoiceBalance)}`" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                <input v-model.number="paymentForm.amount" type="number" min="0" step="0.01" :placeholder="`Balance: ${formatCurrency(invoiceBalance)}`" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
                                 <p v-if="paymentForm.errors.amount" class="mt-1 text-xs text-red-600">{{ paymentForm.errors.amount }}</p>
                             </div>
                             <div>
                                 <label class="block text-xs font-medium text-gray-500 mb-1.5">{{ $t('a_reference') }} #</label>
-                                <input v-model="paymentForm.reference_number" type="text" :placeholder="$t('a_reference_placeholder')" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                <input v-model="paymentForm.reference_number" type="text" :placeholder="$t('a_reference_placeholder')" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
                             </div>
                             <div>
                                 <label class="block text-xs font-medium text-gray-500 mb-1.5">{{ $t('a_notes') }}</label>
-                                <input v-model="paymentForm.notes" type="text" :placeholder="$t('a_optional_notes')" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                <input v-model="paymentForm.notes" type="text" :placeholder="$t('a_optional_notes')" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
                             </div>
                         </div>
                         <div class="flex items-center gap-3 mt-5">
@@ -1514,7 +1514,7 @@ function submitEditServices() {
                 </div>
 
                 <!-- Add Payment Button (when no payments yet but balance > 0) -->
-                <div v-if="hasInvoiceBalance && !showPaymentForm && (!invoice?.payments || invoice.payments.length === 0)" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6 text-center">
+                <div v-if="hasInvoiceBalance && !showPaymentForm && (!invoice?.payments || invoice.payments.length === 0)" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 md:p-6 text-center">
                     <svg class="w-10 h-10 text-gray-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
                     <p class="text-sm text-gray-500 mb-3">{{ $t('a_no_payments_yet') }} {{ $t('a_balance') }}: <span class="font-bold text-red-600">{{ formatCurrency(invoiceBalance) }}</span></p>
                     <button @click="openPaymentForm" type="button" class="inline-flex items-center gap-1.5 px-4 py-2 text-white rounded-xl text-sm font-semibold hover:opacity-90 transition shadow-sm" style="background-color: #C4A265;">
@@ -1526,21 +1526,21 @@ function submitEditServices() {
                 <!-- ═══════════════════════════════════════════════════════ -->
                 <!-- ─── Confirm Booking Section (Unconfirmed Only) ─────── -->
                 <!-- ═══════════════════════════════════════════════════════ -->
-                <div v-if="isUnconfirmed && patients" class="bg-white rounded-2xl shadow-sm border border-yellow-200 overflow-hidden">
+                <div v-if="isUnconfirmed && patients" class="bg-white rounded-2xl shadow-sm border border-amber-200 overflow-hidden">
                     <button type="button" @click="showConfirmSection = !showConfirmSection"
-                        class="w-full px-6 py-4 flex items-center justify-between bg-yellow-50/80 hover:bg-yellow-50 transition-colors">
+                        class="w-full px-4 md:px-6 py-4 flex items-center justify-between bg-amber-50/80 hover:bg-amber-50 transition-colors">
                         <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 rounded-lg bg-yellow-100 flex items-center justify-center">
-                                <svg class="w-4 h-4 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            <div class="w-8 h-8 rounded-lg bg-amber-100 flex items-center justify-center">
+                                <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                             </div>
-                            <h2 class="text-sm font-bold text-yellow-800">{{ $t('a_confirm_this_booking') }}</h2>
+                            <h2 class="text-sm font-bold text-amber-800">{{ $t('a_confirm_this_booking') }}</h2>
                         </div>
-                        <svg class="w-5 h-5 text-yellow-600 transition-transform duration-200" :class="{ 'rotate-180': showConfirmSection }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-5 h-5 text-amber-600 transition-transform duration-200" :class="{ 'rotate-180': showConfirmSection }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
 
-                    <div v-if="showConfirmSection" class="p-6 space-y-6 border-t border-yellow-100">
+                    <div v-if="showConfirmSection" class="p-4 md:p-6 space-y-6 border-t border-amber-100">
                         <!-- General Validation Errors -->
                         <div v-if="Object.keys(confirmErrors).length" class="p-3 bg-red-50 border border-red-200 rounded-xl">
                             <p class="text-xs font-semibold text-red-700 mb-1">{{ $t('a_fix_errors') }}</p>
@@ -1559,7 +1559,7 @@ function submitEditServices() {
                                     <!-- Selected patient display -->
                                     <div v-if="selectedPatient" class="flex items-center justify-between px-4 py-3 border rounded-xl bg-amber-50/50" style="border-color: rgba(196, 162, 101, 0.4);">
                                         <div class="flex items-center gap-3">
-                                            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-amber-500 to-yellow-400 flex items-center justify-center text-white text-xs font-bold">
+                                            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-amber-500 to-amber-400 flex items-center justify-center text-white text-xs font-bold">
                                                 {{ selectedPatient.full_name?.charAt(0) }}
                                             </div>
                                             <div>
@@ -1575,12 +1575,12 @@ function submitEditServices() {
                                     <div v-else class="relative patient-search-wrapper">
                                         <svg class="absolute ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                                         <input v-model="patientSearch" type="text" :placeholder="$t('a_search_patient_placeholder')"
-                                            class="w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent transition"
+                                            class="w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent transition"
                                             @focus="showPatientDropdown = true" />
                                         <div v-if="showPatientDropdown && filteredPatients.length > 0" class="absolute z-30 left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-lg max-h-48 overflow-y-auto">
                                             <button v-for="p in filteredPatients" :key="p.id" type="button" @click="selectPatient(p)"
                                                 class="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-amber-50 transition text-start border-b border-gray-50 last:border-b-0">
-                                                <div class="w-7 h-7 rounded-full bg-gradient-to-br from-amber-500 to-yellow-400 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                                                <div class="w-7 h-7 rounded-full bg-gradient-to-br from-amber-500 to-amber-400 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
                                                     {{ p.full_name?.charAt(0) }}
                                                 </div>
                                                 <div>
@@ -1619,7 +1619,7 @@ function submitEditServices() {
                                             <div class="relative ss-dropdown">
                                                 <label class="block text-xs text-gray-500 mb-1">{{ $t('a_doctor') }} <span class="text-red-500">*</span></label>
                                                 <button type="button" @click.stop="toggleDropdown('consult-doctor')"
-                                                    class="w-full flex items-center justify-between px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white hover:border-gray-300 focus:ring-2 focus:ring-yellow-200 focus:border-transparent transition">
+                                                    class="w-full flex items-center justify-between px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white hover:border-gray-300 focus:ring-2 focus:ring-amber-200 focus:border-transparent transition">
                                                     <span :class="confirmForm.services[0].doctor_id ? 'text-gray-800' : 'text-gray-400'">
                                                         {{ getDoctorName(confirmForm.services[0].doctor_id) || $t('a_select_doctor') }}
                                                     </span>
@@ -1630,7 +1630,7 @@ function submitEditServices() {
                                                         <div class="p-2 border-b border-gray-100">
                                                             <div class="relative">
                                                                 <svg class="absolute ltr:left-2.5 rtl:right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                                                                <input v-model="dropdownSearches['consult-doctor']" type="text" :placeholder="$t('a_search') + '...'" class="w-full ltr:pl-8 rtl:pr-8 ltr:pr-3 rtl:pl-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-yellow-200 focus:border-transparent" @click.stop />
+                                                                <input v-model="dropdownSearches['consult-doctor']" type="text" :placeholder="$t('a_search') + '...'" class="w-full ltr:pl-8 rtl:pr-8 ltr:pr-3 rtl:pl-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-amber-200 focus:border-transparent" @click.stop />
                                                             </div>
                                                         </div>
                                                         <div class="max-h-48 overflow-y-auto">
@@ -1638,7 +1638,7 @@ function submitEditServices() {
                                                                 @click="confirmForm.services[0].doctor_id = d.id; onConfirmDoctorChange(0); openDropdown = null"
                                                                 class="w-full flex items-center gap-2 px-3 py-2 text-sm text-start hover:bg-amber-50 transition"
                                                                 :class="confirmForm.services[0].doctor_id == d.id ? 'bg-amber-50/60 font-semibold' : ''">
-                                                                <span class="w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0">{{ (d.name_en || d.name_ar || '?').charAt(0) }}</span>
+                                                                <span class="w-6 h-6 rounded-full bg-gradient-to-br from-[#1B365D] to-[#1B365D] flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0">{{ (d.name_en || d.name_ar || '?').charAt(0) }}</span>
                                                                 <span>{{ d.name_en || d.name_ar || d.name }}</span>
                                                             </button>
                                                             <p v-if="!filteredDoctorsList('consult-doctor').length" class="text-xs text-gray-400 text-center py-3">{{ $t('a_no_results') }}</p>
@@ -1648,11 +1648,11 @@ function submitEditServices() {
                                             </div>
                                             <div>
                                                 <label class="block text-xs text-gray-500 mb-1">{{ $t('a_consultation_fee') }} ({{ currencyCode }}) <span class="text-red-500">*</span></label>
-                                                <input v-model.number="confirmForm.services[0].unit_price" type="number" min="0" step="0.01" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                                <input v-model.number="confirmForm.services[0].unit_price" type="number" min="0" step="0.01" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
                                             </div>
                                             <div>
                                                 <label class="block text-xs text-gray-500 mb-1">{{ $t('a_discount') }} ({{ currencyCode }})</label>
-                                                <input v-model.number="confirmForm.services[0].discount_per_session" type="number" min="0" step="0.01" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                                <input v-model.number="confirmForm.services[0].discount_per_session" type="number" min="0" step="0.01" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
                                             </div>
                                             <div class="flex items-end">
                                                 <div>
@@ -1681,7 +1681,7 @@ function submitEditServices() {
                                             <div class="relative ss-dropdown">
                                                 <label class="block text-xs text-gray-500 mb-1">{{ $t('a_service') }} <span class="text-red-500">*</span></label>
                                                 <button type="button" @click.stop="toggleDropdown('cf-svc-' + svcIdx)"
-                                                    class="w-full flex items-center justify-between px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white hover:border-gray-300 focus:ring-2 focus:ring-yellow-200 focus:border-transparent transition">
+                                                    class="w-full flex items-center justify-between px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white hover:border-gray-300 focus:ring-2 focus:ring-amber-200 focus:border-transparent transition">
                                                     <span class="truncate" :class="svc.service_id ? 'text-gray-800' : 'text-gray-400'">
                                                         {{ getServiceName(svc.service_id) || $t('a_select_service') }}
                                                     </span>
@@ -1692,7 +1692,7 @@ function submitEditServices() {
                                                         <div class="p-2 border-b border-gray-100">
                                                             <div class="relative">
                                                                 <svg class="absolute ltr:left-2.5 rtl:right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                                                                <input v-model="dropdownSearches['cf-svc-' + svcIdx]" type="text" :placeholder="$t('a_search') + '...'" class="w-full ltr:pl-8 rtl:pr-8 ltr:pr-3 rtl:pl-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-yellow-200 focus:border-transparent" @click.stop />
+                                                                <input v-model="dropdownSearches['cf-svc-' + svcIdx]" type="text" :placeholder="$t('a_search') + '...'" class="w-full ltr:pl-8 rtl:pr-8 ltr:pr-3 rtl:pl-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-amber-200 focus:border-transparent" @click.stop />
                                                             </div>
                                                         </div>
                                                         <div class="max-h-48 overflow-y-auto">
@@ -1711,7 +1711,7 @@ function submitEditServices() {
                                             <div class="relative ss-dropdown">
                                                 <label class="block text-xs text-gray-500 mb-1">{{ $t('a_doctor') }} <span class="text-red-500">*</span></label>
                                                 <button type="button" @click.stop="toggleDropdown('cf-doc-' + svcIdx)"
-                                                    class="w-full flex items-center justify-between px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white hover:border-gray-300 focus:ring-2 focus:ring-yellow-200 focus:border-transparent transition">
+                                                    class="w-full flex items-center justify-between px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white hover:border-gray-300 focus:ring-2 focus:ring-amber-200 focus:border-transparent transition">
                                                     <span :class="svc.doctor_id ? 'text-gray-800' : 'text-gray-400'">
                                                         {{ getDoctorName(svc.doctor_id) || $t('a_select_doctor') }}
                                                     </span>
@@ -1722,7 +1722,7 @@ function submitEditServices() {
                                                         <div class="p-2 border-b border-gray-100">
                                                             <div class="relative">
                                                                 <svg class="absolute ltr:left-2.5 rtl:right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                                                                <input v-model="dropdownSearches['cf-doc-' + svcIdx]" type="text" :placeholder="$t('a_search') + '...'" class="w-full ltr:pl-8 rtl:pr-8 ltr:pr-3 rtl:pl-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-yellow-200 focus:border-transparent" @click.stop />
+                                                                <input v-model="dropdownSearches['cf-doc-' + svcIdx]" type="text" :placeholder="$t('a_search') + '...'" class="w-full ltr:pl-8 rtl:pr-8 ltr:pr-3 rtl:pl-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-amber-200 focus:border-transparent" @click.stop />
                                                             </div>
                                                         </div>
                                                         <div class="max-h-48 overflow-y-auto">
@@ -1730,7 +1730,7 @@ function submitEditServices() {
                                                                 @click="svc.doctor_id = d.id; openDropdown = null"
                                                                 class="w-full flex items-center gap-2 px-3 py-2 text-sm text-start hover:bg-amber-50 transition"
                                                                 :class="svc.doctor_id == d.id ? 'bg-amber-50/60 font-semibold' : ''">
-                                                                <span class="w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0">{{ (d.name_en || d.name_ar || '?').charAt(0) }}</span>
+                                                                <span class="w-6 h-6 rounded-full bg-gradient-to-br from-[#1B365D] to-[#1B365D] flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0">{{ (d.name_en || d.name_ar || '?').charAt(0) }}</span>
                                                                 <span>{{ d.name_en || d.name_ar || d.name }}</span>
                                                             </button>
                                                             <p v-if="!filteredDoctorsList('cf-doc-' + svcIdx).length" class="text-xs text-gray-400 text-center py-3">{{ $t('a_no_results') }}</p>
@@ -1740,15 +1740,15 @@ function submitEditServices() {
                                             </div>
                                             <div>
                                                 <label class="block text-xs text-gray-500 mb-1">{{ $t('a_sessions') }}</label>
-                                                <input v-model.number="svc.sessions_count" type="number" min="1" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                                <input v-model.number="svc.sessions_count" type="number" min="1" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
                                             </div>
                                             <div>
                                                 <label class="block text-xs text-gray-500 mb-1">{{ $t('a_unit_price') }}</label>
-                                                <input v-model.number="svc.unit_price" type="number" min="0" step="0.01" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                                <input v-model.number="svc.unit_price" type="number" min="0" step="0.01" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
                                             </div>
                                             <div>
                                                 <label class="block text-xs text-gray-500 mb-1">{{ $t('a_discount_per_session') }}</label>
-                                                <input v-model.number="svc.discount_per_session" type="number" min="0" step="0.01" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                                <input v-model.number="svc.discount_per_session" type="number" min="0" step="0.01" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
                                             </div>
                                             <div class="flex items-end">
                                                 <div>
@@ -1787,7 +1787,7 @@ function submitEditServices() {
                                             <div class="relative ss-dropdown">
                                                 <label class="block text-xs text-gray-500 mb-1">{{ $t('a_for_service') }}</label>
                                                 <button type="button" @click.stop="toggleDropdown('appt-svc-' + apptIdx)"
-                                                    class="w-full flex items-center justify-between px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white hover:border-gray-300 focus:ring-2 focus:ring-yellow-200 focus:border-transparent transition">
+                                                    class="w-full flex items-center justify-between px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white hover:border-gray-300 focus:ring-2 focus:ring-amber-200 focus:border-transparent transition">
                                                     <span class="truncate text-gray-800">
                                                         {{ isConsultationBooking
                                                             ? $t('a_' + booking.booking_type)
@@ -1815,7 +1815,7 @@ function submitEditServices() {
                                             <div class="relative ss-dropdown">
                                                 <label class="block text-xs text-gray-500 mb-1">{{ $t('a_doctor') }}</label>
                                                 <button type="button" @click.stop="toggleDropdown('appt-doc-' + apptIdx)"
-                                                    class="w-full flex items-center justify-between px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white hover:border-gray-300 focus:ring-2 focus:ring-yellow-200 focus:border-transparent transition">
+                                                    class="w-full flex items-center justify-between px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white hover:border-gray-300 focus:ring-2 focus:ring-amber-200 focus:border-transparent transition">
                                                     <span :class="appt.doctor_id ? 'text-gray-800' : 'text-gray-400'">
                                                         {{ getDoctorName(appt.doctor_id) || $t('a_select_doctor') }}
                                                     </span>
@@ -1826,7 +1826,7 @@ function submitEditServices() {
                                                         <div class="p-2 border-b border-gray-100">
                                                             <div class="relative">
                                                                 <svg class="absolute ltr:left-2.5 rtl:right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                                                                <input v-model="dropdownSearches['appt-doc-' + apptIdx]" type="text" :placeholder="$t('a_search') + '...'" class="w-full ltr:pl-8 rtl:pr-8 ltr:pr-3 rtl:pl-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-yellow-200 focus:border-transparent" @click.stop />
+                                                                <input v-model="dropdownSearches['appt-doc-' + apptIdx]" type="text" :placeholder="$t('a_search') + '...'" class="w-full ltr:pl-8 rtl:pr-8 ltr:pr-3 rtl:pl-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-amber-200 focus:border-transparent" @click.stop />
                                                             </div>
                                                         </div>
                                                         <div class="max-h-48 overflow-y-auto">
@@ -1834,7 +1834,7 @@ function submitEditServices() {
                                                                 @click="appt.doctor_id = d.id; appt.start_time = ''; fetchTimeSlots(apptIdx); openDropdown = null"
                                                                 class="w-full flex items-center gap-2 px-3 py-2 text-sm text-start hover:bg-amber-50 transition"
                                                                 :class="appt.doctor_id == d.id ? 'bg-amber-50/60 font-semibold' : ''">
-                                                                <span class="w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0">{{ (d.name_en || d.name_ar || '?').charAt(0) }}</span>
+                                                                <span class="w-6 h-6 rounded-full bg-gradient-to-br from-[#1B365D] to-[#1B365D] flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0">{{ (d.name_en || d.name_ar || '?').charAt(0) }}</span>
                                                                 <span>{{ d.name_en || d.name_ar || d.name }}</span>
                                                             </button>
                                                             <p v-if="!filteredDoctorsList('appt-doc-' + apptIdx).length" class="text-xs text-gray-400 text-center py-3">{{ $t('a_no_results') }}</p>
@@ -1871,13 +1871,13 @@ function submitEditServices() {
                                                     </button>
                                                 </div>
                                                 <div v-else-if="appt.appointment_date && appt.doctor_id" class="text-xs text-gray-400 py-2">
-                                                    <input v-model="appt.start_time" type="time" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                                    <input v-model="appt.start_time" type="time" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
                                                 </div>
                                                 <p v-else class="text-xs text-gray-400 py-2">{{ $t('a_select_doctor_and_date') }}</p>
                                             </div>
                                             <div>
                                                 <label class="block text-xs text-gray-500 mb-1">{{ $t('a_session') }} #</label>
-                                                <input v-model.number="appt.session_number" type="number" min="1" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                                <input v-model.number="appt.session_number" type="number" min="1" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
                                             </div>
                                         </div>
                                     </div>
@@ -1892,19 +1892,19 @@ function submitEditServices() {
                             <!-- Notes -->
                             <div>
                                 <label class="block text-xs font-medium text-gray-500 mb-1.5">{{ $t('a_notes') }}</label>
-                                <textarea v-model="confirmForm.notes" rows="2" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" :placeholder="$t('a_optional_notes')"></textarea>
+                                <textarea v-model="confirmForm.notes" rows="2" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" :placeholder="$t('a_optional_notes')"></textarea>
                             </div>
 
                             <!-- Submit -->
                             <div class="flex items-center gap-3 pt-2 border-t border-gray-100">
-                                <button type="submit" :disabled="confirmProcessing" class="px-6 py-2.5 text-white rounded-xl text-sm font-semibold hover:opacity-90 transition-all disabled:opacity-50 shadow-sm" style="background-color: #C4A265;">
+                                <button type="submit" :disabled="confirmProcessing" class="px-4 md:px-6 py-2.5 text-white rounded-xl text-sm font-semibold hover:opacity-90 transition-all disabled:opacity-50 shadow-sm" style="background-color: #C4A265;">
                                     <span v-if="confirmProcessing" class="flex items-center gap-2">
                                         <svg class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/></svg>
                                         {{ $t('a_confirming') }}
                                     </span>
                                     <span v-else>{{ $t('a_confirm_booking') }}</span>
                                 </button>
-                                <button type="button" @click="showConfirmSection = false" class="px-6 py-2.5 border border-gray-200 text-gray-600 rounded-xl text-sm font-medium hover:bg-gray-50 transition">
+                                <button type="button" @click="showConfirmSection = false" class="px-4 md:px-6 py-2.5 border border-gray-200 text-gray-600 rounded-xl text-sm font-medium hover:bg-gray-50 transition">
                                     {{ $t('a_cancel') }}
                                 </button>
                             </div>
@@ -1951,7 +1951,7 @@ function submitEditServices() {
                         </div>
                         <div>
                             <label class="block text-xs text-gray-500 mb-1.5">{{ $t('a_admin_notes') }}</label>
-                            <textarea v-model="statusForm.admin_notes" rows="3" class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" :placeholder="$t('a_internal_notes')"></textarea>
+                            <textarea v-model="statusForm.admin_notes" rows="3" class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" :placeholder="$t('a_internal_notes')"></textarea>
                         </div>
                         <button type="submit" :disabled="statusForm.processing" class="w-full py-2.5 px-4 rounded-xl text-white font-semibold text-sm hover:opacity-90 transition-all duration-300 disabled:opacity-50 shadow-sm" style="background-color: #C4A265;">
                             {{ statusForm.processing ? $t('a_updating') : $t('a_update_status') }}
@@ -2107,13 +2107,13 @@ function submitEditServices() {
                 <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" @click="closeRescheduleModal"></div>
                 <div class="relative w-full max-w-lg bg-white rounded-2xl shadow-2xl overflow-hidden transform transition-all">
                     <!-- Modal Header -->
-                    <div class="px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-[#C4A265]/5 to-transparent">
+                    <div class="px-4 md:px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-[#C4A265]/5 to-transparent">
                         <div class="flex items-center justify-between">
                             <div>
                                 <h3 class="text-lg font-bold text-gray-900">{{ $t('a_edit_appointment') }}</h3>
                                 <p class="text-xs text-gray-500 mt-0.5">
                                     {{ $t('a_session') }} #{{ editingAppointment.session_number || '-' }}
-                                    <span v-if="editingAppointment.is_retouch" class="ltr:ml-1 rtl:mr-1 text-purple-600">({{ $t('a_retouch') }})</span>
+                                    <span v-if="editingAppointment.is_retouch" class="ltr:ml-1 rtl:mr-1 text-[#1B365D]">({{ $t('a_retouch') }})</span>
                                 </p>
                             </div>
                             <button @click="closeRescheduleModal" class="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors">
@@ -2123,7 +2123,7 @@ function submitEditServices() {
                     </div>
 
                     <!-- Modal Body -->
-                    <div class="px-6 py-5 space-y-5 max-h-[70vh] overflow-y-auto">
+                    <div class="px-4 md:px-6 py-5 space-y-5 max-h-[70vh] overflow-y-auto">
                         <!-- Doctor -->
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-1.5">{{ $t('a_doctor') }}</label>
@@ -2150,7 +2150,7 @@ function submitEditServices() {
                                 <svg class="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
                                 {{ $t('a_loading_slots') }}
                             </div>
-                            <div v-else-if="rescheduleTimeSlots.length > 0" class="grid grid-cols-3 sm:grid-cols-4 gap-2 max-h-48 overflow-y-auto pr-1">
+                            <div v-else-if="rescheduleTimeSlots.length > 0" class="grid grid-cols-1 md:grid-cols-3 sm:grid-cols-4 gap-2 max-h-48 overflow-y-auto pr-1">
                                 <button v-for="slot in rescheduleTimeSlots" :key="slot.start" @click="selectRescheduleSlot(slot)" type="button"
                                     class="px-3 py-2 rounded-lg text-xs font-medium border transition-all text-center"
                                     :class="rescheduleForm.start_time === slot.start ? 'bg-[#C4A265] text-white border-[#C4A265] shadow-md' : 'bg-white text-gray-600 border-gray-200 hover:border-[#C4A265]/40 hover:bg-[#C4A265]/5'">
@@ -2184,7 +2184,7 @@ function submitEditServices() {
                     </div>
 
                     <!-- Modal Footer -->
-                    <div class="px-6 py-4 border-t border-gray-100 bg-gray-50/50 flex items-center justify-end gap-3">
+                    <div class="px-4 md:px-6 py-4 border-t border-gray-100 bg-gray-50/50 flex items-center justify-end gap-3">
                         <button @click="closeRescheduleModal" class="px-4 py-2 rounded-xl text-sm font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-100 transition-colors">
                             {{ $t('a_cancel') }}
                         </button>

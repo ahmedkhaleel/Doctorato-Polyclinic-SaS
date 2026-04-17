@@ -65,9 +65,9 @@ function submitAdjust() {
 const typeConfig = {
     deposit:       { labelEn: 'Deposit',    labelAr: 'إيداع',       color: 'bg-emerald-100 text-emerald-700', sign: '+' },
     withdrawal:    { labelEn: 'Withdrawal', labelAr: 'سحب',         color: 'bg-red-100 text-red-700',         sign: '-' },
-    refund_credit: { labelEn: 'Refund',     labelAr: 'رد مبلغ',     color: 'bg-blue-100 text-blue-700',       sign: '+' },
-    payment:       { labelEn: 'Payment',    labelAr: 'دفع فاتورة',  color: 'bg-orange-100 text-orange-700',   sign: '-' },
-    adjustment:    { labelEn: 'Adjustment', labelAr: 'تعديل',       color: 'bg-purple-100 text-purple-700',   sign: '~' },
+    refund_credit: { labelEn: 'Refund',     labelAr: 'رد مبلغ',     color: 'bg-slate-100 text-[#1B365D]',       sign: '+' },
+    payment:       { labelEn: 'Payment',    labelAr: 'دفع فاتورة',  color: 'bg-amber-100 text-[#C4A265]',   sign: '-' },
+    adjustment:    { labelEn: 'Adjustment', labelAr: 'تعديل',       color: 'bg-slate-100 text-[#1B365D]',   sign: '~' },
 };
 
 function getTypeConfig(type) {
@@ -88,12 +88,12 @@ function formatDateTime(iso) {
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
                     <div class="flex items-center gap-2 mb-1">
-                        <Link href="/admin/wallets" class="text-sm text-gray-500 hover:text-cyan-600 transition">
+                        <Link href="/admin/wallets" class="text-sm text-gray-500 hover:text-[#1B365D] transition">
                             {{ isRtl ? 'محافظ المرضى' : 'Patient Wallets' }}
                         </Link>
                         <span class="text-gray-300">/</span>
                     </div>
-                    <h1 class="text-2xl font-bold text-gray-900">{{ patient.full_name }}</h1>
+                    <h1 class="text-xl md:text-2xl font-bold text-gray-900">{{ patient.full_name }}</h1>
                     <p class="text-sm text-gray-500 mt-0.5">
                         {{ patient.file_number }} &bull; {{ patient.phone }}
                     </p>
@@ -116,17 +116,17 @@ function formatDateTime(iso) {
 
             <!-- Balance Cards -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div class="bg-gradient-to-br from-cyan-500 to-cyan-600 rounded-xl p-6 text-white">
+                <div class="bg-gradient-to-br from-[#1B365D] to-[#1B365D] rounded-xl p-4 md:p-6 text-white">
                     <div class="text-sm opacity-80">{{ isRtl ? 'رصيد المحفظة' : 'Wallet Balance' }}</div>
-                    <div class="text-3xl font-bold mt-2">{{ formatCurrency(wallet.balance) }}</div>
+                    <div class="text-2xl md:text-3xl font-bold mt-2">{{ formatCurrency(wallet.balance) }}</div>
                 </div>
                 <div class="bg-white rounded-xl border border-red-200 p-6">
                     <div class="text-sm text-gray-500">{{ isRtl ? 'فواتير غير مسددة' : 'Outstanding Invoices' }}</div>
-                    <div class="text-3xl font-bold text-red-600 mt-2">{{ formatCurrency(outstandingBalance) }}</div>
+                    <div class="text-2xl md:text-3xl font-bold text-red-600 mt-2">{{ formatCurrency(outstandingBalance) }}</div>
                 </div>
                 <div class="bg-white rounded-xl border border-gray-200 p-6">
                     <div class="text-sm text-gray-500">{{ isRtl ? 'صافي الوضع' : 'Net Position' }}</div>
-                    <div class="text-3xl font-bold mt-2"
+                    <div class="text-2xl md:text-3xl font-bold mt-2"
                         :class="Number(wallet.balance) - outstandingBalance >= 0 ? 'text-emerald-600' : 'text-red-600'">
                         {{ formatCurrency(Number(wallet.balance) - outstandingBalance) }}
                     </div>
@@ -135,13 +135,13 @@ function formatDateTime(iso) {
 
             <!-- Transactions History -->
             <div class="bg-white rounded-xl border border-gray-200">
-                <div class="px-6 py-4 border-b border-gray-100">
+                <div class="px-4 md:px-6 py-4 border-b border-gray-100">
                     <h3 class="text-lg font-semibold text-gray-900">{{ isRtl ? 'سجل المعاملات' : 'Transaction History' }}</h3>
                 </div>
 
                 <div v-if="transactions.data?.length" class="divide-y divide-gray-50">
                     <div v-for="tx in transactions.data" :key="tx.id"
-                        class="flex items-center gap-4 px-6 py-4 hover:bg-gray-50/50 transition">
+                        class="flex items-center gap-4 px-4 md:px-6 py-4 hover:bg-gray-50/50 transition">
                         <!-- Type Icon -->
                         <div class="flex-shrink-0">
                             <span class="inline-flex items-center justify-center w-10 h-10 rounded-full"
@@ -191,7 +191,7 @@ function formatDateTime(iso) {
                     <template v-for="link in transactions.links" :key="link.label">
                         <Link v-if="link.url" :href="link.url"
                             class="px-3 py-1.5 text-sm rounded-lg border transition"
-                            :class="link.active ? 'bg-cyan-600 text-white border-cyan-600' : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'"
+                            :class="link.active ? 'bg-[#1B365D] text-white border-[#1B365D]' : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'"
                             v-html="link.label" preserve-state />
                         <span v-else class="px-3 py-1.5 text-sm text-gray-400" v-html="link.label" />
                     </template>
@@ -203,25 +203,25 @@ function formatDateTime(iso) {
         <Teleport to="body">
             <div v-if="showDepositModal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
                 <div class="fixed inset-0 bg-black/40" @click="showDepositModal = false"></div>
-                <div class="relative bg-white rounded-2xl shadow-xl w-full max-w-md p-6 space-y-4">
+                <div class="relative bg-white rounded-2xl shadow-xl w-full max-w-md p-4 md:p-6 space-y-4">
                     <h3 class="text-lg font-bold text-gray-900">{{ isRtl ? 'إيداع مبلغ' : 'Deposit Funds' }}</h3>
                     <form @submit.prevent="submitDeposit" class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'المبلغ' : 'Amount' }} *</label>
                             <input v-model="depositForm.amount" type="number" step="0.01" min="0.01" required
-                                class="w-full rounded-lg border-gray-300 focus:ring-cyan-500 focus:border-cyan-500" />
+                                class="w-full rounded-lg border-gray-300 focus:ring-[#1B365D] focus:border-[#1B365D]" />
                             <p v-if="depositForm.errors.amount" class="text-red-500 text-xs mt-1">{{ depositForm.errors.amount }}</p>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'الوصف' : 'Description' }} *</label>
                             <input v-model="depositForm.description" type="text" required maxlength="255"
                                 :placeholder="isRtl ? 'مثال: إيداع نقدي' : 'e.g., Cash deposit'"
-                                class="w-full rounded-lg border-gray-300 focus:ring-cyan-500 focus:border-cyan-500" />
+                                class="w-full rounded-lg border-gray-300 focus:ring-[#1B365D] focus:border-[#1B365D]" />
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
                             <textarea v-model="depositForm.notes" rows="2"
-                                class="w-full rounded-lg border-gray-300 focus:ring-cyan-500 focus:border-cyan-500"></textarea>
+                                class="w-full rounded-lg border-gray-300 focus:ring-[#1B365D] focus:border-[#1B365D]"></textarea>
                         </div>
                         <div class="flex justify-end gap-2 pt-2">
                             <button type="button" @click="showDepositModal = false"
@@ -242,7 +242,7 @@ function formatDateTime(iso) {
         <Teleport to="body">
             <div v-if="showWithdrawModal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
                 <div class="fixed inset-0 bg-black/40" @click="showWithdrawModal = false"></div>
-                <div class="relative bg-white rounded-2xl shadow-xl w-full max-w-md p-6 space-y-4">
+                <div class="relative bg-white rounded-2xl shadow-xl w-full max-w-md p-4 md:p-6 space-y-4">
                     <h3 class="text-lg font-bold text-gray-900">{{ isRtl ? 'سحب مبلغ' : 'Withdraw Funds' }}</h3>
                     <div class="text-sm text-gray-500">
                         {{ isRtl ? 'الرصيد المتاح:' : 'Available balance:' }}
@@ -252,12 +252,12 @@ function formatDateTime(iso) {
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'المبلغ' : 'Amount' }} *</label>
                             <input v-model="withdrawForm.amount" type="number" step="0.01" min="0.01" :max="wallet.balance" required
-                                class="w-full rounded-lg border-gray-300 focus:ring-cyan-500 focus:border-cyan-500" />
+                                class="w-full rounded-lg border-gray-300 focus:ring-[#1B365D] focus:border-[#1B365D]" />
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'النوع' : 'Type' }}</label>
                             <select v-model="withdrawForm.type"
-                                class="w-full rounded-lg border-gray-300 focus:ring-cyan-500 focus:border-cyan-500">
+                                class="w-full rounded-lg border-gray-300 focus:ring-[#1B365D] focus:border-[#1B365D]">
                                 <option value="withdrawal">{{ isRtl ? 'سحب نقدي' : 'Cash Withdrawal' }}</option>
                                 <option value="payment">{{ isRtl ? 'دفع فاتورة' : 'Invoice Payment' }}</option>
                             </select>
@@ -265,12 +265,12 @@ function formatDateTime(iso) {
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'الوصف' : 'Description' }} *</label>
                             <input v-model="withdrawForm.description" type="text" required maxlength="255"
-                                class="w-full rounded-lg border-gray-300 focus:ring-cyan-500 focus:border-cyan-500" />
+                                class="w-full rounded-lg border-gray-300 focus:ring-[#1B365D] focus:border-[#1B365D]" />
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
                             <textarea v-model="withdrawForm.notes" rows="2"
-                                class="w-full rounded-lg border-gray-300 focus:ring-cyan-500 focus:border-cyan-500"></textarea>
+                                class="w-full rounded-lg border-gray-300 focus:ring-[#1B365D] focus:border-[#1B365D]"></textarea>
                         </div>
                         <div class="flex justify-end gap-2 pt-2">
                             <button type="button" @click="showWithdrawModal = false"
@@ -291,25 +291,25 @@ function formatDateTime(iso) {
         <Teleport to="body">
             <div v-if="showAdjustModal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
                 <div class="fixed inset-0 bg-black/40" @click="showAdjustModal = false"></div>
-                <div class="relative bg-white rounded-2xl shadow-xl w-full max-w-md p-6 space-y-4">
+                <div class="relative bg-white rounded-2xl shadow-xl w-full max-w-md p-4 md:p-6 space-y-4">
                     <h3 class="text-lg font-bold text-gray-900">{{ isRtl ? 'تعديل الرصيد' : 'Adjust Balance' }}</h3>
                     <p class="text-xs text-gray-500">{{ isRtl ? 'أدخل قيمة موجبة للزيادة أو سالبة للنقصان' : 'Enter positive to add, negative to subtract' }}</p>
                     <form @submit.prevent="submitAdjust" class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'المبلغ' : 'Amount' }} *</label>
                             <input v-model="adjustForm.amount" type="number" step="0.01" required
-                                class="w-full rounded-lg border-gray-300 focus:ring-cyan-500 focus:border-cyan-500" />
+                                class="w-full rounded-lg border-gray-300 focus:ring-[#1B365D] focus:border-[#1B365D]" />
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'السبب' : 'Reason' }} *</label>
                             <input v-model="adjustForm.description" type="text" required maxlength="255"
                                 :placeholder="isRtl ? 'سبب التعديل' : 'Reason for adjustment'"
-                                class="w-full rounded-lg border-gray-300 focus:ring-cyan-500 focus:border-cyan-500" />
+                                class="w-full rounded-lg border-gray-300 focus:ring-[#1B365D] focus:border-[#1B365D]" />
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
                             <textarea v-model="adjustForm.notes" rows="2"
-                                class="w-full rounded-lg border-gray-300 focus:ring-cyan-500 focus:border-cyan-500"></textarea>
+                                class="w-full rounded-lg border-gray-300 focus:ring-[#1B365D] focus:border-[#1B365D]"></textarea>
                         </div>
                         <div class="flex justify-end gap-2 pt-2">
                             <button type="button" @click="showAdjustModal = false"
@@ -317,7 +317,7 @@ function formatDateTime(iso) {
                                 {{ isRtl ? 'إلغاء' : 'Cancel' }}
                             </button>
                             <button type="submit" :disabled="adjustForm.processing"
-                                class="px-4 py-2 text-sm font-medium text-white bg-purple-600 rounded-lg hover:bg-purple-700 disabled:opacity-50">
+                                class="px-4 py-2 text-sm font-medium text-white bg-[#1B365D] rounded-lg hover:bg-[#1B365D] disabled:opacity-50">
                                 {{ isRtl ? 'تعديل' : 'Adjust' }}
                             </button>
                         </div>

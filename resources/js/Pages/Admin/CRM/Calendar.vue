@@ -74,7 +74,7 @@ function heatColor(count) {
     if (ratio > 0.75) return 'bg-amber-200';
     if (ratio > 0.5) return 'bg-amber-100';
     if (ratio > 0.25) return 'bg-amber-50';
-    return 'bg-yellow-50/50';
+    return 'bg-amber-50/50';
 }
 
 const selectedDayFollowUps = computed(() => {
@@ -108,8 +108,8 @@ function missFollowUp(id) {
 }
 
 const statusBadge = {
-    pending: 'bg-yellow-100 text-yellow-700',
-    completed: 'bg-green-100 text-green-700',
+    pending: 'bg-amber-100 text-amber-700',
+    completed: 'bg-emerald-100 text-emerald-700',
     missed: 'bg-red-100 text-red-700',
 };
 
@@ -149,7 +149,7 @@ const filters = [
                                       :d="isRtl ? 'M9 5l7 7-7 7' : 'M15 19l-7-7 7-7'" />
                             </svg>
                         </Link>
-                        <h1 class="text-2xl font-bold text-gray-900">Follow-up Calendar</h1>
+                        <h1 class="text-xl md:text-2xl font-bold text-gray-900">Follow-up Calendar</h1>
                     </div>
                     <p class="text-sm text-gray-500">{{ monthNames[month - 1] }} {{ year }}</p>
                 </div>
@@ -180,23 +180,23 @@ const filters = [
                  :class="[mounted ? 'card-entrance-active' : 'card-entrance']">
                 <div class="flex flex-wrap items-center gap-6 mb-3">
                     <div class="text-center">
-                        <div class="text-2xl font-bold text-gray-900">{{ stats.total || 0 }}</div>
+                        <div class="text-xl md:text-2xl font-bold text-gray-900">{{ stats.total || 0 }}</div>
                         <div class="text-xs text-gray-500">Total</div>
                     </div>
                     <div class="text-center">
-                        <div class="text-2xl font-bold text-yellow-600">{{ stats.pending || 0 }}</div>
+                        <div class="text-xl md:text-2xl font-bold text-amber-600">{{ stats.pending || 0 }}</div>
                         <div class="text-xs text-gray-500">Pending</div>
                     </div>
                     <div class="text-center">
-                        <div class="text-2xl font-bold text-green-600">{{ stats.completed || 0 }}</div>
+                        <div class="text-xl md:text-2xl font-bold text-emerald-600">{{ stats.completed || 0 }}</div>
                         <div class="text-xs text-gray-500">Completed</div>
                     </div>
                     <div class="text-center">
-                        <div class="text-2xl font-bold text-red-600">{{ stats.missed || 0 }}</div>
+                        <div class="text-xl md:text-2xl font-bold text-red-600">{{ stats.missed || 0 }}</div>
                         <div class="text-xs text-gray-500">Missed</div>
                     </div>
                     <div class="text-center">
-                        <div class="text-2xl font-bold text-orange-600">{{ stats.overdue || 0 }}</div>
+                        <div class="text-xl md:text-2xl font-bold text-[#C4A265]">{{ stats.overdue || 0 }}</div>
                         <div class="text-xs text-gray-500">Overdue</div>
                     </div>
                 </div>

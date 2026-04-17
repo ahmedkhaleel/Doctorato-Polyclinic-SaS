@@ -117,7 +117,7 @@ function getActiveDays(doctor) {
             <!-- Header -->
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-900">{{ isRtl ? 'جداول عمل الأطباء' : 'Doctor Schedules' }}</h1>
+                    <h1 class="text-xl md:text-2xl font-bold text-gray-900">{{ isRtl ? 'جداول عمل الأطباء' : 'Doctor Schedules' }}</h1>
                     <p class="text-sm text-gray-500 mt-1">{{ isRtl ? 'إدارة مواعيد العمل الأسبوعية' : 'Manage weekly work schedules' }}</p>
                 </div>
             </div>
@@ -125,19 +125,19 @@ function getActiveDays(doctor) {
             <!-- Stats -->
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div class="bg-white rounded-xl border border-gray-200 p-4">
-                    <div class="text-2xl font-bold text-gray-900">{{ stats.total_doctors }}</div>
+                    <div class="text-xl md:text-2xl font-bold text-gray-900">{{ stats.total_doctors }}</div>
                     <div class="text-xs text-gray-500 mt-1">{{ isRtl ? 'إجمالي الأطباء' : 'Total Doctors' }}</div>
                 </div>
                 <div class="bg-white rounded-xl border border-emerald-200 p-4">
-                    <div class="text-2xl font-bold text-emerald-600">{{ stats.working_today }}</div>
+                    <div class="text-xl md:text-2xl font-bold text-emerald-600">{{ stats.working_today }}</div>
                     <div class="text-xs text-gray-500 mt-1">{{ isRtl ? 'يعملون اليوم' : 'Working Today' }}</div>
                 </div>
                 <div class="bg-white rounded-xl border border-amber-200 p-4">
-                    <div class="text-2xl font-bold text-amber-600">{{ stats.on_vacation }}</div>
+                    <div class="text-xl md:text-2xl font-bold text-amber-600">{{ stats.on_vacation }}</div>
                     <div class="text-xs text-gray-500 mt-1">{{ isRtl ? 'في إجازة' : 'On Vacation' }}</div>
                 </div>
-                <div class="bg-white rounded-xl border border-cyan-200 p-4">
-                    <div class="text-2xl font-bold text-cyan-600">{{ stats.available_today }}</div>
+                <div class="bg-white rounded-xl border border-slate-200 p-4">
+                    <div class="text-xl md:text-2xl font-bold text-[#1B365D]">{{ stats.available_today }}</div>
                     <div class="text-xs text-gray-500 mt-1">{{ isRtl ? 'متاحون اليوم' : 'Available Today' }}</div>
                 </div>
             </div>
@@ -148,12 +148,12 @@ function getActiveDays(doctor) {
                 <div class="flex flex-wrap gap-2">
                     <button @click="deptFilter = ''"
                         class="px-3 py-1.5 text-xs font-medium rounded-full border transition"
-                        :class="!deptFilter ? 'bg-cyan-600 text-white border-cyan-600' : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'">
+                        :class="!deptFilter ? 'bg-[#1B365D] text-white border-[#1B365D]' : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'">
                         {{ isRtl ? 'الكل' : 'All' }}
                     </button>
                     <button v-for="dept in departments" :key="dept" @click="deptFilter = dept"
                         class="px-3 py-1.5 text-xs font-medium rounded-full border transition capitalize"
-                        :class="deptFilter === dept ? 'bg-cyan-600 text-white border-cyan-600' : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'">
+                        :class="deptFilter === dept ? 'bg-[#1B365D] text-white border-[#1B365D]' : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'">
                         {{ dept }}
                     </button>
                 </div>
@@ -170,10 +170,10 @@ function getActiveDays(doctor) {
                                 </th>
                                 <th v-for="day in days" :key="day.index"
                                     class="px-2 py-3 text-center text-xs font-semibold uppercase"
-                                    :class="day.index === todayIndex ? 'text-cyan-700 bg-cyan-50' : 'text-gray-500'">
+                                    :class="day.index === todayIndex ? 'text-[#1B365D] bg-slate-50' : 'text-gray-500'">
                                     <div>{{ isRtl ? day.ar : day.en.slice(0, 3) }}</div>
                                     <div v-if="day.index === todayIndex" class="mt-0.5">
-                                        <span class="inline-block w-1.5 h-1.5 rounded-full bg-cyan-500"></span>
+                                        <span class="inline-block w-1.5 h-1.5 rounded-full bg-[#1B365D]"></span>
                                     </div>
                                 </th>
                                 <th class="px-4 py-3 text-center text-xs font-semibold text-gray-500 uppercase w-20">
@@ -190,7 +190,7 @@ function getActiveDays(doctor) {
                                 <!-- Doctor Info -->
                                 <td class="px-4 py-3">
                                     <div class="flex items-center gap-3">
-                                        <div class="w-9 h-9 rounded-full bg-gradient-to-br from-cyan-400 to-cyan-600 flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+                                        <div class="w-9 h-9 rounded-full bg-gradient-to-br from-slate-400 to-[#1B365D] flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
                                             {{ (isRtl ? doctor.name_ar : doctor.name_en)?.charAt(0) || 'D' }}
                                         </div>
                                         <div class="min-w-0">
@@ -211,7 +211,7 @@ function getActiveDays(doctor) {
                                 <!-- Schedule Cells (View Mode) -->
                                 <template v-if="editingDoctor !== doctor.id">
                                     <td v-for="day in days" :key="day.index" class="px-2 py-3 text-center"
-                                        :class="day.index === todayIndex ? 'bg-cyan-50/50' : ''">
+                                        :class="day.index === todayIndex ? 'bg-slate-50/50' : ''">
                                         <div v-if="doctor.schedules[day.index]?.is_active"
                                             class="inline-flex flex-col items-center px-2 py-1 rounded-lg bg-emerald-50 border border-emerald-100">
                                             <span class="text-[11px] font-medium text-emerald-700">
@@ -229,7 +229,7 @@ function getActiveDays(doctor) {
                                 <!-- Schedule Cells (Edit Mode) -->
                                 <template v-else>
                                     <td v-for="day in days" :key="day.index" class="px-1.5 py-2 text-center"
-                                        :class="day.index === todayIndex ? 'bg-cyan-50/50' : ''">
+                                        :class="day.index === todayIndex ? 'bg-slate-50/50' : ''">
                                         <div class="space-y-1">
                                             <button @click="toggleDay(day.index)"
                                                 class="w-full px-2 py-1 rounded text-[11px] font-medium transition"
@@ -240,9 +240,9 @@ function getActiveDays(doctor) {
                                             </button>
                                             <template v-if="editSchedules[day.index].is_active">
                                                 <input type="time" v-model="editSchedules[day.index].start_time"
-                                                    class="w-full text-[11px] px-1 py-0.5 rounded border border-gray-200 focus:ring-cyan-500 focus:border-cyan-500" />
+                                                    class="w-full text-[11px] px-1 py-0.5 rounded border border-gray-200 focus:ring-[#1B365D] focus:border-[#1B365D]" />
                                                 <input type="time" v-model="editSchedules[day.index].end_time"
-                                                    class="w-full text-[11px] px-1 py-0.5 rounded border border-gray-200 focus:ring-cyan-500 focus:border-cyan-500" />
+                                                    class="w-full text-[11px] px-1 py-0.5 rounded border border-gray-200 focus:ring-[#1B365D] focus:border-[#1B365D]" />
                                             </template>
                                         </div>
                                     </td>
@@ -258,7 +258,7 @@ function getActiveDays(doctor) {
                                 <td class="px-4 py-3 text-center">
                                     <template v-if="editingDoctor !== doctor.id">
                                         <button @click="startEdit(doctor)"
-                                            class="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium text-cyan-700 bg-cyan-50 rounded-lg hover:bg-cyan-100 transition">
+                                            class="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium text-[#1B365D] bg-slate-50 rounded-lg hover:bg-slate-100 transition">
                                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
                                             {{ isRtl ? 'تعديل' : 'Edit' }}
                                         </button>

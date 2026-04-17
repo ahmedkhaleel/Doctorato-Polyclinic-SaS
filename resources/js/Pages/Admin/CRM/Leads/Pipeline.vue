@@ -74,20 +74,20 @@ const statusLabels = computed(() => ({
     appointment_booked: t('a_lead_appt_booked'), consultation_done: t('a_lead_consultation'), negotiation: t('a_lead_negotiation'),
 }));
 const statusHeaderGradients = {
-    new: 'from-blue-500 to-blue-600',
-    contacted: 'from-indigo-500 to-indigo-600',
-    qualified: 'from-purple-500 to-purple-600',
+    new: 'from-[#1B365D] to-[#1B365D]',
+    contacted: 'from-[#1B365D] to-[#1B365D]',
+    qualified: 'from-[#1B365D] to-[#1B365D]',
     appointment_booked: 'from-amber-500 to-amber-600',
     consultation_done: 'from-teal-500 to-teal-600',
-    negotiation: 'from-orange-500 to-orange-600',
+    negotiation: 'from-[#C4A265] to-[#C4A265]',
 };
 const statusBgColors = {
-    new: 'bg-blue-50/50',
-    contacted: 'bg-indigo-50/50',
-    qualified: 'bg-purple-50/50',
+    new: 'bg-slate-50/50',
+    contacted: 'bg-slate-50/50',
+    qualified: 'bg-slate-50/50',
     appointment_booked: 'bg-amber-50/50',
     consultation_done: 'bg-teal-50/50',
-    negotiation: 'bg-orange-50/50',
+    negotiation: 'bg-amber-50/50',
 };
 const statusIcons = {
     new: 'M12 6v6m0 0v6m0-6h6m-6 0H6',
@@ -99,8 +99,8 @@ const statusIcons = {
 };
 const priorityLabels = computed(() => ({ 1: t('a_hot'), 2: t('a_warm'), 3: t('a_cold') }));
 const priorityBorderColors = { 1: 'border-l-red-500', 2: 'border-l-amber-400', 3: 'border-l-blue-400' };
-const priorityDots = { 1: 'bg-red-500', 2: 'bg-amber-400', 3: 'bg-blue-400' };
-const priorityBadgeBg = { 1: 'bg-red-50 text-red-700', 2: 'bg-amber-50 text-amber-700', 3: 'bg-blue-50 text-blue-700' };
+const priorityDots = { 1: 'bg-red-500', 2: 'bg-amber-400', 3: 'bg-slate-400' };
+const priorityBadgeBg = { 1: 'bg-red-50 text-red-700', 2: 'bg-amber-50 text-amber-700', 3: 'bg-slate-50 text-[#1B365D]' };
 
 // ─── Drag and Drop ───
 const sortableInstances = [];
@@ -223,14 +223,14 @@ function closeDrawer() {
 
 const activityIcons = {
     note: { path: 'M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z', color: 'text-gray-500 bg-gray-100' },
-    call: { path: 'M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z', color: 'text-green-600 bg-green-100' },
+    call: { path: 'M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z', color: 'text-emerald-600 bg-emerald-100' },
     whatsapp: { path: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z', color: 'text-emerald-600 bg-emerald-100' },
-    email: { path: 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z', color: 'text-blue-600 bg-blue-100' },
-    sms: { path: 'M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z', color: 'text-purple-600 bg-purple-100' },
+    email: { path: 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z', color: 'text-[#1B365D] bg-slate-100' },
+    sms: { path: 'M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z', color: 'text-[#1B365D] bg-slate-100' },
     meeting: { path: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z', color: 'text-amber-600 bg-amber-100' },
-    status_change: { path: 'M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4', color: 'text-indigo-600 bg-indigo-100' },
-    follow_up_scheduled: { path: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z', color: 'text-cyan-600 bg-cyan-100' },
-    follow_up_completed: { path: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z', color: 'text-green-600 bg-green-100' },
+    status_change: { path: 'M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4', color: 'text-[#1B365D] bg-slate-100' },
+    follow_up_scheduled: { path: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z', color: 'text-[#1B365D] bg-slate-100' },
+    follow_up_completed: { path: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z', color: 'text-emerald-600 bg-emerald-100' },
     system: { path: 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z', color: 'text-gray-500 bg-gray-100' },
 };
 
@@ -253,13 +253,13 @@ function formatDate(date) {
                 class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-700 ease-out"
             >
                 <div class="h-1 bg-gradient-to-r from-[#C4A265] via-[#D4B87A] to-[#C4A265]"></div>
-                <div class="px-6 py-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div class="px-4 md:px-6 py-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div class="flex items-center gap-4">
                         <div class="w-12 h-12 rounded-2xl flex items-center justify-center shadow-sm" style="background: linear-gradient(135deg, #C4A265, #D4B87A);">
                             <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" /></svg>
                         </div>
                         <div>
-                            <h1 class="text-2xl font-bold text-gray-900">{{ $t('a_lead_pipeline') }}</h1>
+                            <h1 class="text-xl md:text-2xl font-bold text-gray-900">{{ $t('a_lead_pipeline') }}</h1>
                             <p class="text-sm text-gray-500 mt-0.5">{{ totalLeads }} {{ $t('a_leads') }} — {{ $t('a_drag_leads_hint') }}</p>
                         </div>
                     </div>
@@ -293,7 +293,7 @@ function formatDate(date) {
                     leave-to-class="max-h-0 opacity-0"
                 >
                     <div v-if="showFilters" class="overflow-hidden border-t border-gray-100">
-                        <div class="px-6 py-4 flex flex-wrap items-center gap-3 bg-gray-50/50">
+                        <div class="px-4 md:px-6 py-4 flex flex-wrap items-center gap-3 bg-gray-50/50">
                             <!-- Source filter -->
                             <div class="flex items-center gap-2">
                                 <label class="text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_source') }}</label>
@@ -487,7 +487,7 @@ function formatDate(date) {
             >
                 <div v-if="drawerOpen" class="fixed top-0 ltr:right-0 rtl:left-0 h-full w-full max-w-[480px] bg-white shadow-2xl z-[70] flex flex-col">
                     <!-- Drawer Header -->
-                    <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white">
+                    <div class="flex items-center justify-between px-4 md:px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white">
                         <div class="flex items-center gap-3 min-w-0">
                             <div class="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold text-sm"
                                 style="background: linear-gradient(135deg, #C4A265, #D4B87A);">
@@ -518,7 +518,7 @@ function formatDate(date) {
 
                         <div v-else-if="drawerLead" class="divide-y divide-gray-100">
                             <!-- Lead Info Card -->
-                            <div class="px-6 py-5">
+                            <div class="px-4 md:px-6 py-5">
                                 <div class="grid grid-cols-2 gap-4">
                                     <!-- Status -->
                                     <div>
@@ -574,7 +574,7 @@ function formatDate(date) {
                                     <!-- Score -->
                                     <div>
                                         <label class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">{{ $t('a_score') }}</label>
-                                        <p class="mt-1 text-sm font-bold" :class="drawerLead.score >= 70 ? 'text-green-600' : drawerLead.score >= 40 ? 'text-amber-600' : 'text-gray-500'">
+                                        <p class="mt-1 text-sm font-bold" :class="drawerLead.score >= 70 ? 'text-emerald-600' : drawerLead.score >= 40 ? 'text-amber-600' : 'text-gray-500'">
                                             {{ drawerLead.score || 0 }} {{ $t('a_pts') }}
                                         </p>
                                     </div>
@@ -609,7 +609,7 @@ function formatDate(date) {
                             </div>
 
                             <!-- Pending Follow-ups -->
-                            <div v-if="drawerFollowUps.length" class="px-6 py-5">
+                            <div v-if="drawerFollowUps.length" class="px-4 md:px-6 py-5">
                                 <h3 class="text-xs font-bold text-gray-700 uppercase tracking-wider mb-3 flex items-center gap-2">
                                     <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                     {{ $t('a_pending_follow_ups') }}
@@ -632,9 +632,9 @@ function formatDate(date) {
                             </div>
 
                             <!-- Recent Activity -->
-                            <div class="px-6 py-5">
+                            <div class="px-4 md:px-6 py-5">
                                 <h3 class="text-xs font-bold text-gray-700 uppercase tracking-wider mb-3 flex items-center gap-2">
-                                    <svg class="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                    <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                     {{ $t('a_recent_activity') }}
                                 </h3>
                                 <div v-if="drawerActivities.length" class="space-y-3">
@@ -660,7 +660,7 @@ function formatDate(date) {
                     </div>
 
                     <!-- Drawer Footer -->
-                    <div class="px-6 py-4 border-t border-gray-100 bg-gray-50/50 flex items-center gap-3">
+                    <div class="px-4 md:px-6 py-4 border-t border-gray-100 bg-gray-50/50 flex items-center gap-3">
                         <Link v-if="drawerLead" :href="`/admin/leads/${drawerLead.id}`"
                             class="flex-1 inline-flex items-center justify-center px-4 py-2.5 rounded-xl text-white text-sm font-semibold transition-all duration-300 shadow-sm hover:shadow-md"
                             style="background: linear-gradient(135deg, #C4A265, #D4B87A);">
