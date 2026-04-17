@@ -106,7 +106,7 @@ function deleteCompany(company) {
                             <p v-if="company.code" class="text-xs text-gray-400 font-mono">{{ company.code }}</p>
                         </div>
                     </div>
-                    <span :class="company.is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'" class="px-2.5 py-0.5 rounded-full text-xs font-medium">
+                    <span :class="company.is_active ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'" class="px-2.5 py-0.5 rounded-full text-xs font-medium">
                         {{ company.is_active ? (isRtl ? 'نشط' : 'Active') : (isRtl ? 'معطل' : 'Inactive') }}
                     </span>
                 </div>

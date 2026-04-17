@@ -47,7 +47,7 @@ function t(en, ar) { return isRtl.value ? ar : en; }
 
 <template>
     <div class="space-y-6 pb-10">
-        <div class="bg-gradient-to-br from-blue-900 to-amber-500 rounded-2xl p-6 shadow-lg flex items-center justify-between">
+        <div class="bg-gradient-to-br from-[#1B365D] to-[#C4A265] rounded-2xl p-6 shadow-lg flex items-center justify-between">
             <h1 class="text-2xl font-bold text-white">{{ t('Session Packages', 'باقات الجلسات') }}</h1>
             <button @click="open()" class="px-4 py-2 bg-white/15 hover:bg-white/25 text-white rounded-xl text-sm font-semibold ring-1 ring-white/30">+ {{ t('Add package', 'إضافة باقة') }}</button>
         </div>
@@ -78,7 +78,7 @@ function t(en, ar) { return isRtl.value ? ar : en; }
                         <td class="px-5 py-3 hidden lg:table-cell">{{ p.total_sessions }}</td>
                         <td class="px-5 py-3 hidden lg:table-cell">{{ p.total_price }}</td>
                         <td class="px-5 py-3 text-end space-x-2 rtl:space-x-reverse">
-                            <button @click="open(p)" class="text-blue-900 text-xs font-semibold">{{ t('Edit', 'تعديل') }}</button>
+                            <button @click="open(p)" class="text-[#1B365D] text-xs font-semibold">{{ t('Edit', 'تعديل') }}</button>
                             <button @click="remove(p)" class="text-red-600 text-xs font-semibold">{{ t('Delete', 'حذف') }}</button>
                         </td>
                     </tr>
@@ -88,7 +88,7 @@ function t(en, ar) { return isRtl.value ? ar : en; }
         </div>
 
         <div v-if="showModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" @click.self="showModal = false">
-            <div class="bg-white rounded-2xl w-full max-w-xl p-6">
+            <div class="bg-white rounded-2xl w-full max-w-full sm:max-w-xl p-4 md:p-6 max-h-[90vh] overflow-y-auto">
                 <h2 class="text-lg font-bold mb-4">{{ editing ? t('Edit package', 'تعديل الباقة') : t('Add package', 'إضافة باقة') }}</h2>
                 <form @submit.prevent="submit" class="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div>
@@ -129,7 +129,7 @@ function t(en, ar) { return isRtl.value ? ar : en; }
                     </div>
                     <div class="md:col-span-2 flex justify-end gap-2 pt-2">
                         <button type="button" @click="showModal = false" class="px-4 py-2 rounded-lg bg-gray-100 text-sm">{{ t('Cancel', 'إلغاء') }}</button>
-                        <button :disabled="form.processing" class="px-5 py-2 rounded-lg bg-blue-900 text-white text-sm font-semibold">{{ t('Save', 'حفظ') }}</button>
+                        <button :disabled="form.processing" class="px-5 py-2 rounded-lg bg-[#1B365D] text-white text-sm font-semibold">{{ t('Save', 'حفظ') }}</button>
                     </div>
                 </form>
             </div>

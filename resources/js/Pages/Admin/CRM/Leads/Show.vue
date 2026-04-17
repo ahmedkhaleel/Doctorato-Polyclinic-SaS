@@ -964,27 +964,41 @@ function translateDescription(desc) {
                         <div class="h-1 bg-gradient-to-r from-[#C4A265] via-[#D4B87A] to-[#C4A265]"></div>
 
                         <!-- Tab Headers -->
-                        <div class="border-b border-gray-100 px-4 md:px-6 flex gap-0 bg-gray-50/50">
-                            <button @click="activeTab = 'activity'"
-                                :class="activeTab === 'activity' ? 'border-[#C4A265] text-[#C4A265] bg-white' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
-                                class="py-4 px-5 text-sm font-semibold border-b-2 transition-all duration-200 -mb-px rounded-t-lg"
-                            >
-                                <span class="flex items-center gap-2">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                    {{ $t('a_activity_timeline') }}
-                                    <span v-if="activities?.length" class="text-[10px] px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-bold">{{ activities.length }}</span>
-                                </span>
-                            </button>
-                            <button @click="activeTab = 'followups'"
-                                :class="activeTab === 'followups' ? 'border-[#C4A265] text-[#C4A265] bg-white' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
-                                class="py-4 px-5 text-sm font-semibold border-b-2 transition-all duration-200 -mb-px rounded-t-lg"
-                            >
-                                <span class="flex items-center gap-2">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                                    {{ $t('a_follow_ups') }}
-                                    <span v-if="followUps?.length" class="text-[10px] px-2 py-0.5 rounded-full bg-[#C4A265]/10 text-[#C4A265] font-bold">{{ followUps.length }}</span>
-                                </span>
-                            </button>
+                        <div class="px-4 md:px-6 py-3 border-b border-slate-100 bg-slate-50/50">
+                            <div class="overflow-x-auto">
+                                <div class="inline-flex gap-1 bg-slate-100 p-1 rounded-xl min-w-full sm:min-w-0">
+                                    <button @click="activeTab = 'activity'"
+                                        :class="[
+                                            'px-4 py-2 rounded-lg text-sm font-semibold transition whitespace-nowrap flex items-center gap-2',
+                                            activeTab === 'activity'
+                                                ? 'bg-gradient-to-r from-[#1B365D] to-[#2C4E7A] text-white shadow-sm'
+                                                : 'text-slate-600 hover:bg-white hover:text-[#1B365D]'
+                                        ]"
+                                    >
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                        {{ $t('a_activity_timeline') }}
+                                        <span v-if="activities?.length" class="ms-1 inline-flex items-center rounded-full px-1.5 py-0.5 text-[10px] font-bold"
+                                            :class="activeTab === 'activity' ? 'bg-[#C4A265] text-white' : 'bg-slate-200 text-slate-600'">
+                                            {{ activities.length }}
+                                        </span>
+                                    </button>
+                                    <button @click="activeTab = 'followups'"
+                                        :class="[
+                                            'px-4 py-2 rounded-lg text-sm font-semibold transition whitespace-nowrap flex items-center gap-2',
+                                            activeTab === 'followups'
+                                                ? 'bg-gradient-to-r from-[#1B365D] to-[#2C4E7A] text-white shadow-sm'
+                                                : 'text-slate-600 hover:bg-white hover:text-[#1B365D]'
+                                        ]"
+                                    >
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                                        {{ $t('a_follow_ups') }}
+                                        <span v-if="followUps?.length" class="ms-1 inline-flex items-center rounded-full px-1.5 py-0.5 text-[10px] font-bold"
+                                            :class="activeTab === 'followups' ? 'bg-[#C4A265] text-white' : 'bg-slate-200 text-slate-600'">
+                                            {{ followUps.length }}
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- ======== ACTIVITY TAB ======== -->
@@ -1604,7 +1618,7 @@ function translateDescription(desc) {
                 leave-from-class="opacity-100" leave-to-class="opacity-0">
                 <div v-if="showStatusModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
                     <transition enter-active-class="transition-all duration-300 delay-100" enter-from-class="opacity-0 scale-95 translate-y-4" enter-to-class="opacity-100 scale-100 translate-y-0">
-                        <div v-if="showStatusModal" class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
+                        <div v-if="showStatusModal" class="bg-white rounded-2xl shadow-2xl w-full max-w-full sm:max-w-md overflow-hidden max-h-[90vh] overflow-y-auto">
                             <div class="h-1 bg-gradient-to-r from-red-400 via-red-500 to-red-400"></div>
                             <div class="p-7">
                                 <div class="flex items-center gap-3 mb-5">

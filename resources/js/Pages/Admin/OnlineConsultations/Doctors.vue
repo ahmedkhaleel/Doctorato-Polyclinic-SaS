@@ -13,9 +13,9 @@ const props = defineProps({
 });
 
 const moduleColors = {
-    derma:     { bg: 'bg-pink-50',    text: 'text-pink-700',    ring: 'ring-pink-200',    ar: 'جلدية',     en: 'Derma' },
+    derma:     { bg: 'bg-[#C4A265]/10',    text: 'text-[#C4A265]',    ring: 'ring-[#C4A265]/30',    ar: 'جلدية',     en: 'Derma' },
     dental:    { bg: 'bg-sky-50',     text: 'text-sky-700',     ring: 'ring-sky-200',     ar: 'أسنان',     en: 'Dental' },
-    pediatric: { bg: 'bg-indigo-50',  text: 'text-indigo-700',  ring: 'ring-indigo-200',  ar: 'أطفال',     en: 'Pediatric' },
+    pediatric: { bg: 'bg-slate-50',  text: 'text-[#1B365D]',  ring: 'ring-slate-200',  ar: 'أطفال',     en: 'Pediatric' },
 };
 
 function moduleInfo(m) { return moduleColors[m] || { bg: 'bg-gray-50', text: 'text-gray-600', ring: 'ring-gray-200', ar: m, en: m }; }

@@ -20,7 +20,7 @@ function fmt(n) {
 
 const statusColors = {
     draft: 'bg-gray-100 text-gray-700',
-    submitted: 'bg-blue-50 text-blue-700',
+    submitted: 'bg-slate-50 text-[#1B365D]',
     under_review: 'bg-amber-50 text-amber-700',
     approved: 'bg-emerald-50 text-emerald-700',
     partially_approved: 'bg-teal-50 text-teal-700',

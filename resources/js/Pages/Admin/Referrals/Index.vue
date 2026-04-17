@@ -380,7 +380,7 @@ function formatDate(d) {
         <Teleport to="body">
             <div v-if="showStatusModal && selectedReferral" class="fixed inset-0 z-50 flex items-center justify-center p-4">
                 <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" @click="showStatusModal = false" />
-                <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md p-6">
+                <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-full sm:max-w-md p-4 md:p-6 max-h-[90vh] overflow-y-auto">
                     <h2 class="text-lg font-bold text-gray-800 mb-4">{{ isRtl ? 'تحديث حالة التحويل' : 'Update Referral Status' }}</h2>
                     <p class="text-sm text-gray-500 mb-4">{{ selectedReferral.referral_number }} - {{ selectedReferral.patient?.full_name }}</p>
 

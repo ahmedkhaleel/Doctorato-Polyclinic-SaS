@@ -73,7 +73,7 @@ const statusConfig = {
     cancelled:       { bg: 'bg-gray-50',    text: 'text-gray-500',    dot: 'bg-gray-300',   ar: 'ملغى',         en: 'Cancelled' },
     missed_patient:  { bg: 'bg-red-50',     text: 'text-red-700',     dot: 'bg-red-500',    ar: 'المريض غاب',   en: 'Patient Missed' },
     missed_doctor:   { bg: 'bg-red-50',     text: 'text-red-700',     dot: 'bg-red-500',    ar: 'الطبيب غاب',   en: 'Doctor Missed' },
-    refunded:        { bg: 'bg-blue-50',    text: 'text-blue-700',    dot: 'bg-blue-500',   ar: 'مسترد',        en: 'Refunded' },
+    refunded:        { bg: 'bg-slate-50',    text: 'text-[#1B365D]',    dot: 'bg-[#1B365D]',   ar: 'مسترد',        en: 'Refunded' },
 };
 
 function statusStyle(s) { return statusConfig[s] || statusConfig.scheduled; }
@@ -87,7 +87,7 @@ const paymentConfig = {
     paid:     { bg: 'bg-emerald-50', text: 'text-emerald-700', ar: 'مدفوع',   en: 'Paid' },
     pending:  { bg: 'bg-amber-50',   text: 'text-amber-700',   ar: 'معلق',    en: 'Pending' },
     failed:   { bg: 'bg-red-50',     text: 'text-red-700',     ar: 'فشل',     en: 'Failed' },
-    refunded: { bg: 'bg-blue-50',    text: 'text-blue-700',    ar: 'مسترد',   en: 'Refunded' },
+    refunded: { bg: 'bg-slate-50',    text: 'text-[#1B365D]',    ar: 'مسترد',   en: 'Refunded' },
 };
 function paymentStyle(s) { return paymentConfig[s] || paymentConfig.pending; }
 function paymentLabel(s) {

@@ -137,15 +137,21 @@ function commitText(key) {
             </div>
 
             <!-- Tabs -->
-            <div class="flex flex-wrap gap-2 border-b border-gray-200">
-                <button v-for="tab in tabs" :key="tab.key" type="button" @click="activeTab = tab.key"
-                    class="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-semibold rounded-t-lg border-b-2 transition"
-                    :class="activeTab === tab.key ? 'border-[#C4A265] text-[#1B365D] bg-[#C4A265]/10' : 'border-transparent text-gray-500 hover:text-[#1B365D]'">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="tab.icon" />
-                    </svg>
-                    {{ isRtl ? tab.labelAr : tab.labelEn }}
-                </button>
+            <div class="overflow-x-auto">
+                <div class="inline-flex gap-1 bg-slate-100 p-1 rounded-xl min-w-full sm:min-w-0">
+                    <button v-for="tab in tabs" :key="tab.key" type="button" @click="activeTab = tab.key"
+                        :class="[
+                            'inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition whitespace-nowrap',
+                            activeTab === tab.key
+                                ? 'bg-gradient-to-r from-[#1B365D] to-[#2C4E7A] text-white shadow-sm'
+                                : 'text-slate-600 hover:bg-white hover:text-[#1B365D]'
+                        ]">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="tab.icon" />
+                        </svg>
+                        {{ isRtl ? tab.labelAr : tab.labelEn }}
+                    </button>
+                </div>
             </div>
 
             <!-- OVERVIEW -->

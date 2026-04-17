@@ -151,18 +151,24 @@ const comparisonByItemType = computed(() => {
             </div>
 
             <!-- Tabs -->
-            <div class="dental-card-enter flex flex-wrap items-center gap-1 bg-white rounded-xl p-1 border border-gray-100 shadow-sm" style="animation-delay:0.3s">
-                <button v-for="tab in [
-                    { key: 'quality', icon: '⭐', ar: 'تصنيف الجودة', en: 'Quality Ranking' },
-                    { key: 'prices', icon: '💰', ar: 'مقارنة الأسعار', en: 'Price Comparison' },
-                    { key: 'recommendations', icon: '🏆', ar: 'التوصيات', en: 'Recommendations' },
-                    { key: 'profitability', icon: '📊', ar: 'الربحية حسب النوع', en: 'Profit by Type' },
-                    { key: 'trend', icon: '📈', ar: 'الاتجاه الشهري', en: 'Monthly Trend' },
-                ]" :key="tab.key" @click="activeTab = tab.key"
-                    :class="activeTab === tab.key ? 'bg-emerald-600 text-white shadow-md' : 'text-gray-500 hover:bg-gray-100'"
-                    class="px-4 py-2.5 rounded-lg text-xs font-medium transition-all whitespace-nowrap">
-                    {{ tab.icon }} {{ isRtl ? tab.ar : tab.en }}
-                </button>
+            <div class="dental-card-enter overflow-x-auto" style="animation-delay:0.3s">
+                <div class="inline-flex gap-1 bg-slate-100 p-1 rounded-xl min-w-full sm:min-w-0">
+                    <button v-for="tab in [
+                        { key: 'quality', icon: '⭐', ar: 'تصنيف الجودة', en: 'Quality Ranking' },
+                        { key: 'prices', icon: '💰', ar: 'مقارنة الأسعار', en: 'Price Comparison' },
+                        { key: 'recommendations', icon: '🏆', ar: 'التوصيات', en: 'Recommendations' },
+                        { key: 'profitability', icon: '📊', ar: 'الربحية حسب النوع', en: 'Profit by Type' },
+                        { key: 'trend', icon: '📈', ar: 'الاتجاه الشهري', en: 'Monthly Trend' },
+                    ]" :key="tab.key" @click="activeTab = tab.key"
+                        :class="[
+                            'px-4 py-2 rounded-lg text-xs font-semibold transition whitespace-nowrap',
+                            activeTab === tab.key
+                                ? 'bg-gradient-to-r from-[#1B365D] to-[#2C4E7A] text-white shadow-sm'
+                                : 'text-slate-600 hover:bg-white hover:text-[#1B365D]'
+                        ]">
+                        {{ tab.icon }} {{ isRtl ? tab.ar : tab.en }}
+                    </button>
+                </div>
             </div>
 
             <!-- ═══ TAB: Quality Ranking ═══ -->

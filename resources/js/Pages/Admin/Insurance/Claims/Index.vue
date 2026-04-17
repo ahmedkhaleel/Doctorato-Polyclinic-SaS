@@ -36,9 +36,9 @@ function applyFilters() {
 
 const statusLabels = {
     draft: { ar: 'مسودة', en: 'Draft', color: 'bg-gray-100 text-gray-700' },
-    submitted: { ar: 'مقدم', en: 'Submitted', color: 'bg-blue-100 text-blue-700' },
+    submitted: { ar: 'مقدم', en: 'Submitted', color: 'bg-slate-100 text-[#1B365D]' },
     under_review: { ar: 'قيد المراجعة', en: 'Under Review', color: 'bg-yellow-100 text-yellow-700' },
-    approved: { ar: 'معتمد', en: 'Approved', color: 'bg-green-100 text-green-700' },
+    approved: { ar: 'معتمد', en: 'Approved', color: 'bg-emerald-100 text-emerald-700' },
     partially_approved: { ar: 'معتمد جزئياً', en: 'Partially Approved', color: 'bg-lime-100 text-lime-700' },
     rejected: { ar: 'مرفوض', en: 'Rejected', color: 'bg-red-100 text-red-700' },
     paid: { ar: 'مدفوع', en: 'Paid', color: 'bg-emerald-100 text-emerald-700' },
@@ -69,7 +69,7 @@ function submitStatusUpdate() {
                 <h1 class="text-2xl font-bold text-gray-800">{{ isRtl ? 'مطالبات التأمين' : 'Insurance Claims' }}</h1>
                 <p class="text-gray-500 text-sm mt-1">{{ isRtl ? 'إدارة ومتابعة مطالبات التأمين' : 'Manage and track insurance claims' }}</p>
             </div>
-            <Link href="/admin/insurance/companies" class="inline-flex items-center gap-2 px-4 py-2 text-[#1B365D] bg-[#1B365D]/5 rounded-xl hover:bg-cyan-100 transition text-sm font-medium">
+            <Link href="/admin/insurance/companies" class="inline-flex items-center gap-2 px-4 py-2 text-[#1B365D] bg-[#1B365D]/5 rounded-xl hover:bg-[#C4A265]/20 transition text-sm font-medium">
                 {{ isRtl ? 'شركات التأمين' : 'Companies' }}
             </Link>
         </div>
@@ -82,7 +82,7 @@ function submitStatusUpdate() {
             </div>
             <div class="bg-white rounded-2xl border border-gray-100 p-4">
                 <p class="text-xs text-gray-400">{{ isRtl ? 'مبلغ الانتظار' : 'Pending Amount' }}</p>
-                <p class="text-xl font-bold text-blue-600 mt-1">{{ formatCurrency(stats.pending_amount) }}</p>
+                <p class="text-xl font-bold text-[#1B365D] mt-1">{{ formatCurrency(stats.pending_amount) }}</p>
             </div>
             <div class="bg-white rounded-2xl border border-gray-100 p-4">
                 <p class="text-xs text-gray-400">{{ isRtl ? 'غير محصل' : 'Unpaid' }}</p>
@@ -94,7 +94,7 @@ function submitStatusUpdate() {
             </div>
             <div class="bg-white rounded-2xl border border-gray-100 p-4">
                 <p class="text-xs text-gray-400">{{ isRtl ? 'محصل هذا الشهر' : 'Collected (Month)' }}</p>
-                <p class="text-xl font-bold text-green-600 mt-1">{{ formatCurrency(stats.this_month_paid) }}</p>
+                <p class="text-xl font-bold text-emerald-600 mt-1">{{ formatCurrency(stats.this_month_paid) }}</p>
             </div>
             <div class="bg-white rounded-2xl border border-gray-100 p-4">
                 <p class="text-xs text-gray-400">{{ isRtl ? 'نسبة الرفض' : 'Rejection Rate' }}</p>
@@ -145,14 +145,14 @@ function submitStatusUpdate() {
                             </td>
                             <td class="px-4 py-3 text-gray-600">{{ claim.service_date }}</td>
                             <td class="px-4 py-3 text-end font-medium text-gray-800">{{ formatCurrency(claim.total_amount) }}</td>
-                            <td class="px-4 py-3 text-end font-medium text-green-600">{{ formatCurrency(claim.covered_amount) }}</td>
+                            <td class="px-4 py-3 text-end font-medium text-emerald-600">{{ formatCurrency(claim.covered_amount) }}</td>
                             <td class="px-4 py-3 text-center">
                                 <span :class="statusLabels[claim.status]?.color || 'bg-gray-100 text-gray-600'" class="px-2.5 py-0.5 rounded-full text-xs font-medium">
                                     {{ isRtl ? statusLabels[claim.status]?.ar : statusLabels[claim.status]?.en }}
                                 </span>
                             </td>
                             <td class="px-4 py-3 text-center">
-                                <button @click="openStatusUpdate(claim)" class="text-[#1B365D] hover:text-cyan-800 text-xs font-medium">
+                                <button @click="openStatusUpdate(claim)" class="text-[#1B365D] hover:text-[#C4A265] text-xs font-medium">
                                     {{ isRtl ? 'تحديث' : 'Update' }}
                                 </button>
                             </td>

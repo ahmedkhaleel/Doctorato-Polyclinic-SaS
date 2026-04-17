@@ -373,23 +373,28 @@ function formatDateTime(date) {
             </div>
 
             <!-- Tabs -->
-            <div class="bg-white rounded-lg shadow-sm">
-                <div class="border-b border-gray-200">
-                    <nav class="flex -mb-px overflow-x-auto">
-                        <button
-                            v-for="tab in tabs"
-                            :key="tab.id"
-                            @click="activeTab = tab.id"
-                            class="px-4 md:px-6 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition"
-                            :class="activeTab === tab.id ? 'border-current' : 'border-transparent text-gray-500 hover:text-gray-700'"
-                            :style="activeTab === tab.id ? 'color: #C4A265;' : ''"
-                        >
-                            {{ tab.key ? $t(tab.key) : tab.label }}
-                        </button>
-                    </nav>
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100">
+                <div class="p-3 md:p-4 border-b border-slate-100">
+                    <div class="overflow-x-auto">
+                        <div class="inline-flex gap-1 bg-slate-100 p-1 rounded-xl min-w-full sm:min-w-0">
+                            <button
+                                v-for="tab in tabs"
+                                :key="tab.id"
+                                @click="activeTab = tab.id"
+                                :class="[
+                                    'px-4 py-2 rounded-lg text-sm font-semibold transition whitespace-nowrap',
+                                    activeTab === tab.id
+                                        ? 'bg-gradient-to-r from-[#1B365D] to-[#2C4E7A] text-white shadow-sm'
+                                        : 'text-slate-600 hover:bg-white hover:text-[#1B365D]'
+                                ]"
+                            >
+                                {{ tab.key ? $t(tab.key) : tab.label }}
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="p-6">
+                <div class="p-4 md:p-6">
                     <!-- Visit Details Tab -->
                     <div v-if="activeTab === 'details'" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="space-y-4">

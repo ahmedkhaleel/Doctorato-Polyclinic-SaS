@@ -39,8 +39,8 @@ function fmtDate(d) { if (!d) return '-'; return new Date(d).toLocaleDateString(
                 { label: t('Visits', 'الزيارات'), val: stats?.totalVisits ?? 0, color: 'from-amber-500 to-amber-400' },
                 { label: t('This Month', 'هذا الشهر'), val: stats?.thisMonthVisits ?? 0, color: 'from-amber-500 to-amber-400' },
                 { label: t('Active Conditions', 'حالات نشطة'), val: stats?.activeConditions ?? 0, color: 'from-amber-500 to-amber-400' },
-                { label: t('Sessions', 'الجلسات'), val: stats?.totalSessions ?? 0, color: 'from-blue-800 to-blue-700' },
-                { label: t('Sessions / month', 'جلسات الشهر'), val: stats?.sessionsThisMonth ?? 0, color: 'from-indigo-500 to-indigo-400' },
+                { label: t('Sessions', 'الجلسات'), val: stats?.totalSessions ?? 0, color: 'from-[#1B365D] to-[#2C4E7A]' },
+                { label: t('Sessions / month', 'جلسات الشهر'), val: stats?.sessionsThisMonth ?? 0, color: 'from-[#1B365D] to-[#2C4E7A]' },
                 { label: t('Photos', 'الصور'), val: stats?.totalPhotos ?? 0, color: 'from-teal-500 to-teal-400' },
             ]" :key="s.label"
                 class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">

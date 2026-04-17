@@ -110,7 +110,7 @@ const salaryCards = computed(() => [
     {
         tKey: 'a_total_slips',
         value: props.salaryOverview?.slips_count ?? 0,
-        borderColor: 'border-l-blue-500',
+        borderColor: 'border-l-[#1B365D]',
         iconBg: 'bg-slate-50',
         iconColor: 'text-[#1B365D]',
         icon: 'document',
@@ -147,7 +147,7 @@ const attendanceCards = computed(() => [
     {
         tKey: 'a_on_leave',
         value: props.todayAttendance?.on_leave ?? 0,
-        borderColor: 'border-l-blue-500',
+        borderColor: 'border-l-[#1B365D]',
         iconBg: 'bg-slate-50',
         iconColor: 'text-[#1B365D]',
         icon: 'calendar',

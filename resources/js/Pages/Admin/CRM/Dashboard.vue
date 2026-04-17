@@ -1256,7 +1256,7 @@ function missFollowUp(fuId) {
             <Transition enter-active-class="transition-all duration-300 ease-out" enter-from-class="opacity-0" enter-to-class="opacity-100" leave-active-class="transition-all duration-200 ease-in" leave-from-class="opacity-100" leave-to-class="opacity-0">
                 <div v-if="showQuickAdd" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" @click.self="showQuickAdd = false">
                     <Transition enter-active-class="transition-all duration-300 ease-out" enter-from-class="opacity-0 scale-95 translate-y-4" enter-to-class="opacity-100 scale-100 translate-y-0" leave-active-class="transition-all duration-200 ease-in" leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-95">
-                        <div v-if="showQuickAdd" class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden" :dir="isRtl ? 'rtl' : 'ltr'">
+                        <div v-if="showQuickAdd" class="bg-white rounded-2xl shadow-2xl w-full max-w-full sm:max-w-md overflow-hidden max-h-[90vh] overflow-y-auto" :dir="isRtl ? 'rtl' : 'ltr'">
                             <div class="h-1 bg-gradient-to-r from-[#C4A265] via-[#D4B87A] to-[#C4A265]"></div>
                             <div class="p-6">
                                 <div class="flex items-center justify-between mb-5">

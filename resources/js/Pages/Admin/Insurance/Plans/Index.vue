@@ -36,8 +36,8 @@ function deletePlan(plan) {
 const classColors = {
     VIP: 'bg-[#C4A265]/15 text-[#8B6F3F] border-[#C4A265]/40',
     A:   'bg-emerald-50 text-emerald-700 border-emerald-200',
-    B:   'bg-blue-50 text-blue-700 border-blue-200',
-    C:   'bg-indigo-50 text-indigo-700 border-indigo-200',
+    B:   'bg-slate-50 text-[#1B365D] border-slate-200',
+    C:   'bg-slate-50 text-[#1B365D] border-slate-200',
     D:   'bg-orange-50 text-orange-700 border-orange-200',
     E:   'bg-gray-50 text-gray-700 border-gray-200',
 }

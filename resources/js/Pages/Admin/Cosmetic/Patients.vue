@@ -19,13 +19,13 @@ function t(en, ar) { return isRtl.value ? ar : en; }
 
 <template>
     <div class="space-y-6 pb-10">
-        <div class="bg-gradient-to-br from-blue-900 to-amber-500 rounded-2xl p-6 shadow-lg">
+        <div class="bg-gradient-to-br from-[#1B365D] to-[#C4A265] rounded-2xl p-6 shadow-lg">
             <h1 class="text-2xl font-bold text-white">{{ t('Cosmetic Patients', 'مرضى التجميل') }}</h1>
-            <p class="text-blue-100/80 text-sm mt-1">{{ t('All patients with cosmetic visits', 'جميع المرضى لديهم زيارات تجميل') }}</p>
+            <p class="text-white/80 text-sm mt-1">{{ t('All patients with cosmetic visits', 'جميع المرضى لديهم زيارات تجميل') }}</p>
         </div>
 
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
-            <input v-model="search" type="text" :placeholder="t('Search…', 'بحث…')" class="w-full md:w-96 px-4 py-2.5 border rounded-xl text-sm focus:ring-2 focus:ring-blue-800/20" />
+            <input v-model="search" type="text" :placeholder="t('Search…', 'بحث…')" class="w-full md:w-96 px-4 py-2.5 border rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20" />
         </div>
 
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
@@ -44,7 +44,7 @@ function t(en, ar) { return isRtl.value ? ar : en; }
                         <td class="px-5 py-3 text-gray-600 hidden sm:table-cell">{{ p.phone || '-' }}</td>
                         <td class="px-5 py-3 text-gray-600 hidden md:table-cell">{{ p.file_number || '-' }}</td>
                         <td class="px-5 py-3 text-end">
-                            <Link :href="`/admin/patients/${p.id}?tab=cosmetic`" class="text-blue-900 text-xs font-semibold">{{ t('Open', 'فتح') }}</Link>
+                            <Link :href="`/admin/patients/${p.id}?tab=cosmetic`" class="text-[#1B365D] text-xs font-semibold">{{ t('Open', 'فتح') }}</Link>
                         </td>
                     </tr>
                     <tr v-if="!patients.data.length"><td colspan="4" class="text-center py-8 text-gray-400">{{ t('No patients', 'لا يوجد مرضى') }}</td></tr>
@@ -52,7 +52,7 @@ function t(en, ar) { return isRtl.value ? ar : en; }
             </table>
             <div v-if="patients.links && patients.links.length > 3" class="flex justify-center gap-1 p-4 border-t">
                 <Link v-for="l in patients.links" :key="l.label" :href="l.url || '#'"
-                    :class="['px-3 py-1.5 rounded-lg text-xs', l.active ? 'bg-blue-900 text-white' : l.url ? 'bg-gray-100 text-gray-700 hover:bg-gray-200' : 'bg-gray-50 text-gray-300 pointer-events-none']"
+                    :class="['px-3 py-1.5 rounded-lg text-xs', l.active ? 'bg-[#1B365D] text-white' : l.url ? 'bg-gray-100 text-gray-700 hover:bg-gray-200' : 'bg-gray-50 text-gray-300 pointer-events-none']"
                     v-html="l.label"></Link>
             </div>
         </div>

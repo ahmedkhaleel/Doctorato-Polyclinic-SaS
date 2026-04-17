@@ -79,15 +79,15 @@ const maxMonthly = computed(() => Math.max(...(props.monthlyTrend || []).map(m =
             </div>
             <div class="bg-white rounded-2xl border border-gray-100 p-4">
                 <p class="text-xs text-gray-500">{{ isRtl ? 'المحصل' : 'Collected' }}</p>
-                <p class="text-2xl font-bold text-green-600 mt-1">{{ fmt(claimStats.total_paid) }}</p>
+                <p class="text-2xl font-bold text-emerald-600 mt-1">{{ fmt(claimStats.total_paid) }}</p>
             </div>
             <div class="bg-white rounded-2xl border border-gray-100 p-4">
                 <p class="text-xs text-gray-500">{{ isRtl ? 'نسبة التحصيل' : 'Collection Rate' }}</p>
-                <p class="text-2xl font-bold mt-1" :class="collectionRate >= 80 ? 'text-green-600' : collectionRate >= 60 ? 'text-yellow-600' : 'text-red-600'">{{ collectionRate }}%</p>
+                <p class="text-2xl font-bold mt-1" :class="collectionRate >= 80 ? 'text-emerald-600' : collectionRate >= 60 ? 'text-yellow-600' : 'text-red-600'">{{ collectionRate }}%</p>
             </div>
             <div class="bg-white rounded-2xl border border-gray-100 p-4">
                 <p class="text-xs text-gray-500">{{ isRtl ? 'نسبة الرفض' : 'Rejection Rate' }}</p>
-                <p class="text-2xl font-bold mt-1" :class="(claimStats.rejection_rate || 0) <= 10 ? 'text-green-600' : 'text-red-600'">{{ claimStats.rejection_rate || 0 }}%</p>
+                <p class="text-2xl font-bold mt-1" :class="(claimStats.rejection_rate || 0) <= 10 ? 'text-emerald-600' : 'text-red-600'">{{ claimStats.rejection_rate || 0 }}%</p>
             </div>
             <div class="bg-white rounded-2xl border border-gray-100 p-4">
                 <p class="text-xs text-gray-500">{{ isRtl ? 'متوسط أيام المعالجة' : 'Avg Processing Days' }}</p>
@@ -102,7 +102,7 @@ const maxMonthly = computed(() => Math.max(...(props.monthlyTrend || []).map(m =
                 <div class="space-y-3">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-2">
-                            <span class="w-3 h-3 rounded-full bg-green-500"></span>
+                            <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
                             <span class="text-sm text-gray-600">{{ isRtl ? 'مدفوعة' : 'Paid' }}</span>
                         </div>
                         <span class="font-bold text-gray-800">{{ fmtInt(claimStats.paid_claims) }}</span>
@@ -124,7 +124,7 @@ const maxMonthly = computed(() => Math.max(...(props.monthlyTrend || []).map(m =
                 </div>
                 <!-- Visual bar -->
                 <div v-if="claimStats.total_claims > 0" class="flex h-3 rounded-full overflow-hidden mt-4 bg-gray-100">
-                    <div class="bg-green-500 transition-all" :style="{ width: (claimStats.paid_claims / claimStats.total_claims * 100) + '%' }"></div>
+                    <div class="bg-emerald-500 transition-all" :style="{ width: (claimStats.paid_claims / claimStats.total_claims * 100) + '%' }"></div>
                     <div class="bg-yellow-500 transition-all" :style="{ width: (claimStats.pending_claims / claimStats.total_claims * 100) + '%' }"></div>
                     <div class="bg-red-500 transition-all" :style="{ width: (claimStats.rejected_claims / claimStats.total_claims * 100) + '%' }"></div>
                 </div>
@@ -137,9 +137,9 @@ const maxMonthly = computed(() => Math.max(...(props.monthlyTrend || []).map(m =
                     <div>
                         <div class="flex justify-between text-xs mb-1">
                             <span class="text-gray-500">0-30 {{ isRtl ? 'يوم' : 'days' }}</span>
-                            <span class="font-bold text-green-600">{{ aging?.within_30 || 0 }}</span>
+                            <span class="font-bold text-emerald-600">{{ aging?.within_30 || 0 }}</span>
                         </div>
-                        <div class="h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-green-500 rounded-full" :style="{ width: Math.min(100, ((aging?.within_30 || 0) / Math.max(1, (aging?.within_30||0) + (aging?.days_31_60||0) + (aging?.days_61_90||0) + (aging?.over_90||0))) * 100) + '%' }"></div></div>
+                        <div class="h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-emerald-500 rounded-full" :style="{ width: Math.min(100, ((aging?.within_30 || 0) / Math.max(1, (aging?.within_30||0) + (aging?.days_31_60||0) + (aging?.days_61_90||0) + (aging?.over_90||0))) * 100) + '%' }"></div></div>
                     </div>
                     <div>
                         <div class="flex justify-between text-xs mb-1">
@@ -179,7 +179,7 @@ const maxMonthly = computed(() => Math.max(...(props.monthlyTrend || []).map(m =
                     </div>
                     <div class="flex justify-between">
                         <span class="text-gray-500">{{ isRtl ? 'الفرق (معتمد - محصل)' : 'Gap (Approved - Collected)' }}</span>
-                        <span class="font-medium" :class="(claimStats.total_approved - claimStats.total_paid) > 0 ? 'text-red-600' : 'text-green-600'">
+                        <span class="font-medium" :class="(claimStats.total_approved - claimStats.total_paid) > 0 ? 'text-red-600' : 'text-emerald-600'">
                             {{ fmt((claimStats.total_approved || 0) - (claimStats.total_paid || 0)) }}
                         </span>
                     </div>
@@ -194,11 +194,11 @@ const maxMonthly = computed(() => Math.max(...(props.monthlyTrend || []).map(m =
                 <div v-for="m in monthlyTrend" :key="m.month" class="flex-1 flex flex-col items-center gap-1">
                     <div class="w-full flex items-end gap-1 h-36">
                         <!-- Claimed bar -->
-                        <div class="flex-1 bg-cyan-100 rounded-t-lg transition-all relative group" :style="{ height: (m.claimed / maxMonthly * 100) + '%', minHeight: m.claimed > 0 ? '4px' : '0' }">
+                        <div class="flex-1 bg-[#C4A265]/20 rounded-t-lg transition-all relative group" :style="{ height: (m.claimed / maxMonthly * 100) + '%', minHeight: m.claimed > 0 ? '4px' : '0' }">
                             <div class="absolute -top-6 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-[9px] px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 whitespace-nowrap">{{ fmt(m.claimed) }}</div>
                         </div>
                         <!-- Paid bar -->
-                        <div class="flex-1 bg-green-400 rounded-t-lg transition-all relative group" :style="{ height: (m.paid / maxMonthly * 100) + '%', minHeight: m.paid > 0 ? '4px' : '0' }">
+                        <div class="flex-1 bg-emerald-400 rounded-t-lg transition-all relative group" :style="{ height: (m.paid / maxMonthly * 100) + '%', minHeight: m.paid > 0 ? '4px' : '0' }">
                             <div class="absolute -top-6 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-[9px] px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 whitespace-nowrap">{{ fmt(m.paid) }}</div>
                         </div>
                     </div>
@@ -206,8 +206,8 @@ const maxMonthly = computed(() => Math.max(...(props.monthlyTrend || []).map(m =
                 </div>
             </div>
             <div class="flex items-center gap-4 mt-3 text-xs text-gray-500">
-                <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-cyan-100"></span> {{ isRtl ? 'المطالب' : 'Claimed' }}</span>
-                <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-green-400"></span> {{ isRtl ? 'المحصل' : 'Collected' }}</span>
+                <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-[#C4A265]/20"></span> {{ isRtl ? 'المطالب' : 'Claimed' }}</span>
+                <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-emerald-400"></span> {{ isRtl ? 'المحصل' : 'Collected' }}</span>
             </div>
         </div>
 
@@ -238,14 +238,14 @@ const maxMonthly = computed(() => Math.max(...(props.monthlyTrend || []).map(m =
                         <td class="px-4 py-3 text-center">{{ fmtInt(c.total_claims) }}</td>
                         <td class="px-4 py-3 text-center text-gray-600">{{ fmt(c.total_claimed) }}</td>
                         <td class="px-4 py-3 text-center text-gray-600">{{ fmt(c.total_approved) }}</td>
-                        <td class="px-4 py-3 text-center font-medium text-green-600">{{ fmt(c.total_paid) }}</td>
+                        <td class="px-4 py-3 text-center font-medium text-emerald-600">{{ fmt(c.total_paid) }}</td>
                         <td class="px-4 py-3 text-center">
-                            <span class="px-2 py-0.5 rounded-full text-xs font-medium" :class="(c.collection_rate||0) >= 80 ? 'bg-green-100 text-green-700' : (c.collection_rate||0) >= 60 ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'">
+                            <span class="px-2 py-0.5 rounded-full text-xs font-medium" :class="(c.collection_rate||0) >= 80 ? 'bg-emerald-100 text-emerald-700' : (c.collection_rate||0) >= 60 ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'">
                                 {{ c.collection_rate || 0 }}%
                             </span>
                         </td>
                         <td class="px-4 py-3 text-center">
-                            <span class="px-2 py-0.5 rounded-full text-xs font-medium" :class="(c.rejection_rate||0) <= 10 ? 'bg-green-100 text-green-700' : (c.rejection_rate||0) <= 20 ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'">
+                            <span class="px-2 py-0.5 rounded-full text-xs font-medium" :class="(c.rejection_rate||0) <= 10 ? 'bg-emerald-100 text-emerald-700' : (c.rejection_rate||0) <= 20 ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'">
                                 {{ c.rejection_rate || 0 }}%
                             </span>
                         </td>
