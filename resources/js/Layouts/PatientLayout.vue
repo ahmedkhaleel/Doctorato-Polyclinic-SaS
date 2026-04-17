@@ -185,16 +185,13 @@ function logout()        { router.post(lp('/logout')); }
 </script>
 
 <template>
-    <div :dir="dir" class="min-h-screen flex bg-[#f5f6fa]" :style="{ fontFamily: isRtl ? '\'Tajawal\', \'Poppins\', sans-serif' : '\'Poppins\', sans-serif' }">
+    <div :dir="dir" class="min-h-screen bg-[#f5f6fa]" :style="{ fontFamily: isRtl ? '\'Tajawal\', \'Poppins\', sans-serif' : '\'Poppins\', sans-serif' }">
         <!-- Mobile overlay -->
         <div v-if="sidebarOpen" class="fixed inset-0 z-30 bg-black/40 lg:hidden" @click="closeSidebar"></div>
 
         <!-- ─── Sidebar ──────────────────────────────────────────── -->
         <aside
-            :class="[
-                sidebarOpen ? 'translate-x-0' : (isRtl ? 'translate-x-full' : '-translate-x-full'),
-                sidebarOpen ? 'lg:static lg:z-auto lg:translate-x-0 lg:transition-none' : 'lg:hidden',
-            ]"
+            :class="[sidebarOpen ? 'translate-x-0' : (isRtl ? 'translate-x-full' : '-translate-x-full')]"
             class="fixed inset-y-0 z-40 w-[260px] transition-transform duration-300 ease-in-out flex flex-col brand-sidebar-bg shadow-2xl ltr:left-0 rtl:right-0"
         >
             <!-- Logo -->
@@ -331,7 +328,10 @@ function logout()        { router.post(lp('/logout')); }
         </aside>
 
         <!-- ─── Main Content ─────────────────────────────────────── -->
-        <div class="flex-1 flex flex-col min-h-screen min-w-0 w-full lg:w-auto">
+        <div
+            :class="sidebarOpen ? 'lg:ps-[260px]' : ''"
+            class="min-h-screen flex flex-col transition-[padding] duration-300 ease-in-out"
+        >
             <!-- Top Header -->
             <header class="h-[64px] md:h-[72px] bg-white/80 backdrop-blur-md border-b border-gray-200/60 flex items-center justify-between px-3 md:px-4 lg:px-8 sticky top-0 z-20 gap-2">
                 <!-- Mobile hamburger -->

@@ -382,24 +382,18 @@ function logout()        { router.post('/admin/logout'); }
 </script>
 
 <template>
-    <div :dir="dir" class="min-h-screen flex bg-[#f5f6fa]" :style="{ fontFamily: isRtl ? '\'Tajawal\', \'Poppins\', sans-serif' : '\'Poppins\', sans-serif' }">
-        <!-- Mobile backdrop (only when sidebar open on mobile) -->
-        <div v-if="sidebarOpen" class="fixed inset-0 z-30 bg-black/40 lg:hidden" @click="closeSidebar"></div>
+    <div :dir="dir" class="min-h-screen bg-[#f5f6fa]" :style="{ fontFamily: isRtl ? '\'Tajawal\', \'Poppins\', sans-serif' : '\'Poppins\', sans-serif' }">
+        <!-- Backdrop: mobile only when sidebar open -->
+        <div
+            v-if="sidebarOpen"
+            class="fixed inset-0 z-30 bg-black/40 lg:hidden"
+            @click="closeSidebar"
+        ></div>
 
-        <!-- ─── Sidebar ──────────────────────────────────────────────
-             Desktop (lg+):
-               open  → static flex column (pushes main content)
-               closed → display:none (main content takes full width)
-             Mobile (<lg):
-               open  → fixed overlay drawer + backdrop
-               closed → slides off-canvas
-        ─────────────────────────────────────────────────────────── -->
+        <!-- ─── Sidebar — always FIXED, animates via transform ─── -->
         <aside
             :class="[
-                // Mobile slide state
                 sidebarOpen ? 'translate-x-0' : (isRtl ? 'translate-x-full' : '-translate-x-full'),
-                // Desktop: static in flex flow when open, completely hidden when closed
-                sidebarOpen ? 'lg:static lg:z-auto lg:translate-x-0 lg:transition-none' : 'lg:hidden',
             ]"
             class="fixed inset-y-0 z-40 w-[275px] transition-transform duration-300 ease-in-out flex flex-col admin-sidebar-navy shadow-2xl ltr:left-0 rtl:right-0"
         >
@@ -692,8 +686,11 @@ function logout()        { router.post('/admin/logout'); }
             </div>
         </aside>
 
-        <!-- ─── Main Content ─────────────────────────────────────── -->
-        <div class="flex-1 flex flex-col min-h-screen min-w-0 w-full lg:w-auto">
+        <!-- ─── Main Content — padding-based layout (sidebar is fixed, not in flow) ─── -->
+        <div
+            :class="sidebarOpen ? 'lg:ps-[275px]' : ''"
+            class="min-h-screen flex flex-col transition-[padding] duration-300 ease-in-out"
+        >
             <!-- Top Header -->
             <header class="h-[64px] md:h-[72px] bg-white/80 backdrop-blur-md border-b border-gray-200/60 flex items-center justify-between px-3 md:px-4 lg:px-8 sticky top-0 z-20 gap-2">
                 <!-- Sidebar toggle (visible on ALL sizes) -->
@@ -805,7 +802,7 @@ function logout()        { router.post('/admin/logout'); }
 /* ═══ Sidebar — Premium Navy + Gold Theme ═══ */
 .admin-sidebar-navy {
     background: linear-gradient(180deg, #0f1d3a 0%, #0a1528 100%);
-    position: relative;
+    /* position is controlled by Tailwind `fixed` — do NOT set here */
 }
 
 .admin-sidebar-navy::before {
