@@ -10,13 +10,23 @@ const page = usePage();
 const SIDEBAR_STORAGE_KEY = 'SecretaryLayout_sidebar_open_v2';
 const getInitialSidebarState = () => {
     if (typeof window === 'undefined') return false;
+    const isDesktop = window.matchMedia('(min-width: 1024px)').matches;
+    // Mobile always starts CLOSED — overlay drawer shouldn't be open on page load.
+    if (!isDesktop) return false;
+    // Desktop: respect user's stored toggle preference; default open on first visit.
     const stored = localStorage.getItem(SIDEBAR_STORAGE_KEY);
     if (stored !== null) return stored === 'true';
-    return window.matchMedia('(min-width: 1024px)').matches;
+    return true;
 };
 const sidebarOpen = ref(getInitialSidebarState());
 if (typeof window !== 'undefined') {
     watch(sidebarOpen, (v) => localStorage.setItem(SIDEBAR_STORAGE_KEY, String(v)));
+}
+/* Auto-close sidebar if viewport shrinks to mobile (avoids leaked desktop state) */
+if (typeof window !== 'undefined') {
+    const mqlDesktop = window.matchMedia('(min-width: 1024px)');
+    const onBreakpointChange = (e) => { if (!e.matches) sidebarOpen.value = false; };
+    mqlDesktop.addEventListener ? mqlDesktop.addEventListener('change', onBreakpointChange) : mqlDesktop.addListener(onBreakpointChange);
 }
 
 const modules = computed(() => page.props.modules || {});
