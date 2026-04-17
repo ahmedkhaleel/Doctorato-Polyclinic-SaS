@@ -188,11 +188,14 @@ function logout()        { router.post('/secretary/logout'); }
 <template>
     <div :dir="dir" class="min-h-screen flex bg-[#f0f9f6]" :style="{ fontFamily: isRtl ? '\'Tajawal\', \'Poppins\', sans-serif' : '\'Poppins\', sans-serif' }">
         <!-- Mobile overlay -->
-        <div v-if="sidebarOpen" class="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden" @click="closeSidebar"></div>
+        <div v-if="sidebarOpen" class="fixed inset-0 z-30 bg-black/40 lg:hidden" @click="closeSidebar"></div>
 
         <!-- ─── Sidebar ──────────────────────────────────────────── -->
         <aside
-            :class="[sidebarOpen ? 'translate-x-0' : (isRtl ? 'translate-x-full' : '-translate-x-full')]"
+            :class="[
+                sidebarOpen ? 'translate-x-0' : (isRtl ? 'translate-x-full' : '-translate-x-full'),
+                sidebarOpen ? 'lg:static lg:z-auto lg:translate-x-0 lg:transition-none' : 'lg:hidden',
+            ]"
             class="fixed inset-y-0 z-40 w-[260px] transition-transform duration-300 ease-in-out flex flex-col bg-[#0d1f2d] shadow-2xl ltr:left-0 rtl:right-0"
         >
             <!-- Logo -->

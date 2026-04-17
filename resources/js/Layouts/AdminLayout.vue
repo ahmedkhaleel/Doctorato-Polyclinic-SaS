@@ -374,15 +374,23 @@ function logout()        { router.post('/admin/logout'); }
 
 <template>
     <div :dir="dir" class="min-h-screen flex bg-[#f5f6fa]" :style="{ fontFamily: isRtl ? '\'Tajawal\', \'Poppins\', sans-serif' : '\'Poppins\', sans-serif' }">
-        <!-- Mobile overlay -->
-        <div v-if="sidebarOpen" class="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden" @click="closeSidebar"></div>
+        <!-- Mobile backdrop (only when sidebar open on mobile) -->
+        <div v-if="sidebarOpen" class="fixed inset-0 z-30 bg-black/40 lg:hidden" @click="closeSidebar"></div>
 
-        <!-- ─── Sidebar ──────────────────────────────────────────── -->
+        <!-- ─── Sidebar ──────────────────────────────────────────────
+             Desktop (lg+):
+               open  → static flex column (pushes main content)
+               closed → display:none (main content takes full width)
+             Mobile (<lg):
+               open  → fixed overlay drawer + backdrop
+               closed → slides off-canvas
+        ─────────────────────────────────────────────────────────── -->
         <aside
             :class="[
-                sidebarOpen
-                    ? 'translate-x-0'
-                    : (isRtl ? 'translate-x-full' : '-translate-x-full'),
+                // Mobile slide state
+                sidebarOpen ? 'translate-x-0' : (isRtl ? 'translate-x-full' : '-translate-x-full'),
+                // Desktop: static in flex flow when open, completely hidden when closed
+                sidebarOpen ? 'lg:static lg:z-auto lg:translate-x-0 lg:transition-none' : 'lg:hidden',
             ]"
             class="fixed inset-y-0 z-40 w-[275px] transition-transform duration-300 ease-in-out flex flex-col admin-sidebar-navy shadow-2xl ltr:left-0 rtl:right-0"
         >
