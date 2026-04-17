@@ -43,14 +43,14 @@ const filteredItems = computed(() => {
 
 function statusBadge(status) {
     const map = {
-        scheduled: { bg: 'bg-blue-50', text: 'text-blue-700', label: isRtl.value ? 'مجدولة' : 'Scheduled' },
+        scheduled: { bg: 'bg-slate-50', text: 'text-[#1B365D]', label: isRtl.value ? 'مجدولة' : 'Scheduled' },
         waiting: { bg: 'bg-amber-50', text: 'text-amber-700', label: isRtl.value ? 'في الانتظار' : 'Waiting' },
         in_progress: { bg: 'bg-emerald-50', text: 'text-emerald-700', label: isRtl.value ? 'جارية' : 'In progress' },
         completed: { bg: 'bg-gray-100', text: 'text-gray-700', label: isRtl.value ? 'مكتملة' : 'Completed' },
         cancelled: { bg: 'bg-red-50', text: 'text-red-600', label: isRtl.value ? 'ملغاة' : 'Cancelled' },
         refunded: { bg: 'bg-red-50', text: 'text-red-600', label: isRtl.value ? 'مُستردة' : 'Refunded' },
-        missed_patient: { bg: 'bg-orange-50', text: 'text-orange-600', label: isRtl.value ? 'فوّت المريض' : 'Missed (patient)' },
-        missed_doctor: { bg: 'bg-orange-50', text: 'text-orange-600', label: isRtl.value ? 'فوّت الطبيب' : 'Missed (doctor)' },
+        missed_patient: { bg: 'bg-amber-50', text: 'text-amber-600', label: isRtl.value ? 'فوّت المريض' : 'Missed (patient)' },
+        missed_doctor: { bg: 'bg-amber-50', text: 'text-amber-600', label: isRtl.value ? 'فوّت الطبيب' : 'Missed (doctor)' },
         technical_issue: { bg: 'bg-gray-50', text: 'text-gray-600', label: isRtl.value ? 'مشكلة تقنية' : 'Technical issue' },
     };
     return map[status] || map.scheduled;

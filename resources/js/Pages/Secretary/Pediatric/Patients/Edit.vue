@@ -113,7 +113,7 @@ const sections = computed(() => [
 <template>
     <div class="min-h-screen bg-gray-50/50">
         <!-- Hero -->
-        <div class="bg-gradient-to-br from-emerald-600 to-green-500 px-4 sm:px-6 pt-6 pb-10">
+        <div class="bg-gradient-to-br from-emerald-600 to-emerald-500 px-4 sm:px-6 pt-6 pb-10">
             <div class="max-w-4xl mx-auto">
                 <Link href="/secretary/pediatric/patients" class="inline-flex items-center gap-2 text-white/80 hover:text-white text-sm mb-4 transition-colors">
                     <svg class="w-4 h-4 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
@@ -181,8 +181,8 @@ const sections = computed(() => [
                 <!-- Section 2: Guardian -->
                 <div v-show="activeSection === 2" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6 mb-4 transition-all duration-300" :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'">
                     <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
-                        <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                            <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                        <div class="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center">
+                            <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                         </div>
                         {{ isRtl ? 'معلومات ولي الأمر' : 'Guardian Information' }}
                     </h3>
@@ -214,8 +214,8 @@ const sections = computed(() => [
                 <!-- Section 3: Birth History -->
                 <div v-show="activeSection === 3" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6 mb-4 transition-all duration-300" :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'">
                     <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
-                        <div class="w-8 h-8 bg-rose-100 rounded-lg flex items-center justify-center">
-                            <svg class="w-4 h-4 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
+                        <div class="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center">
+                            <svg class="w-4 h-4 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
                         </div>
                         {{ isRtl ? 'تاريخ الولادة والحمل' : 'Birth & Pregnancy History' }}
                     </h3>
@@ -286,7 +286,7 @@ const sections = computed(() => [
                     <button
                         type="submit"
                         :disabled="form.processing"
-                        class="px-6 py-3 bg-gradient-to-r from-emerald-600 to-green-500 text-white font-semibold rounded-xl shadow-lg shadow-emerald-500/25 hover:shadow-xl hover:shadow-emerald-500/30 transition-all duration-300 disabled:opacity-50 flex items-center gap-2"
+                        class="px-6 py-3 bg-gradient-to-r from-emerald-600 to-emerald-500 text-white font-semibold rounded-xl shadow-lg shadow-emerald-500/25 hover:shadow-xl hover:shadow-emerald-500/30 transition-all duration-300 disabled:opacity-50 flex items-center gap-2"
                     >
                         <svg v-if="form.processing" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
                         <svg v-else class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>

@@ -39,8 +39,8 @@ function setViewMode(mode) {
 
 // Calendar status config (localized)
 const calendarStatusConfig = computed(() => ({
-    confirmed: { label: isRtl.value ? 'مؤكد' : 'Confirmed', bg: 'bg-blue-50', text: 'text-blue-700', dot: 'bg-blue-500', border: 'border-blue-200' },
-    in_progress: { label: isRtl.value ? 'قيد التنفيذ' : 'In Progress', bg: 'bg-indigo-50', text: 'text-indigo-700', dot: 'bg-indigo-500', border: 'border-indigo-200' },
+    confirmed: { label: isRtl.value ? 'مؤكد' : 'Confirmed', bg: 'bg-slate-50', text: 'text-[#1B365D]', dot: 'bg-[#1B365D]', border: 'border-slate-200' },
+    in_progress: { label: isRtl.value ? 'قيد التنفيذ' : 'In Progress', bg: 'bg-slate-50', text: 'text-[#1B365D]', dot: 'bg-[#1B365D]', border: 'border-slate-200' },
     completed: { label: isRtl.value ? 'مكتمل' : 'Completed', bg: 'bg-emerald-50', text: 'text-emerald-700', dot: 'bg-emerald-500', border: 'border-emerald-200' },
     cancelled: { label: isRtl.value ? 'ملغي' : 'Cancelled', bg: 'bg-red-50', text: 'text-red-700', dot: 'bg-red-500', border: 'border-red-200' },
     pending: { label: isRtl.value ? 'معلق' : 'Pending', bg: 'bg-amber-50', text: 'text-amber-700', dot: 'bg-amber-500', border: 'border-amber-200' },
@@ -88,8 +88,8 @@ function applyFilters() {
 }
 
 const statusConfig = {
-    confirmed: { label: 'Confirmed', labelAr: 'مؤكد', bg: 'bg-blue-50', text: 'text-blue-700', dot: 'bg-blue-500', border: 'border-blue-200' },
-    in_progress: { label: 'In Progress', labelAr: 'قيد التنفيذ', bg: 'bg-indigo-50', text: 'text-indigo-700', dot: 'bg-indigo-500', border: 'border-indigo-200' },
+    confirmed: { label: 'Confirmed', labelAr: 'مؤكد', bg: 'bg-slate-50', text: 'text-[#1B365D]', dot: 'bg-[#1B365D]', border: 'border-slate-200' },
+    in_progress: { label: 'In Progress', labelAr: 'قيد التنفيذ', bg: 'bg-slate-50', text: 'text-[#1B365D]', dot: 'bg-[#1B365D]', border: 'border-slate-200' },
     completed: { label: 'Completed', labelAr: 'مكتمل', bg: 'bg-emerald-50', text: 'text-emerald-700', dot: 'bg-emerald-500', border: 'border-emerald-200' },
     cancelled: { label: 'Cancelled', labelAr: 'ملغي', bg: 'bg-red-50', text: 'text-red-700', dot: 'bg-red-500', border: 'border-red-200' },
     pending: { label: 'Pending', labelAr: 'معلق', bg: 'bg-amber-50', text: 'text-amber-700', dot: 'bg-amber-500', border: 'border-amber-200' },
@@ -159,11 +159,11 @@ const statusOptions = computed(() => {
     <div class="space-y-6">
         <!-- Hero Header -->
         <div
-            class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6 sm:p-8 transition-all duration-700"
+            class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] p-6 sm:p-8 transition-all duration-700"
             :class="headerLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
         >
             <div class="absolute top-0 right-0 w-96 h-96 bg-gradient-radial from-[#C4A265]/10 to-transparent rounded-full -translate-y-1/2 translate-x-1/2"></div>
-            <div class="absolute bottom-0 left-0 w-64 h-64 bg-gradient-radial from-blue-500/5 to-transparent rounded-full translate-y-1/2 -translate-x-1/4"></div>
+            <div class="absolute bottom-0 left-0 w-64 h-64 bg-gradient-radial from-[#1B365D]/5 to-transparent rounded-full translate-y-1/2 -translate-x-1/4"></div>
 
             <div class="relative z-10">
                 <div class="flex items-center gap-4">
@@ -184,7 +184,7 @@ const statusOptions = computed(() => {
                     </div>
                     <div class="bg-white/5 backdrop-blur-sm rounded-xl px-4 py-3 border border-white/10 flex-1">
                         <p class="text-xs text-gray-400">{{ isRtl ? 'الباقات' : 'Packages' }}</p>
-                        <p class="text-lg font-bold text-purple-400 mt-0.5">{{ bundleCount }}</p>
+                        <p class="text-lg font-bold text-slate-400 mt-0.5">{{ bundleCount }}</p>
                     </div>
                     <div class="bg-white/5 backdrop-blur-sm rounded-xl px-4 py-3 border border-white/10 flex-1">
                         <p class="text-xs text-gray-400">{{ isRtl ? 'الإجمالي' : 'Total' }}</p>
@@ -376,8 +376,8 @@ const statusOptions = computed(() => {
                         <!-- Top Row: Booking Number + Patient + Status -->
                         <div class="flex flex-col sm:flex-row sm:items-center gap-4">
                             <div class="flex items-center gap-3 flex-1 min-w-0">
-                                <div class="w-11 h-11 rounded-xl bg-purple-50 flex items-center justify-center flex-shrink-0">
-                                    <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
+                                <div class="w-11 h-11 rounded-xl bg-slate-50 flex items-center justify-center flex-shrink-0">
+                                    <svg class="w-5 h-5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
                                 </div>
                                 <div class="min-w-0">
                                     <p class="text-sm font-bold text-gray-800 truncate">{{ bb.patient_name }}</p>
@@ -388,7 +388,7 @@ const statusOptions = computed(() => {
                             <!-- Bundle Name -->
                             <div class="flex-1 min-w-0">
                                 <p class="text-[10px] font-semibold text-gray-400 uppercase">{{ isRtl ? 'الباقة' : 'Package' }}</p>
-                                <p class="text-sm font-semibold text-purple-700 truncate mt-0.5">{{ bb.bundle_name }}</p>
+                                <p class="text-sm font-semibold text-[#1B365D] truncate mt-0.5">{{ bb.bundle_name }}</p>
                                 <p class="text-[10px] font-mono text-gray-400 mt-0.5">{{ bb.booking_number }}</p>
                             </div>
 
@@ -400,7 +400,7 @@ const statusOptions = computed(() => {
                                     <span class="text-[10px] text-gray-400">({{ bb.progress_percent }}%)</span>
                                 </div>
                                 <div class="w-full h-1.5 bg-gray-100 rounded-full mt-1.5 overflow-hidden">
-                                    <div class="h-full bg-purple-500 rounded-full transition-all duration-500" :style="{ width: bb.progress_percent + '%' }"></div>
+                                    <div class="h-full bg-[#1B365D] rounded-full transition-all duration-500" :style="{ width: bb.progress_percent + '%' }"></div>
                                 </div>
                             </div>
 
@@ -433,7 +433,7 @@ const statusOptions = computed(() => {
                                         >{{ svc.completed_sessions }}/{{ svc.sessions_count }}</span>
                                         <div class="w-12 h-1 bg-gray-200 rounded-full overflow-hidden">
                                             <div class="h-full rounded-full transition-all duration-500"
-                                                :class="svc.completed_sessions >= svc.sessions_count ? 'bg-emerald-500' : 'bg-purple-400'"
+                                                :class="svc.completed_sessions >= svc.sessions_count ? 'bg-emerald-500' : 'bg-slate-400'"
                                                 :style="{ width: sessionsPercent(svc.completed_sessions, svc.sessions_count) + '%' }"
                                             ></div>
                                         </div>
@@ -447,8 +447,8 @@ const statusOptions = computed(() => {
 
             <!-- Empty State -->
             <div v-else class="text-center py-16 bg-white rounded-xl border border-gray-100">
-                <div class="w-16 h-16 mx-auto bg-purple-50 rounded-full flex items-center justify-center mb-4">
-                    <svg class="w-8 h-8 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
+                <div class="w-16 h-16 mx-auto bg-slate-50 rounded-full flex items-center justify-center mb-4">
+                    <svg class="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
                 </div>
                 <p class="text-sm font-medium text-gray-500">{{ isRtl ? 'لا توجد حجوزات باقات' : 'No package bookings found' }}</p>
                 <p class="text-xs text-gray-400 mt-1">{{ isRtl ? 'حجوزات الباقات المسندة إليك ستظهر هنا' : 'Package bookings assigned to you will appear here' }}</p>

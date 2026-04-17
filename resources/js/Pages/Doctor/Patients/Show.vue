@@ -60,11 +60,11 @@ const visitStats = computed(() => {
     <div class="space-y-6">
         <!-- Hero Header -->
         <div
-            class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 transition-all duration-700"
+            class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] transition-all duration-700"
             :class="headerLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
         >
             <div class="absolute top-0 right-0 w-96 h-96 bg-gradient-radial from-[#C4A265]/10 to-transparent rounded-full -translate-y-1/2 translate-x-1/2"></div>
-            <div class="absolute bottom-0 left-0 w-64 h-64 bg-gradient-radial from-purple-500/5 to-transparent rounded-full translate-y-1/2 -translate-x-1/4"></div>
+            <div class="absolute bottom-0 left-0 w-64 h-64 bg-gradient-radial from-[#1B365D]/5 to-transparent rounded-full translate-y-1/2 -translate-x-1/4"></div>
 
             <div class="relative z-10 p-6 sm:p-8">
                 <Link href="/doctor/patients" class="inline-flex items-center gap-1.5 text-xs text-[#C4A265] hover:text-[#D4B87A] transition mb-4">
@@ -110,7 +110,7 @@ const visitStats = computed(() => {
                     </div>
                     <div class="bg-white/5 backdrop-blur-sm rounded-xl px-4 py-3 border border-white/10">
                         <p class="text-xs text-gray-400">{{ isRtl ? 'صور' : 'Photos' }}</p>
-                        <p class="text-xl font-bold text-blue-400 mt-0.5">{{ visitStats.photos }}</p>
+                        <p class="text-xl font-bold text-slate-400 mt-0.5">{{ visitStats.photos }}</p>
                     </div>
                 </div>
             </div>

@@ -146,7 +146,7 @@ function updatePassword() {
                         <span v-else>{{ isRtl ? 'حفظ المعلومات' : 'Save Information' }}</span>
                     </button>
 
-                    <p v-if="profileForm.recentlySuccessful" class="text-sm text-green-600 text-center">
+                    <p v-if="profileForm.recentlySuccessful" class="text-sm text-emerald-600 text-center">
                         {{ isRtl ? 'تم الحفظ بنجاح' : 'Saved successfully' }}
                     </p>
                 </form>
@@ -204,7 +204,7 @@ function updatePassword() {
                             <span v-else>{{ isRtl ? 'تحديث كلمة المرور' : 'Update Password' }}</span>
                         </button>
 
-                        <p v-if="passwordForm.recentlySuccessful" class="text-sm text-green-600 text-center">
+                        <p v-if="passwordForm.recentlySuccessful" class="text-sm text-emerald-600 text-center">
                             {{ isRtl ? 'تم تحديث كلمة المرور بنجاح' : 'Password updated successfully' }}
                         </p>
                     </form>

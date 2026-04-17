@@ -27,23 +27,23 @@ function formatDate(date) {
 const statusColors = {
     draft: 'bg-gray-100 text-gray-800',
     pending: 'bg-yellow-100 text-yellow-800',
-    approved: 'bg-blue-100 text-blue-800',
+    approved: 'bg-slate-100 text-[#1B365D]',
     in_progress: 'bg-[#C4A265]/10 text-[#C4A265]',
-    completed: 'bg-green-100 text-green-800',
+    completed: 'bg-emerald-100 text-emerald-800',
     cancelled: 'bg-red-100 text-red-800',
 };
 
 const treatmentStatusColors = {
     planned: 'bg-gray-100 text-gray-700',
     in_progress: 'bg-[#C4A265]/10 text-[#C4A265]',
-    completed: 'bg-green-100 text-green-700',
+    completed: 'bg-emerald-100 text-emerald-700',
     cancelled: 'bg-red-100 text-red-700',
 };
 
 const priorityColors = {
     low: 'bg-gray-100 text-gray-600',
-    normal: 'bg-blue-100 text-blue-700',
-    high: 'bg-orange-100 text-orange-700',
+    normal: 'bg-slate-100 text-[#1B365D]',
+    high: 'bg-amber-100 text-amber-700',
     urgent: 'bg-red-100 text-red-700',
 };
 
@@ -134,8 +134,8 @@ const hasPendingConsent = computed(() => latestConsent.value?.status === 'pendin
 const needsConsent = computed(() => props.plan.status === 'approved' && !hasSignedConsent.value);
 
 const consentStatusColors = {
-    pending: 'bg-yellow-100 text-yellow-700',
-    signed: 'bg-green-100 text-green-700',
+    pending: 'bg-yellow-100 text-amber-700',
+    signed: 'bg-emerald-100 text-emerald-700',
     declined: 'bg-red-100 text-red-700',
     expired: 'bg-gray-100 text-gray-600',
 };
@@ -169,9 +169,9 @@ function sendConsent() {
 <template>
     <div class="space-y-6">
         <!-- Hero Header -->
-        <div class="dental-hero-enter relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6 sm:p-7">
+        <div class="dental-hero-enter relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] p-6 sm:p-7">
             <div class="absolute -top-12 ltr:-right-12 rtl:-left-12 w-48 h-48 bg-[#C4A265]/10 rounded-full blur-3xl"></div>
-            <div class="absolute -bottom-8 ltr:left-20 rtl:right-20 w-32 h-32 bg-purple-500/10 rounded-full blur-2xl"></div>
+            <div class="absolute -bottom-8 ltr:left-20 rtl:right-20 w-32 h-32 bg-[#1B365D]/10 rounded-full blur-2xl"></div>
 
             <div class="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div class="flex items-center gap-3">
@@ -274,7 +274,7 @@ function sendConsent() {
                         v-if="plan.status === 'draft' || plan.status === 'pending'"
                         @click="confirmStatusChange('approved')"
                         :disabled="updatingStatus"
-                        class="w-full px-4 py-2.5 text-sm font-medium text-white bg-blue-600 rounded-xl hover:bg-blue-700 disabled:opacity-50 transition"
+                        class="w-full px-4 py-2.5 text-sm font-medium text-white bg-[#1B365D] rounded-xl hover:bg-[#1B365D] disabled:opacity-50 transition"
                     >
                         {{ isRtl ? 'اعتماد الخطة' : 'Approve Plan' }}
                     </button>
@@ -296,7 +296,7 @@ function sendConsent() {
                         v-if="plan.status === 'in_progress'"
                         @click="confirmStatusChange('completed')"
                         :disabled="updatingStatus"
-                        class="w-full px-4 py-2.5 text-sm font-medium text-white bg-green-600 rounded-xl hover:bg-green-700 disabled:opacity-50 transition"
+                        class="w-full px-4 py-2.5 text-sm font-medium text-white bg-emerald-600 rounded-xl hover:bg-emerald-700 disabled:opacity-50 transition"
                     >
                         {{ isRtl ? 'إكمال الخطة' : 'Complete Plan' }}
                     </button>
@@ -322,8 +322,8 @@ function sendConsent() {
             <div class="px-4 sm:px-6 py-4 border-b border-gray-100 flex items-center justify-between flex-wrap gap-3">
                 <div class="flex items-center gap-3">
                     <div class="w-9 h-9 rounded-lg flex items-center justify-center"
-                         :class="hasSignedConsent ? 'bg-green-100' : hasPendingConsent ? 'bg-yellow-100' : 'bg-gray-100'">
-                        <svg v-if="hasSignedConsent" class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                         :class="hasSignedConsent ? 'bg-emerald-100' : hasPendingConsent ? 'bg-yellow-100' : 'bg-gray-100'">
+                        <svg v-if="hasSignedConsent" class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                         </svg>
                         <svg v-else class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -356,16 +356,16 @@ function sendConsent() {
                     <p class="text-sm text-gray-500">{{ isRtl ? 'لم يتم إرسال طلب موافقة بعد' : 'No consent request sent yet' }}</p>
                     <p v-if="needsConsent" class="text-xs text-amber-500 mt-1">{{ isRtl ? 'يجب الحصول على موافقة المريض قبل بدء العلاج' : 'Patient consent required before starting' }}</p>
                 </div>
-                <div v-else-if="hasSignedConsent" class="flex items-center gap-3 p-4 bg-green-50 rounded-xl border border-green-100">
-                    <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div v-else-if="hasSignedConsent" class="flex items-center gap-3 p-4 bg-emerald-50 rounded-xl border border-emerald-100">
+                    <svg class="w-8 h-8 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                     </svg>
                     <div class="flex-1">
-                        <p class="text-sm font-medium text-green-700">{{ isRtl ? 'تم التوقيع بنجاح' : 'Consent Signed' }}</p>
-                        <p class="text-xs text-green-600">{{ formatDate(latestConsent.signed_at) }}</p>
+                        <p class="text-sm font-medium text-emerald-700">{{ isRtl ? 'تم التوقيع بنجاح' : 'Consent Signed' }}</p>
+                        <p class="text-xs text-emerald-600">{{ formatDate(latestConsent.signed_at) }}</p>
                     </div>
                     <div class="flex items-center gap-2">
-                        <img v-if="latestConsent.signature_url" :src="latestConsent.signature_url" alt="Signature" class="h-10 rounded border border-green-200 bg-white p-1" />
+                        <img v-if="latestConsent.signature_url" :src="latestConsent.signature_url" alt="Signature" class="h-10 rounded border border-emerald-200 bg-white p-1" />
                         <a v-if="latestConsent.id" :href="`/doctor/dental/consent/${latestConsent.id}/pdf`" target="_blank"
                            class="inline-flex items-center gap-1 px-2 py-1 text-xs text-[#C4A265] bg-[#C4A265]/5 rounded-lg hover:bg-[#C4A265]/10 border border-[#C4A265]/10 transition">
                             PDF
@@ -376,8 +376,8 @@ function sendConsent() {
                     <div class="flex items-center gap-3">
                         <div class="w-3 h-3 bg-yellow-400 rounded-full animate-pulse flex-shrink-0"></div>
                         <div>
-                            <p class="text-sm font-medium text-yellow-700">{{ isRtl ? 'في انتظار توقيع المريض' : 'Waiting for patient signature' }}</p>
-                            <p class="text-xs text-yellow-600">{{ isRtl ? 'تم الإرسال' : 'Sent' }} {{ formatDate(latestConsent.sent_at) }}</p>
+                            <p class="text-sm font-medium text-amber-700">{{ isRtl ? 'في انتظار توقيع المريض' : 'Waiting for patient signature' }}</p>
+                            <p class="text-xs text-amber-600">{{ isRtl ? 'تم الإرسال' : 'Sent' }} {{ formatDate(latestConsent.sent_at) }}</p>
                         </div>
                     </div>
                 </div>

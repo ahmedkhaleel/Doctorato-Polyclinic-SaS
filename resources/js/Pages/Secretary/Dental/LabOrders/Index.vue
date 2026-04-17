@@ -56,11 +56,11 @@ function markReceived(order) {
 
 const statusColors = {
     ordered: 'bg-gray-50 text-gray-700 border-gray-200',
-    in_production: 'bg-blue-50 text-blue-700 border-blue-200',
+    in_production: 'bg-slate-50 text-[#1B365D] border-slate-200',
     ready: 'bg-emerald-50 text-emerald-700 border-emerald-200',
     delivered: 'bg-teal-50 text-teal-700 border-teal-200',
-    adjustment: 'bg-orange-50 text-orange-700 border-orange-200',
-    completed: 'bg-green-50 text-green-700 border-green-200',
+    adjustment: 'bg-amber-50 text-amber-700 border-amber-200',
+    completed: 'bg-emerald-50 text-emerald-700 border-emerald-200',
     cancelled: 'bg-red-50 text-red-700 border-red-200',
 };
 
@@ -106,10 +106,10 @@ const itemTypeLabels = computed(() => ({
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm text-gray-500">{{ isRtl ? 'طلبات معلقة' : 'Pending Orders' }}</p>
-                        <p class="text-3xl font-bold text-yellow-600 mt-1">{{ stats?.pending ?? 0 }}</p>
+                        <p class="text-3xl font-bold text-amber-600 mt-1">{{ stats?.pending ?? 0 }}</p>
                     </div>
                     <div class="w-12 h-12 rounded-xl bg-yellow-50 flex items-center justify-center">
-                        <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                     </div>
                 </div>
             </div>

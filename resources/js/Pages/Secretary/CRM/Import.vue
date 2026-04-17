@@ -486,8 +486,8 @@ function startNewImport() {
         <!-- Tips -->
         <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
             <div class="flex items-start gap-3 p-3 rounded-xl bg-gray-50">
-                <div class="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center flex-shrink-0">
-                    <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <div class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center flex-shrink-0">
+                    <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 </div>
                 <div>
                     <p class="text-xs font-semibold text-gray-700">{{ isRtl ? 'الحقول المطلوبة' : 'Required Fields' }}</p>
@@ -504,8 +504,8 @@ function startNewImport() {
                 </div>
             </div>
             <div class="flex items-start gap-3 p-3 rounded-xl bg-gray-50">
-                <div class="w-8 h-8 rounded-lg bg-green-100 flex items-center justify-center flex-shrink-0">
-                    <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <div class="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center flex-shrink-0">
+                    <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 </div>
                 <div>
                     <p class="text-xs font-semibold text-gray-700">{{ isRtl ? 'تعيين تلقائي' : 'Auto-Assigned' }}</p>
@@ -678,7 +678,7 @@ function startNewImport() {
                 <div class="text-xs text-gray-400 mt-1">{{ isRtl ? 'إجمالي الصفوف' : 'Total Rows' }}</div>
             </div>
             <div class="rounded-xl border border-gray-100 p-4 text-center">
-                <div class="text-3xl font-bold text-blue-600">{{ Object.values(columnMap).filter(v => v).length }}</div>
+                <div class="text-3xl font-bold text-[#1B365D]">{{ Object.values(columnMap).filter(v => v).length }}</div>
                 <div class="text-xs text-gray-400 mt-1">{{ isRtl ? 'أعمدة مربوطة' : 'Mapped Columns' }}</div>
             </div>
             <div class="rounded-xl border border-gray-100 p-4 text-center">
@@ -874,14 +874,14 @@ function startNewImport() {
                 <div class="text-xs text-emerald-600/70 mt-1 font-medium">{{ isRtl ? 'تم استيرادهم' : 'Imported' }}</div>
             </div>
             <!-- Updated -->
-            <div class="rounded-xl border-2 border-blue-100 bg-blue-50/50 p-4 text-center">
-                <div class="w-10 h-10 mx-auto mb-2 rounded-xl bg-blue-100 flex items-center justify-center">
-                    <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <div class="rounded-xl border-2 border-slate-100 bg-slate-50/50 p-4 text-center">
+                <div class="w-10 h-10 mx-auto mb-2 rounded-xl bg-slate-100 flex items-center justify-center">
+                    <svg class="w-5 h-5 text-[#1B365D]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182"/>
                     </svg>
                 </div>
-                <div class="text-3xl font-bold text-blue-600">{{ importResults.updated }}</div>
-                <div class="text-xs text-blue-600/70 mt-1 font-medium">{{ isRtl ? 'تم تحديثهم' : 'Updated' }}</div>
+                <div class="text-3xl font-bold text-[#1B365D]">{{ importResults.updated }}</div>
+                <div class="text-xs text-[#1B365D]/70 mt-1 font-medium">{{ isRtl ? 'تم تحديثهم' : 'Updated' }}</div>
             </div>
             <!-- Skipped -->
             <div class="rounded-xl border-2 border-amber-100 bg-amber-50/50 p-4 text-center">
@@ -916,7 +916,7 @@ function startNewImport() {
                      class="bg-emerald-500 transition-all duration-1000"
                      :style="{ width: (importResults.imported / importResults.total * 100) + '%' }"></div>
                 <div v-if="importResults.updated > 0"
-                     class="bg-blue-500 transition-all duration-1000"
+                     class="bg-[#1B365D] transition-all duration-1000"
                      :style="{ width: (importResults.updated / importResults.total * 100) + '%' }"></div>
                 <div v-if="importResults.skipped > 0"
                      class="bg-amber-400 transition-all duration-1000"
@@ -927,7 +927,7 @@ function startNewImport() {
             </div>
             <div class="flex items-center gap-4 mt-2 text-[11px] text-gray-400">
                 <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-500"></span>{{ isRtl ? 'مستورد' : 'Imported' }}</span>
-                <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-blue-500"></span>{{ isRtl ? 'محدث' : 'Updated' }}</span>
+                <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-[#1B365D]"></span>{{ isRtl ? 'محدث' : 'Updated' }}</span>
                 <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-amber-400"></span>{{ isRtl ? 'تخطي' : 'Skipped' }}</span>
                 <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-red-400"></span>{{ isRtl ? 'خطأ' : 'Error' }}</span>
             </div>

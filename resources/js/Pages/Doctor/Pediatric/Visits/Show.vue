@@ -132,8 +132,8 @@ const photos = computed(() => props.visit?.photos || []);
 
 const statusConfig = computed(() => ({
     waiting: { label: isRtl.value ? 'انتظار' : 'Waiting', bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200', dot: 'bg-amber-400', heroBg: 'from-amber-600 to-amber-500' },
-    in_progress: { label: isRtl.value ? 'جاري' : 'In Progress', bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200', dot: 'bg-blue-500', heroBg: 'from-blue-600 to-blue-500' },
-    completed: { label: isRtl.value ? 'مكتمل' : 'Completed', bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200', dot: 'bg-emerald-500', heroBg: 'from-emerald-600 to-green-500' },
+    in_progress: { label: isRtl.value ? 'جاري' : 'In Progress', bg: 'bg-slate-50', text: 'text-[#1B365D]', border: 'border-slate-200', dot: 'bg-[#1B365D]', heroBg: 'from-[#1B365D] to-[#1B365D]' },
+    completed: { label: isRtl.value ? 'مكتمل' : 'Completed', bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200', dot: 'bg-emerald-500', heroBg: 'from-emerald-600 to-emerald-500' },
     cancelled: { label: isRtl.value ? 'ملغي' : 'Cancelled', bg: 'bg-gray-50', text: 'text-gray-500', border: 'border-gray-200', dot: 'bg-gray-400', heroBg: 'from-gray-600 to-gray-500' },
 }));
 
@@ -169,7 +169,7 @@ function formatDateTime(date) {
 function severityColor(severity) {
     switch (severity) {
         case 'mild': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-        case 'moderate': return 'bg-orange-100 text-orange-800 border-orange-200';
+        case 'moderate': return 'bg-amber-100 text-amber-800 border-amber-200';
         case 'severe': return 'bg-red-100 text-red-800 border-red-200';
         default: return 'bg-gray-100 text-gray-700 border-gray-200';
     }
@@ -248,7 +248,7 @@ function severityColor(severity) {
                         <div class="flex flex-wrap items-center gap-2">
                             <!-- Start Visit -->
                             <button v-if="visit.status === 'waiting'" @click="startVisit"
-                                class="inline-flex items-center gap-1.5 px-5 py-2.5 text-sm font-semibold text-white bg-green-500 hover:bg-green-600 rounded-xl transition-all shadow-sm shadow-green-900/30 hover:shadow-md hover:-translate-y-0.5"
+                                class="inline-flex items-center gap-1.5 px-5 py-2.5 text-sm font-semibold text-white bg-emerald-500 hover:bg-emerald-600 rounded-xl transition-all shadow-sm shadow-green-900/30 hover:shadow-md hover:-translate-y-0.5"
                             >
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /></svg>
                                 {{ isRtl ? 'بدء الزيارة' : 'Start Visit' }}
@@ -321,7 +321,7 @@ function severityColor(severity) {
             :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
             style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.15s"
         >
-            <div class="px-4 sm:px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-emerald-50 to-green-50">
+            <div class="px-4 sm:px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-emerald-50 to-emerald-50">
                 <div class="flex items-center gap-2">
                     <div class="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center">
                         <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
@@ -335,11 +335,11 @@ function severityColor(severity) {
             <div class="px-4 sm:px-6 py-5">
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
                     <!-- Weight -->
-                    <div v-if="latestGrowth.weight" class="text-center p-3 rounded-xl bg-blue-50/50 border border-blue-100/50">
-                        <div class="w-10 h-10 mx-auto rounded-lg bg-blue-100 flex items-center justify-center mb-2">
-                            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" /></svg>
+                    <div v-if="latestGrowth.weight" class="text-center p-3 rounded-xl bg-slate-50/50 border border-slate-100/50">
+                        <div class="w-10 h-10 mx-auto rounded-lg bg-slate-100 flex items-center justify-center mb-2">
+                            <svg class="w-5 h-5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" /></svg>
                         </div>
-                        <p class="text-lg font-bold text-blue-700">{{ latestGrowth.weight }}</p>
+                        <p class="text-lg font-bold text-[#1B365D]">{{ latestGrowth.weight }}</p>
                         <p class="text-[10px] text-gray-500 font-medium uppercase tracking-wide">{{ isRtl ? 'الوزن (كجم)' : 'Weight (kg)' }}</p>
                     </div>
                     <!-- Height -->
@@ -351,11 +351,11 @@ function severityColor(severity) {
                         <p class="text-[10px] text-gray-500 font-medium uppercase tracking-wide">{{ isRtl ? 'الطول (سم)' : 'Height (cm)' }}</p>
                     </div>
                     <!-- Head Circ -->
-                    <div v-if="latestGrowth.head_circumference" class="text-center p-3 rounded-xl bg-purple-50/50 border border-purple-100/50">
-                        <div class="w-10 h-10 mx-auto rounded-lg bg-purple-100 flex items-center justify-center mb-2">
-                            <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6" /></svg>
+                    <div v-if="latestGrowth.head_circumference" class="text-center p-3 rounded-xl bg-slate-50/50 border border-slate-100/50">
+                        <div class="w-10 h-10 mx-auto rounded-lg bg-slate-100 flex items-center justify-center mb-2">
+                            <svg class="w-5 h-5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6" /></svg>
                         </div>
-                        <p class="text-lg font-bold text-purple-700">{{ latestGrowth.head_circumference }}</p>
+                        <p class="text-lg font-bold text-[#1B365D]">{{ latestGrowth.head_circumference }}</p>
                         <p class="text-[10px] text-gray-500 font-medium uppercase tracking-wide">{{ isRtl ? 'محيط الرأس (سم)' : 'Head Circ (cm)' }}</p>
                     </div>
                     <!-- BMI -->
@@ -371,37 +371,37 @@ function severityColor(severity) {
         </div>
 
         <!-- Pediatric Growth Recording (only during active visit) -->
-        <section v-if="visit.status === 'in_progress'" class="bg-white rounded-2xl shadow-sm border border-green-100 p-4 md:p-6 mb-6">
-            <h3 class="text-sm font-bold text-green-800 mb-4 flex items-center gap-2">
+        <section v-if="visit.status === 'in_progress'" class="bg-white rounded-2xl shadow-sm border border-emerald-100 p-4 md:p-6 mb-6">
+            <h3 class="text-sm font-bold text-emerald-800 mb-4 flex items-center gap-2">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3v18h18M7 14l4-4 4 4 4-8" /></svg>
                 {{ isRtl ? 'تسجيل قياسات النمو' : 'Record Growth Measurements' }}
             </h3>
             <form @submit.prevent="submitGrowth" class="grid grid-cols-1 md:grid-cols-5 gap-3">
                 <div>
                     <label class="block text-[11px] font-semibold text-gray-500 mb-1">{{ isRtl ? 'التاريخ' : 'Date' }}</label>
-                    <input v-model="growthForm.measurement_date" type="date" required class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-green-300 focus:border-green-500" />
+                    <input v-model="growthForm.measurement_date" type="date" required class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-emerald-300 focus:border-emerald-500" />
                 </div>
                 <div>
                     <label class="block text-[11px] font-semibold text-gray-500 mb-1">{{ isRtl ? 'الوزن (كجم)' : 'Weight (kg)' }}</label>
-                    <input v-model="growthForm.weight_kg" type="number" step="0.01" min="0" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-green-300 focus:border-green-500" />
+                    <input v-model="growthForm.weight_kg" type="number" step="0.01" min="0" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-emerald-300 focus:border-emerald-500" />
                 </div>
                 <div>
                     <label class="block text-[11px] font-semibold text-gray-500 mb-1">{{ isRtl ? 'الطول (سم)' : 'Height (cm)' }}</label>
-                    <input v-model="growthForm.height_cm" type="number" step="0.1" min="0" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-green-300 focus:border-green-500" />
+                    <input v-model="growthForm.height_cm" type="number" step="0.1" min="0" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-emerald-300 focus:border-emerald-500" />
                 </div>
                 <div>
                     <label class="block text-[11px] font-semibold text-gray-500 mb-1">{{ isRtl ? 'محيط الرأس (سم)' : 'Head (cm)' }}</label>
-                    <input v-model="growthForm.head_circumference_cm" type="number" step="0.1" min="0" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-green-300 focus:border-green-500" />
+                    <input v-model="growthForm.head_circumference_cm" type="number" step="0.1" min="0" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-emerald-300 focus:border-emerald-500" />
                 </div>
                 <div class="flex items-end">
-                    <button type="submit" :disabled="growthForm.processing" class="w-full px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white text-sm font-bold rounded-lg hover:from-green-600 hover:to-emerald-700 transition-all shadow-sm disabled:opacity-50">
+                    <button type="submit" :disabled="growthForm.processing" class="w-full px-4 py-2 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white text-sm font-bold rounded-lg hover:from-emerald-600 hover:to-emerald-700 transition-all shadow-sm disabled:opacity-50">
                         {{ growthForm.processing ? (isRtl ? 'جاري الحفظ...' : 'Saving...') : (isRtl ? 'حفظ القياس' : 'Save') }}
                     </button>
                 </div>
             </form>
             <div class="mt-3">
                 <label class="block text-[11px] font-semibold text-gray-500 mb-1">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
-                <textarea v-model="growthForm.notes" rows="2" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-green-300 focus:border-green-500" :placeholder="isRtl ? 'ملاحظات اختيارية...' : 'Optional notes...'"></textarea>
+                <textarea v-model="growthForm.notes" rows="2" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-emerald-300 focus:border-emerald-500" :placeholder="isRtl ? 'ملاحظات اختيارية...' : 'Optional notes...'"></textarea>
             </div>
         </section>
 
@@ -466,7 +466,7 @@ function severityColor(severity) {
             :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
             style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.22s"
         >
-            <div class="px-4 sm:px-6 py-4 border-b border-emerald-100 bg-gradient-to-r from-emerald-50 to-green-50">
+            <div class="px-4 sm:px-6 py-4 border-b border-emerald-100 bg-gradient-to-r from-emerald-50 to-emerald-50">
                 <div class="flex items-center gap-2">
                     <div class="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center">
                         <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
@@ -569,11 +569,11 @@ function severityColor(severity) {
                             </div>
                             <!-- Dose, Frequency, Duration -->
                             <div class="flex flex-wrap items-center gap-2 text-xs">
-                                <span v-if="item.dose || item.dosage" class="inline-flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-700 rounded-md border border-blue-100 font-medium">
+                                <span v-if="item.dose || item.dosage" class="inline-flex items-center gap-1 px-2 py-1 bg-slate-50 text-[#1B365D] rounded-md border border-slate-100 font-medium">
                                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" /></svg>
                                     {{ item.dose || item.dosage }}
                                 </span>
-                                <span v-if="item.frequency" class="inline-flex items-center gap-1 px-2 py-1 bg-purple-50 text-purple-700 rounded-md border border-purple-100 font-medium">
+                                <span v-if="item.frequency" class="inline-flex items-center gap-1 px-2 py-1 bg-slate-50 text-[#1B365D] rounded-md border border-slate-100 font-medium">
                                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                     {{ item.frequency }}
                                 </span>

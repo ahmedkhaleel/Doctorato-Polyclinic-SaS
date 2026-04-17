@@ -131,7 +131,7 @@ const statusConfig = {
     present: { label: 'Present', labelAr: 'حاضر', bg: 'bg-emerald-50', text: 'text-emerald-700', dot: 'bg-emerald-500', border: 'border-emerald-200' },
     absent: { label: 'Absent', labelAr: 'غائب', bg: 'bg-red-50', text: 'text-red-700', dot: 'bg-red-500', border: 'border-red-200' },
     late: { label: 'Late', labelAr: 'متأخر', bg: 'bg-amber-50', text: 'text-amber-700', dot: 'bg-amber-500', border: 'border-amber-200' },
-    leave: { label: 'On Leave', labelAr: 'إجازة', bg: 'bg-blue-50', text: 'text-blue-700', dot: 'bg-blue-500', border: 'border-blue-200' },
+    leave: { label: 'On Leave', labelAr: 'إجازة', bg: 'bg-slate-50', text: 'text-[#1B365D]', dot: 'bg-[#1B365D]', border: 'border-slate-200' },
 };
 function getStatus(s) { return statusConfig[s] || { label: s, labelAr: s, bg: 'bg-gray-50', text: 'text-gray-700', dot: 'bg-gray-500', border: 'border-gray-200' }; }
 
@@ -149,7 +149,7 @@ onMounted(() => {
 <template>
     <div>
         <!-- ═══ HERO HEADER ═══ -->
-        <div class="relative -mx-4 sm:-mx-6 lg:-mx-8 -mt-4 sm:-mt-6 mb-8 px-4 sm:px-6 lg:px-8 pt-8 pb-10 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 overflow-hidden transition-all duration-700" :class="headerLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'">
+        <div class="relative -mx-4 sm:-mx-6 lg:-mx-8 -mt-4 sm:-mt-6 mb-8 px-4 sm:px-6 lg:px-8 pt-8 pb-10 bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] overflow-hidden transition-all duration-700" :class="headerLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'">
             <div class="absolute inset-0 opacity-10" style="background: radial-gradient(circle at 70% 50%, #0d9488 0%, transparent 60%)"></div>
             <div class="relative z-10">
                 <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
@@ -188,11 +188,11 @@ onMounted(() => {
                     </div>
                     <div class="bg-white/5 backdrop-blur-sm rounded-xl p-3.5 border border-white/10">
                         <p class="text-xs text-gray-400 font-medium">{{ isRtl ? 'إجازة' : 'Leave' }}</p>
-                        <p class="text-2xl font-bold text-blue-400 mt-1">{{ summary?.leave ?? 0 }}</p>
+                        <p class="text-2xl font-bold text-slate-400 mt-1">{{ summary?.leave ?? 0 }}</p>
                     </div>
                     <div class="bg-white/5 backdrop-blur-sm rounded-xl p-3.5 border border-white/10">
                         <p class="text-xs text-gray-400 font-medium">{{ isRtl ? 'إضافي' : 'Overtime' }}</p>
-                        <p class="text-2xl font-bold text-purple-400 mt-1">{{ summary?.overtime_hours ?? 0 }}<span class="text-xs text-gray-500">h</span></p>
+                        <p class="text-2xl font-bold text-slate-400 mt-1">{{ summary?.overtime_hours ?? 0 }}<span class="text-xs text-gray-500">h</span></p>
                     </div>
                 </div>
             </div>
@@ -360,7 +360,7 @@ onMounted(() => {
                         </div>
                         <div class="hidden sm:block">
                             <p class="text-[10px] text-gray-400 font-semibold uppercase">{{ isRtl ? 'إضافي' : 'Overtime' }}</p>
-                            <p class="text-sm font-bold text-purple-600 mt-0.5">{{ record.overtime_hours > 0 ? record.overtime_hours + 'h' : '-' }}</p>
+                            <p class="text-sm font-bold text-[#1B365D] mt-0.5">{{ record.overtime_hours > 0 ? record.overtime_hours + 'h' : '-' }}</p>
                         </div>
                     </div>
 

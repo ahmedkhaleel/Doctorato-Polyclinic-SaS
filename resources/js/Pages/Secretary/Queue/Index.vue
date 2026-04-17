@@ -40,7 +40,7 @@ function toggleAlert(visitId) {
 const severityStyles = {
     high: { bg: 'bg-red-50', text: 'text-red-700', border: 'border-red-200' },
     medium: { bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200' },
-    low: { bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200' },
+    low: { bg: 'bg-slate-50', text: 'text-[#1B365D]', border: 'border-slate-200' },
 };
 
 /* ── Status helpers ─────────────────────────────────────── */
@@ -53,15 +53,15 @@ const statusLabels = {
 
 const statusColors = {
     waiting: 'bg-yellow-100 text-yellow-800 border-yellow-200',
-    in_progress: 'bg-blue-100 text-blue-800 border-blue-200',
-    completed: 'bg-green-100 text-green-800 border-green-200',
+    in_progress: 'bg-slate-100 text-[#1B365D] border-slate-200',
+    completed: 'bg-emerald-100 text-emerald-800 border-emerald-200',
     cancelled: 'bg-red-100 text-red-800 border-red-200',
 };
 
 const statusDotColors = {
-    waiting: 'bg-yellow-500',
-    in_progress: 'bg-blue-500',
-    completed: 'bg-green-500',
+    waiting: 'bg-amber-500',
+    in_progress: 'bg-[#1B365D]',
+    completed: 'bg-emerald-500',
     cancelled: 'bg-red-500',
 };
 
@@ -73,8 +73,8 @@ const visitTypeLabels = {
 
 const visitTypeBadgeColors = {
     consultation: 'bg-teal-100 text-teal-700',
-    session: 'bg-cyan-100 text-cyan-700',
-    follow_up: 'bg-sky-100 text-sky-700',
+    session: 'bg-slate-100 text-[#1B365D]',
+    follow_up: 'bg-slate-100 text-[#1B365D]',
 };
 
 /* ── Module helpers ────────────────────────────────────── */
@@ -113,12 +113,12 @@ function filterVisits(visits) {
 
 /* ── Doctor colors for avatars ──────────────────────────── */
 const doctorGradients = [
-    'from-teal-500 to-cyan-500',
-    'from-cyan-500 to-blue-500',
+    'from-teal-500 to-[#1B365D]',
+    'from-[#1B365D] to-[#1B365D]',
     'from-teal-600 to-emerald-500',
-    'from-sky-500 to-indigo-500',
-    'from-cyan-600 to-teal-400',
-    'from-blue-500 to-cyan-400',
+    'from-[#1B365D] to-[#1B365D]',
+    'from-[#1B365D] to-teal-400',
+    'from-[#1B365D] to-slate-400',
 ];
 
 function getDoctorGradient(index) {
@@ -282,23 +282,23 @@ function refreshQueue() {
             <button
                 @click="moduleFilter = 'dental'"
                 class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border transition-all duration-200"
-                :class="moduleFilter === 'dental' ? 'bg-cyan-600 text-white border-cyan-600 shadow-sm' : 'bg-white text-cyan-700 border-cyan-200 hover:bg-cyan-50'"
+                :class="moduleFilter === 'dental' ? 'bg-[#1B365D] text-white border-[#1B365D] shadow-sm' : 'bg-white text-[#1B365D] border-slate-200 hover:bg-slate-50'"
             >
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342" /></svg>
                 {{ isRtl ? 'أسنان' : 'Dental' }}
                 <span class="inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full text-[10px] font-bold"
-                    :class="moduleFilter === 'dental' ? 'bg-white/20 text-white' : 'bg-cyan-50 text-cyan-600'">
+                    :class="moduleFilter === 'dental' ? 'bg-white/20 text-white' : 'bg-slate-50 text-[#1B365D]'">
                     {{ dentalCount }}
                 </span>
             </button>
             <button
                 @click="moduleFilter = 'derma'"
                 class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border transition-all duration-200"
-                :class="moduleFilter === 'derma' ? 'bg-pink-600 text-white border-pink-600 shadow-sm' : 'bg-white text-pink-700 border-pink-200 hover:bg-pink-50'"
+                :class="moduleFilter === 'derma' ? 'bg-[#C4A265] text-white border-[#C4A265] shadow-sm' : 'bg-white text-[#C4A265] border-amber-200 hover:bg-amber-50'"
             >
                 {{ isRtl ? 'جلدية' : 'Derma' }}
                 <span class="inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full text-[10px] font-bold"
-                    :class="moduleFilter === 'derma' ? 'bg-white/20 text-white' : 'bg-pink-50 text-pink-600'">
+                    :class="moduleFilter === 'derma' ? 'bg-white/20 text-white' : 'bg-amber-50 text-[#C4A265]'">
                     {{ dermaCount }}
                 </span>
             </button>
@@ -308,7 +308,7 @@ function refreshQueue() {
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
             <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-3 sm:p-4">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-teal-500 to-cyan-500 flex items-center justify-center">
+                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-teal-500 to-[#1B365D] flex items-center justify-center">
                         <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
                         </svg>
@@ -323,12 +323,12 @@ function refreshQueue() {
             <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-3 sm:p-4">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-lg bg-yellow-100 flex items-center justify-center">
-                        <svg class="w-5 h-5 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                     </div>
                     <div>
-                        <p class="text-2xl font-bold text-yellow-600">{{ waitingCount }}</p>
+                        <p class="text-2xl font-bold text-amber-600">{{ waitingCount }}</p>
                         <p class="text-xs text-gray-500">{{ isRtl ? 'انتظار' : 'Waiting' }}</p>
                     </div>
                 </div>
@@ -336,14 +336,14 @@ function refreshQueue() {
 
             <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-3 sm:p-4">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">
-                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                     </div>
                     <div>
-                        <p class="text-2xl font-bold text-blue-600">{{ inProgressCount }}</p>
+                        <p class="text-2xl font-bold text-[#1B365D]">{{ inProgressCount }}</p>
                         <p class="text-xs text-gray-500">{{ isRtl ? 'جاري' : 'In Progress' }}</p>
                     </div>
                 </div>
@@ -351,13 +351,13 @@ function refreshQueue() {
 
             <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-3 sm:p-4">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center">
-                        <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                     </div>
                     <div>
-                        <p class="text-2xl font-bold text-green-600">{{ completedCount }}</p>
+                        <p class="text-2xl font-bold text-emerald-600">{{ completedCount }}</p>
                         <p class="text-xs text-gray-500">{{ isRtl ? 'مكتمل' : 'Completed' }}</p>
                     </div>
                 </div>
@@ -369,7 +369,7 @@ function refreshQueue() {
             <div v-for="(doctorId, dIdx) in filteredDoctorIds" :key="doctorId">
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                     <!-- Doctor Header -->
-                    <div class="px-4 sm:px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-teal-50 to-cyan-50">
+                    <div class="px-4 sm:px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-teal-50 to-slate-50">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-3">
                                 <div :class="'bg-gradient-to-br ' + getDoctorGradient(dIdx)" class="w-10 h-10 rounded-lg flex items-center justify-center text-white text-sm font-bold shadow-sm">
@@ -433,17 +433,17 @@ function refreshQueue() {
                                                 {{ visitTypeLabels[visit.visit_type] || visit.visit_type }}
                                             </span>
                                             <!-- Module Badge -->
-                                            <span v-if="visit.module === 'dental'" class="px-2 py-0.5 text-[10px] font-semibold rounded-full flex-shrink-0 bg-cyan-50 text-cyan-700 border border-cyan-200 inline-flex items-center gap-0.5">
+                                            <span v-if="visit.module === 'dental'" class="px-2 py-0.5 text-[10px] font-semibold rounded-full flex-shrink-0 bg-slate-50 text-[#1B365D] border border-slate-200 inline-flex items-center gap-0.5">
                                                 <svg class="w-3 h-3 inline -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342" /></svg> {{ isRtl ? 'أسنان' : 'Dental' }}
                                             </span>
-                                            <span v-else class="px-2 py-0.5 text-[10px] font-semibold rounded-full flex-shrink-0 bg-pink-50 text-pink-700 border border-pink-200 inline-flex items-center gap-0.5">
+                                            <span v-else class="px-2 py-0.5 text-[10px] font-semibold rounded-full flex-shrink-0 bg-amber-50 text-[#C4A265] border border-amber-200 inline-flex items-center gap-0.5">
                                                 {{ isRtl ? 'جلدية' : 'Derma' }}
                                             </span>
                                         </div>
                                         <div class="flex items-center gap-3 mt-0.5">
                                             <span class="text-xs text-gray-400">{{ visit.service?.name_en || visit.service?.name || '-' }}</span>
                                             <!-- Dental treatment description -->
-                                            <span v-if="getDentalDescription(visit)" class="text-xs text-cyan-600 font-medium">
+                                            <span v-if="getDentalDescription(visit)" class="text-xs text-[#1B365D] font-medium">
                                                 {{ getDentalDescription(visit) }}
                                             </span>
                                             <span v-if="visit.visit_date || visit.created_at" class="text-xs text-gray-300">
@@ -492,7 +492,7 @@ function refreshQueue() {
                                         <button
                                             v-if="visit.status === 'waiting'"
                                             @click="startVisit(visit.id)"
-                                            class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 transition"
+                                            class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-medium text-[#1B365D] bg-slate-50 hover:bg-slate-100 border border-slate-200 transition"
                                             :title="isRtl ? 'بدء الزيارة' : 'Start visit'"
                                         >
                                             <svg class="w-3.5 h-3.5 ltr:mr-1 rtl:ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -504,7 +504,7 @@ function refreshQueue() {
                                         <button
                                             v-if="visit.status === 'in_progress'"
                                             @click="completeVisit(visit.id)"
-                                            class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-medium text-green-700 bg-green-50 hover:bg-green-100 border border-green-200 transition"
+                                            class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-medium text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 transition"
                                             :title="isRtl ? 'إنهاء الزيارة' : 'Complete visit'"
                                         >
                                             <svg class="w-3.5 h-3.5 ltr:mr-1 rtl:ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -43,14 +43,14 @@ function submit() {
         <div class="absolute inset-0 overflow-hidden pointer-events-none">
             <!-- Large gradient orbs -->
             <div class="orb-float absolute w-[500px] h-[500px] rounded-full bg-gradient-radial from-[#C4A265]/[0.06] to-transparent -top-48 -right-48"></div>
-            <div class="orb-float-reverse absolute w-[400px] h-[400px] rounded-full bg-gradient-radial from-indigo-500/[0.04] to-transparent -bottom-32 -left-32"></div>
+            <div class="orb-float-reverse absolute w-[400px] h-[400px] rounded-full bg-gradient-radial from-[#1B365D]/[0.04] to-transparent -bottom-32 -left-32"></div>
             <div class="orb-float-slow absolute w-[300px] h-[300px] rounded-full bg-gradient-radial from-[#C4A265]/[0.03] to-transparent top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
 
             <!-- Floating particles -->
             <div class="particle particle-1 absolute w-1.5 h-1.5 rounded-full bg-[#C4A265]/20"></div>
             <div class="particle particle-2 absolute w-1 h-1 rounded-full bg-white/10"></div>
             <div class="particle particle-3 absolute w-2 h-2 rounded-full bg-[#C4A265]/10"></div>
-            <div class="particle particle-4 absolute w-1 h-1 rounded-full bg-indigo-400/15"></div>
+            <div class="particle particle-4 absolute w-1 h-1 rounded-full bg-slate-400/15"></div>
             <div class="particle particle-5 absolute w-1.5 h-1.5 rounded-full bg-[#C4A265]/15"></div>
             <div class="particle particle-6 absolute w-1 h-1 rounded-full bg-white/[0.07]"></div>
 

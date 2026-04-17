@@ -169,13 +169,13 @@ function getInitials(name) {
 
 const avatarColors = [
     'from-[#C4A265] to-[#A68B52]',
-    'from-blue-400 to-blue-600',
+    'from-slate-400 to-[#1B365D]',
     'from-emerald-400 to-emerald-600',
-    'from-purple-400 to-purple-600',
-    'from-rose-400 to-rose-600',
-    'from-cyan-400 to-cyan-600',
-    'from-amber-400 to-orange-600',
-    'from-indigo-400 to-indigo-600',
+    'from-slate-400 to-[#1B365D]',
+    'from-amber-400 to-[#C4A265]',
+    'from-slate-400 to-[#1B365D]',
+    'from-amber-400 to-amber-600',
+    'from-slate-400 to-[#1B365D]',
 ];
 
 function getAvatarColor(id) {
@@ -210,13 +210,13 @@ function timeAgo(dateStr) {
 <template>
     <div class="space-y-5">
         <!-- Hero Header -->
-        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6 sm:p-8"
+        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] p-6 sm:p-8"
             :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
             style="transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1)"
         >
             <!-- Decorative elements -->
             <div class="absolute top-0 right-0 w-80 h-80 bg-[#C4A265]/10 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl"></div>
-            <div class="absolute bottom-0 left-0 w-56 h-56 bg-purple-500/10 rounded-full translate-y-1/2 -translate-x-1/4 blur-2xl"></div>
+            <div class="absolute bottom-0 left-0 w-56 h-56 bg-[#1B365D]/10 rounded-full translate-y-1/2 -translate-x-1/4 blur-2xl"></div>
             <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#C4A265]/5 rounded-full blur-3xl"></div>
 
             <div class="relative z-10">
@@ -386,8 +386,8 @@ function timeAgo(dateStr) {
             </div>
             <!-- Recent Visits -->
             <div class="bg-white rounded-xl border border-gray-100/80 px-4 py-3.5 flex items-center gap-3 shadow-sm">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100/50 flex items-center justify-center flex-shrink-0">
-                    <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-slate-50 to-slate-100/50 flex items-center justify-center flex-shrink-0">
+                    <svg class="w-5 h-5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                 </div>
@@ -481,7 +481,7 @@ function timeAgo(dateStr) {
                                         {{ patient.file_number }}
                                     </span>
                                     <span v-if="patient.module" class="inline-flex items-center text-[10px] font-medium px-1.5 py-0.5 rounded"
-                                        :class="patient.module === 'dental' ? 'text-blue-600 bg-blue-50' : 'text-purple-600 bg-purple-50'"
+                                        :class="patient.module === 'dental' ? 'text-[#1B365D] bg-slate-50' : 'text-[#1B365D] bg-slate-50'"
                                     >
                                         {{ patient.module === 'dental' ? (isRtl ? 'أسنان' : 'Dental') : (isRtl ? 'جلدية' : 'Derma') }}
                                     </span>
@@ -518,7 +518,7 @@ function timeAgo(dateStr) {
                             <div class="flex items-center gap-1" @click.prevent>
                                 <!-- Quick Note -->
                                 <button @click.prevent="openQuickNote(patient)"
-                                    class="p-1.5 rounded-lg text-gray-300 hover:text-blue-500 hover:bg-blue-50 transition-all"
+                                    class="p-1.5 rounded-lg text-gray-300 hover:text-[#1B365D] hover:bg-slate-50 transition-all"
                                     :title="isRtl ? 'ملاحظة سريعة' : 'Quick Note'">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
                                 </button>
@@ -563,7 +563,7 @@ function timeAgo(dateStr) {
                                 <p class="text-sm font-semibold text-gray-800 truncate group-hover:text-gray-900 transition-colors">{{ patient.full_name }}</p>
                                 <span v-if="patient.file_number" class="flex-shrink-0 font-mono text-[10px] text-[#C4A265] bg-[#C4A265]/5 px-1.5 py-0.5 rounded border border-[#C4A265]/10">{{ patient.file_number }}</span>
                                 <span v-if="patient.module" class="flex-shrink-0 text-[10px] font-medium px-1.5 py-0.5 rounded"
-                                    :class="patient.module === 'dental' ? 'text-blue-600 bg-blue-50' : 'text-purple-600 bg-purple-50'"
+                                    :class="patient.module === 'dental' ? 'text-[#1B365D] bg-slate-50' : 'text-[#1B365D] bg-slate-50'"
                                 >
                                     {{ patient.module === 'dental' ? (isRtl ? 'أسنان' : 'Dental') : (isRtl ? 'جلدية' : 'Derma') }}
                                 </span>
@@ -591,7 +591,7 @@ function timeAgo(dateStr) {
                             </div>
                             <div class="flex items-center gap-0.5" @click.prevent>
                                 <button @click.prevent="openQuickNote(patient)"
-                                    class="p-1.5 rounded-lg text-gray-300 hover:text-blue-500 hover:bg-blue-50 transition-all"
+                                    class="p-1.5 rounded-lg text-gray-300 hover:text-[#1B365D] hover:bg-slate-50 transition-all"
                                     :title="isRtl ? 'ملاحظة سريعة' : 'Quick Note'">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
                                 </button>
@@ -623,8 +623,8 @@ function timeAgo(dateStr) {
                         </div>
                         <!-- Floating dots decoration -->
                         <div class="absolute -top-2 -right-2 w-4 h-4 rounded-full bg-[#C4A265]/10 animate-bounce" style="animation-delay: 0s; animation-duration: 2s"></div>
-                        <div class="absolute -bottom-1 -left-3 w-3 h-3 rounded-full bg-blue-100 animate-bounce" style="animation-delay: 0.5s; animation-duration: 2.5s"></div>
-                        <div class="absolute top-1/2 -right-4 w-2 h-2 rounded-full bg-purple-100 animate-bounce" style="animation-delay: 1s; animation-duration: 3s"></div>
+                        <div class="absolute -bottom-1 -left-3 w-3 h-3 rounded-full bg-slate-100 animate-bounce" style="animation-delay: 0.5s; animation-duration: 2.5s"></div>
+                        <div class="absolute top-1/2 -right-4 w-2 h-2 rounded-full bg-slate-100 animate-bounce" style="animation-delay: 1s; animation-duration: 3s"></div>
                     </div>
 
                     <h3 class="text-base font-semibold text-gray-600 mb-1.5">
@@ -685,8 +685,8 @@ function timeAgo(dateStr) {
                         <div v-if="quickNotePatient" class="relative w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden">
                             <div class="p-6">
                                 <div class="flex items-center gap-3 mb-4">
-                                    <div class="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
-                                        <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                                    <div class="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center">
+                                        <svg class="w-5 h-5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
                                     </div>
                                     <div>
                                         <h3 class="text-sm font-bold text-gray-900">{{ isRtl ? 'ملاحظة سريعة' : 'Quick Note' }}</h3>

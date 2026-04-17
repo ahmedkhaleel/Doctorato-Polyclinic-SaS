@@ -29,9 +29,9 @@ function $localized(obj, field) {
 }
 
 const statusColors = {
-    planned: 'bg-blue-100 text-blue-700',
-    in_progress: 'bg-yellow-100 text-yellow-700',
-    completed: 'bg-green-100 text-green-700',
+    planned: 'bg-slate-100 text-[#1B365D]',
+    in_progress: 'bg-yellow-100 text-amber-700',
+    completed: 'bg-emerald-100 text-emerald-700',
     cancelled: 'bg-red-100 text-red-700',
 };
 
@@ -82,11 +82,11 @@ const stats = computed(() => {
                 <p class="text-xs text-gray-400 mt-1">{{ isRtl ? 'إجمالي العلاجات' : 'Total Treatments' }}</p>
             </div>
             <div class="bg-white rounded-xl border border-gray-100 p-4 text-center">
-                <p class="text-2xl font-bold text-green-600">{{ stats.completed }}</p>
+                <p class="text-2xl font-bold text-emerald-600">{{ stats.completed }}</p>
                 <p class="text-xs text-gray-400 mt-1">{{ isRtl ? 'مكتملة' : 'Completed' }}</p>
             </div>
             <div class="bg-white rounded-xl border border-gray-100 p-4 text-center">
-                <p class="text-2xl font-bold text-yellow-600">{{ stats.inProgress }}</p>
+                <p class="text-2xl font-bold text-amber-600">{{ stats.inProgress }}</p>
                 <p class="text-xs text-gray-400 mt-1">{{ isRtl ? 'قيد التنفيذ' : 'In Progress' }}</p>
             </div>
         </div>

@@ -78,16 +78,16 @@ onMounted(() => {
     <div class="space-y-6">
         <!-- Hero Header -->
         <div
-            class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6 sm:p-8 transition-all duration-700"
+            class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] p-6 sm:p-8 transition-all duration-700"
             :class="headerLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
             :style="{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }"
         >
-            <div class="absolute top-0 right-0 w-96 h-96 bg-gradient-radial from-indigo-500/10 to-transparent rounded-full -translate-y-1/2 translate-x-1/2"></div>
+            <div class="absolute top-0 right-0 w-96 h-96 bg-gradient-radial from-[#1B365D]/10 to-transparent rounded-full -translate-y-1/2 translate-x-1/2"></div>
             <div class="absolute bottom-0 left-0 w-64 h-64 bg-gradient-radial from-[#C4A265]/5 to-transparent rounded-full translate-y-1/2 -translate-x-1/4"></div>
 
             <div class="relative z-10">
                 <div class="flex items-center gap-4">
-                    <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-indigo-400 to-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-500/20">
+                    <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-slate-400 to-[#1B365D] flex items-center justify-center shadow-lg shadow-[#1B365D]/20">
                         <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
                     </div>
                     <div class="flex-1">
@@ -141,14 +141,14 @@ onMounted(() => {
                     :style="{ animationDelay: `${index * 60}ms` }"
                 >
                     <!-- Hover accent stripe -->
-                    <div class="absolute top-0 bottom-0 w-1 bg-gradient-to-b from-indigo-400 to-indigo-600 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" :class="isRtl ? 'right-0' : 'left-0'"></div>
+                    <div class="absolute top-0 bottom-0 w-1 bg-gradient-to-b from-slate-400 to-[#1B365D] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" :class="isRtl ? 'right-0' : 'left-0'"></div>
 
                     <div class="flex flex-col sm:flex-row sm:items-center gap-4 p-4 sm:p-5 relative">
                         <!-- Period -->
                         <div class="flex items-center gap-3 sm:w-52">
-                            <div class="w-13 h-13 rounded-xl bg-gradient-to-br from-indigo-50 to-indigo-100 flex flex-col items-center justify-center shadow-sm group-hover:shadow-md group-hover:scale-105 transition-all duration-300">
-                                <span class="text-lg font-bold text-indigo-600 leading-none">{{ slip.month }}</span>
-                                <span class="text-[9px] text-indigo-400 font-semibold">{{ slip.year }}</span>
+                            <div class="w-13 h-13 rounded-xl bg-gradient-to-br from-slate-50 to-slate-100 flex flex-col items-center justify-center shadow-sm group-hover:shadow-md group-hover:scale-105 transition-all duration-300">
+                                <span class="text-lg font-bold text-[#1B365D] leading-none">{{ slip.month }}</span>
+                                <span class="text-[9px] text-slate-400 font-semibold">{{ slip.year }}</span>
                             </div>
                             <div>
                                 <p class="text-sm font-bold text-gray-800">{{ periodLabel(slip) }}</p>
@@ -168,7 +168,7 @@ onMounted(() => {
                             </div>
                             <div>
                                 <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">{{ isRtl ? 'الصافي' : 'Net' }}</p>
-                                <p class="text-sm font-bold text-indigo-600 tabular-nums mt-0.5">{{ formatCurrency(slip.net_salary) }}</p>
+                                <p class="text-sm font-bold text-[#1B365D] tabular-nums mt-0.5">{{ formatCurrency(slip.net_salary) }}</p>
                             </div>
                         </div>
 
@@ -188,7 +188,7 @@ onMounted(() => {
                             </div>
                             <Link
                                 :href="`/doctor/my-salary-slips/${slip.id}`"
-                                class="inline-flex items-center gap-1.5 px-4 py-2.5 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 group/btn"
+                                class="inline-flex items-center gap-1.5 px-4 py-2.5 text-xs font-semibold text-white bg-[#1B365D] hover:bg-[#1B365D] rounded-xl shadow-sm hover:shadow-md transition-all duration-200 group/btn"
                             >
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
                                 {{ isRtl ? 'عرض' : 'View' }}
@@ -219,7 +219,7 @@ onMounted(() => {
                         v-if="link.url"
                         :href="link.url"
                         class="px-3.5 py-2 rounded-xl text-xs font-medium transition-all duration-200"
-                        :class="link.active ? 'bg-indigo-600 text-white shadow-sm shadow-indigo-500/20' : 'text-gray-500 hover:bg-gray-100 bg-white border border-gray-200 hover:border-gray-300'"
+                        :class="link.active ? 'bg-[#1B365D] text-white shadow-sm shadow-[#1B365D]/20' : 'text-gray-500 hover:bg-gray-100 bg-white border border-gray-200 hover:border-gray-300'"
                         v-html="link.label"
                         preserve-state
                     />

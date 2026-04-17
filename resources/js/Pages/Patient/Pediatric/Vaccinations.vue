@@ -22,7 +22,7 @@ const statusColors = {
     scheduled: 'bg-amber-50 text-amber-700 border-amber-200',
     missed: 'bg-red-50 text-red-700 border-red-200',
     postponed: 'bg-gray-50 text-gray-700 border-gray-200',
-    contraindicated: 'bg-purple-50 text-purple-700 border-purple-200',
+    contraindicated: 'bg-slate-50 text-[#1B365D] border-slate-200',
 };
 
 const statusLabels = {

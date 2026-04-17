@@ -26,15 +26,15 @@ function $localized(obj, field) {
 }
 
 const statusColors = {
-    active: 'bg-green-100 text-green-700',
-    completed: 'bg-blue-100 text-blue-700',
+    active: 'bg-emerald-100 text-emerald-700',
+    completed: 'bg-slate-100 text-[#1B365D]',
     inactive: 'bg-gray-100 text-gray-500',
 };
 
 const stepStatusColors = {
     pending: 'border-gray-300 bg-white text-gray-400',
     in_progress: 'border-[var(--brand-primary)] bg-[var(--brand-primary)]/10 text-[var(--brand-primary)]',
-    completed: 'border-green-500 bg-green-500 text-white',
+    completed: 'border-emerald-500 bg-emerald-500 text-white',
     skipped: 'border-gray-300 bg-gray-100 text-gray-400',
 };
 </script>
@@ -110,8 +110,8 @@ const stepStatusColors = {
                                     class="text-[10px] font-medium px-2 py-0.5 rounded-full"
                                     :class="{
                                         'bg-gray-100 text-gray-500': step.status === 'pending',
-                                        'bg-yellow-100 text-yellow-700': step.status === 'in_progress',
-                                        'bg-green-100 text-green-700': step.status === 'completed',
+                                        'bg-yellow-100 text-amber-700': step.status === 'in_progress',
+                                        'bg-emerald-100 text-emerald-700': step.status === 'completed',
                                         'bg-gray-100 text-gray-400': step.status === 'skipped',
                                     }"
                                 >{{ step.status }}</span>

@@ -29,11 +29,11 @@ function $localized(obj, field) {
 
 const statusColors = {
     draft: 'bg-gray-100 text-gray-600',
-    approved: 'bg-blue-100 text-blue-700',
-    in_progress: 'bg-yellow-100 text-yellow-700',
-    completed: 'bg-green-100 text-green-700',
+    approved: 'bg-slate-100 text-[#1B365D]',
+    in_progress: 'bg-yellow-100 text-amber-700',
+    completed: 'bg-emerald-100 text-emerald-700',
     cancelled: 'bg-red-100 text-red-700',
-    planned: 'bg-blue-100 text-blue-700',
+    planned: 'bg-slate-100 text-[#1B365D]',
 };
 
 const statusLabels = {
@@ -93,33 +93,33 @@ const planTitle = computed(() => {
             </div>
 
             <!-- Consent Banner -->
-            <div v-if="plan.consent && plan.consent.status === 'pending'" class="mb-4 p-4 bg-gradient-to-r from-cyan-50 to-teal-50 border border-cyan-200 rounded-xl">
+            <div v-if="plan.consent && plan.consent.status === 'pending'" class="mb-4 p-4 bg-gradient-to-r from-slate-50 to-teal-50 border border-slate-200 rounded-xl">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-full bg-cyan-100 flex items-center justify-center flex-shrink-0">
-                        <svg class="w-5 h-5 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center flex-shrink-0">
+                        <svg class="w-5 h-5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                         </svg>
                     </div>
                     <div class="flex-1">
-                        <p class="text-sm font-semibold text-cyan-800">
+                        <p class="text-sm font-semibold text-[#1B365D]">
                             {{ isRtl ? 'مطلوب توقيعك على خطة العلاج' : 'Your signature is required' }}
                         </p>
-                        <p class="text-xs text-cyan-600">
+                        <p class="text-xs text-[#1B365D]">
                             {{ isRtl ? 'يرجى مراجعة الخطة والتوقيع للموافقة على بدء العلاج' : 'Please review and sign to consent to treatment' }}
                         </p>
                     </div>
                     <Link :href="lp('/dental/consent/' + plan.consent.id)"
-                        class="px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-cyan-500 to-teal-500 rounded-xl hover:from-cyan-600 hover:to-teal-600 transition-all shadow-md shadow-cyan-200/50 flex-shrink-0">
+                        class="px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-[#1B365D] to-teal-500 rounded-xl hover:from-[#1B365D] hover:to-teal-600 transition-all shadow-md shadow-cyan-200/50 flex-shrink-0">
                         {{ isRtl ? 'وقّع الآن' : 'Sign Now' }}
                     </Link>
                 </div>
             </div>
 
-            <div v-else-if="plan.consent && plan.consent.status === 'signed'" class="mb-4 p-3 bg-green-50 border border-green-100 rounded-xl flex items-center gap-2">
-                <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div v-else-if="plan.consent && plan.consent.status === 'signed'" class="mb-4 p-3 bg-emerald-50 border border-emerald-100 rounded-xl flex items-center gap-2">
+                <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                 </svg>
-                <span class="text-sm text-green-700 font-medium">
+                <span class="text-sm text-emerald-700 font-medium">
                     {{ isRtl ? 'تم التوقيع على الموافقة' : 'Consent signed' }}
                 </span>
             </div>
@@ -136,7 +136,7 @@ const planTitle = computed(() => {
                 <div class="w-full h-3 bg-gray-100 rounded-full overflow-hidden">
                     <div
                         class="h-full rounded-full transition-all duration-700 ease-out"
-                        :class="plan.status === 'completed' ? 'bg-green-500' : 'bg-[var(--brand-primary)]'"
+                        :class="plan.status === 'completed' ? 'bg-emerald-500' : 'bg-[var(--brand-primary)]'"
                         :style="{ width: progressPercent() + '%' }"
                     ></div>
                 </div>
@@ -191,7 +191,7 @@ const planTitle = computed(() => {
                     <div class="flex items-start gap-4">
                         <!-- Step Number -->
                         <div
-                            :class="treatment.status === 'completed' ? 'bg-green-500 text-white' : treatment.status === 'in_progress' ? 'bg-[var(--brand-primary)] text-white' : 'bg-gray-100 text-gray-400'"
+                            :class="treatment.status === 'completed' ? 'bg-emerald-500 text-white' : treatment.status === 'in_progress' ? 'bg-[var(--brand-primary)] text-white' : 'bg-gray-100 text-gray-400'"
                             class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0"
                         >
                             <svg v-if="treatment.status === 'completed'" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>

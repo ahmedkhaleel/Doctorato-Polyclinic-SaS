@@ -134,19 +134,25 @@ const completionDash = computed(() => {
 <template>
     <div>
         <!-- Hero Header -->
-        <div class="relative mb-8 overflow-hidden rounded-2xl bg-gradient-to-br from-[#1a1523] via-[#1e1a2e] to-[#2a1f3d] p-5 sm:p-7 shadow-xl"
+        <div class="relative mb-8 overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] p-5 sm:p-7 shadow-xl"
             :class="mounted ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'"
             style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1)">
+            <!-- Gold accent line -->
+            <div class="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-[#C4A265] to-transparent"></div>
             <!-- Decorative elements -->
-            <div class="absolute top-0 right-0 w-80 h-80 rounded-full bg-[#C4A265]/10 blur-3xl -translate-y-1/2 translate-x-1/4"></div>
-            <div class="absolute bottom-0 left-1/3 w-64 h-64 rounded-full bg-purple-500/5 blur-3xl translate-y-1/2"></div>
+            <div class="absolute top-0 right-0 w-80 h-80 rounded-full bg-[#C4A265]/20 blur-3xl -translate-y-1/2 translate-x-1/4"></div>
+            <div class="absolute bottom-0 left-1/3 w-64 h-64 rounded-full bg-[#C4A265]/10 blur-3xl translate-y-1/2"></div>
             <div class="absolute top-4 right-6 opacity-[0.03]">
                 <svg class="w-48 h-48 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
             </div>
 
             <div class="relative z-10 flex items-start justify-between">
                 <div>
-                    <p class="text-[#C4A265] text-xs font-semibold tracking-widest uppercase mb-1">{{ currentDate }}</p>
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="h-[3px] w-6 bg-[#C4A265] rounded-full"></span>
+                        <span class="text-[10px] font-bold text-[#C4A265] tracking-[0.25em] uppercase">{{ isRtl ? 'الطبيب' : 'Doctor' }}</span>
+                    </div>
+                    <p class="text-white/60 text-xs font-medium tracking-wide uppercase mb-1">{{ currentDate }}</p>
                     <h1 class="text-2xl font-bold text-white">
                         {{ greeting }}, <span class="text-[#C4A265]">Dr. {{ $page.props.auth?.doctor?.name_en || 'Doctor' }}</span>
                     </h1>
@@ -239,7 +245,7 @@ const completionDash = computed(() => {
                                         {{ visit.patient?.full_name?.charAt(0) || '?' }}
                                     </div>
                                     <div class="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full border-2 border-white flex items-center justify-center"
-                                        :class="visit.status === 'in_progress' ? 'bg-blue-500' : 'bg-amber-400'">
+                                        :class="visit.status === 'in_progress' ? 'bg-[#1B365D]' : 'bg-amber-400'">
                                     </div>
                                 </div>
                                 <div>
@@ -279,8 +285,8 @@ const completionDash = computed(() => {
                     style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s">
                     <div class="flex items-center justify-between px-4 sm:px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-gray-50/80 to-white">
                         <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 rounded-xl bg-indigo-50 flex items-center justify-center">
-                                <svg class="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            <div class="w-8 h-8 rounded-xl bg-slate-50 flex items-center justify-center">
+                                <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                             </div>
                             <div>
                                 <h2 class="text-sm font-bold text-gray-800">{{ isRtl ? 'جدول اليوم' : 'Today\'s Timeline' }}</h2>
@@ -318,19 +324,19 @@ const completionDash = computed(() => {
                                         :class="[
                                             isRtl ? 'right-[10px]' : 'left-[10px]',
                                             visit.status === 'waiting' ? 'bg-amber-400' :
-                                            visit.status === 'in_progress' ? 'bg-blue-500' :
+                                            visit.status === 'in_progress' ? 'bg-[#1B365D]' :
                                             visit.status === 'completed' ? 'bg-emerald-500' : 'bg-gray-300'
                                         ]"></div>
 
                                     <!-- Content -->
                                     <div class="flex-1 flex items-center justify-between gap-3 p-3 rounded-xl border transition-all duration-200 hover:shadow-sm"
-                                        :class="visit.status === 'in_progress' ? 'bg-blue-50/50 border-blue-100' :
+                                        :class="visit.status === 'in_progress' ? 'bg-slate-50/50 border-slate-100' :
                                                 visit.status === 'completed' ? 'bg-emerald-50/30 border-emerald-100/60' :
                                                 'bg-gray-50/50 border-gray-100/60'">
                                         <div class="flex items-center gap-3 min-w-0">
                                             <div class="w-8 h-8 rounded-lg flex items-center justify-center text-[10px] font-bold shrink-0"
                                                 :class="visit.status === 'waiting' ? 'bg-amber-100 text-amber-700' :
-                                                        visit.status === 'in_progress' ? 'bg-blue-100 text-blue-700' :
+                                                        visit.status === 'in_progress' ? 'bg-slate-100 text-[#1B365D]' :
                                                         'bg-emerald-100 text-emerald-700'">
                                                 {{ visit.patient?.full_name?.charAt(0) || '?' }}
                                             </div>
@@ -400,7 +406,7 @@ const completionDash = computed(() => {
                                     </td>
                                     <td class="px-3 py-3">
                                         <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full capitalize"
-                                            :class="visit.visit_type === 'consultation' ? 'bg-sky-50 text-sky-600' : 'bg-violet-50 text-violet-600'">
+                                            :class="visit.visit_type === 'consultation' ? 'bg-slate-50 text-[#1B365D]' : 'bg-slate-50 text-[#1B365D]'">
                                             {{ visit.visit_type === 'consultation' ? (isRtl ? 'استشارة' : 'Consultation') : (visit.service?.name_en || (isRtl ? 'جلسة' : 'Session')) }}
                                         </span>
                                     </td>
@@ -512,13 +518,13 @@ const completionDash = computed(() => {
                     class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden"
                     :class="mounted ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'"
                     style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.25s">
-                    <div class="px-5 py-3.5 border-b border-gray-100 bg-gradient-to-r from-cyan-50/40 to-white flex items-center gap-2">
-                        <svg class="w-4 h-4 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3C10.5 3 9 4.5 8.5 6.5C8 8.5 7 9.5 6 10.5C5 11.5 4 13 4 15C4 17 5.5 19 7.5 19C9 19 10 18 10.5 17C11 16 11.5 15.5 12 15.5C12.5 15.5 13 16 13.5 17C14 18 15 19 16.5 19C18.5 19 20 17 20 15C20 13 19 11.5 18 10.5C17 9.5 16 8.5 15.5 6.5C15 4.5 13.5 3 12 3Z" /></svg>
+                    <div class="px-5 py-3.5 border-b border-gray-100 bg-gradient-to-r from-slate-50/40 to-white flex items-center gap-2">
+                        <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3C10.5 3 9 4.5 8.5 6.5C8 8.5 7 9.5 6 10.5C5 11.5 4 13 4 15C4 17 5.5 19 7.5 19C9 19 10 18 10.5 17C11 16 11.5 15.5 12 15.5C12.5 15.5 13 16 13.5 17C14 18 15 19 16.5 19C18.5 19 20 17 20 15C20 13 19 11.5 18 10.5C17 9.5 16 8.5 15.5 6.5C15 4.5 13.5 3 12 3Z" /></svg>
                         <h3 class="text-xs font-bold text-gray-700 uppercase tracking-wider">{{ isRtl ? 'ملخص الأسنان' : 'Dental Quick Stats' }}</h3>
                     </div>
                     <div class="p-5 grid grid-cols-3 gap-3">
-                        <div class="text-center p-2.5 rounded-xl bg-blue-50/50">
-                            <p class="text-lg font-bold text-blue-600 tabular-nums">{{ dental.active_plans ?? 0 }}</p>
+                        <div class="text-center p-2.5 rounded-xl bg-slate-50/50">
+                            <p class="text-lg font-bold text-[#1B365D] tabular-nums">{{ dental.active_plans ?? 0 }}</p>
                             <p class="text-[10px] font-medium text-gray-500 mt-0.5">{{ isRtl ? 'خطط نشطة' : 'Active Plans' }}</p>
                         </div>
                         <div class="text-center p-2.5 rounded-xl bg-amber-50/50">
@@ -645,14 +651,14 @@ const completionDash = computed(() => {
                     style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.42s">
                     <div class="flex items-center justify-between px-5 py-3.5 border-b border-gray-100 bg-gradient-to-r from-gray-50/80 to-white">
                         <div class="flex items-center gap-2">
-                            <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                            <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                             <h3 class="text-xs font-bold text-gray-700 uppercase tracking-wider">{{ isRtl ? 'الحجوزات القادمة' : 'Upcoming Bookings' }}</h3>
                         </div>
                         <Link href="/doctor/bookings" class="text-[10px] font-semibold text-[#C4A265] hover:text-[#B3914F]">{{ isRtl ? 'عرض الكل' : 'View all' }}</Link>
                     </div>
                     <div v-if="upcomingBookings?.length > 0" class="divide-y divide-gray-50">
                         <div v-for="booking in upcomingBookings" :key="booking.id" class="px-5 py-3 flex items-center gap-3 hover:bg-gray-50/50 transition-colors">
-                            <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center text-[10px] font-bold text-blue-500 shrink-0">
+                            <div class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-[10px] font-bold text-[#1B365D] shrink-0">
                                 {{ new Date(booking.preferred_date).getDate() }}
                             </div>
                             <div class="flex-1 min-w-0">
@@ -680,8 +686,8 @@ const completionDash = computed(() => {
                             <span class="text-[11px] font-semibold text-gray-600 group-hover:text-[#C4A265] transition-colors">{{ isRtl ? 'الطابور' : 'My Queue' }}</span>
                         </Link>
                         <Link href="/doctor/patients" class="flex items-center gap-2.5 p-3 rounded-xl bg-gray-50 hover:bg-[#C4A265]/5 hover:border-[#C4A265]/20 border border-transparent transition-all group">
-                            <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center group-hover:scale-105 transition-transform">
-                                <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                            <div class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center group-hover:scale-105 transition-transform">
+                                <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                             </div>
                             <span class="text-[11px] font-semibold text-gray-600 group-hover:text-[#C4A265] transition-colors">{{ isRtl ? 'المرضى' : 'Patients' }}</span>
                         </Link>
@@ -692,8 +698,8 @@ const completionDash = computed(() => {
                             <span class="text-[11px] font-semibold text-gray-600 group-hover:text-[#C4A265] transition-colors">{{ isRtl ? 'العمولة' : 'Commission' }}</span>
                         </Link>
                         <Link href="/doctor/profile" class="flex items-center gap-2.5 p-3 rounded-xl bg-gray-50 hover:bg-[#C4A265]/5 hover:border-[#C4A265]/20 border border-transparent transition-all group">
-                            <div class="w-8 h-8 rounded-lg bg-purple-50 flex items-center justify-center group-hover:scale-105 transition-transform">
-                                <svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                            <div class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center group-hover:scale-105 transition-transform">
+                                <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                             </div>
                             <span class="text-[11px] font-semibold text-gray-600 group-hover:text-[#C4A265] transition-colors">{{ isRtl ? 'الإعدادات' : 'Settings' }}</span>
                         </Link>
@@ -708,8 +714,8 @@ const completionDash = computed(() => {
             style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.5s">
             <div class="px-4 sm:px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-gray-50/80 to-white flex items-center justify-between">
                 <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl bg-indigo-50 flex items-center justify-center">
-                        <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
+                    <div class="w-9 h-9 rounded-xl bg-slate-50 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
                     </div>
                     <div>
                         <h2 class="text-sm font-bold text-gray-800">{{ isRtl ? 'ملخص الأداء الشهري' : 'Monthly Performance' }}</h2>
@@ -720,8 +726,8 @@ const completionDash = computed(() => {
             <div class="p-6">
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
                     <!-- Total Visits -->
-                    <div class="relative group p-4 rounded-xl border border-gray-100 hover:border-indigo-200 hover:shadow-sm transition-all duration-300 overflow-hidden">
-                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-400 to-indigo-600 transform origin-left transition-transform duration-500" :style="{ transform: mounted ? 'scaleX(1)' : 'scaleX(0)' }"></div>
+                    <div class="relative group p-4 rounded-xl border border-gray-100 hover:border-slate-200 hover:shadow-sm transition-all duration-300 overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-slate-400 to-[#1B365D] transform origin-left transition-transform duration-500" :style="{ transform: mounted ? 'scaleX(1)' : 'scaleX(0)' }"></div>
                         <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1">{{ isRtl ? 'الزيارات' : 'Visits' }}</p>
                         <p class="text-2xl font-bold text-gray-800 tabular-nums">{{ monthly?.total_visits || 0 }}</p>
                         <div class="flex items-center gap-1 mt-1.5">
@@ -750,8 +756,8 @@ const completionDash = computed(() => {
                     </div>
 
                     <!-- Unique Patients -->
-                    <div class="relative group p-4 rounded-xl border border-gray-100 hover:border-blue-200 hover:shadow-sm transition-all duration-300 overflow-hidden">
-                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 to-blue-600 transform origin-left transition-transform duration-500" :style="{ transform: mounted ? 'scaleX(1)' : 'scaleX(0)', transitionDelay: '0.2s' }"></div>
+                    <div class="relative group p-4 rounded-xl border border-gray-100 hover:border-slate-200 hover:shadow-sm transition-all duration-300 overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-slate-400 to-[#1B365D] transform origin-left transition-transform duration-500" :style="{ transform: mounted ? 'scaleX(1)' : 'scaleX(0)', transitionDelay: '0.2s' }"></div>
                         <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1">{{ isRtl ? 'مرضى فريدون' : 'Unique Patients' }}</p>
                         <p class="text-2xl font-bold text-gray-800 tabular-nums">{{ monthly?.unique_patients || 0 }}</p>
                         <p class="text-[10px] text-gray-400 mt-1.5">{{ isRtl ? 'من إجمالي' : 'out of' }} {{ monthly?.total_visits || 0 }} {{ isRtl ? 'زيارة' : 'visits' }}</p>
@@ -814,7 +820,7 @@ const completionDash = computed(() => {
                                 :class="{
                                     'bg-red-100 text-red-700': flag.severity === 'high',
                                     'bg-amber-100 text-amber-700': flag.severity === 'medium',
-                                    'bg-blue-100 text-blue-700': flag.severity === 'low',
+                                    'bg-slate-100 text-[#1B365D]': flag.severity === 'low',
                                 }">
                                 <svg v-if="flag.severity === 'high'" class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
@@ -895,10 +901,10 @@ const completionDash = computed(() => {
         <div v-if="dental" class="mt-6 bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden"
             :class="mounted ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'"
             style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.5s">
-            <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-cyan-50/50 to-white">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-slate-50/50 to-white">
                 <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-xl bg-cyan-50 flex items-center justify-center">
-                        <svg class="w-4 h-4 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3C10.5 3 9 4.5 8.5 6.5C8 8.5 7 9.5 6 10.5C5 11.5 4 13 4 15C4 17 5.5 19 7.5 19C9 19 10 18 10.5 17C11 16 11.5 15.5 12 15.5C12.5 15.5 13 16 13.5 17C14 18 15 19 16.5 19C18.5 19 20 17 20 15C20 13 19 11.5 18 10.5C17 9.5 16 8.5 15.5 6.5C15 4.5 13.5 3 12 3Z" /></svg>
+                    <div class="w-8 h-8 rounded-xl bg-slate-50 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3C10.5 3 9 4.5 8.5 6.5C8 8.5 7 9.5 6 10.5C5 11.5 4 13 4 15C4 17 5.5 19 7.5 19C9 19 10 18 10.5 17C11 16 11.5 15.5 12 15.5C12.5 15.5 13 16 13.5 17C14 18 15 19 16.5 19C18.5 19 20 17 20 15C20 13 19 11.5 18 10.5C17 9.5 16 8.5 15.5 6.5C15 4.5 13.5 3 12 3Z" /></svg>
                     </div>
                     <div>
                         <h2 class="text-sm font-bold text-gray-800">{{ isRtl ? 'نظرة عامة على الأسنان' : 'Dental Overview' }}</h2>
@@ -910,7 +916,7 @@ const completionDash = computed(() => {
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3C10.5 3 9 4.5 8.5 6.5C8 8.5 7 9.5 6 10.5C5 11.5 4 13 4 15C4 17 5.5 19 7.5 19C9 19 10 18 10.5 17C11 16 11.5 15.5 12 15.5C12.5 15.5 13 16 13.5 17C14 18 15 19 16.5 19C18.5 19 20 17 20 15C20 13 19 11.5 18 10.5C17 9.5 16 8.5 15.5 6.5C15 4.5 13.5 3 12 3Z" /></svg>
                         {{ isRtl ? 'مخطط الأسنان' : 'Dental Chart' }}
                     </Link>
-                    <Link href="/doctor/dental/treatments" class="inline-flex items-center gap-1.5 text-[11px] font-semibold text-cyan-600 hover:text-cyan-700 px-3 py-1.5 rounded-lg hover:bg-cyan-50 transition-all">
+                    <Link href="/doctor/dental/treatments" class="inline-flex items-center gap-1.5 text-[11px] font-semibold text-[#1B365D] hover:text-[#1B365D] px-3 py-1.5 rounded-lg hover:bg-slate-50 transition-all">
                         {{ isRtl ? 'كل العلاجات' : 'All treatments' }}
                         <svg class="w-3.5 h-3.5 ltr:rotate-0 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
                     </Link>
@@ -930,7 +936,7 @@ const completionDash = computed(() => {
                     <p class="text-[10px] font-medium text-gray-500 mt-0.5">{{ isRtl ? 'معلّق' : 'Pending' }}</p>
                 </div>
                 <div class="px-3 py-4 text-center">
-                    <p class="text-2xl font-bold text-blue-600">{{ dental.active_plans ?? 0 }}</p>
+                    <p class="text-2xl font-bold text-[#1B365D]">{{ dental.active_plans ?? 0 }}</p>
                     <p class="text-[10px] font-medium text-gray-500 mt-0.5">{{ isRtl ? 'خطط نشطة' : 'Active Plans' }}</p>
                 </div>
                 <div class="px-3 py-4 text-center">
@@ -946,7 +952,7 @@ const completionDash = computed(() => {
                     <p class="text-[10px] font-medium text-gray-500 mt-0.5">{{ isRtl ? 'الشهر' : 'Month' }}</p>
                 </div>
                 <div class="px-3 py-4 text-center">
-                    <p class="text-lg font-bold text-cyan-600">{{ formatCurrency(dental.month_revenue) }}</p>
+                    <p class="text-lg font-bold text-[#1B365D]">{{ formatCurrency(dental.month_revenue) }}</p>
                     <p class="text-[10px] font-medium text-gray-500 mt-0.5">{{ isRtl ? 'إيرادات' : 'Revenue' }}</p>
                 </div>
             </div>
@@ -955,10 +961,10 @@ const completionDash = computed(() => {
         <div v-if="pediatric" class="mt-6 bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden"
             :class="mounted ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'"
             style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.55s">
-            <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-green-50/50 to-white">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-emerald-50/50 to-white">
                 <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-xl bg-green-50 flex items-center justify-center">
-                        <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                    <div class="w-8 h-8 rounded-xl bg-emerald-50 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
                     </div>
                     <div>
                         <h2 class="text-sm font-bold text-gray-800">{{ isRtl ? 'نظرة عامة على طب الأطفال' : 'Pediatric Overview' }}</h2>
@@ -966,7 +972,7 @@ const completionDash = computed(() => {
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
-                    <Link href="/doctor/pediatric/dashboard" class="inline-flex items-center gap-1.5 text-[11px] font-semibold text-green-600 hover:text-green-700 px-3 py-1.5 rounded-lg hover:bg-green-50 transition-all">
+                    <Link href="/doctor/pediatric/dashboard" class="inline-flex items-center gap-1.5 text-[11px] font-semibold text-emerald-600 hover:text-emerald-700 px-3 py-1.5 rounded-lg hover:bg-emerald-50 transition-all">
                         {{ isRtl ? 'لوحة التحكم' : 'Dashboard' }}
                         <svg class="w-3.5 h-3.5 ltr:rotate-0 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
                     </Link>
@@ -974,7 +980,7 @@ const completionDash = computed(() => {
             </div>
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 divide-x rtl:divide-x-reverse divide-gray-100">
                 <div class="px-3 py-4 text-center">
-                    <p class="text-2xl font-bold text-green-600">{{ pediatric.total_patients ?? 0 }}</p>
+                    <p class="text-2xl font-bold text-emerald-600">{{ pediatric.total_patients ?? 0 }}</p>
                     <p class="text-[10px] font-medium text-gray-500 mt-0.5">{{ isRtl ? 'مرضى' : 'Patients' }}</p>
                 </div>
                 <div class="px-3 py-4 text-center">
@@ -994,7 +1000,7 @@ const completionDash = computed(() => {
                     <p class="text-[10px] font-medium text-gray-500 mt-0.5">{{ isRtl ? 'الشهر' : 'Month' }}</p>
                 </div>
                 <div class="px-3 py-4 text-center">
-                    <p class="text-lg font-bold text-green-600">{{ formatCurrency(pediatric.revenue_this_month ?? 0) }}</p>
+                    <p class="text-lg font-bold text-emerald-600">{{ formatCurrency(pediatric.revenue_this_month ?? 0) }}</p>
                     <p class="text-[10px] font-medium text-gray-500 mt-0.5">{{ isRtl ? 'إيرادات' : 'Revenue' }}</p>
                 </div>
             </div>

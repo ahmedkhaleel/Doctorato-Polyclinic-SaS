@@ -266,33 +266,33 @@ const visitTypeDistribution = computed(() => {
                                 <p class="text-xs text-gray-500 uppercase tracking-wider">Total Visits</p>
                                 <p class="text-2xl font-bold text-gray-800 mt-1">{{ performanceStats.total_visits }}</p>
                             </div>
-                            <div class="bg-green-50 rounded-lg p-4">
+                            <div class="bg-emerald-50 rounded-lg p-4">
                                 <p class="text-xs text-gray-500 uppercase tracking-wider">Completed</p>
-                                <p class="text-2xl font-bold text-green-700 mt-1">{{ performanceStats.completed_visits }}</p>
+                                <p class="text-2xl font-bold text-emerald-700 mt-1">{{ performanceStats.completed_visits }}</p>
                             </div>
                             <div class="rounded-lg p-4" style="background-color: rgba(196,162,101,0.08);">
                                 <p class="text-xs text-gray-500 uppercase tracking-wider">Consultations</p>
                                 <p class="text-2xl font-bold mt-1" style="color: #C4A265;">{{ performanceStats.consultations }}</p>
                             </div>
-                            <div class="bg-blue-50 rounded-lg p-4">
+                            <div class="bg-slate-50 rounded-lg p-4">
                                 <p class="text-xs text-gray-500 uppercase tracking-wider">Sessions</p>
-                                <p class="text-2xl font-bold text-blue-700 mt-1">{{ performanceStats.sessions }}</p>
+                                <p class="text-2xl font-bold text-[#1B365D] mt-1">{{ performanceStats.sessions }}</p>
                             </div>
-                            <div class="bg-green-50 rounded-lg p-4">
+                            <div class="bg-emerald-50 rounded-lg p-4">
                                 <p class="text-xs text-gray-500 uppercase tracking-wider">Total Revenue</p>
-                                <p class="text-xl font-bold text-green-700 mt-1">{{ formatCurrency(performanceStats.total_revenue) }}</p>
+                                <p class="text-xl font-bold text-emerald-700 mt-1">{{ formatCurrency(performanceStats.total_revenue) }}</p>
                             </div>
                             <div class="rounded-lg p-4" style="background-color: rgba(196,162,101,0.08);">
                                 <p class="text-xs text-gray-500 uppercase tracking-wider">Total Commission</p>
                                 <p class="text-xl font-bold mt-1" style="color: #C4A265;">{{ formatCurrency(performanceStats.total_commission) }}</p>
                             </div>
-                            <div class="bg-blue-50 rounded-lg p-4">
+                            <div class="bg-slate-50 rounded-lg p-4">
                                 <p class="text-xs text-gray-500 uppercase tracking-wider">This Month Revenue</p>
-                                <p class="text-xl font-bold text-blue-700 mt-1">{{ formatCurrency(performanceStats.this_month_revenue) }}</p>
+                                <p class="text-xl font-bold text-[#1B365D] mt-1">{{ formatCurrency(performanceStats.this_month_revenue) }}</p>
                             </div>
-                            <div class="bg-purple-50 rounded-lg p-4">
+                            <div class="bg-slate-50 rounded-lg p-4">
                                 <p class="text-xs text-gray-500 uppercase tracking-wider">This Month Commission</p>
-                                <p class="text-xl font-bold text-purple-700 mt-1">{{ formatCurrency(performanceStats.this_month_commission) }}</p>
+                                <p class="text-xl font-bold text-[#1B365D] mt-1">{{ formatCurrency(performanceStats.this_month_commission) }}</p>
                             </div>
                             <div v-if="visitTypeDistribution.length > 0" class="bg-gray-50 rounded-lg p-4 flex items-center justify-center">
                                 <DonutChart :data="visitTypeDistribution" :size="100" />
@@ -447,11 +447,11 @@ const visitTypeDistribution = computed(() => {
                                     <Link v-if="can('prescriptions.view')" :href="`/webmaster/prescriptions/${rx.id}`" class="inline-flex items-center px-2.5 py-1 text-xs font-medium rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-50 transition">
                                         View
                                     </Link>
-                                    <a v-if="can('prescriptions.view')" :href="`/webmaster/prescriptions/${rx.id}/print`" target="_blank" class="inline-flex items-center px-2.5 py-1 text-xs font-medium rounded-lg border text-blue-600 border-blue-300 hover:bg-blue-50 transition">
+                                    <a v-if="can('prescriptions.view')" :href="`/webmaster/prescriptions/${rx.id}/print`" target="_blank" class="inline-flex items-center px-2.5 py-1 text-xs font-medium rounded-lg border text-[#1B365D] border-slate-300 hover:bg-slate-50 transition">
                                         <svg class="w-3.5 h-3.5 ltr:mr-1 rtl:ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" /></svg>
                                         Print
                                     </a>
-                                    <a v-if="can('prescriptions.view')" :href="`/webmaster/prescriptions/${rx.id}/pdf`" class="inline-flex items-center px-2.5 py-1 text-xs font-medium rounded-lg border text-green-600 border-green-300 hover:bg-green-50 transition">
+                                    <a v-if="can('prescriptions.view')" :href="`/webmaster/prescriptions/${rx.id}/pdf`" class="inline-flex items-center px-2.5 py-1 text-xs font-medium rounded-lg border text-emerald-600 border-emerald-300 hover:bg-emerald-50 transition">
                                         <svg class="w-3.5 h-3.5 ltr:mr-1 rtl:ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
                                         PDF
                                     </a>
@@ -643,21 +643,21 @@ const visitTypeDistribution = computed(() => {
 
                         <!-- Summary Cards -->
                         <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                            <div class="bg-green-50 rounded-lg p-4">
+                            <div class="bg-emerald-50 rounded-lg p-4">
                                 <p class="text-xs text-gray-500 uppercase tracking-wider">Total Revenue</p>
-                                <p class="text-xl font-bold text-green-700 mt-1">{{ formatCurrency(performanceStats.total_revenue) }}</p>
+                                <p class="text-xl font-bold text-emerald-700 mt-1">{{ formatCurrency(performanceStats.total_revenue) }}</p>
                             </div>
                             <div class="rounded-lg p-4" style="background-color: rgba(196,162,101,0.08);">
                                 <p class="text-xs text-gray-500 uppercase tracking-wider">Total Commission</p>
                                 <p class="text-xl font-bold mt-1" style="color: #C4A265;">{{ formatCurrency(performanceStats.total_commission) }}</p>
                             </div>
-                            <div class="bg-blue-50 rounded-lg p-4">
+                            <div class="bg-slate-50 rounded-lg p-4">
                                 <p class="text-xs text-gray-500 uppercase tracking-wider">This Month Revenue</p>
-                                <p class="text-xl font-bold text-blue-700 mt-1">{{ formatCurrency(performanceStats.this_month_revenue) }}</p>
+                                <p class="text-xl font-bold text-[#1B365D] mt-1">{{ formatCurrency(performanceStats.this_month_revenue) }}</p>
                             </div>
-                            <div class="bg-purple-50 rounded-lg p-4">
+                            <div class="bg-slate-50 rounded-lg p-4">
                                 <p class="text-xs text-gray-500 uppercase tracking-wider">This Month Commission</p>
-                                <p class="text-xl font-bold text-purple-700 mt-1">{{ formatCurrency(performanceStats.this_month_commission) }}</p>
+                                <p class="text-xl font-bold text-[#1B365D] mt-1">{{ formatCurrency(performanceStats.this_month_commission) }}</p>
                             </div>
                         </div>
 
@@ -704,7 +704,7 @@ const visitTypeDistribution = computed(() => {
                                             <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900 text-right">{{ row.invoice_total ? formatCurrency(row.invoice_total) : '-' }}</td>
                                             <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500 text-right">{{ row.supply_cost ? formatCurrency(row.supply_cost) : '-' }}</td>
                                             <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-right" style="color: #C4A265;">{{ row.commission_rate }}%</td>
-                                            <td class="px-4 py-3 whitespace-nowrap text-sm font-bold text-right text-green-700">{{ formatCurrency(row.commission_amount) }}</td>
+                                            <td class="px-4 py-3 whitespace-nowrap text-sm font-bold text-right text-emerald-700">{{ formatCurrency(row.commission_amount) }}</td>
                                         </tr>
                                     </tbody>
                                     <tfoot class="bg-gray-50">
@@ -717,7 +717,7 @@ const visitTypeDistribution = computed(() => {
                                                 {{ formatCurrency(commissionStatement.reduce((sum, r) => sum + Number(r.supply_cost || 0), 0)) }}
                                             </td>
                                             <td class="px-4 py-3"></td>
-                                            <td class="px-4 py-3 text-sm font-bold text-green-700 text-right">
+                                            <td class="px-4 py-3 text-sm font-bold text-emerald-700 text-right">
                                                 {{ formatCurrency(commissionStatement.reduce((sum, r) => sum + Number(r.commission_amount || 0), 0)) }}
                                             </td>
                                         </tr>
@@ -734,10 +734,10 @@ const visitTypeDistribution = computed(() => {
                         <div>
                             <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wider mb-3">{{ $t('a_weekly_schedule') }}</h3>
                             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                                <div v-for="(day, i) in dayNames" :key="i" class="border rounded-lg p-3" :class="getScheduleForDay(i)?.is_active ? 'border-green-200 bg-green-50' : 'border-gray-200 bg-gray-50'">
+                                <div v-for="(day, i) in dayNames" :key="i" class="border rounded-lg p-3" :class="getScheduleForDay(i)?.is_active ? 'border-emerald-200 bg-emerald-50' : 'border-gray-200 bg-gray-50'">
                                     <div class="flex items-center justify-between mb-1">
                                         <span class="text-sm font-medium text-gray-800">{{ day }}</span>
-                                        <span v-if="getScheduleForDay(i)?.is_active" class="w-2 h-2 rounded-full bg-green-500"></span>
+                                        <span v-if="getScheduleForDay(i)?.is_active" class="w-2 h-2 rounded-full bg-emerald-500"></span>
                                         <span v-else class="w-2 h-2 rounded-full bg-gray-300"></span>
                                     </div>
                                     <p v-if="getScheduleForDay(i)" class="text-xs text-gray-600">

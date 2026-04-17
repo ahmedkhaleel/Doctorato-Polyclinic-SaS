@@ -463,7 +463,7 @@ function submit() {
                             </div>
                             <div class="ltr:text-right rtl:text-left">
                                 <span class="font-semibold" style="color: #0d9488;">{{ formatCurrency(bs.bundle_price) }}</span>
-                                <span v-if="Number(bs.discount_percentage) > 0" class="text-xs text-green-600 ltr:ml-2 rtl:mr-2">-{{ bs.discount_percentage }}%</span>
+                                <span v-if="Number(bs.discount_percentage) > 0" class="text-xs text-emerald-600 ltr:ml-2 rtl:mr-2">-{{ bs.discount_percentage }}%</span>
                             </div>
                         </div>
                     </div>
@@ -485,7 +485,7 @@ function submit() {
                             <div class="flex items-center gap-3 mt-1 text-xs text-gray-500">
                                 <span>{{ sa.sessions_count }} {{ sa.sessions_count === 1 ? 'session' : 'sessions' }}</span>
                                 <span>{{ formatCurrency(sa.bundle_price) }}</span>
-                                <span v-if="Number(sa.discount_percentage) > 0" class="text-green-600">-{{ sa.discount_percentage }}% off</span>
+                                <span v-if="Number(sa.discount_percentage) > 0" class="text-emerald-600">-{{ sa.discount_percentage }}% off</span>
                             </div>
                         </div>
                         <div class="w-full sm:w-64">
@@ -629,7 +629,7 @@ function submit() {
                         </div>
                         <div class="ltr:text-right rtl:text-left">
                             <div class="text-lg font-bold" style="color: #0d9488;">{{ formatCurrency(selectedBundle?.total_price) }}</div>
-                            <div v-if="Number(selectedBundle?.savings) > 0" class="text-xs text-green-600">{{ isRtl ? 'توفر' : 'You save' }} {{ formatCurrency(selectedBundle?.savings) }}</div>
+                            <div v-if="Number(selectedBundle?.savings) > 0" class="text-xs text-emerald-600">{{ isRtl ? 'توفر' : 'You save' }} {{ formatCurrency(selectedBundle?.savings) }}</div>
                         </div>
                     </div>
                 </div>

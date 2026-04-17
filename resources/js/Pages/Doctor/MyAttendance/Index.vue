@@ -115,7 +115,7 @@ const statusConfig = {
     present: { label: isRtl.value ? 'حاضر' : 'Present', bg: 'bg-emerald-50', text: 'text-emerald-700', dot: 'bg-emerald-500' },
     absent: { label: isRtl.value ? 'غائب' : 'Absent', bg: 'bg-red-50', text: 'text-red-700', dot: 'bg-red-500' },
     late: { label: isRtl.value ? 'متأخر' : 'Late', bg: 'bg-amber-50', text: 'text-amber-700', dot: 'bg-amber-500' },
-    leave: { label: isRtl.value ? 'إجازة' : 'On Leave', bg: 'bg-blue-50', text: 'text-blue-700', dot: 'bg-blue-500' },
+    leave: { label: isRtl.value ? 'إجازة' : 'On Leave', bg: 'bg-slate-50', text: 'text-[#1B365D]', dot: 'bg-[#1B365D]' },
 };
 
 const hasCheckedIn = computed(() => !!props.today?.check_in);
@@ -135,7 +135,7 @@ onMounted(() => {
     <div class="space-y-6">
         <!-- ═══ Hero Header ═══ -->
         <div
-            class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6 sm:p-8 transition-all duration-700"
+            class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] p-6 sm:p-8 transition-all duration-700"
             :class="headerLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
         >
             <div class="absolute top-0 right-0 w-96 h-96 bg-gradient-radial from-emerald-500/10 to-transparent rounded-full -translate-y-1/2 translate-x-1/2"></div>
@@ -179,11 +179,11 @@ onMounted(() => {
                     </div>
                     <div class="bg-white/5 backdrop-blur-sm rounded-xl px-4 py-3 border border-white/10">
                         <p class="text-[10px] text-gray-400 uppercase font-semibold">{{ isRtl ? 'إجازة' : 'Leave' }}</p>
-                        <p class="text-xl font-bold text-blue-400">{{ summary?.leave ?? 0 }}</p>
+                        <p class="text-xl font-bold text-slate-400">{{ summary?.leave ?? 0 }}</p>
                     </div>
                     <div class="bg-white/5 backdrop-blur-sm rounded-xl px-4 py-3 border border-white/10 hidden sm:block">
                         <p class="text-[10px] text-gray-400 uppercase font-semibold">{{ isRtl ? 'إضافي' : 'Overtime' }}</p>
-                        <p class="text-xl font-bold text-purple-400">{{ summary?.overtime_hours ?? 0 }}<span class="text-xs text-gray-500">h</span></p>
+                        <p class="text-xl font-bold text-slate-400">{{ summary?.overtime_hours ?? 0 }}<span class="text-xs text-gray-500">h</span></p>
                     </div>
                 </div>
             </div>
@@ -337,7 +337,7 @@ onMounted(() => {
                             </div>
                             <div class="hidden sm:block">
                                 <p class="text-[10px] text-gray-400 font-semibold uppercase">{{ isRtl ? 'إضافي' : 'OT' }}</p>
-                                <p class="text-sm font-bold text-purple-600 mt-0.5">{{ record.overtime_hours > 0 ? record.overtime_hours + 'h' : '-' }}</p>
+                                <p class="text-sm font-bold text-[#1B365D] mt-0.5">{{ record.overtime_hours > 0 ? record.overtime_hours + 'h' : '-' }}</p>
                             </div>
                         </div>
 

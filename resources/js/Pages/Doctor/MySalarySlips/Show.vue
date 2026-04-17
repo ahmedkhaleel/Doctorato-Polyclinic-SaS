@@ -95,7 +95,7 @@ function handlePrint() {
                     <p class="text-sm text-gray-500 mt-0.5">{{ periodLabel() }} <span class="text-gray-300 mx-1">&mdash;</span> <span class="font-mono text-gray-400">{{ slip?.slip_number }}</span></p>
                 </div>
             </div>
-            <button @click="handlePrint" class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#4f46e5] text-white text-sm font-semibold rounded-xl hover:bg-[#4338ca] transition-all duration-200 hover:shadow-lg hover:shadow-indigo-500/20 active:scale-95">
+            <button @click="handlePrint" class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#4f46e5] text-white text-sm font-semibold rounded-xl hover:bg-[#4338ca] transition-all duration-200 hover:shadow-lg hover:shadow-[#1B365D]/20 active:scale-95">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" /></svg>
                 {{ isRtl ? 'طباعة' : 'Print' }}
             </button>
@@ -115,7 +115,7 @@ function handlePrint() {
         >
             <div class="p-4 sm:p-6">
                 <div class="flex items-center gap-4">
-                    <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-[#4f46e5] to-[#6366f1] flex items-center justify-center shadow-lg shadow-indigo-500/20">
+                    <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-[#4f46e5] to-[#6366f1] flex items-center justify-center shadow-lg shadow-[#1B365D]/20">
                         <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                     </div>
                     <div class="flex-1">
@@ -138,8 +138,8 @@ function handlePrint() {
                     </div>
                 </div>
                 <div v-if="slip.payment_method" class="flex items-center gap-2">
-                    <div class="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center">
-                        <svg class="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
+                    <div class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
                     </div>
                     <div>
                         <span class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider">{{ isRtl ? 'طريقة الدفع' : 'Payment Method' }}</span>
@@ -210,7 +210,7 @@ function handlePrint() {
 
         <!-- Net Salary -->
         <div
-            class="relative overflow-hidden bg-gradient-to-r from-[#4f46e5] to-[#6366f1] rounded-2xl shadow-lg shadow-indigo-500/20 p-6 sm:p-8 text-white transition-all duration-700"
+            class="relative overflow-hidden bg-gradient-to-r from-[#4f46e5] to-[#6366f1] rounded-2xl shadow-lg shadow-[#1B365D]/20 p-6 sm:p-8 text-white transition-all duration-700"
             :class="netLoaded ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-6 scale-95'"
             :style="{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }"
         >

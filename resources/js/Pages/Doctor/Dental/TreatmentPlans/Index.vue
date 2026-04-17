@@ -77,16 +77,16 @@ function formatDate(date) {
 const statusColors = {
     draft: 'bg-gray-100 text-gray-800',
     pending: 'bg-yellow-100 text-yellow-800',
-    approved: 'bg-blue-100 text-blue-800',
+    approved: 'bg-slate-100 text-[#1B365D]',
     in_progress: 'bg-[#C4A265]/10 text-[#C4A265]',
-    completed: 'bg-green-100 text-green-800',
+    completed: 'bg-emerald-100 text-emerald-800',
     cancelled: 'bg-red-100 text-red-800',
 };
 
 const priorityColors = {
     low: 'bg-gray-100 text-gray-600',
-    normal: 'bg-blue-100 text-blue-700',
-    high: 'bg-orange-100 text-orange-700',
+    normal: 'bg-slate-100 text-[#1B365D]',
+    high: 'bg-amber-100 text-amber-700',
     urgent: 'bg-red-100 text-red-700',
 };
 </script>
@@ -94,9 +94,9 @@ const priorityColors = {
 <template>
     <div class="space-y-6">
         <!-- Hero Header -->
-        <div class="dental-hero-enter relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6 sm:p-8">
+        <div class="dental-hero-enter relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] p-6 sm:p-8">
             <div class="absolute top-0 right-0 w-72 h-72 bg-[#C4A265]/10 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl"></div>
-            <div class="absolute bottom-0 left-0 w-48 h-48 bg-purple-500/10 rounded-full translate-y-1/2 -translate-x-1/4 blur-2xl"></div>
+            <div class="absolute bottom-0 left-0 w-48 h-48 bg-[#1B365D]/10 rounded-full translate-y-1/2 -translate-x-1/4 blur-2xl"></div>
 
             <div class="relative z-10">
                 <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-5">

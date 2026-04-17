@@ -207,7 +207,7 @@ function getEffectiveness(template) {
     const usage = template.usage_count || 0;
     if (usage === 0) return { score: 0, label: { en: 'Unused', ar: 'غير مستخدم' }, color: 'text-gray-400', bg: 'bg-gray-50' };
     if (usage < 5) return { score: 1, label: { en: 'Low', ar: 'منخفض' }, color: 'text-amber-600', bg: 'bg-amber-50' };
-    if (usage < 20) return { score: 2, label: { en: 'Good', ar: 'جيد' }, color: 'text-blue-600', bg: 'bg-blue-50' };
+    if (usage < 20) return { score: 2, label: { en: 'Good', ar: 'جيد' }, color: 'text-[#1B365D]', bg: 'bg-slate-50' };
     return { score: 3, label: { en: 'Excellent', ar: 'ممتاز' }, color: 'text-emerald-600', bg: 'bg-emerald-50' };
 }
 
@@ -362,42 +362,42 @@ const selectedLeadName = computed(() => {
             </div>
         </div>
         <!-- WhatsApp -->
-        <div class="relative overflow-hidden bg-gradient-to-br from-green-50 to-white rounded-2xl border border-green-100/60 p-4 md:p-5 shadow-sm group hover:shadow-md hover:-translate-y-0.5 transition-all duration-300">
-            <div class="absolute top-0 right-0 w-20 h-20 bg-green-500/5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+        <div class="relative overflow-hidden bg-gradient-to-br from-emerald-50 to-white rounded-2xl border border-emerald-100/60 p-4 md:p-5 shadow-sm group hover:shadow-md hover:-translate-y-0.5 transition-all duration-300">
+            <div class="absolute top-0 right-0 w-20 h-20 bg-emerald-500/5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
             <div class="relative">
-                <div class="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
-                    <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 24 24">
+                <div class="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
+                    <svg class="w-5 h-5 text-emerald-600" fill="currentColor" viewBox="0 0 24 24">
                         <path :d="channelConfig.whatsapp.icon"/>
                     </svg>
                 </div>
-                <div class="text-2xl md:text-3xl font-bold text-green-700">{{ animatedWhatsapp }}</div>
-                <div class="text-xs text-green-600/70 font-medium mt-0.5">{{ isRtl ? 'واتساب' : 'WhatsApp' }}</div>
+                <div class="text-2xl md:text-3xl font-bold text-emerald-700">{{ animatedWhatsapp }}</div>
+                <div class="text-xs text-emerald-600/70 font-medium mt-0.5">{{ isRtl ? 'واتساب' : 'WhatsApp' }}</div>
             </div>
         </div>
         <!-- SMS -->
-        <div class="relative overflow-hidden bg-gradient-to-br from-blue-50 to-white rounded-2xl border border-blue-100/60 p-4 md:p-5 shadow-sm group hover:shadow-md hover:-translate-y-0.5 transition-all duration-300">
-            <div class="absolute top-0 right-0 w-20 h-20 bg-blue-500/5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+        <div class="relative overflow-hidden bg-gradient-to-br from-slate-50 to-white rounded-2xl border border-slate-100/60 p-4 md:p-5 shadow-sm group hover:shadow-md hover:-translate-y-0.5 transition-all duration-300">
+            <div class="absolute top-0 right-0 w-20 h-20 bg-[#1B365D]/5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
             <div class="relative">
-                <div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
-                    <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <div class="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
+                    <svg class="w-5 h-5 text-[#1B365D]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" :d="channelConfig.sms.icon"/>
                     </svg>
                 </div>
-                <div class="text-2xl md:text-3xl font-bold text-blue-700">{{ animatedSms }}</div>
-                <div class="text-xs text-blue-600/70 font-medium mt-0.5">{{ isRtl ? 'رسائل نصية' : 'SMS' }}</div>
+                <div class="text-2xl md:text-3xl font-bold text-[#1B365D]">{{ animatedSms }}</div>
+                <div class="text-xs text-[#1B365D]/70 font-medium mt-0.5">{{ isRtl ? 'رسائل نصية' : 'SMS' }}</div>
             </div>
         </div>
         <!-- Email -->
-        <div class="relative overflow-hidden bg-gradient-to-br from-purple-50 to-white rounded-2xl border border-purple-100/60 p-4 md:p-5 shadow-sm group hover:shadow-md hover:-translate-y-0.5 transition-all duration-300">
-            <div class="absolute top-0 right-0 w-20 h-20 bg-purple-500/5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+        <div class="relative overflow-hidden bg-gradient-to-br from-slate-50 to-white rounded-2xl border border-slate-100/60 p-4 md:p-5 shadow-sm group hover:shadow-md hover:-translate-y-0.5 transition-all duration-300">
+            <div class="absolute top-0 right-0 w-20 h-20 bg-[#1B365D]/5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
             <div class="relative">
-                <div class="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
-                    <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <div class="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
+                    <svg class="w-5 h-5 text-[#1B365D]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" :d="channelConfig.email.icon"/>
                     </svg>
                 </div>
-                <div class="text-2xl md:text-3xl font-bold text-purple-700">{{ animatedEmail }}</div>
-                <div class="text-xs text-purple-600/70 font-medium mt-0.5">{{ isRtl ? 'بريد إلكتروني' : 'Email' }}</div>
+                <div class="text-2xl md:text-3xl font-bold text-[#1B365D]">{{ animatedEmail }}</div>
+                <div class="text-xs text-[#1B365D]/70 font-medium mt-0.5">{{ isRtl ? 'بريد إلكتروني' : 'Email' }}</div>
             </div>
         </div>
     </div>
@@ -431,13 +431,13 @@ const selectedLeadName = computed(() => {
                                     ? 'bg-white text-teal-700 shadow-sm ring-1 ring-slate-200/60'
                                     : 'text-slate-500 hover:text-slate-700 hover:bg-white/50']">
                     <template v-if="ch.icon === 'whatsapp'">
-                        <svg class="w-3.5 h-3.5" :class="channelFilter === ch.value ? 'text-green-600' : ''" fill="currentColor" viewBox="0 0 24 24"><path :d="channelConfig.whatsapp.icon"/></svg>
+                        <svg class="w-3.5 h-3.5" :class="channelFilter === ch.value ? 'text-emerald-600' : ''" fill="currentColor" viewBox="0 0 24 24"><path :d="channelConfig.whatsapp.icon"/></svg>
                     </template>
                     <template v-else-if="ch.icon === 'sms'">
-                        <svg class="w-3.5 h-3.5" :class="channelFilter === ch.value ? 'text-blue-600' : ''" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" :d="channelConfig.sms.icon"/></svg>
+                        <svg class="w-3.5 h-3.5" :class="channelFilter === ch.value ? 'text-[#1B365D]' : ''" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" :d="channelConfig.sms.icon"/></svg>
                     </template>
                     <template v-else-if="ch.icon === 'email'">
-                        <svg class="w-3.5 h-3.5" :class="channelFilter === ch.value ? 'text-purple-600' : ''" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" :d="channelConfig.email.icon"/></svg>
+                        <svg class="w-3.5 h-3.5" :class="channelFilter === ch.value ? 'text-[#1B365D]' : ''" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" :d="channelConfig.email.icon"/></svg>
                     </template>
                     <template v-else>
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
@@ -530,7 +530,7 @@ const selectedLeadName = computed(() => {
                     <div class="flex flex-col items-end gap-1 flex-shrink-0">
                         <div :class="['inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-full border transition-colors',
                             (template.usage_count || 0) >= 20 ? 'bg-teal-50 text-teal-700 border-teal-200' :
-                            (template.usage_count || 0) >= 5 ? 'bg-blue-50 text-blue-600 border-blue-200' :
+                            (template.usage_count || 0) >= 5 ? 'bg-slate-50 text-[#1B365D] border-slate-200' :
                             'bg-slate-50 text-slate-400 border-slate-200']">
                             <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
                             {{ template.usage_count || 0 }}
@@ -588,7 +588,7 @@ const selectedLeadName = computed(() => {
                     </button>
                     <!-- Duplicate -->
                     <button @click="duplicateTemplate(template)" :disabled="duplicating === template.id"
-                            class="flex items-center justify-center w-10 h-10 bg-slate-100 hover:bg-purple-50 hover:text-purple-600 text-slate-500 rounded-xl transition-all duration-200 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+                            class="flex items-center justify-center w-10 h-10 bg-slate-100 hover:bg-slate-50 hover:text-[#1B365D] text-slate-500 rounded-xl transition-all duration-200 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
                             :title="isRtl ? 'تكرار القالب' : 'Duplicate'">
                         <svg v-if="duplicating !== template.id" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"/></svg>
                         <svg v-else class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
@@ -731,15 +731,15 @@ const selectedLeadName = computed(() => {
                             </div>
 
                             <!-- WhatsApp Preview Mockup -->
-                            <div v-else-if="previewText && selectedTemplate?.channel === 'whatsapp'" class="rounded-2xl overflow-hidden border border-green-100">
+                            <div v-else-if="previewText && selectedTemplate?.channel === 'whatsapp'" class="rounded-2xl overflow-hidden border border-emerald-100">
                                 <!-- WhatsApp header bar -->
-                                <div class="bg-gradient-to-r from-green-700 to-green-600 px-4 py-3 flex items-center gap-3">
+                                <div class="bg-gradient-to-r from-emerald-700 to-emerald-600 px-4 py-3 flex items-center gap-3">
                                     <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
                                         <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
                                     </div>
                                     <div>
                                         <p class="text-white text-sm font-semibold">{{ selectedLeadName || (isRtl ? 'العميل' : 'Lead') }}</p>
-                                        <p class="text-green-200 text-[10px]">{{ isRtl ? 'متصل' : 'online' }}</p>
+                                        <p class="text-emerald-200 text-[10px]">{{ isRtl ? 'متصل' : 'online' }}</p>
                                     </div>
                                 </div>
                                 <!-- Chat area -->
@@ -749,15 +749,15 @@ const selectedLeadName = computed(() => {
                                         <p class="text-sm text-slate-800 leading-relaxed whitespace-pre-wrap" :dir="selectedLang === 'ar' ? 'rtl' : 'ltr'">{{ previewText }}</p>
                                         <div class="flex items-center justify-end gap-1 mt-1">
                                             <span class="text-[10px] text-slate-500">{{ currentTime() }}</span>
-                                            <svg class="w-3.5 h-3.5 text-blue-500" fill="currentColor" viewBox="0 0 24 24"><path d="M18 7l-1.41-1.41-6.34 6.34 1.41 1.41L18 7zm4.24-1.41L11.66 16.17 7.48 12l-1.41 1.41L11.66 19l12-12-1.42-1.41zM.41 13.41L6 19l1.41-1.41L1.83 12 .41 13.41z"/></svg>
+                                            <svg class="w-3.5 h-3.5 text-[#1B365D]" fill="currentColor" viewBox="0 0 24 24"><path d="M18 7l-1.41-1.41-6.34 6.34 1.41 1.41L18 7zm4.24-1.41L11.66 16.17 7.48 12l-1.41 1.41L11.66 19l12-12-1.42-1.41zM.41 13.41L6 19l1.41-1.41L1.83 12 .41 13.41z"/></svg>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- SMS Preview Mockup -->
-                            <div v-else-if="previewText && selectedTemplate?.channel === 'sms'" class="rounded-2xl overflow-hidden border border-blue-100">
-                                <div class="bg-gradient-to-r from-blue-600 to-blue-500 px-4 py-3 flex items-center justify-center">
+                            <div v-else-if="previewText && selectedTemplate?.channel === 'sms'" class="rounded-2xl overflow-hidden border border-slate-100">
+                                <div class="bg-gradient-to-r from-[#1B365D] to-[#1B365D] px-4 py-3 flex items-center justify-center">
                                     <p class="text-white text-sm font-semibold">{{ selectedLeadName || (isRtl ? 'رسالة نصية' : 'Text Message') }}</p>
                                 </div>
                                 <div class="bg-gradient-to-b from-slate-50 to-white p-4">
@@ -770,8 +770,8 @@ const selectedLeadName = computed(() => {
                             </div>
 
                             <!-- Email Preview Mockup -->
-                            <div v-else-if="previewText && selectedTemplate?.channel === 'email'" class="rounded-2xl overflow-hidden border border-purple-100">
-                                <div class="bg-gradient-to-r from-purple-600 to-purple-500 px-4 py-3">
+                            <div v-else-if="previewText && selectedTemplate?.channel === 'email'" class="rounded-2xl overflow-hidden border border-slate-100">
+                                <div class="bg-gradient-to-r from-[#1B365D] to-[#1B365D] px-4 py-3">
                                     <p class="text-white text-sm font-semibold">{{ isRtl ? 'بريد إلكتروني' : 'Email' }}</p>
                                 </div>
                                 <div class="bg-white p-4 border-b border-slate-100">

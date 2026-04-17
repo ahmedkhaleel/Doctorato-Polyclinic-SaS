@@ -109,12 +109,12 @@ const groupLabels = computed(() => ({
 }));
 
 const typeIcons = {
-    new_booking: { icon: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z', color: 'text-blue-500', bg: 'bg-blue-50', border: 'border-blue-400', category: 'booking' },
+    new_booking: { icon: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z', color: 'text-[#1B365D]', bg: 'bg-slate-50', border: 'border-slate-400', category: 'booking' },
     new_visit: { icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z', color: 'text-emerald-500', bg: 'bg-emerald-50', border: 'border-emerald-400', category: 'visit' },
     booking_reminder: { icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z', color: 'text-amber-500', bg: 'bg-amber-50', border: 'border-amber-400', category: 'reminder' },
     dental_lab_overdue: { icon: 'M12 9v2m0 4h.01M12 3a9 9 0 110 18 9 9 0 010-18z', color: 'text-red-500', bg: 'bg-red-50', border: 'border-red-400', category: 'alert' },
-    dental_plan_due: { icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2', color: 'text-purple-500', bg: 'bg-purple-50', border: 'border-purple-400', category: 'reminder' },
-    dental_followup_reminder: { icon: 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z', color: 'text-pink-500', bg: 'bg-pink-50', border: 'border-pink-400', category: 'reminder' },
+    dental_plan_due: { icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2', color: 'text-[#1B365D]', bg: 'bg-slate-50', border: 'border-slate-400', category: 'reminder' },
+    dental_followup_reminder: { icon: 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z', color: 'text-[#C4A265]', bg: 'bg-amber-50', border: 'border-amber-400', category: 'reminder' },
 };
 const defaultIcon = { icon: 'M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 00-9.33-5A4.97 4.97 0 008 11v3.159c0 .538-.214 1.055-.595 1.436L6 17h5m4 0v1a3 3 0 11-6 0v-1m6 0H9', color: 'text-gray-500', bg: 'bg-gray-50', border: 'border-gray-300', category: 'other' };
 
@@ -165,7 +165,7 @@ function getActionUrl(n) {
     <div class="space-y-4 sm:space-y-5">
         <!-- Hero Header -->
         <div
-            class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6 sm:p-8 transition-all duration-700"
+            class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] p-6 sm:p-8 transition-all duration-700"
             :class="headerLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
         >
             <div class="absolute top-0 right-0 w-96 h-96 bg-gradient-radial from-amber-500/10 to-transparent rounded-full -translate-y-1/2 translate-x-1/2"></div>
@@ -270,8 +270,8 @@ function getActionUrl(n) {
                 </div>
             </div>
             <div class="bg-white rounded-xl border border-gray-100 px-3 sm:px-4 py-2.5 sm:py-3 flex items-center gap-2 sm:gap-3">
-                <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
-                    <svg class="w-4 h-4 sm:w-4.5 sm:h-4.5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" /></svg>
+                <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-slate-50 flex items-center justify-center flex-shrink-0">
+                    <svg class="w-4 h-4 sm:w-4.5 sm:h-4.5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" /></svg>
                 </div>
                 <div class="min-w-0">
                     <p class="text-xs sm:text-sm font-bold text-gray-900 leading-tight truncate">{{ mostCommonType }}</p>

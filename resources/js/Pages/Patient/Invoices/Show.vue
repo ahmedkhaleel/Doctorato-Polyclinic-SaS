@@ -22,8 +22,8 @@ const translations = computed(() => page.props.translations || {});
 function t(key) { return translations.value[key] || key; }
 
 const statusColors = {
-    paid: 'bg-green-100 text-green-700',
-    partial: 'bg-yellow-100 text-yellow-700',
+    paid: 'bg-emerald-100 text-emerald-700',
+    partial: 'bg-yellow-100 text-amber-700',
     unpaid: 'bg-red-100 text-red-700',
     cancelled: 'bg-gray-100 text-gray-500',
 };
@@ -89,7 +89,7 @@ const balanceDue = computed(() => {
                     </div>
                     <div v-if="invoice?.discount && parseFloat(invoice.discount) > 0" class="flex items-center gap-8">
                         <span class="text-gray-500">{{ isRtl ? 'الخصم' : 'Discount' }}</span>
-                        <span class="font-medium text-green-600 w-24 text-end">-{{ formatCurrency(invoice.discount) }}</span>
+                        <span class="font-medium text-emerald-600 w-24 text-end">-{{ formatCurrency(invoice.discount) }}</span>
                     </div>
                     <div v-if="invoice?.tax && parseFloat(invoice.tax) > 0" class="flex items-center gap-8">
                         <span class="text-gray-500">{{ isRtl ? 'الضريبة' : 'Tax' }}</span>
@@ -120,7 +120,7 @@ const balanceDue = computed(() => {
                     <tbody>
                         <tr v-for="payment in invoice.payments" :key="payment.id" class="border-b border-gray-50">
                             <td class="px-6 py-3 text-gray-700">{{ payment.payment_date || payment.created_at?.split('T')[0] }}</td>
-                            <td class="px-6 py-3 font-medium text-green-600">{{ formatCurrency(payment.amount) }}</td>
+                            <td class="px-6 py-3 font-medium text-emerald-600">{{ formatCurrency(payment.amount) }}</td>
                             <td class="px-6 py-3 text-gray-600">{{ payment.payment_method || payment.method }}</td>
                         </tr>
                     </tbody>
@@ -133,8 +133,8 @@ const balanceDue = computed(() => {
             <p class="text-sm text-red-600 font-medium mb-1">{{ isRtl ? 'المبلغ المتبقي' : 'Balance Due' }}</p>
             <p class="text-3xl font-bold text-red-700">{{ formatCurrency(balanceDue) }}</p>
         </div>
-        <div v-else-if="invoice?.status === 'paid'" class="bg-green-50 rounded-2xl border border-green-200 p-6 text-center">
-            <p class="text-sm text-green-600 font-semibold">{{ isRtl ? 'تم الدفع بالكامل' : 'Fully Paid' }}</p>
+        <div v-else-if="invoice?.status === 'paid'" class="bg-emerald-50 rounded-2xl border border-emerald-200 p-6 text-center">
+            <p class="text-sm text-emerald-600 font-semibold">{{ isRtl ? 'تم الدفع بالكامل' : 'Fully Paid' }}</p>
         </div>
     </div>
 </template>

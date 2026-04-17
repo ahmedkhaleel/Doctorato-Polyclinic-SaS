@@ -25,8 +25,8 @@ onMounted(() => {
 /* ── Status configuration ─────────────────────────────────── */
 const statusConfig = computed(() => ({
     waiting: { label: isRtl.value ? 'انتظار' : 'Waiting', bg: 'bg-amber-50', text: 'text-amber-700', dot: 'bg-amber-400', heroBg: 'from-amber-600 to-amber-500' },
-    in_progress: { label: isRtl.value ? 'جاري' : 'In Progress', bg: 'bg-blue-50', text: 'text-blue-700', dot: 'bg-blue-500', heroBg: 'from-blue-600 to-blue-500' },
-    completed: { label: isRtl.value ? 'مكتمل' : 'Completed', bg: 'bg-emerald-50', text: 'text-emerald-700', dot: 'bg-emerald-500', heroBg: 'from-emerald-600 to-green-500' },
+    in_progress: { label: isRtl.value ? 'جاري' : 'In Progress', bg: 'bg-slate-50', text: 'text-[#1B365D]', dot: 'bg-[#1B365D]', heroBg: 'from-[#1B365D] to-[#1B365D]' },
+    completed: { label: isRtl.value ? 'مكتمل' : 'Completed', bg: 'bg-emerald-50', text: 'text-emerald-700', dot: 'bg-emerald-500', heroBg: 'from-emerald-600 to-emerald-500' },
     cancelled: { label: isRtl.value ? 'ملغي' : 'Cancelled', bg: 'bg-gray-50', text: 'text-gray-500', dot: 'bg-gray-400', heroBg: 'from-gray-600 to-gray-500' },
 }));
 
@@ -41,8 +41,8 @@ const visitTypeLabels = computed(() => ({
 
 const visitTypeBadgeColors = {
     consultation: 'bg-teal-100 text-teal-700',
-    session: 'bg-cyan-100 text-cyan-700',
-    follow_up: 'bg-sky-100 text-sky-700',
+    session: 'bg-slate-100 text-[#1B365D]',
+    follow_up: 'bg-slate-100 text-[#1B365D]',
 };
 
 /* ── Helper functions ─────────────────────────────────────── */
@@ -210,9 +210,9 @@ const doctorName = computed(() => {
             >
                 <!-- Visit Information Card -->
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div class="px-4 sm:px-6 py-4 bg-gradient-to-r from-green-50 to-emerald-50 border-b border-gray-100">
-                        <h2 class="text-base font-semibold text-green-800 flex items-center gap-2">
-                            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="px-4 sm:px-6 py-4 bg-gradient-to-r from-emerald-50 to-emerald-50 border-b border-gray-100">
+                        <h2 class="text-base font-semibold text-emerald-800 flex items-center gap-2">
+                            <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                             </svg>
                             {{ isRtl ? 'معلومات الزيارة' : 'Visit Information' }}
@@ -265,7 +265,7 @@ const doctorName = computed(() => {
                             <div v-if="visit.session_number">
                                 <dt class="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">{{ isRtl ? 'رقم الجلسة' : 'Session Number' }}</dt>
                                 <dd class="text-sm text-gray-900 font-semibold">
-                                    <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-green-100 text-green-700 text-xs font-bold">
+                                    <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-emerald-100 text-emerald-700 text-xs font-bold">
                                         {{ visit.session_number }}
                                     </span>
                                 </dd>
@@ -289,9 +289,9 @@ const doctorName = computed(() => {
 
                 <!-- Diagnosis & Notes Card -->
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div class="px-4 sm:px-6 py-4 bg-gradient-to-r from-green-50 to-emerald-50 border-b border-gray-100">
-                        <h2 class="text-base font-semibold text-green-800 flex items-center gap-2">
-                            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="px-4 sm:px-6 py-4 bg-gradient-to-r from-emerald-50 to-emerald-50 border-b border-gray-100">
+                        <h2 class="text-base font-semibold text-emerald-800 flex items-center gap-2">
+                            <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                             </svg>
                             {{ isRtl ? 'التشخيص والملاحظات' : 'Diagnosis & Notes' }}
@@ -301,7 +301,7 @@ const doctorName = computed(() => {
                         <!-- Diagnosis -->
                         <div>
                             <h3 class="text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">{{ isRtl ? 'التشخيص' : 'Diagnosis' }}</h3>
-                            <div v-if="visit.diagnosis" class="text-sm text-gray-800 leading-relaxed bg-green-50/50 border border-green-100 rounded-lg p-3">
+                            <div v-if="visit.diagnosis" class="text-sm text-gray-800 leading-relaxed bg-emerald-50/50 border border-emerald-100 rounded-lg p-3">
                                 {{ visit.diagnosis }}
                             </div>
                             <p v-else class="text-sm text-gray-400 italic">{{ isRtl ? 'لا يوجد تشخيص بعد' : 'No diagnosis yet' }}</p>
@@ -319,13 +319,13 @@ const doctorName = computed(() => {
 
                 <!-- Prescriptions Section -->
                 <div v-if="visit.prescriptions && visit.prescriptions.length > 0" class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div class="px-4 sm:px-6 py-4 bg-gradient-to-r from-green-50 to-emerald-50 border-b border-gray-100">
-                        <h2 class="text-base font-semibold text-green-800 flex items-center gap-2">
-                            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="px-4 sm:px-6 py-4 bg-gradient-to-r from-emerald-50 to-emerald-50 border-b border-gray-100">
+                        <h2 class="text-base font-semibold text-emerald-800 flex items-center gap-2">
+                            <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
                             </svg>
                             {{ isRtl ? 'الوصفات الطبية' : 'Prescriptions' }}
-                            <span class="ltr:ml-auto rtl:mr-auto text-xs font-normal text-green-600 bg-green-100 px-2 py-0.5 rounded-full">
+                            <span class="ltr:ml-auto rtl:mr-auto text-xs font-normal text-emerald-600 bg-emerald-100 px-2 py-0.5 rounded-full">
                                 {{ visit.prescriptions.length }}
                             </span>
                         </h2>
@@ -348,7 +348,7 @@ const doctorName = computed(() => {
                                     class="flex flex-wrap items-start gap-x-4 gap-y-1 bg-gray-50 rounded-lg px-3 py-2.5 text-sm"
                                 >
                                     <div class="flex items-center gap-2 font-medium text-gray-800">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-green-400 flex-shrink-0"></span>
+                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 flex-shrink-0"></span>
                                         {{ item.medication?.name || item.medication_name || '-' }}
                                     </div>
                                     <span v-if="item.dosage" class="text-gray-500 text-xs bg-white px-2 py-0.5 rounded border border-gray-200">
@@ -369,9 +369,9 @@ const doctorName = computed(() => {
 
                 <!-- No prescriptions placeholder -->
                 <div v-else class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div class="px-4 sm:px-6 py-4 bg-gradient-to-r from-green-50 to-emerald-50 border-b border-gray-100">
-                        <h2 class="text-base font-semibold text-green-800 flex items-center gap-2">
-                            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="px-4 sm:px-6 py-4 bg-gradient-to-r from-emerald-50 to-emerald-50 border-b border-gray-100">
+                        <h2 class="text-base font-semibold text-emerald-800 flex items-center gap-2">
+                            <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
                             </svg>
                             {{ isRtl ? 'الوصفات الطبية' : 'Prescriptions' }}
@@ -395,9 +395,9 @@ const doctorName = computed(() => {
             >
                 <!-- Patient Info Card -->
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div class="px-4 sm:px-6 py-4 bg-gradient-to-r from-green-50 to-emerald-50 border-b border-gray-100">
-                        <h2 class="text-base font-semibold text-green-800 flex items-center gap-2">
-                            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="px-4 sm:px-6 py-4 bg-gradient-to-r from-emerald-50 to-emerald-50 border-b border-gray-100">
+                        <h2 class="text-base font-semibold text-emerald-800 flex items-center gap-2">
+                            <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                             </svg>
                             {{ isRtl ? 'بيانات المريض' : 'Patient Info' }}
@@ -406,12 +406,12 @@ const doctorName = computed(() => {
                     <div class="p-4 sm:p-6">
                         <!-- Avatar & Name -->
                         <div class="flex items-center gap-3 mb-5">
-                            <div class="w-14 h-14 rounded-full bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center text-white text-xl font-bold shadow-md">
+                            <div class="w-14 h-14 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-500 flex items-center justify-center text-white text-xl font-bold shadow-md">
                                 {{ visit.patient?.full_name?.charAt(0) || '?' }}
                             </div>
                             <div>
                                 <p class="text-sm font-semibold text-gray-900">{{ visit.patient?.full_name || '-' }}</p>
-                                <p v-if="visit.patient?.file_number" class="text-xs text-green-600 font-mono mt-0.5">
+                                <p v-if="visit.patient?.file_number" class="text-xs text-emerald-600 font-mono mt-0.5">
                                     {{ isRtl ? 'ملف' : 'File' }} #{{ visit.patient.file_number }}
                                 </p>
                             </div>
@@ -473,7 +473,7 @@ const doctorName = computed(() => {
 
                 <!-- Quick Links Card -->
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div class="px-4 sm:px-6 py-4 bg-gradient-to-r from-teal-50 to-cyan-50 border-b border-gray-100">
+                    <div class="px-4 sm:px-6 py-4 bg-gradient-to-r from-teal-50 to-slate-50 border-b border-gray-100">
                         <h2 class="text-base font-semibold text-teal-800 flex items-center gap-2">
                             <svg class="w-5 h-5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -493,7 +493,7 @@ const doctorName = computed(() => {
                         </Link>
                         <Link
                             :href="`/secretary/pediatric/patients/${visit.patient_id || visit.patient?.id}`"
-                            class="w-full flex items-center gap-2.5 px-4 py-2.5 rounded-lg text-sm font-medium text-green-700 hover:bg-green-50 transition border border-green-200"
+                            class="w-full flex items-center gap-2.5 px-4 py-2.5 rounded-lg text-sm font-medium text-emerald-700 hover:bg-emerald-50 transition border border-emerald-200"
                         >
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />

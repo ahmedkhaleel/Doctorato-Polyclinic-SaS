@@ -19,10 +19,10 @@ function $localized(obj, field) {
 }
 
 const statusConfig = {
-    ordered: { ar: 'تم الطلب', en: 'Ordered', color: 'bg-blue-100 text-blue-700', icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' },
-    in_production: { ar: 'قيد التصنيع', en: 'In Production', color: 'bg-yellow-100 text-yellow-700', icon: 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z' },
-    ready: { ar: 'جاهز للتركيب', en: 'Ready', color: 'bg-green-100 text-green-700', icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' },
-    delivered: { ar: 'تم التسليم', en: 'Delivered', color: 'bg-green-100 text-green-700', icon: 'M5 13l4 4L19 7' },
+    ordered: { ar: 'تم الطلب', en: 'Ordered', color: 'bg-slate-100 text-[#1B365D]', icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' },
+    in_production: { ar: 'قيد التصنيع', en: 'In Production', color: 'bg-yellow-100 text-amber-700', icon: 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z' },
+    ready: { ar: 'جاهز للتركيب', en: 'Ready', color: 'bg-emerald-100 text-emerald-700', icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' },
+    delivered: { ar: 'تم التسليم', en: 'Delivered', color: 'bg-emerald-100 text-emerald-700', icon: 'M5 13l4 4L19 7' },
     completed: { ar: 'مكتمل', en: 'Completed', color: 'bg-gray-100 text-gray-600', icon: 'M5 13l4 4L19 7' },
     cancelled: { ar: 'ملغي', en: 'Cancelled', color: 'bg-red-100 text-red-600', icon: 'M6 18L18 6M6 6l12 12' },
 };
@@ -79,10 +79,10 @@ function itemLabel(type) {
                     <div class="w-full bg-gray-100 rounded-full h-2">
                         <div class="h-2 rounded-full transition-all duration-500"
                             :class="{
-                                'bg-blue-400 w-1/4': order.status === 'ordered',
+                                'bg-slate-400 w-1/4': order.status === 'ordered',
                                 'bg-yellow-400 w-2/4': order.status === 'in_production',
-                                'bg-green-400 w-3/4': order.status === 'ready',
-                                'bg-green-500 w-full': ['delivered', 'completed'].includes(order.status),
+                                'bg-emerald-400 w-3/4': order.status === 'ready',
+                                'bg-emerald-500 w-full': ['delivered', 'completed'].includes(order.status),
                                 'bg-red-300 w-full': order.status === 'cancelled',
                             }">
                         </div>
@@ -92,7 +92,7 @@ function itemLabel(type) {
                 <div class="flex items-center gap-4 text-xs text-gray-500">
                     <span v-if="order.order_date">{{ isRtl ? 'تاريخ الطلب:' : 'Ordered:' }} {{ order.order_date }}</span>
                     <span v-if="order.expected_date">{{ isRtl ? 'متوقع:' : 'Expected:' }} {{ order.expected_date }}</span>
-                    <span v-if="order.delivered_date" class="text-green-600">{{ isRtl ? 'تسليم:' : 'Delivered:' }} {{ order.delivered_date }}</span>
+                    <span v-if="order.delivered_date" class="text-emerald-600">{{ isRtl ? 'تسليم:' : 'Delivered:' }} {{ order.delivered_date }}</span>
                     <span v-if="order.tooth_number" class="text-gray-400">{{ isRtl ? 'سن' : 'Tooth' }} #{{ order.tooth_number }}</span>
                 </div>
 
@@ -110,7 +110,7 @@ function itemLabel(type) {
         <div v-if="labOrders.last_page > 1" class="flex justify-center mt-6 gap-1">
             <Link v-for="link in labOrders.links" :key="link.label"
                 :href="link.url || '#'"
-                :class="['px-3 py-1.5 text-xs rounded-lg border', link.active ? 'bg-cyan-600 text-white border-cyan-600' : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50']"
+                :class="['px-3 py-1.5 text-xs rounded-lg border', link.active ? 'bg-[#1B365D] text-white border-[#1B365D]' : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50']"
                 v-html="link.label" preserve-state />
         </div>
     </div>

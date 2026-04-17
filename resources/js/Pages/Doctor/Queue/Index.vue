@@ -44,7 +44,7 @@ function toggleAlert(visitId) {
 const severityStyles = {
     high: { bg: 'bg-red-50', text: 'text-red-700', border: 'border-red-200' },
     medium: { bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200' },
-    low: { bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200' },
+    low: { bg: 'bg-slate-50', text: 'text-[#1B365D]', border: 'border-slate-200' },
 };
 
 const mounted = ref(false);
@@ -233,7 +233,7 @@ function cancelVisit(visit) {
 function getSwipeLeftActions(visit) {
     const actions = [];
     if (visit.status === 'waiting') {
-        actions.push({ key: 'start', label: isRtl.value ? 'بدء' : 'Start', icon: 'M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z', color: 'bg-gradient-to-b from-blue-500 to-blue-600' });
+        actions.push({ key: 'start', label: isRtl.value ? 'بدء' : 'Start', icon: 'M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z', color: 'bg-gradient-to-b from-[#1B365D] to-[#1B365D]' });
     }
     if (visit.status === 'in_progress') {
         actions.push({ key: 'complete', label: isRtl.value ? 'إكمال' : 'Done', icon: 'M5 13l4 4L19 7', color: 'bg-gradient-to-b from-emerald-500 to-emerald-600' });
@@ -303,13 +303,13 @@ const todayProgress = computed(() => {
 <template>
     <div class="space-y-6">
         <!-- Hero Header -->
-        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6 sm:p-8"
+        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] p-6 sm:p-8"
             :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
             style="transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1)"
         >
             <!-- Decorative elements -->
             <div class="absolute top-0 right-0 w-72 h-72 bg-[#C4A265]/10 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl"></div>
-            <div class="absolute bottom-0 left-0 w-48 h-48 bg-blue-500/10 rounded-full translate-y-1/2 -translate-x-1/4 blur-2xl"></div>
+            <div class="absolute bottom-0 left-0 w-48 h-48 bg-[#1B365D]/10 rounded-full translate-y-1/2 -translate-x-1/4 blur-2xl"></div>
 
             <div class="relative z-10">
                 <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
@@ -361,11 +361,11 @@ const todayProgress = computed(() => {
                         style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.2s"
                     >
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center">
-                                <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                            <div class="w-10 h-10 rounded-lg bg-[#1B365D]/20 flex items-center justify-center">
+                                <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
                             </div>
                             <div>
-                                <p class="text-2xl font-bold text-blue-400">{{ animatedStats.in_progress }}</p>
+                                <p class="text-2xl font-bold text-slate-400">{{ animatedStats.in_progress }}</p>
                                 <p class="text-xs text-gray-400">{{ isRtl ? 'جاري' : 'In Progress' }}</p>
                             </div>
                         </div>
@@ -405,23 +405,23 @@ const todayProgress = computed(() => {
 
         <!-- Current In-Progress Banner -->
         <div v-if="currentInProgress && activeView === 'today'"
-            class="relative overflow-hidden rounded-2xl border-2 border-blue-200 bg-gradient-to-r from-blue-50 via-white to-blue-50 p-4 sm:p-5"
+            class="relative overflow-hidden rounded-2xl border-2 border-slate-200 bg-gradient-to-r from-slate-50 via-white to-slate-50 p-4 sm:p-5"
             :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
             style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.35s"
         >
-            <div class="absolute top-0 right-0 w-32 h-32 bg-blue-100/30 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+            <div class="absolute top-0 right-0 w-32 h-32 bg-slate-100/30 rounded-full -translate-y-1/2 translate-x-1/2"></div>
             <div class="relative flex items-center justify-between flex-wrap gap-3">
                 <div class="flex items-center gap-4">
                     <div class="relative">
-                        <div class="w-14 h-14 rounded-2xl bg-blue-100 flex items-center justify-center">
-                            <svg class="w-7 h-7 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                        <div class="w-14 h-14 rounded-2xl bg-slate-100 flex items-center justify-center">
+                            <svg class="w-7 h-7 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                         </div>
-                        <div class="absolute -bottom-0.5 -right-0.5 w-4 h-4 bg-blue-500 rounded-full border-2 border-white flex items-center justify-center">
+                        <div class="absolute -bottom-0.5 -right-0.5 w-4 h-4 bg-[#1B365D] rounded-full border-2 border-white flex items-center justify-center">
                             <div class="w-1.5 h-1.5 bg-white rounded-full pulse-dot"></div>
                         </div>
                     </div>
                     <div>
-                        <p class="text-xs font-semibold text-blue-600 uppercase tracking-wider mb-0.5">{{ isRtl ? 'حالياً مع المريض' : 'Currently with patient' }}</p>
+                        <p class="text-xs font-semibold text-[#1B365D] uppercase tracking-wider mb-0.5">{{ isRtl ? 'حالياً مع المريض' : 'Currently with patient' }}</p>
                         <p class="text-lg font-bold text-gray-900">{{ currentInProgress.patient?.full_name }}</p>
                         <div class="flex items-center gap-2 mt-0.5">
                             <span class="text-xs text-gray-500">{{ currentInProgress.patient?.file_number }}</span>
@@ -475,11 +475,11 @@ const todayProgress = computed(() => {
                         >{{ isRtl ? 'الكل' : 'All' }}</button>
                         <button @click="setModuleFilter('dental')"
                             class="px-2.5 py-1.5 text-[11px] font-semibold transition-all border-x border-gray-200"
-                            :class="moduleFilter === 'dental' ? 'bg-cyan-600 text-white' : 'bg-white text-cyan-700 hover:bg-cyan-50'"
+                            :class="moduleFilter === 'dental' ? 'bg-[#1B365D] text-white' : 'bg-white text-[#1B365D] hover:bg-slate-50'"
                         ><svg class="w-3 h-3 inline -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342" /></svg> {{ isRtl ? 'أسنان' : 'Dental' }}</button>
                         <button @click="setModuleFilter('derma')"
                             class="px-2.5 py-1.5 text-[11px] font-semibold transition-all"
-                            :class="moduleFilter === 'derma' ? 'bg-pink-600 text-white' : 'bg-white text-pink-700 hover:bg-pink-50'"
+                            :class="moduleFilter === 'derma' ? 'bg-[#C4A265] text-white' : 'bg-white text-[#C4A265] hover:bg-amber-50'"
                         >{{ isRtl ? 'جلدية' : 'Derma' }}</button>
                     </div>
                     <div class="w-full sm:w-40">
@@ -548,12 +548,12 @@ const todayProgress = computed(() => {
                                         :class="[statusConfig[visit.status]?.bg, statusConfig[visit.status]?.border]"
                                     >
                                         <svg v-if="visit.status === 'waiting'" class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                        <svg v-else-if="visit.status === 'in_progress'" class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                                        <svg v-else-if="visit.status === 'in_progress'" class="w-5 h-5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
                                         <svg v-else-if="visit.status === 'completed'" class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
                                         <svg v-else class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                                     </div>
-                                    <div v-if="visit.status === 'in_progress'" class="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full border-2 border-white bg-blue-500">
-                                        <div class="w-full h-full rounded-full animate-ping bg-blue-400 opacity-75"></div>
+                                    <div v-if="visit.status === 'in_progress'" class="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full border-2 border-white bg-[#1B365D]">
+                                        <div class="w-full h-full rounded-full animate-ping bg-slate-400 opacity-75"></div>
                                     </div>
                                 </div>
 
@@ -583,13 +583,13 @@ const todayProgress = computed(() => {
                                     <div class="flex items-center gap-1.5 mt-1 flex-wrap">
                                         <span class="text-xs text-gray-400">{{ visit.patient?.file_number || '-' }}</span>
                                         <span class="text-gray-200">&middot;</span>
-                                        <span v-if="visit.module === 'dental'" class="inline-flex items-center gap-0.5 text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-cyan-50 text-cyan-700 border border-cyan-200"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342" /></svg> {{ isRtl ? 'أسنان' : 'Dental' }}</span>
-                                        <span v-else class="inline-flex items-center gap-0.5 text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-pink-50 text-pink-700 border border-pink-200">{{ isRtl ? 'جلدية' : 'Derma' }}</span>
+                                        <span v-if="visit.module === 'dental'" class="inline-flex items-center gap-0.5 text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-slate-50 text-[#1B365D] border border-slate-200"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342" /></svg> {{ isRtl ? 'أسنان' : 'Dental' }}</span>
+                                        <span v-else class="inline-flex items-center gap-0.5 text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-amber-50 text-[#C4A265] border border-amber-200">{{ isRtl ? 'جلدية' : 'Derma' }}</span>
                                         <span class="text-gray-200">&middot;</span>
                                         <span class="inline-flex items-center text-xs font-medium px-1.5 py-0.5 rounded bg-gray-50 text-gray-600 truncate max-w-[120px] sm:max-w-none">{{ getVisitTypeLabel(visit) }}</span>
                                         <template v-if="getDentalDescription(visit)">
                                             <span class="text-gray-200">&middot;</span>
-                                            <span class="text-xs font-medium text-cyan-600">{{ getDentalDescription(visit) }}</span>
+                                            <span class="text-xs font-medium text-[#1B365D]">{{ getDentalDescription(visit) }}</span>
                                         </template>
                                         <template v-if="visit.service">
                                             <span class="text-gray-200">&middot;</span>
@@ -638,7 +638,7 @@ const todayProgress = computed(() => {
                                 </span>
                                 <div class="flex items-center gap-1.5 flex-wrap" @click.stop>
                                     <button v-if="visit.status === 'waiting'" @click="showConfirmStart = visit"
-                                        class="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-semibold text-white bg-blue-500 hover:bg-blue-600 rounded-lg transition-all shadow-sm shadow-blue-200 hover:shadow-md hover:shadow-blue-200 hover:-translate-y-0.5"
+                                        class="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-semibold text-white bg-[#1B365D] hover:bg-[#1B365D] rounded-lg transition-all shadow-sm shadow-blue-200 hover:shadow-md hover:shadow-blue-200 hover:-translate-y-0.5"
                                     >
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /></svg>
                                         {{ isRtl ? 'بدء' : 'Start' }}

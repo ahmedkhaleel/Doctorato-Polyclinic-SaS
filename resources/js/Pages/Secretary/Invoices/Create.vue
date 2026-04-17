@@ -219,7 +219,7 @@ function submit() {
                         </div>
                     </dl>
 
-                    <button type="submit" :disabled="form.processing" class="w-full mt-6 px-6 py-3 bg-gradient-to-r from-teal-500 to-cyan-500 text-white rounded-xl font-semibold text-sm hover:from-teal-600 hover:to-cyan-600 transition-all shadow-lg shadow-teal-500/20 disabled:opacity-50">
+                    <button type="submit" :disabled="form.processing" class="w-full mt-6 px-6 py-3 bg-gradient-to-r from-teal-500 to-[#1B365D] text-white rounded-xl font-semibold text-sm hover:from-teal-600 hover:to-[#1B365D] transition-all shadow-lg shadow-teal-500/20 disabled:opacity-50">
                         {{ form.processing ? 'Creating...' : 'Create Invoice' }}
                     </button>
                 </div>

@@ -21,10 +21,10 @@ const categoryLabels = {
 };
 
 const categoryColors = {
-    orthodontic: 'from-violet-500 to-purple-600', cosmetic: 'from-pink-500 to-rose-600',
-    implant: 'from-cyan-500 to-teal-600', whitening: 'from-amber-400 to-yellow-500',
-    restoration: 'from-blue-500 to-indigo-600', surgical: 'from-red-500 to-rose-600',
-    xray: 'from-gray-500 to-gray-700', other: 'from-emerald-500 to-green-600',
+    orthodontic: 'from-[#1B365D] to-[#1B365D]', cosmetic: 'from-[#C4A265] to-[#C4A265]',
+    implant: 'from-[#1B365D] to-teal-600', whitening: 'from-amber-400 to-amber-500',
+    restoration: 'from-[#1B365D] to-[#1B365D]', surgical: 'from-red-500 to-[#C4A265]',
+    xray: 'from-gray-500 to-gray-700', other: 'from-emerald-500 to-emerald-600',
 };
 
 function categoryLabel(cat) { const l = categoryLabels[cat]; return l ? (isRtl.value ? l.ar : l.en) : cat; }
@@ -190,11 +190,11 @@ onUnmounted(() => {
             <p class="text-[10px] text-gray-400 uppercase tracking-wider mb-2">{{ isRtl ? 'خطة العلاج' : 'Treatment Plan' }}</p>
             <Link :href="lp('/dental/treatment-plans/' + comp.treatment_plan.id)"
                 class="flex items-center gap-3 group">
-                <div class="w-9 h-9 bg-cyan-50 rounded-lg flex items-center justify-center group-hover:bg-cyan-100 transition">
-                    <svg class="w-4 h-4 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
+                <div class="w-9 h-9 bg-slate-50 rounded-lg flex items-center justify-center group-hover:bg-slate-100 transition">
+                    <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
                 </div>
                 <div>
-                    <p class="text-sm font-semibold text-gray-800 group-hover:text-cyan-600 transition">
+                    <p class="text-sm font-semibold text-gray-800 group-hover:text-[#1B365D] transition">
                         {{ isRtl ? comp.treatment_plan.title_ar : comp.treatment_plan.title_en }}
                     </p>
                     <p class="text-[11px] text-gray-400">{{ isRtl ? 'عرض خطة العلاج' : 'View treatment plan' }} →</p>

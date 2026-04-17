@@ -98,7 +98,7 @@ function discountPercent(bundle) {
                         <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
                         <!-- Discount badge -->
                         <div v-if="discountPercent(bundle) > 0"
-                             class="absolute top-4 start-4 bg-gradient-to-r from-green-500 to-emerald-500 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
+                             class="absolute top-4 start-4 bg-gradient-to-r from-emerald-500 to-emerald-500 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
                             -{{ discountPercent(bundle) }}%
                         </div>
                         <!-- Bottom stats -->
@@ -132,7 +132,7 @@ function discountPercent(bundle) {
                             <span class="text-2xl font-bold text-[var(--brand-primary)]">{{ formatCurrency(bundle.total_price) }}</span>
                             <div v-if="Number(bundle.original_price) > Number(bundle.total_price)" class="ms-auto flex flex-col items-end">
                                 <span class="text-xs text-gray-400 line-through">{{ formatCurrency(bundle.original_price) }}</span>
-                                <span v-if="Number(bundle.savings) > 0" class="text-xs text-green-600 font-semibold">
+                                <span v-if="Number(bundle.savings) > 0" class="text-xs text-emerald-600 font-semibold">
                                     {{ t('save_amount') }} {{ formatCurrency(bundle.savings) }}
                                 </span>
                             </div>

@@ -442,7 +442,7 @@ function sourceIcon(icon) {
 const priorityOptions = [
     { value: 1, label: { en: 'Hot', ar: '\u0633\u0627\u062E\u0646' }, icon: 'hot', color: 'bg-red-100 text-red-700 border-red-300 ring-red-400' },
     { value: 2, label: { en: 'Warm', ar: '\u062F\u0627\u0641\u0626' }, icon: 'warm', color: 'bg-amber-100 text-amber-700 border-amber-300 ring-amber-400' },
-    { value: 3, label: { en: 'Cold', ar: '\u0628\u0627\u0631\u062F' }, icon: 'cold', color: 'bg-blue-100 text-blue-700 border-blue-300 ring-blue-400' },
+    { value: 3, label: { en: 'Cold', ar: '\u0628\u0627\u0631\u062F' }, icon: 'cold', color: 'bg-slate-100 text-[#1B365D] border-slate-300 ring-slate-400' },
 ];
 
 /* ---------- Form progress indicator ---------- */
@@ -644,8 +644,8 @@ const phoneValidation = computed(() => {
         <div :class="['relative z-20 bg-white rounded-2xl shadow-sm border border-slate-100 p-4 sm:p-6 mb-6 transition-all duration-700', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6']"
              :style="{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)', transitionDelay: '200ms' }">
             <div class="flex items-center gap-3 mb-5">
-                <div class="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
-                    <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                <div class="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center">
+                    <svg class="w-5 h-5 text-[#1B365D]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
                 </div>
                 <h2 class="text-lg font-bold text-slate-800">{{ isRtl ? '\u0627\u0644\u0645\u0639\u0644\u0648\u0645\u0627\u062A \u0627\u0644\u0634\u062E\u0635\u064A\u0629' : 'Personal Information' }}</h2>
             </div>
@@ -659,7 +659,7 @@ const phoneValidation = computed(() => {
                             {{ isRtl ? '\u0630\u0643\u0631' : 'Male' }}
                         </button>
                         <button type="button" @click="form.gender = 'female'"
-                                :class="['flex-1 py-3 rounded-xl border text-sm font-medium transition-all duration-200', form.gender === 'female' ? 'bg-pink-50 border-pink-400 text-pink-700 ring-2 ring-pink-400/30' : 'border-slate-200 text-slate-500 hover:border-slate-300']">
+                                :class="['flex-1 py-3 rounded-xl border text-sm font-medium transition-all duration-200', form.gender === 'female' ? 'bg-amber-50 border-amber-400 text-[#C4A265] ring-2 ring-amber-400/30' : 'border-slate-200 text-slate-500 hover:border-slate-300']">
                             {{ isRtl ? '\u0623\u0646\u062B\u0649' : 'Female' }}
                         </button>
                     </div>
@@ -884,7 +884,7 @@ const phoneValidation = computed(() => {
                     <button type="button" @click="form.module = 'dental'"
                         :class="['flex-1 py-3 px-4 rounded-xl border-2 text-sm font-semibold transition-all duration-300 flex items-center justify-center gap-2',
                             form.module === 'dental'
-                                ? 'bg-sky-50 text-sky-700 border-sky-300 ring-2 ring-sky-400 shadow-sm scale-[1.02]'
+                                ? 'bg-slate-50 text-[#1B365D] border-slate-300 ring-2 ring-slate-400 shadow-sm scale-[1.02]'
                                 : 'border-slate-200 text-slate-400 hover:border-slate-300']">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z"/>
@@ -894,7 +894,7 @@ const phoneValidation = computed(() => {
                     <button type="button" @click="form.module = 'pediatric'"
                         :class="['flex-1 py-3 px-4 rounded-xl border-2 text-sm font-semibold transition-all duration-300 flex items-center justify-center gap-2',
                             form.module === 'pediatric'
-                                ? 'bg-green-50 text-green-700 border-green-300 ring-2 ring-green-400 shadow-sm scale-[1.02]'
+                                ? 'bg-emerald-50 text-emerald-700 border-emerald-300 ring-2 ring-emerald-400 shadow-sm scale-[1.02]'
                                 : 'border-slate-200 text-slate-400 hover:border-slate-300']">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/>
@@ -953,8 +953,8 @@ const phoneValidation = computed(() => {
         <div :class="['bg-white rounded-2xl shadow-sm border border-slate-100 p-4 sm:p-6 mb-6 transition-all duration-700', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6']"
              :style="{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)', transitionDelay: '400ms' }">
             <div class="flex items-center gap-3 mb-5">
-                <div class="w-10 h-10 bg-sky-100 rounded-xl flex items-center justify-center">
-                    <svg class="w-5 h-5 text-sky-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                <div class="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center">
+                    <svg class="w-5 h-5 text-[#1B365D]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                 </div>
                 <h2 class="text-lg font-bold text-slate-800">{{ isRtl ? '\u0645\u0644\u0627\u062D\u0638\u0627\u062A' : 'Notes' }}</h2>
             </div>

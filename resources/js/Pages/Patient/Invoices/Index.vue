@@ -74,8 +74,8 @@ function balance(invoice) {
                             <td class="px-6 py-4 font-medium text-gray-800">{{ invoice.invoice_number }}</td>
                             <td class="px-6 py-4 text-gray-600">{{ invoice.invoice_date }}</td>
                             <td class="px-6 py-4 font-medium text-gray-800">{{ formatCurrency(invoice.total) }}</td>
-                            <td class="px-6 py-4 text-green-600">{{ formatCurrency(invoice.paid_amount) }}</td>
-                            <td class="px-6 py-4" :class="parseFloat(balance(invoice)) > 0 ? 'text-red-600 font-medium' : 'text-green-600'">{{ formatCurrency(balance(invoice)) }}</td>
+                            <td class="px-6 py-4 text-emerald-600">{{ formatCurrency(invoice.paid_amount) }}</td>
+                            <td class="px-6 py-4" :class="parseFloat(balance(invoice)) > 0 ? 'text-red-600 font-medium' : 'text-emerald-600'">{{ formatCurrency(balance(invoice)) }}</td>
                             <td class="px-6 py-4">
                                 <span :class="invoiceColor(invoice.status)" class="text-xs font-medium px-2.5 py-1 rounded-full">{{ invoiceLabel(invoice.status) }}</span>
                             </td>
@@ -99,7 +99,7 @@ function balance(invoice) {
                     <p class="text-xs text-gray-400">{{ invoice.invoice_date }}</p>
                     <div class="flex items-center justify-between mt-2">
                         <span class="text-sm font-semibold text-gray-800">{{ formatCurrency(invoice.total) }}</span>
-                        <span class="text-xs" :class="parseFloat(balance(invoice)) > 0 ? 'text-red-600' : 'text-green-600'">
+                        <span class="text-xs" :class="parseFloat(balance(invoice)) > 0 ? 'text-red-600' : 'text-emerald-600'">
                             {{ isRtl ? 'المتبقي:' : 'Balance:' }} {{ formatCurrency(balance(invoice)) }}
                         </span>
                     </div>

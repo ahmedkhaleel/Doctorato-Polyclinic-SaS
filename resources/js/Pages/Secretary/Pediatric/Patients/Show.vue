@@ -44,7 +44,7 @@ const feedingTypeLabels = computed(() => ({
 
 const visitStatusColors = {
     waiting: 'bg-amber-50 text-amber-700 border-amber-200',
-    in_progress: 'bg-blue-50 text-blue-700 border-blue-200',
+    in_progress: 'bg-slate-50 text-[#1B365D] border-slate-200',
     completed: 'bg-emerald-50 text-emerald-700 border-emerald-200',
     cancelled: 'bg-red-50 text-red-700 border-red-200',
 };
@@ -121,7 +121,7 @@ onMounted(() => {
     <div>
         <!-- HERO HEADER -->
         <div
-            class="relative -mx-4 sm:-mx-6 lg:-mx-8 -mt-4 sm:-mt-6 mb-8 px-4 sm:px-6 lg:px-8 pt-8 pb-10 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 overflow-hidden transition-all duration-700"
+            class="relative -mx-4 sm:-mx-6 lg:-mx-8 -mt-4 sm:-mt-6 mb-8 px-4 sm:px-6 lg:px-8 pt-8 pb-10 bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] overflow-hidden transition-all duration-700"
             :class="headerLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'"
         >
             <div class="absolute inset-0 opacity-10" style="background: radial-gradient(circle at 30% 50%, #4CAF50 0%, transparent 40%), radial-gradient(circle at 70% 50%, #0d9488 0%, transparent 50%)"></div>
@@ -146,7 +146,7 @@ onMounted(() => {
                             </span>
                             <span
                                 class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold border"
-                                :class="patient.gender === 'male' ? 'bg-blue-500/20 text-blue-300 border-blue-400/30' : 'bg-pink-500/20 text-pink-300 border-pink-400/30'"
+                                :class="patient.gender === 'male' ? 'bg-[#1B365D]/20 text-slate-300 border-slate-400/30' : 'bg-[#C4A265]/20 text-amber-300 border-amber-400/30'"
                             >
                                 {{ genderLabels[patient.gender] || '-' }}
                             </span>
@@ -291,9 +291,9 @@ onMounted(() => {
             <!-- TAB: Birth History -->
             <div v-show="activeTab === 'birth'" class="space-y-6">
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
-                    <div class="px-5 py-4 border-b border-gray-100 bg-gradient-to-r from-pink-50/50 to-transparent">
+                    <div class="px-5 py-4 border-b border-gray-100 bg-gradient-to-r from-amber-50/50 to-transparent">
                         <h3 class="font-bold text-gray-900 flex items-center gap-2">
-                            <svg class="w-5 h-5 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
+                            <svg class="w-5 h-5 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
                             {{ isRtl ? 'تاريخ الولادة' : 'Birth History' }}
                         </h3>
                     </div>
@@ -345,7 +345,7 @@ onMounted(() => {
                                     v-for="comp in patient.birth_complications"
                                     :key="comp"
                                     class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold"
-                                    :class="comp === 'none' ? 'bg-green-50 text-green-700' : 'bg-amber-50 text-amber-700'"
+                                    :class="comp === 'none' ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'"
                                 >
                                     {{ complicationLabels[comp] || comp }}
                                 </span>

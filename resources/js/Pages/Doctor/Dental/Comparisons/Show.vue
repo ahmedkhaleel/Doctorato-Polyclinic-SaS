@@ -43,9 +43,9 @@ onUnmounted(() => { document.removeEventListener('mousemove', onDrag); document.
 <template>
     <div class="max-w-4xl mx-auto space-y-6">
         <!-- Hero Header -->
-        <div class="dental-hero-enter relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6 sm:p-7">
+        <div class="dental-hero-enter relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] p-6 sm:p-7">
             <div class="absolute -top-12 ltr:-right-12 rtl:-left-12 w-48 h-48 bg-[#C4A265]/10 rounded-full blur-3xl"></div>
-            <div class="absolute -bottom-8 ltr:left-20 rtl:right-20 w-32 h-32 bg-purple-500/10 rounded-full blur-2xl"></div>
+            <div class="absolute -bottom-8 ltr:left-20 rtl:right-20 w-32 h-32 bg-[#1B365D]/10 rounded-full blur-2xl"></div>
 
             <div class="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div class="flex items-center gap-3">

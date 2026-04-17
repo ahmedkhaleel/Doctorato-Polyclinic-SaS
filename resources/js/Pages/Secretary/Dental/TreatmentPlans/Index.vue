@@ -46,9 +46,9 @@ function formatCurrency(amount) {
 
 const statusColors = {
     draft: 'bg-gray-50 text-gray-700 border-gray-200',
-    pending: 'bg-yellow-50 text-yellow-700 border-yellow-200',
-    approved: 'bg-blue-50 text-blue-700 border-blue-200',
-    in_progress: 'bg-indigo-50 text-indigo-700 border-indigo-200',
+    pending: 'bg-yellow-50 text-amber-700 border-yellow-200',
+    approved: 'bg-slate-50 text-[#1B365D] border-slate-200',
+    in_progress: 'bg-slate-50 text-[#1B365D] border-slate-200',
     completed: 'bg-emerald-50 text-emerald-700 border-emerald-200',
     cancelled: 'bg-red-50 text-red-700 border-red-200',
 };
@@ -64,8 +64,8 @@ const statusLabels = computed(() => ({
 
 const priorityColors = {
     low: 'bg-gray-50 text-gray-600 border-gray-200',
-    normal: 'bg-blue-50 text-blue-700 border-blue-200',
-    high: 'bg-orange-50 text-orange-700 border-orange-200',
+    normal: 'bg-slate-50 text-[#1B365D] border-slate-200',
+    high: 'bg-amber-50 text-amber-700 border-amber-200',
     urgent: 'bg-red-50 text-red-700 border-red-200',
 };
 

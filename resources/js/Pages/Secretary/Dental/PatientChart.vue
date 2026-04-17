@@ -24,14 +24,14 @@ const lowerRight = [48, 47, 46, 45, 44, 43, 42, 41];
 const lowerLeft = [31, 32, 33, 34, 35, 36, 37, 38];
 
 const conditionColors = {
-    healthy: 'bg-green-200 text-green-900 border-green-400',
+    healthy: 'bg-emerald-200 text-emerald-900 border-emerald-400',
     decayed: 'bg-red-200 text-red-900 border-red-400',
-    filled: 'bg-blue-200 text-blue-900 border-blue-400',
+    filled: 'bg-slate-200 text-[#1B365D] border-slate-400',
     missing: 'bg-gray-300 text-gray-600 border-gray-400',
     crown: 'bg-yellow-200 text-yellow-900 border-yellow-400',
-    bridge: 'bg-purple-200 text-purple-900 border-purple-400',
-    implant: 'bg-indigo-200 text-indigo-900 border-indigo-400',
-    root_canal: 'bg-orange-200 text-orange-900 border-orange-400',
+    bridge: 'bg-slate-200 text-[#1B365D] border-slate-400',
+    implant: 'bg-slate-200 text-[#1B365D] border-slate-400',
+    root_canal: 'bg-amber-200 text-amber-900 border-amber-400',
     extracted: 'bg-gray-400 text-white border-gray-500',
 };
 

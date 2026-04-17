@@ -44,18 +44,18 @@ onMounted(() => {
 const statuses = ['new', 'contacted', 'qualified', 'appointment_booked', 'consultation_done', 'negotiation'];
 
 const statusConfig = {
-    new:               { en: 'New',          ar: 'جديد',         gradient: 'from-blue-500 to-blue-600',    bg: 'bg-blue-50/60',    border: 'border-blue-200', icon: 'M12 6v6m0 0v6m0-6h6m-6 0H6' },
-    contacted:         { en: 'Contacted',    ar: 'تم التواصل',   gradient: 'from-indigo-500 to-indigo-600', bg: 'bg-indigo-50/60', border: 'border-indigo-200', icon: 'M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z' },
-    qualified:         { en: 'Qualified',    ar: 'مؤهل',         gradient: 'from-purple-500 to-purple-600', bg: 'bg-purple-50/60', border: 'border-purple-200', icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' },
+    new:               { en: 'New',          ar: 'جديد',         gradient: 'from-[#1B365D] to-[#1B365D]',    bg: 'bg-slate-50/60',    border: 'border-slate-200', icon: 'M12 6v6m0 0v6m0-6h6m-6 0H6' },
+    contacted:         { en: 'Contacted',    ar: 'تم التواصل',   gradient: 'from-[#1B365D] to-[#1B365D]', bg: 'bg-slate-50/60', border: 'border-slate-200', icon: 'M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z' },
+    qualified:         { en: 'Qualified',    ar: 'مؤهل',         gradient: 'from-[#1B365D] to-[#1B365D]', bg: 'bg-slate-50/60', border: 'border-slate-200', icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' },
     appointment_booked:{ en: 'Booked',       ar: 'تم الحجز',     gradient: 'from-amber-500 to-amber-600',  bg: 'bg-amber-50/60',  border: 'border-amber-200', icon: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z' },
     consultation_done: { en: 'Consulted',    ar: 'تم الاستشارة',  gradient: 'from-teal-500 to-teal-600',    bg: 'bg-teal-50/60',   border: 'border-teal-200', icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4' },
-    negotiation:       { en: 'Negotiation',  ar: 'تفاوض',        gradient: 'from-orange-500 to-orange-600', bg: 'bg-orange-50/60', border: 'border-orange-200', icon: 'M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z' },
+    negotiation:       { en: 'Negotiation',  ar: 'تفاوض',        gradient: 'from-amber-500 to-amber-600', bg: 'bg-amber-50/60', border: 'border-amber-200', icon: 'M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z' },
 };
 
 const priorityConfig = {
     1: { en: 'Hot',  ar: 'ساخن', dot: 'bg-red-500',   badge: 'bg-red-50 text-red-700 border-red-200',   borderL: 'border-s-red-500' },
     2: { en: 'Warm', ar: 'دافئ', dot: 'bg-amber-400', badge: 'bg-amber-50 text-amber-700 border-amber-200', borderL: 'border-s-amber-400' },
-    3: { en: 'Cold', ar: 'بارد', dot: 'bg-blue-400',  badge: 'bg-blue-50 text-blue-700 border-blue-200',   borderL: 'border-s-blue-400' },
+    3: { en: 'Cold', ar: 'بارد', dot: 'bg-slate-400',  badge: 'bg-slate-50 text-[#1B365D] border-slate-200',   borderL: 'border-s-blue-400' },
 };
 
 const totalLeads = computed(() => {
@@ -443,9 +443,9 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handlePipelineKe
             <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider flex-shrink-0">{{ isRtl ? 'الأولويات' : 'Priorities' }}</span>
             <!-- Stacked bar -->
             <div class="flex-1 h-2.5 rounded-full bg-gray-100 overflow-hidden flex">
-                <div v-if="priorityBreakdown.hot" class="h-full bg-gradient-to-r from-red-500 to-rose-400 transition-all duration-1000 ease-out" :style="{ width: mounted ? priorityBreakdown.hotPct + '%' : '0%' }"></div>
+                <div v-if="priorityBreakdown.hot" class="h-full bg-gradient-to-r from-red-500 to-amber-400 transition-all duration-1000 ease-out" :style="{ width: mounted ? priorityBreakdown.hotPct + '%' : '0%' }"></div>
                 <div v-if="priorityBreakdown.warm" class="h-full bg-gradient-to-r from-amber-400 to-yellow-300 transition-all duration-1000 ease-out" :style="{ width: mounted ? priorityBreakdown.warmPct + '%' : '0%', transitionDelay: '100ms' }"></div>
-                <div v-if="priorityBreakdown.cold" class="h-full bg-gradient-to-r from-blue-400 to-sky-300 transition-all duration-1000 ease-out" :style="{ width: mounted ? priorityBreakdown.coldPct + '%' : '0%', transitionDelay: '200ms' }"></div>
+                <div v-if="priorityBreakdown.cold" class="h-full bg-gradient-to-r from-slate-400 to-slate-300 transition-all duration-1000 ease-out" :style="{ width: mounted ? priorityBreakdown.coldPct + '%' : '0%', transitionDelay: '200ms' }"></div>
                 <div v-if="priorityBreakdown.none" class="h-full bg-gray-200 transition-all duration-1000 ease-out" :style="{ width: mounted ? priorityBreakdown.nonePct + '%' : '0%', transitionDelay: '300ms' }"></div>
             </div>
             <!-- Legend -->
@@ -464,8 +464,8 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handlePipelineKe
                 </button>
                 <button v-if="priorityBreakdown.cold" @click="filterPriority = filterPriority === '3' ? '' : '3'"
                     class="flex items-center gap-1 text-[10px] font-semibold transition-all px-1.5 py-0.5 rounded-md"
-                    :class="filterPriority === '3' ? 'bg-blue-100 text-blue-700 ring-1 ring-blue-300' : 'text-gray-500 hover:text-blue-600'">
-                    <span class="w-2 h-2 rounded-full bg-blue-400"></span>
+                    :class="filterPriority === '3' ? 'bg-slate-100 text-[#1B365D] ring-1 ring-slate-300' : 'text-gray-500 hover:text-[#1B365D]'">
+                    <span class="w-2 h-2 rounded-full bg-slate-400"></span>
                     {{ priorityBreakdown.cold }}
                 </button>
             </div>
@@ -600,7 +600,7 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handlePipelineKe
                             <!-- Quick move to next stage -->
                             <button v-if="statuses.indexOf(status) < statuses.length - 1"
                                 @click.stop="moveToNextStage(lead, status)"
-                                class="flex-1 inline-flex items-center justify-center gap-1 py-1.5 rounded-lg text-[10px] font-semibold bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200/60 transition-colors"
+                                class="flex-1 inline-flex items-center justify-center gap-1 py-1.5 rounded-lg text-[10px] font-semibold bg-slate-50 text-[#1B365D] hover:bg-slate-100 border border-slate-200/60 transition-colors"
                                 :title="isRtl ? ('نقل إلى ' + statusConfig[statuses[statuses.indexOf(status) + 1]]?.ar) : ('Move to ' + statusConfig[statuses[statuses.indexOf(status) + 1]]?.en)">
                                 <svg class="w-3 h-3" :class="isRtl ? 'rotate-180' : ''" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
                                 {{ isRtl ? statusConfig[statuses[statuses.indexOf(status) + 1]]?.ar : statusConfig[statuses[statuses.indexOf(status) + 1]]?.en }}
@@ -612,7 +612,7 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handlePipelineKe
                                 {{ isRtl ? '\u0627\u062A\u0635\u0627\u0644' : 'Call' }}
                             </a>
                             <a :href="`https://wa.me/${(lead.phone || '').replace(/[^0-9+]/g, '')}`" target="_blank" @click.stop
-                               class="flex-1 inline-flex items-center justify-center gap-1 py-1.5 rounded-lg text-[10px] font-semibold bg-green-50 text-green-700 hover:bg-green-100 border border-green-200/60 transition-colors"
+                               class="flex-1 inline-flex items-center justify-center gap-1 py-1.5 rounded-lg text-[10px] font-semibold bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200/60 transition-colors"
                                :title="isRtl ? '\u0648\u0627\u062A\u0633\u0627\u0628' : 'WhatsApp'">
                                 <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>
                                 <span class="hidden sm:inline">WA</span>

@@ -80,12 +80,12 @@ const totalInProgress = computed(() => {
 });
 
 const doctorGradients = [
-    'from-blue-600 to-cyan-500',
+    'from-[#1B365D] to-[#1B365D]',
     'from-emerald-600 to-teal-500',
-    'from-purple-600 to-indigo-500',
-    'from-amber-500 to-orange-500',
-    'from-rose-500 to-pink-500',
-    'from-sky-500 to-blue-500',
+    'from-[#1B365D] to-[#1B365D]',
+    'from-amber-500 to-amber-500',
+    'from-[#C4A265] to-[#C4A265]',
+    'from-[#1B365D] to-[#1B365D]',
 ];
 
 function getDoctorGradient(index) {
@@ -117,8 +117,8 @@ function getDoctorGradient(index) {
         <!-- Summary Bar -->
         <div class="px-8 py-4 flex items-center gap-6 border-b border-white/5 bg-white/5">
             <div class="flex items-center gap-2">
-                <span class="w-3 h-3 rounded-full bg-green-400 animate-pulse"></span>
-                <span class="text-sm text-slate-300">In Progress: <strong class="text-green-400 text-lg">{{ totalInProgress }}</strong></span>
+                <span class="w-3 h-3 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span class="text-sm text-slate-300">In Progress: <strong class="text-emerald-400 text-lg">{{ totalInProgress }}</strong></span>
             </div>
             <div class="flex items-center gap-2">
                 <span class="w-3 h-3 rounded-full bg-amber-400"></span>
@@ -159,22 +159,22 @@ function getDoctorGradient(index) {
                             <!-- Current Patient (In Progress) -->
                             <div
                                 v-if="visit.status === 'in_progress'"
-                                class="relative bg-green-500/15 border border-green-500/30 rounded-xl p-4 overflow-hidden"
+                                class="relative bg-emerald-500/15 border border-emerald-500/30 rounded-xl p-4 overflow-hidden"
                             >
                                 <!-- Glow effect -->
-                                <div class="absolute inset-0 bg-green-500/5 animate-pulse rounded-xl"></div>
+                                <div class="absolute inset-0 bg-emerald-500/5 animate-pulse rounded-xl"></div>
                                 <div class="relative">
                                     <div class="flex items-center gap-2 mb-2">
-                                        <span class="w-2.5 h-2.5 rounded-full bg-green-400 animate-pulse"></span>
-                                        <span class="text-xs font-semibold text-green-400 uppercase tracking-wider">Now Serving</span>
+                                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                                        <span class="text-xs font-semibold text-emerald-400 uppercase tracking-wider">Now Serving</span>
                                     </div>
                                     <div class="flex items-center justify-between">
                                         <div>
                                             <p class="text-xl font-bold text-white">{{ visit.patient?.full_name || '-' }}</p>
                                             <p class="text-sm text-slate-400 mt-0.5">{{ visit.service?.name_en || '-' }}</p>
                                         </div>
-                                        <div class="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center">
-                                            <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <div class="w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center">
+                                            <svg class="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                             </svg>

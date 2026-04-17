@@ -85,7 +85,7 @@ function deleteItem(id) {
                         <!-- Before/After badge -->
                         <span
                             v-if="item.is_before_after"
-                            class="absolute top-2 left-2 px-2 py-0.5 text-xs font-medium bg-blue-100 text-blue-800 rounded-full"
+                            class="absolute top-2 left-2 px-2 py-0.5 text-xs font-medium bg-slate-100 text-[#1B365D] rounded-full"
                         >
                             Before/After
                         </span>

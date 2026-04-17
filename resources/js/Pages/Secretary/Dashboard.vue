@@ -68,9 +68,9 @@ const statsCards = computed(() => [
     {
         label: isRtl.value ? 'زيارات اليوم' : 'Visits Today',
         value: props.stats?.visits_today ?? 0,
-        gradient: 'from-cyan-500 to-cyan-600',
-        lightBg: 'bg-cyan-50',
-        iconColor: 'text-cyan-600',
+        gradient: 'from-[#1B365D] to-[#1B365D]',
+        lightBg: 'bg-slate-50',
+        iconColor: 'text-[#1B365D]',
         icon: 'visits',
     },
     {
@@ -95,7 +95,7 @@ const statsCards = computed(() => [
 
 const statusConfig = {
     waiting:     { label: isRtl.value ? 'انتظار' : 'Waiting',     bg: 'bg-amber-50',   text: 'text-amber-700',   dot: 'bg-amber-500' },
-    in_progress: { label: isRtl.value ? 'جاري' : 'In Progress', bg: 'bg-blue-50',    text: 'text-blue-700',     dot: 'bg-blue-500' },
+    in_progress: { label: isRtl.value ? 'جاري' : 'In Progress', bg: 'bg-slate-50',    text: 'text-[#1B365D]',     dot: 'bg-[#1B365D]' },
     completed:   { label: isRtl.value ? 'مكتمل' : 'Completed',   bg: 'bg-emerald-50', text: 'text-emerald-700',  dot: 'bg-emerald-500' },
     cancelled:   { label: isRtl.value ? 'ملغي' : 'Cancelled',   bg: 'bg-red-50',     text: 'text-red-700',      dot: 'bg-red-500' },
 };
@@ -107,7 +107,7 @@ function getStatusStyle(status) {
 /* -- Booking Status ------------------------------------------- */
 
 const bookingStatusConfig = {
-    new:       { label: isRtl.value ? 'جديد' : 'New',       bg: 'bg-blue-50',    text: 'text-blue-700' },
+    new:       { label: isRtl.value ? 'جديد' : 'New',       bg: 'bg-slate-50',    text: 'text-[#1B365D]' },
     pending:   { label: isRtl.value ? 'معلق' : 'Pending',   bg: 'bg-amber-50',   text: 'text-amber-700' },
     confirmed: { label: isRtl.value ? 'مؤكد' : 'Confirmed', bg: 'bg-emerald-50', text: 'text-emerald-700' },
     cancelled: { label: isRtl.value ? 'ملغي' : 'Cancelled', bg: 'bg-red-50',     text: 'text-red-700' },
@@ -134,25 +134,40 @@ function $localized(obj, field) {
 const severityStyles = {
     high: { bg: 'bg-red-50', text: 'text-red-700', border: 'border-red-200', icon: 'text-red-500' },
     medium: { bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200', icon: 'text-amber-500' },
-    low: { bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200', icon: 'text-blue-500' },
+    low: { bg: 'bg-slate-50', text: 'text-[#1B365D]', border: 'border-slate-200', icon: 'text-[#1B365D]' },
 };
 </script>
 
 <template>
     <div class="space-y-8">
 
-        <!-- Header + Quick Actions -->
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div>
-                <h1 class="text-2xl font-bold text-gray-900">{{ isRtl ? 'لوحة تحكم السكرتارية' : 'Secretary Dashboard' }}</h1>
-                <p class="text-sm text-gray-500 mt-1">
-                    {{ isRtl ? 'مرحباً بعودتك، ' : 'Welcome back, ' }}{{ $page.props.auth?.user?.name || (isRtl ? 'سكرتارية' : 'Secretary') }}. {{ isRtl ? 'إليك نظرة عامة على اليوم.' : "Here is today's overview." }}
-                </p>
-            </div>
-            <div class="flex items-center gap-3 flex-wrap">
+        <!-- Doctorato Navy Hero -->
+        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] shadow-xl">
+            <div class="pointer-events-none absolute -top-16 -end-16 h-56 w-56 rounded-full bg-[#C4A265]/20 blur-3xl"></div>
+            <div class="pointer-events-none absolute -bottom-20 -start-20 h-64 w-64 rounded-full bg-[#C4A265]/10 blur-3xl"></div>
+            <div class="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-[#C4A265] to-transparent"></div>
+            <div class="relative p-4 md:p-7 flex flex-col md:flex-row md:items-center gap-4 justify-between">
+                <div class="flex items-start gap-3 md:gap-4 min-w-0">
+                    <div class="w-12 h-12 md:w-14 md:h-14 rounded-xl bg-gradient-to-br from-[#C4A265] to-[#8B7043] flex items-center justify-center shadow-lg flex-shrink-0">
+                        <svg class="w-6 h-6 md:w-7 md:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 17v-2a4 4 0 00-4-4H3m0 0V7a2 2 0 012-2h14a2 2 0 012 2v4m-4 0V7m0 4h4m-4 0a4 4 0 00-4 4v2" />
+                        </svg>
+                    </div>
+                    <div class="min-w-0">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="h-[3px] w-6 bg-[#C4A265] rounded-full"></span>
+                            <span class="text-[10px] font-bold text-[#C4A265] tracking-[0.25em] uppercase">{{ isRtl ? 'السكرتارية' : 'Secretary' }}</span>
+                        </div>
+                        <h1 class="text-xl md:text-3xl font-extrabold text-white tracking-tight truncate">{{ isRtl ? 'لوحة تحكم السكرتارية' : 'Secretary Dashboard' }}</h1>
+                        <p class="text-xs md:text-sm text-white/70 mt-1 max-w-xl">
+                            {{ isRtl ? 'مرحباً بعودتك، ' : 'Welcome back, ' }}{{ $page.props.auth?.user?.name || (isRtl ? 'سكرتارية' : 'Secretary') }}. {{ isRtl ? 'إليك نظرة عامة على اليوم.' : "Here is today's overview." }}
+                        </p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 md:gap-3 flex-wrap">
                 <Link
                     href="/secretary/patients/create"
-                    class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 shadow-sm hover:shadow-md transition-all duration-200"
+                    class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-[#C4A265] to-[#8B7043] hover:brightness-110 shadow-lg hover:shadow-xl transition-all duration-200"
                 >
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
@@ -161,7 +176,7 @@ const severityStyles = {
                 </Link>
                 <Link
                     href="/secretary/bookings/create"
-                    class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-700 bg-white border border-gray-200 hover:border-teal-300 hover:bg-teal-50/50 shadow-sm transition-all duration-200"
+                    class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-white bg-white/10 border border-white/20 hover:bg-white/15 backdrop-blur shadow-sm transition-all duration-200"
                 >
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -170,13 +185,14 @@ const severityStyles = {
                 </Link>
                 <Link
                     href="/secretary/bookings"
-                    class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-700 bg-white border border-gray-200 hover:border-teal-300 hover:bg-teal-50/50 shadow-sm transition-all duration-200"
+                    class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-white bg-white/10 border border-white/20 hover:bg-white/15 backdrop-blur shadow-sm transition-all duration-200"
                 >
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
                     {{ isRtl ? 'عرض الحجوزات' : 'View Bookings' }}
                 </Link>
+                </div>
             </div>
         </div>
 
@@ -322,7 +338,7 @@ const severityStyles = {
                                 </p>
                             </div>
                             <Link href="/secretary/bookings/create"
-                                class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] font-medium text-white bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600 shadow-sm transition-all">
+                                class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] font-medium text-white bg-gradient-to-r from-[#1B365D] to-teal-500 hover:from-[#1B365D] hover:to-teal-600 shadow-sm transition-all">
                                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                                 </svg>
@@ -516,8 +532,8 @@ const severityStyles = {
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
                 <div class="px-4 sm:px-6 py-5 border-b border-gray-100">
                     <div class="flex items-center gap-3">
-                        <div class="w-9 h-9 rounded-xl bg-cyan-50 flex items-center justify-center">
-                            <svg class="w-5 h-5 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3C10.5 3 9 4.5 8.5 6.5C8 8.5 7 9.5 6 10.5C5 11.5 4 13 4 15C4 17 5.5 19 7.5 19C9 19 10 18 10.5 17C11 16 11.5 15.5 12 15.5C12.5 15.5 13 16 13.5 17C14 18 15 19 16.5 19C18.5 19 20 17 20 15C20 13 19 11.5 18 10.5C17 9.5 16 8.5 15.5 6.5C15 4.5 13.5 3 12 3Z" /></svg>
+                        <div class="w-9 h-9 rounded-xl bg-slate-50 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3C10.5 3 9 4.5 8.5 6.5C8 8.5 7 9.5 6 10.5C5 11.5 4 13 4 15C4 17 5.5 19 7.5 19C9 19 10 18 10.5 17C11 16 11.5 15.5 12 15.5C12.5 15.5 13 16 13.5 17C14 18 15 19 16.5 19C18.5 19 20 17 20 15C20 13 19 11.5 18 10.5C17 9.5 16 8.5 15.5 6.5C15 4.5 13.5 3 12 3Z" /></svg>
                         </div>
                         <div>
                             <h2 class="text-[15px] font-semibold text-gray-900">{{ isRtl ? 'طلبات المعمل' : 'Lab Orders' }}</h2>
@@ -562,17 +578,17 @@ const severityStyles = {
                         </div>
                         <span class="inline-flex items-center justify-center min-w-[28px] h-7 px-2 rounded-lg text-sm font-bold" :class="(dental.lab_overdue ?? 0) > 0 ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-400'">{{ dental.lab_overdue ?? 0 }}</span>
                     </Link>
-                    <Link href="/secretary/dental/treatment-plans" class="flex items-center justify-between px-4 sm:px-6 py-4 hover:bg-blue-50/30 transition-colors">
+                    <Link href="/secretary/dental/treatment-plans" class="flex items-center justify-between px-4 sm:px-6 py-4 hover:bg-slate-50/30 transition-colors">
                         <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
-                                <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
+                            <div class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center">
+                                <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
                             </div>
                             <div>
                                 <p class="text-sm font-semibold text-gray-800">{{ isRtl ? 'خطط علاج نشطة' : 'Active Treatment Plans' }}</p>
                                 <p class="text-[11px] text-gray-400">{{ isRtl ? 'تحتاج متابعة مواعيد' : 'Need appointment scheduling' }}</p>
                             </div>
                         </div>
-                        <span class="inline-flex items-center justify-center min-w-[28px] h-7 px-2 rounded-lg text-sm font-bold bg-blue-100 text-blue-700">{{ dental.active_plans ?? 0 }}</span>
+                        <span class="inline-flex items-center justify-center min-w-[28px] h-7 px-2 rounded-lg text-sm font-bold bg-slate-100 text-[#1B365D]">{{ dental.active_plans ?? 0 }}</span>
                     </Link>
                 </div>
             </div>
@@ -586,7 +602,7 @@ const severityStyles = {
                     </div>
                     <Link
                         href="/secretary/dental/lab-orders"
-                        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-cyan-600 bg-cyan-50 hover:bg-cyan-100 transition-colors duration-200"
+                        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-[#1B365D] bg-slate-50 hover:bg-slate-100 transition-colors duration-200"
                     >
                         {{ isRtl ? 'عرض الكل' : 'View All' }}
                         <svg class="w-3.5 h-3.5 ltr:rotate-0 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
@@ -607,7 +623,7 @@ const severityStyles = {
                             <tr v-for="order in dental.recent_lab_orders" :key="order.id" class="hover:bg-gray-50/50 transition-colors duration-150">
                                 <td class="px-3 sm:px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center gap-2">
-                                        <div class="w-7 h-7 rounded-lg bg-cyan-50 flex items-center justify-center text-cyan-600 text-xs font-bold flex-shrink-0">
+                                        <div class="w-7 h-7 rounded-lg bg-slate-50 flex items-center justify-center text-[#1B365D] text-xs font-bold flex-shrink-0">
                                             {{ (order.patient?.full_name || '?').charAt(0).toUpperCase() }}
                                         </div>
                                         <span class="text-sm font-semibold text-gray-900">{{ order.patient?.full_name || '-' }}</span>
@@ -620,14 +636,14 @@ const severityStyles = {
                                         :class="{
                                             'bg-emerald-50 text-emerald-700': order.status === 'ready',
                                             'bg-amber-50 text-amber-700': order.status === 'ordered' || order.status === 'in_production',
-                                            'bg-blue-50 text-blue-700': order.status === 'delivered',
+                                            'bg-slate-50 text-[#1B365D]': order.status === 'delivered',
                                             'bg-gray-50 text-gray-600': !['ready','ordered','in_production','delivered'].includes(order.status),
                                         }">
                                         <span class="w-1.5 h-1.5 rounded-full"
                                             :class="{
                                                 'bg-emerald-500': order.status === 'ready',
                                                 'bg-amber-500': order.status === 'ordered' || order.status === 'in_production',
-                                                'bg-blue-500': order.status === 'delivered',
+                                                'bg-[#1B365D]': order.status === 'delivered',
                                                 'bg-gray-400': !['ready','ordered','in_production','delivered'].includes(order.status),
                                             }"></span>
                                         {{ order.status?.replace('_', ' ') }}
@@ -733,17 +749,17 @@ const severityStyles = {
 
         <!-- ── Pediatric Overview ──────────────────────────── -->
         <div v-if="pediatric" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
-            <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gradient-to-r from-green-50/50 to-white">
+            <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gradient-to-r from-emerald-50/50 to-white">
                 <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-xl bg-green-50 flex items-center justify-center">
-                        <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                    <div class="w-8 h-8 rounded-xl bg-emerald-50 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
                     </div>
                     <h2 class="text-sm font-bold text-gray-800">{{ isRtl ? 'ملخص طب الأطفال' : 'Pediatric Summary' }}</h2>
                 </div>
             </div>
             <div class="grid grid-cols-2 sm:grid-cols-4 divide-x rtl:divide-x-reverse divide-gray-100">
                 <div class="px-4 py-4 text-center">
-                    <p class="text-2xl font-bold text-green-600">{{ pediatric.total_patients ?? 0 }}</p>
+                    <p class="text-2xl font-bold text-emerald-600">{{ pediatric.total_patients ?? 0 }}</p>
                     <p class="text-[10px] font-medium text-gray-500 mt-0.5">{{ isRtl ? 'المرضى' : 'Patients' }}</p>
                 </div>
                 <div class="px-4 py-4 text-center">

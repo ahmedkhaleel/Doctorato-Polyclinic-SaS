@@ -48,8 +48,8 @@ function formatDate(date) {
 
 const statusConfig = {
     pending: { label: isRtl.value ? 'بانتظار الحجز' : 'Needs Booking', bg: 'bg-amber-50', text: 'text-amber-700', dot: 'bg-amber-500' },
-    sms_sent: { label: isRtl.value ? 'تم إرسال SMS' : 'SMS Sent', bg: 'bg-blue-50', text: 'text-blue-700', dot: 'bg-blue-500' },
-    booking_created: { label: isRtl.value ? 'تم الحجز' : 'Booked', bg: 'bg-green-50', text: 'text-green-700', dot: 'bg-green-500' },
+    sms_sent: { label: isRtl.value ? 'تم إرسال SMS' : 'SMS Sent', bg: 'bg-slate-50', text: 'text-[#1B365D]', dot: 'bg-[#1B365D]' },
+    booking_created: { label: isRtl.value ? 'تم الحجز' : 'Booked', bg: 'bg-emerald-50', text: 'text-emerald-700', dot: 'bg-emerald-500' },
     completed: { label: isRtl.value ? 'مكتمل' : 'Completed', bg: 'bg-gray-50', text: 'text-gray-600', dot: 'bg-gray-400' },
     cancelled: { label: isRtl.value ? 'ملغي' : 'Cancelled', bg: 'bg-red-50', text: 'text-red-600', dot: 'bg-red-400' },
 };
@@ -72,8 +72,8 @@ const statCards = computed(() => [
 const colorMap = {
     amber: { bg: 'bg-amber-50', text: 'text-amber-700', gradient: 'from-amber-500 to-amber-600' },
     red: { bg: 'bg-red-50', text: 'text-red-700', gradient: 'from-red-500 to-red-600' },
-    cyan: { bg: 'bg-cyan-50', text: 'text-cyan-700', gradient: 'from-cyan-500 to-cyan-600' },
-    green: { bg: 'bg-green-50', text: 'text-green-700', gradient: 'from-green-500 to-green-600' },
+    cyan: { bg: 'bg-slate-50', text: 'text-[#1B365D]', gradient: 'from-[#1B365D] to-[#1B365D]' },
+    green: { bg: 'bg-emerald-50', text: 'text-emerald-700', gradient: 'from-emerald-500 to-emerald-600' },
 };
 </script>
 
@@ -94,7 +94,7 @@ const colorMap = {
                 :key="card.label"
                 @click="statusFilter = card.filter"
                 class="relative bg-white rounded-2xl p-4 shadow-sm border border-gray-100/80 hover:shadow-md transition-all duration-200 text-left"
-                :class="statusFilter === card.filter ? 'ring-2 ring-offset-1 ring-cyan-400' : ''"
+                :class="statusFilter === card.filter ? 'ring-2 ring-offset-1 ring-slate-400' : ''"
             >
                 <div :class="`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${colorMap[card.color].gradient} rounded-t-2xl opacity-80`"></div>
                 <p class="text-[13px] font-medium text-gray-500">{{ card.label }}</p>
@@ -110,12 +110,12 @@ const colorMap = {
                         v-model="search"
                         type="text"
                         :placeholder="isRtl ? 'بحث بالاسم أو رقم الملف أو الهاتف...' : 'Search by name, file # or phone...'"
-                        class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-cyan-400 focus:border-transparent"
+                        class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-slate-400 focus:border-transparent"
                     />
                 </div>
                 <select
                     v-model="statusFilter"
-                    class="px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-cyan-400 focus:border-transparent"
+                    class="px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-slate-400 focus:border-transparent"
                 >
                     <option value="pending">{{ isRtl ? 'تحتاج حجز' : 'Needs Booking' }}</option>
                     <option value="overdue">{{ isRtl ? 'متأخرة' : 'Overdue' }}</option>
@@ -145,7 +145,7 @@ const colorMap = {
                             :class="isOverdue(f) ? 'bg-red-50/30' : ''">
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center gap-3">
-                                    <div class="w-8 h-8 rounded-lg bg-cyan-50 flex items-center justify-center text-cyan-600 text-xs font-bold flex-shrink-0">
+                                    <div class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-[#1B365D] text-xs font-bold flex-shrink-0">
                                         {{ (f.patient?.full_name || '?').charAt(0).toUpperCase() }}
                                     </div>
                                     <div>
@@ -196,13 +196,13 @@ const colorMap = {
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <Link v-if="f.status === 'pending' && !f.booking_id"
                                     href="/secretary/bookings/create"
-                                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-white bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600 shadow-sm transition-all">
+                                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-white bg-gradient-to-r from-[#1B365D] to-teal-500 hover:from-[#1B365D] hover:to-teal-600 shadow-sm transition-all">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                     </svg>
                                     {{ isRtl ? 'حجز موعد' : 'Book' }}
                                 </Link>
-                                <span v-else-if="f.status === 'booking_created'" class="text-xs text-green-600 font-medium">
+                                <span v-else-if="f.status === 'booking_created'" class="text-xs text-emerald-600 font-medium">
                                     {{ isRtl ? 'تم الحجز' : 'Booked' }}
                                 </span>
                                 <span v-else class="text-xs text-gray-400">-</span>
@@ -214,8 +214,8 @@ const colorMap = {
                 <!-- Empty state -->
                 <div v-else class="py-16 text-center">
                     <div class="flex flex-col items-center">
-                        <div class="w-16 h-16 rounded-2xl bg-cyan-50 flex items-center justify-center mb-3">
-                            <svg class="w-8 h-8 text-cyan-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="w-16 h-16 rounded-2xl bg-slate-50 flex items-center justify-center mb-3">
+                            <svg class="w-8 h-8 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                         </div>
@@ -229,7 +229,7 @@ const colorMap = {
             <div v-if="followups.last_page > 1" class="px-6 py-4 border-t border-gray-100 flex justify-center gap-1">
                 <Link v-for="link in followups.links" :key="link.label"
                     :href="link.url || '#'"
-                    :class="['px-3 py-1.5 text-xs rounded-lg border', link.active ? 'bg-cyan-600 text-white border-cyan-600' : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50']"
+                    :class="['px-3 py-1.5 text-xs rounded-lg border', link.active ? 'bg-[#1B365D] text-white border-[#1B365D]' : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50']"
                     v-html="link.label" preserve-state />
             </div>
         </div>

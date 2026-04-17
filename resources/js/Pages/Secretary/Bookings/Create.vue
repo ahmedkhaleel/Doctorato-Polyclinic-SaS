@@ -753,7 +753,7 @@ const stepLabels = computed(() => isRtl.value ? [
                             :class="[
                                 'w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300',
                                 currentStep === index + 1
-                                    ? 'bg-gradient-to-r from-teal-500 to-cyan-500 text-white shadow-lg shadow-teal-500/30'
+                                    ? 'bg-gradient-to-r from-teal-500 to-[#1B365D] text-white shadow-lg shadow-teal-500/30'
                                     : currentStep > index + 1
                                         ? 'bg-teal-500 text-white'
                                         : 'bg-gray-100 text-gray-400'
@@ -817,7 +817,7 @@ const stepLabels = computed(() => isRtl.value ? [
                     <!-- Selected Patient Card -->
                     <div v-if="selectedPatient" class="mt-5 p-4 bg-teal-50/50 border border-teal-100 rounded-xl">
                         <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-xl bg-gradient-to-r from-teal-500 to-cyan-500 flex items-center justify-center text-white text-lg font-bold flex-shrink-0">
+                            <div class="w-12 h-12 rounded-xl bg-gradient-to-r from-teal-500 to-[#1B365D] flex items-center justify-center text-white text-lg font-bold flex-shrink-0">
                                 {{ selectedPatient.full_name?.charAt(0).toUpperCase() }}
                             </div>
                             <div class="flex-1 min-w-0">
@@ -1189,7 +1189,7 @@ const stepLabels = computed(() => isRtl.value ? [
                     <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6">
                         <h2 class="text-sm font-bold text-gray-800 mb-4 border-b border-gray-100 pb-2">{{ isRtl ? 'المريض' : 'Patient' }}</h2>
                         <div v-if="selectedPatient" class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-xl bg-gradient-to-r from-teal-500 to-cyan-500 flex items-center justify-center text-white text-lg font-bold flex-shrink-0">
+                            <div class="w-12 h-12 rounded-xl bg-gradient-to-r from-teal-500 to-[#1B365D] flex items-center justify-center text-white text-lg font-bold flex-shrink-0">
                                 {{ selectedPatient.full_name?.charAt(0).toUpperCase() }}
                             </div>
                             <div>
@@ -1321,7 +1321,7 @@ const stepLabels = computed(() => isRtl.value ? [
                         type="button"
                         @click="nextStep"
                         :disabled="!canProceed(currentStep)"
-                        class="inline-flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-teal-500 to-cyan-500 text-white rounded-xl text-sm font-semibold hover:from-teal-600 hover:to-cyan-600 transition-all shadow-lg shadow-teal-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                        class="inline-flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-teal-500 to-[#1B365D] text-white rounded-xl text-sm font-semibold hover:from-teal-600 hover:to-[#1B365D] transition-all shadow-lg shadow-teal-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         {{ isRtl ? 'التالي' : 'Next' }}
                         <svg class="w-4 h-4 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1333,7 +1333,7 @@ const stepLabels = computed(() => isRtl.value ? [
                         type="button"
                         @click="submit"
                         :disabled="processing"
-                        class="inline-flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-teal-500 to-cyan-500 text-white rounded-xl text-sm font-semibold hover:from-teal-600 hover:to-cyan-600 transition-all shadow-lg shadow-teal-500/20 disabled:opacity-50"
+                        class="inline-flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-teal-500 to-[#1B365D] text-white rounded-xl text-sm font-semibold hover:from-teal-600 hover:to-[#1B365D] transition-all shadow-lg shadow-teal-500/20 disabled:opacity-50"
                     >
                         <svg v-if="processing" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>

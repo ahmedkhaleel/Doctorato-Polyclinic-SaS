@@ -20,7 +20,7 @@ function formatDate(date) {
 const statusColors = {
     completed: 'bg-emerald-50 text-emerald-700',
     waiting: 'bg-amber-50 text-amber-700',
-    in_progress: 'bg-blue-50 text-blue-700',
+    in_progress: 'bg-slate-50 text-[#1B365D]',
     cancelled: 'bg-red-50 text-red-700',
 };
 
@@ -75,7 +75,7 @@ const statusLabels = {
                     v-if="link.url"
                     :href="link.url"
                     class="px-3 py-1.5 text-xs rounded-lg transition-colors"
-                    :class="link.active ? 'bg-green-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'"
+                    :class="link.active ? 'bg-emerald-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'"
                     v-html="link.label"
                 />
                 <span v-else class="px-3 py-1.5 text-xs text-gray-300" v-html="link.label" />

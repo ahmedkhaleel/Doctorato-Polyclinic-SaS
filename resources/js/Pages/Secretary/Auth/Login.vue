@@ -85,7 +85,7 @@ function submit() {
                     <button
                         type="submit"
                         :disabled="form.processing"
-                        class="w-full py-3 px-4 rounded-xl text-white font-semibold text-sm bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-600 hover:to-cyan-600 transition-all duration-300 disabled:opacity-50 shadow-lg shadow-teal-500/20"
+                        class="w-full py-3 px-4 rounded-xl text-white font-semibold text-sm bg-gradient-to-r from-teal-500 to-[#1B365D] hover:from-teal-600 hover:to-[#1B365D] transition-all duration-300 disabled:opacity-50 shadow-lg shadow-teal-500/20"
                     >
                         <span v-if="form.processing" class="flex items-center justify-center gap-2">
                             <svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">

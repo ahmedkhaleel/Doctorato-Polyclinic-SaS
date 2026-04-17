@@ -103,7 +103,7 @@ const showMedicalAlerts = ref(true);
 
 const statusConfig = computed(() => ({
     waiting: { label: isRtl.value ? 'انتظار' : 'Waiting', bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200', dot: 'bg-amber-400', heroBg: 'from-amber-600 to-amber-800' },
-    in_progress: { label: isRtl.value ? 'جاري' : 'In Progress', bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200', dot: 'bg-blue-500', heroBg: 'from-blue-700 to-blue-900' },
+    in_progress: { label: isRtl.value ? 'جاري' : 'In Progress', bg: 'bg-slate-50', text: 'text-[#1B365D]', border: 'border-slate-200', dot: 'bg-[#1B365D]', heroBg: 'from-[#1B365D] to-[#1B365D]' },
     completed: { label: isRtl.value ? 'مكتمل' : 'Completed', bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200', dot: 'bg-emerald-500', heroBg: 'from-emerald-700 to-emerald-900' },
     cancelled: { label: isRtl.value ? 'ملغي' : 'Cancelled', bg: 'bg-gray-50', text: 'text-gray-500', border: 'border-gray-200', dot: 'bg-gray-400', heroBg: 'from-gray-700 to-gray-900' },
 }));
@@ -207,9 +207,9 @@ function bpClassification(sys, dia) {
     if (!sys || !dia) return null;
     if (sys >= 180 || dia >= 120) return { label: isRtl.value ? 'أزمة' : 'Crisis', color: 'text-red-700 bg-red-50' };
     if (sys >= 140 || dia >= 90) return { label: isRtl.value ? 'مرتفع ٢' : 'Stage 2', color: 'text-red-600 bg-red-50' };
-    if (sys >= 130 || dia >= 80) return { label: isRtl.value ? 'مرتفع ١' : 'Stage 1', color: 'text-orange-600 bg-orange-50' };
-    if (sys >= 120 && dia < 80) return { label: isRtl.value ? 'مرتفع' : 'Elevated', color: 'text-yellow-600 bg-yellow-50' };
-    return { label: isRtl.value ? 'طبيعي' : 'Normal', color: 'text-green-600 bg-green-50' };
+    if (sys >= 130 || dia >= 80) return { label: isRtl.value ? 'مرتفع ١' : 'Stage 1', color: 'text-amber-600 bg-amber-50' };
+    if (sys >= 120 && dia < 80) return { label: isRtl.value ? 'مرتفع' : 'Elevated', color: 'text-amber-600 bg-yellow-50' };
+    return { label: isRtl.value ? 'طبيعي' : 'Normal', color: 'text-emerald-600 bg-emerald-50' };
 }
 
 function formatDate(date) {
@@ -226,12 +226,12 @@ function formatDate(date) {
 <template>
     <div class="space-y-6">
         <!-- Hero Header -->
-        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6 sm:p-8"
+        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] p-6 sm:p-8"
             :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
             style="transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1)"
         >
             <div class="absolute top-0 right-0 w-72 h-72 bg-[#C4A265]/10 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl"></div>
-            <div class="absolute bottom-0 left-0 w-48 h-48 bg-blue-500/10 rounded-full translate-y-1/2 -translate-x-1/4 blur-2xl"></div>
+            <div class="absolute bottom-0 left-0 w-48 h-48 bg-[#1B365D]/10 rounded-full translate-y-1/2 -translate-x-1/4 blur-2xl"></div>
 
             <div class="relative z-10">
                 <!-- Breadcrumb -->
@@ -264,7 +264,7 @@ function formatDate(date) {
                     <!-- Action Buttons -->
                     <div class="flex flex-wrap items-center gap-2">
                         <button v-if="visit.status === 'waiting'" @click="startVisit"
-                            class="inline-flex items-center gap-1.5 px-5 py-2.5 text-sm font-semibold text-white bg-blue-500 hover:bg-blue-600 rounded-xl transition-all shadow-sm shadow-blue-900/30 hover:shadow-md hover:-translate-y-0.5"
+                            class="inline-flex items-center gap-1.5 px-5 py-2.5 text-sm font-semibold text-white bg-[#1B365D] hover:bg-[#1B365D] rounded-xl transition-all shadow-sm shadow-[#1B365D]/30 hover:shadow-md hover:-translate-y-0.5"
                         >
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /></svg>
                             {{ isRtl ? 'بدء الزيارة' : 'Start Visit' }}
@@ -321,9 +321,9 @@ function formatDate(date) {
                         </span>
                         <!-- Low severity (blue) -->
                         <span v-for="flag in lowRiskFlags" :key="flag.key"
-                            class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-full bg-blue-100 text-blue-800 border border-blue-200"
+                            class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-full bg-slate-100 text-[#1B365D] border border-slate-200"
                         >
-                            <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                            <span class="w-1.5 h-1.5 rounded-full bg-[#1B365D]"></span>
                             {{ isRtl ? flag.label_ar : flag.label_en }}
                         </span>
                     </div>
@@ -366,8 +366,8 @@ function formatDate(date) {
                 >
                     <div class="flex items-center justify-between px-4 sm:px-6 py-4 border-b border-gray-100">
                         <div class="flex items-center gap-2">
-                            <div class="w-8 h-8 rounded-lg bg-purple-50 flex items-center justify-center">
-                                <svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                            <div class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center">
+                                <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
                             </div>
                             <h3 class="text-sm font-bold text-gray-800">{{ isRtl ? 'التشخيص والملاحظات' : 'Diagnosis & Notes' }}</h3>
                         </div>
@@ -413,11 +413,11 @@ function formatDate(date) {
                 >
                     <div class="flex items-center justify-between px-4 sm:px-6 py-4 border-b border-gray-100">
                         <div class="flex items-center gap-2">
-                            <div class="w-8 h-8 rounded-lg bg-cyan-50 flex items-center justify-center">
-                                <svg class="w-4 h-4 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                            <div class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center">
+                                <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                             </div>
                             <h3 class="text-sm font-bold text-gray-800">{{ isRtl ? 'صور الزيارة' : 'Visit Photos' }}</h3>
-                            <span v-if="totalPhotos" class="text-[10px] font-bold text-cyan-600 bg-cyan-50 px-1.5 py-0.5 rounded-full border border-cyan-100">{{ totalPhotos }}</span>
+                            <span v-if="totalPhotos" class="text-[10px] font-bold text-[#1B365D] bg-slate-50 px-1.5 py-0.5 rounded-full border border-slate-100">{{ totalPhotos }}</span>
                         </div>
                         <button v-if="isEditable && !showPhotoUpload" @click="showPhotoUpload = true"
                             class="inline-flex items-center gap-1 text-xs font-semibold text-white bg-[#C4A265] hover:bg-[#A68B52] px-3 py-1.5 rounded-lg transition-all shadow-sm hover:shadow"
@@ -550,7 +550,7 @@ function formatDate(date) {
                                             <td class="py-2 pr-3">
                                                 <span class="px-2 py-0.5 text-[10px] font-semibold rounded-full" :class="{
                                                     'bg-emerald-50 text-emerald-700 border border-emerald-200': t.status === 'completed',
-                                                    'bg-blue-50 text-blue-700 border border-blue-200': t.status === 'in_progress',
+                                                    'bg-slate-50 text-[#1B365D] border border-slate-200': t.status === 'in_progress',
                                                     'bg-amber-50 text-amber-700 border border-amber-200': t.status === 'planned',
                                                     'bg-gray-50 text-gray-500 border border-gray-200': t.status === 'cancelled',
                                                 }">{{ isRtl ? ({ completed: 'مكتمل', in_progress: 'جاري', planned: 'مخطط', cancelled: 'ملغي' }[t.status] || t.status) : ({ completed: 'Completed', in_progress: 'In Progress', planned: 'Planned', cancelled: 'Cancelled' }[t.status] || t.status) }}</span>
@@ -609,11 +609,11 @@ function formatDate(date) {
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7" /></svg>
                                 {{ isRtl ? 'المخطط' : 'Chart' }}
                             </Link>
-                            <Link :href="`/doctor/dental/treatment-plans?patient_id=${visit.patient_id}`" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-purple-600 bg-purple-50 hover:bg-purple-100 rounded-lg border border-purple-200 transition-all">
+                            <Link :href="`/doctor/dental/treatment-plans?patient_id=${visit.patient_id}`" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#1B365D] bg-slate-50 hover:bg-slate-100 rounded-lg border border-slate-200 transition-all">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" /></svg>
                                 {{ isRtl ? 'خطط العلاج' : 'Plans' }}
                             </Link>
-                            <Link :href="`/doctor/dental/xrays/${visit.patient_id}`" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-cyan-600 bg-cyan-50 hover:bg-cyan-100 rounded-lg border border-cyan-200 transition-all">
+                            <Link :href="`/doctor/dental/xrays/${visit.patient_id}`" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#1B365D] bg-slate-50 hover:bg-slate-100 rounded-lg border border-slate-200 transition-all">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                                 {{ isRtl ? 'الأشعة' : 'X-Rays' }}
                             </Link>
@@ -664,8 +664,8 @@ function formatDate(date) {
                 >
                     <div class="px-4 sm:px-6 py-4 border-b border-gray-100 flex items-center justify-between">
                         <div class="flex items-center gap-2">
-                            <div class="w-8 h-8 rounded-lg bg-rose-50 flex items-center justify-center">
-                                <svg class="w-4 h-4 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
+                            <div class="w-8 h-8 rounded-lg bg-amber-50 flex items-center justify-center">
+                                <svg class="w-4 h-4 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
                             </div>
                             <h3 class="text-sm font-bold text-gray-800">{{ isRtl ? 'العلامات الحيوية' : 'Vitals' }}</h3>
                             <span v-if="hasVitalsAlerts" class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
@@ -728,7 +728,7 @@ function formatDate(date) {
                             </div>
                             <div v-if="latestVitals.pain_level != null" class="flex justify-between text-xs">
                                 <span class="text-gray-500">{{ isRtl ? 'مستوى الألم' : 'Pain Level' }}</span>
-                                <span class="font-medium" :class="latestVitals.pain_level >= 7 ? 'text-red-600' : latestVitals.pain_level >= 4 ? 'text-orange-600' : 'text-gray-800'">{{ latestVitals.pain_level }}/10</span>
+                                <span class="font-medium" :class="latestVitals.pain_level >= 7 ? 'text-red-600' : latestVitals.pain_level >= 4 ? 'text-amber-600' : 'text-gray-800'">{{ latestVitals.pain_level }}/10</span>
                             </div>
                             <p class="text-[10px] text-gray-400 pt-1 border-t border-gray-50">
                                 {{ isRtl ? 'آخر تحديث:' : 'Last updated:' }} {{ latestVitals.recorded_at ? new Date(latestVitals.recorded_at).toLocaleString(isRtl ? 'ar-EG' : 'en-GB') : '-' }}
@@ -834,15 +834,15 @@ function formatDate(date) {
                     style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.19s"
                 >
                     <div class="px-4 sm:px-6 py-4 border-b border-gray-100 flex items-center gap-2">
-                        <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
-                            <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                        <div class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center">
+                            <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
                         </div>
                         <h3 class="text-sm font-bold text-gray-800">{{ isRtl ? 'التأمين' : 'Insurance' }}</h3>
                     </div>
                     <div class="p-4 space-y-2 text-xs">
                         <div class="flex justify-between"><span class="text-gray-500">{{ isRtl ? 'الشركة' : 'Company' }}</span><span class="font-medium text-gray-800">{{ isRtl ? activeInsurance.company?.name_ar : activeInsurance.company?.name_en }}</span></div>
                         <div v-if="activeInsurance.policy_number" class="flex justify-between"><span class="text-gray-500">{{ isRtl ? 'رقم البوليصة' : 'Policy #' }}</span><span class="font-mono text-gray-700">{{ activeInsurance.policy_number }}</span></div>
-                        <div v-if="activeInsurance.plan" class="flex justify-between"><span class="text-gray-500">{{ isRtl ? 'التغطية' : 'Coverage' }}</span><span class="font-medium text-blue-600">{{ activeInsurance.plan.coverage_percentage }}%</span></div>
+                        <div v-if="activeInsurance.plan" class="flex justify-between"><span class="text-gray-500">{{ isRtl ? 'التغطية' : 'Coverage' }}</span><span class="font-medium text-[#1B365D]">{{ activeInsurance.plan.coverage_percentage }}%</span></div>
                         <div v-if="activeInsurance.valid_until" class="flex justify-between">
                             <span class="text-gray-500">{{ isRtl ? 'صالح حتى' : 'Valid Until' }}</span>
                             <span :class="new Date(activeInsurance.valid_until) < new Date() ? 'text-red-600 font-medium' : 'text-gray-700'">{{ new Date(activeInsurance.valid_until).toLocaleDateString(isRtl ? 'ar-EG' : 'en-GB') }}</span>
@@ -856,8 +856,8 @@ function formatDate(date) {
                     style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.2s"
                 >
                     <div class="px-4 sm:px-6 py-4 border-b border-gray-100 flex items-center gap-2">
-                        <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
-                            <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
+                        <div class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center">
+                            <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
                         </div>
                         <h3 class="text-sm font-bold text-gray-800">{{ isRtl ? 'تفاصيل الزيارة' : 'Visit Details' }}</h3>
                     </div>

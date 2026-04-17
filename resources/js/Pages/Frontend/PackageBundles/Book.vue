@@ -212,13 +212,13 @@ onMounted(() => {
             <div v-if="successMessage" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
                 <div class="success-flash">
                     <div class="success-flash__icon">
-                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                     </div>
                     <div>
-                        <h3 class="font-bold text-green-800 mb-0.5">{{ t('booking_success_title') || t('success') }}</h3>
-                        <p class="text-green-700 text-sm">{{ successMessage }}</p>
+                        <h3 class="font-bold text-emerald-800 mb-0.5">{{ t('booking_success_title') || t('success') }}</h3>
+                        <p class="text-emerald-700 text-sm">{{ successMessage }}</p>
                     </div>
                 </div>
             </div>
@@ -461,7 +461,7 @@ onMounted(() => {
                                             <span class="text-gray-400 text-sm line-through">{{ formatCurrency(bundle.original_price) }}</span>
                                         </div>
                                         <div v-if="Number(bundle.savings) > 0" class="price-row price-row--savings">
-                                            <span class="text-green-600 text-sm font-medium">{{ t('you_save') }}</span>
+                                            <span class="text-emerald-600 text-sm font-medium">{{ t('you_save') }}</span>
                                             <span class="savings-amount">-{{ formatCurrency(animatedSavings) }}</span>
                                         </div>
                                         <div class="price-total">

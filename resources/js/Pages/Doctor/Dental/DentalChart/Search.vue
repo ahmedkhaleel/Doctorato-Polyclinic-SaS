@@ -108,16 +108,16 @@ function openChart(patientId) {
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <button v-for="rc in recentCharts" :key="rc.id"
                     @click="openChart(rc.id)"
-                    class="flex items-center gap-3 p-4 bg-white rounded-xl border border-gray-200 hover:border-cyan-200 hover:bg-cyan-50/30 transition-all group text-start"
+                    class="flex items-center gap-3 p-4 bg-white rounded-xl border border-gray-200 hover:border-slate-200 hover:bg-slate-50/30 transition-all group text-start"
                 >
-                    <div class="w-10 h-10 rounded-lg bg-cyan-50 flex items-center justify-center flex-shrink-0">
-                        <svg class="w-5 h-5 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3C10.5 3 9 4.5 8.5 6.5C8 8.5 7 9.5 6 10.5C5 11.5 4 13 4 15C4 17 5.5 19 7.5 19C9 19 10 18 10.5 17C11 16 11.5 15.5 12 15.5C12.5 15.5 13 16 13.5 17C14 18 15 19 16.5 19C18.5 19 20 17 20 15C20 13 19 11.5 18 10.5C17 9.5 16 8.5 15.5 6.5C15 4.5 13.5 3 12 3Z" /></svg>
+                    <div class="w-10 h-10 rounded-lg bg-slate-50 flex items-center justify-center flex-shrink-0">
+                        <svg class="w-5 h-5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3C10.5 3 9 4.5 8.5 6.5C8 8.5 7 9.5 6 10.5C5 11.5 4 13 4 15C4 17 5.5 19 7.5 19C9 19 10 18 10.5 17C11 16 11.5 15.5 12 15.5C12.5 15.5 13 16 13.5 17C14 18 15 19 16.5 19C18.5 19 20 17 20 15C20 13 19 11.5 18 10.5C17 9.5 16 8.5 15.5 6.5C15 4.5 13.5 3 12 3Z" /></svg>
                     </div>
                     <div class="min-w-0 flex-1">
-                        <p class="text-sm font-semibold text-gray-800 group-hover:text-cyan-700 truncate">{{ rc.full_name }}</p>
+                        <p class="text-sm font-semibold text-gray-800 group-hover:text-[#1B365D] truncate">{{ rc.full_name }}</p>
                         <p class="text-[10px] text-gray-400">{{ rc.file_number }} · {{ rc.teeth_count || 0 }} {{ isRtl ? 'سن مسجل' : 'teeth' }}</p>
                     </div>
-                    <svg class="w-4 h-4 text-gray-300 group-hover:text-cyan-500" :class="isRtl ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                    <svg class="w-4 h-4 text-gray-300 group-hover:text-[#1B365D]" :class="isRtl ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
                 </button>
             </div>
         </div>

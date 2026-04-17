@@ -48,7 +48,7 @@ function formatDate(date) {
             <!-- Profile Card -->
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6">
                 <div class="text-center">
-                    <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-teal-500 to-cyan-500 flex items-center justify-center mx-auto mb-3 text-white text-2xl font-bold">
+                    <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-teal-500 to-[#1B365D] flex items-center justify-center mx-auto mb-3 text-white text-2xl font-bold">
                         {{ user.name?.charAt(0)?.toUpperCase() || 'S' }}
                     </div>
                     <h2 class="text-lg font-bold text-gray-800">{{ user.name }}</h2>
@@ -87,7 +87,7 @@ function formatDate(date) {
                             </div>
                         </div>
                         <div class="flex justify-end">
-                            <button type="submit" :disabled="profileForm.processing" class="px-6 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-600 hover:to-cyan-600 rounded-xl transition-all shadow-lg shadow-teal-500/20 disabled:opacity-50">
+                            <button type="submit" :disabled="profileForm.processing" class="px-6 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-teal-500 to-[#1B365D] hover:from-teal-600 hover:to-[#1B365D] rounded-xl transition-all shadow-lg shadow-teal-500/20 disabled:opacity-50">
                                 {{ profileForm.processing ? (isRtl ? 'جاري الحفظ...' : 'Saving...') : (isRtl ? 'تحديث الملف الشخصي' : 'Update Profile') }}
                             </button>
                         </div>

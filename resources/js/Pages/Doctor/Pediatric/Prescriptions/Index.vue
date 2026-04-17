@@ -242,13 +242,13 @@ function hasMedicalNotes(patient) {
 <template>
     <div class="space-y-6">
         <!-- ══════ HERO HEADER ══════ -->
-        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-600 via-green-500 to-teal-500 p-6 sm:p-8"
+        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-600 via-emerald-500 to-teal-500 p-6 sm:p-8"
             :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
             style="transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1)"
         >
             <div class="absolute top-0 right-0 w-72 h-72 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl"></div>
             <div class="absolute bottom-0 left-0 w-48 h-48 bg-emerald-300/20 rounded-full translate-y-1/2 -translate-x-1/4 blur-2xl"></div>
-            <div class="absolute top-1/2 right-1/4 w-32 h-32 bg-green-400/10 rounded-full blur-xl"></div>
+            <div class="absolute top-1/2 right-1/4 w-32 h-32 bg-emerald-400/10 rounded-full blur-xl"></div>
 
             <div class="relative z-10">
                 <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -276,12 +276,12 @@ function hasMedicalNotes(patient) {
         </div>
 
         <!-- ══════ WEIGHT-BASED DOSE CALCULATOR ══════ -->
-        <div class="relative overflow-hidden rounded-2xl border-2 border-emerald-200 bg-gradient-to-br from-emerald-50/80 via-white to-green-50/50 shadow-lg shadow-emerald-100/50"
+        <div class="relative overflow-hidden rounded-2xl border-2 border-emerald-200 bg-gradient-to-br from-emerald-50/80 via-white to-emerald-50/50 shadow-lg shadow-emerald-100/50"
             :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
             style="transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.1s"
         >
             <!-- Calculator Header -->
-            <div class="bg-gradient-to-r from-emerald-600 to-green-500 px-5 sm:px-6 py-4">
+            <div class="bg-gradient-to-r from-emerald-600 to-emerald-500 px-5 sm:px-6 py-4">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
@@ -415,7 +415,7 @@ function hasMedicalNotes(patient) {
                             <!-- Dose per administration -->
                             <div class="relative overflow-hidden rounded-xl border-2 p-4 text-center transition-all duration-500"
                                 :class="[
-                                    isDoseExceeded ? 'border-red-300 bg-red-50' : 'border-emerald-300 bg-gradient-to-br from-emerald-50 to-green-50',
+                                    isDoseExceeded ? 'border-red-300 bg-red-50' : 'border-emerald-300 bg-gradient-to-br from-emerald-50 to-emerald-50',
                                     calcAnimating ? 'scale-100 opacity-100' : 'scale-95 opacity-70'
                                 ]"
                             >
@@ -431,11 +431,11 @@ function hasMedicalNotes(patient) {
                             </div>
 
                             <!-- Daily dose -->
-                            <div class="relative overflow-hidden rounded-xl border-2 border-emerald-300 bg-gradient-to-br from-emerald-50 to-green-50 p-4 text-center transition-all duration-500"
+                            <div class="relative overflow-hidden rounded-xl border-2 border-emerald-300 bg-gradient-to-br from-emerald-50 to-emerald-50 p-4 text-center transition-all duration-500"
                                 :class="calcAnimating ? 'scale-100 opacity-100' : 'scale-95 opacity-70'"
                                 style="transition-delay: 0.1s"
                             >
-                                <div class="absolute top-0 right-0 w-20 h-20 bg-green-200/50 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl"></div>
+                                <div class="absolute top-0 right-0 w-20 h-20 bg-emerald-200/50 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl"></div>
                                 <p class="text-[10px] font-bold text-emerald-500 uppercase tracking-wider mb-1">{{ isRtl ? '\u0627\u0644\u062C\u0631\u0639\u0629 \u0627\u0644\u064A\u0648\u0645\u064A\u0629' : 'Daily Dose' }}</p>
                                 <p class="text-3xl sm:text-4xl font-black text-emerald-700 transition-all duration-700">{{ dailyDose }}</p>
                                 <p class="text-xs font-semibold text-emerald-400">mg / {{ isRtl ? '\u064A\u0648\u0645' : 'day' }}</p>
@@ -469,7 +469,7 @@ function hasMedicalNotes(patient) {
                             <button
                                 type="button"
                                 @click="copyToForm"
-                                class="inline-flex items-center gap-2.5 px-6 py-3 text-sm font-bold text-white bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600 rounded-xl transition-all duration-300 shadow-lg shadow-emerald-200/50 hover:shadow-emerald-300/50 hover:scale-105 active:scale-95"
+                                class="inline-flex items-center gap-2.5 px-6 py-3 text-sm font-bold text-white bg-gradient-to-r from-emerald-500 to-emerald-500 hover:from-emerald-600 hover:to-emerald-600 rounded-xl transition-all duration-300 shadow-lg shadow-emerald-200/50 hover:shadow-emerald-300/50 hover:scale-105 active:scale-95"
                             >
                                 <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" /></svg>
                                 {{ isRtl ? '\u0646\u0633\u062E \u0625\u0644\u0649 \u0627\u0644\u0648\u0635\u0641\u0629' : 'Copy to Prescription' }}
@@ -628,7 +628,7 @@ function hasMedicalNotes(patient) {
 
                     <!-- Submit -->
                     <div class="flex justify-end pt-2">
-                        <button type="submit" :disabled="form.processing" class="inline-flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600 rounded-xl transition-all disabled:opacity-50 shadow-lg shadow-emerald-200/50">
+                        <button type="submit" :disabled="form.processing" class="inline-flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-emerald-500 to-emerald-500 hover:from-emerald-600 hover:to-emerald-600 rounded-xl transition-all disabled:opacity-50 shadow-lg shadow-emerald-200/50">
                             <svg v-if="!form.processing" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
                             <svg v-else class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" /><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
                             {{ form.processing ? (isRtl ? '\u062C\u0627\u0631\u064A \u0627\u0644\u0625\u0646\u0634\u0627\u0621...' : 'Creating...') : (isRtl ? '\u0625\u0646\u0634\u0627\u0621 \u0648\u0635\u0641\u0629' : 'Create Prescription') }}
@@ -677,7 +677,7 @@ function hasMedicalNotes(patient) {
                         <tr v-for="rx in prescriptions.data" :key="rx.id" class="hover:bg-emerald-50/30 transition-colors group">
                             <td class="px-3 sm:px-5 py-3.5">
                                 <div class="flex items-center gap-3">
-                                    <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-400/15 to-green-400/10 flex items-center justify-center text-emerald-600 font-bold text-xs flex-shrink-0">{{ rx.patient?.full_name?.charAt(0) || '?' }}</div>
+                                    <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-400/15 to-emerald-400/10 flex items-center justify-center text-emerald-600 font-bold text-xs flex-shrink-0">{{ rx.patient?.full_name?.charAt(0) || '?' }}</div>
                                     <div>
                                         <p class="font-semibold text-gray-800 text-[13px]">{{ rx.patient?.full_name }}</p>
                                         <div class="flex items-center gap-2 mt-0.5">
@@ -704,7 +704,7 @@ function hasMedicalNotes(patient) {
                                     <button @click="printPdf(rx.id)" class="p-1.5 text-gray-500 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors" :title="isRtl ? '\u0637\u0628\u0627\u0639\u0629' : 'Print'">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" /></svg>
                                     </button>
-                                    <button @click="downloadPdf(rx.id)" class="p-1.5 text-gray-500 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors" :title="isRtl ? '\u062A\u062D\u0645\u064A\u0644 PDF' : 'Download PDF'">
+                                    <button @click="downloadPdf(rx.id)" class="p-1.5 text-gray-500 hover:text-[#1B365D] hover:bg-slate-50 rounded-lg transition-colors" :title="isRtl ? '\u062A\u062D\u0645\u064A\u0644 PDF' : 'Download PDF'">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
                                     </button>
                                 </div>
@@ -719,7 +719,7 @@ function hasMedicalNotes(patient) {
                 <div v-for="rx in prescriptions.data" :key="'m-'+rx.id" class="p-4 hover:bg-emerald-50/30 transition-colors">
                     <div class="flex items-start justify-between gap-3">
                         <div class="flex items-center gap-3 min-w-0">
-                            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400/15 to-green-400/10 flex items-center justify-center text-emerald-600 font-bold text-sm flex-shrink-0">{{ rx.patient?.full_name?.charAt(0) || '?' }}</div>
+                            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400/15 to-emerald-400/10 flex items-center justify-center text-emerald-600 font-bold text-sm flex-shrink-0">{{ rx.patient?.full_name?.charAt(0) || '?' }}</div>
                             <div class="min-w-0">
                                 <p class="font-semibold text-gray-800 text-sm truncate">{{ rx.patient?.full_name }}</p>
                                 <div class="flex items-center gap-2 mt-0.5">
@@ -734,7 +734,7 @@ function hasMedicalNotes(patient) {
                     <div class="flex items-center gap-2 mt-3">
                         <button @click="openView(rx)" class="flex-1 text-center py-1.5 text-xs font-semibold text-emerald-600 bg-emerald-50 rounded-lg hover:bg-emerald-100 transition-colors">{{ isRtl ? '\u0639\u0631\u0636' : 'View' }}</button>
                         <button @click="printPdf(rx.id)" class="flex-1 text-center py-1.5 text-xs font-semibold text-gray-600 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">{{ isRtl ? '\u0637\u0628\u0627\u0639\u0629' : 'Print' }}</button>
-                        <button @click="downloadPdf(rx.id)" class="flex-1 text-center py-1.5 text-xs font-semibold text-purple-600 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors">PDF</button>
+                        <button @click="downloadPdf(rx.id)" class="flex-1 text-center py-1.5 text-xs font-semibold text-[#1B365D] bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors">PDF</button>
                     </div>
                 </div>
             </div>
@@ -764,7 +764,7 @@ function hasMedicalNotes(patient) {
                     <div class="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
                     <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[85vh] overflow-y-auto">
                         <!-- Modal Header -->
-                        <div class="sticky top-0 z-10 bg-gradient-to-r from-emerald-500 to-green-500 px-5 py-4 rounded-t-2xl flex items-center justify-between">
+                        <div class="sticky top-0 z-10 bg-gradient-to-r from-emerald-500 to-emerald-500 px-5 py-4 rounded-t-2xl flex items-center justify-between">
                             <div>
                                 <h3 class="text-base font-bold text-white">{{ isRtl ? '\u062A\u0641\u0627\u0635\u064A\u0644 \u0627\u0644\u0648\u0635\u0641\u0629' : 'Prescription Details' }}</h3>
                                 <p class="text-emerald-100 text-xs">Rx #{{ viewingPrescription.id }}</p>
@@ -777,7 +777,7 @@ function hasMedicalNotes(patient) {
                         <div class="p-5 space-y-4">
                             <!-- Patient info -->
                             <div class="flex items-center gap-3 pb-3 border-b border-gray-100">
-                                <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-emerald-400/15 to-green-400/10 flex items-center justify-center text-emerald-600 font-bold text-sm">{{ viewingPrescription.patient?.full_name?.charAt(0) || '?' }}</div>
+                                <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-emerald-400/15 to-emerald-400/10 flex items-center justify-center text-emerald-600 font-bold text-sm">{{ viewingPrescription.patient?.full_name?.charAt(0) || '?' }}</div>
                                 <div>
                                     <p class="font-bold text-gray-800">{{ viewingPrescription.patient?.full_name }}</p>
                                     <p class="text-xs text-gray-400">{{ viewingPrescription.patient?.file_number }} &middot; {{ formatDate(viewingPrescription.created_at) }}</p>
@@ -819,7 +819,7 @@ function hasMedicalNotes(patient) {
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" /></svg>
                                     {{ isRtl ? '\u0637\u0628\u0627\u0639\u0629' : 'Print' }}
                                 </button>
-                                <button @click="downloadPdf(viewingPrescription.id)" class="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold text-purple-600 bg-purple-50 hover:bg-purple-100 rounded-xl transition-colors">
+                                <button @click="downloadPdf(viewingPrescription.id)" class="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold text-[#1B365D] bg-slate-50 hover:bg-slate-100 rounded-xl transition-colors">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
                                     PDF
                                 </button>

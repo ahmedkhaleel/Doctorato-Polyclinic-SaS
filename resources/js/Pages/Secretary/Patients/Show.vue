@@ -61,7 +61,7 @@ const prescriptions = computed(() => props.patient?.prescriptions || []);
                             class="w-full h-full object-cover"
                         />
                     </div>
-                    <div v-else class="w-14 h-14 rounded-2xl flex-shrink-0 flex items-center justify-center text-white text-xl font-bold bg-gradient-to-br from-teal-500 to-cyan-500 shadow-md shadow-teal-500/20">
+                    <div v-else class="w-14 h-14 rounded-2xl flex-shrink-0 flex items-center justify-center text-white text-xl font-bold bg-gradient-to-br from-teal-500 to-[#1B365D] shadow-md shadow-teal-500/20">
                         {{ patient.full_name?.charAt(0) }}
                     </div>
                     <div>

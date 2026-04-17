@@ -42,29 +42,29 @@ function jsToSystemDay(jsDay) {
 /* -- Status Colors ---------------------------------------- */
 const bookingStatusColors = {
     pending: 'bg-yellow-100 text-yellow-800',
-    confirmed: 'bg-blue-100 text-blue-800',
-    in_progress: 'bg-indigo-100 text-indigo-800',
-    completed: 'bg-green-100 text-green-800',
+    confirmed: 'bg-slate-100 text-[#1B365D]',
+    in_progress: 'bg-slate-100 text-[#1B365D]',
+    completed: 'bg-emerald-100 text-emerald-800',
     cancelled: 'bg-red-100 text-red-800',
 };
 const serviceStatusColors = {
-    pending: 'bg-yellow-50 text-yellow-700 border-yellow-200',
-    in_progress: 'bg-indigo-50 text-indigo-700 border-indigo-200',
-    completed: 'bg-green-50 text-green-700 border-green-200',
+    pending: 'bg-yellow-50 text-amber-700 border-yellow-200',
+    in_progress: 'bg-slate-50 text-[#1B365D] border-slate-200',
+    completed: 'bg-emerald-50 text-emerald-700 border-emerald-200',
     cancelled: 'bg-red-50 text-red-700 border-red-200',
 };
 const visitStatusColors = {
     waiting: 'bg-yellow-100 text-yellow-800',
-    in_progress: 'bg-blue-100 text-blue-800',
-    completed: 'bg-green-100 text-green-800',
+    in_progress: 'bg-slate-100 text-[#1B365D]',
+    completed: 'bg-emerald-100 text-emerald-800',
     cancelled: 'bg-red-100 text-red-800',
 };
 const appointmentStatusColors = {
-    scheduled: 'bg-blue-100 text-blue-800',
-    confirmed: 'bg-indigo-100 text-indigo-800',
+    scheduled: 'bg-slate-100 text-[#1B365D]',
+    confirmed: 'bg-slate-100 text-[#1B365D]',
     checked_in: 'bg-yellow-100 text-yellow-800',
-    in_progress: 'bg-purple-100 text-purple-800',
-    completed: 'bg-green-100 text-green-800',
+    in_progress: 'bg-slate-100 text-[#1B365D]',
+    completed: 'bg-emerald-100 text-emerald-800',
     cancelled: 'bg-red-100 text-red-800',
     no_show: 'bg-gray-100 text-gray-800',
 };
@@ -378,7 +378,7 @@ function toggleSection(key) {
             </div>
             <div class="bg-white rounded-lg shadow-sm p-4 sm:p-5">
                 <div class="text-xs font-medium text-gray-400 uppercase mb-2">{{ isRtl ? 'المبلغ المتبقي' : 'Balance Due' }}</div>
-                <div class="text-xl font-bold" :class="Number(b.balance_due) > 0 ? 'text-red-600' : 'text-green-600'">
+                <div class="text-xl font-bold" :class="Number(b.balance_due) > 0 ? 'text-red-600' : 'text-emerald-600'">
                     {{ Number(b.balance_due) > 0 ? formatCurrency(b.balance_due) : 'Paid' }}
                 </div>
                 <div class="text-xs text-gray-400 mt-1">{{ isRtl ? 'المدفوع:' : 'Paid:' }} {{ formatCurrency(b.total_paid) }}</div>
@@ -405,7 +405,7 @@ function toggleSection(key) {
                     <div><span class="text-gray-400">{{ isRtl ? 'المصدر' : 'Source' }}</span><div class="font-medium text-gray-900 capitalize">{{ b.source }}</div></div>
                     <div><span class="text-gray-400">{{ isRtl ? 'تاريخ الإنشاء' : 'Created' }}</span><div class="font-medium text-gray-900">{{ formatDateTime(b.created_at) }}</div></div>
                     <div v-if="b.started_at"><span class="text-gray-400">{{ isRtl ? 'بدأ' : 'Started' }}</span><div class="font-medium text-gray-900">{{ formatDateTime(b.started_at) }}</div></div>
-                    <div v-if="b.completed_at"><span class="text-gray-400">{{ isRtl ? 'مكتمل' : 'Completed' }}</span><div class="font-medium text-green-600">{{ formatDateTime(b.completed_at) }}</div></div>
+                    <div v-if="b.completed_at"><span class="text-gray-400">{{ isRtl ? 'مكتمل' : 'Completed' }}</span><div class="font-medium text-emerald-600">{{ formatDateTime(b.completed_at) }}</div></div>
                 </div>
                 <div v-if="b.promo_code" class="mt-4 pt-3 border-t border-teal-100 flex items-center gap-2">
                     <svg class="w-4 h-4 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" /></svg>
@@ -429,7 +429,7 @@ function toggleSection(key) {
             <div v-show="expandedSections.services" class="px-3 sm:px-5 pb-5 space-y-4">
                 <div v-for="bs in b.bundle_services" :key="bs.id"
                      class="border rounded-xl p-4"
-                     :class="bs.status === 'completed' ? 'border-green-200 bg-green-50/30' : bs.status === 'cancelled' ? 'border-red-200 bg-red-50/30' : 'border-gray-200'">
+                     :class="bs.status === 'completed' ? 'border-emerald-200 bg-emerald-50/30' : bs.status === 'cancelled' ? 'border-red-200 bg-red-50/30' : 'border-gray-200'">
                     <div class="flex items-start justify-between mb-3">
                         <div>
                             <div class="font-medium text-gray-900">{{ bs.service?.name_en }}</div>
@@ -476,7 +476,7 @@ function toggleSection(key) {
                             <tr v-for="apt in b.appointments" :key="apt.id" class="hover:bg-gray-50">
                                 <td class="px-3 py-2.5 font-medium text-gray-800">
                                     {{ apt.bundle_booking_service?.service?.name_en || '-' }}
-                                    <span v-if="apt.is_retouch" class="ltr:ml-1 rtl:mr-1 text-xs text-purple-600 font-semibold">(Retouch)</span>
+                                    <span v-if="apt.is_retouch" class="ltr:ml-1 rtl:mr-1 text-xs text-[#1B365D] font-semibold">(Retouch)</span>
                                 </td>
                                 <td class="px-3 py-2.5 text-center text-gray-600">{{ apt.session_number }}</td>
                                 <td class="px-3 py-2.5 text-gray-600">{{ apt.doctor?.name_en || '-' }}</td>
@@ -568,7 +568,7 @@ function toggleSection(key) {
                         <tr v-for="payment in payments" :key="payment.id" class="hover:bg-gray-50">
                             <td class="px-3 py-2.5 text-gray-600">{{ formatDate(payment.payment_date) }}</td>
                             <td class="px-3 py-2.5 text-gray-600">{{ payment.payment_method?.name_en || '-' }}</td>
-                            <td class="px-3 py-2.5 ltr:text-right rtl:text-left font-semibold text-green-600">{{ formatCurrency(payment.amount) }}</td>
+                            <td class="px-3 py-2.5 ltr:text-right rtl:text-left font-semibold text-emerald-600">{{ formatCurrency(payment.amount) }}</td>
                             <td class="px-3 py-2.5 text-gray-500 font-mono text-xs">{{ payment.reference_number || '-' }}</td>
                         </tr>
                     </tbody>
@@ -577,8 +577,8 @@ function toggleSection(key) {
                 <div class="mt-4 border-t border-gray-200 pt-4">
                     <div class="max-w-xs ltr:ml-auto rtl:mr-auto space-y-2 text-sm">
                         <div class="flex justify-between"><span class="text-gray-500">{{ isRtl ? 'الإجمالي' : 'Total' }}</span><span class="font-bold" style="color: #0d9488;">{{ formatCurrency(invoice?.total) }}</span></div>
-                        <div class="flex justify-between"><span class="text-gray-500">{{ isRtl ? 'المدفوع' : 'Paid' }}</span><span class="font-bold text-green-600">{{ formatCurrency(totalPaid) }}</span></div>
-                        <div class="flex justify-between border-t pt-2"><span class="font-bold text-gray-700">{{ isRtl ? 'المبلغ المتبقي' : 'Balance Due' }}</span><span class="font-bold" :class="remainingBalance > 0 ? 'text-red-600' : 'text-green-600'">{{ formatCurrency(remainingBalance) }}</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">{{ isRtl ? 'المدفوع' : 'Paid' }}</span><span class="font-bold text-emerald-600">{{ formatCurrency(totalPaid) }}</span></div>
+                        <div class="flex justify-between border-t pt-2"><span class="font-bold text-gray-700">{{ isRtl ? 'المبلغ المتبقي' : 'Balance Due' }}</span><span class="font-bold" :class="remainingBalance > 0 ? 'text-red-600' : 'text-emerald-600'">{{ formatCurrency(remainingBalance) }}</span></div>
                     </div>
                 </div>
             </div>

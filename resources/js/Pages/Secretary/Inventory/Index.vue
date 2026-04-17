@@ -116,7 +116,7 @@ onMounted(() => { requestAnimationFrame(() => { mounted.value = true; }); });
     <div class="space-y-6">
         <!-- Hero Header -->
         <div
-            class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6 sm:p-8 transition-all duration-700"
+            class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] p-6 sm:p-8 transition-all duration-700"
             :style="{ opacity: mounted ? 1 : 0, transform: mounted ? 'translateY(0)' : 'translateY(12px)', transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }"
         >
             <div class="absolute top-0 right-0 w-64 h-64 bg-teal-500/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl"></div>
@@ -199,7 +199,7 @@ onMounted(() => { requestAnimationFrame(() => { mounted.value = true; }); });
                             <span
                                 v-if="supply.module && supply.module !== 'shared'"
                                 class="px-1.5 py-0.5 rounded text-[9px] font-bold uppercase"
-                                :class="supply.module === 'dental' ? 'bg-sky-100 text-sky-700' : 'bg-rose-100 text-rose-700'"
+                                :class="supply.module === 'dental' ? 'bg-slate-100 text-[#1B365D]' : 'bg-amber-100 text-[#C4A265]'"
                             >{{ supply.module }}</span>
                             <span
                                 v-if="isLowStock(supply)"
@@ -353,7 +353,7 @@ onMounted(() => { requestAnimationFrame(() => { mounted.value = true; }); });
                                             @click="adjustType = 'adjustment'"
                                             class="px-4 py-2.5 rounded-xl text-sm font-medium border-2 transition-all duration-200"
                                             :class="adjustType === 'adjustment'
-                                                ? 'border-green-500 bg-green-50 text-green-700'
+                                                ? 'border-emerald-500 bg-emerald-50 text-emerald-700'
                                                 : 'border-gray-200 text-gray-500 hover:border-gray-300'"
                                         >
                                             <svg class="w-4 h-4 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -405,7 +405,7 @@ onMounted(() => { requestAnimationFrame(() => { mounted.value = true; }); });
                                     @click="submitAdjust"
                                     :disabled="adjustLoading || !adjustQty || adjustQty <= 0"
                                     class="px-5 py-2 rounded-xl text-sm font-semibold text-white shadow-sm transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                                    :class="adjustType === 'usage' ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'"
+                                    :class="adjustType === 'usage' ? 'bg-red-500 hover:bg-red-600' : 'bg-emerald-500 hover:bg-emerald-600'"
                                 >
                                     <span v-if="adjustLoading" class="flex items-center gap-2">
                                         <svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" /><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>

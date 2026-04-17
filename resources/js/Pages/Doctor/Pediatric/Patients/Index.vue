@@ -73,14 +73,14 @@ function calculateAge(dob) {
 }
 
 function getInitialColor(gender) {
-    if (gender === 'male') return 'from-blue-400 to-blue-600';
-    if (gender === 'female') return 'from-pink-400 to-pink-600';
+    if (gender === 'male') return 'from-slate-400 to-[#1B365D]';
+    if (gender === 'female') return 'from-amber-400 to-[#C4A265]';
     return 'from-emerald-400 to-emerald-600';
 }
 
 function getInitialBg(gender) {
-    if (gender === 'male') return 'ring-blue-200';
-    if (gender === 'female') return 'ring-pink-200';
+    if (gender === 'male') return 'ring-slate-200';
+    if (gender === 'female') return 'ring-amber-200';
     return 'ring-emerald-200';
 }
 </script>
@@ -89,7 +89,7 @@ function getInitialBg(gender) {
     <div class="space-y-6">
         <!-- Hero Header -->
         <div
-            class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-emerald-600 to-green-500 transition-all duration-700"
+            class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-emerald-600 to-emerald-500 transition-all duration-700"
             :class="heroVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
         >
             <!-- Decorative blobs -->
@@ -182,10 +182,10 @@ function getInitialBg(gender) {
 
                     <!-- Gender Icon -->
                     <div class="flex-shrink-0">
-                        <span v-if="patient.gender === 'male'" class="text-blue-400" title="Male">
+                        <span v-if="patient.gender === 'male'" class="text-slate-400" title="Male">
                             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a1 1 0 011 1v3.586l2.293-2.293a1 1 0 111.414 1.414L14.414 8H18a1 1 0 110 2h-5a1 1 0 01-1-1V4a1 1 0 011-1zM8 13a4 4 0 100 8 4 4 0 000-8zm-6 4a6 6 0 1112 0 6 6 0 01-12 0z"/></svg>
                         </span>
-                        <span v-else-if="patient.gender === 'female'" class="text-pink-400" title="Female">
+                        <span v-else-if="patient.gender === 'female'" class="text-amber-400" title="Female">
                             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a6 6 0 016 6 6 6 0 01-5 5.917V16h2a1 1 0 110 2h-2v2a1 1 0 11-2 0v-2H9a1 1 0 110-2h2v-2.083A6.002 6.002 0 0112 2zm0 2a4 4 0 100 8 4 4 0 000-8z"/></svg>
                         </span>
                     </div>

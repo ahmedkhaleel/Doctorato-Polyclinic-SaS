@@ -115,7 +115,7 @@ function treatmentLabel(type) {
     <div class="max-w-3xl mx-auto">
         <!-- Header -->
         <div class="text-center mb-8 consent-hero-enter">
-            <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-cyan-400 to-teal-500 text-white mb-4 shadow-lg shadow-cyan-200/50">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-slate-400 to-teal-500 text-white mb-4 shadow-lg shadow-cyan-200/50">
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
@@ -135,12 +135,12 @@ function treatmentLabel(type) {
             <p class="text-sm text-amber-600 mt-1">{{ isRtl ? 'يرجى التواصل مع العيادة لإعادة الإرسال' : 'Please contact the clinic to resend' }}</p>
         </div>
 
-        <div v-if="isSigned" class="bg-green-50 border border-green-200 rounded-2xl p-5 mb-6 text-center consent-card-enter">
-            <svg class="w-10 h-10 text-green-500 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div v-if="isSigned" class="bg-emerald-50 border border-emerald-200 rounded-2xl p-5 mb-6 text-center consent-card-enter">
+            <svg class="w-10 h-10 text-emerald-500 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <h3 class="text-lg font-semibold text-green-700">{{ isRtl ? 'تم التوقيع بنجاح' : 'Already Signed' }}</h3>
-            <p class="text-sm text-green-600 mt-1">{{ isRtl ? 'تم توقيع هذه الموافقة بتاريخ' : 'This consent was signed on' }} {{ formatDate(consent.signed_at) }}</p>
+            <h3 class="text-lg font-semibold text-emerald-700">{{ isRtl ? 'تم التوقيع بنجاح' : 'Already Signed' }}</h3>
+            <p class="text-sm text-emerald-600 mt-1">{{ isRtl ? 'تم توقيع هذه الموافقة بتاريخ' : 'This consent was signed on' }} {{ formatDate(consent.signed_at) }}</p>
         </div>
 
         <div v-if="isDeclined" class="bg-red-50 border border-red-200 rounded-2xl p-5 mb-6 text-center consent-card-enter">
@@ -153,11 +153,11 @@ function treatmentLabel(type) {
         <!-- Plan Details Card -->
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-6 consent-card-enter" style="animation-delay: 0.1s;">
             <!-- Plan Header -->
-            <div class="bg-gradient-to-r from-cyan-500 to-teal-500 px-6 py-4">
+            <div class="bg-gradient-to-r from-[#1B365D] to-teal-500 px-6 py-4">
                 <h2 class="text-white font-bold text-lg">
                     {{ isRtl ? (snapshot.plan_title_ar || snapshot.plan_title_en) : (snapshot.plan_title_en || snapshot.plan_title_ar) }}
                 </h2>
-                <p class="text-cyan-100 text-sm mt-0.5">
+                <p class="text-slate-100 text-sm mt-0.5">
                     {{ isRtl ? 'الطبيب:' : 'Doctor:' }}
                     {{ isRtl ? (snapshot.doctor_name_ar || snapshot.doctor_name_en) : (snapshot.doctor_name_en || snapshot.doctor_name_ar) }}
                 </p>
@@ -173,7 +173,7 @@ function treatmentLabel(type) {
                 <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-5">
                     <div class="bg-gray-50 rounded-xl p-3">
                         <p class="text-xs text-gray-400">{{ isRtl ? 'التكلفة التقديرية' : 'Estimated Cost' }}</p>
-                        <p class="text-lg font-bold text-cyan-600 mt-1">{{ formatCurrency(snapshot.estimated_cost || 0) }}</p>
+                        <p class="text-lg font-bold text-[#1B365D] mt-1">{{ formatCurrency(snapshot.estimated_cost || 0) }}</p>
                     </div>
                     <div class="bg-gray-50 rounded-xl p-3">
                         <p class="text-xs text-gray-400">{{ isRtl ? 'عدد الجلسات' : 'Sessions' }}</p>
@@ -194,7 +194,7 @@ function treatmentLabel(type) {
                             :key="index"
                             class="flex items-center gap-3 p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
                         >
-                            <div class="w-8 h-8 rounded-full bg-cyan-100 text-cyan-600 flex items-center justify-center text-xs font-bold flex-shrink-0">
+                            <div class="w-8 h-8 rounded-full bg-slate-100 text-[#1B365D] flex items-center justify-center text-xs font-bold flex-shrink-0">
                                 {{ index + 1 }}
                             </div>
                             <div class="flex-1 min-w-0">
@@ -206,7 +206,7 @@ function treatmentLabel(type) {
                                 </div>
                                 <p v-if="treatment.description" class="text-xs text-gray-500 mt-0.5 truncate">{{ treatment.description }}</p>
                             </div>
-                            <div class="text-sm font-semibold text-cyan-600 flex-shrink-0">
+                            <div class="text-sm font-semibold text-[#1B365D] flex-shrink-0">
                                 {{ formatCurrency((parseFloat(treatment.cost) || 0) + (parseFloat(treatment.lab_cost) || 0)) }}
                             </div>
                         </div>
@@ -215,7 +215,7 @@ function treatmentLabel(type) {
                     <!-- Total -->
                     <div class="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between">
                         <span class="text-sm font-medium text-gray-600">{{ isRtl ? 'الإجمالي' : 'Total' }}</span>
-                        <span class="text-lg font-bold text-cyan-600">{{ formatCurrency(totalCost) }}</span>
+                        <span class="text-lg font-bold text-[#1B365D]">{{ formatCurrency(totalCost) }}</span>
                     </div>
                 </div>
 
@@ -271,7 +271,7 @@ function treatmentLabel(type) {
                 <button
                     @click="submitSign"
                     :disabled="!signatureData || signForm.processing"
-                    class="flex-1 px-6 py-3 text-sm font-semibold text-white bg-gradient-to-r from-cyan-500 to-teal-500 rounded-xl hover:from-cyan-600 hover:to-teal-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg shadow-cyan-200/50 flex items-center justify-center gap-2"
+                    class="flex-1 px-6 py-3 text-sm font-semibold text-white bg-gradient-to-r from-[#1B365D] to-teal-500 rounded-xl hover:from-[#1B365D] hover:to-teal-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg shadow-cyan-200/50 flex items-center justify-center gap-2"
                 >
                     <svg v-if="signForm.processing" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>

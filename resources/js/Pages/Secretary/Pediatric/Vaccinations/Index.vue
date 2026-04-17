@@ -83,8 +83,8 @@ function submitStatusUpdate(vaccinationId) {
 const vaccinationStatusColors = {
     given: 'bg-emerald-50 text-emerald-700 border-emerald-200',
     overdue: 'bg-red-50 text-red-700 border-red-200',
-    upcoming: 'bg-blue-50 text-blue-700 border-blue-200',
-    scheduled: 'bg-blue-50 text-blue-700 border-blue-200',
+    upcoming: 'bg-slate-50 text-[#1B365D] border-slate-200',
+    scheduled: 'bg-slate-50 text-[#1B365D] border-slate-200',
     missed: 'bg-red-50 text-red-600 border-red-200',
     postponed: 'bg-amber-50 text-amber-700 border-amber-200',
     contraindicated: 'bg-gray-100 text-gray-500 border-gray-200',
@@ -112,7 +112,7 @@ const statCards = computed(() => [
         label: isRtl.value ? 'تم إعطاؤها' : 'Given',
         value: props.stats?.given ?? 0,
         color: 'text-emerald-600',
-        bg: 'from-emerald-50 to-green-50',
+        bg: 'from-emerald-50 to-emerald-50',
         borderColor: 'border-emerald-100',
         icon: 'M5 13l4 4L19 7',
     },
@@ -120,16 +120,16 @@ const statCards = computed(() => [
         label: isRtl.value ? 'متأخرة' : 'Overdue',
         value: props.stats?.overdue ?? 0,
         color: 'text-red-600',
-        bg: 'from-red-50 to-rose-50',
+        bg: 'from-red-50 to-amber-50',
         borderColor: 'border-red-100',
         icon: 'M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z',
     },
     {
         label: isRtl.value ? 'قادمة' : 'Upcoming',
         value: props.stats?.upcoming ?? 0,
-        color: 'text-blue-600',
-        bg: 'from-blue-50 to-indigo-50',
-        borderColor: 'border-blue-100',
+        color: 'text-[#1B365D]',
+        bg: 'from-slate-50 to-slate-50',
+        borderColor: 'border-slate-100',
         icon: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z',
     },
 ]);
@@ -168,7 +168,7 @@ onMounted(() => {
     <div>
         <!-- HERO HEADER -->
         <div
-            class="relative -mx-4 sm:-mx-6 lg:-mx-8 -mt-4 sm:-mt-6 mb-8 px-4 sm:px-6 lg:px-8 pt-8 pb-10 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 overflow-hidden transition-all duration-700"
+            class="relative -mx-4 sm:-mx-6 lg:-mx-8 -mt-4 sm:-mt-6 mb-8 px-4 sm:px-6 lg:px-8 pt-8 pb-10 bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] overflow-hidden transition-all duration-700"
             :class="headerLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'"
         >
             <div class="absolute inset-0 opacity-10" style="background: radial-gradient(circle at 30% 50%, #4CAF50 0%, transparent 40%), radial-gradient(circle at 70% 50%, #0d9488 0%, transparent 50%)"></div>
@@ -267,7 +267,7 @@ onMounted(() => {
                             :class="{
                                 'bg-emerald-100 text-emerald-600': vaccination.status === 'given',
                                 'bg-red-100 text-red-600': vaccination.status === 'overdue' || vaccination.status === 'missed',
-                                'bg-blue-100 text-blue-600': vaccination.status === 'upcoming' || vaccination.status === 'scheduled',
+                                'bg-slate-100 text-[#1B365D]': vaccination.status === 'upcoming' || vaccination.status === 'scheduled',
                                 'bg-amber-100 text-amber-600': vaccination.status === 'postponed',
                                 'bg-gray-100 text-gray-500': vaccination.status === 'contraindicated',
                             }"
@@ -411,8 +411,8 @@ onMounted(() => {
 
         <!-- Empty State -->
         <div v-if="!vaccinations.data || vaccinations.data.length === 0" class="py-16 text-center">
-            <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-green-50 flex items-center justify-center">
-                <svg class="w-8 h-8 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>
+            <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-emerald-50 flex items-center justify-center">
+                <svg class="w-8 h-8 text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>
             </div>
             <p class="text-sm font-semibold text-gray-500">{{ isRtl ? 'لا توجد تطعيمات' : 'No vaccinations found' }}</p>
             <p class="text-xs text-gray-400 mt-1">{{ isRtl ? 'جرب تغيير البحث أو الفلاتر' : 'Try adjusting your search or filters' }}</p>

@@ -51,7 +51,7 @@ function submit() {
                             type="email"
                             required
                             autofocus
-                            class="w-full px-4 py-3 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white placeholder-white/30 focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 text-sm transition-all duration-200"
+                            class="w-full px-4 py-3 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white placeholder-white/30 focus:ring-2 focus:ring-[#1B365D]/50 focus:border-[#1B365D]/50 text-sm transition-all duration-200"
                             :class="form.errors.email ? 'border-red-500/50' : ''"
                             placeholder="webmaster@doctorato.com"
                         />
@@ -66,7 +66,7 @@ function submit() {
                             v-model="form.password"
                             type="password"
                             required
-                            class="w-full px-4 py-3 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white placeholder-white/30 focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 text-sm transition-all duration-200"
+                            class="w-full px-4 py-3 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white placeholder-white/30 focus:ring-2 focus:ring-[#1B365D]/50 focus:border-[#1B365D]/50 text-sm transition-all duration-200"
                             :class="form.errors.password ? 'border-red-500/50' : ''"
                             placeholder="Enter your password"
                         />
@@ -79,7 +79,7 @@ function submit() {
                             id="remember"
                             v-model="form.remember"
                             type="checkbox"
-                            class="h-4 w-4 rounded border-white/20 bg-white/[0.06] text-purple-500 focus:ring-purple-500/50"
+                            class="h-4 w-4 rounded border-white/20 bg-white/[0.06] text-[#1B365D] focus:ring-[#1B365D]/50"
                         />
                         <label for="remember" class="ltr:ml-2 rtl:mr-2 text-sm text-white/50">{{ isRtl ? 'تذكرني' : 'Remember me' }}</label>
                     </div>
@@ -88,7 +88,7 @@ function submit() {
                     <button
                         type="submit"
                         :disabled="form.processing"
-                        class="w-full py-3 px-4 rounded-xl text-white font-semibold text-sm bg-gradient-to-r from-purple-500 to-violet-600 hover:from-purple-600 hover:to-violet-700 transition-all duration-300 disabled:opacity-50 shadow-lg shadow-purple-500/20"
+                        class="w-full py-3 px-4 rounded-xl text-white font-semibold text-sm bg-gradient-to-r from-[#1B365D] to-[#1B365D] hover:from-[#1B365D] hover:to-[#1B365D] transition-all duration-300 disabled:opacity-50 shadow-lg shadow-[#1B365D]/20"
                     >
                         <span v-if="form.processing" class="flex items-center justify-center gap-2">
                             <svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">

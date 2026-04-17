@@ -21,7 +21,7 @@ const { formatCurrency } = useCurrency();
 
 const statusConfig = {
     draft:    { label: 'Draft',    labelAr: 'مسودة',   bg: 'bg-gray-100',   text: 'text-gray-600', icon: 'M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z' },
-    approved: { label: 'Approved', labelAr: 'معتمد',   bg: 'bg-blue-50',    text: 'text-blue-700', icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' },
+    approved: { label: 'Approved', labelAr: 'معتمد',   bg: 'bg-slate-50',    text: 'text-[#1B365D]', icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' },
     paid:     { label: 'Paid',     labelAr: 'مدفوع',   bg: 'bg-emerald-50', text: 'text-emerald-700', icon: 'M5 13l4 4L19 7' },
 };
 
@@ -46,7 +46,7 @@ onMounted(() => {
 <template>
     <div>
         <!-- ═══ HERO HEADER ═══ -->
-        <div class="relative -mx-4 sm:-mx-6 lg:-mx-8 -mt-4 sm:-mt-6 mb-8 px-4 sm:px-6 lg:px-8 pt-8 pb-10 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 overflow-hidden transition-all duration-700" :class="headerLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'">
+        <div class="relative -mx-4 sm:-mx-6 lg:-mx-8 -mt-4 sm:-mt-6 mb-8 px-4 sm:px-6 lg:px-8 pt-8 pb-10 bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] overflow-hidden transition-all duration-700" :class="headerLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'">
             <div class="absolute inset-0 opacity-10" style="background: radial-gradient(circle at 30% 50%, #0d9488 0%, transparent 60%)"></div>
             <div class="relative z-10">
                 <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">

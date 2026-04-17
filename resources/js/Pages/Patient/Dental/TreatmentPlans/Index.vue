@@ -29,9 +29,9 @@ function $localized(obj, field) {
 
 const statusColors = {
     draft: 'bg-gray-100 text-gray-600',
-    approved: 'bg-blue-100 text-blue-700',
-    in_progress: 'bg-yellow-100 text-yellow-700',
-    completed: 'bg-green-100 text-green-700',
+    approved: 'bg-slate-100 text-[#1B365D]',
+    in_progress: 'bg-yellow-100 text-amber-700',
+    completed: 'bg-emerald-100 text-emerald-700',
     cancelled: 'bg-red-100 text-red-700',
 };
 
@@ -44,9 +44,9 @@ const statusLabels = {
 };
 
 const priorityColors = {
-    low: 'text-green-500',
-    medium: 'text-yellow-500',
-    high: 'text-orange-500',
+    low: 'text-emerald-500',
+    medium: 'text-amber-500',
+    high: 'text-amber-500',
     urgent: 'text-red-500',
 };
 
@@ -102,7 +102,7 @@ function progressPercent(plan) {
                     <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
                         <div
                             class="h-full rounded-full transition-all duration-500"
-                            :class="plan.status === 'completed' ? 'bg-green-500' : 'bg-[var(--brand-primary)]'"
+                            :class="plan.status === 'completed' ? 'bg-emerald-500' : 'bg-[var(--brand-primary)]'"
                             :style="{ width: progressPercent(plan) + '%' }"
                         ></div>
                     </div>
@@ -121,7 +121,7 @@ function progressPercent(plan) {
 
                 <!-- Consent Badge -->
                 <div v-if="plan.consent && plan.consent.status === 'pending'" class="mt-2 flex items-center gap-1.5">
-                    <span class="flex items-center gap-1 px-2.5 py-1 text-[10px] font-semibold text-cyan-700 bg-cyan-50 border border-cyan-200 rounded-full">
+                    <span class="flex items-center gap-1 px-2.5 py-1 text-[10px] font-semibold text-[#1B365D] bg-slate-50 border border-slate-200 rounded-full">
                         <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
                         {{ isRtl ? 'بحاجة لتوقيعك' : 'Needs your signature' }}
                     </span>

@@ -86,19 +86,19 @@ const currentDate = computed(() => {
 const ageGroups = computed(() => {
     const dist = props.ageDistribution || {};
     return [
-        { key: 'newborn', label: isRtl.value ? 'حديث الولادة' : 'Newborn', count: dist.newborn || 0, color: 'bg-pink-100 text-pink-700 border-pink-200' },
-        { key: 'infant', label: isRtl.value ? 'رضيع' : 'Infant', count: dist.infant || 0, color: 'bg-rose-100 text-rose-700 border-rose-200' },
-        { key: 'toddler', label: isRtl.value ? 'طفل صغير' : 'Toddler', count: dist.toddler || 0, color: 'bg-orange-100 text-orange-700 border-orange-200' },
+        { key: 'newborn', label: isRtl.value ? 'حديث الولادة' : 'Newborn', count: dist.newborn || 0, color: 'bg-amber-100 text-[#C4A265] border-amber-200' },
+        { key: 'infant', label: isRtl.value ? 'رضيع' : 'Infant', count: dist.infant || 0, color: 'bg-amber-100 text-[#C4A265] border-amber-200' },
+        { key: 'toddler', label: isRtl.value ? 'طفل صغير' : 'Toddler', count: dist.toddler || 0, color: 'bg-amber-100 text-amber-700 border-amber-200' },
         { key: 'preschool', label: isRtl.value ? 'ما قبل المدرسة' : 'Preschool', count: dist.preschool || 0, color: 'bg-amber-100 text-amber-700 border-amber-200' },
         { key: 'school', label: isRtl.value ? 'سن المدرسة' : 'School Age', count: dist.school || 0, color: 'bg-emerald-100 text-emerald-700 border-emerald-200' },
-        { key: 'adolescent', label: isRtl.value ? 'مراهق' : 'Adolescent', count: dist.adolescent || 0, color: 'bg-blue-100 text-blue-700 border-blue-200' },
+        { key: 'adolescent', label: isRtl.value ? 'مراهق' : 'Adolescent', count: dist.adolescent || 0, color: 'bg-slate-100 text-[#1B365D] border-slate-200' },
     ];
 });
 
 function getVisitStatusBadge(status) {
     const map = {
         waiting: { label: isRtl.value ? 'انتظار' : 'Waiting', cls: 'bg-amber-50 text-amber-700 border-amber-200' },
-        in_progress: { label: isRtl.value ? 'جاري' : 'In Progress', cls: 'bg-blue-50 text-blue-700 border-blue-200' },
+        in_progress: { label: isRtl.value ? 'جاري' : 'In Progress', cls: 'bg-slate-50 text-[#1B365D] border-slate-200' },
         completed: { label: isRtl.value ? 'مكتمل' : 'Completed', cls: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
         cancelled: { label: isRtl.value ? 'ملغي' : 'Cancelled', cls: 'bg-gray-50 text-gray-500 border-gray-200' },
         no_show: { label: isRtl.value ? 'لم يحضر' : 'No Show', cls: 'bg-red-50 text-red-600 border-red-200' },
@@ -132,7 +132,7 @@ function getChildAge(dob) {
         <!-- HERO SECTION                                 -->
         <!-- ============================================ -->
         <div
-            class="relative mb-8 overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-600 to-green-500 p-5 sm:p-7 shadow-xl"
+            class="relative mb-8 overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-600 to-emerald-500 p-5 sm:p-7 shadow-xl"
             :class="mounted ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'"
             style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1)"
         >
@@ -196,10 +196,10 @@ function getChildAge(dob) {
                 :class="mounted ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'"
                 style="transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 200ms"
             >
-                <div class="absolute top-0 left-0 w-1 h-full bg-blue-500 rounded-l-xl"></div>
+                <div class="absolute top-0 left-0 w-1 h-full bg-[#1B365D] rounded-l-xl"></div>
                 <div class="flex items-center gap-3 mb-3">
-                    <div class="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
-                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center flex-shrink-0">
+                        <svg class="w-5 h-5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                         </svg>
                     </div>
@@ -236,10 +236,10 @@ function getChildAge(dob) {
                 :class="mounted ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'"
                 style="transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 400ms"
             >
-                <div class="absolute top-0 left-0 w-1 h-full bg-violet-500 rounded-l-xl"></div>
+                <div class="absolute top-0 left-0 w-1 h-full bg-[#1B365D] rounded-l-xl"></div>
                 <div class="flex items-center gap-3 mb-3">
-                    <div class="w-10 h-10 rounded-xl bg-violet-50 flex items-center justify-center flex-shrink-0">
-                        <svg class="w-5 h-5 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center flex-shrink-0">
+                        <svg class="w-5 h-5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
                         </svg>
                     </div>
@@ -397,7 +397,7 @@ function getChildAge(dob) {
                 :class="mounted ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'"
                 style="transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 900ms"
             >
-                <div class="px-5 py-4 border-b border-red-50 bg-gradient-to-r from-red-50 to-orange-50">
+                <div class="px-5 py-4 border-b border-red-50 bg-gradient-to-r from-red-50 to-amber-50">
                     <div class="flex items-center gap-3">
                         <div class="w-9 h-9 rounded-xl bg-red-100 flex items-center justify-center">
                             <svg class="w-4.5 h-4.5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
@@ -483,14 +483,14 @@ function getChildAge(dob) {
                 :class="mounted ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'"
                 style="transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 1100ms"
             >
-                <div class="px-5 py-4 border-b border-gray-100 bg-gradient-to-r from-purple-50 to-indigo-50">
+                <div class="px-5 py-4 border-b border-gray-100 bg-gradient-to-r from-slate-50 to-slate-50">
                     <div class="flex items-center gap-3">
-                        <div class="w-9 h-9 rounded-xl bg-purple-100 flex items-center justify-center">
-                            <svg class="w-4.5 h-4.5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+                        <div class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center">
+                            <svg class="w-4.5 h-4.5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
                         </div>
                         <div>
                             <h3 class="text-sm font-bold text-gray-800">{{ isRtl ? 'تنبيهات النمو' : 'Growth Alerts' }}</h3>
-                            <p class="text-[10px] text-purple-600 font-medium uppercase tracking-wider">{{ (growthAlerts || []).length }} {{ isRtl ? 'تنبيه' : 'alerts' }}</p>
+                            <p class="text-[10px] text-[#1B365D] font-medium uppercase tracking-wider">{{ (growthAlerts || []).length }} {{ isRtl ? 'تنبيه' : 'alerts' }}</p>
                         </div>
                     </div>
                 </div>
@@ -498,7 +498,7 @@ function getChildAge(dob) {
                     <div
                         v-for="(alert, i) in growthAlerts.slice(0, 6)"
                         :key="alert.id || i"
-                        class="px-5 py-3 hover:bg-purple-50/30 transition-colors"
+                        class="px-5 py-3 hover:bg-slate-50/30 transition-colors"
                     >
                         <div class="flex items-center justify-between">
                             <div class="min-w-0">

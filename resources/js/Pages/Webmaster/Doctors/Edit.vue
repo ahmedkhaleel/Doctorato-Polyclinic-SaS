@@ -294,10 +294,10 @@ function serviceRateOptions(currentIndex) {
                             <SearchableSelect v-model="form.user_id" :options="userOptions" placeholder="-- No user linked --" searchPlaceholder="Search users..." />
                             <p class="text-xs text-gray-400 mt-1">Link doctor to a system user for login & leave management</p>
                             <p v-if="form.errors.user_id" class="mt-1 text-sm text-red-600">{{ form.errors.user_id }}</p>
-                            <div v-if="doctor.user_id" class="mt-2 p-3 bg-green-50 border border-green-200 rounded-lg">
+                            <div v-if="doctor.user_id" class="mt-2 p-3 bg-emerald-50 border border-emerald-200 rounded-lg">
                                 <div class="flex items-center gap-2">
-                                    <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                    <span class="text-sm font-medium text-green-700">User account linked — Doctor can login at <code class="bg-green-100 px-1 rounded">/doctor/login</code></span>
+                                    <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                    <span class="text-sm font-medium text-emerald-700">User account linked — Doctor can login at <code class="bg-emerald-100 px-1 rounded">/doctor/login</code></span>
                                 </div>
                             </div>
                         </div>
@@ -350,13 +350,13 @@ function serviceRateOptions(currentIndex) {
                                 v-for="(schedule, i) in form.schedules"
                                 :key="i"
                                 class="flex items-center gap-4 p-3 rounded-lg border transition"
-                                :class="schedule.is_active ? 'border-green-200 bg-green-50' : 'border-gray-200 bg-gray-50'"
+                                :class="schedule.is_active ? 'border-emerald-200 bg-emerald-50' : 'border-gray-200 bg-gray-50'"
                             >
                                 <label class="flex items-center cursor-pointer min-w-[140px]">
                                     <input
                                         type="checkbox"
                                         v-model="schedule.is_active"
-                                        class="w-4 h-4 rounded border-gray-300 text-green-600 focus:ring-green-200 mr-3"
+                                        class="w-4 h-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-200 mr-3"
                                     />
                                     <span class="text-sm font-medium" :class="schedule.is_active ? 'text-gray-900' : 'text-gray-400'">
                                         {{ dayNames[i] }}
@@ -493,7 +493,7 @@ function serviceRateOptions(currentIndex) {
 
                 <!-- ==================== SAVE BUTTON (always visible) ==================== -->
                 <div class="mt-6 flex items-center justify-between bg-white rounded-lg shadow-sm p-4">
-                    <p v-if="form.recentlySuccessful" class="text-sm text-green-600 font-medium">{{ $t('a_saved_successfully') }}</p>
+                    <p v-if="form.recentlySuccessful" class="text-sm text-emerald-600 font-medium">{{ $t('a_saved_successfully') }}</p>
                     <p v-else-if="Object.keys(form.errors).length > 0" class="text-sm text-red-600 font-medium">
                         {{ $t('a_please_fix') }} {{ Object.keys(form.errors).length }} {{ $t('a_errors_before_saving') }}
                     </p>

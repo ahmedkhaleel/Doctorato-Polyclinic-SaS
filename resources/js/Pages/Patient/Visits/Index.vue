@@ -75,7 +75,7 @@ function $localized(obj, field) {
                             <td class="px-6 py-4 text-gray-600">{{ $localized(visit.doctor, 'name') }}</td>
                             <td class="px-6 py-4 text-gray-600">
                                 <div class="flex items-center gap-1.5">
-                                    <svg v-if="visit.module === 'dental'" class="w-3.5 h-3.5 text-cyan-500 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342" /></svg>
+                                    <svg v-if="visit.module === 'dental'" class="w-3.5 h-3.5 text-[#1B365D] inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342" /></svg>
                                     {{ $localized(visit.service, 'name') || $localized(visit, 'service_name') }}
                                 </div>
                             </td>
@@ -102,7 +102,7 @@ function $localized(obj, field) {
                     </div>
                     <p class="text-sm text-gray-600">{{ $localized(visit.doctor, 'name') }}</p>
                     <p class="text-xs text-gray-400 mt-0.5">
-                        <svg v-if="visit.module === 'dental'" class="w-3 h-3 text-cyan-500 inline -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342" /></svg> {{ $localized(visit.service, 'name') || $localized(visit, 'service_name') }}
+                        <svg v-if="visit.module === 'dental'" class="w-3 h-3 text-[#1B365D] inline -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342" /></svg> {{ $localized(visit.service, 'name') || $localized(visit, 'service_name') }}
                     </p>
                     <p v-if="visit.diagnosis" class="text-xs text-gray-500 mt-1 truncate">{{ visit.diagnosis }}</p>
                 </Link>

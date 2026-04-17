@@ -50,9 +50,9 @@ function closeModal() {
 }
 
 const typeConfig = {
-    annual: { label: 'Annual', labelAr: 'سنوية', icon: 'M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z', color: 'bg-blue-500', bg: 'bg-blue-50', text: 'text-blue-700' },
+    annual: { label: 'Annual', labelAr: 'سنوية', icon: 'M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z', color: 'bg-[#1B365D]', bg: 'bg-slate-50', text: 'text-[#1B365D]' },
     sick: { label: 'Sick', labelAr: 'مرضية', icon: 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z', color: 'bg-red-500', bg: 'bg-red-50', text: 'text-red-700' },
-    personal: { label: 'Personal', labelAr: 'شخصية', icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z', color: 'bg-purple-500', bg: 'bg-purple-50', text: 'text-purple-700' },
+    personal: { label: 'Personal', labelAr: 'شخصية', icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z', color: 'bg-[#1B365D]', bg: 'bg-slate-50', text: 'text-[#1B365D]' },
     unpaid: { label: 'Unpaid', labelAr: 'بدون راتب', icon: 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z', color: 'bg-gray-500', bg: 'bg-gray-100', text: 'text-gray-600' },
 };
 
@@ -84,7 +84,7 @@ const rejectedCount = computed(() => leavesList.value.filter(l => l.status === '
     <div class="space-y-6">
         <!-- Hero Header -->
         <div
-            class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6 sm:p-8 transition-all duration-700"
+            class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] p-6 sm:p-8 transition-all duration-700"
             :class="headerLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
         >
             <div class="absolute top-0 right-0 w-96 h-96 bg-gradient-radial from-teal-500/10 to-transparent rounded-full -translate-y-1/2 translate-x-1/2"></div>

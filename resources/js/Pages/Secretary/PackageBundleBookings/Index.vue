@@ -37,9 +37,9 @@ const { formatCurrency, currencyCode } = useCurrency();
 
 const statusColors = {
     pending: 'bg-yellow-100 text-yellow-800',
-    confirmed: 'bg-blue-100 text-blue-800',
-    in_progress: 'bg-indigo-100 text-indigo-800',
-    completed: 'bg-green-100 text-green-800',
+    confirmed: 'bg-slate-100 text-[#1B365D]',
+    in_progress: 'bg-slate-100 text-[#1B365D]',
+    completed: 'bg-emerald-100 text-emerald-800',
     cancelled: 'bg-red-100 text-red-800',
 };
 
@@ -107,7 +107,7 @@ function getProgress(booking) {
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ b.package_bundle?.name_en || '-' }}</td>
                             <td class="px-6 py-4 whitespace-nowrap hidden sm:table-cell">
                                 <div class="text-sm font-medium text-gray-900">{{ formatCurrency(b.total_price) }}</div>
-                                <div class="text-xs" :class="Number(b.balance_due) > 0 ? 'text-red-500' : 'text-green-500'">
+                                <div class="text-xs" :class="Number(b.balance_due) > 0 ? 'text-red-500' : 'text-emerald-500'">
                                     {{ Number(b.balance_due) > 0 ? 'Due: ' + formatCurrency(b.balance_due) : 'Paid' }}
                                 </div>
                             </td>

@@ -127,7 +127,7 @@ function onDragEnd() {
                         <!-- Status badge -->
                         <div class="absolute top-3 right-3">
                             <span
-                                :class="slide.is_active ? 'bg-green-500' : 'bg-gray-400'"
+                                :class="slide.is_active ? 'bg-emerald-500' : 'bg-gray-400'"
                                 class="px-2.5 py-1 rounded-full text-white text-xs font-medium shadow-lg"
                             >
                                 {{ slide.is_active ? $t('a_active') : $t('a_inactive') }}
@@ -172,7 +172,7 @@ function onDragEnd() {
                                 class="px-3 py-1.5 rounded-lg text-sm font-medium transition"
                                 :class="slide.is_active
                                     ? 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                                    : 'bg-green-50 text-green-600 hover:bg-green-100'"
+                                    : 'bg-emerald-50 text-emerald-600 hover:bg-emerald-100'"
                             >
                                 {{ slide.is_active ? $t('a_hide') : $t('a_show') }}
                             </button>

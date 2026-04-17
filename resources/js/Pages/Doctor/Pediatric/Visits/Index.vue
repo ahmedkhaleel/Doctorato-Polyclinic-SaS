@@ -65,7 +65,7 @@ const statusOptions = computed(() => [
 
 const statusConfig = computed(() => ({
     waiting: { label: isRtl.value ? 'انتظار' : 'Waiting', bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200', dot: 'bg-amber-400' },
-    in_progress: { label: isRtl.value ? 'جاري' : 'In Progress', bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200', dot: 'bg-blue-500' },
+    in_progress: { label: isRtl.value ? 'جاري' : 'In Progress', bg: 'bg-slate-50', text: 'text-[#1B365D]', border: 'border-slate-200', dot: 'bg-[#1B365D]' },
     completed: { label: isRtl.value ? 'مكتمل' : 'Completed', bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200', dot: 'bg-emerald-500' },
     cancelled: { label: isRtl.value ? 'ملغي' : 'Cancelled', bg: 'bg-gray-50', text: 'text-gray-500', border: 'border-gray-200', dot: 'bg-gray-400' },
 }));
@@ -119,13 +119,13 @@ function formatTime(date) {
 <template>
     <div class="space-y-6">
         <!-- Hero Header -->
-        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-600 to-green-500 p-6 sm:p-8"
+        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-600 to-emerald-500 p-6 sm:p-8"
             :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
             style="transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1)"
         >
             <div class="absolute top-0 right-0 w-72 h-72 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl"></div>
             <div class="absolute bottom-0 left-0 w-48 h-48 bg-emerald-300/20 rounded-full translate-y-1/2 -translate-x-1/4 blur-2xl"></div>
-            <div class="absolute top-1/2 right-1/4 w-32 h-32 bg-green-400/10 rounded-full blur-xl"></div>
+            <div class="absolute top-1/2 right-1/4 w-32 h-32 bg-emerald-400/10 rounded-full blur-xl"></div>
 
             <div class="relative z-10">
                 <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-5">
@@ -229,11 +229,11 @@ function formatTime(date) {
             </div>
             <div class="bg-white rounded-xl border border-gray-100 p-4 shadow-sm hover:shadow-md transition-shadow duration-200">
                 <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
-                        <svg class="w-4.5 h-4.5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                    <div class="w-9 h-9 rounded-lg bg-slate-50 flex items-center justify-center flex-shrink-0">
+                        <svg class="w-4.5 h-4.5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
                     </div>
                     <div class="min-w-0">
-                        <p class="text-lg font-bold text-blue-600">{{ stats.in_progress }}</p>
+                        <p class="text-lg font-bold text-[#1B365D]">{{ stats.in_progress }}</p>
                         <p class="text-[10px] text-gray-400 font-medium uppercase tracking-wide truncate">{{ isRtl ? 'جاري' : 'Active' }}</p>
                     </div>
                 </div>
@@ -275,13 +275,13 @@ function formatTime(date) {
                         <!-- Child Avatar -->
                         <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 transition-transform duration-200 group-hover:scale-105"
                             :class="visit.patient?.gender === 'female'
-                                ? 'bg-pink-50 border border-pink-200'
-                                : 'bg-sky-50 border border-sky-200'"
+                                ? 'bg-amber-50 border border-amber-200'
+                                : 'bg-slate-50 border border-slate-200'"
                         >
-                            <svg v-if="visit.patient?.gender === 'female'" class="w-6 h-6 text-pink-400" fill="currentColor" viewBox="0 0 24 24">
+                            <svg v-if="visit.patient?.gender === 'female'" class="w-6 h-6 text-amber-400" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M12 2a6 6 0 016 6c0 2.22-1.21 4.16-3 5.2V16h2v2h-2v2h-2v-2h-2v-2h2v-2.8A6.004 6.004 0 016 8a6 6 0 016-6zm0 2a4 4 0 100 8 4 4 0 000-8z"/>
                             </svg>
-                            <svg v-else class="w-6 h-6 text-sky-400" fill="currentColor" viewBox="0 0 24 24">
+                            <svg v-else class="w-6 h-6 text-slate-400" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M9.5 11c1.93 0 3.5 1.57 3.5 3.5S11.43 18 9.5 18 6 16.43 6 14.5 7.57 11 9.5 11zm0 2C8.67 13 8 13.67 8 14.5S8.67 16 9.5 16s1.5-.67 1.5-1.5S10.33 13 9.5 13zM15 3l4 4-1.5 1.5L19 10l-2 2-1.5-1.5L14 12l-1.5-1.5 4.5-4.5L15 4z"/>
                             </svg>
                         </div>

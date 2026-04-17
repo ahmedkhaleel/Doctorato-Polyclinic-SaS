@@ -276,25 +276,25 @@ const typeDistribution = computed(() => {
 
 /* ── Visual helpers ──────────────────────────────────── */
 const typeConfig = {
-    call:     { en: 'Call',     ar: 'مكالمة',   color: 'bg-blue-500',   lightBg: 'bg-blue-50 text-blue-700 border-blue-200' },
-    whatsapp: { en: 'WhatsApp', ar: 'واتساب',   color: 'bg-green-500',  lightBg: 'bg-green-50 text-green-700 border-green-200' },
-    email:    { en: 'Email',    ar: 'بريد',      color: 'bg-purple-500', lightBg: 'bg-purple-50 text-purple-700 border-purple-200' },
-    sms:      { en: 'SMS',      ar: 'رسالة',     color: 'bg-cyan-500',   lightBg: 'bg-cyan-50 text-cyan-700 border-cyan-200' },
+    call:     { en: 'Call',     ar: 'مكالمة',   color: 'bg-[#1B365D]',   lightBg: 'bg-slate-50 text-[#1B365D] border-slate-200' },
+    whatsapp: { en: 'WhatsApp', ar: 'واتساب',   color: 'bg-emerald-500',  lightBg: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
+    email:    { en: 'Email',    ar: 'بريد',      color: 'bg-[#1B365D]', lightBg: 'bg-slate-50 text-[#1B365D] border-slate-200' },
+    sms:      { en: 'SMS',      ar: 'رسالة',     color: 'bg-[#1B365D]',   lightBg: 'bg-slate-50 text-[#1B365D] border-slate-200' },
     meeting:  { en: 'Meeting',  ar: 'اجتماع',    color: 'bg-amber-500',  lightBg: 'bg-amber-50 text-amber-700 border-amber-200' },
     other:    { en: 'Other',    ar: 'أخرى',      color: 'bg-gray-500',   lightBg: 'bg-gray-50 text-gray-700 border-gray-200' },
 };
 
 const statusConfig = {
     pending:     { en: 'Pending',     ar: 'معلق',      color: 'text-amber-600 bg-amber-50 border-amber-200' },
-    completed:   { en: 'Completed',   ar: 'مكتمل',     color: 'text-green-600 bg-green-50 border-green-200' },
+    completed:   { en: 'Completed',   ar: 'مكتمل',     color: 'text-emerald-600 bg-emerald-50 border-emerald-200' },
     missed:      { en: 'Missed',      ar: 'فائت',       color: 'text-red-600 bg-red-50 border-red-200' },
-    rescheduled: { en: 'Rescheduled', ar: 'مُعاد جدولته', color: 'text-blue-600 bg-blue-50 border-blue-200' },
+    rescheduled: { en: 'Rescheduled', ar: 'مُعاد جدولته', color: 'text-[#1B365D] bg-slate-50 border-slate-200' },
 };
 
 const priorityConfig = {
     1: { en: 'Hot',  ar: 'ساخن',  color: 'text-red-500' },
     2: { en: 'Warm', ar: 'دافئ',  color: 'text-amber-500' },
-    3: { en: 'Cold', ar: 'بارد',  color: 'text-blue-400' },
+    3: { en: 'Cold', ar: 'بارد',  color: 'text-slate-400' },
 };
 
 function getTypeDots(fups) {
@@ -685,7 +685,7 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handleCalendarKe
                          @click.stop>
                         <div :class="['flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium border truncate transition-all duration-150',
                             fu.is_overdue ? 'bg-red-50 text-red-600 border-red-200 animate-pulse' :
-                            fu.status === 'completed' ? 'bg-green-50 text-green-600 border-green-200' :
+                            fu.status === 'completed' ? 'bg-emerald-50 text-emerald-600 border-emerald-200' :
                             fu.status === 'missed' ? 'bg-red-50 text-red-500 border-red-200' :
                             typeConfig[fu.type]?.lightBg || 'bg-gray-50 text-gray-600 border-gray-200']">
                             <span :class="['w-1.5 h-1.5 rounded-full flex-shrink-0', typeConfig[fu.type]?.color || 'bg-gray-400']"></span>
@@ -696,7 +696,7 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handleCalendarKe
                              class="absolute -top-1 z-20 flex items-center gap-0.5 opacity-0 group-hover/card:opacity-100 transition-all duration-150"
                              :class="isRtl ? 'left-0' : 'right-0'">
                             <button @click.stop="completeFollowUp(fu.id)"
-                                    class="w-4 h-4 rounded-full bg-green-500 text-white flex items-center justify-center hover:bg-green-600 shadow-sm"
+                                    class="w-4 h-4 rounded-full bg-emerald-500 text-white flex items-center justify-center hover:bg-emerald-600 shadow-sm"
                                     :title="isRtl ? '\u0625\u0643\u0645\u0627\u0644' : 'Complete'">
                                 <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                             </button>
@@ -773,7 +773,7 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handleCalendarKe
                          @click.stop="selectDay(wd.date)"
                          :class="['p-2 rounded-lg border text-[11px] transition-all duration-200 hover:shadow-sm',
                             fu.is_overdue ? 'bg-red-50 border-red-200' :
-                            fu.status === 'completed' ? 'bg-green-50 border-green-200' :
+                            fu.status === 'completed' ? 'bg-emerald-50 border-emerald-200' :
                             fu.status === 'missed' ? 'bg-red-50/60 border-red-200' :
                             'bg-white border-gray-150 hover:border-teal-200']">
                         <div class="flex items-center gap-1.5 mb-1">
@@ -879,7 +879,7 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handleCalendarKe
                         <div v-for="fu in selectedFollowUps" :key="fu.id"
                              :class="['rounded-xl border p-4 transition-all duration-200 hover:shadow-md',
                                 fu.is_overdue ? 'border-red-200 bg-red-50/50' :
-                                fu.status === 'completed' ? 'border-green-200 bg-green-50/30' :
+                                fu.status === 'completed' ? 'border-emerald-200 bg-emerald-50/30' :
                                 fu.status === 'missed' ? 'border-red-200 bg-red-50/30' :
                                 'border-gray-150 bg-white']">
 
@@ -938,7 +938,7 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handleCalendarKe
                             </div>
 
                             <!-- Result -->
-                            <div v-if="fu.result" class="mt-2 text-xs text-green-600 bg-green-50 rounded-lg p-2 border border-green-100">
+                            <div v-if="fu.result" class="mt-2 text-xs text-emerald-600 bg-emerald-50 rounded-lg p-2 border border-emerald-100">
                                 <svg class="w-3 h-3 inline-block me-1 -mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                                 {{ fu.result }}
                             </div>
@@ -985,18 +985,18 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handleCalendarKe
                                     </button>
                                     <!-- Snooze dropdown -->
                                     <div class="relative group/snooze">
-                                        <button class="inline-flex items-center justify-center gap-1 px-3 py-2 rounded-lg text-xs font-semibold bg-purple-50 text-purple-700 hover:bg-purple-100 border border-purple-200 transition-all duration-200">
+                                        <button class="inline-flex items-center justify-center gap-1 px-3 py-2 rounded-lg text-xs font-semibold bg-slate-50 text-[#1B365D] hover:bg-slate-100 border border-slate-200 transition-all duration-200">
                                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                                         </button>
                                         <div class="absolute bottom-full mb-1 z-30 bg-white rounded-xl shadow-xl border border-gray-200 py-1 min-w-[130px] opacity-0 invisible group-hover/snooze:opacity-100 group-hover/snooze:visible transition-all duration-200"
                                              :class="isRtl ? 'right-0' : 'left-0'">
-                                            <button @click="snoozeFollowUp(fu.id, '1h')" class="w-full text-start px-3 py-2 text-xs text-gray-700 hover:bg-purple-50 hover:text-purple-700 transition-colors">
+                                            <button @click="snoozeFollowUp(fu.id, '1h')" class="w-full text-start px-3 py-2 text-xs text-gray-700 hover:bg-slate-50 hover:text-[#1B365D] transition-colors">
                                                 {{ isRtl ? '\u0633\u0627\u0639\u0629 \u0648\u0627\u062D\u062F\u0629' : '1 Hour' }}
                                             </button>
-                                            <button @click="snoozeFollowUp(fu.id, 'tomorrow')" class="w-full text-start px-3 py-2 text-xs text-gray-700 hover:bg-purple-50 hover:text-purple-700 transition-colors">
+                                            <button @click="snoozeFollowUp(fu.id, 'tomorrow')" class="w-full text-start px-3 py-2 text-xs text-gray-700 hover:bg-slate-50 hover:text-[#1B365D] transition-colors">
                                                 {{ isRtl ? '\u063A\u062F\u0627\u064B 9 \u0635' : 'Tomorrow 9 AM' }}
                                             </button>
-                                            <button @click="snoozeFollowUp(fu.id, '1w')" class="w-full text-start px-3 py-2 text-xs text-gray-700 hover:bg-purple-50 hover:text-purple-700 transition-colors">
+                                            <button @click="snoozeFollowUp(fu.id, '1w')" class="w-full text-start px-3 py-2 text-xs text-gray-700 hover:bg-slate-50 hover:text-[#1B365D] transition-colors">
                                                 {{ isRtl ? '\u0623\u0633\u0628\u0648\u0639' : '1 Week' }}
                                             </button>
                                         </div>

@@ -190,7 +190,7 @@ function getMilestoneIndex(dob) {
 
         <!-- HERO SECTION -->
         <div
-            class="relative mb-8 overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-600 to-green-500 p-5 sm:p-7 shadow-xl"
+            class="relative mb-8 overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-600 to-emerald-500 p-5 sm:p-7 shadow-xl"
             :class="mounted ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'"
             style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1)"
         >
@@ -289,7 +289,7 @@ function getMilestoneIndex(dob) {
                             <span
                                 v-for="(test, tIdx) in item.tests"
                                 :key="'t-' + tIdx"
-                                class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200/60"
+                                class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-50 text-[#1B365D] border border-slate-200/60"
                             >
                                 {{ t(test) }}
                             </span>

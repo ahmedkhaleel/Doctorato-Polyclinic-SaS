@@ -67,7 +67,7 @@ const hasActiveFilters = computed(() => {
 
 const statusConfig = {
     waiting:     { label: 'Waiting',     labelAr: 'انتظار',  bg: 'bg-amber-50',   text: 'text-amber-700',   dot: 'bg-amber-500',   border: 'border-amber-200' },
-    in_progress: { label: 'In Progress', labelAr: 'جاري',    bg: 'bg-blue-50',    text: 'text-blue-700',    dot: 'bg-blue-500',    border: 'border-blue-200' },
+    in_progress: { label: 'In Progress', labelAr: 'جاري',    bg: 'bg-slate-50',    text: 'text-[#1B365D]',    dot: 'bg-[#1B365D]',    border: 'border-slate-200' },
     completed:   { label: 'Completed',   labelAr: 'مكتمل',   bg: 'bg-emerald-50', text: 'text-emerald-700', dot: 'bg-emerald-500', border: 'border-emerald-200' },
     cancelled:   { label: 'Cancelled',   labelAr: 'ملغي',    bg: 'bg-red-50',     text: 'text-red-700',     dot: 'bg-red-500',     border: 'border-red-200' },
 };
@@ -78,8 +78,8 @@ function getStatus(status) {
 
 const visitTypeConfig = {
     consultation: { label: 'Consultation', labelAr: 'استشارة', bg: 'bg-teal-50',  text: 'text-teal-700' },
-    session:      { label: 'Session',      labelAr: 'جلسة',    bg: 'bg-cyan-50',  text: 'text-cyan-700' },
-    follow_up:    { label: 'Follow Up',    labelAr: 'متابعة',  bg: 'bg-sky-50',   text: 'text-sky-700' },
+    session:      { label: 'Session',      labelAr: 'جلسة',    bg: 'bg-slate-50',  text: 'text-[#1B365D]' },
+    follow_up:    { label: 'Follow Up',    labelAr: 'متابعة',  bg: 'bg-slate-50',   text: 'text-[#1B365D]' },
 };
 
 function getVisitType(type) {
@@ -107,7 +107,7 @@ onMounted(() => {
 <template>
     <div>
         <!-- ═══ HERO HEADER ═══ -->
-        <div class="relative -mx-4 sm:-mx-6 lg:-mx-8 -mt-4 sm:-mt-6 mb-8 px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8 pb-8 sm:pb-10 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 overflow-hidden transition-all duration-700" :class="headerLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'">
+        <div class="relative -mx-4 sm:-mx-6 lg:-mx-8 -mt-4 sm:-mt-6 mb-8 px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8 pb-8 sm:pb-10 bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] overflow-hidden transition-all duration-700" :class="headerLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'">
             <div class="absolute inset-0 opacity-10" style="background: radial-gradient(circle at 30% 50%, #0d9488 0%, transparent 60%)"></div>
             <div class="relative z-10">
                 <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">

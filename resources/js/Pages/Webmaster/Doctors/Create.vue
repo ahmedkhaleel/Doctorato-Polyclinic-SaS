@@ -258,10 +258,10 @@ function serviceRateOptions(currentIndex) {
                                 v-for="(schedule, i) in form.schedules"
                                 :key="i"
                                 class="flex items-center gap-4 p-3 rounded-lg border transition"
-                                :class="schedule.is_active ? 'border-green-200 bg-green-50' : 'border-gray-200 bg-gray-50'"
+                                :class="schedule.is_active ? 'border-emerald-200 bg-emerald-50' : 'border-gray-200 bg-gray-50'"
                             >
                                 <label class="flex items-center cursor-pointer min-w-[140px]">
-                                    <input type="checkbox" v-model="schedule.is_active" class="w-4 h-4 rounded border-gray-300 text-green-600 focus:ring-green-200 mr-3" />
+                                    <input type="checkbox" v-model="schedule.is_active" class="w-4 h-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-200 mr-3" />
                                     <span class="text-sm font-medium" :class="schedule.is_active ? 'text-gray-900' : 'text-gray-400'">
                                         {{ ['Saturday','Sunday','Monday','Tuesday','Wednesday','Thursday','Friday'][i] }}
                                     </span>

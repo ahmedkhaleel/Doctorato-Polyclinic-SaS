@@ -28,9 +28,9 @@ function $localized(obj, field) {
 }
 
 const statusColors = {
-    scheduled: 'bg-blue-100 text-blue-700',
-    in_progress: 'bg-yellow-100 text-yellow-700',
-    completed: 'bg-green-100 text-green-700',
+    scheduled: 'bg-slate-100 text-[#1B365D]',
+    in_progress: 'bg-yellow-100 text-amber-700',
+    completed: 'bg-emerald-100 text-emerald-700',
     cancelled: 'bg-red-100 text-red-700',
     no_show: 'bg-gray-100 text-gray-500',
 };
@@ -60,7 +60,7 @@ const statusColors = {
                 <div>
                     <span class="text-xs text-gray-400 font-medium">{{ isRtl ? 'الخدمة' : 'Service' }}</span>
                     <p class="text-sm font-semibold text-gray-800 mt-0.5 flex items-center gap-1.5">
-                        <svg v-if="visit?.module === 'dental'" class="w-3.5 h-3.5 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342" /></svg>
+                        <svg v-if="visit?.module === 'dental'" class="w-3.5 h-3.5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342" /></svg>
                         {{ $localized(visit?.service, 'name') || $localized(visit, 'service_name') }}
                     </p>
                 </div>
@@ -90,14 +90,14 @@ const statusColors = {
         <!-- Dental Treatments (for dental visits) -->
         <div v-if="visit?.dental_treatments?.length" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mt-6">
             <h2 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                <svg class="w-5 h-5 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342" /></svg>
+                <svg class="w-5 h-5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342" /></svg>
                 {{ isRtl ? 'علاجات الأسنان' : 'Dental Treatments' }}
             </h2>
             <div class="space-y-3">
                 <div v-for="dt in visit.dental_treatments" :key="dt.id" class="flex items-center justify-between p-3 rounded-xl bg-gray-50">
                     <div class="flex items-center gap-3 min-w-0 flex-1">
                         <div class="w-9 h-9 rounded-lg flex items-center justify-center text-xs font-bold flex-shrink-0"
-                            :class="dt.status === 'completed' ? 'bg-green-50 text-green-600' : dt.status === 'in_progress' ? 'bg-blue-50 text-blue-600' : 'bg-gray-100 text-gray-500'">
+                            :class="dt.status === 'completed' ? 'bg-emerald-50 text-emerald-600' : dt.status === 'in_progress' ? 'bg-slate-50 text-[#1B365D]' : 'bg-gray-100 text-gray-500'">
                             {{ dt.tooth_number || '—' }}
                         </div>
                         <div class="min-w-0">
@@ -110,7 +110,7 @@ const statusColors = {
                             {{ isRtl ? 'معمل' : 'Lab' }}: {{ dt.lab_order.status }}
                         </span>
                         <span class="px-2 py-0.5 text-[10px] font-semibold rounded-full capitalize"
-                            :class="dt.status === 'completed' ? 'bg-green-100 text-green-700' : dt.status === 'in_progress' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-500'">
+                            :class="dt.status === 'completed' ? 'bg-emerald-100 text-emerald-700' : dt.status === 'in_progress' ? 'bg-slate-100 text-[#1B365D]' : 'bg-gray-100 text-gray-500'">
                             {{ dt.status }}
                         </span>
                     </div>
@@ -174,11 +174,11 @@ const statusColors = {
                 </div>
                 <div>
                     <span class="text-gray-400 text-xs">{{ isRtl ? 'المدفوع' : 'Paid' }}</span>
-                    <p class="font-medium text-green-600">{{ formatCurrency(visit.invoice.paid_amount) }}</p>
+                    <p class="font-medium text-emerald-600">{{ formatCurrency(visit.invoice.paid_amount) }}</p>
                 </div>
                 <div>
                     <span class="text-gray-400 text-xs">{{ isRtl ? 'المتبقي' : 'Balance' }}</span>
-                    <p class="font-medium" :class="(visit.invoice.total - visit.invoice.paid_amount) > 0 ? 'text-red-600' : 'text-green-600'">
+                    <p class="font-medium" :class="(visit.invoice.total - visit.invoice.paid_amount) > 0 ? 'text-red-600' : 'text-emerald-600'">
                         {{ formatCurrency(visit.invoice.total - visit.invoice.paid_amount) }}
                     </p>
                 </div>

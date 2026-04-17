@@ -79,14 +79,14 @@ const colorClasses = {
         btn: 'bg-emerald-500 hover:bg-emerald-600',
     },
     blue: {
-        bg: 'bg-blue-50', border: 'border-blue-200', icon: 'bg-blue-100',
-        text: 'text-blue-700', hover: 'hover:border-blue-300 hover:shadow-blue-100/50',
-        btn: 'bg-blue-500 hover:bg-blue-600',
+        bg: 'bg-slate-50', border: 'border-slate-200', icon: 'bg-slate-100',
+        text: 'text-[#1B365D]', hover: 'hover:border-slate-300 hover:shadow-blue-100/50',
+        btn: 'bg-[#1B365D] hover:bg-[#1B365D]',
     },
     purple: {
-        bg: 'bg-purple-50', border: 'border-purple-200', icon: 'bg-purple-100',
-        text: 'text-purple-700', hover: 'hover:border-purple-300 hover:shadow-purple-100/50',
-        btn: 'bg-purple-500 hover:bg-purple-600',
+        bg: 'bg-slate-50', border: 'border-slate-200', icon: 'bg-slate-100',
+        text: 'text-[#1B365D]', hover: 'hover:border-slate-300 hover:shadow-purple-100/50',
+        btn: 'bg-[#1B365D] hover:bg-[#1B365D]',
     },
     amber: {
         bg: 'bg-amber-50', border: 'border-amber-200', icon: 'bg-amber-100',
@@ -94,14 +94,14 @@ const colorClasses = {
         btn: 'bg-amber-500 hover:bg-amber-600',
     },
     rose: {
-        bg: 'bg-rose-50', border: 'border-rose-200', icon: 'bg-rose-100',
-        text: 'text-rose-700', hover: 'hover:border-rose-300 hover:shadow-rose-100/50',
-        btn: 'bg-rose-500 hover:bg-rose-600',
+        bg: 'bg-amber-50', border: 'border-amber-200', icon: 'bg-amber-100',
+        text: 'text-[#C4A265]', hover: 'hover:border-amber-300 hover:shadow-rose-100/50',
+        btn: 'bg-[#C4A265] hover:bg-[#C4A265]',
     },
     orange: {
-        bg: 'bg-orange-50', border: 'border-orange-200', icon: 'bg-orange-100',
-        text: 'text-orange-700', hover: 'hover:border-orange-300 hover:shadow-orange-100/50',
-        btn: 'bg-orange-500 hover:bg-orange-600',
+        bg: 'bg-amber-50', border: 'border-amber-200', icon: 'bg-amber-100',
+        text: 'text-amber-700', hover: 'hover:border-amber-300 hover:shadow-orange-100/50',
+        btn: 'bg-amber-500 hover:bg-amber-600',
     },
 };
 
@@ -263,7 +263,7 @@ function selectPatient(patient) {
 
         <!-- HERO SECTION -->
         <div
-            class="relative mb-8 overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-600 to-green-500 p-5 sm:p-7 shadow-xl"
+            class="relative mb-8 overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-600 to-emerald-500 p-5 sm:p-7 shadow-xl"
             :class="mounted ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'"
             style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1)"
         >
@@ -513,19 +513,19 @@ function selectPatient(patient) {
                             <template v-if="selectedReportType?.id === 'referral'">
                                 <div>
                                     <label class="block text-xs font-semibold text-gray-700 mb-1.5">{{ isRtl ? 'التحويل إلى' : 'Referred To' }}</label>
-                                    <input v-model="form.referred_to" type="text" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-sm focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all placeholder:text-gray-400" :placeholder="isRtl ? 'اسم الطبيب أو التخصص...' : 'Doctor name or specialty...'" />
+                                    <input v-model="form.referred_to" type="text" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all placeholder:text-gray-400" :placeholder="isRtl ? 'اسم الطبيب أو التخصص...' : 'Doctor name or specialty...'" />
                                 </div>
                                 <div>
                                     <label class="block text-xs font-semibold text-gray-700 mb-1.5">{{ isRtl ? 'سبب التحويل' : 'Reason for Referral' }}</label>
-                                    <textarea v-model="form.reason" rows="2" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-sm focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all resize-none placeholder:text-gray-400" :placeholder="isRtl ? 'سبب التحويل...' : 'Reason for referral...'"></textarea>
+                                    <textarea v-model="form.reason" rows="2" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all resize-none placeholder:text-gray-400" :placeholder="isRtl ? 'سبب التحويل...' : 'Reason for referral...'"></textarea>
                                 </div>
                                 <div>
                                     <label class="block text-xs font-semibold text-gray-700 mb-1.5">{{ isRtl ? 'الملخص السريري' : 'Clinical Summary' }}</label>
-                                    <textarea v-model="form.clinical_summary" rows="2" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-sm focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all resize-none placeholder:text-gray-400" :placeholder="isRtl ? 'ملخص الحالة السريرية...' : 'Clinical summary...'"></textarea>
+                                    <textarea v-model="form.clinical_summary" rows="2" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all resize-none placeholder:text-gray-400" :placeholder="isRtl ? 'ملخص الحالة السريرية...' : 'Clinical summary...'"></textarea>
                                 </div>
                                 <div>
                                     <label class="block text-xs font-semibold text-gray-700 mb-1.5">{{ isRtl ? 'الأولوية' : 'Urgency' }}</label>
-                                    <select v-model="form.urgency" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-sm focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all">
+                                    <select v-model="form.urgency" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all">
                                         <option value="routine">{{ isRtl ? 'روتيني' : 'Routine' }}</option>
                                         <option value="urgent">{{ isRtl ? 'عاجل' : 'Urgent' }}</option>
                                         <option value="emergency">{{ isRtl ? 'طوارئ' : 'Emergency' }}</option>
@@ -537,16 +537,16 @@ function selectPatient(patient) {
                             <template v-if="selectedReportType?.id === 'medical_leave'">
                                 <div>
                                     <label class="block text-xs font-semibold text-gray-700 mb-1.5">{{ isRtl ? 'التشخيص' : 'Diagnosis' }}</label>
-                                    <input v-model="form.diagnosis" type="text" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-sm focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all placeholder:text-gray-400" :placeholder="isRtl ? 'التشخيص...' : 'Diagnosis...'" />
+                                    <input v-model="form.diagnosis" type="text" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-sm focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all placeholder:text-gray-400" :placeholder="isRtl ? 'التشخيص...' : 'Diagnosis...'" />
                                 </div>
                                 <div class="grid grid-cols-2 gap-3">
                                     <div>
                                         <label class="block text-xs font-semibold text-gray-700 mb-1.5">{{ isRtl ? 'من تاريخ' : 'Leave From' }}</label>
-                                        <input v-model="form.leave_from" type="date" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-sm focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all" />
+                                        <input v-model="form.leave_from" type="date" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-sm focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all" />
                                     </div>
                                     <div>
                                         <label class="block text-xs font-semibold text-gray-700 mb-1.5">{{ isRtl ? 'إلى تاريخ' : 'Leave To' }}</label>
-                                        <input v-model="form.leave_to" type="date" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-sm focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all" />
+                                        <input v-model="form.leave_to" type="date" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-sm focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all" />
                                     </div>
                                 </div>
                             </template>

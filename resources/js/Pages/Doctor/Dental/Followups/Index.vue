@@ -50,8 +50,8 @@ function formatDate(date) {
 
 const statusConfig = {
     pending: { label: isRtl.value ? 'بانتظار الحجز' : 'Needs Booking', bg: 'bg-amber-50', text: 'text-amber-700', dot: 'bg-amber-500' },
-    sms_sent: { label: isRtl.value ? 'تم إرسال SMS' : 'SMS Sent', bg: 'bg-blue-50', text: 'text-blue-700', dot: 'bg-blue-500' },
-    booking_created: { label: isRtl.value ? 'تم الحجز' : 'Booked', bg: 'bg-green-50', text: 'text-green-700', dot: 'bg-green-500' },
+    sms_sent: { label: isRtl.value ? 'تم إرسال SMS' : 'SMS Sent', bg: 'bg-slate-50', text: 'text-[#1B365D]', dot: 'bg-[#1B365D]' },
+    booking_created: { label: isRtl.value ? 'تم الحجز' : 'Booked', bg: 'bg-emerald-50', text: 'text-emerald-700', dot: 'bg-emerald-500' },
     completed: { label: isRtl.value ? 'مكتمل' : 'Completed', bg: 'bg-gray-50', text: 'text-gray-600', dot: 'bg-gray-400' },
     cancelled: { label: isRtl.value ? 'ملغي' : 'Cancelled', bg: 'bg-red-50', text: 'text-red-600', dot: 'bg-red-400' },
 };
@@ -74,17 +74,17 @@ const statCards = computed(() => [
 const colorMap = {
     amber: { text: 'text-amber-700', gradient: 'from-amber-500 to-amber-600' },
     red: { text: 'text-red-700', gradient: 'from-red-500 to-red-600' },
-    cyan: { text: 'text-cyan-700', gradient: 'from-cyan-500 to-cyan-600' },
-    green: { text: 'text-green-700', gradient: 'from-green-500 to-green-600' },
+    cyan: { text: 'text-[#1B365D]', gradient: 'from-[#1B365D] to-[#1B365D]' },
+    green: { text: 'text-emerald-700', gradient: 'from-emerald-500 to-emerald-600' },
 };
 </script>
 
 <template>
     <div class="space-y-6">
         <!-- Hero Header -->
-        <div class="dental-hero-enter relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6 sm:p-7">
+        <div class="dental-hero-enter relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] p-6 sm:p-7">
             <div class="absolute -top-12 ltr:-right-12 rtl:-left-12 w-48 h-48 bg-[#C4A265]/10 rounded-full blur-3xl"></div>
-            <div class="absolute -bottom-8 ltr:left-20 rtl:right-20 w-32 h-32 bg-purple-500/10 rounded-full blur-2xl"></div>
+            <div class="absolute -bottom-8 ltr:left-20 rtl:right-20 w-32 h-32 bg-[#1B365D]/10 rounded-full blur-2xl"></div>
 
             <div class="relative z-10">
                 <div class="mb-5">
@@ -143,7 +143,7 @@ const colorMap = {
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
                         <div class="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
                             <div class="w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold flex-shrink-0"
-                                :class="isOverdue(f) ? 'bg-red-100 text-red-700' : 'bg-gradient-to-br from-cyan-50 to-teal-50 text-cyan-700'">
+                                :class="isOverdue(f) ? 'bg-red-100 text-red-700' : 'bg-gradient-to-br from-slate-50 to-teal-50 text-[#1B365D]'">
                                 {{ (f.patient?.full_name || '?').charAt(0).toUpperCase() }}
                             </div>
                             <div class="min-w-0">

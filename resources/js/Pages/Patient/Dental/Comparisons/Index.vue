@@ -24,10 +24,10 @@ const categoryLabels = {
 };
 
 const categoryColors = {
-    orthodontic: 'from-violet-500 to-purple-600', cosmetic: 'from-pink-500 to-rose-600',
-    implant: 'from-cyan-500 to-teal-600', whitening: 'from-amber-400 to-yellow-500',
-    restoration: 'from-blue-500 to-indigo-600', surgical: 'from-red-500 to-rose-600',
-    xray: 'from-gray-500 to-gray-700', other: 'from-emerald-500 to-green-600',
+    orthodontic: 'from-[#1B365D] to-[#1B365D]', cosmetic: 'from-[#C4A265] to-[#C4A265]',
+    implant: 'from-[#1B365D] to-teal-600', whitening: 'from-amber-400 to-amber-500',
+    restoration: 'from-[#1B365D] to-[#1B365D]', surgical: 'from-red-500 to-[#C4A265]',
+    xray: 'from-gray-500 to-gray-700', other: 'from-emerald-500 to-emerald-600',
 };
 
 function categoryLabel(cat) { const l = categoryLabels[cat]; return l ? (isRtl.value ? l.ar : l.en) : cat; }

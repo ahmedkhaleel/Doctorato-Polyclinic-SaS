@@ -21,7 +21,7 @@ function percentileColor(p) {
     if (p === null || p === undefined) return 'text-gray-400';
     if (p < 3 || p > 97) return 'text-red-600 font-bold';
     if (p < 15 || p > 85) return 'text-amber-600';
-    return 'text-green-600';
+    return 'text-emerald-600';
 }
 </script>
 

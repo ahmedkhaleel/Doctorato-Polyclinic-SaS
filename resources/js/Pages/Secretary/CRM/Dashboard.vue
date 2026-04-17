@@ -149,21 +149,21 @@ const statusLabels = {
 };
 
 const statusColors = {
-    new: 'bg-blue-100 text-blue-700 border-blue-200',
-    contacted: 'bg-indigo-100 text-indigo-700 border-indigo-200',
-    qualified: 'bg-purple-100 text-purple-700 border-purple-200',
+    new: 'bg-slate-100 text-[#1B365D] border-slate-200',
+    contacted: 'bg-slate-100 text-[#1B365D] border-slate-200',
+    qualified: 'bg-slate-100 text-[#1B365D] border-slate-200',
     appointment_booked: 'bg-amber-100 text-amber-700 border-amber-200',
     consultation_done: 'bg-teal-100 text-teal-700 border-teal-200',
-    negotiation: 'bg-orange-100 text-orange-700 border-orange-200',
-    converted: 'bg-green-100 text-green-700 border-green-200',
+    negotiation: 'bg-amber-100 text-amber-700 border-amber-200',
+    converted: 'bg-emerald-100 text-emerald-700 border-emerald-200',
     lost: 'bg-red-100 text-red-700 border-red-200',
     dormant: 'bg-gray-100 text-gray-600 border-gray-200',
 };
 
 const priorityConfig = {
     hot: { icon: 'flame', color: 'text-red-500', label: isRtl.value ? 'ساخن' : 'Hot' },
-    warm: { icon: 'flame', color: 'text-orange-400', label: isRtl.value ? 'دافئ' : 'Warm' },
-    cold: { icon: 'snowflake', color: 'text-blue-400', label: isRtl.value ? 'بارد' : 'Cold' },
+    warm: { icon: 'flame', color: 'text-amber-400', label: isRtl.value ? 'دافئ' : 'Warm' },
+    cold: { icon: 'snowflake', color: 'text-slate-400', label: isRtl.value ? 'بارد' : 'Cold' },
 };
 
 /* ---------- Follow-up type icons ---------- */
@@ -175,17 +175,17 @@ const followUpTypeConfig = {
     },
     whatsapp: {
         label: isRtl.value ? 'واتساب' : 'WhatsApp',
-        color: 'bg-green-100 text-green-600',
+        color: 'bg-emerald-100 text-emerald-600',
         iconPath: 'M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z',
     },
     email: {
         label: isRtl.value ? 'بريد' : 'Email',
-        color: 'bg-blue-100 text-blue-600',
+        color: 'bg-slate-100 text-[#1B365D]',
         iconPath: 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z',
     },
     sms: {
         label: isRtl.value ? 'رسالة' : 'SMS',
-        color: 'bg-violet-100 text-violet-600',
+        color: 'bg-slate-100 text-[#1B365D]',
         iconPath: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z',
     },
     meeting: {
@@ -499,12 +499,12 @@ function sparklinePath(data, w, h) {
 /* ---------- Activity Icons ---------- */
 const activityTypeConfig = {
     call: { icon: 'M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z', color: 'bg-emerald-100 text-emerald-600' },
-    whatsapp: { icon: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z', color: 'bg-green-100 text-green-600' },
-    email: { icon: 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z', color: 'bg-blue-100 text-blue-600' },
-    sms: { icon: 'M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z', color: 'bg-violet-100 text-violet-600' },
+    whatsapp: { icon: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z', color: 'bg-emerald-100 text-emerald-600' },
+    email: { icon: 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z', color: 'bg-slate-100 text-[#1B365D]' },
+    sms: { icon: 'M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z', color: 'bg-slate-100 text-[#1B365D]' },
     meeting: { icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z', color: 'bg-amber-100 text-amber-600' },
     note: { icon: 'M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z', color: 'bg-slate-100 text-slate-600' },
-    status_change: { icon: 'M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15', color: 'bg-indigo-100 text-indigo-600' },
+    status_change: { icon: 'M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15', color: 'bg-slate-100 text-[#1B365D]' },
     follow_up_scheduled: { icon: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z', color: 'bg-teal-100 text-teal-600' },
     follow_up_completed: { icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z', color: 'bg-emerald-100 text-emerald-600' },
     system: { icon: 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z', color: 'bg-gray-100 text-gray-500' },
@@ -528,15 +528,15 @@ const activityTypeConfig = {
                     style="transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1)"
                 >
                     <!-- Animated gradient background -->
-                    <div class="absolute inset-0 bg-gradient-to-r from-red-50 via-rose-50 to-red-50"></div>
+                    <div class="absolute inset-0 bg-gradient-to-r from-red-50 via-amber-50 to-red-50"></div>
                     <!-- Pulsing left accent -->
-                    <div class="absolute inset-y-0 start-0 w-1.5 bg-gradient-to-b from-red-500 to-rose-500"></div>
+                    <div class="absolute inset-y-0 start-0 w-1.5 bg-gradient-to-b from-red-500 to-[#C4A265]"></div>
 
                     <div class="relative px-5 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3" :class="isRtl ? 'pr-7' : 'pl-7'">
                         <div class="flex items-center gap-3">
                             <!-- Warning icon with pulse -->
                             <div class="relative flex-shrink-0">
-                                <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-red-500 to-rose-500 flex items-center justify-center shadow-lg shadow-red-200">
+                                <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-red-500 to-[#C4A265] flex items-center justify-center shadow-lg shadow-red-200">
                                     <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
                                     </svg>
@@ -563,7 +563,7 @@ const activityTypeConfig = {
                             </Link>
                             <Link
                                 href="/secretary/crm/leads?overdue=1"
-                                class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-gradient-to-r from-red-500 to-rose-500 text-white shadow-sm shadow-red-200 hover:shadow-md transition-all duration-200 hover:scale-[1.02]"
+                                class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-gradient-to-r from-red-500 to-[#C4A265] text-white shadow-sm shadow-red-200 hover:shadow-md transition-all duration-200 hover:scale-[1.02]"
                             >
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
                                 {{ isRtl ? 'عرض المتأخرة' : 'View Overdue' }}
@@ -682,7 +682,7 @@ const activityTypeConfig = {
                     <div class="flex items-start justify-between">
                         <div>
                             <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">{{ isRtl ? 'عملاء جدد' : 'New Leads' }}</p>
-                            <p class="text-3xl font-bold text-blue-600 mt-2 tabular-nums">{{ counterNewLeads }}</p>
+                            <p class="text-3xl font-bold text-[#1B365D] mt-2 tabular-nums">{{ counterNewLeads }}</p>
                         </div>
                         <div class="w-11 h-11 rounded-xl flex items-center justify-center" style="background: linear-gradient(135deg, #2563eb, #60a5fa);">
                             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -898,25 +898,25 @@ const activityTypeConfig = {
                             <div class="text-xl font-bold text-teal-700">{{ weeklyStats?.leads_added || 0 }}</div>
                             <div class="text-[10px] text-teal-600 font-medium mt-0.5">{{ isRtl ? 'عملاء جدد' : 'New Leads' }}</div>
                         </div>
-                        <div class="bg-blue-50/60 rounded-xl p-3 text-center border border-blue-100">
-                            <div class="text-xl font-bold text-blue-700">{{ weeklyStats?.activities_logged || 0 }}</div>
-                            <div class="text-[10px] text-blue-600 font-medium mt-0.5">{{ isRtl ? 'نشاط' : 'Activities' }}</div>
+                        <div class="bg-slate-50/60 rounded-xl p-3 text-center border border-slate-100">
+                            <div class="text-xl font-bold text-[#1B365D]">{{ weeklyStats?.activities_logged || 0 }}</div>
+                            <div class="text-[10px] text-[#1B365D] font-medium mt-0.5">{{ isRtl ? 'نشاط' : 'Activities' }}</div>
                         </div>
                         <div class="bg-emerald-50/60 rounded-xl p-3 text-center border border-emerald-100">
                             <div class="text-xl font-bold text-emerald-700">{{ weeklyStats?.follow_ups_completed || 0 }}</div>
                             <div class="text-[10px] text-emerald-600 font-medium mt-0.5">{{ isRtl ? 'متابعات مكتملة' : 'Completed F/U' }}</div>
                         </div>
-                        <div class="bg-indigo-50/60 rounded-xl p-3 text-center border border-indigo-100">
-                            <div class="text-xl font-bold text-indigo-700">{{ weeklyStats?.calls_made || 0 }}</div>
-                            <div class="text-[10px] text-indigo-600 font-medium mt-0.5">{{ isRtl ? 'مكالمات' : 'Calls' }}</div>
+                        <div class="bg-slate-50/60 rounded-xl p-3 text-center border border-slate-100">
+                            <div class="text-xl font-bold text-[#1B365D]">{{ weeklyStats?.calls_made || 0 }}</div>
+                            <div class="text-[10px] text-[#1B365D] font-medium mt-0.5">{{ isRtl ? 'مكالمات' : 'Calls' }}</div>
                         </div>
-                        <div class="bg-green-50/60 rounded-xl p-3 text-center border border-green-100">
-                            <div class="text-xl font-bold text-green-700">{{ weeklyStats?.whatsapp_sent || 0 }}</div>
-                            <div class="text-[10px] text-green-600 font-medium mt-0.5">{{ isRtl ? 'واتساب' : 'WhatsApp' }}</div>
+                        <div class="bg-emerald-50/60 rounded-xl p-3 text-center border border-emerald-100">
+                            <div class="text-xl font-bold text-emerald-700">{{ weeklyStats?.whatsapp_sent || 0 }}</div>
+                            <div class="text-[10px] text-emerald-600 font-medium mt-0.5">{{ isRtl ? 'واتساب' : 'WhatsApp' }}</div>
                         </div>
-                        <div class="bg-purple-50/60 rounded-xl p-3 text-center border border-purple-100">
-                            <div class="text-xl font-bold text-purple-700">{{ conversionRate || 0 }}%</div>
-                            <div class="text-[10px] text-purple-600 font-medium mt-0.5">{{ isRtl ? 'نسبة التحويل' : 'Conv. Rate' }}</div>
+                        <div class="bg-slate-50/60 rounded-xl p-3 text-center border border-slate-100">
+                            <div class="text-xl font-bold text-[#1B365D]">{{ conversionRate || 0 }}%</div>
+                            <div class="text-[10px] text-[#1B365D] font-medium mt-0.5">{{ isRtl ? 'نسبة التحويل' : 'Conv. Rate' }}</div>
                         </div>
                     </div>
 
@@ -975,11 +975,11 @@ const activityTypeConfig = {
                             </div>
                             <div>
                                 <div class="flex items-center justify-between mb-1.5">
-                                    <span class="flex items-center gap-1.5 text-sm font-medium text-sky-700">
+                                    <span class="flex items-center gap-1.5 text-sm font-medium text-[#1B365D]">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                                         {{ isRtl ? 'أسنان' : 'Dental' }}
                                     </span>
-                                    <span class="text-sm font-bold text-sky-700">{{ moduleDistribution.dental || 0 }}</span>
+                                    <span class="text-sm font-bold text-[#1B365D]">{{ moduleDistribution.dental || 0 }}</span>
                                 </div>
                                 <div class="h-3 rounded-full bg-gray-100 overflow-hidden">
                                     <div class="h-full rounded-full transition-all duration-1000 ease-out"
@@ -990,11 +990,11 @@ const activityTypeConfig = {
                             </div>
                             <div>
                                 <div class="flex items-center justify-between mb-1.5">
-                                    <span class="flex items-center gap-1.5 text-sm font-medium text-green-700">
+                                    <span class="flex items-center gap-1.5 text-sm font-medium text-emerald-700">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/></svg>
                                         {{ isRtl ? 'أطفال' : 'Pediatric' }}
                                     </span>
-                                    <span class="text-sm font-bold text-green-700">{{ moduleDistribution.pediatric || 0 }}</span>
+                                    <span class="text-sm font-bold text-emerald-700">{{ moduleDistribution.pediatric || 0 }}</span>
                                 </div>
                                 <div class="h-3 rounded-full bg-gray-100 overflow-hidden">
                                     <div class="h-full rounded-full transition-all duration-1000 ease-out"
@@ -1198,14 +1198,14 @@ const activityTypeConfig = {
                                     <!-- Snooze -->
                                     <div class="relative">
                                         <button @click="toggleSnooze(fu.id)"
-                                            class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-xs font-semibold bg-purple-50 text-purple-500 hover:bg-purple-100 border border-purple-200 transition-all duration-200">
+                                            class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-xs font-semibold bg-slate-50 text-[#1B365D] hover:bg-slate-100 border border-slate-200 transition-all duration-200">
                                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                                         </button>
                                         <Transition enter-active-class="transition-all duration-200" enter-from-class="opacity-0 scale-95" enter-to-class="opacity-100 scale-100" leave-active-class="transition-all duration-150" leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-95">
                                             <div v-if="snoozeOpenId === fu.id" class="absolute bottom-full mb-1 end-0 w-40 bg-white rounded-xl shadow-xl border border-gray-200 py-1.5 z-20">
-                                                <button @click="snoozeFollowUp(fu.id, '1h')" class="w-full text-start px-3 py-1.5 text-xs text-gray-700 hover:bg-purple-50 transition-colors">{{ isRtl ? 'ساعة واحدة' : '1 Hour' }}</button>
-                                                <button @click="snoozeFollowUp(fu.id, 'tomorrow')" class="w-full text-start px-3 py-1.5 text-xs text-gray-700 hover:bg-purple-50 transition-colors">{{ isRtl ? 'غدا 9 صباحا' : 'Tomorrow 9 AM' }}</button>
-                                                <button @click="snoozeFollowUp(fu.id, '1w')" class="w-full text-start px-3 py-1.5 text-xs text-gray-700 hover:bg-purple-50 transition-colors">{{ isRtl ? 'اسبوع واحد' : '1 Week' }}</button>
+                                                <button @click="snoozeFollowUp(fu.id, '1h')" class="w-full text-start px-3 py-1.5 text-xs text-gray-700 hover:bg-slate-50 transition-colors">{{ isRtl ? 'ساعة واحدة' : '1 Hour' }}</button>
+                                                <button @click="snoozeFollowUp(fu.id, 'tomorrow')" class="w-full text-start px-3 py-1.5 text-xs text-gray-700 hover:bg-slate-50 transition-colors">{{ isRtl ? 'غدا 9 صباحا' : 'Tomorrow 9 AM' }}</button>
+                                                <button @click="snoozeFollowUp(fu.id, '1w')" class="w-full text-start px-3 py-1.5 text-xs text-gray-700 hover:bg-slate-50 transition-colors">{{ isRtl ? 'اسبوع واحد' : '1 Week' }}</button>
                                             </div>
                                         </Transition>
                                     </div>
@@ -1232,9 +1232,9 @@ const activityTypeConfig = {
                         :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
                         style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.4s"
                     >
-                        <div class="px-4 sm:px-6 py-4 border-b border-red-100 flex items-center justify-between bg-gradient-to-r from-red-50 to-rose-50">
+                        <div class="px-4 sm:px-6 py-4 border-b border-red-100 flex items-center justify-between bg-gradient-to-r from-red-50 to-amber-50">
                             <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 rounded-lg flex items-center justify-center bg-gradient-to-br from-red-500 to-rose-500 relative">
+                                <div class="w-8 h-8 rounded-lg flex items-center justify-center bg-gradient-to-br from-red-500 to-[#C4A265] relative">
                                     <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
                                     </svg>
@@ -1255,7 +1255,7 @@ const activityTypeConfig = {
                                 :style="`transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: ${0.45 + idx * 0.05}s`"
                             >
                                 <!-- Urgent stripe -->
-                                <div class="absolute top-0 left-0 w-1 h-full rounded-l-xl bg-gradient-to-b from-red-500 to-rose-500"></div>
+                                <div class="absolute top-0 left-0 w-1 h-full rounded-l-xl bg-gradient-to-b from-red-500 to-[#C4A265]"></div>
 
                                 <div class="flex items-start gap-3" :class="isRtl ? 'pr-2' : 'pl-2'">
                                     <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" :class="followUpTypeConfig[fu.type]?.color || 'bg-gray-100 text-gray-500'">
@@ -1317,14 +1317,14 @@ const activityTypeConfig = {
                                     <!-- Snooze -->
                                     <div class="relative">
                                         <button @click="toggleSnooze(fu.id)"
-                                            class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-xs font-semibold bg-purple-50 text-purple-500 hover:bg-purple-100 border border-purple-200 transition-all duration-200">
+                                            class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-xs font-semibold bg-slate-50 text-[#1B365D] hover:bg-slate-100 border border-slate-200 transition-all duration-200">
                                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                                         </button>
                                         <Transition enter-active-class="transition-all duration-200" enter-from-class="opacity-0 scale-95" enter-to-class="opacity-100 scale-100" leave-active-class="transition-all duration-150" leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-95">
                                             <div v-if="snoozeOpenId === fu.id" class="absolute bottom-full mb-1 end-0 w-40 bg-white rounded-xl shadow-xl border border-gray-200 py-1.5 z-20">
-                                                <button @click="snoozeFollowUp(fu.id, '1h')" class="w-full text-start px-3 py-1.5 text-xs text-gray-700 hover:bg-purple-50 transition-colors">{{ isRtl ? 'ساعة واحدة' : '1 Hour' }}</button>
-                                                <button @click="snoozeFollowUp(fu.id, 'tomorrow')" class="w-full text-start px-3 py-1.5 text-xs text-gray-700 hover:bg-purple-50 transition-colors">{{ isRtl ? 'غدا 9 صباحا' : 'Tomorrow 9 AM' }}</button>
-                                                <button @click="snoozeFollowUp(fu.id, '1w')" class="w-full text-start px-3 py-1.5 text-xs text-gray-700 hover:bg-purple-50 transition-colors">{{ isRtl ? 'اسبوع واحد' : '1 Week' }}</button>
+                                                <button @click="snoozeFollowUp(fu.id, '1h')" class="w-full text-start px-3 py-1.5 text-xs text-gray-700 hover:bg-slate-50 transition-colors">{{ isRtl ? 'ساعة واحدة' : '1 Hour' }}</button>
+                                                <button @click="snoozeFollowUp(fu.id, 'tomorrow')" class="w-full text-start px-3 py-1.5 text-xs text-gray-700 hover:bg-slate-50 transition-colors">{{ isRtl ? 'غدا 9 صباحا' : 'Tomorrow 9 AM' }}</button>
+                                                <button @click="snoozeFollowUp(fu.id, '1w')" class="w-full text-start px-3 py-1.5 text-xs text-gray-700 hover:bg-slate-50 transition-colors">{{ isRtl ? 'اسبوع واحد' : '1 Week' }}</button>
                                             </div>
                                         </Transition>
                                     </div>
@@ -1440,10 +1440,10 @@ const activityTypeConfig = {
                                             <span v-if="lead.priority === 'hot'" class="text-red-500 flex-shrink-0" :title="priorityConfig.hot.label">
                                                 <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clip-rule="evenodd" /></svg>
                                             </span>
-                                            <span v-else-if="lead.priority === 'warm'" class="text-orange-400 flex-shrink-0" :title="priorityConfig.warm.label">
+                                            <span v-else-if="lead.priority === 'warm'" class="text-amber-400 flex-shrink-0" :title="priorityConfig.warm.label">
                                                 <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clip-rule="evenodd" /></svg>
                                             </span>
-                                            <span v-else-if="lead.priority === 'cold'" class="text-blue-400 flex-shrink-0" :title="priorityConfig.cold.label">
+                                            <span v-else-if="lead.priority === 'cold'" class="text-slate-400 flex-shrink-0" :title="priorityConfig.cold.label">
                                                 <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a.75.75 0 01.75.75v1.563l1.08-.625a.75.75 0 01.75 1.3L11.5 5.5l1.08.625a.75.75 0 01-.75 1.3L10.75 6.8v1.45a.75.75 0 01-1.5 0V6.8l-1.08.625a.75.75 0 11-.75-1.3L8.5 5.5l-1.08-.513a.75.75 0 01.75-1.3l1.08.625V2.75A.75.75 0 0110 2zM5.5 10a.75.75 0 01.75.75v1.563l1.08-.625a.75.75 0 01.75 1.3l-1.08.512 1.08.625a.75.75 0 01-.75 1.3l-1.08-.625v1.45a.75.75 0 01-1.5 0V14.8l-1.08.625a.75.75 0 01-.75-1.3l1.08-.625-1.08-.513a.75.75 0 01.75-1.3l1.08.626V10.75A.75.75 0 015.5 10zm9 0a.75.75 0 01.75.75v1.563l1.08-.625a.75.75 0 01.75 1.3l-1.08.512 1.08.625a.75.75 0 01-.75 1.3l-1.08-.625v1.45a.75.75 0 01-1.5 0V14.8l-1.08.625a.75.75 0 01-.75-1.3l1.08-.625-1.08-.513a.75.75 0 01.75-1.3l1.08.626V10.75a.75.75 0 01.75-.75z" /></svg>
                                             </span>
                                         </div>
@@ -1457,7 +1457,7 @@ const activityTypeConfig = {
                                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
                                         </a>
                                         <a v-if="lead.phone" :href="`https://wa.me/${(lead.phone || '').replace(/[^0-9]/g, '')}`" target="_blank" @click.stop
-                                           class="w-7 h-7 rounded-lg bg-green-50 text-green-600 hover:bg-green-100 inline-flex items-center justify-center transition-colors border border-green-200/60"
+                                           class="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-600 hover:bg-emerald-100 inline-flex items-center justify-center transition-colors border border-emerald-200/60"
                                            :title="isRtl ? 'واتساب' : 'WhatsApp'">
                                             <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>
                                         </a>
@@ -1589,7 +1589,7 @@ const activityTypeConfig = {
                         <!-- Period Leads (This Week) -->
                         <div class="col-span-2 text-center">
                             <span class="inline-flex items-center justify-center min-w-[24px] h-6 px-1.5 rounded-full text-xs font-bold"
-                                :class="member.period_leads > 0 ? 'bg-blue-50 text-blue-600' : 'bg-gray-50 text-gray-400'">
+                                :class="member.period_leads > 0 ? 'bg-slate-50 text-[#1B365D]' : 'bg-gray-50 text-gray-400'">
                                 {{ member.period_leads }}
                             </span>
                         </div>
@@ -1886,7 +1886,7 @@ const activityTypeConfig = {
                                     <div>
                                         <label class="block text-xs font-semibold text-gray-600 mb-1.5">{{ isRtl ? 'الأولوية' : 'Priority' }}</label>
                                         <div class="flex gap-2">
-                                            <button v-for="p in [{v:1,l:'Hot',c:'border-red-300 bg-red-50 text-red-700'},{v:2,l:'Warm',c:'border-amber-300 bg-amber-50 text-amber-700'},{v:3,l:'Cold',c:'border-blue-300 bg-blue-50 text-blue-700'}]"
+                                            <button v-for="p in [{v:1,l:'Hot',c:'border-red-300 bg-red-50 text-red-700'},{v:2,l:'Warm',c:'border-amber-300 bg-amber-50 text-amber-700'},{v:3,l:'Cold',c:'border-slate-300 bg-slate-50 text-[#1B365D]'}]"
                                                 :key="p.v" type="button" @click="quickAddForm.priority = p.v"
                                                 class="flex-1 py-2 text-xs font-semibold rounded-lg border transition-all"
                                                 :class="quickAddForm.priority === p.v ? p.c + ' ring-2 ring-offset-1 ring-teal-500/40' : 'border-gray-200 text-gray-500 hover:bg-gray-50'">

@@ -48,7 +48,7 @@ onMounted(() => {
 <template>
     <div>
         <!-- ═══ HERO HEADER ═══ -->
-        <div class="relative -mx-4 sm:-mx-6 lg:-mx-8 -mt-4 sm:-mt-6 mb-8 px-4 sm:px-6 lg:px-8 pt-8 pb-10 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 overflow-hidden transition-all duration-700" :class="headerLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'">
+        <div class="relative -mx-4 sm:-mx-6 lg:-mx-8 -mt-4 sm:-mt-6 mb-8 px-4 sm:px-6 lg:px-8 pt-8 pb-10 bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] overflow-hidden transition-all duration-700" :class="headerLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'">
             <div class="absolute inset-0 opacity-10" style="background: radial-gradient(circle at 70% 50%, #0d9488 0%, transparent 60%)"></div>
             <div class="relative z-10">
                 <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
@@ -125,7 +125,7 @@ onMounted(() => {
                                 class="w-full h-full object-cover"
                             />
                         </div>
-                        <div v-else class="w-12 h-12 rounded-xl flex-shrink-0 flex items-center justify-center text-white text-sm font-bold bg-gradient-to-br from-[#0d9488] to-cyan-500">
+                        <div v-else class="w-12 h-12 rounded-xl flex-shrink-0 flex items-center justify-center text-white text-sm font-bold bg-gradient-to-br from-[#0d9488] to-[#1B365D]">
                             {{ patient.full_name?.charAt(0) }}
                         </div>
                         <div class="min-w-0">
@@ -171,7 +171,7 @@ onMounted(() => {
                         </Link>
                         <Link
                             :href="`/secretary/patients/${patient.id}/edit`"
-                            class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-xl transition-colors"
+                            class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-[#1B365D] bg-slate-50 hover:bg-slate-100 rounded-xl transition-colors"
                         >
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
                             {{ isRtl ? 'تعديل' : 'Edit' }}

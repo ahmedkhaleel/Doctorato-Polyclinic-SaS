@@ -34,9 +34,9 @@ const allPhotos = computed(() => {
 });
 
 const typeColors = {
-    before: 'bg-blue-100 text-blue-700',
-    after: 'bg-green-100 text-green-700',
-    progress: 'bg-yellow-100 text-yellow-700',
+    before: 'bg-slate-100 text-[#1B365D]',
+    after: 'bg-emerald-100 text-emerald-700',
+    progress: 'bg-yellow-100 text-amber-700',
 };
 
 // Modal

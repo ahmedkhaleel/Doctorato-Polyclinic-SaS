@@ -26,8 +26,8 @@ function $localized(obj, field) {
 }
 
 const statusColors = {
-    active: 'bg-green-100 text-green-700',
-    completed: 'bg-blue-100 text-blue-700',
+    active: 'bg-emerald-100 text-emerald-700',
+    completed: 'bg-slate-100 text-[#1B365D]',
     inactive: 'bg-gray-100 text-gray-500',
 };
 
@@ -66,7 +66,7 @@ function progressPercent(plan) {
                     <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
                         <div
                             class="h-full rounded-full transition-all duration-500"
-                            :class="plan.status === 'completed' ? 'bg-blue-500' : 'bg-[var(--brand-primary)]'"
+                            :class="plan.status === 'completed' ? 'bg-[#1B365D]' : 'bg-[var(--brand-primary)]'"
                             :style="{ width: progressPercent(plan) + '%' }"
                         ></div>
                     </div>

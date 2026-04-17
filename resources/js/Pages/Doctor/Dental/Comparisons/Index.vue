@@ -31,14 +31,14 @@ const categoryLabels = {
 };
 
 const categoryColors = {
-    orthodontic: 'from-violet-500 to-purple-600',
-    cosmetic: 'from-pink-500 to-rose-600',
-    implant: 'from-cyan-500 to-teal-600',
-    whitening: 'from-amber-400 to-yellow-500',
-    restoration: 'from-blue-500 to-indigo-600',
-    surgical: 'from-red-500 to-rose-600',
+    orthodontic: 'from-[#1B365D] to-[#1B365D]',
+    cosmetic: 'from-[#C4A265] to-[#C4A265]',
+    implant: 'from-[#1B365D] to-teal-600',
+    whitening: 'from-amber-400 to-amber-500',
+    restoration: 'from-[#1B365D] to-[#1B365D]',
+    surgical: 'from-red-500 to-[#C4A265]',
     xray: 'from-gray-500 to-gray-700',
-    other: 'from-emerald-500 to-green-600',
+    other: 'from-emerald-500 to-emerald-600',
 };
 
 function categoryLabel(cat) {
@@ -73,9 +73,9 @@ function formatDate(date) {
 <template>
     <div class="space-y-6">
         <!-- Hero Header -->
-        <div class="dental-hero-enter relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6 sm:p-7">
+        <div class="dental-hero-enter relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] p-6 sm:p-7">
             <div class="absolute -top-12 ltr:-right-12 rtl:-left-12 w-48 h-48 bg-[#C4A265]/10 rounded-full blur-3xl"></div>
-            <div class="absolute -bottom-8 ltr:left-20 rtl:right-20 w-32 h-32 bg-purple-500/10 rounded-full blur-2xl"></div>
+            <div class="absolute -bottom-8 ltr:left-20 rtl:right-20 w-32 h-32 bg-[#1B365D]/10 rounded-full blur-2xl"></div>
 
             <div class="relative z-10">
                 <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-5">

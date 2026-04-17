@@ -92,16 +92,16 @@ function selectDay(day) {
 
 function statusColor(status, type) {
     if (type === 'booking') {
-        const colors = { new: 'bg-blue-100 text-blue-700', contacted: 'bg-yellow-100 text-yellow-700', confirmed: 'bg-emerald-100 text-emerald-700', completed: 'bg-gray-100 text-gray-600', cancelled: 'bg-red-100 text-red-600' };
+        const colors = { new: 'bg-slate-100 text-[#1B365D]', contacted: 'bg-yellow-100 text-amber-700', confirmed: 'bg-emerald-100 text-emerald-700', completed: 'bg-gray-100 text-gray-600', cancelled: 'bg-red-100 text-red-600' };
         return colors[status] || 'bg-gray-100 text-gray-600';
     }
-    const colors = { waiting: 'bg-amber-100 text-amber-700', in_progress: 'bg-blue-100 text-blue-700', completed: 'bg-emerald-100 text-emerald-700', cancelled: 'bg-red-100 text-red-600' };
+    const colors = { waiting: 'bg-amber-100 text-amber-700', in_progress: 'bg-slate-100 text-[#1B365D]', completed: 'bg-emerald-100 text-emerald-700', cancelled: 'bg-red-100 text-red-600' };
     return colors[status] || 'bg-gray-100 text-gray-600';
 }
 
 function eventDotColor(event) {
-    if (event.type === 'booking') return 'bg-blue-400';
-    const colors = { waiting: 'bg-amber-400', in_progress: 'bg-blue-500', completed: 'bg-emerald-400', cancelled: 'bg-red-400' };
+    if (event.type === 'booking') return 'bg-slate-400';
+    const colors = { waiting: 'bg-amber-400', in_progress: 'bg-[#1B365D]', completed: 'bg-emerald-400', cancelled: 'bg-red-400' };
     return colors[event.status] || 'bg-gray-400';
 }
 
@@ -122,7 +122,7 @@ function formatSelectedDate(dateStr) {
                 <p class="text-sm text-gray-500 mt-1">{{ isRtl ? 'عرض جميع الزيارات والحجوزات حسب التاريخ.' : 'View all visits and bookings by date.' }}</p>
             </div>
             <div class="flex items-center gap-3 flex-wrap">
-                <Link href="/secretary/bookings/create" class="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-teal-500 to-cyan-500 text-white text-sm font-medium rounded-xl hover:from-teal-600 hover:to-cyan-600 transition-all duration-200 shadow-sm">
+                <Link href="/secretary/bookings/create" class="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-teal-500 to-[#1B365D] text-white text-sm font-medium rounded-xl hover:from-teal-600 hover:to-[#1B365D] transition-all duration-200 shadow-sm">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
                     {{ isRtl ? 'حجز جديد' : 'New Booking' }}
                 </Link>
@@ -144,11 +144,11 @@ function formatSelectedDate(dateStr) {
                 <p class="text-[10px] text-gray-500 uppercase tracking-wide">{{ isRtl ? 'انتظار' : 'Waiting' }}</p>
             </div>
             <div class="bg-white rounded-xl p-3 border border-gray-100 shadow-sm text-center">
-                <p class="text-lg font-bold text-blue-600">{{ stats?.total_bookings || 0 }}</p>
+                <p class="text-lg font-bold text-[#1B365D]">{{ stats?.total_bookings || 0 }}</p>
                 <p class="text-[10px] text-gray-500 uppercase tracking-wide">{{ isRtl ? 'الحجوزات' : 'Bookings' }}</p>
             </div>
             <div class="bg-white rounded-xl p-3 border border-gray-100 shadow-sm text-center">
-                <p class="text-lg font-bold text-blue-500">{{ stats?.pending_bookings || 0 }}</p>
+                <p class="text-lg font-bold text-[#1B365D]">{{ stats?.pending_bookings || 0 }}</p>
                 <p class="text-[10px] text-gray-500 uppercase tracking-wide">{{ isRtl ? 'معلق' : 'Pending' }}</p>
             </div>
             <div class="bg-white rounded-xl p-3 border border-gray-100 shadow-sm text-center">
@@ -176,7 +176,7 @@ function formatSelectedDate(dateStr) {
                 </select>
                 <div class="flex items-center gap-3 text-xs text-gray-500">
                     <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>{{ isRtl ? 'زيارة' : 'Visit' }}</span>
-                    <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-blue-400"></span>{{ isRtl ? 'حجز' : 'Booking' }}</span>
+                    <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-slate-400"></span>{{ isRtl ? 'حجز' : 'Booking' }}</span>
                 </div>
             </div>
         </div>
@@ -225,12 +225,12 @@ function formatSelectedDate(dateStr) {
                             v-for="ev in selectedDayEvents"
                             :key="ev.type + '-' + ev.id"
                             class="p-3 rounded-xl border transition-colors duration-150"
-                            :class="ev.type === 'visit' ? 'border-emerald-100 bg-emerald-50/30 hover:bg-emerald-50' : 'border-blue-100 bg-blue-50/30 hover:bg-blue-50'"
+                            :class="ev.type === 'visit' ? 'border-emerald-100 bg-emerald-50/30 hover:bg-emerald-50' : 'border-slate-100 bg-slate-50/30 hover:bg-slate-50'"
                         >
                             <div class="flex items-start justify-between gap-2">
                                 <div class="min-w-0 flex-1">
                                     <div class="flex items-center gap-2 mb-1">
-                                        <span class="text-xs font-semibold uppercase tracking-wide" :class="ev.type === 'visit' ? 'text-emerald-600' : 'text-blue-600'">{{ ev.type }}</span>
+                                        <span class="text-xs font-semibold uppercase tracking-wide" :class="ev.type === 'visit' ? 'text-emerald-600' : 'text-[#1B365D]'">{{ ev.type }}</span>
                                         <span :class="statusColor(ev.status, ev.type)" class="text-[10px] px-1.5 py-0.5 rounded-full font-medium">{{ ev.status }}</span>
                                     </div>
                                     <p class="text-sm font-medium text-gray-900 truncate">{{ ev.title }}</p>
@@ -245,7 +245,7 @@ function formatSelectedDate(dateStr) {
                                 <Link
                                     v-else
                                     :href="'/secretary/bookings/' + ev.id"
-                                    class="text-xs text-blue-600 hover:underline flex-shrink-0"
+                                    class="text-xs text-[#1B365D] hover:underline flex-shrink-0"
                                 >{{ isRtl ? 'عرض' : 'View' }}</Link>
                             </div>
                         </div>

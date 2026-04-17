@@ -86,12 +86,12 @@ const displayPhoto = computed(() => photoPreview.value || props.doctor.photo_url
     <div class="space-y-4 sm:space-y-6">
         <!-- Hero Header -->
         <div
-            class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 transition-all duration-700"
+            class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] transition-all duration-700"
             :class="headerLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
         >
             <!-- Decorative -->
             <div class="absolute top-0 right-0 w-96 h-96 bg-gradient-radial from-[#C4A265]/10 to-transparent rounded-full -translate-y-1/2 translate-x-1/2"></div>
-            <div class="absolute bottom-0 left-0 w-64 h-64 bg-gradient-radial from-purple-500/5 to-transparent rounded-full translate-y-1/2 -translate-x-1/4"></div>
+            <div class="absolute bottom-0 left-0 w-64 h-64 bg-gradient-radial from-[#1B365D]/5 to-transparent rounded-full translate-y-1/2 -translate-x-1/4"></div>
 
             <div class="relative z-10 p-6 sm:p-8">
                 <div class="flex flex-col sm:flex-row items-center gap-6">
@@ -354,8 +354,8 @@ const displayPhoto = computed(() => photoPreview.value || props.doctor.photo_url
                     <!-- Schedule Card -->
                     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6">
                         <div class="flex items-center gap-3 mb-4">
-                            <div class="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
-                                <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            <div class="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center">
+                                <svg class="w-5 h-5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                             </div>
                             <h3 class="text-sm font-bold text-gray-800">{{ $t('a_schedule') }}</h3>
                         </div>
@@ -371,8 +371,8 @@ const displayPhoto = computed(() => photoPreview.value || props.doctor.photo_url
                     <!-- Custom Service Rates Card -->
                     <div v-if="doctor.service_rates?.length > 0" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6 md:col-span-2 lg:col-span-3">
                         <div class="flex items-center gap-3 mb-1">
-                            <div class="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center">
-                                <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A2 2 0 013 12V7a4 4 0 014-4z" /></svg>
+                            <div class="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center">
+                                <svg class="w-5 h-5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A2 2 0 013 12V7a4 4 0 014-4z" /></svg>
                             </div>
                             <div>
                                 <h3 class="text-sm font-bold text-gray-800">{{ $t('a_custom_service_rates') }}</h3>

@@ -183,7 +183,7 @@ onMounted(() => {
     <div>
         <!-- HERO HEADER -->
         <div
-            class="relative -mx-4 sm:-mx-6 lg:-mx-8 -mt-4 sm:-mt-6 mb-8 px-4 sm:px-6 lg:px-8 pt-8 pb-10 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 overflow-hidden transition-all duration-700"
+            class="relative -mx-4 sm:-mx-6 lg:-mx-8 -mt-4 sm:-mt-6 mb-8 px-4 sm:px-6 lg:px-8 pt-8 pb-10 bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] overflow-hidden transition-all duration-700"
             :class="headerLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'"
         >
             <div class="absolute inset-0 opacity-10" style="background: radial-gradient(circle at 30% 50%, #4CAF50 0%, transparent 40%), radial-gradient(circle at 70% 50%, #0d9488 0%, transparent 50%)"></div>
@@ -421,10 +421,10 @@ onMounted(() => {
 
             <!-- ===== SECTION 3: Birth History ===== -->
             <div v-show="activeSection === 3" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden animate-fadeIn">
-                <div class="px-5 py-4 border-b border-gray-100 bg-gradient-to-r from-pink-50/50 to-transparent">
+                <div class="px-5 py-4 border-b border-gray-100 bg-gradient-to-r from-amber-50/50 to-transparent">
                     <div class="flex items-center gap-3">
-                        <div class="w-9 h-9 rounded-xl bg-pink-50 flex items-center justify-center">
-                            <svg class="w-5 h-5 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
+                        <div class="w-9 h-9 rounded-xl bg-amber-50 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
                         </div>
                         <div>
                             <h3 class="font-bold text-gray-900">{{ isRtl ? 'تاريخ الولادة' : 'Birth History' }}</h3>

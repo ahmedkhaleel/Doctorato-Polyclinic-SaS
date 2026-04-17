@@ -214,8 +214,8 @@ const conditionTypes = [
 ];
 
 const chronicSeverityBadge = {
-    mild: { bg: 'bg-yellow-50 dark:bg-yellow-900/30', text: 'text-yellow-700 dark:text-yellow-400', label: 'Mild', labelAr: 'خفيف' },
-    moderate: { bg: 'bg-orange-50 dark:bg-orange-900/30', text: 'text-orange-700 dark:text-orange-400', label: 'Moderate', labelAr: 'متوسط' },
+    mild: { bg: 'bg-yellow-50 dark:bg-yellow-900/30', text: 'text-amber-700 dark:text-yellow-400', label: 'Mild', labelAr: 'خفيف' },
+    moderate: { bg: 'bg-amber-50 dark:bg-amber-900/30', text: 'text-amber-700 dark:text-amber-400', label: 'Moderate', labelAr: 'متوسط' },
     severe: { bg: 'bg-red-50 dark:bg-red-900/30', text: 'text-red-700 dark:text-red-400', label: 'Severe', labelAr: 'شديد' },
     controlled: { bg: 'bg-emerald-50 dark:bg-emerald-900/30', text: 'text-emerald-700 dark:text-emerald-400', label: 'Controlled', labelAr: 'مسيطر عليه' },
 };
@@ -344,7 +344,7 @@ const screeningResultBadge = {
     normal: { bg: 'bg-emerald-50 dark:bg-emerald-900/30', text: 'text-emerald-700 dark:text-emerald-400' },
     at_risk: { bg: 'bg-amber-50 dark:bg-amber-900/30', text: 'text-amber-700 dark:text-amber-400' },
     abnormal: { bg: 'bg-red-50 dark:bg-red-900/30', text: 'text-red-700 dark:text-red-400' },
-    needs_rescreen: { bg: 'bg-blue-50 dark:bg-blue-900/30', text: 'text-blue-700 dark:text-blue-400' },
+    needs_rescreen: { bg: 'bg-slate-50 dark:bg-[#1B365D]/30', text: 'text-[#1B365D] dark:text-slate-400' },
 };
 
 function submitScreening() {
@@ -370,21 +370,21 @@ const vaccinationGrouped = computed(() => {
 
 const vaccineStatusConfig = {
     given: { bg: 'bg-emerald-50 dark:bg-emerald-900/30', text: 'text-emerald-700 dark:text-emerald-400', dot: 'bg-emerald-500', label: 'Given', labelAr: 'تم إعطاؤه' },
-    scheduled: { bg: 'bg-blue-50 dark:bg-blue-900/30', text: 'text-blue-700 dark:text-blue-400', dot: 'bg-blue-500', label: 'Scheduled', labelAr: 'مجدول' },
+    scheduled: { bg: 'bg-slate-50 dark:bg-[#1B365D]/30', text: 'text-[#1B365D] dark:text-slate-400', dot: 'bg-[#1B365D]', label: 'Scheduled', labelAr: 'مجدول' },
     missed: { bg: 'bg-red-50 dark:bg-red-900/30', text: 'text-red-700 dark:text-red-400', dot: 'bg-red-500', label: 'Missed', labelAr: 'فائت' },
     postponed: { bg: 'bg-amber-50 dark:bg-amber-900/30', text: 'text-amber-700 dark:text-amber-400', dot: 'bg-amber-500', label: 'Postponed', labelAr: 'مؤجل' },
 };
 
 const severityBadge = {
-    mild: { bg: 'bg-yellow-50 dark:bg-yellow-900/30', text: 'text-yellow-700 dark:text-yellow-400' },
-    moderate: { bg: 'bg-orange-50 dark:bg-orange-900/30', text: 'text-orange-700 dark:text-orange-400' },
+    mild: { bg: 'bg-yellow-50 dark:bg-yellow-900/30', text: 'text-amber-700 dark:text-yellow-400' },
+    moderate: { bg: 'bg-amber-50 dark:bg-amber-900/30', text: 'text-amber-700 dark:text-amber-400' },
     severe: { bg: 'bg-red-50 dark:bg-red-900/30', text: 'text-red-700 dark:text-red-400' },
     life_threatening: { bg: 'bg-red-100 dark:bg-red-900/50', text: 'text-red-800 dark:text-red-300' },
 };
 
 const visitStatusConfig = {
     waiting: { bg: 'bg-amber-50', text: 'text-amber-700', label: 'Waiting', labelAr: 'انتظار' },
-    in_progress: { bg: 'bg-blue-50', text: 'text-blue-700', label: 'In Progress', labelAr: 'قيد التنفيذ' },
+    in_progress: { bg: 'bg-slate-50', text: 'text-[#1B365D]', label: 'In Progress', labelAr: 'قيد التنفيذ' },
     completed: { bg: 'bg-emerald-50', text: 'text-emerald-700', label: 'Completed', labelAr: 'مكتمل' },
     cancelled: { bg: 'bg-gray-50', text: 'text-gray-600', label: 'Cancelled', labelAr: 'ملغي' },
 };
@@ -413,7 +413,7 @@ const percentileTextColor = (p) => {
     <div class="space-y-5">
         <!-- ═══════════════ PATIENT HEADER ═══════════════ -->
         <div
-            class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-600 via-green-500 to-teal-500 transition-all duration-700"
+            class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-600 via-emerald-500 to-teal-500 transition-all duration-700"
             :class="headerLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
         >
             <!-- Decorative -->
@@ -435,7 +435,7 @@ const percentileTextColor = (p) => {
                     <div
                         v-else
                         class="w-16 h-16 rounded-2xl flex items-center justify-center text-white text-2xl font-bold ring-4 ring-white/20 shadow-lg flex-shrink-0"
-                        :class="patient.gender === 'male' ? 'bg-blue-500/40' : patient.gender === 'female' ? 'bg-pink-500/40' : 'bg-white/20'"
+                        :class="patient.gender === 'male' ? 'bg-[#1B365D]/40' : patient.gender === 'female' ? 'bg-[#C4A265]/40' : 'bg-white/20'"
                     >
                         {{ (patient.full_name || 'P').charAt(0).toUpperCase() }}
                     </div>
@@ -602,13 +602,13 @@ const percentileTextColor = (p) => {
                 <!-- Upcoming Vaccinations -->
                 <div v-if="upcomingVaccinations.length" class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm p-4 sm:p-5">
                     <h3 class="text-sm font-semibold text-gray-900 dark:text-white flex items-center gap-2 mb-3">
-                        <span class="w-2 h-2 bg-blue-500 rounded-full"></span>
+                        <span class="w-2 h-2 bg-[#1B365D] rounded-full"></span>
                         {{ isRtl ? 'التطعيمات القادمة' : 'Upcoming Vaccinations' }}
                     </h3>
                     <div class="space-y-2">
-                        <div v-for="v in upcomingVaccinations" :key="v.id" class="flex items-center justify-between text-sm py-1.5 px-3 bg-blue-50/50 dark:bg-blue-900/10 rounded-lg">
+                        <div v-for="v in upcomingVaccinations" :key="v.id" class="flex items-center justify-between text-sm py-1.5 px-3 bg-slate-50/50 dark:bg-[#1B365D]/10 rounded-lg">
                             <span class="text-gray-700 dark:text-gray-300">{{ isRtl ? (v.vaccine_name_ar || v.vaccine_name) : v.vaccine_name }}</span>
-                            <span class="text-xs text-blue-600 dark:text-blue-400">{{ v.recommended_age || v.age_period }}</span>
+                            <span class="text-xs text-[#1B365D] dark:text-slate-400">{{ v.recommended_age || v.age_period }}</span>
                         </div>
                     </div>
                 </div>
@@ -639,13 +639,13 @@ const percentileTextColor = (p) => {
                             <p class="text-xs text-gray-500">{{ isRtl ? 'الوزن' : 'Weight' }}</p>
                             <p class="text-lg font-bold text-emerald-600">{{ latestGrowth.weight_kg || '--' }}<span class="text-xs font-normal text-gray-400 mx-0.5">kg</span></p>
                         </div>
-                        <div class="text-center p-3 bg-blue-50/50 dark:bg-blue-900/10 rounded-lg">
+                        <div class="text-center p-3 bg-slate-50/50 dark:bg-[#1B365D]/10 rounded-lg">
                             <p class="text-xs text-gray-500">{{ isRtl ? 'الطول' : 'Height' }}</p>
-                            <p class="text-lg font-bold text-blue-600">{{ latestGrowth.height_cm || '--' }}<span class="text-xs font-normal text-gray-400 mx-0.5">cm</span></p>
+                            <p class="text-lg font-bold text-[#1B365D]">{{ latestGrowth.height_cm || '--' }}<span class="text-xs font-normal text-gray-400 mx-0.5">cm</span></p>
                         </div>
-                        <div class="text-center p-3 bg-purple-50/50 dark:bg-purple-900/10 rounded-lg">
+                        <div class="text-center p-3 bg-slate-50/50 dark:bg-[#1B365D]/10 rounded-lg">
                             <p class="text-xs text-gray-500">{{ isRtl ? 'محيط الرأس' : 'Head' }}</p>
-                            <p class="text-lg font-bold text-purple-600">{{ latestGrowth.head_circumference_cm || '--' }}<span class="text-xs font-normal text-gray-400 mx-0.5">cm</span></p>
+                            <p class="text-lg font-bold text-[#1B365D]">{{ latestGrowth.head_circumference_cm || '--' }}<span class="text-xs font-normal text-gray-400 mx-0.5">cm</span></p>
                         </div>
                     </div>
                 </div>
@@ -811,26 +811,26 @@ const percentileTextColor = (p) => {
                     </div>
                     <div class="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-3 overflow-hidden">
                         <div
-                            class="bg-gradient-to-r from-emerald-500 to-green-400 h-full rounded-full transition-all duration-700"
+                            class="bg-gradient-to-r from-emerald-500 to-emerald-400 h-full rounded-full transition-all duration-700"
                             :style="{ width: vaccineStats.total ? ((vaccineStats.given / vaccineStats.total) * 100) + '%' : '0%' }"
                         ></div>
                     </div>
                     <div class="flex items-center gap-4 mt-2 text-xs text-gray-500 dark:text-gray-400">
                         <span class="flex items-center gap-1"><span class="w-2 h-2 bg-emerald-500 rounded-full"></span> {{ isRtl ? 'تم إعطاؤها' : 'Given' }} ({{ vaccineStats.given || 0 }})</span>
-                        <span class="flex items-center gap-1"><span class="w-2 h-2 bg-blue-500 rounded-full"></span> {{ isRtl ? 'مجدولة' : 'Scheduled' }} ({{ vaccineStats.scheduled || 0 }})</span>
+                        <span class="flex items-center gap-1"><span class="w-2 h-2 bg-[#1B365D] rounded-full"></span> {{ isRtl ? 'مجدولة' : 'Scheduled' }} ({{ vaccineStats.scheduled || 0 }})</span>
                         <span v-if="vaccineStats.missed" class="flex items-center gap-1"><span class="w-2 h-2 bg-red-500 rounded-full"></span> {{ isRtl ? 'فائتة' : 'Missed' }} ({{ vaccineStats.missed }})</span>
                     </div>
                 </div>
 
                 <!-- Initialize Button -->
                 <div v-if="!vaccinations?.length" class="text-center py-12 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700">
-                    <div class="w-14 h-14 mx-auto rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center mb-3">
-                        <svg class="w-7 h-7 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+                    <div class="w-14 h-14 mx-auto rounded-full bg-slate-50 dark:bg-[#1B365D]/20 flex items-center justify-center mb-3">
+                        <svg class="w-7 h-7 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
                     </div>
                     <p class="text-sm text-gray-500 dark:text-gray-400 mb-3">{{ isRtl ? 'لم يتم إعداد جدول التطعيمات بعد' : 'Vaccination schedule not initialized yet' }}</p>
                     <button
                         @click="initializeSchedule"
-                        class="inline-flex items-center gap-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium rounded-xl shadow-sm shadow-blue-500/20 transition-all duration-200"
+                        class="inline-flex items-center gap-2 px-4 py-2 bg-[#1B365D] hover:bg-[#1B365D] text-white text-sm font-medium rounded-xl shadow-sm shadow-[#1B365D]/20 transition-all duration-200"
                     >
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
                         {{ isRtl ? 'إنشاء الجدول' : 'Initialize Schedule' }}
@@ -1139,8 +1139,8 @@ const percentileTextColor = (p) => {
 
                 <!-- Empty Allergies -->
                 <div v-else-if="!showAllergyForm" class="text-center py-12 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700">
-                    <div class="w-14 h-14 mx-auto rounded-full bg-green-50 dark:bg-green-900/20 flex items-center justify-center mb-3">
-                        <svg class="w-7 h-7 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    <div class="w-14 h-14 mx-auto rounded-full bg-emerald-50 dark:bg-emerald-900/20 flex items-center justify-center mb-3">
+                        <svg class="w-7 h-7 text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                     </div>
                     <p class="text-sm text-gray-500 dark:text-gray-400">{{ isRtl ? 'لا توجد حساسية مسجلة' : 'No allergies recorded' }}</p>
                     <button @click="showAllergyForm = true" class="mt-3 text-sm text-emerald-600 hover:text-emerald-700 font-medium transition">
@@ -1320,7 +1320,7 @@ const percentileTextColor = (p) => {
                     leave-from-class="opacity-100 translate-y-0 max-h-[600px]"
                     leave-to-class="opacity-0 -translate-y-2 max-h-0"
                 >
-                    <div v-if="showNutritionForm" class="bg-white dark:bg-gray-800 rounded-xl border border-green-200 dark:border-green-800/50 shadow-sm p-4 sm:p-5 overflow-hidden">
+                    <div v-if="showNutritionForm" class="bg-white dark:bg-gray-800 rounded-xl border border-emerald-200 dark:border-emerald-800/50 shadow-sm p-4 sm:p-5 overflow-hidden">
                         <form @submit.prevent="submitNutrition" class="space-y-4">
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 <div>
@@ -1411,7 +1411,7 @@ const percentileTextColor = (p) => {
                                 <p v-for="(err, key) in nutritionForm.errors" :key="key">{{ err }}</p>
                             </div>
                             <div class="flex items-center gap-2">
-                                <button type="submit" :disabled="nutritionForm.processing" class="px-4 py-2 bg-green-500 hover:bg-green-600 disabled:opacity-50 text-white text-sm font-medium rounded-lg transition shadow-sm">
+                                <button type="submit" :disabled="nutritionForm.processing" class="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 text-white text-sm font-medium rounded-lg transition shadow-sm">
                                     {{ nutritionForm.processing ? (isRtl ? 'جاري الحفظ...' : 'Saving...') : (isRtl ? 'حفظ' : 'Save') }}
                                 </button>
                                 <button type="button" @click="showNutritionForm = false; nutritionForm.reset();" class="px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition">
@@ -1474,8 +1474,8 @@ const percentileTextColor = (p) => {
 
                 <!-- Empty Nutrition -->
                 <div v-else-if="!showNutritionForm" class="text-center py-12 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700">
-                    <div class="w-14 h-14 mx-auto rounded-full bg-green-50 dark:bg-green-900/20 flex items-center justify-center mb-3">
-                        <svg class="w-7 h-7 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z" /></svg>
+                    <div class="w-14 h-14 mx-auto rounded-full bg-emerald-50 dark:bg-emerald-900/20 flex items-center justify-center mb-3">
+                        <svg class="w-7 h-7 text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z" /></svg>
                     </div>
                     <p class="text-sm text-gray-500 dark:text-gray-400">{{ isRtl ? 'لا توجد سجلات تغذية بعد' : 'No nutrition records yet' }}</p>
                     <button @click="showNutritionForm = true" class="mt-3 text-sm text-emerald-600 hover:text-emerald-700 font-medium transition">
@@ -1508,7 +1508,7 @@ const percentileTextColor = (p) => {
                     leave-from-class="opacity-100 translate-y-0 max-h-96"
                     leave-to-class="opacity-0 -translate-y-2 max-h-0"
                 >
-                    <div v-if="showScreeningForm" class="bg-white dark:bg-gray-800 rounded-xl border border-blue-200 dark:border-blue-800/50 shadow-sm p-4 sm:p-5 overflow-hidden">
+                    <div v-if="showScreeningForm" class="bg-white dark:bg-gray-800 rounded-xl border border-slate-200 dark:border-[#1B365D]/50 shadow-sm p-4 sm:p-5 overflow-hidden">
                         <form @submit.prevent="submitScreening" class="space-y-4">
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 <div>
@@ -1546,7 +1546,7 @@ const percentileTextColor = (p) => {
                                 <p v-for="(err, key) in screeningForm.errors" :key="key">{{ err }}</p>
                             </div>
                             <div class="flex items-center gap-2">
-                                <button type="submit" :disabled="screeningForm.processing" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 disabled:opacity-50 text-white text-sm font-medium rounded-lg transition shadow-sm">
+                                <button type="submit" :disabled="screeningForm.processing" class="px-4 py-2 bg-[#1B365D] hover:bg-[#1B365D] disabled:opacity-50 text-white text-sm font-medium rounded-lg transition shadow-sm">
                                     {{ screeningForm.processing ? (isRtl ? 'جاري الحفظ...' : 'Saving...') : (isRtl ? 'حفظ' : 'Save') }}
                                 </button>
                                 <button type="button" @click="showScreeningForm = false; screeningForm.reset();" class="px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition">
@@ -1575,13 +1575,13 @@ const percentileTextColor = (p) => {
                                     v-for="(test, idx) in screeningTests"
                                     :key="test.id"
                                     class="hover:bg-gray-50/50 dark:hover:bg-gray-700/30 transition-colors"
-                                    :class="idx === 0 ? 'bg-blue-50/30 dark:bg-blue-900/10' : ''"
+                                    :class="idx === 0 ? 'bg-slate-50/30 dark:bg-[#1B365D]/10' : ''"
                                 >
                                     <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-nowrap font-medium">
                                         {{ screeningTestTypes.find(t => t.value === test.test_type)
                                             ? (isRtl ? screeningTestTypes.find(t => t.value === test.test_type).labelAr : screeningTestTypes.find(t => t.value === test.test_type).label)
                                             : (test.test_type || '--').replace(/_/g, ' ') }}
-                                        <span v-if="idx === 0" class="text-[10px] text-blue-600 font-medium mx-1">{{ isRtl ? 'الأحدث' : 'Latest' }}</span>
+                                        <span v-if="idx === 0" class="text-[10px] text-[#1B365D] font-medium mx-1">{{ isRtl ? 'الأحدث' : 'Latest' }}</span>
                                     </td>
                                     <td class="px-4 py-3 text-gray-600 dark:text-gray-400 whitespace-nowrap">{{ test.test_date || '--' }}</td>
                                     <td class="px-4 py-3 font-medium text-gray-900 dark:text-white">{{ test.total_score ?? '--' }}</td>
@@ -1606,8 +1606,8 @@ const percentileTextColor = (p) => {
 
                 <!-- Empty Screening -->
                 <div v-else-if="!showScreeningForm" class="text-center py-12 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700">
-                    <div class="w-14 h-14 mx-auto rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center mb-3">
-                        <svg class="w-7 h-7 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>
+                    <div class="w-14 h-14 mx-auto rounded-full bg-slate-50 dark:bg-[#1B365D]/20 flex items-center justify-center mb-3">
+                        <svg class="w-7 h-7 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>
                     </div>
                     <p class="text-sm text-gray-500 dark:text-gray-400">{{ isRtl ? 'لا توجد فحوصات مسجلة بعد' : 'No screening tests recorded yet' }}</p>
                     <button @click="showScreeningForm = true" class="mt-3 text-sm text-emerald-600 hover:text-emerald-700 font-medium transition">

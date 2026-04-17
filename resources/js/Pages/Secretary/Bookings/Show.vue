@@ -30,12 +30,12 @@ const isConsultationBooking = computed(() => {
 });
 
 const bookingTypeColors = {
-    dermatology_consultation: 'bg-blue-50 text-blue-700 border-blue-200',
-    cosmetic_consultation: 'bg-pink-50 text-pink-700 border-pink-200',
+    dermatology_consultation: 'bg-slate-50 text-[#1B365D] border-slate-200',
+    cosmetic_consultation: 'bg-amber-50 text-[#C4A265] border-amber-200',
     service: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-    dental_consultation: 'bg-cyan-50 text-cyan-700 border-cyan-200',
+    dental_consultation: 'bg-slate-50 text-[#1B365D] border-slate-200',
     dental_service: 'bg-teal-50 text-teal-700 border-teal-200',
-    pediatric_consultation: 'bg-green-50 text-green-700 border-green-200',
+    pediatric_consultation: 'bg-emerald-50 text-emerald-700 border-emerald-200',
     pediatric_service: 'bg-lime-50 text-lime-700 border-lime-200',
 };
 
@@ -85,9 +85,9 @@ const { formatCurrency, currencyCode } = useCurrency();
 
 /* ── Status Colors ─────────────────────────────────────── */
 const bookingStatusColors = {
-    unconfirmed: 'bg-yellow-50 text-yellow-700 border-yellow-200',
-    confirmed: 'bg-blue-50 text-blue-700 border-blue-200',
-    in_progress: 'bg-indigo-50 text-indigo-700 border-indigo-200',
+    unconfirmed: 'bg-yellow-50 text-amber-700 border-yellow-200',
+    confirmed: 'bg-slate-50 text-[#1B365D] border-slate-200',
+    in_progress: 'bg-slate-50 text-[#1B365D] border-slate-200',
     completed: 'bg-emerald-50 text-emerald-700 border-emerald-200',
     cancelled: 'bg-red-50 text-red-700 border-red-200',
 };
@@ -108,23 +108,23 @@ const bookingStatusLabels = computed(() => isRtl.value ? {
 
 const appointmentStatusColors = {
     scheduled: 'bg-gray-50 text-gray-600 border-gray-200',
-    confirmed: 'bg-blue-50 text-blue-700 border-blue-200',
-    checked_in: 'bg-indigo-50 text-indigo-700 border-indigo-200',
+    confirmed: 'bg-slate-50 text-[#1B365D] border-slate-200',
+    checked_in: 'bg-slate-50 text-[#1B365D] border-slate-200',
     in_progress: 'bg-amber-50 text-amber-700 border-amber-200',
-    completed: 'bg-green-50 text-green-700 border-green-200',
+    completed: 'bg-emerald-50 text-emerald-700 border-emerald-200',
     cancelled: 'bg-red-50 text-red-700 border-red-200',
-    no_show: 'bg-orange-50 text-orange-700 border-orange-200',
+    no_show: 'bg-amber-50 text-amber-700 border-amber-200',
 };
 
 const sourceColors = {
-    website: 'bg-blue-50 text-blue-700 border-blue-200',
+    website: 'bg-slate-50 text-[#1B365D] border-slate-200',
     secretary: 'bg-teal-50 text-teal-700 border-teal-200',
 };
 
 const serviceStatusColors = {
     active: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-    pending: 'bg-yellow-50 text-yellow-700 border-yellow-200',
-    completed: 'bg-blue-50 text-blue-700 border-blue-200',
+    pending: 'bg-yellow-50 text-amber-700 border-yellow-200',
+    completed: 'bg-slate-50 text-[#1B365D] border-slate-200',
     cancelled: 'bg-red-50 text-red-700 border-red-200',
 };
 
@@ -685,7 +685,7 @@ function submitReschedule() {
                         :class="{
                             'bg-red-100 text-red-700 border-red-200': flag.severity === 'high',
                             'bg-amber-100 text-amber-700 border-amber-200': flag.severity === 'medium',
-                            'bg-blue-100 text-blue-700 border-blue-200': flag.severity === 'low',
+                            'bg-slate-100 text-[#1B365D] border-slate-200': flag.severity === 'low',
                         }">
                         <svg v-if="flag.severity === 'high'" class="w-3 h-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
@@ -713,7 +713,7 @@ function submitReschedule() {
                     </div>
                     <template v-if="booking.patient">
                         <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-teal-500 to-cyan-500 flex items-center justify-center text-white text-lg font-bold flex-shrink-0">
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-teal-500 to-[#1B365D] flex items-center justify-center text-white text-lg font-bold flex-shrink-0">
                                 {{ booking.patient.full_name?.charAt(0) || '?' }}
                             </div>
                             <div class="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -748,8 +748,8 @@ function submitReschedule() {
                             </div>
                         </div>
                         <div v-if="isUnconfirmed" class="mt-3 flex items-center gap-2 px-3 py-2 bg-yellow-50 rounded-lg border border-yellow-200">
-                            <svg class="w-4 h-4 text-yellow-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" /></svg>
-                            <p class="text-xs text-yellow-700">{{ isRtl ? 'لا يوجد مريض مرتبط. قم بتأكيد الحجز لربط مريض.' : 'No linked patient. Confirm this booking to associate a patient.' }}</p>
+                            <svg class="w-4 h-4 text-amber-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" /></svg>
+                            <p class="text-xs text-amber-700">{{ isRtl ? 'لا يوجد مريض مرتبط. قم بتأكيد الحجز لربط مريض.' : 'No linked patient. Confirm this booking to associate a patient.' }}</p>
                         </div>
                     </template>
                 </div>
@@ -775,7 +775,7 @@ function submitReschedule() {
                         <div v-if="booking.doctor">
                             <p class="text-xs text-gray-400 mb-1">{{ $t('a_requested_doctor') }}</p>
                             <div class="flex items-center gap-2">
-                                <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-blue-50 text-blue-600">
+                                <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-slate-50 text-[#1B365D]">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                                 </span>
                                 <span class="text-sm font-semibold text-gray-800">{{ booking.doctor.name_en || booking.doctor.name_ar }}</span>
@@ -793,7 +793,7 @@ function submitReschedule() {
                         <div v-if="booking.preferred_time">
                             <p class="text-xs text-gray-400 mb-1">{{ $t('a_preferred_time') }}</p>
                             <div class="flex items-center gap-2">
-                                <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-purple-50 text-purple-600">
+                                <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-slate-50 text-[#1B365D]">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                 </span>
                                 <span class="text-sm font-semibold text-gray-800">{{ formatTime(booking.preferred_time) }}</span>
@@ -862,9 +862,9 @@ function submitReschedule() {
                                         <td class="px-6 py-3">
                                             <span class="text-teal-600 font-semibold">{{ bs.completed_sessions || 0 }}</span>
                                             <span class="text-gray-400"> / {{ bs.sessions_count }}</span>
-                                            <span v-if="retouchCount(bs) > 0" class="ltr:ml-1 rtl:mr-1 text-purple-600 text-xs font-medium">(+{{ retouchCount(bs) }} {{ isRtl ? 'متابعة' : 'retouch' }})</span>
+                                            <span v-if="retouchCount(bs) > 0" class="ltr:ml-1 rtl:mr-1 text-[#1B365D] text-xs font-medium">(+{{ retouchCount(bs) }} {{ isRtl ? 'متابعة' : 'retouch' }})</span>
                                             <div class="mt-1 h-1.5 bg-gray-100 rounded-full overflow-hidden w-16">
-                                                <div class="h-full bg-gradient-to-r from-teal-500 to-cyan-500 rounded-full transition-all"
+                                                <div class="h-full bg-gradient-to-r from-teal-500 to-[#1B365D] rounded-full transition-all"
                                                      :style="{ width: (bs.sessions_count > 0 ? ((bs.completed_sessions || 0) / bs.sessions_count * 100) : 0) + '%' }"></div>
                                             </div>
                                         </td>
@@ -898,7 +898,7 @@ function submitReschedule() {
                                                             <tr v-for="appt in bs.appointments" :key="appt.id" class="hover:bg-white/60">
                                                                 <td class="py-2 pr-3 font-medium text-gray-500">
                                                                     {{ appt.session_number || '-' }}
-                                                                    <span v-if="appt.is_retouch" class="ltr:ml-1 rtl:mr-1 inline-flex px-1.5 py-0.5 rounded text-[9px] font-bold bg-purple-50 text-purple-600 border border-purple-200">{{ isRtl ? 'متابعة' : 'Retouch' }}</span>
+                                                                    <span v-if="appt.is_retouch" class="ltr:ml-1 rtl:mr-1 inline-flex px-1.5 py-0.5 rounded text-[9px] font-bold bg-slate-50 text-[#1B365D] border border-slate-200">{{ isRtl ? 'متابعة' : 'Retouch' }}</span>
                                                                 </td>
                                                                 <td class="py-2 pr-3 text-gray-700">{{ formatDate(appt.appointment_date) }}</td>
                                                                 <td class="py-2 pr-3 text-gray-600">{{ formatTime(appt.start_time) }} - {{ formatTime(appt.end_time) }}</td>
@@ -944,28 +944,28 @@ function submitReschedule() {
                 </div>
 
                 <!-- ─── Add Retouch Session ──────────────────────────── -->
-                <div v-if="canAddRetouch" class="bg-white rounded-2xl shadow-sm border border-purple-200 overflow-hidden">
+                <div v-if="canAddRetouch" class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
                     <button type="button" @click="showRetouchForm = !showRetouchForm"
-                        class="w-full px-4 sm:px-6 py-4 flex items-center justify-between bg-purple-50/80 hover:bg-purple-50 transition-colors">
+                        class="w-full px-4 sm:px-6 py-4 flex items-center justify-between bg-slate-50/80 hover:bg-slate-50 transition-colors">
                         <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 rounded-lg bg-purple-100 flex items-center justify-center">
-                                <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                            <div class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center">
+                                <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
                             </div>
-                            <h2 class="text-sm font-bold text-purple-800">{{ isRtl ? 'إضافة جلسة متابعة' : 'Add Retouch Session' }}</h2>
-                            <span class="text-xs text-purple-500 font-medium">{{ isRtl ? '(متابعة مجانية)' : '(Free follow-up)' }}</span>
+                            <h2 class="text-sm font-bold text-[#1B365D]">{{ isRtl ? 'إضافة جلسة متابعة' : 'Add Retouch Session' }}</h2>
+                            <span class="text-xs text-[#1B365D] font-medium">{{ isRtl ? '(متابعة مجانية)' : '(Free follow-up)' }}</span>
                         </div>
-                        <svg class="w-5 h-5 text-purple-600 transition-transform duration-200" :class="{ 'rotate-180': showRetouchForm }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-5 h-5 text-[#1B365D] transition-transform duration-200" :class="{ 'rotate-180': showRetouchForm }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
 
-                    <div v-if="showRetouchForm" class="p-4 sm:p-6 space-y-4 border-t border-purple-100">
+                    <div v-if="showRetouchForm" class="p-4 sm:p-6 space-y-4 border-t border-slate-100">
                         <form @submit.prevent="submitRetouch" class="space-y-4">
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <!-- Service Selection -->
                                 <div>
                                     <label class="block text-xs font-medium text-gray-500 mb-1.5">{{ isRtl ? 'الخدمة' : 'Service' }} <span class="text-red-500">*</span></label>
-                                    <select v-model="retouchForm.booking_service_id" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-purple-200 focus:border-transparent bg-white">
+                                    <select v-model="retouchForm.booking_service_id" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent bg-white">
                                         <option value="">{{ isRtl ? 'اختر الخدمة...' : 'Select service...' }}</option>
                                         <option v-for="bs in booking.booking_services" :key="bs.id" :value="bs.id">
                                             {{ bs.service?.name_en || bs.service?.name_ar || (booking.booking_type === 'dermatology_consultation' ? (isRtl ? 'استشارة جلدية' : 'Dermatology Consultation') : booking.booking_type === 'cosmetic_consultation' ? (isRtl ? 'استشارة تجميلية' : 'Cosmetic Consultation') : (isRtl ? 'خدمة' : 'Service')) }}
@@ -978,7 +978,7 @@ function submitReschedule() {
                                 <!-- Doctor Selection -->
                                 <div>
                                     <label class="block text-xs font-medium text-gray-500 mb-1.5">{{ isRtl ? 'الطبيب' : 'Doctor' }} <span class="text-red-500">*</span></label>
-                                    <select v-model="retouchForm.doctor_id" @change="fetchRetouchTimeSlots" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-purple-200 focus:border-transparent bg-white">
+                                    <select v-model="retouchForm.doctor_id" @change="fetchRetouchTimeSlots" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent bg-white">
                                         <option value="">{{ isRtl ? 'اختر الطبيب...' : 'Select doctor...' }}</option>
                                         <option v-for="d in doctors" :key="d.id" :value="d.id">{{ d.name_en || d.name_ar }}</option>
                                     </select>
@@ -988,7 +988,7 @@ function submitReschedule() {
                                 <!-- Date -->
                                 <div>
                                     <label class="block text-xs font-medium text-gray-500 mb-1.5">{{ isRtl ? 'التاريخ' : 'Date' }} <span class="text-red-500">*</span></label>
-                                    <input v-model="retouchForm.appointment_date" type="date" :min="new Date().toISOString().split('T')[0]" @change="fetchRetouchTimeSlots" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-purple-200 focus:border-transparent" />
+                                    <input v-model="retouchForm.appointment_date" type="date" :min="new Date().toISOString().split('T')[0]" @change="fetchRetouchTimeSlots" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent" />
                                     <p v-if="retouchForm.errors.appointment_date" class="mt-1 text-xs text-red-600">{{ retouchForm.errors.appointment_date }}</p>
                                 </div>
 
@@ -996,26 +996,26 @@ function submitReschedule() {
                                 <div>
                                     <label class="block text-xs font-medium text-gray-500 mb-1.5">{{ isRtl ? 'الوقت' : 'Time Slot' }} <span class="text-red-500">*</span></label>
                                     <div v-if="retouchLoadingSlots" class="text-xs text-gray-400 py-2.5">{{ isRtl ? 'جاري تحميل المواعيد المتاحة...' : 'Loading available slots...' }}</div>
-                                    <select v-else-if="retouchTimeSlots.length" v-model="retouchForm.start_time" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-purple-200 focus:border-transparent bg-white">
+                                    <select v-else-if="retouchTimeSlots.length" v-model="retouchForm.start_time" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent bg-white">
                                         <option value="">{{ isRtl ? 'اختر الوقت...' : 'Select time...' }}</option>
                                         <option v-for="slot in retouchTimeSlots" :key="slot.start || slot" :value="slot.start || slot">
                                             {{ formatTime(slot.start || slot) }} {{ slot.end ? '- ' + formatTime(slot.end) : '' }}
                                         </option>
                                     </select>
-                                    <input v-else v-model="retouchForm.start_time" type="time" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-purple-200 focus:border-transparent" />
+                                    <input v-else v-model="retouchForm.start_time" type="time" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent" />
                                     <p v-if="retouchForm.errors.start_time" class="mt-1 text-xs text-red-600">{{ retouchForm.errors.start_time }}</p>
                                 </div>
                             </div>
 
                             <!-- Info Box -->
-                            <div class="flex items-start gap-2 px-4 py-3 bg-purple-50 rounded-xl border border-purple-100">
-                                <svg class="w-4 h-4 text-purple-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                <p class="text-xs text-purple-700">{{ isRtl ? 'جلسات المتابعة مجانية. لن تتأثر الفاتورة. سيُعاد فتح الحجز حتى اكتمال جلسة المتابعة.' : 'Retouch sessions are free of charge. The invoice will not be affected. The booking will reopen until the retouch session is completed.' }}</p>
+                            <div class="flex items-start gap-2 px-4 py-3 bg-slate-50 rounded-xl border border-slate-100">
+                                <svg class="w-4 h-4 text-[#1B365D] mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                <p class="text-xs text-[#1B365D]">{{ isRtl ? 'جلسات المتابعة مجانية. لن تتأثر الفاتورة. سيُعاد فتح الحجز حتى اكتمال جلسة المتابعة.' : 'Retouch sessions are free of charge. The invoice will not be affected. The booking will reopen until the retouch session is completed.' }}</p>
                             </div>
 
                             <!-- Submit -->
                             <div class="flex items-center gap-3">
-                                <button type="submit" :disabled="retouchForm.processing" class="px-5 py-2.5 text-white rounded-xl text-sm font-semibold hover:opacity-90 transition-all disabled:opacity-50 shadow-sm bg-purple-600">
+                                <button type="submit" :disabled="retouchForm.processing" class="px-5 py-2.5 text-white rounded-xl text-sm font-semibold hover:opacity-90 transition-all disabled:opacity-50 shadow-sm bg-[#1B365D]">
                                     {{ retouchForm.processing ? (isRtl ? 'جاري الإضافة...' : 'Adding...') : (isRtl ? 'إضافة جلسة متابعة' : 'Add Retouch Session') }}
                                 </button>
                                 <button type="button" @click="showRetouchForm = false; retouchForm.reset()" class="px-5 py-2.5 border border-gray-200 text-gray-600 rounded-xl text-sm font-medium hover:bg-gray-50 transition">
@@ -1047,7 +1047,7 @@ function submitReschedule() {
                                 <tr v-for="appt in booking.appointments" :key="appt.id" class="hover:bg-gray-50/50 transition-colors">
                                     <td class="px-6 py-3 font-medium text-gray-500">
                                         {{ appt.session_number || '-' }}
-                                        <span v-if="appt.is_retouch" class="ltr:ml-1 rtl:mr-1 inline-flex px-1.5 py-0.5 rounded text-[10px] font-bold bg-purple-50 text-purple-600 border border-purple-200">{{ isRtl ? 'متابعة' : 'Retouch' }}</span>
+                                        <span v-if="appt.is_retouch" class="ltr:ml-1 rtl:mr-1 inline-flex px-1.5 py-0.5 rounded text-[10px] font-bold bg-slate-50 text-[#1B365D] border border-slate-200">{{ isRtl ? 'متابعة' : 'Retouch' }}</span>
                                     </td>
                                     <td class="px-6 py-3 text-gray-700">{{ formatDate(appt.appointment_date) }}</td>
                                     <td class="px-6 py-3 text-gray-600 hidden sm:table-cell">{{ formatTime(appt.start_time) }} - {{ formatTime(appt.end_time) }}</td>
@@ -1155,7 +1155,7 @@ function submitReschedule() {
                             v-if="hasInvoiceBalance"
                             type="button"
                             @click="openPaymentForm"
-                            class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-teal-500 to-cyan-500 text-white rounded-lg text-xs font-semibold hover:from-teal-600 hover:to-cyan-600 transition shadow-sm"
+                            class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-teal-500 to-[#1B365D] text-white rounded-lg text-xs font-semibold hover:from-teal-600 hover:to-[#1B365D] transition shadow-sm"
                         >
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
                             {{ isRtl ? 'إضافة دفعة' : 'Add Payment' }}
@@ -1228,7 +1228,7 @@ function submitReschedule() {
                             </div>
                         </div>
                         <div class="flex items-center gap-3 mt-5">
-                            <button type="submit" :disabled="paymentForm.processing" class="px-5 py-2.5 bg-gradient-to-r from-teal-500 to-cyan-500 text-white rounded-xl text-sm font-semibold hover:from-teal-600 hover:to-cyan-600 transition-all disabled:opacity-50 shadow-sm">
+                            <button type="submit" :disabled="paymentForm.processing" class="px-5 py-2.5 bg-gradient-to-r from-teal-500 to-[#1B365D] text-white rounded-xl text-sm font-semibold hover:from-teal-600 hover:to-[#1B365D] transition-all disabled:opacity-50 shadow-sm">
                                 {{ paymentForm.processing ? (isRtl ? 'جاري...' : 'Processing...') : (isRtl ? 'تسجيل الدفعة' : 'Record Payment') }}
                             </button>
                             <button type="button" @click="showPaymentForm = false" class="px-5 py-2.5 border border-gray-200 text-gray-600 rounded-xl text-sm font-medium hover:bg-gray-50 transition">
@@ -1242,7 +1242,7 @@ function submitReschedule() {
                 <div v-if="hasInvoiceBalance && !showPaymentForm && (!invoice?.payments || invoice.payments.length === 0)" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6 text-center">
                     <svg class="w-10 h-10 text-gray-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
                     <p class="text-sm text-gray-500 mb-3">{{ isRtl ? 'لا توجد مدفوعات مسجلة بعد. المتبقي:' : 'No payments recorded yet. Balance:' }} <span class="font-bold text-red-600">{{ formatCurrency(invoiceBalance) }}</span></p>
-                    <button @click="openPaymentForm" type="button" class="inline-flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-teal-500 to-cyan-500 text-white rounded-xl text-sm font-semibold hover:from-teal-600 hover:to-cyan-600 transition shadow-sm">
+                    <button @click="openPaymentForm" type="button" class="inline-flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-teal-500 to-[#1B365D] text-white rounded-xl text-sm font-semibold hover:from-teal-600 hover:to-[#1B365D] transition shadow-sm">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
                         {{ isRtl ? 'تسجيل أول دفعة' : 'Record First Payment' }}
                     </button>
@@ -1256,11 +1256,11 @@ function submitReschedule() {
                         class="w-full px-4 sm:px-6 py-4 flex items-center justify-between bg-yellow-50/80 hover:bg-yellow-50 transition-colors">
                         <div class="flex items-center gap-3">
                             <div class="w-8 h-8 rounded-lg bg-yellow-100 flex items-center justify-center">
-                                <svg class="w-4 h-4 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                             </div>
                             <h2 class="text-sm font-bold text-yellow-800">{{ isRtl ? 'تأكيد هذا الحجز' : 'Confirm This Booking' }}</h2>
                         </div>
-                        <svg class="w-5 h-5 text-yellow-600 transition-transform duration-200" :class="{ 'rotate-180': showConfirmSection }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-5 h-5 text-amber-600 transition-transform duration-200" :class="{ 'rotate-180': showConfirmSection }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
@@ -1284,7 +1284,7 @@ function submitReschedule() {
                                     <!-- Selected patient display -->
                                     <div v-if="selectedPatient" class="flex items-center justify-between px-4 py-3 border border-teal-200 rounded-xl bg-teal-50/50">
                                         <div class="flex items-center gap-3">
-                                            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-teal-500 to-cyan-500 flex items-center justify-center text-white text-xs font-bold">
+                                            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-teal-500 to-[#1B365D] flex items-center justify-center text-white text-xs font-bold">
                                                 {{ selectedPatient.full_name?.charAt(0) }}
                                             </div>
                                             <div>
@@ -1305,7 +1305,7 @@ function submitReschedule() {
                                         <div v-if="showPatientDropdown && filteredPatients.length > 0" class="absolute z-30 left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-lg max-h-48 overflow-y-auto">
                                             <button v-for="p in filteredPatients" :key="p.id" type="button" @click="selectPatient(p)"
                                                 class="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-teal-50 transition ltr:text-left rtl:ltr:text-right rtl:text-left border-b border-gray-50 last:border-b-0">
-                                                <div class="w-7 h-7 rounded-full bg-gradient-to-br from-teal-500 to-cyan-500 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                                                <div class="w-7 h-7 rounded-full bg-gradient-to-br from-teal-500 to-[#1B365D] flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
                                                     {{ p.full_name?.charAt(0) }}
                                                 </div>
                                                 <div>
@@ -1494,7 +1494,7 @@ function submitReschedule() {
 
                             <!-- Submit -->
                             <div class="flex items-center gap-3 pt-2 border-t border-gray-100">
-                                <button type="submit" :disabled="confirmProcessing" class="px-6 py-2.5 bg-gradient-to-r from-teal-500 to-cyan-500 text-white rounded-xl text-sm font-semibold hover:from-teal-600 hover:to-cyan-600 transition-all disabled:opacity-50 shadow-sm">
+                                <button type="submit" :disabled="confirmProcessing" class="px-6 py-2.5 bg-gradient-to-r from-teal-500 to-[#1B365D] text-white rounded-xl text-sm font-semibold hover:from-teal-600 hover:to-[#1B365D] transition-all disabled:opacity-50 shadow-sm">
                                     <span v-if="confirmProcessing" class="flex items-center gap-2">
                                         <svg class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/></svg>
                                         {{ isRtl ? 'جاري التأكيد...' : 'Confirming...' }}
@@ -1531,7 +1531,7 @@ function submitReschedule() {
                             <label class="block text-xs text-gray-500 mb-1.5">{{ isRtl ? 'ملاحظات الإدارة' : 'Admin Notes' }}</label>
                             <textarea v-model="statusForm.admin_notes" rows="3" class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500" :placeholder="isRtl ? 'ملاحظات داخلية...' : 'Internal notes...'"></textarea>
                         </div>
-                        <button type="submit" :disabled="statusForm.processing" class="w-full py-2.5 px-4 rounded-xl text-white font-semibold text-sm bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-600 hover:to-cyan-600 transition-all duration-300 disabled:opacity-50 shadow-sm">
+                        <button type="submit" :disabled="statusForm.processing" class="w-full py-2.5 px-4 rounded-xl text-white font-semibold text-sm bg-gradient-to-r from-teal-500 to-[#1B365D] hover:from-teal-600 hover:to-[#1B365D] transition-all duration-300 disabled:opacity-50 shadow-sm">
                             {{ statusForm.processing ? (isRtl ? 'جاري التحديث...' : 'Updating...') : (isRtl ? 'تحديث الحالة' : 'Update Status') }}
                         </button>
                     </form>
@@ -1691,7 +1691,7 @@ function submitReschedule() {
                                 <h3 class="text-lg font-bold text-gray-900">{{ isRtl ? 'تعديل الموعد' : 'Edit Appointment' }}</h3>
                                 <p class="text-xs text-gray-500 mt-0.5">
                                     {{ isRtl ? 'الجلسة' : 'Session' }} #{{ editingAppointment.session_number || '-' }}
-                                    <span v-if="editingAppointment.is_retouch" class="ltr:ml-1 rtl:mr-1 text-purple-600">({{ isRtl ? 'متابعة' : 'Retouch' }})</span>
+                                    <span v-if="editingAppointment.is_retouch" class="ltr:ml-1 rtl:mr-1 text-[#1B365D]">({{ isRtl ? 'متابعة' : 'Retouch' }})</span>
                                 </p>
                             </div>
                             <button @click="closeRescheduleModal" class="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors">

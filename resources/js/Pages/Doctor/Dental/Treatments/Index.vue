@@ -65,7 +65,7 @@ function formatDate(date) {
 const statusColors = {
     planned: 'bg-gray-100 text-gray-700',
     in_progress: 'bg-[#C4A265]/10 text-[#C4A265]',
-    completed: 'bg-green-100 text-green-700',
+    completed: 'bg-emerald-100 text-emerald-700',
     cancelled: 'bg-red-100 text-red-700',
 };
 
@@ -103,9 +103,9 @@ function advanceTreatmentStatus(treatmentId, currentStatus) {
 <template>
     <div class="space-y-6">
         <!-- Hero Header -->
-        <div class="dental-hero-enter relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6 sm:p-8">
+        <div class="dental-hero-enter relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] p-6 sm:p-8">
             <div class="absolute top-0 right-0 w-72 h-72 bg-[#C4A265]/10 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl"></div>
-            <div class="absolute bottom-0 left-0 w-48 h-48 bg-purple-500/10 rounded-full translate-y-1/2 -translate-x-1/4 blur-2xl"></div>
+            <div class="absolute bottom-0 left-0 w-48 h-48 bg-[#1B365D]/10 rounded-full translate-y-1/2 -translate-x-1/4 blur-2xl"></div>
 
             <div class="relative z-10">
                 <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-5">
@@ -218,7 +218,7 @@ function advanceTreatmentStatus(treatmentId, currentStatus) {
                                         class="inline-flex items-center gap-1 px-2 py-1 text-[10px] font-semibold rounded-lg transition-all"
                                         :class="treatment.status === 'planned'
                                             ? 'bg-[#C4A265]/10 text-[#C4A265] hover:bg-[#C4A265]/20'
-                                            : 'bg-green-50 text-green-600 hover:bg-green-100'"
+                                            : 'bg-emerald-50 text-emerald-600 hover:bg-emerald-100'"
                                         :title="nextStatusLabel[treatment.status]">
                                         <span>{{ nextStatusIcon[treatment.status] }}</span>
                                         <span class="hidden sm:inline">{{ nextStatusLabel[treatment.status] }}</span>

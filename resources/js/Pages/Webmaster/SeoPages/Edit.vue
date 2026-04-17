@@ -79,7 +79,7 @@ const descLengthClass = computed(() => {
                     <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">{{ $t('a_google_search_preview') }}</h2>
                     <div class="border border-gray-200 rounded-lg p-5 bg-gray-50/50">
                         <p class="text-xs text-emerald-700 font-medium truncate">{{ previewUrl }}</p>
-                        <h3 class="text-lg font-medium text-blue-700 hover:underline cursor-default mt-1 leading-snug">{{ previewTitle }}</h3>
+                        <h3 class="text-lg font-medium text-[#1B365D] hover:underline cursor-default mt-1 leading-snug">{{ previewTitle }}</h3>
                         <p class="text-sm text-gray-600 mt-1 leading-relaxed">{{ previewDescription }}</p>
                     </div>
                 </div>

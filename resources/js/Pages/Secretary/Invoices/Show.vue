@@ -33,7 +33,7 @@ const { formatCurrency, currencyCode } = useCurrency();
 
 const statusColors = {
     paid: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-    partial: 'bg-yellow-50 text-yellow-700 border-yellow-200',
+    partial: 'bg-yellow-50 text-amber-700 border-yellow-200',
     unpaid: 'bg-red-50 text-red-700 border-red-200',
     cancelled: 'bg-gray-50 text-gray-600 border-gray-200',
 };

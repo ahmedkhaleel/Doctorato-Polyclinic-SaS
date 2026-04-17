@@ -46,16 +46,16 @@ function submit() {
 </script>
 
 <template>
-    <div class="min-h-screen bg-gradient-to-br from-cyan-50 via-white to-teal-50 flex items-center justify-center p-4" :dir="isRtl ? 'rtl' : 'ltr'">
+    <div class="min-h-screen bg-gradient-to-br from-slate-50 via-white to-teal-50 flex items-center justify-center p-4" :dir="isRtl ? 'rtl' : 'ltr'">
         <div class="w-full max-w-lg">
             <!-- Header -->
             <div class="text-center mb-8">
-                <div class="w-16 h-16 bg-cyan-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <div class="w-16 h-16 bg-[#1B365D] rounded-2xl flex items-center justify-center mx-auto mb-4">
                     <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 </div>
                 <h1 class="text-2xl font-bold text-gray-800">{{ isRtl ? 'رأيك يهمنا' : 'Your Feedback Matters' }}</h1>
                 <p class="text-gray-500 mt-2 text-sm">{{ isRtl ? 'ساعدنا في تحسين خدماتنا' : 'Help us improve our services' }}</p>
-                <p v-if="satisfaction.doctor" class="text-cyan-600 text-sm mt-1 font-medium">
+                <p v-if="satisfaction.doctor" class="text-[#1B365D] text-sm mt-1 font-medium">
                     {{ isRtl ? satisfaction.doctor?.name_ar : satisfaction.doctor?.name_en }}
                 </p>
             </div>
@@ -90,7 +90,7 @@ function submit() {
                     </div>
 
                     <button type="button" @click="step = 2" :disabled="!form.overall_rating"
-                        class="w-full py-3 bg-cyan-600 text-white rounded-xl font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-cyan-700 transition">
+                        class="w-full py-3 bg-[#1B365D] text-white rounded-xl font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#1B365D] transition">
                         {{ isRtl ? 'التالي' : 'Next' }}
                     </button>
                 </div>
@@ -105,7 +105,7 @@ function submit() {
                         <div class="flex justify-center gap-1.5 flex-wrap">
                             <button v-for="i in 11" :key="i-1" type="button" @click="form.nps_score = i - 1"
                                 class="w-9 h-9 rounded-lg text-sm font-medium transition"
-                                :class="form.nps_score === i - 1 ? (i <= 7 ? 'bg-red-500 text-white' : i <= 9 ? 'bg-yellow-500 text-white' : 'bg-green-500 text-white') : 'bg-gray-100 text-gray-600 hover:bg-gray-200'">
+                                :class="form.nps_score === i - 1 ? (i <= 7 ? 'bg-red-500 text-white' : i <= 9 ? 'bg-amber-500 text-white' : 'bg-emerald-500 text-white') : 'bg-gray-100 text-gray-600 hover:bg-gray-200'">
                                 {{ i - 1 }}
                             </button>
                         </div>
@@ -121,7 +121,7 @@ function submit() {
                         <div class="flex justify-center gap-4">
                             <button type="button" @click="form.would_recommend = true"
                                 class="px-6 py-2 rounded-xl text-sm font-medium transition"
-                                :class="form.would_recommend === true ? 'bg-green-500 text-white' : 'bg-gray-100 text-gray-600 hover:bg-green-50'">
+                                :class="form.would_recommend === true ? 'bg-emerald-500 text-white' : 'bg-gray-100 text-gray-600 hover:bg-emerald-50'">
                                 {{ isRtl ? 'نعم' : 'Yes' }} 👍
                             </button>
                             <button type="button" @click="form.would_recommend = false"
@@ -138,7 +138,7 @@ function submit() {
                         <div class="flex flex-wrap gap-2">
                             <button v-for="(label, key) in improvementAreas" :key="key" type="button" @click="toggleArea(key)"
                                 class="px-3 py-1.5 rounded-full text-xs font-medium transition"
-                                :class="form.improvement_areas.includes(key) ? 'bg-cyan-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'">
+                                :class="form.improvement_areas.includes(key) ? 'bg-[#1B365D] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'">
                                 {{ isRtl ? label.ar : label.en }}
                             </button>
                         </div>
@@ -148,7 +148,7 @@ function submit() {
                     <div>
                         <label class="block text-sm font-bold text-gray-700 mb-2">{{ isRtl ? 'تعليقات إضافية' : 'Additional Comments' }}</label>
                         <textarea v-model="form.comments" rows="3" :placeholder="isRtl ? 'أخبرنا المزيد...' : 'Tell us more...'"
-                            class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-cyan-500 focus:border-cyan-500 resize-none" />
+                            class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-[#1B365D] focus:border-[#1B365D] resize-none" />
                     </div>
 
                     <div class="flex gap-3">
@@ -156,7 +156,7 @@ function submit() {
                             {{ isRtl ? 'رجوع' : 'Back' }}
                         </button>
                         <button type="submit" :disabled="submitting"
-                            class="flex-1 py-3 bg-cyan-600 text-white rounded-xl font-medium disabled:opacity-50 hover:bg-cyan-700 transition">
+                            class="flex-1 py-3 bg-[#1B365D] text-white rounded-xl font-medium disabled:opacity-50 hover:bg-[#1B365D] transition">
                             {{ submitting ? (isRtl ? 'جاري الإرسال...' : 'Submitting...') : (isRtl ? 'إرسال التقييم' : 'Submit Feedback') }}
                         </button>
                     </div>

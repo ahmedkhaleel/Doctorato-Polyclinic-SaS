@@ -20,8 +20,8 @@ function $localized(obj, field) {
 
 const statusConfig = {
     pending: { ar: 'بانتظار الحجز', en: 'Pending', color: 'bg-amber-100 text-amber-700', dot: 'bg-amber-400' },
-    sms_sent: { ar: 'تم إرسال SMS', en: 'SMS Sent', color: 'bg-blue-100 text-blue-700', dot: 'bg-blue-400' },
-    booking_created: { ar: 'تم الحجز', en: 'Booked', color: 'bg-green-100 text-green-700', dot: 'bg-green-400' },
+    sms_sent: { ar: 'تم إرسال SMS', en: 'SMS Sent', color: 'bg-slate-100 text-[#1B365D]', dot: 'bg-slate-400' },
+    booking_created: { ar: 'تم الحجز', en: 'Booked', color: 'bg-emerald-100 text-emerald-700', dot: 'bg-emerald-400' },
     completed: { ar: 'مكتمل', en: 'Completed', color: 'bg-gray-100 text-gray-600', dot: 'bg-gray-400' },
     cancelled: { ar: 'ملغي', en: 'Cancelled', color: 'bg-red-100 text-red-600', dot: 'bg-red-400' },
     skipped: { ar: 'تم تخطيه', en: 'Skipped', color: 'bg-gray-100 text-gray-500', dot: 'bg-gray-300' },
@@ -98,7 +98,7 @@ function daysUntil(dateStr) {
         <div v-if="followups.last_page > 1" class="flex justify-center mt-6 gap-1">
             <Link v-for="link in followups.links" :key="link.label"
                 :href="link.url || '#'"
-                :class="['px-3 py-1.5 text-xs rounded-lg border', link.active ? 'bg-cyan-600 text-white border-cyan-600' : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50']"
+                :class="['px-3 py-1.5 text-xs rounded-lg border', link.active ? 'bg-[#1B365D] text-white border-[#1B365D]' : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50']"
                 v-html="link.label" preserve-state />
         </div>
     </div>

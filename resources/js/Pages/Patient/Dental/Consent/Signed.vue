@@ -28,7 +28,7 @@ function formatDate(date) {
     <div class="max-w-lg mx-auto text-center py-8">
         <!-- Success: Signed -->
         <div v-if="isSigned" class="consent-result-enter">
-            <div class="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-br from-green-400 to-emerald-500 flex items-center justify-center shadow-xl shadow-green-200/50">
+            <div class="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-500 flex items-center justify-center shadow-xl shadow-green-200/50">
                 <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                 </svg>
@@ -44,14 +44,14 @@ function formatDate(date) {
                 {{ isRtl ? 'تاريخ التوقيع:' : 'Signed on:' }} {{ formatDate(consent.signed_at) }}
             </p>
 
-            <div class="bg-green-50 border border-green-100 rounded-2xl p-5 mb-8 text-start">
+            <div class="bg-emerald-50 border border-emerald-100 rounded-2xl p-5 mb-8 text-start">
                 <div class="flex items-start gap-3">
-                    <svg class="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <div>
-                        <p class="text-sm text-green-700 font-medium">{{ isRtl ? 'ماذا يحدث الآن؟' : 'What happens next?' }}</p>
-                        <p class="text-sm text-green-600 mt-1">
+                        <p class="text-sm text-emerald-700 font-medium">{{ isRtl ? 'ماذا يحدث الآن؟' : 'What happens next?' }}</p>
+                        <p class="text-sm text-emerald-600 mt-1">
                             {{ isRtl
                                 ? 'سيقوم فريق العيادة بمراجعة موافقتك والبدء في تنفيذ خطة العلاج. ستتلقى إشعاراً عند حجز موعدك القادم.'
                                 : 'The clinic team will review your consent and begin executing the treatment plan. You will be notified when your next appointment is scheduled.'
@@ -70,7 +70,7 @@ function formatDate(date) {
 
         <!-- Declined -->
         <div v-else-if="isDeclined" class="consent-result-enter">
-            <div class="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-br from-red-400 to-rose-500 flex items-center justify-center shadow-xl shadow-red-200/50">
+            <div class="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-br from-red-400 to-[#C4A265] flex items-center justify-center shadow-xl shadow-red-200/50">
                 <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
@@ -87,7 +87,7 @@ function formatDate(date) {
         <!-- Navigation -->
         <div class="flex flex-col sm:flex-row gap-3 justify-center">
             <Link :href="lp('/dental/treatment-plans')"
-                class="inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-medium text-cyan-600 bg-cyan-50 border border-cyan-100 rounded-xl hover:bg-cyan-100 transition-all">
+                class="inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-medium text-[#1B365D] bg-slate-50 border border-slate-100 rounded-xl hover:bg-slate-100 transition-all">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                 </svg>

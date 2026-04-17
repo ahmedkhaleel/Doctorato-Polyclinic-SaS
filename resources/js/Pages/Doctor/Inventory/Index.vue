@@ -78,7 +78,7 @@ onMounted(() => { requestAnimationFrame(() => { mounted.value = true; }); });
     <div class="space-y-4 sm:space-y-6">
         <!-- Hero Header -->
         <div
-            class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6 sm:p-8 transition-all duration-700"
+            class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] p-6 sm:p-8 transition-all duration-700"
             :style="{ opacity: mounted ? 1 : 0, transform: mounted ? 'translateY(0)' : 'translateY(12px)', transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }"
         >
             <div class="absolute top-0 right-0 w-64 h-64 bg-[#C4A265]/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl"></div>
@@ -157,7 +157,7 @@ onMounted(() => { requestAnimationFrame(() => { mounted.value = true; }); });
                             <span
                                 v-if="supply.module && supply.module !== 'shared'"
                                 class="px-1.5 py-0.5 rounded text-[9px] font-bold uppercase"
-                                :class="supply.module === 'dental' ? 'bg-sky-100 text-sky-700' : 'bg-rose-100 text-rose-700'"
+                                :class="supply.module === 'dental' ? 'bg-slate-100 text-[#1B365D]' : 'bg-amber-100 text-[#C4A265]'"
                             >{{ supply.module }}</span>
                             <span
                                 v-if="isLowStock(supply)"

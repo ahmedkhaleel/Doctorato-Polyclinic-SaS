@@ -139,7 +139,7 @@ function getVisitTypeLabel(visit) {
 <template>
     <div class="space-y-6">
         <!-- Hero Header -->
-        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6 sm:p-8"
+        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] p-6 sm:p-8"
             :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
             style="transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1)"
         >
@@ -298,11 +298,11 @@ function getVisitTypeLabel(visit) {
             <!-- In Progress -->
             <div class="bg-white rounded-xl border border-gray-100 p-4 shadow-sm hover:shadow-md transition-shadow duration-200">
                 <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
-                        <svg class="w-4.5 h-4.5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                    <div class="w-9 h-9 rounded-lg bg-slate-50 flex items-center justify-center flex-shrink-0">
+                        <svg class="w-4.5 h-4.5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
                     </div>
                     <div class="min-w-0">
-                        <p class="text-lg font-bold text-blue-600">{{ stats.in_progress }}</p>
+                        <p class="text-lg font-bold text-[#1B365D]">{{ stats.in_progress }}</p>
                         <p class="text-[10px] text-gray-400 font-medium uppercase tracking-wide truncate">{{ isRtl ? 'جارٍ' : 'Active' }}</p>
                     </div>
                 </div>
@@ -410,7 +410,7 @@ function getVisitTypeLabel(visit) {
                         :class="[statusConfig[visit.status]?.bg, statusConfig[visit.status]?.border]"
                     >
                         <svg v-if="visit.status === 'waiting'" class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                        <svg v-else-if="visit.status === 'in_progress'" class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                        <svg v-else-if="visit.status === 'in_progress'" class="w-5 h-5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
                         <svg v-else-if="visit.status === 'completed'" class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
                         <svg v-else class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                     </div>
@@ -420,7 +420,7 @@ function getVisitTypeLabel(visit) {
                         <div class="flex items-center gap-2">
                             <p class="text-sm font-semibold text-gray-800 truncate group-hover:text-gray-900 transition-colors">{{ visit.patient?.full_name }}</p>
                             <span v-if="visit.patient?.file_number" class="flex-shrink-0 font-mono text-[10px] text-gray-400">{{ visit.patient.file_number }}</span>
-                            <span v-if="visit.package_bundle_booking_id" class="flex-shrink-0 inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-bold bg-purple-50 text-purple-600 border border-purple-200">
+                            <span v-if="visit.package_bundle_booking_id" class="flex-shrink-0 inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-bold bg-slate-50 text-[#1B365D] border border-slate-200">
                                 <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
                                 {{ isRtl ? 'باقة' : 'PKG' }}
                             </span>
@@ -429,7 +429,7 @@ function getVisitTypeLabel(visit) {
                             <span class="text-xs text-gray-500">{{ getVisitTypeLabel(visit) }}</span>
                             <template v-if="visit.package_bundle_booking?.package_bundle">
                                 <span class="text-gray-200">&middot;</span>
-                                <span class="text-xs text-purple-500 font-medium truncate">{{ isRtl ? (visit.package_bundle_booking.package_bundle.name_ar || visit.package_bundle_booking.package_bundle.name_en) : (visit.package_bundle_booking.package_bundle.name_en || visit.package_bundle_booking.package_bundle.name_ar) }}</span>
+                                <span class="text-xs text-[#1B365D] font-medium truncate">{{ isRtl ? (visit.package_bundle_booking.package_bundle.name_ar || visit.package_bundle_booking.package_bundle.name_en) : (visit.package_bundle_booking.package_bundle.name_en || visit.package_bundle_booking.package_bundle.name_ar) }}</span>
                             </template>
                             <span class="text-gray-200">&middot;</span>
                             <span class="text-xs text-gray-400 flex items-center gap-1">
@@ -519,7 +519,7 @@ function getVisitTypeLabel(visit) {
                                 <p class="text-sm font-semibold text-gray-800 truncate group-hover:text-gray-900">{{ visit.patient?.full_name }}</p>
                                 <div class="flex items-center gap-1.5 mt-0.5">
                                     <span v-if="visit.patient?.file_number" class="font-mono text-[10px] text-gray-400">{{ visit.patient.file_number }}</span>
-                                    <span v-if="visit.package_bundle_booking_id" class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[9px] font-bold bg-purple-50 text-purple-600 border border-purple-200">
+                                    <span v-if="visit.package_bundle_booking_id" class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[9px] font-bold bg-slate-50 text-[#1B365D] border border-slate-200">
                                         <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
                                         {{ isRtl ? 'باقة' : 'PKG' }}
                                     </span>
@@ -540,7 +540,7 @@ function getVisitTypeLabel(visit) {
                         </div>
 
                         <!-- Package name if exists -->
-                        <div v-if="visit.package_bundle_booking?.package_bundle" class="flex items-center gap-1.5 text-xs text-purple-500 font-medium">
+                        <div v-if="visit.package_bundle_booking?.package_bundle" class="flex items-center gap-1.5 text-xs text-[#1B365D] font-medium">
                             <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
                             <span class="truncate">{{ isRtl ? (visit.package_bundle_booking.package_bundle.name_ar || visit.package_bundle_booking.package_bundle.name_en) : (visit.package_bundle_booking.package_bundle.name_en || visit.package_bundle_booking.package_bundle.name_ar) }}</span>
                         </div>

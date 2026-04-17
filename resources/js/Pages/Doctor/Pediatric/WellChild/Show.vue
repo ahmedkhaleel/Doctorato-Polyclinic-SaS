@@ -96,7 +96,7 @@ function initializeSchedule() {
 function statusColor(status) {
     return {
         completed: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400',
-        scheduled: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
+        scheduled: 'bg-slate-100 text-[#1B365D] dark:bg-[#1B365D]/30 dark:text-slate-400',
         missed: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
         skipped: 'bg-gray-100 text-gray-500 dark:bg-gray-700/30 dark:text-gray-400',
         upcoming: 'bg-gray-50 text-gray-400 dark:bg-gray-800 dark:text-gray-500',
@@ -118,7 +118,7 @@ function statusLabel(status) {
 function dotColor(status) {
     return {
         completed: 'bg-emerald-500',
-        scheduled: 'bg-blue-500',
+        scheduled: 'bg-[#1B365D]',
         missed: 'bg-red-500',
         skipped: 'bg-gray-400',
         upcoming: 'bg-gray-300 dark:bg-gray-600',
@@ -130,7 +130,7 @@ function dotColor(status) {
     <div class="space-y-5">
         <!-- ═══════════ HEADER ═══════════ -->
         <div
-            class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-600 via-green-500 to-teal-500 transition-all duration-700"
+            class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-600 via-emerald-500 to-teal-500 transition-all duration-700"
             :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
         >
             <div class="absolute top-0 right-0 w-72 h-72 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/3"></div>
@@ -142,7 +142,7 @@ function dotColor(status) {
 
                 <div class="flex items-center gap-4">
                     <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-white text-xl font-bold ring-4 ring-white/20 shadow-lg"
-                        :class="patient.gender === 'male' ? 'bg-blue-500/40' : patient.gender === 'female' ? 'bg-pink-500/40' : 'bg-white/20'">
+                        :class="patient.gender === 'male' ? 'bg-[#1B365D]/40' : patient.gender === 'female' ? 'bg-[#C4A265]/40' : 'bg-white/20'">
                         {{ (patient.full_name || 'P').charAt(0).toUpperCase() }}
                     </div>
                     <div>

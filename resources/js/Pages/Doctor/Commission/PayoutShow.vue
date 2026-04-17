@@ -72,7 +72,7 @@ function formatDateTime(d) {
 <template>
     <div class="space-y-6">
         <!-- Hero Header -->
-        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6 sm:p-8"
+        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] p-6 sm:p-8"
             :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
             style="transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1)"
         >
@@ -160,8 +160,8 @@ function formatDateTime(d) {
                     style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.25s"
                 >
                     <div class="px-4 sm:px-6 py-4 border-b border-gray-100 flex items-center gap-2">
-                        <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
-                            <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
+                        <div class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center">
+                            <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
                         </div>
                         <h2 class="text-sm font-bold text-gray-800">{{ isRtl ? 'الزيارات المشمولة' : 'Included Visits' }}</h2>
                         <span class="ml-auto text-xs font-semibold text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">{{ payout.total_visits }}</span>
@@ -344,8 +344,8 @@ function formatDateTime(d) {
                     style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.4s"
                 >
                     <div class="px-3 sm:px-5 py-3.5 border-b border-gray-100 flex items-center gap-2">
-                        <div class="w-7 h-7 rounded-lg bg-purple-50 flex items-center justify-center">
-                            <svg class="w-3.5 h-3.5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        <div class="w-7 h-7 rounded-lg bg-slate-50 flex items-center justify-center">
+                            <svg class="w-3.5 h-3.5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                         </div>
                         <h3 class="text-sm font-bold text-gray-800">{{ isRtl ? 'التفاصيل' : 'Details' }}</h3>
                     </div>
@@ -379,8 +379,8 @@ function formatDateTime(d) {
                     style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.45s"
                 >
                     <div class="px-3 sm:px-5 py-3.5 border-b border-gray-100 flex items-center gap-2">
-                        <div class="w-7 h-7 rounded-lg bg-cyan-50 flex items-center justify-center">
-                            <svg class="w-3.5 h-3.5 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" /></svg>
+                        <div class="w-7 h-7 rounded-lg bg-slate-50 flex items-center justify-center">
+                            <svg class="w-3.5 h-3.5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" /></svg>
                         </div>
                         <h3 class="text-sm font-bold text-gray-800">{{ isRtl ? 'ملاحظات' : 'Notes' }}</h3>
                     </div>

@@ -67,7 +67,7 @@ onMounted(() => {
     <div>
         <!-- HERO HEADER -->
         <div
-            class="relative -mx-4 sm:-mx-6 lg:-mx-8 -mt-4 sm:-mt-6 mb-8 px-4 sm:px-6 lg:px-8 pt-8 pb-10 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 overflow-hidden transition-all duration-700"
+            class="relative -mx-4 sm:-mx-6 lg:-mx-8 -mt-4 sm:-mt-6 mb-8 px-4 sm:px-6 lg:px-8 pt-8 pb-10 bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] overflow-hidden transition-all duration-700"
             :class="headerLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'"
         >
             <div class="absolute inset-0 opacity-10" style="background: radial-gradient(circle at 30% 50%, #4CAF50 0%, transparent 40%), radial-gradient(circle at 70% 50%, #0d9488 0%, transparent 50%)"></div>
@@ -145,13 +145,13 @@ onMounted(() => {
                             </Link>
                             <div class="flex items-center gap-2 mt-1 flex-wrap">
                                 <span class="text-xs font-mono font-semibold text-[#0d9488]">{{ patient.file_number || '-' }}</span>
-                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-green-50 text-green-700 border border-green-200">
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
                                     <svg class="w-3 h-3 ltr:mr-0.5 rtl:ml-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                     {{ calculateAge(patient.date_of_birth) }}
                                 </span>
                                 <span
                                     class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold border"
-                                    :class="patient.gender === 'male' ? 'bg-blue-50 text-blue-600 border-blue-200' : 'bg-pink-50 text-pink-600 border-pink-200'"
+                                    :class="patient.gender === 'male' ? 'bg-slate-50 text-[#1B365D] border-slate-200' : 'bg-amber-50 text-[#C4A265] border-amber-200'"
                                 >
                                     {{ genderLabels[patient.gender] || '-' }}
                                 </span>
@@ -186,7 +186,7 @@ onMounted(() => {
                         </Link>
                         <Link
                             :href="`/secretary/pediatric/patients/${patient.id}/edit`"
-                            class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-xl transition-colors"
+                            class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-[#1B365D] bg-slate-50 hover:bg-slate-100 rounded-xl transition-colors"
                         >
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
                             {{ isRtl ? 'تعديل' : 'Edit' }}
@@ -198,8 +198,8 @@ onMounted(() => {
 
         <!-- Empty State -->
         <div v-if="!patients.data || patients.data.length === 0" class="py-16 text-center">
-            <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-green-50 flex items-center justify-center">
-                <svg class="w-8 h-8 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+            <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-emerald-50 flex items-center justify-center">
+                <svg class="w-8 h-8 text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
             </div>
             <p class="text-sm font-semibold text-gray-500">{{ isRtl ? 'لا يوجد مرضى أطفال' : 'No pediatric patients found' }}</p>
             <p class="text-xs text-gray-400 mt-1">{{ isRtl ? 'جرب تغيير البحث أو سجّل مريض جديد' : 'Try adjusting your search or register a new patient' }}</p>

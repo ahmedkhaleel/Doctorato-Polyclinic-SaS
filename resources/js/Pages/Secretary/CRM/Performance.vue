@@ -71,8 +71,8 @@ const achievements = computed(() => {
 
     if (s >= 7) badges.push({ icon: 'M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z', en: `${s}-Day Streak`, ar: `سلسلة ${s} يوم`, color: 'bg-amber-100 text-amber-700 border-amber-200' });
     if ((props.conversionRate || 0) >= 20) badges.push({ icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z', en: 'High Converter', ar: 'محوّل متميز', color: 'bg-emerald-100 text-emerald-700 border-emerald-200' });
-    if ((props.avgResponseTime || 99) <= 2) badges.push({ icon: 'M13 10V3L4 14h7v7l9-11h-7z', en: 'Speed Demon', ar: 'سرعة البرق', color: 'bg-blue-100 text-blue-700 border-blue-200' });
-    if ((m.total_activities || 0) >= 50) badges.push({ icon: 'M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z', en: 'Super Active', ar: 'نشاط خارق', color: 'bg-purple-100 text-purple-700 border-purple-200' });
+    if ((props.avgResponseTime || 99) <= 2) badges.push({ icon: 'M13 10V3L4 14h7v7l9-11h-7z', en: 'Speed Demon', ar: 'سرعة البرق', color: 'bg-slate-100 text-[#1B365D] border-slate-200' });
+    if ((m.total_activities || 0) >= 50) badges.push({ icon: 'M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z', en: 'Super Active', ar: 'نشاط خارق', color: 'bg-slate-100 text-[#1B365D] border-slate-200' });
     if ((m.follow_ups_completed || 0) > 0 && (m.follow_ups_missed || 0) === 0) badges.push({ icon: 'M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z', en: 'Zero Missed', ar: 'صفر فائت', color: 'bg-teal-100 text-teal-700 border-teal-200' });
 
     return badges;
@@ -282,11 +282,11 @@ const streakMessage = computed(() => {
                 </div>
             </div>
             <!-- Activities Goal -->
-            <div class="rounded-xl border border-slate-100 p-4 bg-gradient-to-br from-blue-50/50 to-white">
+            <div class="rounded-xl border border-slate-100 p-4 bg-gradient-to-br from-slate-50/50 to-white">
                 <div class="flex items-center justify-between mb-3">
                     <div class="flex items-center gap-2">
-                        <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                            <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                        <div class="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center">
+                            <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                         </div>
                         <span class="text-xs font-medium text-slate-600">{{ isRtl ? 'النشاطات' : 'Activities' }}</span>
                     </div>
@@ -466,11 +466,11 @@ const streakMessage = computed(() => {
         </h3>
         <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
             <div v-for="item in [
-                { key: 'calls', label: { en: 'Calls', ar: 'مكالمات' }, gradient: 'from-green-500 to-emerald-500', bg: 'bg-green-50', text: 'text-green-700', icon: 'M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z' },
+                { key: 'calls', label: { en: 'Calls', ar: 'مكالمات' }, gradient: 'from-emerald-500 to-emerald-500', bg: 'bg-emerald-50', text: 'text-emerald-700', icon: 'M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z' },
                 { key: 'whatsapp', label: { en: 'WhatsApp', ar: 'واتساب' }, gradient: 'from-emerald-500 to-teal-500', bg: 'bg-emerald-50', text: 'text-emerald-700', icon: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z' },
-                { key: 'emails', label: { en: 'Emails', ar: 'بريد' }, gradient: 'from-blue-500 to-indigo-500', bg: 'bg-blue-50', text: 'text-blue-700', icon: 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z' },
-                { key: 'meetings', label: { en: 'Meetings', ar: 'اجتماعات' }, gradient: 'from-amber-500 to-orange-500', bg: 'bg-amber-50', text: 'text-amber-700', icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z' },
-                { key: 'follow_ups_completed', label: { en: 'Follow-ups', ar: 'متابعات' }, gradient: 'from-teal-500 to-cyan-500', bg: 'bg-teal-50', text: 'text-teal-700', icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' },
+                { key: 'emails', label: { en: 'Emails', ar: 'بريد' }, gradient: 'from-[#1B365D] to-[#1B365D]', bg: 'bg-slate-50', text: 'text-[#1B365D]', icon: 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z' },
+                { key: 'meetings', label: { en: 'Meetings', ar: 'اجتماعات' }, gradient: 'from-amber-500 to-amber-500', bg: 'bg-amber-50', text: 'text-amber-700', icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z' },
+                { key: 'follow_ups_completed', label: { en: 'Follow-ups', ar: 'متابعات' }, gradient: 'from-teal-500 to-[#1B365D]', bg: 'bg-teal-50', text: 'text-teal-700', icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' },
             ]" :key="item.key"
                 class="rounded-xl p-4 text-center border border-slate-100 hover:shadow-md transition-all duration-200"
                 :class="item.bg">
@@ -532,8 +532,8 @@ const streakMessage = computed(() => {
             <div :class="['grid grid-cols-3 gap-3 transition-all duration-700', mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6']"
                  :style="{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)', transitionDelay: '500ms' }">
                 <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-4 text-center">
-                    <div class="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center mx-auto mb-2">
-                        <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                    <div class="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center mx-auto mb-2">
+                        <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                     </div>
                     <p class="text-2xl font-bold text-slate-800">{{ monthlyStats?.follow_ups_completed || 0 }}</p>
                     <p class="text-[10px] text-slate-500 mt-1">{{ isRtl ? 'متابعات مكتملة' : 'Completed' }}</p>
@@ -563,7 +563,7 @@ const streakMessage = computed(() => {
                 </h3>
                 <div class="space-y-3">
                     <div v-for="item in [
-                        { label: { en: 'New leads added', ar: 'عملاء جدد' }, value: monthlyStats?.leads_created || 0, color: 'text-blue-600' },
+                        { label: { en: 'New leads added', ar: 'عملاء جدد' }, value: monthlyStats?.leads_created || 0, color: 'text-[#1B365D]' },
                         { label: { en: 'Leads converted', ar: 'تم تحويلهم' }, value: monthlyStats?.leads_converted || 0, color: 'text-emerald-600' },
                         { label: { en: 'Total activities', ar: 'إجمالي النشاطات' }, value: monthlyStats?.total_activities || 0, color: 'text-teal-600' },
                     ]" :key="item.label.en"
@@ -621,7 +621,7 @@ const streakMessage = computed(() => {
                         <!-- Activities Goal -->
                         <div>
                             <label class="block text-sm font-medium text-slate-700 mb-2 flex items-center gap-2">
-                                <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                                <svg class="w-4 h-4 text-[#1B365D]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                                 {{ isRtl ? 'هدف النشاطات الشهرية' : 'Monthly Activities Target' }}
                             </label>
                             <input v-model.number="editGoals.activities" type="number" min="1" max="9999"

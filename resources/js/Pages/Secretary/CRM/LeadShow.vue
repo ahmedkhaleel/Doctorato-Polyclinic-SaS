@@ -74,13 +74,13 @@ const statusLabels = {
 };
 
 const statusColors = {
-    new: 'bg-blue-100 text-blue-800',
-    contacted: 'bg-cyan-100 text-cyan-800',
+    new: 'bg-slate-100 text-[#1B365D]',
+    contacted: 'bg-slate-100 text-[#1B365D]',
     qualified: 'bg-teal-100 text-teal-800',
     appointment_booked: 'bg-emerald-100 text-emerald-800',
-    consultation_done: 'bg-green-100 text-green-800',
+    consultation_done: 'bg-emerald-100 text-emerald-800',
     negotiation: 'bg-amber-100 text-amber-800',
-    converted: 'bg-purple-100 text-purple-800',
+    converted: 'bg-slate-100 text-[#1B365D]',
     lost: 'bg-red-100 text-red-800',
     dormant: 'bg-gray-100 text-gray-800',
 };
@@ -88,10 +88,10 @@ const statusColors = {
 const priorityDisplay = {
     1: { color: 'bg-red-100 text-red-700', label: { en: 'Hot', ar: 'ساخن' }, icon: 'M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z' },
     2: { color: 'bg-amber-100 text-amber-700', label: { en: 'Warm', ar: 'دافئ' }, icon: 'M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z' },
-    3: { color: 'bg-blue-100 text-blue-700', label: { en: 'Cold', ar: 'بارد' }, icon: 'M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z' },
+    3: { color: 'bg-slate-100 text-[#1B365D]', label: { en: 'Cold', ar: 'بارد' }, icon: 'M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z' },
     hot: { color: 'bg-red-100 text-red-700', label: { en: 'Hot', ar: 'ساخن' }, icon: 'M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z' },
     warm: { color: 'bg-amber-100 text-amber-700', label: { en: 'Warm', ar: 'دافئ' }, icon: 'M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z' },
-    cold: { color: 'bg-blue-100 text-blue-700', label: { en: 'Cold', ar: 'بارد' }, icon: 'M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z' },
+    cold: { color: 'bg-slate-100 text-[#1B365D]', label: { en: 'Cold', ar: 'بارد' }, icon: 'M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z' },
 };
 
 // Status form
@@ -109,7 +109,7 @@ const priorityChanging = ref(false);
 const priorityOptions = [
     { value: 1, en: 'Hot', ar: '\u0633\u0627\u062E\u0646', color: 'bg-red-100 text-red-700 border-red-300 hover:bg-red-200' },
     { value: 2, en: 'Warm', ar: '\u062F\u0627\u0641\u0626', color: 'bg-amber-100 text-amber-700 border-amber-300 hover:bg-amber-200' },
-    { value: 3, en: 'Cold', ar: '\u0628\u0627\u0631\u062F', color: 'bg-blue-100 text-blue-700 border-blue-300 hover:bg-blue-200' },
+    { value: 3, en: 'Cold', ar: '\u0628\u0627\u0631\u062F', color: 'bg-slate-100 text-[#1B365D] border-slate-300 hover:bg-slate-200' },
 ];
 
 function changePriority(newPriority) {
@@ -149,16 +149,16 @@ const activityTypes = [
 
 const activityTypeColors = {
     note: 'text-gray-500 bg-gray-100',
-    call: 'text-green-600 bg-green-100',
+    call: 'text-emerald-600 bg-emerald-100',
     whatsapp: 'text-emerald-600 bg-emerald-100',
-    email: 'text-blue-600 bg-blue-100',
-    sms: 'text-purple-600 bg-purple-100',
+    email: 'text-[#1B365D] bg-slate-100',
+    sms: 'text-[#1B365D] bg-slate-100',
     meeting: 'text-amber-600 bg-amber-100',
-    status_change: 'text-indigo-600 bg-indigo-100',
-    assignment: 'text-pink-600 bg-pink-100',
+    status_change: 'text-[#1B365D] bg-slate-100',
+    assignment: 'text-[#C4A265] bg-amber-100',
     system: 'text-gray-500 bg-gray-100',
-    follow_up_scheduled: 'text-cyan-600 bg-cyan-100',
-    follow_up_completed: 'text-green-600 bg-green-100',
+    follow_up_scheduled: 'text-[#1B365D] bg-slate-100',
+    follow_up_completed: 'text-emerald-600 bg-emerald-100',
     booking_created: 'text-teal-600 bg-teal-100',
     visit_completed: 'text-emerald-600 bg-emerald-100',
     payment_received: 'text-amber-600 bg-amber-100',
@@ -229,10 +229,10 @@ function missFollowUp(fuId) {
 
 const followUpStatusColors = {
     pending: 'bg-amber-100 text-amber-800 border-amber-200',
-    completed: 'bg-green-100 text-green-800 border-green-200',
+    completed: 'bg-emerald-100 text-emerald-800 border-emerald-200',
     missed: 'bg-red-100 text-red-800 border-red-200',
     cancelled: 'bg-gray-100 text-gray-700 border-gray-200',
-    rescheduled: 'bg-blue-100 text-blue-800 border-blue-200',
+    rescheduled: 'bg-slate-100 text-[#1B365D] border-slate-200',
 };
 
 const followUpStatusLabels = {
@@ -600,10 +600,10 @@ const activityTypeSummary = computed(() => {
     const acts = props.activities || [];
     if (!acts.length) return [];
     const types = [
-        { key: 'call', en: 'Calls', ar: '\u0645\u0643\u0627\u0644\u0645\u0627\u062A', color: 'bg-green-100 text-green-700', iconColor: 'text-green-500' },
+        { key: 'call', en: 'Calls', ar: '\u0645\u0643\u0627\u0644\u0645\u0627\u062A', color: 'bg-emerald-100 text-emerald-700', iconColor: 'text-emerald-500' },
         { key: 'whatsapp', en: 'WhatsApp', ar: '\u0648\u0627\u062A\u0633\u0627\u0628', color: 'bg-emerald-100 text-emerald-700', iconColor: 'text-emerald-500' },
-        { key: 'email', en: 'Email', ar: '\u0628\u0631\u064A\u062F', color: 'bg-blue-100 text-blue-700', iconColor: 'text-blue-500' },
-        { key: 'sms', en: 'SMS', ar: '\u0631\u0633\u0627\u0626\u0644', color: 'bg-cyan-100 text-cyan-700', iconColor: 'text-cyan-500' },
+        { key: 'email', en: 'Email', ar: '\u0628\u0631\u064A\u062F', color: 'bg-slate-100 text-[#1B365D]', iconColor: 'text-[#1B365D]' },
+        { key: 'sms', en: 'SMS', ar: '\u0631\u0633\u0627\u0626\u0644', color: 'bg-slate-100 text-[#1B365D]', iconColor: 'text-[#1B365D]' },
         { key: 'meeting', en: 'Meetings', ar: '\u0627\u062C\u062A\u0645\u0627\u0639\u0627\u062A', color: 'bg-amber-100 text-amber-700', iconColor: 'text-amber-500' },
         { key: 'note', en: 'Notes', ar: '\u0645\u0644\u0627\u062D\u0638\u0627\u062A', color: 'bg-gray-100 text-gray-700', iconColor: 'text-gray-500' },
     ];
@@ -760,13 +760,13 @@ const actOutcomeOpen = ref(false);
 const actOutcomeRef = ref(null);
 const outcomeOptions = [
     { value: '', label: { en: '-- Select --', ar: '-- اختر --' }, color: '' },
-    { value: 'answered', label: { en: 'Answered', ar: 'تم الرد' }, color: 'bg-green-100 text-green-700' },
+    { value: 'answered', label: { en: 'Answered', ar: 'تم الرد' }, color: 'bg-emerald-100 text-emerald-700' },
     { value: 'no_answer', label: { en: 'No Answer', ar: 'لا رد' }, color: 'bg-red-100 text-red-700' },
     { value: 'busy', label: { en: 'Busy', ar: 'مشغول' }, color: 'bg-amber-100 text-amber-700' },
-    { value: 'voicemail', label: { en: 'Voicemail', ar: 'بريد صوتي' }, color: 'bg-purple-100 text-purple-700' },
+    { value: 'voicemail', label: { en: 'Voicemail', ar: 'بريد صوتي' }, color: 'bg-slate-100 text-[#1B365D]' },
     { value: 'interested', label: { en: 'Interested', ar: 'مهتم' }, color: 'bg-teal-100 text-teal-700' },
     { value: 'not_interested', label: { en: 'Not Interested', ar: 'غير مهتم' }, color: 'bg-gray-100 text-gray-700' },
-    { value: 'callback', label: { en: 'Callback', ar: 'إعادة اتصال' }, color: 'bg-blue-100 text-blue-700' },
+    { value: 'callback', label: { en: 'Callback', ar: 'إعادة اتصال' }, color: 'bg-slate-100 text-[#1B365D]' },
 ];
 
 // Activity Filter dropdown
@@ -783,10 +783,10 @@ const actFilterOptions = computed(() => {
 const fuTypeOpen = ref(false);
 const fuTypeRef = ref(null);
 const fuTypeOptions = [
-    { value: 'call', label: { en: 'Call', ar: 'مكالمة' }, icon: 'M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z', color: 'text-green-600 bg-green-100' },
+    { value: 'call', label: { en: 'Call', ar: 'مكالمة' }, icon: 'M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z', color: 'text-emerald-600 bg-emerald-100' },
     { value: 'whatsapp', label: { en: 'WhatsApp', ar: 'واتساب' }, icon: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z', color: 'text-emerald-600 bg-emerald-100' },
-    { value: 'email', label: { en: 'Email', ar: 'بريد' }, icon: 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z', color: 'text-blue-600 bg-blue-100' },
-    { value: 'sms', label: { en: 'SMS', ar: 'رسالة' }, icon: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z', color: 'text-purple-600 bg-purple-100' },
+    { value: 'email', label: { en: 'Email', ar: 'بريد' }, icon: 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z', color: 'text-[#1B365D] bg-slate-100' },
+    { value: 'sms', label: { en: 'SMS', ar: 'رسالة' }, icon: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z', color: 'text-[#1B365D] bg-slate-100' },
     { value: 'meeting', label: { en: 'Meeting', ar: 'اجتماع' }, icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z', color: 'text-amber-600 bg-amber-100' },
 ];
 
@@ -857,7 +857,7 @@ const tabIndicatorStyle = computed(() => {
                                     <span class="hidden sm:inline">{{ isRtl ? 'اتصال' : 'Call' }}</span>
                                 </a>
                                 <a v-if="lead.phone" :href="whatsappUrl(lead.phone)" target="_blank"
-                                   class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-green-50 text-green-700 hover:bg-green-100 border border-green-200 transition-all">
+                                   class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200 transition-all">
                                     <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>
                                     <span class="hidden sm:inline">WA</span>
                                 </a>
@@ -1044,7 +1044,7 @@ const tabIndicatorStyle = computed(() => {
                                 <button
                                     v-if="lead.phone"
                                     @click="window.open('tel:' + lead.phone)"
-                                    class="w-11 h-11 rounded-xl bg-green-500 hover:bg-green-400 text-white flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-200 hover:-translate-y-0.5"
+                                    class="w-11 h-11 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-white flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-200 hover:-translate-y-0.5"
                                     :title="isRtl ? 'اتصال' : 'Call'"
                                 >
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
@@ -1060,7 +1060,7 @@ const tabIndicatorStyle = computed(() => {
                                 <button
                                     v-if="lead.email"
                                     @click="window.open('mailto:' + lead.email)"
-                                    class="w-11 h-11 rounded-xl bg-blue-500 hover:bg-blue-400 text-white flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-200 hover:-translate-y-0.5"
+                                    class="w-11 h-11 rounded-xl bg-[#1B365D] hover:bg-slate-400 text-white flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-200 hover:-translate-y-0.5"
                                     :title="isRtl ? 'بريد إلكتروني' : 'Email'"
                                 >
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
@@ -1068,7 +1068,7 @@ const tabIndicatorStyle = computed(() => {
                                 <button
                                     v-if="lead.phone"
                                     @click="window.open('sms:' + lead.phone)"
-                                    class="w-11 h-11 rounded-xl bg-purple-500 hover:bg-purple-400 text-white flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-200 hover:-translate-y-0.5"
+                                    class="w-11 h-11 rounded-xl bg-[#1B365D] hover:bg-slate-400 text-white flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-200 hover:-translate-y-0.5"
                                     :title="isRtl ? 'رسالة نصية' : 'SMS'"
                                 >
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
@@ -1135,7 +1135,7 @@ const tabIndicatorStyle = computed(() => {
 
             <!-- Lost / Dormant Info Banner -->
             <div v-if="lead.status === 'lost' || lead.status === 'dormant'" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
-                <div class="bg-gradient-to-r from-red-50 to-rose-50 border border-red-200 rounded-2xl p-5">
+                <div class="bg-gradient-to-r from-red-50 to-amber-50 border border-red-200 rounded-2xl p-5">
                     <div class="flex items-center justify-between gap-4">
                         <div class="flex items-center gap-4">
                             <div class="w-11 h-11 rounded-xl bg-red-100 flex items-center justify-center shrink-0">
@@ -1174,8 +1174,8 @@ const tabIndicatorStyle = computed(() => {
                         </div>
                     </div>
                     <div class="bg-white rounded-xl border border-gray-100 p-3 flex items-center gap-3 shadow-sm">
-                        <div class="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
-                            <svg class="w-4.5 h-4.5 text-blue-600" style="width:18px;height:18px" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/></svg>
+                        <div class="w-9 h-9 rounded-lg bg-slate-50 flex items-center justify-center flex-shrink-0">
+                            <svg class="w-4.5 h-4.5 text-[#1B365D]" style="width:18px;height:18px" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/></svg>
                         </div>
                         <div>
                             <div class="text-lg font-bold text-gray-800">{{ activityStats.total }}</div>
@@ -1192,8 +1192,8 @@ const tabIndicatorStyle = computed(() => {
                         </div>
                     </div>
                     <div class="bg-white rounded-xl border border-gray-100 p-3 flex items-center gap-3 shadow-sm">
-                        <div class="w-9 h-9 rounded-lg bg-green-50 flex items-center justify-center flex-shrink-0">
-                            <svg class="w-4.5 h-4.5 text-green-600" style="width:18px;height:18px" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <div class="w-9 h-9 rounded-lg bg-emerald-50 flex items-center justify-center flex-shrink-0">
+                            <svg class="w-4.5 h-4.5 text-emerald-600" style="width:18px;height:18px" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                         </div>
                         <div>
                             <div class="text-lg font-bold text-gray-800">{{ completedFollowUps }}</div>
@@ -1397,7 +1397,7 @@ const tabIndicatorStyle = computed(() => {
                                                     <button type="button" @click="activityForm.direction = 'inbound'"
                                                             :class="['flex-1 flex items-center justify-center gap-2 py-3 rounded-xl border-2 text-sm font-medium transition-all duration-200',
                                                                 activityForm.direction === 'inbound'
-                                                                    ? 'border-blue-400 bg-blue-50 text-blue-700 shadow-sm'
+                                                                    ? 'border-slate-400 bg-slate-50 text-[#1B365D] shadow-sm'
                                                                     : 'border-gray-200 text-gray-400 hover:border-gray-300 bg-white']">
                                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 16l-4-4m0 0l4-4m-4 4h18"/></svg>
                                                         {{ isRtl ? 'وارد' : 'Inbound' }}
@@ -1719,7 +1719,7 @@ const tabIndicatorStyle = computed(() => {
                                                 <div v-if="fu.status === 'pending'" class="flex items-center gap-1.5 flex-shrink-0">
                                                     <button
                                                         @click="openComplete(fu)"
-                                                        class="px-2.5 py-1.5 bg-green-50 text-green-700 text-xs font-medium rounded-lg hover:bg-green-100 transition-colors border border-green-200"
+                                                        class="px-2.5 py-1.5 bg-emerald-50 text-emerald-700 text-xs font-medium rounded-lg hover:bg-emerald-100 transition-colors border border-emerald-200"
                                                     >
                                                         {{ isRtl ? 'إكمال' : 'Complete' }}
                                                     </button>
@@ -1731,7 +1731,7 @@ const tabIndicatorStyle = computed(() => {
                                                     </button>
                                                     <button
                                                         @click="openReschedule(fu)"
-                                                        class="px-2.5 py-1.5 bg-blue-50 text-blue-700 text-xs font-medium rounded-lg hover:bg-blue-100 transition-colors border border-blue-200"
+                                                        class="px-2.5 py-1.5 bg-slate-50 text-[#1B365D] text-xs font-medium rounded-lg hover:bg-slate-100 transition-colors border border-slate-200"
                                                     >
                                                         {{ isRtl ? 'إعادة جدولة' : 'Reschedule' }}
                                                     </button>
@@ -1739,7 +1739,7 @@ const tabIndicatorStyle = computed(() => {
                                                     <div class="relative">
                                                         <button
                                                             @click="toggleSnooze(fu.id)"
-                                                            class="px-2.5 py-1.5 bg-purple-50 text-purple-700 text-xs font-medium rounded-lg hover:bg-purple-100 transition-colors border border-purple-200 flex items-center gap-1"
+                                                            class="px-2.5 py-1.5 bg-slate-50 text-[#1B365D] text-xs font-medium rounded-lg hover:bg-slate-100 transition-colors border border-slate-200 flex items-center gap-1"
                                                         >
                                                             <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                                                             {{ isRtl ? 'تأجيل' : 'Snooze' }}
@@ -1761,9 +1761,9 @@ const tabIndicatorStyle = computed(() => {
                                                                     v-for="opt in snoozeOptions"
                                                                     :key="opt.key"
                                                                     @click="snoozeFollowUp(fu.id, opt.key)"
-                                                                    class="w-full text-start px-3 py-2 text-xs text-gray-700 hover:bg-purple-50 hover:text-purple-700 transition-colors flex items-center gap-2"
+                                                                    class="w-full text-start px-3 py-2 text-xs text-gray-700 hover:bg-slate-50 hover:text-[#1B365D] transition-colors flex items-center gap-2"
                                                                 >
-                                                                    <svg class="w-3.5 h-3.5 text-purple-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                                                    <svg class="w-3.5 h-3.5 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                                                                     {{ isRtl ? opt.ar : opt.en }}
                                                                 </button>
                                                             </div>
@@ -1792,7 +1792,7 @@ const tabIndicatorStyle = computed(() => {
                                                         <button
                                                             type="submit"
                                                             :disabled="completeForm.processing"
-                                                            class="px-4 py-2 bg-green-600 text-white text-xs font-medium rounded-lg hover:bg-green-700 disabled:opacity-50 transition-colors"
+                                                            class="px-4 py-2 bg-emerald-600 text-white text-xs font-medium rounded-lg hover:bg-emerald-700 disabled:opacity-50 transition-colors"
                                                         >
                                                             {{ isRtl ? 'تأكيد' : 'Confirm' }}
                                                         </button>
@@ -1842,7 +1842,7 @@ const tabIndicatorStyle = computed(() => {
                                                             <button
                                                                 type="submit"
                                                                 :disabled="rescheduleForm.processing || !rescheduleForm.scheduled_at"
-                                                                class="px-4 py-1.5 bg-blue-600 text-white text-xs font-medium rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
+                                                                class="px-4 py-1.5 bg-[#1B365D] text-white text-xs font-medium rounded-lg hover:bg-[#1B365D] disabled:opacity-50 transition-colors"
                                                             >
                                                                 {{ isRtl ? 'إعادة جدولة' : 'Reschedule' }}
                                                             </button>
@@ -2025,21 +2025,21 @@ const tabIndicatorStyle = computed(() => {
                                 </a>
                                 <a v-if="lead.phone" :href="'tel:' + lead.phone"
                                    @click="contactAutoLog('call')"
-                                   class="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-green-50 text-green-700 hover:bg-green-100 transition-colors border border-green-200 text-sm font-medium relative group/btn">
+                                   class="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-emerald-50 text-emerald-700 hover:bg-emerald-100 transition-colors border border-emerald-200 text-sm font-medium relative group/btn">
                                     <svg v-if="contactAutoLogSaving !== 'call'" class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
                                     <svg v-else class="w-4 h-4 flex-shrink-0 animate-spin" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
                                     {{ isRtl ? 'اتصال' : 'Call' }}
-                                    <span class="absolute -top-1 -end-1 w-3.5 h-3.5 rounded-full bg-green-500 text-white flex items-center justify-center opacity-0 group-hover/btn:opacity-100 transition-opacity" :title="isRtl ? 'تسجيل تلقائي' : 'Auto-log'">
+                                    <span class="absolute -top-1 -end-1 w-3.5 h-3.5 rounded-full bg-emerald-500 text-white flex items-center justify-center opacity-0 group-hover/btn:opacity-100 transition-opacity" :title="isRtl ? 'تسجيل تلقائي' : 'Auto-log'">
                                         <svg class="w-2 h-2" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                                     </span>
                                 </a>
                                 <a v-if="lead.email" :href="'mailto:' + lead.email"
                                    @click="contactAutoLog('email')"
-                                   class="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-blue-50 text-blue-700 hover:bg-blue-100 transition-colors border border-blue-200 text-sm font-medium relative group/btn">
+                                   class="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-slate-50 text-[#1B365D] hover:bg-slate-100 transition-colors border border-slate-200 text-sm font-medium relative group/btn">
                                     <svg v-if="contactAutoLogSaving !== 'email'" class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                                     <svg v-else class="w-4 h-4 flex-shrink-0 animate-spin" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
                                     {{ isRtl ? 'بريد' : 'Email' }}
-                                    <span class="absolute -top-1 -end-1 w-3.5 h-3.5 rounded-full bg-blue-500 text-white flex items-center justify-center opacity-0 group-hover/btn:opacity-100 transition-opacity" :title="isRtl ? 'تسجيل تلقائي' : 'Auto-log'">
+                                    <span class="absolute -top-1 -end-1 w-3.5 h-3.5 rounded-full bg-[#1B365D] text-white flex items-center justify-center opacity-0 group-hover/btn:opacity-100 transition-opacity" :title="isRtl ? 'تسجيل تلقائي' : 'Auto-log'">
                                         <svg class="w-2 h-2" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                                     </span>
                                 </a>
@@ -2069,17 +2069,17 @@ const tabIndicatorStyle = computed(() => {
                                     <div class="text-xl font-bold text-gray-800">{{ activityStats.total }}</div>
                                     <div class="text-[10px] text-gray-400 mt-0.5">{{ isRtl ? 'إجمالي' : 'Total' }}</div>
                                 </div>
-                                <div class="bg-green-50 rounded-xl p-3 text-center">
-                                    <div class="text-xl font-bold text-green-700">{{ activityStats.calls }}</div>
-                                    <div class="text-[10px] text-green-500 mt-0.5">{{ isRtl ? 'مكالمات' : 'Calls' }}</div>
+                                <div class="bg-emerald-50 rounded-xl p-3 text-center">
+                                    <div class="text-xl font-bold text-emerald-700">{{ activityStats.calls }}</div>
+                                    <div class="text-[10px] text-emerald-500 mt-0.5">{{ isRtl ? 'مكالمات' : 'Calls' }}</div>
                                 </div>
                                 <div class="bg-emerald-50 rounded-xl p-3 text-center">
                                     <div class="text-xl font-bold text-emerald-700">{{ activityStats.whatsapp }}</div>
                                     <div class="text-[10px] text-emerald-500 mt-0.5">{{ isRtl ? 'واتساب' : 'WhatsApp' }}</div>
                                 </div>
-                                <div class="bg-blue-50 rounded-xl p-3 text-center">
-                                    <div class="text-xl font-bold text-blue-700">{{ activityStats.emails }}</div>
-                                    <div class="text-[10px] text-blue-500 mt-0.5">{{ isRtl ? 'بريد' : 'Emails' }}</div>
+                                <div class="bg-slate-50 rounded-xl p-3 text-center">
+                                    <div class="text-xl font-bold text-[#1B365D]">{{ activityStats.emails }}</div>
+                                    <div class="text-[10px] text-[#1B365D] mt-0.5">{{ isRtl ? 'بريد' : 'Emails' }}</div>
                                 </div>
                             </div>
                         </div>
@@ -2106,7 +2106,7 @@ const tabIndicatorStyle = computed(() => {
                                 <div v-if="lead.module" class="flex items-center justify-between text-sm">
                                     <span class="text-gray-500">{{ isRtl ? 'القسم' : 'Department' }}</span>
                                     <span class="inline-flex items-center gap-1.5 font-medium px-2.5 py-1 rounded-full text-xs"
-                                        :class="lead.module === 'dental' ? 'bg-sky-50 text-sky-700 border border-sky-200' : 'bg-teal-50 text-teal-700 border border-teal-200'">
+                                        :class="lead.module === 'dental' ? 'bg-slate-50 text-[#1B365D] border border-slate-200' : 'bg-teal-50 text-teal-700 border border-teal-200'">
                                         <svg v-if="lead.module === 'dental'" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                                         <svg v-else class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.098 19.902a3.75 3.75 0 005.304 0l6.401-6.402M6.75 21A3.75 3.75 0 013 17.25V4.125C3 3.504 3.504 3 4.125 3h5.25c.621 0 1.125.504 1.125 1.125v4.072M6.75 21a3.75 3.75 0 003.75-3.75V8.197"/></svg>
                                         {{ lead.module === 'dental' ? (isRtl ? 'أسنان' : 'Dental') : (isRtl ? 'جلدية' : 'Derma') }}
@@ -2188,24 +2188,24 @@ const tabIndicatorStyle = computed(() => {
                         </div>
 
                         <!-- Patient Link Card -->
-                        <div v-if="lead.patient" class="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-2xl shadow-sm border border-purple-200 p-5">
-                            <h3 class="text-sm font-semibold text-purple-800 mb-3 flex items-center gap-2">
+                        <div v-if="lead.patient" class="bg-gradient-to-br from-slate-50 to-slate-50 rounded-2xl shadow-sm border border-slate-200 p-5">
+                            <h3 class="text-sm font-semibold text-[#1B365D] mb-3 flex items-center gap-2">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
                                 {{ isRtl ? 'تم التحويل لمريض' : 'Converted to Patient' }}
                             </h3>
                             <div class="space-y-2 text-sm">
                                 <div class="flex justify-between">
-                                    <span class="text-purple-600">{{ isRtl ? 'الاسم' : 'Name' }}</span>
-                                    <span class="font-medium text-purple-900">{{ lead.patient.full_name }}</span>
+                                    <span class="text-[#1B365D]">{{ isRtl ? 'الاسم' : 'Name' }}</span>
+                                    <span class="font-medium text-[#1B365D]">{{ lead.patient.full_name }}</span>
                                 </div>
                                 <div class="flex justify-between">
-                                    <span class="text-purple-600">{{ isRtl ? 'رقم الملف' : 'File #' }}</span>
-                                    <span class="font-medium text-purple-900">{{ lead.patient.file_number }}</span>
+                                    <span class="text-[#1B365D]">{{ isRtl ? 'رقم الملف' : 'File #' }}</span>
+                                    <span class="font-medium text-[#1B365D]">{{ lead.patient.file_number }}</span>
                                 </div>
                             </div>
                             <Link
                                 :href="'/secretary/patients/' + lead.patient.id"
-                                class="mt-3 inline-flex items-center gap-1.5 text-xs font-medium text-purple-700 hover:text-purple-900 transition-colors"
+                                class="mt-3 inline-flex items-center gap-1.5 text-xs font-medium text-[#1B365D] hover:text-[#1B365D] transition-colors"
                             >
                                 {{ isRtl ? 'عرض ملف المريض' : 'View Patient File' }}
                                 <svg class="w-3.5 h-3.5" :class="isRtl ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
