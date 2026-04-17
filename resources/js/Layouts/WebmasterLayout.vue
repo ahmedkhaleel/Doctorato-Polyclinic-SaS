@@ -16,7 +16,7 @@ const getInitialSidebarState = () => {
     if (typeof window === 'undefined') return false;
     const stored = localStorage.getItem(SIDEBAR_STORAGE_KEY);
     if (stored !== null) return stored === 'true';
-    return window.matchMedia('(min-width: 1024px)').matches;
+    return false;
 };
 const sidebarOpen = ref(getInitialSidebarState());
 if (typeof window !== 'undefined') {
@@ -129,11 +129,11 @@ function switchLocale() {
 <template>
     <div :dir="dir" class="min-h-screen flex bg-[#f5f6fa]" :style="{ fontFamily: isRtl ? '\'Tajawal\', \'Poppins\', sans-serif' : '\'Poppins\', sans-serif' }">
         <!-- Mobile overlay -->
-        <div v-if="sidebarOpen" class="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden" @click="closeSidebar"></div>
+        <div v-if="sidebarOpen" class="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm" @click="closeSidebar"></div>
 
         <!-- Sidebar -->
         <aside
-            :class="[sidebarOpen ? 'translate-x-0 lg:static lg:z-auto' : (isRtl ? 'translate-x-full' : '-translate-x-full')]"
+            :class="[sidebarOpen ? 'translate-x-0' : (isRtl ? 'translate-x-full' : '-translate-x-full')]"
             class="fixed inset-y-0 ltr:left-0 rtl:right-0 z-40 w-[260px] transition-transform duration-300 ease-in-out flex flex-col bg-[#2D1B69] shadow-2xl"
         >
             <!-- Logo -->

@@ -20,7 +20,7 @@ const getInitialSidebarState = () => {
     const stored = localStorage.getItem(SIDEBAR_STORAGE_KEY);
     if (stored !== null) return stored === 'true';
     // Default: open on lg+, closed on mobile
-    return window.matchMedia('(min-width: 1024px)').matches;
+    return false;
 };
 const sidebarOpen = ref(getInitialSidebarState());
 if (typeof window !== 'undefined') {
@@ -362,25 +362,21 @@ watch(currentUrl, autoOpenActiveGroup);
 
 function toggleSidebar() { sidebarOpen.value = !sidebarOpen.value; }
 function closeSidebar()  { sidebarOpen.value = false; }
-/* Only close on mobile when a nav link is clicked — leave desktop state alone */
-function closeSidebarOnMobile() {
-    if (typeof window !== 'undefined' && !window.matchMedia('(min-width: 1024px)').matches) {
-        sidebarOpen.value = false;
-    }
-}
+/* Sidebar is overlay on all sizes — always close on nav click */
+function closeSidebarOnMobile() { sidebarOpen.value = false; }
 function logout()        { router.post('/admin/logout'); }
 </script>
 
 <template>
     <div :dir="dir" class="min-h-screen flex bg-[#f5f6fa]" :style="{ fontFamily: isRtl ? '\'Tajawal\', \'Poppins\', sans-serif' : '\'Poppins\', sans-serif' }">
         <!-- Mobile overlay -->
-        <div v-if="sidebarOpen" class="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden" @click="closeSidebar"></div>
+        <div v-if="sidebarOpen" class="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm" @click="closeSidebar"></div>
 
         <!-- ─── Sidebar ──────────────────────────────────────────── -->
         <aside
             :class="[
                 sidebarOpen
-                    ? 'translate-x-0 lg:static lg:z-auto'
+                    ? 'translate-x-0'
                     : (isRtl ? 'translate-x-full' : '-translate-x-full'),
             ]"
             class="fixed inset-y-0 z-40 w-[275px] transition-transform duration-300 ease-in-out flex flex-col admin-sidebar-navy shadow-2xl ltr:left-0 rtl:right-0"
