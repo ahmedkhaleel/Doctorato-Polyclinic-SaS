@@ -168,6 +168,12 @@ watchEffect(() => {
 
 function toggleSidebar() { sidebarOpen.value = !sidebarOpen.value; }
 function closeSidebar()  { sidebarOpen.value = false; }
+/* Only auto-close on mobile. On desktop, sidebar stays open as user navigates. */
+function closeSidebarOnMobile() {
+    if (typeof window !== 'undefined' && !window.matchMedia('(min-width: 1024px)').matches) {
+        sidebarOpen.value = false;
+    }
+}
 function logout()        { router.post('/doctor/logout'); }
 
 /* ── Global Quick Search (Cmd+K / Ctrl+K) ──────────────── */

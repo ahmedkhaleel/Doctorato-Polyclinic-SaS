@@ -363,7 +363,12 @@ watch(currentUrl, autoOpenActiveGroup);
 function toggleSidebar() { sidebarOpen.value = !sidebarOpen.value; }
 function closeSidebar()  { sidebarOpen.value = false; }
 /* Sidebar is overlay on all sizes — always close on nav click */
-function closeSidebarOnMobile() { sidebarOpen.value = false; }
+function closeSidebarOnMobile() {
+    // Only auto-close on mobile (<lg). On desktop, keep the sidebar open as the user navigates.
+    if (typeof window !== 'undefined' && !window.matchMedia('(min-width: 1024px)').matches) {
+        sidebarOpen.value = false;
+    }
+}
 function logout()        { router.post('/admin/logout'); }
 </script>
 
