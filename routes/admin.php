@@ -908,6 +908,72 @@ Route::middleware('admin.auth')->group(function () {
     // ═══════════════════════════════════════════════════════════
     Route::get('/appointment-reminders', [AppointmentReminderController::class, 'index'])->name('admin.appointment-reminders.index')->middleware('permission:visits.view');
 
+    // ═══ DERMA MODULE ═══════════════════════════════════════════
+    // ═══════════════════════════════════════════════════════════
+    Route::prefix('derma')->name('admin.derma.')->middleware(['module:derma'])->group(function () {
+        Route::get('/', [\App\Http\Controllers\Admin\DermaController::class, 'index'])->name('dashboard');
+        Route::get('/patients', [\App\Http\Controllers\Admin\DermaPatientController::class, 'index'])->name('patients');
+        Route::get('/patients/{patient}', [\App\Http\Controllers\Admin\DermaPatientController::class, 'show'])->name('patients.show');
+        Route::get('/visits', [\App\Http\Controllers\Admin\DermaVisitController::class, 'index'])->name('visits');
+
+        Route::get('/conditions', [\App\Http\Controllers\Admin\SkinConditionController::class, 'index'])->name('conditions.index');
+        Route::post('/conditions', [\App\Http\Controllers\Admin\SkinConditionController::class, 'store'])->name('conditions.store');
+        Route::post('/conditions/{condition}', [\App\Http\Controllers\Admin\SkinConditionController::class, 'update'])->name('conditions.update');
+        Route::delete('/conditions/{condition}', [\App\Http\Controllers\Admin\SkinConditionController::class, 'destroy'])->name('conditions.destroy');
+
+        Route::get('/sessions', [\App\Http\Controllers\Admin\DermaSessionController::class, 'index'])->name('sessions.index');
+        Route::post('/sessions', [\App\Http\Controllers\Admin\DermaSessionController::class, 'store'])->name('sessions.store');
+        Route::post('/sessions/{session}', [\App\Http\Controllers\Admin\DermaSessionController::class, 'update'])->name('sessions.update');
+        Route::delete('/sessions/{session}', [\App\Http\Controllers\Admin\DermaSessionController::class, 'destroy'])->name('sessions.destroy');
+
+        Route::get('/gallery', [\App\Http\Controllers\Admin\DermaPhotoController::class, 'index'])->name('gallery');
+        Route::post('/gallery', [\App\Http\Controllers\Admin\DermaPhotoController::class, 'store'])->name('gallery.store');
+        Route::delete('/gallery/{photo}', [\App\Http\Controllers\Admin\DermaPhotoController::class, 'destroy'])->name('gallery.destroy');
+
+        Route::get('/prescription-templates', [\App\Http\Controllers\Admin\DermaPrescriptionTemplateController::class, 'index'])->name('prescriptionTemplates.index');
+        Route::post('/prescription-templates', [\App\Http\Controllers\Admin\DermaPrescriptionTemplateController::class, 'store'])->name('prescriptionTemplates.store');
+        Route::post('/prescription-templates/{template}', [\App\Http\Controllers\Admin\DermaPrescriptionTemplateController::class, 'update'])->name('prescriptionTemplates.update');
+        Route::delete('/prescription-templates/{template}', [\App\Http\Controllers\Admin\DermaPrescriptionTemplateController::class, 'destroy'])->name('prescriptionTemplates.destroy');
+
+        Route::get('/settings', [\App\Http\Controllers\Admin\DermaController::class, 'settings'])->name('settings');
+        Route::post('/settings', [\App\Http\Controllers\Admin\DermaController::class, 'updateSettings'])->name('settings.update');
+    });
+
+    // ═══ COSMETIC MODULE ════════════════════════════════════════
+    // ═══════════════════════════════════════════════════════════
+    Route::prefix('cosmetic')->name('admin.cosmetic.')->middleware(['module:cosmetic'])->group(function () {
+        Route::get('/', [\App\Http\Controllers\Admin\CosmeticController::class, 'index'])->name('dashboard');
+        Route::get('/patients', [\App\Http\Controllers\Admin\CosmeticPatientController::class, 'index'])->name('patients');
+        Route::get('/patients/{patient}', [\App\Http\Controllers\Admin\CosmeticPatientController::class, 'show'])->name('patients.show');
+
+        Route::get('/procedures', [\App\Http\Controllers\Admin\CosmeticProcedureController::class, 'index'])->name('procedures.index');
+        Route::post('/procedures', [\App\Http\Controllers\Admin\CosmeticProcedureController::class, 'store'])->name('procedures.store');
+        Route::post('/procedures/{procedure}', [\App\Http\Controllers\Admin\CosmeticProcedureController::class, 'update'])->name('procedures.update');
+        Route::delete('/procedures/{procedure}', [\App\Http\Controllers\Admin\CosmeticProcedureController::class, 'destroy'])->name('procedures.destroy');
+
+        Route::get('/packages', [\App\Http\Controllers\Admin\CosmeticPackageController::class, 'index'])->name('packages.index');
+        Route::post('/packages', [\App\Http\Controllers\Admin\CosmeticPackageController::class, 'store'])->name('packages.store');
+        Route::post('/packages/{package}', [\App\Http\Controllers\Admin\CosmeticPackageController::class, 'update'])->name('packages.update');
+        Route::delete('/packages/{package}', [\App\Http\Controllers\Admin\CosmeticPackageController::class, 'destroy'])->name('packages.destroy');
+
+        Route::get('/sessions', [\App\Http\Controllers\Admin\CosmeticSessionController::class, 'index'])->name('sessions.index');
+        Route::post('/sessions', [\App\Http\Controllers\Admin\CosmeticSessionController::class, 'store'])->name('sessions.store');
+        Route::post('/sessions/{session}', [\App\Http\Controllers\Admin\CosmeticSessionController::class, 'update'])->name('sessions.update');
+        Route::delete('/sessions/{session}', [\App\Http\Controllers\Admin\CosmeticSessionController::class, 'destroy'])->name('sessions.destroy');
+
+        Route::get('/gallery', [\App\Http\Controllers\Admin\CosmeticPhotoController::class, 'index'])->name('gallery');
+        Route::post('/gallery', [\App\Http\Controllers\Admin\CosmeticPhotoController::class, 'store'])->name('gallery.store');
+        Route::delete('/gallery/{photo}', [\App\Http\Controllers\Admin\CosmeticPhotoController::class, 'destroy'])->name('gallery.destroy');
+
+        Route::get('/consents', [\App\Http\Controllers\Admin\CosmeticConsentController::class, 'index'])->name('consents.index');
+        Route::post('/consents', [\App\Http\Controllers\Admin\CosmeticConsentController::class, 'store'])->name('consents.store');
+        Route::post('/consents/{consent}', [\App\Http\Controllers\Admin\CosmeticConsentController::class, 'update'])->name('consents.update');
+        Route::delete('/consents/{consent}', [\App\Http\Controllers\Admin\CosmeticConsentController::class, 'destroy'])->name('consents.destroy');
+
+        Route::get('/settings', [\App\Http\Controllers\Admin\CosmeticController::class, 'settings'])->name('settings');
+        Route::post('/settings', [\App\Http\Controllers\Admin\CosmeticController::class, 'updateSettings'])->name('settings.update');
+    });
+
     // ═══ PATIENT WALLETS ════════════════════════════════════════
     // ═══════════════════════════════════════════════════════════
     Route::get('/wallets', [PatientWalletController::class, 'index'])->name('admin.wallets.index')->middleware('permission:payments.view');
