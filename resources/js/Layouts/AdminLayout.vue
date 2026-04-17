@@ -195,13 +195,17 @@ const navGroups = [
         ],
     },
     {
-        key: 'insurance', titleEn: 'Insurance', titleAr: 'التأمين', moduleKey: 'insurance',
+        key: 'insurance', titleEn: 'Insurance', titleAr: 'التأمينات', moduleKey: 'insurance',
         color: '#10B981',
+        accent: '#C4A265',
+        featured: true,
         groupIcon: 'M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z',
         items: [
-            { labelEn: 'Companies',      labelAr: 'شركات التأمين',  href: '/admin/insurance/companies', icon: 'building',  permission: 'settings.view' },
-            { labelEn: 'Claims',         labelAr: 'المطالبات',      href: '/admin/insurance/claims',    icon: 'clipboard', permission: 'invoices.view' },
-            { labelEn: 'Reports',        labelAr: 'التقارير',       href: '/admin/insurance/reports',   icon: 'chart',    permission: 'invoices.view' },
+            { labelEn: 'Reports Dashboard',  labelAr: 'لوحة التقارير',   href: '/admin/insurance/reports',   icon: 'chartUp',   permission: 'invoices.view' },
+            { labelEn: 'Claims',             labelAr: 'المطالبات',        href: '/admin/insurance/claims',    icon: 'clipboard', permission: 'invoices.view' },
+            { labelEn: 'Companies',          labelAr: 'شركات التأمين',    href: '/admin/insurance/companies', icon: 'building',  permission: 'settings.view' },
+            { labelEn: 'Plans',              labelAr: 'باقات التأمين',    href: '/admin/insurance/plans',     icon: 'layers',    permission: 'settings.view' },
+            { labelEn: 'Patient Insurances', labelAr: 'تأمينات المرضى',   href: '/admin/insurance/patient-insurances', icon: 'heart', permission: 'patients.view' },
         ],
     },
     {

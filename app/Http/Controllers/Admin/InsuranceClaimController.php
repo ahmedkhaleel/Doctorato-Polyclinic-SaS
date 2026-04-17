@@ -57,6 +57,22 @@ class InsuranceClaimController extends Controller
         ]);
     }
 
+    public function show(InsuranceClaim $claim)
+    {
+        $claim->load([
+            'patientInsurance.company',
+            'patientInsurance.plan',
+            'patient',
+            'invoice',
+            'visit',
+            'creator:id,name',
+        ]);
+
+        return Inertia::render('Admin/Insurance/Claims/Show', [
+            'claim' => $claim,
+        ]);
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([

@@ -67,6 +67,8 @@ use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\PurchaseOrderController;
 use App\Http\Controllers\Admin\InsuranceCompanyController;
 use App\Http\Controllers\Admin\InsuranceClaimController;
+use App\Http\Controllers\Admin\InsurancePlanController;
+use App\Http\Controllers\Admin\PatientInsuranceController;
 use App\Http\Controllers\Admin\PatientVitalController;
 use App\Http\Controllers\Admin\PatientDocumentController;
 use App\Http\Controllers\Admin\PatientSatisfactionController;
@@ -850,10 +852,26 @@ Route::middleware('admin.auth')->group(function () {
         Route::post('/insurance/companies/{company}/delete', [InsuranceCompanyController::class, 'destroy'])->name('admin.insurance.companies.destroy')->middleware('permission:settings.update');
 
         Route::get('/insurance/claims', [InsuranceClaimController::class, 'index'])->name('admin.insurance.claims.index')->middleware('permission:invoices.view');
+        Route::get('/insurance/claims/{claim}', [InsuranceClaimController::class, 'show'])->name('admin.insurance.claims.show')->middleware('permission:invoices.view');
         Route::post('/insurance/claims', [InsuranceClaimController::class, 'store'])->name('admin.insurance.claims.store')->middleware('permission:invoices.create');
         Route::post('/insurance/claims/{claim}/status', [InsuranceClaimController::class, 'updateStatus'])->name('admin.insurance.claims.status')->middleware('permission:invoices.update');
 
         Route::get('/insurance/reports', [InsuranceReportController::class, 'index'])->name('admin.insurance.reports')->middleware('permission:invoices.view');
+
+        // Insurance Plans
+        Route::get('/insurance/plans', [InsurancePlanController::class, 'index'])->name('admin.insurance.plans.index')->middleware('permission:settings.view');
+        Route::get('/insurance/plans/create', [InsurancePlanController::class, 'create'])->name('admin.insurance.plans.create')->middleware('permission:settings.update');
+        Route::post('/insurance/plans', [InsurancePlanController::class, 'store'])->name('admin.insurance.plans.store')->middleware('permission:settings.update');
+        Route::get('/insurance/plans/{plan}/edit', [InsurancePlanController::class, 'edit'])->name('admin.insurance.plans.edit')->middleware('permission:settings.update');
+        Route::post('/insurance/plans/{plan}/update', [InsurancePlanController::class, 'update'])->name('admin.insurance.plans.update')->middleware('permission:settings.update');
+        Route::post('/insurance/plans/{plan}/delete', [InsurancePlanController::class, 'destroy'])->name('admin.insurance.plans.destroy')->middleware('permission:settings.update');
+
+        // Patient Insurances
+        Route::get('/insurance/patient-insurances', [PatientInsuranceController::class, 'index'])->name('admin.insurance.patient-insurances.index')->middleware('permission:patients.view');
+        Route::post('/patients/{patient}/insurances', [PatientInsuranceController::class, 'storeForPatient'])->name('admin.patient-insurances.store')->middleware('permission:patients.update');
+        Route::post('/patient-insurances/{insurance}/update', [PatientInsuranceController::class, 'update'])->name('admin.patient-insurances.update')->middleware('permission:patients.update');
+        Route::post('/patient-insurances/{insurance}/verify', [PatientInsuranceController::class, 'verify'])->name('admin.patient-insurances.verify')->middleware('permission:patients.update');
+        Route::post('/patient-insurances/{insurance}/delete', [PatientInsuranceController::class, 'destroy'])->name('admin.patient-insurances.destroy')->middleware('permission:patients.update');
     });
 
     // ═══════════════════════════════════════════════════════════

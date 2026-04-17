@@ -468,6 +468,9 @@ class BookingWorkflowService
             ]);
         }
 
+        // Auto-apply insurance coverage if patient has active verified insurance
+        app(\App\Services\InsuranceCoverageService::class)->applyToInvoice($invoice);
+
         return $invoice;
     }
 

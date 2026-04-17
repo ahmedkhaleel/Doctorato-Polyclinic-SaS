@@ -36,6 +36,11 @@ class InsurancePlan extends Model
         return $this->belongsTo(InsuranceCompany::class, 'insurance_company_id');
     }
 
+    public function patientInsurances()
+    {
+        return $this->hasMany(PatientInsurance::class, 'insurance_plan_id');
+    }
+
     public function scopeActive($query)
     {
         return $query->where('is_active', true);

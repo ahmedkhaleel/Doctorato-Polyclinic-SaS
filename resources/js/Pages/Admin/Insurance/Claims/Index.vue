@@ -69,7 +69,7 @@ function submitStatusUpdate() {
                 <h1 class="text-2xl font-bold text-gray-800">{{ isRtl ? 'مطالبات التأمين' : 'Insurance Claims' }}</h1>
                 <p class="text-gray-500 text-sm mt-1">{{ isRtl ? 'إدارة ومتابعة مطالبات التأمين' : 'Manage and track insurance claims' }}</p>
             </div>
-            <Link href="/admin/insurance/companies" class="inline-flex items-center gap-2 px-4 py-2 text-cyan-600 bg-cyan-50 rounded-xl hover:bg-cyan-100 transition text-sm font-medium">
+            <Link href="/admin/insurance/companies" class="inline-flex items-center gap-2 px-4 py-2 text-[#1B365D] bg-[#1B365D]/5 rounded-xl hover:bg-cyan-100 transition text-sm font-medium">
                 {{ isRtl ? 'شركات التأمين' : 'Companies' }}
             </Link>
         </div>
@@ -90,7 +90,7 @@ function submitStatusUpdate() {
             </div>
             <div class="bg-white rounded-2xl border border-gray-100 p-4">
                 <p class="text-xs text-gray-400">{{ isRtl ? 'مقدم هذا الشهر' : 'Submitted (Month)' }}</p>
-                <p class="text-xl font-bold text-cyan-600 mt-1">{{ stats.this_month_submitted }}</p>
+                <p class="text-xl font-bold text-[#1B365D] mt-1">{{ stats.this_month_submitted }}</p>
             </div>
             <div class="bg-white rounded-2xl border border-gray-100 p-4">
                 <p class="text-xs text-gray-400">{{ isRtl ? 'محصل هذا الشهر' : 'Collected (Month)' }}</p>
@@ -104,17 +104,17 @@ function submitStatusUpdate() {
 
         <!-- Filters -->
         <div class="flex flex-wrap gap-3 mb-6 bg-white rounded-2xl border border-gray-100 p-4">
-            <input v-model="search" @keyup.enter="applyFilters" type="text" :placeholder="isRtl ? 'رقم المطالبة أو المريض...' : 'Claim # or patient...'" class="px-4 py-2 border border-gray-200 rounded-xl text-sm w-56 focus:ring-cyan-500 focus:border-cyan-500" />
-            <select v-model="statusFilter" @change="applyFilters" class="px-4 py-2 border border-gray-200 rounded-xl text-sm focus:ring-cyan-500 focus:border-cyan-500">
+            <input v-model="search" @keyup.enter="applyFilters" type="text" :placeholder="isRtl ? 'رقم المطالبة أو المريض...' : 'Claim # or patient...'" class="px-4 py-2 border border-gray-200 rounded-xl text-sm w-56 focus:ring-[#C4A265] focus:border-[#C4A265]" />
+            <select v-model="statusFilter" @change="applyFilters" class="px-4 py-2 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]">
                 <option value="">{{ isRtl ? 'كل الحالات' : 'All Status' }}</option>
                 <option v-for="(label, key) in statusLabels" :key="key" :value="key">{{ isRtl ? label.ar : label.en }}</option>
             </select>
-            <select v-model="companyFilter" @change="applyFilters" class="px-4 py-2 border border-gray-200 rounded-xl text-sm focus:ring-cyan-500 focus:border-cyan-500">
+            <select v-model="companyFilter" @change="applyFilters" class="px-4 py-2 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]">
                 <option value="">{{ isRtl ? 'كل الشركات' : 'All Companies' }}</option>
                 <option v-for="c in companies" :key="c.id" :value="c.id">{{ isRtl ? c.name_ar : c.name_en }}</option>
             </select>
-            <input v-model="dateFrom" @change="applyFilters" type="date" class="px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-cyan-500 focus:border-cyan-500" />
-            <input v-model="dateTo" @change="applyFilters" type="date" class="px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-cyan-500 focus:border-cyan-500" />
+            <input v-model="dateFrom" @change="applyFilters" type="date" class="px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]" />
+            <input v-model="dateTo" @change="applyFilters" type="date" class="px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]" />
         </div>
 
         <!-- Claims Table -->
@@ -152,7 +152,7 @@ function submitStatusUpdate() {
                                 </span>
                             </td>
                             <td class="px-4 py-3 text-center">
-                                <button @click="openStatusUpdate(claim)" class="text-cyan-600 hover:text-cyan-800 text-xs font-medium">
+                                <button @click="openStatusUpdate(claim)" class="text-[#1B365D] hover:text-cyan-800 text-xs font-medium">
                                     {{ isRtl ? 'تحديث' : 'Update' }}
                                 </button>
                             </td>
@@ -169,7 +169,7 @@ function submitStatusUpdate() {
         <!-- Pagination -->
         <div v-if="claims.links && claims.last_page > 1" class="flex justify-center gap-1 mt-6">
             <Link v-for="link in claims.links" :key="link.label" :href="link.url || '#'"
-                class="px-3 py-1.5 rounded-lg text-sm" :class="link.active ? 'bg-cyan-600 text-white' : 'text-gray-500 hover:bg-gray-100'"
+                class="px-3 py-1.5 rounded-lg text-sm" :class="link.active ? 'bg-[#1B365D] text-white' : 'text-gray-500 hover:bg-gray-100'"
                 v-html="link.label" preserve-state />
         </div>
 
@@ -186,7 +186,7 @@ function submitStatusUpdate() {
                     <form @submit.prevent="submitStatusUpdate" class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'الحالة الجديدة' : 'New Status' }} *</label>
-                            <select v-model="statusForm.status" required class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-cyan-500 focus:border-cyan-500">
+                            <select v-model="statusForm.status" required class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]">
                                 <option value="">{{ isRtl ? 'اختر...' : 'Select...' }}</option>
                                 <option value="submitted">{{ isRtl ? 'مقدم' : 'Submitted' }}</option>
                                 <option value="under_review">{{ isRtl ? 'قيد المراجعة' : 'Under Review' }}</option>
@@ -200,29 +200,29 @@ function submitStatusUpdate() {
 
                         <div v-if="['approved', 'partially_approved'].includes(statusForm.status)">
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'المبلغ المعتمد' : 'Approved Amount' }}</label>
-                            <input v-model="statusForm.approved_amount" type="number" step="0.01" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-cyan-500 focus:border-cyan-500" />
+                            <input v-model="statusForm.approved_amount" type="number" step="0.01" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]" />
                         </div>
 
                         <div v-if="['paid', 'partially_paid'].includes(statusForm.status)">
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'المبلغ المحصل' : 'Paid Amount' }}</label>
-                            <input v-model="statusForm.paid_amount" type="number" step="0.01" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-cyan-500 focus:border-cyan-500" />
+                            <input v-model="statusForm.paid_amount" type="number" step="0.01" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]" />
                         </div>
 
                         <div v-if="statusForm.status === 'rejected'">
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'سبب الرفض' : 'Rejection Reason' }}</label>
-                            <textarea v-model="statusForm.rejection_reason" rows="2" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-cyan-500 focus:border-cyan-500" />
+                            <textarea v-model="statusForm.rejection_reason" rows="2" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]" />
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'رقم المرجع' : 'Reference Number' }}</label>
-                            <input v-model="statusForm.reference_number" type="text" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-cyan-500 focus:border-cyan-500" />
+                            <input v-model="statusForm.reference_number" type="text" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]" />
                         </div>
 
                         <div class="flex items-center justify-end gap-3 pt-4 border-t">
                             <button type="button" @click="updatingClaim = null" class="px-5 py-2.5 text-gray-600 hover:bg-gray-100 rounded-xl transition text-sm font-medium">
                                 {{ isRtl ? 'إلغاء' : 'Cancel' }}
                             </button>
-                            <button type="submit" class="px-5 py-2.5 bg-cyan-600 text-white rounded-xl hover:bg-cyan-700 transition text-sm font-medium">
+                            <button type="submit" class="px-5 py-2.5 bg-[#1B365D] text-white rounded-xl hover:bg-[#142849] transition text-sm font-medium">
                                 {{ isRtl ? 'تحديث' : 'Update' }}
                             </button>
                         </div>

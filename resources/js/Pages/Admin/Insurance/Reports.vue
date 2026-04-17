@@ -56,13 +56,13 @@ const maxMonthly = computed(() => Math.max(...(props.monthlyTrend || []).map(m =
         <div class="flex flex-wrap items-end gap-3 mb-6">
             <div>
                 <label class="block text-xs text-gray-500 mb-1">{{ isRtl ? 'من' : 'From' }}</label>
-                <input v-model="dateFrom" type="date" class="px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-cyan-500 focus:border-cyan-500" />
+                <input v-model="dateFrom" type="date" class="px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]" />
             </div>
             <div>
                 <label class="block text-xs text-gray-500 mb-1">{{ isRtl ? 'إلى' : 'To' }}</label>
-                <input v-model="dateTo" type="date" class="px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-cyan-500 focus:border-cyan-500" />
+                <input v-model="dateTo" type="date" class="px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]" />
             </div>
-            <button @click="applyFilters" class="px-5 py-2.5 bg-cyan-600 text-white rounded-xl hover:bg-cyan-700 text-sm font-medium transition">
+            <button @click="applyFilters" class="px-5 py-2.5 bg-[#1B365D] text-white rounded-xl hover:bg-[#142849] text-sm font-medium transition">
                 {{ isRtl ? 'تطبيق' : 'Apply' }}
             </button>
         </div>
@@ -171,7 +171,7 @@ const maxMonthly = computed(() => Math.max(...(props.monthlyTrend || []).map(m =
                 <div class="space-y-3 text-sm">
                     <div class="flex justify-between">
                         <span class="text-gray-500">{{ isRtl ? 'المرضى المؤمنين النشطين' : 'Active Insured Patients' }}</span>
-                        <span class="font-bold text-cyan-600">{{ fmtInt(activeInsured) }}</span>
+                        <span class="font-bold text-[#1B365D]">{{ fmtInt(activeInsured) }}</span>
                     </div>
                     <div class="flex justify-between">
                         <span class="text-gray-500">{{ isRtl ? 'المبلغ المعتمد' : 'Approved Amount' }}</span>

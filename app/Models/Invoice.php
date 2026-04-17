@@ -80,6 +80,16 @@ class Invoice extends Model
         return $this->hasMany(Payment::class);
     }
 
+    public function patientInsurance()
+    {
+        return $this->belongsTo(\App\Models\PatientInsurance::class);
+    }
+
+    public function insuranceClaims()
+    {
+        return $this->hasMany(\App\Models\InsuranceClaim::class);
+    }
+
     // ─── Accessors ──────────────────────────────────────
 
     protected function balance(): Attribute
