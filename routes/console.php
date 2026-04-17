@@ -44,6 +44,9 @@ Schedule::command('dental:process-followups')->dailyAt('08:30');
 // Dental: Smart patient notifications (follow-up, lab, stalled plans, post-treatment) every 2 hours during working hours
 Schedule::command('dental:smart-notifications')->everyTwoHours()->between('08:00', '20:00');
 
+// Telemedicine: Auto-mark missed sessions every 15 minutes
+Schedule::command('telemedicine:handle-missed')->everyFifteenMinutes();
+
 // Dental: Auto-expire pending treatment plan consents daily at midnight
 Schedule::command('dental:expire-consents')->dailyAt('00:30');
 
