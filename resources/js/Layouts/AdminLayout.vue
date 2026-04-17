@@ -20,7 +20,7 @@ const getInitialSidebarState = () => {
     const stored = localStorage.getItem(SIDEBAR_STORAGE_KEY);
     if (stored !== null) return stored === 'true';
     // Default: open on lg+, closed on mobile
-    return false;
+    return window.matchMedia('(min-width: 1024px)').matches;
 };
 const sidebarOpen = ref(getInitialSidebarState());
 if (typeof window !== 'undefined') {
@@ -370,7 +370,7 @@ function logout()        { router.post('/admin/logout'); }
 <template>
     <div :dir="dir" class="min-h-screen flex bg-[#f5f6fa]" :style="{ fontFamily: isRtl ? '\'Tajawal\', \'Poppins\', sans-serif' : '\'Poppins\', sans-serif' }">
         <!-- Mobile overlay -->
-        <div v-if="sidebarOpen" class="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm" @click="closeSidebar"></div>
+        <div v-if="sidebarOpen" class="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden" @click="closeSidebar"></div>
 
         <!-- ─── Sidebar ──────────────────────────────────────────── -->
         <aside
