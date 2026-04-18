@@ -22,85 +22,107 @@ function fmtDate(d) { if (!d) return '-'; return new Date(d).toLocaleDateString(
 
 <template>
     <div class="space-y-6 pb-10">
-        <!-- Hero -->
-        <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-amber-600 via-amber-500 to-amber-500 p-8 shadow-xl">
-            <div class="absolute -top-20 ltr:-right-20 rtl:-left-20 w-72 h-72 bg-amber-300/20 rounded-full blur-3xl"></div>
-            <div class="absolute -bottom-16 ltr:-left-16 rtl:-right-16 w-56 h-56 bg-amber-300/15 rounded-full blur-3xl"></div>
-            <div class="relative z-10">
-                <h1 class="text-3xl font-bold text-white">{{ t('Dermatology Dashboard', 'لوحة الجلدية') }}</h1>
-                <p class="mt-1 text-amber-100/90">{{ t('Overview of derma module activity', 'نظرة عامة على نشاط قسم الجلدية') }}</p>
+        <!-- Navy Hero -->
+        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] shadow-xl">
+            <div class="pointer-events-none absolute -top-16 -end-16 h-56 w-56 rounded-full bg-[#C4A265]/20 blur-3xl"></div>
+            <div class="pointer-events-none absolute -bottom-20 start-1/3 h-48 w-48 rounded-full bg-[#C4A265]/10 blur-3xl"></div>
+            <div class="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-[#C4A265] to-transparent"></div>
+            <div class="relative p-4 md:p-7 flex flex-col md:flex-row md:items-center gap-4 md:gap-5 justify-between">
+                <div class="flex items-start gap-3 md:gap-4 min-w-0">
+                    <div class="w-12 h-12 md:w-14 md:h-14 rounded-xl bg-gradient-to-br from-[#C4A265] to-[#8B7043] flex items-center justify-center shadow-lg flex-shrink-0">
+                        <svg class="w-6 h-6 md:w-7 md:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z"/>
+                        </svg>
+                    </div>
+                    <div class="min-w-0">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="h-[3px] w-6 bg-[#C4A265] rounded-full"></span>
+                            <span class="text-[10px] font-bold text-[#C4A265] tracking-[0.25em] uppercase">{{ isRtl ? 'الجلدية والتجميل' : 'DERMA & COSMETIC' }}</span>
+                        </div>
+                        <h1 class="text-xl md:text-3xl font-extrabold text-white tracking-tight">{{ t('Dermatology Dashboard', 'لوحة الجلدية') }}</h1>
+                        <p class="text-xs md:text-sm text-white/70 mt-1 max-w-xl">{{ t('Overview of derma module activity', 'نظرة عامة على نشاط قسم الجلدية') }}</p>
+                    </div>
+                </div>
             </div>
         </div>
 
         <!-- Stats -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div v-for="s in [
-                { label: t('Patients', 'المرضى'), val: stats?.totalPatients ?? 0, color: 'from-amber-500 to-amber-400' },
-                { label: t('Visits', 'الزيارات'), val: stats?.totalVisits ?? 0, color: 'from-amber-500 to-amber-400' },
-                { label: t('This Month', 'هذا الشهر'), val: stats?.thisMonthVisits ?? 0, color: 'from-amber-500 to-amber-400' },
-                { label: t('Active Conditions', 'حالات نشطة'), val: stats?.activeConditions ?? 0, color: 'from-amber-500 to-amber-400' },
-                { label: t('Sessions', 'الجلسات'), val: stats?.totalSessions ?? 0, color: 'from-[#1B365D] to-[#2C4E7A]' },
-                { label: t('Sessions / month', 'جلسات الشهر'), val: stats?.sessionsThisMonth ?? 0, color: 'from-[#1B365D] to-[#2C4E7A]' },
-                { label: t('Photos', 'الصور'), val: stats?.totalPhotos ?? 0, color: 'from-teal-500 to-teal-400' },
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+            <div v-for="(s, i) in [
+                { label: t('Patients', 'المرضى'), val: stats?.totalPatients ?? 0 },
+                { label: t('Visits', 'الزيارات'), val: stats?.totalVisits ?? 0 },
+                { label: t('This Month', 'هذا الشهر'), val: stats?.thisMonthVisits ?? 0 },
+                { label: t('Active Conditions', 'حالات نشطة'), val: stats?.activeConditions ?? 0 },
+                { label: t('Sessions', 'الجلسات'), val: stats?.totalSessions ?? 0 },
+                { label: t('Sessions / month', 'جلسات الشهر'), val: stats?.sessionsThisMonth ?? 0 },
+                { label: t('Photos', 'الصور'), val: stats?.totalPhotos ?? 0 },
             ]" :key="s.label"
-                class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-br text-white flex items-center justify-center mb-3" :class="s.color">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                class="relative bg-white rounded-2xl border border-[#C4A265]/20 p-4 md:p-5 overflow-hidden hover:shadow-lg hover:shadow-[#C4A265]/10 transition">
+                <div class="absolute top-0 inset-x-0 h-1"
+                    :class="['bg-gradient-to-r from-[#C4A265] to-[#8B7043]', 'bg-gradient-to-r from-[#1B365D] to-[#2C4E7A]', 'bg-gradient-to-r from-emerald-400 to-emerald-600', 'bg-gradient-to-r from-[#C4A265] to-[#8B7043]'][i % 4]"></div>
+                <div class="flex items-start justify-between gap-2">
+                    <div class="min-w-0">
+                        <div class="text-[10px] md:text-xs font-semibold text-[#8B7043] tracking-wide uppercase mb-1.5 md:mb-2">{{ s.label }}</div>
+                        <div class="text-2xl md:text-3xl font-extrabold text-[#1B365D]">{{ s.val }}</div>
+                    </div>
+                    <div class="w-9 h-9 md:w-11 md:h-11 rounded-xl bg-gradient-to-br from-[#C4A265]/20 to-[#C4A265]/5 flex items-center justify-center flex-shrink-0">
+                        <svg class="w-4 h-4 md:w-5 md:h-5 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                    </div>
                 </div>
-                <div class="text-2xl font-bold text-gray-900">{{ s.val }}</div>
-                <div class="text-xs text-gray-500 mt-1">{{ s.label }}</div>
             </div>
         </div>
 
         <!-- Top Conditions -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                <h3 class="text-lg font-semibold mb-4 text-gray-800">{{ t('Top Skin Conditions', 'أعلى الحالات الجلدية') }}</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 md:p-6">
+                <h3 class="text-base md:text-lg font-bold mb-4 text-[#1B365D]">{{ t('Top Skin Conditions', 'أعلى الحالات الجلدية') }}</h3>
                 <div class="space-y-2">
-                    <div v-for="c in topConditions" :key="c.category" class="flex items-center justify-between px-3 py-2 rounded-lg bg-gray-50">
-                        <span class="text-sm text-gray-700 capitalize">{{ c.category }}</span>
-                        <span class="text-sm font-semibold text-amber-600">{{ c.total }}</span>
+                    <div v-for="c in topConditions" :key="c.category" class="flex items-center justify-between px-3 py-2 rounded-lg bg-[#C4A265]/5 hover:bg-[#C4A265]/10 transition">
+                        <span class="text-sm text-slate-700 capitalize">{{ c.category }}</span>
+                        <span class="text-sm font-bold text-[#C4A265]">{{ c.total }}</span>
                     </div>
-                    <p v-if="!topConditions?.length" class="text-sm text-gray-400 text-center py-6">{{ t('No data yet', 'لا توجد بيانات') }}</p>
+                    <p v-if="!topConditions?.length" class="text-sm text-slate-400 text-center py-6">{{ t('No data yet', 'لا توجد بيانات') }}</p>
                 </div>
             </div>
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                <h3 class="text-lg font-semibold mb-4 text-gray-800">{{ t('Session Types', 'أنواع الجلسات') }}</h3>
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 md:p-6">
+                <h3 class="text-base md:text-lg font-bold mb-4 text-[#1B365D]">{{ t('Session Types', 'أنواع الجلسات') }}</h3>
                 <div class="space-y-2">
-                    <div v-for="s in sessionTypes" :key="s.session_type" class="flex items-center justify-between px-3 py-2 rounded-lg bg-gray-50">
-                        <span class="text-sm text-gray-700 capitalize">{{ s.session_type }}</span>
-                        <span class="text-sm font-semibold text-amber-600">{{ s.total }}</span>
+                    <div v-for="s in sessionTypes" :key="s.session_type" class="flex items-center justify-between px-3 py-2 rounded-lg bg-[#1B365D]/5 hover:bg-[#1B365D]/10 transition">
+                        <span class="text-sm text-slate-700 capitalize">{{ s.session_type }}</span>
+                        <span class="text-sm font-bold text-[#1B365D]">{{ s.total }}</span>
                     </div>
-                    <p v-if="!sessionTypes?.length" class="text-sm text-gray-400 text-center py-6">{{ t('No sessions yet', 'لا توجد جلسات') }}</p>
+                    <p v-if="!sessionTypes?.length" class="text-sm text-slate-400 text-center py-6">{{ t('No sessions yet', 'لا توجد جلسات') }}</p>
                 </div>
             </div>
         </div>
 
         <!-- Recent Patients -->
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-            <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-                <h3 class="text-lg font-semibold text-gray-800">{{ t('Recent Patients', 'أحدث المرضى') }}</h3>
-                <Link href="/admin/derma/patients" class="text-sm text-amber-600 font-medium">{{ t('View all →', 'عرض الكل ←') }}</Link>
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <div class="flex items-center justify-between px-4 md:px-6 py-4 border-b border-slate-100">
+                <h3 class="text-base md:text-lg font-bold text-[#1B365D]">{{ t('Recent Patients', 'أحدث المرضى') }}</h3>
+                <Link href="/admin/derma/patients" class="text-xs md:text-sm text-[#C4A265] hover:text-[#8B7043] font-bold">{{ t('View all →', 'عرض الكل ←') }}</Link>
             </div>
-            <table class="w-full text-sm">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="text-start px-6 py-3 text-gray-500 font-semibold">{{ t('Name', 'الاسم') }}</th>
-                        <th class="text-start px-6 py-3 text-gray-500 font-semibold">{{ t('Phone', 'الهاتف') }}</th>
-                        <th class="text-start px-6 py-3 text-gray-500 font-semibold">{{ t('File #', 'رقم الملف') }}</th>
-                        <th class="text-start px-6 py-3 text-gray-500 font-semibold">{{ t('Updated', 'آخر تحديث') }}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="p in recentPatients" :key="p.id" class="border-t border-gray-100 hover:bg-gray-50">
-                        <td class="px-6 py-3 font-medium text-gray-800">{{ p.full_name }}</td>
-                        <td class="px-6 py-3 text-gray-600">{{ p.phone || '-' }}</td>
-                        <td class="px-6 py-3 text-gray-600">{{ p.file_number || '-' }}</td>
-                        <td class="px-6 py-3 text-gray-500">{{ fmtDate(p.updated_at) }}</td>
-                    </tr>
-                    <tr v-if="!recentPatients?.length"><td colspan="4" class="text-center py-6 text-gray-400 text-sm">{{ t('No patients yet', 'لا يوجد مرضى') }}</td></tr>
-                </tbody>
-            </table>
+            <div class="overflow-x-auto">
+                <table class="w-full min-w-[600px] text-sm">
+                    <thead class="bg-[#1B365D]/5 text-[#1B365D]">
+                        <tr>
+                            <th class="text-start px-4 md:px-6 py-3 text-[11px] font-bold uppercase tracking-wider">{{ t('Name', 'الاسم') }}</th>
+                            <th class="text-start px-4 md:px-6 py-3 text-[11px] font-bold uppercase tracking-wider">{{ t('Phone', 'الهاتف') }}</th>
+                            <th class="text-start px-4 md:px-6 py-3 text-[11px] font-bold uppercase tracking-wider hidden md:table-cell">{{ t('File #', 'رقم الملف') }}</th>
+                            <th class="text-start px-4 md:px-6 py-3 text-[11px] font-bold uppercase tracking-wider hidden md:table-cell">{{ t('Updated', 'آخر تحديث') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        <tr v-for="p in recentPatients" :key="p.id" class="hover:bg-[#C4A265]/5 transition">
+                            <td class="px-4 md:px-6 py-3 font-medium text-slate-800">{{ p.full_name }}</td>
+                            <td class="px-4 md:px-6 py-3 text-slate-600">{{ p.phone || '-' }}</td>
+                            <td class="px-4 md:px-6 py-3 text-slate-600 hidden md:table-cell">{{ p.file_number || '-' }}</td>
+                            <td class="px-4 md:px-6 py-3 text-slate-500 hidden md:table-cell">{{ fmtDate(p.updated_at) }}</td>
+                        </tr>
+                        <tr v-if="!recentPatients?.length"><td colspan="4" class="text-center py-6 text-slate-400 text-sm">{{ t('No patients yet', 'لا يوجد مرضى') }}</td></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </template>

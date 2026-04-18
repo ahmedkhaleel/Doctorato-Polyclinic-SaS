@@ -19,44 +19,63 @@ function t(en, ar) { return isRtl.value ? ar : en; }
 
 <template>
     <div class="space-y-6 pb-10">
-        <div class="bg-gradient-to-br from-amber-600 to-amber-500 rounded-2xl p-6 shadow-lg">
-            <h1 class="text-2xl font-bold text-white">{{ t('Derma Patients', 'مرضى الجلدية') }}</h1>
-            <p class="text-amber-100/80 text-sm mt-1">{{ t('All patients with dermatology visits', 'جميع المرضى الذين لديهم زيارات جلدية') }}</p>
+        <!-- Navy Hero -->
+        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] shadow-xl">
+            <div class="pointer-events-none absolute -top-16 -end-16 h-56 w-56 rounded-full bg-[#C4A265]/20 blur-3xl"></div>
+            <div class="pointer-events-none absolute -bottom-20 start-1/3 h-48 w-48 rounded-full bg-[#C4A265]/10 blur-3xl"></div>
+            <div class="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-[#C4A265] to-transparent"></div>
+            <div class="relative p-4 md:p-7 flex flex-col md:flex-row md:items-center gap-4 md:gap-5 justify-between">
+                <div class="flex items-start gap-3 md:gap-4 min-w-0">
+                    <div class="w-12 h-12 md:w-14 md:h-14 rounded-xl bg-gradient-to-br from-[#C4A265] to-[#8B7043] flex items-center justify-center shadow-lg flex-shrink-0">
+                        <svg class="w-6 h-6 md:w-7 md:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+                    </div>
+                    <div class="min-w-0">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="h-[3px] w-6 bg-[#C4A265] rounded-full"></span>
+                            <span class="text-[10px] font-bold text-[#C4A265] tracking-[0.25em] uppercase">{{ isRtl ? 'الجلدية والتجميل' : 'DERMA & COSMETIC' }}</span>
+                        </div>
+                        <h1 class="text-xl md:text-3xl font-extrabold text-white tracking-tight">{{ t('Derma Patients', 'مرضى الجلدية') }}</h1>
+                        <p class="text-xs md:text-sm text-white/70 mt-1 max-w-xl">{{ t('All patients with dermatology visits', 'جميع المرضى الذين لديهم زيارات جلدية') }}</p>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4">
             <input v-model="search" type="text"
                 :placeholder="t('Search by name, phone, file #', 'بحث بالاسم أو الهاتف أو رقم الملف')"
-                class="doctorato-input w-full md:w-96 px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30/20 focus:border-[#1B365D]" />
+                class="doctorato-input w-full md:w-96 px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#1B365D]" />
         </div>
 
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-            <table class="w-full text-sm">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="text-start px-5 py-3 text-gray-500 font-semibold">{{ t('Name', 'الاسم') }}</th>
-                        <th class="text-start px-5 py-3 text-gray-500 font-semibold hidden sm:table-cell">{{ t('Phone', 'الهاتف') }}</th>
-                        <th class="text-start px-5 py-3 text-gray-500 font-semibold hidden md:table-cell">{{ t('File #', 'رقم الملف') }}</th>
-                        <th class="text-start px-5 py-3 text-gray-500 font-semibold hidden lg:table-cell">{{ t('Gender', 'النوع') }}</th>
-                        <th class="text-end px-5 py-3 text-gray-500 font-semibold">{{ t('Actions', 'إجراءات') }}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="p in patients.data" :key="p.id" class="border-t border-gray-100 hover:bg-gray-50">
-                        <td class="px-5 py-3 font-medium text-gray-800">{{ p.full_name }}</td>
-                        <td class="px-5 py-3 text-gray-600 hidden sm:table-cell">{{ p.phone || '-' }}</td>
-                        <td class="px-5 py-3 text-gray-600 hidden md:table-cell">{{ p.file_number || '-' }}</td>
-                        <td class="px-5 py-3 text-gray-600 hidden lg:table-cell">{{ p.gender || '-' }}</td>
-                        <td class="px-5 py-3 text-end">
-                            <Link :href="`/admin/patients/${p.id}?tab=derma`" class="text-amber-600 text-xs font-semibold">{{ t('Open', 'فتح') }}</Link>
-                        </td>
-                    </tr>
-                    <tr v-if="!patients.data.length"><td colspan="5" class="text-center py-8 text-gray-400">{{ t('No patients', 'لا يوجد مرضى') }}</td></tr>
-                </tbody>
-            </table>
-            <div v-if="patients.links && patients.links.length > 3" class="flex justify-center gap-1 p-4 border-t">
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full min-w-[600px] text-sm">
+                    <thead class="bg-[#1B365D]/5 text-[#1B365D]">
+                        <tr>
+                            <th class="text-start px-5 py-3 text-[11px] font-bold uppercase tracking-wider">{{ t('Name', 'الاسم') }}</th>
+                            <th class="text-start px-5 py-3 text-[11px] font-bold uppercase tracking-wider hidden sm:table-cell">{{ t('Phone', 'الهاتف') }}</th>
+                            <th class="text-start px-5 py-3 text-[11px] font-bold uppercase tracking-wider hidden md:table-cell">{{ t('File #', 'رقم الملف') }}</th>
+                            <th class="text-start px-5 py-3 text-[11px] font-bold uppercase tracking-wider hidden lg:table-cell">{{ t('Gender', 'النوع') }}</th>
+                            <th class="text-end px-5 py-3 text-[11px] font-bold uppercase tracking-wider">{{ t('Actions', 'إجراءات') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        <tr v-for="p in patients.data" :key="p.id" class="hover:bg-[#C4A265]/5 transition">
+                            <td class="px-5 py-3 font-medium text-slate-800">{{ p.full_name }}</td>
+                            <td class="px-5 py-3 text-slate-600 hidden sm:table-cell">{{ p.phone || '-' }}</td>
+                            <td class="px-5 py-3 text-slate-600 hidden md:table-cell">{{ p.file_number || '-' }}</td>
+                            <td class="px-5 py-3 text-slate-600 hidden lg:table-cell">{{ p.gender || '-' }}</td>
+                            <td class="px-5 py-3 text-end">
+                                <Link :href="`/admin/patients/${p.id}?tab=derma`" class="text-[#C4A265] hover:text-[#8B7043] text-xs font-bold">{{ t('Open', 'فتح') }}</Link>
+                            </td>
+                        </tr>
+                        <tr v-if="!patients.data.length"><td colspan="5" class="text-center py-8 text-slate-400">{{ t('No patients', 'لا يوجد مرضى') }}</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div v-if="patients.links && patients.links.length > 3" class="flex justify-center gap-1 p-4 border-t border-slate-100">
                 <Link v-for="l in patients.links" :key="l.label" :href="l.url || '#'"
-                    :class="['px-3 py-1.5 rounded-lg text-xs', l.active ? 'bg-amber-600 text-white' : l.url ? 'bg-gray-100 text-gray-700 hover:bg-gray-200' : 'bg-gray-50 text-gray-300 pointer-events-none']"
+                    :class="['px-3 py-1.5 rounded-lg text-xs font-semibold', l.active ? 'bg-gradient-to-r from-[#C4A265] to-[#8B7043] text-white' : l.url ? 'bg-slate-100 text-slate-700 hover:bg-slate-200' : 'bg-slate-50 text-slate-300 pointer-events-none']"
                     v-html="l.label"></Link>
             </div>
         </div>

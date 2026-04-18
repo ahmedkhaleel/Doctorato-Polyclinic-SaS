@@ -56,46 +56,69 @@ function fmt(d) { if (!d) return '-'; return new Date(d).toLocaleDateString(isRt
 
 <template>
     <div class="space-y-6 pb-10">
-        <div class="bg-gradient-to-br from-[#1B365D] to-[#C4A265] rounded-2xl p-6 shadow-lg flex items-center justify-between">
-            <h1 class="text-2xl font-bold text-white">{{ t('Client Sessions', 'جلسات العملاء') }}</h1>
-            <button @click="open()" class="px-4 py-2 bg-white/15 hover:bg-white/25 text-white rounded-xl text-sm font-semibold ring-1 ring-white/30">+ {{ t('New session', 'جلسة جديدة') }}</button>
+        <!-- Navy Hero -->
+        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] shadow-xl">
+            <div class="pointer-events-none absolute -top-16 -end-16 h-56 w-56 rounded-full bg-[#C4A265]/20 blur-3xl"></div>
+            <div class="pointer-events-none absolute -bottom-20 start-1/3 h-48 w-48 rounded-full bg-[#C4A265]/10 blur-3xl"></div>
+            <div class="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-[#C4A265] to-transparent"></div>
+            <div class="relative p-4 md:p-7 flex flex-col md:flex-row md:items-center gap-4 md:gap-5 justify-between">
+                <div class="flex items-start gap-3 md:gap-4 min-w-0">
+                    <div class="w-12 h-12 md:w-14 md:h-14 rounded-xl bg-gradient-to-br from-[#C4A265] to-[#8B7043] flex items-center justify-center shadow-lg flex-shrink-0">
+                        <svg class="w-6 h-6 md:w-7 md:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                    </div>
+                    <div class="min-w-0">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="h-[3px] w-6 bg-[#C4A265] rounded-full"></span>
+                            <span class="text-[10px] font-bold text-[#C4A265] tracking-[0.25em] uppercase">{{ isRtl ? 'الجلدية والتجميل' : 'DERMA & COSMETIC' }}</span>
+                        </div>
+                        <h1 class="text-xl md:text-3xl font-extrabold text-white tracking-tight">{{ t('Client Sessions', 'جلسات العملاء') }}</h1>
+                        <p class="text-xs md:text-sm text-white/70 mt-1">{{ t('Cosmetic session activity log', 'سجل نشاط جلسات التجميل') }}</p>
+                    </div>
+                </div>
+                <button @click="open()" class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#C4A265] to-[#8B7043] hover:from-[#8B7043] hover:to-[#C4A265] text-white font-bold px-4 md:px-5 py-2.5 shadow-md hover:shadow-lg transition flex-shrink-0">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                    {{ t('New session', 'جلسة جديدة') }}
+                </button>
+            </div>
         </div>
 
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-wrap gap-3">
-            <input v-model="search" :placeholder="t('Search patient…', 'بحث عن مريض…')" class="doctorato-input flex-1 min-w-[200px] px-4 py-2.5 border rounded-xl text-sm" />
-            <select v-model="procId" class="doctorato-input px-4 py-2.5 border rounded-xl text-sm">
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 flex flex-wrap gap-3">
+            <input v-model="search" :placeholder="t('Search patient…', 'بحث عن مريض…')" class="doctorato-input flex-1 min-w-[200px] px-4 py-2.5 border border-slate-200 rounded-xl text-sm" />
+            <select v-model="procId" class="doctorato-input px-4 py-2.5 border border-slate-200 rounded-xl text-sm">
                 <option value="">{{ t('All procedures', 'كل الإجراءات') }}</option>
                 <option v-for="p in procedures" :key="p.id" :value="p.id">{{ p.name_ar }}</option>
             </select>
         </div>
 
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-            <table class="w-full text-sm">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="text-start px-5 py-3 font-semibold text-gray-500">{{ t('Patient', 'المريض') }}</th>
-                        <th class="text-start px-5 py-3 font-semibold text-gray-500 hidden md:table-cell">{{ t('Procedure', 'الإجراء') }}</th>
-                        <th class="text-start px-5 py-3 font-semibold text-gray-500 hidden lg:table-cell">{{ t('Area', 'المنطقة') }}</th>
-                        <th class="text-start px-5 py-3 font-semibold text-gray-500 hidden lg:table-cell">{{ t('Cost', 'التكلفة') }}</th>
-                        <th class="text-start px-5 py-3 font-semibold text-gray-500 hidden md:table-cell">{{ t('Completed', 'تاريخ الإنجاز') }}</th>
-                        <th class="text-end px-5 py-3 font-semibold text-gray-500">{{ t('Actions', 'إجراءات') }}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="s in sessions.data" :key="s.id" class="border-t hover:bg-gray-50">
-                        <td class="px-5 py-3 font-medium">{{ s.patient?.full_name || '-' }}</td>
-                        <td class="px-5 py-3 hidden md:table-cell">{{ s.procedure?.name_ar || '-' }}</td>
-                        <td class="px-5 py-3 hidden lg:table-cell">{{ s.area_treated || '-' }}</td>
-                        <td class="px-5 py-3 hidden lg:table-cell">{{ s.cost }}</td>
-                        <td class="px-5 py-3 hidden md:table-cell">{{ fmt(s.completed_at) }}</td>
-                        <td class="px-5 py-3 text-end space-x-2 rtl:space-x-reverse">
-                            <button @click="open(s)" class="text-[#1B365D] text-xs font-semibold">{{ t('Edit', 'تعديل') }}</button>
-                            <button @click="remove(s)" class="text-red-600 text-xs font-semibold">{{ t('Delete', 'حذف') }}</button>
-                        </td>
-                    </tr>
-                    <tr v-if="!sessions.data.length"><td colspan="6" class="text-center py-8 text-gray-400">{{ t('No sessions', 'لا توجد جلسات') }}</td></tr>
-                </tbody>
-            </table>
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full min-w-[800px] text-sm">
+                    <thead class="bg-[#1B365D]/5 text-[#1B365D]">
+                        <tr>
+                            <th class="text-start px-5 py-3 text-[11px] font-bold uppercase tracking-wider">{{ t('Patient', 'المريض') }}</th>
+                            <th class="text-start px-5 py-3 text-[11px] font-bold uppercase tracking-wider hidden md:table-cell">{{ t('Procedure', 'الإجراء') }}</th>
+                            <th class="text-start px-5 py-3 text-[11px] font-bold uppercase tracking-wider hidden lg:table-cell">{{ t('Area', 'المنطقة') }}</th>
+                            <th class="text-start px-5 py-3 text-[11px] font-bold uppercase tracking-wider hidden lg:table-cell">{{ t('Cost', 'التكلفة') }}</th>
+                            <th class="text-start px-5 py-3 text-[11px] font-bold uppercase tracking-wider hidden md:table-cell">{{ t('Completed', 'تاريخ الإنجاز') }}</th>
+                            <th class="text-end px-5 py-3 text-[11px] font-bold uppercase tracking-wider">{{ t('Actions', 'إجراءات') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        <tr v-for="s in sessions.data" :key="s.id" class="hover:bg-[#C4A265]/5 transition">
+                            <td class="px-5 py-3 font-medium text-slate-800">{{ s.patient?.full_name || '-' }}</td>
+                            <td class="px-5 py-3 hidden md:table-cell text-slate-600">{{ s.procedure?.name_ar || '-' }}</td>
+                            <td class="px-5 py-3 hidden lg:table-cell text-slate-600">{{ s.area_treated || '-' }}</td>
+                            <td class="px-5 py-3 hidden lg:table-cell text-slate-600">{{ s.cost }}</td>
+                            <td class="px-5 py-3 hidden md:table-cell text-slate-500">{{ fmt(s.completed_at) }}</td>
+                            <td class="px-5 py-3 text-end space-x-2 rtl:space-x-reverse">
+                                <button @click="open(s)" class="text-[#C4A265] hover:text-[#8B7043] text-xs font-bold">{{ t('Edit', 'تعديل') }}</button>
+                                <button @click="remove(s)" class="text-red-600 hover:text-red-800 text-xs font-bold">{{ t('Delete', 'حذف') }}</button>
+                            </td>
+                        </tr>
+                        <tr v-if="!sessions.data.length"><td colspan="6" class="text-center py-8 text-slate-400">{{ t('No sessions', 'لا توجد جلسات') }}</td></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <div v-if="showModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" @click.self="showModal = false">
@@ -160,7 +183,7 @@ function fmt(d) { if (!d) return '-'; return new Date(d).toLocaleDateString(isRt
                     </div>
                     <div class="md:col-span-2 flex justify-end gap-2 pt-2">
                         <button type="button" @click="showModal = false" class="px-4 py-2 rounded-lg bg-gray-100 text-sm">{{ t('Cancel', 'إلغاء') }}</button>
-                        <button :disabled="form.processing" class="px-5 py-2 rounded-lg bg-[#1B365D] text-white text-sm font-semibold">{{ t('Save', 'حفظ') }}</button>
+                        <button :disabled="form.processing" class="px-5 py-2 rounded-lg bg-gradient-to-r from-[#C4A265] to-[#8B7043] text-white text-sm font-bold">{{ t('Save', 'حفظ') }}</button>
                     </div>
                 </form>
             </div>
