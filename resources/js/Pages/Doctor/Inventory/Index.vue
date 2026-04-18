@@ -65,7 +65,7 @@ function isExpired(s) { return s.expiry_date && new Date(s.expiry_date) < new Da
 
 const moduleOptions = [
     { value: '', label: { en: 'All Modules', ar: 'كل الأقسام' } },
-    { value: 'derma', label: { en: 'Dermatology', ar: 'الجلدية' } },
+    { value: 'derma', label: { en: 'Dermatology & Cosmetic', ar: 'الجلدية والتجميل' } },
     { value: 'dental', label: { en: 'Dental', ar: 'الأسنان' } },
     { value: 'shared', label: { en: 'Shared', ar: 'مشترك' } },
 ];

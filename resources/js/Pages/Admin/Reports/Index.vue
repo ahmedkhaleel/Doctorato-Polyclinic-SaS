@@ -338,7 +338,7 @@ const maxServiceVisits = computed(() => {
                 </div>
             </div>
 
-            <!-- ── Module Comparison (Dermatology vs Dental vs Pediatric) ──── -->
+            <!-- ── Module Comparison (Derma & Cosmetic vs Dental vs Pediatric) ──── -->
             <div
                 v-if="moduleComparison && !moduleFilter"
                 class="bg-white rounded-2xl border border-gray-100/80 p-4 md:p-6 transition-all duration-700"
@@ -351,7 +351,7 @@ const maxServiceVisits = computed(() => {
                     </div>
                     <div>
                         <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wider">{{ isRtl ? 'مقارنة الأقسام' : 'Module Comparison' }}</h3>
-                        <p class="text-[11px] text-gray-400">{{ isRtl ? 'الجلدية مقابل الأسنان مقابل الأطفال — هذا الشهر' : 'Dermatology vs Dental vs Pediatric — This Month' }}</p>
+                        <p class="text-[11px] text-gray-400">{{ isRtl ? 'الجلدية والتجميل مقابل الأسنان مقابل الأطفال — هذا الشهر' : 'Derma & Cosmetic vs Dental vs Pediatric — This Month' }}</p>
                     </div>
                 </div>
 
@@ -364,7 +364,7 @@ const maxServiceVisits = computed(() => {
                                 <div class="flex items-center justify-between mb-1">
                                     <span class="text-xs font-medium text-gray-600 flex items-center gap-1.5">
                                         <span class="w-2.5 h-2.5 rounded-full bg-[#1B365D]"></span>
-                                        {{ isRtl ? 'الجلدية' : 'Dermatology' }}
+                                        {{ isRtl ? 'الجلدية والتجميل' : 'Dermatology & Cosmetic' }}
                                     </span>
                                     <span class="text-xs font-bold text-gray-900">{{ formatCurrency(moduleComparison.derma?.revenue || 0) }}</span>
                                 </div>
@@ -407,7 +407,7 @@ const maxServiceVisits = computed(() => {
                                 <div class="flex items-center justify-between mb-1">
                                     <span class="text-xs font-medium text-gray-600 flex items-center gap-1.5">
                                         <span class="w-2.5 h-2.5 rounded-full bg-[#1B365D]"></span>
-                                        {{ isRtl ? 'الجلدية' : 'Dermatology' }}
+                                        {{ isRtl ? 'الجلدية والتجميل' : 'Dermatology & Cosmetic' }}
                                     </span>
                                     <div class="flex items-center gap-2">
                                         <span class="text-xs font-bold text-gray-900">{{ moduleComparison.derma?.visits || 0 }}</span>
@@ -459,7 +459,7 @@ const maxServiceVisits = computed(() => {
                                 <div class="flex items-center justify-between mb-1">
                                     <span class="text-xs font-medium text-gray-600 flex items-center gap-1.5">
                                         <span class="w-2.5 h-2.5 rounded-full bg-[#1B365D]"></span>
-                                        {{ isRtl ? 'الجلدية' : 'Dermatology' }}
+                                        {{ isRtl ? 'الجلدية والتجميل' : 'Dermatology & Cosmetic' }}
                                     </span>
                                     <span class="text-xs font-bold text-gray-900">{{ moduleComparison.derma?.patients || 0 }}</span>
                                 </div>
