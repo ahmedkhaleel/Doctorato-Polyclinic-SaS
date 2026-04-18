@@ -444,7 +444,7 @@ function selectPatient(patient) {
                                         @focus="showPatientDropdown = true"
                                         @blur="setTimeout(() => showPatientDropdown = false, 200)"
                                         type="text"
-                                        class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-sm focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all placeholder:text-gray-400"
+                                        class="doctorato-input w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-sm focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all placeholder:text-gray-400"
                                         :placeholder="isRtl ? 'ابحث عن مريض...' : 'Search for a patient...'"
                                     />
                                     <div class="absolute inset-y-0 end-0 pe-3 flex items-center pointer-events-none">

@@ -799,7 +799,7 @@ function translateDescription(desc) {
                                             @focus="showTemplateDropdown = true"
                                             @blur="setTimeout(() => showTemplateDropdown = false, 200)"
                                             :placeholder="$t('a_search_templates')"
-                                            class="w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-2.5 text-sm border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all duration-200"
+                                            class="doctorato-input w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-2.5 text-sm border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all duration-200"
                                         />
                                     </div>
                                     <div v-if="showTemplateDropdown && filteredTemplateOptions.length" class="absolute z-20 mt-1 w-full bg-white border border-gray-200 rounded-xl shadow-lg max-h-48 overflow-y-auto">
@@ -1157,7 +1157,7 @@ function translateDescription(desc) {
                                                 @focus="showAssigneeDropdown = true"
                                                 @blur="setTimeout(() => showAssigneeDropdown = false, 200)"
                                                 :placeholder="$t('a_search_assignee')"
-                                                class="w-full pl-10 pr-4 text-sm border border-gray-200 rounded-xl py-2.5 bg-white focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all"
+                                                class="doctorato-input w-full pl-10 pr-4 text-sm border border-gray-200 rounded-xl py-2.5 bg-white focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all"
                                             />
                                             <div v-if="showAssigneeDropdown && filteredAssigneeOptions.length" class="absolute z-20 mt-1 w-full bg-white border border-gray-200 rounded-xl shadow-lg max-h-48 overflow-y-auto">
                                                 <button type="button"

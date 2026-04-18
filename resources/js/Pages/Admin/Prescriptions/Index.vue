@@ -205,7 +205,7 @@ function submitPrescription() {
                                 @focus="searchPatients(patientSearch)"
                                 @blur="setTimeout(() => showPatientDropdown = false, 200)"
                                 type="text"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                                class="doctorato-input w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
                                 :placeholder="$t('a_search_patient')"
                                 autocomplete="off"
                             />
@@ -255,7 +255,7 @@ function submitPrescription() {
                                     @input="searchMedications(item.medication_name, idx)"
                                     @blur="setTimeout(() => { if (activeMedIdx === idx) medicationSuggestions = []; }, 200)"
                                     type="text"
-                                    class="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm"
+                                    class="doctorato-input w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm"
                                     :placeholder="$t('a_medication_name') + ' *'"
                                 />
                                 <div v-if="activeMedIdx === idx && medicationSuggestions.length" class="absolute z-10 mt-1 w-full bg-white rounded-lg shadow-lg border max-h-40 overflow-y-auto">
@@ -334,7 +334,7 @@ function submitPrescription() {
                     v-if="activeModules.length> 1"
                     v-model="moduleFilter"
                     @change="applyFilters"
-                    class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
+                    class="doctorato-input px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                 >
                     <option value="">{{ $t('a_all_departments') }}</option>
                     <option v-for="m in activeModules" :key="m.slug" :value="m.slug">{{ m.name }}</option>

@@ -885,7 +885,7 @@ function formatDateTime(date) {
                                                     @input="searchMedications(item.medication_name, idx)"
                                                     @blur="setTimeout(() => { if (activeMedIdx === idx) medicationSuggestions = []; }, 200)"
                                                     type="text"
-                                                    class="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm"
+                                                    class="doctorato-input w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm"
                                                     placeholder="Medication name *"
                                                 />
                                                 <div v-if="activeMedIdx === idx && medicationSuggestions.length" class="absolute z-10 mt-1 w-full bg-white rounded-lg shadow-lg border max-h-40 overflow-y-auto">

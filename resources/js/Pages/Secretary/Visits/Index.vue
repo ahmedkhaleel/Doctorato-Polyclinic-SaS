@@ -139,18 +139,18 @@ onMounted(() => {
                             class="doctorato-input w-full ltr:pl-10 ltr:pr-4 rtl:pr-10 rtl:pl-4 py-2.5 bg-white/10 border border-white/20 rounded-xl text-sm text-white placeholder-gray-400 focus:ring-2 focus:ring-[#0d9488]/50 focus:border-[#0d9488] transition"
                         />
                     </div>
-                    <select v-model="statusFilter" class="px-3 py-2.5 bg-white/10 border border-white/20 rounded-xl text-sm text-white focus:ring-2 focus:ring-[#0d9488]/50 focus:border-[#0d9488] [&>option]:text-gray-900">
+                    <select v-model="statusFilter" class="doctorato-input px-3 py-2.5 bg-white/10 border border-white/20 rounded-xl text-sm text-white focus:ring-2 focus:ring-[#0d9488]/50 focus:border-[#0d9488] [&>option]:text-gray-900">
                         <option value="">{{ isRtl ? 'جميع الحالات' : 'All Status' }}</option>
                         <option value="waiting">{{ isRtl ? 'انتظار' : 'Waiting' }}</option>
                         <option value="in_progress">{{ isRtl ? 'جاري' : 'In Progress' }}</option>
                         <option value="completed">{{ isRtl ? 'مكتمل' : 'Completed' }}</option>
                         <option value="cancelled">{{ isRtl ? 'ملغي' : 'Cancelled' }}</option>
                     </select>
-                    <select v-if="activeModules.length> 1" v-model="moduleFilter" class="px-3 py-2.5 bg-white/10 border border-white/20 rounded-xl text-sm text-white focus:ring-2 focus:ring-[#0d9488]/50 focus:border-[#0d9488] [&>option]:text-gray-900">
+                    <select v-if="activeModules.length> 1" v-model="moduleFilter" class="doctorato-input px-3 py-2.5 bg-white/10 border border-white/20 rounded-xl text-sm text-white focus:ring-2 focus:ring-[#0d9488]/50 focus:border-[#0d9488] [&>option]:text-gray-900">
                         <option value="">{{ isRtl ? 'كل الأقسام' : 'All Departments' }}</option>
                         <option v-for="mod in activeModules" :key="mod.slug" :value="mod.slug">{{ mod.name }}</option>
                     </select>
-                    <select v-model="visitTypeFilter" class="px-3 py-2.5 bg-white/10 border border-white/20 rounded-xl text-sm text-white focus:ring-2 focus:ring-[#0d9488]/50 focus:border-[#0d9488] [&>option]:text-gray-900">
+                    <select v-model="visitTypeFilter" class="doctorato-input px-3 py-2.5 bg-white/10 border border-white/20 rounded-xl text-sm text-white focus:ring-2 focus:ring-[#0d9488]/50 focus:border-[#0d9488] [&>option]:text-gray-900">
                         <option value="">{{ isRtl ? 'جميع الأنواع' : 'All Types' }}</option>
                         <option value="consultation">{{ isRtl ? 'استشارة' : 'Consultation' }}</option>
                         <option value="session">{{ isRtl ? 'جلسة' : 'Session' }}</option>

@@ -132,7 +132,7 @@ function statusLabel(status) {
                 <select
                     v-if="activeModules.length> 1"
                     v-model="moduleFilter"
-                    class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
+                    class="doctorato-input px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                 >
                     <option value="">{{ isRtl ? 'كل الأقسام' : 'All Departments' }}</option>
                     <option v-for="mod in activeModules" :key="mod.slug" :value="mod.slug">{{ mod.name }}</option>

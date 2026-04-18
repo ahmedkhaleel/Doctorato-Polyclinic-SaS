@@ -661,7 +661,7 @@ onMounted(() => {
                                                 @focus="searchPatients(patientSearch)"
                                                 @blur="setTimeout(() => showPatientDropdown = false, 200)"
                                                 type="text"
-                                                class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition"
+                                                class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition"
                                                 :placeholder="$t('a_search_patient')"
                                                 autocomplete="off"
                                             />
@@ -686,7 +686,7 @@ onMounted(() => {
                                         <label class="block text-sm font-medium text-gray-700 mb-2">{{ $t('a_medications') }}</label>
                                         <div v-for="(item, idx) in prescriptionForm.items" :key="idx" class="flex flex-wrap gap-2 mb-3 items-start p-4 bg-white rounded-xl border border-gray-200">
                                             <div class="flex-1 min-w-[160px] relative">
-                                                <input v-model="item.medication_name" @input="searchMedications(item.medication_name, idx)" @blur="setTimeout(() => { if (activeMedIdx === idx) medicationSuggestions = []; }, 200)" type="text" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition" placeholder="Medication name *" />
+                                                <input v-model="item.medication_name" @input="searchMedications(item.medication_name, idx)" @blur="setTimeout(() => { if (activeMedIdx === idx) medicationSuggestions = []; }, 200)" type="text" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition" placeholder="Medication name *" />
                                                 <div v-if="activeMedIdx === idx && medicationSuggestions.length" class="absolute z-10 mt-1 w-full bg-white rounded-xl shadow-xl border max-h-40 overflow-y-auto">
                                                     <button v-for="med in medicationSuggestions" :key="med.id" type="button" @mousedown.prevent="selectMedication(med, idx)" class="w-full ltr:text-left rtl:text-right px-3 py-2 text-sm hover:bg-[#C4A265]/5 border-b last:border-b-0">
                                                         <span class="font-medium text-gray-900">{{ med.name }}</span>

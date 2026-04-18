@@ -452,7 +452,7 @@ const visitTypeConfig = {
                                 class="doctorato-input w-full rounded-xl border-gray-200 text-sm font-medium focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all tabular-nums" />
                             <transition enter-active-class="transition duration-200 ease-out" enter-from-class="opacity-0 -translate-y-1 max-h-0" enter-to-class="opacity-100 translate-y-0 max-h-20" leave-active-class="transition duration-150 ease-in" leave-from-class="opacity-100" leave-to-class="opacity-0">
                                 <textarea v-if="form.deductions> 0" v-model="form.deduction_notes" placeholder="Reason for deductions..."
-                                    rows="2" class="mt-2 w-full rounded-xl border-gray-200 text-xs focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all resize-none"></textarea>
+                                    rows="2" class="doctorato-input mt-2 w-full rounded-xl border-gray-200 text-xs focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all resize-none"></textarea>
                             </transition>
                         </div>
 

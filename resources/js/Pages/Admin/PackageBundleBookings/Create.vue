@@ -372,7 +372,7 @@ function submit() {
                             @blur="setTimeout(() => showPatientDropdown = false, 200)"
                             type="text"
                             placeholder="Search patient by name, phone, or file number..."
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
+                            class="doctorato-input w-full px-4 py-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                         />
                         <div v-if="showPatientDropdown && filteredPatients.length > 0"
                              class="absolute z-20 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">

@@ -1028,7 +1028,7 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handleCalendarKe
                             <input v-if="activeLeads && activeLeads.length> 8"
                                 v-model="quickAddLeadSearch"
                                 type="text"
-                                class="w-full rounded-xl border-gray-200 text-sm focus:ring-teal-500 focus:border-teal-500 mb-2"
+                                class="doctorato-input w-full rounded-xl border-gray-200 text-sm focus:ring-teal-500 focus:border-teal-500 mb-2"
                                 :placeholder="isRtl ? 'ابحث بالاسم أو الهاتف...' : 'Search by name or phone...'" />
                             <select v-model="quickAddLeadId" class="doctorato-input w-full rounded-xl border-gray-200 text-sm focus:ring-[#C4A265]/30 focus:border-[#1B365D]" size="1">
                                 <option value="">{{ isRtl ? '-- اختر عميل --' : '-- Select lead --' }}</option>

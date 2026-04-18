@@ -810,7 +810,7 @@ function getServiceLabel(id) {
                                     @blur="setTimeout(() => showPatientDropdown = false, 200)"
                                     type="text"
                                     :placeholder="$t('a_search_patient_placeholder')"
-                                    class="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
+                                    class="doctorato-input w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                                 />
                                 <button
                                     v-if="selectedPatient"

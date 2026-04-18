@@ -128,7 +128,7 @@ onMounted(() => {
                     </div>
                     <select
                         v-model="statusFilter"
-                        class="px-4 py-2.5 bg-white/10 border border-white/20 rounded-xl text-sm text-white focus:ring-2 focus:ring-[#4CAF50]/50 focus:border-[#4CAF50] [&>option]:text-gray-900"
+                        class="doctorato-input px-4 py-2.5 bg-white/10 border border-white/20 rounded-xl text-sm text-white focus:ring-2 focus:ring-[#4CAF50]/50 focus:border-[#4CAF50] [&>option]:text-gray-900"
                     >
                         <option value="">{{ isRtl ? 'جميع الحالات' : 'All Status' }}</option>
                         <option value="waiting">{{ isRtl ? 'انتظار' : 'Waiting' }}</option>

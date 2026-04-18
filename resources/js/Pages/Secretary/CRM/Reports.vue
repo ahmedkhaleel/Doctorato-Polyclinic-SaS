@@ -239,7 +239,7 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handleReportsKey
             <div class="flex items-center gap-3 flex-wrap">
                 <!-- Period Selector -->
                 <select v-model="selectedPeriod" @change="changePeriod"
-                        class="bg-white/20 backdrop-blur text-white border border-white/30 rounded-xl py-2.5 px-4 text-sm focus:ring-2 focus:ring-white/50 [&>option]:text-slate-800">
+                        class="doctorato-input bg-white/20 backdrop-blur text-white border border-white/30 rounded-xl py-2.5 px-4 text-sm focus:ring-2 focus:ring-white/50 [&>option]:text-slate-800">
                     <option v-for="(label, key) in periodLabels" :key="key" :value="key">{{ isRtl ? label.ar : label.en }}</option>
                 </select>
                 <!-- Comparison toggle -->

@@ -171,7 +171,7 @@ function formatDate(d) {
                 <option value="">{{ isRtl ? 'كل الأنواع' : 'All Types' }}</option>
                 <option v-for="(l, k) in typeLabels" :key="k" :value="k">{{ isRtl ? l.ar : l.en }}</option>
             </select>
-            <select v-if="activeModules.length> 1" v-model="moduleFilter" @change="applyFilters" class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm">
+            <select v-if="activeModules.length> 1" v-model="moduleFilter" @change="applyFilters" class="doctorato-input px-4 py-2.5 border border-gray-200 rounded-xl text-sm">
                 <option value="">{{ isRtl ? 'كل الأقسام' : 'All Departments' }}</option>
                 <option v-for="mod in activeModules" :key="mod.slug" :value="mod.slug">{{ mod.name }}</option>
             </select>

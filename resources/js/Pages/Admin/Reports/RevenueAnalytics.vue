@@ -86,7 +86,7 @@ const maxServiceRevenue = computed(() => Math.max(...(props.topServices?.map(s =
                     </div>
                     <div class="flex items-center gap-2 flex-wrap">
                         <select v-if="activeModules.length> 1" v-model="moduleFilter"
-                            class="px-3 py-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl text-sm text-white focus:ring-2 focus:ring-[#C4A265]/40 focus:border-[#C4A265]">
+                            class="doctorato-input px-3 py-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl text-sm text-white focus:ring-2 focus:ring-[#C4A265]/40 focus:border-[#C4A265]">
                             <option value="" class="text-slate-800">{{ isRtl ? 'كل الأقسام' : 'All Departments' }}</option>
                             <option v-for="mod in activeModules" :key="mod.slug" :value="mod.slug" class="text-slate-800">{{ mod.name }}</option>
                         </select>
