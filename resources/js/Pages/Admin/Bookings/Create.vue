@@ -627,117 +627,156 @@ function getServiceLabel(id) {
                 </div>
             </div>
 
-            <!-- Booking Type Selector -->
+            <!-- ═══ Booking Type Selector — premium card-grid with icons + animations ═══ -->
             <div class="mb-6">
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-5 max-w-4xl mx-auto">
-                    <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">{{ $t('a_booking_type') }}</h3>
-                    <div class="grid gap-3 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4" :class="{ 'xl:grid-cols-5': isDentalEnabled || isPediatricEnabled }">
-                        <!-- Combined Dermatology & Cosmetic (one module — sub-type selected below) -->
-                        <button
-                            type="button"
+                <div class="relative bg-white rounded-2xl shadow-sm border border-slate-200/80 p-5 md:p-6 max-w-5xl mx-auto overflow-hidden">
+                    <!-- decorative gold accent line -->
+                    <div class="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-[#C4A265]/40 to-transparent"></div>
+
+                    <div class="flex items-center gap-3 mb-4 md:mb-5">
+                        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-[#C4A265] to-[#8B7043] flex items-center justify-center shadow-sm shadow-[#C4A265]/20">
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-sm md:text-base font-extrabold text-[#1B365D]">{{ $t('a_booking_type') }}</h3>
+                            <p class="text-[11px] md:text-xs text-slate-500 mt-0.5">{{ isRtl ? 'اختر نوع الحجز المناسب' : 'Pick the booking type that fits the patient' }}</p>
+                        </div>
+                    </div>
+
+                    <div class="grid gap-3 md:gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4" :class="{ 'xl:grid-cols-6': isDentalEnabled && isPediatricEnabled, 'xl:grid-cols-5': (isDentalEnabled || isPediatricEnabled) && !(isDentalEnabled && isPediatricEnabled) }">
+
+                        <!-- 1. Derma & Cosmetic (combined) -->
+                        <button type="button"
                             @click="bookingType = bookingType === 'cosmetic_consultation' ? 'cosmetic_consultation' : 'dermatology_consultation'"
                             :class="[
-                                'p-3 rounded-xl border-2 transition-all text-start',
+                                'booking-type-card group',
                                 (bookingType === 'dermatology_consultation' || bookingType === 'cosmetic_consultation')
-                                    ? 'border-[#C4A265] bg-amber-50/50'
-                                    : 'border-gray-200 hover:border-gray-300'
-                            ]"
-                        >
-                            <p class="text-sm font-semibold text-gray-800">{{ $t('a_derma_cosmetic_module') }}</p>
-                            <p class="text-[11px] text-gray-500 mt-0.5">{{ $t('a_dermatology_consultation') }} / {{ $t('a_cosmetic_consultation') }}</p>
+                                    ? 'is-active theme-gold'
+                                    : 'theme-gold'
+                            ]">
+                            <div class="booking-type-icon">
+                                <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                                </svg>
+                            </div>
+                            <p class="booking-type-title">{{ $t('a_derma_cosmetic_module') }}</p>
+                            <p class="booking-type-sub">{{ $t('a_dermatology_consultation') }} / {{ $t('a_cosmetic_consultation') }}</p>
+                            <span class="booking-type-check" aria-hidden="true">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                            </span>
                         </button>
-                        <button
-                            type="button"
+
+                        <!-- 2. Service booking -->
+                        <button type="button"
                             @click="bookingType = 'service'"
-                            :class="[
-                                'p-3 rounded-xl border-2 transition-all text-start',
-                                bookingType === 'service'
-                                    ? 'border-[#C4A265] bg-amber-50/50'
-                                    : 'border-gray-200 hover:border-gray-300'
-                            ]"
-                        >
-                            <p class="text-sm font-semibold text-gray-800">{{ $t('a_book_service') }}</p>
+                            :class="['booking-type-card group theme-gold', bookingType === 'service' ? 'is-active' : '']">
+                            <div class="booking-type-icon">
+                                <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456z"/>
+                                </svg>
+                            </div>
+                            <p class="booking-type-title">{{ $t('a_book_service') }}</p>
+                            <p class="booking-type-sub">{{ isRtl ? 'جلسة / خدمة علاجية' : 'Treatment session or service' }}</p>
+                            <span class="booking-type-check" aria-hidden="true">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                            </span>
                         </button>
-                        <button
-                            v-if="isDentalEnabled"
-                            type="button"
+
+                        <!-- 3. Dental consultation -->
+                        <button v-if="isDentalEnabled" type="button"
                             @click="bookingType = 'dental_consultation'"
-                            :class="[
-                                'p-3 rounded-xl border-2 transition-all text-start',
-                                bookingType === 'dental_consultation'
-                                    ? 'border-[#1B365D] bg-slate-50/50'
-                                    : 'border-gray-200 hover:border-gray-300'
-                            ]"
-                        >
-                            <p class="text-sm font-semibold text-gray-800">{{ $t('a_dental_consultation') }}</p>
+                            :class="['booking-type-card group theme-navy', bookingType === 'dental_consultation' ? 'is-active' : '']">
+                            <div class="booking-type-icon">
+                                <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342"/>
+                                </svg>
+                            </div>
+                            <p class="booking-type-title">{{ $t('a_dental_consultation') }}</p>
+                            <p class="booking-type-sub">{{ isRtl ? 'فحص وتشخيص الأسنان' : 'Examination & diagnosis' }}</p>
+                            <span class="booking-type-check" aria-hidden="true">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                            </span>
                         </button>
-                        <button
-                            v-if="isDentalEnabled"
-                            type="button"
+
+                        <!-- 4. Dental service -->
+                        <button v-if="isDentalEnabled" type="button"
                             @click="bookingType = 'dental_service'"
-                            :class="[
-                                'p-3 rounded-xl border-2 transition-all text-start',
-                                bookingType === 'dental_service'
-                                    ? 'border-[#1B365D] bg-slate-50/50'
-                                    : 'border-gray-200 hover:border-gray-300'
-                            ]"
-                        >
-                            <p class="text-sm font-semibold text-gray-800">{{ $t('a_dental_service') }}</p>
+                            :class="['booking-type-card group theme-navy', bookingType === 'dental_service' ? 'is-active' : '']">
+                            <div class="booking-type-icon">
+                                <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17l-5.658-5.66A4.022 4.022 0 013 6.476V5a1 1 0 011-1h2.476c1.064 0 2.084.423 2.836 1.176l5.658 5.66M11.42 15.17l2.496-2.496M11.42 15.17l4.243 4.243a2 2 0 002.828 0l.586-.586a2 2 0 000-2.828L14.83 11.758M14.83 11.758L18 8.586a2 2 0 000-2.828l-.586-.586a2 2 0 00-2.828 0L11.42 8.414"/>
+                                </svg>
+                            </div>
+                            <p class="booking-type-title">{{ $t('a_dental_service') }}</p>
+                            <p class="booking-type-sub">{{ isRtl ? 'علاج / حشو / تنظيف' : 'Treatment / filling / cleaning' }}</p>
+                            <span class="booking-type-check" aria-hidden="true">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                            </span>
                         </button>
-                        <button
-                            v-if="isPediatricEnabled"
-                            type="button"
+
+                        <!-- 5. Pediatric consultation -->
+                        <button v-if="isPediatricEnabled" type="button"
                             @click="bookingType = 'pediatric_consultation'"
-                            :class="[
-                                'p-3 rounded-xl border-2 transition-all text-start',
-                                bookingType === 'pediatric_consultation'
-                                    ? 'border-emerald-500 bg-emerald-50/50'
-                                    : 'border-gray-200 hover:border-gray-300'
-                            ]"
-                        >
-                            <p class="text-sm font-semibold text-gray-800">{{ isRtl ? 'كشف أطفال' : 'Pediatric Consultation' }}</p>
+                            :class="['booking-type-card group theme-emerald', bookingType === 'pediatric_consultation' ? 'is-active' : '']">
+                            <div class="booking-type-icon">
+                                <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                                </svg>
+                            </div>
+                            <p class="booking-type-title">{{ isRtl ? 'كشف أطفال' : 'Pediatric Consultation' }}</p>
+                            <p class="booking-type-sub">{{ isRtl ? 'فحص وتقييم طفلك' : 'Child checkup & assessment' }}</p>
+                            <span class="booking-type-check" aria-hidden="true">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                            </span>
                         </button>
-                        <button
-                            v-if="isPediatricEnabled"
-                            type="button"
+
+                        <!-- 6. Pediatric service -->
+                        <button v-if="isPediatricEnabled" type="button"
                             @click="bookingType = 'pediatric_service'"
-                            :class="[
-                                'p-3 rounded-xl border-2 transition-all text-start',
-                                bookingType === 'pediatric_service'
-                                    ? 'border-emerald-500 bg-emerald-50/50'
-                                    : 'border-gray-200 hover:border-gray-300'
-                            ]"
-                        >
-                            <p class="text-sm font-semibold text-gray-800">{{ isRtl ? 'خدمة أطفال' : 'Pediatric Service' }}</p>
+                            :class="['booking-type-card group theme-emerald', bookingType === 'pediatric_service' ? 'is-active' : '']">
+                            <div class="booking-type-icon">
+                                <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                </svg>
+                            </div>
+                            <p class="booking-type-title">{{ isRtl ? 'خدمة أطفال' : 'Pediatric Service' }}</p>
+                            <p class="booking-type-sub">{{ isRtl ? 'تطعيم / متابعة نمو' : 'Vaccine / growth check' }}</p>
+                            <span class="booking-type-check" aria-hidden="true">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                            </span>
                         </button>
                     </div>
 
                     <!-- Sub-type selector for Dermatology & Cosmetic module -->
-                    <div v-if="bookingType === 'dermatology_consultation' || bookingType === 'cosmetic_consultation'" class="mt-4 pt-4 border-t border-slate-100">
-                        <p class="text-xs font-bold text-[#1B365D] uppercase tracking-wider mb-2">{{ $t('a_consultation_subtype') }}</p>
+                    <div v-if="bookingType === 'dermatology_consultation' || bookingType === 'cosmetic_consultation'"
+                         class="mt-5 pt-5 border-t border-slate-100 animate-slideDown">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="h-[3px] w-5 bg-[#C4A265] rounded-full"></span>
+                            <p class="text-[11px] font-bold text-[#1B365D] uppercase tracking-[0.2em]">{{ $t('a_consultation_subtype') }}</p>
+                        </div>
                         <div class="flex gap-2 flex-wrap">
-                            <button
-                                type="button"
+                            <button type="button"
                                 @click="bookingType = 'dermatology_consultation'"
                                 :class="[
-                                    'px-4 py-2 rounded-xl text-sm font-semibold transition-all',
+                                    'inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200',
                                     bookingType === 'dermatology_consultation'
-                                        ? 'bg-gradient-to-r from-[#C4A265] to-[#8B7043] text-white shadow-md'
-                                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                                ]"
-                            >
+                                        ? 'bg-gradient-to-r from-[#C4A265] to-[#8B7043] text-white shadow-md hover:shadow-lg scale-100'
+                                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200 hover:scale-[1.02]'
+                                ]">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
                                 {{ $t('a_derma_general') }}
                             </button>
-                            <button
-                                type="button"
+                            <button type="button"
                                 @click="bookingType = 'cosmetic_consultation'"
                                 :class="[
-                                    'px-4 py-2 rounded-xl text-sm font-semibold transition-all',
+                                    'inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200',
                                     bookingType === 'cosmetic_consultation'
-                                        ? 'bg-gradient-to-r from-[#C4A265] to-[#8B7043] text-white shadow-md'
-                                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                                ]"
-                            >
+                                        ? 'bg-gradient-to-r from-[#C4A265] to-[#8B7043] text-white shadow-md hover:shadow-lg scale-100'
+                                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200 hover:scale-[1.02]'
+                                ]">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"/></svg>
                                 {{ $t('a_cosmetic_consultation') }}
                             </button>
                         </div>
@@ -1523,3 +1562,157 @@ function getServiceLabel(id) {
         />
     </AdminLayout>
 </template>
+
+<style scoped>
+/* ═══ Booking Type Card — Premium design with animations ═══ */
+.booking-type-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    padding: 1rem;
+    border-radius: 1rem;
+    border: 2px solid rgb(226 232 240);
+    background: white;
+    text-align: start;
+    cursor: pointer;
+    overflow: hidden;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+}
+
+.booking-type-card::before {
+    content: "";
+    position: absolute;
+    inset-inline-start: 0;
+    top: 0;
+    height: 100%;
+    width: 3px;
+    background: var(--theme-accent, #C4A265);
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 0.3s ease;
+}
+
+.booking-type-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px -6px rgba(27, 54, 93, 0.12);
+    border-color: var(--theme-accent, #C4A265);
+}
+
+.booking-type-card:hover::before {
+    transform: scaleY(1);
+}
+
+.booking-type-card.is-active {
+    border-color: var(--theme-accent, #C4A265);
+    background: var(--theme-bg, rgba(196, 162, 101, 0.05));
+    box-shadow: 0 6px 18px -4px rgba(196, 162, 101, 0.25);
+    transform: translateY(-2px);
+}
+
+.booking-type-card.is-active::before {
+    transform: scaleY(1);
+}
+
+/* Theme: Gold (Derma & Cosmetic, Service) */
+.booking-type-card.theme-gold {
+    --theme-accent: #C4A265;
+    --theme-bg: rgba(196, 162, 101, 0.08);
+    --theme-icon-bg-from: rgba(196, 162, 101, 0.15);
+    --theme-icon-bg-to: rgba(196, 162, 101, 0.05);
+    --theme-icon-color: #8B7043;
+    --theme-active-icon-from: #C4A265;
+    --theme-active-icon-to: #8B7043;
+}
+
+/* Theme: Navy (Dental) */
+.booking-type-card.theme-navy {
+    --theme-accent: #1B365D;
+    --theme-bg: rgba(27, 54, 93, 0.05);
+    --theme-icon-bg-from: rgba(27, 54, 93, 0.12);
+    --theme-icon-bg-to: rgba(27, 54, 93, 0.04);
+    --theme-icon-color: #1B365D;
+    --theme-active-icon-from: #1B365D;
+    --theme-active-icon-to: #2C4E7A;
+}
+
+/* Theme: Emerald (Pediatric) */
+.booking-type-card.theme-emerald {
+    --theme-accent: #10B981;
+    --theme-bg: rgba(16, 185, 129, 0.05);
+    --theme-icon-bg-from: rgba(16, 185, 129, 0.12);
+    --theme-icon-bg-to: rgba(16, 185, 129, 0.04);
+    --theme-icon-color: #047857;
+    --theme-active-icon-from: #10B981;
+    --theme-active-icon-to: #047857;
+}
+
+.booking-type-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.75rem;
+    background: linear-gradient(135deg, var(--theme-icon-bg-from), var(--theme-icon-bg-to));
+    color: var(--theme-icon-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease, background 0.3s ease, color 0.3s ease;
+}
+
+.booking-type-card:hover .booking-type-icon {
+    transform: scale(1.08) rotate(-3deg);
+}
+
+.booking-type-card.is-active .booking-type-icon {
+    background: linear-gradient(135deg, var(--theme-active-icon-from), var(--theme-active-icon-to));
+    color: white;
+    transform: scale(1.05);
+    box-shadow: 0 6px 14px -3px rgba(27, 54, 93, 0.25);
+}
+
+.booking-type-title {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #1B365D;
+    line-height: 1.3;
+}
+
+.booking-type-sub {
+    font-size: 0.7rem;
+    color: rgb(100 116 139);
+    line-height: 1.4;
+    min-height: 1.75rem;
+}
+
+.booking-type-check {
+    position: absolute;
+    top: 0.625rem;
+    inset-inline-end: 0.625rem;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 9999px;
+    background: linear-gradient(135deg, var(--theme-active-icon-from), var(--theme-active-icon-to));
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: scale(0.5);
+    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.booking-type-card.is-active .booking-type-check {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Slide-down animation for sub-type selector */
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-8px); max-height: 0; }
+    to   { opacity: 1; transform: translateY(0);     max-height: 200px; }
+}
+
+.animate-slideDown {
+    animation: slideDown 0.3s ease-out;
+}
+</style>
