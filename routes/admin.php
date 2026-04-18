@@ -939,9 +939,9 @@ Route::middleware('admin.auth')->group(function () {
         Route::post('/settings', [\App\Http\Controllers\Admin\DermaController::class, 'updateSettings'])->name('settings.update');
     });
 
-    // ═══ COSMETIC MODULE ════════════════════════════════════════
-    // ═══════════════════════════════════════════════════════════
-    Route::prefix('cosmetic')->name('admin.cosmetic.')->middleware(['module:cosmetic'])->group(function () {
+    // ═══ COSMETIC FEATURES (part of Dermatology & Cosmetic module) ═══
+    // ═══════════════════════════════════════════════════════════════
+    Route::prefix('cosmetic')->name('admin.cosmetic.')->middleware(['module:derma'])->group(function () {
         Route::get('/', [\App\Http\Controllers\Admin\CosmeticController::class, 'index'])->name('dashboard');
         Route::get('/patients', [\App\Http\Controllers\Admin\CosmeticPatientController::class, 'index'])->name('patients');
         Route::get('/patients/{patient}', [\App\Http\Controllers\Admin\CosmeticPatientController::class, 'show'])->name('patients.show');
