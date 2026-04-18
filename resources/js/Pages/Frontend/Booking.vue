@@ -26,6 +26,8 @@ const props = defineProps({
     doctorSchedules: Array,
     seo: Object,
     modules: Object,
+    telemedicineEnabled: { type: Boolean, default: false },
+    onlineDoctorsCount: { type: Number, default: 0 },
 });
 
 const flash = computed(() => page.props.flash || {});
@@ -463,6 +465,54 @@ function submit() {
                                         autocomplete="off"
                                         tabindex="-1"
                                     class="doctorato-input"/>
+                                </div>
+
+                                <!-- ═══ Online Consultation CTA (if telemedicine enabled) ═══ -->
+                                <div v-if="telemedicineEnabled && onlineDoctorsCount > 0" class="mb-6">
+                                    <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] shadow-xl">
+                                        <div class="pointer-events-none absolute -top-16 -end-16 h-56 w-56 rounded-full bg-[#C4A265]/20 blur-3xl"></div>
+                                        <div class="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-[#C4A265] to-transparent"></div>
+                                        <div class="relative p-5 md:p-6 flex flex-col md:flex-row md:items-center gap-4 md:gap-6 justify-between">
+                                            <div class="flex items-start gap-3 md:gap-4 min-w-0">
+                                                <div class="w-12 h-12 md:w-14 md:h-14 rounded-xl bg-gradient-to-br from-[#C4A265] to-[#8B7043] flex items-center justify-center shadow-lg flex-shrink-0">
+                                                    <svg class="w-6 h-6 md:w-7 md:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                                    </svg>
+                                                </div>
+                                                <div class="min-w-0">
+                                                    <div class="flex items-center gap-2 mb-1">
+                                                        <span class="h-[3px] w-6 bg-[#C4A265] rounded-full"></span>
+                                                        <span class="text-[10px] font-bold text-[#C4A265] tracking-[0.25em] uppercase">
+                                                            {{ isRtl ? 'جديد' : 'NEW' }}
+                                                        </span>
+                                                    </div>
+                                                    <h3 class="text-lg md:text-xl font-extrabold text-white">
+                                                        {{ isRtl ? 'استشارة أونلاين — بدون زيارة العيادة' : 'Online Consultation — No Clinic Visit' }}
+                                                    </h3>
+                                                    <p class="text-xs md:text-sm text-white/70 mt-1">
+                                                        {{ isRtl
+                                                            ? `تواصل مع ${onlineDoctorsCount} طبيب عبر مكالمة فيديو فورية مع وصفة طبية إلكترونية`
+                                                            : `Connect with ${onlineDoctorsCount} doctor(s) via instant video call, with digital prescription` }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <Link
+                                                href="/patient/online-consultations/doctors"
+                                                class="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#C4A265] to-[#8B7043] hover:from-[#8B7043] hover:to-[#C4A265] text-white font-bold px-5 py-3 shadow-md hover:shadow-lg transition text-sm whitespace-nowrap flex-shrink-0"
+                                            >
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                                </svg>
+                                                {{ isRtl ? 'احجز أونلاين الآن' : 'Book Online Now' }}
+                                                <svg class="w-4 h-4 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                                                </svg>
+                                            </Link>
+                                        </div>
+                                    </div>
+                                    <div class="text-center text-xs text-gray-400 mt-3">
+                                        {{ isRtl ? '──── أو احجز استشارة في العيادة ────' : '──── Or book an in-clinic visit ────' }}
+                                    </div>
                                 </div>
 
                                 <!-- Department Selector (only when multiple modules) -->

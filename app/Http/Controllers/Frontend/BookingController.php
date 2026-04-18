@@ -59,6 +59,11 @@ class BookingController extends Controller
             'doctorSchedules' => $doctorSchedules,
             'seo' => SeoService::get('booking'),
             'modules' => $activeModules,
+            // Online consultation availability — shows as a CTA banner on the booking page
+            'telemedicineEnabled' => ModuleManager::isEnabled('telemedicine'),
+            'onlineDoctorsCount' => \App\Models\Doctor::where('online_consultation_enabled', true)
+                ->where('status', 'active')
+                ->count(),
         ]);
     }
 
