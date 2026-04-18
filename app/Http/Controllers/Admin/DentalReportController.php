@@ -38,10 +38,10 @@ class DentalReportController extends Controller
             ->selectRaw('SUM(cost) as treatment_cost, SUM(lab_cost) as lab_cost, COUNT(*) as count')
             ->first();
 
-        $prevConsultationRevenue = Visit::where('module', 'dental')
-            ->whereDate('visit_date', '>=', $prevDateFrom)
-            ->whereDate('visit_date', '<=', $prevDateTo)
-            ->where('status', 'completed')
+        $prevConsultationRevenue = Visit::where('visits.module', 'dental')
+            ->whereDate('visits.visit_date', '>=', $prevDateFrom)
+            ->whereDate('visits.visit_date', '<=', $prevDateTo)
+            ->where('visits.status', 'completed')
             ->join('invoices', 'visits.id', '=', 'invoices.visit_id')
             ->sum('invoices.paid_amount');
 
@@ -61,10 +61,10 @@ class DentalReportController extends Controller
             ->selectRaw('SUM(cost) as treatment_cost, SUM(lab_cost) as lab_cost, COUNT(*) as count')
             ->first();
 
-        $consultationRevenue = Visit::where('module', 'dental')
-            ->whereDate('visit_date', '>=', $dateFrom)
-            ->whereDate('visit_date', '<=', $dateTo)
-            ->where('status', 'completed')
+        $consultationRevenue = Visit::where('visits.module', 'dental')
+            ->whereDate('visits.visit_date', '>=', $dateFrom)
+            ->whereDate('visits.visit_date', '<=', $dateTo)
+            ->where('visits.status', 'completed')
             ->join('invoices', 'visits.id', '=', 'invoices.visit_id')
             ->sum('invoices.paid_amount');
 
@@ -98,9 +98,9 @@ class DentalReportController extends Controller
         });
 
         // Revenue by doctor
-        $revenueByDoctor = DentalTreatment::whereDate('created_at', '>=', $dateFrom)
-            ->whereDate('created_at', '<=', $dateTo)
-            ->where('status', 'completed')
+        $revenueByDoctor = DentalTreatment::whereDate('dental_treatments.created_at', '>=', $dateFrom)
+            ->whereDate('dental_treatments.created_at', '<=', $dateTo)
+            ->where('dental_treatments.status', 'completed')
             ->join('doctors', 'dental_treatments.doctor_id', '=', 'doctors.id')
             ->select(
                 'doctors.id',

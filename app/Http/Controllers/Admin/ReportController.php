@@ -375,8 +375,9 @@ class ReportController extends Controller
                 ->where('visits.module', $module);
         }
         $topSpenders = $topSpendersQuery
-            ->groupBy('patients.id')
+            ->select('patients.id', 'patients.full_name', 'patients.phone', 'patients.email')
             ->selectRaw('SUM(invoices.paid_amount) as total_spent')
+            ->groupBy('patients.id', 'patients.full_name', 'patients.phone', 'patients.email')
             ->orderByDesc('total_spent')
             ->limit(10)
             ->get();
