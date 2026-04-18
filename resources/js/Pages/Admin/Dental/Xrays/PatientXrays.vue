@@ -151,7 +151,7 @@ const selectedXray = ref(null);
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_xray_type') }} *</label>
                             <select
                                 v-model="form.type"
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent"
+                                class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent"
                             >
                                 <option value="">{{ $t('a_select_type') }}</option>
                                 <option v-for="xType in xrayTypes" :key="xType.value || xType" :value="xType.value || xType">
@@ -162,14 +162,14 @@ const selectedXray = ref(null);
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_tooth_number') }}</label>
-                            <input v-model="form.tooth_number" type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent" />
+                            <input v-model="form.tooth_number" type="text" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent" />
                             <p v-if="errors.tooth_number" class="mt-1 text-sm text-red-600">{{ errors.tooth_number }}</p>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_doctor') }}</label>
                             <select
                                 v-model="form.doctor_id"
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent"
+                                class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent"
                             >
                                 <option value="">{{ $t('a_select_doctor') }}</option>
                                 <option v-for="doc in doctors" :key="doc.id" :value="doc.id">
@@ -193,20 +193,20 @@ const selectedXray = ref(null);
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_taken_date') }}</label>
-                            <input v-model="form.taken_date" type="date" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent" />
+                            <input v-model="form.taken_date" type="date" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent" />
                             <p v-if="errors.taken_date" class="mt-1 text-sm text-red-600">{{ errors.taken_date }}</p>
                         </div>
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_findings') }}</label>
-                        <textarea v-model="form.findings" rows="2" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent"></textarea>
+                        <textarea v-model="form.findings" rows="2" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent"></textarea>
                         <p v-if="errors.findings" class="mt-1 text-sm text-red-600">{{ errors.findings }}</p>
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_notes') }}</label>
-                        <textarea v-model="form.notes" rows="2" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent"></textarea>
+                        <textarea v-model="form.notes" rows="2" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent"></textarea>
                     </div>
 
                     <div class="flex items-center gap-3">

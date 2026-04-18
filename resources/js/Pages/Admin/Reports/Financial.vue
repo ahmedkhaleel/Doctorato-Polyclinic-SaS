@@ -239,10 +239,10 @@ const categoryColors = ['#EF4444', '#F59E0B', '#3B82F6', '#8B5CF6', '#10B981', '
                 </div>
                 <span class="text-sm font-medium text-gray-700">{{ $t('a_date_range') }}:</span>
                 <input v-model="dateFrom" type="date" :max="dateTo || undefined"
-                    class="px-4 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] outline-none transition-colors" />
+                    class="doctorato-input px-4 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] outline-none transition-colors" />
                 <span class="text-sm text-gray-400">{{ $t('a_to') }}</span>
                 <input v-model="dateTo" type="date" :min="dateFrom || undefined"
-                    class="px-4 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] outline-none transition-colors" />
+                    class="doctorato-input px-4 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] outline-none transition-colors" />
                 <button @click="dateFrom = ''; dateTo = ''" v-if="dateFrom || dateTo"
                     class="ltr:ml-auto rtl:mr-auto px-3 py-2 text-xs font-medium text-gray-400 hover:text-red-500 rounded-lg hover:bg-red-50 transition-all duration-200">
                     {{ isRtl ? 'مسح' : 'Clear' }}

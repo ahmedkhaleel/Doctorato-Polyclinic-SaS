@@ -148,7 +148,7 @@ function submit() {
                     <div>
                         <label class="block text-sm font-bold text-gray-700 mb-2">{{ isRtl ? 'تعليقات إضافية' : 'Additional Comments' }}</label>
                         <textarea v-model="form.comments" rows="3" :placeholder="isRtl ? 'أخبرنا المزيد...' : 'Tell us more...'"
-                            class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-[#1B365D] focus:border-[#1B365D] resize-none" />
+                            class="doctorato-input w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-[#1B365D] focus:border-[#1B365D] resize-none" />
                     </div>
 
                     <div class="flex gap-3">

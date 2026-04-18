@@ -134,16 +134,16 @@ function npsColor(score) {
 
         <!-- Filters -->
         <div class="flex flex-wrap gap-3 mb-4">
-            <select v-model="doctorFilter" @change="applyFilters" class="px-4 py-2 border border-gray-200 rounded-xl text-sm focus:ring-[#1B365D] focus:border-[#1B365D]">
+            <select v-model="doctorFilter" @change="applyFilters" class="doctorato-input px-4 py-2 border border-gray-200 rounded-xl text-sm focus:ring-[#1B365D] focus:border-[#1B365D]">
                 <option value="">{{ isRtl ? 'كل الأطباء' : 'All Doctors' }}</option>
                 <option v-for="d in doctors" :key="d.id" :value="d.id">{{ isRtl ? d.name_ar : d.name_en }}</option>
             </select>
-            <select v-model="ratingFilter" @change="applyFilters" class="px-4 py-2 border border-gray-200 rounded-xl text-sm focus:ring-[#1B365D] focus:border-[#1B365D]">
+            <select v-model="ratingFilter" @change="applyFilters" class="doctorato-input px-4 py-2 border border-gray-200 rounded-xl text-sm focus:ring-[#1B365D] focus:border-[#1B365D]">
                 <option value="">{{ isRtl ? 'كل التقييمات' : 'All Ratings' }}</option>
                 <option v-for="r in [5,4,3,2,1]" :key="r" :value="r">{{ r }}★ {{ isRtl ? 'فأعلى' : '& up' }}</option>
             </select>
-            <input v-model="dateFrom" @change="applyFilters" type="date" class="px-3 py-2 border border-gray-200 rounded-xl text-sm" />
-            <input v-model="dateTo" @change="applyFilters" type="date" class="px-3 py-2 border border-gray-200 rounded-xl text-sm" />
+            <input v-model="dateFrom" @change="applyFilters" type="date" class="doctorato-input px-3 py-2 border border-gray-200 rounded-xl text-sm" />
+            <input v-model="dateTo" @change="applyFilters" type="date" class="doctorato-input px-3 py-2 border border-gray-200 rounded-xl text-sm" />
         </div>
 
         <!-- Feedback List -->

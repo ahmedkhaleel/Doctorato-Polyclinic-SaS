@@ -136,7 +136,7 @@ onMounted(() => {
                             v-model="search"
                             type="text"
                             :placeholder="isRtl ? 'بحث بالاسم أو الهاتف...' : 'Search by patient name or phone...'"
-                            class="w-full ltr:pl-10 ltr:pr-4 rtl:pr-10 rtl:pl-4 py-2.5 bg-white/10 border border-white/20 rounded-xl text-sm text-white placeholder-gray-400 focus:ring-2 focus:ring-[#0d9488]/50 focus:border-[#0d9488] transition"
+                            class="doctorato-input w-full ltr:pl-10 ltr:pr-4 rtl:pr-10 rtl:pl-4 py-2.5 bg-white/10 border border-white/20 rounded-xl text-sm text-white placeholder-gray-400 focus:ring-2 focus:ring-[#0d9488]/50 focus:border-[#0d9488] transition"
                         />
                     </div>
                     <select v-model="statusFilter" class="px-3 py-2.5 bg-white/10 border border-white/20 rounded-xl text-sm text-white focus:ring-2 focus:ring-[#0d9488]/50 focus:border-[#0d9488] [&>option]:text-gray-900">
@@ -146,7 +146,7 @@ onMounted(() => {
                         <option value="completed">{{ isRtl ? 'مكتمل' : 'Completed' }}</option>
                         <option value="cancelled">{{ isRtl ? 'ملغي' : 'Cancelled' }}</option>
                     </select>
-                    <select v-if="activeModules.length > 1" v-model="moduleFilter" class="px-3 py-2.5 bg-white/10 border border-white/20 rounded-xl text-sm text-white focus:ring-2 focus:ring-[#0d9488]/50 focus:border-[#0d9488] [&>option]:text-gray-900">
+                    <select v-if="activeModules.length> 1" v-model="moduleFilter" class="px-3 py-2.5 bg-white/10 border border-white/20 rounded-xl text-sm text-white focus:ring-2 focus:ring-[#0d9488]/50 focus:border-[#0d9488] [&>option]:text-gray-900">
                         <option value="">{{ isRtl ? 'كل الأقسام' : 'All Departments' }}</option>
                         <option v-for="mod in activeModules" :key="mod.slug" :value="mod.slug">{{ mod.name }}</option>
                     </select>
@@ -157,9 +157,9 @@ onMounted(() => {
                         <option value="follow_up">{{ isRtl ? 'متابعة' : 'Follow Up' }}</option>
                     </select>
                     <div class="flex flex-wrap items-center gap-2">
-                        <input v-model="dateFrom" type="date" :max="dateTo || undefined" class="px-3 py-2.5 bg-white/10 border border-white/20 rounded-xl text-sm text-white focus:ring-2 focus:ring-[#0d9488]/50 focus:border-[#0d9488] [color-scheme:dark]" />
+                        <input v-model="dateFrom" type="date" :max="dateTo || undefined" class="doctorato-input px-3 py-2.5 bg-white/10 border border-white/20 rounded-xl text-sm text-white focus:ring-2 focus:ring-[#0d9488]/50 focus:border-[#0d9488] [color-scheme:dark]" />
                         <span class="text-gray-400 text-xs">{{ isRtl ? 'إلى' : 'to' }}</span>
-                        <input v-model="dateTo" type="date" :min="dateFrom || undefined" class="px-3 py-2.5 bg-white/10 border border-white/20 rounded-xl text-sm text-white focus:ring-2 focus:ring-[#0d9488]/50 focus:border-[#0d9488] [color-scheme:dark]" />
+                        <input v-model="dateTo" type="date" :min="dateFrom || undefined" class="doctorato-input px-3 py-2.5 bg-white/10 border border-white/20 rounded-xl text-sm text-white focus:ring-2 focus:ring-[#0d9488]/50 focus:border-[#0d9488] [color-scheme:dark]" />
                     </div>
                     <button v-if="hasActiveFilters" @click="clearFilters" class="p-2.5 rounded-xl text-gray-400 hover:text-red-400 hover:bg-white/10 transition" :title="isRtl ? 'مسح الفلاتر' : 'Clear filters'">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>

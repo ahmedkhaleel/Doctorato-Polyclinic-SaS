@@ -436,7 +436,7 @@ onMounted(() => {
                                         v-model="familyForm.condition"
                                         type="text"
                                         :placeholder="isRtl ? 'مثال: السكري' : 'e.g. Diabetes'"
-                                        class="w-full px-3 py-2 text-sm rounded-xl border border-gray-200 focus:border-[#0d9488] focus:ring-2 focus:ring-[#0d9488]/20 outline-none transition-all"
+                                        class="doctorato-input w-full px-3 py-2 text-sm rounded-xl border border-gray-200 focus:border-[#0d9488] focus:ring-2 focus:ring-[#0d9488]/20 outline-none transition-all"
                                     />
                                 </div>
                                 <div>
@@ -445,7 +445,7 @@ onMounted(() => {
                                         v-model="familyForm.relation"
                                         type="text"
                                         :placeholder="isRtl ? 'مثال: الأب' : 'e.g. Father'"
-                                        class="w-full px-3 py-2 text-sm rounded-xl border border-gray-200 focus:border-[#0d9488] focus:ring-2 focus:ring-[#0d9488]/20 outline-none transition-all"
+                                        class="doctorato-input w-full px-3 py-2 text-sm rounded-xl border border-gray-200 focus:border-[#0d9488] focus:ring-2 focus:ring-[#0d9488]/20 outline-none transition-all"
                                     />
                                 </div>
                             </div>
@@ -455,7 +455,7 @@ onMounted(() => {
                                     v-model="familyForm.notes"
                                     rows="2"
                                     :placeholder="isRtl ? 'ملاحظات إضافية (اختياري)' : 'Additional notes (optional)'"
-                                    class="w-full px-3 py-2 text-sm rounded-xl border border-gray-200 focus:border-[#0d9488] focus:ring-2 focus:ring-[#0d9488]/20 outline-none transition-all resize-none"
+                                    class="doctorato-input w-full px-3 py-2 text-sm rounded-xl border border-gray-200 focus:border-[#0d9488] focus:ring-2 focus:ring-[#0d9488]/20 outline-none transition-all resize-none"
                                 ></textarea>
                             </div>
                             <div class="flex items-center gap-2 mt-3">

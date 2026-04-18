@@ -77,7 +77,7 @@ onMounted(() => {
                             v-model="search"
                             type="text"
                             :placeholder="isRtl ? 'بحث بالاسم، الهاتف، رقم الملف...' : 'Search by name, phone, file number...'"
-                            class="w-full ltr:pl-10 ltr:pr-4 rtl:pr-10 rtl:pl-4 py-2.5 bg-white/10 border border-white/20 rounded-xl text-sm text-white placeholder-gray-400 focus:ring-2 focus:ring-[#0d9488]/50 focus:border-[#0d9488] transition"
+                            class="doctorato-input w-full ltr:pl-10 ltr:pr-4 rtl:pr-10 rtl:pl-4 py-2.5 bg-white/10 border border-white/20 rounded-xl text-sm text-white placeholder-gray-400 focus:ring-2 focus:ring-[#0d9488]/50 focus:border-[#0d9488] transition"
                         />
                     </div>
                     <select

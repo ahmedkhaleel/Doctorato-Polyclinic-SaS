@@ -176,7 +176,7 @@ function getCategoryColor(index) {
                         v-model="searchQuery"
                         type="text"
                         :placeholder="locale === 'ar' ? 'بحث في التصنيفات...' : 'Search categories...'"
-                        class="w-full py-2.5 border border-gray-200 rounded-xl text-sm bg-white shadow-sm focus:ring-2 focus:ring-amber-200 focus:border-amber-400 transition"
+                        class="doctorato-input w-full py-2.5 border border-gray-200 rounded-xl text-sm bg-white shadow-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#1B365D] transition"
                         :class="isRtl ? 'pr-10 pl-4' : 'pl-10 pr-4'"
                     />
                 </div>
@@ -336,7 +336,7 @@ function getCategoryColor(index) {
                                         type="text"
                                         dir="rtl"
                                         :placeholder="locale === 'ar' ? 'أدخل اسم التصنيف بالعربية' : 'Enter category name in Arabic'"
-                                        class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-amber-200 focus:border-amber-400 transition"
+                                        class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#1B365D] transition"
                                     />
                                     <p v-if="form.errors.name_ar" class="mt-1.5 text-xs text-red-600 flex items-center gap-1">
                                         <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>
@@ -353,7 +353,7 @@ function getCategoryColor(index) {
                                         type="text"
                                         dir="ltr"
                                         :placeholder="locale === 'ar' ? 'أدخل اسم التصنيف بالإنجليزية' : 'Enter category name in English'"
-                                        class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-amber-200 focus:border-amber-400 transition"
+                                        class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#1B365D] transition"
                                     />
                                     <p v-if="form.errors.name_en" class="mt-1.5 text-xs text-red-600 flex items-center gap-1">
                                         <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>

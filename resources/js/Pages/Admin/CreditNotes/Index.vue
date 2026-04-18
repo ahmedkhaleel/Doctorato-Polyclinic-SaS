@@ -162,16 +162,16 @@ function formatDate(d) {
 
         <!-- Filters -->
         <div class="flex flex-wrap gap-3 mb-6">
-            <input v-model="search" @keyup.enter="applyFilters" type="text" :placeholder="isRtl ? 'بحث...' : 'Search...'" class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm w-64 focus:ring-[#1B365D] focus:border-[#1B365D]" />
-            <select v-model="statusFilter" @change="applyFilters" class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm">
+            <input v-model="search" @keyup.enter="applyFilters" type="text" :placeholder="isRtl ? 'بحث...' : 'Search...'" class="doctorato-input px-4 py-2.5 border border-gray-200 rounded-xl text-sm w-64 focus:ring-[#1B365D] focus:border-[#1B365D]" />
+            <select v-model="statusFilter" @change="applyFilters" class="doctorato-input px-4 py-2.5 border border-gray-200 rounded-xl text-sm">
                 <option value="">{{ isRtl ? 'كل الحالات' : 'All Statuses' }}</option>
                 <option v-for="(l, k) in statusLabels" :key="k" :value="k">{{ isRtl ? l.ar : l.en }}</option>
             </select>
-            <select v-model="typeFilter" @change="applyFilters" class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm">
+            <select v-model="typeFilter" @change="applyFilters" class="doctorato-input px-4 py-2.5 border border-gray-200 rounded-xl text-sm">
                 <option value="">{{ isRtl ? 'كل الأنواع' : 'All Types' }}</option>
                 <option v-for="(l, k) in typeLabels" :key="k" :value="k">{{ isRtl ? l.ar : l.en }}</option>
             </select>
-            <select v-if="activeModules.length > 1" v-model="moduleFilter" @change="applyFilters" class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm">
+            <select v-if="activeModules.length> 1" v-model="moduleFilter" @change="applyFilters" class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm">
                 <option value="">{{ isRtl ? 'كل الأقسام' : 'All Departments' }}</option>
                 <option v-for="mod in activeModules" :key="mod.slug" :value="mod.slug">{{ mod.name }}</option>
             </select>
@@ -238,7 +238,7 @@ function formatDate(d) {
                                 <button type="button" @click="selectedInvoice = null; createForm.invoice_id = ''" class="text-gray-400 hover:text-red-500"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
                             </div>
                             <div v-else class="relative">
-                                <input v-model="invoiceSearch" @input="searchInvoices" type="text" :placeholder="isRtl ? 'ابحث برقم الفاتورة...' : 'Search invoice number...'" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm" />
+                                <input v-model="invoiceSearch" @input="searchInvoices" type="text" :placeholder="isRtl ? 'ابحث برقم الفاتورة...' : 'Search invoice number...'" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-xl text-sm" />
                                 <div v-if="invoiceResults.length" class="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg max-h-40 overflow-y-auto">
                                     <button v-for="inv in invoiceResults" :key="inv.id" type="button" @click="selectInvoice(inv)" class="w-full flex items-center justify-between px-3 py-2 hover:bg-gray-50 text-start">
                                         <span class="text-sm font-mono text-gray-700">{{ inv.title }}</span>
@@ -251,24 +251,24 @@ function formatDate(d) {
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'النوع' : 'Type' }} *</label>
-                                <select v-model="createForm.type" required class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm">
+                                <select v-model="createForm.type" required class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-xl text-sm">
                                     <option v-for="(l, k) in typeLabels" :key="k" :value="k">{{ isRtl ? l.ar : l.en }}</option>
                                 </select>
                             </div>
                             <div>
                                 <label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'المبلغ' : 'Amount' }} *</label>
-                                <input v-model.number="createForm.amount" type="number" min="0.01" step="0.01" required class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm" />
+                                <input v-model.number="createForm.amount" type="number" min="0.01" step="0.01" required class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-xl text-sm" />
                             </div>
                         </div>
 
                         <div>
                             <label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'السبب' : 'Reason' }} *</label>
-                            <input v-model="createForm.reason" required type="text" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm" :placeholder="isRtl ? 'سبب الاسترداد...' : 'Reason for refund...'" />
+                            <input v-model="createForm.reason" required type="text" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-xl text-sm" :placeholder="isRtl ? 'سبب الاسترداد...' : 'Reason for refund...'" />
                         </div>
 
                         <div>
                             <label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
-                            <textarea v-model="createForm.notes" rows="2" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm"></textarea>
+                            <textarea v-model="createForm.notes" rows="2" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-xl text-sm"></textarea>
                         </div>
 
                         <div class="flex justify-end gap-3 pt-4 border-t">
@@ -293,7 +293,7 @@ function formatDate(d) {
                     <div class="space-y-4">
                         <div>
                             <label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'الحالة' : 'Status' }} *</label>
-                            <select v-model="statusForm.status" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm">
+                            <select v-model="statusForm.status" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-xl text-sm">
                                 <option value="">{{ isRtl ? 'اختر' : 'Select' }}</option>
                                 <option v-for="s in (allowedTransitions[selectedNote.status] || [])" :key="s" :value="s">{{ isRtl ? statusLabels[s]?.ar : statusLabels[s]?.en }}</option>
                             </select>
@@ -301,7 +301,7 @@ function formatDate(d) {
 
                         <div v-if="statusForm.status === 'refunded'">
                             <label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'طريقة الاسترداد' : 'Refund Method' }}</label>
-                            <select v-model="statusForm.refund_method" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm">
+                            <select v-model="statusForm.refund_method" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-xl text-sm">
                                 <option value="cash">{{ isRtl ? 'نقدي' : 'Cash' }}</option>
                                 <option value="card">{{ isRtl ? 'بطاقة' : 'Card' }}</option>
                                 <option value="bank_transfer">{{ isRtl ? 'تحويل بنكي' : 'Bank Transfer' }}</option>
@@ -311,7 +311,7 @@ function formatDate(d) {
 
                         <div>
                             <label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
-                            <textarea v-model="statusForm.notes" rows="2" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm"></textarea>
+                            <textarea v-model="statusForm.notes" rows="2" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-xl text-sm"></textarea>
                         </div>
                     </div>
 

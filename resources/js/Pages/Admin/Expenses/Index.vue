@@ -95,11 +95,11 @@ const recurringLabels = computed(() => ({
                     v-model="search"
                     type="text"
                     :placeholder="$t('a_search_expenses')"
-                    class="w-full sm:w-64 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
+                    class="doctorato-input w-full sm:w-64 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                 />
                 <select
                     v-model="categoryFilter"
-                    class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
+                    class="doctorato-input px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                 >
                     <option value="">{{ $t('a_all_categories') }}</option>
                     <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ cat.name_en }}</option>
@@ -108,14 +108,14 @@ const recurringLabels = computed(() => ({
                     v-model="dateFrom"
                     type="date"
                     :max="dateTo || undefined"
-                    class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
+                    class="doctorato-input px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                     :placeholder="$t('a_from')"
                 />
                 <input
                     v-model="dateTo"
                     type="date"
                     :min="dateFrom || undefined"
-                    class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
+                    class="doctorato-input px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                     :placeholder="$t('a_to_date')"
                 />
             </div>

@@ -1277,14 +1277,14 @@ function missFollowUp(fuId) {
                                     <div>
                                         <label class="block text-xs font-semibold text-gray-600 mb-1.5">{{ isRtl ? 'الاسم الكامل' : 'Full Name' }} *</label>
                                         <input v-model="quickAddForm.full_name" type="text" required
-                                            class="w-full rounded-xl border-gray-200 text-sm focus:ring-[#C4A265] focus:border-[#C4A265] transition"
+                                            class="doctorato-input w-full rounded-xl border-gray-200 text-sm focus:ring-[#C4A265] focus:border-[#C4A265] transition"
                                             :placeholder="isRtl ? 'أدخل اسم العميل' : 'Enter lead name'" />
                                         <p v-if="quickAddForm.errors.full_name" class="text-xs text-red-500 mt-1">{{ quickAddForm.errors.full_name }}</p>
                                     </div>
                                     <div>
                                         <label class="block text-xs font-semibold text-gray-600 mb-1.5">{{ isRtl ? 'رقم الهاتف' : 'Phone' }} *</label>
                                         <input v-model="quickAddForm.phone" type="tel" required dir="ltr"
-                                            class="w-full rounded-xl border-gray-200 text-sm focus:ring-[#C4A265] focus:border-[#C4A265] transition"
+                                            class="doctorato-input w-full rounded-xl border-gray-200 text-sm focus:ring-[#C4A265] focus:border-[#C4A265] transition"
                                             placeholder="05xxxxxxxx" />
                                         <p v-if="quickAddForm.errors.phone" class="text-xs text-red-500 mt-1">{{ quickAddForm.errors.phone }}</p>
                                     </div>
@@ -1292,7 +1292,7 @@ function missFollowUp(fuId) {
                                         <div>
                                             <label class="block text-xs font-semibold text-gray-600 mb-1.5">{{ isRtl ? 'المصدر' : 'Source' }}</label>
                                             <select v-model="quickAddForm.lead_source_id"
-                                                class="w-full rounded-xl border-gray-200 text-sm focus:ring-[#C4A265] focus:border-[#C4A265] transition">
+                                                class="doctorato-input w-full rounded-xl border-gray-200 text-sm focus:ring-[#C4A265] focus:border-[#C4A265] transition">
                                                 <option value="">{{ isRtl ? 'اختر المصدر' : 'Select source' }}</option>
                                                 <option v-for="src in leadsBySource" :key="src.id" :value="src.id">{{ src.name }}</option>
                                             </select>
@@ -1300,7 +1300,7 @@ function missFollowUp(fuId) {
                                         <div>
                                             <label class="block text-xs font-semibold text-gray-600 mb-1.5">{{ isRtl ? 'القسم' : 'Module' }}</label>
                                             <select v-model="quickAddForm.module"
-                                                class="w-full rounded-xl border-gray-200 text-sm focus:ring-[#C4A265] focus:border-[#C4A265] transition">
+                                                class="doctorato-input w-full rounded-xl border-gray-200 text-sm focus:ring-[#C4A265] focus:border-[#C4A265] transition">
                                                 <option value="derma">Derma</option>
                                                 <option value="dental">Dental</option>
                                                 <option value="pediatric">Pediatric</option>

@@ -65,7 +65,7 @@ function submit() { form.post('/admin/commissions'); }
                                 <div>
                                     <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">{{ $t('a_marketer') }}<span class="text-red-400">*</span></label>
                                     <select v-model="form.user_id"
-                                        class="w-full px-4 py-3 text-sm bg-gray-50/80 border border-gray-200/80 rounded-xl focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200 appearance-none cursor-pointer">
+                                        class="doctorato-input w-full px-4 py-3 text-sm bg-gray-50/80 border border-gray-200/80 rounded-xl focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200 appearance-none cursor-pointer">
                                         <option value="">Select marketer...</option>
                                         <option v-for="m in marketers" :key="m.id" :value="m.id">{{ m.name }}</option>
                                     </select>
@@ -74,7 +74,7 @@ function submit() { form.post('/admin/commissions'); }
                                 <div>
                                     <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">{{ $t('a_lead') }}<span class="text-red-400">*</span></label>
                                     <select v-model="form.lead_id"
-                                        class="w-full px-4 py-3 text-sm bg-gray-50/80 border border-gray-200/80 rounded-xl focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200 appearance-none cursor-pointer">
+                                        class="doctorato-input w-full px-4 py-3 text-sm bg-gray-50/80 border border-gray-200/80 rounded-xl focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200 appearance-none cursor-pointer">
                                         <option value="">Select converted lead...</option>
                                         <option v-for="l in leads" :key="l.id" :value="l.id">{{ l.full_name }}</option>
                                     </select>
@@ -129,7 +129,7 @@ function submit() { form.post('/admin/commissions'); }
                                     </label>
                                     <div class="relative">
                                         <input v-model="form.rate" type="number" step="0.01" min="0"
-                                            class="w-full px-4 py-3 text-sm bg-gray-50/80 border border-gray-200/80 rounded-xl focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200 ltr:pr-14 rtl:pl-14" />
+                                            class="doctorato-input w-full px-4 py-3 text-sm bg-gray-50/80 border border-gray-200/80 rounded-xl focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200 ltr:pr-14 rtl:pl-14" />
                                         <span class="absolute ltr:right-4 rtl:left-4 top-1/2 -translate-y-1/2 text-xs font-bold text-gray-300">{{ form.commission_type === 'percentage' ? '%' : currencyCode }}</span>
                                     </div>
                                     <p v-if="form.errors.rate" class="text-xs text-red-500 mt-1.5 font-medium">{{ form.errors.rate }}</p>
@@ -137,7 +137,7 @@ function submit() { form.post('/admin/commissions'); }
                                 <div>
                                     <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Base Amount ({{ currencyCode }}) <span class="text-red-400">*</span></label>
                                     <input v-model="form.base_amount" type="number" step="0.01" min="0"
-                                        class="w-full px-4 py-3 text-sm bg-gray-50/80 border border-gray-200/80 rounded-xl focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200" />
+                                        class="doctorato-input w-full px-4 py-3 text-sm bg-gray-50/80 border border-gray-200/80 rounded-xl focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200" />
                                     <p v-if="form.errors.base_amount" class="text-xs text-red-500 mt-1.5 font-medium">{{ form.errors.base_amount }}</p>
                                 </div>
                             </div>
@@ -146,7 +146,7 @@ function submit() { form.post('/admin/commissions'); }
                             <div>
                                 <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">{{ $t('a_notes') }}</label>
                                 <textarea v-model="form.notes" rows="3"
-                                    class="w-full px-4 py-3 text-sm bg-gray-50/80 border border-gray-200/80 rounded-xl resize-none focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200 placeholder-gray-300"
+                                    class="doctorato-input w-full px-4 py-3 text-sm bg-gray-50/80 border border-gray-200/80 rounded-xl resize-none focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200 placeholder-gray-300"
                                     :placeholder="$t('a_optional_notes')"></textarea>
                             </div>
                         </div>

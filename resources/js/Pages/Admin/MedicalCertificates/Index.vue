@@ -155,7 +155,7 @@ watch([() => form.start_date, () => form.end_date], ([s, e]) => {
                         <svg class="absolute top-2.5 w-4 h-4 text-gray-400" :class="isRtl ? 'right-3' : 'left-3'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" stroke-width="2"/><path stroke-linecap="round" stroke-width="2" d="m21 21-4.35-4.35"/></svg>
                         <input v-model="search" type="text"
                             :placeholder="isRtl ? 'بحث بالرقم أو اسم المريض...' : 'Search by number or patient name...'"
-                            class="w-full rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]"
+                            class="doctorato-input w-full rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]"
                             :class="isRtl ? 'pr-10 pl-3' : 'pl-10 pr-3'" />
                     </div>
                 </div>
@@ -265,7 +265,7 @@ watch([() => form.start_date, () => form.end_date], ([s, e]) => {
                             <div v-else class="relative">
                                 <input v-model="patientSearch" type="text"
                                     :placeholder="isRtl ? 'ابحث عن مريض...' : 'Search patient...'"
-                                    class="w-full rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]" />
+                                    class="doctorato-input w-full rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]" />
                                 <div v-if="patientResults.length" class="absolute z-10 w-full mt-1 bg-white rounded-lg shadow-lg border max-h-48 overflow-y-auto">
                                     <button v-for="p in patientResults" :key="p.id" type="button" @click="selectPatient(p)"
                                         class="w-full text-start px-4 py-2 text-sm hover:bg-gray-50">
@@ -281,7 +281,7 @@ watch([() => form.start_date, () => form.end_date], ([s, e]) => {
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'الطبيب' : 'Doctor' }} *</label>
                                 <select v-model="form.doctor_id" required
-                                    class="w-full rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                    class="doctorato-input w-full rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]">
                                     <option value="">{{ isRtl ? '— اختر —' : '— Select —' }}</option>
                                     <option v-for="doc in doctors" :key="doc.id" :value="doc.id">
                                         {{ isRtl ? doc.name_ar : doc.name_en }}
@@ -292,7 +292,7 @@ watch([() => form.start_date, () => form.end_date], ([s, e]) => {
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'النوع' : 'Type' }} *</label>
                                 <select v-model="form.type" required
-                                    class="w-full rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                    class="doctorato-input w-full rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]">
                                     <option v-for="(cfg, key) in typeConfig" :key="key" :value="key">
                                         {{ isRtl ? cfg.ar : cfg.en }}
                                     </option>
@@ -304,17 +304,17 @@ watch([() => form.start_date, () => form.end_date], ([s, e]) => {
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'تاريخ الإصدار' : 'Issue Date' }} *</label>
                                 <input v-model="form.issue_date" type="date" required
-                                    class="w-full rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]" />
+                                    class="doctorato-input w-full rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]" />
                             </div>
                             <div v-if="form.type === 'sick_leave'">
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'من' : 'From' }}</label>
                                 <input v-model="form.start_date" type="date"
-                                    class="w-full rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]" />
+                                    class="doctorato-input w-full rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]" />
                             </div>
                             <div v-if="form.type === 'sick_leave'">
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'إلى' : 'To' }}</label>
                                 <input v-model="form.end_date" type="date"
-                                    class="w-full rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]" />
+                                    class="doctorato-input w-full rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]" />
                             </div>
                         </div>
 
@@ -325,19 +325,19 @@ watch([() => form.start_date, () => form.end_date], ([s, e]) => {
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'التشخيص' : 'Diagnosis' }}</label>
                             <input v-model="form.diagnosis" type="text" maxlength="500"
-                                class="w-full rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]" />
+                                class="doctorato-input w-full rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]" />
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
                             <textarea v-model="form.notes" rows="2"
-                                class="w-full rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]"></textarea>
+                                class="doctorato-input w-full rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]"></textarea>
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'التوصيات' : 'Recommendations' }}</label>
                             <textarea v-model="form.recommendations" rows="2"
-                                class="w-full rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]"></textarea>
+                                class="doctorato-input w-full rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]"></textarea>
                         </div>
 
                         <div class="flex justify-end gap-2 pt-2">

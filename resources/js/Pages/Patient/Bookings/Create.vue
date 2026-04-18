@@ -191,7 +191,7 @@ function submit() {
                             <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ isRtl ? 'الخدمة' : 'Service' }}</label>
                             <select
                                 v-model="form.service_id"
-                                class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[var(--brand-primary)]/50 focus:border-[var(--brand-primary)]/50 transition-all"
+                                class="doctorato-input w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[var(--brand-primary)]/50 focus:border-[var(--brand-primary)]/50 transition-all"
                                 :class="form.errors.service_id ? 'border-red-300' : ''"
                             >
                                 <option value="">{{ isRtl ? 'اختر الخدمة' : 'Select service' }}</option>
@@ -207,7 +207,7 @@ function submit() {
                             <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ isRtl ? 'الطبيب' : 'Doctor' }}</label>
                             <select
                                 v-model="form.doctor_id"
-                                class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[var(--brand-primary)]/50 focus:border-[var(--brand-primary)]/50 transition-all"
+                                class="doctorato-input w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[var(--brand-primary)]/50 focus:border-[var(--brand-primary)]/50 transition-all"
                                 :class="form.errors.doctor_id ? 'border-red-300' : ''"
                             >
                                 <option value="">{{ isRtl ? 'اختر الطبيب' : 'Select doctor' }}</option>
@@ -225,7 +225,7 @@ function submit() {
                                 <input
                                     v-model="form.preferred_date"
                                     type="date"
-                                    class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[var(--brand-primary)]/50 focus:border-[var(--brand-primary)]/50 transition-all"
+                                    class="doctorato-input w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[var(--brand-primary)]/50 focus:border-[var(--brand-primary)]/50 transition-all"
                                     :class="form.errors.preferred_date ? 'border-red-300' : ''"
                                 />
                                 <p v-if="form.errors.preferred_date" class="mt-1.5 text-sm text-red-500">{{ form.errors.preferred_date }}</p>
@@ -235,7 +235,7 @@ function submit() {
                                 <input
                                     v-model="form.preferred_time"
                                     type="time"
-                                    class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[var(--brand-primary)]/50 focus:border-[var(--brand-primary)]/50 transition-all"
+                                    class="doctorato-input w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[var(--brand-primary)]/50 focus:border-[var(--brand-primary)]/50 transition-all"
                                     :class="form.errors.preferred_time ? 'border-red-300' : ''"
                                 />
                                 <p v-if="form.errors.preferred_time" class="mt-1.5 text-sm text-red-500">{{ form.errors.preferred_time }}</p>
@@ -248,7 +248,7 @@ function submit() {
                             <textarea
                                 v-model="form.notes"
                                 rows="3"
-                                class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[var(--brand-primary)]/50 focus:border-[var(--brand-primary)]/50 transition-all resize-none"
+                                class="doctorato-input w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[var(--brand-primary)]/50 focus:border-[var(--brand-primary)]/50 transition-all resize-none"
                                 :placeholder="isRtl ? 'أي ملاحظات إضافية...' : 'Any additional notes...'"
                             ></textarea>
                         </div>
@@ -259,7 +259,7 @@ function submit() {
                             <input
                                 v-model="form.promo_code"
                                 type="text"
-                                class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[var(--brand-primary)]/50 focus:border-[var(--brand-primary)]/50 transition-all"
+                                class="doctorato-input w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[var(--brand-primary)]/50 focus:border-[var(--brand-primary)]/50 transition-all"
                                 :placeholder="isRtl ? 'أدخل رمز الخصم (اختياري)' : 'Enter promo code (optional)'"
                             />
                             <p v-if="form.errors.promo_code" class="mt-1.5 text-sm text-red-500">{{ form.errors.promo_code }}</p>

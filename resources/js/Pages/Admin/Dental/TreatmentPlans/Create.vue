@@ -390,7 +390,7 @@ function submit() {
                                 <div class="relative">
                                     <div @click="!patient && (showPatientDropdown = !showPatientDropdown)" class="tp-input-wrapper cursor-pointer" :class="{ 'tp-input-focus': showPatientDropdown, 'tp-input-disabled': !!patient }">
                                         <svg class="w-5 h-5 text-gray-300 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>
-                                        <input v-if="showPatientDropdown && !patient" v-model="patientSearch" type="text" :placeholder="isRtl ? 'ابحث بالاسم أو رقم الملف...' : 'Search by name or file number...'" class="flex-1 bg-transparent border-none outline-none text-sm text-gray-700 placeholder-gray-300 p-0 focus:ring-0" @click.stop />
+                                        <input v-if="showPatientDropdown && !patient" v-model="patientSearch" type="text" :placeholder="isRtl ? 'ابحث بالاسم أو رقم الملف...' : 'Search by name or file number...'" class="doctorato-input flex-1 bg-transparent border-none outline-none text-sm text-gray-700 placeholder-gray-300 p-0 focus:ring-0" @click.stop />
                                         <span v-else class="flex-1 text-sm" :class="selectedPatientName ? 'text-gray-800 font-medium' : 'text-gray-300'">{{ selectedPatientName || (isRtl ? 'اختر المريض' : 'Select patient') }}</span>
                                         <svg class="w-4 h-4 text-gray-300 transition-transform duration-300" :class="showPatientDropdown ? 'rotate-180' : ''" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
                                     </div>
@@ -419,7 +419,7 @@ function submit() {
                                 <div class="relative">
                                     <div @click="showDoctorDropdown = !showDoctorDropdown" class="tp-input-wrapper cursor-pointer" :class="{ 'tp-input-focus': showDoctorDropdown }">
                                         <svg class="w-5 h-5 text-gray-300 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" /></svg>
-                                        <input v-if="showDoctorDropdown" v-model="doctorSearch" type="text" :placeholder="isRtl ? 'ابحث عن طبيب...' : 'Search doctor...'" class="flex-1 bg-transparent border-none outline-none text-sm text-gray-700 placeholder-gray-300 p-0 focus:ring-0" @click.stop />
+                                        <input v-if="showDoctorDropdown" v-model="doctorSearch" type="text" :placeholder="isRtl ? 'ابحث عن طبيب...' : 'Search doctor...'" class="doctorato-input flex-1 bg-transparent border-none outline-none text-sm text-gray-700 placeholder-gray-300 p-0 focus:ring-0" @click.stop />
                                         <span v-else class="flex-1 text-sm" :class="selectedDoctorName ? 'text-gray-800 font-medium' : 'text-gray-300'">{{ selectedDoctorName || (isRtl ? 'اختر الطبيب' : 'Select doctor') }}</span>
                                         <svg class="w-4 h-4 text-gray-300 transition-transform duration-300" :class="showDoctorDropdown ? 'rotate-180' : ''" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
                                     </div>
@@ -444,12 +444,12 @@ function submit() {
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label class="tp-label"><svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" /></svg> {{ isRtl ? 'العنوان (عربي)' : 'Title (Arabic)' }}</label>
-                                <input v-model="form.title_ar" type="text" dir="rtl" class="tp-input" :placeholder="isRtl ? 'عنوان خطة العلاج بالعربي' : 'Arabic title'" />
+                                <input v-model="form.title_ar" type="text" dir="rtl" class="doctorato-input tp-input" :placeholder="isRtl ? 'عنوان خطة العلاج بالعربي' : 'Arabic title'" />
                                 <p v-if="errors.title_ar" class="tp-error">{{ errors.title_ar }}</p>
                             </div>
                             <div>
                                 <label class="tp-label"><svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 21l5.25-11.25L21 21m-9-3h7.5M3 5.621a48.474 48.474 0 016-.371m0 0c1.12 0 2.233.038 3.334.114M9 5.25V3m3.334 2.364C11.176 10.658 7.69 15.08 3 17.502m9.334-12.138c.896.061 1.785.147 2.666.257m-4.589 8.495a18.023 18.023 0 01-3.827-5.802" /></svg> {{ isRtl ? 'العنوان (إنجليزي)' : 'Title (English)' }}</label>
-                                <input v-model="form.title_en" type="text" class="tp-input" :placeholder="isRtl ? 'عنوان خطة العلاج بالإنجليزي' : 'English title'" />
+                                <input v-model="form.title_en" type="text" class="doctorato-input tp-input" :placeholder="isRtl ? 'عنوان خطة العلاج بالإنجليزي' : 'English title'" />
                                 <p v-if="errors.title_en" class="tp-error">{{ errors.title_en }}</p>
                             </div>
                         </div>
@@ -457,7 +457,7 @@ function submit() {
                         <!-- Description -->
                         <div>
                             <label class="tp-label"><svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" /></svg> {{ isRtl ? 'الوصف' : 'Description' }}</label>
-                            <textarea v-model="form.description" rows="3" class="tp-input resize-none" :placeholder="isRtl ? 'وصف مختصر لخطة العلاج...' : 'Brief description of the treatment plan...'"></textarea>
+                            <textarea v-model="form.description" rows="3" class="doctorato-input tp-input resize-none" :placeholder="isRtl ? 'وصف مختصر لخطة العلاج...' : 'Brief description of the treatment plan...'"></textarea>
                             <p v-if="errors.description" class="tp-error">{{ errors.description }}</p>
                         </div>
 
@@ -467,7 +467,7 @@ function submit() {
                                 <label class="tp-label"><svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z" /></svg> {{ isRtl ? 'التكلفة التقديرية' : 'Estimated Cost' }}</label>
                                 <div class="tp-input-wrapper">
                                     <svg class="w-5 h-5 text-gray-300 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                    <input v-model="form.estimated_cost" type="number" min="0" step="0.01" class="flex-1 bg-transparent border-none outline-none text-sm text-gray-700 p-0 focus:ring-0" :placeholder="isRtl ? '0.00' : '0.00'" />
+                                    <input v-model="form.estimated_cost" type="number" min="0" step="0.01" class="doctorato-input flex-1 bg-transparent border-none outline-none text-sm text-gray-700 p-0 focus:ring-0" :placeholder="isRtl ? '0.00' : '0.00'" />
                                     <span class="text-xs text-gray-400 font-medium">{{ currencyCode }}</span>
                                 </div>
                                 <p v-if="errors.estimated_cost" class="tp-error">{{ errors.estimated_cost }}</p>
@@ -476,7 +476,7 @@ function submit() {
                                 <label class="tp-label"><svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> {{ isRtl ? 'عدد الجلسات التقديري' : 'Estimated Sessions' }}</label>
                                 <div class="tp-input-wrapper">
                                     <svg class="w-5 h-5 text-gray-300 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" /></svg>
-                                    <input v-model="form.estimated_sessions" type="number" min="1" class="flex-1 bg-transparent border-none outline-none text-sm text-gray-700 p-0 focus:ring-0" placeholder="1" />
+                                    <input v-model="form.estimated_sessions" type="number" min="1" class="doctorato-input flex-1 bg-transparent border-none outline-none text-sm text-gray-700 p-0 focus:ring-0" placeholder="1" />
                                     <span class="text-xs text-gray-400">{{ isRtl ? 'جلسة' : 'sessions' }}</span>
                                 </div>
                                 <p v-if="errors.estimated_sessions" class="tp-error">{{ errors.estimated_sessions }}</p>
@@ -496,12 +496,12 @@ function submit() {
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label class="tp-label"><svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z" /></svg> {{ isRtl ? 'تاريخ البدء' : 'Start Date' }}</label>
-                                <input v-model="form.start_date" type="date" class="tp-input" />
+                                <input v-model="form.start_date" type="date" class="doctorato-input tp-input" />
                                 <p v-if="errors.start_date" class="tp-error">{{ errors.start_date }}</p>
                             </div>
                             <div>
                                 <label class="tp-label"><svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" /></svg> {{ isRtl ? 'تاريخ الانتهاء المتوقع' : 'Expected End Date' }}</label>
-                                <input v-model="form.expected_end_date" type="date" class="tp-input" />
+                                <input v-model="form.expected_end_date" type="date" class="doctorato-input tp-input" />
                                 <p v-if="errors.expected_end_date" class="tp-error">{{ errors.expected_end_date }}</p>
                             </div>
                         </div>
@@ -509,7 +509,7 @@ function submit() {
                         <!-- Notes -->
                         <div>
                             <label class="tp-label"><svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" /></svg> {{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
-                            <textarea v-model="form.notes" rows="2" class="tp-input resize-none" :placeholder="isRtl ? 'ملاحظات إضافية...' : 'Additional notes...'"></textarea>
+                            <textarea v-model="form.notes" rows="2" class="doctorato-input tp-input resize-none" :placeholder="isRtl ? 'ملاحظات إضافية...' : 'Additional notes...'"></textarea>
                         </div>
                     </div>
                 </div>
@@ -573,12 +573,12 @@ function submit() {
                                         <label class="tp-label-sm">{{ isRtl ? 'رقم السن' : 'Tooth Number' }}</label>
                                         <div class="tp-input-wrapper-sm">
                                             <svg class="w-4 h-4 text-gray-300" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5.25 8.25h15m-16.5 7.5h15m-1.8-13.5l-3.9 19.5m-2.1-19.5l-3.9 19.5" /></svg>
-                                            <input v-model="treatment.tooth_number" type="text" class="flex-1 bg-transparent border-none outline-none text-sm p-0 focus:ring-0" placeholder="e.g. 18" />
+                                            <input v-model="treatment.tooth_number" type="text" class="doctorato-input flex-1 bg-transparent border-none outline-none text-sm p-0 focus:ring-0" placeholder="e.g. 18" />
                                         </div>
                                     </div>
                                     <div>
                                         <label class="tp-label-sm">{{ isRtl ? 'نوع العلاج' : 'Treatment Type' }}</label>
-                                        <select v-model="treatment.treatment_type" class="tp-select-sm">
+                                        <select v-model="treatment.treatment_type" class="doctorato-input tp-select-sm">
                                             <option value="">{{ isRtl ? 'اختر النوع' : 'Select type' }}</option>
                                             <option v-for="tt in treatmentTypes" :key="tt" :value="tt">{{ treatmentTypeLabels[tt] || tt }}</option>
                                         </select>
@@ -587,7 +587,7 @@ function submit() {
                                         <label class="tp-label-sm">{{ isRtl ? 'الأسطح' : 'Surfaces' }}</label>
                                         <div class="tp-input-wrapper-sm">
                                             <svg class="w-4 h-4 text-gray-300" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6z" /></svg>
-                                            <input v-model="treatment.surfaces" type="text" placeholder="M, O, D, B, L" class="flex-1 bg-transparent border-none outline-none text-sm p-0 focus:ring-0" />
+                                            <input v-model="treatment.surfaces" type="text" placeholder="M, O, D, B, L" class="doctorato-input flex-1 bg-transparent border-none outline-none text-sm p-0 focus:ring-0" />
                                         </div>
                                     </div>
                                 </div>
@@ -596,7 +596,7 @@ function submit() {
                                     <label class="tp-label-sm">{{ isRtl ? 'الوصف' : 'Description' }}</label>
                                     <div class="tp-input-wrapper-sm">
                                         <svg class="w-4 h-4 text-gray-300" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" /></svg>
-                                        <input v-model="treatment.description" type="text" class="flex-1 bg-transparent border-none outline-none text-sm p-0 focus:ring-0" :placeholder="isRtl ? 'وصف الإجراء...' : 'Describe the procedure...'" />
+                                        <input v-model="treatment.description" type="text" class="doctorato-input flex-1 bg-transparent border-none outline-none text-sm p-0 focus:ring-0" :placeholder="isRtl ? 'وصف الإجراء...' : 'Describe the procedure...'" />
                                     </div>
                                 </div>
 
@@ -605,7 +605,7 @@ function submit() {
                                         <label class="tp-label-sm">{{ isRtl ? 'التكلفة' : 'Cost' }}</label>
                                         <div class="tp-input-wrapper-sm">
                                             <svg class="w-4 h-4 text-gray-300" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                            <input v-model="treatment.cost" type="number" min="0" step="0.01" class="flex-1 bg-transparent border-none outline-none text-sm p-0 focus:ring-0" placeholder="0.00" />
+                                            <input v-model="treatment.cost" type="number" min="0" step="0.01" class="doctorato-input flex-1 bg-transparent border-none outline-none text-sm p-0 focus:ring-0" placeholder="0.00" />
                                             <span class="text-[10px] text-gray-400 font-medium">{{ currencyCode }}</span>
                                         </div>
                                     </div>
@@ -613,7 +613,7 @@ function submit() {
                                         <label class="tp-label-sm">{{ isRtl ? 'تكلفة المعمل' : 'Lab Cost' }}</label>
                                         <div class="tp-input-wrapper-sm">
                                             <svg class="w-4 h-4 text-gray-300" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 00-6.23.693L5 14.5m14.8.8l1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0112 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5" /></svg>
-                                            <input v-model="treatment.lab_cost" type="number" min="0" step="0.01" class="flex-1 bg-transparent border-none outline-none text-sm p-0 focus:ring-0" placeholder="0.00" />
+                                            <input v-model="treatment.lab_cost" type="number" min="0" step="0.01" class="doctorato-input flex-1 bg-transparent border-none outline-none text-sm p-0 focus:ring-0" placeholder="0.00" />
                                             <span class="text-[10px] text-gray-400 font-medium">{{ currencyCode }}</span>
                                         </div>
                                     </div>

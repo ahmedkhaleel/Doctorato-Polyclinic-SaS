@@ -860,7 +860,7 @@ const stepLabels = computed(() => isRtl.value ? [
                                     <select
                                         v-model="serviceRows[0].doctor_id"
                                         @change="onConsultationDoctorChange(0)"
-                                        class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500"
+                                        class="doctorato-input w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D]"
                                     >
                                         <option value="">{{ isRtl ? 'اختر الطبيب' : 'Select doctor' }}</option>
                                         <option v-for="d in filteredDoctors" :key="d.id" :value="d.id">{{ d.name_en || d.name_ar }}</option>
@@ -875,7 +875,7 @@ const stepLabels = computed(() => isRtl.value ? [
                                         type="number"
                                         min="0"
                                         step="0.01"
-                                        class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500"
+                                        class="doctorato-input w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D]"
                                     />
                                 </div>
 
@@ -887,7 +887,7 @@ const stepLabels = computed(() => isRtl.value ? [
                                         type="number"
                                         min="0"
                                         step="0.01"
-                                        class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500"
+                                        class="doctorato-input w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D]"
                                     />
                                 </div>
 
@@ -907,7 +907,7 @@ const stepLabels = computed(() => isRtl.value ? [
                                     v-model="serviceRows[0].notes"
                                     type="text"
                                     :placeholder="isRtl ? 'ملاحظات الاستشارة...' : 'Consultation notes...'"
-                                    class="w-full px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500"
+                                    class="doctorato-input w-full px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D]"
                                 />
                             </div>
                         </div>
@@ -954,7 +954,7 @@ const stepLabels = computed(() => isRtl.value ? [
                                         <select
                                             v-model="row.service_id"
                                             @change="onServiceChange(index)"
-                                            class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500"
+                                            class="doctorato-input w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D]"
                                         >
                                             <option value="">{{ isRtl ? 'اختر الخدمة' : 'Select service' }}</option>
                                             <template v-if="filteredServiceCategories && filteredServiceCategories.length">
@@ -979,7 +979,7 @@ const stepLabels = computed(() => isRtl.value ? [
                                         <label class="block text-xs font-medium text-gray-500 mb-1">{{ isRtl ? 'الطبيب' : 'Doctor' }} <span class="text-red-500">*</span></label>
                                         <select
                                             v-model="row.doctor_id"
-                                            class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500"
+                                            class="doctorato-input w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D]"
                                         >
                                             <option value="">{{ isRtl ? 'اختر الطبيب' : 'Select doctor' }}</option>
                                             <option v-for="d in filteredDoctors" :key="d.id" :value="d.id">{{ d.name_en || d.name_ar }}</option>
@@ -993,7 +993,7 @@ const stepLabels = computed(() => isRtl.value ? [
                                             v-model.number="row.sessions_count"
                                             type="number"
                                             min="1"
-                                            class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500"
+                                            class="doctorato-input w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D]"
                                         />
                                     </div>
 
@@ -1005,7 +1005,7 @@ const stepLabels = computed(() => isRtl.value ? [
                                             type="number"
                                             min="0"
                                             step="0.01"
-                                            class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500"
+                                            class="doctorato-input w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D]"
                                         />
                                     </div>
 
@@ -1017,7 +1017,7 @@ const stepLabels = computed(() => isRtl.value ? [
                                             type="number"
                                             min="0"
                                             step="0.01"
-                                            class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500"
+                                            class="doctorato-input w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D]"
                                         />
                                     </div>
 
@@ -1037,7 +1037,7 @@ const stepLabels = computed(() => isRtl.value ? [
                                         v-model="row.notes"
                                         type="text"
                                         :placeholder="isRtl ? 'ملاحظات خاصة بالخدمة...' : 'Service-specific notes...'"
-                                        class="w-full px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500"
+                                        class="doctorato-input w-full px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D]"
                                     />
                                 </div>
                             </div>
@@ -1093,7 +1093,7 @@ const stepLabels = computed(() => isRtl.value ? [
                                         <select
                                             v-model="apt.doctor_id"
                                             @change="onAppointmentDoctorChange(sIndex, aIndex)"
-                                            class="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500"
+                                            class="doctorato-input w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D]"
                                         >
                                             <option value="">{{ isRtl ? 'اختر الطبيب' : 'Select doctor' }}</option>
                                             <option v-for="d in filteredDoctors" :key="d.id" :value="d.id">{{ d.name_en || d.name_ar }}</option>
@@ -1270,7 +1270,7 @@ const stepLabels = computed(() => isRtl.value ? [
                             v-model="notes"
                             rows="3"
                             :placeholder="isRtl ? 'ملاحظات اختيارية للحجز...' : 'Optional booking notes...'"
-                            class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500"
+                            class="doctorato-input w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D]"
                         ></textarea>
                     </div>
 

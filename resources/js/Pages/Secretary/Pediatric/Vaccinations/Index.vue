@@ -192,7 +192,7 @@ onMounted(() => {
                             v-model="search"
                             type="text"
                             :placeholder="isRtl ? 'بحث بالاسم، التطعيم...' : 'Search by name, vaccine...'"
-                            class="w-full ltr:pl-10 ltr:pr-4 rtl:pr-10 rtl:pl-4 py-2.5 bg-white/10 border border-white/20 rounded-xl text-sm text-white placeholder-gray-400 focus:ring-2 focus:ring-[#4CAF50]/50 focus:border-[#4CAF50] transition"
+                            class="doctorato-input w-full ltr:pl-10 ltr:pr-4 rtl:pr-10 rtl:pl-4 py-2.5 bg-white/10 border border-white/20 rounded-xl text-sm text-white placeholder-gray-400 focus:ring-2 focus:ring-[#4CAF50]/50 focus:border-[#4CAF50] transition"
                         />
                     </div>
                     <select
@@ -347,7 +347,7 @@ onMounted(() => {
                             </label>
                             <select
                                 v-model="editForm.status"
-                                class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#0d9488]/40 focus:border-[#0d9488] transition bg-white"
+                                class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#0d9488]/40 focus:border-[#0d9488] transition bg-white"
                             >
                                 <option
                                     v-for="opt in statusOptions"
@@ -367,7 +367,7 @@ onMounted(() => {
                             <input
                                 v-model="editForm.given_date"
                                 type="date"
-                                class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#0d9488]/40 focus:border-[#0d9488] transition bg-white"
+                                class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#0d9488]/40 focus:border-[#0d9488] transition bg-white"
                             />
                         </div>
 
@@ -381,7 +381,7 @@ onMounted(() => {
                                 type="text"
                                 :placeholder="isRtl ? 'ملاحظات اختيارية...' : 'Optional notes...'"
                                 maxlength="500"
-                                class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#0d9488]/40 focus:border-[#0d9488] transition bg-white placeholder-gray-300"
+                                class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#0d9488]/40 focus:border-[#0d9488] transition bg-white placeholder-gray-300"
                             />
                         </div>
 

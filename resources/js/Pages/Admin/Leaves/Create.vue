@@ -49,7 +49,7 @@ function submit() {
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_leave_type') }} <span class="text-red-500">*</span></label>
-                        <select v-model="form.leave_type" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent">
+                        <select v-model="form.leave_type" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent">
                             <option value="annual">{{ $t('a_annual') }}</option>
                             <option value="sick">{{ $t('a_sick') }}</option>
                             <option value="personal">{{ $t('a_personal') }}</option>
@@ -61,19 +61,19 @@ function submit() {
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_start_date') }} <span class="text-red-500">*</span></label>
-                            <input v-model="form.start_date" type="date" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
+                            <input v-model="form.start_date" type="date" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                             <p v-if="form.errors.start_date" class="mt-1 text-sm text-red-600">{{ form.errors.start_date }}</p>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_end_date') }} <span class="text-red-500">*</span></label>
-                            <input v-model="form.end_date" type="date" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
+                            <input v-model="form.end_date" type="date" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                             <p v-if="form.errors.end_date" class="mt-1 text-sm text-red-600">{{ form.errors.end_date }}</p>
                         </div>
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_reason') }}</label>
-                        <textarea v-model="form.reason" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" :placeholder="$t('a_leave_reason_placeholder')"></textarea>
+                        <textarea v-model="form.reason" rows="4" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" :placeholder="$t('a_leave_reason_placeholder')"></textarea>
                         <p v-if="form.errors.reason" class="mt-1 text-sm text-red-600">{{ form.errors.reason }}</p>
                     </div>
                 </div>

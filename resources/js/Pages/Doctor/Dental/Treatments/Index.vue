@@ -131,12 +131,12 @@ function advanceTreatmentStatus(treatmentId, currentStatus) {
                             v-model="search"
                             type="text"
                             :placeholder="isRtl ? 'بحث بالمريض، رقم السن، الملاحظات...' : 'Search patient, tooth #, notes...'"
-                            class="w-full pl-12 pr-4 py-3 bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl text-sm text-white placeholder-gray-400 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]/50 focus:bg-white/15 transition-all"
+                            class="doctorato-input w-full pl-12 pr-4 py-3 bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl text-sm text-white placeholder-gray-400 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]/50 focus:bg-white/15 transition-all"
                         />
                     </div>
                     <select
                         v-model="statusFilter"
-                        class="px-4 py-3 bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl text-sm text-white focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]/50 transition-all"
+                        class="doctorato-input px-4 py-3 bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl text-sm text-white focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]/50 transition-all"
                     >
                         <option value="" class="text-gray-900">{{ isRtl ? 'جميع الحالات' : 'All Statuses' }}</option>
                         <option value="planned" class="text-gray-900">{{ isRtl ? 'مخطط' : 'Planned' }}</option>
@@ -146,7 +146,7 @@ function advanceTreatmentStatus(treatmentId, currentStatus) {
                     </select>
                     <select
                         v-model="typeFilter"
-                        class="px-4 py-3 bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl text-sm text-white focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]/50 transition-all"
+                        class="doctorato-input px-4 py-3 bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl text-sm text-white focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]/50 transition-all"
                     >
                         <option value="" class="text-gray-900">{{ isRtl ? 'جميع الأنواع' : 'All Types' }}</option>
                         <option v-for="tt in treatmentTypes" :key="tt.id" :value="tt.id" class="text-gray-900">
@@ -160,14 +160,14 @@ function advanceTreatmentStatus(treatmentId, currentStatus) {
                         v-model="toothNumber"
                         type="text"
                         :placeholder="isRtl ? 'رقم السن (14, 36...)' : 'Tooth # (14, 36...)'"
-                        class="px-4 py-3 bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl text-sm text-white placeholder-gray-400 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]/50 focus:bg-white/15 transition-all w-36 font-mono"
+                        class="doctorato-input px-4 py-3 bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl text-sm text-white placeholder-gray-400 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]/50 focus:bg-white/15 transition-all w-36 font-mono"
                     />
                     <div class="flex items-center gap-2">
                         <span class="text-xs text-gray-400 whitespace-nowrap">{{ isRtl ? 'من' : 'From' }}</span>
                         <input
                             v-model="dateFrom"
                             type="date"
-                            class="px-4 py-3 bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl text-sm text-white focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]/50 transition-all"
+                            class="doctorato-input px-4 py-3 bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl text-sm text-white focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]/50 transition-all"
                         />
                     </div>
                     <div class="flex items-center gap-2">
@@ -175,7 +175,7 @@ function advanceTreatmentStatus(treatmentId, currentStatus) {
                         <input
                             v-model="dateTo"
                             type="date"
-                            class="px-4 py-3 bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl text-sm text-white focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]/50 transition-all"
+                            class="doctorato-input px-4 py-3 bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl text-sm text-white focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]/50 transition-all"
                         />
                     </div>
                 </div>

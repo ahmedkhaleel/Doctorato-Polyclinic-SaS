@@ -57,7 +57,7 @@ function submit() {
                             type="text"
                             required
                             autofocus
-                            class="w-full px-4 py-3 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white placeholder-white/30 focus:ring-2 focus:ring-[var(--brand-primary)]/50 focus:border-[var(--brand-primary)]/50 text-sm transition-all duration-200"
+                            class="doctorato-input w-full px-4 py-3 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white placeholder-white/30 focus:ring-2 focus:ring-[var(--brand-primary)]/50 focus:border-[var(--brand-primary)]/50 text-sm transition-all duration-200"
                             :class="form.errors.full_name ? 'border-red-500/50' : ''"
                             :placeholder="isRtl ? 'أدخل اسمك الكامل' : 'Enter your full name'"
                         />
@@ -72,7 +72,7 @@ function submit() {
                             v-model="form.phone"
                             type="tel"
                             required
-                            class="w-full px-4 py-3 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white placeholder-white/30 focus:ring-2 focus:ring-[var(--brand-primary)]/50 focus:border-[var(--brand-primary)]/50 text-sm transition-all duration-200"
+                            class="doctorato-input w-full px-4 py-3 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white placeholder-white/30 focus:ring-2 focus:ring-[var(--brand-primary)]/50 focus:border-[var(--brand-primary)]/50 text-sm transition-all duration-200"
                             :class="form.errors.phone ? 'border-red-500/50' : ''"
                             placeholder="+966XXXXXXXXX"
                         />
@@ -88,7 +88,7 @@ function submit() {
                             v-model="form.email"
                             type="email"
                             required
-                            class="w-full px-4 py-3 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white placeholder-white/30 focus:ring-2 focus:ring-[var(--brand-primary)]/50 focus:border-[var(--brand-primary)]/50 text-sm transition-all duration-200"
+                            class="doctorato-input w-full px-4 py-3 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white placeholder-white/30 focus:ring-2 focus:ring-[var(--brand-primary)]/50 focus:border-[var(--brand-primary)]/50 text-sm transition-all duration-200"
                             :class="form.errors.email ? 'border-red-500/50' : ''"
                             placeholder="patient@example.com"
                         />
@@ -103,7 +103,7 @@ function submit() {
                             v-model="form.password"
                             type="password"
                             required
-                            class="w-full px-4 py-3 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white placeholder-white/30 focus:ring-2 focus:ring-[var(--brand-primary)]/50 focus:border-[var(--brand-primary)]/50 text-sm transition-all duration-200"
+                            class="doctorato-input w-full px-4 py-3 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white placeholder-white/30 focus:ring-2 focus:ring-[var(--brand-primary)]/50 focus:border-[var(--brand-primary)]/50 text-sm transition-all duration-200"
                             :class="form.errors.password ? 'border-red-500/50' : ''"
                             :placeholder="isRtl ? 'أدخل كلمة المرور' : 'Enter your password'"
                         />
@@ -118,7 +118,7 @@ function submit() {
                             v-model="form.password_confirmation"
                             type="password"
                             required
-                            class="w-full px-4 py-3 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white placeholder-white/30 focus:ring-2 focus:ring-[var(--brand-primary)]/50 focus:border-[var(--brand-primary)]/50 text-sm transition-all duration-200"
+                            class="doctorato-input w-full px-4 py-3 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white placeholder-white/30 focus:ring-2 focus:ring-[var(--brand-primary)]/50 focus:border-[var(--brand-primary)]/50 text-sm transition-all duration-200"
                             :placeholder="isRtl ? 'أعد إدخال كلمة المرور' : 'Re-enter your password'"
                         />
                     </div>

@@ -275,8 +275,8 @@ onMounted(() => {
                                     type="text"
                                     required
                                     :placeholder="t('full_name_placeholder')"
-                                    class="form-control form-input-animated"
-                                    :class="{ 'border-red-400 focus:ring-red-300 focus:border-red-400': form.errors.full_name }"
+                                    class="doctorato-input form-control form-input-animated"
+                                    :class="{ 'border-red-400 focus:ring-[#C4A265]/30 focus:border-red-400': form.errors.full_name }"
                                     @focus="focusedField = 'name'"
                                     @blur="focusedField = ''"
                                 />
@@ -299,8 +299,8 @@ onMounted(() => {
                                     dir="ltr"
                                     placeholder="01xxxxxxxxx"
                                     maxlength="11"
-                                    class="form-control form-input-animated"
-                                    :class="{ 'border-red-400 focus:ring-red-300 focus:border-red-400': form.errors.phone }"
+                                    class="doctorato-input form-control form-input-animated"
+                                    :class="{ 'border-red-400 focus:ring-[#C4A265]/30 focus:border-red-400': form.errors.phone }"
                                     @input="handlePhoneInput"
                                     @focus="focusedField = 'phone'"
                                     @blur="focusedField = ''"
@@ -327,7 +327,7 @@ onMounted(() => {
                                             v-model="preferredDate"
                                             type="date"
                                             :min="todayDate"
-                                            class="form-control form-input-animated text-sm"
+                                            class="doctorato-input form-control form-input-animated text-sm"
                                             @focus="focusedField = 'preferred_date'"
                                             @blur="focusedField = ''"
                                         />
@@ -340,7 +340,7 @@ onMounted(() => {
                                         <input
                                             v-model="preferredTime"
                                             type="time"
-                                            class="form-control form-input-animated text-sm"
+                                            class="doctorato-input form-control form-input-animated text-sm"
                                             @focus="focusedField = 'preferred_time'"
                                             @blur="focusedField = ''"
                                         />
@@ -358,7 +358,7 @@ onMounted(() => {
                                     v-model="form.notes"
                                     rows="4"
                                     :placeholder="t('notes_placeholder')"
-                                    class="form-control form-input-animated resize-none"
+                                    class="doctorato-input form-control form-input-animated resize-none"
                                     @focus="focusedField = 'notes'"
                                     @blur="focusedField = ''"
                                 ></textarea>

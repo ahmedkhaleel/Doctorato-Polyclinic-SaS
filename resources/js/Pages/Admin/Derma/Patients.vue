@@ -27,7 +27,7 @@ function t(en, ar) { return isRtl.value ? ar : en; }
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
             <input v-model="search" type="text"
                 :placeholder="t('Search by name, phone, file #', 'بحث بالاسم أو الهاتف أو رقم الملف')"
-                class="w-full md:w-96 px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-500/20 focus:border-amber-400" />
+                class="doctorato-input w-full md:w-96 px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30/20 focus:border-[#1B365D]" />
         </div>
 
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">

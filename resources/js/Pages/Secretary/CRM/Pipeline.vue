@@ -356,11 +356,11 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handlePipelineKe
                     <svg class="w-3.5 h-3.5 text-gray-400 absolute top-1/2 -translate-y-1/2 start-2.5 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                     <input v-model="searchQuery" type="text" data-pipeline-search
                         :placeholder="isRtl ? 'بحث...' : 'Search...'"
-                        class="text-xs rounded-lg border border-gray-200 bg-white ps-8 pe-3 py-2 text-gray-600 outline-none focus:ring-2 focus:ring-teal-200 transition-all w-36 focus:w-48 placeholder:text-gray-400">
+                        class="doctorato-input text-xs rounded-lg border border-gray-200 bg-white ps-8 pe-3 py-2 text-gray-600 outline-none focus:ring-2 focus:ring-[#C4A265]/30 transition-all w-36 focus:w-48 placeholder:text-gray-400">
                     <kbd v-if="!searchQuery" class="absolute top-1/2 -translate-y-1/2 end-2 px-1 py-0.5 text-[9px] font-mono font-semibold text-gray-300 bg-gray-50 border border-gray-200 rounded pointer-events-none hidden md:inline">/</kbd>
                 </div>
                 <!-- Priority filter -->
-                <select v-model="filterPriority" class="text-xs rounded-lg border border-gray-200 bg-white px-3 py-2 text-gray-600 outline-none focus:ring-2 focus:ring-teal-200 transition-all">
+                <select v-model="filterPriority" class="doctorato-input text-xs rounded-lg border border-gray-200 bg-white px-3 py-2 text-gray-600 outline-none focus:ring-2 focus:ring-[#C4A265]/30 transition-all">
                     <option value="">{{ isRtl ? 'كل الأولويات' : 'All Priorities' }}</option>
                     <option value="1">{{ isRtl ? 'ساخن' : 'Hot' }}</option>
                     <option value="2">{{ isRtl ? 'دافئ' : 'Warm' }}</option>

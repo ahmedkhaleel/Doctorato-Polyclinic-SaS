@@ -927,7 +927,7 @@ function getServiceLabel(id) {
                                         <Transition enter-active-class="transition duration-150" enter-from-class="opacity-0 -translate-y-1" enter-to-class="opacity-100 translate-y-0" leave-active-class="transition duration-100" leave-from-class="opacity-100" leave-to-class="opacity-0">
                                             <div v-if="openDropdown === 'cons_doc'" class="absolute z-40 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden">
                                                 <div class="p-2 border-b border-gray-100">
-                                                    <input type="text" v-model="ddSearch['cons_doc']" class="bk-dd-search-cons_doc w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-200 focus:border-transparent" :placeholder="isRtl ? 'بحث عن طبيب...' : 'Search doctor...'" />
+                                                    <input type="text" v-model="ddSearch['cons_doc']" class="doctorato-input bk-dd-search-cons_doc w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" :placeholder="isRtl ? 'بحث عن طبيب...' : 'Search doctor...'" />
                                                 </div>
                                                 <div class="max-h-48 overflow-y-auto">
                                                     <button v-for="d in searchedDoctors('cons_doc')" :key="d.id" type="button"
@@ -954,7 +954,7 @@ function getServiceLabel(id) {
                                             type="number"
                                             min="0"
                                             step="0.01"
-                                            class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
+                                            class="doctorato-input w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                                         />
                                     </div>
 
@@ -966,7 +966,7 @@ function getServiceLabel(id) {
                                             type="number"
                                             min="0"
                                             step="0.01"
-                                            class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
+                                            class="doctorato-input w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                                         />
                                     </div>
 
@@ -986,7 +986,7 @@ function getServiceLabel(id) {
                                         v-model="serviceRows[0].notes"
                                         type="text"
                                         placeholder="Consultation notes..."
-                                        class="w-full px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
+                                        class="doctorato-input w-full px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                                     />
                                 </div>
                             </div>
@@ -1040,7 +1040,7 @@ function getServiceLabel(id) {
                                             <Transition enter-active-class="transition duration-150" enter-from-class="opacity-0 -translate-y-1" enter-to-class="opacity-100 translate-y-0" leave-active-class="transition duration-100" leave-from-class="opacity-100" leave-to-class="opacity-0">
                                                 <div v-if="openDropdown === 'svc_' + index" class="absolute z-40 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden">
                                                     <div class="p-2 border-b border-gray-100">
-                                                        <input type="text" v-model="ddSearch['svc_' + index]" :class="'bk-dd-search-svc_' + index" class="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-200 focus:border-transparent" :placeholder="isRtl ? 'بحث عن خدمة...' : 'Search service...'" />
+                                                        <input type="text" v-model="ddSearch['svc_' + index]"  class="doctorato-input w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" :placeholder="isRtl ? 'بحث عن خدمة...' : 'Search service...'"  :class="'bk-dd-search-svc_' + index"/>
                                                     </div>
                                                     <div class="max-h-56 overflow-y-auto">
                                                         <template v-if="searchedServiceCategories('svc_' + index).length">
@@ -1090,7 +1090,7 @@ function getServiceLabel(id) {
                                             <Transition enter-active-class="transition duration-150" enter-from-class="opacity-0 -translate-y-1" enter-to-class="opacity-100 translate-y-0" leave-active-class="transition duration-100" leave-from-class="opacity-100" leave-to-class="opacity-0">
                                                 <div v-if="openDropdown === 'doc_' + index" class="absolute z-40 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden">
                                                     <div class="p-2 border-b border-gray-100">
-                                                        <input type="text" v-model="ddSearch['doc_' + index]" :class="'bk-dd-search-doc_' + index" class="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-200 focus:border-transparent" :placeholder="isRtl ? 'بحث عن طبيب...' : 'Search doctor...'" />
+                                                        <input type="text" v-model="ddSearch['doc_' + index]"  class="doctorato-input w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" :placeholder="isRtl ? 'بحث عن طبيب...' : 'Search doctor...'"  :class="'bk-dd-search-doc_' + index"/>
                                                     </div>
                                                     <div class="max-h-48 overflow-y-auto">
                                                         <button v-for="d in searchedDoctors('doc_' + index)" :key="d.id" type="button"
@@ -1116,7 +1116,7 @@ function getServiceLabel(id) {
                                                 v-model.number="row.sessions_count"
                                                 type="number"
                                                 min="1"
-                                                class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
+                                                class="doctorato-input w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                                             />
                                         </div>
 
@@ -1128,7 +1128,7 @@ function getServiceLabel(id) {
                                                 type="number"
                                                 min="0"
                                                 step="0.01"
-                                                class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
+                                                class="doctorato-input w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                                             />
                                         </div>
 
@@ -1140,7 +1140,7 @@ function getServiceLabel(id) {
                                                 type="number"
                                                 min="0"
                                                 step="0.01"
-                                                class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
+                                                class="doctorato-input w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                                             />
                                         </div>
 
@@ -1160,7 +1160,7 @@ function getServiceLabel(id) {
                                             v-model="row.notes"
                                             type="text"
                                             :placeholder="$t('a_service_notes_placeholder')"
-                                            class="w-full px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
+                                            class="doctorato-input w-full px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                                         />
                                     </div>
                                 </div>
@@ -1224,7 +1224,7 @@ function getServiceLabel(id) {
                                             <Transition enter-active-class="transition duration-150" enter-from-class="opacity-0 -translate-y-1" enter-to-class="opacity-100 translate-y-0" leave-active-class="transition duration-100" leave-from-class="opacity-100" leave-to-class="opacity-0">
                                                 <div v-if="openDropdown === 'apt_doc_' + sIndex + '_' + aIndex" class="absolute z-40 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden">
                                                     <div class="p-2 border-b border-gray-100">
-                                                        <input type="text" v-model="ddSearch['apt_doc_' + sIndex + '_' + aIndex]" :class="'bk-dd-search-apt_doc_' + sIndex + '_' + aIndex" class="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-200 focus:border-transparent" :placeholder="isRtl ? 'بحث عن طبيب...' : 'Search doctor...'" />
+                                                        <input type="text" v-model="ddSearch['apt_doc_' + sIndex + '_' + aIndex]"  class="doctorato-input w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" :placeholder="isRtl ? 'بحث عن طبيب...' : 'Search doctor...'"  :class="'bk-dd-search-apt_doc_' + sIndex + '_' + aIndex"/>
                                                     </div>
                                                     <div class="max-h-48 overflow-y-auto">
                                                         <button v-for="d in searchedDoctors('apt_doc_' + sIndex + '_' + aIndex)" :key="d.id" type="button"
@@ -1414,7 +1414,7 @@ function getServiceLabel(id) {
                                 v-model="notes"
                                 rows="3"
                                 placeholder="Optional booking notes..."
-                                class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
+                                class="doctorato-input w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                             ></textarea>
                         </div>
 

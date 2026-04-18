@@ -199,7 +199,7 @@ watch(filteredOptions, () => { highlightedIndex.value = -1; });
                     v-model="searchQuery"
                     :placeholder="searchPlaceholder"
                     type="text"
-                    class="flex-1 border-0 outline-none bg-transparent p-0 focus:ring-0 text-gray-800 placeholder-gray-400"
+                    class="doctorato-input flex-1 border-0 outline-none bg-transparent p-0 focus:ring-0 text-gray-800 placeholder-gray-400"
                     :class="sizeClasses.dropdown"
                     @keydown="handleKeydown"
                 />

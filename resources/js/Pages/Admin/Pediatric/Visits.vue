@@ -174,12 +174,12 @@ const paginationLinks = computed(() => props.visits?.links || []);
                         v-model="search"
                         type="text"
                         :placeholder="isRtl ? 'بحث بالمريض، رقم الملف، أو الطبيب...' : 'Search by patient, file number, or doctor...'"
-                        class="w-full ltr:pl-10 rtl:pr-10 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#2C4E7A] transition"
+                        class="doctorato-input w-full ltr:pl-10 rtl:pr-10 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#2C4E7A] transition"
                     />
                 </div>
                 <select
                     v-model="statusFilter"
-                    class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#2C4E7A] transition bg-white"
+                    class="doctorato-input px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#2C4E7A] transition bg-white"
                 >
                     <option value="">{{ isRtl ? 'كل الحالات' : 'All Statuses' }}</option>
                     <option value="waiting">{{ isRtl ? 'في الانتظار' : 'Waiting' }}</option>
@@ -192,7 +192,7 @@ const paginationLinks = computed(() => props.visits?.links || []);
                     <input
                         v-model="dateFrom"
                         type="date"
-                        class="px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#2C4E7A] transition bg-white"
+                        class="doctorato-input px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#2C4E7A] transition bg-white"
                     />
                 </div>
                 <div class="flex items-center gap-2">
@@ -200,7 +200,7 @@ const paginationLinks = computed(() => props.visits?.links || []);
                     <input
                         v-model="dateTo"
                         type="date"
-                        class="px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#2C4E7A] transition bg-white"
+                        class="doctorato-input px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#2C4E7A] transition bg-white"
                     />
                 </div>
             </div>

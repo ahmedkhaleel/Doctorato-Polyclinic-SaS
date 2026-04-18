@@ -583,7 +583,7 @@ onUnmounted(() => { document.removeEventListener('keydown', handleGlobalKey); })
                             <input ref="quickSearchInput" v-model="quickSearchQuery"
                                 @keydown="handleQuickSearchKey"
                                 :placeholder="isRtl ? 'ابحث عن صفحة أو ميزة...' : 'Search for a page or feature...'"
-                                class="flex-1 text-sm text-gray-800 placeholder-gray-400 border-0 focus:ring-0 p-0 bg-transparent" />
+                                class="doctorato-input flex-1 text-sm text-gray-800 placeholder-gray-400 border-0 focus:ring-0 p-0 bg-transparent" />
                             <kbd class="px-2 py-0.5 rounded bg-gray-100 border border-gray-200 text-[10px] font-mono text-gray-400">ESC</kbd>
                         </div>
                         <!-- Results -->

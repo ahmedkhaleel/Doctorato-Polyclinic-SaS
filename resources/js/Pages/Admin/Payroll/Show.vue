@@ -304,7 +304,7 @@ function submitMarkPaid() {
                             <select
                                 v-model="paidForm.payment_method"
                                 required
-                                class="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-[#C4A265] focus:ring-[#C4A265] focus:outline-none"
+                                class="doctorato-input w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-[#C4A265] focus:ring-[#C4A265] focus:outline-none"
                             >
                                 <option value="" disabled>{{ $t('a_select_method') }}</option>
                                 <option value="bank_transfer">{{ $t('a_bank_transfer') }}</option>
@@ -320,7 +320,7 @@ function submitMarkPaid() {
                                 v-model="paidForm.payment_reference"
                                 type="text"
                                 :placeholder="$t('a_payment_reference_placeholder')"
-                                class="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-[#C4A265] focus:ring-[#C4A265] focus:outline-none"
+                                class="doctorato-input w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-[#C4A265] focus:ring-[#C4A265] focus:outline-none"
                             />
                         </div>
 

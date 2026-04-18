@@ -180,7 +180,7 @@ function hasMedicalNotes(patient) {
                         </div>
                         <div>
                             <label class="text-xs font-semibold text-gray-500 mb-1.5 block uppercase tracking-wide">{{ isRtl ? 'التشخيص' : 'Diagnosis' }}</label>
-                            <input v-model="form.diagnosis" type="text" class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]" :placeholder="isRtl ? 'مثال: حب الشباب، إكزيما...' : 'e.g. Acne vulgaris, Eczema...'" />
+                            <input v-model="form.diagnosis" type="text" class="doctorato-input w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]" :placeholder="isRtl ? 'مثال: حب الشباب، إكزيما...' : 'e.g. Acne vulgaris, Eczema...'" />
                         </div>
                     </div>
 
@@ -203,7 +203,7 @@ function hasMedicalNotes(patient) {
 
                     <div>
                         <label class="text-xs font-semibold text-gray-500 mb-1.5 block uppercase tracking-wide">{{ isRtl ? 'ملاحظات للمريض' : 'Notes for Patient' }}</label>
-                        <textarea v-model="form.notes" rows="2" class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]" :placeholder="isRtl ? 'تعليمات إضافية، نصائح متابعة...' : 'Additional instructions, follow-up advice...'"></textarea>
+                        <textarea v-model="form.notes" rows="2" class="doctorato-input w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]" :placeholder="isRtl ? 'تعليمات إضافية، نصائح متابعة...' : 'Additional instructions, follow-up advice...'"></textarea>
                     </div>
 
                     <!-- Medications -->
@@ -229,7 +229,7 @@ function hasMedicalNotes(patient) {
                         <div v-for="(item, index) in form.items" :key="index" class="mb-2">
                             <div class="grid grid-cols-12 gap-2 items-start">
                                 <div class="col-span-12 lg:col-span-3 relative">
-                                        <input v-model="item.medication_name" @input="searchMedication('create', index, item.medication_name)" :placeholder="isRtl ? 'اكتب اسم الدواء...' : 'Type medication...'" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]" required />
+                                        <input v-model="item.medication_name" @input="searchMedication('create', index, item.medication_name)" :placeholder="isRtl ? 'اكتب اسم الدواء...' : 'Type medication...'" class="doctorato-input w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]" required />
                                     <div v-if="medicationSuggestions[`create-${index}`]?.length" class="absolute z-30 top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-xl max-h-44 overflow-y-auto">
                                         <button v-for="med in medicationSuggestions[`create-${index}`]" :key="med.id" type="button" @click="selectMedication('create', index, med)" class="w-full text-left px-3.5 py-2.5 text-sm hover:bg-[#FDF8F0] border-b border-gray-50 last:border-0">
                                             <span class="font-semibold text-gray-800">{{ med.name }}</span>
@@ -238,10 +238,10 @@ function hasMedicalNotes(patient) {
                                         </button>
                                     </div>
                                 </div>
-                                <input v-model="item.dosage" :placeholder="isRtl ? 'مثال: 500مج' : 'e.g. 500mg'" class="col-span-6 lg:col-span-2 px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30" />
+                                <input v-model="item.dosage" :placeholder="isRtl ? 'مثال: 500مج' : 'e.g. 500mg'" class="doctorato-input col-span-6 lg:col-span-2 px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30" />
                                 <div class="col-span-6 lg:col-span-2 relative">
                                     <div class="relative">
-                                        <input v-model="item.frequency" :placeholder="isRtl ? 'التكرار' : 'Frequency'" class="w-full px-3 py-2.5 pr-8 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30" />
+                                        <input v-model="item.frequency" :placeholder="isRtl ? 'التكرار' : 'Frequency'" class="doctorato-input w-full px-3 py-2.5 pr-8 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30" />
                                         <button type="button" @click="togglePreset(`freq-c-${index}`)" class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#C4A265]"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg></button>
                                     </div>
                                     <div v-if="showPreset[`freq-c-${index}`]" class="absolute z-30 top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-xl max-h-44 overflow-y-auto">
@@ -250,14 +250,14 @@ function hasMedicalNotes(patient) {
                                 </div>
                                 <div class="col-span-6 lg:col-span-2 relative">
                                     <div class="relative">
-                                        <input v-model="item.duration" :placeholder="isRtl ? 'المدة' : 'Duration'" class="w-full px-3 py-2.5 pr-8 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30" />
+                                        <input v-model="item.duration" :placeholder="isRtl ? 'المدة' : 'Duration'" class="doctorato-input w-full px-3 py-2.5 pr-8 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30" />
                                         <button type="button" @click="togglePreset(`dur-c-${index}`)" class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#C4A265]"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg></button>
                                     </div>
                                     <div v-if="showPreset[`dur-c-${index}`]" class="absolute z-30 top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-xl max-h-44 overflow-y-auto">
                                         <button v-for="opt in presets?.durations" :key="opt" type="button" @click="selectPreset('create', index, 'duration', opt)" class="w-full text-left px-3 py-2 text-xs hover:bg-[#FDF8F0] border-b border-gray-50 last:border-0">{{ opt }}</button>
                                     </div>
                                 </div>
-                                <input v-model="item.instructions" :placeholder="isRtl ? 'تعليمات خاصة...' : 'Special instructions...'" class="col-span-5 lg:col-span-2 px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30" />
+                                <input v-model="item.instructions" :placeholder="isRtl ? 'تعليمات خاصة...' : 'Special instructions...'" class="doctorato-input col-span-5 lg:col-span-2 px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30" />
                                 <button type="button" @click="removeItem(index)" class="col-span-1 flex items-center justify-center h-10 text-gray-300 hover:text-red-500 transition-colors" :class="form.items.length <= 1 ? 'invisible' : ''">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                                 </button>
@@ -279,7 +279,7 @@ function hasMedicalNotes(patient) {
         <div class="mb-4">
             <div class="relative max-w-md">
                 <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                <input v-model="search" type="text" :placeholder="isRtl ? 'بحث بالاسم، الهاتف، رقم الملف...' : 'Search by patient name, phone, file #...'" class="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]" />
+                <input v-model="search" type="text" :placeholder="isRtl ? 'بحث بالاسم، الهاتف، رقم الملف...' : 'Search by patient name, phone, file #...'" class="doctorato-input w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]" />
             </div>
         </div>
 
@@ -443,8 +443,8 @@ function hasMedicalNotes(patient) {
                                 <div><p class="text-xs font-bold text-red-700 uppercase">{{ isRtl ? 'ملاحظات طبية / حساسية' : 'Medical Notes / Allergies' }}</p><p class="text-sm text-red-600 mt-0.5">{{ editingPrescription.patient.medical_notes }}</p></div>
                             </div>
                             <div class="grid md:grid-cols-2 gap-4">
-                                <div><label class="text-xs font-semibold text-gray-500 mb-1.5 block uppercase tracking-wide">{{ isRtl ? 'التشخيص' : 'Diagnosis' }}</label><input v-model="editForm.diagnosis" type="text" class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]" /></div>
-                                <div><label class="text-xs font-semibold text-gray-500 mb-1.5 block uppercase tracking-wide">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label><input v-model="editForm.notes" type="text" class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]" /></div>
+                                <div><label class="text-xs font-semibold text-gray-500 mb-1.5 block uppercase tracking-wide">{{ isRtl ? 'التشخيص' : 'Diagnosis' }}</label><input v-model="editForm.diagnosis" type="text" class="doctorato-input w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]" /></div>
+                                <div><label class="text-xs font-semibold text-gray-500 mb-1.5 block uppercase tracking-wide">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label><input v-model="editForm.notes" type="text" class="doctorato-input w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]" /></div>
                             </div>
                             <div>
                                 <div class="flex items-center justify-between mb-3">
@@ -454,21 +454,21 @@ function hasMedicalNotes(patient) {
                                 <div v-for="(item, index) in editForm.items" :key="index" class="mb-2">
                                     <div class="grid grid-cols-12 gap-2 items-start">
                                         <div class="col-span-12 lg:col-span-3 relative">
-                                            <input v-model="item.medication_name" @input="searchMedication('edit', index, item.medication_name)" :placeholder="isRtl ? 'الدواء *' : 'Medication *'" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30" required />
+                                            <input v-model="item.medication_name" @input="searchMedication('edit', index, item.medication_name)" :placeholder="isRtl ? 'الدواء *' : 'Medication *'" class="doctorato-input w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30" required />
                                             <div v-if="medicationSuggestions[`edit-${index}`]?.length" class="absolute z-30 top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-xl max-h-40 overflow-y-auto">
                                                 <button v-for="med in medicationSuggestions[`edit-${index}`]" :key="med.id" type="button" @click="selectMedication('edit', index, med)" class="w-full text-left px-3 py-2 text-sm hover:bg-[#FDF8F0] border-b border-gray-50 last:border-0"><span class="font-semibold text-gray-800">{{ med.name }}</span><span v-if="med.generic_name" class="text-gray-400 ml-1 text-xs">({{ med.generic_name }})</span></button>
                                             </div>
                                         </div>
-                                        <input v-model="item.dosage" :placeholder="isRtl ? 'الجرعة' : 'Dosage'" class="col-span-6 lg:col-span-2 px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30" />
+                                        <input v-model="item.dosage" :placeholder="isRtl ? 'الجرعة' : 'Dosage'" class="doctorato-input col-span-6 lg:col-span-2 px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30" />
                                         <div class="col-span-6 lg:col-span-2 relative">
-                                            <div class="relative"><input v-model="item.frequency" :placeholder="isRtl ? 'التكرار' : 'Frequency'" class="w-full px-3 py-2.5 pr-8 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30" /><button type="button" @click="togglePreset(`freq-e-${index}`)" class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#C4A265]"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg></button></div>
+                                            <div class="relative"><input v-model="item.frequency" :placeholder="isRtl ? 'التكرار' : 'Frequency'" class="doctorato-input w-full px-3 py-2.5 pr-8 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30" /><button type="button" @click="togglePreset(`freq-e-${index}`)" class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#C4A265]"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg></button></div>
                                             <div v-if="showPreset[`freq-e-${index}`]" class="absolute z-30 top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-xl max-h-44 overflow-y-auto"><button v-for="opt in presets?.frequencies" :key="opt" type="button" @click="selectPreset('edit', index, 'frequency', opt)" class="w-full text-left px-3 py-2 text-xs hover:bg-[#FDF8F0] border-b border-gray-50 last:border-0">{{ opt }}</button></div>
                                         </div>
                                         <div class="col-span-6 lg:col-span-2 relative">
-                                            <div class="relative"><input v-model="item.duration" :placeholder="isRtl ? 'المدة' : 'Duration'" class="w-full px-3 py-2.5 pr-8 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30" /><button type="button" @click="togglePreset(`dur-e-${index}`)" class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#C4A265]"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg></button></div>
+                                            <div class="relative"><input v-model="item.duration" :placeholder="isRtl ? 'المدة' : 'Duration'" class="doctorato-input w-full px-3 py-2.5 pr-8 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30" /><button type="button" @click="togglePreset(`dur-e-${index}`)" class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#C4A265]"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg></button></div>
                                             <div v-if="showPreset[`dur-e-${index}`]" class="absolute z-30 top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-xl max-h-44 overflow-y-auto"><button v-for="opt in presets?.durations" :key="opt" type="button" @click="selectPreset('edit', index, 'duration', opt)" class="w-full text-left px-3 py-2 text-xs hover:bg-[#FDF8F0] border-b border-gray-50 last:border-0">{{ opt }}</button></div>
                                         </div>
-                                        <input v-model="item.instructions" :placeholder="isRtl ? 'تعليمات' : 'Instructions'" class="col-span-5 lg:col-span-2 px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30" />
+                                        <input v-model="item.instructions" :placeholder="isRtl ? 'تعليمات' : 'Instructions'" class="doctorato-input col-span-5 lg:col-span-2 px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30" />
                                         <button type="button" @click="removeEditItem(index)" class="col-span-1 flex items-center justify-center h-10 text-gray-300 hover:text-red-500 transition-colors" :class="editForm.items.length <= 1 ? 'invisible' : ''"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg></button>
                                     </div>
                                 </div>

@@ -53,7 +53,7 @@ function submit() {
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_month') }} <span class="text-red-500">*</span></label>
                             <select
                                 v-model="month"
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
+                                class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                             >
                                 <option v-for="(name, index) in months" :key="index" :value="index + 1">{{ name }}</option>
                             </select>
@@ -66,7 +66,7 @@ function submit() {
                                 type="number"
                                 min="2020"
                                 max="2099"
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
+                                class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                             />
                         </div>
                     </div>

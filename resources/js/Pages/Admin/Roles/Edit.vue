@@ -209,21 +209,21 @@ function submit() {
                             <div>
                                 <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">{{ $t('a_display_name_en') }}</label>
                                 <input v-model="form.display_name_en" type="text" :disabled="isSystem"
-                                    class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50/50 hover:border-gray-300 focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] outline-none transition"
+                                    class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50/50 hover:border-gray-300 focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] outline-none transition"
                                     :class="{ 'bg-gray-100 text-gray-500 cursor-not-allowed': isSystem }" />
                                 <p v-if="form.errors.display_name_en" class="mt-1 text-xs text-red-500">{{ form.errors.display_name_en }}</p>
                             </div>
                             <div>
                                 <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">{{ $t('a_display_name_ar') }}</label>
                                 <input v-model="form.display_name_ar" type="text" dir="rtl" :disabled="isSystem"
-                                    class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50/50 hover:border-gray-300 focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] outline-none transition"
+                                    class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50/50 hover:border-gray-300 focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] outline-none transition"
                                     :class="{ 'bg-gray-100 text-gray-500 cursor-not-allowed': isSystem }" />
                                 <p v-if="form.errors.display_name_ar" class="mt-1 text-xs text-red-500">{{ form.errors.display_name_ar }}</p>
                             </div>
                             <div>
                                 <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">{{ $t('a_slug') }}</label>
                                 <input :value="role.name" type="text" disabled
-                                    class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm font-mono bg-gray-100/70 text-gray-500 cursor-not-allowed" />
+                                    class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm font-mono bg-gray-100/70 text-gray-500 cursor-not-allowed" />
                             </div>
                         </div>
                     </div>

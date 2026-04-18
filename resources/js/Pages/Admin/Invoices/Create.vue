@@ -362,7 +362,7 @@ function submit() {
                                 <input
                                     v-model="form.invoice_date"
                                     type="date"
-                                    class="date-input"
+                                    class="doctorato-input date-input"
                                 />
                             </div>
                             <p v-if="form.errors.invoice_date" class="field-error">{{ form.errors.invoice_date }}</p>
@@ -419,7 +419,7 @@ function submit() {
                                     <select
                                         :value="item.service_id"
                                         @change="onServiceSelect(item, $event.target.value)"
-                                        class="item-select"
+                                        class="doctorato-input item-select"
                                     >
                                         <option value="">{{ isRtl ? 'اختر خدمة...' : 'Select service...' }}</option>
                                         <option v-for="s in serviceOptions" :key="s.value" :value="s.value">{{ s.label }}</option>
@@ -434,7 +434,7 @@ function submit() {
                                             v-model="item.description_en"
                                             type="text"
                                             :placeholder="$t('a_service_product')"
-                                            class="item-input"
+                                            class="doctorato-input item-input"
                                         />
                                         <p v-if="form.errors[`items.${index}.description_en`]" class="field-error">{{ form.errors[`items.${index}.description_en`] }}</p>
                                     </div>
@@ -445,7 +445,7 @@ function submit() {
                                             type="text"
                                             dir="rtl"
                                             placeholder="الوصف بالعربي"
-                                            class="item-input"
+                                            class="doctorato-input item-input"
                                         />
                                     </div>
                                 </div>
@@ -454,15 +454,15 @@ function submit() {
                                 <div class="item-numbers-row">
                                     <div class="item-num-field">
                                         <label class="field-label-sm">{{ $t('a_qty') }}</label>
-                                        <input v-model.number="item.quantity" type="number" min="1" class="item-input item-input-num" />
+                                        <input v-model.number="item.quantity" type="number" min="1" class="doctorato-input item-input item-input-num" />
                                     </div>
                                     <div class="item-num-field">
                                         <label class="field-label-sm">{{ $t('a_unit_price') }}</label>
-                                        <input v-model.number="item.unit_price" type="number" min="0" step="0.01" class="item-input item-input-num" />
+                                        <input v-model.number="item.unit_price" type="number" min="0" step="0.01" class="doctorato-input item-input item-input-num" />
                                     </div>
                                     <div class="item-num-field">
                                         <label class="field-label-sm">{{ $t('a_discount') }}</label>
-                                        <input v-model.number="item.discount" type="number" min="0" step="0.01" class="item-input item-input-num" />
+                                        <input v-model.number="item.discount" type="number" min="0" step="0.01" class="doctorato-input item-input item-input-num" />
                                     </div>
                                     <div class="item-total-field">
                                         <label class="field-label-sm">{{ $t('a_total') }}</label>
@@ -495,7 +495,7 @@ function submit() {
                                         v-model="discountCodeInput"
                                         type="text"
                                         :placeholder="$t('a_enter_discount_code')"
-                                        class="discount-input"
+                                        class="doctorato-input discount-input"
                                     />
                                 </div>
                                 <button
@@ -530,7 +530,7 @@ function submit() {
                             <textarea
                                 v-model="form.notes"
                                 rows="4"
-                                class="notes-textarea"
+                                class="doctorato-input notes-textarea"
                                 :placeholder="$t('a_optional_notes')"
                             ></textarea>
                         </div>
@@ -562,7 +562,7 @@ function submit() {
                                 </div>
                                 <div class="insurance-covered-input">
                                     <label>{{ isRtl ? 'المبلغ المغطى' : 'Covered Amount' }}</label>
-                                    <input v-model.number="form.insurance_covered" type="number" min="0" :max="total" step="0.01" />
+                                    <input v-model.number="form.insurance_covered" type="number" min="0" :max="total" step="0.01" class="doctorato-input"/>
                                 </div>
                             </div>
                         </Transition>
@@ -589,7 +589,7 @@ function submit() {
                                 </label>
                                 <Transition name="slide-fade">
                                     <div v-if="form.is_installment" class="installment-config">
-                                        <select v-model.number="form.installment_count" class="installment-select">
+                                        <select v-model.number="form.installment_count" class="doctorato-input installment-select">
                                             <option v-for="n in [2,3,4,6,8,10,12]" :key="n" :value="n">{{ n }} {{ isRtl ? 'أقساط' : 'installments' }}</option>
                                         </select>
                                         <div class="installment-amount">

@@ -265,12 +265,12 @@ function submit() {
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                                         <div class="field">
                                             <label class="field__label">{{ $t('a_site_name_en') }}</label>
-                                            <input v-model="form.site_name_en" type="text" class="field__input" />
+                                            <input v-model="form.site_name_en" type="text" class="doctorato-input field__input" />
                                             <p v-if="form.errors.site_name_en" class="field__error">{{ form.errors.site_name_en }}</p>
                                         </div>
                                         <div class="field">
                                             <label class="field__label">{{ $t('a_site_name_ar') }}</label>
-                                            <input v-model="form.site_name_ar" type="text" dir="rtl" class="field__input" />
+                                            <input v-model="form.site_name_ar" type="text" dir="rtl" class="doctorato-input field__input" />
                                             <p v-if="form.errors.site_name_ar" class="field__error">{{ form.errors.site_name_ar }}</p>
                                         </div>
                                     </div>
@@ -281,11 +281,11 @@ function submit() {
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                                         <div class="field">
                                             <label class="field__label">{{ $t('a_site_desc_en') }}</label>
-                                            <textarea v-model="form.site_description_en" rows="3" class="field__input field__textarea"></textarea>
+                                            <textarea v-model="form.site_description_en" rows="3" class="doctorato-input field__input field__textarea"></textarea>
                                         </div>
                                         <div class="field">
                                             <label class="field__label">{{ $t('a_site_desc_ar') }}</label>
-                                            <textarea v-model="form.site_description_ar" rows="3" dir="rtl" class="field__input field__textarea"></textarea>
+                                            <textarea v-model="form.site_description_ar" rows="3" dir="rtl" class="doctorato-input field__input field__textarea"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -296,7 +296,7 @@ function submit() {
                                         <div class="field">
                                             <label class="field__label">{{ $t('a_logo_url') }}</label>
                                             <div class="field__with-preview">
-                                                <input v-model="form.logo" type="text" class="field__input" />
+                                                <input v-model="form.logo" type="text" class="doctorato-input field__input" />
                                                 <div v-if="form.logo" class="field__preview">
                                                     <img :src="form.logo" alt="Logo preview" class="h-8 w-auto object-contain" />
                                                 </div>
@@ -305,7 +305,7 @@ function submit() {
                                         <div class="field">
                                             <label class="field__label">{{ $t('a_favicon_url') }}</label>
                                             <div class="field__with-preview">
-                                                <input v-model="form.favicon" type="text" class="field__input" />
+                                                <input v-model="form.favicon" type="text" class="doctorato-input field__input" />
                                                 <div v-if="form.favicon" class="field__preview">
                                                     <img :src="form.favicon" alt="Favicon preview" class="h-6 w-6 object-contain" />
                                                 </div>
@@ -389,7 +389,7 @@ function submit() {
                                             <label class="field__label">{{ isRtl ? c.ar : c.en }}</label>
                                             <div class="flex items-center gap-2">
                                                 <input v-model="form[c.key]" type="color" class="w-10 h-10 rounded-lg border border-gray-200 cursor-pointer p-0.5" />
-                                                <input v-model="form[c.key]" type="text" class="field__input flex-1 font-mono text-xs" maxlength="7" />
+                                                <input v-model="form[c.key]" type="text" class="doctorato-input field__input flex-1 font-mono text-xs" maxlength="7" />
                                             </div>
                                         </div>
                                     </div>
@@ -409,7 +409,7 @@ function submit() {
                                             <label class="field__label">{{ isRtl ? c.ar : c.en }}</label>
                                             <div class="flex items-center gap-2">
                                                 <input v-model="form[c.key]" type="color" class="w-10 h-10 rounded-lg border border-gray-200 cursor-pointer p-0.5" />
-                                                <input v-model="form[c.key]" type="text" class="field__input flex-1 font-mono text-xs" maxlength="7" />
+                                                <input v-model="form[c.key]" type="text" class="doctorato-input field__input flex-1 font-mono text-xs" maxlength="7" />
                                             </div>
                                         </div>
                                     </div>
@@ -426,7 +426,7 @@ function submit() {
                                             <label class="field__label">{{ isRtl ? c.ar : c.en }}</label>
                                             <div class="flex items-center gap-2">
                                                 <input v-model="form[c.key]" type="color" class="w-10 h-10 rounded-lg border border-gray-200 cursor-pointer p-0.5" />
-                                                <input v-model="form[c.key]" type="text" class="field__input flex-1 font-mono text-xs" maxlength="7" />
+                                                <input v-model="form[c.key]" type="text" class="doctorato-input field__input flex-1 font-mono text-xs" maxlength="7" />
                                             </div>
                                         </div>
                                     </div>
@@ -439,21 +439,21 @@ function submit() {
                                         <div class="field">
                                             <label class="field__label">{{ isRtl ? 'الشعار الرئيسي (خلفية فاتحة)' : 'Main Logo (Light Background)' }}</label>
                                             <div class="field__with-preview">
-                                                <input v-model="form.logo" type="text" class="field__input" :placeholder="isRtl ? 'رابط الصورة أو مسار الملف' : 'Image URL or file path'" />
+                                                <input v-model="form.logo" type="text" class="doctorato-input field__input" :placeholder="isRtl ? 'رابط الصورة أو مسار الملف' : 'Image URL or file path'" />
                                                 <div v-if="form.logo" class="field__preview"><img :src="form.logo" alt="" class="h-10 w-auto object-contain" /></div>
                                             </div>
                                         </div>
                                         <div class="field">
                                             <label class="field__label">{{ isRtl ? 'الشعار الداكن (خلفية داكنة)' : 'Dark Logo (Dark Background)' }}</label>
                                             <div class="field__with-preview">
-                                                <input v-model="form.logo_dark" type="text" class="field__input" :placeholder="isRtl ? 'رابط الصورة أو مسار الملف' : 'Image URL or file path'" />
+                                                <input v-model="form.logo_dark" type="text" class="doctorato-input field__input" :placeholder="isRtl ? 'رابط الصورة أو مسار الملف' : 'Image URL or file path'" />
                                                 <div v-if="form.logo_dark" class="field__preview bg-gray-800"><img :src="form.logo_dark" alt="" class="h-10 w-auto object-contain" /></div>
                                             </div>
                                         </div>
                                         <div class="field">
                                             <label class="field__label">{{ isRtl ? 'الأيقونة المفضلة (Favicon)' : 'Favicon' }}</label>
                                             <div class="field__with-preview">
-                                                <input v-model="form.favicon" type="text" class="field__input" />
+                                                <input v-model="form.favicon" type="text" class="doctorato-input field__input" />
                                                 <div v-if="form.favicon" class="field__preview"><img :src="form.favicon" alt="" class="h-6 w-auto object-contain" /></div>
                                             </div>
                                         </div>
@@ -466,7 +466,7 @@ function submit() {
                                     <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
                                         <div class="field">
                                             <label class="field__label">{{ isRtl ? 'الخط العربي' : 'Arabic Font' }}</label>
-                                            <select v-model="form.brand_font_ar" class="field__input">
+                                            <select v-model="form.brand_font_ar" class="doctorato-input field__input">
                                                 <option value="Tajawal">Tajawal</option>
                                                 <option value="Cairo">Cairo</option>
                                                 <option value="Almarai">Almarai</option>
@@ -477,7 +477,7 @@ function submit() {
                                         </div>
                                         <div class="field">
                                             <label class="field__label">{{ isRtl ? 'الخط الإنجليزي' : 'English Font' }}</label>
-                                            <select v-model="form.brand_font_en" class="field__input">
+                                            <select v-model="form.brand_font_en" class="doctorato-input field__input">
                                                 <option value="Poppins">Poppins</option>
                                                 <option value="Inter">Inter</option>
                                                 <option value="DM Sans">DM Sans</option>
@@ -506,27 +506,27 @@ function submit() {
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                                         <div class="field">
                                             <label class="field__label">{{ isRtl ? 'الشعار النصي (إنجليزي)' : 'Tagline (English)' }}</label>
-                                            <input v-model="form.tagline_en" type="text" class="field__input" :placeholder="isRtl ? 'مثال: Your Beauty, Our Passion' : 'e.g. Your Beauty, Our Passion'" />
+                                            <input v-model="form.tagline_en" type="text" class="doctorato-input field__input" :placeholder="isRtl ? 'مثال: Your Beauty, Our Passion' : 'e.g. Your Beauty, Our Passion'" />
                                         </div>
                                         <div class="field">
                                             <label class="field__label">{{ isRtl ? 'الشعار النصي (عربي)' : 'Tagline (Arabic)' }}</label>
-                                            <input v-model="form.tagline_ar" type="text" dir="rtl" class="field__input" :placeholder="isRtl ? 'مثال: جمالك، شغفنا' : 'e.g. جمالك، شغفنا'" />
+                                            <input v-model="form.tagline_ar" type="text" dir="rtl" class="doctorato-input field__input" :placeholder="isRtl ? 'مثال: جمالك، شغفنا' : 'e.g. جمالك، شغفنا'" />
                                         </div>
                                         <div class="field">
                                             <label class="field__label">{{ isRtl ? 'نص حقوق النشر (إنجليزي)' : 'Copyright Text (English)' }}</label>
-                                            <input v-model="form.copyright_text_en" type="text" class="field__input" placeholder="Doctorato Polyclinic" />
+                                            <input v-model="form.copyright_text_en" type="text" class="doctorato-input field__input" placeholder="Doctorato Polyclinic" />
                                         </div>
                                         <div class="field">
                                             <label class="field__label">{{ isRtl ? 'نص حقوق النشر (عربي)' : 'Copyright Text (Arabic)' }}</label>
-                                            <input v-model="form.copyright_text_ar" type="text" dir="rtl" class="field__input" placeholder="عيادة دكتوراتو التخصصية" />
+                                            <input v-model="form.copyright_text_ar" type="text" dir="rtl" class="doctorato-input field__input" placeholder="عيادة دكتوراتو التخصصية" />
                                         </div>
                                         <div class="field">
                                             <label class="field__label">{{ isRtl ? 'اسم المطور' : 'Developer Name' }}</label>
-                                            <input v-model="form.developer_name" type="text" class="field__input" />
+                                            <input v-model="form.developer_name" type="text" class="doctorato-input field__input" />
                                         </div>
                                         <div class="field">
                                             <label class="field__label">{{ isRtl ? 'رابط المطور' : 'Developer URL' }}</label>
-                                            <input v-model="form.developer_url" type="text" class="field__input" dir="ltr" />
+                                            <input v-model="form.developer_url" type="text" class="doctorato-input field__input" dir="ltr" />
                                         </div>
                                     </div>
                                 </div>
@@ -552,11 +552,11 @@ function submit() {
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                                         <div class="field">
                                             <label class="field__label">{{ $t('a_phone') }}</label>
-                                            <input v-model="form.phone" type="text" class="field__input" />
+                                            <input v-model="form.phone" type="text" class="doctorato-input field__input" />
                                         </div>
                                         <div class="field">
                                             <label class="field__label">{{ $t('a_secondary_phone') }}</label>
-                                            <input v-model="form.phone_secondary" type="text" class="field__input" />
+                                            <input v-model="form.phone_secondary" type="text" class="doctorato-input field__input" />
                                         </div>
                                     </div>
                                 </div>
@@ -566,11 +566,11 @@ function submit() {
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                                         <div class="field">
                                             <label class="field__label">{{ $t('a_whatsapp') }}</label>
-                                            <input v-model="form.whatsapp" type="text" class="field__input" />
+                                            <input v-model="form.whatsapp" type="text" class="doctorato-input field__input" />
                                         </div>
                                         <div class="field">
                                             <label class="field__label">{{ $t('a_email') }}</label>
-                                            <input v-model="form.email" type="email" class="field__input" />
+                                            <input v-model="form.email" type="email" class="doctorato-input field__input" />
                                         </div>
                                     </div>
                                 </div>
@@ -580,17 +580,17 @@ function submit() {
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                                         <div class="field">
                                             <label class="field__label">{{ $t('a_address_en') }}</label>
-                                            <textarea v-model="form.address_en" rows="2" class="field__input field__textarea"></textarea>
+                                            <textarea v-model="form.address_en" rows="2" class="doctorato-input field__input field__textarea"></textarea>
                                         </div>
                                         <div class="field">
                                             <label class="field__label">{{ $t('a_address_ar') }}</label>
-                                            <textarea v-model="form.address_ar" rows="2" dir="rtl" class="field__input field__textarea"></textarea>
+                                            <textarea v-model="form.address_ar" rows="2" dir="rtl" class="doctorato-input field__input field__textarea"></textarea>
                                         </div>
                                     </div>
                                     <div class="mt-5">
                                         <div class="field">
                                             <label class="field__label">{{ $t('a_google_maps_url') }}</label>
-                                            <input v-model="form.google_maps_url" type="text" class="field__input" />
+                                            <input v-model="form.google_maps_url" type="text" class="doctorato-input field__input" />
                                         </div>
                                     </div>
                                 </div>
@@ -600,11 +600,11 @@ function submit() {
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                                         <div class="field">
                                             <label class="field__label">{{ $t('a_working_hours_en') }}</label>
-                                            <input v-model="form.working_hours_en" type="text" class="field__input" />
+                                            <input v-model="form.working_hours_en" type="text" class="doctorato-input field__input" />
                                         </div>
                                         <div class="field">
                                             <label class="field__label">{{ $t('a_working_hours_ar') }}</label>
-                                            <input v-model="form.working_hours_ar" type="text" dir="rtl" class="field__input" />
+                                            <input v-model="form.working_hours_ar" type="text" dir="rtl" class="doctorato-input field__input" />
                                         </div>
                                     </div>
                                 </div>
@@ -637,17 +637,17 @@ function submit() {
                                     <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
                                         <div class="field">
                                             <label class="field__label">{{ $t('a_currency_code') }}</label>
-                                            <input v-model="form.currency_code" type="text" maxlength="5" placeholder="EGP" class="field__input uppercase" />
+                                            <input v-model="form.currency_code" type="text" maxlength="5" placeholder="EGP" class="doctorato-input field__input uppercase" />
                                             <p class="field__hint">e.g. EGP, SAR, AED, USD, EUR</p>
                                         </div>
                                         <div class="field">
                                             <label class="field__label">{{ $t('a_currency_symbol') }}</label>
-                                            <input v-model="form.currency_symbol" type="text" maxlength="5" placeholder="E£" class="field__input" />
+                                            <input v-model="form.currency_symbol" type="text" maxlength="5" placeholder="E£" class="doctorato-input field__input" />
                                             <p class="field__hint">e.g. E£, &#xFDFC;, &#x62F;.&#x625;, $</p>
                                         </div>
                                         <div class="field">
                                             <label class="field__label">{{ $t('a_decimal_places') }}</label>
-                                            <select v-model="form.currency_decimals" class="field__input">
+                                            <select v-model="form.currency_decimals" class="doctorato-input field__input">
                                                 <option value="0">0 (1,000)</option>
                                                 <option value="1">1 (1,000.0)</option>
                                                 <option value="2">2 (1,000.00)</option>
@@ -661,15 +661,15 @@ function submit() {
                                     <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
                                         <div class="field">
                                             <label class="field__label">{{ $t('a_currency_name_en') }}</label>
-                                            <input v-model="form.currency_name_en" type="text" placeholder="Egyptian Pound" class="field__input" />
+                                            <input v-model="form.currency_name_en" type="text" placeholder="Egyptian Pound" class="doctorato-input field__input" />
                                         </div>
                                         <div class="field">
                                             <label class="field__label">{{ $t('a_currency_name_ar') }}</label>
-                                            <input v-model="form.currency_name_ar" type="text" dir="rtl" placeholder="جنيه مصري" class="field__input" />
+                                            <input v-model="form.currency_name_ar" type="text" dir="rtl" placeholder="جنيه مصري" class="doctorato-input field__input" />
                                         </div>
                                         <div class="field">
                                             <label class="field__label">{{ $t('a_position') }}</label>
-                                            <select v-model="form.currency_position" class="field__input">
+                                            <select v-model="form.currency_position" class="doctorato-input field__input">
                                                 <option value="after">After number (1,000 EGP)</option>
                                                 <option value="before">Before number (EGP 1,000)</option>
                                             </select>
@@ -698,12 +698,12 @@ function submit() {
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                                         <div class="field">
                                             <label class="field__label">Consultant Fee ({{ form.currency_code || 'EGP' }})</label>
-                                            <input v-model="form.dermatology_consultant_fee" type="number" step="0.01" min="0" placeholder="0.00" class="field__input" />
+                                            <input v-model="form.dermatology_consultant_fee" type="number" step="0.01" min="0" placeholder="0.00" class="doctorato-input field__input" />
                                             <p class="field__hint">Applied when the doctor's type is "Consultant"</p>
                                         </div>
                                         <div class="field">
                                             <label class="field__label">Specialist Fee ({{ form.currency_code || 'EGP' }})</label>
-                                            <input v-model="form.dermatology_specialist_fee" type="number" step="0.01" min="0" placeholder="0.00" class="field__input" />
+                                            <input v-model="form.dermatology_specialist_fee" type="number" step="0.01" min="0" placeholder="0.00" class="doctorato-input field__input" />
                                             <p class="field__hint">Applied when the doctor's type is "Specialist"</p>
                                         </div>
                                     </div>
@@ -714,7 +714,7 @@ function submit() {
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                                         <div class="field">
                                             <label class="field__label">Consultation Fee ({{ form.currency_code || 'EGP' }})</label>
-                                            <input v-model="form.cosmetic_consultation_fee" type="number" step="0.01" min="0" placeholder="0.00" class="field__input" />
+                                            <input v-model="form.cosmetic_consultation_fee" type="number" step="0.01" min="0" placeholder="0.00" class="doctorato-input field__input" />
                                         </div>
                                     </div>
                                 </div>
@@ -724,11 +724,11 @@ function submit() {
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                                         <div class="field">
                                             <label class="field__label">Follow-up Fee ({{ form.currency_code || 'EGP' }})</label>
-                                            <input v-model="form.followup_fee" type="number" step="0.01" min="0" placeholder="0.00" class="field__input" />
+                                            <input v-model="form.followup_fee" type="number" step="0.01" min="0" placeholder="0.00" class="doctorato-input field__input" />
                                         </div>
                                         <div class="field">
                                             <label class="field__label">Follow-up Window (Days)</label>
-                                            <input v-model="form.followup_window_days" type="number" min="1" max="90" placeholder="15" class="field__input" />
+                                            <input v-model="form.followup_window_days" type="number" min="1" max="90" placeholder="15" class="doctorato-input field__input" />
                                             <p class="field__hint">Patient can get a follow-up within this many days of their last dermatology consultation</p>
                                         </div>
                                     </div>
@@ -742,12 +742,12 @@ function submit() {
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                                         <div class="field">
                                             <label class="field__label">{{ $t('a_consultant') }} ({{ form.currency_code || 'EGP' }})</label>
-                                            <input v-model="form.dental_consultant_fee" type="number" step="0.01" min="0" placeholder="0.00" class="field__input" />
+                                            <input v-model="form.dental_consultant_fee" type="number" step="0.01" min="0" placeholder="0.00" class="doctorato-input field__input" />
                                             <p class="field__hint">{{ $t('a_dental_consultant_fee_hint') }}</p>
                                         </div>
                                         <div class="field">
                                             <label class="field__label">{{ $t('a_specialist') }} ({{ form.currency_code || 'EGP' }})</label>
-                                            <input v-model="form.dental_specialist_fee" type="number" step="0.01" min="0" placeholder="0.00" class="field__input" />
+                                            <input v-model="form.dental_specialist_fee" type="number" step="0.01" min="0" placeholder="0.00" class="doctorato-input field__input" />
                                             <p class="field__hint">{{ $t('a_dental_specialist_fee_hint') }}</p>
                                         </div>
                                     </div>
@@ -759,11 +759,11 @@ function submit() {
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                                         <div class="field">
                                             <label class="field__label">Default Dermatology Fee ({{ form.currency_code || 'EGP' }})</label>
-                                            <input v-model="form.default_dermatology_fee" type="number" step="0.01" min="0" placeholder="0.00" class="field__input" />
+                                            <input v-model="form.default_dermatology_fee" type="number" step="0.01" min="0" placeholder="0.00" class="doctorato-input field__input" />
                                         </div>
                                         <div class="field">
                                             <label class="field__label">Default Cosmetic Fee ({{ form.currency_code || 'EGP' }})</label>
-                                            <input v-model="form.default_cosmetic_fee" type="number" step="0.01" min="0" placeholder="0.00" class="field__input" />
+                                            <input v-model="form.default_cosmetic_fee" type="number" step="0.01" min="0" placeholder="0.00" class="doctorato-input field__input" />
                                         </div>
                                     </div>
                                 </div>
@@ -792,7 +792,7 @@ function submit() {
                                         </div>
                                         <div class="flex-1">
                                             <label class="field__label">Facebook</label>
-                                            <input v-model="form.facebook" type="url" placeholder="https://facebook.com/..." class="field__input" />
+                                            <input v-model="form.facebook" type="url" placeholder="https://facebook.com/..." class="doctorato-input field__input" />
                                         </div>
                                     </div>
                                     <!-- Instagram -->
@@ -802,7 +802,7 @@ function submit() {
                                         </div>
                                         <div class="flex-1">
                                             <label class="field__label">Instagram</label>
-                                            <input v-model="form.instagram" type="url" placeholder="https://instagram.com/..." class="field__input" />
+                                            <input v-model="form.instagram" type="url" placeholder="https://instagram.com/..." class="doctorato-input field__input" />
                                         </div>
                                     </div>
                                     <!-- Twitter/X -->
@@ -812,7 +812,7 @@ function submit() {
                                         </div>
                                         <div class="flex-1">
                                             <label class="field__label">Twitter / X</label>
-                                            <input v-model="form.twitter" type="url" placeholder="https://x.com/..." class="field__input" />
+                                            <input v-model="form.twitter" type="url" placeholder="https://x.com/..." class="doctorato-input field__input" />
                                         </div>
                                     </div>
                                     <!-- TikTok -->
@@ -822,7 +822,7 @@ function submit() {
                                         </div>
                                         <div class="flex-1">
                                             <label class="field__label">TikTok</label>
-                                            <input v-model="form.tiktok" type="url" placeholder="https://tiktok.com/..." class="field__input" />
+                                            <input v-model="form.tiktok" type="url" placeholder="https://tiktok.com/..." class="doctorato-input field__input" />
                                         </div>
                                     </div>
                                     <!-- YouTube -->
@@ -832,7 +832,7 @@ function submit() {
                                         </div>
                                         <div class="flex-1">
                                             <label class="field__label">YouTube</label>
-                                            <input v-model="form.youtube" type="url" placeholder="https://youtube.com/..." class="field__input" />
+                                            <input v-model="form.youtube" type="url" placeholder="https://youtube.com/..." class="doctorato-input field__input" />
                                         </div>
                                     </div>
                                     <!-- Snapchat -->
@@ -842,7 +842,7 @@ function submit() {
                                         </div>
                                         <div class="flex-1">
                                             <label class="field__label">Snapchat</label>
-                                            <input v-model="form.snapchat" type="url" placeholder="https://snapchat.com/..." class="field__input" />
+                                            <input v-model="form.snapchat" type="url" placeholder="https://snapchat.com/..." class="doctorato-input field__input" />
                                         </div>
                                     </div>
                                 </div>
@@ -888,19 +888,19 @@ function submit() {
                                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">
                                         <div class="field">
                                             <label class="field__label">{{ $t('a_happy_patients') }}</label>
-                                            <input v-model="form.stat_patients" type="text" class="field__input" />
+                                            <input v-model="form.stat_patients" type="text" class="doctorato-input field__input" />
                                         </div>
                                         <div class="field">
                                             <label class="field__label">{{ $t('a_years_experience') }}</label>
-                                            <input v-model="form.stat_years" type="text" class="field__input" />
+                                            <input v-model="form.stat_years" type="text" class="doctorato-input field__input" />
                                         </div>
                                         <div class="field">
                                             <label class="field__label">{{ $t('a_expert_doctors') }}</label>
-                                            <input v-model="form.stat_doctors" type="text" class="field__input" />
+                                            <input v-model="form.stat_doctors" type="text" class="doctorato-input field__input" />
                                         </div>
                                         <div class="field">
                                             <label class="field__label">{{ $t('a_services_count') }}</label>
-                                            <input v-model="form.stat_services" type="text" class="field__input" />
+                                            <input v-model="form.stat_services" type="text" class="doctorato-input field__input" />
                                         </div>
                                     </div>
                                 </div>
@@ -969,7 +969,7 @@ function submit() {
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                                         <div class="field">
                                             <label class="field__label">{{ $t('a_sms_provider') }}</label>
-                                            <select v-model="form.sms_provider" class="field__input">
+                                            <select v-model="form.sms_provider" class="doctorato-input field__input">
                                                 <option value="none">{{ $t('a_none') }}</option>
                                                 <option value="unifonic">Unifonic</option>
                                                 <option value="twilio">Twilio</option>
@@ -978,7 +978,7 @@ function submit() {
                                         </div>
                                         <div class="field">
                                             <label class="field__label">{{ $t('a_sender_name') }}</label>
-                                            <input v-model="form.sms_sender_name" type="text" maxlength="11" placeholder="Doctorato" class="field__input" />
+                                            <input v-model="form.sms_sender_name" type="text" maxlength="11" placeholder="Doctorato" class="doctorato-input field__input" />
                                             <p class="field__hint">{{ $t('a_sender_name_hint') }}</p>
                                         </div>
                                     </div>
@@ -990,7 +990,7 @@ function submit() {
                                     <div class="grid grid-cols-1 gap-5">
                                         <div class="field">
                                             <label class="field__label">App SID</label>
-                                            <input v-model="form.sms_unifonic_app_sid" type="text" placeholder="Enter Unifonic App SID" class="field__input font-mono text-sm" />
+                                            <input v-model="form.sms_unifonic_app_sid" type="text" placeholder="Enter Unifonic App SID" class="doctorato-input field__input font-mono text-sm" />
                                         </div>
                                     </div>
                                 </div>
@@ -1001,17 +1001,17 @@ function submit() {
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                                         <div class="field">
                                             <label class="field__label">Account SID</label>
-                                            <input v-model="form.sms_twilio_account_sid" type="text" placeholder="ACxxxxxxxx..." class="field__input font-mono text-sm" />
+                                            <input v-model="form.sms_twilio_account_sid" type="text" placeholder="ACxxxxxxxx..." class="doctorato-input field__input font-mono text-sm" />
                                         </div>
                                         <div class="field">
                                             <label class="field__label">Auth Token</label>
-                                            <input v-model="form.sms_twilio_auth_token" type="password" placeholder="Enter Auth Token" class="field__input font-mono text-sm" />
+                                            <input v-model="form.sms_twilio_auth_token" type="password" placeholder="Enter Auth Token" class="doctorato-input field__input font-mono text-sm" />
                                         </div>
                                     </div>
                                     <div class="mt-5">
                                         <div class="field">
                                             <label class="field__label">{{ $t('a_from_number') }}</label>
-                                            <input v-model="form.sms_twilio_from_number" type="text" placeholder="+1234567890" class="field__input font-mono text-sm" />
+                                            <input v-model="form.sms_twilio_from_number" type="text" placeholder="+1234567890" class="doctorato-input field__input font-mono text-sm" />
                                         </div>
                                     </div>
                                 </div>
@@ -1022,21 +1022,21 @@ function submit() {
                                     <div class="grid grid-cols-1 gap-5">
                                         <div class="field">
                                             <label class="field__label">{{ $t('a_gateway_url') }}</label>
-                                            <input v-model="form.sms_gateway_url" type="text" placeholder="https://api.example.com/sms?phone={phone}&message={message}&api_key={api_key}" class="field__input font-mono text-xs" />
+                                            <input v-model="form.sms_gateway_url" type="text" placeholder="https://api.example.com/sms?phone={phone}&message={message}&api_key={api_key}" class="doctorato-input field__input font-mono text-xs" />
                                             <p class="field__hint">{{ $t('a_gateway_url_hint') }}</p>
                                         </div>
                                     </div>
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-5">
                                         <div class="field">
                                             <label class="field__label">{{ $t('a_http_method') }}</label>
-                                            <select v-model="form.sms_gateway_method" class="field__input">
+                                            <select v-model="form.sms_gateway_method" class="doctorato-input field__input">
                                                 <option value="GET">GET</option>
                                                 <option value="POST">POST</option>
                                             </select>
                                         </div>
                                         <div class="field">
                                             <label class="field__label">API Key</label>
-                                            <input v-model="form.sms_gateway_api_key" type="password" placeholder="Enter API Key" class="field__input font-mono text-sm" />
+                                            <input v-model="form.sms_gateway_api_key" type="password" placeholder="Enter API Key" class="doctorato-input field__input font-mono text-sm" />
                                         </div>
                                     </div>
                                 </div>
@@ -1142,7 +1142,7 @@ function submit() {
                                         <div v-if="form.sms_recall_enabled === '1'" class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                                             <div class="field">
                                                 <label class="field__label">{{ $t('a_sms_recall_dental_months') }}</label>
-                                                <select v-model="form.sms_recall_dental_months" class="field__input">
+                                                <select v-model="form.sms_recall_dental_months" class="doctorato-input field__input">
                                                     <option value="3">3</option>
                                                     <option value="4">4</option>
                                                     <option value="6">6</option>
@@ -1152,7 +1152,7 @@ function submit() {
                                             </div>
                                             <div class="field">
                                                 <label class="field__label">{{ $t('a_sms_recall_derma_months') }}</label>
-                                                <select v-model="form.sms_recall_derma_months" class="field__input">
+                                                <select v-model="form.sms_recall_derma_months" class="doctorato-input field__input">
                                                     <option value="3">3</option>
                                                     <option value="4">4</option>
                                                     <option value="6">6</option>
@@ -1162,7 +1162,7 @@ function submit() {
                                             </div>
                                             <div class="field">
                                                 <label class="field__label">{{ $t('a_sms_recall_max_per_day') }}</label>
-                                                <input v-model="form.sms_recall_max_per_day" type="number" min="5" max="500" class="field__input" />
+                                                <input v-model="form.sms_recall_max_per_day" type="number" min="5" max="500" class="doctorato-input field__input" />
                                             </div>
                                         </div>
                                         </Transition>
@@ -1175,7 +1175,7 @@ function submit() {
                                     <div class="flex items-end gap-3">
                                         <div class="flex-1 field">
                                             <label class="field__label">{{ $t('a_phone') }}</label>
-                                            <input v-model="testSmsPhone" type="text" placeholder="07xxxxxxxx" class="field__input" />
+                                            <input v-model="testSmsPhone" type="text" placeholder="07xxxxxxxx" class="doctorato-input field__input" />
                                         </div>
                                         <button
                                             type="button"

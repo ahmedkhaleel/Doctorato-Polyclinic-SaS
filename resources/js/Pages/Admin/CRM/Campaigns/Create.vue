@@ -126,7 +126,7 @@ function getSelectedSourceName() {
                                         v-model="form.name"
                                         type="text"
                                         :placeholder="$t('a_enter_campaign_name')"
-                                        class="w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-2.5 text-sm bg-gray-50/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] focus:bg-white transition-all duration-200 placeholder-gray-400"
+                                        class="doctorato-input w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-2.5 text-sm bg-gray-50/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] focus:bg-white transition-all duration-200 placeholder-gray-400"
                                     />
                                 </div>
                                 <p v-if="form.errors.name" class="text-xs text-red-500 mt-1.5 flex items-center gap-1">
@@ -147,7 +147,7 @@ function getSelectedSourceName() {
                                         @input="filterSources"
                                         type="text"
                                         :placeholder="$t('a_search_sources')"
-                                        class="w-full ltr:pl-10 rtl:pr-10 ltr:pr-10 rtl:pl-10 py-2.5 text-sm bg-gray-50/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] focus:bg-white transition-all duration-200 placeholder-gray-400"
+                                        class="doctorato-input w-full ltr:pl-10 rtl:pr-10 ltr:pr-10 rtl:pl-10 py-2.5 text-sm bg-gray-50/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] focus:bg-white transition-all duration-200 placeholder-gray-400"
                                     />
                                     <button
                                         v-if="form.lead_source_id"
@@ -193,7 +193,7 @@ function getSelectedSourceName() {
                                     v-model="form.description"
                                     rows="3"
                                     :placeholder="$t('a_describe_campaign')"
-                                    class="w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-2.5 text-sm bg-gray-50/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] focus:bg-white transition-all duration-200 resize-none placeholder-gray-400"
+                                    class="doctorato-input w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-2.5 text-sm bg-gray-50/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] focus:bg-white transition-all duration-200 resize-none placeholder-gray-400"
                                 ></textarea>
                             </div>
                         </div>
@@ -232,7 +232,7 @@ function getSelectedSourceName() {
                                         step="0.01"
                                         min="0"
                                         placeholder="0.00"
-                                        class="w-full ltr:pl-14 rtl:pr-14 ltr:pr-4 rtl:pl-4 py-2.5 text-sm bg-gray-50/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] focus:bg-white transition-all duration-200 placeholder-gray-400 tabular-nums"
+                                        class="doctorato-input w-full ltr:pl-14 rtl:pr-14 ltr:pr-4 rtl:pl-4 py-2.5 text-sm bg-gray-50/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] focus:bg-white transition-all duration-200 placeholder-gray-400 tabular-nums"
                                     />
                                 </div>
                             </div>
@@ -248,7 +248,7 @@ function getSelectedSourceName() {
                                         step="0.01"
                                         min="0"
                                         placeholder="0.00"
-                                        class="w-full ltr:pl-14 rtl:pr-14 ltr:pr-4 rtl:pl-4 py-2.5 text-sm bg-gray-50/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] focus:bg-white transition-all duration-200 placeholder-gray-400 tabular-nums"
+                                        class="doctorato-input w-full ltr:pl-14 rtl:pr-14 ltr:pr-4 rtl:pl-4 py-2.5 text-sm bg-gray-50/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] focus:bg-white transition-all duration-200 placeholder-gray-400 tabular-nums"
                                     />
                                 </div>
                             </div>
@@ -265,7 +265,7 @@ function getSelectedSourceName() {
                                     <input
                                         v-model="form.start_date"
                                         type="date"
-                                        class="w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-2.5 text-sm bg-gray-50/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] focus:bg-white transition-all duration-200"
+                                        class="doctorato-input w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-2.5 text-sm bg-gray-50/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] focus:bg-white transition-all duration-200"
                                     />
                                 </div>
                                 <div class="flex items-center justify-center w-10">
@@ -278,7 +278,7 @@ function getSelectedSourceName() {
                                     <input
                                         v-model="form.end_date"
                                         type="date"
-                                        class="w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-2.5 text-sm bg-gray-50/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] focus:bg-white transition-all duration-200"
+                                        class="doctorato-input w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-2.5 text-sm bg-gray-50/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] focus:bg-white transition-all duration-200"
                                     />
                                 </div>
                             </div>
@@ -323,7 +323,7 @@ function getSelectedSourceName() {
                                         v-model="form.utm_source"
                                         type="text"
                                         placeholder="e.g. facebook, google, newsletter"
-                                        class="w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-2.5 text-sm bg-gray-50/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] focus:bg-white transition-all duration-200 placeholder-gray-400 font-mono"
+                                        class="doctorato-input w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-2.5 text-sm bg-gray-50/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] focus:bg-white transition-all duration-200 placeholder-gray-400 font-mono"
                                     />
                                 </div>
                                 <p class="text-[11px] text-gray-400 mt-1.5 font-mono">utm_source={{ form.utm_source || '...' }}</p>
@@ -340,7 +340,7 @@ function getSelectedSourceName() {
                                         v-model="form.utm_medium"
                                         type="text"
                                         placeholder="e.g. cpc, email, social"
-                                        class="w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-2.5 text-sm bg-gray-50/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] focus:bg-white transition-all duration-200 placeholder-gray-400 font-mono"
+                                        class="doctorato-input w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-2.5 text-sm bg-gray-50/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] focus:bg-white transition-all duration-200 placeholder-gray-400 font-mono"
                                     />
                                 </div>
                                 <p class="text-[11px] text-gray-400 mt-1.5 font-mono">utm_medium={{ form.utm_medium || '...' }}</p>
@@ -357,7 +357,7 @@ function getSelectedSourceName() {
                                         v-model="form.utm_campaign"
                                         type="text"
                                         placeholder="e.g. summer_promo, launch_2024"
-                                        class="w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-2.5 text-sm bg-gray-50/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] focus:bg-white transition-all duration-200 placeholder-gray-400 font-mono"
+                                        class="doctorato-input w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-2.5 text-sm bg-gray-50/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] focus:bg-white transition-all duration-200 placeholder-gray-400 font-mono"
                                     />
                                 </div>
                                 <p class="text-[11px] text-gray-400 mt-1.5 font-mono">utm_campaign={{ form.utm_campaign || '...' }}</p>

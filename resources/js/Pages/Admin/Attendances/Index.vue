@@ -709,7 +709,7 @@ onMounted(() => {
                                                     v-model="formPickerSearch"
                                                     type="text"
                                                     :placeholder="isRtl ? 'ابحث عن موظف...' : 'Search employee...'"
-                                                    class="w-full bg-gray-50 border-0 rounded-lg ps-9 pe-3 py-2 text-sm text-gray-700 placeholder:text-gray-300 focus:ring-2 focus:ring-amber-200/50 focus:bg-white transition-all duration-150"
+                                                    class="doctorato-input w-full bg-gray-50 border-0 rounded-lg ps-9 pe-3 py-2 text-sm text-gray-700 placeholder:text-gray-300 focus:ring-2 focus:ring-[#C4A265]/30/50 focus:bg-white transition-all duration-150"
                                                 />
                                             </div>
                                         </div>
@@ -747,7 +747,7 @@ onMounted(() => {
                                 <input
                                     v-model="form.date"
                                     type="date"
-                                    class="w-full bg-gray-50/80 border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-700 font-medium focus:bg-white focus:ring-2 focus:ring-amber-200/50 focus:border-amber-300 transition-all duration-200"
+                                    class="doctorato-input w-full bg-gray-50/80 border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-700 font-medium focus:bg-white focus:ring-2 focus:ring-[#C4A265]/30/50 focus:border-[#1B365D] transition-all duration-200"
                                 />
                                 <p v-if="form.errors.date" class="mt-1.5 text-xs text-red-500 font-medium">{{ form.errors.date }}</p>
                             </div>
@@ -791,7 +791,7 @@ onMounted(() => {
                                         <input
                                             v-model="form.check_in"
                                             type="time"
-                                            class="w-full bg-gray-50/80 border border-gray-200 rounded-xl ps-10 pe-4 py-2.5 text-sm text-gray-700 font-medium focus:bg-white focus:ring-2 focus:ring-emerald-200/50 focus:border-emerald-300 transition-all duration-200"
+                                            class="doctorato-input w-full bg-gray-50/80 border border-gray-200 rounded-xl ps-10 pe-4 py-2.5 text-sm text-gray-700 font-medium focus:bg-white focus:ring-2 focus:ring-[#C4A265]/30/50 focus:border-[#1B365D] transition-all duration-200"
                                         />
                                     </div>
                                     <button
@@ -827,7 +827,7 @@ onMounted(() => {
                                         <input
                                             v-model="form.check_out"
                                             type="time"
-                                            class="w-full bg-gray-50/80 border border-gray-200 rounded-xl ps-10 pe-4 py-2.5 text-sm text-gray-700 font-medium focus:bg-white focus:ring-2 focus:ring-red-200/50 focus:border-red-300 transition-all duration-200"
+                                            class="doctorato-input w-full bg-gray-50/80 border border-gray-200 rounded-xl ps-10 pe-4 py-2.5 text-sm text-gray-700 font-medium focus:bg-white focus:ring-2 focus:ring-[#C4A265]/30/50 focus:border-red-300 transition-all duration-200"
                                         />
                                     </div>
                                     <button
@@ -873,7 +873,7 @@ onMounted(() => {
                                         step="0.5"
                                         min="0"
                                         :placeholder="isRtl ? 'ساعات إضافية' : 'Hours'"
-                                        class="w-full bg-gray-50/80 border border-gray-200 rounded-xl ps-10 pe-4 py-2.5 text-sm text-gray-700 font-medium focus:bg-white focus:ring-2 focus:ring-slate-200/50 focus:border-slate-300 transition-all duration-200 placeholder:text-gray-300"
+                                        class="doctorato-input w-full bg-gray-50/80 border border-gray-200 rounded-xl ps-10 pe-4 py-2.5 text-sm text-gray-700 font-medium focus:bg-white focus:ring-2 focus:ring-slate-200/50 focus:border-slate-300 transition-all duration-200 placeholder:text-gray-300"
                                     />
                                 </div>
                             </div>
@@ -891,7 +891,7 @@ onMounted(() => {
                                         v-model="form.notes"
                                         rows="2"
                                         :placeholder="isRtl ? 'ملاحظات اختيارية...' : 'Optional notes...'"
-                                        class="w-full bg-gray-50/80 border border-gray-200 rounded-xl ps-10 pe-4 py-2.5 text-sm text-gray-700 font-medium focus:bg-white focus:ring-2 focus:ring-amber-200/50 focus:border-amber-300 transition-all duration-200 placeholder:text-gray-300 resize-none"
+                                        class="doctorato-input w-full bg-gray-50/80 border border-gray-200 rounded-xl ps-10 pe-4 py-2.5 text-sm text-gray-700 font-medium focus:bg-white focus:ring-2 focus:ring-[#C4A265]/30/50 focus:border-[#1B365D] transition-all duration-200 placeholder:text-gray-300 resize-none"
                                     />
                                 </div>
                             </div>
@@ -977,7 +977,7 @@ onMounted(() => {
                                             v-model="filterPickerSearch"
                                             type="text"
                                             :placeholder="isRtl ? 'ابحث عن موظف...' : 'Search employee...'"
-                                            class="w-full bg-gray-50 border-0 rounded-lg ps-9 pe-3 py-2 text-sm text-gray-700 placeholder:text-gray-300 focus:ring-2 focus:ring-amber-200/50 focus:bg-white transition-all duration-150"
+                                            class="doctorato-input w-full bg-gray-50 border-0 rounded-lg ps-9 pe-3 py-2 text-sm text-gray-700 placeholder:text-gray-300 focus:ring-2 focus:ring-[#C4A265]/30/50 focus:bg-white transition-all duration-150"
                                         />
                                     </div>
                                 </div>
@@ -1022,7 +1022,7 @@ onMounted(() => {
                         <div class="relative">
                             <select
                                 v-model="statusFilter"
-                                class="w-full appearance-none bg-gray-50/80 border border-gray-200 rounded-xl px-4 py-2.5 pe-10 text-sm text-gray-700 font-medium focus:bg-white focus:ring-2 focus:ring-amber-200/50 focus:border-amber-300 transition-all duration-200 cursor-pointer"
+                                class="doctorato-input w-full appearance-none bg-gray-50/80 border border-gray-200 rounded-xl px-4 py-2.5 pe-10 text-sm text-gray-700 font-medium focus:bg-white focus:ring-2 focus:ring-[#C4A265]/30/50 focus:border-[#1B365D] transition-all duration-200 cursor-pointer"
                             >
                                 <option value="">{{ $t('a_all_status') }}</option>
                                 <option v-for="(cfg, key) in statusConfig" :key="key" :value="key">{{ isRtl ? cfg.label_ar : cfg.label_en }}</option>
@@ -1039,7 +1039,7 @@ onMounted(() => {
                             v-model="dateFrom"
                             type="date"
                             :max="dateTo || undefined"
-                            class="w-full bg-gray-50/80 border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-700 font-medium focus:bg-white focus:ring-2 focus:ring-amber-200/50 focus:border-amber-300 transition-all duration-200"
+                            class="doctorato-input w-full bg-gray-50/80 border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-700 font-medium focus:bg-white focus:ring-2 focus:ring-[#C4A265]/30/50 focus:border-[#1B365D] transition-all duration-200"
                         />
                     </div>
                     <!-- Date To -->
@@ -1049,7 +1049,7 @@ onMounted(() => {
                             v-model="dateTo"
                             type="date"
                             :min="dateFrom || undefined"
-                            class="w-full bg-gray-50/80 border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-700 font-medium focus:bg-white focus:ring-2 focus:ring-amber-200/50 focus:border-amber-300 transition-all duration-200"
+                            class="doctorato-input w-full bg-gray-50/80 border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-700 font-medium focus:bg-white focus:ring-2 focus:ring-[#C4A265]/30/50 focus:border-[#1B365D] transition-all duration-200"
                         />
                     </div>
                 </div>

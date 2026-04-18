@@ -125,13 +125,13 @@ function exportUrl() {
                     <div class="flex-1 min-w-[200px]">
                         <label class="block text-xs font-medium text-gray-500 mb-1">{{ $t('a_search') }}</label>
                         <input v-model="search" type="text" :placeholder="$t('a_search_logs_placeholder')"
-                            class="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-colors" />
+                            class="doctorato-input w-full px-4 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-colors" />
                     </div>
                     <!-- User -->
                     <div class="w-44">
                         <label class="block text-xs font-medium text-gray-500 mb-1">{{ $t('a_user') }}</label>
                         <select v-model="userId"
-                            class="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-colors">
+                            class="doctorato-input w-full px-4 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-colors">
                             <option value="">{{ $t('a_all_users') }}</option>
                             <option v-for="u in users" :key="u.id" :value="u.id">{{ u.name }}</option>
                         </select>
@@ -140,7 +140,7 @@ function exportUrl() {
                     <div class="w-44">
                         <label class="block text-xs font-medium text-gray-500 mb-1">{{ $t('a_action') }}</label>
                         <select v-model="action"
-                            class="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-colors">
+                            class="doctorato-input w-full px-4 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-colors">
                             <option value="">{{ $t('a_all_actions') }}</option>
                             <option v-for="a in actions" :key="a" :value="a">{{ a }}</option>
                         </select>
@@ -149,7 +149,7 @@ function exportUrl() {
                     <div class="w-40">
                         <label class="block text-xs font-medium text-gray-500 mb-1">{{ $t('a_panel') }}</label>
                         <select v-model="panel"
-                            class="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-colors">
+                            class="doctorato-input w-full px-4 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-colors">
                             <option value="">{{ $t('a_all_panels') }}</option>
                             <option v-for="p in panels" :key="p" :value="p" class="capitalize">{{ p }}</option>
                         </select>
@@ -158,13 +158,13 @@ function exportUrl() {
                     <div class="w-40">
                         <label class="block text-xs font-medium text-gray-500 mb-1">{{ $t('a_from') }}</label>
                         <input v-model="dateFrom" type="date" :max="dateTo || undefined"
-                            class="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-colors" />
+                            class="doctorato-input w-full px-4 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-colors" />
                     </div>
                     <!-- Date To -->
                     <div class="w-40">
                         <label class="block text-xs font-medium text-gray-500 mb-1">{{ $t('a_to') }}</label>
                         <input v-model="dateTo" type="date" :min="dateFrom || undefined"
-                            class="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-colors" />
+                            class="doctorato-input w-full px-4 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-colors" />
                     </div>
                 </div>
             </div>

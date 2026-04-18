@@ -154,26 +154,26 @@ const sections = computed(() => [
                     <div class="grid sm:grid-cols-2 gap-4">
                         <div class="sm:col-span-2">
                             <label class="block text-sm font-semibold text-gray-700 mb-1.5">{{ isRtl ? 'الاسم الكامل' : 'Full Name' }} *</label>
-                            <input v-model="form.full_name" type="text" class="w-full rounded-xl border-gray-200 focus:border-emerald-500 focus:ring-emerald-500/20 text-sm py-2.5" :class="form.errors.full_name ? 'border-red-300' : ''" />
+                            <input v-model="form.full_name" type="text" class="doctorato-input w-full rounded-xl border-gray-200 focus:border-[#1B365D] focus:ring-[#C4A265]/30/20 text-sm py-2.5" :class="form.errors.full_name ? 'border-red-300' : ''" />
                             <p v-if="form.errors.full_name" class="mt-1 text-xs text-red-500">{{ form.errors.full_name }}</p>
                         </div>
                         <SearchableSelect v-model="form.gender" :options="genderOptions" :label="isRtl ? 'الجنس *' : 'Gender *'" :placeholder="isRtl ? 'اختر...' : 'Select...'" accentColor="#4CAF50" :error="form.errors.gender" />
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-1.5">{{ isRtl ? 'تاريخ الميلاد' : 'Date of Birth' }} *</label>
-                            <input v-model="form.date_of_birth" type="date" class="w-full rounded-xl border-gray-200 focus:border-emerald-500 focus:ring-emerald-500/20 text-sm py-2.5" :class="form.errors.date_of_birth ? 'border-red-300' : ''" />
+                            <input v-model="form.date_of_birth" type="date" class="doctorato-input w-full rounded-xl border-gray-200 focus:border-[#1B365D] focus:ring-[#C4A265]/30/20 text-sm py-2.5" :class="form.errors.date_of_birth ? 'border-red-300' : ''" />
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-1.5">{{ isRtl ? 'هاتف' : 'Phone' }}</label>
-                            <input v-model="form.phone" type="tel" class="w-full rounded-xl border-gray-200 focus:border-emerald-500 focus:ring-emerald-500/20 text-sm py-2.5" />
+                            <input v-model="form.phone" type="tel" class="doctorato-input w-full rounded-xl border-gray-200 focus:border-[#1B365D] focus:ring-[#C4A265]/30/20 text-sm py-2.5" />
                         </div>
                         <SearchableSelect v-model="form.blood_type" :options="bloodTypeOptions" :label="isRtl ? 'فصيلة الدم' : 'Blood Type'" :placeholder="isRtl ? 'اختر...' : 'Select...'" accentColor="#4CAF50" />
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-1.5">{{ isRtl ? 'الجنسية' : 'Nationality' }}</label>
-                            <input v-model="form.nationality" type="text" class="w-full rounded-xl border-gray-200 focus:border-emerald-500 focus:ring-emerald-500/20 text-sm py-2.5" />
+                            <input v-model="form.nationality" type="text" class="doctorato-input w-full rounded-xl border-gray-200 focus:border-[#1B365D] focus:ring-[#C4A265]/30/20 text-sm py-2.5" />
                         </div>
                         <div class="sm:col-span-2">
                             <label class="block text-sm font-semibold text-gray-700 mb-1.5">{{ isRtl ? 'العنوان' : 'Address' }}</label>
-                            <input v-model="form.address" type="text" class="w-full rounded-xl border-gray-200 focus:border-emerald-500 focus:ring-emerald-500/20 text-sm py-2.5" />
+                            <input v-model="form.address" type="text" class="doctorato-input w-full rounded-xl border-gray-200 focus:border-[#1B365D] focus:ring-[#C4A265]/30/20 text-sm py-2.5" />
                         </div>
                     </div>
                 </div>
@@ -189,24 +189,24 @@ const sections = computed(() => [
                     <div class="grid sm:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-1.5">{{ isRtl ? 'اسم ولي الأمر' : 'Guardian Name' }} *</label>
-                            <input v-model="form.guardian_name" type="text" class="w-full rounded-xl border-gray-200 focus:border-emerald-500 focus:ring-emerald-500/20 text-sm py-2.5" />
+                            <input v-model="form.guardian_name" type="text" class="doctorato-input w-full rounded-xl border-gray-200 focus:border-[#1B365D] focus:ring-[#C4A265]/30/20 text-sm py-2.5" />
                         </div>
                         <SearchableSelect v-model="form.guardian_relation" :options="relationOptions" :label="isRtl ? 'صلة القرابة *' : 'Relation *'" :placeholder="isRtl ? 'اختر...' : 'Select...'" accentColor="#4CAF50" />
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-1.5">{{ isRtl ? 'هاتف ولي الأمر' : 'Guardian Phone' }} *</label>
-                            <input v-model="form.guardian_phone" type="tel" class="w-full rounded-xl border-gray-200 focus:border-emerald-500 focus:ring-emerald-500/20 text-sm py-2.5" />
+                            <input v-model="form.guardian_phone" type="tel" class="doctorato-input w-full rounded-xl border-gray-200 focus:border-[#1B365D] focus:ring-[#C4A265]/30/20 text-sm py-2.5" />
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-1.5">{{ isRtl ? 'هاتف احتياطي' : 'Secondary Phone' }}</label>
-                            <input v-model="form.guardian_phone2" type="tel" class="w-full rounded-xl border-gray-200 focus:border-emerald-500 focus:ring-emerald-500/20 text-sm py-2.5" />
+                            <input v-model="form.guardian_phone2" type="tel" class="doctorato-input w-full rounded-xl border-gray-200 focus:border-[#1B365D] focus:ring-[#C4A265]/30/20 text-sm py-2.5" />
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-1.5">{{ isRtl ? 'البريد الإلكتروني' : 'Email' }}</label>
-                            <input v-model="form.guardian_email" type="email" class="w-full rounded-xl border-gray-200 focus:border-emerald-500 focus:ring-emerald-500/20 text-sm py-2.5" />
+                            <input v-model="form.guardian_email" type="email" class="doctorato-input w-full rounded-xl border-gray-200 focus:border-[#1B365D] focus:ring-[#C4A265]/30/20 text-sm py-2.5" />
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-1.5">{{ isRtl ? 'المهنة' : 'Occupation' }}</label>
-                            <input v-model="form.guardian_occupation" type="text" class="w-full rounded-xl border-gray-200 focus:border-emerald-500 focus:ring-emerald-500/20 text-sm py-2.5" />
+                            <input v-model="form.guardian_occupation" type="text" class="doctorato-input w-full rounded-xl border-gray-200 focus:border-[#1B365D] focus:ring-[#C4A265]/30/20 text-sm py-2.5" />
                         </div>
                     </div>
                 </div>
@@ -223,31 +223,31 @@ const sections = computed(() => [
                         <SearchableSelect v-model="form.birth_type" :options="birthTypeOptions" :label="isRtl ? 'نوع الولادة' : 'Birth Type'" :placeholder="isRtl ? 'اختر...' : 'Select...'" accentColor="#4CAF50" />
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-1.5">{{ isRtl ? 'مكان الولادة' : 'Birth Place' }}</label>
-                            <input v-model="form.birth_place" type="text" class="w-full rounded-xl border-gray-200 focus:border-emerald-500 focus:ring-emerald-500/20 text-sm py-2.5" />
+                            <input v-model="form.birth_place" type="text" class="doctorato-input w-full rounded-xl border-gray-200 focus:border-[#1B365D] focus:ring-[#C4A265]/30/20 text-sm py-2.5" />
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-1.5">{{ isRtl ? 'عمر الحمل (أسابيع)' : 'Gestational Age (weeks)' }}</label>
-                            <input v-model="form.gestational_age_weeks" type="number" step="0.5" min="20" max="45" class="w-full rounded-xl border-gray-200 focus:border-emerald-500 focus:ring-emerald-500/20 text-sm py-2.5" />
+                            <input v-model="form.gestational_age_weeks" type="number" step="0.5" min="20" max="45" class="doctorato-input w-full rounded-xl border-gray-200 focus:border-[#1B365D] focus:ring-[#C4A265]/30/20 text-sm py-2.5" />
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-1.5">{{ isRtl ? 'وزن الولادة (كجم)' : 'Birth Weight (kg)' }}</label>
-                            <input v-model="form.birth_weight_kg" type="number" step="0.001" min="0.3" max="7" class="w-full rounded-xl border-gray-200 focus:border-emerald-500 focus:ring-emerald-500/20 text-sm py-2.5" />
+                            <input v-model="form.birth_weight_kg" type="number" step="0.001" min="0.3" max="7" class="doctorato-input w-full rounded-xl border-gray-200 focus:border-[#1B365D] focus:ring-[#C4A265]/30/20 text-sm py-2.5" />
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-1.5">{{ isRtl ? 'طول الولادة (سم)' : 'Birth Length (cm)' }}</label>
-                            <input v-model="form.birth_length_cm" type="number" step="0.1" min="20" max="65" class="w-full rounded-xl border-gray-200 focus:border-emerald-500 focus:ring-emerald-500/20 text-sm py-2.5" />
+                            <input v-model="form.birth_length_cm" type="number" step="0.1" min="20" max="65" class="doctorato-input w-full rounded-xl border-gray-200 focus:border-[#1B365D] focus:ring-[#C4A265]/30/20 text-sm py-2.5" />
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-1.5">{{ isRtl ? 'محيط الرأس (سم)' : 'Head Circumference (cm)' }}</label>
-                            <input v-model="form.birth_head_circumference_cm" type="number" step="0.1" min="20" max="50" class="w-full rounded-xl border-gray-200 focus:border-emerald-500 focus:ring-emerald-500/20 text-sm py-2.5" />
+                            <input v-model="form.birth_head_circumference_cm" type="number" step="0.1" min="20" max="50" class="doctorato-input w-full rounded-xl border-gray-200 focus:border-[#1B365D] focus:ring-[#C4A265]/30/20 text-sm py-2.5" />
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-1.5">{{ isRtl ? 'APGAR الدقيقة 1' : 'APGAR (1 min)' }}</label>
-                            <input v-model="form.apgar_1min" type="number" min="0" max="10" class="w-full rounded-xl border-gray-200 focus:border-emerald-500 focus:ring-emerald-500/20 text-sm py-2.5" />
+                            <input v-model="form.apgar_1min" type="number" min="0" max="10" class="doctorato-input w-full rounded-xl border-gray-200 focus:border-[#1B365D] focus:ring-[#C4A265]/30/20 text-sm py-2.5" />
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-1.5">{{ isRtl ? 'APGAR الدقيقة 5' : 'APGAR (5 min)' }}</label>
-                            <input v-model="form.apgar_5min" type="number" min="0" max="10" class="w-full rounded-xl border-gray-200 focus:border-emerald-500 focus:ring-emerald-500/20 text-sm py-2.5" />
+                            <input v-model="form.apgar_5min" type="number" min="0" max="10" class="doctorato-input w-full rounded-xl border-gray-200 focus:border-[#1B365D] focus:ring-[#C4A265]/30/20 text-sm py-2.5" />
                         </div>
                         <SearchableSelect v-model="form.feeding_type" :options="feedingOptions" :label="isRtl ? 'نوع الرضاعة' : 'Feeding Type'" :placeholder="isRtl ? 'اختر...' : 'Select...'" accentColor="#4CAF50" />
 
@@ -271,12 +271,12 @@ const sections = computed(() => [
 
                         <div v-if="form.birth_complications.includes('nicu')">
                             <label class="block text-sm font-semibold text-gray-700 mb-1.5">{{ isRtl ? 'مدة الحضانة (أيام)' : 'NICU Days' }}</label>
-                            <input v-model="form.nicu_days" type="number" min="0" class="w-full rounded-xl border-gray-200 focus:border-emerald-500 focus:ring-emerald-500/20 text-sm py-2.5" />
+                            <input v-model="form.nicu_days" type="number" min="0" class="doctorato-input w-full rounded-xl border-gray-200 focus:border-[#1B365D] focus:ring-[#C4A265]/30/20 text-sm py-2.5" />
                         </div>
 
                         <div class="sm:col-span-2 lg:col-span-3">
                             <label class="block text-sm font-semibold text-gray-700 mb-1.5">{{ isRtl ? 'مشاكل أثناء الحمل' : 'Pregnancy Complications' }}</label>
-                            <textarea v-model="form.pregnancy_complications" rows="3" class="w-full rounded-xl border-gray-200 focus:border-emerald-500 focus:ring-emerald-500/20 text-sm py-2.5"></textarea>
+                            <textarea v-model="form.pregnancy_complications" rows="3" class="doctorato-input w-full rounded-xl border-gray-200 focus:border-[#1B365D] focus:ring-[#C4A265]/30/20 text-sm py-2.5"></textarea>
                         </div>
                     </div>
                 </div>

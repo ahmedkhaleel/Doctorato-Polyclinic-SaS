@@ -192,12 +192,12 @@ const paginationLinks = computed(() => props.consultations?.links || []);
                         v-model="search"
                         type="text"
                         :placeholder="isRtl ? 'بحث برقم الاستشارة، المريض، أو الطبيب...' : 'Search by #, patient, or doctor...'"
-                        class="w-full ltr:pl-10 rtl:pr-10 py-2.5 ltr:pr-4 rtl:pl-4 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition"
+                        class="doctorato-input w-full ltr:pl-10 rtl:pr-10 py-2.5 ltr:pr-4 rtl:pl-4 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition"
                     />
                 </div>
                 <select
                     v-model="statusFilter"
-                    class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] bg-white"
+                    class="doctorato-input px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] bg-white"
                 >
                     <option value="all">{{ isRtl ? 'كل الحالات' : 'All statuses' }}</option>
                     <option value="scheduled">{{ isRtl ? 'مجدول' : 'Scheduled' }}</option>

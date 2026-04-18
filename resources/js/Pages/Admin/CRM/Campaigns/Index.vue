@@ -205,7 +205,7 @@ function deleteCampaign(id) {
                                 v-model="search"
                                 type="text"
                                 :placeholder="$t('a_search_campaigns')"
-                                class="w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-2.5 text-sm bg-gray-50/80 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] focus:bg-white transition-all duration-200 placeholder-gray-400"
+                                class="doctorato-input w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-2.5 text-sm bg-gray-50/80 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] focus:bg-white transition-all duration-200 placeholder-gray-400"
                             />
                         </div>
                         <!-- Searchable Status Filter -->
@@ -220,7 +220,7 @@ function deleteCampaign(id) {
                                 @blur="onStatusBlur"
                                 type="text"
                                 :placeholder="$t('a_filter_by_status')"
-                                class="w-full ltr:pl-9 rtl:pr-9 ltr:pr-8 rtl:pl-8 py-2.5 text-sm bg-gray-50/80 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] focus:bg-white transition-all duration-200 cursor-pointer"
+                                class="doctorato-input w-full ltr:pl-9 rtl:pr-9 ltr:pr-8 rtl:pl-8 py-2.5 text-sm bg-gray-50/80 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] focus:bg-white transition-all duration-200 cursor-pointer"
                             />
                             <div class="absolute inset-y-0 ltr:right-0 rtl:left-0 ltr:pr-2.5 rtl:pl-2.5 flex items-center pointer-events-none">
                                 <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>

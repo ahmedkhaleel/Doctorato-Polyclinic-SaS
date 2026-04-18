@@ -674,7 +674,7 @@ const activeFilterPills = computed(() => {
                         </div>
                         <input v-model="search" type="text" data-search-input
                             :placeholder="isRtl ? '\u0628\u062D\u062B \u0628\u0627\u0644\u0627\u0633\u0645\u060C \u0627\u0644\u0647\u0627\u062A\u0641\u060C \u0627\u0644\u0628\u0631\u064A\u062F \u0627\u0644\u0625\u0644\u0643\u062A\u0631\u0648\u0646\u064A...' : 'Search by name, phone, email...'  "
-                            class="w-full ltr:pl-11 rtl:pr-11 ltr:pr-12 rtl:pl-12 py-2.5 text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all duration-200 bg-gray-50 focus:bg-white" />
+                            class="doctorato-input w-full ltr:pl-11 rtl:pr-11 ltr:pr-12 rtl:pl-12 py-2.5 text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#C4A265]/30/20 focus:border-[#1B365D] transition-all duration-200 bg-gray-50 focus:bg-white" />
                         <!-- Results count or keyboard shortcut badge -->
                         <div class="absolute inset-y-0 ltr:right-0 rtl:left-0 ltr:pr-3 rtl:pl-3 hidden md:flex items-center pointer-events-none">
                             <span v-if="hasActiveFilters"
@@ -689,7 +689,7 @@ const activeFilterPills = computed(() => {
                     <!-- Status Dropdown -->
                     <div class="relative min-w-[180px]">
                         <select v-model="statusFilter"
-                            class="w-full appearance-none text-sm border border-gray-200 rounded-xl py-2.5 ltr:pl-4 rtl:pr-4 ltr:pr-10 rtl:pl-10 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all duration-200 bg-gray-50 focus:bg-white cursor-pointer">
+                            class="doctorato-input w-full appearance-none text-sm border border-gray-200 rounded-xl py-2.5 ltr:pl-4 rtl:pr-4 ltr:pr-10 rtl:pl-10 focus:ring-2 focus:ring-[#C4A265]/30/20 focus:border-[#1B365D] transition-all duration-200 bg-gray-50 focus:bg-white cursor-pointer">
                             <option value="">{{ isRtl ? 'جميع الحالات' : 'All Statuses' }}</option>
                             <option v-for="(label, key) in statusLabels" :key="key" :value="key">{{ label }}</option>
                         </select>
@@ -703,7 +703,7 @@ const activeFilterPills = computed(() => {
                     <!-- Priority Dropdown -->
                     <div class="relative min-w-[160px]">
                         <select v-model="priorityFilter"
-                            class="w-full appearance-none text-sm border border-gray-200 rounded-xl py-2.5 ltr:pl-4 rtl:pr-4 ltr:pr-10 rtl:pl-10 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all duration-200 bg-gray-50 focus:bg-white cursor-pointer">
+                            class="doctorato-input w-full appearance-none text-sm border border-gray-200 rounded-xl py-2.5 ltr:pl-4 rtl:pr-4 ltr:pr-10 rtl:pl-10 focus:ring-2 focus:ring-[#C4A265]/30/20 focus:border-[#1B365D] transition-all duration-200 bg-gray-50 focus:bg-white cursor-pointer">
                             <option value="">{{ isRtl ? 'جميع الأولويات' : 'All Priorities' }}</option>
                             <option value="1">{{ isRtl ? 'ساخن' : 'Hot' }}</option>
                             <option value="2">{{ isRtl ? 'دافئ' : 'Warm' }}</option>
@@ -737,7 +737,7 @@ const activeFilterPills = computed(() => {
                         <div class="flex items-center gap-1">
                             <div class="relative min-w-[140px]">
                                 <select @change="changeSort($event.target.value)" :value="sortField"
-                                    class="w-full appearance-none text-sm border border-gray-200 rounded-xl py-2.5 ltr:pl-4 rtl:pr-4 ltr:pr-10 rtl:pl-10 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all duration-200 bg-gray-50 focus:bg-white cursor-pointer">
+                                    class="doctorato-input w-full appearance-none text-sm border border-gray-200 rounded-xl py-2.5 ltr:pl-4 rtl:pr-4 ltr:pr-10 rtl:pl-10 focus:ring-2 focus:ring-[#C4A265]/30/20 focus:border-[#1B365D] transition-all duration-200 bg-gray-50 focus:bg-white cursor-pointer">
                                     <option value="created_at">{{ isRtl ? 'الأحدث' : 'Newest' }}</option>
                                     <option value="full_name">{{ isRtl ? 'الاسم' : 'Name' }}</option>
                                     <option value="score">{{ isRtl ? 'النقاط' : 'Score' }}</option>
@@ -803,7 +803,7 @@ const activeFilterPills = computed(() => {
                                     <label v-for="col in tableColumns" :key="col.key"
                                         class="flex items-center gap-2.5 px-3 py-1.5 hover:bg-gray-50 cursor-pointer transition-colors">
                                         <input type="checkbox" :checked="isColumnVisible(col.key)" @change="toggleColumn(col.key)"
-                                            class="w-3.5 h-3.5 rounded border-gray-300 text-teal-600 focus:ring-teal-500 transition" />
+                                            class="w-3.5 h-3.5 rounded border-gray-300 text-teal-600 focus:ring-[#C4A265]/30 transition" />
                                         <span class="text-xs text-gray-700">{{ isRtl ? col.ar : col.en }}</span>
                                     </label>
                                 </div>
@@ -828,7 +828,7 @@ const activeFilterPills = computed(() => {
                                     {{ isRtl ? 'المصدر' : 'Source' }}
                                 </label>
                                 <select v-model="sourceFilter"
-                                    class="w-full appearance-none text-sm border border-gray-200 rounded-xl py-2.5 ltr:pl-4 rtl:pr-4 ltr:pr-10 rtl:pl-10 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all duration-200 bg-gray-50 focus:bg-white cursor-pointer">
+                                    class="doctorato-input w-full appearance-none text-sm border border-gray-200 rounded-xl py-2.5 ltr:pl-4 rtl:pr-4 ltr:pr-10 rtl:pl-10 focus:ring-2 focus:ring-[#C4A265]/30/20 focus:border-[#1B365D] transition-all duration-200 bg-gray-50 focus:bg-white cursor-pointer">
                                     <option value="">{{ isRtl ? 'جميع المصادر' : 'All Sources' }}</option>
                                     <option v-for="src in sources" :key="src.id" :value="src.id">
                                         {{ isRtl ? src.name_ar : src.name_en }}
@@ -878,7 +878,7 @@ const activeFilterPills = computed(() => {
                                     {{ isRtl ? 'الخدمة' : 'Service' }}
                                 </label>
                                 <select v-model="serviceFilter2" @change="applyFilters()"
-                                    class="w-full appearance-none text-sm border border-gray-200 rounded-xl py-2.5 ltr:pl-4 rtl:pr-4 ltr:pr-10 rtl:pl-10 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all duration-200 bg-gray-50 focus:bg-white cursor-pointer">
+                                    class="doctorato-input w-full appearance-none text-sm border border-gray-200 rounded-xl py-2.5 ltr:pl-4 rtl:pr-4 ltr:pr-10 rtl:pl-10 focus:ring-2 focus:ring-[#C4A265]/30/20 focus:border-[#1B365D] transition-all duration-200 bg-gray-50 focus:bg-white cursor-pointer">
                                     <option value="">{{ isRtl ? 'جميع الخدمات' : 'All Services' }}</option>
                                     <option v-for="svc in services" :key="svc.id" :value="svc.id">
                                         {{ isRtl ? svc.name_ar : svc.name_en }}
@@ -898,7 +898,7 @@ const activeFilterPills = computed(() => {
                                     {{ isRtl ? 'من تاريخ' : 'Date From' }}
                                 </label>
                                 <input v-model="dateFrom" type="date"
-                                    class="w-full text-sm border border-gray-200 rounded-xl py-2.5 px-4 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all duration-200 bg-gray-50 focus:bg-white" />
+                                    class="doctorato-input w-full text-sm border border-gray-200 rounded-xl py-2.5 px-4 focus:ring-2 focus:ring-[#C4A265]/30/20 focus:border-[#1B365D] transition-all duration-200 bg-gray-50 focus:bg-white" />
                             </div>
                             <!-- Date To -->
                             <div class="flex-1">
@@ -906,7 +906,7 @@ const activeFilterPills = computed(() => {
                                     {{ isRtl ? 'إلى تاريخ' : 'Date To' }}
                                 </label>
                                 <input v-model="dateTo" type="date"
-                                    class="w-full text-sm border border-gray-200 rounded-xl py-2.5 px-4 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all duration-200 bg-gray-50 focus:bg-white" />
+                                    class="doctorato-input w-full text-sm border border-gray-200 rounded-xl py-2.5 px-4 focus:ring-2 focus:ring-[#C4A265]/30/20 focus:border-[#1B365D] transition-all duration-200 bg-gray-50 focus:bg-white" />
                             </div>
                             <div class="flex-1"></div>
                         </div>
@@ -1130,7 +1130,7 @@ const activeFilterPills = computed(() => {
                         <!-- Checkbox -->
                         <label class="relative flex items-center cursor-pointer mt-1" @click.stop>
                             <input type="checkbox" :checked="isSelected(lead.id)" @change="toggleLead(lead.id)"
-                                class="w-4 h-4 rounded border-gray-300 text-teal-500 focus:ring-teal-400 transition-all" />
+                                class="w-4 h-4 rounded border-gray-300 text-teal-500 focus:ring-[#C4A265]/30 transition-all" />
                         </label>
                         <!-- Avatar -->
                         <div class="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-sm shrink-0 shadow-sm"
@@ -1305,7 +1305,7 @@ const activeFilterPills = computed(() => {
                             <tr class="text-xs text-gray-400 uppercase border-b border-gray-100"
                                 style="background: linear-gradient(180deg, #f9fafb 0%, #ffffff 100%);">
                                 <th class="px-3 py-3.5 w-10">
-                                    <input type="checkbox" v-model="selectAll" @change="toggleSelectAll" class="w-4 h-4 rounded border-gray-300 text-teal-500 focus:ring-teal-400" />
+                                    <input type="checkbox" v-model="selectAll" @change="toggleSelectAll" class="w-4 h-4 rounded border-gray-300 text-teal-500 focus:ring-[#C4A265]/30" />
                                 </th>
                                 <th class="px-5 py-3.5 font-semibold ltr:text-left rtl:text-right">{{ isRtl ? 'العميل' : 'Lead' }}</th>
                                 <th v-if="isColumnVisible('phone')" class="px-5 py-3.5 font-semibold ltr:text-left rtl:text-right">{{ isRtl ? 'التواصل' : 'Contact' }}</th>
@@ -1324,7 +1324,7 @@ const activeFilterPills = computed(() => {
                                 :class="['transition-colors duration-150', isSelected(lead.id) ? 'bg-teal-50/50' : 'hover:bg-teal-50/30']">
                                 <!-- Checkbox -->
                                 <td class="px-3 py-3.5">
-                                    <input type="checkbox" :checked="isSelected(lead.id)" @change="toggleLead(lead.id)" class="w-4 h-4 rounded border-gray-300 text-teal-500 focus:ring-teal-400" />
+                                    <input type="checkbox" :checked="isSelected(lead.id)" @change="toggleLead(lead.id)" class="w-4 h-4 rounded border-gray-300 text-teal-500 focus:ring-[#C4A265]/30" />
                                 </td>
                                 <!-- Lead -->
                                 <td class="px-5 py-3.5">
@@ -1759,7 +1759,7 @@ const activeFilterPills = computed(() => {
                                 <h4 class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">{{ isRtl ? '\u0645\u0644\u0627\u062D\u0638\u0629 \u0633\u0631\u064A\u0639\u0629' : 'Quick Note' }}</h4>
                                 <form @submit.prevent="quickViewAddNote" class="flex gap-1.5">
                                     <input v-model="quickViewNote" type="text"
-                                        class="flex-1 rounded-lg border-gray-200 text-xs py-1.5 px-2.5 focus:ring-teal-500 focus:border-teal-500"
+                                        class="doctorato-input flex-1 rounded-lg border-gray-200 text-xs py-1.5 px-2.5 focus:ring-[#C4A265]/30 focus:border-[#1B365D]"
                                         :placeholder="isRtl ? '\u0627\u0643\u062A\u0628 \u0645\u0644\u0627\u062D\u0638\u0629...' : 'Type a note...'" />
                                     <button type="submit"
                                         :disabled="!quickViewNote.trim() || quickViewSavingNote"

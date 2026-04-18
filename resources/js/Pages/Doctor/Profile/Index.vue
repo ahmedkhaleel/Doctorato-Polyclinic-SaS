@@ -229,26 +229,26 @@ const displayPhoto = computed(() => photoPreview.value || props.doctor.photo_url
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                             <div>
                                 <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">{{ $t('a_phone') }}</label>
-                                <input v-model="profileForm.phone" type="text" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition" />
+                                <input v-model="profileForm.phone" type="text" class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition" />
                                 <p v-if="profileForm.errors.phone" class="text-xs text-red-500 mt-1">{{ profileForm.errors.phone }}</p>
                             </div>
                             <div>
                                 <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">{{ $t('a_email') }}</label>
-                                <input v-model="profileForm.email" type="email" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition" />
+                                <input v-model="profileForm.email" type="email" class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition" />
                                 <p v-if="profileForm.errors.email" class="text-xs text-red-500 mt-1">{{ profileForm.errors.email }}</p>
                             </div>
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">{{ $t('a_bio_en') }}</label>
-                            <textarea v-model="profileForm.bio_en" rows="3" dir="ltr" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition"></textarea>
+                            <textarea v-model="profileForm.bio_en" rows="3" dir="ltr" class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition"></textarea>
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">{{ $t('a_bio_ar') }}</label>
-                            <textarea v-model="profileForm.bio_ar" rows="3" dir="rtl" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition"></textarea>
+                            <textarea v-model="profileForm.bio_ar" rows="3" dir="rtl" class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition"></textarea>
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">{{ $t('a_clinic_notes') }}</label>
-                            <textarea v-model="profileForm.clinic_notes" rows="2" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition"></textarea>
+                            <textarea v-model="profileForm.clinic_notes" rows="2" class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition"></textarea>
                         </div>
                         <div class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-gray-100">
                             <button type="button" @click="triggerPhotoUpload" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 rounded-xl hover:bg-gray-200 transition">
@@ -276,18 +276,18 @@ const displayPhoto = computed(() => photoPreview.value || props.doctor.photo_url
                     <form @submit.prevent="updatePassword" class="p-4 sm:p-6 space-y-5">
                         <div>
                             <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">{{ $t('a_current_password') }}</label>
-                            <input v-model="passwordForm.current_password" type="password" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition" required />
+                            <input v-model="passwordForm.current_password" type="password" class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition" required />
                             <p v-if="passwordForm.errors.current_password" class="text-xs text-red-500 mt-1">{{ passwordForm.errors.current_password }}</p>
                         </div>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                             <div>
                                 <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">{{ $t('a_new_password') }}</label>
-                                <input v-model="passwordForm.password" type="password" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition" required />
+                                <input v-model="passwordForm.password" type="password" class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition" required />
                                 <p v-if="passwordForm.errors.password" class="text-xs text-red-500 mt-1">{{ passwordForm.errors.password }}</p>
                             </div>
                             <div>
                                 <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">{{ $t('a_confirm_password') }}</label>
-                                <input v-model="passwordForm.password_confirmation" type="password" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition" required />
+                                <input v-model="passwordForm.password_confirmation" type="password" class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition" required />
                             </div>
                         </div>
                         <div class="flex justify-end pt-2 border-t border-gray-100">

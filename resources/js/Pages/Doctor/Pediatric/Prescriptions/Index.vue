@@ -336,7 +336,7 @@ function hasMedicalNotes(patient) {
                                 min="0"
                                 max="100"
                                 :placeholder="isRtl ? '\u0645\u062B\u0627\u0644: 12' : 'e.g. 12'"
-                                class="w-full px-3.5 py-2.5 border-2 border-emerald-200 rounded-xl text-sm font-semibold focus:ring-2 focus:ring-emerald-300/50 focus:border-emerald-400 bg-white transition-all"
+                                class="doctorato-input w-full px-3.5 py-2.5 border-2 border-emerald-200 rounded-xl text-sm font-semibold focus:ring-2 focus:ring-[#C4A265]/30/50 focus:border-[#1B365D] bg-white transition-all"
                                 @input="triggerCalcAnimation"
                             />
                             <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-emerald-400 font-bold">kg</span>
@@ -353,7 +353,7 @@ function hasMedicalNotes(patient) {
                                 step="0.1"
                                 min="0"
                                 :placeholder="isRtl ? '\u0645\u062B\u0627\u0644: 15' : 'e.g. 15'"
-                                class="w-full px-3.5 py-2.5 border-2 border-emerald-200 rounded-xl text-sm font-semibold focus:ring-2 focus:ring-emerald-300/50 focus:border-emerald-400 bg-white transition-all"
+                                class="doctorato-input w-full px-3.5 py-2.5 border-2 border-emerald-200 rounded-xl text-sm font-semibold focus:ring-2 focus:ring-[#C4A265]/30/50 focus:border-[#1B365D] bg-white transition-all"
                                 @input="triggerCalcAnimation"
                             />
                             <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-emerald-400 font-bold">mg/kg</span>
@@ -366,7 +366,7 @@ function hasMedicalNotes(patient) {
                         <div class="relative">
                             <select
                                 v-model.number="calcFrequency"
-                                class="w-full px-3.5 py-2.5 border-2 border-emerald-200 rounded-xl text-sm font-semibold focus:ring-2 focus:ring-emerald-300/50 focus:border-emerald-400 bg-white appearance-none transition-all"
+                                class="doctorato-input w-full px-3.5 py-2.5 border-2 border-emerald-200 rounded-xl text-sm font-semibold focus:ring-2 focus:ring-[#C4A265]/30/50 focus:border-[#1B365D] bg-white appearance-none transition-all"
                             >
                                 <option :value="1">1x / {{ isRtl ? '\u064A\u0648\u0645' : 'day' }}</option>
                                 <option :value="2">2x / {{ isRtl ? '\u064A\u0648\u0645' : 'day' }}</option>
@@ -388,7 +388,7 @@ function hasMedicalNotes(patient) {
                                 step="0.1"
                                 min="0"
                                 :placeholder="isRtl ? '\u0645\u062B\u0627\u0644: 120' : 'e.g. 120'"
-                                class="w-full px-3.5 py-2.5 border-2 border-emerald-200 rounded-xl text-sm font-semibold focus:ring-2 focus:ring-emerald-300/50 focus:border-emerald-400 bg-white transition-all"
+                                class="doctorato-input w-full px-3.5 py-2.5 border-2 border-emerald-200 rounded-xl text-sm font-semibold focus:ring-2 focus:ring-[#C4A265]/30/50 focus:border-[#1B365D] bg-white transition-all"
                             />
                             <span class="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-emerald-400 font-bold">mg/5ml</span>
                         </div>
@@ -515,7 +515,7 @@ function hasMedicalNotes(patient) {
                         </div>
                         <div>
                             <label class="text-xs font-semibold text-gray-500 mb-1.5 block uppercase tracking-wide">{{ isRtl ? '\u0627\u0644\u062A\u0634\u062E\u064A\u0635' : 'Diagnosis' }}</label>
-                            <textarea v-model="form.diagnosis" rows="2" class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-300/50 focus:border-emerald-400 transition-all" :placeholder="isRtl ? '\u0645\u062B\u0627\u0644: \u0627\u0644\u062A\u0647\u0627\u0628 \u0627\u0644\u0623\u0630\u0646 \u0627\u0644\u0648\u0633\u0637\u0649...' : 'e.g. Acute otitis media...'"></textarea>
+                            <textarea v-model="form.diagnosis" rows="2" class="doctorato-input w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30/50 focus:border-[#1B365D] transition-all" :placeholder="isRtl ? '\u0645\u062B\u0627\u0644: \u0627\u0644\u062A\u0647\u0627\u0628 \u0627\u0644\u0623\u0630\u0646 \u0627\u0644\u0648\u0633\u0637\u0649...' : 'e.g. Acute otitis media...'"></textarea>
                         </div>
                     </div>
 
@@ -539,7 +539,7 @@ function hasMedicalNotes(patient) {
                     <!-- Notes -->
                     <div>
                         <label class="text-xs font-semibold text-gray-500 mb-1.5 block uppercase tracking-wide">{{ isRtl ? '\u0645\u0644\u0627\u062D\u0638\u0627\u062A \u0644\u0644\u0645\u0631\u064A\u0636' : 'Notes for Patient' }}</label>
-                        <textarea v-model="form.notes" rows="2" class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-300/50 focus:border-emerald-400 transition-all" :placeholder="isRtl ? '\u062A\u0639\u0644\u064A\u0645\u0627\u062A \u0625\u0636\u0627\u0641\u064A\u0629...' : 'Additional instructions...'"></textarea>
+                        <textarea v-model="form.notes" rows="2" class="doctorato-input w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30/50 focus:border-[#1B365D] transition-all" :placeholder="isRtl ? '\u062A\u0639\u0644\u064A\u0645\u0627\u062A \u0625\u0636\u0627\u0641\u064A\u0629...' : 'Additional instructions...'"></textarea>
                     </div>
 
                     <!-- Medications -->
@@ -574,7 +574,7 @@ function hasMedicalNotes(patient) {
                                         v-model="item.medication_name"
                                         @input="searchMedication(index, item.medication_name)"
                                         :placeholder="isRtl ? '\u0627\u0643\u062A\u0628 \u0627\u0633\u0645 \u0627\u0644\u062F\u0648\u0627\u0621...' : 'Type medication...'"
-                                        class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-300/50 focus:border-emerald-400 transition-all"
+                                        class="doctorato-input w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30/50 focus:border-[#1B365D] transition-all"
                                         required
                                     />
                                     <div v-if="medicationSuggestions[`create-${index}`]?.length" class="absolute z-30 top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-xl max-h-44 overflow-y-auto">
@@ -587,12 +587,12 @@ function hasMedicalNotes(patient) {
                                 </div>
 
                                 <!-- Dosage -->
-                                <input v-model="item.dosage" :placeholder="isRtl ? '\u0645\u062B\u0627\u0644: 180mg (7.5ml)' : 'e.g. 180mg (7.5ml)'" class="col-span-6 lg:col-span-2 px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-300/50 focus:border-emerald-400 transition-all" />
+                                <input v-model="item.dosage" :placeholder="isRtl ? '\u0645\u062B\u0627\u0644: 180mg (7.5ml)' : 'e.g. 180mg (7.5ml)'" class="doctorato-input col-span-6 lg:col-span-2 px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30/50 focus:border-[#1B365D] transition-all" />
 
                                 <!-- Frequency with presets -->
                                 <div class="col-span-6 lg:col-span-2 relative">
                                     <div class="relative">
-                                        <input v-model="item.frequency" :placeholder="isRtl ? '\u0627\u0644\u062A\u0643\u0631\u0627\u0631' : 'Frequency'" class="w-full px-3 py-2.5 pr-8 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-300/50 focus:border-emerald-400 transition-all" />
+                                        <input v-model="item.frequency" :placeholder="isRtl ? '\u0627\u0644\u062A\u0643\u0631\u0627\u0631' : 'Frequency'" class="doctorato-input w-full px-3 py-2.5 pr-8 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30/50 focus:border-[#1B365D] transition-all" />
                                         <button type="button" @click="togglePreset(`freq-${index}`)" class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-emerald-500 transition-colors">
                                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
                                         </button>
@@ -605,7 +605,7 @@ function hasMedicalNotes(patient) {
                                 <!-- Duration with presets -->
                                 <div class="col-span-6 lg:col-span-2 relative">
                                     <div class="relative">
-                                        <input v-model="item.duration" :placeholder="isRtl ? '\u0627\u0644\u0645\u062F\u0629' : 'Duration'" class="w-full px-3 py-2.5 pr-8 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-300/50 focus:border-emerald-400 transition-all" />
+                                        <input v-model="item.duration" :placeholder="isRtl ? '\u0627\u0644\u0645\u062F\u0629' : 'Duration'" class="doctorato-input w-full px-3 py-2.5 pr-8 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30/50 focus:border-[#1B365D] transition-all" />
                                         <button type="button" @click="togglePreset(`dur-${index}`)" class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-emerald-500 transition-colors">
                                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
                                         </button>
@@ -616,7 +616,7 @@ function hasMedicalNotes(patient) {
                                 </div>
 
                                 <!-- Instructions -->
-                                <input v-model="item.instructions" :placeholder="isRtl ? '\u062A\u0639\u0644\u064A\u0645\u0627\u062A...' : 'Instructions...'" class="col-span-5 lg:col-span-2 px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-300/50 focus:border-emerald-400 transition-all" />
+                                <input v-model="item.instructions" :placeholder="isRtl ? '\u062A\u0639\u0644\u064A\u0645\u0627\u062A...' : 'Instructions...'" class="doctorato-input col-span-5 lg:col-span-2 px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30/50 focus:border-[#1B365D] transition-all" />
 
                                 <!-- Remove -->
                                 <button type="button" @click="removeItem(index)" class="col-span-1 flex items-center justify-center h-10 text-gray-300 hover:text-red-500 transition-colors" :class="form.items.length <= 1 ? 'invisible' : ''">
@@ -645,7 +645,7 @@ function hasMedicalNotes(patient) {
         >
             <div class="relative max-w-md">
                 <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                <input v-model="search" type="text" :placeholder="isRtl ? '\u0628\u062D\u062B \u0628\u0627\u0644\u0627\u0633\u0645\u060C \u0627\u0644\u0647\u0627\u062A\u0641\u060C \u0631\u0642\u0645 \u0627\u0644\u0645\u0644\u0641...' : 'Search by patient name, phone, file #...'" class="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-300/50 focus:border-emerald-400 transition-all" />
+                <input v-model="search" type="text" :placeholder="isRtl ? '\u0628\u062D\u062B \u0628\u0627\u0644\u0627\u0633\u0645\u060C \u0627\u0644\u0647\u0627\u062A\u0641\u060C \u0631\u0642\u0645 \u0627\u0644\u0645\u0644\u0641...' : 'Search by patient name, phone, file #...'" class="doctorato-input w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30/50 focus:border-[#1B365D] transition-all" />
             </div>
         </div>
 

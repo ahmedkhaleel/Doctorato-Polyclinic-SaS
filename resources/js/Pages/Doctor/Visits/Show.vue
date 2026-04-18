@@ -389,11 +389,11 @@ function formatDate(date) {
                         <form v-else @submit.prevent="saveDiagnosis" class="space-y-4">
                             <div>
                                 <label class="text-xs text-gray-500 font-medium mb-1.5 block">{{ isRtl ? 'التشخيص' : 'Diagnosis' }}</label>
-                                <textarea v-model="diagnosisForm.diagnosis" rows="3" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all" :placeholder="isRtl ? 'أدخل التشخيص...' : 'Enter diagnosis...'"></textarea>
+                                <textarea v-model="diagnosisForm.diagnosis" rows="3" class="doctorato-input w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all" :placeholder="isRtl ? 'أدخل التشخيص...' : 'Enter diagnosis...'"></textarea>
                             </div>
                             <div>
                                 <label class="text-xs text-gray-500 font-medium mb-1.5 block">{{ isRtl ? 'ملاحظات الطبيب' : 'Doctor Notes' }}</label>
-                                <textarea v-model="diagnosisForm.doctor_notes" rows="3" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all" :placeholder="isRtl ? 'أدخل الملاحظات...' : 'Enter notes...'"></textarea>
+                                <textarea v-model="diagnosisForm.doctor_notes" rows="3" class="doctorato-input w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all" :placeholder="isRtl ? 'أدخل الملاحظات...' : 'Enter notes...'"></textarea>
                             </div>
                             <div class="flex gap-2">
                                 <button type="submit" :disabled="diagnosisForm.processing" class="px-5 py-2 text-xs font-semibold text-white bg-[#C4A265] hover:bg-[#A68B52] rounded-lg transition-colors shadow-sm">{{ isRtl ? 'حفظ' : 'Save' }}</button>
@@ -434,7 +434,7 @@ function formatDate(date) {
                                     <div class="grid grid-cols-2 gap-3">
                                         <div>
                                             <label class="text-xs text-gray-500 font-medium mb-1 block">{{ isRtl ? 'نوع الصورة' : 'Photo Type' }}</label>
-                                            <select v-model="photoForm.type" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]">
+                                            <select v-model="photoForm.type" class="doctorato-input w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]">
                                                 <option value="before">{{ isRtl ? 'قبل' : 'Before' }}</option>
                                                 <option value="after">{{ isRtl ? 'بعد' : 'After' }}</option>
                                                 <option value="other">{{ isRtl ? 'أخرى' : 'Other' }}</option>
@@ -442,7 +442,7 @@ function formatDate(date) {
                                         </div>
                                         <div>
                                             <label class="text-xs text-gray-500 font-medium mb-1 block">{{ isRtl ? 'وصف' : 'Caption' }}</label>
-                                            <input v-model="photoForm.caption" type="text" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]" :placeholder="isRtl ? 'وصف اختياري...' : 'Optional caption...'" />
+                                            <input v-model="photoForm.caption" type="text" class="doctorato-input w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]" :placeholder="isRtl ? 'وصف اختياري...' : 'Optional caption...'" />
                                         </div>
                                     </div>
                                     <div>
@@ -758,60 +758,60 @@ function formatDate(date) {
                                 <div class="grid grid-cols-2 gap-2">
                                     <div>
                                         <label class="text-[10px] text-gray-500 block mb-0.5">{{ isRtl ? 'انقباضي' : 'Systolic' }}</label>
-                                        <input v-model="vitalsForm.bp_systolic" type="number" placeholder="120" class="w-full px-2 py-1.5 border rounded-lg text-xs focus:ring-1 focus:ring-[#C4A265] focus:border-[#C4A265]" :class="vitalsForm.errors.bp_systolic ? 'border-red-400 bg-red-50' : 'border-gray-200'" />
+                                        <input v-model="vitalsForm.bp_systolic" type="number" placeholder="120" class="doctorato-input w-full px-2 py-1.5 border rounded-lg text-xs focus:ring-1 focus:ring-[#C4A265] focus:border-[#C4A265]" :class="vitalsForm.errors.bp_systolic ? 'border-red-400 bg-red-50' : 'border-gray-200'" />
                                         <p v-if="vitalsForm.errors.bp_systolic" class="text-[10px] text-red-500 mt-0.5">{{ vitalsForm.errors.bp_systolic }}</p>
                                     </div>
                                     <div>
                                         <label class="text-[10px] text-gray-500 block mb-0.5">{{ isRtl ? 'انبساطي' : 'Diastolic' }}</label>
-                                        <input v-model="vitalsForm.bp_diastolic" type="number" placeholder="80" class="w-full px-2 py-1.5 border rounded-lg text-xs focus:ring-1 focus:ring-[#C4A265] focus:border-[#C4A265]" :class="vitalsForm.errors.bp_diastolic ? 'border-red-400 bg-red-50' : 'border-gray-200'" />
+                                        <input v-model="vitalsForm.bp_diastolic" type="number" placeholder="80" class="doctorato-input w-full px-2 py-1.5 border rounded-lg text-xs focus:ring-1 focus:ring-[#C4A265] focus:border-[#C4A265]" :class="vitalsForm.errors.bp_diastolic ? 'border-red-400 bg-red-50' : 'border-gray-200'" />
                                         <p v-if="vitalsForm.errors.bp_diastolic" class="text-[10px] text-red-500 mt-0.5">{{ vitalsForm.errors.bp_diastolic }}</p>
                                     </div>
                                 </div>
                                 <div class="grid grid-cols-2 gap-2">
                                     <div>
                                         <label class="text-[10px] text-gray-500 block mb-0.5">{{ isRtl ? 'النبض' : 'Heart Rate' }}</label>
-                                        <input v-model="vitalsForm.heart_rate" type="number" placeholder="72" class="w-full px-2 py-1.5 border rounded-lg text-xs focus:ring-1 focus:ring-[#C4A265] focus:border-[#C4A265]" :class="vitalsForm.errors.heart_rate ? 'border-red-400 bg-red-50' : 'border-gray-200'" />
+                                        <input v-model="vitalsForm.heart_rate" type="number" placeholder="72" class="doctorato-input w-full px-2 py-1.5 border rounded-lg text-xs focus:ring-1 focus:ring-[#C4A265] focus:border-[#C4A265]" :class="vitalsForm.errors.heart_rate ? 'border-red-400 bg-red-50' : 'border-gray-200'" />
                                         <p v-if="vitalsForm.errors.heart_rate" class="text-[10px] text-red-500 mt-0.5">{{ vitalsForm.errors.heart_rate }}</p>
                                     </div>
                                     <div>
                                         <label class="text-[10px] text-gray-500 block mb-0.5">{{ isRtl ? 'الحرارة' : 'Temp °C' }}</label>
-                                        <input v-model="vitalsForm.temperature" type="number" step="0.1" placeholder="37.0" class="w-full px-2 py-1.5 border rounded-lg text-xs focus:ring-1 focus:ring-[#C4A265] focus:border-[#C4A265]" :class="vitalsForm.errors.temperature ? 'border-red-400 bg-red-50' : 'border-gray-200'" />
+                                        <input v-model="vitalsForm.temperature" type="number" step="0.1" placeholder="37.0" class="doctorato-input w-full px-2 py-1.5 border rounded-lg text-xs focus:ring-1 focus:ring-[#C4A265] focus:border-[#C4A265]" :class="vitalsForm.errors.temperature ? 'border-red-400 bg-red-50' : 'border-gray-200'" />
                                         <p v-if="vitalsForm.errors.temperature" class="text-[10px] text-red-500 mt-0.5">{{ vitalsForm.errors.temperature }}</p>
                                     </div>
                                 </div>
                                 <div class="grid grid-cols-2 gap-2">
                                     <div>
                                         <label class="text-[10px] text-gray-500 block mb-0.5">SpO2 %</label>
-                                        <input v-model="vitalsForm.spo2" type="number" placeholder="98" class="w-full px-2 py-1.5 border rounded-lg text-xs focus:ring-1 focus:ring-[#C4A265] focus:border-[#C4A265]" :class="vitalsForm.errors.spo2 ? 'border-red-400 bg-red-50' : 'border-gray-200'" />
+                                        <input v-model="vitalsForm.spo2" type="number" placeholder="98" class="doctorato-input w-full px-2 py-1.5 border rounded-lg text-xs focus:ring-1 focus:ring-[#C4A265] focus:border-[#C4A265]" :class="vitalsForm.errors.spo2 ? 'border-red-400 bg-red-50' : 'border-gray-200'" />
                                         <p v-if="vitalsForm.errors.spo2" class="text-[10px] text-red-500 mt-0.5">{{ vitalsForm.errors.spo2 }}</p>
                                     </div>
                                     <div>
                                         <label class="text-[10px] text-gray-500 block mb-0.5">{{ isRtl ? 'التنفس' : 'Resp. Rate' }}</label>
-                                        <input v-model="vitalsForm.respiratory_rate" type="number" placeholder="16" class="w-full px-2 py-1.5 border rounded-lg text-xs focus:ring-1 focus:ring-[#C4A265] focus:border-[#C4A265]" :class="vitalsForm.errors.respiratory_rate ? 'border-red-400 bg-red-50' : 'border-gray-200'" />
+                                        <input v-model="vitalsForm.respiratory_rate" type="number" placeholder="16" class="doctorato-input w-full px-2 py-1.5 border rounded-lg text-xs focus:ring-1 focus:ring-[#C4A265] focus:border-[#C4A265]" :class="vitalsForm.errors.respiratory_rate ? 'border-red-400 bg-red-50' : 'border-gray-200'" />
                                         <p v-if="vitalsForm.errors.respiratory_rate" class="text-[10px] text-red-500 mt-0.5">{{ vitalsForm.errors.respiratory_rate }}</p>
                                     </div>
                                 </div>
                                 <div class="grid grid-cols-2 gap-2">
                                     <div>
                                         <label class="text-[10px] text-gray-500 block mb-0.5">{{ isRtl ? 'الوزن kg' : 'Weight kg' }}</label>
-                                        <input v-model="vitalsForm.weight" type="number" step="0.1" placeholder="70" class="w-full px-2 py-1.5 border rounded-lg text-xs focus:ring-1 focus:ring-[#C4A265] focus:border-[#C4A265]" :class="vitalsForm.errors.weight ? 'border-red-400 bg-red-50' : 'border-gray-200'" />
+                                        <input v-model="vitalsForm.weight" type="number" step="0.1" placeholder="70" class="doctorato-input w-full px-2 py-1.5 border rounded-lg text-xs focus:ring-1 focus:ring-[#C4A265] focus:border-[#C4A265]" :class="vitalsForm.errors.weight ? 'border-red-400 bg-red-50' : 'border-gray-200'" />
                                         <p v-if="vitalsForm.errors.weight" class="text-[10px] text-red-500 mt-0.5">{{ vitalsForm.errors.weight }}</p>
                                     </div>
                                     <div>
                                         <label class="text-[10px] text-gray-500 block mb-0.5">{{ isRtl ? 'الطول cm' : 'Height cm' }}</label>
-                                        <input v-model="vitalsForm.height" type="number" placeholder="170" class="w-full px-2 py-1.5 border rounded-lg text-xs focus:ring-1 focus:ring-[#C4A265] focus:border-[#C4A265]" :class="vitalsForm.errors.height ? 'border-red-400 bg-red-50' : 'border-gray-200'" />
+                                        <input v-model="vitalsForm.height" type="number" placeholder="170" class="doctorato-input w-full px-2 py-1.5 border rounded-lg text-xs focus:ring-1 focus:ring-[#C4A265] focus:border-[#C4A265]" :class="vitalsForm.errors.height ? 'border-red-400 bg-red-50' : 'border-gray-200'" />
                                         <p v-if="vitalsForm.errors.height" class="text-[10px] text-red-500 mt-0.5">{{ vitalsForm.errors.height }}</p>
                                     </div>
                                 </div>
                                 <div class="grid grid-cols-2 gap-2">
                                     <div>
                                         <label class="text-[10px] text-gray-500 block mb-0.5">{{ isRtl ? 'السكر mg/dL' : 'Sugar mg/dL' }}</label>
-                                        <input v-model="vitalsForm.blood_sugar" type="number" placeholder="100" class="w-full px-2 py-1.5 border rounded-lg text-xs focus:ring-1 focus:ring-[#C4A265] focus:border-[#C4A265]" :class="vitalsForm.errors.blood_sugar ? 'border-red-400 bg-red-50' : 'border-gray-200'" />
+                                        <input v-model="vitalsForm.blood_sugar" type="number" placeholder="100" class="doctorato-input w-full px-2 py-1.5 border rounded-lg text-xs focus:ring-1 focus:ring-[#C4A265] focus:border-[#C4A265]" :class="vitalsForm.errors.blood_sugar ? 'border-red-400 bg-red-50' : 'border-gray-200'" />
                                         <p v-if="vitalsForm.errors.blood_sugar" class="text-[10px] text-red-500 mt-0.5">{{ vitalsForm.errors.blood_sugar }}</p>
                                     </div>
                                     <div>
                                         <label class="text-[10px] text-gray-500 block mb-0.5">{{ isRtl ? 'الألم 0-10' : 'Pain 0-10' }}</label>
-                                        <input v-model="vitalsForm.pain_level" type="number" min="0" max="10" placeholder="0" class="w-full px-2 py-1.5 border rounded-lg text-xs focus:ring-1 focus:ring-[#C4A265] focus:border-[#C4A265]" :class="vitalsForm.errors.pain_level ? 'border-red-400 bg-red-50' : 'border-gray-200'" />
+                                        <input v-model="vitalsForm.pain_level" type="number" min="0" max="10" placeholder="0" class="doctorato-input w-full px-2 py-1.5 border rounded-lg text-xs focus:ring-1 focus:ring-[#C4A265] focus:border-[#C4A265]" :class="vitalsForm.errors.pain_level ? 'border-red-400 bg-red-50' : 'border-gray-200'" />
                                         <p v-if="vitalsForm.errors.pain_level" class="text-[10px] text-red-500 mt-0.5">{{ vitalsForm.errors.pain_level }}</p>
                                     </div>
                                 </div>

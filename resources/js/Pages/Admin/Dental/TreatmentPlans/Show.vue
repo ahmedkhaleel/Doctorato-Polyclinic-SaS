@@ -495,7 +495,7 @@ function executeResendConsent() {
                                 </label>
                                 <textarea
                                     v-model="consentRisksNotes"
-                                    class="w-full p-3 border border-gray-200 rounded-xl text-sm resize-none focus:outline-none focus:ring-2 focus:ring-slate-200 focus:border-slate-300"
+                                    class="doctorato-input w-full p-3 border border-gray-200 rounded-xl text-sm resize-none focus:outline-none focus:ring-2 focus:ring-slate-200 focus:border-slate-300"
                                     rows="3"
                                     :placeholder="locale === 'ar' ? 'أضف أي ملاحظات عن المخاطر المحتملة...' : 'Add any notes about potential risks...'"
                                 ></textarea>
@@ -509,7 +509,7 @@ function executeResendConsent() {
                                     type="number"
                                     min="1"
                                     max="30"
-                                    class="w-full p-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-slate-200 focus:border-slate-300"
+                                    class="doctorato-input w-full p-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-slate-200 focus:border-slate-300"
                                 />
                             </div>
                         </div>

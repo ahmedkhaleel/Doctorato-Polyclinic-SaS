@@ -1121,7 +1121,7 @@ function submitEditServices() {
                                             <div class="p-2 border-b border-gray-100">
                                                 <div class="relative">
                                                     <svg class="absolute ltr:left-2.5 rtl:right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                                                    <input v-model="dropdownSearches['ed-svc-' + idx]" type="text" :placeholder="$t('a_search') + '...'" class="w-full ltr:pl-8 rtl:pr-8 ltr:pr-3 rtl:pl-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#C4A265]/30 focus:border-transparent" @click.stop />
+                                                    <input v-model="dropdownSearches['ed-svc-' + idx]" type="text" :placeholder="$t('a_search') + '...'" class="doctorato-input w-full ltr:pl-8 rtl:pr-8 ltr:pr-3 rtl:pl-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#C4A265]/30 focus:border-transparent" @click.stop />
                                                 </div>
                                             </div>
                                             <div class="max-h-48 overflow-y-auto">
@@ -1151,7 +1151,7 @@ function submitEditServices() {
                                             <div class="p-2 border-b border-gray-100">
                                                 <div class="relative">
                                                     <svg class="absolute ltr:left-2.5 rtl:right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                                                    <input v-model="dropdownSearches['ed-doc-' + idx]" type="text" :placeholder="$t('a_search') + '...'" class="w-full ltr:pl-8 rtl:pr-8 ltr:pr-3 rtl:pl-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#C4A265]/30 focus:border-transparent" @click.stop />
+                                                    <input v-model="dropdownSearches['ed-doc-' + idx]" type="text" :placeholder="$t('a_search') + '...'" class="doctorato-input w-full ltr:pl-8 rtl:pr-8 ltr:pr-3 rtl:pl-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#C4A265]/30 focus:border-transparent" @click.stop />
                                                 </div>
                                             </div>
                                             <div class="max-h-48 overflow-y-auto">
@@ -1169,15 +1169,15 @@ function submitEditServices() {
                                 </div>
                                 <div>
                                     <label class="block text-xs text-gray-500 mb-1">{{ $t('a_sessions') }}</label>
-                                    <input v-model.number="svc.sessions_count" type="number" min="1" max="50" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
+                                    <input v-model.number="svc.sessions_count" type="number" min="1" max="50" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                 </div>
                                 <div>
                                     <label class="block text-xs text-gray-500 mb-1">{{ $t('a_unit_price') }} ({{ currencyCode }})</label>
-                                    <input v-model.number="svc.unit_price" type="number" min="0" step="0.01" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
+                                    <input v-model.number="svc.unit_price" type="number" min="0" step="0.01" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                 </div>
                                 <div>
                                     <label class="block text-xs text-gray-500 mb-1">{{ $t('a_discount_per_session') }} ({{ currencyCode }})</label>
-                                    <input v-model.number="svc.discount_per_session" type="number" min="0" step="0.01" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
+                                    <input v-model.number="svc.discount_per_session" type="number" min="0" step="0.01" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                 </div>
                                 <div class="flex items-end">
                                     <div>
@@ -1187,7 +1187,7 @@ function submitEditServices() {
                                 </div>
                                 <div class="sm:col-span-2">
                                     <label class="block text-xs text-gray-500 mb-1">{{ $t('a_notes') }}</label>
-                                    <input v-model="svc.notes" type="text" :placeholder="$t('a_optional_notes')" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
+                                    <input v-model="svc.notes" type="text" :placeholder="$t('a_optional_notes')" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                 </div>
                             </div>
                         </div>
@@ -1251,7 +1251,7 @@ function submitEditServices() {
                                 <!-- Service Selection -->
                                 <div>
                                     <label class="block text-xs font-medium text-gray-500 mb-1.5">{{ $t('a_service') }} <span class="text-red-500">*</span></label>
-                                    <select v-model="retouchForm.booking_service_id" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent bg-white">
+                                    <select v-model="retouchForm.booking_service_id" class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent bg-white">
                                         <option value="">{{ $t('a_select_service') }}</option>
                                         <option v-for="bs in booking.booking_services" :key="bs.id" :value="bs.id">
                                             {{ bs.service?.name_en || bs.service?.name_ar || (booking.booking_type ? $t('a_' + booking.booking_type) : $t('a_service')) }}
@@ -1264,7 +1264,7 @@ function submitEditServices() {
                                 <!-- Doctor Selection -->
                                 <div>
                                     <label class="block text-xs font-medium text-gray-500 mb-1.5">{{ $t('a_doctor') }} <span class="text-red-500">*</span></label>
-                                    <select v-model="retouchForm.doctor_id" @change="fetchRetouchTimeSlots" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent bg-white">
+                                    <select v-model="retouchForm.doctor_id" @change="fetchRetouchTimeSlots" class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent bg-white">
                                         <option value="">{{ $t('a_select_doctor') }}</option>
                                         <option v-for="d in doctors" :key="d.id" :value="d.id">{{ d.name_en || d.name_ar }}</option>
                                     </select>
@@ -1274,7 +1274,7 @@ function submitEditServices() {
                                 <!-- Date -->
                                 <div>
                                     <label class="block text-xs font-medium text-gray-500 mb-1.5">{{ $t('a_date') }} <span class="text-red-500">*</span></label>
-                                    <input v-model="retouchForm.appointment_date" type="date" :min="new Date().toISOString().split('T')[0]" @change="fetchRetouchTimeSlots" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent" />
+                                    <input v-model="retouchForm.appointment_date" type="date" :min="new Date().toISOString().split('T')[0]" @change="fetchRetouchTimeSlots" class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent" />
                                     <p v-if="retouchForm.errors.appointment_date" class="mt-1 text-xs text-red-600">{{ retouchForm.errors.appointment_date }}</p>
                                 </div>
 
@@ -1282,13 +1282,13 @@ function submitEditServices() {
                                 <div>
                                     <label class="block text-xs font-medium text-gray-500 mb-1.5">{{ $t('a_time_slot') }} <span class="text-red-500">*</span></label>
                                     <div v-if="retouchLoadingSlots" class="text-xs text-gray-400 py-2.5">{{ $t('a_loading_slots') }}</div>
-                                    <select v-else-if="retouchTimeSlots.length" v-model="retouchForm.start_time" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent bg-white">
+                                    <select v-else-if="retouchTimeSlots.length" v-model="retouchForm.start_time" class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent bg-white">
                                         <option value="">{{ $t('a_select_time') }}</option>
                                         <option v-for="slot in retouchTimeSlots" :key="slot.start || slot" :value="slot.start || slot">
                                             {{ formatTime(slot.start || slot) }} {{ slot.end ? '- ' + formatTime(slot.end) : '' }}
                                         </option>
                                     </select>
-                                    <input v-else v-model="retouchForm.start_time" type="time" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent" />
+                                    <input v-else v-model="retouchForm.start_time" type="time" class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent" />
                                     <p v-if="retouchForm.errors.start_time" class="mt-1 text-xs text-red-600">{{ retouchForm.errors.start_time }}</p>
                                 </div>
                             </div>
@@ -1495,7 +1495,7 @@ function submitEditServices() {
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-xs font-medium text-gray-500 mb-1.5">{{ $t('a_payment_method') }} <span class="text-red-500">*</span></label>
-                                <select v-model="paymentForm.payment_method_id" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent bg-white">
+                                <select v-model="paymentForm.payment_method_id" class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent bg-white">
                                     <option value="">{{ $t('a_select_method') }}</option>
                                     <option v-for="method in paymentMethods" :key="method.id" :value="method.id">{{ method.name_en }}</option>
                                 </select>
@@ -1503,16 +1503,16 @@ function submitEditServices() {
                             </div>
                             <div>
                                 <label class="block text-xs font-medium text-gray-500 mb-1.5">{{ $t('a_amount') }} <span class="text-red-500">*</span></label>
-                                <input v-model.number="paymentForm.amount" type="number" min="0" step="0.01" :placeholder="`Balance: ${formatCurrency(invoiceBalance)}`" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
+                                <input v-model.number="paymentForm.amount" type="number" min="0" step="0.01" :placeholder="`Balance: ${formatCurrency(invoiceBalance)}`" class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                 <p v-if="paymentForm.errors.amount" class="mt-1 text-xs text-red-600">{{ paymentForm.errors.amount }}</p>
                             </div>
                             <div>
                                 <label class="block text-xs font-medium text-gray-500 mb-1.5">{{ $t('a_reference') }} #</label>
-                                <input v-model="paymentForm.reference_number" type="text" :placeholder="$t('a_reference_placeholder')" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
+                                <input v-model="paymentForm.reference_number" type="text" :placeholder="$t('a_reference_placeholder')" class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                             </div>
                             <div>
                                 <label class="block text-xs font-medium text-gray-500 mb-1.5">{{ $t('a_notes') }}</label>
-                                <input v-model="paymentForm.notes" type="text" :placeholder="$t('a_optional_notes')" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
+                                <input v-model="paymentForm.notes" type="text" :placeholder="$t('a_optional_notes')" class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                             </div>
                         </div>
                         <div class="flex items-center gap-3 mt-5">
@@ -1588,7 +1588,7 @@ function submitEditServices() {
                                     <div v-else class="relative patient-search-wrapper">
                                         <svg class="absolute ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                                         <input v-model="patientSearch" type="text" :placeholder="$t('a_search_patient_placeholder')"
-                                            class="w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent transition"
+                                            class="doctorato-input w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent transition"
                                             @focus="showPatientDropdown = true" />
                                         <div v-if="showPatientDropdown && filteredPatients.length > 0" class="absolute z-30 left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-lg max-h-48 overflow-y-auto">
                                             <button v-for="p in filteredPatients" :key="p.id" type="button" @click="selectPatient(p)"
@@ -1643,7 +1643,7 @@ function submitEditServices() {
                                                         <div class="p-2 border-b border-gray-100">
                                                             <div class="relative">
                                                                 <svg class="absolute ltr:left-2.5 rtl:right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                                                                <input v-model="dropdownSearches['consult-doctor']" type="text" :placeholder="$t('a_search') + '...'" class="w-full ltr:pl-8 rtl:pr-8 ltr:pr-3 rtl:pl-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#C4A265]/30 focus:border-transparent" @click.stop />
+                                                                <input v-model="dropdownSearches['consult-doctor']" type="text" :placeholder="$t('a_search') + '...'" class="doctorato-input w-full ltr:pl-8 rtl:pr-8 ltr:pr-3 rtl:pl-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#C4A265]/30 focus:border-transparent" @click.stop />
                                                             </div>
                                                         </div>
                                                         <div class="max-h-48 overflow-y-auto">
@@ -1661,11 +1661,11 @@ function submitEditServices() {
                                             </div>
                                             <div>
                                                 <label class="block text-xs text-gray-500 mb-1">{{ $t('a_consultation_fee') }} ({{ currencyCode }}) <span class="text-red-500">*</span></label>
-                                                <input v-model.number="confirmForm.services[0].unit_price" type="number" min="0" step="0.01" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
+                                                <input v-model.number="confirmForm.services[0].unit_price" type="number" min="0" step="0.01" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                             </div>
                                             <div>
                                                 <label class="block text-xs text-gray-500 mb-1">{{ $t('a_discount') }} ({{ currencyCode }})</label>
-                                                <input v-model.number="confirmForm.services[0].discount_per_session" type="number" min="0" step="0.01" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
+                                                <input v-model.number="confirmForm.services[0].discount_per_session" type="number" min="0" step="0.01" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                             </div>
                                             <div class="flex items-end">
                                                 <div>
@@ -1705,7 +1705,7 @@ function submitEditServices() {
                                                         <div class="p-2 border-b border-gray-100">
                                                             <div class="relative">
                                                                 <svg class="absolute ltr:left-2.5 rtl:right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                                                                <input v-model="dropdownSearches['cf-svc-' + svcIdx]" type="text" :placeholder="$t('a_search') + '...'" class="w-full ltr:pl-8 rtl:pr-8 ltr:pr-3 rtl:pl-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#C4A265]/30 focus:border-transparent" @click.stop />
+                                                                <input v-model="dropdownSearches['cf-svc-' + svcIdx]" type="text" :placeholder="$t('a_search') + '...'" class="doctorato-input w-full ltr:pl-8 rtl:pr-8 ltr:pr-3 rtl:pl-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#C4A265]/30 focus:border-transparent" @click.stop />
                                                             </div>
                                                         </div>
                                                         <div class="max-h-48 overflow-y-auto">
@@ -1735,7 +1735,7 @@ function submitEditServices() {
                                                         <div class="p-2 border-b border-gray-100">
                                                             <div class="relative">
                                                                 <svg class="absolute ltr:left-2.5 rtl:right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                                                                <input v-model="dropdownSearches['cf-doc-' + svcIdx]" type="text" :placeholder="$t('a_search') + '...'" class="w-full ltr:pl-8 rtl:pr-8 ltr:pr-3 rtl:pl-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#C4A265]/30 focus:border-transparent" @click.stop />
+                                                                <input v-model="dropdownSearches['cf-doc-' + svcIdx]" type="text" :placeholder="$t('a_search') + '...'" class="doctorato-input w-full ltr:pl-8 rtl:pr-8 ltr:pr-3 rtl:pl-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#C4A265]/30 focus:border-transparent" @click.stop />
                                                             </div>
                                                         </div>
                                                         <div class="max-h-48 overflow-y-auto">
@@ -1753,15 +1753,15 @@ function submitEditServices() {
                                             </div>
                                             <div>
                                                 <label class="block text-xs text-gray-500 mb-1">{{ $t('a_sessions') }}</label>
-                                                <input v-model.number="svc.sessions_count" type="number" min="1" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
+                                                <input v-model.number="svc.sessions_count" type="number" min="1" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                             </div>
                                             <div>
                                                 <label class="block text-xs text-gray-500 mb-1">{{ $t('a_unit_price') }}</label>
-                                                <input v-model.number="svc.unit_price" type="number" min="0" step="0.01" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
+                                                <input v-model.number="svc.unit_price" type="number" min="0" step="0.01" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                             </div>
                                             <div>
                                                 <label class="block text-xs text-gray-500 mb-1">{{ $t('a_discount_per_session') }}</label>
-                                                <input v-model.number="svc.discount_per_session" type="number" min="0" step="0.01" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
+                                                <input v-model.number="svc.discount_per_session" type="number" min="0" step="0.01" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                             </div>
                                             <div class="flex items-end">
                                                 <div>
@@ -1839,7 +1839,7 @@ function submitEditServices() {
                                                         <div class="p-2 border-b border-gray-100">
                                                             <div class="relative">
                                                                 <svg class="absolute ltr:left-2.5 rtl:right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                                                                <input v-model="dropdownSearches['appt-doc-' + apptIdx]" type="text" :placeholder="$t('a_search') + '...'" class="w-full ltr:pl-8 rtl:pr-8 ltr:pr-3 rtl:pl-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#C4A265]/30 focus:border-transparent" @click.stop />
+                                                                <input v-model="dropdownSearches['appt-doc-' + apptIdx]" type="text" :placeholder="$t('a_search') + '...'" class="doctorato-input w-full ltr:pl-8 rtl:pr-8 ltr:pr-3 rtl:pl-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#C4A265]/30 focus:border-transparent" @click.stop />
                                                             </div>
                                                         </div>
                                                         <div class="max-h-48 overflow-y-auto">
@@ -1884,13 +1884,13 @@ function submitEditServices() {
                                                     </button>
                                                 </div>
                                                 <div v-else-if="appt.appointment_date && appt.doctor_id" class="text-xs text-gray-400 py-2">
-                                                    <input v-model="appt.start_time" type="time" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
+                                                    <input v-model="appt.start_time" type="time" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                                 </div>
                                                 <p v-else class="text-xs text-gray-400 py-2">{{ $t('a_select_doctor_and_date') }}</p>
                                             </div>
                                             <div>
                                                 <label class="block text-xs text-gray-500 mb-1">{{ $t('a_session') }} #</label>
-                                                <input v-model.number="appt.session_number" type="number" min="1" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
+                                                <input v-model.number="appt.session_number" type="number" min="1" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                             </div>
                                         </div>
                                     </div>
@@ -1905,7 +1905,7 @@ function submitEditServices() {
                             <!-- Notes -->
                             <div>
                                 <label class="block text-xs font-medium text-gray-500 mb-1.5">{{ $t('a_notes') }}</label>
-                                <textarea v-model="confirmForm.notes" rows="2" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" :placeholder="$t('a_optional_notes')"></textarea>
+                                <textarea v-model="confirmForm.notes" rows="2" class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" :placeholder="$t('a_optional_notes')"></textarea>
                             </div>
 
                             <!-- Submit -->
@@ -1945,7 +1945,7 @@ function submitEditServices() {
                                 </button>
                                 <div v-if="openDropdown === 'status'" class="absolute z-40 left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-xl overflow-hidden">
                                     <div class="p-2 border-b border-gray-100">
-                                        <input v-model="dropdownSearches['status']" type="text" :placeholder="locale === 'ar' ? 'بحث...' : 'Search...'" class="w-full px-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#C4A265]/30 focus:border-[#C4A265]/60" @click.stop />
+                                        <input v-model="dropdownSearches['status']" type="text" :placeholder="locale === 'ar' ? 'بحث...' : 'Search...'" class="doctorato-input w-full px-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#C4A265]/30 focus:border-[#C4A265]/60" @click.stop />
                                     </div>
                                     <div class="max-h-48 overflow-y-auto">
                                         <button v-for="opt in filteredStatusOptions('status')" :key="opt.value" type="button"
@@ -1964,7 +1964,7 @@ function submitEditServices() {
                         </div>
                         <div>
                             <label class="block text-xs text-gray-500 mb-1.5">{{ $t('a_admin_notes') }}</label>
-                            <textarea v-model="statusForm.admin_notes" rows="3" class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" :placeholder="$t('a_internal_notes')"></textarea>
+                            <textarea v-model="statusForm.admin_notes" rows="3" class="doctorato-input w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" :placeholder="$t('a_internal_notes')"></textarea>
                         </div>
                         <button type="submit" :disabled="statusForm.processing" class="w-full py-2.5 px-4 rounded-xl text-white font-semibold text-sm hover:opacity-90 transition-all duration-300 disabled:opacity-50 shadow-sm" style="background-color: #C4A265;">
                             {{ statusForm.processing ? $t('a_updating') : $t('a_update_status') }}
@@ -2140,7 +2140,7 @@ function submitEditServices() {
                         <!-- Doctor -->
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-1.5">{{ $t('a_doctor') }}</label>
-                            <select v-model="rescheduleForm.doctor_id" @change="fetchRescheduleTimeSlots" class="w-full rounded-xl border-gray-200 text-sm focus:border-[#C4A265] focus:ring-[#C4A265]/20 transition">
+                            <select v-model="rescheduleForm.doctor_id" @change="fetchRescheduleTimeSlots" class="doctorato-input w-full rounded-xl border-gray-200 text-sm focus:border-[#C4A265] focus:ring-[#C4A265]/20 transition">
                                 <option value="">{{ $t('a_select_doctor') }}</option>
                                 <option v-for="doc in doctors" :key="doc.id" :value="doc.id">
                                     {{ doc.name_en || doc.name_ar }}
@@ -2152,7 +2152,7 @@ function submitEditServices() {
                         <!-- Date -->
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-1.5">{{ $t('a_appointment_date') }}</label>
-                            <input type="date" v-model="rescheduleForm.appointment_date" @change="fetchRescheduleTimeSlots" class="w-full rounded-xl border-gray-200 text-sm focus:border-[#C4A265] focus:ring-[#C4A265]/20 transition" />
+                            <input type="date" v-model="rescheduleForm.appointment_date" @change="fetchRescheduleTimeSlots" class="doctorato-input w-full rounded-xl border-gray-200 text-sm focus:border-[#C4A265] focus:ring-[#C4A265]/20 transition" />
                             <p v-if="rescheduleForm.errors.appointment_date" class="mt-1 text-xs text-red-600">{{ rescheduleForm.errors.appointment_date }}</p>
                         </div>
 

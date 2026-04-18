@@ -61,8 +61,8 @@ function fmt(d) { if (!d) return '-'; return new Date(d).toLocaleDateString(isRt
         </div>
 
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-wrap gap-3">
-            <input v-model="search" :placeholder="t('Search patient…', 'بحث عن مريض…')" class="flex-1 min-w-[200px] px-4 py-2.5 border rounded-xl text-sm" />
-            <select v-model="type" class="px-4 py-2.5 border rounded-xl text-sm">
+            <input v-model="search" :placeholder="t('Search patient…', 'بحث عن مريض…')" class="doctorato-input flex-1 min-w-[200px] px-4 py-2.5 border rounded-xl text-sm" />
+            <select v-model="type" class="doctorato-input px-4 py-2.5 border rounded-xl text-sm">
                 <option value="">{{ t('All types', 'كل الأنواع') }}</option>
                 <option v-for="tt in types" :key="tt" :value="tt">{{ tt }}</option>
             </select>
@@ -105,55 +105,55 @@ function fmt(d) { if (!d) return '-'; return new Date(d).toLocaleDateString(isRt
                 <form @submit.prevent="submit" class="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div class="md:col-span-2">
                         <label class="block text-xs font-medium mb-1">{{ t('Patient', 'المريض') }} *</label>
-                        <select v-model="form.patient_id" required class="w-full px-3 py-2 border rounded-lg text-sm">
+                        <select v-model="form.patient_id" required class="doctorato-input w-full px-3 py-2 border rounded-lg text-sm">
                             <option value="">—</option>
                             <option v-for="p in patients" :key="p.id" :value="p.id">{{ p.full_name }}</option>
                         </select>
                     </div>
                     <div>
                         <label class="block text-xs font-medium mb-1">{{ t('Doctor', 'الطبيب') }}</label>
-                        <select v-model="form.doctor_id" class="w-full px-3 py-2 border rounded-lg text-sm">
+                        <select v-model="form.doctor_id" class="doctorato-input w-full px-3 py-2 border rounded-lg text-sm">
                             <option value="">—</option>
                             <option v-for="d in doctors" :key="d.id" :value="d.id">{{ d.name_ar || d.name_en }}</option>
                         </select>
                     </div>
                     <div>
                         <label class="block text-xs font-medium mb-1">{{ t('Type', 'النوع') }} *</label>
-                        <select v-model="form.session_type" required class="w-full px-3 py-2 border rounded-lg text-sm">
+                        <select v-model="form.session_type" required class="doctorato-input w-full px-3 py-2 border rounded-lg text-sm">
                             <option v-for="tt in types" :key="tt" :value="tt">{{ tt }}</option>
                         </select>
                     </div>
                     <div>
                         <label class="block text-xs font-medium mb-1">{{ t('Area treated', 'المنطقة') }}</label>
-                        <input v-model="form.area_treated" class="w-full px-3 py-2 border rounded-lg text-sm" />
+                        <input v-model="form.area_treated" class="doctorato-input w-full px-3 py-2 border rounded-lg text-sm" />
                     </div>
                     <div>
                         <label class="block text-xs font-medium mb-1">{{ t('Product used', 'المنتج') }}</label>
-                        <input v-model="form.product_used" class="w-full px-3 py-2 border rounded-lg text-sm" />
+                        <input v-model="form.product_used" class="doctorato-input w-full px-3 py-2 border rounded-lg text-sm" />
                     </div>
                     <div>
                         <label class="block text-xs font-medium mb-1">{{ t('Session #', 'رقم الجلسة') }}</label>
-                        <input v-model.number="form.session_number" type="number" min="1" class="w-full px-3 py-2 border rounded-lg text-sm" />
+                        <input v-model.number="form.session_number" type="number" min="1" class="doctorato-input w-full px-3 py-2 border rounded-lg text-sm" />
                     </div>
                     <div>
                         <label class="block text-xs font-medium mb-1">{{ t('Total sessions', 'إجمالي الجلسات') }}</label>
-                        <input v-model.number="form.total_sessions" type="number" min="1" class="w-full px-3 py-2 border rounded-lg text-sm" />
+                        <input v-model.number="form.total_sessions" type="number" min="1" class="doctorato-input w-full px-3 py-2 border rounded-lg text-sm" />
                     </div>
                     <div>
                         <label class="block text-xs font-medium mb-1">{{ t('Cost', 'التكلفة') }}</label>
-                        <input v-model.number="form.cost" type="number" min="0" step="0.01" class="w-full px-3 py-2 border rounded-lg text-sm" />
+                        <input v-model.number="form.cost" type="number" min="0" step="0.01" class="doctorato-input w-full px-3 py-2 border rounded-lg text-sm" />
                     </div>
                     <div>
                         <label class="block text-xs font-medium mb-1">{{ t('Completed at', 'تاريخ الإنجاز') }}</label>
-                        <input v-model="form.completed_at" type="date" class="w-full px-3 py-2 border rounded-lg text-sm" />
+                        <input v-model="form.completed_at" type="date" class="doctorato-input w-full px-3 py-2 border rounded-lg text-sm" />
                     </div>
                     <div>
                         <label class="block text-xs font-medium mb-1">{{ t('Next session', 'الجلسة القادمة') }}</label>
-                        <input v-model="form.next_session_date" type="date" class="w-full px-3 py-2 border rounded-lg text-sm" />
+                        <input v-model="form.next_session_date" type="date" class="doctorato-input w-full px-3 py-2 border rounded-lg text-sm" />
                     </div>
                     <div class="md:col-span-2">
                         <label class="block text-xs font-medium mb-1">{{ t('Notes', 'ملاحظات') }}</label>
-                        <textarea v-model="form.notes" rows="2" class="w-full px-3 py-2 border rounded-lg text-sm"></textarea>
+                        <textarea v-model="form.notes" rows="2" class="doctorato-input w-full px-3 py-2 border rounded-lg text-sm"></textarea>
                     </div>
                     <div class="md:col-span-2 flex justify-end gap-2">
                         <button type="button" @click="showModal = false" class="px-4 py-2 rounded-lg bg-gray-100 text-sm">{{ t('Cancel', 'إلغاء') }}</button>

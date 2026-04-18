@@ -46,31 +46,31 @@ function submit() {
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Client Name (English)</label>
-                                <input v-model="form.client_name_en" type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                <input v-model="form.client_name_en" type="text" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                 <p v-if="form.errors.client_name_en" class="mt-1 text-sm text-red-600">{{ form.errors.client_name_en }}</p>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Client Name (Arabic)</label>
-                                <input v-model="form.client_name_ar" type="text" dir="rtl" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                <input v-model="form.client_name_ar" type="text" dir="rtl" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                 <p v-if="form.errors.client_name_ar" class="mt-1 text-sm text-red-600">{{ form.errors.client_name_ar }}</p>
                             </div>
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Review (English)</label>
-                            <textarea v-model="form.review_en" rows="5" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"></textarea>
+                            <textarea v-model="form.review_en" rows="5" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"></textarea>
                             <p v-if="form.errors.review_en" class="mt-1 text-sm text-red-600">{{ form.errors.review_en }}</p>
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Review (Arabic)</label>
-                            <textarea v-model="form.review_ar" rows="5" dir="rtl" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"></textarea>
+                            <textarea v-model="form.review_ar" rows="5" dir="rtl" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"></textarea>
                             <p v-if="form.errors.review_ar" class="mt-1 text-sm text-red-600">{{ form.errors.review_ar }}</p>
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Video URL (optional)</label>
-                            <input v-model="form.video_url" type="url" placeholder="https://youtube.com/..." class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                            <input v-model="form.video_url" type="url" placeholder="https://youtube.com/..." class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                             <p v-if="form.errors.video_url" class="mt-1 text-sm text-red-600">{{ form.errors.video_url }}</p>
                         </div>
                     </div>
@@ -82,7 +82,7 @@ function submit() {
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Service</label>
-                            <select v-model="form.service_id" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent">
+                            <select v-model="form.service_id" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent">
                                 <option value="">Select Service</option>
                                 <option v-for="s in services" :key="s.id" :value="s.id">{{ s.name_en }}</option>
                             </select>
@@ -91,7 +91,7 @@ function submit() {
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Rating</label>
-                            <select v-model="form.rating" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent">
+                            <select v-model="form.rating" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent">
                                 <option :value="5">5 Stars</option>
                                 <option :value="4">4 Stars</option>
                                 <option :value="3">3 Stars</option>
@@ -103,7 +103,7 @@ function submit() {
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_status') }}</label>
-                            <select v-model="form.status" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent">
+                            <select v-model="form.status" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent">
                                 <option value="pending">Pending</option>
                                 <option value="approved">Approved</option>
                                 <option value="rejected">Rejected</option>
@@ -112,7 +112,7 @@ function submit() {
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_display_order') }}</label>
-                            <input v-model="form.display_order" type="number" min="0" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                            <input v-model="form.display_order" type="number" min="0" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                         </div>
                     </div>
 

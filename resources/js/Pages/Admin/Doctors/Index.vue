@@ -192,7 +192,7 @@ function getModuleColor(mod) {
                             v-model="search"
                             type="text"
                             :placeholder="$t('a_search_doctors') || (isRtl ? 'البحث عن طبيب...' : 'Search doctors...')"
-                            class="search-input w-full border border-gray-200 rounded-lg text-sm py-2.5 focus:ring-2 focus:border-transparent transition-all duration-200"
+                            class="doctorato-input search-input w-full border border-gray-200 rounded-lg text-sm py-2.5 focus:ring-2 focus:border-transparent transition-all duration-200"
                             :class="isRtl ? 'pr-10 pl-4' : 'pl-10 pr-4'"
                             style="--focus-ring: rgba(196, 162, 101, 0.3);"
                         />

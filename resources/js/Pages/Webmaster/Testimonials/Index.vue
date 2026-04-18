@@ -68,7 +68,7 @@ function renderStars(rating) {
                     v-model="search"
                     type="text"
                     :placeholder="$t('a_search_testimonials')"
-                    class="w-full sm:w-80 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                    class="doctorato-input w-full sm:w-80 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                 />
             </div>
 

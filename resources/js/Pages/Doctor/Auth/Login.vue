@@ -119,7 +119,7 @@ function submit() {
                                     type="email"
                                     required
                                     autofocus
-                                    class="w-full py-3.5 bg-white/[0.04] border border-white/[0.08] rounded-xl text-white placeholder-white/20 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]/40 focus:bg-white/[0.06] text-sm transition-all duration-300"
+                                    class="doctorato-input w-full py-3.5 bg-white/[0.04] border border-white/[0.08] rounded-xl text-white placeholder-white/20 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]/40 focus:bg-white/[0.06] text-sm transition-all duration-300"
                                     :class="[form.errors.email ? 'border-red-500/50' : '', isRtl ? 'pr-12 pl-4' : 'pl-12 pr-4']"
                                     placeholder="doctor@doctorato.com"
                                 />
@@ -146,7 +146,7 @@ function submit() {
                                     v-model="form.password"
                                     :type="showPassword ? 'text' : 'password'"
                                     required
-                                    class="w-full py-3.5 bg-white/[0.04] border border-white/[0.08] rounded-xl text-white placeholder-white/20 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]/40 focus:bg-white/[0.06] text-sm transition-all duration-300"
+                                    class="doctorato-input w-full py-3.5 bg-white/[0.04] border border-white/[0.08] rounded-xl text-white placeholder-white/20 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]/40 focus:bg-white/[0.06] text-sm transition-all duration-300"
                                     :class="[form.errors.password ? 'border-red-500/50' : '', isRtl ? 'pr-12 pl-12' : 'pl-12 pr-12']"
                                     :placeholder="isRtl ? 'أدخل كلمة المرور' : 'Enter your password'"
                                 />

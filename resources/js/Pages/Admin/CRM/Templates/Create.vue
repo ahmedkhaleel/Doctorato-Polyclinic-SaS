@@ -244,10 +244,8 @@ function handleToggleVariable(v) {
                                         id="template-name"
                                         @focus="nameInputFocused = true"
                                         @blur="nameInputFocused = false"
-                                        class="peer w-full px-4 pt-6 pb-2 text-sm bg-gray-50/60 border-2 rounded-xl transition-all duration-300 placeholder-transparent focus:bg-white focus:outline-none"
-                                        :class="nameInputFocused || form.name
-                                            ? 'border-[#C4A265]/40 ring-4 ring-[#C4A265]/10 shadow-sm'
-                                            : 'border-gray-200 hover:border-gray-300'"
+                                        class="doctorato-input peer w-full px-4 pt-6 pb-2 text-sm bg-gray-50/60 border-2 rounded-xl transition-all duration-300 placeholder-transparent focus:bg-white focus:outline-none"
+                                        :class="nameInputFocused || form.name ? 'border-[#C4A265]/40 ring-4 ring-[#C4A265]/10 shadow-sm' : 'border-gray-200 hover:border-gray-300'"
                                         placeholder="Template name"
                                     />
                                     <label for="template-name"
@@ -329,7 +327,7 @@ function handleToggleVariable(v) {
                                     </label>
                                     <div class="relative">
                                         <select v-model="form.category"
-                                            class="w-full appearance-none px-4 py-3.5 text-sm bg-gray-50/60 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-[#C4A265]/10 focus:border-[#C4A265]/40 focus:bg-white transition-all duration-300 hover:border-gray-300 cursor-pointer">
+                                            class="doctorato-input w-full appearance-none px-4 py-3.5 text-sm bg-gray-50/60 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-[#C4A265]/10 focus:border-[#C4A265]/40 focus:bg-white transition-all duration-300 hover:border-gray-300 cursor-pointer">
                                             <option value="welcome">Welcome</option>
                                             <option value="follow_up">{{ $t('a_follow_up') }}</option>
                                             <option value="appointment_reminder">Appointment Reminder</option>
@@ -363,10 +361,8 @@ function handleToggleVariable(v) {
                                             id="template-subject"
                                             @focus="subjectInputFocused = true"
                                             @blur="subjectInputFocused = false"
-                                            class="peer w-full px-4 pt-6 pb-2 text-sm bg-gray-50/60 border-2 rounded-xl transition-all duration-300 placeholder-transparent focus:bg-white focus:outline-none"
-                                            :class="subjectInputFocused || form.subject
-                                                ? 'border-[#C4A265]/40 ring-4 ring-[#C4A265]/10 shadow-sm'
-                                                : 'border-gray-200 hover:border-gray-300'"
+                                            class="doctorato-input peer w-full px-4 pt-6 pb-2 text-sm bg-gray-50/60 border-2 rounded-xl transition-all duration-300 placeholder-transparent focus:bg-white focus:outline-none"
+                                            :class="subjectInputFocused || form.subject ? 'border-[#C4A265]/40 ring-4 ring-[#C4A265]/10 shadow-sm' : 'border-gray-200 hover:border-gray-300'"
                                             placeholder="Email subject line"
                                         />
                                         <label for="template-subject"
@@ -450,7 +446,7 @@ function handleToggleVariable(v) {
 
                                 <div class="relative">
                                     <textarea v-model="form.body_en" rows="7"
-                                        class="w-full px-4 py-3.5 text-sm leading-relaxed bg-gray-50/60 border-2 border-gray-200 rounded-xl resize-none focus:ring-4 focus:ring-[#C4A265]/10 focus:border-[#C4A265]/40 focus:bg-white transition-all duration-300 placeholder-gray-300 hover:border-gray-300"
+                                        class="doctorato-input w-full px-4 py-3.5 text-sm leading-relaxed bg-gray-50/60 border-2 border-gray-200 rounded-xl resize-none focus:ring-4 focus:ring-[#C4A265]/10 focus:border-[#C4A265]/40 focus:bg-white transition-all duration-300 placeholder-gray-300 hover:border-gray-300"
                                         :placeholder="$t('a_enter_message_en')"></textarea>
                                     <!-- Character count -->
                                     <div class="absolute bottom-3 ltr:right-3 rtl:left-3 flex items-center gap-1.5">
@@ -490,7 +486,7 @@ function handleToggleVariable(v) {
 
                                 <div class="relative">
                                     <textarea v-model="form.body_ar" rows="7" dir="rtl"
-                                        class="w-full px-4 py-3.5 text-sm leading-relaxed bg-gray-50/60 border-2 border-gray-200 rounded-xl resize-none focus:ring-4 focus:ring-[#C4A265]/10 focus:border-[#C4A265]/40 focus:bg-white transition-all duration-300 placeholder-gray-300 hover:border-gray-300"
+                                        class="doctorato-input w-full px-4 py-3.5 text-sm leading-relaxed bg-gray-50/60 border-2 border-gray-200 rounded-xl resize-none focus:ring-4 focus:ring-[#C4A265]/10 focus:border-[#C4A265]/40 focus:bg-white transition-all duration-300 placeholder-gray-300 hover:border-gray-300"
                                         placeholder="..."></textarea>
                                     <!-- Character count -->
                                     <div class="absolute bottom-3 ltr:right-3 rtl:left-3 flex items-center gap-1.5">

@@ -45,8 +45,8 @@ function fmt(d) { if (!d) return '-'; return new Date(d).toLocaleDateString(isRt
         </div>
 
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-wrap gap-3">
-            <input v-model="search" :placeholder="t('Search patient…', 'بحث عن مريض…')" class="flex-1 min-w-[220px] px-4 py-2.5 border rounded-xl text-sm" />
-            <select v-model="procId" class="px-4 py-2.5 border rounded-xl text-sm">
+            <input v-model="search" :placeholder="t('Search patient…', 'بحث عن مريض…')" class="doctorato-input flex-1 min-w-[220px] px-4 py-2.5 border rounded-xl text-sm" />
+            <select v-model="procId" class="doctorato-input px-4 py-2.5 border rounded-xl text-sm">
                 <option value="">{{ t('All procedures', 'كل الإجراءات') }}</option>
                 <option v-for="p in procedures" :key="p.id" :value="p.id">{{ p.name_ar }}</option>
             </select>
@@ -83,17 +83,17 @@ function fmt(d) { if (!d) return '-'; return new Date(d).toLocaleDateString(isRt
             <div class="bg-white rounded-2xl w-full max-w-xl max-h-[90vh] overflow-auto p-6">
                 <h2 class="text-lg font-bold mb-4">{{ t('New consent', 'موافقة جديدة') }}</h2>
                 <form @submit.prevent="submit" class="space-y-3">
-                    <select v-model="form.patient_id" required class="w-full px-3 py-2 border rounded-lg text-sm">
+                    <select v-model="form.patient_id" required class="doctorato-input w-full px-3 py-2 border rounded-lg text-sm">
                         <option value="">{{ t('Select patient', 'اختر المريض') }}</option>
                         <option v-for="p in patients" :key="p.id" :value="p.id">{{ p.full_name }}</option>
                     </select>
-                    <select v-model="form.procedure_id" class="w-full px-3 py-2 border rounded-lg text-sm">
+                    <select v-model="form.procedure_id" class="doctorato-input w-full px-3 py-2 border rounded-lg text-sm">
                         <option value="">{{ t('Procedure', 'الإجراء') }}</option>
                         <option v-for="p in procedures" :key="p.id" :value="p.id">{{ p.name_ar }}</option>
                     </select>
-                    <textarea v-model="form.consent_text" :placeholder="t('Consent text', 'نص الموافقة')" rows="4" class="w-full px-3 py-2 border rounded-lg text-sm"></textarea>
-                    <input v-model="form.signed_at" type="date" class="w-full px-3 py-2 border rounded-lg text-sm" />
-                    <input v-model="form.witnessed_by" :placeholder="t('Witnessed by', 'الشاهد')" class="w-full px-3 py-2 border rounded-lg text-sm" />
+                    <textarea v-model="form.consent_text" :placeholder="t('Consent text', 'نص الموافقة')" rows="4" class="doctorato-input w-full px-3 py-2 border rounded-lg text-sm"></textarea>
+                    <input v-model="form.signed_at" type="date" class="doctorato-input w-full px-3 py-2 border rounded-lg text-sm" />
+                    <input v-model="form.witnessed_by" :placeholder="t('Witnessed by', 'الشاهد')" class="doctorato-input w-full px-3 py-2 border rounded-lg text-sm" />
                     <div>
                         <label class="block text-xs font-medium mb-1">{{ t('Signature (image)', 'التوقيع (صورة)') }}</label>
                         <input type="file" accept="image/*" @change="e => form.signature = e.target.files[0]" class="w-full text-sm" />

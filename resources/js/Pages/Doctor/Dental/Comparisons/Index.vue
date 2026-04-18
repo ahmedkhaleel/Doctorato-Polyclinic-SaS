@@ -96,7 +96,7 @@ function formatDate(date) {
                         <svg v-if="!isFiltering" class="absolute top-1/2 -translate-y-1/2 ltr:left-3 rtl:right-3 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                         <svg v-else class="absolute top-1/2 -translate-y-1/2 ltr:left-3 rtl:right-3 w-4 h-4 text-[#C4A265] animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
                         <input v-model="search" type="text" :placeholder="isRtl ? 'بحث...' : 'Search...'"
-                            class="w-full ltr:pl-10 rtl:pr-10 pr-4 py-2.5 bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl text-sm text-white placeholder-gray-400 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]/50 transition" />
+                            class="doctorato-input w-full ltr:pl-10 rtl:pr-10 pr-4 py-2.5 bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl text-sm text-white placeholder-gray-400 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]/50 transition" />
                     </div>
                     <div class="flex flex-wrap gap-1.5 overflow-x-auto scrollbar-none">
                         <button @click="selectedCategory = ''; applyFilters()"

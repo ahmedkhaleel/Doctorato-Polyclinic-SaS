@@ -130,7 +130,7 @@ function formatDate(date) {
                         <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'نوع الأشعة' : 'X-Ray Type' }} *</label>
                         <select
                             v-model="form.type"
-                            class="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]"
+                            class="doctorato-input w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]"
                         >
                             <option value="">{{ isRtl ? 'اختر النوع' : 'Select Type' }}</option>
                             <option v-for="xType in xrayTypes" :key="xType.value || xType" :value="xType.value || xType">
@@ -145,13 +145,13 @@ function formatDate(date) {
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'رقم السن' : 'Tooth Number' }}</label>
                         <input v-model="form.tooth_number" type="text"
-                            class="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]" />
+                            class="doctorato-input w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]" />
                         <p v-if="errors.tooth_number" class="mt-1 text-sm text-red-600">{{ errors.tooth_number }}</p>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'تاريخ التصوير' : 'Taken Date' }}</label>
                         <input v-model="form.taken_date" type="date"
-                            class="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]" />
+                            class="doctorato-input w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]" />
                         <p v-if="errors.taken_date" class="mt-1 text-sm text-red-600">{{ errors.taken_date }}</p>
                     </div>
                 </div>
@@ -170,14 +170,14 @@ function formatDate(date) {
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'النتائج' : 'Findings' }}</label>
                     <textarea v-model="form.findings" rows="2"
-                        class="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]"></textarea>
+                        class="doctorato-input w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]"></textarea>
                     <p v-if="errors.findings" class="mt-1 text-sm text-red-600">{{ errors.findings }}</p>
                 </div>
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
                     <textarea v-model="form.notes" rows="2"
-                        class="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]"></textarea>
+                        class="doctorato-input w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]"></textarea>
                 </div>
 
                 <div class="flex items-center gap-3 flex-wrap">

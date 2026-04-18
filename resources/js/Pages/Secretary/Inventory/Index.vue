@@ -161,20 +161,20 @@ onMounted(() => { requestAnimationFrame(() => { mounted.value = true; }); });
                     v-model="search"
                     type="text"
                     :placeholder="isRtl ? 'بحث بالاسم أو الرمز...' : 'Search by name or SKU...'"
-                    class="w-full ps-10 pe-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-colors"
+                    class="doctorato-input w-full ps-10 pe-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30/20 focus:border-[#1B365D] transition-colors"
                 />
             </div>
 
-            <select v-model="moduleFilter" class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-white focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500">
+            <select v-model="moduleFilter" class="doctorato-input px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#C4A265]/30/20 focus:border-[#1B365D]">
                 <option v-for="opt in moduleOptions" :key="opt.value" :value="opt.value">{{ isRtl ? opt.label.ar : opt.label.en }}</option>
             </select>
 
-            <select v-model="categoryFilter" class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-white focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500">
+            <select v-model="categoryFilter" class="doctorato-input px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#C4A265]/30/20 focus:border-[#1B365D]">
                 <option value="">{{ isRtl ? 'كل الفئات' : 'All Categories' }}</option>
                 <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ displayName(cat) }}</option>
             </select>
 
-            <select v-model="stockFilter" class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-white focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500">
+            <select v-model="stockFilter" class="doctorato-input px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#C4A265]/30/20 focus:border-[#1B365D]">
                 <option value="">{{ isRtl ? 'كل المخزون' : 'All Stock' }}</option>
                 <option value="low">{{ isRtl ? 'مخزون منخفض' : 'Low Stock' }}</option>
             </select>
@@ -375,7 +375,7 @@ onMounted(() => { requestAnimationFrame(() => { mounted.value = true; }); });
                                         min="0.01"
                                         step="0.01"
                                         :placeholder="isRtl ? 'أدخل الكمية' : 'Enter quantity'"
-                                        class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500"
+                                        class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30/20 focus:border-[#1B365D]"
                                     />
                                 </div>
 
@@ -388,7 +388,7 @@ onMounted(() => { requestAnimationFrame(() => { mounted.value = true; }); });
                                         v-model="adjustNotes"
                                         rows="2"
                                         :placeholder="isRtl ? 'ملاحظات إضافية...' : 'Additional notes...'"
-                                        class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 resize-none"
+                                        class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30/20 focus:border-[#1B365D] resize-none"
                                     ></textarea>
                                 </div>
                             </div>

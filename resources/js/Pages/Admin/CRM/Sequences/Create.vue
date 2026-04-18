@@ -138,18 +138,18 @@ const filteredTemplates = computed(() => (actionType) => {
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_name_en') }}<span class="text-red-500">*</span></label>
                             <input v-model="form.name" type="text" :placeholder="$t('a_sequence_name_placeholder')"
-                                class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-colors" />
+                                class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-colors" />
                             <p v-if="form.errors.name" class="text-xs text-red-500 mt-1">{{ form.errors.name }}</p>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_name_ar') }}</label>
                             <input v-model="form.name_ar" type="text" dir="rtl" placeholder="مثال: ترحيب بالعميل الجديد"
-                                class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-colors" />
+                                class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-colors" />
                         </div>
                         <div class="md:col-span-2">
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_description') }}</label>
                             <textarea v-model="form.description" rows="2" :placeholder="$t('a_sequence_description_placeholder')"
-                                class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-colors resize-none" />
+                                class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-colors resize-none" />
                         </div>
                     </div>
                 </div>
@@ -164,7 +164,7 @@ const filteredTemplates = computed(() => (actionType) => {
                         <div class="md:col-span-2">
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_when_this_happens') }}<span class="text-red-500">*</span></label>
                             <select v-model="form.trigger_event"
-                                class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-colors">
+                                class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-colors">
                                 <option v-for="(label, key) in triggerEvents" :key="key" :value="key">{{ label }}</option>
                             </select>
                         </div>
@@ -172,7 +172,7 @@ const filteredTemplates = computed(() => (actionType) => {
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_only_from_source') }}</label>
                             <select v-model="form.trigger_conditions.lead_source_id"
-                                class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-colors">
+                                class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-colors">
                                 <option :value="null">{{ $t('a_any_source') }}</option>
                                 <option v-for="s in sources" :key="s.id" :value="s.id">{{ s.name_en }}</option>
                             </select>
@@ -180,7 +180,7 @@ const filteredTemplates = computed(() => (actionType) => {
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_only_priority') }}</label>
                             <select v-model="form.trigger_conditions.priority"
-                                class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-colors">
+                                class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-colors">
                                 <option :value="null">{{ $t('a_any_priority') }}</option>
                                 <option :value="1">&#9679; Hot</option>
                                 <option :value="2">&#9679; Warm</option>
@@ -190,7 +190,7 @@ const filteredTemplates = computed(() => (actionType) => {
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_only_from_campaign') }}</label>
                             <select v-model="form.trigger_conditions.campaign_id"
-                                class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-colors">
+                                class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-colors">
                                 <option :value="null">{{ $t('a_any_campaign') }}</option>
                                 <option v-for="c in campaigns" :key="c.id" :value="c.id">{{ c.name }}</option>
                             </select>
@@ -260,7 +260,7 @@ const filteredTemplates = computed(() => (actionType) => {
                                 <div>
                                     <label class="block text-xs font-medium text-gray-600 mb-1">{{ $t('a_delay_minutes') }}</label>
                                     <input v-model.number="step.delay_minutes" type="number" min="0"
-                                        class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] bg-white transition-colors" />
+                                        class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] bg-white transition-colors" />
                                     <div class="flex flex-wrap gap-1 mt-1">
                                         <button v-for="p in delayPresets" :key="p.value" type="button"
                                             @click="step.delay_minutes = p.value"
@@ -275,7 +275,7 @@ const filteredTemplates = computed(() => (actionType) => {
                                 <div>
                                     <label class="block text-xs font-medium text-gray-600 mb-1">{{ $t('a_action') }}</label>
                                     <select v-model="step.action_type"
-                                        class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] bg-white transition-colors">
+                                        class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] bg-white transition-colors">
                                         <option v-for="(label, key) in actionTypes" :key="key" :value="key">{{ label }}</option>
                                     </select>
                                 </div>
@@ -284,7 +284,7 @@ const filteredTemplates = computed(() => (actionType) => {
                                 <div v-if="['send_whatsapp', 'send_email', 'send_sms'].includes(step.action_type)">
                                     <label class="block text-xs font-medium text-gray-600 mb-1">{{ $t('a_template') }}</label>
                                     <select v-model="step.template_id"
-                                        class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] bg-white transition-colors">
+                                        class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] bg-white transition-colors">
                                         <option :value="null">{{ $t('a_custom_message') }}</option>
                                         <option v-for="t in filteredTemplates(step.action_type)" :key="t.id" :value="t.id">{{ t.name }}</option>
                                     </select>
@@ -294,7 +294,7 @@ const filteredTemplates = computed(() => (actionType) => {
                                 <div v-if="step.action_type === 'create_follow_up'">
                                     <label class="block text-xs font-medium text-gray-600 mb-1">{{ $t('a_follow_up_type') }}</label>
                                     <select v-model="step.follow_up_type"
-                                        class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] bg-white transition-colors">
+                                        class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] bg-white transition-colors">
                                         <option value="call">{{ $t('a_call') }}</option>
                                         <option value="whatsapp">{{ $t('a_whatsapp') }}</option>
                                         <option value="email">{{ $t('a_email') }}</option>
@@ -307,7 +307,7 @@ const filteredTemplates = computed(() => (actionType) => {
                                 <div v-if="step.action_type === 'change_status'">
                                     <label class="block text-xs font-medium text-gray-600 mb-1">{{ $t('a_target_status') }}</label>
                                     <select v-model="step.target_status"
-                                        class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] bg-white transition-colors">
+                                        class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] bg-white transition-colors">
                                         <option v-for="(label, key) in leadStatuses" :key="key" :value="key">{{ label }}</option>
                                     </select>
                                 </div>
@@ -316,7 +316,7 @@ const filteredTemplates = computed(() => (actionType) => {
                                 <div v-if="step.action_type === 'add_score'">
                                     <label class="block text-xs font-medium text-gray-600 mb-1">{{ $t('a_score_points') }}</label>
                                     <input v-model.number="step.score_points" type="number" min="-100" max="100"
-                                        class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] bg-white transition-colors" />
+                                        class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] bg-white transition-colors" />
                                 </div>
                             </div>
 
@@ -326,12 +326,12 @@ const filteredTemplates = computed(() => (actionType) => {
                                 <div>
                                     <label class="block text-xs font-medium text-gray-600 mb-1">{{ $t('a_message_en') }}</label>
                                     <textarea v-model="step.message_en" rows="2" placeholder="Use {{name}}, {{clinic_name}}, {{date}}..."
-                                        class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] bg-white transition-colors resize-none" />
+                                        class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] bg-white transition-colors resize-none" />
                                 </div>
                                 <div>
                                     <label class="block text-xs font-medium text-gray-600 mb-1">{{ $t('a_message_ar') }}</label>
                                     <textarea v-model="step.message_ar" rows="2" dir="rtl" placeholder="استخدم {{name}}، {{clinic_name}}، {{date}}..."
-                                        class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] bg-white transition-colors resize-none" />
+                                        class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] bg-white transition-colors resize-none" />
                                 </div>
                             </div>
 
@@ -339,7 +339,7 @@ const filteredTemplates = computed(() => (actionType) => {
                             <div v-if="['notify_staff', 'create_follow_up'].includes(step.action_type)" class="mt-3">
                                 <label class="block text-xs font-medium text-gray-600 mb-1">{{ $t('a_note_instructions') }}</label>
                                 <input v-model="step.notification_message" type="text" placeholder="e.g. Call this lead to confirm their interest"
-                                    class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] bg-white transition-colors" />
+                                    class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] bg-white transition-colors" />
                             </div>
                         </div>
                     </div>

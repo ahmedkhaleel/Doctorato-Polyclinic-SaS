@@ -81,9 +81,9 @@ const maxDailyTotal = computed(() => Math.max(...(props.dailyTrend?.map(d => d.t
                         </div>
                     </div>
                     <div class="flex items-center gap-2 flex-wrap">
-                        <input v-model="dateFrom" type="date" class="rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 text-white text-sm focus:ring-[#C4A265] focus:border-[#C4A265] [color-scheme:dark]" />
+                        <input v-model="dateFrom" type="date" class="doctorato-input rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 text-white text-sm focus:ring-[#C4A265] focus:border-[#C4A265] [color-scheme:dark]" />
                         <span class="text-[#C4A265]">→</span>
-                        <input v-model="dateTo" type="date" class="rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 text-white text-sm focus:ring-[#C4A265] focus:border-[#C4A265] [color-scheme:dark]" />
+                        <input v-model="dateTo" type="date" class="doctorato-input rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 text-white text-sm focus:ring-[#C4A265] focus:border-[#C4A265] [color-scheme:dark]" />
                     </div>
                 </div>
             </div>

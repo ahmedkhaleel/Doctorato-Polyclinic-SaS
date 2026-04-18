@@ -153,7 +153,7 @@ const sections = [
                             v-model="form[field.key]"
                             type="text"
                             :placeholder="field.placeholder"
-                            class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm font-mono focus:ring-2 focus:ring-amber-200 focus:border-transparent"
+                            class="doctorato-input w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm font-mono focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                         />
                         <p class="text-xs text-gray-400">{{ field.description }}</p>
                         <p v-if="form.errors[field.key]" class="text-sm text-red-600">{{ form.errors[field.key] }}</p>
@@ -185,7 +185,7 @@ const sections = [
                         <textarea
                             v-model="form.tracking_head_scripts"
                             rows="4"
-                            class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-xs font-mono focus:ring-2 focus:ring-amber-200 focus:border-transparent"
+                            class="doctorato-input w-full px-4 py-2.5 border border-gray-300 rounded-lg text-xs font-mono focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                             placeholder="<!-- Paste your head scripts here -->"
                         ></textarea>
                         <p class="mt-1 text-xs text-gray-400">Injected before &lt;/head&gt; tag</p>
@@ -196,7 +196,7 @@ const sections = [
                         <textarea
                             v-model="form.tracking_body_start_scripts"
                             rows="4"
-                            class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-xs font-mono focus:ring-2 focus:ring-amber-200 focus:border-transparent"
+                            class="doctorato-input w-full px-4 py-2.5 border border-gray-300 rounded-lg text-xs font-mono focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                             placeholder="<!-- Paste your body start scripts here -->"
                         ></textarea>
                         <p class="mt-1 text-xs text-gray-400">Injected right after &lt;body&gt; tag</p>
@@ -207,7 +207,7 @@ const sections = [
                         <textarea
                             v-model="form.tracking_body_end_scripts"
                             rows="4"
-                            class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-xs font-mono focus:ring-2 focus:ring-amber-200 focus:border-transparent"
+                            class="doctorato-input w-full px-4 py-2.5 border border-gray-300 rounded-lg text-xs font-mono focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                             placeholder="<!-- Paste your body end scripts here -->"
                         ></textarea>
                         <p class="mt-1 text-xs text-gray-400">Injected before &lt;/body&gt; tag</p>

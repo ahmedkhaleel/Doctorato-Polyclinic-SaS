@@ -382,7 +382,7 @@ onMounted(() => {
                                         <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_type') }} <span class="text-red-500">*</span></label>
                                         <select
                                             v-model="form.transaction_type"
-                                            class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] bg-white transition-all"
+                                            class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] bg-white transition-all"
                                         >
                                             <option value="purchase">{{ $t('a_purchase') }}</option>
                                             <option value="adjustment">{{ $t('a_adjustment') }}</option>
@@ -396,7 +396,7 @@ onMounted(() => {
                                         <input
                                             v-model="form.quantity"
                                             type="number"
-                                            class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] bg-white transition-all"
+                                            class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] bg-white transition-all"
                                             :placeholder="$t('a_enter_quantity')"
                                         />
                                         <p v-if="form.errors.quantity" class="mt-1 text-xs text-red-600">{{ form.errors.quantity }}</p>
@@ -408,7 +408,7 @@ onMounted(() => {
                                             type="number"
                                             step="0.01"
                                             min="0"
-                                            class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] bg-white transition-all"
+                                            class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] bg-white transition-all"
                                             placeholder="0.00"
                                         />
                                         <p v-if="form.errors.unit_cost" class="mt-1 text-xs text-red-600">{{ form.errors.unit_cost }}</p>
@@ -418,7 +418,7 @@ onMounted(() => {
                                         <input
                                             v-model="form.notes"
                                             type="text"
-                                            class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] bg-white transition-all"
+                                            class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] bg-white transition-all"
                                             :placeholder="$t('a_optional_notes')"
                                         />
                                     </div>

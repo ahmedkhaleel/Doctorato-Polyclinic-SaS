@@ -202,11 +202,11 @@ function exportBookings() {
                         v-model="search"
                         type="text"
                         :placeholder="$t('a_search_bookings_placeholder')"
-                        class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
+                        class="doctorato-input px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                     />
                     <select
                         v-model="statusFilter"
-                        class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
+                        class="doctorato-input px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                     >
                         <option value="">{{ $t('a_all_statuses') }}</option>
                         <option value="unconfirmed">{{ $t('a_unconfirmed') }}</option>
@@ -217,7 +217,7 @@ function exportBookings() {
                     </select>
                     <select
                         v-model="source"
-                        class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
+                        class="doctorato-input px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                     >
                         <option value="">{{ $t('a_all_sources') }}</option>
                         <option value="website">{{ $t('a_website') }}</option>
@@ -228,14 +228,14 @@ function exportBookings() {
                         v-model="dateFrom"
                         type="date"
                         :max="dateTo || undefined"
-                        class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
+                        class="doctorato-input px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                         :placeholder="$t('a_from_date')"
                     />
                     <input
                         v-model="dateTo"
                         type="date"
                         :min="dateFrom || undefined"
-                        class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
+                        class="doctorato-input px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                         :placeholder="$t('a_to_date')"
                     />
                 </div>

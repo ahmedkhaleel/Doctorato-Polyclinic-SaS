@@ -170,7 +170,7 @@ function formatSelectedDate(dateStr) {
                 <button @click="goToday" class="px-3 py-1.5 text-xs font-medium text-teal-600 bg-teal-50 rounded-lg hover:bg-teal-100 transition-colors ltr:ml-2 rtl:mr-2">{{ isRtl ? 'اليوم' : 'Today' }}</button>
             </div>
             <div class="flex items-center gap-3 flex-wrap">
-                <select v-model="doctorId" class="px-4 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-colors">
+                <select v-model="doctorId" class="doctorato-input px-4 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30/20 focus:border-[#1B365D] transition-colors">
                     <option value="">{{ isRtl ? 'جميع الأطباء' : 'All Doctors' }}</option>
                     <option v-for="doc in doctors" :key="doc.id" :value="doc.id">{{ doc.name_en }}</option>
                 </select>

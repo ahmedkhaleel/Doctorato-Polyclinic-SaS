@@ -107,12 +107,12 @@ function formatDate(date) {
                             v-model="search"
                             type="text"
                             :placeholder="isRtl ? 'بحث بالمريض...' : 'Search by patient...'"
-                            class="w-full pl-12 pr-4 py-3 bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl text-sm text-white placeholder-gray-400 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]/50 focus:bg-white/15 transition-all"
+                            class="doctorato-input w-full pl-12 pr-4 py-3 bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl text-sm text-white placeholder-gray-400 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]/50 focus:bg-white/15 transition-all"
                         />
                     </div>
                     <select
                         v-model="typeFilter"
-                        class="px-4 py-3 bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl text-sm text-white focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]/50 transition-all"
+                        class="doctorato-input px-4 py-3 bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl text-sm text-white focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]/50 transition-all"
                     >
                         <option value="" class="text-gray-900">{{ isRtl ? 'جميع الأنواع' : 'All Types' }}</option>
                         <option v-for="xType in xrayTypes" :key="xType.value || xType" :value="xType.value || xType" class="text-gray-900">

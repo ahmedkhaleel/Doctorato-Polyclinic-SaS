@@ -131,7 +131,7 @@ function getInitialBg(gender) {
                         v-model="search"
                         type="text"
                         :placeholder="isRtl ? 'البحث بالاسم أو رقم الملف...' : 'Search by name or file number...'"
-                        class="w-full bg-white/15 backdrop-blur-sm border border-white/20 rounded-xl text-white placeholder-white/50 text-sm py-2.5 focus:outline-none focus:ring-2 focus:ring-white/30 transition"
+                        class="doctorato-input w-full bg-white/15 backdrop-blur-sm border border-white/20 rounded-xl text-white placeholder-white/50 text-sm py-2.5 focus:outline-none focus:ring-2 focus:ring-white/30 transition"
                         :class="isRtl ? 'pr-10 pl-4' : 'pl-10 pr-4'"
                     />
                     <div v-if="search" class="absolute inset-y-0 flex items-center" :class="isRtl ? 'left-0 pl-3' : 'right-0 pr-3'">

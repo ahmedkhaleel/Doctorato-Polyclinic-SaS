@@ -73,11 +73,11 @@ function formatDate(dateString) {
                     v-model="search"
                     type="text"
                     :placeholder="$t('a_search') + '...'"
-                    class="w-full sm:w-80 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
+                    class="doctorato-input w-full sm:w-80 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                 />
                 <select
                     v-model="isReadFilter"
-                    class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
+                    class="doctorato-input px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                 >
                     <option value="">{{ $t('a_all_messages') }}</option>
                     <option value="0">{{ $t('a_unread') }}</option>

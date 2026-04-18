@@ -297,7 +297,7 @@ function formatDate(date) {
                             <!-- Source filter -->
                             <div class="flex items-center gap-2">
                                 <label class="text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_source') }}</label>
-                                <select v-model="filterSource" class="text-sm border border-gray-200 rounded-lg px-3 py-1.5 bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] outline-none min-w-[140px]">
+                                <select v-model="filterSource" class="doctorato-input text-sm border border-gray-200 rounded-lg px-3 py-1.5 bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] outline-none min-w-[140px]">
                                     <option value="">{{ $t('a_all_sources') }}</option>
                                     <option v-for="src in sources" :key="src.id" :value="src.id">{{ src[`name_${locale}`] || src.name_en }}</option>
                                 </select>
@@ -305,7 +305,7 @@ function formatDate(date) {
                             <!-- Priority filter -->
                             <div class="flex items-center gap-2">
                                 <label class="text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_priority') }}</label>
-                                <select v-model="filterPriority" class="text-sm border border-gray-200 rounded-lg px-3 py-1.5 bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] outline-none min-w-[120px]">
+                                <select v-model="filterPriority" class="doctorato-input text-sm border border-gray-200 rounded-lg px-3 py-1.5 bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] outline-none min-w-[120px]">
                                     <option value="">{{ $t('a_all') }}</option>
                                     <option value="1">{{ $t('a_hot') }}</option>
                                     <option value="2">{{ $t('a_warm') }}</option>
@@ -315,7 +315,7 @@ function formatDate(date) {
                             <!-- Assignee filter -->
                             <div class="flex items-center gap-2">
                                 <label class="text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_assigned_to') }}</label>
-                                <select v-model="filterAssignee" class="text-sm border border-gray-200 rounded-lg px-3 py-1.5 bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] outline-none min-w-[150px]">
+                                <select v-model="filterAssignee" class="doctorato-input text-sm border border-gray-200 rounded-lg px-3 py-1.5 bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] outline-none min-w-[150px]">
                                     <option value="">{{ $t('a_all') }}</option>
                                     <option value="unassigned">{{ $t('a_unassigned') }}</option>
                                     <option v-for="user in assignees" :key="user.id" :value="user.id">{{ user.name }}</option>

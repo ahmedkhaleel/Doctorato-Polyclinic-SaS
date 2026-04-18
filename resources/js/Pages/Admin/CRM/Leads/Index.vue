@@ -394,14 +394,14 @@ function quickChangePriority(leadId, newPriority) {
                             <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                         </div>
                         <input v-model="search" type="text" placeholder="Search by name, phone, email..."
-                            class="w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200 placeholder:text-gray-400" />
+                            class="doctorato-input w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200 placeholder:text-gray-400" />
                     </div>
                     <!-- Status Filter -->
                     <div class="relative">
                         <div class="absolute ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 pointer-events-none">
                             <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                         </div>
-                        <select v-model="statusFilter" class="w-full text-sm bg-gray-50 border border-gray-200 rounded-xl py-2.5 ltr:pl-9 rtl:pr-9 ltr:pr-8 rtl:pl-8 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200 appearance-none cursor-pointer">
+                        <select v-model="statusFilter" class="doctorato-input w-full text-sm bg-gray-50 border border-gray-200 rounded-xl py-2.5 ltr:pl-9 rtl:pr-9 ltr:pr-8 rtl:pl-8 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200 appearance-none cursor-pointer">
                             <option value="">{{ $t('a_all_statuses') }}</option>
                             <option v-for="(label, key) in statusLabels" :key="key" :value="key">{{ label }}</option>
                         </select>
@@ -414,7 +414,7 @@ function quickChangePriority(leadId, newPriority) {
                         <div class="absolute ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 pointer-events-none">
                             <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" /></svg>
                         </div>
-                        <select v-model="priorityFilter" class="w-full text-sm bg-gray-50 border border-gray-200 rounded-xl py-2.5 ltr:pl-9 rtl:pr-9 ltr:pr-8 rtl:pl-8 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200 appearance-none cursor-pointer">
+                        <select v-model="priorityFilter" class="doctorato-input w-full text-sm bg-gray-50 border border-gray-200 rounded-xl py-2.5 ltr:pl-9 rtl:pr-9 ltr:pr-8 rtl:pl-8 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200 appearance-none cursor-pointer">
                             <option value="">{{ $t('a_all_priorities') }}</option>
                             <option value="1">{{ $t('a_hot') }}</option>
                             <option value="2">{{ $t('a_warm') }}</option>
@@ -429,7 +429,7 @@ function quickChangePriority(leadId, newPriority) {
                         <div class="absolute ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 pointer-events-none">
                             <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
                         </div>
-                        <select v-model="sourceFilter" class="w-full text-sm bg-gray-50 border border-gray-200 rounded-xl py-2.5 ltr:pl-9 rtl:pr-9 ltr:pr-8 rtl:pl-8 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200 appearance-none cursor-pointer">
+                        <select v-model="sourceFilter" class="doctorato-input w-full text-sm bg-gray-50 border border-gray-200 rounded-xl py-2.5 ltr:pl-9 rtl:pr-9 ltr:pr-8 rtl:pl-8 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200 appearance-none cursor-pointer">
                             <option value="">{{ $t('a_all_sources') }}</option>
                             <option v-for="s in sources" :key="s.id" :value="s.id">{{ s.name_en }}</option>
                         </select>
@@ -442,7 +442,7 @@ function quickChangePriority(leadId, newPriority) {
                         <div class="absolute ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 pointer-events-none">
                             <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                         </div>
-                        <select v-model="assignedFilter" class="w-full text-sm bg-gray-50 border border-gray-200 rounded-xl py-2.5 ltr:pl-9 rtl:pr-9 ltr:pr-8 rtl:pl-8 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200 appearance-none cursor-pointer">
+                        <select v-model="assignedFilter" class="doctorato-input w-full text-sm bg-gray-50 border border-gray-200 rounded-xl py-2.5 ltr:pl-9 rtl:pr-9 ltr:pr-8 rtl:pl-8 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200 appearance-none cursor-pointer">
                             <option value="">All Staff</option>
                             <option value="unassigned">Unassigned</option>
                             <option v-for="a in assignees" :key="a.id" :value="a.id">{{ a.name }}</option>
@@ -483,7 +483,7 @@ function quickChangePriority(leadId, newPriority) {
                     </div>
                     <div class="h-6 w-px bg-[#C4A265]/20 hidden sm:block"></div>
                     <div class="relative">
-                        <select v-model="bulkAction" class="text-sm bg-white border border-gray-200 rounded-xl py-2 ltr:pl-3 rtl:pr-3 ltr:pr-8 rtl:pl-8 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all duration-200 appearance-none cursor-pointer">
+                        <select v-model="bulkAction" class="doctorato-input text-sm bg-white border border-gray-200 rounded-xl py-2 ltr:pl-3 rtl:pr-3 ltr:pr-8 rtl:pl-8 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all duration-200 appearance-none cursor-pointer">
                             <option value="">Choose action...</option>
                             <option value="assign">Assign to user</option>
                             <option value="status">Change status</option>
@@ -494,7 +494,7 @@ function quickChangePriority(leadId, newPriority) {
                         </div>
                     </div>
                     <div v-if="bulkAction === 'assign'" class="relative">
-                        <select v-model="bulkAssignTo" class="text-sm bg-white border border-gray-200 rounded-xl py-2 ltr:pl-3 rtl:pr-3 ltr:pr-8 rtl:pl-8 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all duration-200 appearance-none cursor-pointer">
+                        <select v-model="bulkAssignTo" class="doctorato-input text-sm bg-white border border-gray-200 rounded-xl py-2 ltr:pl-3 rtl:pr-3 ltr:pr-8 rtl:pl-8 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all duration-200 appearance-none cursor-pointer">
                             <option value="">Select user...</option>
                             <option v-for="a in assignees" :key="a.id" :value="a.id">{{ a.name }}</option>
                         </select>
@@ -503,7 +503,7 @@ function quickChangePriority(leadId, newPriority) {
                         </div>
                     </div>
                     <div v-if="bulkAction === 'status'" class="relative">
-                        <select v-model="bulkStatus" class="text-sm bg-white border border-gray-200 rounded-xl py-2 ltr:pl-3 rtl:pr-3 ltr:pr-8 rtl:pl-8 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all duration-200 appearance-none cursor-pointer">
+                        <select v-model="bulkStatus" class="doctorato-input text-sm bg-white border border-gray-200 rounded-xl py-2 ltr:pl-3 rtl:pr-3 ltr:pr-8 rtl:pl-8 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all duration-200 appearance-none cursor-pointer">
                             <option value="">Select status...</option>
                             <option v-for="(label, key) in statusLabels" :key="key" :value="key">{{ label }}</option>
                         </select>

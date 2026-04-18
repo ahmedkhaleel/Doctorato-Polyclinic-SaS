@@ -194,19 +194,19 @@ function deleteCategory() {
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $t('a_name_english') }} <span class="text-red-500">*</span></label>
-                                        <input v-model="form.name_en" type="text" placeholder="e.g. Injectables" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-all" />
+                                        <input v-model="form.name_en" type="text" placeholder="e.g. Injectables" class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-all" />
                                         <p v-if="form.errors.name_en" class="mt-1 text-sm text-red-500">{{ form.errors.name_en }}</p>
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $t('a_name_arabic') }} <span class="text-red-500">*</span></label>
-                                        <input v-model="form.name_ar" type="text" dir="rtl" placeholder="مثال: حقن تجميلية" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-all" />
+                                        <input v-model="form.name_ar" type="text" dir="rtl" placeholder="مثال: حقن تجميلية" class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-all" />
                                         <p v-if="form.errors.name_ar" class="mt-1 text-sm text-red-500">{{ form.errors.name_ar }}</p>
                                     </div>
                                 </div>
 
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $t('a_description') }}</label>
-                                    <textarea v-model="form.description" rows="2" placeholder="Brief description of this category..." class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-all resize-none"></textarea>
+                                    <textarea v-model="form.description" rows="2" placeholder="Brief description of this category..." class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-all resize-none"></textarea>
                                 </div>
 
                                 <div>
@@ -228,7 +228,7 @@ function deleteCategory() {
                                 <div class="grid grid-cols-2 gap-4">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $t('a_display_order') }}</label>
-                                        <input v-model="form.display_order" type="number" min="0" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-all" />
+                                        <input v-model="form.display_order" type="number" min="0" class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-all" />
                                     </div>
                                     <div class="flex items-end pb-1">
                                         <label class="flex items-center gap-2 cursor-pointer">

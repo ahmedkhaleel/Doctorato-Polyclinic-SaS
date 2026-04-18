@@ -83,7 +83,7 @@ function getRoleColor(role) {
                                 v-model="search"
                                 type="text"
                                 placeholder="Search by name, email, or role..."
-                                class="w-full pl-9 pr-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-gray-300 focus:border-gray-300 bg-gray-50 transition-all"
+                                class="doctorato-input w-full pl-9 pr-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-gray-300 focus:border-gray-300 bg-gray-50 transition-all"
                                 autofocus
                             />
                         </div>

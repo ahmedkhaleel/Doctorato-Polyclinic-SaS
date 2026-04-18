@@ -269,7 +269,7 @@ function cancelPayout() {
                     <div class="space-y-4">
                         <div>
                             <label class="text-[11px] font-semibold text-gray-400 uppercase tracking-wide">{{ $t('a_payment_method') }} *</label>
-                            <select v-model="payForm.payment_method" class="mt-1 w-full rounded-lg border-gray-200 text-sm focus:ring-[#C4A265] focus:border-[#C4A265]">
+                            <select v-model="payForm.payment_method" class="doctorato-input mt-1 w-full rounded-lg border-gray-200 text-sm focus:ring-[#C4A265] focus:border-[#C4A265]">
                                 <option value="cash">{{ $t('a_cash') }}</option>
                                 <option value="bank_transfer">{{ $t('a_bank_transfer') }}</option>
                                 <option value="check">{{ $t('a_check') }}</option>
@@ -278,7 +278,7 @@ function cancelPayout() {
                         </div>
                         <div>
                             <label class="text-[11px] font-semibold text-gray-400 uppercase tracking-wide">{{ $t('a_reference_number') }}</label>
-                            <input type="text" v-model="payForm.payment_reference" placeholder="Check #, transfer ref, etc." class="mt-1 w-full rounded-lg border-gray-200 text-sm focus:ring-[#C4A265] focus:border-[#C4A265]" />
+                            <input type="text" v-model="payForm.payment_reference" placeholder="Check #, transfer ref, etc." class="doctorato-input mt-1 w-full rounded-lg border-gray-200 text-sm focus:ring-[#C4A265] focus:border-[#C4A265]" />
                         </div>
                         <div class="bg-emerald-50 rounded-xl p-4 border border-emerald-200">
                             <div class="flex justify-between items-center">
@@ -308,7 +308,7 @@ function cancelPayout() {
                     <p class="text-sm text-gray-500 mb-4">{{ $t('a_cancel_payout_warning') }}</p>
                     <div>
                         <label class="text-[11px] font-semibold text-gray-400 uppercase tracking-wide">{{ $t('a_reason') }} *</label>
-                        <textarea v-model="cancelForm.cancellation_reason" rows="3" placeholder="Why is this payout being cancelled?" class="mt-1 w-full rounded-lg border-gray-200 text-sm focus:ring-[#C4A265] focus:border-[#C4A265]"></textarea>
+                        <textarea v-model="cancelForm.cancellation_reason" rows="3" placeholder="Why is this payout being cancelled?" class="doctorato-input mt-1 w-full rounded-lg border-gray-200 text-sm focus:ring-[#C4A265] focus:border-[#C4A265]"></textarea>
                     </div>
                     <div v-if="cancelForm.errors && Object.keys(cancelForm.errors).length" class="mt-3 p-3 bg-red-50 rounded-lg">
                         <p v-for="(err, key) in cancelForm.errors" :key="key" class="text-xs text-red-600">{{ err }}</p>

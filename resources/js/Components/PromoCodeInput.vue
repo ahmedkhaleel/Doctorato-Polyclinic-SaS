@@ -198,13 +198,8 @@ onMounted(() => {
                                 v-model="codeInput"
                                 type="text"
                                 :placeholder="locale === 'ar' ? 'ادخل كود الخصم' : 'Enter promo code'"
-                                class="w-full px-4 py-2.5 border rounded-xl text-sm font-medium uppercase tracking-wider transition-all duration-200 focus:outline-none focus:ring-2"
-                                :class="[
-                                    hasError
-                                        ? 'border-red-300 focus:ring-red-200 focus:border-red-400 bg-red-50/50'
-                                        : 'border-gray-200 focus:ring-[#C4A265]/20 focus:border-[#C4A265] bg-gray-50',
-                                    isRtl ? 'text-right' : 'text-left'
-                                ]"
+                                class="doctorato-input w-full px-4 py-2.5 border rounded-xl text-sm font-medium uppercase tracking-wider transition-all duration-200 focus:outline-none focus:ring-2"
+                                :class="[ hasError ? 'border-red-300 focus:ring-[#C4A265]/30 focus:border-red-400 bg-red-50/50' : 'border-gray-200 focus:ring-[#C4A265]/20 focus:border-[#C4A265] bg-gray-50', isRtl ? 'text-right' : 'text-left' ]"
                                 :dir="isRtl ? 'rtl' : 'ltr'"
                                 @keyup.enter="applyCode"
                                 :disabled="isLoading"

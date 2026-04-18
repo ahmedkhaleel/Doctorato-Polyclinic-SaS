@@ -119,20 +119,20 @@ onMounted(() => { requestAnimationFrame(() => { mounted.value = true; }); });
                     v-model="search"
                     type="text"
                     :placeholder="isRtl ? 'بحث بالاسم أو الرمز...' : 'Search by name or SKU...'"
-                    class="w-full ps-10 pe-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-colors"
+                    class="doctorato-input w-full ps-10 pe-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-colors"
                 />
             </div>
 
-            <select v-model="moduleFilter" class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265]">
+            <select v-model="moduleFilter" class="doctorato-input px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265]">
                 <option v-for="opt in moduleOptions" :key="opt.value" :value="opt.value">{{ isRtl ? opt.label.ar : opt.label.en }}</option>
             </select>
 
-            <select v-model="categoryFilter" class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265]">
+            <select v-model="categoryFilter" class="doctorato-input px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265]">
                 <option value="">{{ isRtl ? 'كل الفئات' : 'All Categories' }}</option>
                 <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ displayName(cat) }}</option>
             </select>
 
-            <select v-model="stockFilter" class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265]">
+            <select v-model="stockFilter" class="doctorato-input px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265]">
                 <option value="">{{ isRtl ? 'كل المخزون' : 'All Stock' }}</option>
                 <option value="low">{{ isRtl ? 'مخزون منخفض' : 'Low Stock' }}</option>
             </select>

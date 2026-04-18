@@ -235,7 +235,7 @@ function submit() {
                                         <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" /></svg>
                                         Name (English) <span class="text-red-400">*</span>
                                     </label>
-                                    <input v-model="form.name_en" type="text" placeholder="e.g. Bride Glow Package" class="cb-input" />
+                                    <input v-model="form.name_en" type="text" placeholder="e.g. Bride Glow Package" class="doctorato-input cb-input" />
                                     <p v-if="form.errors.name_en" class="cb-error">{{ form.errors.name_en }}</p>
                                 </div>
                                 <div class="cb-field">
@@ -243,7 +243,7 @@ function submit() {
                                         <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" /></svg>
                                         Name (Arabic) <span class="text-red-400">*</span>
                                     </label>
-                                    <input v-model="form.name_ar" type="text" dir="rtl" placeholder="مثال: باقة عروس متالقة" class="cb-input" />
+                                    <input v-model="form.name_ar" type="text" dir="rtl" placeholder="مثال: باقة عروس متالقة" class="doctorato-input cb-input" />
                                     <p v-if="form.errors.name_ar" class="cb-error">{{ form.errors.name_ar }}</p>
                                 </div>
                             </div>
@@ -254,7 +254,7 @@ function submit() {
                                         <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" /></svg>
                                         Description (English)
                                     </label>
-                                    <textarea v-model="form.description_en" rows="4" :placeholder="$t('a_bundle_desc_placeholder')" class="cb-input cb-textarea"></textarea>
+                                    <textarea v-model="form.description_en" rows="4" :placeholder="$t('a_bundle_desc_placeholder')" class="doctorato-input cb-input cb-textarea"></textarea>
                                     <p v-if="form.errors.description_en" class="cb-error">{{ form.errors.description_en }}</p>
                                 </div>
                                 <div class="cb-field">
@@ -262,7 +262,7 @@ function submit() {
                                         <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" /></svg>
                                         Description (Arabic)
                                     </label>
-                                    <textarea v-model="form.description_ar" rows="4" dir="rtl" placeholder="اكتب وصف الباقة..." class="cb-input cb-textarea"></textarea>
+                                    <textarea v-model="form.description_ar" rows="4" dir="rtl" placeholder="اكتب وصف الباقة..." class="doctorato-input cb-input cb-textarea"></textarea>
                                     <p v-if="form.errors.description_ar" class="cb-error">{{ form.errors.description_ar }}</p>
                                 </div>
                             </div>
@@ -383,7 +383,7 @@ function submit() {
                                                         type="number"
                                                         min="1"
                                                         @change="recalcBundlePrice(index)"
-                                                        class="cb-input text-sm"
+                                                        class="doctorato-input cb-input text-sm"
                                                     />
                                                 </div>
 
@@ -397,7 +397,7 @@ function submit() {
                                                         max="100"
                                                         step="0.01"
                                                         @input="recalcBundlePrice(index)"
-                                                        class="cb-input text-sm"
+                                                        class="doctorato-input cb-input text-sm"
                                                     />
                                                 </div>
 
@@ -409,7 +409,7 @@ function submit() {
                                                         type="number"
                                                         step="0.01"
                                                         min="0"
-                                                        class="cb-input text-sm font-semibold"
+                                                        class="doctorato-input cb-input text-sm font-semibold"
                                                         style="color: #C4A265;"
                                                     />
                                                 </div>
@@ -480,7 +480,7 @@ function submit() {
                                     type="number"
                                     step="0.01"
                                     min="0"
-                                    class="cb-price-input w-full px-4 py-3 border-2 rounded-xl text-xl font-bold text-center transition-all duration-300"
+                                    class="doctorato-input cb-price-input w-full px-4 py-3 border-2 rounded-xl text-xl font-bold text-center transition-all duration-300"
                                     style="border-color: #C4A265; color: #C4A265;"
                                 />
                                 <p v-if="form.errors.total_price" class="mt-1.5 text-sm text-red-600">{{ form.errors.total_price }}</p>
@@ -523,7 +523,7 @@ function submit() {
                                     <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
                                     Display Order
                                 </label>
-                                <input v-model="form.display_order" type="number" min="0" class="cb-input" />
+                                <input v-model="form.display_order" type="number" min="0" class="doctorato-input cb-input" />
                                 <p class="text-[11px] text-gray-400 mt-1">Lower numbers appear first</p>
                             </div>
 

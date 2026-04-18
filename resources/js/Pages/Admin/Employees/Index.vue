@@ -104,12 +104,12 @@ const contractKeys = {
                     v-model="search"
                     type="text"
                     :placeholder="$t('a_search_employees')"
-                    class="w-full sm:w-64 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
+                    class="doctorato-input w-full sm:w-64 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                 />
                 <select
                     v-model="departmentFilter"
                     @change="applyFilter('department_id', departmentFilter)"
-                    class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
+                    class="doctorato-input px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                 >
                     <option value="">{{ $t('a_all_departments') }}</option>
                     <option v-for="dept in departments" :key="dept.id" :value="dept.id">{{ dept.name_en }}</option>
@@ -117,7 +117,7 @@ const contractKeys = {
                 <select
                     v-model="statusFilter"
                     @change="applyFilter('status', statusFilter)"
-                    class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
+                    class="doctorato-input px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                 >
                     <option value="">{{ $t('a_all_status') }}</option>
                     <option value="active">{{ $t('a_active') }}</option>

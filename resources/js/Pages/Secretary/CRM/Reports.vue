@@ -275,11 +275,11 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handleReportsKey
             <div v-if="showCustomRange" class="mt-4 flex items-center gap-3 flex-wrap">
                 <div class="flex items-center gap-2">
                     <label class="text-xs text-teal-100">{{ isRtl ? 'من' : 'From' }}</label>
-                    <input v-model="customFrom" type="date" class="bg-white/20 backdrop-blur text-white border border-white/30 rounded-lg py-1.5 px-3 text-sm focus:ring-2 focus:ring-white/50 [color-scheme:dark]">
+                    <input v-model="customFrom" type="date" class="doctorato-input bg-white/20 backdrop-blur text-white border border-white/30 rounded-lg py-1.5 px-3 text-sm focus:ring-2 focus:ring-white/50 [color-scheme:dark]">
                 </div>
                 <div class="flex items-center gap-2">
                     <label class="text-xs text-teal-100">{{ isRtl ? 'إلى' : 'To' }}</label>
-                    <input v-model="customTo" type="date" class="bg-white/20 backdrop-blur text-white border border-white/30 rounded-lg py-1.5 px-3 text-sm focus:ring-2 focus:ring-white/50 [color-scheme:dark]">
+                    <input v-model="customTo" type="date" class="doctorato-input bg-white/20 backdrop-blur text-white border border-white/30 rounded-lg py-1.5 px-3 text-sm focus:ring-2 focus:ring-white/50 [color-scheme:dark]">
                 </div>
                 <button @click="applyCustomRange" :disabled="!customFrom || !customTo"
                     :class="['px-4 py-1.5 rounded-lg text-sm font-medium transition-all duration-200',

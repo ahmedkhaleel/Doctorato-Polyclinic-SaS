@@ -113,20 +113,20 @@ const channelIcons = {
                         <div>
                             <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">{{ $t('a_name_en') }}<span class="text-red-400">*</span></label>
                             <input v-model="form.name_en" @blur="!editingId && generateSlug()" type="text"
-                                class="w-full px-4 py-3 text-sm bg-gray-50/80 border border-gray-200/80 rounded-xl focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200 placeholder-gray-300"
+                                class="doctorato-input w-full px-4 py-3 text-sm bg-gray-50/80 border border-gray-200/80 rounded-xl focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200 placeholder-gray-300"
                                 :placeholder="$t('a_source_name_placeholder')" />
                             <p v-if="form.errors.name_en" class="text-xs text-red-500 mt-1.5">{{ form.errors.name_en }}</p>
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">{{ $t('a_name_ar') }}<span class="text-red-400">*</span></label>
                             <input v-model="form.name_ar" type="text" dir="rtl"
-                                class="w-full px-4 py-3 text-sm bg-gray-50/80 border border-gray-200/80 rounded-xl focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200 placeholder-gray-300" />
+                                class="doctorato-input w-full px-4 py-3 text-sm bg-gray-50/80 border border-gray-200/80 rounded-xl focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200 placeholder-gray-300" />
                             <p v-if="form.errors.name_ar" class="text-xs text-red-500 mt-1.5">{{ form.errors.name_ar }}</p>
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">{{ $t('a_slug') }}<span class="text-red-400">*</span></label>
                             <input v-model="form.slug" type="text"
-                                class="w-full px-4 py-3 text-sm bg-gray-50/80 border border-gray-200/80 rounded-xl focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200 font-mono placeholder-gray-300"
+                                class="doctorato-input w-full px-4 py-3 text-sm bg-gray-50/80 border border-gray-200/80 rounded-xl focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200 font-mono placeholder-gray-300"
                                 placeholder="auto-generated" />
                             <p v-if="form.errors.slug" class="text-xs text-red-500 mt-1.5">{{ form.errors.slug }}</p>
                         </div>
@@ -152,13 +152,13 @@ const channelIcons = {
                                     <div class="absolute inset-0 rounded-xl pointer-events-none" :style="{ boxShadow: `0 4px 12px ${form.color}40` }"></div>
                                 </div>
                                 <input v-model="form.color" type="text"
-                                    class="flex-1 px-4 py-3 text-sm bg-gray-50/80 border border-gray-200/80 rounded-xl font-mono focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200" />
+                                    class="doctorato-input flex-1 px-4 py-3 text-sm bg-gray-50/80 border border-gray-200/80 rounded-xl font-mono focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200" />
                             </div>
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">{{ $t('a_sort_order') }}</label>
                             <input v-model.number="form.sort_order" type="number" min="0"
-                                class="w-full px-4 py-3 text-sm bg-gray-50/80 border border-gray-200/80 rounded-xl focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200" />
+                                class="doctorato-input w-full px-4 py-3 text-sm bg-gray-50/80 border border-gray-200/80 rounded-xl focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200" />
                         </div>
                     </div>
 

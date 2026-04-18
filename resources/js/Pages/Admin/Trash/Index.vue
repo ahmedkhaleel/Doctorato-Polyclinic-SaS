@@ -151,7 +151,7 @@ const currentItems = computed(() => getItemsForType(activeTab.value));
                         @input="doSearch"
                         type="text"
                         :placeholder="isRtl ? 'بحث في المحذوفات...' : 'Search in trash...'"
-                        class="w-full border border-gray-200 rounded-lg py-2 text-sm focus:ring-[#C4A265] focus:border-[#C4A265]"
+                        class="doctorato-input w-full border border-gray-200 rounded-lg py-2 text-sm focus:ring-[#C4A265] focus:border-[#C4A265]"
                         :class="isRtl ? 'pr-10 pl-4' : 'pl-10 pr-4'"
                     />
                 </div>

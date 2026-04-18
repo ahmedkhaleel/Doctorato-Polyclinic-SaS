@@ -167,7 +167,7 @@ const stats = computed(() => {
                         <div class="relative">
                             <select
                                 v-model="employeeFilter"
-                                class="w-full appearance-none bg-gray-50/80 border border-gray-200 rounded-xl px-4 py-2.5 pe-10 text-sm text-gray-700 font-medium focus:bg-white focus:ring-2 focus:ring-amber-200/50 focus:border-amber-300 transition-all duration-200 cursor-pointer"
+                                class="doctorato-input w-full appearance-none bg-gray-50/80 border border-gray-200 rounded-xl px-4 py-2.5 pe-10 text-sm text-gray-700 font-medium focus:bg-white focus:ring-2 focus:ring-[#C4A265]/30/50 focus:border-[#1B365D] transition-all duration-200 cursor-pointer"
                             >
                                 <option value="">{{ $t('a_all_employees') }}</option>
                                 <option v-for="user in users" :key="user.id" :value="user.id">{{ user.name }}</option>
@@ -183,7 +183,7 @@ const stats = computed(() => {
                         <div class="relative">
                             <select
                                 v-model="statusFilter"
-                                class="w-full appearance-none bg-gray-50/80 border border-gray-200 rounded-xl px-4 py-2.5 pe-10 text-sm text-gray-700 font-medium focus:bg-white focus:ring-2 focus:ring-amber-200/50 focus:border-amber-300 transition-all duration-200 cursor-pointer"
+                                class="doctorato-input w-full appearance-none bg-gray-50/80 border border-gray-200 rounded-xl px-4 py-2.5 pe-10 text-sm text-gray-700 font-medium focus:bg-white focus:ring-2 focus:ring-[#C4A265]/30/50 focus:border-[#1B365D] transition-all duration-200 cursor-pointer"
                             >
                                 <option value="">{{ $t('a_all_status') }}</option>
                                 <option value="pending">{{ $t('a_pending') }}</option>
@@ -201,7 +201,7 @@ const stats = computed(() => {
                         <div class="relative">
                             <select
                                 v-model="typeFilter"
-                                class="w-full appearance-none bg-gray-50/80 border border-gray-200 rounded-xl px-4 py-2.5 pe-10 text-sm text-gray-700 font-medium focus:bg-white focus:ring-2 focus:ring-amber-200/50 focus:border-amber-300 transition-all duration-200 cursor-pointer"
+                                class="doctorato-input w-full appearance-none bg-gray-50/80 border border-gray-200 rounded-xl px-4 py-2.5 pe-10 text-sm text-gray-700 font-medium focus:bg-white focus:ring-2 focus:ring-[#C4A265]/30/50 focus:border-[#1B365D] transition-all duration-200 cursor-pointer"
                             >
                                 <option value="">{{ $t('a_all_types') }}</option>
                                 <option value="annual">{{ $t('a_annual') }}</option>

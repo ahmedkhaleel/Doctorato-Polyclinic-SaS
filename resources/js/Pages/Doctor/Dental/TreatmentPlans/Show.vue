@@ -398,11 +398,11 @@ function sendConsent() {
                     <div class="space-y-4">
                         <div>
                             <label class="text-sm font-medium text-gray-700 block mb-1">{{ isRtl ? 'ملاحظات المخاطر (اختياري)' : 'Risks Notes (optional)' }}</label>
-                            <textarea v-model="consentRisksNotes" class="w-full p-3 border border-gray-200 rounded-xl text-sm resize-none focus:outline-none focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]" rows="3"></textarea>
+                            <textarea v-model="consentRisksNotes" class="doctorato-input w-full p-3 border border-gray-200 rounded-xl text-sm resize-none focus:outline-none focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]" rows="3"></textarea>
                         </div>
                         <div>
                             <label class="text-sm font-medium text-gray-700 block mb-1">{{ isRtl ? 'مدة الصلاحية (بالأيام)' : 'Validity Period (days)' }}</label>
-                            <input v-model.number="consentExpiryDays" type="number" min="1" max="30" class="w-full p-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]" />
+                            <input v-model.number="consentExpiryDays" type="number" min="1" max="30" class="doctorato-input w-full p-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]" />
                         </div>
                     </div>
                     <div class="flex gap-3 mt-6">

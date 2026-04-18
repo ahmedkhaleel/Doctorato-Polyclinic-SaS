@@ -66,7 +66,7 @@ const recurringOptions = [
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_category') }} <span class="text-red-500">*</span></label>
-                                <select v-model="form.expense_category_id" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent">
+                                <select v-model="form.expense_category_id" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent">
                                     <option value="">{{ $t('a_select_category') }}</option>
                                     <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ cat.name_en }}</option>
                                 </select>
@@ -74,7 +74,7 @@ const recurringOptions = [
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_item') }} <span class="text-red-500">*</span></label>
-                                <select v-model="form.expense_item_id" :disabled="!form.expense_category_id" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent disabled:bg-gray-100">
+                                <select v-model="form.expense_item_id" :disabled="!form.expense_category_id" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent disabled:bg-gray-100">
                                     <option value="">{{ $t('a_select_item') }}</option>
                                     <option v-for="item in filteredItems" :key="item.id" :value="item.id">{{ item.name_en }}</option>
                                 </select>
@@ -85,19 +85,19 @@ const recurringOptions = [
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_amount') }} <span class="text-red-500">*</span></label>
-                                <input v-model="form.amount" type="number" step="0.01" min="0" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" placeholder="0.00" />
+                                <input v-model="form.amount" type="number" step="0.01" min="0" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" placeholder="0.00" />
                                 <p v-if="form.errors.amount" class="mt-1 text-sm text-red-600">{{ form.errors.amount }}</p>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_date') }} <span class="text-red-500">*</span></label>
-                                <input v-model="form.expense_date" type="date" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
+                                <input v-model="form.expense_date" type="date" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                 <p v-if="form.errors.expense_date" class="mt-1 text-sm text-red-600">{{ form.errors.expense_date }}</p>
                             </div>
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_description') }}</label>
-                            <textarea v-model="form.description" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" :placeholder="$t('a_optional_description')"></textarea>
+                            <textarea v-model="form.description" rows="3" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" :placeholder="$t('a_optional_description')"></textarea>
                         </div>
                     </div>
                 </div>
@@ -121,13 +121,13 @@ const recurringOptions = [
                         <h2 class="text-lg font-semibold text-gray-700 border-b pb-2">{{ $t('a_recurring') }}</h2>
                         <div>
                             <label class="flex items-center space-x-3">
-                                <input type="checkbox" v-model="form.is_recurring" class="rounded border-gray-300 text-amber-600 focus:ring-amber-200" />
+                                <input type="checkbox" v-model="form.is_recurring" class="rounded border-gray-300 text-amber-600 focus:ring-[#C4A265]/30" />
                                 <span class="text-sm text-gray-700">{{ $t('a_recurring_expense') }}</span>
                             </label>
                         </div>
                         <div v-if="form.is_recurring">
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_period') }}</label>
-                            <select v-model="form.recurring_period" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent">
+                            <select v-model="form.recurring_period" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent">
                                 <option value="">{{ $t('a_select_period') }}</option>
                                 <option v-for="opt in recurringOptions" :key="opt.value" :value="opt.value">{{ opt.label }}</option>
                             </select>

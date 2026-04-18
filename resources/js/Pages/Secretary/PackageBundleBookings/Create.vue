@@ -490,7 +490,7 @@ function submit() {
                         </div>
                         <div class="w-full sm:w-64">
                             <select v-model="sa.doctor_id"
-                                    class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-teal-200 focus:border-transparent"
+                                    class="doctorato-input w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                                     :class="!sa.doctor_id ? 'text-gray-400' : 'text-gray-800'">
                                 <option :value="null" disabled>{{ isRtl ? 'اختر الطبيب' : 'Select Doctor' }}</option>
                                 <option v-for="doc in doctors" :key="doc.id" :value="doc.id">
@@ -541,7 +541,7 @@ function submit() {
                                 <label class="block text-xs font-medium text-gray-500 mb-1">{{ isRtl ? 'الطبيب' : 'Doctor' }}</label>
                                 <select v-model="apt.doctor_id"
                                         @change="onAppointmentDoctorChange(sIndex, aIndex)"
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-teal-200 focus:border-transparent">
+                                        class="doctorato-input w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent">
                                     <option v-for="doc in doctors" :key="doc.id" :value="doc.id">{{ doc.name_en }}</option>
                                 </select>
                             </div>
@@ -668,7 +668,7 @@ function submit() {
                 <div class="mb-4">
                     <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'ملاحظات (اختياري)' : 'Notes (optional)' }}</label>
                     <textarea v-model="notes" rows="3" :placeholder="isRtl ? 'ملاحظات إضافية...' : 'Any additional notes...'"
-                              class="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-teal-200 focus:border-transparent resize-none"></textarea>
+                              class="doctorato-input w-full px-4 py-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent resize-none"></textarea>
                     <p v-if="errors.notes" class="text-red-500 text-xs mt-1">{{ errors.notes }}</p>
                 </div>
 

@@ -185,7 +185,7 @@ function submitPayment() {
                                             <input
                                                 v-model="invoiceEditForm.invoice_date"
                                                 type="date"
-                                                class="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
+                                                class="doctorato-input w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                                             />
                                             <p v-if="invoiceEditForm.errors.invoice_date" class="mt-1 text-xs text-red-600">{{ invoiceEditForm.errors.invoice_date }}</p>
                                         </div>
@@ -194,7 +194,7 @@ function submitPayment() {
                                             <textarea
                                                 v-model="invoiceEditForm.notes"
                                                 rows="3"
-                                                class="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
+                                                class="doctorato-input w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                                                 :placeholder="$t('a_invoice_notes')"
                                             ></textarea>
                                             <p v-if="invoiceEditForm.errors.notes" class="mt-1 text-xs text-red-600">{{ invoiceEditForm.errors.notes }}</p>
@@ -286,7 +286,7 @@ function submitPayment() {
                                     <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_payment_method') }} <span class="text-red-500">*</span></label>
                                     <select
                                         v-model="paymentForm.payment_method_id"
-                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
+                                        class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                                     >
                                         <option value="">{{ $t('a_select_method') }}</option>
                                         <option v-for="method in paymentMethods" :key="method.id" :value="method.id">{{ method.name_en }}</option>
@@ -301,7 +301,7 @@ function submitPayment() {
                                         min="0"
                                         step="0.01"
                                         :placeholder="`${$t('a_balance')}: ${formatCurrency(balance)}`"
-                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
+                                        class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                                     />
                                     <p v-if="paymentForm.errors.amount" class="mt-1 text-xs text-red-600">{{ paymentForm.errors.amount }}</p>
                                 </div>
@@ -310,7 +310,7 @@ function submitPayment() {
                                     <input
                                         v-model="paymentForm.payment_date"
                                         type="date"
-                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
+                                        class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                                     />
                                     <p v-if="paymentForm.errors.payment_date" class="mt-1 text-xs text-red-600">{{ paymentForm.errors.payment_date }}</p>
                                 </div>
@@ -320,7 +320,7 @@ function submitPayment() {
                                         v-model="paymentForm.reference_number"
                                         type="text"
                                         :placeholder="$t('a_transaction_receipt')"
-                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
+                                        class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                                     />
                                 </div>
                                 <div>
@@ -329,7 +329,7 @@ function submitPayment() {
                                         v-model="paymentForm.notes"
                                         type="text"
                                         :placeholder="$t('a_optional_notes')"
-                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
+                                        class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                                     />
                                 </div>
                                 <div class="flex items-end gap-2">

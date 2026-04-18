@@ -420,7 +420,7 @@ function formatDateTime(date) {
                                         <input
                                             v-model="visitDateForm.visit_date"
                                             type="date"
-                                            class="px-2 py-1 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
+                                            class="doctorato-input px-2 py-1 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                                         />
                                         <button
                                             @click="saveVisitDate"
@@ -532,12 +532,12 @@ function formatDateTime(date) {
                         <form v-else @submit.prevent="saveDiagnosis" class="space-y-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_diagnosis') }}</label>
-                                <textarea v-model="diagnosisForm.diagnosis" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" placeholder="Enter diagnosis..."></textarea>
+                                <textarea v-model="diagnosisForm.diagnosis" rows="4" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" placeholder="Enter diagnosis..."></textarea>
                                 <p v-if="diagnosisForm.errors.diagnosis" class="mt-1 text-sm text-red-600">{{ diagnosisForm.errors.diagnosis }}</p>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_notes') }}</label>
-                                <textarea v-model="diagnosisForm.doctor_notes" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" placeholder="Enter notes..."></textarea>
+                                <textarea v-model="diagnosisForm.doctor_notes" rows="4" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" placeholder="Enter notes..."></textarea>
                                 <p v-if="diagnosisForm.errors.doctor_notes" class="mt-1 text-sm text-red-600">{{ diagnosisForm.errors.doctor_notes }}</p>
                             </div>
                             <div class="flex space-x-3">
@@ -692,7 +692,7 @@ function formatDateTime(date) {
                                 </div>
                                 <div class="w-40">
                                     <label class="block text-xs font-medium text-gray-600 mb-1">Type</label>
-                                    <select v-model="photoForm.photo_type" class="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm">
+                                    <select v-model="photoForm.photo_type" class="doctorato-input w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm">
                                         <option value="before">Before</option>
                                         <option value="after">After</option>
                                         <option value="during">During</option>
@@ -701,7 +701,7 @@ function formatDateTime(date) {
                                 </div>
                                 <div class="flex-1 min-w-[150px]">
                                     <label class="block text-xs font-medium text-gray-600 mb-1">Caption</label>
-                                    <input v-model="photoForm.caption" type="text" placeholder="Optional caption" class="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm" />
+                                    <input v-model="photoForm.caption" type="text" placeholder="Optional caption" class="doctorato-input w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm" />
                                 </div>
                                 <button
                                     type="submit"
@@ -797,11 +797,11 @@ function formatDateTime(date) {
                                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                             <div>
                                                 <label class="block text-sm font-medium text-gray-700 mb-1">Diagnosis</label>
-                                                <input v-model="editPrescriptionForm.diagnosis" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="Diagnosis" />
+                                                <input v-model="editPrescriptionForm.diagnosis" type="text" class="doctorato-input w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="Diagnosis" />
                                             </div>
                                             <div>
                                                 <label class="block text-sm font-medium text-gray-700 mb-1">Notes</label>
-                                                <input v-model="editPrescriptionForm.notes" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="Optional notes" />
+                                                <input v-model="editPrescriptionForm.notes" type="text" class="doctorato-input w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="Optional notes" />
                                             </div>
                                         </div>
 
@@ -809,19 +809,19 @@ function formatDateTime(date) {
                                             <label class="block text-sm font-medium text-gray-700 mb-2">Medications</label>
                                             <div v-for="(item, idx) in editPrescriptionForm.items" :key="idx" class="flex flex-wrap gap-2 mb-3 items-start p-3 bg-white rounded-lg border border-gray-200">
                                                 <div class="flex-1 min-w-[160px]">
-                                                    <input v-model="item.medication_name" type="text" class="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm" placeholder="Medication name *" />
+                                                    <input v-model="item.medication_name" type="text" class="doctorato-input w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm" placeholder="Medication name *" />
                                                 </div>
                                                 <div class="w-28">
-                                                    <input v-model="item.dosage" type="text" class="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm" placeholder="Dosage" />
+                                                    <input v-model="item.dosage" type="text" class="doctorato-input w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm" placeholder="Dosage" />
                                                 </div>
                                                 <div class="w-32">
-                                                    <input v-model="item.frequency" type="text" class="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm" placeholder="Frequency" />
+                                                    <input v-model="item.frequency" type="text" class="doctorato-input w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm" placeholder="Frequency" />
                                                 </div>
                                                 <div class="w-24">
-                                                    <input v-model="item.duration" type="text" class="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm" placeholder="Duration" />
+                                                    <input v-model="item.duration" type="text" class="doctorato-input w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm" placeholder="Duration" />
                                                 </div>
                                                 <div class="flex-1 min-w-[120px]">
-                                                    <input v-model="item.instructions" type="text" class="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm" placeholder="Instructions" />
+                                                    <input v-model="item.instructions" type="text" class="doctorato-input w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm" placeholder="Instructions" />
                                                 </div>
                                                 <button v-if="editPrescriptionForm.items.length > 1" type="button" @click="removeEditPrescriptionItem(idx)" class="p-1.5 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition">
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
@@ -867,11 +867,11 @@ function formatDateTime(date) {
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         <div>
                                             <label class="block text-sm font-medium text-gray-700 mb-1">Diagnosis</label>
-                                            <input v-model="prescriptionForm.diagnosis" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="Diagnosis for this prescription" />
+                                            <input v-model="prescriptionForm.diagnosis" type="text" class="doctorato-input w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="Diagnosis for this prescription" />
                                         </div>
                                         <div>
                                             <label class="block text-sm font-medium text-gray-700 mb-1">Notes</label>
-                                            <input v-model="prescriptionForm.notes" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="Optional notes" />
+                                            <input v-model="prescriptionForm.notes" type="text" class="doctorato-input w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="Optional notes" />
                                         </div>
                                     </div>
 
@@ -902,13 +902,13 @@ function formatDateTime(date) {
                                                 </div>
                                             </div>
                                             <div class="w-28">
-                                                <input v-model="item.dosage" type="text" class="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm" placeholder="Dosage" />
+                                                <input v-model="item.dosage" type="text" class="doctorato-input w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm" placeholder="Dosage" />
                                             </div>
                                             <div class="w-32">
-                                                <input v-model="item.frequency" type="text" class="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm" placeholder="Frequency" />
+                                                <input v-model="item.frequency" type="text" class="doctorato-input w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm" placeholder="Frequency" />
                                             </div>
                                             <div class="w-24">
-                                                <input v-model="item.duration" type="text" class="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm" placeholder="Duration" />
+                                                <input v-model="item.duration" type="text" class="doctorato-input w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm" placeholder="Duration" />
                                             </div>
                                             <button
                                                 v-if="prescriptionForm.items.length > 1"

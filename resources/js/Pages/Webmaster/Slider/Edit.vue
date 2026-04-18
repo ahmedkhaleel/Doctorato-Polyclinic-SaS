@@ -70,13 +70,13 @@ function submit() {
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_title_en') }}</label>
                                 <input v-model="form.title_en" type="text" placeholder="e.g. Doctorato"
-                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                       class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                 <p v-if="form.errors.title_en" class="mt-1 text-sm text-red-600">{{ form.errors.title_en }}</p>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_title_ar') }}</label>
                                 <input v-model="form.title_ar" type="text" dir="rtl" placeholder="مثال: دكتوراتو"
-                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                       class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                 <p v-if="form.errors.title_ar" class="mt-1 text-sm text-red-600">{{ form.errors.title_ar }}</p>
                             </div>
                         </div>
@@ -85,13 +85,13 @@ function submit() {
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Subtitle (English)</label>
                                 <input v-model="form.subtitle_en" type="text" placeholder="e.g. Where Advanced Technology Meets Natural Beauty"
-                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                       class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                 <p v-if="form.errors.subtitle_en" class="mt-1 text-sm text-red-600">{{ form.errors.subtitle_en }}</p>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Subtitle (Arabic)</label>
                                 <input v-model="form.subtitle_ar" type="text" dir="rtl" placeholder="مثال: حيث تلتقي التكنولوجيا المتقدمة بالجمال الطبيعي"
-                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                       class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                 <p v-if="form.errors.subtitle_ar" class="mt-1 text-sm text-red-600">{{ form.errors.subtitle_ar }}</p>
                             </div>
                         </div>
@@ -100,13 +100,13 @@ function submit() {
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_description_en') }}</label>
                                 <textarea v-model="form.description_en" rows="3" placeholder="Short description..."
-                                          class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent resize-none"></textarea>
+                                          class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent resize-none"></textarea>
                                 <p v-if="form.errors.description_en" class="mt-1 text-sm text-red-600">{{ form.errors.description_en }}</p>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_description_ar') }}</label>
                                 <textarea v-model="form.description_ar" rows="3" dir="rtl" placeholder="وصف قصير..."
-                                          class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent resize-none"></textarea>
+                                          class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent resize-none"></textarea>
                                 <p v-if="form.errors.description_ar" class="mt-1 text-sm text-red-600">{{ form.errors.description_ar }}</p>
                             </div>
                         </div>
@@ -120,13 +120,13 @@ function submit() {
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Button Text (English)</label>
                                 <input v-model="form.button_text_en" type="text" placeholder="e.g. Book Appointment"
-                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                       class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                 <p v-if="form.errors.button_text_en" class="mt-1 text-sm text-red-600">{{ form.errors.button_text_en }}</p>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Button Text (Arabic)</label>
                                 <input v-model="form.button_text_ar" type="text" dir="rtl" placeholder="مثال: احجزي موعدك"
-                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                       class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                 <p v-if="form.errors.button_text_ar" class="mt-1 text-sm text-red-600">{{ form.errors.button_text_ar }}</p>
                             </div>
                         </div>
@@ -134,7 +134,7 @@ function submit() {
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Button Link</label>
                             <input v-model="form.button_link" type="text" placeholder="e.g. /booking or https://..."
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                   class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                             <p class="mt-1 text-xs text-gray-400">Use relative path like /booking or full URL</p>
                             <p v-if="form.errors.button_link" class="mt-1 text-sm text-red-600">{{ form.errors.button_link }}</p>
                         </div>
@@ -177,7 +177,7 @@ function submit() {
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_display_order') }}</label>
                             <input v-model="form.display_order" type="number" min="0"
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                   class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                         </div>
 
                         <div class="flex items-center gap-3">

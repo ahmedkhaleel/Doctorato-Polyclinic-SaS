@@ -139,7 +139,7 @@ function submit() {
                                     <div class="sm:col-span-2">
                                         <label class="emp-label">{{ $t('a_user') }} <span class="text-red-400">*</span></label>
                                         <div class="emp-select-wrap">
-                                            <select v-model="form.user_id" class="emp-input">
+                                            <select v-model="form.user_id" class="doctorato-input emp-input">
                                                 <option value="" disabled>{{ $t('a_select_user') }}</option>
                                                 <option v-for="user in availableUsers" :key="user.id" :value="user.id">
                                                     {{ user.name }} ({{ user.email }})
@@ -155,7 +155,7 @@ function submit() {
                                     <div class="sm:col-span-2">
                                         <label class="emp-label">{{ $t('a_department') }}</label>
                                         <div class="emp-select-wrap">
-                                            <select v-model="form.department_id" class="emp-input">
+                                            <select v-model="form.department_id" class="doctorato-input emp-input">
                                                 <option value="" disabled>{{ $t('a_select_department') }}</option>
                                                 <option v-for="dept in departments" :key="dept.id" :value="dept.id">
                                                     {{ dept.name_en }} - {{ dept.name_ar }}
@@ -170,24 +170,24 @@ function submit() {
 
                                     <div>
                                         <label class="emp-label">{{ $t('a_job_title_en') }}</label>
-                                        <input v-model="form.job_title_en" type="text" :placeholder="$t('a_job_title_en_placeholder')" class="emp-input" />
+                                        <input v-model="form.job_title_en" type="text" :placeholder="$t('a_job_title_en_placeholder')" class="doctorato-input emp-input" />
                                         <p v-if="form.errors.job_title_en" class="emp-error">{{ form.errors.job_title_en }}</p>
                                     </div>
                                     <div>
                                         <label class="emp-label">{{ $t('a_job_title_ar') }}</label>
-                                        <input v-model="form.job_title_ar" type="text" dir="rtl" :placeholder="$t('a_job_title_ar_placeholder')" class="emp-input" />
+                                        <input v-model="form.job_title_ar" type="text" dir="rtl" :placeholder="$t('a_job_title_ar_placeholder')" class="doctorato-input emp-input" />
                                         <p v-if="form.errors.job_title_ar" class="emp-error">{{ form.errors.job_title_ar }}</p>
                                     </div>
 
                                     <div>
                                         <label class="emp-label">{{ $t('a_hire_date') }}</label>
-                                        <input v-model="form.hire_date" type="date" class="emp-input" />
+                                        <input v-model="form.hire_date" type="date" class="doctorato-input emp-input" />
                                         <p v-if="form.errors.hire_date" class="emp-error">{{ form.errors.hire_date }}</p>
                                     </div>
                                     <div>
                                         <label class="emp-label">{{ $t('a_contract_type') }}</label>
                                         <div class="emp-select-wrap">
-                                            <select v-model="form.contract_type" class="emp-input">
+                                            <select v-model="form.contract_type" class="doctorato-input emp-input">
                                                 <option value="full_time">{{ $t('a_full_time') }}</option>
                                                 <option value="part_time">{{ $t('a_part_time') }}</option>
                                                 <option value="contract">{{ $t('a_contract') }}</option>
@@ -201,7 +201,7 @@ function submit() {
 
                                     <div v-if="form.contract_type !== 'full_time'" class="sm:col-span-2">
                                         <label class="emp-label">{{ $t('a_contract_end_date') }}</label>
-                                        <input v-model="form.contract_end_date" type="date" class="emp-input" />
+                                        <input v-model="form.contract_end_date" type="date" class="doctorato-input emp-input" />
                                         <p v-if="form.errors.contract_end_date" class="emp-error">{{ form.errors.contract_end_date }}</p>
                                     </div>
                                 </div>
@@ -237,7 +237,7 @@ function submit() {
                                         <label class="emp-label">{{ $t('a_basic_salary') }} <span class="text-red-400">*</span></label>
                                         <div class="emp-input-with-addon">
                                             <span class="emp-addon">{{ currencyCode }}</span>
-                                            <input v-model="form.basic_salary" type="number" step="0.01" min="0" placeholder="0.00" class="emp-input emp-input--addon" />
+                                            <input v-model="form.basic_salary" type="number" step="0.01" min="0" placeholder="0.00" class="doctorato-input emp-input emp-input--addon" />
                                         </div>
                                         <p v-if="form.errors.basic_salary" class="emp-error">{{ form.errors.basic_salary }}</p>
                                     </div>
@@ -252,7 +252,7 @@ function submit() {
                                         <label class="emp-label">{{ $t('a_housing') }}</label>
                                         <div class="emp-input-with-addon">
                                             <span class="emp-addon">{{ currencyCode }}</span>
-                                            <input v-model="form.housing_allowance" type="number" step="0.01" min="0" placeholder="0.00" class="emp-input emp-input--addon" />
+                                            <input v-model="form.housing_allowance" type="number" step="0.01" min="0" placeholder="0.00" class="doctorato-input emp-input emp-input--addon" />
                                         </div>
                                         <p v-if="form.errors.housing_allowance" class="emp-error">{{ form.errors.housing_allowance }}</p>
                                     </div>
@@ -260,7 +260,7 @@ function submit() {
                                         <label class="emp-label">{{ $t('a_transport') }}</label>
                                         <div class="emp-input-with-addon">
                                             <span class="emp-addon">{{ currencyCode }}</span>
-                                            <input v-model="form.transport_allowance" type="number" step="0.01" min="0" placeholder="0.00" class="emp-input emp-input--addon" />
+                                            <input v-model="form.transport_allowance" type="number" step="0.01" min="0" placeholder="0.00" class="doctorato-input emp-input emp-input--addon" />
                                         </div>
                                         <p v-if="form.errors.transport_allowance" class="emp-error">{{ form.errors.transport_allowance }}</p>
                                     </div>
@@ -268,7 +268,7 @@ function submit() {
                                         <label class="emp-label">{{ $t('a_other') }}</label>
                                         <div class="emp-input-with-addon">
                                             <span class="emp-addon">{{ currencyCode }}</span>
-                                            <input v-model="form.other_allowances" type="number" step="0.01" min="0" placeholder="0.00" class="emp-input emp-input--addon" />
+                                            <input v-model="form.other_allowances" type="number" step="0.01" min="0" placeholder="0.00" class="doctorato-input emp-input emp-input--addon" />
                                         </div>
                                         <p v-if="form.errors.other_allowances" class="emp-error">{{ form.errors.other_allowances }}</p>
                                     </div>
@@ -298,7 +298,7 @@ function submit() {
                                         <label class="emp-label">{{ $t('a_national_id') }}</label>
                                         <div class="emp-input-icon-wrap">
                                             <svg class="emp-input-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5zm6-10.125a1.875 1.875 0 11-3.75 0 1.875 1.875 0 013.75 0zm1.294 6.336a6.721 6.721 0 01-3.17.789 6.721 6.721 0 01-3.168-.789 3.376 3.376 0 016.338 0z" /></svg>
-                                            <input v-model="form.national_id" type="text" :placeholder="$t('a_national_id_placeholder')" class="emp-input emp-input--icon" />
+                                            <input v-model="form.national_id" type="text" :placeholder="$t('a_national_id_placeholder')" class="doctorato-input emp-input emp-input--icon" />
                                         </div>
                                         <p v-if="form.errors.national_id" class="emp-error">{{ form.errors.national_id }}</p>
                                     </div>
@@ -306,7 +306,7 @@ function submit() {
                                         <label class="emp-label">{{ $t('a_phone') }}</label>
                                         <div class="emp-input-icon-wrap">
                                             <svg class="emp-input-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" /></svg>
-                                            <input v-model="form.phone" type="text" :placeholder="$t('a_phone_placeholder')" class="emp-input emp-input--icon" />
+                                            <input v-model="form.phone" type="text" :placeholder="$t('a_phone_placeholder')" class="doctorato-input emp-input emp-input--icon" />
                                         </div>
                                         <p v-if="form.errors.phone" class="emp-error">{{ form.errors.phone }}</p>
                                     </div>
@@ -319,17 +319,17 @@ function submit() {
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                                     <div>
                                         <label class="emp-label">{{ $t('a_contact_name') }}</label>
-                                        <input v-model="form.emergency_contact_name" type="text" :placeholder="$t('a_emergency_contact_name_placeholder')" class="emp-input" />
+                                        <input v-model="form.emergency_contact_name" type="text" :placeholder="$t('a_emergency_contact_name_placeholder')" class="doctorato-input emp-input" />
                                         <p v-if="form.errors.emergency_contact_name" class="emp-error">{{ form.errors.emergency_contact_name }}</p>
                                     </div>
                                     <div>
                                         <label class="emp-label">{{ $t('a_contact_phone') }}</label>
-                                        <input v-model="form.emergency_contact_phone" type="text" :placeholder="$t('a_emergency_contact_phone_placeholder')" class="emp-input" />
+                                        <input v-model="form.emergency_contact_phone" type="text" :placeholder="$t('a_emergency_contact_phone_placeholder')" class="doctorato-input emp-input" />
                                         <p v-if="form.errors.emergency_contact_phone" class="emp-error">{{ form.errors.emergency_contact_phone }}</p>
                                     </div>
                                     <div class="sm:col-span-2">
                                         <label class="emp-label">{{ $t('a_address') }}</label>
-                                        <textarea v-model="form.address" rows="3" :placeholder="$t('a_address_placeholder')" class="emp-input emp-textarea"></textarea>
+                                        <textarea v-model="form.address" rows="3" :placeholder="$t('a_address_placeholder')" class="doctorato-input emp-input emp-textarea"></textarea>
                                         <p v-if="form.errors.address" class="emp-error">{{ form.errors.address }}</p>
                                     </div>
                                 </div>
@@ -358,7 +358,7 @@ function submit() {
                                         <label class="emp-label">{{ $t('a_bank_name') }}</label>
                                         <div class="emp-input-icon-wrap">
                                             <svg class="emp-input-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75z" /></svg>
-                                            <input v-model="form.bank_name" type="text" :placeholder="$t('a_bank_name_placeholder')" class="emp-input emp-input--icon" />
+                                            <input v-model="form.bank_name" type="text" :placeholder="$t('a_bank_name_placeholder')" class="doctorato-input emp-input emp-input--icon" />
                                         </div>
                                         <p v-if="form.errors.bank_name" class="emp-error">{{ form.errors.bank_name }}</p>
                                     </div>
@@ -366,7 +366,7 @@ function submit() {
                                         <label class="emp-label">{{ $t('a_account_number') }}</label>
                                         <div class="emp-input-icon-wrap">
                                             <svg class="emp-input-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" /></svg>
-                                            <input v-model="form.bank_account_number" type="text" :placeholder="$t('a_account_number_placeholder')" class="emp-input emp-input--icon" />
+                                            <input v-model="form.bank_account_number" type="text" :placeholder="$t('a_account_number_placeholder')" class="doctorato-input emp-input emp-input--icon" />
                                         </div>
                                         <p v-if="form.errors.bank_account_number" class="emp-error">{{ form.errors.bank_account_number }}</p>
                                     </div>
@@ -374,7 +374,7 @@ function submit() {
                                         <label class="emp-label">{{ $t('a_insurance_number') }}</label>
                                         <div class="emp-input-icon-wrap">
                                             <svg class="emp-input-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" /></svg>
-                                            <input v-model="form.insurance_number" type="text" :placeholder="$t('a_insurance_number_placeholder')" class="emp-input emp-input--icon" />
+                                            <input v-model="form.insurance_number" type="text" :placeholder="$t('a_insurance_number_placeholder')" class="doctorato-input emp-input emp-input--icon" />
                                         </div>
                                         <p v-if="form.errors.insurance_number" class="emp-error">{{ form.errors.insurance_number }}</p>
                                     </div>

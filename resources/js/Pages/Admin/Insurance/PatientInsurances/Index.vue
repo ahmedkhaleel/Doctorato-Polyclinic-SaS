@@ -76,17 +76,17 @@ function fmt(n) {
         <div class="bg-white rounded-2xl border border-gray-100 p-4 mb-5 flex flex-wrap gap-3">
             <input v-model="search" @keyup.enter="applyFilters" type="text"
                    :placeholder="isRtl ? 'بحث بالاسم، رقم الملف، رقم العضوية...' : 'Search name, file#, member...'"
-                   class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm flex-1 min-w-[220px] focus:ring-[#C4A265] focus:border-[#C4A265]" />
-            <select v-model="companyFilter" @change="applyFilters" class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]">
+                   class="doctorato-input px-4 py-2.5 border border-gray-200 rounded-xl text-sm flex-1 min-w-[220px] focus:ring-[#C4A265] focus:border-[#C4A265]" />
+            <select v-model="companyFilter" @change="applyFilters" class="doctorato-input px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]">
                 <option value="">{{ isRtl ? 'كل الشركات' : 'All Companies' }}</option>
                 <option v-for="c in companies" :key="c.id" :value="c.id">{{ isRtl ? c.name_ar : c.name_en }}</option>
             </select>
-            <select v-model="verifiedFilter" @change="applyFilters" class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]">
+            <select v-model="verifiedFilter" @change="applyFilters" class="doctorato-input px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]">
                 <option value="">{{ isRtl ? 'كل الحالات' : 'All' }}</option>
                 <option value="1">{{ isRtl ? 'تم التحقق' : 'Verified' }}</option>
                 <option value="0">{{ isRtl ? 'بانتظار التحقق' : 'Unverified' }}</option>
             </select>
-            <select v-model="expiredFilter" @change="applyFilters" class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]">
+            <select v-model="expiredFilter" @change="applyFilters" class="doctorato-input px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]">
                 <option value="">{{ isRtl ? 'السريان' : 'Validity' }}</option>
                 <option value="1">{{ isRtl ? 'منتهي فقط' : 'Expired only' }}</option>
             </select>

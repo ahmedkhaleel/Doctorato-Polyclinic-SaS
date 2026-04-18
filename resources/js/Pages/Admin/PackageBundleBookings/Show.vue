@@ -729,7 +729,7 @@ function toggleSection(key) {
                     <form @submit.prevent="submitPayment" class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Payment Method *</label>
-                            <select v-model="paymentForm.payment_method_id" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent">
+                            <select v-model="paymentForm.payment_method_id" class="doctorato-input w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent">
                                 <option :value="null" disabled>Select method</option>
                                 <option v-for="pm in paymentMethods" :key="pm.id" :value="pm.id">{{ pm.name_en }}</option>
                             </select>
@@ -737,17 +737,17 @@ function toggleSection(key) {
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Amount ({{ currencyCode }}) *</label>
-                            <input v-model="paymentForm.amount" type="number" step="0.01" min="0.01" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" placeholder="0.00" />
+                            <input v-model="paymentForm.amount" type="number" step="0.01" min="0.01" class="doctorato-input w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" placeholder="0.00" />
                             <p v-if="paymentForm.errors.amount" class="text-red-500 text-xs mt-1">{{ paymentForm.errors.amount }}</p>
                             <p v-if="remainingBalance > 0" class="text-xs text-gray-400 mt-1">Remaining: {{ formatCurrency(remainingBalance) }}</p>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Reference Number</label>
-                            <input v-model="paymentForm.reference_number" type="text" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" placeholder="Optional" />
+                            <input v-model="paymentForm.reference_number" type="text" class="doctorato-input w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" placeholder="Optional" />
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Notes</label>
-                            <textarea v-model="paymentForm.notes" rows="2" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent resize-none" placeholder="Optional"></textarea>
+                            <textarea v-model="paymentForm.notes" rows="2" class="doctorato-input w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent resize-none" placeholder="Optional"></textarea>
                         </div>
                         <div class="flex gap-3 pt-2">
                             <button type="button" @click="showPaymentModal = false" class="flex-1 px-4 py-2.5 rounded-lg text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 transition">Cancel</button>
@@ -775,7 +775,7 @@ function toggleSection(key) {
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Doctor</label>
                             <select v-model="rescheduleForm.doctor_id" @change="rescheduleForm.date = ''; rescheduleForm.availableSlots = []; rescheduleForm.start_time = ''; rescheduleForm.end_time = '';"
-                                    class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent">
+                                    class="doctorato-input w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent">
                                 <option v-for="doc in doctors" :key="doc.id" :value="doc.id">{{ doc.name_en }}</option>
                             </select>
                         </div>
@@ -845,7 +845,7 @@ function toggleSection(key) {
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Service *</label>
                             <select v-model="retouchForm.package_bundle_booking_service_id"
-                                    class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent">
+                                    class="doctorato-input w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent">
                                 <option :value="null" disabled>Select service</option>
                                 <option v-for="bs in b.bundle_services" :key="bs.id" :value="bs.id">
                                     {{ bs.service?.name_en }} ({{ bs.completed_sessions }}/{{ bs.sessions_count }} sessions)
@@ -855,7 +855,7 @@ function toggleSection(key) {
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Doctor *</label>
                             <select v-model="retouchForm.doctor_id" @change="retouchForm.date = ''; retouchForm.availableSlots = []; retouchForm.start_time = ''; retouchForm.end_time = '';"
-                                    class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent">
+                                    class="doctorato-input w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent">
                                 <option :value="null" disabled>Select doctor</option>
                                 <option v-for="doc in doctors" :key="doc.id" :value="doc.id">{{ doc.name_en }}</option>
                             </select>

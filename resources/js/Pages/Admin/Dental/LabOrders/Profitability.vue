@@ -119,9 +119,9 @@ const comparisonByItemType = computed(() => {
                         </Link>
                         <!-- Date Filter -->
                         <div class="flex items-center gap-2 bg-white/10 rounded-xl px-3 py-1.5 backdrop-blur-sm">
-                            <input v-model="dateFrom" type="date" class="bg-transparent text-white text-sm border-0 focus:ring-0 p-1 w-32" @change="applyFilters" />
+                            <input v-model="dateFrom" type="date" class="doctorato-input bg-transparent text-white text-sm border-0 focus:ring-0 p-1 w-32" @change="applyFilters" />
                             <span class="text-white/50">→</span>
-                            <input v-model="dateTo" type="date" class="bg-transparent text-white text-sm border-0 focus:ring-0 p-1 w-32" @change="applyFilters" />
+                            <input v-model="dateTo" type="date" class="doctorato-input bg-transparent text-white text-sm border-0 focus:ring-0 p-1 w-32" @change="applyFilters" />
                         </div>
                     </div>
                 </div>

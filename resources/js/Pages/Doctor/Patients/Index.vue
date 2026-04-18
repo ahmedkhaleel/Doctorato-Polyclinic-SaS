@@ -254,7 +254,7 @@ function timeAgo(dateStr) {
                         v-model="search"
                         type="text"
                         :placeholder="isRtl ? 'بحث بالاسم أو الهاتف أو رقم الملف... (اضغط /)' : 'Search by name, phone, or file number... (press /)'"
-                        class="w-full pl-12 pr-20 py-3.5 bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl text-sm text-white placeholder-gray-400 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]/50 focus:bg-white/15 transition-all"
+                        class="doctorato-input w-full pl-12 pr-20 py-3.5 bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl text-sm text-white placeholder-gray-400 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]/50 focus:bg-white/15 transition-all"
                     />
                     <!-- Results count badge -->
                     <Transition
@@ -318,7 +318,7 @@ function timeAgo(dateStr) {
                                 <div>
                                     <label class="block text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">{{ isRtl ? 'الخدمة' : 'Service' }}</label>
                                     <select v-model="selectedServiceId"
-                                        class="w-full px-3 py-2 bg-white/10 border border-white/15 rounded-lg text-sm text-white focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]/50 transition-all appearance-none cursor-pointer"
+                                        class="doctorato-input w-full px-3 py-2 bg-white/10 border border-white/15 rounded-lg text-sm text-white focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]/50 transition-all appearance-none cursor-pointer"
                                         style="background-image: url('data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%239ca3af%22 stroke-width=%222%22%3E%3Cpath d=%22M6 9l6 6 6-6%22/%3E%3C/svg%3E'); background-repeat: no-repeat; background-position: right 0.5rem center; background-size: 1.2em;"
                                     >
                                         <option value="" class="bg-gray-800 text-white">{{ isRtl ? 'كل الخدمات' : 'All Services' }}</option>
@@ -331,14 +331,14 @@ function timeAgo(dateStr) {
                                 <div>
                                     <label class="block text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">{{ isRtl ? 'آخر زيارة من' : 'Last Visit From' }}</label>
                                     <input type="date" v-model="lastVisitFrom"
-                                        class="w-full px-3 py-2 bg-white/10 border border-white/15 rounded-lg text-sm text-white placeholder-gray-500 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]/50 transition-all"
+                                        class="doctorato-input w-full px-3 py-2 bg-white/10 border border-white/15 rounded-lg text-sm text-white placeholder-gray-500 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]/50 transition-all"
                                     />
                                 </div>
                                 <!-- Date To -->
                                 <div>
                                     <label class="block text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">{{ isRtl ? 'آخر زيارة إلى' : 'Last Visit To' }}</label>
                                     <input type="date" v-model="lastVisitTo"
-                                        class="w-full px-3 py-2 bg-white/10 border border-white/15 rounded-lg text-sm text-white placeholder-gray-500 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]/50 transition-all"
+                                        class="doctorato-input w-full px-3 py-2 bg-white/10 border border-white/15 rounded-lg text-sm text-white placeholder-gray-500 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]/50 transition-all"
                                     />
                                 </div>
                             </div>
@@ -697,7 +697,7 @@ function timeAgo(dateStr) {
                                     v-model="quickNoteText"
                                     rows="3"
                                     :placeholder="isRtl ? 'اكتب ملاحظتك هنا...' : 'Write your note here...'"
-                                    class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] resize-none transition"
+                                    class="doctorato-input w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] resize-none transition"
                                     autofocus
                                 ></textarea>
                             </div>

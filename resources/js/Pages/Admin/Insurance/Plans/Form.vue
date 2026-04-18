@@ -82,7 +82,7 @@ const coverageToggles = [
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'شركة التأمين' : 'Insurance Company' }} *</label>
-                        <select v-model="form.insurance_company_id" required class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]">
+                        <select v-model="form.insurance_company_id" required class="doctorato-input w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]">
                             <option value="">{{ isRtl ? 'اختر الشركة' : 'Select company' }}</option>
                             <option v-for="c in companies" :key="c.id" :value="c.id">{{ isRtl ? c.name_ar : c.name_en }}</option>
                         </select>
@@ -90,7 +90,7 @@ const coverageToggles = [
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'الفئة' : 'Class' }} *</label>
-                        <select v-model="form.class" required class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]">
+                        <select v-model="form.class" required class="doctorato-input w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]">
                             <option value="VIP">VIP</option>
                             <option value="A">A</option><option value="B">B</option><option value="C">C</option>
                             <option value="D">D</option><option value="E">E</option>
@@ -98,17 +98,17 @@ const coverageToggles = [
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'الاسم بالعربي' : 'Name (Arabic)' }} *</label>
-                        <input v-model="form.name_ar" type="text" required class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]" />
+                        <input v-model="form.name_ar" type="text" required class="doctorato-input w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]" />
                         <p v-if="form.errors.name_ar" class="text-xs text-red-600 mt-1">{{ form.errors.name_ar }}</p>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'الاسم بالإنجليزي' : 'Name (English)' }} *</label>
-                        <input v-model="form.name_en" type="text" required class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]" />
+                        <input v-model="form.name_en" type="text" required class="doctorato-input w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]" />
                         <p v-if="form.errors.name_en" class="text-xs text-red-600 mt-1">{{ form.errors.name_en }}</p>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'كود الباقة' : 'Plan Code' }}</label>
-                        <input v-model="form.plan_code" type="text" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm font-mono focus:ring-[#C4A265] focus:border-[#C4A265]" />
+                        <input v-model="form.plan_code" type="text" class="doctorato-input w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm font-mono focus:ring-[#C4A265] focus:border-[#C4A265]" />
                     </div>
                 </div>
             </section>
@@ -130,15 +130,15 @@ const coverageToggles = [
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'الحد الأقصى السنوي' : 'Max Annual Amount' }}</label>
-                        <input v-model="form.max_coverage_amount" type="number" step="0.01" min="0" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]" />
+                        <input v-model="form.max_coverage_amount" type="number" step="0.01" min="0" class="doctorato-input w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]" />
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'المشاركة (Copay)' : 'Copay Amount' }}</label>
-                        <input v-model="form.copay_amount" type="number" step="0.01" min="0" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]" />
+                        <input v-model="form.copay_amount" type="number" step="0.01" min="0" class="doctorato-input w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]" />
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'التحمل (Deductible)' : 'Deductible' }}</label>
-                        <input v-model="form.deductible" type="number" step="0.01" min="0" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]" />
+                        <input v-model="form.deductible" type="number" step="0.01" min="0" class="doctorato-input w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]" />
                     </div>
                 </div>
             </section>
@@ -175,11 +175,11 @@ const coverageToggles = [
                 <div class="space-y-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'الاستثناءات' : 'Exclusions' }}</label>
-                        <textarea v-model="form.exclusions" rows="3" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]"></textarea>
+                        <textarea v-model="form.exclusions" rows="3" class="doctorato-input w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]"></textarea>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
-                        <textarea v-model="form.notes" rows="2" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]"></textarea>
+                        <textarea v-model="form.notes" rows="2" class="doctorato-input w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]"></textarea>
                     </div>
                     <label class="flex items-center gap-2 cursor-pointer">
                         <input v-model="form.is_active" type="checkbox" class="rounded text-[#1B365D] focus:ring-[#C4A265]" />

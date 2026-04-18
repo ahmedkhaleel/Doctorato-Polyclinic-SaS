@@ -64,12 +64,12 @@ function submit() {
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_name_en') }}</label>
-                                <input v-model="form.name_en" type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                <input v-model="form.name_en" type="text" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                 <p v-if="form.errors.name_en" class="mt-1 text-sm text-red-600">{{ form.errors.name_en }}</p>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_name_ar') }}</label>
-                                <input v-model="form.name_ar" type="text" dir="rtl" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                <input v-model="form.name_ar" type="text" dir="rtl" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                 <p v-if="form.errors.name_ar" class="mt-1 text-sm text-red-600">{{ form.errors.name_ar }}</p>
                             </div>
                         </div>
@@ -77,12 +77,12 @@ function submit() {
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Short Description (English)</label>
-                                <textarea v-model="form.short_desc_en" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"></textarea>
+                                <textarea v-model="form.short_desc_en" rows="3" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"></textarea>
                                 <p v-if="form.errors.short_desc_en" class="mt-1 text-sm text-red-600">{{ form.errors.short_desc_en }}</p>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Short Description (Arabic)</label>
-                                <textarea v-model="form.short_desc_ar" rows="3" dir="rtl" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"></textarea>
+                                <textarea v-model="form.short_desc_ar" rows="3" dir="rtl" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"></textarea>
                                 <p v-if="form.errors.short_desc_ar" class="mt-1 text-sm text-red-600">{{ form.errors.short_desc_ar }}</p>
                             </div>
                         </div>
@@ -102,12 +102,12 @@ function submit() {
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Benefits (English)</label>
-                                <textarea v-model="form.benefits_en" rows="4" placeholder="One benefit per line" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"></textarea>
+                                <textarea v-model="form.benefits_en" rows="4" placeholder="One benefit per line" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"></textarea>
                                 <p v-if="form.errors.benefits_en" class="mt-1 text-sm text-red-600">{{ form.errors.benefits_en }}</p>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Benefits (Arabic)</label>
-                                <textarea v-model="form.benefits_ar" rows="4" dir="rtl" placeholder="One benefit per line" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"></textarea>
+                                <textarea v-model="form.benefits_ar" rows="4" dir="rtl" placeholder="One benefit per line" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"></textarea>
                                 <p v-if="form.errors.benefits_ar" class="mt-1 text-sm text-red-600">{{ form.errors.benefits_ar }}</p>
                             </div>
                         </div>
@@ -115,12 +115,12 @@ function submit() {
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Results (English)</label>
-                                <textarea v-model="form.results_en" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"></textarea>
+                                <textarea v-model="form.results_en" rows="3" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"></textarea>
                                 <p v-if="form.errors.results_en" class="mt-1 text-sm text-red-600">{{ form.errors.results_en }}</p>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Results (Arabic)</label>
-                                <textarea v-model="form.results_ar" rows="3" dir="rtl" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"></textarea>
+                                <textarea v-model="form.results_ar" rows="3" dir="rtl" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"></textarea>
                                 <p v-if="form.errors.results_ar" class="mt-1 text-sm text-red-600">{{ form.errors.results_ar }}</p>
                             </div>
                         </div>
@@ -132,24 +132,24 @@ function submit() {
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">SEO Title (English)</label>
-                                <input v-model="form.seo_title_en" type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                <input v-model="form.seo_title_en" type="text" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">SEO Title (Arabic)</label>
-                                <input v-model="form.seo_title_ar" type="text" dir="rtl" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                <input v-model="form.seo_title_ar" type="text" dir="rtl" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">SEO Description (English)</label>
-                                <textarea v-model="form.seo_desc_en" rows="2" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"></textarea>
+                                <textarea v-model="form.seo_desc_en" rows="2" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"></textarea>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">SEO Description (Arabic)</label>
-                                <textarea v-model="form.seo_desc_ar" rows="2" dir="rtl" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"></textarea>
+                                <textarea v-model="form.seo_desc_ar" rows="2" dir="rtl" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"></textarea>
                             </div>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">SEO Keywords</label>
-                            <input v-model="form.seo_keywords" type="text" placeholder="comma, separated, keywords" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                            <input v-model="form.seo_keywords" type="text" placeholder="comma, separated, keywords" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                         </div>
                     </div>
                 </div>
@@ -166,7 +166,7 @@ function submit() {
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_status') }}</label>
-                            <select v-model="form.status" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent">
+                            <select v-model="form.status" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent">
                                 <option value="active">{{ $t('a_active') }}</option>
                                 <option value="inactive">{{ $t('a_inactive') }}</option>
                             </select>
@@ -174,12 +174,12 @@ function submit() {
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Sessions Count</label>
-                            <input v-model="form.sessions_count" type="number" min="0" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                            <input v-model="form.sessions_count" type="number" min="0" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Icon (CSS class or SVG name)</label>
-                            <input v-model="form.icon" type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                            <input v-model="form.icon" type="text" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                         </div>
 
                         <!-- Visibility Settings -->

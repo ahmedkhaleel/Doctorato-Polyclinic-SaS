@@ -126,9 +126,9 @@ function submit() {
 
                             <div class="grid grid-cols-1 gap-3 mt-3">
                                 <input v-model="form.before_date" type="date" :placeholder="isRtl ? 'تاريخ قبل' : 'Before date'"
-                                    class="dental-input" />
+                                    class="doctorato-input dental-input" />
                                 <input v-model="form.before_notes" type="text" :placeholder="isRtl ? 'ملاحظات قبل العلاج...' : 'Before notes...'"
-                                    class="dental-input" />
+                                    class="doctorato-input dental-input" />
                             </div>
                         </div>
 
@@ -151,9 +151,9 @@ function submit() {
 
                             <div class="grid grid-cols-1 gap-3 mt-3">
                                 <input v-model="form.after_date" type="date" :placeholder="isRtl ? 'تاريخ بعد' : 'After date'"
-                                    class="dental-input" />
+                                    class="doctorato-input dental-input" />
                                 <input v-model="form.after_notes" type="text" :placeholder="isRtl ? 'ملاحظات بعد العلاج...' : 'After notes...'"
-                                    class="dental-input" />
+                                    class="doctorato-input dental-input" />
                             </div>
                         </div>
                     </div>
@@ -166,7 +166,7 @@ function submit() {
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="text-sm font-medium text-gray-700 mb-1 block">{{ isRtl ? 'المريض *' : 'Patient *' }}</label>
-                            <select v-model="form.patient_id" class="dental-select">
+                            <select v-model="form.patient_id" class="doctorato-input dental-select">
                                 <option value="">{{ isRtl ? 'اختر المريض' : 'Select Patient' }}</option>
                                 <option v-for="p in patients" :key="p.id" :value="p.id">{{ p.full_name }} ({{ p.file_number }})</option>
                             </select>
@@ -174,33 +174,33 @@ function submit() {
                         </div>
                         <div>
                             <label class="text-sm font-medium text-gray-700 mb-1 block">{{ isRtl ? 'الطبيب' : 'Doctor' }}</label>
-                            <select v-model="form.doctor_id" class="dental-select">
+                            <select v-model="form.doctor_id" class="doctorato-input dental-select">
                                 <option value="">{{ isRtl ? 'اختر الطبيب' : 'Select Doctor' }}</option>
                                 <option v-for="d in doctors" :key="d.id" :value="d.id">{{ isRtl ? d.name_ar : d.name_en }}</option>
                             </select>
                         </div>
                         <div>
                             <label class="text-sm font-medium text-gray-700 mb-1 block">{{ isRtl ? 'التصنيف *' : 'Category *' }}</label>
-                            <select v-model="form.category" class="dental-select">
+                            <select v-model="form.category" class="doctorato-input dental-select">
                                 <option v-for="cat in categories" :key="cat" :value="cat">{{ categoryLabel(cat) }}</option>
                             </select>
                         </div>
                         <div>
                             <label class="text-sm font-medium text-gray-700 mb-1 block">{{ isRtl ? 'أرقام الأسنان' : 'Tooth Numbers' }}</label>
                             <input v-model="form.tooth_numbers" type="text" :placeholder="isRtl ? 'مثال: 11, 12, 21' : 'e.g. 11, 12, 21'"
-                                class="dental-input" />
+                                class="doctorato-input dental-input" />
                         </div>
                         <div>
                             <label class="text-sm font-medium text-gray-700 mb-1 block">{{ isRtl ? 'العنوان بالعربي' : 'Title (Arabic)' }}</label>
-                            <input v-model="form.title_ar" type="text" class="dental-input" />
+                            <input v-model="form.title_ar" type="text" class="doctorato-input dental-input" />
                         </div>
                         <div>
                             <label class="text-sm font-medium text-gray-700 mb-1 block">{{ isRtl ? 'العنوان بالإنجليزي' : 'Title (English)' }}</label>
-                            <input v-model="form.title_en" type="text" class="dental-input" />
+                            <input v-model="form.title_en" type="text" class="doctorato-input dental-input" />
                         </div>
                         <div class="md:col-span-2">
                             <label class="text-sm font-medium text-gray-700 mb-1 block">{{ isRtl ? 'الوصف' : 'Description' }}</label>
-                            <textarea v-model="form.description" rows="3" class="dental-input resize-none"></textarea>
+                            <textarea v-model="form.description" rows="3" class="doctorato-input dental-input resize-none"></textarea>
                         </div>
                     </div>
 
@@ -211,7 +211,7 @@ function submit() {
                             <span class="text-sm text-gray-700">{{ isRtl ? 'مرئي للمريض' : 'Visible to patient' }}</span>
                         </label>
                         <label class="flex items-center gap-2 cursor-pointer">
-                            <input v-model="form.is_featured" type="checkbox" class="w-4 h-4 text-amber-500 border-gray-300 rounded focus:ring-amber-400" />
+                            <input v-model="form.is_featured" type="checkbox" class="w-4 h-4 text-amber-500 border-gray-300 rounded focus:ring-[#C4A265]/30" />
                             <span class="text-sm text-gray-700">{{ isRtl ? 'مميز' : 'Featured' }}</span>
                         </label>
                     </div>

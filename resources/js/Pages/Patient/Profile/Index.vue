@@ -81,7 +81,7 @@ function updatePassword() {
                         <input
                             v-model="profileForm.email"
                             type="email"
-                            class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[var(--brand-primary)]/50 focus:border-[var(--brand-primary)]/50 transition-all"
+                            class="doctorato-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[var(--brand-primary)]/50 focus:border-[var(--brand-primary)]/50 transition-all"
                             :class="profileForm.errors.email ? 'border-red-300' : ''"
                         />
                         <p v-if="profileForm.errors.email" class="mt-1 text-xs text-red-500">{{ profileForm.errors.email }}</p>
@@ -92,7 +92,7 @@ function updatePassword() {
                         <input
                             v-model="profileForm.phone2"
                             type="tel"
-                            class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[var(--brand-primary)]/50 focus:border-[var(--brand-primary)]/50 transition-all"
+                            class="doctorato-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[var(--brand-primary)]/50 focus:border-[var(--brand-primary)]/50 transition-all"
                             :class="profileForm.errors.phone2 ? 'border-red-300' : ''"
                         />
                         <p v-if="profileForm.errors.phone2" class="mt-1 text-xs text-red-500">{{ profileForm.errors.phone2 }}</p>
@@ -103,7 +103,7 @@ function updatePassword() {
                         <textarea
                             v-model="profileForm.address"
                             rows="2"
-                            class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[var(--brand-primary)]/50 focus:border-[var(--brand-primary)]/50 transition-all resize-none"
+                            class="doctorato-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[var(--brand-primary)]/50 focus:border-[var(--brand-primary)]/50 transition-all resize-none"
                             :class="profileForm.errors.address ? 'border-red-300' : ''"
                         ></textarea>
                         <p v-if="profileForm.errors.address" class="mt-1 text-xs text-red-500">{{ profileForm.errors.address }}</p>
@@ -114,7 +114,7 @@ function updatePassword() {
                         <input
                             v-model="profileForm.emergency_contact_name"
                             type="text"
-                            class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[var(--brand-primary)]/50 focus:border-[var(--brand-primary)]/50 transition-all"
+                            class="doctorato-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[var(--brand-primary)]/50 focus:border-[var(--brand-primary)]/50 transition-all"
                             :class="profileForm.errors.emergency_contact_name ? 'border-red-300' : ''"
                         />
                         <p v-if="profileForm.errors.emergency_contact_name" class="mt-1 text-xs text-red-500">{{ profileForm.errors.emergency_contact_name }}</p>
@@ -125,7 +125,7 @@ function updatePassword() {
                         <input
                             v-model="profileForm.emergency_contact_phone"
                             type="tel"
-                            class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[var(--brand-primary)]/50 focus:border-[var(--brand-primary)]/50 transition-all"
+                            class="doctorato-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[var(--brand-primary)]/50 focus:border-[var(--brand-primary)]/50 transition-all"
                             :class="profileForm.errors.emergency_contact_phone ? 'border-red-300' : ''"
                         />
                         <p v-if="profileForm.errors.emergency_contact_phone" class="mt-1 text-xs text-red-500">{{ profileForm.errors.emergency_contact_phone }}</p>
@@ -163,7 +163,7 @@ function updatePassword() {
                             <input
                                 v-model="passwordForm.current_password"
                                 type="password"
-                                class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[var(--brand-primary)]/50 focus:border-[var(--brand-primary)]/50 transition-all"
+                                class="doctorato-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[var(--brand-primary)]/50 focus:border-[var(--brand-primary)]/50 transition-all"
                                 :class="passwordForm.errors.current_password ? 'border-red-300' : ''"
                             />
                             <p v-if="passwordForm.errors.current_password" class="mt-1 text-xs text-red-500">{{ passwordForm.errors.current_password }}</p>
@@ -174,7 +174,7 @@ function updatePassword() {
                             <input
                                 v-model="passwordForm.password"
                                 type="password"
-                                class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[var(--brand-primary)]/50 focus:border-[var(--brand-primary)]/50 transition-all"
+                                class="doctorato-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[var(--brand-primary)]/50 focus:border-[var(--brand-primary)]/50 transition-all"
                                 :class="passwordForm.errors.password ? 'border-red-300' : ''"
                             />
                             <p v-if="passwordForm.errors.password" class="mt-1 text-xs text-red-500">{{ passwordForm.errors.password }}</p>
@@ -185,7 +185,7 @@ function updatePassword() {
                             <input
                                 v-model="passwordForm.password_confirmation"
                                 type="password"
-                                class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[var(--brand-primary)]/50 focus:border-[var(--brand-primary)]/50 transition-all"
+                                class="doctorato-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[var(--brand-primary)]/50 focus:border-[var(--brand-primary)]/50 transition-all"
                             />
                         </div>
 

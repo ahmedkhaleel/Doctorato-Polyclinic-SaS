@@ -951,7 +951,7 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handleCalendarKe
                                     <div v-if="completingFuId === fu.id" class="mb-2.5">
                                         <form @submit.prevent="submitDetailComplete(fu.id)" class="flex flex-col gap-2">
                                             <input v-model="completionResult" type="text" autofocus
-                                                class="w-full rounded-lg border-emerald-300 text-xs py-2 px-3 focus:ring-emerald-500 focus:border-emerald-500 bg-emerald-50/50"
+                                                class="doctorato-input w-full rounded-lg border-emerald-300 text-xs py-2 px-3 focus:ring-[#C4A265]/30 focus:border-[#1B365D] bg-emerald-50/50"
                                                 :placeholder="isRtl ? '\u0646\u062A\u064A\u062C\u0629 \u0627\u0644\u0645\u062A\u0627\u0628\u0639\u0629 (\u0627\u062E\u062A\u064A\u0627\u0631\u064A)...' : 'Follow-up result (optional)...'" />
                                             <div class="flex items-center gap-2">
                                                 <button type="submit"
@@ -1025,12 +1025,12 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handleCalendarKe
                     <div class="p-6 space-y-4">
                         <div>
                             <label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'العميل' : 'Lead' }} *</label>
-                            <input v-if="activeLeads && activeLeads.length > 8"
+                            <input v-if="activeLeads && activeLeads.length> 8"
                                 v-model="quickAddLeadSearch"
                                 type="text"
                                 class="w-full rounded-xl border-gray-200 text-sm focus:ring-teal-500 focus:border-teal-500 mb-2"
                                 :placeholder="isRtl ? 'ابحث بالاسم أو الهاتف...' : 'Search by name or phone...'" />
-                            <select v-model="quickAddLeadId" class="w-full rounded-xl border-gray-200 text-sm focus:ring-teal-500 focus:border-teal-500" size="1">
+                            <select v-model="quickAddLeadId" class="doctorato-input w-full rounded-xl border-gray-200 text-sm focus:ring-[#C4A265]/30 focus:border-[#1B365D]" size="1">
                                 <option value="">{{ isRtl ? '-- اختر عميل --' : '-- Select lead --' }}</option>
                                 <option v-for="lead in filteredQuickAddLeads" :key="lead.id" :value="lead.id">{{ lead.full_name }} - {{ lead.phone }}</option>
                             </select>
@@ -1039,22 +1039,22 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handleCalendarKe
                         <div class="grid grid-cols-2 gap-3">
                             <div>
                                 <label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'النوع' : 'Type' }}</label>
-                                <select v-model="quickAddType" class="w-full rounded-xl border-gray-200 text-sm focus:ring-teal-500 focus:border-teal-500">
+                                <select v-model="quickAddType" class="doctorato-input w-full rounded-xl border-gray-200 text-sm focus:ring-[#C4A265]/30 focus:border-[#1B365D]">
                                     <option v-for="(cfg, key) in typeConfig" :key="key" :value="key">{{ isRtl ? cfg.ar : cfg.en }}</option>
                                 </select>
                             </div>
                             <div>
                                 <label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'الوقت' : 'Time' }}</label>
-                                <input v-model="quickAddTime" type="time" class="w-full rounded-xl border-gray-200 text-sm focus:ring-teal-500 focus:border-teal-500"/>
+                                <input v-model="quickAddTime" type="time" class="doctorato-input w-full rounded-xl border-gray-200 text-sm focus:ring-[#C4A265]/30 focus:border-[#1B365D]"/>
                             </div>
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'التاريخ' : 'Date' }}</label>
-                            <input v-model="quickAddDate" type="date" class="w-full rounded-xl border-gray-200 text-sm focus:ring-teal-500 focus:border-teal-500"/>
+                            <input v-model="quickAddDate" type="date" class="doctorato-input w-full rounded-xl border-gray-200 text-sm focus:ring-[#C4A265]/30 focus:border-[#1B365D]"/>
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
-                            <input v-model="quickAddNotes" type="text" class="w-full rounded-xl border-gray-200 text-sm focus:ring-teal-500 focus:border-teal-500" :placeholder="isRtl ? 'اختياري...' : 'Optional...'"/>
+                            <input v-model="quickAddNotes" type="text" class="doctorato-input w-full rounded-xl border-gray-200 text-sm focus:ring-[#C4A265]/30 focus:border-[#1B365D]" :placeholder="isRtl ? 'اختياري...' : 'Optional...'"/>
                         </div>
                         <div class="flex gap-3 pt-2">
                             <button @click="submitQuickAdd" :disabled="!quickAddLeadId || quickAddSaving"

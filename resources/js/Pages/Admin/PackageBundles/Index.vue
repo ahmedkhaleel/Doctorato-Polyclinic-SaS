@@ -268,7 +268,7 @@ function toggleActive(bundle) {
                             <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                         </div>
                         <input v-model="search" type="text" :placeholder="isRtl ? 'ابحث عن الباقات بالاسم...' : 'Search bundles by name...'"
-                               class="w-full py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all duration-200 placeholder-gray-400 bg-gray-50/50 hover:bg-white focus:bg-white"
+                               class="doctorato-input w-full py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all duration-200 placeholder-gray-400 bg-gray-50/50 hover:bg-white focus:bg-white"
                                :class="isRtl ? 'pr-11 pl-4' : 'pl-11 pr-4'" />
                     </div>
                     <!-- Module Dropdown -->
@@ -295,7 +295,7 @@ function toggleActive(bundle) {
                                         <svg class="absolute top-2.5 w-3.5 h-3.5 text-gray-400" :class="isRtl ? 'right-2.5' : 'left-2.5'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" stroke-width="2"/><path stroke-linecap="round" stroke-width="2" d="m21 21-4.35-4.35"/></svg>
                                         <input v-model="dropdownSearches.module" type="text"
                                                :placeholder="isRtl ? 'بحث عن قسم...' : 'Search department...'"
-                                               class="pb-dd-search w-full text-xs border border-gray-200 rounded-lg py-2 bg-gray-50 focus:bg-white focus:ring-1 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all"
+                                               class="doctorato-input pb-dd-search w-full text-xs border border-gray-200 rounded-lg py-2 bg-gray-50 focus:bg-white focus:ring-1 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all"
                                                :class="isRtl ? 'pr-8 pl-3' : 'pl-8 pr-3'" />
                                     </div>
                                 </div>

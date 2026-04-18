@@ -56,11 +56,11 @@ const maxMonthly = computed(() => Math.max(...(props.monthlyTrend || []).map(m =
         <div class="flex flex-wrap items-end gap-3 mb-6">
             <div>
                 <label class="block text-xs text-gray-500 mb-1">{{ isRtl ? 'من' : 'From' }}</label>
-                <input v-model="dateFrom" type="date" class="px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]" />
+                <input v-model="dateFrom" type="date" class="doctorato-input px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]" />
             </div>
             <div>
                 <label class="block text-xs text-gray-500 mb-1">{{ isRtl ? 'إلى' : 'To' }}</label>
-                <input v-model="dateTo" type="date" class="px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]" />
+                <input v-model="dateTo" type="date" class="doctorato-input px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]" />
             </div>
             <button @click="applyFilters" class="px-5 py-2.5 bg-[#1B365D] text-white rounded-xl hover:bg-[#142849] text-sm font-medium transition">
                 {{ isRtl ? 'تطبيق' : 'Apply' }}

@@ -230,7 +230,7 @@ const fee = computed(() => Number(props.doctor.online_consultation_fee || 0).toF
                             v-model="form.chief_complaint"
                             rows="4"
                             :placeholder="isRtl ? 'وصف مختصر للأعراض أو سبب الاستشارة...' : 'Short description of symptoms or reason for consultation...'"
-                            class="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]"
+                            class="doctorato-input w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]"
                         ></textarea>
                         <p v-if="form.errors.chief_complaint" class="mt-1 text-xs text-red-600">{{ form.errors.chief_complaint }}</p>
                     </div>

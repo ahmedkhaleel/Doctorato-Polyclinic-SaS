@@ -193,9 +193,9 @@ const durations = [
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div class="relative">
                         <svg class="absolute top-1/2 -translate-y-1/2 ltr:left-4 rtl:right-4 w-4.5 h-4.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                        <input v-model="search" type="text" :placeholder="locale === 'ar' ? 'بحث بالاسم...' : 'Search by name...'" class="w-full ltr:pl-11 rtl:pr-11 ltr:pr-4 rtl:pl-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-slate-200/60 focus:border-slate-300 transition-all duration-200" />
+                        <input v-model="search" type="text" :placeholder="locale === 'ar' ? 'بحث بالاسم...' : 'Search by name...'" class="doctorato-input w-full ltr:pl-11 rtl:pr-11 ltr:pr-4 rtl:pl-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-slate-200/60 focus:border-slate-300 transition-all duration-200" />
                     </div>
-                    <select v-model="typeFilter" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-slate-200/60 focus:border-slate-300 transition-all duration-200">
+                    <select v-model="typeFilter" class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-slate-200/60 focus:border-slate-300 transition-all duration-200">
                         <option value="">{{ locale === 'ar' ? 'جميع أنواع العلاج' : 'All Treatment Types' }}</option>
                         <option v-for="tt in treatmentTypes" :key="tt" :value="tt">{{ getTypeLabel(tt) }}</option>
                     </select>
@@ -289,25 +289,25 @@ const durations = [
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ locale === 'ar' ? 'الاسم (عربي)' : 'Name (Arabic)' }} *</label>
-                                <input v-model="form.name_ar" type="text" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent" />
+                                <input v-model="form.name_ar" type="text" required class="doctorato-input w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent" />
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ locale === 'ar' ? 'الاسم (إنجليزي)' : 'Name (English)' }} *</label>
-                                <input v-model="form.name_en" type="text" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent" />
+                                <input v-model="form.name_en" type="text" required class="doctorato-input w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent" />
                             </div>
                         </div>
 
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ locale === 'ar' ? 'نوع العلاج' : 'Treatment Type' }}</label>
-                                <select v-model="form.treatment_type" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent">
+                                <select v-model="form.treatment_type" class="doctorato-input w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent">
                                     <option value="">{{ locale === 'ar' ? 'عام' : 'General' }}</option>
                                     <option v-for="tt in treatmentTypes" :key="tt" :value="tt">{{ getTypeLabel(tt) }}</option>
                                 </select>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ locale === 'ar' ? 'الترتيب' : 'Sort Order' }}</label>
-                                <input v-model="form.sort_order" type="number" min="0" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent" />
+                                <input v-model="form.sort_order" type="number" min="0" class="doctorato-input w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent" />
                             </div>
                             <div class="flex items-end gap-6 pb-1">
                                 <label class="flex items-center gap-2 cursor-pointer">
@@ -324,22 +324,22 @@ const durations = [
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ locale === 'ar' ? 'التشخيص (عربي)' : 'Diagnosis (Arabic)' }}</label>
-                                <input v-model="form.diagnosis_ar" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent" />
+                                <input v-model="form.diagnosis_ar" type="text" class="doctorato-input w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent" />
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ locale === 'ar' ? 'التشخيص (إنجليزي)' : 'Diagnosis (English)' }}</label>
-                                <input v-model="form.diagnosis_en" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent" />
+                                <input v-model="form.diagnosis_en" type="text" class="doctorato-input w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent" />
                             </div>
                         </div>
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ locale === 'ar' ? 'ملاحظات (عربي)' : 'Notes (Arabic)' }}</label>
-                                <textarea v-model="form.notes_ar" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent" />
+                                <textarea v-model="form.notes_ar" rows="2" class="doctorato-input w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent" />
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ locale === 'ar' ? 'ملاحظات (إنجليزي)' : 'Notes (English)' }}</label>
-                                <textarea v-model="form.notes_en" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent" />
+                                <textarea v-model="form.notes_en" rows="2" class="doctorato-input w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent" />
                             </div>
                         </div>
 
@@ -361,25 +361,25 @@ const durations = [
                                 </div>
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                     <div class="sm:col-span-2">
-                                        <input v-model="item.medication_name" type="text" required :placeholder="locale === 'ar' ? 'اسم الدواء *' : 'Medication Name *'" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent" />
+                                        <input v-model="item.medication_name" type="text" required :placeholder="locale === 'ar' ? 'اسم الدواء *' : 'Medication Name *'" class="doctorato-input w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent" />
                                     </div>
                                     <div>
-                                        <input v-model="item.dosage" type="text" :placeholder="locale === 'ar' ? 'الجرعة' : 'Dosage'" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent" />
+                                        <input v-model="item.dosage" type="text" :placeholder="locale === 'ar' ? 'الجرعة' : 'Dosage'" class="doctorato-input w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent" />
                                     </div>
                                     <div>
-                                        <select v-model="item.frequency" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent">
+                                        <select v-model="item.frequency" class="doctorato-input w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent">
                                             <option value="">{{ locale === 'ar' ? 'التكرار' : 'Frequency' }}</option>
                                             <option v-for="f in frequencies" :key="f" :value="f">{{ f }}</option>
                                         </select>
                                     </div>
                                     <div>
-                                        <select v-model="item.duration" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent">
+                                        <select v-model="item.duration" class="doctorato-input w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent">
                                             <option value="">{{ locale === 'ar' ? 'المدة' : 'Duration' }}</option>
                                             <option v-for="d in durations" :key="d" :value="d">{{ d }}</option>
                                         </select>
                                     </div>
                                     <div>
-                                        <input v-model="item.instructions_ar" type="text" :placeholder="locale === 'ar' ? 'تعليمات (عربي)' : 'Instructions (AR)'" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent" />
+                                        <input v-model="item.instructions_ar" type="text" :placeholder="locale === 'ar' ? 'تعليمات (عربي)' : 'Instructions (AR)'" class="doctorato-input w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent" />
                                     </div>
                                 </div>
                             </div>

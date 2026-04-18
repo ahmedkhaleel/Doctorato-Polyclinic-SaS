@@ -337,11 +337,11 @@ function useTemplate(template) {
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-xs font-semibold text-gray-600 mb-1.5">{{ isRtl ? 'الاسم بالعربي' : 'Name (Arabic)' }} *</label>
-                    <input v-model="form.name_ar" type="text" dir="rtl" class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all" />
+                    <input v-model="form.name_ar" type="text" dir="rtl" class="doctorato-input w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all" />
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-gray-600 mb-1.5">{{ isRtl ? 'الاسم بالإنجليزي' : 'Name (English)' }} *</label>
-                    <input v-model="form.name_en" type="text" class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all" />
+                    <input v-model="form.name_en" type="text" class="doctorato-input w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all" />
                 </div>
             </div>
 
@@ -349,19 +349,19 @@ function useTemplate(template) {
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
                     <label class="block text-xs font-semibold text-gray-600 mb-1.5">{{ isRtl ? 'الفئة' : 'Category' }} *</label>
-                    <select v-model="form.category" class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all">
+                    <select v-model="form.category" class="doctorato-input w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all">
                         <option v-for="cat in categories" :key="cat" :value="cat">{{ categoryIcons[cat] }} {{ categoryLabels[cat] }}</option>
                     </select>
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-gray-600 mb-1.5">{{ isRtl ? 'الأولوية' : 'Priority' }}</label>
-                    <select v-model="form.priority" class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all">
+                    <select v-model="form.priority" class="doctorato-input w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all">
                         <option v-for="(label, val) in priorityLabels" :key="val" :value="val">{{ label }}</option>
                     </select>
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-gray-600 mb-1.5">{{ isRtl ? 'عدد الجلسات' : 'Sessions' }}</label>
-                    <input v-model="form.estimated_sessions" type="number" min="1" class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all" />
+                    <input v-model="form.estimated_sessions" type="number" min="1" class="doctorato-input w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all" />
                 </div>
             </div>
 
@@ -369,11 +369,11 @@ function useTemplate(template) {
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-xs font-semibold text-gray-600 mb-1.5">{{ isRtl ? 'الوصف بالعربي' : 'Description (AR)' }}</label>
-                    <textarea v-model="form.description_ar" rows="2" dir="rtl" class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all resize-none"></textarea>
+                    <textarea v-model="form.description_ar" rows="2" dir="rtl" class="doctorato-input w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all resize-none"></textarea>
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-gray-600 mb-1.5">{{ isRtl ? 'الوصف بالإنجليزي' : 'Description (EN)' }}</label>
-                    <textarea v-model="form.description_en" rows="2" class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all resize-none"></textarea>
+                    <textarea v-model="form.description_en" rows="2" class="doctorato-input w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all resize-none"></textarea>
                 </div>
             </div>
 
@@ -395,23 +395,23 @@ function useTemplate(template) {
                         <div class="text-[10px] font-bold text-gray-400 mb-2">{{ isRtl ? 'إجراء' : 'Step' }} #{{ ti + 1 }}</div>
                         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
                             <div class="col-span-2 sm:col-span-1">
-                                <select v-model="tr.treatment_type" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all">
+                                <select v-model="tr.treatment_type" class="doctorato-input w-full border border-gray-200 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all">
                                     <option value="">{{ isRtl ? 'نوع العلاج' : 'Type' }}</option>
                                     <option v-for="tt in treatmentTypes" :key="tt" :value="tt">{{ treatmentTypeLabels[tt] || tt }}</option>
                                 </select>
                             </div>
                             <div>
-                                <input v-model="tr.tooth_number" type="number" min="11" max="85" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all" :placeholder="isRtl ? 'رقم السن' : 'Tooth #'" />
+                                <input v-model="tr.tooth_number" type="number" min="11" max="85" class="doctorato-input w-full border border-gray-200 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all" :placeholder="isRtl ? 'رقم السن' : 'Tooth #'" />
                             </div>
                             <div>
-                                <input v-model="tr.cost" type="number" min="0" step="0.01" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all" :placeholder="isRtl ? 'التكلفة' : 'Cost'" />
+                                <input v-model="tr.cost" type="number" min="0" step="0.01" class="doctorato-input w-full border border-gray-200 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all" :placeholder="isRtl ? 'التكلفة' : 'Cost'" />
                             </div>
                             <div>
-                                <input v-model="tr.lab_cost" type="number" min="0" step="0.01" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all" :placeholder="isRtl ? 'تكلفة المعمل' : 'Lab Cost'" />
+                                <input v-model="tr.lab_cost" type="number" min="0" step="0.01" class="doctorato-input w-full border border-gray-200 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all" :placeholder="isRtl ? 'تكلفة المعمل' : 'Lab Cost'" />
                             </div>
                         </div>
                         <div class="mt-2">
-                            <input v-model="tr.description" type="text" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all" :placeholder="isRtl ? 'وصف الإجراء...' : 'Procedure description...'" />
+                            <input v-model="tr.description" type="text" class="doctorato-input w-full border border-gray-200 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all" :placeholder="isRtl ? 'وصف الإجراء...' : 'Procedure description...'" />
                         </div>
                     </div>
                 </div>
@@ -426,7 +426,7 @@ function useTemplate(template) {
             <!-- Notes -->
             <div>
                 <label class="block text-xs font-semibold text-gray-600 mb-1.5">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
-                <textarea v-model="form.notes" rows="2" class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all resize-none" :placeholder="isRtl ? 'ملاحظات إضافية...' : 'Additional notes...'"></textarea>
+                <textarea v-model="form.notes" rows="2" class="doctorato-input w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all resize-none" :placeholder="isRtl ? 'ملاحظات إضافية...' : 'Additional notes...'"></textarea>
             </div>
         </div>
 

@@ -965,7 +965,7 @@ function submitReschedule() {
                                 <!-- Service Selection -->
                                 <div>
                                     <label class="block text-xs font-medium text-gray-500 mb-1.5">{{ isRtl ? 'الخدمة' : 'Service' }} <span class="text-red-500">*</span></label>
-                                    <select v-model="retouchForm.booking_service_id" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent bg-white">
+                                    <select v-model="retouchForm.booking_service_id" class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent bg-white">
                                         <option value="">{{ isRtl ? 'اختر الخدمة...' : 'Select service...' }}</option>
                                         <option v-for="bs in booking.booking_services" :key="bs.id" :value="bs.id">
                                             {{ bs.service?.name_en || bs.service?.name_ar || (booking.booking_type === 'dermatology_consultation' ? (isRtl ? 'استشارة جلدية' : 'Dermatology Consultation') : booking.booking_type === 'cosmetic_consultation' ? (isRtl ? 'استشارة تجميلية' : 'Cosmetic Consultation') : (isRtl ? 'خدمة' : 'Service')) }}
@@ -978,7 +978,7 @@ function submitReschedule() {
                                 <!-- Doctor Selection -->
                                 <div>
                                     <label class="block text-xs font-medium text-gray-500 mb-1.5">{{ isRtl ? 'الطبيب' : 'Doctor' }} <span class="text-red-500">*</span></label>
-                                    <select v-model="retouchForm.doctor_id" @change="fetchRetouchTimeSlots" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent bg-white">
+                                    <select v-model="retouchForm.doctor_id" @change="fetchRetouchTimeSlots" class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent bg-white">
                                         <option value="">{{ isRtl ? 'اختر الطبيب...' : 'Select doctor...' }}</option>
                                         <option v-for="d in doctors" :key="d.id" :value="d.id">{{ d.name_en || d.name_ar }}</option>
                                     </select>
@@ -988,7 +988,7 @@ function submitReschedule() {
                                 <!-- Date -->
                                 <div>
                                     <label class="block text-xs font-medium text-gray-500 mb-1.5">{{ isRtl ? 'التاريخ' : 'Date' }} <span class="text-red-500">*</span></label>
-                                    <input v-model="retouchForm.appointment_date" type="date" :min="new Date().toISOString().split('T')[0]" @change="fetchRetouchTimeSlots" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent" />
+                                    <input v-model="retouchForm.appointment_date" type="date" :min="new Date().toISOString().split('T')[0]" @change="fetchRetouchTimeSlots" class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent" />
                                     <p v-if="retouchForm.errors.appointment_date" class="mt-1 text-xs text-red-600">{{ retouchForm.errors.appointment_date }}</p>
                                 </div>
 
@@ -996,13 +996,13 @@ function submitReschedule() {
                                 <div>
                                     <label class="block text-xs font-medium text-gray-500 mb-1.5">{{ isRtl ? 'الوقت' : 'Time Slot' }} <span class="text-red-500">*</span></label>
                                     <div v-if="retouchLoadingSlots" class="text-xs text-gray-400 py-2.5">{{ isRtl ? 'جاري تحميل المواعيد المتاحة...' : 'Loading available slots...' }}</div>
-                                    <select v-else-if="retouchTimeSlots.length" v-model="retouchForm.start_time" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent bg-white">
+                                    <select v-else-if="retouchTimeSlots.length" v-model="retouchForm.start_time" class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent bg-white">
                                         <option value="">{{ isRtl ? 'اختر الوقت...' : 'Select time...' }}</option>
                                         <option v-for="slot in retouchTimeSlots" :key="slot.start || slot" :value="slot.start || slot">
                                             {{ formatTime(slot.start || slot) }} {{ slot.end ? '- ' + formatTime(slot.end) : '' }}
                                         </option>
                                     </select>
-                                    <input v-else v-model="retouchForm.start_time" type="time" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent" />
+                                    <input v-else v-model="retouchForm.start_time" type="time" class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-slate-200 focus:border-transparent" />
                                     <p v-if="retouchForm.errors.start_time" class="mt-1 text-xs text-red-600">{{ retouchForm.errors.start_time }}</p>
                                 </div>
                             </div>
@@ -1207,7 +1207,7 @@ function submitReschedule() {
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-xs font-medium text-gray-500 mb-1.5">{{ isRtl ? 'طريقة الدفع' : 'Payment Method' }} <span class="text-red-500">*</span></label>
-                                <select v-model="paymentForm.payment_method_id" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500 bg-white">
+                                <select v-model="paymentForm.payment_method_id" class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D] bg-white">
                                     <option value="">{{ isRtl ? 'اختر طريقة الدفع' : 'Select Method' }}</option>
                                     <option v-for="method in paymentMethods" :key="method.id" :value="method.id">{{ isRtl ? (method.name_ar || method.name_en) : method.name_en }}</option>
                                 </select>
@@ -1215,16 +1215,16 @@ function submitReschedule() {
                             </div>
                             <div>
                                 <label class="block text-xs font-medium text-gray-500 mb-1.5">{{ isRtl ? 'المبلغ' : 'Amount' }} <span class="text-red-500">*</span></label>
-                                <input v-model.number="paymentForm.amount" type="number" min="0" step="0.01" :placeholder="`Balance: ${formatCurrency(invoiceBalance)}`" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500" />
+                                <input v-model.number="paymentForm.amount" type="number" min="0" step="0.01" :placeholder="`Balance: ${formatCurrency(invoiceBalance)}`" class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D]" />
                                 <p v-if="paymentForm.errors.amount" class="mt-1 text-xs text-red-600">{{ paymentForm.errors.amount }}</p>
                             </div>
                             <div>
                                 <label class="block text-xs font-medium text-gray-500 mb-1.5">{{ isRtl ? 'رقم المرجع' : 'Reference #' }}</label>
-                                <input v-model="paymentForm.reference_number" type="text" :placeholder="isRtl ? 'رقم الإيصال / المعاملة' : 'Receipt / Transaction #'" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500" />
+                                <input v-model="paymentForm.reference_number" type="text" :placeholder="isRtl ? 'رقم الإيصال / المعاملة' : 'Receipt / Transaction #'" class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D]" />
                             </div>
                             <div>
                                 <label class="block text-xs font-medium text-gray-500 mb-1.5">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
-                                <input v-model="paymentForm.notes" type="text" :placeholder="isRtl ? 'ملاحظات اختيارية' : 'Optional notes'" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500" />
+                                <input v-model="paymentForm.notes" type="text" :placeholder="isRtl ? 'ملاحظات اختيارية' : 'Optional notes'" class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D]" />
                             </div>
                         </div>
                         <div class="flex items-center gap-3 mt-5">
@@ -1300,7 +1300,7 @@ function submitReschedule() {
                                     <div v-else class="relative patient-search-wrapper">
                                         <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                                         <input v-model="patientSearch" type="text" :placeholder="isRtl ? 'بحث بالاسم، الهاتف، أو رقم الملف...' : 'Search by name, phone, or file number...'"
-                                            class="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500 transition"
+                                            class="doctorato-input w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D] transition"
                                             @focus="showPatientDropdown = true" />
                                         <div v-if="showPatientDropdown && filteredPatients.length > 0" class="absolute z-30 left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-lg max-h-48 overflow-y-auto">
                                             <button v-for="p in filteredPatients" :key="p.id" type="button" @click="selectPatient(p)"
@@ -1342,18 +1342,18 @@ function submitReschedule() {
                                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                             <div>
                                                 <label class="block text-xs text-gray-500 mb-1">{{ isRtl ? 'الطبيب' : 'Doctor' }} <span class="text-red-500">*</span></label>
-                                                <select v-model="confirmForm.services[0].doctor_id" @change="onConfirmDoctorChange(0)" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500 bg-white">
+                                                <select v-model="confirmForm.services[0].doctor_id" @change="onConfirmDoctorChange(0)" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D] bg-white">
                                                     <option value="">{{ isRtl ? 'اختر الطبيب...' : 'Select doctor...' }}</option>
                                                     <option v-for="d in doctors" :key="d.id" :value="d.id">{{ d.name_en || d.name }}</option>
                                                 </select>
                                             </div>
                                             <div>
                                                 <label class="block text-xs text-gray-500 mb-1">{{ isRtl ? 'رسوم الاستشارة' : 'Consultation Fee' }} ({{ currencyCode }}) <span class="text-red-500">*</span></label>
-                                                <input v-model.number="confirmForm.services[0].unit_price" type="number" min="0" step="0.01" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500" />
+                                                <input v-model.number="confirmForm.services[0].unit_price" type="number" min="0" step="0.01" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D]" />
                                             </div>
                                             <div>
                                                 <label class="block text-xs text-gray-500 mb-1">{{ isRtl ? 'الخصم' : 'Discount' }} ({{ currencyCode }})</label>
-                                                <input v-model.number="confirmForm.services[0].discount_per_session" type="number" min="0" step="0.01" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500" />
+                                                <input v-model.number="confirmForm.services[0].discount_per_session" type="number" min="0" step="0.01" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D]" />
                                             </div>
                                             <div class="flex items-end">
                                                 <div>
@@ -1381,29 +1381,29 @@ function submitReschedule() {
                                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                             <div>
                                                 <label class="block text-xs text-gray-500 mb-1">{{ isRtl ? 'الخدمة' : 'Service' }} <span class="text-red-500">*</span></label>
-                                                <select v-model="svc.service_id" @change="onServiceChange(svcIdx)" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500 bg-white">
+                                                <select v-model="svc.service_id" @change="onServiceChange(svcIdx)" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D] bg-white">
                                                     <option value="">{{ isRtl ? '��ختر الخدمة...' : 'Select service...' }}</option>
                                                     <option v-for="s in services" :key="s.id" :value="s.id">{{ s.name_en || s.name_ar }} - {{ formatCurrency(s.price) }}</option>
                                                 </select>
                                             </div>
                                             <div>
                                                 <label class="block text-xs text-gray-500 mb-1">{{ isRtl ? 'الطبيب' : 'Doctor' }} <span class="text-red-500">*</span></label>
-                                                <select v-model="svc.doctor_id" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500 bg-white">
+                                                <select v-model="svc.doctor_id" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D] bg-white">
                                                     <option value="">{{ isRtl ? 'اختر الطبيب...' : 'Select doctor...' }}</option>
                                                     <option v-for="d in doctors" :key="d.id" :value="d.id">{{ d.name_en || d.name }}</option>
                                                 </select>
                                             </div>
                                             <div>
                                                 <label class="block text-xs text-gray-500 mb-1">{{ isRtl ? 'الجلسات' : 'Sessions' }}</label>
-                                                <input v-model.number="svc.sessions_count" type="number" min="1" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500" />
+                                                <input v-model.number="svc.sessions_count" type="number" min="1" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D]" />
                                             </div>
                                             <div>
                                                 <label class="block text-xs text-gray-500 mb-1">{{ isRtl ? 'سعر الوحدة' : 'Unit Price' }}</label>
-                                                <input v-model.number="svc.unit_price" type="number" min="0" step="0.01" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500" />
+                                                <input v-model.number="svc.unit_price" type="number" min="0" step="0.01" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D]" />
                                             </div>
                                             <div>
                                                 <label class="block text-xs text-gray-500 mb-1">{{ isRtl ? 'الخصم/الجلسة' : 'Discount/Session' }}</label>
-                                                <input v-model.number="svc.discount_per_session" type="number" min="0" step="0.01" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500" />
+                                                <input v-model.number="svc.discount_per_session" type="number" min="0" step="0.01" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D]" />
                                             </div>
                                             <div class="flex items-end">
                                                 <div>
@@ -1441,7 +1441,7 @@ function submitReschedule() {
                                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                             <div>
                                                 <label class="block text-xs text-gray-500 mb-1">{{ isRtl ? 'للخدمة' : 'For Service' }}</label>
-                                                <select v-model.number="appt.service_index" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500 bg-white">
+                                                <select v-model.number="appt.service_index" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D] bg-white">
                                                     <option v-for="(svc, si) in confirmForm.services" :key="si" :value="si">
                                                         {{ isConsultationBooking
                                                             ? (booking.booking_type === 'dermatology_consultation' ? (isRtl ? 'استشارة جلدية' : 'Dermatology Consultation') : (isRtl ? 'استشارة تجميلية' : 'Cosmetic Consultation'))
@@ -1452,29 +1452,29 @@ function submitReschedule() {
                                             </div>
                                             <div>
                                                 <label class="block text-xs text-gray-500 mb-1">{{ isRtl ? 'الطبيب' : 'Doctor' }}</label>
-                                                <select v-model="appt.doctor_id" @change="fetchTimeSlots(apptIdx)" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500 bg-white">
+                                                <select v-model="appt.doctor_id" @change="fetchTimeSlots(apptIdx)" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D] bg-white">
                                                     <option value="">{{ isRtl ? 'اختر الطبيب...' : 'Select doctor...' }}</option>
                                                     <option v-for="d in doctors" :key="d.id" :value="d.id">{{ d.name_en || d.name }}</option>
                                                 </select>
                                             </div>
                                             <div>
                                                 <label class="block text-xs text-gray-500 mb-1">{{ isRtl ? 'التاريخ' : 'Date' }} <span class="text-red-500">*</span></label>
-                                                <input v-model="appt.appointment_date" type="date" @change="fetchTimeSlots(apptIdx)" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500" />
+                                                <input v-model="appt.appointment_date" type="date" @change="fetchTimeSlots(apptIdx)" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D]" />
                                             </div>
                                             <div>
                                                 <label class="block text-xs text-gray-500 mb-1">{{ isRtl ? 'الوقت' : 'Time Slot' }}</label>
                                                 <div v-if="loadingSlots[apptIdx]" class="text-xs text-gray-400 py-2">{{ isRtl ? 'جاري تحميل المواعيد...' : 'Loading slots...' }}</div>
-                                                <select v-else-if="timeSlots[apptIdx]?.length" v-model="appt.start_time" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500 bg-white">
+                                                <select v-else-if="timeSlots[apptIdx]?.length" v-model="appt.start_time" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D] bg-white">
                                                     <option value="">{{ isRtl ? 'اختر الوقت...' : 'Select time...' }}</option>
                                                     <option v-for="slot in timeSlots[apptIdx]" :key="slot.start || slot" :value="slot.start || slot">
                                                         {{ formatTime(slot.start || slot) }} {{ slot.end ? '- ' + formatTime(slot.end) : '' }}
                                                     </option>
                                                 </select>
-                                                <input v-else v-model="appt.start_time" type="time" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500" />
+                                                <input v-else v-model="appt.start_time" type="time" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D]" />
                                             </div>
                                             <div>
                                                 <label class="block text-xs text-gray-500 mb-1">{{ isRtl ? 'رقم الجلسة' : 'Session #' }}</label>
-                                                <input v-model.number="appt.session_number" type="number" min="1" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500" />
+                                                <input v-model.number="appt.session_number" type="number" min="1" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D]" />
                                             </div>
                                         </div>
                                     </div>
@@ -1489,7 +1489,7 @@ function submitReschedule() {
                             <!-- Notes -->
                             <div>
                                 <label class="block text-xs font-medium text-gray-500 mb-1.5">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
-                                <textarea v-model="confirmForm.notes" rows="2" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500" :placeholder="isRtl ? 'ملاحظات اختيارية...' : 'Optional notes...'"></textarea>
+                                <textarea v-model="confirmForm.notes" rows="2" class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D]" :placeholder="isRtl ? 'ملاحظات اختيارية...' : 'Optional notes...'"></textarea>
                             </div>
 
                             <!-- Submit -->
@@ -1518,7 +1518,7 @@ function submitReschedule() {
                     <form @submit.prevent="updateStatus" class="space-y-4">
                         <div>
                             <label class="block text-xs text-gray-500 mb-1.5">{{ isRtl ? 'الحالة' : 'Status' }}</label>
-                            <select v-model="statusForm.status" class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500">
+                            <select v-model="statusForm.status" class="doctorato-input w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D]">
                                 <option value="unconfirmed">{{ isRtl ? 'غير مؤكد' : 'Unconfirmed' }}</option>
                                 <option value="confirmed">{{ isRtl ? 'مؤكد' : 'Confirmed' }}</option>
                                 <option value="in_progress">{{ isRtl ? 'قيد التنفيذ' : 'In Progress' }}</option>
@@ -1529,7 +1529,7 @@ function submitReschedule() {
                         </div>
                         <div>
                             <label class="block text-xs text-gray-500 mb-1.5">{{ isRtl ? 'ملاحظات الإدارة' : 'Admin Notes' }}</label>
-                            <textarea v-model="statusForm.admin_notes" rows="3" class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500" :placeholder="isRtl ? 'ملاحظات داخلية...' : 'Internal notes...'"></textarea>
+                            <textarea v-model="statusForm.admin_notes" rows="3" class="doctorato-input w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D]" :placeholder="isRtl ? 'ملاحظات داخلية...' : 'Internal notes...'"></textarea>
                         </div>
                         <button type="submit" :disabled="statusForm.processing" class="w-full py-2.5 px-4 rounded-xl text-white font-semibold text-sm bg-gradient-to-r from-teal-500 to-[#1B365D] hover:from-teal-600 hover:to-[#1B365D] transition-all duration-300 disabled:opacity-50 shadow-sm">
                             {{ statusForm.processing ? (isRtl ? 'جاري التحديث...' : 'Updating...') : (isRtl ? 'تحديث الحالة' : 'Update Status') }}
@@ -1705,7 +1705,7 @@ function submitReschedule() {
                         <!-- Doctor -->
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-1.5">{{ isRtl ? 'الطبيب' : 'Doctor' }}</label>
-                            <select v-model="rescheduleForm.doctor_id" @change="fetchRescheduleTimeSlots" class="w-full rounded-xl border-gray-200 text-sm focus:border-teal-500 focus:ring-teal-500/20 transition">
+                            <select v-model="rescheduleForm.doctor_id" @change="fetchRescheduleTimeSlots" class="doctorato-input w-full rounded-xl border-gray-200 text-sm focus:border-[#1B365D] focus:ring-[#C4A265]/30/20 transition">
                                 <option value="">{{ isRtl ? 'اختر الطبيب' : 'Select Doctor' }}</option>
                                 <option v-for="doc in doctors" :key="doc.id" :value="doc.id">
                                     {{ doc.name_en || doc.name_ar }}
@@ -1717,7 +1717,7 @@ function submitReschedule() {
                         <!-- Date -->
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-1.5">{{ isRtl ? 'تاريخ الموعد' : 'Appointment Date' }}</label>
-                            <input type="date" v-model="rescheduleForm.appointment_date" @change="fetchRescheduleTimeSlots" class="w-full rounded-xl border-gray-200 text-sm focus:border-teal-500 focus:ring-teal-500/20 transition" />
+                            <input type="date" v-model="rescheduleForm.appointment_date" @change="fetchRescheduleTimeSlots" class="doctorato-input w-full rounded-xl border-gray-200 text-sm focus:border-[#1B365D] focus:ring-[#C4A265]/30/20 transition" />
                             <p v-if="rescheduleForm.errors.appointment_date" class="mt-1 text-xs text-red-600">{{ rescheduleForm.errors.appointment_date }}</p>
                         </div>
 

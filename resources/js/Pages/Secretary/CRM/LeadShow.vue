@@ -1412,7 +1412,7 @@ const tabIndicatorStyle = computed(() => {
                                                 v-model="activityForm.description"
                                                 rows="2"
                                                 data-activity-desc
-                                                class="w-full rounded-xl border-gray-200 bg-white text-sm focus:ring-2 focus:ring-teal-400/30 focus:border-teal-400 resize-none transition-all duration-200 placeholder:text-gray-300"
+                                                class="doctorato-input w-full rounded-xl border-gray-200 bg-white text-sm focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D] resize-none transition-all duration-200 placeholder:text-gray-300"
                                                 :placeholder="isRtl ? 'أضف وصفاً...' : 'Add description...'"
                                             ></textarea>
                                             <!-- Quick note templates - pill style -->
@@ -1486,7 +1486,7 @@ const tabIndicatorStyle = computed(() => {
                                             <svg class="w-3.5 h-3.5 text-gray-400 absolute top-1/2 -translate-y-1/2 pointer-events-none" :class="isRtl ? 'right-3' : 'left-3'" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="m21 21-4.35-4.35"/></svg>
                                             <input v-model="activitySearchQuery" type="text"
                                                 :placeholder="isRtl ? 'بحث في النشاطات...' : 'Search activities...'"
-                                                class="w-full rounded-xl border-gray-200 bg-white text-xs py-2.5 focus:ring-2 focus:ring-teal-400/30 focus:border-teal-400 transition-all duration-200"
+                                                class="doctorato-input w-full rounded-xl border-gray-200 bg-white text-xs py-2.5 focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D] transition-all duration-200"
                                                 :class="isRtl ? 'pr-9 pl-3' : 'pl-9 pr-3'"/>
                                         </div>
                                         <!-- Type Filter - Custom Dropdown -->
@@ -1653,7 +1653,7 @@ const tabIndicatorStyle = computed(() => {
                                                     <input
                                                         type="datetime-local"
                                                         v-model="followUpForm.scheduled_at"
-                                                        class="w-full rounded-xl border-gray-200 bg-white text-sm focus:ring-2 focus:ring-teal-400/30 focus:border-teal-400 transition-all duration-200"
+                                                        class="doctorato-input w-full rounded-xl border-gray-200 bg-white text-sm focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D] transition-all duration-200"
                                                     />
                                                 </div>
                                             </div>
@@ -1662,7 +1662,7 @@ const tabIndicatorStyle = computed(() => {
                                                 <textarea
                                                     v-model="followUpForm.notes"
                                                     rows="2"
-                                                    class="w-full rounded-xl border-gray-200 bg-white text-sm focus:ring-2 focus:ring-teal-400/30 focus:border-teal-400 resize-none transition-all duration-200 placeholder:text-gray-300"
+                                                    class="doctorato-input w-full rounded-xl border-gray-200 bg-white text-sm focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D] resize-none transition-all duration-200 placeholder:text-gray-300"
                                                     :placeholder="isRtl ? 'ملاحظات اختيارية...' : 'Optional notes...'"
                                                 ></textarea>
                                             </div>
@@ -1786,7 +1786,7 @@ const tabIndicatorStyle = computed(() => {
                                                         <input
                                                             v-model="completeForm.result"
                                                             type="text"
-                                                            class="flex-1 rounded-lg border-gray-300 text-sm focus:ring-teal-500 focus:border-teal-500"
+                                                            class="doctorato-input flex-1 rounded-lg border-gray-300 text-sm focus:ring-[#C4A265]/30 focus:border-[#1B365D]"
                                                             :placeholder="isRtl ? 'نتيجة المتابعة...' : 'Follow-up result...'"
                                                         />
                                                         <button
@@ -1822,13 +1822,13 @@ const tabIndicatorStyle = computed(() => {
                                                             <input
                                                                 v-model="rescheduleForm.scheduled_at"
                                                                 type="datetime-local"
-                                                                class="flex-1 rounded-lg border-gray-300 text-sm focus:ring-teal-500 focus:border-teal-500"
+                                                                class="doctorato-input flex-1 rounded-lg border-gray-300 text-sm focus:ring-[#C4A265]/30 focus:border-[#1B365D]"
                                                             />
                                                         </div>
                                                         <input
                                                             v-model="rescheduleForm.notes"
                                                             type="text"
-                                                            class="w-full rounded-lg border-gray-300 text-sm focus:ring-teal-500 focus:border-teal-500"
+                                                            class="doctorato-input w-full rounded-lg border-gray-300 text-sm focus:ring-[#C4A265]/30 focus:border-[#1B365D]"
                                                             :placeholder="isRtl ? 'ملاحظات...' : 'Notes...'"
                                                         />
                                                         <div class="flex gap-2 justify-end">
@@ -1932,7 +1932,7 @@ const tabIndicatorStyle = computed(() => {
                                                             <svg class="w-4 h-4 text-gray-400 absolute top-1/2 -translate-y-1/2 pointer-events-none" :class="isRtl ? 'right-3' : 'left-3'" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="m21 21-4.35-4.35"/></svg>
                                                             <input v-model="commTemplateSearch" type="text"
                                                                    :placeholder="isRtl ? 'ابحث عن القالب...' : 'Search templates...'"
-                                                                   class="w-full rounded-lg border border-gray-200 text-sm py-2.5 outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-400/30"
+                                                                   class="doctorato-input w-full rounded-lg border border-gray-200 text-sm py-2.5 outline-none focus:border-[#1B365D] focus:ring-1 focus:ring-[#C4A265]/30/30"
                                                                    :class="isRtl ? 'pr-9 pl-3' : 'pl-9 pr-3'" />
                                                         </div>
                                                     </div>
@@ -2288,7 +2288,7 @@ const tabIndicatorStyle = computed(() => {
                                 <textarea
                                     v-model="convertForm.booking_notes"
                                     rows="3"
-                                    class="w-full rounded-xl border-gray-300 text-sm focus:ring-teal-500 focus:border-teal-500 resize-none"
+                                    class="doctorato-input w-full rounded-xl border-gray-300 text-sm focus:ring-[#C4A265]/30 focus:border-[#1B365D] resize-none"
                                     :placeholder="isRtl ? 'ملاحظات إضافية عن التحويل...' : 'Additional conversion notes...'"
                                 ></textarea>
                             </div>
@@ -2359,7 +2359,7 @@ const tabIndicatorStyle = computed(() => {
                                 <textarea
                                     v-model="lostForm.loss_reason"
                                     rows="2"
-                                    class="w-full rounded-xl border-gray-300 text-sm focus:ring-red-400 focus:border-red-400 resize-none"
+                                    class="doctorato-input w-full rounded-xl border-gray-300 text-sm focus:ring-[#C4A265]/30 focus:border-red-400 resize-none"
                                     :placeholder="isRtl ? 'أو اكتب سبباً آخر...' : 'Or type a custom reason...'"
                                 ></textarea>
                                 <p v-if="lostForm.errors.loss_reason" class="mt-1 text-xs text-red-500">{{ lostForm.errors.loss_reason }}</p>

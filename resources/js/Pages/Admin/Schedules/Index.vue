@@ -240,9 +240,9 @@ function getActiveDays(doctor) {
                                             </button>
                                             <template v-if="editSchedules[day.index].is_active">
                                                 <input type="time" v-model="editSchedules[day.index].start_time"
-                                                    class="w-full text-[11px] px-1 py-0.5 rounded border border-gray-200 focus:ring-[#1B365D] focus:border-[#1B365D]" />
+                                                    class="doctorato-input w-full text-[11px] px-1 py-0.5 rounded border border-gray-200 focus:ring-[#1B365D] focus:border-[#1B365D]" />
                                                 <input type="time" v-model="editSchedules[day.index].end_time"
-                                                    class="w-full text-[11px] px-1 py-0.5 rounded border border-gray-200 focus:ring-[#1B365D] focus:border-[#1B365D]" />
+                                                    class="doctorato-input w-full text-[11px] px-1 py-0.5 rounded border border-gray-200 focus:ring-[#1B365D] focus:border-[#1B365D]" />
                                             </template>
                                         </div>
                                     </td>

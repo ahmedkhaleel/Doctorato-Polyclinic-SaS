@@ -290,7 +290,7 @@ function dotColor(status) {
                             <div class="grid grid-cols-2 gap-3">
                                 <div>
                                     <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{{ isRtl ? 'الحالة' : 'Status' }}</label>
-                                    <select v-model="editForm.status" class="w-full text-sm border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 transition">
+                                    <select v-model="editForm.status" class="doctorato-input w-full text-sm border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D] transition">
                                         <option value="completed">{{ isRtl ? 'مكتمل' : 'Completed' }}</option>
                                         <option value="scheduled">{{ isRtl ? 'مجدول' : 'Scheduled' }}</option>
                                         <option value="missed">{{ isRtl ? 'فائت' : 'Missed' }}</option>
@@ -299,7 +299,7 @@ function dotColor(status) {
                                 </div>
                                 <div>
                                     <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{{ isRtl ? 'التاريخ' : 'Date' }}</label>
-                                    <input v-model="editForm.visit_date" type="date" class="w-full text-sm border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 transition" />
+                                    <input v-model="editForm.visit_date" type="date" class="doctorato-input w-full text-sm border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D] transition" />
                                 </div>
                             </div>
 
@@ -307,40 +307,40 @@ function dotColor(status) {
                             <div class="grid grid-cols-3 gap-3">
                                 <div>
                                     <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{{ isRtl ? 'الوزن (كغ)' : 'Weight (kg)' }}</label>
-                                    <input v-model="editForm.weight_kg" type="number" step="0.001" min="0" class="w-full text-sm border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 transition" />
+                                    <input v-model="editForm.weight_kg" type="number" step="0.001" min="0" class="doctorato-input w-full text-sm border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D] transition" />
                                 </div>
                                 <div>
                                     <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{{ isRtl ? 'الطول (سم)' : 'Height (cm)' }}</label>
-                                    <input v-model="editForm.height_cm" type="number" step="0.1" min="0" class="w-full text-sm border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 transition" />
+                                    <input v-model="editForm.height_cm" type="number" step="0.1" min="0" class="doctorato-input w-full text-sm border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D] transition" />
                                 </div>
                                 <div>
                                     <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{{ isRtl ? 'محيط الرأس' : 'Head (cm)' }}</label>
-                                    <input v-model="editForm.head_circumference_cm" type="number" step="0.1" min="0" class="w-full text-sm border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 transition" />
+                                    <input v-model="editForm.head_circumference_cm" type="number" step="0.1" min="0" class="doctorato-input w-full text-sm border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D] transition" />
                                 </div>
                             </div>
 
                             <!-- Clinical Notes -->
                             <div>
                                 <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{{ isRtl ? 'ملاحظات الفحص البدني' : 'Physical Exam Notes' }}</label>
-                                <textarea v-model="editForm.physical_exam_notes" rows="2" class="w-full text-sm border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 transition resize-none"></textarea>
+                                <textarea v-model="editForm.physical_exam_notes" rows="2" class="doctorato-input w-full text-sm border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D] transition resize-none"></textarea>
                             </div>
                             <div>
                                 <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{{ isRtl ? 'ملاحظات التطور' : 'Development Notes' }}</label>
-                                <textarea v-model="editForm.development_notes" rows="2" class="w-full text-sm border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 transition resize-none"></textarea>
+                                <textarea v-model="editForm.development_notes" rows="2" class="doctorato-input w-full text-sm border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D] transition resize-none"></textarea>
                             </div>
                             <div class="grid grid-cols-2 gap-3">
                                 <div>
                                     <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{{ isRtl ? 'ملاحظات التغذية' : 'Feeding Notes' }}</label>
-                                    <textarea v-model="editForm.feeding_notes" rows="2" class="w-full text-sm border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 transition resize-none"></textarea>
+                                    <textarea v-model="editForm.feeding_notes" rows="2" class="doctorato-input w-full text-sm border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D] transition resize-none"></textarea>
                                 </div>
                                 <div>
                                     <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{{ isRtl ? 'إرشادات السلامة' : 'Safety Guidance' }}</label>
-                                    <textarea v-model="editForm.safety_guidance" rows="2" class="w-full text-sm border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 transition resize-none"></textarea>
+                                    <textarea v-model="editForm.safety_guidance" rows="2" class="doctorato-input w-full text-sm border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D] transition resize-none"></textarea>
                                 </div>
                             </div>
                             <div>
                                 <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{{ isRtl ? 'ملاحظات عامة' : 'General Notes' }}</label>
-                                <textarea v-model="editForm.notes" rows="2" class="w-full text-sm border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 transition resize-none"></textarea>
+                                <textarea v-model="editForm.notes" rows="2" class="doctorato-input w-full text-sm border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D] transition resize-none"></textarea>
                             </div>
 
                             <!-- Actions -->

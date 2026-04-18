@@ -277,8 +277,8 @@ function submit() {
                                         v-model="form.name"
                                         type="text"
                                         :placeholder="t('full_name_placeholder')"
-                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-[#3A3A3A] placeholder-gray-400 transition-all duration-200 focus:ring-2 focus:ring-[var(--brand-primary)]/30 focus:border-[var(--brand-primary)] outline-none form-input-animated"
-                                        :class="{ 'border-red-400 focus:ring-red-300 focus:border-red-400': form.errors.name }"
+                                        class="doctorato-input w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-[#3A3A3A] placeholder-gray-400 transition-all duration-200 focus:ring-2 focus:ring-[var(--brand-primary)]/30 focus:border-[var(--brand-primary)] outline-none form-input-animated"
+                                        :class="{ 'border-red-400 focus:ring-[#C4A265]/30 focus:border-red-400': form.errors.name }"
                                         required
                                     />
                                     <p v-if="form.errors.name" class="mt-1.5 text-sm text-red-500">
@@ -299,8 +299,8 @@ function submit() {
                                             @blur="validateEmail"
                                             type="email"
                                             :placeholder="t('email_placeholder')"
-                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-[#3A3A3A] placeholder-gray-400 transition-all duration-200 focus:ring-2 focus:ring-[var(--brand-primary)]/30 focus:border-[var(--brand-primary)] outline-none form-input-animated"
-                                            :class="{ 'border-red-400 focus:ring-red-300 focus:border-red-400': form.errors.email || emailError }"
+                                            class="doctorato-input w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-[#3A3A3A] placeholder-gray-400 transition-all duration-200 focus:ring-2 focus:ring-[var(--brand-primary)]/30 focus:border-[var(--brand-primary)] outline-none form-input-animated"
+                                            :class="{ 'border-red-400 focus:ring-[#C4A265]/30 focus:border-red-400': form.errors.email || emailError }"
                                             required
                                         />
                                         <p v-if="emailError" class="mt-1.5 text-sm text-red-500">
@@ -338,8 +338,8 @@ function submit() {
                                                 @input="normalizePhone"
                                                 type="tel"
                                                 :placeholder="t('phone_placeholder')"
-                                                class="w-full px-4 py-3 border border-gray-300 rounded-e-lg bg-white text-[#3A3A3A] placeholder-gray-400 transition-all duration-200 focus:ring-2 focus:ring-[var(--brand-primary)]/30 focus:border-[var(--brand-primary)] outline-none form-input-animated"
-                                                :class="{ 'border-red-400 focus:ring-red-300 focus:border-red-400': form.errors.phone }"
+                                                class="doctorato-input w-full px-4 py-3 border border-gray-300 rounded-e-lg bg-white text-[#3A3A3A] placeholder-gray-400 transition-all duration-200 focus:ring-2 focus:ring-[var(--brand-primary)]/30 focus:border-[var(--brand-primary)] outline-none form-input-animated"
+                                                :class="{ 'border-red-400 focus:ring-[#C4A265]/30 focus:border-red-400': form.errors.phone }"
                                             />
 
                                             <!-- Country Dropdown -->
@@ -357,7 +357,7 @@ function submit() {
                                                             v-model="countrySearch"
                                                             type="text"
                                                             :placeholder="locale === 'ar' ? 'ابحث عن دولة...' : 'Search country...'"
-                                                            class="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg bg-gray-50 outline-none focus:border-[var(--brand-primary)] focus:ring-1 focus:ring-[var(--brand-primary)]/30"
+                                                            class="doctorato-input w-full px-3 py-2 text-sm border border-gray-200 rounded-lg bg-gray-50 outline-none focus:border-[var(--brand-primary)] focus:ring-1 focus:ring-[var(--brand-primary)]/30"
                                                         />
                                                     </div>
                                                     <div class="max-h-52 overflow-y-auto">
@@ -393,8 +393,8 @@ function submit() {
                                         v-model="form.subject"
                                         type="text"
                                         :placeholder="t('subject_placeholder')"
-                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-[#3A3A3A] placeholder-gray-400 transition-all duration-200 focus:ring-2 focus:ring-[var(--brand-primary)]/30 focus:border-[var(--brand-primary)] outline-none form-input-animated"
-                                        :class="{ 'border-red-400 focus:ring-red-300 focus:border-red-400': form.errors.subject }"
+                                        class="doctorato-input w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-[#3A3A3A] placeholder-gray-400 transition-all duration-200 focus:ring-2 focus:ring-[var(--brand-primary)]/30 focus:border-[var(--brand-primary)] outline-none form-input-animated"
+                                        :class="{ 'border-red-400 focus:ring-[#C4A265]/30 focus:border-red-400': form.errors.subject }"
                                         required
                                     />
                                     <p v-if="form.errors.subject" class="mt-1.5 text-sm text-red-500">
@@ -412,8 +412,8 @@ function submit() {
                                         v-model="form.message"
                                         rows="5"
                                         :placeholder="t('message_placeholder')"
-                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-[#3A3A3A] placeholder-gray-400 transition-all duration-200 focus:ring-2 focus:ring-[var(--brand-primary)]/30 focus:border-[var(--brand-primary)] outline-none resize-none form-input-animated"
-                                        :class="{ 'border-red-400 focus:ring-red-300 focus:border-red-400': form.errors.message }"
+                                        class="doctorato-input w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-[#3A3A3A] placeholder-gray-400 transition-all duration-200 focus:ring-2 focus:ring-[var(--brand-primary)]/30 focus:border-[var(--brand-primary)] outline-none resize-none form-input-animated"
+                                        :class="{ 'border-red-400 focus:ring-[#C4A265]/30 focus:border-red-400': form.errors.message }"
                                         required
                                     ></textarea>
                                     <p v-if="form.errors.message" class="mt-1.5 text-sm text-red-500">

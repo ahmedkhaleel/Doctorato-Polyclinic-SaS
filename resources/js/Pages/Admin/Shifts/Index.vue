@@ -83,22 +83,22 @@ function deleteShift(id) {
                 <form @submit.prevent="submitAdd" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 items-end">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_name_ar') }} <span class="text-red-500">*</span></label>
-                        <input v-model="addForm.name_ar" type="text" dir="rtl" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
+                        <input v-model="addForm.name_ar" type="text" dir="rtl" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                         <p v-if="addForm.errors.name_ar" class="mt-1 text-sm text-red-600">{{ addForm.errors.name_ar }}</p>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_name_en') }} <span class="text-red-500">*</span></label>
-                        <input v-model="addForm.name_en" type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
+                        <input v-model="addForm.name_en" type="text" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                         <p v-if="addForm.errors.name_en" class="mt-1 text-sm text-red-600">{{ addForm.errors.name_en }}</p>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_start_time') }} <span class="text-red-500">*</span></label>
-                        <input v-model="addForm.start_time" type="time" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
+                        <input v-model="addForm.start_time" type="time" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                         <p v-if="addForm.errors.start_time" class="mt-1 text-sm text-red-600">{{ addForm.errors.start_time }}</p>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_end_time') }} <span class="text-red-500">*</span></label>
-                        <input v-model="addForm.end_time" type="time" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
+                        <input v-model="addForm.end_time" type="time" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                         <p v-if="addForm.errors.end_time" class="mt-1 text-sm text-red-600">{{ addForm.errors.end_time }}</p>
                     </div>
                     <div>
@@ -144,19 +144,19 @@ function deleteShift(id) {
                                 <!-- Edit Row -->
                                 <tr v-else class="bg-amber-50">
                                     <td class="px-4 md:px-6 py-3">
-                                        <input v-model="editForm.name_ar" type="text" dir="rtl" class="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
+                                        <input v-model="editForm.name_ar" type="text" dir="rtl" class="doctorato-input w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                     </td>
                                     <td class="px-4 md:px-6 py-3">
-                                        <input v-model="editForm.name_en" type="text" class="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
+                                        <input v-model="editForm.name_en" type="text" class="doctorato-input w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                     </td>
                                     <td class="px-4 md:px-6 py-3">
-                                        <input v-model="editForm.start_time" type="time" class="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
+                                        <input v-model="editForm.start_time" type="time" class="doctorato-input w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                     </td>
                                     <td class="px-4 md:px-6 py-3">
-                                        <input v-model="editForm.end_time" type="time" class="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
+                                        <input v-model="editForm.end_time" type="time" class="doctorato-input w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                     </td>
                                     <td class="px-4 md:px-6 py-3">
-                                        <select v-model="editForm.is_active" class="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent">
+                                        <select v-model="editForm.is_active" class="doctorato-input w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent">
                                             <option :value="true">{{ $t('a_active') }}</option>
                                             <option :value="false">{{ $t('a_inactive') }}</option>
                                         </select>

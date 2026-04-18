@@ -209,19 +209,19 @@ function formatDateTime(iso) {
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'المبلغ' : 'Amount' }} *</label>
                             <input v-model="depositForm.amount" type="number" step="0.01" min="0.01" required
-                                class="w-full rounded-lg border-gray-300 focus:ring-[#1B365D] focus:border-[#1B365D]" />
+                                class="doctorato-input w-full rounded-lg border-gray-300 focus:ring-[#1B365D] focus:border-[#1B365D]" />
                             <p v-if="depositForm.errors.amount" class="text-red-500 text-xs mt-1">{{ depositForm.errors.amount }}</p>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'الوصف' : 'Description' }} *</label>
                             <input v-model="depositForm.description" type="text" required maxlength="255"
                                 :placeholder="isRtl ? 'مثال: إيداع نقدي' : 'e.g., Cash deposit'"
-                                class="w-full rounded-lg border-gray-300 focus:ring-[#1B365D] focus:border-[#1B365D]" />
+                                class="doctorato-input w-full rounded-lg border-gray-300 focus:ring-[#1B365D] focus:border-[#1B365D]" />
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
                             <textarea v-model="depositForm.notes" rows="2"
-                                class="w-full rounded-lg border-gray-300 focus:ring-[#1B365D] focus:border-[#1B365D]"></textarea>
+                                class="doctorato-input w-full rounded-lg border-gray-300 focus:ring-[#1B365D] focus:border-[#1B365D]"></textarea>
                         </div>
                         <div class="flex justify-end gap-2 pt-2">
                             <button type="button" @click="showDepositModal = false"
@@ -252,12 +252,12 @@ function formatDateTime(iso) {
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'المبلغ' : 'Amount' }} *</label>
                             <input v-model="withdrawForm.amount" type="number" step="0.01" min="0.01" :max="wallet.balance" required
-                                class="w-full rounded-lg border-gray-300 focus:ring-[#1B365D] focus:border-[#1B365D]" />
+                                class="doctorato-input w-full rounded-lg border-gray-300 focus:ring-[#1B365D] focus:border-[#1B365D]" />
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'النوع' : 'Type' }}</label>
                             <select v-model="withdrawForm.type"
-                                class="w-full rounded-lg border-gray-300 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                class="doctorato-input w-full rounded-lg border-gray-300 focus:ring-[#1B365D] focus:border-[#1B365D]">
                                 <option value="withdrawal">{{ isRtl ? 'سحب نقدي' : 'Cash Withdrawal' }}</option>
                                 <option value="payment">{{ isRtl ? 'دفع فاتورة' : 'Invoice Payment' }}</option>
                             </select>
@@ -265,12 +265,12 @@ function formatDateTime(iso) {
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'الوصف' : 'Description' }} *</label>
                             <input v-model="withdrawForm.description" type="text" required maxlength="255"
-                                class="w-full rounded-lg border-gray-300 focus:ring-[#1B365D] focus:border-[#1B365D]" />
+                                class="doctorato-input w-full rounded-lg border-gray-300 focus:ring-[#1B365D] focus:border-[#1B365D]" />
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
                             <textarea v-model="withdrawForm.notes" rows="2"
-                                class="w-full rounded-lg border-gray-300 focus:ring-[#1B365D] focus:border-[#1B365D]"></textarea>
+                                class="doctorato-input w-full rounded-lg border-gray-300 focus:ring-[#1B365D] focus:border-[#1B365D]"></textarea>
                         </div>
                         <div class="flex justify-end gap-2 pt-2">
                             <button type="button" @click="showWithdrawModal = false"
@@ -298,18 +298,18 @@ function formatDateTime(iso) {
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'المبلغ' : 'Amount' }} *</label>
                             <input v-model="adjustForm.amount" type="number" step="0.01" required
-                                class="w-full rounded-lg border-gray-300 focus:ring-[#1B365D] focus:border-[#1B365D]" />
+                                class="doctorato-input w-full rounded-lg border-gray-300 focus:ring-[#1B365D] focus:border-[#1B365D]" />
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'السبب' : 'Reason' }} *</label>
                             <input v-model="adjustForm.description" type="text" required maxlength="255"
                                 :placeholder="isRtl ? 'سبب التعديل' : 'Reason for adjustment'"
-                                class="w-full rounded-lg border-gray-300 focus:ring-[#1B365D] focus:border-[#1B365D]" />
+                                class="doctorato-input w-full rounded-lg border-gray-300 focus:ring-[#1B365D] focus:border-[#1B365D]" />
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
                             <textarea v-model="adjustForm.notes" rows="2"
-                                class="w-full rounded-lg border-gray-300 focus:ring-[#1B365D] focus:border-[#1B365D]"></textarea>
+                                class="doctorato-input w-full rounded-lg border-gray-300 focus:ring-[#1B365D] focus:border-[#1B365D]"></textarea>
                         </div>
                         <div class="flex justify-end gap-2 pt-2">
                             <button type="button" @click="showAdjustModal = false"

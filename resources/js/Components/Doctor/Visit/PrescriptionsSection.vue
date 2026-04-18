@@ -111,11 +111,11 @@ function submitPrescription() {
                         <div class="grid lg:grid-cols-2 gap-3">
                             <div>
                                 <label class="text-xs text-gray-500 font-medium mb-1 block">{{ isRtl ? 'التشخيص' : 'Diagnosis' }}</label>
-                                <input v-model="prescriptionForm.diagnosis" type="text" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]" :placeholder="isRtl ? 'التشخيص...' : 'Diagnosis...'" />
+                                <input v-model="prescriptionForm.diagnosis" type="text" class="doctorato-input w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]" :placeholder="isRtl ? 'التشخيص...' : 'Diagnosis...'" />
                             </div>
                             <div>
                                 <label class="text-xs text-gray-500 font-medium mb-1 block">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
-                                <input v-model="prescriptionForm.notes" type="text" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]" :placeholder="isRtl ? 'ملاحظات...' : 'Notes...'" />
+                                <input v-model="prescriptionForm.notes" type="text" class="doctorato-input w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]" :placeholder="isRtl ? 'ملاحظات...' : 'Notes...'" />
                             </div>
                         </div>
                         <div>
@@ -126,7 +126,7 @@ function submitPrescription() {
                             <div v-for="(item, idx) in prescriptionForm.items" :key="idx" class="relative mb-3">
                                 <div class="grid grid-cols-12 gap-1.5">
                                     <div class="col-span-3 relative">
-                                        <input v-model="item.medication_name" @input="searchMedication(idx, item.medication_name)" :placeholder="isRtl ? 'الدواء *' : 'Medication *'" class="w-full px-2.5 py-2 border border-gray-200 rounded-lg text-xs focus:ring-2 focus:ring-[#C4A265]/30" required />
+                                        <input v-model="item.medication_name" @input="searchMedication(idx, item.medication_name)" :placeholder="isRtl ? 'الدواء *' : 'Medication *'" class="doctorato-input w-full px-2.5 py-2 border border-gray-200 rounded-lg text-xs focus:ring-2 focus:ring-[#C4A265]/30" required />
                                         <div v-if="medicationSuggestions[idx]?.length" class="absolute z-20 top-full left-0 right-0 mt-0.5 bg-white border border-gray-200 rounded-lg shadow-lg max-h-40 overflow-y-auto">
                                             <button v-for="med in medicationSuggestions[idx]" :key="med.id" type="button" @click="selectMedication(idx, med)" class="w-full text-left px-3 py-2 text-xs hover:bg-[#C4A265]/5 border-b border-gray-50 last:border-0">
                                                 <span class="font-medium text-gray-800">{{ med.name }}</span>
@@ -134,10 +134,10 @@ function submitPrescription() {
                                             </button>
                                         </div>
                                     </div>
-                                    <input v-model="item.dosage" :placeholder="isRtl ? 'الجرعة' : 'Dosage'" class="col-span-2 px-2.5 py-2 border border-gray-200 rounded-lg text-xs focus:ring-2 focus:ring-[#C4A265]/30" />
-                                    <input v-model="item.frequency" :placeholder="isRtl ? 'التكرار' : 'Frequency'" class="col-span-2 px-2.5 py-2 border border-gray-200 rounded-lg text-xs focus:ring-2 focus:ring-[#C4A265]/30" />
-                                    <input v-model="item.duration" :placeholder="isRtl ? 'المدة' : 'Duration'" class="col-span-2 px-2.5 py-2 border border-gray-200 rounded-lg text-xs focus:ring-2 focus:ring-[#C4A265]/30" />
-                                    <input v-model="item.instructions" :placeholder="isRtl ? 'تعليمات' : 'Instructions'" class="col-span-2 px-2.5 py-2 border border-gray-200 rounded-lg text-xs focus:ring-2 focus:ring-[#C4A265]/30" />
+                                    <input v-model="item.dosage" :placeholder="isRtl ? 'الجرعة' : 'Dosage'" class="doctorato-input col-span-2 px-2.5 py-2 border border-gray-200 rounded-lg text-xs focus:ring-2 focus:ring-[#C4A265]/30" />
+                                    <input v-model="item.frequency" :placeholder="isRtl ? 'التكرار' : 'Frequency'" class="doctorato-input col-span-2 px-2.5 py-2 border border-gray-200 rounded-lg text-xs focus:ring-2 focus:ring-[#C4A265]/30" />
+                                    <input v-model="item.duration" :placeholder="isRtl ? 'المدة' : 'Duration'" class="doctorato-input col-span-2 px-2.5 py-2 border border-gray-200 rounded-lg text-xs focus:ring-2 focus:ring-[#C4A265]/30" />
+                                    <input v-model="item.instructions" :placeholder="isRtl ? 'تعليمات' : 'Instructions'" class="doctorato-input col-span-2 px-2.5 py-2 border border-gray-200 rounded-lg text-xs focus:ring-2 focus:ring-[#C4A265]/30" />
                                     <button type="button" @click="removeMedItem(idx)" class="col-span-1 flex items-center justify-center text-gray-300 hover:text-red-500 rounded-lg hover:bg-red-50 transition-all">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                                     </button>

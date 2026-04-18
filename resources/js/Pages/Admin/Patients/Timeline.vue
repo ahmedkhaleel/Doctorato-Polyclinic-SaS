@@ -136,7 +136,7 @@ function formatMonth(d) {
             <div class="relative mb-3">
                 <svg class="w-4 h-4 text-gray-400 absolute top-3 start-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                 <input v-model="searchQuery" type="text" :placeholder="isRtl ? 'بحث في السجل الزمني...' : 'Search timeline...'"
-                    class="w-full ps-11 pe-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent transition-all" />
+                    class="doctorato-input w-full ps-11 pe-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent transition-all" />
             </div>
             <!-- Type Chips -->
             <div class="flex flex-wrap gap-2">

@@ -219,11 +219,11 @@ function formatSelectedDate(dateStr) {
                     <button @click="goToday" class="px-3 py-1.5 text-xs font-medium text-[#C4A265] bg-[#C4A265]/10 rounded-lg hover:bg-[#C4A265]/20 transition-colors ltr:ml-2 rtl:mr-2">{{ $t('a_today') }}</button>
                 </div>
                 <div class="flex items-center gap-3">
-                    <select v-if="activeModules.length > 1" v-model="moduleFilter" class="px-4 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-colors">
+                    <select v-if="activeModules.length> 1" v-model="moduleFilter" class="px-4 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-colors">
                         <option value="">{{ isRtl ? 'كل الأقسام' : 'All Departments' }}</option>
                         <option v-for="mod in activeModules" :key="mod.slug" :value="mod.slug">{{ mod.name }}</option>
                     </select>
-                    <select v-model="doctorId" class="px-4 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-colors">
+                    <select v-model="doctorId" class="doctorato-input px-4 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-colors">
                         <option value="">{{ $t('a_all_doctors') }}</option>
                         <option v-for="doc in doctors" :key="doc.id" :value="doc.id">{{ doc.name_en }}</option>
                     </select>

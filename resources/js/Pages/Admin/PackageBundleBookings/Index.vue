@@ -72,8 +72,8 @@ function getProgress(booking) {
 
             <div class="bg-white rounded-lg shadow-sm p-4 flex flex-wrap gap-3">
                 <input v-model="search" type="text" placeholder="Search by booking number, patient..."
-                       class="w-full sm:w-80 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
-                <select v-model="statusFilter" class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent">
+                       class="doctorato-input w-full sm:w-80 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
+                <select v-model="statusFilter" class="doctorato-input px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent">
                     <option value="">{{ $t('a_all_status') }}</option>
                     <option value="pending">Pending</option>
                     <option value="confirmed">Confirmed</option>

@@ -1164,7 +1164,7 @@ const activityTypeConfig = {
                                                 v-model="completionResult"
                                                 type="text"
                                                 :placeholder="isRtl ? 'نتيجة المتابعة (اختياري)...' : 'Follow-up result (optional)...'"
-                                                class="w-full px-3 py-2 text-xs border border-emerald-200 rounded-lg bg-emerald-50/50 focus:ring-2 focus:ring-emerald-300 focus:border-emerald-300 outline-none transition-all"
+                                                class="doctorato-input w-full px-3 py-2 text-xs border border-emerald-200 rounded-lg bg-emerald-50/50 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#1B365D] outline-none transition-all"
                                                 @keyup.enter="submitComplete(fu.id)"
                                                 @keyup.escape="cancelComplete()"
                                             />
@@ -1283,7 +1283,7 @@ const activityTypeConfig = {
                                                 v-model="completionResult"
                                                 type="text"
                                                 :placeholder="isRtl ? 'نتيجة المتابعة (اختياري)...' : 'Follow-up result (optional)...'"
-                                                class="w-full px-3 py-2 text-xs border border-emerald-200 rounded-lg bg-emerald-50/50 focus:ring-2 focus:ring-emerald-300 focus:border-emerald-300 outline-none transition-all"
+                                                class="doctorato-input w-full px-3 py-2 text-xs border border-emerald-200 rounded-lg bg-emerald-50/50 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#1B365D] outline-none transition-all"
                                                 @keyup.enter="submitComplete(fu.id)"
                                                 @keyup.escape="cancelComplete()"
                                             />
@@ -1853,14 +1853,14 @@ const activityTypeConfig = {
                                     <div>
                                         <label class="block text-xs font-semibold text-gray-600 mb-1.5">{{ isRtl ? 'الاسم الكامل' : 'Full Name' }} *</label>
                                         <input v-model="quickAddForm.full_name" type="text" required
-                                            class="w-full rounded-xl border-gray-200 text-sm focus:ring-teal-500 focus:border-teal-500 transition"
+                                            class="doctorato-input w-full rounded-xl border-gray-200 text-sm focus:ring-[#C4A265]/30 focus:border-[#1B365D] transition"
                                             :placeholder="isRtl ? 'أدخل اسم العميل' : 'Enter lead name'" />
                                         <p v-if="quickAddForm.errors.full_name" class="text-xs text-red-500 mt-1">{{ quickAddForm.errors.full_name }}</p>
                                     </div>
                                     <div>
                                         <label class="block text-xs font-semibold text-gray-600 mb-1.5">{{ isRtl ? 'رقم الهاتف' : 'Phone' }} *</label>
                                         <input v-model="quickAddForm.phone" type="tel" required dir="ltr"
-                                            class="w-full rounded-xl border-gray-200 text-sm focus:ring-teal-500 focus:border-teal-500 transition"
+                                            class="doctorato-input w-full rounded-xl border-gray-200 text-sm focus:ring-[#C4A265]/30 focus:border-[#1B365D] transition"
                                             placeholder="05xxxxxxxx" />
                                         <p v-if="quickAddForm.errors.phone" class="text-xs text-red-500 mt-1">{{ quickAddForm.errors.phone }}</p>
                                     </div>
@@ -1868,7 +1868,7 @@ const activityTypeConfig = {
                                         <div>
                                             <label class="block text-xs font-semibold text-gray-600 mb-1.5">{{ isRtl ? 'المصدر' : 'Source' }}</label>
                                             <select v-model="quickAddForm.lead_source_id"
-                                                class="w-full rounded-xl border-gray-200 text-sm focus:ring-teal-500 focus:border-teal-500 transition">
+                                                class="doctorato-input w-full rounded-xl border-gray-200 text-sm focus:ring-[#C4A265]/30 focus:border-[#1B365D] transition">
                                                 <option value="">{{ isRtl ? 'اختر المصدر' : 'Select source' }}</option>
                                                 <option v-for="src in leadSources" :key="src.id" :value="src.id">{{ isRtl ? src.name_ar : src.name_en }}</option>
                                             </select>
@@ -1876,7 +1876,7 @@ const activityTypeConfig = {
                                         <div>
                                             <label class="block text-xs font-semibold text-gray-600 mb-1.5">{{ isRtl ? 'القسم' : 'Module' }}</label>
                                             <select v-model="quickAddForm.module"
-                                                class="w-full rounded-xl border-gray-200 text-sm focus:ring-teal-500 focus:border-teal-500 transition">
+                                                class="doctorato-input w-full rounded-xl border-gray-200 text-sm focus:ring-[#C4A265]/30 focus:border-[#1B365D] transition">
                                                 <option value="derma">Derma</option>
                                                 <option value="dental">Dental</option>
                                                 <option value="pediatric">Pediatric</option>

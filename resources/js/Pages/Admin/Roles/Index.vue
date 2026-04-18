@@ -193,7 +193,7 @@ function deleteRole(id) {
                         v-model="searchQuery"
                         type="text"
                         :placeholder="isRtl ? 'البحث عن دور...' : 'Search roles...'"
-                        class="w-full ps-12 pe-4 py-3 bg-white border border-gray-200 rounded-2xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] outline-none transition-all duration-200 shadow-sm"
+                        class="doctorato-input w-full ps-12 pe-4 py-3 bg-white border border-gray-200 rounded-2xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] outline-none transition-all duration-200 shadow-sm"
                     />
                 </div>
             </div>

@@ -48,7 +48,7 @@ function balance(invoice) {
     <div>
         <div class="flex items-center justify-between mb-6">
             <h1 class="text-2xl font-bold text-gray-800">{{ t('p_my_invoices') }}</h1>
-            <select v-if="activeModules.length > 1" v-model="moduleFilter" class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent">
+            <select v-if="activeModules.length> 1" v-model="moduleFilter" class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent">
                 <option value="">{{ isRtl ? 'كل الأقسام' : 'All Departments' }}</option>
                 <option v-for="mod in activeModules" :key="mod.slug" :value="mod.slug">{{ mod.name }}</option>
             </select>

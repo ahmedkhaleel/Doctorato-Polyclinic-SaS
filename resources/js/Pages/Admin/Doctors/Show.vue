@@ -675,11 +675,11 @@ onMounted(() => {
                                         </div>
                                         <div>
                                             <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $t('a_diagnosis') }}</label>
-                                            <input v-model="prescriptionForm.diagnosis" type="text" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition" placeholder="Diagnosis" />
+                                            <input v-model="prescriptionForm.diagnosis" type="text" class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition" placeholder="Diagnosis" />
                                         </div>
                                         <div>
                                             <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $t('a_notes') }}</label>
-                                            <input v-model="prescriptionForm.notes" type="text" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition" placeholder="Optional notes" />
+                                            <input v-model="prescriptionForm.notes" type="text" class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition" placeholder="Optional notes" />
                                         </div>
                                     </div>
                                     <div>
@@ -694,9 +694,9 @@ onMounted(() => {
                                                     </button>
                                                 </div>
                                             </div>
-                                            <div class="w-28"><input v-model="item.dosage" type="text" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" placeholder="Dosage" /></div>
-                                            <div class="w-32"><input v-model="item.frequency" type="text" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" placeholder="Frequency" /></div>
-                                            <div class="w-24"><input v-model="item.duration" type="text" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" placeholder="Duration" /></div>
+                                            <div class="w-28"><input v-model="item.dosage" type="text" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" placeholder="Dosage" /></div>
+                                            <div class="w-32"><input v-model="item.frequency" type="text" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" placeholder="Frequency" /></div>
+                                            <div class="w-24"><input v-model="item.duration" type="text" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" placeholder="Duration" /></div>
                                             <button v-if="prescriptionForm.items.length > 1" type="button" @click="removePrescriptionItem(idx)" class="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                                             </button>

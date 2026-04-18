@@ -96,7 +96,7 @@ onMounted(() => {
                             v-model="search"
                             type="text"
                             :placeholder="isRtl ? 'بحث برقم الفاتورة أو المريض...' : 'Search by invoice # or patient...'"
-                            class="w-full ltr:pl-10 ltr:pr-4 rtl:pr-10 rtl:pl-4 py-2.5 bg-white/10 border border-white/20 rounded-xl text-sm text-white placeholder-gray-400 focus:ring-2 focus:ring-[#0d9488]/50 focus:border-[#0d9488] transition"
+                            class="doctorato-input w-full ltr:pl-10 ltr:pr-4 rtl:pr-10 rtl:pl-4 py-2.5 bg-white/10 border border-white/20 rounded-xl text-sm text-white placeholder-gray-400 focus:ring-2 focus:ring-[#0d9488]/50 focus:border-[#0d9488] transition"
                         />
                     </div>
                     <select v-model="status" class="px-3 py-2.5 bg-white/10 border border-white/20 rounded-xl text-sm text-white focus:ring-2 focus:ring-[#0d9488]/50 focus:border-[#0d9488] [&>option]:text-gray-900">
@@ -105,7 +105,7 @@ onMounted(() => {
                         <option value="partial">{{ isRtl ? 'مدفوع جزئياً' : 'Partial' }}</option>
                         <option value="paid">{{ isRtl ? 'مدفوع' : 'Paid' }}</option>
                     </select>
-                    <select v-if="activeModules.length > 1" v-model="moduleFilter" class="px-3 py-2.5 bg-white/10 border border-white/20 rounded-xl text-sm text-white focus:ring-2 focus:ring-[#0d9488]/50 focus:border-[#0d9488] [&>option]:text-gray-900">
+                    <select v-if="activeModules.length> 1" v-model="moduleFilter" class="px-3 py-2.5 bg-white/10 border border-white/20 rounded-xl text-sm text-white focus:ring-2 focus:ring-[#0d9488]/50 focus:border-[#0d9488] [&>option]:text-gray-900">
                         <option value="">{{ isRtl ? 'كل الأقسام' : 'All Departments' }}</option>
                         <option v-for="mod in activeModules" :key="mod.slug" :value="mod.slug">{{ mod.name }}</option>
                     </select>

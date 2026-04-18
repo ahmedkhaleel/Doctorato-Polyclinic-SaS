@@ -238,7 +238,7 @@ const statusOptions = computed(() => {
                     :placeholder="activeTab === 'bookings'
                         ? (isRtl ? 'بحث بالاسم، الهاتف، رقم الحجز...' : 'Search name, phone, booking #...')
                         : (isRtl ? 'بحث بالاسم، الهاتف، اسم الباقة...' : 'Search name, phone, package...')"
-                    class="w-full ps-10 pe-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition" />
+                    class="doctorato-input w-full ps-10 pe-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition" />
             </div>
             <div v-if="activeTab === 'bookings' && activeModules.length > 1" class="w-44">
                 <SearchableSelect

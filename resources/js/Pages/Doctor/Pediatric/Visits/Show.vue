@@ -379,19 +379,19 @@ function severityColor(severity) {
             <form @submit.prevent="submitGrowth" class="grid grid-cols-1 md:grid-cols-5 gap-3">
                 <div>
                     <label class="block text-[11px] font-semibold text-gray-500 mb-1">{{ isRtl ? 'التاريخ' : 'Date' }}</label>
-                    <input v-model="growthForm.measurement_date" type="date" required class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-emerald-300 focus:border-emerald-500" />
+                    <input v-model="growthForm.measurement_date" type="date" required class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#1B365D]" />
                 </div>
                 <div>
                     <label class="block text-[11px] font-semibold text-gray-500 mb-1">{{ isRtl ? 'الوزن (كجم)' : 'Weight (kg)' }}</label>
-                    <input v-model="growthForm.weight_kg" type="number" step="0.01" min="0" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-emerald-300 focus:border-emerald-500" />
+                    <input v-model="growthForm.weight_kg" type="number" step="0.01" min="0" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#1B365D]" />
                 </div>
                 <div>
                     <label class="block text-[11px] font-semibold text-gray-500 mb-1">{{ isRtl ? 'الطول (سم)' : 'Height (cm)' }}</label>
-                    <input v-model="growthForm.height_cm" type="number" step="0.1" min="0" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-emerald-300 focus:border-emerald-500" />
+                    <input v-model="growthForm.height_cm" type="number" step="0.1" min="0" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#1B365D]" />
                 </div>
                 <div>
                     <label class="block text-[11px] font-semibold text-gray-500 mb-1">{{ isRtl ? 'محيط الرأس (سم)' : 'Head (cm)' }}</label>
-                    <input v-model="growthForm.head_circumference_cm" type="number" step="0.1" min="0" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-emerald-300 focus:border-emerald-500" />
+                    <input v-model="growthForm.head_circumference_cm" type="number" step="0.1" min="0" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#1B365D]" />
                 </div>
                 <div class="flex items-end">
                     <button type="submit" :disabled="growthForm.processing" class="w-full px-4 py-2 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white text-sm font-bold rounded-lg hover:from-emerald-600 hover:to-emerald-700 transition-all shadow-sm disabled:opacity-50">
@@ -401,7 +401,7 @@ function severityColor(severity) {
             </form>
             <div class="mt-3">
                 <label class="block text-[11px] font-semibold text-gray-500 mb-1">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
-                <textarea v-model="growthForm.notes" rows="2" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-emerald-300 focus:border-emerald-500" :placeholder="isRtl ? 'ملاحظات اختيارية...' : 'Optional notes...'"></textarea>
+                <textarea v-model="growthForm.notes" rows="2" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#1B365D]" :placeholder="isRtl ? 'ملاحظات اختيارية...' : 'Optional notes...'"></textarea>
             </div>
         </section>
 
@@ -484,7 +484,7 @@ function severityColor(severity) {
                     <textarea
                         v-model="diagnosisForm.diagnosis"
                         rows="3"
-                        class="w-full rounded-xl border border-gray-200 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100 text-sm text-gray-700 placeholder-gray-400 px-4 py-3 transition-all resize-none"
+                        class="doctorato-input w-full rounded-xl border border-gray-200 focus:border-[#1B365D] focus:ring-2 focus:ring-[#C4A265]/30 text-sm text-gray-700 placeholder-gray-400 px-4 py-3 transition-all resize-none"
                         :class="isRtl ? 'text-right' : 'text-left'"
                         :placeholder="isRtl ? 'أدخل التشخيص...' : 'Enter diagnosis...'"
                     ></textarea>
@@ -497,7 +497,7 @@ function severityColor(severity) {
                     <textarea
                         v-model="diagnosisForm.doctor_notes"
                         rows="3"
-                        class="w-full rounded-xl border border-gray-200 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100 text-sm text-gray-700 placeholder-gray-400 px-4 py-3 transition-all resize-none"
+                        class="doctorato-input w-full rounded-xl border border-gray-200 focus:border-[#1B365D] focus:ring-2 focus:ring-[#C4A265]/30 text-sm text-gray-700 placeholder-gray-400 px-4 py-3 transition-all resize-none"
                         :class="isRtl ? 'text-right' : 'text-left'"
                         :placeholder="isRtl ? 'أدخل ملاحظات الطبيب...' : 'Enter doctor notes...'"
                     ></textarea>

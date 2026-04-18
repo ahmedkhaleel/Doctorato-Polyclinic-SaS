@@ -240,7 +240,7 @@ function onBlur() {
                 v-model="query"
                 type="text"
                 :placeholder="isRtl ? 'بحث في ملف المريض (تشخيصات، أدوية، علاجات...)' : 'Search patient file (diagnoses, meds, treatments...)'"
-                class="flex-1 bg-transparent outline-none text-sm text-gray-800 placeholder-gray-400"
+                class="doctorato-input flex-1 bg-transparent outline-none text-sm text-gray-800 placeholder-gray-400"
                 @focus="focused = true; showDropdown = query.trim().length >= 2"
                 @blur="onBlur"
             />

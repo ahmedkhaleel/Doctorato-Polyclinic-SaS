@@ -130,12 +130,12 @@ const priorityColors = {
                             v-model="search"
                             type="text"
                             :placeholder="isRtl ? 'بحث بالاسم، العنوان، الملاحظات...' : 'Search name, title, notes...'"
-                            class="w-full pl-12 pr-4 py-3 bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl text-sm text-white placeholder-gray-400 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]/50 focus:bg-white/15 transition-all"
+                            class="doctorato-input w-full pl-12 pr-4 py-3 bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl text-sm text-white placeholder-gray-400 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]/50 focus:bg-white/15 transition-all"
                         />
                     </div>
                     <select
                         v-model="statusFilter"
-                        class="px-4 py-3 bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl text-sm text-white focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]/50 transition-all"
+                        class="doctorato-input px-4 py-3 bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl text-sm text-white focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]/50 transition-all"
                     >
                         <option value="" class="text-gray-900">{{ isRtl ? 'جميع الحالات' : 'All Statuses' }}</option>
                         <option value="draft" class="text-gray-900">{{ isRtl ? 'مسودة' : 'Draft' }}</option>
@@ -153,7 +153,7 @@ const priorityColors = {
                         <input
                             v-model="dateFrom"
                             type="date"
-                            class="px-4 py-3 bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl text-sm text-white focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]/50 transition-all"
+                            class="doctorato-input px-4 py-3 bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl text-sm text-white focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]/50 transition-all"
                         />
                     </div>
                     <div class="flex items-center gap-2">
@@ -161,7 +161,7 @@ const priorityColors = {
                         <input
                             v-model="dateTo"
                             type="date"
-                            class="px-4 py-3 bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl text-sm text-white focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]/50 transition-all"
+                            class="doctorato-input px-4 py-3 bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl text-sm text-white focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]/50 transition-all"
                         />
                     </div>
                 </div>

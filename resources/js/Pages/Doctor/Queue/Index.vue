@@ -507,11 +507,11 @@ const todayProgress = computed(() => {
                     <div class="flex flex-wrap items-center gap-2 sm:gap-3">
                         <div class="flex items-center gap-2">
                             <label class="text-xs text-gray-500">{{ isRtl ? 'من' : 'From' }}</label>
-                            <input v-model="dateFrom" type="date" :max="dateTo || undefined" @change="applyFilters" class="text-sm border border-gray-200 rounded-lg px-3 py-1.5 bg-white text-gray-600 focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265]" />
+                            <input v-model="dateFrom" type="date" :max="dateTo || undefined" @change="applyFilters" class="doctorato-input text-sm border border-gray-200 rounded-lg px-3 py-1.5 bg-white text-gray-600 focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265]" />
                         </div>
                         <div class="flex items-center gap-2">
                             <label class="text-xs text-gray-500">{{ isRtl ? 'إلى' : 'To' }}</label>
-                            <input v-model="dateTo" type="date" :min="dateFrom || undefined" @change="applyFilters" class="text-sm border border-gray-200 rounded-lg px-3 py-1.5 bg-white text-gray-600 focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265]" />
+                            <input v-model="dateTo" type="date" :min="dateFrom || undefined" @change="applyFilters" class="doctorato-input text-sm border border-gray-200 rounded-lg px-3 py-1.5 bg-white text-gray-600 focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265]" />
                         </div>
                         <button v-if="dateFrom || dateTo" @click="clearDateFilter" class="text-xs text-red-400 hover:text-red-600 font-medium transition-colors">{{ isRtl ? 'مسح' : 'Clear' }}</button>
                     </div>

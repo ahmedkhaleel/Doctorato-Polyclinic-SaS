@@ -25,7 +25,7 @@ function t(en, ar) { return isRtl.value ? ar : en; }
         </div>
 
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
-            <input v-model="search" type="text" :placeholder="t('Search…', 'بحث…')" class="w-full md:w-96 px-4 py-2.5 border rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20" />
+            <input v-model="search" type="text" :placeholder="t('Search…', 'بحث…')" class="doctorato-input w-full md:w-96 px-4 py-2.5 border rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20" />
         </div>
 
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">

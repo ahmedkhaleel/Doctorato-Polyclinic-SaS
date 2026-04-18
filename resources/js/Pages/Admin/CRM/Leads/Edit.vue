@@ -247,7 +247,7 @@ const notesLength = computed(() => form.notes.length);
                         <textarea
                             v-model="form.loss_reason"
                             rows="3"
-                            class="w-full px-4 py-3 text-sm border border-red-200 rounded-xl bg-white/70 focus:bg-white focus:ring-2 focus:ring-red-200 focus:border-red-400 transition-all duration-200 resize-none"
+                            class="doctorato-input w-full px-4 py-3 text-sm border border-red-200 rounded-xl bg-white/70 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/30 focus:border-red-400 transition-all duration-200 resize-none"
                             :placeholder="isRtl ? 'لماذا تم فقدان هذا العميل؟ هذه المعلومات تساعد في تحسين معدلات التحويل...' : 'Why was this lead lost? This information helps improve future conversion rates...'"
                         ></textarea>
                     </div>
@@ -272,7 +272,7 @@ const notesLength = computed(() => form.notes.length);
                                 <div class="absolute inset-y-0 ltr:left-0 rtl:right-0 flex items-center ltr:pl-3.5 rtl:pr-3.5 pointer-events-none">
                                     <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                                 </div>
-                                <input v-model="form.full_name" type="text" class="w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-3 text-sm border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all duration-200" :placeholder="isRtl ? 'أدخل الاسم الكامل' : 'Enter full name'" />
+                                <input v-model="form.full_name" type="text" class="doctorato-input w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-3 text-sm border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all duration-200" :placeholder="isRtl ? 'أدخل الاسم الكامل' : 'Enter full name'" />
                             </div>
                             <p v-if="form.errors.full_name" class="text-xs text-red-500 mt-1.5">{{ form.errors.full_name }}</p>
                         </div>
@@ -283,7 +283,7 @@ const notesLength = computed(() => form.notes.length);
                                 <div class="absolute inset-y-0 ltr:left-0 rtl:right-0 flex items-center ltr:pl-3.5 rtl:pr-3.5 pointer-events-none">
                                     <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
                                 </div>
-                                <input v-model="form.phone" type="text" class="w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-3 text-sm border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all duration-200" placeholder="+20 1xx xxx xxxx" />
+                                <input v-model="form.phone" type="text" class="doctorato-input w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-3 text-sm border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all duration-200" placeholder="+20 1xx xxx xxxx" />
                             </div>
                             <p v-if="form.errors.phone" class="text-xs text-red-500 mt-1.5">{{ form.errors.phone }}</p>
                         </div>
@@ -294,7 +294,7 @@ const notesLength = computed(() => form.notes.length);
                                 <div class="absolute inset-y-0 ltr:left-0 rtl:right-0 flex items-center ltr:pl-3.5 rtl:pr-3.5 pointer-events-none">
                                     <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
                                 </div>
-                                <input v-model="form.phone2" type="text" class="w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-3 text-sm border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all duration-200" :placeholder="isRtl ? 'هاتف بديل' : 'Alternative phone'" />
+                                <input v-model="form.phone2" type="text" class="doctorato-input w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-3 text-sm border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all duration-200" :placeholder="isRtl ? 'هاتف بديل' : 'Alternative phone'" />
                             </div>
                         </div>
                         <!-- Email -->
@@ -304,7 +304,7 @@ const notesLength = computed(() => form.notes.length);
                                 <div class="absolute inset-y-0 ltr:left-0 rtl:right-0 flex items-center ltr:pl-3.5 rtl:pr-3.5 pointer-events-none">
                                     <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
                                 </div>
-                                <input v-model="form.email" type="email" class="w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-3 text-sm border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all duration-200" placeholder="email@example.com" />
+                                <input v-model="form.email" type="email" class="doctorato-input w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-3 text-sm border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all duration-200" placeholder="email@example.com" />
                             </div>
                             <p v-if="form.errors.email" class="text-xs text-red-500 mt-1.5">{{ form.errors.email }}</p>
                         </div>
@@ -315,7 +315,7 @@ const notesLength = computed(() => form.notes.length);
                                 <div class="absolute inset-y-0 ltr:left-0 rtl:right-0 flex items-center ltr:pl-3.5 rtl:pr-3.5 pointer-events-none">
                                     <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
                                 </div>
-                                <select v-model="form.gender" class="w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-3 text-sm border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all duration-200 appearance-none">
+                                <select v-model="form.gender" class="doctorato-input w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-3 text-sm border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all duration-200 appearance-none">
                                     <option value="">{{ $t('a_select') }}</option>
                                     <option value="male">{{ $t('a_male') }}</option>
                                     <option value="female">{{ $t('a_female') }}</option>
@@ -332,7 +332,7 @@ const notesLength = computed(() => form.notes.length);
                                 <div class="absolute inset-y-0 ltr:left-0 rtl:right-0 flex items-center ltr:pl-3.5 rtl:pr-3.5 pointer-events-none">
                                     <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                                 </div>
-                                <input v-model="form.date_of_birth" type="date" class="w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-3 text-sm border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all duration-200" />
+                                <input v-model="form.date_of_birth" type="date" class="doctorato-input w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-3 text-sm border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all duration-200" />
                             </div>
                         </div>
                         <!-- City -->
@@ -342,7 +342,7 @@ const notesLength = computed(() => form.notes.length);
                                 <div class="absolute inset-y-0 ltr:left-0 rtl:right-0 flex items-center ltr:pl-3.5 rtl:pr-3.5 pointer-events-none">
                                     <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                                 </div>
-                                <input v-model="form.city" type="text" class="w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-3 text-sm border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all duration-200" :placeholder="isRtl ? 'المدينة' : 'City'" />
+                                <input v-model="form.city" type="text" class="doctorato-input w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-3 text-sm border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all duration-200" :placeholder="isRtl ? 'المدينة' : 'City'" />
                             </div>
                         </div>
                         <!-- Nationality -->
@@ -352,7 +352,7 @@ const notesLength = computed(() => form.notes.length);
                                 <div class="absolute inset-y-0 ltr:left-0 rtl:right-0 flex items-center ltr:pl-3.5 rtl:pr-3.5 pointer-events-none">
                                     <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                 </div>
-                                <input v-model="form.nationality" type="text" class="w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-3 text-sm border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all duration-200" :placeholder="isRtl ? 'الجنسية' : 'Nationality'" />
+                                <input v-model="form.nationality" type="text" class="doctorato-input w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-3 text-sm border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all duration-200" :placeholder="isRtl ? 'الجنسية' : 'Nationality'" />
                             </div>
                         </div>
                     </div>
@@ -388,7 +388,7 @@ const notesLength = computed(() => form.notes.length);
                                         v-model="sourceSearchText"
                                         @focus="sourceSearchOpen = true"
                                         type="text"
-                                        class="w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-3 text-sm border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all duration-200"
+                                        class="doctorato-input w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-3 text-sm border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all duration-200"
                                         :placeholder="isRtl ? 'بحث عن المصدر...' : 'Search source...'"
                                     />
                                 </div>
@@ -432,7 +432,7 @@ const notesLength = computed(() => form.notes.length);
                                         v-model="campaignSearchText"
                                         @focus="campaignSearchOpen = true"
                                         type="text"
-                                        class="w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-3 text-sm border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all duration-200"
+                                        class="doctorato-input w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-3 text-sm border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all duration-200"
                                         :placeholder="isRtl ? 'بحث عن الحملة...' : 'Search campaign...'"
                                     />
                                 </div>
@@ -476,7 +476,7 @@ const notesLength = computed(() => form.notes.length);
                                         v-model="assigneeSearchText"
                                         @focus="assigneeSearchOpen = true"
                                         type="text"
-                                        class="w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-3 text-sm border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all duration-200"
+                                        class="doctorato-input w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 py-3 text-sm border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all duration-200"
                                         :placeholder="isRtl ? 'بحث عن المسؤول...' : 'Search assignee...'"
                                     />
                                 </div>
@@ -582,7 +582,7 @@ const notesLength = computed(() => form.notes.length);
                         v-model="form.notes"
                         rows="5"
                         :maxlength="notesMaxLength"
-                        class="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all duration-200 resize-none"
+                        class="doctorato-input w-full px-4 py-3 text-sm border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all duration-200 resize-none"
                         :placeholder="isRtl ? 'أي ملاحظات إضافية عن هذا العميل المحتمل...' : 'Any additional notes about this lead...'"
                     ></textarea>
                     <div class="flex justify-end mt-2">

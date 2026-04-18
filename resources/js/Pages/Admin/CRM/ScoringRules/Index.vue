@@ -153,27 +153,27 @@ function getEventCategory(event) {
                                 <div>
                                     <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">{{ $t('a_name_en') }}<span class="text-red-400">*</span></label>
                                     <input v-model="form.name_en" type="text"
-                                        class="w-full px-4 py-3 text-sm bg-gray-50/80 border border-gray-200/80 rounded-xl focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200"
+                                        class="doctorato-input w-full px-4 py-3 text-sm bg-gray-50/80 border border-gray-200/80 rounded-xl focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200"
                                         :placeholder="$t('a_scoring_rule_placeholder')" />
                                     <p v-if="form.errors.name_en" class="text-xs text-red-500 mt-1.5 font-medium">{{ form.errors.name_en }}</p>
                                 </div>
                                 <div>
                                     <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">{{ $t('a_name_ar') }}<span class="text-red-400">*</span></label>
                                     <input v-model="form.name_ar" type="text" dir="rtl"
-                                        class="w-full px-4 py-3 text-sm bg-gray-50/80 border border-gray-200/80 rounded-xl focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200" />
+                                        class="doctorato-input w-full px-4 py-3 text-sm bg-gray-50/80 border border-gray-200/80 rounded-xl focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200" />
                                     <p v-if="form.errors.name_ar" class="text-xs text-red-500 mt-1.5 font-medium">{{ form.errors.name_ar }}</p>
                                 </div>
                                 <div>
                                     <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">{{ $t('a_event_key') }}<span class="text-red-400">*</span></label>
                                     <input v-model="form.event" type="text" :disabled="!!editingId"
-                                        class="w-full px-4 py-3 text-sm bg-gray-50/80 border border-gray-200/80 rounded-xl focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200 disabled:bg-gray-100 disabled:cursor-not-allowed font-mono"
+                                        class="doctorato-input w-full px-4 py-3 text-sm bg-gray-50/80 border border-gray-200/80 rounded-xl focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200 disabled:bg-gray-100 disabled:cursor-not-allowed font-mono"
                                         placeholder="e.g. call_answered" />
                                     <p v-if="form.errors.event" class="text-xs text-red-500 mt-1.5 font-medium">{{ form.errors.event }}</p>
                                 </div>
                                 <div>
                                     <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">{{ $t('a_points') }}<span class="text-red-400">*</span></label>
                                     <input v-model="form.points" type="number" min="-100" max="100"
-                                        class="w-full px-4 py-3 text-sm bg-gray-50/80 border border-gray-200/80 rounded-xl focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200 font-mono" />
+                                        class="doctorato-input w-full px-4 py-3 text-sm bg-gray-50/80 border border-gray-200/80 rounded-xl focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200 font-mono" />
                                     <!-- Points Scale Indicator -->
                                     <div class="mt-2 flex items-center gap-2">
                                         <span class="text-[10px] font-mono text-red-400">-</span>
@@ -188,7 +188,7 @@ function getEventCategory(event) {
                                 <div>
                                     <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">{{ $t('a_description') }}</label>
                                     <input v-model="form.description" type="text"
-                                        class="w-full px-4 py-3 text-sm bg-gray-50/80 border border-gray-200/80 rounded-xl focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200"
+                                        class="doctorato-input w-full px-4 py-3 text-sm bg-gray-50/80 border border-gray-200/80 rounded-xl focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200"
                                         :placeholder="$t('a_brief_description')" />
                                 </div>
                                 <div class="flex items-end">

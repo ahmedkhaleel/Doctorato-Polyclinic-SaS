@@ -158,7 +158,7 @@ function formatTime(date) {
                                 v-model="search"
                                 type="text"
                                 :placeholder="isRtl ? 'بحث باسم المريض أو ولي الأمر...' : 'Search patient or guardian name...'"
-                                class="w-full ltr:pl-12 ltr:pr-4 rtl:pr-12 rtl:pl-4 py-3 bg-white/15 backdrop-blur-sm border border-white/20 rounded-xl text-sm text-white placeholder-white/50 focus:ring-2 focus:ring-white/30 focus:border-white/40 focus:bg-white/20 transition-all"
+                                class="doctorato-input w-full ltr:pl-12 ltr:pr-4 rtl:pr-12 rtl:pl-4 py-3 bg-white/15 backdrop-blur-sm border border-white/20 rounded-xl text-sm text-white placeholder-white/50 focus:ring-2 focus:ring-white/30 focus:border-white/40 focus:bg-white/20 transition-all"
                             />
                         </div>
 
@@ -185,7 +185,7 @@ function formatTime(date) {
                                 v-model="dateFrom"
                                 type="date"
                                 :title="isRtl ? 'من تاريخ' : 'From date'"
-                                class="pl-10 pr-3 py-2.5 bg-white/15 backdrop-blur-sm border border-white/20 rounded-xl text-sm text-white focus:ring-2 focus:ring-white/30 focus:border-white/40 transition-all [color-scheme:dark]"
+                                class="doctorato-input pl-10 pr-3 py-2.5 bg-white/15 backdrop-blur-sm border border-white/20 rounded-xl text-sm text-white focus:ring-2 focus:ring-white/30 focus:border-white/40 transition-all [color-scheme:dark]"
                             />
                         </div>
                         <span class="text-white/60 text-xs font-medium">{{ isRtl ? 'إلى' : 'to' }}</span>
@@ -195,7 +195,7 @@ function formatTime(date) {
                                 v-model="dateTo"
                                 type="date"
                                 :title="isRtl ? 'إلى تاريخ' : 'To date'"
-                                class="pl-10 pr-3 py-2.5 bg-white/15 backdrop-blur-sm border border-white/20 rounded-xl text-sm text-white focus:ring-2 focus:ring-white/30 focus:border-white/40 transition-all [color-scheme:dark]"
+                                class="doctorato-input pl-10 pr-3 py-2.5 bg-white/15 backdrop-blur-sm border border-white/20 rounded-xl text-sm text-white focus:ring-2 focus:ring-white/30 focus:border-white/40 transition-all [color-scheme:dark]"
                             />
                         </div>
 

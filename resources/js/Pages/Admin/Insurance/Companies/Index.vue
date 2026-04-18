@@ -82,8 +82,8 @@ function deleteCompany(company) {
 
         <!-- Filters -->
         <div class="flex flex-wrap gap-3 mb-6">
-            <input v-model="search" @keyup.enter="applyFilters" type="text" :placeholder="isRtl ? 'بحث...' : 'Search...'" class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm w-64 focus:ring-[#C4A265] focus:border-[#C4A265]" />
-            <select v-model="statusFilter" @change="applyFilters" class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]">
+            <input v-model="search" @keyup.enter="applyFilters" type="text" :placeholder="isRtl ? 'بحث...' : 'Search...'" class="doctorato-input px-4 py-2.5 border border-gray-200 rounded-xl text-sm w-64 focus:ring-[#C4A265] focus:border-[#C4A265]" />
+            <select v-model="statusFilter" @change="applyFilters" class="doctorato-input px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]">
                 <option value="">{{ isRtl ? 'الكل' : 'All' }}</option>
                 <option value="active">{{ isRtl ? 'نشط' : 'Active' }}</option>
                 <option value="inactive">{{ isRtl ? 'غير نشط' : 'Inactive' }}</option>
@@ -166,44 +166,44 @@ function deleteCompany(company) {
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'الاسم بالعربي' : 'Name (Arabic)' }} *</label>
-                                <input v-model="form.name_ar" type="text" required class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]" />
+                                <input v-model="form.name_ar" type="text" required class="doctorato-input w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]" />
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'الاسم بالإنجليزي' : 'Name (English)' }} *</label>
-                                <input v-model="form.name_en" type="text" required class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]" />
+                                <input v-model="form.name_en" type="text" required class="doctorato-input w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]" />
                             </div>
                         </div>
 
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'الرمز' : 'Code' }}</label>
-                                <input v-model="form.code" type="text" :placeholder="isRtl ? 'مثال: BUPA' : 'e.g., BUPA'" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265] font-mono" />
+                                <input v-model="form.code" type="text" :placeholder="isRtl ? 'مثال: BUPA' : 'e.g., BUPA'" class="doctorato-input w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265] font-mono" />
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'الهاتف' : 'Phone' }}</label>
-                                <input v-model="form.phone" type="tel" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]" />
+                                <input v-model="form.phone" type="tel" class="doctorato-input w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]" />
                             </div>
                         </div>
 
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'البريد' : 'Email' }}</label>
-                                <input v-model="form.email" type="email" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]" />
+                                <input v-model="form.email" type="email" class="doctorato-input w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]" />
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'جهة التواصل' : 'Contact Person' }}</label>
-                                <input v-model="form.contact_person" type="text" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]" />
+                                <input v-model="form.contact_person" type="text" class="doctorato-input w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]" />
                             </div>
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'العنوان' : 'Address' }}</label>
-                            <textarea v-model="form.address" rows="2" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]" />
+                            <textarea v-model="form.address" rows="2" class="doctorato-input w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]" />
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
-                            <textarea v-model="form.notes" rows="2" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]" />
+                            <textarea v-model="form.notes" rows="2" class="doctorato-input w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]" />
                         </div>
 
                         <label class="flex items-center gap-2 cursor-pointer">

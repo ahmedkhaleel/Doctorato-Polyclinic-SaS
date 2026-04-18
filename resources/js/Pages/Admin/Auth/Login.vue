@@ -60,8 +60,8 @@ function switchLocale() {
                             type="text"
                             required
                             autofocus
-                            class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent text-sm transition"
-                            :class="form.errors.login ? 'border-red-500 focus:ring-red-200' : 'focus:ring-amber-200'"
+                            class="doctorato-input w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent text-sm transition"
+                            :class="form.errors.login ? 'border-red-500 focus:ring-[#C4A265]/30' : 'focus:ring-[#C4A265]/30'"
                             :placeholder="$t('a_login_username_or_email_placeholder')"
                         />
                         <p v-if="form.errors.login" class="mt-1 text-sm text-red-600">{{ form.errors.login }}</p>
@@ -75,8 +75,8 @@ function switchLocale() {
                             v-model="form.password"
                             type="password"
                             required
-                            class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent text-sm transition"
-                            :class="form.errors.password ? 'border-red-500 focus:ring-red-200' : 'focus:ring-amber-200'"
+                            class="doctorato-input w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent text-sm transition"
+                            :class="form.errors.password ? 'border-red-500 focus:ring-[#C4A265]/30' : 'focus:ring-[#C4A265]/30'"
                             :placeholder="$t('a_enter_password')"
                         />
                         <p v-if="form.errors.password" class="mt-1 text-sm text-red-600">{{ form.errors.password }}</p>

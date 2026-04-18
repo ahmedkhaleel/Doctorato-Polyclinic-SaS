@@ -48,7 +48,7 @@ function submit() {
                             type="email"
                             required
                             autofocus
-                            class="w-full px-4 py-3 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white placeholder-white/30 focus:ring-2 focus:ring-teal-500/50 focus:border-teal-500/50 text-sm transition-all duration-200"
+                            class="doctorato-input w-full px-4 py-3 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white placeholder-white/30 focus:ring-2 focus:ring-[#C4A265]/30/50 focus:border-[#1B365D]/50 text-sm transition-all duration-200"
                             :class="form.errors.email ? 'border-red-500/50' : ''"
                             placeholder="secretary@doctorato.com"
                         />
@@ -63,7 +63,7 @@ function submit() {
                             v-model="form.password"
                             type="password"
                             required
-                            class="w-full px-4 py-3 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white placeholder-white/30 focus:ring-2 focus:ring-teal-500/50 focus:border-teal-500/50 text-sm transition-all duration-200"
+                            class="doctorato-input w-full px-4 py-3 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white placeholder-white/30 focus:ring-2 focus:ring-[#C4A265]/30/50 focus:border-[#1B365D]/50 text-sm transition-all duration-200"
                             :class="form.errors.password ? 'border-red-500/50' : ''"
                             :placeholder="isRtl ? 'أدخل كلمة المرور' : 'Enter your password'"
                         />
@@ -76,7 +76,7 @@ function submit() {
                             id="remember"
                             v-model="form.remember"
                             type="checkbox"
-                            class="h-4 w-4 rounded border-white/20 bg-white/[0.06] text-teal-500 focus:ring-teal-500/50"
+                            class="h-4 w-4 rounded border-white/20 bg-white/[0.06] text-teal-500 focus:ring-[#C4A265]/30/50"
                         />
                         <label for="remember" class="ltr:ml-2 rtl:mr-2 text-sm text-white/50">{{ isRtl ? 'تذكرني' : 'Remember me' }}</label>
                     </div>

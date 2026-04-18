@@ -201,24 +201,24 @@ function serviceRateOptions(currentIndex) {
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_name_en') }} <span class="text-red-500">*</span></label>
-                                    <input v-model="form.name_en" type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                    <input v-model="form.name_en" type="text" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                     <p v-if="form.errors.name_en" class="mt-1 text-sm text-red-600">{{ form.errors.name_en }}</p>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_name_ar') }} <span class="text-red-500">*</span></label>
-                                    <input v-model="form.name_ar" type="text" dir="rtl" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                    <input v-model="form.name_ar" type="text" dir="rtl" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                     <p v-if="form.errors.name_ar" class="mt-1 text-sm text-red-600">{{ form.errors.name_ar }}</p>
                                 </div>
                             </div>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Specialization (English) <span class="text-red-500">*</span></label>
-                                    <input v-model="form.specialization_en" type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                    <input v-model="form.specialization_en" type="text" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                     <p v-if="form.errors.specialization_en" class="mt-1 text-sm text-red-600">{{ form.errors.specialization_en }}</p>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Specialization (Arabic) <span class="text-red-500">*</span></label>
-                                    <input v-model="form.specialization_ar" type="text" dir="rtl" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                    <input v-model="form.specialization_ar" type="text" dir="rtl" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                     <p v-if="form.errors.specialization_ar" class="mt-1 text-sm text-red-600">{{ form.errors.specialization_ar }}</p>
                                 </div>
                             </div>
@@ -239,11 +239,11 @@ function serviceRateOptions(currentIndex) {
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Qualifications (English)</label>
-                                    <textarea v-model="form.qualifications_en" rows="4" placeholder="One qualification per line" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"></textarea>
+                                    <textarea v-model="form.qualifications_en" rows="4" placeholder="One qualification per line" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"></textarea>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Qualifications (Arabic)</label>
-                                    <textarea v-model="form.qualifications_ar" rows="4" dir="rtl" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"></textarea>
+                                    <textarea v-model="form.qualifications_ar" rows="4" dir="rtl" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -255,14 +255,14 @@ function serviceRateOptions(currentIndex) {
                             <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wider">{{ $t('a_status_order') }}</h3>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_status') }}</label>
-                                <select v-model="form.status" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent">
+                                <select v-model="form.status" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent">
                                     <option value="active">{{ $t('a_active') }}</option>
                                     <option value="inactive">{{ $t('a_inactive') }}</option>
                                 </select>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_display_order') }}</label>
-                                <input v-model="form.display_order" type="number" min="0" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                <input v-model="form.display_order" type="number" min="0" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                             </div>
                         </div>
 
@@ -305,12 +305,12 @@ function serviceRateOptions(currentIndex) {
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Phone</label>
-                                <input v-model="form.phone" type="text" placeholder="01xxxxxxxxx" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                <input v-model="form.phone" type="text" placeholder="01xxxxxxxxx" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                 <p v-if="form.errors.phone" class="mt-1 text-sm text-red-600">{{ form.errors.phone }}</p>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                                <input v-model="form.email" type="email" placeholder="doctor@clinic.com" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                <input v-model="form.email" type="email" placeholder="doctor@clinic.com" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                 <p v-if="form.errors.email" class="mt-1 text-sm text-red-600">{{ form.errors.email }}</p>
                             </div>
                         </div>
@@ -321,12 +321,12 @@ function serviceRateOptions(currentIndex) {
                             <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wider">{{ $t('a_financial_settings') }}</h3>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Consultation Fee ({{ currencyCode }})</label>
-                                <input v-model="form.consultation_fee" type="number" step="0.01" min="0" placeholder="0.00" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                <input v-model="form.consultation_fee" type="number" step="0.01" min="0" placeholder="0.00" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                 <p v-if="form.errors.consultation_fee" class="mt-1 text-sm text-red-600">{{ form.errors.consultation_fee }}</p>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Default Commission Rate (%)</label>
-                                <input v-model="form.default_commission_percentage" type="number" step="0.01" min="0" max="100" placeholder="0.00" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                <input v-model="form.default_commission_percentage" type="number" step="0.01" min="0" max="100" placeholder="0.00" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                 <p class="text-xs text-gray-400 mt-1">Fallback rate when no per-service rate is set</p>
                                 <p v-if="form.errors.default_commission_percentage" class="mt-1 text-sm text-red-600">{{ form.errors.default_commission_percentage }}</p>
                             </div>
@@ -334,7 +334,7 @@ function serviceRateOptions(currentIndex) {
 
                         <div class="bg-white rounded-lg shadow-sm p-6 space-y-5">
                             <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wider">{{ $t('a_clinic_notes') }}</h3>
-                            <textarea v-model="form.clinic_notes" rows="5" placeholder="Internal notes about this doctor..." class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"></textarea>
+                            <textarea v-model="form.clinic_notes" rows="5" placeholder="Internal notes about this doctor..." class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"></textarea>
                             <p v-if="form.errors.clinic_notes" class="mt-1 text-sm text-red-600">{{ form.errors.clinic_notes }}</p>
                         </div>
                     </div>
@@ -356,7 +356,7 @@ function serviceRateOptions(currentIndex) {
                                     <input
                                         type="checkbox"
                                         v-model="schedule.is_active"
-                                        class="w-4 h-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-200 mr-3"
+                                        class="w-4 h-4 rounded border-gray-300 text-emerald-600 focus:ring-[#C4A265]/30 mr-3"
                                     />
                                     <span class="text-sm font-medium" :class="schedule.is_active ? 'text-gray-900' : 'text-gray-400'">
                                         {{ dayNames[i] }}
@@ -366,13 +366,13 @@ function serviceRateOptions(currentIndex) {
                                     <input
                                         v-model="schedule.start_time"
                                         type="time"
-                                        class="px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                                        class="doctorato-input px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                                     />
                                     <span class="text-gray-400">to</span>
                                     <input
                                         v-model="schedule.end_time"
                                         type="time"
-                                        class="px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                                        class="doctorato-input px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                                     />
                                 </div>
                             </div>
@@ -410,15 +410,15 @@ function serviceRateOptions(currentIndex) {
                                 <div class="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-4">
                                     <div>
                                         <label class="block text-xs font-medium text-gray-500 mb-1">Start Date</label>
-                                        <input v-model="vacation.start_date" type="date" class="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                        <input v-model="vacation.start_date" type="date" class="doctorato-input w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                     </div>
                                     <div>
                                         <label class="block text-xs font-medium text-gray-500 mb-1">End Date</label>
-                                        <input v-model="vacation.end_date" type="date" class="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                        <input v-model="vacation.end_date" type="date" class="doctorato-input w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                     </div>
                                     <div>
                                         <label class="block text-xs font-medium text-gray-500 mb-1">Reason</label>
-                                        <input v-model="vacation.reason" type="text" placeholder="Optional" class="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                        <input v-model="vacation.reason" type="text" placeholder="Optional" class="doctorato-input w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                     </div>
                                 </div>
                                 <button
@@ -472,7 +472,7 @@ function serviceRateOptions(currentIndex) {
                                     </div>
                                     <div>
                                         <label class="block text-xs font-medium text-gray-500 mb-1">Commission Rate (%)</label>
-                                        <input v-model="rate.commission_percentage" type="number" step="0.01" min="0" max="100" placeholder="0.00" class="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" />
+                                        <input v-model="rate.commission_percentage" type="number" step="0.01" min="0" max="100" placeholder="0.00" class="doctorato-input w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                     </div>
                                 </div>
                                 <button

@@ -380,7 +380,7 @@ function executeBulkPrint() {
                             v-model="search"
                             type="text"
                             :placeholder="$t('a_search_patient_lab_tooth')"
-                            class="lo-input-field"
+                            class="doctorato-input lo-input-field"
                         />
                     </div>
                     <!-- Overdue toggle -->
@@ -414,7 +414,7 @@ function executeBulkPrint() {
                         <div class="lo-filters-grid">
                             <div class="lo-input-wrapper">
                                 <svg class="w-4 h-4 lo-input-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" /></svg>
-                                <select v-model="statusFilter" class="lo-input-field lo-select-field">
+                                <select v-model="statusFilter" class="doctorato-input lo-input-field lo-select-field">
                                     <option value="">{{ $t('a_all_statuses') }}</option>
                                     <option v-for="s in statusOptions" :key="s" :value="s">{{ $t('a_lab_status_' + s) }}</option>
                                 </select>
@@ -422,12 +422,12 @@ function executeBulkPrint() {
                             <div class="lo-date-range">
                                 <div class="lo-input-wrapper">
                                     <svg class="w-4 h-4 lo-input-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                                    <input v-model="dateFrom" type="date" class="lo-input-field" />
+                                    <input v-model="dateFrom" type="date" class="doctorato-input lo-input-field" />
                                 </div>
                                 <span class="lo-date-sep">-</span>
                                 <div class="lo-input-wrapper">
                                     <svg class="w-4 h-4 lo-input-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                                    <input v-model="dateTo" type="date" class="lo-input-field" />
+                                    <input v-model="dateTo" type="date" class="doctorato-input lo-input-field" />
                                 </div>
                             </div>
                             <div v-if="hasActiveFilters" class="lo-clear-filters">
@@ -546,9 +546,9 @@ function executeBulkPrint() {
                                         <select
                                             :value="order.status"
                                             @change="updateOrderStatus(order.id, $event.target.value)"
-                                            :class="[getStatus(order.status).bg, getStatus(order.status).text]"
-                                            class="lo-status-select"
-                                        >
+                                            
+                                            class="doctorato-input lo-status-select"
+                                         :class="[getStatus(order.status).bg, getStatus(order.status).text]">
                                             <option v-for="s in statusOptions" :key="s" :value="s">{{ $t('a_lab_status_' + s) }}</option>
                                         </select>
                                         <!-- Quick Advance Button -->

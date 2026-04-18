@@ -129,7 +129,7 @@ function isOpen(faqId) {
                     v-model="searchQuery"
                     type="text"
                     :placeholder="locale === 'ar' ? 'ابحثي عن سؤالك...' : 'Search for your question...'"
-                    class="w-full ps-12 pe-4 py-4 bg-white border-2 border-gray-200 rounded-2xl text-[#3A3A3A] placeholder-gray-400 focus:border-[var(--brand-primary)] focus:ring-[var(--brand-primary)]/20 focus:ring-4 outline-none transition-all duration-300 text-lg shadow-sm form-input-animated"
+                    class="doctorato-input w-full ps-12 pe-4 py-4 bg-white border-2 border-gray-200 rounded-2xl text-[#3A3A3A] placeholder-gray-400 focus:border-[var(--brand-primary)] focus:ring-[var(--brand-primary)]/20 focus:ring-4 outline-none transition-all duration-300 text-lg shadow-sm form-input-animated"
                 />
                 <button
                     v-if="searchQuery"

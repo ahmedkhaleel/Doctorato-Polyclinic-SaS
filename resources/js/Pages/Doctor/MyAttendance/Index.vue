@@ -154,10 +154,10 @@ onMounted(() => {
 
                     <!-- Filter -->
                     <div class="flex items-center gap-2 flex-wrap">
-                        <select v-model="selectedMonth" @change="applyFilter" class="px-3 py-2 bg-white/10 border border-white/20 rounded-xl text-sm text-white focus:ring-2 focus:ring-emerald-400/50 [&>option]:text-gray-900">
+                        <select v-model="selectedMonth" @change="applyFilter" class="px-3 py-2 bg-white/10 border border-white/20 rounded-xl text-sm text-white focus:ring-2 focus:ring-[#C4A265]/30/50 [&>option]:text-gray-900">
                             <option v-for="m in months" :key="m.value" :value="m.value">{{ m.label }}</option>
                         </select>
-                        <select v-model="selectedYear" @change="applyFilter" class="px-3 py-2 bg-white/10 border border-white/20 rounded-xl text-sm text-white focus:ring-2 focus:ring-emerald-400/50 [&>option]:text-gray-900">
+                        <select v-model="selectedYear" @change="applyFilter" class="px-3 py-2 bg-white/10 border border-white/20 rounded-xl text-sm text-white focus:ring-2 focus:ring-[#C4A265]/30/50 [&>option]:text-gray-900">
                             <option v-for="y in years" :key="y" :value="y">{{ y }}</option>
                         </select>
                     </div>

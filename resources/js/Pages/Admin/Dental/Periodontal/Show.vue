@@ -251,7 +251,7 @@ function toggleToothDetail(tooth) {
                         </label>
                         <div class="perio-input-wrapper">
                             <svg class="w-5 h-5 text-gray-300 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" /></svg>
-                            <select v-model="selectedExamDate" @change="loadExam(selectedExamDate)" class="flex-1 bg-transparent border-none outline-none text-sm text-gray-700 p-0 focus:ring-0 cursor-pointer appearance-none">
+                            <select v-model="selectedExamDate" @change="loadExam(selectedExamDate)" class="doctorato-input flex-1 bg-transparent border-none outline-none text-sm text-gray-700 p-0 focus:ring-0 cursor-pointer appearance-none">
                                 <option value="">{{ isRtl ? 'فحص جديد' : 'New Exam' }}</option>
                                 <option v-for="date in examDates" :key="date" :value="date">{{ date }}</option>
                             </select>
@@ -268,7 +268,7 @@ function toggleToothDetail(tooth) {
                         <div class="relative">
                             <div @click="showDoctorDropdown = !showDoctorDropdown" class="perio-input-wrapper cursor-pointer" :class="{ 'perio-input-focus': showDoctorDropdown }">
                                 <svg class="w-5 h-5 text-gray-300 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" /></svg>
-                                <input v-if="showDoctorDropdown" v-model="doctorSearch" type="text" :placeholder="isRtl ? 'ابحث عن طبيب...' : 'Search doctor...'" class="flex-1 bg-transparent border-none outline-none text-sm text-gray-700 placeholder-gray-300 p-0 focus:ring-0" @click.stop />
+                                <input v-if="showDoctorDropdown" v-model="doctorSearch" type="text" :placeholder="isRtl ? 'ابحث عن طبيب...' : 'Search doctor...'" class="doctorato-input flex-1 bg-transparent border-none outline-none text-sm text-gray-700 placeholder-gray-300 p-0 focus:ring-0" @click.stop />
                                 <span v-else class="flex-1 text-sm" :class="selectedDoctorName ? 'text-gray-800 font-medium' : 'text-gray-300'">{{ selectedDoctorName || (isRtl ? 'اختر الطبيب' : 'Select doctor') }}</span>
                                 <svg class="w-4 h-4 text-gray-300 transition-transform duration-300" :class="showDoctorDropdown ? 'rotate-180' : ''" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
                             </div>
@@ -364,7 +364,7 @@ function toggleToothDetail(tooth) {
                                 </td>
                                 <td v-for="tooth in upperTeeth" :key="'ub-' + tooth" class="px-0 py-1 border-e border-gray-50">
                                     <div class="flex">
-                                        <input v-for="i in 3" :key="i" v-model="measurements[tooth].probing_depths[i-1]" type="number" min="0" max="15" class="perio-cell" :class="depthColor(measurements[tooth].probing_depths[i-1])" />
+                                        <input v-for="i in 3" :key="i" v-model="measurements[tooth].probing_depths[i-1]" type="number" min="0" max="15" class="doctorato-input perio-cell" :class="depthColor(measurements[tooth].probing_depths[i-1])" />
                                     </div>
                                 </td>
                             </tr>
@@ -397,7 +397,7 @@ function toggleToothDetail(tooth) {
                                 </td>
                                 <td v-for="tooth in upperTeeth" :key="'ul-' + tooth" class="px-0 py-1 border-e border-gray-50">
                                     <div class="flex">
-                                        <input v-for="i in 3" :key="i" v-model="measurements[tooth].probing_depths[i+2]" type="number" min="0" max="15" class="perio-cell" :class="depthColor(measurements[tooth].probing_depths[i+2])" />
+                                        <input v-for="i in 3" :key="i" v-model="measurements[tooth].probing_depths[i+2]" type="number" min="0" max="15" class="doctorato-input perio-cell" :class="depthColor(measurements[tooth].probing_depths[i+2])" />
                                     </div>
                                 </td>
                             </tr>
@@ -429,7 +429,7 @@ function toggleToothDetail(tooth) {
                                 </td>
                                 <td v-for="tooth in upperTeeth" :key="'ur-' + tooth" class="px-0 py-1 border-e border-gray-50">
                                     <div class="flex">
-                                        <input v-for="i in 3" :key="i" v-model="measurements[tooth].recession[i-1]" type="number" min="0" max="15" class="perio-cell perio-cell-recession" />
+                                        <input v-for="i in 3" :key="i" v-model="measurements[tooth].recession[i-1]" type="number" min="0" max="15" class="doctorato-input perio-cell perio-cell-recession" />
                                     </div>
                                 </td>
                             </tr>
@@ -444,7 +444,7 @@ function toggleToothDetail(tooth) {
                                     <div class="text-[9px] text-gray-300 mt-0.5">0-3</div>
                                 </td>
                                 <td v-for="tooth in upperTeeth" :key="'um-' + tooth" class="px-0.5 py-1 border-e border-gray-50">
-                                    <input v-model="measurements[tooth].mobility" type="number" min="0" max="3" class="perio-cell-single" />
+                                    <input v-model="measurements[tooth].mobility" type="number" min="0" max="3" class="doctorato-input perio-cell-single" />
                                 </td>
                             </tr>
                             <tr>
@@ -456,7 +456,7 @@ function toggleToothDetail(tooth) {
                                     <div class="text-[9px] text-gray-300 mt-0.5">0-3</div>
                                 </td>
                                 <td v-for="tooth in upperTeeth" :key="'uf-' + tooth" class="px-0.5 py-1 border-e border-gray-50">
-                                    <input v-model="measurements[tooth].furcation" type="number" min="0" max="3" class="perio-cell-single" />
+                                    <input v-model="measurements[tooth].furcation" type="number" min="0" max="3" class="doctorato-input perio-cell-single" />
                                 </td>
                             </tr>
                         </tbody>
@@ -501,7 +501,7 @@ function toggleToothDetail(tooth) {
                                 </td>
                                 <td v-for="tooth in lowerTeeth" :key="'lb-' + tooth" class="px-0 py-1 border-e border-gray-50">
                                     <div class="flex">
-                                        <input v-for="i in 3" :key="i" v-model="measurements[tooth].probing_depths[i-1]" type="number" min="0" max="15" class="perio-cell" :class="depthColor(measurements[tooth].probing_depths[i-1])" />
+                                        <input v-for="i in 3" :key="i" v-model="measurements[tooth].probing_depths[i-1]" type="number" min="0" max="15" class="doctorato-input perio-cell" :class="depthColor(measurements[tooth].probing_depths[i-1])" />
                                     </div>
                                 </td>
                             </tr>
@@ -533,7 +533,7 @@ function toggleToothDetail(tooth) {
                                 </td>
                                 <td v-for="tooth in lowerTeeth" :key="'ll-' + tooth" class="px-0 py-1 border-e border-gray-50">
                                     <div class="flex">
-                                        <input v-for="i in 3" :key="i" v-model="measurements[tooth].probing_depths[i+2]" type="number" min="0" max="15" class="perio-cell" :class="depthColor(measurements[tooth].probing_depths[i+2])" />
+                                        <input v-for="i in 3" :key="i" v-model="measurements[tooth].probing_depths[i+2]" type="number" min="0" max="15" class="doctorato-input perio-cell" :class="depthColor(measurements[tooth].probing_depths[i+2])" />
                                     </div>
                                 </td>
                             </tr>
@@ -565,7 +565,7 @@ function toggleToothDetail(tooth) {
                                 </td>
                                 <td v-for="tooth in lowerTeeth" :key="'lr-' + tooth" class="px-0 py-1 border-e border-gray-50">
                                     <div class="flex">
-                                        <input v-for="i in 3" :key="i" v-model="measurements[tooth].recession[i-1]" type="number" min="0" max="15" class="perio-cell perio-cell-recession" />
+                                        <input v-for="i in 3" :key="i" v-model="measurements[tooth].recession[i-1]" type="number" min="0" max="15" class="doctorato-input perio-cell perio-cell-recession" />
                                     </div>
                                 </td>
                             </tr>
@@ -579,7 +579,7 @@ function toggleToothDetail(tooth) {
                                     </div>
                                 </td>
                                 <td v-for="tooth in lowerTeeth" :key="'lm-' + tooth" class="px-0.5 py-1 border-e border-gray-50">
-                                    <input v-model="measurements[tooth].mobility" type="number" min="0" max="3" class="perio-cell-single" />
+                                    <input v-model="measurements[tooth].mobility" type="number" min="0" max="3" class="doctorato-input perio-cell-single" />
                                 </td>
                             </tr>
                             <tr>
@@ -590,7 +590,7 @@ function toggleToothDetail(tooth) {
                                     </div>
                                 </td>
                                 <td v-for="tooth in lowerTeeth" :key="'lf-' + tooth" class="px-0.5 py-1 border-e border-gray-50">
-                                    <input v-model="measurements[tooth].furcation" type="number" min="0" max="3" class="perio-cell-single" />
+                                    <input v-model="measurements[tooth].furcation" type="number" min="0" max="3" class="doctorato-input perio-cell-single" />
                                 </td>
                             </tr>
                         </tbody>

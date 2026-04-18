@@ -312,7 +312,7 @@ const months = [
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_employee') }} <span class="text-red-500">*</span></label>
                                 <select
                                     v-model="form.employee_id"
-                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
+                                    class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                                 >
                                     <option value="">{{ $t('a_select_employee') }}</option>
                                     <option v-for="emp in employees" :key="emp.id" :value="emp.id">{{ emp.name }}</option>
@@ -327,7 +327,7 @@ const months = [
                                         type="number"
                                         step="0.01"
                                         min="0"
-                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
+                                        class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                                         placeholder="0.00"
                                     />
                                     <p v-if="formErrors.amount" class="mt-1 text-sm text-red-600">{{ formErrors.amount }}</p>
@@ -339,7 +339,7 @@ const months = [
                                         type="number"
                                         step="0.01"
                                         min="0"
-                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
+                                        class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                                         placeholder="0.00"
                                     />
                                     <p v-if="formErrors.monthly_installment" class="mt-1 text-sm text-red-600">{{ formErrors.monthly_installment }}</p>
@@ -350,7 +350,7 @@ const months = [
                                 <textarea
                                     v-model="form.reason"
                                     rows="3"
-                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
+                                    class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                                     :placeholder="$t('a_reason_for_advance')"
                                 ></textarea>
                                 <p v-if="formErrors.reason" class="mt-1 text-sm text-red-600">{{ formErrors.reason }}</p>
@@ -360,7 +360,7 @@ const months = [
                                     <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_start_month') }} <span class="text-red-500">*</span></label>
                                     <select
                                         v-model="form.start_month"
-                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
+                                        class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                                     >
                                         <option value="">{{ $t('a_select_month') }}</option>
                                         <option v-for="m in months" :key="m.value" :value="m.value">{{ m.label }}</option>
@@ -374,7 +374,7 @@ const months = [
                                         type="number"
                                         min="2024"
                                         max="2030"
-                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
+                                        class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                                         placeholder="2026"
                                     />
                                     <p v-if="formErrors.start_year" class="mt-1 text-sm text-red-600">{{ formErrors.start_year }}</p>

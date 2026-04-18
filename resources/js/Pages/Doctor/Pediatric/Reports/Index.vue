@@ -492,7 +492,7 @@ function selectPatient(patient) {
                                 <input
                                     v-model="form.date"
                                     type="date"
-                                    class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-sm focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all"
+                                    class="doctorato-input w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-sm focus:ring-2 focus:ring-[#C4A265]/30/20 focus:border-[#1B365D] transition-all"
                                 />
                             </div>
 
@@ -504,7 +504,7 @@ function selectPatient(patient) {
                                 <textarea
                                     v-model="form.notes"
                                     rows="3"
-                                    class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-sm focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all resize-none placeholder:text-gray-400"
+                                    class="doctorato-input w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-sm focus:ring-2 focus:ring-[#C4A265]/30/20 focus:border-[#1B365D] transition-all resize-none placeholder:text-gray-400"
                                     :placeholder="isRtl ? 'أضف ملاحظات إضافية للتقرير...' : 'Add additional notes for the report...'"
                                 ></textarea>
                             </div>
@@ -513,19 +513,19 @@ function selectPatient(patient) {
                             <template v-if="selectedReportType?.id === 'referral'">
                                 <div>
                                     <label class="block text-xs font-semibold text-gray-700 mb-1.5">{{ isRtl ? 'التحويل إلى' : 'Referred To' }}</label>
-                                    <input v-model="form.referred_to" type="text" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all placeholder:text-gray-400" :placeholder="isRtl ? 'اسم الطبيب أو التخصص...' : 'Doctor name or specialty...'" />
+                                    <input v-model="form.referred_to" type="text" class="doctorato-input w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all placeholder:text-gray-400" :placeholder="isRtl ? 'اسم الطبيب أو التخصص...' : 'Doctor name or specialty...'" />
                                 </div>
                                 <div>
                                     <label class="block text-xs font-semibold text-gray-700 mb-1.5">{{ isRtl ? 'سبب التحويل' : 'Reason for Referral' }}</label>
-                                    <textarea v-model="form.reason" rows="2" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all resize-none placeholder:text-gray-400" :placeholder="isRtl ? 'سبب التحويل...' : 'Reason for referral...'"></textarea>
+                                    <textarea v-model="form.reason" rows="2" class="doctorato-input w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all resize-none placeholder:text-gray-400" :placeholder="isRtl ? 'سبب التحويل...' : 'Reason for referral...'"></textarea>
                                 </div>
                                 <div>
                                     <label class="block text-xs font-semibold text-gray-700 mb-1.5">{{ isRtl ? 'الملخص السريري' : 'Clinical Summary' }}</label>
-                                    <textarea v-model="form.clinical_summary" rows="2" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all resize-none placeholder:text-gray-400" :placeholder="isRtl ? 'ملخص الحالة السريرية...' : 'Clinical summary...'"></textarea>
+                                    <textarea v-model="form.clinical_summary" rows="2" class="doctorato-input w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all resize-none placeholder:text-gray-400" :placeholder="isRtl ? 'ملخص الحالة السريرية...' : 'Clinical summary...'"></textarea>
                                 </div>
                                 <div>
                                     <label class="block text-xs font-semibold text-gray-700 mb-1.5">{{ isRtl ? 'الأولوية' : 'Urgency' }}</label>
-                                    <select v-model="form.urgency" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all">
+                                    <select v-model="form.urgency" class="doctorato-input w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all">
                                         <option value="routine">{{ isRtl ? 'روتيني' : 'Routine' }}</option>
                                         <option value="urgent">{{ isRtl ? 'عاجل' : 'Urgent' }}</option>
                                         <option value="emergency">{{ isRtl ? 'طوارئ' : 'Emergency' }}</option>
@@ -537,16 +537,16 @@ function selectPatient(patient) {
                             <template v-if="selectedReportType?.id === 'medical_leave'">
                                 <div>
                                     <label class="block text-xs font-semibold text-gray-700 mb-1.5">{{ isRtl ? 'التشخيص' : 'Diagnosis' }}</label>
-                                    <input v-model="form.diagnosis" type="text" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-sm focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all placeholder:text-gray-400" :placeholder="isRtl ? 'التشخيص...' : 'Diagnosis...'" />
+                                    <input v-model="form.diagnosis" type="text" class="doctorato-input w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-sm focus:ring-2 focus:ring-[#C4A265]/30/20 focus:border-[#1B365D] transition-all placeholder:text-gray-400" :placeholder="isRtl ? 'التشخيص...' : 'Diagnosis...'" />
                                 </div>
                                 <div class="grid grid-cols-2 gap-3">
                                     <div>
                                         <label class="block text-xs font-semibold text-gray-700 mb-1.5">{{ isRtl ? 'من تاريخ' : 'Leave From' }}</label>
-                                        <input v-model="form.leave_from" type="date" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-sm focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all" />
+                                        <input v-model="form.leave_from" type="date" class="doctorato-input w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-sm focus:ring-2 focus:ring-[#C4A265]/30/20 focus:border-[#1B365D] transition-all" />
                                     </div>
                                     <div>
                                         <label class="block text-xs font-semibold text-gray-700 mb-1.5">{{ isRtl ? 'إلى تاريخ' : 'Leave To' }}</label>
-                                        <input v-model="form.leave_to" type="date" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-sm focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all" />
+                                        <input v-model="form.leave_to" type="date" class="doctorato-input w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-sm focus:ring-2 focus:ring-[#C4A265]/30/20 focus:border-[#1B365D] transition-all" />
                                     </div>
                                 </div>
                             </template>

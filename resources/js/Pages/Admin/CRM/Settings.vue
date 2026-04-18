@@ -417,7 +417,7 @@ const slaGaugePercent = computed(() => {
                                             v-model.number="form.sla_response_target_minutes"
                                             min="1"
                                             max="1440"
-                                            class="w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white text-sm focus:border-[#C4A265] focus:ring-[#C4A265] transition-colors"
+                                            class="doctorato-input w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white text-sm focus:border-[#C4A265] focus:ring-[#C4A265] transition-colors"
                                             :placeholder="isRtl ? 'دقائق' : 'Minutes'"
                                         />
                                     </div>
@@ -450,7 +450,7 @@ const slaGaugePercent = computed(() => {
                                     v-model.number="form.sla_followup_target_hours"
                                     min="1"
                                     max="720"
-                                    class="w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white text-sm focus:border-[#C4A265] focus:ring-[#C4A265] transition-colors pe-16"
+                                    class="doctorato-input w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white text-sm focus:border-[#C4A265] focus:ring-[#C4A265] transition-colors pe-16"
                                     :placeholder="isRtl ? 'ساعات' : 'Hours'"
                                 />
                                 <span class="absolute top-1/2 -translate-y-1/2 text-sm text-gray-400 dark:text-gray-500" :class="isRtl ? 'start-4' : 'end-4'">
@@ -485,7 +485,7 @@ const slaGaugePercent = computed(() => {
                                     v-model.number="form.stale_lead_days"
                                     min="1"
                                     max="365"
-                                    class="w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white text-sm focus:border-[#C4A265] focus:ring-[#C4A265] transition-colors pe-16"
+                                    class="doctorato-input w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white text-sm focus:border-[#C4A265] focus:ring-[#C4A265] transition-colors pe-16"
                                     :placeholder="isRtl ? 'ايام' : 'Days'"
                                 />
                                 <span class="absolute top-1/2 -translate-y-1/2 text-sm text-gray-400 dark:text-gray-500" :class="isRtl ? 'start-4' : 'end-4'">

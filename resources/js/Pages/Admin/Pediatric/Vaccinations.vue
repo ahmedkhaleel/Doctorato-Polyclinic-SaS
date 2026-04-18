@@ -295,12 +295,12 @@ function deleteVaccination(v) {
                         v-model="search"
                         type="text"
                         :placeholder="isRtl ? 'بحث بالمريض أو التطعيم...' : 'Search by patient or vaccine...'"
-                        class="w-full ltr:pl-10 rtl:pr-10 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-emerald-400 transition"
+                        class="doctorato-input w-full ltr:pl-10 rtl:pr-10 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition"
                     />
                 </div>
                 <select
                     v-model="statusFilter"
-                    class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-emerald-400 transition bg-white"
+                    class="doctorato-input px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition bg-white"
                 >
                     <option value="">{{ isRtl ? 'كل الحالات' : 'All Statuses' }}</option>
                     <option value="given">{{ isRtl ? 'تم التطعيم' : 'Given' }}</option>
@@ -430,7 +430,7 @@ function deleteVaccination(v) {
                     <!-- Patient -->
                     <div>
                         <label class="block text-xs font-semibold text-gray-500 mb-1">{{ isRtl ? 'المريض' : 'Patient' }} *</label>
-                        <select v-model="newForm.patient_id" required class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-300 focus:border-[#1B365D]">
+                        <select v-model="newForm.patient_id" required class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#1B365D]">
                             <option value="">{{ isRtl ? 'اختر المريض' : 'Select patient' }}</option>
                             <option v-for="p in pediatricPatients" :key="p.id" :value="p.id">{{ p.full_name }} {{ p.file_number ? `(${p.file_number})` : '' }}</option>
                         </select>
@@ -440,39 +440,39 @@ function deleteVaccination(v) {
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-semibold text-gray-500 mb-1">{{ isRtl ? 'اسم اللقاح (إنجليزي)' : 'Vaccine Name (EN)' }} *</label>
-                            <input v-model="newForm.vaccine_name" required class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-300" />
+                            <input v-model="newForm.vaccine_name" required class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30" />
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-gray-500 mb-1">{{ isRtl ? 'اسم اللقاح (عربي)' : 'Vaccine Name (AR)' }}</label>
-                            <input v-model="newForm.vaccine_name_ar" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-300" />
+                            <input v-model="newForm.vaccine_name_ar" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30" />
                         </div>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-semibold text-gray-500 mb-1">{{ isRtl ? 'رقم الجرعة' : 'Dose Number' }} *</label>
-                            <input v-model="newForm.dose_number" required placeholder="Dose 1" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-300" />
+                            <input v-model="newForm.dose_number" required placeholder="Dose 1" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30" />
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-gray-500 mb-1">{{ isRtl ? 'العمر المجدول' : 'Scheduled Age' }}</label>
-                            <input v-model="newForm.scheduled_age" placeholder="2 months" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-300" />
+                            <input v-model="newForm.scheduled_age" placeholder="2 months" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30" />
                         </div>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-semibold text-gray-500 mb-1">{{ isRtl ? 'تاريخ الجدولة' : 'Scheduled Date' }} *</label>
-                            <input v-model="newForm.scheduled_date" type="date" required class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-300" />
+                            <input v-model="newForm.scheduled_date" type="date" required class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30" />
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-gray-500 mb-1">{{ isRtl ? 'تاريخ التطعيم' : 'Given Date' }}</label>
-                            <input v-model="newForm.given_date" type="date" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-300" />
+                            <input v-model="newForm.given_date" type="date" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30" />
                         </div>
                     </div>
 
                     <div>
                         <label class="block text-xs font-semibold text-gray-500 mb-1">{{ isRtl ? 'الحالة' : 'Status' }} *</label>
-                        <select v-model="newForm.status" required class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-300">
+                        <select v-model="newForm.status" required class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30">
                             <option value="scheduled">{{ isRtl ? 'مجدول' : 'Scheduled' }}</option>
                             <option value="given">{{ isRtl ? 'تم التطعيم' : 'Given' }}</option>
                             <option value="missed">{{ isRtl ? 'فائت' : 'Missed' }}</option>
@@ -484,27 +484,27 @@ function deleteVaccination(v) {
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-semibold text-gray-500 mb-1">{{ isRtl ? 'رقم الدفعة' : 'Batch #' }}</label>
-                            <input v-model="newForm.batch_number" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-300" />
+                            <input v-model="newForm.batch_number" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30" />
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-gray-500 mb-1">{{ isRtl ? 'الشركة المصنعة' : 'Manufacturer' }}</label>
-                            <input v-model="newForm.manufacturer" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-300" />
+                            <input v-model="newForm.manufacturer" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30" />
                         </div>
                     </div>
 
                     <div>
                         <label class="block text-xs font-semibold text-gray-500 mb-1">{{ isRtl ? 'موقع الحقن' : 'Injection Site' }}</label>
-                        <input v-model="newForm.site_of_injection" placeholder="Left arm" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-300" />
+                        <input v-model="newForm.site_of_injection" placeholder="Left arm" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30" />
                     </div>
 
                     <div>
                         <label class="block text-xs font-semibold text-gray-500 mb-1">{{ isRtl ? 'الآثار الجانبية' : 'Side Effects' }}</label>
-                        <textarea v-model="newForm.side_effects" rows="2" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-300"></textarea>
+                        <textarea v-model="newForm.side_effects" rows="2" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30"></textarea>
                     </div>
 
                     <div>
                         <label class="block text-xs font-semibold text-gray-500 mb-1">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
-                        <textarea v-model="newForm.notes" rows="2" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-300"></textarea>
+                        <textarea v-model="newForm.notes" rows="2" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30"></textarea>
                     </div>
 
                     <div class="flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
@@ -530,7 +530,7 @@ function deleteVaccination(v) {
                 <form @submit.prevent="submitInit" class="p-6 space-y-4">
                     <div>
                         <label class="block text-xs font-semibold text-gray-500 mb-1">{{ isRtl ? 'المريض' : 'Patient' }} *</label>
-                        <select v-model="initForm.patient_id" required class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-300 focus:border-[#1B365D]">
+                        <select v-model="initForm.patient_id" required class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#1B365D]">
                             <option value="">{{ isRtl ? 'اختر المريض' : 'Select patient' }}</option>
                             <option v-for="p in pediatricPatients" :key="p.id" :value="p.id">{{ p.full_name }} {{ p.file_number ? `(${p.file_number})` : '' }}</option>
                         </select>
@@ -558,7 +558,7 @@ function deleteVaccination(v) {
                 <form @submit.prevent="submitStatus" class="p-6 space-y-4">
                     <div>
                         <label class="block text-xs font-semibold text-gray-500 mb-1">{{ isRtl ? 'الحالة' : 'Status' }} *</label>
-                        <select v-model="statusForm.status" required class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm">
+                        <select v-model="statusForm.status" required class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-xl text-sm">
                             <option value="given">{{ isRtl ? 'تم التطعيم' : 'Given' }}</option>
                             <option value="missed">{{ isRtl ? 'فائت' : 'Missed' }}</option>
                             <option value="postponed">{{ isRtl ? 'مؤجل' : 'Postponed' }}</option>
@@ -567,25 +567,25 @@ function deleteVaccination(v) {
                     </div>
                     <div v-if="statusForm.status === 'given'">
                         <label class="block text-xs font-semibold text-gray-500 mb-1">{{ isRtl ? 'تاريخ التطعيم' : 'Given Date' }} *</label>
-                        <input v-model="statusForm.given_date" type="date" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm" />
+                        <input v-model="statusForm.given_date" type="date" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-xl text-sm" />
                     </div>
                     <div v-if="statusForm.status === 'given'" class="grid grid-cols-2 gap-3">
                         <div>
                             <label class="block text-xs font-semibold text-gray-500 mb-1">{{ isRtl ? 'رقم الدفعة' : 'Batch #' }}</label>
-                            <input v-model="statusForm.batch_number" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm" />
+                            <input v-model="statusForm.batch_number" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-xl text-sm" />
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-gray-500 mb-1">{{ isRtl ? 'الشركة' : 'Manufacturer' }}</label>
-                            <input v-model="statusForm.manufacturer" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm" />
+                            <input v-model="statusForm.manufacturer" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-xl text-sm" />
                         </div>
                     </div>
                     <div v-if="statusForm.status === 'given'">
                         <label class="block text-xs font-semibold text-gray-500 mb-1">{{ isRtl ? 'موقع الحقن' : 'Injection Site' }}</label>
-                        <input v-model="statusForm.site_of_injection" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm" />
+                        <input v-model="statusForm.site_of_injection" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-xl text-sm" />
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-gray-500 mb-1">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
-                        <textarea v-model="statusForm.notes" rows="2" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm"></textarea>
+                        <textarea v-model="statusForm.notes" rows="2" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-xl text-sm"></textarea>
                     </div>
                     <div class="flex items-center justify-end gap-3 pt-3 border-t border-gray-100">
                         <button type="button" @click="showStatusModal = false" class="px-4 py-2 rounded-xl text-sm font-semibold text-gray-600 hover:bg-gray-100">

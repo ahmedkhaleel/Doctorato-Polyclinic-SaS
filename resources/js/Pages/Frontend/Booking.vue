@@ -462,7 +462,7 @@ function submit() {
                                         v-model="form._honeypot"
                                         autocomplete="off"
                                         tabindex="-1"
-                                    />
+                                    class="doctorato-input"/>
                                 </div>
 
                                 <!-- Department Selector (only when multiple modules) -->
@@ -573,8 +573,8 @@ function submit() {
                                                 v-model="form.full_name"
                                                 type="text"
                                                 :placeholder="t('full_name_placeholder')"
-                                                class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-[#3A3A3A] placeholder-gray-400 transition-all duration-200 focus:ring-2 focus:ring-[var(--brand-primary)]/30 focus:border-[var(--brand-primary)] outline-none form-input-animated"
-                                                :class="{ 'border-red-400 focus:ring-red-300 focus:border-red-400': form.errors.full_name }"
+                                                class="doctorato-input w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-[#3A3A3A] placeholder-gray-400 transition-all duration-200 focus:ring-2 focus:ring-[var(--brand-primary)]/30 focus:border-[var(--brand-primary)] outline-none form-input-animated"
+                                                :class="{ 'border-red-400 focus:ring-[#C4A265]/30 focus:border-red-400': form.errors.full_name }"
                                                 required
                                             />
                                             <p v-if="form.errors.full_name" class="mt-1.5 text-sm text-red-500">
@@ -609,8 +609,8 @@ function submit() {
                                                     @input="normalizePhone"
                                                     type="tel"
                                                     :placeholder="t('phone_placeholder')"
-                                                    class="w-full px-4 py-3 border border-gray-300 rounded-e-lg bg-white text-[#3A3A3A] placeholder-gray-400 transition-all duration-200 focus:ring-2 focus:ring-[var(--brand-primary)]/30 focus:border-[var(--brand-primary)] outline-none form-input-animated"
-                                                    :class="{ 'border-red-400 focus:ring-red-300 focus:border-red-400': form.errors.phone }"
+                                                    class="doctorato-input w-full px-4 py-3 border border-gray-300 rounded-e-lg bg-white text-[#3A3A3A] placeholder-gray-400 transition-all duration-200 focus:ring-2 focus:ring-[var(--brand-primary)]/30 focus:border-[var(--brand-primary)] outline-none form-input-animated"
+                                                    :class="{ 'border-red-400 focus:ring-[#C4A265]/30 focus:border-red-400': form.errors.phone }"
                                                     required
                                                 />
 
@@ -630,7 +630,7 @@ function submit() {
                                                                 v-model="countrySearch"
                                                                 type="text"
                                                                 :placeholder="locale === 'ar' ? 'ابحث عن دولة...' : 'Search country...'"
-                                                                class="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg bg-gray-50 outline-none focus:border-[var(--brand-primary)] focus:ring-1 focus:ring-[var(--brand-primary)]/30"
+                                                                class="doctorato-input w-full px-3 py-2 text-sm border border-gray-200 rounded-lg bg-gray-50 outline-none focus:border-[var(--brand-primary)] focus:ring-1 focus:ring-[var(--brand-primary)]/30"
                                                             />
                                                         </div>
                                                         <!-- List -->
@@ -669,8 +669,8 @@ function submit() {
                                             @blur="validateEmail"
                                             type="email"
                                             :placeholder="t('email_placeholder')"
-                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-[#3A3A3A] placeholder-gray-400 transition-all duration-200 focus:ring-2 focus:ring-[var(--brand-primary)]/30 focus:border-[var(--brand-primary)] outline-none form-input-animated"
-                                            :class="{ 'border-red-400 focus:ring-red-300 focus:border-red-400': form.errors.email || emailError }"
+                                            class="doctorato-input w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-[#3A3A3A] placeholder-gray-400 transition-all duration-200 focus:ring-2 focus:ring-[var(--brand-primary)]/30 focus:border-[var(--brand-primary)] outline-none form-input-animated"
+                                            :class="{ 'border-red-400 focus:ring-[#C4A265]/30 focus:border-red-400': form.errors.email || emailError }"
                                         />
                                         <p v-if="emailError" class="mt-1.5 text-sm text-red-500">
                                             {{ emailError }}
@@ -751,7 +751,7 @@ function submit() {
                                                                 v-model="serviceSearch"
                                                                 type="text"
                                                                 :placeholder="locale === 'ar' ? 'ابحث عن خدمة...' : 'Search service...'"
-                                                                class="w-full ps-9 pe-3 py-2.5 text-sm border border-gray-200 rounded-lg bg-gray-50 outline-none focus:border-[var(--brand-primary)] focus:ring-1 focus:ring-[var(--brand-primary)]/30"
+                                                                class="doctorato-input w-full ps-9 pe-3 py-2.5 text-sm border border-gray-200 rounded-lg bg-gray-50 outline-none focus:border-[var(--brand-primary)] focus:ring-1 focus:ring-[var(--brand-primary)]/30"
                                                             />
                                                         </div>
                                                     </div>
@@ -847,7 +847,7 @@ function submit() {
                                                             v-model="doctorSearch"
                                                             type="text"
                                                             :placeholder="locale === 'ar' ? 'ابحث عن طبيب...' : 'Search doctor...'"
-                                                            class="w-full ps-9 pe-3 py-2.5 text-sm border border-gray-200 rounded-lg bg-gray-50 outline-none focus:border-[var(--brand-primary)] focus:ring-1 focus:ring-[var(--brand-primary)]/30"
+                                                            class="doctorato-input w-full ps-9 pe-3 py-2.5 text-sm border border-gray-200 rounded-lg bg-gray-50 outline-none focus:border-[var(--brand-primary)] focus:ring-1 focus:ring-[var(--brand-primary)]/30"
                                                         />
                                                     </div>
                                                 </div>
@@ -967,8 +967,8 @@ function submit() {
                                             v-model="form.notes"
                                             rows="4"
                                             :placeholder="t('notes_placeholder')"
-                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-[#3A3A3A] placeholder-gray-400 transition-all duration-200 focus:ring-2 focus:ring-[var(--brand-primary)]/30 focus:border-[var(--brand-primary)] outline-none resize-none form-input-animated"
-                                            :class="{ 'border-red-400 focus:ring-red-300 focus:border-red-400': form.errors.notes }"
+                                            class="doctorato-input w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-[#3A3A3A] placeholder-gray-400 transition-all duration-200 focus:ring-2 focus:ring-[var(--brand-primary)]/30 focus:border-[var(--brand-primary)] outline-none resize-none form-input-animated"
+                                            :class="{ 'border-red-400 focus:ring-[#C4A265]/30 focus:border-red-400': form.errors.notes }"
                                         ></textarea>
                                         <p v-if="form.errors.notes" class="mt-1.5 text-sm text-red-500">
                                             {{ form.errors.notes }}

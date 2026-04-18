@@ -274,7 +274,7 @@ const receivedPercentage = computed(() => {
                     </div>
                     <div v-if="['received', 'partially_received'].includes(newStatus)" class="mb-4">
                         <label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'ملاحظات التسليم' : 'Delivery Notes' }}</label>
-                        <textarea v-model="deliveryNotes" rows="2" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm"></textarea>
+                        <textarea v-model="deliveryNotes" rows="2" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-xl text-sm"></textarea>
                     </div>
                     <div v-if="newStatus === 'cancelled'" class="bg-red-50 border border-red-100 rounded-xl p-3 mb-4">
                         <p class="text-sm text-red-700">{{ isRtl ? 'هل أنت متأكد من إلغاء أمر الشراء؟ لا يمكن التراجع عن هذا.' : 'Are you sure you want to cancel this PO? This cannot be undone.' }}</p>
@@ -323,13 +323,13 @@ const receivedPercentage = computed(() => {
                                 <td class="px-3 py-2.5 text-center text-gray-600">{{ item.quantity_ordered }} {{ item.unit }}</td>
                                 <td class="px-3 py-2.5 text-center text-gray-400">{{ item.quantity_received }}</td>
                                 <td class="px-3 py-2.5 text-center">
-                                    <input v-model.number="item.new_received" type="number" :min="0" :max="item.quantity_ordered" step="0.01" class="w-full px-2 py-1.5 border border-gray-200 rounded-lg text-sm text-center focus:ring-[#1B365D] focus:border-[#1B365D]" />
+                                    <input v-model.number="item.new_received" type="number" :min="0" :max="item.quantity_ordered" step="0.01" class="doctorato-input w-full px-2 py-1.5 border border-gray-200 rounded-lg text-sm text-center focus:ring-[#1B365D] focus:border-[#1B365D]" />
                                 </td>
                                 <td class="px-3 py-2.5 text-center">
-                                    <input v-model="item.batch_number" type="text" class="w-full px-2 py-1.5 border border-gray-200 rounded-lg text-sm text-center" :placeholder="isRtl ? 'اختياري' : 'Optional'" />
+                                    <input v-model="item.batch_number" type="text" class="doctorato-input w-full px-2 py-1.5 border border-gray-200 rounded-lg text-sm text-center" :placeholder="isRtl ? 'اختياري' : 'Optional'" />
                                 </td>
                                 <td class="px-3 py-2.5 text-center">
-                                    <input v-model="item.expiry_date" type="date" class="w-full px-2 py-1.5 border border-gray-200 rounded-lg text-sm" />
+                                    <input v-model="item.expiry_date" type="date" class="doctorato-input w-full px-2 py-1.5 border border-gray-200 rounded-lg text-sm" />
                                 </td>
                             </tr>
                         </tbody>

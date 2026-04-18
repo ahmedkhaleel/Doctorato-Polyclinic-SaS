@@ -96,12 +96,12 @@ function t(en, ar) { return isRtl.value ? ar : en; }
                 <div class="p-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-semibold text-gray-700 mb-1.5">{{ t('Consultation Fee (IQD)', 'رسوم الكشف (د.ع)') }}</label>
-                        <input v-model="form.pediatric_consultation_fee" type="number" step="500" min="0" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all" />
+                        <input v-model="form.pediatric_consultation_fee" type="number" step="500" min="0" class="doctorato-input w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all" />
                         <p v-if="form.errors.pediatric_consultation_fee" class="text-xs text-red-500 mt-1">{{ form.errors.pediatric_consultation_fee }}</p>
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-gray-700 mb-1.5">{{ t('Follow-up Fee (IQD)', 'رسوم المتابعة (د.ع)') }}</label>
-                        <input v-model="form.pediatric_followup_fee" type="number" step="500" min="0" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all" />
+                        <input v-model="form.pediatric_followup_fee" type="number" step="500" min="0" class="doctorato-input w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all" />
                         <p v-if="form.errors.pediatric_followup_fee" class="text-xs text-red-500 mt-1">{{ form.errors.pediatric_followup_fee }}</p>
                     </div>
                 </div>
@@ -135,11 +135,11 @@ function t(en, ar) { return isRtl.value ? ar : en; }
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-semibold text-gray-700 mb-1.5">{{ t('Upcoming Reminder (days before)', 'تذكير مسبق (أيام)') }}</label>
-                            <input v-model="form.pediatric_vaccination_reminder_days" type="number" min="1" max="30" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all" />
+                            <input v-model="form.pediatric_vaccination_reminder_days" type="number" min="1" max="30" class="doctorato-input w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all" />
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-gray-700 mb-1.5">{{ t('Overdue Reminder Interval (days)', 'فترة تذكير التأخير (أيام)') }}</label>
-                            <input v-model="form.pediatric_overdue_reminder_interval" type="number" min="7" max="60" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all" />
+                            <input v-model="form.pediatric_overdue_reminder_interval" type="number" min="7" max="60" class="doctorato-input w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all" />
                         </div>
                     </div>
                 </div>
@@ -163,17 +163,17 @@ function t(en, ar) { return isRtl.value ? ar : en; }
                 <div class="p-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     <div>
                         <label class="block text-xs font-semibold text-gray-700 mb-1.5">{{ t('Low Percentile Alert', 'تنبيه النسبة المنخفضة') }}</label>
-                        <input v-model="form.pediatric_growth_alert_low_percentile" type="number" min="1" max="25" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-sm focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all" />
+                        <input v-model="form.pediatric_growth_alert_low_percentile" type="number" min="1" max="25" class="doctorato-input w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-sm focus:ring-2 focus:ring-[#C4A265]/30/20 focus:border-[#1B365D] transition-all" />
                         <p class="text-[10px] text-gray-400 mt-1">{{ t('Below this = alert (default: 3)', 'أقل من هذا = تنبيه') }}</p>
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-gray-700 mb-1.5">{{ t('High Percentile Alert', 'تنبيه النسبة المرتفعة') }}</label>
-                        <input v-model="form.pediatric_growth_alert_high_percentile" type="number" min="75" max="99" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-sm focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all" />
+                        <input v-model="form.pediatric_growth_alert_high_percentile" type="number" min="75" max="99" class="doctorato-input w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-sm focus:ring-2 focus:ring-[#C4A265]/30/20 focus:border-[#1B365D] transition-all" />
                         <p class="text-[10px] text-gray-400 mt-1">{{ t('Above this = alert (default: 97)', 'أعلى من هذا = تنبيه') }}</p>
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-gray-700 mb-1.5">{{ t('Max Patient Age (years)', 'الحد الأقصى للعمر (سنوات)') }}</label>
-                        <input v-model="form.pediatric_max_age_years" type="number" min="12" max="21" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-sm focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all" />
+                        <input v-model="form.pediatric_max_age_years" type="number" min="12" max="21" class="doctorato-input w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-sm focus:ring-2 focus:ring-[#C4A265]/30/20 focus:border-[#1B365D] transition-all" />
                     </div>
                 </div>
             </div>

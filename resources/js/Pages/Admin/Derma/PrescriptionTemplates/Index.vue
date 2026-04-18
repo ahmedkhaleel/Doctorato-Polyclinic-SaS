@@ -60,8 +60,8 @@ function t(en, ar) { return isRtl.value ? ar : en; }
         </div>
 
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-wrap gap-3">
-            <input v-model="search" :placeholder="t('Search…', 'بحث…')" class="flex-1 min-w-[220px] px-4 py-2.5 border rounded-xl text-sm" />
-            <select v-model="cat" class="px-4 py-2.5 border rounded-xl text-sm">
+            <input v-model="search" :placeholder="t('Search…', 'بحث…')" class="doctorato-input flex-1 min-w-[220px] px-4 py-2.5 border rounded-xl text-sm" />
+            <select v-model="cat" class="doctorato-input px-4 py-2.5 border rounded-xl text-sm">
                 <option value="">{{ t('All categories', 'كل التصنيفات') }}</option>
                 <option v-for="c in categories" :key="c" :value="c">{{ c }}</option>
             </select>
@@ -101,27 +101,27 @@ function t(en, ar) { return isRtl.value ? ar : en; }
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                         <div>
                             <label class="block text-xs font-medium mb-1">{{ t('Name (AR)', 'الاسم (عربي)') }} *</label>
-                            <input v-model="form.name_ar" required class="w-full px-3 py-2 border rounded-lg text-sm" />
+                            <input v-model="form.name_ar" required class="doctorato-input w-full px-3 py-2 border rounded-lg text-sm" />
                         </div>
                         <div>
                             <label class="block text-xs font-medium mb-1">{{ t('Name (EN)', 'الاسم (إنجليزي)') }}</label>
-                            <input v-model="form.name_en" class="w-full px-3 py-2 border rounded-lg text-sm" />
+                            <input v-model="form.name_en" class="doctorato-input w-full px-3 py-2 border rounded-lg text-sm" />
                         </div>
                         <div>
                             <label class="block text-xs font-medium mb-1">{{ t('Category', 'التصنيف') }}</label>
-                            <select v-model="form.condition_category" class="w-full px-3 py-2 border rounded-lg text-sm">
+                            <select v-model="form.condition_category" class="doctorato-input w-full px-3 py-2 border rounded-lg text-sm">
                                 <option value="">—</option>
                                 <option v-for="c in categories" :key="c" :value="c">{{ c }}</option>
                             </select>
                         </div>
                         <div>
                             <label class="block text-xs font-medium mb-1">{{ t('Sort order', 'الترتيب') }}</label>
-                            <input v-model.number="form.sort_order" type="number" min="0" class="w-full px-3 py-2 border rounded-lg text-sm" />
+                            <input v-model.number="form.sort_order" type="number" min="0" class="doctorato-input w-full px-3 py-2 border rounded-lg text-sm" />
                         </div>
                     </div>
                     <div>
                         <label class="block text-xs font-medium mb-1">{{ t('Diagnosis (AR)', 'التشخيص (عربي)') }}</label>
-                        <textarea v-model="form.diagnosis_ar" rows="2" class="w-full px-3 py-2 border rounded-lg text-sm"></textarea>
+                        <textarea v-model="form.diagnosis_ar" rows="2" class="doctorato-input w-full px-3 py-2 border rounded-lg text-sm"></textarea>
                     </div>
 
                     <div>
@@ -130,12 +130,12 @@ function t(en, ar) { return isRtl.value ? ar : en; }
                             <button type="button" @click="addItem" class="text-xs text-amber-600 font-semibold">+ {{ t('Add', 'إضافة') }}</button>
                         </div>
                         <div v-for="(it, i) in form.items" :key="i" class="grid grid-cols-1 md:grid-cols-5 gap-2 p-2 border rounded-lg mb-2">
-                            <input v-model="it.medication_name" :placeholder="t('Medication', 'الدواء')" class="px-2 py-1.5 border rounded text-xs" />
-                            <input v-model="it.dosage" :placeholder="t('Dosage', 'الجرعة')" class="px-2 py-1.5 border rounded text-xs" />
-                            <input v-model="it.frequency" :placeholder="t('Frequency', 'التكرار')" class="px-2 py-1.5 border rounded text-xs" />
-                            <input v-model="it.duration" :placeholder="t('Duration', 'المدة')" class="px-2 py-1.5 border rounded text-xs" />
+                            <input v-model="it.medication_name" :placeholder="t('Medication', 'الدواء')" class="doctorato-input px-2 py-1.5 border rounded text-xs" />
+                            <input v-model="it.dosage" :placeholder="t('Dosage', 'الجرعة')" class="doctorato-input px-2 py-1.5 border rounded text-xs" />
+                            <input v-model="it.frequency" :placeholder="t('Frequency', 'التكرار')" class="doctorato-input px-2 py-1.5 border rounded text-xs" />
+                            <input v-model="it.duration" :placeholder="t('Duration', 'المدة')" class="doctorato-input px-2 py-1.5 border rounded text-xs" />
                             <div class="flex gap-1">
-                                <input v-model="it.instructions" :placeholder="t('Instructions', 'تعليمات')" class="flex-1 px-2 py-1.5 border rounded text-xs" />
+                                <input v-model="it.instructions" :placeholder="t('Instructions', 'تعليمات')" class="doctorato-input flex-1 px-2 py-1.5 border rounded text-xs" />
                                 <button type="button" @click="removeItem(i)" class="text-red-600 text-xs px-2">✕</button>
                             </div>
                         </div>

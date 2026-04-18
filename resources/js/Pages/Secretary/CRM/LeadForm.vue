@@ -569,7 +569,7 @@ const phoneValidation = computed(() => {
                         {{ isRtl ? '\u0627\u0644\u0627\u0633\u0645 \u0627\u0644\u0643\u0627\u0645\u0644' : 'Full Name' }} <span class="text-red-500">*</span>
                     </label>
                     <input v-model="form.full_name" type="text"
-                           :class="['w-full rounded-xl border px-4 py-3 text-sm transition-all duration-200 focus:ring-2 focus:ring-teal-400/40 focus:border-teal-400 outline-none', form.errors.full_name ? 'border-red-300 bg-red-50' : 'border-slate-200 bg-slate-50/50 hover:border-slate-300']"
+                            class="doctorato-input" :class="['w-full rounded-xl border px-4 py-3 text-sm transition-all duration-200 focus:ring-2 focus:ring-[#C4A265]/30/40 focus:border-[#1B365D] outline-none', form.errors.full_name ? 'border-red-300 bg-red-50' : 'border-slate-200 bg-slate-50/50 hover:border-slate-300']"
                            :placeholder="isRtl ? '\u0623\u062F\u062E\u0644 \u0627\u0633\u0645 \u0627\u0644\u0639\u0645\u064A\u0644' : 'Enter client name'" />
                     <p v-if="form.errors.full_name" class="mt-1 text-xs text-red-500">{{ form.errors.full_name }}</p>
                 </div>
@@ -579,7 +579,7 @@ const phoneValidation = computed(() => {
                         {{ isRtl ? '\u0631\u0642\u0645 \u0627\u0644\u0647\u0627\u062A\u0641' : 'Phone Number' }} <span class="text-red-500">*</span>
                     </label>
                     <input v-model="form.phone" type="tel" dir="ltr" @blur="checkDuplicate"
-                           :class="['w-full rounded-xl border px-4 py-3 text-sm transition-all duration-200 focus:ring-2 focus:ring-teal-400/40 focus:border-teal-400 outline-none', form.errors.phone ? 'border-red-300 bg-red-50' : 'border-slate-200 bg-slate-50/50 hover:border-slate-300']"
+                            class="doctorato-input" :class="['w-full rounded-xl border px-4 py-3 text-sm transition-all duration-200 focus:ring-2 focus:ring-[#C4A265]/30/40 focus:border-[#1B365D] outline-none', form.errors.phone ? 'border-red-300 bg-red-50' : 'border-slate-200 bg-slate-50/50 hover:border-slate-300']"
                            placeholder="+971 XX XXX XXXX" />
                     <p v-if="form.errors.phone" class="mt-1 text-xs text-red-500">{{ form.errors.phone }}</p>
                     <!-- Phone Validation Hint -->
@@ -610,7 +610,7 @@ const phoneValidation = computed(() => {
                         {{ isRtl ? '\u0631\u0642\u0645 \u0647\u0627\u062A\u0641 \u0628\u062F\u064A\u0644' : 'Alternative Phone' }}
                     </label>
                     <input v-model="form.phone2" type="tel" dir="ltr"
-                           class="w-full rounded-xl border border-slate-200 bg-slate-50/50 hover:border-slate-300 px-4 py-3 text-sm transition-all duration-200 focus:ring-2 focus:ring-teal-400/40 focus:border-teal-400 outline-none"
+                           class="doctorato-input w-full rounded-xl border border-slate-200 bg-slate-50/50 hover:border-slate-300 px-4 py-3 text-sm transition-all duration-200 focus:ring-2 focus:ring-[#C4A265]/30/40 focus:border-[#1B365D] outline-none"
                            placeholder="+971 XX XXX XXXX" />
                     <p v-if="form.errors.phone2" class="mt-1 text-xs text-red-500">{{ form.errors.phone2 }}</p>
                 </div>
@@ -621,12 +621,7 @@ const phoneValidation = computed(() => {
                     </label>
                     <div class="relative">
                         <input v-model="form.email" type="email" dir="ltr"
-                               :class="['w-full rounded-xl border bg-slate-50/50 hover:border-slate-300 px-4 py-3 text-sm transition-all duration-200 focus:ring-2 outline-none',
-                                   emailValidation && !emailValidation.valid
-                                       ? 'border-red-300 focus:ring-red-400/40 focus:border-red-400'
-                                       : emailValidation && emailValidation.valid
-                                           ? 'border-emerald-300 focus:ring-emerald-400/40 focus:border-emerald-400'
-                                           : 'border-slate-200 focus:ring-teal-400/40 focus:border-teal-400']"
+                                class="doctorato-input" :class="['w-full rounded-xl border bg-slate-50/50 hover:border-slate-300 px-4 py-3 text-sm transition-all duration-200 focus:ring-2 outline-none', emailValidation && !emailValidation.valid ? 'border-red-300 focus:ring-[#C4A265]/30/40 focus:border-red-400' : emailValidation && emailValidation.valid ? 'border-emerald-300 focus:ring-[#C4A265]/30/40 focus:border-[#1B365D]' : 'border-slate-200 focus:ring-[#C4A265]/30/40 focus:border-[#1B365D]']"
                                placeholder="email@example.com" />
                         <!-- Validation icon -->
                         <div v-if="emailValidation" :class="['absolute top-1/2 -translate-y-1/2', isRtl ? 'left-3' : 'right-3']">
@@ -668,7 +663,7 @@ const phoneValidation = computed(() => {
                 <div>
                     <label class="block text-sm font-semibold text-slate-600 mb-1.5">{{ isRtl ? '\u062A\u0627\u0631\u064A\u062E \u0627\u0644\u0645\u064A\u0644\u0627\u062F' : 'Date of Birth' }}</label>
                     <input v-model="form.date_of_birth" type="date" dir="ltr"
-                           class="w-full rounded-xl border border-slate-200 bg-slate-50/50 hover:border-slate-300 px-4 py-3 text-sm transition-all duration-200 focus:ring-2 focus:ring-teal-400/40 focus:border-teal-400 outline-none" />
+                           class="doctorato-input w-full rounded-xl border border-slate-200 bg-slate-50/50 hover:border-slate-300 px-4 py-3 text-sm transition-all duration-200 focus:ring-2 focus:ring-[#C4A265]/30/40 focus:border-[#1B365D] outline-none" />
                 </div>
                 <!-- Nationality (Searchable) -->
                 <div ref="natRef" class="relative">
@@ -689,7 +684,7 @@ const phoneValidation = computed(() => {
                                 <div class="relative">
                                     <svg class="w-4 h-4 text-slate-400 absolute top-1/2 -translate-y-1/2 pointer-events-none" :class="isRtl ? 'right-3' : 'left-3'" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="m21 21-4.35-4.35"/></svg>
                                     <input v-model="natSearch" type="text" :placeholder="isRtl ? 'ابحث عن الجنسية...' : 'Search nationality...'"
-                                           class="w-full rounded-lg border border-slate-200 text-sm py-2.5 outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-400/30"
+                                           class="doctorato-input w-full rounded-lg border border-slate-200 text-sm py-2.5 outline-none focus:border-[#1B365D] focus:ring-1 focus:ring-[#C4A265]/30/30"
                                            :class="isRtl ? 'pr-9 pl-3' : 'pl-9 pr-3'" />
                                 </div>
                             </div>
@@ -735,7 +730,7 @@ const phoneValidation = computed(() => {
                                     <svg class="w-4 h-4 text-slate-400 absolute top-1/2 -translate-y-1/2 pointer-events-none" :class="isRtl ? 'right-3' : 'left-3'" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="m21 21-4.35-4.35"/></svg>
                                     <input v-model="citySearch" type="text"
                                            :placeholder="form.nationality === 'Egyptian' ? (isRtl ? 'ابحث عن المحافظة...' : 'Search governorate...') : (isRtl ? 'ابحث عن المدينة...' : 'Search city...')"
-                                           class="w-full rounded-lg border border-slate-200 text-sm py-2.5 outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-400/30"
+                                           class="doctorato-input w-full rounded-lg border border-slate-200 text-sm py-2.5 outline-none focus:border-[#1B365D] focus:ring-1 focus:ring-[#C4A265]/30/30"
                                            :class="isRtl ? 'pr-9 pl-3' : 'pl-9 pr-3'" />
                                 </div>
                             </div>
@@ -779,7 +774,7 @@ const phoneValidation = computed(() => {
                                     <svg class="w-4 h-4 text-slate-400 absolute top-1/2 -translate-y-1/2 pointer-events-none" :class="isRtl ? 'right-3' : 'left-3'" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="m21 21-4.35-4.35"/></svg>
                                     <input v-model="areaSearch" type="text"
                                            :placeholder="isRtl ? 'ابحث عن المدينة...' : 'Search area...'"
-                                           class="w-full rounded-lg border border-slate-200 text-sm py-2.5 outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-400/30"
+                                           class="doctorato-input w-full rounded-lg border border-slate-200 text-sm py-2.5 outline-none focus:border-[#1B365D] focus:ring-1 focus:ring-[#C4A265]/30/30"
                                            :class="isRtl ? 'pr-9 pl-3' : 'pl-9 pr-3'" />
                                 </div>
                             </div>
@@ -932,7 +927,7 @@ const phoneValidation = computed(() => {
                     <svg class="w-3.5 h-3.5 text-slate-400 absolute top-1/2 -translate-y-1/2 pointer-events-none" :class="isRtl ? 'right-3' : 'left-3'" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="m21 21-4.35-4.35"/></svg>
                     <input v-model="serviceSearch" type="text"
                         :placeholder="isRtl ? '\u0628\u062D\u062B \u0641\u064A \u0627\u0644\u062E\u062F\u0645\u0627\u062A...' : 'Search services...'"
-                        class="w-full rounded-xl border border-slate-200 bg-slate-50/50 text-xs py-2.5 transition-all duration-200 focus:ring-2 focus:ring-teal-400/40 focus:border-teal-400 outline-none"
+                        class="doctorato-input w-full rounded-xl border border-slate-200 bg-slate-50/50 text-xs py-2.5 transition-all duration-200 focus:ring-2 focus:ring-[#C4A265]/30/40 focus:border-[#1B365D] outline-none"
                         :class="isRtl ? 'pr-9 pl-3' : 'pl-9 pr-3'" />
                 </div>
                 <div class="grid grid-cols-2 md:grid-cols-3 gap-2" :class="services.length >= 12 ? 'max-h-48 overflow-y-auto rounded-xl' : ''">
@@ -959,7 +954,7 @@ const phoneValidation = computed(() => {
                 <h2 class="text-lg font-bold text-slate-800">{{ isRtl ? '\u0645\u0644\u0627\u062D\u0638\u0627\u062A' : 'Notes' }}</h2>
             </div>
             <textarea v-model="form.notes" rows="4"
-                      class="w-full rounded-xl border border-slate-200 bg-slate-50/50 hover:border-slate-300 px-4 py-3 text-sm transition-all duration-200 focus:ring-2 focus:ring-teal-400/40 focus:border-teal-400 outline-none resize-none"
+                      class="doctorato-input w-full rounded-xl border border-slate-200 bg-slate-50/50 hover:border-slate-300 px-4 py-3 text-sm transition-all duration-200 focus:ring-2 focus:ring-[#C4A265]/30/40 focus:border-[#1B365D] outline-none resize-none"
                       :placeholder="isRtl ? '\u0623\u0636\u0641 \u0645\u0644\u0627\u062D\u0638\u0627\u062A \u062D\u0648\u0644 \u0627\u0644\u0639\u0645\u064A\u0644 \u0627\u0644\u0645\u062D\u062A\u0645\u0644...' : 'Add notes about this lead...'"></textarea>
         </div>
 

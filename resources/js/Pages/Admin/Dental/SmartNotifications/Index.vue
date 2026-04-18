@@ -307,7 +307,7 @@ const responseRate = computed(() => {
                                 v-model="search"
                                 type="text"
                                 :placeholder="locale === 'ar' ? 'بحث بالاسم، رقم الملف، الهاتف...' : 'Search by name, file number, phone...'"
-                                class="w-full ltr:pl-10 rtl:pr-10 pr-4 py-2.5 rounded-xl border border-gray-200 focus:border-[#2C4E7A] focus:ring-2 focus:ring-slate-100 text-sm transition-all"
+                                class="doctorato-input w-full ltr:pl-10 rtl:pr-10 pr-4 py-2.5 rounded-xl border border-gray-200 focus:border-[#2C4E7A] focus:ring-2 focus:ring-slate-100 text-sm transition-all"
                             />
                         </div>
                         <button @click="showFilters = !showFilters" :class="['inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium border transition-all', hasActiveFilters ? 'bg-slate-50 border-slate-200 text-[#1B365D]' : 'bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100']">
@@ -320,17 +320,17 @@ const responseRate = computed(() => {
                     <!-- Filter Panel -->
                     <Transition enter-active-class="transition-all duration-300 ease-out" enter-from-class="opacity-0 max-h-0" enter-to-class="opacity-100 max-h-40" leave-active-class="transition-all duration-200" leave-from-class="opacity-100 max-h-40" leave-to-class="opacity-0 max-h-0">
                         <div v-if="showFilters" class="mt-4 pt-4 border-t border-gray-100 grid grid-cols-1 sm:grid-cols-4 gap-3">
-                            <select v-model="typeFilter" class="rounded-xl border-gray-200 text-sm focus:border-[#2C4E7A] focus:ring-slate-100">
+                            <select v-model="typeFilter" class="doctorato-input rounded-xl border-gray-200 text-sm focus:border-[#2C4E7A] focus:ring-slate-100">
                                 <option value="">{{ locale === 'ar' ? 'كل الأنواع' : 'All Types' }}</option>
                                 <option v-for="(labels, key) in types" :key="key" :value="key">{{ locale === 'ar' ? labels.ar : labels.en }}</option>
                             </select>
-                            <select v-model="statusFilter" class="rounded-xl border-gray-200 text-sm focus:border-[#2C4E7A] focus:ring-slate-100">
+                            <select v-model="statusFilter" class="doctorato-input rounded-xl border-gray-200 text-sm focus:border-[#2C4E7A] focus:ring-slate-100">
                                 <option value="">{{ locale === 'ar' ? 'كل الحالات' : 'All Statuses' }}</option>
                                 <option v-for="(s, key) in statusConfig" :key="key" :value="key">{{ locale === 'ar' ? s.label_ar : s.label_en }}</option>
                             </select>
-                            <input v-model="dateFrom" type="date" class="rounded-xl border-gray-200 text-sm focus:border-[#2C4E7A] focus:ring-slate-100" :placeholder="locale === 'ar' ? 'من تاريخ' : 'From'" />
+                            <input v-model="dateFrom" type="date" class="doctorato-input rounded-xl border-gray-200 text-sm focus:border-[#2C4E7A] focus:ring-slate-100" :placeholder="locale === 'ar' ? 'من تاريخ' : 'From'" />
                             <div class="flex items-center gap-2">
-                                <input v-model="dateTo" type="date" class="flex-1 rounded-xl border-gray-200 text-sm focus:border-[#2C4E7A] focus:ring-slate-100" :placeholder="locale === 'ar' ? 'إلى تاريخ' : 'To'" />
+                                <input v-model="dateTo" type="date" class="doctorato-input flex-1 rounded-xl border-gray-200 text-sm focus:border-[#2C4E7A] focus:ring-slate-100" :placeholder="locale === 'ar' ? 'إلى تاريخ' : 'To'" />
                                 <button v-if="hasActiveFilters" @click="clearFilters" class="text-xs text-red-500 hover:text-red-700 whitespace-nowrap">
                                     {{ locale === 'ar' ? 'مسح' : 'Clear' }}
                                 </button>
@@ -520,7 +520,7 @@ const responseRate = computed(() => {
                                     @input="searchPatients"
                                     type="text"
                                     :placeholder="locale === 'ar' ? 'ابحث عن المريض...' : 'Search patient...'"
-                                    class="w-full rounded-xl border-gray-200 text-sm focus:border-[#2C4E7A] focus:ring-slate-100"
+                                    class="doctorato-input w-full rounded-xl border-gray-200 text-sm focus:border-[#2C4E7A] focus:ring-slate-100"
                                 />
                                 <div v-if="patients.length" class="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg max-h-48 overflow-y-auto">
                                     <button
@@ -562,7 +562,7 @@ const responseRate = computed(() => {
                             <textarea
                                 v-model="manualForm.message_ar"
                                 rows="4"
-                                class="w-full rounded-xl border-gray-200 text-sm focus:border-[#2C4E7A] focus:ring-slate-100"
+                                class="doctorato-input w-full rounded-xl border-gray-200 text-sm focus:border-[#2C4E7A] focus:ring-slate-100"
                                 dir="rtl"
                                 :placeholder="locale === 'ar' ? 'اكتب نص الرسالة...' : 'Type message text...'"
                             ></textarea>
@@ -578,7 +578,7 @@ const responseRate = computed(() => {
                             <textarea
                                 v-model="manualForm.message_en"
                                 rows="3"
-                                class="w-full rounded-xl border-gray-200 text-sm focus:border-[#2C4E7A] focus:ring-slate-100"
+                                class="doctorato-input w-full rounded-xl border-gray-200 text-sm focus:border-[#2C4E7A] focus:ring-slate-100"
                                 dir="ltr"
                                 placeholder="Optional English version..."
                             ></textarea>

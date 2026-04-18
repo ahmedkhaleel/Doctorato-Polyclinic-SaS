@@ -195,9 +195,9 @@ function formatStatus(status) {
                         <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
-                        <input type="date" v-model="dateFrom" class="text-sm border-0 focus:ring-0 p-0 w-32 bg-transparent" />
+                        <input type="date" v-model="dateFrom" class="doctorato-input text-sm border-0 focus:ring-0 p-0 w-32 bg-transparent" />
                         <span class="text-gray-400">→</span>
-                        <input type="date" v-model="dateTo" class="text-sm border-0 focus:ring-0 p-0 w-32 bg-transparent" />
+                        <input type="date" v-model="dateTo" class="doctorato-input text-sm border-0 focus:ring-0 p-0 w-32 bg-transparent" />
                     </div>
 
                     <!-- Export Buttons -->

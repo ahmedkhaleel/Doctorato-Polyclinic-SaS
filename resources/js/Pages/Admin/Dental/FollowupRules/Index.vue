@@ -372,23 +372,23 @@ const activeTab = ref('rules');
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label class="text-sm font-medium text-gray-700 mb-1 block">{{ isRtl ? 'الاسم بالعربي' : 'Arabic Label' }}</label>
-                                    <input v-model="editForm.label_ar" type="text" class="dental-input" required />
+                                    <input v-model="editForm.label_ar" type="text" class="doctorato-input dental-input" required />
                                 </div>
                                 <div>
                                     <label class="text-sm font-medium text-gray-700 mb-1 block">{{ isRtl ? 'الاسم بالإنجليزي' : 'English Label' }}</label>
-                                    <input v-model="editForm.label_en" type="text" class="dental-input" required />
+                                    <input v-model="editForm.label_en" type="text" class="doctorato-input dental-input" required />
                                 </div>
                             </div>
 
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label class="text-sm font-medium text-gray-700 mb-1 block">{{ isRtl ? 'أيام المتابعة' : 'Follow-up Days' }}</label>
-                                    <input v-model="editForm.followup_days" type="number" min="1" max="365" class="dental-input" required />
+                                    <input v-model="editForm.followup_days" type="number" min="1" max="365" class="doctorato-input dental-input" required />
                                     <p class="text-xs text-gray-400 mt-1">= {{ formatDays(editForm.followup_days) }}</p>
                                 </div>
                                 <div>
                                     <label class="text-sm font-medium text-gray-700 mb-1 block">{{ isRtl ? 'تذكير SMS قبل (أيام)' : 'SMS Reminder Before (days)' }}</label>
-                                    <input v-model="editForm.sms_days_before" type="number" min="0" max="7" class="dental-input" />
+                                    <input v-model="editForm.sms_days_before" type="number" min="0" max="7" class="doctorato-input dental-input" />
                                 </div>
                             </div>
 
@@ -412,14 +412,14 @@ const activeTab = ref('rules');
                                     <span class="text-sm text-gray-700 font-medium group-hover:text-[#1B365D] transition">{{ isRtl ? 'تنبيه الطبيب' : 'Notify doctor' }}</span>
                                 </label>
                                 <label class="flex items-center gap-3 cursor-pointer group">
-                                    <input v-model="editForm.notify_secretary" type="checkbox" class="w-4 h-4 text-amber-600 border-gray-300 rounded focus:ring-amber-500" />
+                                    <input v-model="editForm.notify_secretary" type="checkbox" class="w-4 h-4 text-amber-600 border-gray-300 rounded focus:ring-[#C4A265]/30" />
                                     <span class="text-sm text-gray-700 font-medium group-hover:text-amber-600 transition">{{ isRtl ? 'تنبيه السكرتير' : 'Notify secretary' }}</span>
                                 </label>
                             </div>
 
                             <div>
                                 <label class="text-sm font-medium text-gray-700 mb-1 block">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
-                                <textarea v-model="editForm.notes" rows="2" class="dental-input" style="resize:none"></textarea>
+                                <textarea v-model="editForm.notes" rows="2" class="doctorato-input dental-input" style="resize:none"></textarea>
                             </div>
 
                             <div class="flex items-center justify-end gap-3 pt-2">

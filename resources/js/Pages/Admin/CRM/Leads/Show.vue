@@ -1027,7 +1027,7 @@ function translateDescription(desc) {
                                             <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
                                         </div>
                                         <select v-model="activityForm.direction"
-                                            class="w-full pl-10 pr-4 text-sm border border-gray-200 rounded-xl py-2.5 bg-white focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all duration-200">
+                                            class="doctorato-input w-full pl-10 pr-4 text-sm border border-gray-200 rounded-xl py-2.5 bg-white focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all duration-200">
                                             <option value="">{{ $t('a_direction') }}</option>
                                             <option value="inbound">{{ $t('a_inbound') }}</option>
                                             <option value="outbound">{{ $t('a_outbound') }}</option>
@@ -1038,7 +1038,7 @@ function translateDescription(desc) {
                                             <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                         </div>
                                         <select v-model="activityForm.outcome"
-                                            class="w-full pl-10 pr-4 text-sm border border-gray-200 rounded-xl py-2.5 bg-white focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all duration-200">
+                                            class="doctorato-input w-full pl-10 pr-4 text-sm border border-gray-200 rounded-xl py-2.5 bg-white focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all duration-200">
                                             <option value="">{{ $t('a_outcome') }}</option>
                                             <option value="successful">{{ $t('a_successful') }}</option>
                                             <option value="no_answer">{{ $t('a_no_answer') }}</option>
@@ -1054,7 +1054,7 @@ function translateDescription(desc) {
                                         <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="activityTypeIcons.note" /></svg>
                                     </div>
                                     <textarea v-model="activityForm.description" rows="2" :placeholder="$t('a_what_happened_placeholder')"
-                                        class="w-full text-sm border border-gray-200 rounded-xl py-3 pl-10 pr-4 resize-none bg-white focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all duration-200 placeholder:text-gray-400"></textarea>
+                                        class="doctorato-input w-full text-sm border border-gray-200 rounded-xl py-3 pl-10 pr-4 resize-none bg-white focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all duration-200 placeholder:text-gray-400"></textarea>
                                 </div>
                                 <div class="flex justify-end">
                                     <button type="submit" :disabled="activityForm.processing"
@@ -1132,7 +1132,7 @@ function translateDescription(desc) {
                                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                                 <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" /></svg>
                                             </div>
-                                            <select v-model="followUpForm.type" class="w-full pl-10 pr-4 text-sm border border-gray-200 rounded-xl py-2.5 bg-white focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all">
+                                            <select v-model="followUpForm.type" class="doctorato-input w-full pl-10 pr-4 text-sm border border-gray-200 rounded-xl py-2.5 bg-white focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all">
                                                 <option value="call">{{ $t('a_call') }}</option>
                                                 <option value="whatsapp">{{ $t('a_whatsapp') }}</option>
                                                 <option value="email">{{ $t('a_email') }}</option>
@@ -1145,7 +1145,7 @@ function translateDescription(desc) {
                                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                                 <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                                             </div>
-                                            <input v-model="followUpForm.scheduled_at" type="datetime-local" class="w-full pl-10 pr-4 text-sm border border-gray-200 rounded-xl py-2.5 bg-white focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all" />
+                                            <input v-model="followUpForm.scheduled_at" type="datetime-local" class="doctorato-input w-full pl-10 pr-4 text-sm border border-gray-200 rounded-xl py-2.5 bg-white focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all" />
                                         </div>
                                         <!-- Assignee (Searchable) -->
                                         <div class="relative">
@@ -1179,7 +1179,7 @@ function translateDescription(desc) {
                                             <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="activityTypeIcons.note" /></svg>
                                         </div>
                                         <textarea v-model="followUpForm.notes" rows="2" :placeholder="$t('a_follow_up_notes_placeholder')"
-                                            class="w-full text-sm border border-gray-200 rounded-xl py-3 pl-10 pr-4 resize-none bg-white focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all placeholder:text-gray-400"></textarea>
+                                            class="doctorato-input w-full text-sm border border-gray-200 rounded-xl py-3 pl-10 pr-4 resize-none bg-white focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all placeholder:text-gray-400"></textarea>
                                     </div>
                                     <div class="flex justify-end">
                                         <button type="submit" :disabled="followUpForm.processing"
@@ -1262,7 +1262,7 @@ function translateDescription(desc) {
                                                             <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4" /></svg>
                                                         </div>
                                                         <input v-model="completeForm.result" type="text" :placeholder="$t('a_complete_result_placeholder')"
-                                                            class="w-full pl-10 pr-4 text-sm border border-gray-200 rounded-xl py-2.5 focus:ring-2 focus:ring-emerald-300 focus:border-emerald-400 transition-all" />
+                                                            class="doctorato-input w-full pl-10 pr-4 text-sm border border-gray-200 rounded-xl py-2.5 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#1B365D] transition-all" />
                                                     </div>
                                                 </div>
                                                 <button type="submit" :disabled="completeForm.processing" class="px-5 py-2.5 text-xs font-semibold text-white bg-emerald-600 rounded-xl hover:bg-emerald-700 hover:-translate-y-0.5 transition-all shadow-sm">{{ $t('a_done') }}</button>
@@ -1282,7 +1282,7 @@ function translateDescription(desc) {
                                                             <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                                                         </div>
                                                         <input v-model="rescheduleForm.scheduled_at" type="datetime-local"
-                                                            class="w-full pl-10 pr-4 text-sm border border-gray-200 rounded-xl py-2.5 focus:ring-2 focus:ring-[#C4A265]/40 focus:border-[#C4A265] transition-all" />
+                                                            class="doctorato-input w-full pl-10 pr-4 text-sm border border-gray-200 rounded-xl py-2.5 focus:ring-2 focus:ring-[#C4A265]/40 focus:border-[#C4A265] transition-all" />
                                                     </div>
                                                 </div>
                                                 <button type="submit" :disabled="rescheduleForm.processing || !rescheduleForm.scheduled_at" class="px-5 py-2.5 text-xs font-semibold text-white bg-[#C4A265] rounded-xl hover:bg-[#8B7043] hover:-translate-y-0.5 transition-all shadow-sm">{{ $t('a_reschedule') }}</button>
@@ -1635,7 +1635,7 @@ function translateDescription(desc) {
                                         <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="activityTypeIcons.note" /></svg>
                                     </div>
                                     <textarea v-model="statusForm.loss_reason" rows="3"
-                                        class="w-full text-sm border border-gray-200 rounded-xl py-3 pl-10 pr-4 resize-none focus:ring-2 focus:ring-red-300 focus:border-red-400 transition-all placeholder:text-gray-400"
+                                        class="doctorato-input w-full text-sm border border-gray-200 rounded-xl py-3 pl-10 pr-4 resize-none focus:ring-2 focus:ring-[#C4A265]/30 focus:border-red-400 transition-all placeholder:text-gray-400"
                                         :placeholder="$t('a_loss_reason_placeholder')"></textarea>
                                 </div>
                                 <div class="flex justify-end gap-3 mt-5">
@@ -1715,7 +1715,7 @@ function translateDescription(desc) {
                                             <!-- Service (shown after department selected) -->
                                             <div v-if="selectedDepartment" class="mb-3">
                                                 <label class="text-xs font-medium text-gray-600 mb-1 block">{{ $t('a_service') }}</label>
-                                                <select v-model="convertForm.service_id" class="w-full text-sm border border-gray-200 rounded-xl px-3 py-2.5 focus:ring-2 focus:ring-emerald-300 focus:border-emerald-400 bg-gray-50 focus:bg-white transition-all">
+                                                <select v-model="convertForm.service_id" class="doctorato-input w-full text-sm border border-gray-200 rounded-xl px-3 py-2.5 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#1B365D] bg-gray-50 focus:bg-white transition-all">
                                                     <option value="">{{ $t('a_select_service') }}</option>
                                                     <option v-for="s in filteredServices" :key="s.id" :value="s.id">{{ isRtl ? s.name_ar : s.name_en }}</option>
                                                 </select>
@@ -1725,7 +1725,7 @@ function translateDescription(desc) {
                                             <!-- Doctor (shown after department selected) -->
                                             <div v-if="selectedDepartment" class="mb-3">
                                                 <label class="text-xs font-medium text-gray-600 mb-1 block">{{ $t('a_doctor') }}</label>
-                                                <select v-model="convertForm.doctor_id" class="w-full text-sm border border-gray-200 rounded-xl px-3 py-2.5 focus:ring-2 focus:ring-emerald-300 focus:border-emerald-400 bg-gray-50 focus:bg-white transition-all">
+                                                <select v-model="convertForm.doctor_id" class="doctorato-input w-full text-sm border border-gray-200 rounded-xl px-3 py-2.5 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#1B365D] bg-gray-50 focus:bg-white transition-all">
                                                     <option value="">{{ $t('a_select_doctor') }}</option>
                                                     <option v-for="d in filteredDoctors" :key="d.id" :value="d.id">{{ isRtl ? (d.name_ar || d.name) : (d.name_en || d.name) }}</option>
                                                 </select>
@@ -1790,7 +1790,7 @@ function translateDescription(desc) {
                                             <div>
                                                 <label class="text-xs font-medium text-gray-600 mb-1 block">{{ $t('a_notes_optional') }}</label>
                                                 <textarea v-model="convertForm.booking_notes" rows="2" :placeholder="$t('a_booking_notes_placeholder')"
-                                                    class="w-full text-sm border border-gray-200 rounded-xl px-3 py-2.5 focus:ring-2 focus:ring-emerald-300 focus:border-emerald-400 bg-gray-50 focus:bg-white transition-all resize-none"></textarea>
+                                                    class="doctorato-input w-full text-sm border border-gray-200 rounded-xl px-3 py-2.5 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#1B365D] bg-gray-50 focus:bg-white transition-all resize-none"></textarea>
                                             </div>
                                         </div>
                                     </div>

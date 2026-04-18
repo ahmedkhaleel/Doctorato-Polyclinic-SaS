@@ -65,7 +65,7 @@ function openChart(patientId) {
                 <svg class="absolute top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" :class="isRtl ? 'right-5' : 'left-5'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                 <input v-model="searchQuery" type="text"
                     :placeholder="isRtl ? 'ابحث بالاسم أو رقم الهاتف أو رقم الملف...' : 'Search by name, phone, or file number...'"
-                    class="w-full border border-gray-200 rounded-2xl py-4 text-base bg-white shadow-sm focus:border-[#2C4E7A] focus:ring-2 focus:ring-slate-200/60 focus:shadow-lg transition-all duration-300"
+                    class="doctorato-input w-full border border-gray-200 rounded-2xl py-4 text-base bg-white shadow-sm focus:border-[#2C4E7A] focus:ring-2 focus:ring-slate-200/60 focus:shadow-lg transition-all duration-300"
                     :class="isRtl ? 'pr-13 pl-4' : 'pl-13 pr-4'"
                 />
                 <div v-if="searching" class="absolute top-1/2 -translate-y-1/2" :class="isRtl ? 'left-5' : 'right-5'">

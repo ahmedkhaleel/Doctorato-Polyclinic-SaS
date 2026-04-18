@@ -114,7 +114,7 @@ onUnmounted(() => {
                 type="text"
                 :placeholder="placeholderText"
                 :required="required && !selectedPatient"
-                class="w-full px-3.5 py-2.5 ps-10 border border-gray-200 rounded-xl text-sm focus:ring-2 bg-white"
+                class="doctorato-input w-full px-3.5 py-2.5 ps-10 border border-gray-200 rounded-xl text-sm focus:ring-2 bg-white"
                 :style="{ '--tw-ring-color': accent + '4D', '--tw-ring-offset-color': accent }"
                 @focus="query.length >= 2 && (isOpen = true)"
             />

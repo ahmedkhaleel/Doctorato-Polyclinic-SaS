@@ -616,7 +616,7 @@ const streakMessage = computed(() => {
                                 {{ isRtl ? 'هدف التحويلات الشهرية' : 'Monthly Conversions Target' }}
                             </label>
                             <input v-model.number="editGoals.conversions" type="number" min="1" max="999"
-                                   class="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-shadow" />
+                                   class="doctorato-input w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#1B365D] transition-shadow" />
                         </div>
                         <!-- Activities Goal -->
                         <div>
@@ -625,7 +625,7 @@ const streakMessage = computed(() => {
                                 {{ isRtl ? 'هدف النشاطات الشهرية' : 'Monthly Activities Target' }}
                             </label>
                             <input v-model.number="editGoals.activities" type="number" min="1" max="9999"
-                                   class="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-shadow" />
+                                   class="doctorato-input w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#1B365D] transition-shadow" />
                         </div>
                         <!-- Response Time Goal -->
                         <div>
@@ -634,7 +634,7 @@ const streakMessage = computed(() => {
                                 {{ isRtl ? 'هدف وقت الاستجابة (ساعات)' : 'Response Time Target (hours)' }}
                             </label>
                             <input v-model.number="editGoals.responseTime" type="number" min="1" max="48"
-                                   class="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-shadow" />
+                                   class="doctorato-input w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#1B365D] transition-shadow" />
                             <p class="text-[11px] text-slate-400 mt-1">{{ isRtl ? 'كلما كان أقل كان أفضل' : 'Lower is better' }}</p>
                         </div>
                     </div>

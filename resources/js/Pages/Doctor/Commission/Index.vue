@@ -345,8 +345,8 @@ function formatDate(d) {
                             <h2 class="text-sm font-bold text-gray-800">{{ isRtl ? 'تفاصيل العمولة' : 'Commission Details' }}</h2>
                         </div>
                         <div class="flex items-center gap-2 flex-wrap">
-                            <input v-model="dateFrom" type="date" :max="dateTo || undefined" class="text-xs border border-gray-200 rounded-lg px-2.5 py-1.5 bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265]" />
-                            <input v-model="dateTo" type="date" :min="dateFrom || undefined" class="text-xs border border-gray-200 rounded-lg px-2.5 py-1.5 bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265]" />
+                            <input v-model="dateFrom" type="date" :max="dateTo || undefined" class="doctorato-input text-xs border border-gray-200 rounded-lg px-2.5 py-1.5 bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265]" />
+                            <input v-model="dateTo" type="date" :min="dateFrom || undefined" class="doctorato-input text-xs border border-gray-200 rounded-lg px-2.5 py-1.5 bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265]" />
                             <button @click="applyFilter" class="px-3 py-1.5 text-xs font-semibold text-white bg-[#C4A265] hover:bg-[#A68B52] rounded-lg transition-colors">{{ isRtl ? 'فلتر' : 'Filter' }}</button>
                             <button v-if="dateFrom || dateTo" @click="clearFilter" class="px-3 py-1.5 text-xs font-medium text-gray-500 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">{{ isRtl ? 'مسح' : 'Clear' }}</button>
                         </div>

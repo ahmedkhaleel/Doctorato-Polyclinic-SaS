@@ -91,13 +91,13 @@ const descLengthClass = computed(() => {
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_title_en') }}</label>
-                            <input v-model="form.title_en" type="text" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" placeholder="Page title for search engines" />
+                            <input v-model="form.title_en" type="text" class="doctorato-input w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" placeholder="Page title for search engines" />
                             <p class="mt-1 text-xs" :class="titleLengthClass">{{ form.title_en?.length || 0 }} / 60 characters</p>
                             <p v-if="form.errors.title_en" class="mt-1 text-sm text-red-600">{{ form.errors.title_en }}</p>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_title_ar') }}</label>
-                            <input v-model="form.title_ar" type="text" dir="rtl" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" placeholder="عنوان الصفحة لمحركات البحث" />
+                            <input v-model="form.title_ar" type="text" dir="rtl" class="doctorato-input w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" placeholder="عنوان الصفحة لمحركات البحث" />
                             <p class="mt-1 text-xs text-gray-400">{{ form.title_ar?.length || 0 }} / 60 characters</p>
                         </div>
                     </div>
@@ -110,12 +110,12 @@ const descLengthClass = computed(() => {
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_description_en') }}</label>
-                            <textarea v-model="form.description_en" rows="3" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" placeholder="Brief description shown in search results"></textarea>
+                            <textarea v-model="form.description_en" rows="3" class="doctorato-input w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" placeholder="Brief description shown in search results"></textarea>
                             <p class="mt-1 text-xs" :class="descLengthClass">{{ form.description_en?.length || 0 }} / 160 characters</p>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_description_ar') }}</label>
-                            <textarea v-model="form.description_ar" rows="3" dir="rtl" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" placeholder="وصف مختصر يظهر في نتائج البحث"></textarea>
+                            <textarea v-model="form.description_ar" rows="3" dir="rtl" class="doctorato-input w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" placeholder="وصف مختصر يظهر في نتائج البحث"></textarea>
                             <p class="mt-1 text-xs text-gray-400">{{ form.description_ar?.length || 0 }} / 160 characters</p>
                         </div>
                     </div>
@@ -127,19 +127,19 @@ const descLengthClass = computed(() => {
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Keywords</label>
-                        <input v-model="form.keywords" type="text" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" placeholder="keyword1, keyword2, keyword3" />
+                        <input v-model="form.keywords" type="text" class="doctorato-input w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" placeholder="keyword1, keyword2, keyword3" />
                         <p class="mt-1 text-xs text-gray-400">Comma-separated keywords for this page</p>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">OG Image URL</label>
-                            <input v-model="form.og_image" type="text" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" placeholder="/images/og-home.jpg" />
+                            <input v-model="form.og_image" type="text" class="doctorato-input w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" placeholder="/images/og-home.jpg" />
                             <p class="mt-1 text-xs text-gray-400">Image shown when shared on social media (1200x630px recommended)</p>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Canonical URL</label>
-                            <input v-model="form.canonical_url" type="text" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-200 focus:border-transparent" placeholder="https://doctorato.com/page" />
+                            <input v-model="form.canonical_url" type="text" class="doctorato-input w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" placeholder="https://doctorato.com/page" />
                             <p class="mt-1 text-xs text-gray-400">Leave empty for automatic canonical URL</p>
                         </div>
                     </div>
@@ -180,7 +180,7 @@ const descLengthClass = computed(() => {
                         <textarea
                             v-model="form.structured_data"
                             rows="6"
-                            class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-xs font-mono focus:ring-2 focus:ring-yellow-200 focus:border-transparent"
+                            class="doctorato-input w-full px-4 py-2.5 border border-gray-300 rounded-lg text-xs font-mono focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                             placeholder='{ "@context": "https://schema.org", "@type": "MedicalClinic", "name": "Doctorato Polyclinic" }'
                         ></textarea>
                         <p class="mt-1 text-xs text-gray-400">Optional JSON-LD structured data for rich search results</p>

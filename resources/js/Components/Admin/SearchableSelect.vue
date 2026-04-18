@@ -202,7 +202,7 @@ watch(filteredOptions, () => {
                     v-model="searchQuery"
                     :placeholder="searchPlaceholder"
                     type="text"
-                    class="flex-1 border-0 outline-none text-sm bg-transparent p-0 focus:ring-0"
+                    class="doctorato-input flex-1 border-0 outline-none text-sm bg-transparent p-0 focus:ring-0"
                     @keydown="handleKeydown"
                 />
                 <button

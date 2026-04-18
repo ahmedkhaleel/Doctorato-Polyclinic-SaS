@@ -74,12 +74,12 @@ const classColors = {
         <div class="bg-white rounded-2xl border border-gray-100 p-4 mb-5 flex flex-wrap gap-3">
             <input v-model="search" @keyup.enter="applyFilters" type="text"
                    :placeholder="isRtl ? 'بحث بالاسم أو الكود...' : 'Search by name or code...'"
-                   class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm flex-1 min-w-[200px] focus:ring-[#C4A265] focus:border-[#C4A265]" />
-            <select v-model="companyFilter" @change="applyFilters" class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]">
+                   class="doctorato-input px-4 py-2.5 border border-gray-200 rounded-xl text-sm flex-1 min-w-[200px] focus:ring-[#C4A265] focus:border-[#C4A265]" />
+            <select v-model="companyFilter" @change="applyFilters" class="doctorato-input px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]">
                 <option value="">{{ isRtl ? 'كل الشركات' : 'All Companies' }}</option>
                 <option v-for="c in companies" :key="c.id" :value="c.id">{{ isRtl ? c.name_ar : c.name_en }}</option>
             </select>
-            <select v-model="classFilter" @change="applyFilters" class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]">
+            <select v-model="classFilter" @change="applyFilters" class="doctorato-input px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]">
                 <option value="">{{ isRtl ? 'كل الفئات' : 'All Classes' }}</option>
                 <option value="VIP">VIP</option>
                 <option value="A">A</option><option value="B">B</option><option value="C">C</option>

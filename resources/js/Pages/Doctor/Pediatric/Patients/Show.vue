@@ -681,24 +681,24 @@ const percentileTextColor = (p) => {
                             <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
                                 <div>
                                     <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{{ isRtl ? 'التاريخ' : 'Date' }}</label>
-                                    <input v-model="growthForm.measurement_date" type="date" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition" />
+                                    <input v-model="growthForm.measurement_date" type="date" class="doctorato-input w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#1B365D] transition" />
                                 </div>
                                 <div>
                                     <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{{ isRtl ? 'الوزن (كغ)' : 'Weight (kg)' }}</label>
-                                    <input v-model="growthForm.weight_kg" type="number" step="0.01" :placeholder="isRtl ? 'مثال: 8.5' : 'e.g. 8.5'" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition" />
+                                    <input v-model="growthForm.weight_kg" type="number" step="0.01" :placeholder="isRtl ? 'مثال: 8.5' : 'e.g. 8.5'" class="doctorato-input w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#1B365D] transition" />
                                 </div>
                                 <div>
                                     <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{{ isRtl ? 'الطول (سم)' : 'Height (cm)' }}</label>
-                                    <input v-model="growthForm.height_cm" type="number" step="0.1" :placeholder="isRtl ? 'مثال: 72' : 'e.g. 72'" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition" />
+                                    <input v-model="growthForm.height_cm" type="number" step="0.1" :placeholder="isRtl ? 'مثال: 72' : 'e.g. 72'" class="doctorato-input w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#1B365D] transition" />
                                 </div>
                                 <div>
                                     <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{{ isRtl ? 'محيط الرأس (سم)' : 'Head Circ. (cm)' }}</label>
-                                    <input v-model="growthForm.head_circumference_cm" type="number" step="0.1" :placeholder="isRtl ? 'مثال: 45' : 'e.g. 45'" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition" />
+                                    <input v-model="growthForm.head_circumference_cm" type="number" step="0.1" :placeholder="isRtl ? 'مثال: 45' : 'e.g. 45'" class="doctorato-input w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#1B365D] transition" />
                                 </div>
                             </div>
                             <div>
                                 <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
-                                <input v-model="growthForm.notes" type="text" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition" />
+                                <input v-model="growthForm.notes" type="text" class="doctorato-input w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#1B365D] transition" />
                             </div>
                             <div v-if="growthForm.errors && Object.keys(growthForm.errors).length" class="text-xs text-red-500">
                                 <p v-for="(err, key) in growthForm.errors" :key="key">{{ err }}</p>
@@ -887,7 +887,7 @@ const percentileTextColor = (p) => {
                                             <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
                                                 <div>
                                                     <label class="block text-xs text-gray-500 mb-0.5">{{ isRtl ? 'الحالة' : 'Status' }}</label>
-                                                    <select v-model="vaccineForm.status" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-2.5 py-1.5 text-sm focus:ring-2 focus:ring-emerald-500 transition">
+                                                    <select v-model="vaccineForm.status" class="doctorato-input w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-2.5 py-1.5 text-sm focus:ring-2 focus:ring-[#C4A265]/30 transition">
                                                         <option value="given">{{ isRtl ? 'تم إعطاؤه' : 'Given' }}</option>
                                                         <option value="scheduled">{{ isRtl ? 'مجدول' : 'Scheduled' }}</option>
                                                         <option value="missed">{{ isRtl ? 'فائت' : 'Missed' }}</option>
@@ -896,15 +896,15 @@ const percentileTextColor = (p) => {
                                                 </div>
                                                 <div>
                                                     <label class="block text-xs text-gray-500 mb-0.5">{{ isRtl ? 'التاريخ' : 'Date' }}</label>
-                                                    <input v-model="vaccineForm.given_date" type="date" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-2.5 py-1.5 text-sm focus:ring-2 focus:ring-emerald-500 transition" />
+                                                    <input v-model="vaccineForm.given_date" type="date" class="doctorato-input w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-2.5 py-1.5 text-sm focus:ring-2 focus:ring-[#C4A265]/30 transition" />
                                                 </div>
                                                 <div>
                                                     <label class="block text-xs text-gray-500 mb-0.5">{{ isRtl ? 'رقم الدفعة' : 'Batch #' }}</label>
-                                                    <input v-model="vaccineForm.batch_number" type="text" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-2.5 py-1.5 text-sm focus:ring-2 focus:ring-emerald-500 transition" />
+                                                    <input v-model="vaccineForm.batch_number" type="text" class="doctorato-input w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-2.5 py-1.5 text-sm focus:ring-2 focus:ring-[#C4A265]/30 transition" />
                                                 </div>
                                                 <div>
                                                     <label class="block text-xs text-gray-500 mb-0.5">{{ isRtl ? 'موقع الحقن' : 'Site' }}</label>
-                                                    <input v-model="vaccineForm.site" type="text" :placeholder="isRtl ? 'مثال: الفخذ الأيسر' : 'e.g. Left thigh'" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-2.5 py-1.5 text-sm focus:ring-2 focus:ring-emerald-500 transition" />
+                                                    <input v-model="vaccineForm.site" type="text" :placeholder="isRtl ? 'مثال: الفخذ الأيسر' : 'e.g. Left thigh'" class="doctorato-input w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-2.5 py-1.5 text-sm focus:ring-2 focus:ring-[#C4A265]/30 transition" />
                                                 </div>
                                             </div>
                                             <div v-if="vaccineForm.errors && Object.keys(vaccineForm.errors).length" class="text-xs text-red-500">
@@ -1048,7 +1048,7 @@ const percentileTextColor = (p) => {
                                 </div>
                                 <div>
                                     <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{{ isRtl ? 'المادة المسببة' : 'Allergen' }}</label>
-                                    <input v-model="allergyForm.allergen" type="text" :placeholder="isRtl ? 'مثال: الفول السوداني' : 'e.g. Peanuts'" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition" />
+                                    <input v-model="allergyForm.allergen" type="text" :placeholder="isRtl ? 'مثال: الفول السوداني' : 'e.g. Peanuts'" class="doctorato-input w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#1B365D] transition" />
                                 </div>
                                 <div>
                                     <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{{ isRtl ? 'الشدة' : 'Severity' }}</label>
@@ -1061,12 +1061,12 @@ const percentileTextColor = (p) => {
                                 </div>
                                 <div>
                                     <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{{ isRtl ? 'رد الفعل' : 'Reaction' }}</label>
-                                    <input v-model="allergyForm.reaction" type="text" :placeholder="isRtl ? 'مثال: طفح جلدي' : 'e.g. Rash, hives'" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition" />
+                                    <input v-model="allergyForm.reaction" type="text" :placeholder="isRtl ? 'مثال: طفح جلدي' : 'e.g. Rash, hives'" class="doctorato-input w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#1B365D] transition" />
                                 </div>
                             </div>
                             <div>
                                 <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
-                                <input v-model="allergyForm.notes" type="text" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition" />
+                                <input v-model="allergyForm.notes" type="text" class="doctorato-input w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#1B365D] transition" />
                             </div>
                             <div v-if="allergyForm.errors && Object.keys(allergyForm.errors).length" class="text-xs text-red-500">
                                 <p v-for="(err, key) in allergyForm.errors" :key="key">{{ err }}</p>
@@ -1187,7 +1187,7 @@ const percentileTextColor = (p) => {
                                 </div>
                                 <div>
                                     <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{{ isRtl ? 'اسم الحالة' : 'Condition Name' }}</label>
-                                    <input v-model="chronicForm.condition_name" type="text" :placeholder="isRtl ? 'مثال: ربو خفيف متقطع' : 'e.g. Mild intermittent asthma'" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition" />
+                                    <input v-model="chronicForm.condition_name" type="text" :placeholder="isRtl ? 'مثال: ربو خفيف متقطع' : 'e.g. Mild intermittent asthma'" class="doctorato-input w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#1B365D] transition" />
                                 </div>
                                 <div>
                                     <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{{ isRtl ? 'الشدة' : 'Severity' }}</label>
@@ -1205,7 +1205,7 @@ const percentileTextColor = (p) => {
                                 </div>
                                 <div>
                                     <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
-                                    <input v-model="chronicForm.notes" type="text" :placeholder="isRtl ? 'أدوية، متابعة...' : 'Medications, follow-up...'" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition" />
+                                    <input v-model="chronicForm.notes" type="text" :placeholder="isRtl ? 'أدوية، متابعة...' : 'Medications, follow-up...'" class="doctorato-input w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#1B365D] transition" />
                                 </div>
                             </div>
                             <div v-if="chronicForm.errors && Object.keys(chronicForm.errors).length" class="text-xs text-red-500">
@@ -1334,15 +1334,15 @@ const percentileTextColor = (p) => {
                                 </div>
                                 <div>
                                     <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{{ isRtl ? 'عدد الرضعات/اليوم' : 'Feeds per Day' }}</label>
-                                    <input v-model="nutritionForm.feeds_per_day" type="number" min="0" :placeholder="isRtl ? 'للرضع' : 'For infants'" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition" />
+                                    <input v-model="nutritionForm.feeds_per_day" type="number" min="0" :placeholder="isRtl ? 'للرضع' : 'For infants'" class="doctorato-input w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#1B365D] transition" />
                                 </div>
                                 <div v-if="nutritionForm.feeding_type === 'formula' || nutritionForm.feeding_type === 'mixed'">
                                     <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{{ isRtl ? 'ماركة الحليب الصناعي' : 'Formula Brand' }}</label>
-                                    <input v-model="nutritionForm.formula_brand" type="text" :placeholder="isRtl ? 'مثال: سيميلاك' : 'e.g. Similac'" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition" />
+                                    <input v-model="nutritionForm.formula_brand" type="text" :placeholder="isRtl ? 'مثال: سيميلاك' : 'e.g. Similac'" class="doctorato-input w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#1B365D] transition" />
                                 </div>
                                 <div>
                                     <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{{ isRtl ? 'عدد الوجبات/اليوم' : 'Meals per Day' }}</label>
-                                    <input v-model="nutritionForm.meals_per_day" type="number" min="0" :placeholder="isRtl ? 'للأطفال الأكبر' : 'For older kids'" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition" />
+                                    <input v-model="nutritionForm.meals_per_day" type="number" min="0" :placeholder="isRtl ? 'للأطفال الأكبر' : 'For older kids'" class="doctorato-input w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#1B365D] transition" />
                                 </div>
                                 <div>
                                     <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{{ isRtl ? 'جودة النظام الغذائي' : 'Diet Quality' }}</label>
@@ -1405,7 +1405,7 @@ const percentileTextColor = (p) => {
 
                             <div>
                                 <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
-                                <input v-model="nutritionForm.notes" type="text" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition" />
+                                <input v-model="nutritionForm.notes" type="text" class="doctorato-input w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#1B365D] transition" />
                             </div>
                             <div v-if="nutritionForm.errors && Object.keys(nutritionForm.errors).length" class="text-xs text-red-500">
                                 <p v-for="(err, key) in nutritionForm.errors" :key="key">{{ err }}</p>
@@ -1522,11 +1522,11 @@ const percentileTextColor = (p) => {
                                 </div>
                                 <div>
                                     <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{{ isRtl ? 'تاريخ الفحص' : 'Test Date' }}</label>
-                                    <input v-model="screeningForm.test_date" type="date" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition" />
+                                    <input v-model="screeningForm.test_date" type="date" class="doctorato-input w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#1B365D] transition" />
                                 </div>
                                 <div>
                                     <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{{ isRtl ? 'الدرجة الكلية' : 'Total Score' }}</label>
-                                    <input v-model="screeningForm.total_score" type="number" step="0.1" :placeholder="isRtl ? 'مثال: 2' : 'e.g. 2'" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition" />
+                                    <input v-model="screeningForm.total_score" type="number" step="0.1" :placeholder="isRtl ? 'مثال: 2' : 'e.g. 2'" class="doctorato-input w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#1B365D] transition" />
                                 </div>
                                 <div>
                                     <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{{ isRtl ? 'النتيجة' : 'Result' }}</label>
@@ -1540,7 +1540,7 @@ const percentileTextColor = (p) => {
                             </div>
                             <div>
                                 <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
-                                <input v-model="screeningForm.notes" type="text" class="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition" />
+                                <input v-model="screeningForm.notes" type="text" class="doctorato-input w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#1B365D] transition" />
                             </div>
                             <div v-if="screeningForm.errors && Object.keys(screeningForm.errors).length" class="text-xs text-red-500">
                                 <p v-for="(err, key) in screeningForm.errors" :key="key">{{ err }}</p>

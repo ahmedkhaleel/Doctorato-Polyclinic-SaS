@@ -138,7 +138,7 @@ function submit() {
                             <div>
                                 <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">{{ $t('a_name') }}<span class="text-red-400 ltr:ml-0.5 rtl:mr-0.5">*</span></label>
                                 <input v-model="form.name" type="text"
-                                    class="w-full px-4 py-3 text-sm bg-gray-50/80 border border-gray-200/80 rounded-xl focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200 placeholder-gray-300"
+                                    class="doctorato-input w-full px-4 py-3 text-sm bg-gray-50/80 border border-gray-200/80 rounded-xl focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200 placeholder-gray-300"
                                     :placeholder="$t('a_template_name_placeholder')" />
                                 <p v-if="form.errors.name" class="text-xs text-red-500 mt-1.5">{{ form.errors.name }}</p>
                             </div>
@@ -169,7 +169,7 @@ function submit() {
                             <div>
                                 <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">{{ $t('a_category') }}<span class="text-red-400 ltr:ml-0.5 rtl:mr-0.5">*</span></label>
                                 <select v-model="form.category"
-                                    class="w-full px-4 py-3 text-sm bg-gray-50/80 border border-gray-200/80 rounded-xl focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200 appearance-none"
+                                    class="doctorato-input w-full px-4 py-3 text-sm bg-gray-50/80 border border-gray-200/80 rounded-xl focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200 appearance-none"
                                     style="background-image: url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270 0 24 24%27 stroke=%27%239CA3AF%27%3E%3Cpath stroke-linecap=%27round%27 stroke-linejoin=%27round%27 stroke-width=%272%27 d=%27M19 9l-7 7-7-7%27/%3E%3C/svg%3E'); background-repeat: no-repeat; background-position: right 1rem center; background-size: 1rem;">
                                     <option value="welcome">Welcome</option>
                                     <option value="follow_up">{{ $t('a_follow_up') }}</option>
@@ -185,7 +185,7 @@ function submit() {
                             <div v-if="form.channel === 'email'">
                                 <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">{{ $t('a_subject') }}</label>
                                 <input v-model="form.subject" type="text"
-                                    class="w-full px-4 py-3 text-sm bg-gray-50/80 border border-gray-200/80 rounded-xl focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200 placeholder-gray-300"
+                                    class="doctorato-input w-full px-4 py-3 text-sm bg-gray-50/80 border border-gray-200/80 rounded-xl focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200 placeholder-gray-300"
                                     :placeholder="$t('a_email_subject_line')" />
                             </div>
 
@@ -263,7 +263,7 @@ function submit() {
                                 </div>
                             </div>
                             <textarea v-model="form.body_en" rows="6"
-                                class="w-full px-4 py-3 text-sm bg-gray-50/80 border border-gray-200/80 rounded-xl resize-none focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200"></textarea>
+                                class="doctorato-input w-full px-4 py-3 text-sm bg-gray-50/80 border border-gray-200/80 rounded-xl resize-none focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200"></textarea>
                             <p v-if="form.errors.body_en" class="text-xs text-red-500 mt-1.5">{{ form.errors.body_en }}</p>
                         </div>
 
@@ -277,7 +277,7 @@ function submit() {
                                 </div>
                             </div>
                             <textarea v-model="form.body_ar" rows="6" dir="rtl"
-                                class="w-full px-4 py-3 text-sm bg-gray-50/80 border border-gray-200/80 rounded-xl resize-none focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200"></textarea>
+                                class="doctorato-input w-full px-4 py-3 text-sm bg-gray-50/80 border border-gray-200/80 rounded-xl resize-none focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200"></textarea>
                             <p v-if="form.errors.body_ar" class="text-xs text-red-500 mt-1.5">{{ form.errors.body_ar }}</p>
                         </div>
 

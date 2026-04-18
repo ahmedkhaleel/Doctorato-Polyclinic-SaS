@@ -143,9 +143,9 @@ const itemTypeLabels = computed(() => ({
                 v-model="search"
                 type="text"
                 :placeholder="isRtl ? 'بحث بالمريض أو المختبر...' : 'Search by patient or lab...'"
-                class="px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] w-full sm:w-72"
+                class="doctorato-input px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] w-full sm:w-72"
             />
-            <select v-model="status" class="px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]">
+            <select v-model="status" class="doctorato-input px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]">
                 <option value="">{{ isRtl ? 'جميع الحالات' : 'All Statuses' }}</option>
                 <option value="ordered">{{ isRtl ? 'تم الطلب' : 'Ordered' }}</option>
                 <option value="in_production">{{ isRtl ? 'قيد التصنيع' : 'In Production' }}</option>

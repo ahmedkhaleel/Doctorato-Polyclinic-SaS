@@ -213,7 +213,7 @@ const statusDistribution = computed(() => {
                             <div class="flex flex-wrap items-end gap-3 pt-4">
                                 <div v-if="activeModules.length > 1" class="flex-1 min-w-[140px]">
                                     <label class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1 block">{{ $t('a_department') }}</label>
-                                    <select v-model="form.module" @change="applyFilters" class="w-full py-2 rounded-xl border-gray-200 text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]">
+                                    <select v-model="form.module" @change="applyFilters" class="doctorato-input w-full py-2 rounded-xl border-gray-200 text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]">
                                         <option value="">{{ $t('a_all_departments') }}</option>
                                         <option v-for="m in activeModules" :key="m.slug" :value="m.slug">{{ m.name }}</option>
                                     </select>
@@ -221,7 +221,7 @@ const statusDistribution = computed(() => {
                                 <div class="flex-1 min-w-[160px]">
                                     <label class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1 block">{{ $t('a_doctor') }}</label>
                                     <div class="relative">
-                                        <select v-model="form.doctor_id" @change="applyFilters" class="w-full pl-9 pr-3 py-2 rounded-xl border-gray-200 text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] appearance-none bg-white">
+                                        <select v-model="form.doctor_id" @change="applyFilters" class="doctorato-input w-full pl-9 pr-3 py-2 rounded-xl border-gray-200 text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] appearance-none bg-white">
                                             <option value="">{{ $t('a_all_doctors') }}</option>
                                             <option v-for="d in doctors" :key="d.id" :value="d.id">Dr. {{ d.name_en }}</option>
                                         </select>
@@ -232,7 +232,7 @@ const statusDistribution = computed(() => {
                                 </div>
                                 <div class="flex-1 min-w-[140px]">
                                     <label class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1 block">{{ $t('a_status') }}</label>
-                                    <select v-model="form.status" @change="applyFilters" class="w-full py-2 rounded-xl border-gray-200 text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]">
+                                    <select v-model="form.status" @change="applyFilters" class="doctorato-input w-full py-2 rounded-xl border-gray-200 text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]">
                                         <option value="">{{ $t('a_all_statuses') }}</option>
                                         <option value="draft">{{ $t('a_draft') }}</option>
                                         <option value="confirmed">{{ $t('a_confirmed') }}</option>
@@ -243,7 +243,7 @@ const statusDistribution = computed(() => {
                                 <div class="flex-1 min-w-[130px]">
                                     <label class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1 block">{{ $t('a_from') }}</label>
                                     <div class="relative">
-                                        <input type="date" v-model="form.date_from" @change="applyFilters" :max="form.date_to || undefined" class="w-full pl-9 pr-3 py-2 rounded-xl border-gray-200 text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]" />
+                                        <input type="date" v-model="form.date_from" @change="applyFilters" :max="form.date_to || undefined" class="doctorato-input w-full pl-9 pr-3 py-2 rounded-xl border-gray-200 text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]" />
                                         <div class="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
                                             <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                                         </div>
@@ -252,7 +252,7 @@ const statusDistribution = computed(() => {
                                 <div class="flex-1 min-w-[130px]">
                                     <label class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1 block">{{ $t('a_to') }}</label>
                                     <div class="relative">
-                                        <input type="date" v-model="form.date_to" @change="applyFilters" :min="form.date_from || undefined" class="w-full pl-9 pr-3 py-2 rounded-xl border-gray-200 text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]" />
+                                        <input type="date" v-model="form.date_to" @change="applyFilters" :min="form.date_from || undefined" class="doctorato-input w-full pl-9 pr-3 py-2 rounded-xl border-gray-200 text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]" />
                                         <div class="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
                                             <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                                         </div>

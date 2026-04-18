@@ -148,7 +148,7 @@ function submit() {
                             <input
                                 v-model="form.full_name"
                                 type="text"
-                                class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500 focus:bg-white transition"
+                                class="doctorato-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D] focus:bg-white transition"
                                 :placeholder="isRtl ? 'أدخل اسم المريض الكامل' : 'Enter patient full name'"
                             />
                             <p v-if="form.errors.full_name" class="mt-1.5 text-xs text-red-600">{{ form.errors.full_name }}</p>
@@ -160,7 +160,7 @@ function submit() {
                                 <input
                                     v-model="form.phone"
                                     type="text"
-                                    class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500 focus:bg-white transition"
+                                    class="doctorato-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D] focus:bg-white transition"
                                     :placeholder="isRtl ? 'الهاتف الرئيسي' : 'Primary phone'"
                                 />
                                 <p v-if="form.errors.phone" class="mt-1.5 text-xs text-red-600">{{ form.errors.phone }}</p>
@@ -170,7 +170,7 @@ function submit() {
                                 <input
                                     v-model="form.phone2"
                                     type="text"
-                                    class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500 focus:bg-white transition"
+                                    class="doctorato-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D] focus:bg-white transition"
                                     :placeholder="isRtl ? 'الهاتف الثانوي (اختياري)' : 'Secondary phone (optional)'"
                                 />
                                 <p v-if="form.errors.phone2" class="mt-1.5 text-xs text-red-600">{{ form.errors.phone2 }}</p>
@@ -183,7 +183,7 @@ function submit() {
                                 <input
                                     v-model="form.email"
                                     type="email"
-                                    class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500 focus:bg-white transition"
+                                    class="doctorato-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D] focus:bg-white transition"
                                     :placeholder="isRtl ? 'البريد الإلكتروني' : 'Email address'"
                                 />
                                 <p v-if="form.errors.email" class="mt-1.5 text-xs text-red-600">{{ form.errors.email }}</p>
@@ -193,7 +193,7 @@ function submit() {
                                 <input
                                     v-model="form.date_of_birth"
                                     type="date"
-                                    class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500 focus:bg-white transition"
+                                    class="doctorato-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D] focus:bg-white transition"
                                 />
                             </div>
                         </div>
@@ -203,7 +203,7 @@ function submit() {
                                 <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ isRtl ? 'الجنس' : 'Gender' }} <span class="text-red-500">*</span></label>
                                 <select
                                     v-model="form.gender"
-                                    class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500 focus:bg-white transition"
+                                    class="doctorato-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D] focus:bg-white transition"
                                 >
                                     <option value="female">{{ isRtl ? 'أنثى' : 'Female' }}</option>
                                     <option value="male">{{ isRtl ? 'ذكر' : 'Male' }}</option>
@@ -213,7 +213,7 @@ function submit() {
                                 <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ isRtl ? 'الجنسية' : 'Nationality' }}</label>
                                 <select
                                     v-model="form.nationality"
-                                    class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500 focus:bg-white transition"
+                                    class="doctorato-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D] focus:bg-white transition"
                                 >
                                     <option v-for="nat in nationalityOptions" :key="nat.value" :value="nat.value">
                                         {{ isRtl ? nat.ar : nat.en }}
@@ -229,7 +229,7 @@ function submit() {
                                 <input
                                     v-model="form.address"
                                     type="text"
-                                    class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500 focus:bg-white transition"
+                                    class="doctorato-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D] focus:bg-white transition"
                                     :placeholder="isRtl ? 'عنوان المريض' : 'Patient address'"
                                 />
                             </div>
@@ -238,7 +238,7 @@ function submit() {
                                 <input
                                     v-model="form.occupation"
                                     type="text"
-                                    class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500 focus:bg-white transition"
+                                    class="doctorato-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D] focus:bg-white transition"
                                     :placeholder="isRtl ? 'مهنة المريض' : 'Patient occupation'"
                                 />
                             </div>
@@ -257,7 +257,7 @@ function submit() {
                     <textarea
                         v-model="form.medical_notes"
                         rows="4"
-                        class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500 focus:bg-white transition resize-none"
+                        class="doctorato-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D] focus:bg-white transition resize-none"
                         :placeholder="isRtl ? 'الحساسية، الأمراض المزمنة، الأدوية الحالية...' : 'Allergies, chronic conditions, current medications, etc.'"
                     ></textarea>
                 </div>
@@ -279,7 +279,7 @@ function submit() {
                             <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ isRtl ? 'مصدر الإحالة' : 'Referral Source' }}</label>
                             <select
                                 v-model="form.referral_source"
-                                class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500 focus:bg-white transition"
+                                class="doctorato-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D] focus:bg-white transition"
                             >
                                 <option v-for="opt in referralOptions" :key="opt.value" :value="opt.value">{{ opt.label }}</option>
                             </select>
@@ -290,7 +290,7 @@ function submit() {
                             <input
                                 v-model="form.referred_by"
                                 type="text"
-                                class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500 focus:bg-white transition"
+                                class="doctorato-input w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D] focus:bg-white transition"
                                 :placeholder="isRtl ? 'اسم المُحيل' : 'Name of referrer'"
                             />
                         </div>

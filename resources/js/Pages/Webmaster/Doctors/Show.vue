@@ -528,11 +528,11 @@ const visitTypeDistribution = computed(() => {
                                         </div>
                                         <div>
                                             <label class="block text-sm font-medium text-gray-700 mb-1">Diagnosis</label>
-                                            <input v-model="prescriptionForm.diagnosis" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="Diagnosis" />
+                                            <input v-model="prescriptionForm.diagnosis" type="text" class="doctorato-input w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="Diagnosis" />
                                         </div>
                                         <div>
                                             <label class="block text-sm font-medium text-gray-700 mb-1">Notes</label>
-                                            <input v-model="prescriptionForm.notes" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="Optional notes" />
+                                            <input v-model="prescriptionForm.notes" type="text" class="doctorato-input w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="Optional notes" />
                                         </div>
                                     </div>
 
@@ -563,13 +563,13 @@ const visitTypeDistribution = computed(() => {
                                                 </div>
                                             </div>
                                             <div class="w-28">
-                                                <input v-model="item.dosage" type="text" class="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm" placeholder="Dosage" />
+                                                <input v-model="item.dosage" type="text" class="doctorato-input w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm" placeholder="Dosage" />
                                             </div>
                                             <div class="w-32">
-                                                <input v-model="item.frequency" type="text" class="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm" placeholder="Frequency" />
+                                                <input v-model="item.frequency" type="text" class="doctorato-input w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm" placeholder="Frequency" />
                                             </div>
                                             <div class="w-24">
-                                                <input v-model="item.duration" type="text" class="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm" placeholder="Duration" />
+                                                <input v-model="item.duration" type="text" class="doctorato-input w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm" placeholder="Duration" />
                                             </div>
                                             <button
                                                 v-if="prescriptionForm.items.length > 1"

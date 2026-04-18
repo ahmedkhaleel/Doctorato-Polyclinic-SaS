@@ -135,7 +135,7 @@ onMounted(() => { requestAnimationFrame(() => { mounted.value = true; }); });
                     v-model="search"
                     type="text"
                     :placeholder="isRtl ? 'بحث بالاسم أو الفئة...' : 'Search by name or category...'"
-                    class="w-full ps-10 pe-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-colors"
+                    class="doctorato-input w-full ps-10 pe-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-colors"
                 />
             </div>
         </div>
@@ -281,7 +281,7 @@ onMounted(() => { requestAnimationFrame(() => { mounted.value = true; }); });
                                     <input
                                         v-model="form.name"
                                         type="text"
-                                        class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D]"
+                                        class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D]"
                                         :placeholder="isRtl ? 'مثال: أموكسيسيلين' : 'e.g., Amoxicillin'"
                                     />
                                     <p v-if="form.errors.name" class="mt-1 text-xs text-red-600">{{ form.errors.name }}</p>
@@ -293,7 +293,7 @@ onMounted(() => { requestAnimationFrame(() => { mounted.value = true; }); });
                                     <input
                                         v-model="form.category"
                                         type="text"
-                                        class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D]"
+                                        class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D]"
                                         :placeholder="isRtl ? 'مثال: مضاد حيوي' : 'e.g., Antibiotic'"
                                     />
                                     <p v-if="form.errors.category" class="mt-1 text-xs text-red-600">{{ form.errors.category }}</p>
@@ -306,7 +306,7 @@ onMounted(() => { requestAnimationFrame(() => { mounted.value = true; }); });
                                         <input
                                             v-model="form.default_dosage"
                                             type="text"
-                                            class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D]"
+                                            class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D]"
                                             :placeholder="isRtl ? '500mg' : '500mg'"
                                         />
                                         <p v-if="form.errors.default_dosage" class="mt-1 text-xs text-red-600">{{ form.errors.default_dosage }}</p>
@@ -316,7 +316,7 @@ onMounted(() => { requestAnimationFrame(() => { mounted.value = true; }); });
                                         <input
                                             v-model="form.default_frequency"
                                             type="text"
-                                            class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D]"
+                                            class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D]"
                                             :placeholder="isRtl ? '3 مرات/يوم' : '3x daily'"
                                         />
                                         <p v-if="form.errors.default_frequency" class="mt-1 text-xs text-red-600">{{ form.errors.default_frequency }}</p>
@@ -326,7 +326,7 @@ onMounted(() => { requestAnimationFrame(() => { mounted.value = true; }); });
                                         <input
                                             v-model="form.default_duration"
                                             type="text"
-                                            class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D]"
+                                            class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D]"
                                             :placeholder="isRtl ? '7 أيام' : '7 days'"
                                         />
                                         <p v-if="form.errors.default_duration" class="mt-1 text-xs text-red-600">{{ form.errors.default_duration }}</p>

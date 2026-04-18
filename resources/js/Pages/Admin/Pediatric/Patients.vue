@@ -104,7 +104,7 @@ const paginationLinks = computed(() => {
                     v-model="search"
                     type="text"
                     :placeholder="isRtl ? 'بحث بالاسم، رقم الملف، ولي الأمر...' : 'Search by name, file number, guardian...'"
-                    class="w-full ltr:pl-10 rtl:pr-10 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-emerald-400 transition"
+                    class="doctorato-input w-full ltr:pl-10 rtl:pr-10 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition"
                 />
             </div>
         </div>

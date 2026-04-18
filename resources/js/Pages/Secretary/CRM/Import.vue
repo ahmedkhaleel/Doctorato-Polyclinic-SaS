@@ -581,8 +581,7 @@ function startNewImport() {
                     </span>
                 </div>
                 <select v-model="columnMap[field.key]"
-                    :class="['w-full text-sm rounded-lg border bg-white px-3 py-2 outline-none transition-all duration-200 focus:ring-2 focus:ring-teal-200',
-                        columnMap[field.key] ? 'border-teal-300 text-gray-800' : 'border-gray-200 text-gray-400']">
+                     class="doctorato-input" :class="['w-full text-sm rounded-lg border bg-white px-3 py-2 outline-none transition-all duration-200 focus:ring-2 focus:ring-[#C4A265]/30', columnMap[field.key] ? 'border-teal-300 text-gray-800' : 'border-gray-200 text-gray-400']">
                     <option value="">{{ isRtl ? '-- لا يوجد --' : '-- None --' }}</option>
                     <option v-for="h in headers" :key="h" :value="h">{{ h }}</option>
                 </select>

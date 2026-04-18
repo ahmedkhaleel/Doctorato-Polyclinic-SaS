@@ -102,14 +102,14 @@ function submit() {
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_code') }} <span class="text-red-500">*</span></label>
-                            <input v-model="form.code" type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm uppercase focus:ring-2 focus:ring-amber-200 focus:border-transparent" :placeholder="$t('a_code_placeholder')" />
+                            <input v-model="form.code" type="text" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm uppercase focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" :placeholder="$t('a_code_placeholder')" />
                             <p v-if="form.errors.code" class="mt-1 text-sm text-red-600">{{ form.errors.code }}</p>
                         </div>
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_discount_type') }} <span class="text-red-500">*</span></label>
-                                <select v-model="form.discount_type" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent">
+                                <select v-model="form.discount_type" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent">
                                     <option value="percentage">{{ $t('a_percentage') }} (%)</option>
                                     <option value="fixed">{{ $t('a_fixed_amount') }} ({{ currencyCode }})</option>
                                 </select>
@@ -117,26 +117,26 @@ function submit() {
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_discount_value') }} <span class="text-red-500">*</span></label>
-                                <input v-model="form.discount_value" type="number" step="0.01" min="0" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" :placeholder="form.discount_type === 'percentage' ? 'e.g. 25' : 'e.g. 100'" />
+                                <input v-model="form.discount_value" type="number" step="0.01" min="0" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" :placeholder="form.discount_type === 'percentage' ? 'e.g. 25' : 'e.g. 100'" />
                                 <p v-if="form.errors.discount_value" class="mt-1 text-sm text-red-600">{{ form.errors.discount_value }}</p>
                             </div>
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_max_uses') }}</label>
-                            <input v-model="form.max_uses" type="number" min="1" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" :placeholder="$t('a_leave_empty_unlimited')" />
+                            <input v-model="form.max_uses" type="number" min="1" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" :placeholder="$t('a_leave_empty_unlimited')" />
                             <p v-if="form.errors.max_uses" class="mt-1 text-sm text-red-600">{{ form.errors.max_uses }}</p>
                         </div>
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_start_date') }}</label>
-                                <input v-model="form.start_date" type="date" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
+                                <input v-model="form.start_date" type="date" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                 <p v-if="form.errors.start_date" class="mt-1 text-sm text-red-600">{{ form.errors.start_date }}</p>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_end_date') }}</label>
-                                <input v-model="form.end_date" type="date" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
+                                <input v-model="form.end_date" type="date" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                 <p v-if="form.errors.end_date" class="mt-1 text-sm text-red-600">{{ form.errors.end_date }}</p>
                             </div>
                         </div>
@@ -161,7 +161,7 @@ function submit() {
                                         type="checkbox"
                                         :checked="form.applicable_services.includes(svc.id)"
                                         @change="toggleService(svc.id)"
-                                        class="rounded border-gray-300 text-amber-600 focus:ring-amber-200"
+                                        class="rounded border-gray-300 text-amber-600 focus:ring-[#C4A265]/30"
                                     />
                                     <span class="text-sm text-gray-700 truncate">{{ svc.name_en }}</span>
                                 </label>
@@ -178,7 +178,7 @@ function submit() {
                                         type="checkbox"
                                         :checked="form.applicable_packages.includes(pkg.id)"
                                         @change="togglePackage(pkg.id)"
-                                        class="rounded border-gray-300 text-amber-600 focus:ring-amber-200"
+                                        class="rounded border-gray-300 text-amber-600 focus:ring-[#C4A265]/30"
                                     />
                                     <span class="text-sm text-gray-700 truncate">{{ pkg.name_en }}</span>
                                     <span class="text-xs text-gray-400 ml-auto">{{ pkg.total_price }} {{ currencyCode }}</span>
@@ -195,13 +195,13 @@ function submit() {
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_minimum_order_amount') }} ({{ currencyCode }})</label>
-                                <input v-model="form.min_order_amount" type="number" step="0.01" min="0" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" placeholder="0.00" />
+                                <input v-model="form.min_order_amount" type="number" step="0.01" min="0" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" placeholder="0.00" />
                                 <p class="mt-1 text-xs text-gray-400">{{ $t('a_min_order_hint') }}</p>
                                 <p v-if="form.errors.min_order_amount" class="mt-1 text-sm text-red-600">{{ form.errors.min_order_amount }}</p>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_max_discount_cap') }} ({{ currencyCode }})</label>
-                                <input v-model="form.max_discount_amount" type="number" step="0.01" min="0" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" :placeholder="$t('a_no_cap')" />
+                                <input v-model="form.max_discount_amount" type="number" step="0.01" min="0" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" :placeholder="$t('a_no_cap')" />
                                 <p class="mt-1 text-xs text-gray-400">{{ $t('a_max_discount_hint') }}</p>
                                 <p v-if="form.errors.max_discount_amount" class="mt-1 text-sm text-red-600">{{ form.errors.max_discount_amount }}</p>
                             </div>
@@ -210,13 +210,13 @@ function submit() {
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_per_patient_limit') }}</label>
-                                <input v-model="form.per_patient_limit" type="number" min="1" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" :placeholder="$t('a_unlimited')" />
+                                <input v-model="form.per_patient_limit" type="number" min="1" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" :placeholder="$t('a_unlimited')" />
                                 <p class="mt-1 text-xs text-gray-400">{{ $t('a_per_patient_hint') }}</p>
                                 <p v-if="form.errors.per_patient_limit" class="mt-1 text-sm text-red-600">{{ form.errors.per_patient_limit }}</p>
                             </div>
                             <div class="flex items-end pb-2">
                                 <label class="flex items-center space-x-3 cursor-pointer">
-                                    <input type="checkbox" v-model="form.first_booking_only" class="rounded border-gray-300 text-amber-600 focus:ring-amber-200" />
+                                    <input type="checkbox" v-model="form.first_booking_only" class="rounded border-gray-300 text-amber-600 focus:ring-[#C4A265]/30" />
                                     <div>
                                         <span class="text-sm font-medium text-gray-700">{{ $t('a_first_booking_only') }}</span>
                                         <p class="text-xs text-gray-400">{{ $t('a_first_booking_hint') }}</p>
@@ -245,12 +245,12 @@ function submit() {
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_popup_title_en') }}</label>
-                                    <input v-model="form.popup_title_en" type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" placeholder="e.g. Special Offer!" />
+                                    <input v-model="form.popup_title_en" type="text" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" placeholder="e.g. Special Offer!" />
                                     <p v-if="form.errors.popup_title_en" class="mt-1 text-sm text-red-600">{{ form.errors.popup_title_en }}</p>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_popup_title_ar') }}</label>
-                                    <input v-model="form.popup_title_ar" type="text" dir="rtl" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" placeholder="e.g. عرض خاص!" />
+                                    <input v-model="form.popup_title_ar" type="text" dir="rtl" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" placeholder="e.g. عرض خاص!" />
                                     <p v-if="form.errors.popup_title_ar" class="mt-1 text-sm text-red-600">{{ form.errors.popup_title_ar }}</p>
                                 </div>
                             </div>
@@ -258,12 +258,12 @@ function submit() {
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_popup_description_en') }}</label>
-                                    <textarea v-model="form.popup_description_en" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" placeholder="Describe the offer..."></textarea>
+                                    <textarea v-model="form.popup_description_en" rows="3" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" placeholder="Describe the offer..."></textarea>
                                     <p v-if="form.errors.popup_description_en" class="mt-1 text-sm text-red-600">{{ form.errors.popup_description_en }}</p>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_popup_description_ar') }}</label>
-                                    <textarea v-model="form.popup_description_ar" rows="3" dir="rtl" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" placeholder="وصف العرض..."></textarea>
+                                    <textarea v-model="form.popup_description_ar" rows="3" dir="rtl" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" placeholder="وصف العرض..."></textarea>
                                     <p v-if="form.errors.popup_description_ar" class="mt-1 text-sm text-red-600">{{ form.errors.popup_description_ar }}</p>
                                 </div>
                             </div>
@@ -291,7 +291,7 @@ function submit() {
                     <div class="bg-white rounded-lg shadow-sm p-4 md:p-6 space-y-4">
                         <h2 class="text-lg font-semibold text-gray-700 border-b pb-2">{{ $t('a_notes') }}</h2>
                         <div>
-                            <textarea v-model="form.notes" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" :placeholder="$t('a_optional_notes')"></textarea>
+                            <textarea v-model="form.notes" rows="3" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" :placeholder="$t('a_optional_notes')"></textarea>
                         </div>
                     </div>
                 </div>
@@ -302,7 +302,7 @@ function submit() {
                         <h2 class="text-lg font-semibold text-gray-700 border-b pb-2">{{ $t('a_status') }}</h2>
                         <div>
                             <label class="flex items-center space-x-3">
-                                <input type="checkbox" v-model="form.is_active" class="rounded border-gray-300 text-amber-600 focus:ring-amber-200" />
+                                <input type="checkbox" v-model="form.is_active" class="rounded border-gray-300 text-amber-600 focus:ring-[#C4A265]/30" />
                                 <span class="text-sm text-gray-700">{{ $t('a_active') }}</span>
                             </label>
                         </div>

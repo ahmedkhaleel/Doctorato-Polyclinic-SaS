@@ -63,7 +63,7 @@ function formatDate(d) {
             <!-- Filter -->
             <div class="mb-4">
                 <select v-model="statusFilter" @change="applyFilters"
-                    class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265]">
+                    class="doctorato-input px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265]">
                     <option value="">{{ $t('a_all_statuses') }}</option>
                     <option value="active">{{ $t('a_active') }}</option>
                     <option value="completed">{{ $t('a_completed') }}</option>

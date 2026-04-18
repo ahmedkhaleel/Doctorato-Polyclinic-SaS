@@ -102,7 +102,7 @@ const genderConfig = {
                             v-model="search"
                             type="text"
                             :placeholder="$t('a_search_patients_placeholder')"
-                            class="w-full ltr:pl-10 ltr:pr-9 rtl:pr-10 rtl:pl-9 py-2.5 border border-gray-200 bg-gray-50/50 rounded-xl text-sm focus:ring-2 focus:ring-amber-100 focus:border-amber-300 focus:bg-white hover:border-gray-300 transition-all duration-200"
+                            class="doctorato-input w-full ltr:pl-10 ltr:pr-9 rtl:pr-10 rtl:pl-9 py-2.5 border border-gray-200 bg-gray-50/50 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#1B365D] focus:bg-white hover:border-gray-300 transition-all duration-200"
                         />
                         <button v-if="search" @click="clearSearch" class="absolute inset-y-0 ltr:right-0 rtl:left-0 ltr:pr-3 rtl:pl-3 flex items-center text-gray-400 hover:text-gray-600 transition">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
@@ -116,7 +116,7 @@ const genderConfig = {
                         </div>
                         <select
                             v-model="statusFilter"
-                            class="pl-10 pr-9 py-2.5 border border-gray-200 bg-gray-50/50 rounded-xl text-sm focus:ring-2 focus:ring-amber-100 focus:border-amber-300 focus:bg-white hover:border-gray-300 transition-all duration-200 appearance-none cursor-pointer"
+                            class="doctorato-input pl-10 pr-9 py-2.5 border border-gray-200 bg-gray-50/50 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#1B365D] focus:bg-white hover:border-gray-300 transition-all duration-200 appearance-none cursor-pointer"
                         >
                             <option value="">{{ $t('a_all_status') }}</option>
                             <option value="active">{{ $t('a_active') }}</option>

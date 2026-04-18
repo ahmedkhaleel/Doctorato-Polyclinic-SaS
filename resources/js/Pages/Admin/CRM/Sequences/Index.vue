@@ -103,10 +103,10 @@ function formatDelay(minutes) {
                 <div class="flex flex-col sm:flex-row gap-3">
                     <div class="flex-1">
                         <input v-model="search" @keyup.enter="applyFilters" type="text" :placeholder="$t('a_search_sequences')"
-                            class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-colors" />
+                            class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-colors" />
                     </div>
                     <select v-model="statusFilter" @change="applyFilters"
-                        class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-colors">
+                        class="doctorato-input px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-colors">
                         <option value="">{{ $t('a_all_statuses') }}</option>
                         <option value="active">{{ $t('a_active') }}</option>
                         <option value="inactive">{{ $t('a_inactive') }}</option>

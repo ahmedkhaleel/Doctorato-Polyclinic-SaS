@@ -246,7 +246,7 @@ onMounted(() => {
                                 v-model="form.full_name"
                                 type="text"
                                 :placeholder="isRtl ? 'أدخل الاسم الكامل للطفل' : 'Enter child full name'"
-                                class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-[#4CAF50]/20 focus:border-[#4CAF50] transition"
+                                class="doctorato-input w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-[#4CAF50]/20 focus:border-[#4CAF50] transition"
                                 :class="form.errors.full_name ? 'border-red-300' : ''"
                             />
                             <p v-if="form.errors.full_name" class="mt-1 text-xs text-red-500">{{ form.errors.full_name }}</p>
@@ -272,7 +272,7 @@ onMounted(() => {
                             <input
                                 v-model="form.date_of_birth"
                                 type="date"
-                                class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-[#4CAF50]/20 focus:border-[#4CAF50] transition"
+                                class="doctorato-input w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-[#4CAF50]/20 focus:border-[#4CAF50] transition"
                                 :class="form.errors.date_of_birth ? 'border-red-300' : ''"
                             />
                             <p v-if="form.errors.date_of_birth" class="mt-1 text-xs text-red-500">{{ form.errors.date_of_birth }}</p>
@@ -285,7 +285,7 @@ onMounted(() => {
                                 v-model="form.phone"
                                 type="tel"
                                 :placeholder="isRtl ? 'رقم الهاتف' : 'Phone number'"
-                                class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-[#4CAF50]/20 focus:border-[#4CAF50] transition dir-ltr"
+                                class="doctorato-input w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-[#4CAF50]/20 focus:border-[#4CAF50] transition dir-ltr"
                             />
                         </div>
 
@@ -320,7 +320,7 @@ onMounted(() => {
                             v-model="form.address"
                             rows="2"
                             :placeholder="isRtl ? 'عنوان السكن' : 'Residential address'"
-                            class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-[#4CAF50]/20 focus:border-[#4CAF50] transition resize-none"
+                            class="doctorato-input w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-[#4CAF50]/20 focus:border-[#4CAF50] transition resize-none"
                         ></textarea>
                     </div>
                 </div>
@@ -350,7 +350,7 @@ onMounted(() => {
                                 v-model="form.guardian_name"
                                 type="text"
                                 :placeholder="isRtl ? 'الاسم الكامل لولي الأمر' : 'Guardian full name'"
-                                class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-[#0d9488]/20 focus:border-[#0d9488] transition"
+                                class="doctorato-input w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-[#0d9488]/20 focus:border-[#0d9488] transition"
                                 :class="form.errors.guardian_name ? 'border-red-300' : ''"
                             />
                             <p v-if="form.errors.guardian_name" class="mt-1 text-xs text-red-500">{{ form.errors.guardian_name }}</p>
@@ -377,7 +377,7 @@ onMounted(() => {
                                 v-model="form.guardian_phone"
                                 type="tel"
                                 :placeholder="isRtl ? 'رقم الهاتف الرئيسي' : 'Primary phone number'"
-                                class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-[#0d9488]/20 focus:border-[#0d9488] transition dir-ltr"
+                                class="doctorato-input w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-[#0d9488]/20 focus:border-[#0d9488] transition dir-ltr"
                                 :class="form.errors.guardian_phone ? 'border-red-300' : ''"
                             />
                             <p v-if="form.errors.guardian_phone" class="mt-1 text-xs text-red-500">{{ form.errors.guardian_phone }}</p>
@@ -390,7 +390,7 @@ onMounted(() => {
                                 v-model="form.guardian_phone2"
                                 type="tel"
                                 :placeholder="isRtl ? 'رقم هاتف بديل' : 'Alternative phone'"
-                                class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-[#0d9488]/20 focus:border-[#0d9488] transition dir-ltr"
+                                class="doctorato-input w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-[#0d9488]/20 focus:border-[#0d9488] transition dir-ltr"
                             />
                         </div>
 
@@ -401,7 +401,7 @@ onMounted(() => {
                                 v-model="form.guardian_email"
                                 type="email"
                                 :placeholder="isRtl ? 'البريد الإلكتروني' : 'Email address'"
-                                class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-[#0d9488]/20 focus:border-[#0d9488] transition dir-ltr"
+                                class="doctorato-input w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-[#0d9488]/20 focus:border-[#0d9488] transition dir-ltr"
                             />
                         </div>
 
@@ -412,7 +412,7 @@ onMounted(() => {
                                 v-model="form.guardian_occupation"
                                 type="text"
                                 :placeholder="isRtl ? 'مهنة ولي الأمر' : 'Guardian occupation'"
-                                class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-[#0d9488]/20 focus:border-[#0d9488] transition"
+                                class="doctorato-input w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-[#0d9488]/20 focus:border-[#0d9488] transition"
                             />
                         </div>
                     </div>
@@ -452,7 +452,7 @@ onMounted(() => {
                                 v-model="form.birth_place"
                                 type="text"
                                 :placeholder="isRtl ? 'المستشفى أو المكان' : 'Hospital or location'"
-                                class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-[#4CAF50]/20 focus:border-[#4CAF50] transition"
+                                class="doctorato-input w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-[#4CAF50]/20 focus:border-[#4CAF50] transition"
                             />
                         </div>
 
@@ -465,7 +465,7 @@ onMounted(() => {
                                 min="20"
                                 max="45"
                                 :placeholder="isRtl ? 'أسابيع' : 'Weeks'"
-                                class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-[#4CAF50]/20 focus:border-[#4CAF50] transition"
+                                class="doctorato-input w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-[#4CAF50]/20 focus:border-[#4CAF50] transition"
                             />
                         </div>
 
@@ -479,7 +479,7 @@ onMounted(() => {
                                 min="0.3"
                                 max="7"
                                 :placeholder="isRtl ? 'كيلوغرام' : 'Kilograms'"
-                                class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-[#4CAF50]/20 focus:border-[#4CAF50] transition"
+                                class="doctorato-input w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-[#4CAF50]/20 focus:border-[#4CAF50] transition"
                             />
                         </div>
 
@@ -493,7 +493,7 @@ onMounted(() => {
                                 min="20"
                                 max="65"
                                 :placeholder="isRtl ? 'سنتيمتر' : 'Centimeters'"
-                                class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-[#4CAF50]/20 focus:border-[#4CAF50] transition"
+                                class="doctorato-input w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-[#4CAF50]/20 focus:border-[#4CAF50] transition"
                             />
                         </div>
 
@@ -507,7 +507,7 @@ onMounted(() => {
                                 min="20"
                                 max="50"
                                 :placeholder="isRtl ? 'سنتيمتر' : 'Centimeters'"
-                                class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-[#4CAF50]/20 focus:border-[#4CAF50] transition"
+                                class="doctorato-input w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-[#4CAF50]/20 focus:border-[#4CAF50] transition"
                             />
                         </div>
 
@@ -520,7 +520,7 @@ onMounted(() => {
                                 min="0"
                                 max="10"
                                 :placeholder="isRtl ? '0-10' : '0-10'"
-                                class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-[#4CAF50]/20 focus:border-[#4CAF50] transition"
+                                class="doctorato-input w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-[#4CAF50]/20 focus:border-[#4CAF50] transition"
                             />
                         </div>
 
@@ -533,7 +533,7 @@ onMounted(() => {
                                 min="0"
                                 max="10"
                                 :placeholder="isRtl ? '0-10' : '0-10'"
-                                class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-[#4CAF50]/20 focus:border-[#4CAF50] transition"
+                                class="doctorato-input w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-[#4CAF50]/20 focus:border-[#4CAF50] transition"
                             />
                         </div>
 
@@ -578,7 +578,7 @@ onMounted(() => {
                             type="number"
                             min="0"
                             :placeholder="isRtl ? 'عدد الأيام' : 'Number of days'"
-                            class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-[#4CAF50]/20 focus:border-[#4CAF50] transition"
+                            class="doctorato-input w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-[#4CAF50]/20 focus:border-[#4CAF50] transition"
                         />
                     </div>
 
@@ -589,7 +589,7 @@ onMounted(() => {
                             v-model="form.pregnancy_complications"
                             rows="2"
                             :placeholder="isRtl ? 'أي مضاعفات أثناء الحمل' : 'Any complications during pregnancy'"
-                            class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-[#4CAF50]/20 focus:border-[#4CAF50] transition resize-none"
+                            class="doctorato-input w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-[#4CAF50]/20 focus:border-[#4CAF50] transition resize-none"
                         ></textarea>
                     </div>
                 </div>
@@ -662,7 +662,7 @@ onMounted(() => {
                                     v-model="row.details"
                                     type="text"
                                     :placeholder="isRtl ? 'ملاحظات إضافية' : 'Additional notes'"
-                                    class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-[#4CAF50]/20 focus:border-[#4CAF50] transition bg-white"
+                                    class="doctorato-input w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-[#4CAF50]/20 focus:border-[#4CAF50] transition bg-white"
                                 />
                             </div>
                         </div>

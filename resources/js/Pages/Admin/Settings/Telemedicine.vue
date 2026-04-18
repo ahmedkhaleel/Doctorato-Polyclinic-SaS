@@ -252,7 +252,7 @@ function commitText(key) {
                             </label>
                             <div class="flex items-center gap-2">
                                 <input type="number" v-model="localSettings.agora_token_expiry_seconds" @blur="commitText('agora_token_expiry_seconds')"
-                                    class="flex-1 px-3 py-2 rounded-lg border border-gray-200 bg-white text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[#C4A265]/30" />
+                                    class="doctorato-input flex-1 px-3 py-2 rounded-lg border border-gray-200 bg-white text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[#C4A265]/30" />
                                 <span class="text-xs text-gray-500">{{ isRtl ? 'الافتراضي 7200 (ساعتان)' : 'default 7200 (2 hours)' }}</span>
                             </div>
                         </div>
@@ -417,23 +417,23 @@ function commitText(key) {
                         <div>
                             <label class="block text-xs font-bold text-gray-600 mb-1">App ID</label>
                             <input type="text" v-model="localSettings.reverb_app_id" @blur="commitText('reverb_app_id')"
-                                class="w-full px-3 py-2 rounded-lg border border-gray-200 bg-white text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[#C4A265]/30" />
+                                class="doctorato-input w-full px-3 py-2 rounded-lg border border-gray-200 bg-white text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[#C4A265]/30" />
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-gray-600 mb-1">Host</label>
                             <input type="text" v-model="localSettings.reverb_host" @blur="commitText('reverb_host')"
                                 placeholder="reverb.doctorato.net"
-                                class="w-full px-3 py-2 rounded-lg border border-gray-200 bg-white text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[#C4A265]/30" />
+                                class="doctorato-input w-full px-3 py-2 rounded-lg border border-gray-200 bg-white text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[#C4A265]/30" />
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-gray-600 mb-1">Port</label>
                             <input type="number" v-model="localSettings.reverb_port" @blur="commitText('reverb_port')"
-                                class="w-full px-3 py-2 rounded-lg border border-gray-200 bg-white text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[#C4A265]/30" />
+                                class="doctorato-input w-full px-3 py-2 rounded-lg border border-gray-200 bg-white text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[#C4A265]/30" />
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-gray-600 mb-1">Scheme</label>
                             <select v-model="localSettings.reverb_scheme" @change="commitText('reverb_scheme')"
-                                class="w-full px-3 py-2 rounded-lg border border-gray-200 bg-white text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[#C4A265]/30">
+                                class="doctorato-input w-full px-3 py-2 rounded-lg border border-gray-200 bg-white text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[#C4A265]/30">
                                 <option value="https">https</option>
                                 <option value="http">http</option>
                             </select>
@@ -466,7 +466,7 @@ function commitText(key) {
                                 {{ isRtl ? 'نافذة الانضمام (دقائق)' : 'Join Window (minutes)' }}
                             </label>
                             <input type="number" v-model="localSettings.telemedicine_join_window_minutes" @blur="commitText('telemedicine_join_window_minutes')"
-                                class="w-full px-3 py-2 rounded-lg border border-gray-200 bg-white text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[#C4A265]/30" />
+                                class="doctorato-input w-full px-3 py-2 rounded-lg border border-gray-200 bg-white text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[#C4A265]/30" />
                             <p class="mt-1 text-xs text-gray-500">{{ isRtl ? 'الوقت قبل الموعد الذي يمكن خلاله الانضمام' : 'How early patients/doctors can join before the scheduled time' }}</p>
                         </div>
 
@@ -475,7 +475,7 @@ function commitText(key) {
                                 {{ isRtl ? 'مهلة الانتظار (دقائق)' : 'Wait Timeout (minutes)' }}
                             </label>
                             <input type="number" v-model="localSettings.telemedicine_wait_timeout_minutes" @blur="commitText('telemedicine_wait_timeout_minutes')"
-                                class="w-full px-3 py-2 rounded-lg border border-gray-200 bg-white text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[#C4A265]/30" />
+                                class="doctorato-input w-full px-3 py-2 rounded-lg border border-gray-200 bg-white text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[#C4A265]/30" />
                             <p class="mt-1 text-xs text-gray-500">{{ isRtl ? 'مدة انتظار الطرف الثاني قبل إلغاء الجلسة' : 'How long to wait for the other party before cancelling' }}</p>
                         </div>
 
@@ -484,7 +484,7 @@ function commitText(key) {
                                 {{ isRtl ? 'نافذة الإلغاء (ساعات)' : 'Cancellation Window (hours)' }}
                             </label>
                             <input type="number" v-model="localSettings.telemedicine_cancellation_hours" @blur="commitText('telemedicine_cancellation_hours')"
-                                class="w-full px-3 py-2 rounded-lg border border-gray-200 bg-white text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[#C4A265]/30" />
+                                class="doctorato-input w-full px-3 py-2 rounded-lg border border-gray-200 bg-white text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[#C4A265]/30" />
                             <p class="mt-1 text-xs text-gray-500">{{ isRtl ? 'عدد الساعات قبل الموعد التي يسمح فيها بالإلغاء المجاني' : 'Hours before appointment that allow free cancellation' }}</p>
                         </div>
 
@@ -493,7 +493,7 @@ function commitText(key) {
                                 {{ isRtl ? 'نسبة الاسترداد (%)' : 'Refund Percentage (%)' }}
                             </label>
                             <input type="number" min="0" max="100" v-model="localSettings.telemedicine_refund_percentage" @blur="commitText('telemedicine_refund_percentage')"
-                                class="w-full px-3 py-2 rounded-lg border border-gray-200 bg-white text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[#C4A265]/30" />
+                                class="doctorato-input w-full px-3 py-2 rounded-lg border border-gray-200 bg-white text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[#C4A265]/30" />
                             <p class="mt-1 text-xs text-gray-500">{{ isRtl ? 'النسبة المستردة عند الإلغاء ضمن النافذة' : 'Refund percentage for timely cancellations' }}</p>
                         </div>
 
@@ -502,7 +502,7 @@ function commitText(key) {
                                 {{ isRtl ? 'رسوم إضافية على الاستشارة الأونلاين (%)' : 'Extra Fee on Online Consultation (%)' }}
                             </label>
                             <input type="number" min="0" v-model="localSettings.telemedicine_extra_fee_percentage" @blur="commitText('telemedicine_extra_fee_percentage')"
-                                class="w-full px-3 py-2 rounded-lg border border-gray-200 bg-white text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[#C4A265]/30" />
+                                class="doctorato-input w-full px-3 py-2 rounded-lg border border-gray-200 bg-white text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[#C4A265]/30" />
                             <p class="mt-1 text-xs text-gray-500">{{ isRtl ? 'نسبة تضاف فوق رسوم الطبيب لتغطية رسوم المنصة' : 'Percentage added on top of doctor fee for platform costs' }}</p>
                         </div>
                     </div>

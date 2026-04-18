@@ -67,7 +67,7 @@ function submit() {
                             type="email"
                             required
                             autofocus
-                            class="w-full px-4 py-3 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white placeholder-white/30 focus:ring-2 focus:ring-[var(--brand-primary)]/50 focus:border-[var(--brand-primary)]/50 text-sm transition-all duration-200"
+                            class="doctorato-input w-full px-4 py-3 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white placeholder-white/30 focus:ring-2 focus:ring-[var(--brand-primary)]/50 focus:border-[var(--brand-primary)]/50 text-sm transition-all duration-200"
                             :class="form.errors.email ? 'border-red-500/50' : ''"
                             placeholder="patient@example.com"
                         />
@@ -83,7 +83,7 @@ function submit() {
                                 v-model="form.password"
                                 :type="showPassword ? 'text' : 'password'"
                                 required
-                                class="w-full px-4 py-3 ltr:pr-11 rtl:pl-11 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white placeholder-white/30 focus:ring-2 focus:ring-[var(--brand-primary)]/50 focus:border-[var(--brand-primary)]/50 text-sm transition-all duration-200"
+                                class="doctorato-input w-full px-4 py-3 ltr:pr-11 rtl:pl-11 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white placeholder-white/30 focus:ring-2 focus:ring-[var(--brand-primary)]/50 focus:border-[var(--brand-primary)]/50 text-sm transition-all duration-200"
                                 :class="form.errors.password ? 'border-red-500/50' : ''"
                                 :placeholder="isRtl ? 'أدخل كلمة المرور' : 'Enter your password'"
                             />

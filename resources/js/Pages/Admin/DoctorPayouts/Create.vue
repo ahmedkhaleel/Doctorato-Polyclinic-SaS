@@ -214,7 +214,7 @@ const visitTypeConfig = {
                             <div>
                                 <label class="text-[11px] font-semibold text-gray-500 uppercase tracking-wide mb-1.5 block">{{ $t('a_doctor') }} <span class="text-red-400">*</span></label>
                                 <div class="relative">
-                                    <select v-model="doctorId" class="w-full pl-10 pr-4 py-2.5 rounded-xl border-gray-200 text-sm font-medium focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all appearance-none bg-white">
+                                    <select v-model="doctorId" class="doctorato-input w-full pl-10 pr-4 py-2.5 rounded-xl border-gray-200 text-sm font-medium focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all appearance-none bg-white">
                                         <option value="">{{ $t('a_choose_doctor') }}</option>
                                         <option v-for="d in doctors" :key="d.id" :value="d.id">Dr. {{ d.name_en }}</option>
                                     </select>
@@ -226,7 +226,7 @@ const visitTypeConfig = {
                             <div>
                                 <label class="text-[11px] font-semibold text-gray-500 uppercase tracking-wide mb-1.5 block">{{ $t('a_from_date') }}</label>
                                 <div class="relative">
-                                    <input type="date" v-model="dateFrom" @change="fetchVisits" :max="dateTo || undefined" class="w-full pl-10 pr-4 py-2.5 rounded-xl border-gray-200 text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all" />
+                                    <input type="date" v-model="dateFrom" @change="fetchVisits" :max="dateTo || undefined" class="doctorato-input w-full pl-10 pr-4 py-2.5 rounded-xl border-gray-200 text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all" />
                                     <div class="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
                                         <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                                     </div>
@@ -235,7 +235,7 @@ const visitTypeConfig = {
                             <div>
                                 <label class="text-[11px] font-semibold text-gray-500 uppercase tracking-wide mb-1.5 block">{{ $t('a_to_date') }}</label>
                                 <div class="relative">
-                                    <input type="date" v-model="dateTo" @change="fetchVisits" :min="dateFrom || undefined" class="w-full pl-10 pr-4 py-2.5 rounded-xl border-gray-200 text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all" />
+                                    <input type="date" v-model="dateTo" @change="fetchVisits" :min="dateFrom || undefined" class="doctorato-input w-full pl-10 pr-4 py-2.5 rounded-xl border-gray-200 text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all" />
                                     <div class="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
                                         <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                                     </div>
@@ -449,9 +449,9 @@ const visitTypeConfig = {
                                 {{ $t('a_deductions') }} ({{ currencyCode }})
                             </label>
                             <input type="number" v-model="form.deductions" min="0" step="0.01" placeholder="0"
-                                class="w-full rounded-xl border-gray-200 text-sm font-medium focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all tabular-nums" />
+                                class="doctorato-input w-full rounded-xl border-gray-200 text-sm font-medium focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all tabular-nums" />
                             <transition enter-active-class="transition duration-200 ease-out" enter-from-class="opacity-0 -translate-y-1 max-h-0" enter-to-class="opacity-100 translate-y-0 max-h-20" leave-active-class="transition duration-150 ease-in" leave-from-class="opacity-100" leave-to-class="opacity-0">
-                                <textarea v-if="form.deductions > 0" v-model="form.deduction_notes" placeholder="Reason for deductions..."
+                                <textarea v-if="form.deductions> 0" v-model="form.deduction_notes" placeholder="Reason for deductions..."
                                     rows="2" class="mt-2 w-full rounded-xl border-gray-200 text-xs focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all resize-none"></textarea>
                             </transition>
                         </div>
@@ -477,7 +477,7 @@ const visitTypeConfig = {
                                 {{ $t('a_notes') }}
                             </label>
                             <textarea v-model="form.notes" placeholder="Optional notes for this payout..."
-                                rows="2" class="w-full rounded-xl border-gray-200 text-xs focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all resize-none"></textarea>
+                                rows="2" class="doctorato-input w-full rounded-xl border-gray-200 text-xs focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all resize-none"></textarea>
                         </div>
 
                         <!-- Errors -->

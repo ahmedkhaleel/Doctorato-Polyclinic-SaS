@@ -38,19 +38,19 @@ function t(en, ar) { return isRtl.value ? ar : en; }
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-sm font-medium mb-1">{{ t('Name (Arabic)', 'الاسم (عربي)') }}</label>
-                    <input v-model="form.name_ar" type="text" class="w-full px-3 py-2 border rounded-lg" />
+                    <input v-model="form.name_ar" type="text" class="doctorato-input w-full px-3 py-2 border rounded-lg" />
                 </div>
                 <div>
                     <label class="block text-sm font-medium mb-1">{{ t('Name (English)', 'الاسم (إنجليزي)') }}</label>
-                    <input v-model="form.name_en" type="text" class="w-full px-3 py-2 border rounded-lg" />
+                    <input v-model="form.name_en" type="text" class="doctorato-input w-full px-3 py-2 border rounded-lg" />
                 </div>
                 <div>
                     <label class="block text-sm font-medium mb-1">{{ t('Consultation Fee', 'رسوم الاستشارة') }}</label>
-                    <input v-model="form.consultation_fee" type="number" min="0" step="0.01" class="w-full px-3 py-2 border rounded-lg" />
+                    <input v-model="form.consultation_fee" type="number" min="0" step="0.01" class="doctorato-input w-full px-3 py-2 border rounded-lg" />
                 </div>
                 <div>
                     <label class="block text-sm font-medium mb-1">{{ t('Follow-up Fee', 'رسوم المتابعة') }}</label>
-                    <input v-model="form.followup_fee" type="number" min="0" step="0.01" class="w-full px-3 py-2 border rounded-lg" />
+                    <input v-model="form.followup_fee" type="number" min="0" step="0.01" class="doctorato-input w-full px-3 py-2 border rounded-lg" />
                 </div>
             </div>
             <div class="pt-2">

@@ -73,7 +73,7 @@ function setFilter(f) {
                         <svg class="absolute top-2.5 w-4 h-4 text-gray-400" :class="isRtl ? 'right-3' : 'left-3'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" stroke-width="2"/><path stroke-linecap="round" stroke-width="2" d="m21 21-4.35-4.35"/></svg>
                         <input v-model="search" type="text"
                             :placeholder="isRtl ? 'بحث بالاسم أو الهاتف أو رقم الملف...' : 'Search by name, phone, or file number...'"
-                            class="w-full rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]"
+                            class="doctorato-input w-full rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]"
                             :class="isRtl ? 'pr-10 pl-3' : 'pl-10 pr-3'" />
                     </div>
                     <div class="flex gap-2">

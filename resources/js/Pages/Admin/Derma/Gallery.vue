@@ -42,11 +42,11 @@ function t(en, ar) { return isRtl.value ? ar : en; }
         </div>
 
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-wrap gap-3">
-            <select v-model="patientId" class="px-4 py-2.5 border rounded-xl text-sm">
+            <select v-model="patientId" class="doctorato-input px-4 py-2.5 border rounded-xl text-sm">
                 <option value="">{{ t('All patients', 'كل المرضى') }}</option>
                 <option v-for="p in patients" :key="p.id" :value="p.id">{{ p.full_name }}</option>
             </select>
-            <select v-model="category" class="px-4 py-2.5 border rounded-xl text-sm">
+            <select v-model="category" class="doctorato-input px-4 py-2.5 border rounded-xl text-sm">
                 <option value="">{{ t('All categories', 'كل التصنيفات') }}</option>
                 <option v-for="c in categories" :key="c" :value="c">{{ c }}</option>
             </select>
@@ -68,17 +68,17 @@ function t(en, ar) { return isRtl.value ? ar : en; }
             <div class="bg-white rounded-2xl w-full max-w-md p-6">
                 <h2 class="text-lg font-bold mb-4">{{ t('Upload photo', 'رفع صورة') }}</h2>
                 <form @submit.prevent="submit" class="space-y-3">
-                    <select v-model="form.patient_id" required class="w-full px-3 py-2 border rounded-lg text-sm">
+                    <select v-model="form.patient_id" required class="doctorato-input w-full px-3 py-2 border rounded-lg text-sm">
                         <option value="">{{ t('Select patient', 'اختر المريض') }}</option>
                         <option v-for="p in patients" :key="p.id" :value="p.id">{{ p.full_name }}</option>
                     </select>
-                    <select v-model="form.category" required class="w-full px-3 py-2 border rounded-lg text-sm">
+                    <select v-model="form.category" required class="doctorato-input w-full px-3 py-2 border rounded-lg text-sm">
                         <option v-for="c in categories" :key="c" :value="c">{{ c }}</option>
                     </select>
-                    <input v-model="form.body_area" :placeholder="t('Body area', 'المنطقة')" class="w-full px-3 py-2 border rounded-lg text-sm" />
-                    <input v-model="form.taken_at" type="date" class="w-full px-3 py-2 border rounded-lg text-sm" />
+                    <input v-model="form.body_area" :placeholder="t('Body area', 'المنطقة')" class="doctorato-input w-full px-3 py-2 border rounded-lg text-sm" />
+                    <input v-model="form.taken_at" type="date" class="doctorato-input w-full px-3 py-2 border rounded-lg text-sm" />
                     <input type="file" accept="image/*" @change="e => form.image = e.target.files[0]" required class="w-full text-sm" />
-                    <textarea v-model="form.notes" :placeholder="t('Notes', 'ملاحظات')" rows="2" class="w-full px-3 py-2 border rounded-lg text-sm"></textarea>
+                    <textarea v-model="form.notes" :placeholder="t('Notes', 'ملاحظات')" rows="2" class="doctorato-input w-full px-3 py-2 border rounded-lg text-sm"></textarea>
                     <div class="flex justify-end gap-2 pt-2">
                         <button type="button" @click="showUpload = false" class="px-4 py-2 rounded-lg bg-gray-100 text-sm">{{ t('Cancel', 'إلغاء') }}</button>
                         <button :disabled="form.processing" class="px-5 py-2 rounded-lg bg-amber-600 text-white text-sm font-semibold">{{ t('Upload', 'رفع') }}</button>

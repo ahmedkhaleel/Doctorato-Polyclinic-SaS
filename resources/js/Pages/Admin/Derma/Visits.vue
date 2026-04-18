@@ -33,8 +33,8 @@ function fmt(d) { if (!d) return '-'; return new Date(d).toLocaleDateString(isRt
 
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-wrap gap-3">
             <input v-model="search" type="text" :placeholder="t('Search patient…', 'بحث عن مريض…')"
-                class="flex-1 min-w-[220px] px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-500/20 focus:border-amber-400" />
-            <select v-model="status" class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm">
+                class="doctorato-input flex-1 min-w-[220px] px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30/20 focus:border-[#1B365D]" />
+            <select v-model="status" class="doctorato-input px-4 py-2.5 border border-gray-200 rounded-xl text-sm">
                 <option value="">{{ t('All statuses', 'كل الحالات') }}</option>
                 <option value="scheduled">{{ t('Scheduled', 'مجدولة') }}</option>
                 <option value="in_progress">{{ t('In progress', 'قيد التنفيذ') }}</option>

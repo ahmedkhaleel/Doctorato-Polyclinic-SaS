@@ -92,12 +92,12 @@ const unitOptions = ['pcs', 'ml', 'mg', 'g', 'box', 'pack', 'bottle', 'tube', 'v
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $t('a_name_english') }} <span class="text-red-500">*</span></label>
-                                    <input v-model="form.name_en" type="text" placeholder="e.g. Botox Allergan 100u" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-all duration-200" />
+                                    <input v-model="form.name_en" type="text" placeholder="e.g. Botox Allergan 100u" class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-all duration-200" />
                                     <p v-if="form.errors.name_en" class="mt-1.5 text-sm text-red-500">{{ form.errors.name_en }}</p>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $t('a_name_arabic') }} <span class="text-red-500">*</span></label>
-                                    <input v-model="form.name_ar" type="text" dir="rtl" placeholder="مثال: بوتكس ألرجان 100 وحدة" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-all duration-200" />
+                                    <input v-model="form.name_ar" type="text" dir="rtl" placeholder="مثال: بوتكس ألرجان 100 وحدة" class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-all duration-200" />
                                     <p v-if="form.errors.name_ar" class="mt-1.5 text-sm text-red-500">{{ form.errors.name_ar }}</p>
                                 </div>
                             </div>
@@ -105,17 +105,17 @@ const unitOptions = ['pcs', 'ml', 'mg', 'g', 'box', 'pack', 'bottle', 'tube', 'v
                             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $t('a_sku') }}</label>
-                                    <input v-model="form.sku" type="text" placeholder="e.g. BTX-ALG-100" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm font-mono focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-all duration-200" />
+                                    <input v-model="form.sku" type="text" placeholder="e.g. BTX-ALG-100" class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm font-mono focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-all duration-200" />
                                     <p v-if="form.errors.sku" class="mt-1.5 text-sm text-red-500">{{ form.errors.sku }}</p>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $t('a_barcode') }}</label>
-                                    <input v-model="form.barcode" type="text" placeholder="e.g. 8901234567890" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm font-mono focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-all duration-200" />
+                                    <input v-model="form.barcode" type="text" placeholder="e.g. 8901234567890" class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm font-mono focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-all duration-200" />
                                     <p v-if="form.errors.barcode" class="mt-1.5 text-sm text-red-500">{{ form.errors.barcode }}</p>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $t('a_category') }}</label>
-                                    <select v-model="form.supply_category_id" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-all duration-200">
+                                    <select v-model="form.supply_category_id" class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-all duration-200">
                                         <option value="">{{ $t('a_select_category') }}</option>
                                         <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ cat.name_en }}</option>
                                     </select>
@@ -123,7 +123,7 @@ const unitOptions = ['pcs', 'ml', 'mg', 'g', 'box', 'pack', 'bottle', 'tube', 'v
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ isRtl ? 'القسم الطبي' : 'Medical Module' }}</label>
-                                    <select v-model="form.module" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-all duration-200">
+                                    <select v-model="form.module" class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-all duration-200">
                                         <option value="shared">{{ isRtl ? 'مشترك' : 'Shared' }}</option>
                                         <option value="derma">{{ isRtl ? 'الجلدية' : 'Dermatology' }}</option>
                                         <option value="dental">{{ isRtl ? 'الأسنان' : 'Dental' }}</option>
@@ -134,7 +134,7 @@ const unitOptions = ['pcs', 'ml', 'mg', 'g', 'box', 'pack', 'bottle', 'tube', 'v
 
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $t('a_description') }}</label>
-                                <textarea v-model="form.description" rows="3" placeholder="Product description, usage notes..." class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-all duration-200 resize-none"></textarea>
+                                <textarea v-model="form.description" rows="3" placeholder="Product description, usage notes..." class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-all duration-200 resize-none"></textarea>
                             </div>
                         </div>
                     </div>
@@ -153,17 +153,17 @@ const unitOptions = ['pcs', 'ml', 'mg', 'g', 'box', 'pack', 'bottle', 'tube', 'v
                             <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $t('a_initial_quantity') }} <span class="text-red-500">*</span></label>
-                                    <input v-model="form.quantity" type="number" min="0" step="0.01" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-all duration-200" />
+                                    <input v-model="form.quantity" type="number" min="0" step="0.01" class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-all duration-200" />
                                     <p v-if="form.errors.quantity" class="mt-1.5 text-sm text-red-500">{{ form.errors.quantity }}</p>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $t('a_min_quantity_alert') }}</label>
-                                    <input v-model="form.min_quantity" type="number" min="0" step="0.01" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-all duration-200" />
+                                    <input v-model="form.min_quantity" type="number" min="0" step="0.01" class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-all duration-200" />
                                     <p v-if="form.errors.min_quantity" class="mt-1.5 text-sm text-red-500">{{ form.errors.min_quantity }}</p>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $t('a_unit') }}</label>
-                                    <select v-model="form.unit" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-all duration-200">
+                                    <select v-model="form.unit" class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-all duration-200">
                                         <option value="">{{ $t('a_select_unit') }}</option>
                                         <option v-for="u in unitOptions" :key="u" :value="u">{{ u }}</option>
                                     </select>
@@ -217,21 +217,21 @@ const unitOptions = ['pcs', 'ml', 'mg', 'g', 'box', 'pack', 'bottle', 'tube', 'v
                         <div class="p-4 md:p-6 space-y-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $t('a_purchase_price') }} ({{ currencyCode }})</label>
-                                <input v-model="form.purchase_price" type="number" step="0.01" min="0" placeholder="0.00" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-all duration-200" />
+                                <input v-model="form.purchase_price" type="number" step="0.01" min="0" placeholder="0.00" class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-all duration-200" />
                                 <p v-if="form.errors.purchase_price" class="mt-1.5 text-sm text-red-500">{{ form.errors.purchase_price }}</p>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $t('a_supplier') }}</label>
-                                <input v-model="form.supplier" type="text" placeholder="Supplier name" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-all duration-200" />
+                                <input v-model="form.supplier" type="text" placeholder="Supplier name" class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-all duration-200" />
                                 <p v-if="form.errors.supplier" class="mt-1.5 text-sm text-red-500">{{ form.errors.supplier }}</p>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $t('a_batch_number') }}</label>
-                                <input v-model="form.batch_number" type="text" placeholder="e.g. BT-2026-001" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm font-mono focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-all duration-200" />
+                                <input v-model="form.batch_number" type="text" placeholder="e.g. BT-2026-001" class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm font-mono focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-all duration-200" />
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $t('a_expiry_date') }}</label>
-                                <input v-model="form.expiry_date" type="date" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-all duration-200" />
+                                <input v-model="form.expiry_date" type="date" class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-all duration-200" />
                                 <p v-if="form.errors.expiry_date" class="mt-1.5 text-sm text-red-500">{{ form.errors.expiry_date }}</p>
                             </div>
                         </div>

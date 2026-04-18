@@ -65,12 +65,12 @@ function t(en, ar) { return isRtl.value ? ar : en; }
         </div>
 
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-wrap gap-3">
-            <input v-model="search" :placeholder="t('Search…', 'بحث…')" class="flex-1 min-w-[200px] px-4 py-2.5 border rounded-xl text-sm" />
-            <select v-model="category" class="px-4 py-2.5 border rounded-xl text-sm">
+            <input v-model="search" :placeholder="t('Search…', 'بحث…')" class="doctorato-input flex-1 min-w-[200px] px-4 py-2.5 border rounded-xl text-sm" />
+            <select v-model="category" class="doctorato-input px-4 py-2.5 border rounded-xl text-sm">
                 <option value="">{{ t('All categories', 'كل التصنيفات') }}</option>
                 <option v-for="c in categories" :key="c" :value="c">{{ c }}</option>
             </select>
-            <select v-model="status" class="px-4 py-2.5 border rounded-xl text-sm">
+            <select v-model="status" class="doctorato-input px-4 py-2.5 border rounded-xl text-sm">
                 <option value="">{{ t('All statuses', 'كل الحالات') }}</option>
                 <option v-for="s in statuses" :key="s" :value="s">{{ s }}</option>
             </select>
@@ -112,48 +112,48 @@ function t(en, ar) { return isRtl.value ? ar : en; }
                 <form @submit.prevent="submit" class="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div class="md:col-span-2">
                         <label class="block text-xs font-medium mb-1">{{ t('Patient', 'المريض') }} *</label>
-                        <select v-model="form.patient_id" required class="w-full px-3 py-2 border rounded-lg text-sm">
+                        <select v-model="form.patient_id" required class="doctorato-input w-full px-3 py-2 border rounded-lg text-sm">
                             <option value="">—</option>
                             <option v-for="p in patients" :key="p.id" :value="p.id">{{ p.full_name }} ({{ p.phone }})</option>
                         </select>
                     </div>
                     <div>
                         <label class="block text-xs font-medium mb-1">{{ t('Name (AR)', 'الاسم (عربي)') }} *</label>
-                        <input v-model="form.name_ar" required class="w-full px-3 py-2 border rounded-lg text-sm" />
+                        <input v-model="form.name_ar" required class="doctorato-input w-full px-3 py-2 border rounded-lg text-sm" />
                     </div>
                     <div>
                         <label class="block text-xs font-medium mb-1">{{ t('Name (EN)', 'الاسم (إنجليزي)') }}</label>
-                        <input v-model="form.name_en" class="w-full px-3 py-2 border rounded-lg text-sm" />
+                        <input v-model="form.name_en" class="doctorato-input w-full px-3 py-2 border rounded-lg text-sm" />
                     </div>
                     <div>
                         <label class="block text-xs font-medium mb-1">{{ t('Category', 'التصنيف') }} *</label>
-                        <select v-model="form.category" required class="w-full px-3 py-2 border rounded-lg text-sm">
+                        <select v-model="form.category" required class="doctorato-input w-full px-3 py-2 border rounded-lg text-sm">
                             <option v-for="c in categories" :key="c" :value="c">{{ c }}</option>
                         </select>
                     </div>
                     <div>
                         <label class="block text-xs font-medium mb-1">{{ t('Severity', 'الشدة') }} *</label>
-                        <select v-model="form.severity" required class="w-full px-3 py-2 border rounded-lg text-sm">
+                        <select v-model="form.severity" required class="doctorato-input w-full px-3 py-2 border rounded-lg text-sm">
                             <option v-for="s in severities" :key="s" :value="s">{{ s }}</option>
                         </select>
                     </div>
                     <div>
                         <label class="block text-xs font-medium mb-1">{{ t('Body Area', 'منطقة الجسم') }}</label>
-                        <input v-model="form.body_area" class="w-full px-3 py-2 border rounded-lg text-sm" />
+                        <input v-model="form.body_area" class="doctorato-input w-full px-3 py-2 border rounded-lg text-sm" />
                     </div>
                     <div>
                         <label class="block text-xs font-medium mb-1">{{ t('Diagnosed at', 'تاريخ التشخيص') }}</label>
-                        <input v-model="form.diagnosed_at" type="date" class="w-full px-3 py-2 border rounded-lg text-sm" />
+                        <input v-model="form.diagnosed_at" type="date" class="doctorato-input w-full px-3 py-2 border rounded-lg text-sm" />
                     </div>
                     <div>
                         <label class="block text-xs font-medium mb-1">{{ t('Status', 'الحالة') }} *</label>
-                        <select v-model="form.status" required class="w-full px-3 py-2 border rounded-lg text-sm">
+                        <select v-model="form.status" required class="doctorato-input w-full px-3 py-2 border rounded-lg text-sm">
                             <option v-for="s in statuses" :key="s" :value="s">{{ s }}</option>
                         </select>
                     </div>
                     <div class="md:col-span-2">
                         <label class="block text-xs font-medium mb-1">{{ t('Notes', 'ملاحظات') }}</label>
-                        <textarea v-model="form.notes" rows="2" class="w-full px-3 py-2 border rounded-lg text-sm"></textarea>
+                        <textarea v-model="form.notes" rows="2" class="doctorato-input w-full px-3 py-2 border rounded-lg text-sm"></textarea>
                     </div>
                     <div class="md:col-span-2 flex justify-end gap-2 pt-2">
                         <button type="button" @click="showModal = false" class="px-4 py-2 rounded-lg bg-gray-100 text-sm">{{ t('Cancel', 'إلغاء') }}</button>

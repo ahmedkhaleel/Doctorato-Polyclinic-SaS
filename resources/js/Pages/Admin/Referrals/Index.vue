@@ -199,12 +199,12 @@ function formatDate(d) {
 
         <!-- Filters -->
         <div class="flex flex-wrap gap-3 mb-6">
-            <input v-model="search" @keyup.enter="applyFilters" type="text" :placeholder="isRtl ? 'بحث...' : 'Search...'" class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm w-64 focus:ring-[#1B365D] focus:border-[#1B365D]" />
-            <select v-model="statusFilter" @change="applyFilters" class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm">
+            <input v-model="search" @keyup.enter="applyFilters" type="text" :placeholder="isRtl ? 'بحث...' : 'Search...'" class="doctorato-input px-4 py-2.5 border border-gray-200 rounded-xl text-sm w-64 focus:ring-[#1B365D] focus:border-[#1B365D]" />
+            <select v-model="statusFilter" @change="applyFilters" class="doctorato-input px-4 py-2.5 border border-gray-200 rounded-xl text-sm">
                 <option value="">{{ isRtl ? 'كل الحالات' : 'All Statuses' }}</option>
                 <option v-for="(lbl, key) in statusLabels" :key="key" :value="key">{{ isRtl ? lbl.ar : lbl.en }}</option>
             </select>
-            <select v-model="deptFilter" @change="applyFilters" class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm">
+            <select v-model="deptFilter" @change="applyFilters" class="doctorato-input px-4 py-2.5 border border-gray-200 rounded-xl text-sm">
                 <option value="">{{ isRtl ? 'كل الأقسام' : 'All Departments' }}</option>
                 <option v-for="d in departments" :key="d.value" :value="d.value">{{ isRtl ? d.ar : d.en }}</option>
             </select>
@@ -290,7 +290,7 @@ function formatDate(d) {
                                 <button type="button" @click="selectedPatient = null; createForm.patient_id = ''" class="text-gray-400 hover:text-red-500"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
                             </div>
                             <div v-else class="relative">
-                                <input v-model="patientSearch" @input="searchPatients" type="text" :placeholder="isRtl ? 'ابحث عن مريض...' : 'Search patient...'" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm" />
+                                <input v-model="patientSearch" @input="searchPatients" type="text" :placeholder="isRtl ? 'ابحث عن مريض...' : 'Search patient...'" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-xl text-sm" />
                                 <div v-if="patientResults.length" class="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg max-h-40 overflow-y-auto">
                                     <button v-for="p in patientResults" :key="p.id" type="button" @click="selectPatient(p)" class="w-full flex items-center justify-between px-3 py-2 hover:bg-gray-50 text-start">
                                         <span class="text-sm text-gray-700">{{ p.full_name }}</span>
@@ -304,14 +304,14 @@ function formatDate(d) {
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'من قسم' : 'From Department' }} *</label>
-                                <select v-model="createForm.from_department" required class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm">
+                                <select v-model="createForm.from_department" required class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-xl text-sm">
                                     <option value="">{{ isRtl ? 'اختر' : 'Select' }}</option>
                                     <option v-for="d in departments" :key="d.value" :value="d.value">{{ isRtl ? d.ar : d.en }}</option>
                                 </select>
                             </div>
                             <div>
                                 <label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'إلى قسم' : 'To Department' }} *</label>
-                                <select v-model="createForm.to_department" required class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm">
+                                <select v-model="createForm.to_department" required class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-xl text-sm">
                                     <option value="">{{ isRtl ? 'اختر' : 'Select' }}</option>
                                     <option v-for="d in departments" :key="d.value" :value="d.value">{{ isRtl ? d.ar : d.en }}</option>
                                 </select>
@@ -322,14 +322,14 @@ function formatDate(d) {
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'الطبيب المحول' : 'Referring Doctor' }} *</label>
-                                <select v-model="createForm.referring_doctor_id" required class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm">
+                                <select v-model="createForm.referring_doctor_id" required class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-xl text-sm">
                                     <option value="">{{ isRtl ? 'اختر' : 'Select' }}</option>
                                     <option v-for="d in doctors" :key="d.id" :value="d.id">{{ d.name }}</option>
                                 </select>
                             </div>
                             <div>
                                 <label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'المحول إليه' : 'Referred To' }}</label>
-                                <select v-model="createForm.referred_to_doctor_id" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm">
+                                <select v-model="createForm.referred_to_doctor_id" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-xl text-sm">
                                     <option value="">{{ isRtl ? 'غير محدد' : 'Not specified' }}</option>
                                     <option v-for="d in doctors" :key="d.id" :value="d.id">{{ d.name }}</option>
                                 </select>
@@ -350,19 +350,19 @@ function formatDate(d) {
                         <!-- Reason -->
                         <div>
                             <label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'سبب التحويل' : 'Reason' }} *</label>
-                            <input v-model="createForm.reason" required type="text" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm" :placeholder="isRtl ? 'سبب التحويل...' : 'Reason for referral...'" />
+                            <input v-model="createForm.reason" required type="text" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-xl text-sm" :placeholder="isRtl ? 'سبب التحويل...' : 'Reason for referral...'" />
                         </div>
 
                         <!-- Clinical Notes -->
                         <div>
                             <label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'ملاحظات سريرية' : 'Clinical Notes' }}</label>
-                            <textarea v-model="createForm.clinical_notes" rows="2" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm" :placeholder="isRtl ? 'ملاحظات...' : 'Notes...'"></textarea>
+                            <textarea v-model="createForm.clinical_notes" rows="2" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-xl text-sm" :placeholder="isRtl ? 'ملاحظات...' : 'Notes...'"></textarea>
                         </div>
 
                         <!-- Diagnosis -->
                         <div>
                             <label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'التشخيص المبدئي' : 'Referring Diagnosis' }}</label>
-                            <input v-model="createForm.referring_diagnosis" type="text" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm" />
+                            <input v-model="createForm.referring_diagnosis" type="text" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-xl text-sm" />
                         </div>
 
                         <div class="flex justify-end gap-3 pt-4 border-t">
@@ -387,7 +387,7 @@ function formatDate(d) {
                     <div class="space-y-4">
                         <div>
                             <label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'الحالة الجديدة' : 'New Status' }} *</label>
-                            <select v-model="statusForm.status" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm">
+                            <select v-model="statusForm.status" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-xl text-sm">
                                 <option value="">{{ isRtl ? 'اختر' : 'Select' }}</option>
                                 <option v-for="s in (allowedTransitions[selectedReferral.status] || [])" :key="s" :value="s">
                                     {{ isRtl ? statusLabels[s].ar : statusLabels[s].en }}
@@ -397,7 +397,7 @@ function formatDate(d) {
 
                         <div v-if="statusForm.status === 'accepted' || statusForm.status === 'scheduled'">
                             <label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'الطبيب المعالج' : 'Assigned Doctor' }}</label>
-                            <select v-model="statusForm.referred_to_doctor_id" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm">
+                            <select v-model="statusForm.referred_to_doctor_id" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-xl text-sm">
                                 <option value="">{{ isRtl ? 'اختر' : 'Select' }}</option>
                                 <option v-for="d in doctors" :key="d.id" :value="d.id">{{ d.name }}</option>
                             </select>
@@ -405,12 +405,12 @@ function formatDate(d) {
 
                         <div v-if="statusForm.status === 'scheduled'">
                             <label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'موعد الزيارة' : 'Scheduled Date' }}</label>
-                            <input v-model="statusForm.scheduled_at" type="datetime-local" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm" />
+                            <input v-model="statusForm.scheduled_at" type="datetime-local" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-xl text-sm" />
                         </div>
 
                         <div>
                             <label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
-                            <textarea v-model="statusForm.response_notes" rows="2" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm"></textarea>
+                            <textarea v-model="statusForm.response_notes" rows="2" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-xl text-sm"></textarea>
                         </div>
                     </div>
 

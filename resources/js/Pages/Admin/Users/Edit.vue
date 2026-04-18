@@ -298,7 +298,7 @@ function copyEmail() {
                                             <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                                         </div>
                                         <input v-model="form.name" type="text" :placeholder="$t('a_enter_full_name')"
-                                               class="w-full pl-10 pr-4 py-2.5 border rounded-xl text-sm transition-all duration-200 focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] outline-none"
+                                               class="doctorato-input w-full pl-10 pr-4 py-2.5 border rounded-xl text-sm transition-all duration-200 focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] outline-none"
                                                :class="form.errors.name ? 'border-red-300 bg-red-50/50' : 'border-gray-200 bg-gray-50/50 hover:border-gray-300'" />
                                     </div>
                                     <p v-if="form.errors.name" class="mt-1.5 text-xs text-red-500 flex items-center gap-1">
@@ -315,7 +315,7 @@ function copyEmail() {
                                             <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                         </div>
                                         <input v-model="form.username" type="text" :placeholder="$t('a_enter_username')"
-                                               class="w-full pl-10 pr-4 py-2.5 border rounded-xl text-sm transition-all duration-200 focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] outline-none"
+                                               class="doctorato-input w-full pl-10 pr-4 py-2.5 border rounded-xl text-sm transition-all duration-200 focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] outline-none"
                                                :class="form.errors.username ? 'border-red-300 bg-red-50/50' : 'border-gray-200 bg-gray-50/50 hover:border-gray-300'" />
                                     </div>
                                     <p v-if="form.errors.username" class="mt-1.5 text-xs text-red-500 flex items-center gap-1">
@@ -332,7 +332,7 @@ function copyEmail() {
                                             <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
                                         </div>
                                         <input v-model="form.email" type="email" :placeholder="$t('a_email_placeholder')"
-                                               class="w-full pl-10 pr-4 py-2.5 border rounded-xl text-sm transition-all duration-200 focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] outline-none"
+                                               class="doctorato-input w-full pl-10 pr-4 py-2.5 border rounded-xl text-sm transition-all duration-200 focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] outline-none"
                                                :class="form.errors.email ? 'border-red-300 bg-red-50/50' : 'border-gray-200 bg-gray-50/50 hover:border-gray-300'" />
                                     </div>
                                     <p v-if="form.errors.email" class="mt-1.5 text-xs text-red-500 flex items-center gap-1">
@@ -457,7 +457,7 @@ function copyEmail() {
                                                 <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" /></svg>
                                             </div>
                                             <input v-model="form.password" :type="showPassword ? 'text' : 'password'" :placeholder="isRtl ? 'أدخل كلمة المرور الجديدة' : 'Enter new password'"
-                                                   class="w-full pl-10 pr-10 py-2.5 border border-gray-200 bg-gray-50/50 hover:border-gray-300 rounded-xl text-sm transition-all duration-200 focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] outline-none" />
+                                                   class="doctorato-input w-full pl-10 pr-10 py-2.5 border border-gray-200 bg-gray-50/50 hover:border-gray-300 rounded-xl text-sm transition-all duration-200 focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] outline-none" />
                                             <button type="button" @click="showPassword = !showPassword"
                                                     class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-gray-400 hover:text-gray-600 transition-colors">
                                                 <svg v-if="!showPassword" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
@@ -491,7 +491,7 @@ function copyEmail() {
                                                 <svg v-else class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
                                             </div>
                                             <input v-model="form.password_confirmation" :type="showConfirmPassword ? 'text' : 'password'" :placeholder="isRtl ? 'تأكيد كلمة المرور' : 'Confirm password'"
-                                                   class="w-full pl-10 pr-10 py-2.5 border rounded-xl text-sm transition-all duration-200 focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] outline-none"
+                                                   class="doctorato-input w-full pl-10 pr-10 py-2.5 border rounded-xl text-sm transition-all duration-200 focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] outline-none"
                                                    :class="passwordsMatch === false ? 'border-red-300 bg-red-50/50' : 'border-gray-200 bg-gray-50/50 hover:border-gray-300'" />
                                             <button type="button" @click="showConfirmPassword = !showConfirmPassword"
                                                     class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-gray-400 hover:text-gray-600 transition-colors">

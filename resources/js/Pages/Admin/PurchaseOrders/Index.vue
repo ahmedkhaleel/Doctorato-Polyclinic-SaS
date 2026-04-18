@@ -112,12 +112,12 @@ function formatDate(d) {
 
         <!-- Filters -->
         <div class="flex flex-wrap gap-3 mb-6">
-            <input v-model="search" @keyup.enter="applyFilters" type="text" :placeholder="isRtl ? 'بحث برقم الأمر...' : 'Search by PO number...'" class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm w-64 focus:ring-[#1B365D] focus:border-[#1B365D]" />
-            <select v-model="statusFilter" @change="applyFilters" class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm">
+            <input v-model="search" @keyup.enter="applyFilters" type="text" :placeholder="isRtl ? 'بحث برقم الأمر...' : 'Search by PO number...'" class="doctorato-input px-4 py-2.5 border border-gray-200 rounded-xl text-sm w-64 focus:ring-[#1B365D] focus:border-[#1B365D]" />
+            <select v-model="statusFilter" @change="applyFilters" class="doctorato-input px-4 py-2.5 border border-gray-200 rounded-xl text-sm">
                 <option value="">{{ isRtl ? 'كل الحالات' : 'All Statuses' }}</option>
                 <option v-for="(lbl, key) in statusLabels" :key="key" :value="key">{{ isRtl ? lbl.ar : lbl.en }}</option>
             </select>
-            <select v-model="supplierFilter" @change="applyFilters" class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm">
+            <select v-model="supplierFilter" @change="applyFilters" class="doctorato-input px-4 py-2.5 border border-gray-200 rounded-xl text-sm">
                 <option value="">{{ isRtl ? 'كل الموردين' : 'All Suppliers' }}</option>
                 <option v-for="s in suppliers" :key="s.id" :value="s.id">{{ isRtl ? s.name_ar : s.name_en }}</option>
             </select>

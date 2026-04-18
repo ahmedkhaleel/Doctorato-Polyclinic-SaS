@@ -314,7 +314,7 @@ const moduleColor = computed(() => props.module?.color || '#C4A265');
                                                 :min="setting.min || 0"
                                                 :max="setting.max || undefined"
                                                 :step="setting.type === 'price' ? '0.01' : '1'"
-                                                class="number-input"
+                                                class="doctorato-input number-input"
                                                 :style="{ '--module-color': moduleColor }"
                                             />
                                             <span v-if="getSuffix(setting)" class="input-suffix">{{ getSuffix(setting) }}</span>
@@ -326,7 +326,7 @@ const moduleColor = computed(() => props.module?.color || '#C4A265');
                                             <input
                                                 v-model="formData[setting.key]"
                                                 type="text"
-                                                class="text-input"
+                                                class="doctorato-input text-input"
                                                 :style="{ '--module-color': moduleColor }"
                                             />
                                         </div>
@@ -336,7 +336,7 @@ const moduleColor = computed(() => props.module?.color || '#C4A265');
                                             <input
                                                 v-model="formData[setting.key]"
                                                 type="text"
-                                                class="text-input"
+                                                class="doctorato-input text-input"
                                                 :style="{ '--module-color': moduleColor }"
                                             />
                                         </div>

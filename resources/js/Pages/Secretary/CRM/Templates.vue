@@ -418,7 +418,7 @@ const selectedLeadName = computed(() => {
                 </div>
                 <input v-model="searchQuery" type="text"
                        :placeholder="isRtl ? 'بحث في القوالب بالاسم او المحتوى...' : 'Search templates by name or content...'"
-                       class="w-full border border-slate-200 rounded-xl py-3 text-sm bg-slate-50/50 focus:bg-white focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all duration-200 placeholder:text-slate-400"
+                       class="doctorato-input w-full border border-slate-200 rounded-xl py-3 text-sm bg-slate-50/50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/30/20 focus:border-[#1B365D] transition-all duration-200 placeholder:text-slate-400"
                        :class="isRtl ? 'pr-12 pl-4' : 'pl-12 pr-4'"/>
             </div>
 
@@ -449,7 +449,7 @@ const selectedLeadName = computed(() => {
             <!-- Category Dropdown -->
             <div class="relative">
                 <select v-model="categoryFilter" @change="applyFilters"
-                        class="appearance-none w-full lg:w-auto border border-slate-200 rounded-xl py-3 text-sm bg-slate-50/50 focus:bg-white focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all duration-200 cursor-pointer"
+                        class="doctorato-input appearance-none w-full lg:w-auto border border-slate-200 rounded-xl py-3 text-sm bg-slate-50/50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/30/20 focus:border-[#1B365D] transition-all duration-200 cursor-pointer"
                         :class="isRtl ? 'pr-4 pl-10' : 'pl-4 pr-10'">
                     <option v-for="cat in categories" :key="cat.value" :value="cat.value">{{ isRtl ? cat.label.ar : cat.label.en }}</option>
                 </select>
@@ -503,7 +503,7 @@ const selectedLeadName = computed(() => {
                             <!-- Inline name edit -->
                             <div v-if="editingNameId === template.id" class="flex items-center gap-1.5">
                                 <input v-model="editingNameValue" type="text"
-                                    class="flex-1 min-w-0 rounded-lg border-teal-300 text-sm font-semibold py-1 px-2 focus:ring-teal-500 focus:border-teal-500"
+                                    class="doctorato-input flex-1 min-w-0 rounded-lg border-teal-300 text-sm font-semibold py-1 px-2 focus:ring-[#C4A265]/30 focus:border-[#1B365D]"
                                     @keyup.enter="saveEditName(template.id)" @keyup.escape="cancelEditName" />
                                 <button @click="saveEditName(template.id)" class="w-7 h-7 rounded-lg bg-teal-500 text-white flex items-center justify-center hover:bg-teal-600 flex-shrink-0 transition-colors">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
@@ -679,7 +679,7 @@ const selectedLeadName = computed(() => {
                                 <svg class="w-4 h-4 text-teal-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
                                 {{ isRtl ? 'اختر العميل' : 'Select Lead' }}
                             </label>
-                            <select v-model="selectedLead" class="w-full border border-slate-200 rounded-xl py-3 px-4 text-sm bg-slate-50/50 focus:bg-white focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all">
+                            <select v-model="selectedLead" class="doctorato-input w-full border border-slate-200 rounded-xl py-3 px-4 text-sm bg-slate-50/50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/30/20 focus:border-[#1B365D] transition-all">
                                 <option value="">{{ isRtl ? '-- اختر عميل --' : '-- Choose a lead --' }}</option>
                                 <option v-for="lead in leads" :key="lead.id" :value="lead.id">
                                     {{ lead.full_name }} - {{ lead.phone }}

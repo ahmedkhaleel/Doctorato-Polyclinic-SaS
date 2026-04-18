@@ -217,12 +217,12 @@ function copyAllCredentials() {
                         v-model="searchQuery"
                         type="text"
                         :placeholder="isRtl ? 'بحث بالاسم أو البريد...' : 'Search by name or email...'"
-                        class="w-full ltr:pl-11 rtl:pr-11 ltr:pr-4 rtl:pl-4 py-3 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all shadow-sm"
+                        class="doctorato-input w-full ltr:pl-11 rtl:pr-11 ltr:pr-4 rtl:pl-4 py-3 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all shadow-sm"
                     />
                 </div>
                 <select
                     v-model="selectedRole"
-                    class="px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all shadow-sm min-w-[180px]"
+                    class="doctorato-input px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all shadow-sm min-w-[180px]"
                 >
                     <option value="">{{ isRtl ? 'كل الأدوار' : 'All Roles' }}</option>
                     <option v-for="role in roles" :key="role.id" :value="role.id">

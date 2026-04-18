@@ -329,13 +329,13 @@ onBeforeUnmount(cleanup);
                         <div>
                             <label class="block text-xs font-semibold text-gray-300 mb-1">التشخيص</label>
                             <textarea v-model="diagnosis" rows="3"
-                                class="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm"
+                                class="doctorato-input w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm"
                                 placeholder="ادخل التشخيص..."></textarea>
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-gray-300 mb-1">ملاحظات الطبيب</label>
                             <textarea v-model="doctorNotes" rows="5"
-                                class="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm"
+                                class="doctorato-input w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm"
                                 placeholder="ملاحظات..."></textarea>
                         </div>
                     </div>

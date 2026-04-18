@@ -501,6 +501,86 @@ html {
 }
 
 /* ========================================
+   UNIFIED FORM FIELD STYLING (doctorato-input)
+   Use for raw <input>, <textarea>, <select> that aren't yet
+   converted to FormInput/FormTextarea/FormSelect components.
+   ======================================== */
+
+.doctorato-input {
+    width: 100%;
+    padding: 0.625rem 1rem;
+    border-radius: 0.75rem;
+    border: 1px solid #cbd5e1; /* slate-300 */
+    background-color: #ffffff;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    color: #0f172a; /* slate-900 */
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+    outline: none;
+}
+
+.doctorato-input::placeholder {
+    color: #94a3b8; /* slate-400 */
+}
+
+.doctorato-input:focus {
+    outline: none;
+    border-color: #1B365D;
+    box-shadow: 0 0 0 2px rgba(196, 162, 101, 0.3);
+}
+
+.doctorato-input:disabled,
+.doctorato-input[disabled] {
+    background-color: #f8fafc; /* slate-50 */
+    color: #94a3b8;
+    cursor: not-allowed;
+}
+
+.doctorato-input[readonly] {
+    background-color: #f8fafc;
+}
+
+.doctorato-input.error,
+.doctorato-input[aria-invalid="true"] {
+    border-color: #f87171; /* red-400 */
+    box-shadow: 0 0 0 1px rgba(254, 226, 226, 0.6);
+}
+
+/* Compact variant */
+.doctorato-input-sm {
+    padding: 0.5rem 0.75rem;
+}
+
+/* Label utility */
+.doctorato-label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #334155; /* slate-700 */
+    margin-bottom: 0.375rem;
+}
+
+/* Native select caret fix when using doctorato-input */
+select.doctorato-input {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8'%3e%3cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: left 0.75rem center;
+    background-size: 1rem;
+    padding-inline-start: 1rem;
+    padding-inline-end: 2.25rem;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+[dir="rtl"] select.doctorato-input {
+    background-position: left 0.75rem center;
+}
+
+[dir="ltr"] select.doctorato-input {
+    background-position: right 0.75rem center;
+}
+
+/* ========================================
    FORM MICRO-INTERACTIONS
    ======================================== */
 

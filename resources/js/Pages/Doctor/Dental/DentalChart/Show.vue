@@ -845,7 +845,7 @@ function formatDate(d) {
                             <div class="grid grid-cols-2 gap-3">
                                 <div>
                                     <label class="block text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1.5">{{ isRtl ? 'الحالة' : 'Status' }}</label>
-                                    <select v-model="quickTreatmentForm.status" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-slate-200 focus:border-slate-300 transition-all">
+                                    <select v-model="quickTreatmentForm.status" class="doctorato-input w-full border border-gray-200 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-slate-200 focus:border-slate-300 transition-all">
                                         <option value="planned">{{ isRtl ? 'مخطط' : 'Planned' }}</option>
                                         <option value="in_progress">{{ isRtl ? 'قيد التنفيذ' : 'In Progress' }}</option>
                                         <option value="completed">{{ isRtl ? 'مكتمل' : 'Completed' }}</option>
@@ -854,7 +854,7 @@ function formatDate(d) {
                                 <div>
                                     <label class="block text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1.5">{{ isRtl ? 'التكلفة' : 'Cost' }}</label>
                                     <input v-model="quickTreatmentForm.cost" type="number" step="0.01" min="0"
-                                        class="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-slate-200 focus:border-slate-300 transition-all"
+                                        class="doctorato-input w-full border border-gray-200 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-slate-200 focus:border-slate-300 transition-all"
                                         :placeholder="isRtl ? 'اختياري' : 'Optional'" />
                                 </div>
                             </div>
@@ -862,7 +862,7 @@ function formatDate(d) {
                             <div>
                                 <label class="block text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1.5">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
                                 <input v-model="quickTreatmentForm.description" type="text"
-                                    class="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-slate-200 focus:border-slate-300 transition-all"
+                                    class="doctorato-input w-full border border-gray-200 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-slate-200 focus:border-slate-300 transition-all"
                                     :placeholder="isRtl ? 'وصف مختصر...' : 'Brief description...'" />
                             </div>
                             <!-- Save -->
@@ -978,7 +978,7 @@ function formatDate(d) {
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
-                            <textarea v-model="editForm.notes" rows="2" class="w-full border-2 border-gray-100 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all resize-none" :placeholder="isRtl ? 'أضف ملاحظات...' : 'Add notes...'"></textarea>
+                            <textarea v-model="editForm.notes" rows="2" class="doctorato-input w-full border-2 border-gray-100 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] transition-all resize-none" :placeholder="isRtl ? 'أضف ملاحظات...' : 'Add notes...'"></textarea>
                         </div>
                     </div>
                     <div class="px-4 sm:px-6 py-4 bg-gray-50 border-t flex gap-3 justify-end flex-wrap">

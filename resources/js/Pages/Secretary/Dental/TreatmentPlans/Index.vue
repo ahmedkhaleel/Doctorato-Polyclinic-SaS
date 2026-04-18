@@ -102,9 +102,9 @@ function getDoctorName(plan) {
                 v-model="search"
                 type="text"
                 :placeholder="isRtl ? 'بحث بالاسم أو رقم الهاتف...' : 'Search by name or phone...'"
-                class="px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] w-full sm:w-72"
+                class="doctorato-input px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] w-full sm:w-72"
             />
-            <select v-model="status" class="px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]">
+            <select v-model="status" class="doctorato-input px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]">
                 <option value="">{{ isRtl ? 'جميع الحالات' : 'All Statuses' }}</option>
                 <option value="draft">{{ isRtl ? 'مسودة' : 'Draft' }}</option>
                 <option value="pending">{{ isRtl ? 'قيد الانتظار' : 'Pending' }}</option>
@@ -113,7 +113,7 @@ function getDoctorName(plan) {
                 <option value="completed">{{ isRtl ? 'مكتمل' : 'Completed' }}</option>
                 <option value="cancelled">{{ isRtl ? 'ملغي' : 'Cancelled' }}</option>
             </select>
-            <select v-model="doctorId" class="px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]">
+            <select v-model="doctorId" class="doctorato-input px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]">
                 <option value="">{{ isRtl ? 'جميع الأطباء' : 'All Doctors' }}</option>
                 <option v-for="doc in doctors" :key="doc.id" :value="doc.id">
                     {{ isRtl ? (doc.name_ar || doc.name_en) : (doc.name_en || doc.name_ar) }}

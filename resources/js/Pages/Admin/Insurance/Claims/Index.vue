@@ -104,17 +104,17 @@ function submitStatusUpdate() {
 
         <!-- Filters -->
         <div class="flex flex-wrap gap-3 mb-6 bg-white rounded-2xl border border-gray-100 p-4">
-            <input v-model="search" @keyup.enter="applyFilters" type="text" :placeholder="isRtl ? 'رقم المطالبة أو المريض...' : 'Claim # or patient...'" class="px-4 py-2 border border-gray-200 rounded-xl text-sm w-56 focus:ring-[#C4A265] focus:border-[#C4A265]" />
-            <select v-model="statusFilter" @change="applyFilters" class="px-4 py-2 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]">
+            <input v-model="search" @keyup.enter="applyFilters" type="text" :placeholder="isRtl ? 'رقم المطالبة أو المريض...' : 'Claim # or patient...'" class="doctorato-input px-4 py-2 border border-gray-200 rounded-xl text-sm w-56 focus:ring-[#C4A265] focus:border-[#C4A265]" />
+            <select v-model="statusFilter" @change="applyFilters" class="doctorato-input px-4 py-2 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]">
                 <option value="">{{ isRtl ? 'كل الحالات' : 'All Status' }}</option>
                 <option v-for="(label, key) in statusLabels" :key="key" :value="key">{{ isRtl ? label.ar : label.en }}</option>
             </select>
-            <select v-model="companyFilter" @change="applyFilters" class="px-4 py-2 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]">
+            <select v-model="companyFilter" @change="applyFilters" class="doctorato-input px-4 py-2 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]">
                 <option value="">{{ isRtl ? 'كل الشركات' : 'All Companies' }}</option>
                 <option v-for="c in companies" :key="c.id" :value="c.id">{{ isRtl ? c.name_ar : c.name_en }}</option>
             </select>
-            <input v-model="dateFrom" @change="applyFilters" type="date" class="px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]" />
-            <input v-model="dateTo" @change="applyFilters" type="date" class="px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]" />
+            <input v-model="dateFrom" @change="applyFilters" type="date" class="doctorato-input px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]" />
+            <input v-model="dateTo" @change="applyFilters" type="date" class="doctorato-input px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]" />
         </div>
 
         <!-- Claims Table -->
@@ -186,7 +186,7 @@ function submitStatusUpdate() {
                     <form @submit.prevent="submitStatusUpdate" class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'الحالة الجديدة' : 'New Status' }} *</label>
-                            <select v-model="statusForm.status" required class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]">
+                            <select v-model="statusForm.status" required class="doctorato-input w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]">
                                 <option value="">{{ isRtl ? 'اختر...' : 'Select...' }}</option>
                                 <option value="submitted">{{ isRtl ? 'مقدم' : 'Submitted' }}</option>
                                 <option value="under_review">{{ isRtl ? 'قيد المراجعة' : 'Under Review' }}</option>
@@ -200,22 +200,22 @@ function submitStatusUpdate() {
 
                         <div v-if="['approved', 'partially_approved'].includes(statusForm.status)">
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'المبلغ المعتمد' : 'Approved Amount' }}</label>
-                            <input v-model="statusForm.approved_amount" type="number" step="0.01" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]" />
+                            <input v-model="statusForm.approved_amount" type="number" step="0.01" class="doctorato-input w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]" />
                         </div>
 
                         <div v-if="['paid', 'partially_paid'].includes(statusForm.status)">
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'المبلغ المحصل' : 'Paid Amount' }}</label>
-                            <input v-model="statusForm.paid_amount" type="number" step="0.01" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]" />
+                            <input v-model="statusForm.paid_amount" type="number" step="0.01" class="doctorato-input w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]" />
                         </div>
 
                         <div v-if="statusForm.status === 'rejected'">
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'سبب الرفض' : 'Rejection Reason' }}</label>
-                            <textarea v-model="statusForm.rejection_reason" rows="2" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]" />
+                            <textarea v-model="statusForm.rejection_reason" rows="2" class="doctorato-input w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]" />
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ isRtl ? 'رقم المرجع' : 'Reference Number' }}</label>
-                            <input v-model="statusForm.reference_number" type="text" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]" />
+                            <input v-model="statusForm.reference_number" type="text" class="doctorato-input w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#C4A265] focus:border-[#C4A265]" />
                         </div>
 
                         <div class="flex items-center justify-end gap-3 pt-4 border-t">

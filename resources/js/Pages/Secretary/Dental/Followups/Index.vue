@@ -110,12 +110,12 @@ const colorMap = {
                         v-model="search"
                         type="text"
                         :placeholder="isRtl ? 'بحث بالاسم أو رقم الملف أو الهاتف...' : 'Search by name, file # or phone...'"
-                        class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-slate-400 focus:border-transparent"
+                        class="doctorato-input w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-slate-400 focus:border-transparent"
                     />
                 </div>
                 <select
                     v-model="statusFilter"
-                    class="px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-slate-400 focus:border-transparent"
+                    class="doctorato-input px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-slate-400 focus:border-transparent"
                 >
                     <option value="pending">{{ isRtl ? 'تحتاج حجز' : 'Needs Booking' }}</option>
                     <option value="overdue">{{ isRtl ? 'متأخرة' : 'Overdue' }}</option>

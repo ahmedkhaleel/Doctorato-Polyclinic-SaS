@@ -195,7 +195,7 @@ function progressPercent(plan) {
                                 v-model="search"
                                 type="text"
                                 :placeholder="$t('a_search_patient_title_notes')"
-                                class="w-full ltr:pl-11 rtl:pr-11 ltr:pr-4 rtl:pl-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-slate-200/60 focus:border-slate-300 transition-all duration-200"
+                                class="doctorato-input w-full ltr:pl-11 rtl:pr-11 ltr:pr-4 rtl:pl-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-slate-200/60 focus:border-slate-300 transition-all duration-200"
                             />
                         </div>
                         <button
@@ -219,7 +219,7 @@ function progressPercent(plan) {
                     >
                         <div v-if="showFilters" class="mt-4 pt-4 border-t border-gray-100 overflow-hidden">
                             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                                <select v-model="statusFilter" class="dental-select">
+                                <select v-model="statusFilter" class="doctorato-input dental-select">
                                     <option value="">{{ $t('a_all_statuses') }}</option>
                                     <option value="draft">{{ $t('a_plan_status_draft') }}</option>
                                     <option value="pending">{{ $t('a_plan_status_pending') }}</option>
@@ -228,16 +228,16 @@ function progressPercent(plan) {
                                     <option value="completed">{{ $t('a_plan_status_completed') }}</option>
                                     <option value="cancelled">{{ $t('a_plan_status_cancelled') }}</option>
                                 </select>
-                                <select v-model="doctorFilter" class="dental-select">
+                                <select v-model="doctorFilter" class="doctorato-input dental-select">
                                     <option value="">{{ $t('a_all_doctors') }}</option>
                                     <option v-for="doc in doctors" :key="doc.id" :value="doc.id">
                                         {{ locale === 'ar' ? doc.name_ar : doc.name_en }}
                                     </option>
                                 </select>
                                 <div class="flex items-center gap-2">
-                                    <input v-model="dateFrom" type="date" class="dental-select flex-1" />
+                                    <input v-model="dateFrom" type="date" class="doctorato-input dental-select flex-1" />
                                     <span class="text-gray-300">-</span>
-                                    <input v-model="dateTo" type="date" class="dental-select flex-1" />
+                                    <input v-model="dateTo" type="date" class="doctorato-input dental-select flex-1" />
                                 </div>
                             </div>
                             <div v-if="hasActiveFilters" class="mt-3 flex justify-end">

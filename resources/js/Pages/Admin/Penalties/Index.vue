@@ -248,7 +248,7 @@ function deleteRecord(id) {
                         <form @submit.prevent="submitRecord" class="px-4 md:px-6 py-4 space-y-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_employee') }} <span class="text-red-500">*</span></label>
-                                <select v-model="form.employee_id" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent">
+                                <select v-model="form.employee_id" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent">
                                     <option value="">{{ $t('a_select_employee') }}</option>
                                     <option v-for="emp in employees" :key="emp.id" :value="emp.id">{{ emp.name }}</option>
                                 </select>
@@ -258,11 +258,11 @@ function deleteRecord(id) {
                                 <label class="block text-sm font-medium text-gray-700 mb-2">{{ $t('a_type') }} <span class="text-red-500">*</span></label>
                                 <div class="flex gap-6">
                                     <label class="inline-flex items-center cursor-pointer">
-                                        <input type="radio" v-model="form.type" value="penalty" class="form-radio text-red-600 focus:ring-red-500" />
+                                        <input type="radio" v-model="form.type" value="penalty" class="form-radio text-red-600 focus:ring-[#C4A265]/30" />
                                         <span :class="isRtl ? 'mr-2' : 'ml-2'" class="text-sm text-gray-700">{{ $t('a_penalty') }}</span>
                                     </label>
                                     <label class="inline-flex items-center cursor-pointer">
-                                        <input type="radio" v-model="form.type" value="reward" class="form-radio text-emerald-600 focus:ring-emerald-500" />
+                                        <input type="radio" v-model="form.type" value="reward" class="form-radio text-emerald-600 focus:ring-[#C4A265]/30" />
                                         <span :class="isRtl ? 'mr-2' : 'ml-2'" class="text-sm text-gray-700">{{ $t('a_reward') }}</span>
                                     </label>
                                 </div>
@@ -271,18 +271,18 @@ function deleteRecord(id) {
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_amount') }} <span class="text-red-500">*</span></label>
-                                    <input v-model="form.amount" type="number" step="0.01" min="0" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" placeholder="0.00" />
+                                    <input v-model="form.amount" type="number" step="0.01" min="0" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" placeholder="0.00" />
                                     <p v-if="formErrors.amount" class="mt-1 text-sm text-red-600">{{ formErrors.amount }}</p>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_date') }} <span class="text-red-500">*</span></label>
-                                    <input v-model="form.date" type="date" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" />
+                                    <input v-model="form.date" type="date" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" />
                                     <p v-if="formErrors.date" class="mt-1 text-sm text-red-600">{{ formErrors.date }}</p>
                                 </div>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_reason') }}</label>
-                                <textarea v-model="form.reason" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent" :placeholder="$t('a_reason_for_penalty_reward')"></textarea>
+                                <textarea v-model="form.reason" rows="3" class="doctorato-input w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent" :placeholder="$t('a_reason_for_penalty_reward')"></textarea>
                                 <p v-if="formErrors.reason" class="mt-1 text-sm text-red-600">{{ formErrors.reason }}</p>
                             </div>
                             <div :class="['flex pt-2 border-t border-gray-200', isRtl ? 'justify-start space-x-reverse space-x-3' : 'justify-end space-x-3']">

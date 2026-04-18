@@ -111,15 +111,15 @@ function formatDate(dateStr) {
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
                     <div>
                         <label class="block text-xs font-medium text-gray-500 mb-1">{{ locale === 'ar' ? 'من تاريخ' : 'From' }}</label>
-                        <input v-model="dateFrom" type="date" class="w-full rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]" />
+                        <input v-model="dateFrom" type="date" class="doctorato-input w-full rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]" />
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-gray-500 mb-1">{{ locale === 'ar' ? 'إلى تاريخ' : 'To' }}</label>
-                        <input v-model="dateTo" type="date" class="w-full rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]" />
+                        <input v-model="dateTo" type="date" class="doctorato-input w-full rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]" />
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-gray-500 mb-1">{{ locale === 'ar' ? 'نوع الوصول' : 'Access Type' }}</label>
-                        <select v-model="accessType" class="w-full rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]">
+                        <select v-model="accessType" class="doctorato-input w-full rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]">
                             <option value="">{{ locale === 'ar' ? 'الكل' : 'All' }}</option>
                             <option value="view_medical">{{ locale === 'ar' ? 'عرض' : 'View' }}</option>
                             <option value="update_medical">{{ locale === 'ar' ? 'تعديل' : 'Update' }}</option>
@@ -129,7 +129,7 @@ function formatDate(dateStr) {
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-gray-500 mb-1">{{ locale === 'ar' ? 'التصنيف' : 'Category' }}</label>
-                        <select v-model="dataCategory" class="w-full rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]">
+                        <select v-model="dataCategory" class="doctorato-input w-full rounded-lg border-gray-300 text-sm focus:ring-[#1B365D] focus:border-[#1B365D]">
                             <option value="">{{ locale === 'ar' ? 'الكل' : 'All' }}</option>
                             <option value="dental_medical">{{ locale === 'ar' ? 'طب أسنان' : 'Dental Medical' }}</option>
                             <option value="risk_flags">{{ locale === 'ar' ? 'أعلام الخطورة' : 'Risk Flags' }}</option>

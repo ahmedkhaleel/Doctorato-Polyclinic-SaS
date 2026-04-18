@@ -186,17 +186,17 @@ function deleteCommission(id) {
                     <div class="h-8 w-px bg-gray-200 hidden sm:block"></div>
 
                     <select v-model="userFilter"
-                        class="px-4 py-2.5 text-xs font-semibold border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all duration-200 appearance-none cursor-pointer">
+                        class="doctorato-input px-4 py-2.5 text-xs font-semibold border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all duration-200 appearance-none cursor-pointer">
                         <option value="">{{ $t('a_all_marketers') }}</option>
                         <option v-for="m in marketers" :key="m.id" :value="m.id">{{ m.name }}</option>
                     </select>
 
                     <div class="flex items-center gap-2 ml-auto">
                         <input v-model="dateFrom" type="date" @change="filterByDate"
-                            class="px-3 py-2.5 text-xs border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all duration-200" />
+                            class="doctorato-input px-3 py-2.5 text-xs border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all duration-200" />
                         <span class="text-gray-300 text-xs font-medium">to</span>
                         <input v-model="dateTo" type="date" @change="filterByDate"
-                            class="px-3 py-2.5 text-xs border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all duration-200" />
+                            class="doctorato-input px-3 py-2.5 text-xs border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all duration-200" />
                     </div>
                 </div>
             </div>

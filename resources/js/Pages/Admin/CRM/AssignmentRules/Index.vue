@@ -130,7 +130,7 @@ function priorityColor(priority) {
                             <div>
                                 <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">{{ $t('a_rule_name') }}<span class="text-red-400">*</span></label>
                                 <input v-model="form.name" type="text"
-                                    class="w-full px-4 py-3 text-sm bg-gray-50/80 border border-gray-200/80 rounded-xl focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200"
+                                    class="doctorato-input w-full px-4 py-3 text-sm bg-gray-50/80 border border-gray-200/80 rounded-xl focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200"
                                     :placeholder="$t('a_assignment_rule_placeholder')" />
                                 <p v-if="form.errors.name" class="text-xs text-red-500 mt-1.5 font-medium">{{ form.errors.name }}</p>
                             </div>
@@ -166,7 +166,7 @@ function priorityColor(priority) {
                                 <div>
                                     <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">{{ $t('a_lead_source') }}</label>
                                     <select v-model="form.lead_source_id"
-                                        class="w-full px-4 py-3 text-sm bg-gray-50/80 border border-gray-200/80 rounded-xl focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200 appearance-none cursor-pointer">
+                                        class="doctorato-input w-full px-4 py-3 text-sm bg-gray-50/80 border border-gray-200/80 rounded-xl focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200 appearance-none cursor-pointer">
                                         <option value="">{{ $t('a_any_source') }}</option>
                                         <option v-for="s in sources" :key="s.id" :value="s.id">{{ s.name_en }}</option>
                                     </select>
@@ -175,7 +175,7 @@ function priorityColor(priority) {
                                 <div>
                                     <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">{{ $t('a_assign_to') }}<span class="text-red-400">*</span></label>
                                     <select v-model="form.assign_to_user_id"
-                                        class="w-full px-4 py-3 text-sm bg-gray-50/80 border border-gray-200/80 rounded-xl focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200 appearance-none cursor-pointer">
+                                        class="doctorato-input w-full px-4 py-3 text-sm bg-gray-50/80 border border-gray-200/80 rounded-xl focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200 appearance-none cursor-pointer">
                                         <option value="">Select user...</option>
                                         <option v-for="u in users" :key="u.id" :value="u.id">{{ u.name }}</option>
                                     </select>
@@ -184,7 +184,7 @@ function priorityColor(priority) {
                                 <div>
                                     <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">{{ $t('a_priority') }}</label>
                                     <input v-model="form.priority" type="number" min="0" max="100"
-                                        class="w-full px-4 py-3 text-sm bg-gray-50/80 border border-gray-200/80 rounded-xl focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200 font-mono" />
+                                        class="doctorato-input w-full px-4 py-3 text-sm bg-gray-50/80 border border-gray-200/80 rounded-xl focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] focus:bg-white transition-all duration-200 font-mono" />
                                     <p class="text-xs text-gray-400 mt-1.5">{{ $t('a_higher_priority_hint') }}</p>
                                 </div>
                                 <div class="flex items-end">

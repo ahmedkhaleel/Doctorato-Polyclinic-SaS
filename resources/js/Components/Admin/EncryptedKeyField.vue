@@ -71,7 +71,7 @@ function save() {
                     v-model="value"
                     :type="showPlain ? 'text' : type"
                     :placeholder="placeholder || 'Enter new value'"
-                    class="w-full px-3 py-2 pe-10 rounded-lg border border-[#C4A265] bg-white text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[#C4A265]/30"
+                    class="doctorato-input w-full px-3 py-2 pe-10 rounded-lg border border-[#C4A265] bg-white text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[#C4A265]/30"
                     @keydown.enter="save"
                     @keydown.escape="cancelEdit"
                 />

@@ -123,7 +123,7 @@ function submit() {
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
                         <label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'المورد' : 'Supplier' }} *</label>
-                        <select v-model="form.supplier_id" required class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#1B365D] focus:border-[#1B365D]">
+                        <select v-model="form.supplier_id" required class="doctorato-input w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#1B365D] focus:border-[#1B365D]">
                             <option value="">{{ isRtl ? 'اختر المورد' : 'Select Supplier' }}</option>
                             <option v-for="s in suppliers" :key="s.id" :value="s.id">{{ isRtl ? s.name_ar : s.name_en }}</option>
                         </select>
@@ -133,11 +133,11 @@ function submit() {
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'تاريخ التسليم المتوقع' : 'Expected Delivery' }}</label>
-                        <input v-model="form.expected_delivery_date" type="date" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#1B365D] focus:border-[#1B365D]" />
+                        <input v-model="form.expected_delivery_date" type="date" class="doctorato-input w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#1B365D] focus:border-[#1B365D]" />
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
-                        <input v-model="form.notes" type="text" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#1B365D] focus:border-[#1B365D]" :placeholder="isRtl ? 'ملاحظات اختيارية...' : 'Optional notes...'" />
+                        <input v-model="form.notes" type="text" class="doctorato-input w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#1B365D] focus:border-[#1B365D]" :placeholder="isRtl ? 'ملاحظات اختيارية...' : 'Optional notes...'" />
                     </div>
                 </div>
             </div>
@@ -148,7 +148,7 @@ function submit() {
 
                 <!-- Search supplies -->
                 <div class="relative mb-4">
-                    <input v-model="searchSupply" type="text" :placeholder="isRtl ? 'ابحث عن صنف بالاسم أو الرمز...' : 'Search item by name or SKU...'" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#1B365D] focus:border-[#1B365D] ps-10" />
+                    <input v-model="searchSupply" type="text" :placeholder="isRtl ? 'ابحث عن صنف بالاسم أو الرمز...' : 'Search item by name or SKU...'" class="doctorato-input w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-[#1B365D] focus:border-[#1B365D] ps-10" />
                     <svg class="w-4 h-4 text-gray-400 absolute top-3 start-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                 </div>
 
@@ -195,10 +195,10 @@ function submit() {
                                     </span>
                                 </td>
                                 <td class="px-4 py-2.5 text-center">
-                                    <input v-model.number="item.quantity_ordered" type="number" min="0.01" step="0.01" required class="w-full px-2 py-1.5 border border-gray-200 rounded-lg text-sm text-center focus:ring-[#1B365D] focus:border-[#1B365D]" />
+                                    <input v-model.number="item.quantity_ordered" type="number" min="0.01" step="0.01" required class="doctorato-input w-full px-2 py-1.5 border border-gray-200 rounded-lg text-sm text-center focus:ring-[#1B365D] focus:border-[#1B365D]" />
                                 </td>
                                 <td class="px-4 py-2.5 text-center">
-                                    <input v-model.number="item.unit_price" type="number" min="0" step="0.01" required class="w-full px-2 py-1.5 border border-gray-200 rounded-lg text-sm text-center focus:ring-[#1B365D] focus:border-[#1B365D]" />
+                                    <input v-model.number="item.unit_price" type="number" min="0" step="0.01" required class="doctorato-input w-full px-2 py-1.5 border border-gray-200 rounded-lg text-sm text-center focus:ring-[#1B365D] focus:border-[#1B365D]" />
                                 </td>
                                 <td class="px-4 py-2.5 text-center font-medium text-gray-800">
                                     {{ formatCurrency(item.quantity_ordered * item.unit_price) }}

@@ -180,7 +180,7 @@ function getVisitTypeLabel(visit) {
                                 v-model="search"
                                 type="text"
                                 :placeholder="isRtl ? 'بحث باسم المريض...' : 'Search patient name...'"
-                                class="w-full pl-12 pr-4 py-3 bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl text-sm text-white placeholder-gray-400 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]/50 focus:bg-white/15 transition-all"
+                                class="doctorato-input w-full pl-12 pr-4 py-3 bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl text-sm text-white placeholder-gray-400 focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]/50 focus:bg-white/15 transition-all"
                             />
                         </div>
 
@@ -192,7 +192,7 @@ function getVisitTypeLabel(visit) {
                                     v-model="dateFrom"
                                     type="date"
                                     :title="isRtl ? 'من تاريخ' : 'From date'"
-                                    class="pl-10 pr-3 py-3 bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl text-sm text-white focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]/50 focus:bg-white/15 transition-all [color-scheme:dark]"
+                                    class="doctorato-input pl-10 pr-3 py-3 bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl text-sm text-white focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]/50 focus:bg-white/15 transition-all [color-scheme:dark]"
                                 />
                             </div>
                             <span class="text-gray-500 text-xs font-medium">{{ isRtl ? 'إلى' : 'to' }}</span>
@@ -202,7 +202,7 @@ function getVisitTypeLabel(visit) {
                                     v-model="dateTo"
                                     type="date"
                                     :title="isRtl ? 'إلى تاريخ' : 'To date'"
-                                    class="pl-10 pr-3 py-3 bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl text-sm text-white focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]/50 focus:bg-white/15 transition-all [color-scheme:dark]"
+                                    class="doctorato-input pl-10 pr-3 py-3 bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl text-sm text-white focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]/50 focus:bg-white/15 transition-all [color-scheme:dark]"
                                 />
                             </div>
                         </div>

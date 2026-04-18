@@ -40,7 +40,7 @@ function formatDate(date) {
 
         <!-- Search -->
         <div class="flex flex-wrap items-center gap-3 mb-6">
-            <input v-model="search" type="text" :placeholder="isRtl ? 'بحث بالمريض أو الطبيب...' : 'Search by patient or doctor...'" class="px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500/30 focus:border-teal-500 w-full sm:w-72" />
+            <input v-model="search" type="text" :placeholder="isRtl ? 'بحث بالمريض أو الطبيب...' : 'Search by patient or doctor...'" class="doctorato-input px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30/30 focus:border-[#1B365D] w-full sm:w-72" />
         </div>
 
         <!-- Table -->

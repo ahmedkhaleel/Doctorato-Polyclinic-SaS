@@ -207,7 +207,7 @@ onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside))
                                     >
                                         <div v-if="showPatientDropdown && !patient" class="loc-dropdown">
                                             <div class="p-2">
-                                                <input v-model="patientSearch" type="text" :placeholder="isRtl ? 'بحث بالاسم أو رقم الملف...' : 'Search by name or file number...'" class="loc-dropdown-search" @click.stop />
+                                                <input v-model="patientSearch" type="text" :placeholder="isRtl ? 'بحث بالاسم أو رقم الملف...' : 'Search by name or file number...'" class="doctorato-input loc-dropdown-search" @click.stop />
                                             </div>
                                             <div class="loc-dropdown-list">
                                                 <button v-for="p in filteredPatients" :key="p.id" type="button" @click="selectPatient(p)" class="loc-dropdown-item">
@@ -245,7 +245,7 @@ onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside))
                                     >
                                         <div v-if="showDoctorDropdown" class="loc-dropdown">
                                             <div class="p-2">
-                                                <input v-model="doctorSearch" type="text" :placeholder="isRtl ? 'بحث عن طبيب...' : 'Search doctor...'" class="loc-dropdown-search" @click.stop />
+                                                <input v-model="doctorSearch" type="text" :placeholder="isRtl ? 'بحث عن طبيب...' : 'Search doctor...'" class="doctorato-input loc-dropdown-search" @click.stop />
                                             </div>
                                             <div class="loc-dropdown-list">
                                                 <button v-for="d in filteredDoctors" :key="d.id" type="button" @click="selectDoctor(d)" class="loc-dropdown-item">
@@ -267,7 +267,7 @@ onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside))
                                 <label class="loc-label">{{ $t('a_item_type') }} <span class="text-[#D4B57E]">*</span></label>
                                 <div class="loc-input-wrapper" :class="{ 'loc-input-error': errors.item_type }">
                                     <svg class="w-4.5 h-4.5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z" /><path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6z" /></svg>
-                                    <select v-model="form.item_type" class="loc-input-field">
+                                    <select v-model="form.item_type" class="doctorato-input loc-input-field">
                                         <option value="">{{ $t('a_select_type') }}</option>
                                         <option v-for="it in itemTypes" :key="it.value || it" :value="it.value || it">{{ $t('a_lab_' + (it.value || it)) }}</option>
                                     </select>
@@ -278,7 +278,7 @@ onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside))
                                 <label class="loc-label">{{ $t('a_tooth_number') }}</label>
                                 <div class="loc-input-wrapper" :class="{ 'loc-input-error': errors.tooth_number }">
                                     <svg class="w-4.5 h-4.5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5.25 8.25h15m-16.5 7.5h15m-1.8-13.5l-3.9 19.5m-2.1-19.5l-3.9 19.5" /></svg>
-                                    <input v-model="form.tooth_number" type="text" :placeholder="isRtl ? 'مثال: 11, 21' : 'e.g. 11, 21'" class="loc-input-field" />
+                                    <input v-model="form.tooth_number" type="text" :placeholder="isRtl ? 'مثال: 11, 21' : 'e.g. 11, 21'" class="doctorato-input loc-input-field" />
                                 </div>
                                 <p v-if="errors.tooth_number" class="loc-error">{{ errors.tooth_number }}</p>
                             </div>
@@ -286,7 +286,7 @@ onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside))
                                 <label class="loc-label">{{ $t('a_shade') }}</label>
                                 <div class="loc-input-wrapper" :class="{ 'loc-input-error': errors.shade }">
                                     <svg class="w-4.5 h-4.5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.098 19.902a3.75 3.75 0 005.304 0l6.401-6.402M6.75 21A3.75 3.75 0 013 17.25V4.125C3 3.504 3.504 3 4.125 3h5.25c.621 0 1.125.504 1.125 1.125V6m3 0h3.375c.621 0 1.125.504 1.125 1.125v3.375M3 12h7.5" /></svg>
-                                    <input v-model="form.shade" type="text" placeholder="A1, A2, B1..." class="loc-input-field" />
+                                    <input v-model="form.shade" type="text" placeholder="A1, A2, B1..." class="doctorato-input loc-input-field" />
                                 </div>
                                 <p v-if="errors.shade" class="loc-error">{{ errors.shade }}</p>
                             </div>
@@ -314,7 +314,7 @@ onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside))
                                     >
                                         <div v-if="showMaterialDropdown" class="loc-dropdown">
                                             <div class="p-2">
-                                                <input v-model="materialSearch" type="text" :placeholder="isRtl ? 'بحث عن المادة...' : 'Search material...'" class="loc-dropdown-search" @click.stop />
+                                                <input v-model="materialSearch" type="text" :placeholder="isRtl ? 'بحث عن المادة...' : 'Search material...'" class="doctorato-input loc-dropdown-search" @click.stop />
                                             </div>
                                             <div class="loc-dropdown-list">
                                                 <button v-for="m in filteredMaterials" :key="m.value || m" type="button" @click="selectMaterial(m)" class="loc-dropdown-item">
@@ -332,7 +332,7 @@ onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside))
                                 <label class="loc-label">{{ $t('a_lab_name') }}</label>
                                 <div class="loc-input-wrapper" :class="{ 'loc-input-error': errors.lab_name }">
                                     <svg class="w-4.5 h-4.5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008z" /></svg>
-                                    <input v-model="form.lab_name" type="text" :placeholder="isRtl ? 'اسم المعمل' : 'Lab name'" class="loc-input-field" />
+                                    <input v-model="form.lab_name" type="text" :placeholder="isRtl ? 'اسم المعمل' : 'Lab name'" class="doctorato-input loc-input-field" />
                                 </div>
                                 <p v-if="errors.lab_name" class="loc-error">{{ errors.lab_name }}</p>
                             </div>
@@ -356,7 +356,7 @@ onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside))
                                 <label class="loc-label">{{ $t('a_lab_cost') }} ({{ currencyCode }})</label>
                                 <div class="loc-input-wrapper" :class="{ 'loc-input-error': errors.cost }">
                                     <svg class="w-4.5 h-4.5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                    <input v-model="form.cost" type="number" min="0" step="0.01" placeholder="0.00" class="loc-input-field" />
+                                    <input v-model="form.cost" type="number" min="0" step="0.01" placeholder="0.00" class="doctorato-input loc-input-field" />
                                 </div>
                                 <p v-if="errors.cost" class="loc-error">{{ errors.cost }}</p>
                             </div>
@@ -364,7 +364,7 @@ onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside))
                                 <label class="loc-label">{{ $t('a_patient_charge') }} ({{ currencyCode }})</label>
                                 <div class="loc-input-wrapper" :class="{ 'loc-input-error': errors.patient_charge }">
                                     <svg class="w-4.5 h-4.5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" /></svg>
-                                    <input v-model="form.patient_charge" type="number" min="0" step="0.01" placeholder="0.00" class="loc-input-field" />
+                                    <input v-model="form.patient_charge" type="number" min="0" step="0.01" placeholder="0.00" class="doctorato-input loc-input-field" />
                                 </div>
                                 <p v-if="errors.patient_charge" class="loc-error">{{ errors.patient_charge }}</p>
                             </div>
@@ -372,7 +372,7 @@ onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside))
                                 <label class="loc-label">{{ $t('a_order_number') }}</label>
                                 <div class="loc-input-wrapper" :class="{ 'loc-input-error': errors.order_number }">
                                     <svg class="w-4.5 h-4.5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5.25 8.25h15m-16.5 7.5h15m-1.8-13.5l-3.9 19.5m-2.1-19.5l-3.9 19.5" /></svg>
-                                    <input v-model="form.order_number" type="text" :placeholder="isRtl ? 'رقم الطلب' : 'Order #'" class="loc-input-field" />
+                                    <input v-model="form.order_number" type="text" :placeholder="isRtl ? 'رقم الطلب' : 'Order #'" class="doctorato-input loc-input-field" />
                                 </div>
                                 <p v-if="errors.order_number" class="loc-error">{{ errors.order_number }}</p>
                             </div>
@@ -384,7 +384,7 @@ onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside))
                                 <label class="loc-label">{{ $t('a_order_date') }}</label>
                                 <div class="loc-input-wrapper" :class="{ 'loc-input-error': errors.order_date }">
                                     <svg class="w-4.5 h-4.5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" /></svg>
-                                    <input v-model="form.order_date" type="date" class="loc-input-field" />
+                                    <input v-model="form.order_date" type="date" class="doctorato-input loc-input-field" />
                                 </div>
                                 <p v-if="errors.order_date" class="loc-error">{{ errors.order_date }}</p>
                             </div>
@@ -392,7 +392,7 @@ onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside))
                                 <label class="loc-label">{{ $t('a_expected_date') }}</label>
                                 <div class="loc-input-wrapper" :class="{ 'loc-input-error': errors.expected_date }">
                                     <svg class="w-4.5 h-4.5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                    <input v-model="form.expected_date" type="date" class="loc-input-field" />
+                                    <input v-model="form.expected_date" type="date" class="doctorato-input loc-input-field" />
                                 </div>
                                 <p v-if="errors.expected_date" class="loc-error">{{ errors.expected_date }}</p>
                             </div>
@@ -403,7 +403,7 @@ onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside))
                             <label class="loc-label">{{ $t('a_notes') }}</label>
                             <div class="loc-textarea-wrapper">
                                 <svg class="w-4.5 h-4.5 text-gray-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" /></svg>
-                                <textarea v-model="form.notes" rows="2" :placeholder="isRtl ? 'ملاحظات...' : 'Notes...'" class="loc-textarea-field"></textarea>
+                                <textarea v-model="form.notes" rows="2" :placeholder="isRtl ? 'ملاحظات...' : 'Notes...'" class="doctorato-input loc-textarea-field"></textarea>
                             </div>
                         </div>
 
@@ -412,7 +412,7 @@ onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside))
                             <label class="loc-label">{{ $t('a_special_instructions') }}</label>
                             <div class="loc-textarea-wrapper">
                                 <svg class="w-4.5 h-4.5 text-gray-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" /></svg>
-                                <textarea v-model="form.special_instructions" rows="2" :placeholder="isRtl ? 'تعليمات خاصة...' : 'Special instructions...'" class="loc-textarea-field"></textarea>
+                                <textarea v-model="form.special_instructions" rows="2" :placeholder="isRtl ? 'تعليمات خاصة...' : 'Special instructions...'" class="doctorato-input loc-textarea-field"></textarea>
                             </div>
                         </div>
                     </div>

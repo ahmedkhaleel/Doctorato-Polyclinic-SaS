@@ -117,11 +117,11 @@ function statusLabel(status) {
                     v-model="search"
                     type="text"
                     :placeholder="$t('a_search_invoices_placeholder')"
-                    class="w-full sm:w-80 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
+                    class="doctorato-input w-full sm:w-80 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                 />
                 <select
                     v-model="statusFilter"
-                    class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
+                    class="doctorato-input px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                 >
                     <option value="">{{ $t('a_all_status') }}</option>
                     <option value="paid">{{ $t('a_paid') }}</option>
@@ -130,7 +130,7 @@ function statusLabel(status) {
                     <option value="cancelled">{{ $t('a_cancelled') }}</option>
                 </select>
                 <select
-                    v-if="activeModules.length > 1"
+                    v-if="activeModules.length> 1"
                     v-model="moduleFilter"
                     class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
                 >
@@ -141,14 +141,14 @@ function statusLabel(status) {
                     v-model="dateFrom"
                     type="date"
                     :max="dateTo || undefined"
-                    class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
+                    class="doctorato-input px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                     :placeholder="$t('a_from_date')"
                 />
                 <input
                     v-model="dateTo"
                     type="date"
                     :min="dateFrom || undefined"
-                    class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
+                    class="doctorato-input px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                     :placeholder="$t('a_to_date')"
                 />
             </div>

@@ -163,7 +163,7 @@ const statusKeys = {
                     <label class="block text-xs font-medium text-gray-500 mb-1">{{ $t('a_month') }}</label>
                     <select
                         v-model="monthFilter"
-                        class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
+                        class="doctorato-input px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                     >
                         <option value="">{{ $t('a_all_months') }}</option>
                         <option v-for="(name, index) in months" :key="index" :value="index + 1">{{ name }}</option>
@@ -177,14 +177,14 @@ const statusKeys = {
                         min="2020"
                         max="2099"
                         :placeholder="$t('a_year')"
-                        class="w-28 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
+                        class="doctorato-input w-28 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                     />
                 </div>
                 <div>
                     <label class="block text-xs font-medium text-gray-500 mb-1">{{ $t('a_status') }}</label>
                     <select
                         v-model="statusFilter"
-                        class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-200 focus:border-transparent"
+                        class="doctorato-input px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
                     >
                         <option value="">{{ $t('a_all_status') }}</option>
                         <option value="draft">{{ $t('a_draft') }}</option>
@@ -212,7 +212,7 @@ const statusKeys = {
                                         type="checkbox"
                                         v-model="selectAll"
                                         @change="toggleSelectAll"
-                                        class="rounded border-gray-300 text-amber-600 focus:ring-amber-200"
+                                        class="rounded border-gray-300 text-amber-600 focus:ring-[#C4A265]/30"
                                     />
                                 </th>
                                 <th class="px-4 md:px-6 py-3 ltr:text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $t('a_slip_number') }}</th>
@@ -233,7 +233,7 @@ const statusKeys = {
                                         :value="slip.id"
                                         :checked="selectedIds.includes(slip.id)"
                                         @change="toggleSlip(slip.id)"
-                                        class="rounded border-gray-300 text-amber-600 focus:ring-amber-200"
+                                        class="rounded border-gray-300 text-amber-600 focus:ring-[#C4A265]/30"
                                     />
                                 </td>
                                 <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">

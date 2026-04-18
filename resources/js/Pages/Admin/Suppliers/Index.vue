@@ -96,9 +96,9 @@ const activeCount = computed(() => props.suppliers?.data?.filter(s => s.is_activ
             <div class="flex flex-wrap items-center gap-3">
                 <div class="relative flex-1 min-w-[200px]">
                     <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                    <input v-model="search" @input="applyFilters" type="text" :placeholder="isRtl ? 'بحث بالاسم أو الكود...' : 'Search by name or code...'" class="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-colors" />
+                    <input v-model="search" @input="applyFilters" type="text" :placeholder="isRtl ? 'بحث بالاسم أو الكود...' : 'Search by name or code...'" class="doctorato-input w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-colors" />
                 </div>
-                <select v-model="statusFilter" @change="applyFilters()" class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] min-w-[130px]">
+                <select v-model="statusFilter" @change="applyFilters()" class="doctorato-input px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] min-w-[130px]">
                     <option value="">{{ isRtl ? 'كل الحالات' : 'All Status' }}</option>
                     <option value="active">{{ isRtl ? 'نشط' : 'Active' }}</option>
                     <option value="inactive">{{ isRtl ? 'غير نشط' : 'Inactive' }}</option>
@@ -232,51 +232,51 @@ const activeCount = computed(() => props.suppliers?.data?.filter(s => s.is_activ
                                 <div class="grid grid-cols-2 gap-4">
                                     <div>
                                         <label class="block text-[11px] font-semibold text-gray-500 uppercase tracking-wider mb-1.5">{{ isRtl ? 'الاسم بالعربي' : 'Name (AR)' }} <span class="text-red-400">*</span></label>
-                                        <input v-model="form.name_ar" required dir="rtl" class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-colors" />
+                                        <input v-model="form.name_ar" required dir="rtl" class="doctorato-input w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-colors" />
                                     </div>
                                     <div>
                                         <label class="block text-[11px] font-semibold text-gray-500 uppercase tracking-wider mb-1.5">{{ isRtl ? 'الاسم بالإنجليزي' : 'Name (EN)' }} <span class="text-red-400">*</span></label>
-                                        <input v-model="form.name_en" required class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-colors" />
+                                        <input v-model="form.name_en" required class="doctorato-input w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-colors" />
                                     </div>
                                 </div>
                                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                     <div>
                                         <label class="block text-[11px] font-semibold text-gray-500 uppercase tracking-wider mb-1.5">{{ isRtl ? 'الرمز' : 'Code' }}</label>
-                                        <input v-model="form.code" class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm font-mono focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-colors" />
+                                        <input v-model="form.code" class="doctorato-input w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm font-mono focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-colors" />
                                     </div>
                                     <div>
                                         <label class="block text-[11px] font-semibold text-gray-500 uppercase tracking-wider mb-1.5">{{ isRtl ? 'الهاتف' : 'Phone' }}</label>
-                                        <input v-model="form.phone" dir="ltr" class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-colors" />
+                                        <input v-model="form.phone" dir="ltr" class="doctorato-input w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-colors" />
                                     </div>
                                     <div>
                                         <label class="block text-[11px] font-semibold text-gray-500 uppercase tracking-wider mb-1.5">{{ isRtl ? 'البريد' : 'Email' }}</label>
-                                        <input v-model="form.email" type="email" dir="ltr" class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-colors" />
+                                        <input v-model="form.email" type="email" dir="ltr" class="doctorato-input w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-colors" />
                                     </div>
                                 </div>
                                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                     <div>
                                         <label class="block text-[11px] font-semibold text-gray-500 uppercase tracking-wider mb-1.5">{{ isRtl ? 'جهة التواصل' : 'Contact Person' }}</label>
-                                        <input v-model="form.contact_person" class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-colors" />
+                                        <input v-model="form.contact_person" class="doctorato-input w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-colors" />
                                     </div>
                                     <div>
                                         <label class="block text-[11px] font-semibold text-gray-500 uppercase tracking-wider mb-1.5">{{ isRtl ? 'شروط الدفع' : 'Payment Terms' }}</label>
-                                        <input v-model="form.payment_terms" placeholder="Net 30" class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-colors" />
+                                        <input v-model="form.payment_terms" placeholder="Net 30" class="doctorato-input w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-colors" />
                                     </div>
                                     <div>
                                         <label class="block text-[11px] font-semibold text-gray-500 uppercase tracking-wider mb-1.5">{{ isRtl ? 'مدة التوصيل' : 'Lead Time' }}</label>
                                         <div class="relative">
-                                            <input v-model="form.lead_time_days" type="number" min="0" class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-colors" />
+                                            <input v-model="form.lead_time_days" type="number" min="0" class="doctorato-input w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-colors" />
                                             <span class="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-gray-400">{{ isRtl ? 'يوم' : 'days' }}</span>
                                         </div>
                                     </div>
                                 </div>
                                 <div>
                                     <label class="block text-[11px] font-semibold text-gray-500 uppercase tracking-wider mb-1.5">{{ isRtl ? 'الرقم الضريبي' : 'Tax Number' }}</label>
-                                    <input v-model="form.tax_number" dir="ltr" class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm font-mono focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-colors" />
+                                    <input v-model="form.tax_number" dir="ltr" class="doctorato-input w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm font-mono focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-colors" />
                                 </div>
                                 <div>
                                     <label class="block text-[11px] font-semibold text-gray-500 uppercase tracking-wider mb-1.5">{{ isRtl ? 'العنوان' : 'Address' }}</label>
-                                    <textarea v-model="form.address" rows="2" class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-colors resize-none" />
+                                    <textarea v-model="form.address" rows="2" class="doctorato-input w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#1B365D]/20 focus:border-[#1B365D] transition-colors resize-none" />
                                 </div>
                                 <label class="flex items-center gap-2.5 cursor-pointer">
                                     <input v-model="form.is_active" type="checkbox" class="w-4 h-4 rounded text-[#1B365D] focus:ring-[#1B365D]" />

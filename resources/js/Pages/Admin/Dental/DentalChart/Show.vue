@@ -875,7 +875,7 @@ const selectedToothTreatments = computed(() => selectedTooth.value ? getToothTre
             </div>
             <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-2">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label>
-                <textarea v-model="editForm.notes" rows="2" class="w-full border-2 border-gray-100 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all resize-none" :placeholder="isRtl ? 'أضف ملاحظات...' : 'Add notes...'"></textarea>
+                <textarea v-model="editForm.notes" rows="2" class="doctorato-input w-full border-2 border-gray-100 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all resize-none" :placeholder="isRtl ? 'أضف ملاحظات...' : 'Add notes...'"></textarea>
             </div>
         </div>
         <div class="px-6 py-4 bg-gray-50 border-t flex gap-3 justify-end">
@@ -923,39 +923,39 @@ const selectedToothTreatments = computed(() => selectedTooth.value ? getToothTre
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-xs font-semibold text-gray-600 mb-1.5">{{ isRtl ? 'العنوان' : 'Title' }}</label>
-                    <input v-model="entryForm.title" type="text" class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all" :placeholder="isRtl ? 'مثال: فحص أولي' : 'e.g. Initial examination'" />
+                    <input v-model="entryForm.title" type="text" class="doctorato-input w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all" :placeholder="isRtl ? 'مثال: فحص أولي' : 'e.g. Initial examination'" />
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-gray-600 mb-1.5">{{ isRtl ? 'التاريخ' : 'Date' }}</label>
-                    <input v-model="entryForm.entry_date" type="date" class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all" />
+                    <input v-model="entryForm.entry_date" type="date" class="doctorato-input w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all" />
                 </div>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-xs font-semibold text-gray-600 mb-1.5">{{ isRtl ? 'الطبيب' : 'Doctor' }}</label>
-                    <select v-model="entryForm.doctor_id" class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all">
+                    <select v-model="entryForm.doctor_id" class="doctorato-input w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all">
                         <option value="">{{ isRtl ? 'اختر الطبيب' : 'Select doctor' }}</option>
                         <option v-for="doc in doctors" :key="doc.id" :value="doc.id">{{ isRtl ? doc.name_ar : doc.name_en }}</option>
                     </select>
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-gray-600 mb-1.5">{{ isRtl ? 'التكلفة' : 'Cost' }}</label>
-                    <input v-model="entryForm.cost" type="number" step="0.01" class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all" placeholder="0.00" />
+                    <input v-model="entryForm.cost" type="number" step="0.01" class="doctorato-input w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all" placeholder="0.00" />
                 </div>
             </div>
 
             <div v-if="entryForm.entry_type==='treatment' || entryForm.entry_type==='examination'" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-xs font-semibold text-gray-600 mb-1.5">{{ isRtl ? 'الحالة قبل' : 'Condition Before' }}</label>
-                    <select v-model="entryForm.condition_before" class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all">
+                    <select v-model="entryForm.condition_before" class="doctorato-input w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all">
                         <option value="">-</option>
                         <option v-for="c in conditions" :key="c" :value="c">{{ conditionLabels[c] }}</option>
                     </select>
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-gray-600 mb-1.5">{{ isRtl ? 'الحالة بعد' : 'Condition After' }}</label>
-                    <select v-model="entryForm.condition_after" class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all">
+                    <select v-model="entryForm.condition_after" class="doctorato-input w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all">
                         <option value="">-</option>
                         <option v-for="c in conditions" :key="c" :value="c">{{ conditionLabels[c] }}</option>
                     </select>
@@ -971,7 +971,7 @@ const selectedToothTreatments = computed(() => selectedTooth.value ? getToothTre
 
             <div>
                 <label class="block text-xs font-semibold text-gray-600 mb-1.5">{{ isRtl ? 'الوصف / التفاصيل' : 'Description / Details' }}</label>
-                <textarea v-model="entryForm.description" rows="3" class="w-full border-2 border-gray-100 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all resize-none" :placeholder="isRtl ? 'اكتب تفاصيل الفحص أو العلاج...' : 'Write examination or treatment details...'"></textarea>
+                <textarea v-model="entryForm.description" rows="3" class="doctorato-input w-full border-2 border-gray-100 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#1B365D] transition-all resize-none" :placeholder="isRtl ? 'اكتب تفاصيل الفحص أو العلاج...' : 'Write examination or treatment details...'"></textarea>
             </div>
 
             <div>

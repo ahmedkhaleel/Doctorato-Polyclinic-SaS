@@ -314,7 +314,7 @@ function treatmentLabel(type) {
                     </p>
                     <textarea
                         v-model="declineForm.declined_reason"
-                        class="w-full p-3 border border-gray-200 rounded-xl text-sm resize-none focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-red-300"
+                        class="doctorato-input w-full p-3 border border-gray-200 rounded-xl text-sm resize-none focus:outline-none focus:ring-2 focus:ring-[#C4A265]/30 focus:border-red-300"
                         rows="3"
                         :placeholder="isRtl ? 'سبب الرفض...' : 'Reason for declining...'"
                     ></textarea>
