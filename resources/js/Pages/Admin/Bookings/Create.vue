@@ -632,29 +632,19 @@ function getServiceLabel(id) {
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-5 max-w-4xl mx-auto">
                     <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">{{ $t('a_booking_type') }}</h3>
                     <div class="grid gap-3 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4" :class="{ 'xl:grid-cols-5': isDentalEnabled || isPediatricEnabled }">
+                        <!-- Combined Dermatology & Cosmetic (one module — sub-type selected below) -->
                         <button
                             type="button"
-                            @click="bookingType = 'dermatology_consultation'"
+                            @click="bookingType = bookingType === 'cosmetic_consultation' ? 'cosmetic_consultation' : 'dermatology_consultation'"
                             :class="[
                                 'p-3 rounded-xl border-2 transition-all text-start',
-                                bookingType === 'dermatology_consultation'
+                                (bookingType === 'dermatology_consultation' || bookingType === 'cosmetic_consultation')
                                     ? 'border-[#C4A265] bg-amber-50/50'
                                     : 'border-gray-200 hover:border-gray-300'
                             ]"
                         >
-                            <p class="text-sm font-semibold text-gray-800">{{ $t('a_dermatology_consultation') }}</p>
-                        </button>
-                        <button
-                            type="button"
-                            @click="bookingType = 'cosmetic_consultation'"
-                            :class="[
-                                'p-3 rounded-xl border-2 transition-all text-start',
-                                bookingType === 'cosmetic_consultation'
-                                    ? 'border-[#C4A265] bg-amber-50/50'
-                                    : 'border-gray-200 hover:border-gray-300'
-                            ]"
-                        >
-                            <p class="text-sm font-semibold text-gray-800">{{ $t('a_cosmetic_consultation') }}</p>
+                            <p class="text-sm font-semibold text-gray-800">{{ $t('a_derma_cosmetic_module') }}</p>
+                            <p class="text-[11px] text-gray-500 mt-0.5">{{ $t('a_dermatology_consultation') }} / {{ $t('a_cosmetic_consultation') }}</p>
                         </button>
                         <button
                             type="button"
@@ -720,6 +710,37 @@ function getServiceLabel(id) {
                         >
                             <p class="text-sm font-semibold text-gray-800">{{ isRtl ? 'خدمة أطفال' : 'Pediatric Service' }}</p>
                         </button>
+                    </div>
+
+                    <!-- Sub-type selector for Dermatology & Cosmetic module -->
+                    <div v-if="bookingType === 'dermatology_consultation' || bookingType === 'cosmetic_consultation'" class="mt-4 pt-4 border-t border-slate-100">
+                        <p class="text-xs font-bold text-[#1B365D] uppercase tracking-wider mb-2">{{ $t('a_consultation_subtype') }}</p>
+                        <div class="flex gap-2 flex-wrap">
+                            <button
+                                type="button"
+                                @click="bookingType = 'dermatology_consultation'"
+                                :class="[
+                                    'px-4 py-2 rounded-xl text-sm font-semibold transition-all',
+                                    bookingType === 'dermatology_consultation'
+                                        ? 'bg-gradient-to-r from-[#C4A265] to-[#8B7043] text-white shadow-md'
+                                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                                ]"
+                            >
+                                {{ $t('a_derma_general') }}
+                            </button>
+                            <button
+                                type="button"
+                                @click="bookingType = 'cosmetic_consultation'"
+                                :class="[
+                                    'px-4 py-2 rounded-xl text-sm font-semibold transition-all',
+                                    bookingType === 'cosmetic_consultation'
+                                        ? 'bg-gradient-to-r from-[#C4A265] to-[#8B7043] text-white shadow-md'
+                                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                                ]"
+                            >
+                                {{ $t('a_cosmetic_consultation') }}
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
