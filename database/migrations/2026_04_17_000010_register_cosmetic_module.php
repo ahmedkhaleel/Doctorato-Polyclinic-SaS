@@ -4,6 +4,15 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Cosmetic is NOT a standalone module — it's a sub-type of the "Dermatology & Cosmetic"
+ * (derma) module. This migration only registers PRICING settings for cosmetic consultations
+ * (used by CommissionCalculator + BookingWorkflowService) and the derma consultation fee.
+ *
+ * The module metadata rows (enabled, name_ar, name_en, color) were removed because
+ * ModuleManager no longer registers 'cosmetic' as a standalone module. Only the
+ * 'derma' module appears in the UI — it covers both dermatology and cosmetic features.
+ */
 return new class extends Migration
 {
     public function up(): void
@@ -14,15 +23,13 @@ return new class extends Migration
 
         $now = now();
         $rows = [
-            ['module' => 'cosmetic', 'key' => 'enabled', 'value' => '1', 'type' => 'boolean', 'label_ar' => 'تفعيل القسم', 'label_en' => 'Enable Module', 'group' => 'general', 'display_order' => 1],
-            ['module' => 'cosmetic', 'key' => 'name_ar', 'value' => 'التجميل', 'type' => 'text', 'label_ar' => 'اسم القسم (عربي)', 'label_en' => 'Module Name (Arabic)', 'group' => 'general', 'display_order' => 2],
-            ['module' => 'cosmetic', 'key' => 'name_en', 'value' => 'Cosmetic Medicine', 'type' => 'text', 'label_ar' => 'اسم القسم (إنجليزي)', 'label_en' => 'Module Name (English)', 'group' => 'general', 'display_order' => 3],
-            ['module' => 'cosmetic', 'key' => 'color', 'value' => '#8B5CF6', 'type' => 'text', 'label_ar' => 'لون القسم', 'label_en' => 'Module Color', 'group' => 'general', 'display_order' => 5],
-            ['module' => 'cosmetic', 'key' => 'consultation_fee', 'value' => '0', 'type' => 'number', 'label_ar' => 'رسوم الاستشارة', 'label_en' => 'Consultation Fee', 'group' => 'pricing', 'display_order' => 1],
-            ['module' => 'cosmetic', 'key' => 'followup_fee', 'value' => '0', 'type' => 'number', 'label_ar' => 'رسوم المتابعة', 'label_en' => 'Follow-up Fee', 'group' => 'pricing', 'display_order' => 2],
+            // ── Cosmetic pricing (sub-type under derma) ──────────────────────────
+            ['module' => 'cosmetic', 'key' => 'consultation_fee', 'value' => '0', 'type' => 'number', 'label_ar' => 'رسوم استشارة التجميل', 'label_en' => 'Cosmetic Consultation Fee', 'group' => 'pricing', 'display_order' => 1],
+            ['module' => 'cosmetic', 'key' => 'followup_fee',     'value' => '0', 'type' => 'number', 'label_ar' => 'رسوم متابعة التجميل',    'label_en' => 'Cosmetic Follow-up Fee',    'group' => 'pricing', 'display_order' => 2],
 
+            // ── Derma pricing (main dermatology module) ──────────────────────────
             ['module' => 'derma', 'key' => 'consultation_fee', 'value' => '0', 'type' => 'number', 'label_ar' => 'رسوم الاستشارة', 'label_en' => 'Consultation Fee', 'group' => 'pricing', 'display_order' => 1],
-            ['module' => 'derma', 'key' => 'followup_fee', 'value' => '0', 'type' => 'number', 'label_ar' => 'رسوم المتابعة', 'label_en' => 'Follow-up Fee', 'group' => 'pricing', 'display_order' => 2],
+            ['module' => 'derma', 'key' => 'followup_fee',     'value' => '0', 'type' => 'number', 'label_ar' => 'رسوم المتابعة', 'label_en' => 'Follow-up Fee',    'group' => 'pricing', 'display_order' => 2],
         ];
 
         foreach ($rows as $r) {
@@ -31,6 +38,12 @@ return new class extends Migration
                 array_merge($r, ['created_at' => $now, 'updated_at' => $now])
             );
         }
+
+        // Clean up any leftover stand-alone module metadata for cosmetic
+        DB::table('module_settings')
+            ->where('module', 'cosmetic')
+            ->whereIn('key', ['enabled', 'name_ar', 'name_en', 'color'])
+            ->delete();
     }
 
     public function down(): void
@@ -38,6 +51,9 @@ return new class extends Migration
         if (! Schema::hasTable('module_settings')) {
             return;
         }
-        DB::table('module_settings')->where('module', 'cosmetic')->delete();
+        DB::table('module_settings')
+            ->where('module', 'cosmetic')
+            ->whereIn('key', ['consultation_fee', 'followup_fee'])
+            ->delete();
     }
 };
