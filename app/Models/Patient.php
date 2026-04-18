@@ -500,4 +500,17 @@ class Patient extends Model
 
         return $fileNumber;
     }
+
+    // ─── Model boot: guard against missing file_number ──
+    protected static function booted(): void
+    {
+        static::creating(function (self $patient) {
+            if (empty($patient->file_number)) {
+                $patient->file_number = static::generateFileNumber();
+            }
+            if (is_null($patient->is_active)) {
+                $patient->is_active = true;
+            }
+        });
+    }
 }
