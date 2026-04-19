@@ -115,6 +115,7 @@ class DatabaseSeeder extends Seeder
                 InvoiceSeeder::class,
                 ExpenseSeeder::class,
                 AttendanceSeeder::class,
+                ComprehensiveDemoSeeder::class,
             ]);
         } else {
             $this->command->info('Production mode: Skipping demo data. Only essential data seeded.');
