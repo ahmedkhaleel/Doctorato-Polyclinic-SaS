@@ -11,6 +11,17 @@ const page = usePage()
 const locale = computed(() => page.props.locale || 'ar')
 const isRtl = computed(() => locale.value === 'ar')
 
+/**
+ * Backend may send `subtitle` as a string OR as an `{ar, en}` localization
+ * object (e.g. PatientDocument::type_label). Normalize to a string.
+ */
+function localizeSubtitle(s) {
+    if (s == null) return ''
+    if (typeof s === 'string') return s
+    if (typeof s === 'object') return isRtl.value ? (s.ar || s.en || '') : (s.en || s.ar || '')
+    return String(s)
+}
+
 const typeFilter = ref('')
 const searchQuery = ref('')
 const headerLoaded = ref(false)
@@ -54,7 +65,7 @@ const filteredTimeline = computed(() => {
         items = items.filter(e =>
             (e.title_en || '').toLowerCase().includes(q) ||
             (e.title_ar || '').toLowerCase().includes(q) ||
-            (e.subtitle || '').toLowerCase().includes(q) ||
+            localizeSubtitle(e.subtitle).toLowerCase().includes(q) ||
             (e.details || '').toLowerCase().includes(q)
         )
     }
@@ -202,7 +213,7 @@ function formatMonth(d) {
                                             {{ event.status }}
                                         </span>
                                     </div>
-                                    <p v-if="event.subtitle" class="text-xs text-gray-500 mb-0.5">{{ event.subtitle }}</p>
+                                    <p v-if="event.subtitle" class="text-xs text-gray-500 mb-0.5">{{ localizeSubtitle(event.subtitle) }}</p>
                                     <p v-if="event.details" class="text-xs text-gray-400 line-clamp-2 leading-relaxed">{{ event.details }}</p>
                                 </div>
 
