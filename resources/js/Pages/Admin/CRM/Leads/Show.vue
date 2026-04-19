@@ -221,6 +221,16 @@ function confirmLostStatus() {
 
 // Reactivate lead (lost/dormant → new)
 const reactivating = ref(false);
+function deleteLead() {
+    const msg = isRtl.value
+        ? `هل أنت متأكد من حذف العميل "${props.lead.full_name}"؟ لا يمكن التراجع عن هذا الإجراء.`
+        : `Are you sure you want to delete "${props.lead.full_name}"? This action cannot be undone.`;
+    if (!confirm(msg)) return;
+    router.post(`/admin/leads/${props.lead.id}/delete`, {}, {
+        onSuccess: () => router.visit('/admin/leads'),
+    });
+}
+
 function reactivateLead() {
     const msg = isRtl.value ? 'هل تريد إعادة تنشيط هذا العميل المحتمل؟' : 'Reactivate this lead back to New status?';
     if (!confirm(msg)) return;
@@ -742,6 +752,14 @@ function translateDescription(desc) {
                                     style="background: linear-gradient(135deg, #C4A265, #D4B87A);"
                                 >
                                     <svg class="w-4 h-4 ltr:mr-2 rtl:ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>{{ $t('a_edit_lead') }}</Link>
+                                <!-- Delete lead -->
+                                <button v-if="can('leads.delete')"
+                                    @click="deleteLead"
+                                    class="inline-flex items-center px-4 py-2.5 rounded-xl text-red-600 border border-red-200 bg-white text-sm font-medium transition-all duration-200 hover:bg-red-50 hover:border-red-300"
+                                >
+                                    <svg class="w-4 h-4 ltr:mr-2 rtl:ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M1 7h22M9 7V4a2 2 0 012-2h2a2 2 0 012 2v3" /></svg>
+                                    {{ isRtl ? 'حذف' : 'Delete' }}
+                                </button>
                             </div>
                         </div>
                     </div>
