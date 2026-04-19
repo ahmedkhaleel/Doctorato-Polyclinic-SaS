@@ -1069,43 +1069,70 @@ class ComprehensiveDemoSeeder extends Seeder
             $this->info('employee_shifts', count($rows));
         }
 
-        if (DB::table('salary_slips')->count() === 0) {
-            $rows = [];
-            $emps = DB::table('employees')->get();
-            $now = Carbon::now();
-            foreach ($emps as $emp) {
-                for ($m = 1; $m <= 3; $m++) {
-                    $d = $now->copy()->subMonths($m);
-                    $earn = $emp->basic_salary + $emp->housing_allowance + $emp->transport_allowance + $emp->other_allowances;
-                    $bonus = random_int(0, 500);
-                    $deduct = random_int(0, 300);
-                    $net = $earn + $bonus - $deduct;
-                    $rows[] = [
-                        'slip_number'=>'SAL-'.$d->format('Ym').'-'.$emp->id,
-                        'employee_id'=>$emp->id,
-                        'month'=>$d->month,'year'=>$d->year,
-                        'basic_salary'=>$emp->basic_salary,
-                        'housing_allowance'=>$emp->housing_allowance,
-                        'transport_allowance'=>$emp->transport_allowance,
-                        'other_allowances'=>$emp->other_allowances,
-                        'overtime_amount'=>0,'bonus'=>$bonus,'commission_amount'=>0,
-                        'insurance_deduction'=>0,'tax_deduction'=>0,'absence_deduction'=>0,
-                        'advance_deduction'=>0,'penalty_deduction'=>$deduct,'other_deductions'=>0,
-                        'total_earnings'=>$earn + $bonus,
-                        'total_deductions'=>$deduct,
-                        'net_salary'=>$net,
-                        'status'=>$m === 1 ? 'approved' : 'paid',
-                        'approved_by'=>$this->adminUserId,
-                        'approved_at'=>$d->copy()->endOfMonth(),
-                        'paid_by'=>$m !== 1 ? $this->adminUserId : null,
-                        'paid_at'=>$m !== 1 ? $d->copy()->endOfMonth()->addDays(2) : null,
-                        'payment_method'=>'bank_transfer',
-                        'payment_reference'=>'TRF-'.random_int(100000,999999),
-                        'notes'=>null,'created_by'=>$this->adminUserId,
-                        'created_at'=>$d->copy()->endOfMonth(),'updated_at'=>now(),
-                    ];
-                }
+        // Salary slips for current month + 3 previous months (so payroll page is never empty)
+        $emps = DB::table('employees')->get();
+        $now = Carbon::now();
+        $rows = [];
+        foreach ($emps as $emp) {
+            // 0 = current month, 1, 2, 3 = previous months
+            for ($m = 0; $m <= 3; $m++) {
+                $d = $now->copy()->subMonths($m);
+                // Skip if slip already exists for this employee/month/year
+                $exists = DB::table('salary_slips')
+                    ->where('employee_id', $emp->id)
+                    ->where('month', $d->month)
+                    ->where('year', $d->year)
+                    ->exists();
+                if ($exists) continue;
+
+                $basic = (float) $emp->basic_salary;
+                $housing = (float) $emp->housing_allowance;
+                $transport = (float) $emp->transport_allowance;
+                $other = (float) $emp->other_allowances;
+                $overtime = random_int(0, 1) ? random_int(100, 800) : 0;
+                $bonus = random_int(0, 1) ? random_int(200, 1500) : 0;
+                $commission = random_int(0, 1) ? random_int(0, 2000) : 0;
+
+                $insurance = round($basic * 0.11, 2);
+                $tax = round($basic * 0.05, 2);
+                $absence = random_int(0, 1) ? random_int(0, 300) : 0;
+                $advance = random_int(0, 1) ? random_int(0, 500) : 0;
+                $penalty = random_int(0, 1) ? random_int(0, 200) : 0;
+
+                $earn = $basic + $housing + $transport + $other + $overtime + $bonus + $commission;
+                $deduct = $insurance + $tax + $absence + $advance + $penalty;
+                $net = $earn - $deduct;
+
+                // Status: current month = draft/approved, previous = paid
+                $status = $m === 0 ? (random_int(0, 1) ? 'draft' : 'approved') : 'paid';
+
+                $rows[] = [
+                    'slip_number' => 'SAL-' . $d->format('Ym') . '-' . str_pad($emp->id, 4, '0', STR_PAD_LEFT),
+                    'employee_id' => $emp->id,
+                    'month' => $d->month, 'year' => $d->year,
+                    'basic_salary' => $basic,
+                    'housing_allowance' => $housing,
+                    'transport_allowance' => $transport,
+                    'other_allowances' => $other,
+                    'overtime_amount' => $overtime, 'bonus' => $bonus, 'commission_amount' => $commission,
+                    'insurance_deduction' => $insurance, 'tax_deduction' => $tax, 'absence_deduction' => $absence,
+                    'advance_deduction' => $advance, 'penalty_deduction' => $penalty, 'other_deductions' => 0,
+                    'total_earnings' => $earn,
+                    'total_deductions' => $deduct,
+                    'net_salary' => $net,
+                    'status' => $status,
+                    'approved_by' => $status !== 'draft' ? $this->adminUserId : null,
+                    'approved_at' => $status !== 'draft' ? $d->copy()->endOfMonth() : null,
+                    'paid_by' => $status === 'paid' ? $this->adminUserId : null,
+                    'paid_at' => $status === 'paid' ? $d->copy()->endOfMonth()->addDays(2) : null,
+                    'payment_method' => $status === 'paid' ? 'bank_transfer' : null,
+                    'payment_reference' => $status === 'paid' ? 'TRF-' . random_int(100000, 999999) : null,
+                    'notes' => null, 'created_by' => $this->adminUserId,
+                    'created_at' => $d->copy()->endOfMonth(), 'updated_at' => now(),
+                ];
             }
+        }
+        if (! empty($rows)) {
             DB::table('salary_slips')->insert($rows);
             $this->info('salary_slips', count($rows));
         }
