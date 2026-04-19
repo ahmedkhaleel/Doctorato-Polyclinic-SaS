@@ -15,14 +15,32 @@ const props = defineProps({
     slip: Object,
 });
 
-const months = ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const monthsAr = ['', 'يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+const monthsEn = ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const months = computed(() => isRtl.value ? monthsAr : monthsEn);
 
 const { formatCurrency, currencyCode } = useCurrency();
 
 function formatDateTime(dt) {
     if (!dt) return '-';
-    return new Date(dt).toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' });
+    return new Date(dt).toLocaleString(isRtl.value ? 'ar-EG' : 'en-GB', { dateStyle: 'medium', timeStyle: 'short' });
 }
+
+const paymentMethodLabel = (method) => {
+    if (!method) return '-';
+    const map = {
+        bank_transfer: { ar: 'تحويل بنكي', en: 'Bank Transfer' },
+        cash:          { ar: 'نقدي',       en: 'Cash' },
+        cheque:        { ar: 'شيك',        en: 'Cheque' },
+        other:         { ar: 'أخرى',       en: 'Other' },
+    };
+    return (map[method]?.[isRtl.value ? 'ar' : 'en']) || method.replace(/_/g, ' ');
+};
+
+const departmentName = (dept) => {
+    if (!dept) return '-';
+    return isRtl.value ? (dept.name_ar || dept.name_en) : (dept.name_en || dept.name_ar);
+};
 
 const statusConfig = {
     draft: { key: 'a_draft', bg: 'bg-gray-100', text: 'text-gray-600', ring: 'ring-gray-200' },
@@ -53,7 +71,10 @@ const deductionKeys = [
 const approving = ref(false);
 
 function approveSlip() {
-    if (!confirm('Are you sure you want to approve this salary slip?')) return;
+    const msg = isRtl.value
+        ? 'هل أنت متأكد من اعتماد كشف الراتب هذا؟'
+        : 'Are you sure you want to approve this salary slip?';
+    if (!confirm(msg)) return;
     approving.value = true;
     router.post(`/admin/payroll/${props.slip.id}/approve`, {}, {
         preserveScroll: true,
@@ -168,7 +189,7 @@ function submitMarkPaid() {
                     </div>
                     <div>
                         <p class="text-[10px] text-gray-400 uppercase tracking-wide font-semibold">{{ $t('a_department') }}</p>
-                        <p class="text-sm text-gray-700 mt-0.5">{{ slip.employee?.department?.name_en }}</p>
+                        <p class="text-sm text-gray-700 mt-0.5">{{ departmentName(slip.employee?.department) }}</p>
                     </div>
                     <div>
                         <p class="text-[10px] text-gray-400 uppercase tracking-wide font-semibold">{{ $t('a_email') }}</p>
@@ -269,7 +290,7 @@ function submitMarkPaid() {
                     </div>
                     <div>
                         <p class="text-[10px] text-gray-400 uppercase tracking-wide font-semibold">{{ $t('a_payment_method') }}</p>
-                        <p class="text-sm text-gray-700 mt-0.5 capitalize">{{ slip.payment_method?.replace(/_/g, ' ') || '-' }}</p>
+                        <p class="text-sm text-gray-700 mt-0.5">{{ paymentMethodLabel(slip.payment_method) }}</p>
                     </div>
                     <div>
                         <p class="text-[10px] text-gray-400 uppercase tracking-wide font-semibold">{{ $t('a_payment_reference') }}</p>
