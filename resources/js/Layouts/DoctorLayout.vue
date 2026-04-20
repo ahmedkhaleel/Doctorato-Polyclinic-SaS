@@ -6,6 +6,7 @@ import ToastNotification from '@/Components/Doctor/ToastNotification.vue';
 import ChatIcon from '@/Components/Chat/ChatIcon.vue';
 import ChatToast from '@/Components/Chat/ChatToast.vue';
 
+import AttendanceReminder from '@/Components/AttendanceReminder.vue';
 const page = usePage();
 const SIDEBAR_STORAGE_KEY = 'DoctorLayout_sidebar_open_v2';
 const getInitialSidebarState = () => {
@@ -635,6 +636,7 @@ onUnmounted(() => { document.removeEventListener('keydown', handleGlobalKey); })
             </Transition>
         </Teleport>
     </div>
+    <AttendanceReminder />
 </template>
 
 <style scoped>

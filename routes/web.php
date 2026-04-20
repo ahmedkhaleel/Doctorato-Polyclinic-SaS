@@ -40,6 +40,13 @@ Route::post('/webhooks/paymob', [\App\Http\Controllers\Webhooks\PaymentWebhookCo
 Route::post('/webhooks/stripe', [\App\Http\Controllers\Webhooks\PaymentWebhookController::class, 'stripe'])
     ->name('webhooks.stripe');
 
+// ─── Attendance Reminder API (Doctor / Secretary / Admin popup) ─────
+Route::middleware('auth')->prefix('api/attendance')->group(function () {
+    Route::get('/status',     [\App\Http\Controllers\AttendanceReminderController::class, 'status'])->name('api.attendance.status');
+    Route::post('/check-in',  [\App\Http\Controllers\AttendanceReminderController::class, 'checkIn'])->name('api.attendance.check-in');
+    Route::post('/check-out', [\App\Http\Controllers\AttendanceReminderController::class, 'checkOut'])->name('api.attendance.check-out');
+});
+
 // ─── Online Consultation Room API (authorized users) ─────────────────
 Route::middleware('auth')->prefix('api/online-consultations')->group(function () {
     Route::get('{consultation}/token', [\App\Http\Controllers\Api\OnlineConsultationRoomController::class, 'token'])

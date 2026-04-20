@@ -6,6 +6,7 @@ import SecretaryToastNotification from '@/Components/Secretary/SecretaryToastNot
 import ChatIcon from '@/Components/Chat/ChatIcon.vue';
 import ChatToast from '@/Components/Chat/ChatToast.vue';
 
+import AttendanceReminder from '@/Components/AttendanceReminder.vue';
 const page = usePage();
 const SIDEBAR_STORAGE_KEY = 'SecretaryLayout_sidebar_open_v2';
 const getInitialSidebarState = () => {
@@ -497,6 +498,7 @@ function logout()        { router.post('/secretary/logout'); }
             </div>
         </Teleport>
     </div>
+    <AttendanceReminder />
 </template>
 
 <style scoped>

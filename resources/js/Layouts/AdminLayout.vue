@@ -4,6 +4,7 @@ import { Link, usePage, router } from '@inertiajs/vue3';
 import { usePermissions } from '@/Composables/usePermissions.js';
 import { useTheme } from '@/Composables/useTheme';
 
+import AttendanceReminder from '@/Components/AttendanceReminder.vue';
 useTheme();
 import NotificationBell from '@/Components/Admin/NotificationBell.vue';
 import AdminToastNotification from '@/Components/Admin/AdminToastNotification.vue';
@@ -786,6 +787,7 @@ function logout()        { router.post('/admin/logout'); }
         <!-- Chat Toast Notifications -->
         <ChatToast panelPrefix="admin" :accentColor="'var(--brand-primary)'" />
     </div>
+    <AttendanceReminder />
 </template>
 
 <style scoped>
