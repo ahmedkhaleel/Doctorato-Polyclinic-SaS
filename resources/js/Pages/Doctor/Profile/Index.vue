@@ -74,9 +74,11 @@ function updatePassword() {
     });
 }
 
+// System convention: 0 = Saturday, 1 = Sunday, …, 6 = Friday
+// (matches admin panel + TimeSlotService::carbonDayToSystemDay)
 const dayNames = computed(() => isRtl.value
-    ? ['أحد', 'اثنين', 'ثلاثاء', 'أربعاء', 'خميس', 'جمعة', 'سبت']
-    : ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+    ? ['السبت', 'الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة']
+    : ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
 );
 
 const displayPhoto = computed(() => photoPreview.value || props.doctor.photo_url);
