@@ -175,8 +175,8 @@ const socialLinks = [
                                 <span dir="ltr" class="font-mono text-xs tracking-wide">{{ phone1 }}</span>
                             </a>
                         </li>
-                        <!-- Phone 2 -->
-                        <li>
+                        <!-- Phone 2 (hidden if not set) -->
+                        <li v-if="phone2">
                             <a :href="`tel:${phone2}`"
                                class="group flex items-center gap-3 text-white/40 hover:text-white transition-all duration-300 text-[13px]">
                                 <span class="w-8 h-8 rounded-lg bg-[#C4A265]/[0.08] border border-[#C4A265]/10 flex items-center justify-center flex-shrink-0
