@@ -69,32 +69,33 @@ const socialLinks = computed(() => [
                     pointer-events-none"></div>
 
         <!-- ══ Main content ══ -->
-        <div class="relative z-10 max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-5">
-            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-12 gap-x-6 gap-y-8">
+        <div class="relative z-10 max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 md:pt-10 pb-5">
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-12 gap-x-5 gap-y-7 md:gap-y-8">
 
                 <!-- Brand block -->
-                <div class="col-span-2 md:col-span-4 lg:col-span-4">
-                    <img src="/images/logo/logo-light.png" alt="Doctorato Polyclinic" class="h-7 w-auto mb-3" />
-                    <p class="text-white/45 text-[13px] leading-relaxed max-w-sm mb-4">
+                <div class="col-span-2 md:col-span-4 lg:col-span-4 text-center md:text-start">
+                    <img src="/images/logo/logo-light.png" alt="Doctorato Polyclinic" class="h-7 w-auto mb-3 mx-auto md:mx-0" />
+                    <p class="text-white/45 text-[13px] leading-relaxed max-w-sm mb-4 mx-auto md:mx-0">
                         {{ t('footer_about_text') }}
                     </p>
 
                     <!-- Social icons -->
-                    <div class="flex gap-2">
+                    <div class="flex gap-2 justify-center md:justify-start">
                         <a v-for="s in socialLinks" :key="s.name"
                            :href="s.href" target="_blank" rel="noopener"
                            :title="s.name"
-                           class="w-8 h-8 rounded-lg bg-white/[0.05] border border-white/10 flex items-center justify-center
+                           class="w-9 h-9 rounded-lg bg-white/[0.05] border border-white/10 flex items-center justify-center
                                   text-white/50 hover:text-[#C4A265] hover:bg-[#C4A265]/10 hover:border-[#C4A265]/30
                                   hover:-translate-y-0.5 transition-all duration-300">
-                            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path :d="s.icon"/></svg>
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path :d="s.icon"/></svg>
                         </a>
                     </div>
                 </div>
 
                 <!-- Quick links -->
-                <div class="lg:col-span-2">
-                    <h3 class="text-white font-semibold text-[13px] mb-3 tracking-wide uppercase">
+                <div class="col-span-1 md:col-span-2 lg:col-span-2">
+                    <h3 class="text-white font-semibold text-[13px] mb-3 tracking-wide uppercase flex items-center gap-2">
+                        <span class="w-5 h-[2px] bg-[#C4A265] rounded-full"></span>
                         {{ t('quick_links') }}
                     </h3>
                     <ul class="space-y-1.5">
@@ -108,8 +109,9 @@ const socialLinks = computed(() => [
                 </div>
 
                 <!-- Specialties -->
-                <div class="lg:col-span-2">
-                    <h3 class="text-white font-semibold text-[13px] mb-3 tracking-wide uppercase">
+                <div class="col-span-1 md:col-span-2 lg:col-span-2">
+                    <h3 class="text-white font-semibold text-[13px] mb-3 tracking-wide uppercase flex items-center gap-2">
+                        <span class="w-5 h-[2px] bg-[#C4A265] rounded-full"></span>
                         {{ isRtl ? 'التخصصات' : 'Specialties' }}
                     </h3>
                     <ul class="space-y-1.5">
@@ -123,11 +125,12 @@ const socialLinks = computed(() => [
                 </div>
 
                 <!-- Contact + hours -->
-                <div class="col-span-2 md:col-span-4 lg:col-span-4">
-                    <h3 class="text-white font-semibold text-[13px] mb-3 tracking-wide uppercase">
+                <div class="col-span-2 md:col-span-4 lg:col-span-4 pt-4 md:pt-0 border-t md:border-0 border-white/[0.06]">
+                    <h3 class="text-white font-semibold text-[13px] mb-3 tracking-wide uppercase flex items-center gap-2">
+                        <span class="w-5 h-[2px] bg-[#C4A265] rounded-full"></span>
                         {{ t('contact_us') }}
                     </h3>
-                    <ul class="space-y-2">
+                    <ul class="space-y-2.5">
                         <li>
                             <a :href="`tel:${phone1}`" class="group flex items-center gap-2.5 text-white/50 hover:text-white transition-colors text-[13px]">
                                 <svg class="w-3.5 h-3.5 text-[#C4A265] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
@@ -170,11 +173,11 @@ const socialLinks = computed(() => [
 
         <!-- ══ Bottom bar ══ -->
         <div class="relative z-10 border-t border-white/[0.06]">
-            <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col sm:flex-row items-center justify-between gap-2">
-                <p class="text-[11px] text-white/35">
+            <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row items-center justify-between gap-3 text-center md:text-start">
+                <p class="text-[11px] text-white/35 order-2 md:order-1">
                     &copy; {{ new Date().getFullYear() }} Doctorato Polyclinic. {{ t('all_rights_reserved') }}
                 </p>
-                <div class="flex items-center gap-3 text-[11px] text-white/35">
+                <div class="flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5 text-[11px] text-white/35 order-1 md:order-2">
                     <Link :href="localizedRoute('/page/privacy-policy')" class="hover:text-[#C4A265] transition-colors">
                         {{ t('privacy_policy') }}
                     </Link>

@@ -89,8 +89,8 @@ html {
    Uses runtime CSS variables injected by useTheme composable.
    ======================================== */
 .brand-sidebar-bg { background-color: var(--brand-sidebar-bg, #0f172a); }
-.brand-header-bg  { background-color: var(--brand-header-bg, #3A3A3A); }
-.brand-footer-bg  { background-color: var(--brand-footer-bg, #3A3A3A); }
+.brand-header-bg  { background-color: var(--brand-header-bg, #1B365D); }
+.brand-footer-bg  { background-color: var(--brand-footer-bg, #1B365D); }
 .brand-text       { color: var(--brand-primary, #C4A265); }
 .brand-bg         { background-color: var(--brand-primary, #C4A265); }
 .brand-border     { border-color: var(--brand-primary, #C4A265); }

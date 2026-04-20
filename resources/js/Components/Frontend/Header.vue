@@ -58,7 +58,7 @@ onUnmounted(() => {
     >
         <!-- Top Bar -->
         <div
-            class="hidden lg:block transition-all duration-300 border-b border-white/10 brand-header-bg"
+            class="hidden lg:block transition-all duration-300 border-b border-white/10 bg-[#1B365D]"
             :class="isScrolled ? 'py-1' : 'py-2'"
         >
             <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between text-sm">
