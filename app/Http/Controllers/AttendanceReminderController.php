@@ -67,7 +67,9 @@ class AttendanceReminderController extends Controller
 
         // Determine action: check-in or check-out
         if (! $attendance || empty($attendance->check_in)) {
-            // Not yet checked in
+            // Not yet checked in — this is the ONLY popup scenario.
+            // Check-out is handled manually from the user's attendance page —
+            // no automatic popup (was too intrusive after shift ended).
             $checkInFrom = $shiftWindow['start']->copy()->subMinutes(self::CHECK_IN_WINDOW_BEFORE);
             $checkInUntil = $shiftWindow['start']->copy()->addMinutes(self::CHECK_IN_WINDOW_AFTER);
 
@@ -80,39 +82,22 @@ class AttendanceReminderController extends Controller
                         'end'   => $shiftWindow['end']->format('H:i'),
                         'source' => $shiftWindow['source'],
                     ],
-                    // Secretaries get a 5-min nag; doctors just once per shift window
-                    'repeat_interval_minutes' => $roleName === 'doctor' ? 0 : 5,
+                    // No background polling — the popup appears once, and if the
+                    // user dismisses it with "Later" the frontend handles a
+                    // 15-minute snooze on its own. Stops the every-5-min nag
+                    // that was annoying secretaries.
+                    'repeat_interval_minutes' => 0,
                     'late' => $now->greaterThan($shiftWindow['start']),
                 ]);
             }
             return response()->json(['show' => false, 'reason' => 'outside_check_in_window']);
         }
 
-        if (empty($attendance->check_out)) {
-            // Checked in but not yet checked out
-            $checkOutFrom = $shiftWindow['end']->copy()->subMinutes(15);
-            $checkOutUntil = $shiftWindow['end']->copy()->addMinutes(self::CHECK_OUT_WINDOW_AFTER);
-
-            if ($now->between($checkOutFrom, $checkOutUntil)) {
-                return response()->json([
-                    'show'   => true,
-                    'action' => 'check_out',
-                    'shift'  => [
-                        'start' => $shiftWindow['start']->format('H:i'),
-                        'end'   => $shiftWindow['end']->format('H:i'),
-                        'source' => $shiftWindow['source'],
-                        'checked_in_at' => $attendance->check_in,
-                    ],
-                    'repeat_interval_minutes' => 0,
-                ]);
-            }
-            return response()->json(['show' => false, 'reason' => 'outside_check_out_window']);
-        }
-
-        // Already fully checked in + out for today
+        // Already checked in (with or without check-out) — no more popups today.
+        // Users can still manually check out from their /my-attendance page.
         return response()->json([
             'show'   => false,
-            'reason' => 'already_completed',
+            'reason' => 'already_checked_in',
             'attendance' => [
                 'check_in'  => $attendance->check_in,
                 'check_out' => $attendance->check_out,

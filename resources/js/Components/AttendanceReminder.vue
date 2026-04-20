@@ -16,52 +16,46 @@ const errorMessage = ref('');
 const dismissedUntil = ref(0);
 
 let pollTimer = null;
-let repeatMin = 0;
 
-const title = computed(() => {
-    if (action.value === 'check_in') {
-        return isRtl.value ? 'تسجيل الحضور' : 'Check In';
-    }
-    return isRtl.value ? 'تسجيل الانصراف' : 'Check Out';
-});
+const title = computed(() => isRtl.value ? 'تسجيل الحضور' : 'Check In');
 
 const subtitle = computed(() => {
     if (!shift.value) return '';
     const sh = shift.value;
-    if (action.value === 'check_in') {
-        const msg = isRtl.value
-            ? `وقت البداية: ${sh.start}`
-            : `Shift starts: ${sh.start}`;
-        return late.value
-            ? (isRtl.value ? `${msg} — تأخرت قليلاً ⏰` : `${msg} — You are a bit late ⏰`)
-            : msg;
-    }
-    return isRtl.value
-        ? `نهاية الشيفت: ${sh.end} (سجلت حضورك الساعة ${sh.checked_in_at})`
-        : `Shift ends: ${sh.end} (checked in at ${sh.checked_in_at})`;
+    const msg = isRtl.value
+        ? `وقت البداية: ${sh.start}`
+        : `Shift starts: ${sh.start}`;
+    return late.value
+        ? (isRtl.value ? `${msg} — تأخرت قليلاً ⏰` : `${msg} — You are a bit late ⏰`)
+        : msg;
 });
 
 async function fetchStatus() {
-    // Don't poll if user recently dismissed (give them 5 min of peace)
+    // Snooze window — respect the user's "Later" click
     if (Date.now() < dismissedUntil.value) return;
 
     try {
         const { data } = await axios.get('/api/attendance/status');
-        if (data.show) {
-            action.value = data.action;
+        if (data.show && data.action === 'check_in') {
+            // Only show popup for CHECK-IN — never for check-out (too intrusive)
+            action.value = 'check_in';
             shift.value = data.shift;
             late.value = !!data.late;
-            repeatMin = data.repeat_interval_minutes || 0;
             show.value = true;
-            rescheduleNextPoll();
-        } else {
+            // No automatic re-poll — popup stays visible until user acts
+        } else if (data.reason === 'already_checked_in') {
+            // Already done for today — don't bother polling again this session
             show.value = false;
-            // schedule next poll in 10 min (maybe shift just hasn't started yet)
-            scheduleNextPoll(10);
+            stopPolling();
+        } else {
+            // Outside shift window or no shift today — check again in 30 min
+            // in case the shift starts later in the day
+            show.value = false;
+            scheduleNextPoll(30);
         }
     } catch (e) {
         // silent fail — never block the UI
-        scheduleNextPoll(10);
+        scheduleNextPoll(30);
     }
 }
 
@@ -70,13 +64,9 @@ function scheduleNextPoll(minutes) {
     pollTimer = setTimeout(fetchStatus, minutes * 60 * 1000);
 }
 
-function rescheduleNextPoll() {
-    // If server said to repeat every N min (e.g., secretary 5-min nag) honor it
-    if (repeatMin > 0) {
-        scheduleNextPoll(repeatMin);
-    } else {
-        scheduleNextPoll(15); // otherwise recheck every 15 min
-    }
+function stopPolling() {
+    if (pollTimer) clearTimeout(pollTimer);
+    pollTimer = null;
 }
 
 async function submit() {
@@ -105,16 +95,16 @@ async function submit() {
     } catch (_) { /* ignore */ }
 
     try {
-        const url = action.value === 'check_in' ? '/api/attendance/check-in' : '/api/attendance/check-out';
-        const { data } = await axios.post(url, coords);
+        // Only check-in is handled by this popup — check-out is manual
+        const { data } = await axios.post('/api/attendance/check-in', coords);
         if (data.success) {
             successMessage.value = data.message;
-            // Auto-close after 1.5s
+            // Auto-close after 1.5s — then stop polling entirely for the rest
+            // of the session (no check-out popup, no further reminders)
             setTimeout(() => {
                 show.value = false;
                 successMessage.value = '';
-                // Re-fetch status so the popup flips to check_out after a successful check_in
-                scheduleNextPoll(0.05);
+                stopPolling();
             }, 1500);
         } else {
             errorMessage.value = data.message || 'فشل تسجيل الحضور';
@@ -128,9 +118,10 @@ async function submit() {
 
 function dismiss() {
     show.value = false;
-    // Don't bug them again for 5 min
-    dismissedUntil.value = Date.now() + 5 * 60 * 1000;
-    scheduleNextPoll(5);
+    // Respect the user's "Later" click — snooze for a full HOUR, not 5 min.
+    // Was annoying every few minutes — now they get peace.
+    dismissedUntil.value = Date.now() + 60 * 60 * 1000;
+    scheduleNextPoll(60);
 }
 
 onMounted(() => {
@@ -177,11 +168,8 @@ onUnmounted(() => {
 
                             <div class="relative flex items-center gap-4">
                                 <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#C4A265] to-[#8B7043] flex items-center justify-center shadow-lg">
-                                    <svg v-if="action === 'check_in'" class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                    </svg>
-                                    <svg v-else class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
                                     </svg>
                                 </div>
                                 <div class="min-w-0 flex-1">
@@ -236,9 +224,7 @@ onUnmounted(() => {
                                     </svg>
                                     {{ submitting
                                         ? (isRtl ? 'جاري الحفظ...' : 'Saving...')
-                                        : (action === 'check_in'
-                                            ? (isRtl ? 'سجل حضوري الآن' : 'Check me in')
-                                            : (isRtl ? 'سجل انصرافي' : 'Check me out')) }}
+                                        : (isRtl ? 'سجل حضوري الآن' : 'Check me in') }}
                                 </button>
                             </div>
                         </div>
