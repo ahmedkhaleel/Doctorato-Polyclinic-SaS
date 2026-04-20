@@ -100,7 +100,8 @@ Route::middleware('patient.auth')->group(function () {
         ->name('patient.online-consultations.index');
     Route::get('/online-consultations/doctors', [OnlineConsultationController::class, 'doctors'])
         ->name('patient.online-consultations.doctors');
-    Route::get('/online-consultations/book/{doctor}', [OnlineConsultationController::class, 'showDoctor'])
+    Route::get('/online-consultations/book/{docId}', [OnlineConsultationController::class, 'showDoctor'])
+        ->where('docId', '[0-9]+')
         ->name('patient.online-consultations.book');
     Route::post('/online-consultations', [OnlineConsultationController::class, 'store'])
         ->name('patient.online-consultations.store')

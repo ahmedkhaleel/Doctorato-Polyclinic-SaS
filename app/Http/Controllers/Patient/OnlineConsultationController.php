@@ -53,13 +53,12 @@ class OnlineConsultationController extends Controller
         ]);
     }
 
-    public function showDoctor(Request $request, $doctor, OnlineSlotGeneratorService $slots)
+    public function showDoctor(Request $request, $docId, OnlineSlotGeneratorService $slots)
     {
-        // Manually resolve the Doctor from the route param to sidestep an edge case
-        // in Laravel 12's route-model-binding when combined with service DI in the
-        // same signature — production hit a TypeError where the string ID leaked
-        // into the $doctor slot.
-        $doctor = $doctor instanceof Doctor ? $doctor : Doctor::findOrFail($doctor);
+        // Route param renamed to {docId} to bypass Laravel 12 implicit model-binding
+        // on {doctor}, which was returning 404 on production even when the doctor
+        // existed and was online_consultation_enabled = true.
+        $doctor = Doctor::findOrFail((int) $docId);
 
         if (!$doctor->online_consultation_enabled) abort(404);
 
