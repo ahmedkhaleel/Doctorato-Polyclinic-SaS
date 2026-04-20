@@ -23,9 +23,10 @@ const translations = computed(() => page.props.translations || {});
 function t(key) { return translations.value[key] || key; }
 
 const modules = computed(() => page.props.modules || {});
+// Only medical modules — visits are always medical, not HR/Inventory/Insurance
 const activeModules = computed(() => {
     return Object.entries(modules.value)
-        .filter(([, m]) => m.is_enabled !== false)
+        .filter(([, m]) => m.is_enabled !== false && m.is_medical !== false)
         .map(([slug, m]) => ({ slug, name: isRtl.value ? m.name_ar : m.name_en }));
 });
 

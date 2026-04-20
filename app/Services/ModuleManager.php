@@ -373,6 +373,9 @@ class ModuleManager
         $modules = [];
         foreach (self::MODULES as $slug => $module) {
             $info = self::getModuleInfo($slug);
+            // Mark each module as medical or administrative so the frontend
+            // can filter appropriately (booking pages should only show medical).
+            $info['is_medical'] = in_array($slug, self::MEDICAL_MODULES, true);
             $modules[$slug] = $info;
         }
         return $modules;

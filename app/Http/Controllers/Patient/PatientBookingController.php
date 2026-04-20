@@ -53,7 +53,12 @@ class PatientBookingController extends BasePatientController
             ->with('schedules')
             ->get();
 
-        $activeModules = ModuleManager::getActiveModules();
+        // Only show MEDICAL modules (derma, dental, pediatric) on the patient
+        // booking page — HR / Inventory / Insurance are administrative modules
+        // and should never appear as department filters here.
+        $activeModules = collect(ModuleManager::getActiveModules())
+            ->only(ModuleManager::MEDICAL_MODULES)
+            ->all();
 
         return Inertia::render('Patient/Bookings/Create', [
             'patient' => $patient->only(['full_name', 'phone', 'email', 'file_number']),

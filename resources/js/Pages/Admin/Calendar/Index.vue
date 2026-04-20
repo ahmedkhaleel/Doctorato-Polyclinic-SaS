@@ -9,7 +9,7 @@ const isRtl = computed(() => (page.props.dir || 'rtl') === 'rtl');
 const modules = computed(() => page.props.modules || {});
 const activeModules = computed(() => {
     return Object.entries(modules.value)
-        .filter(([, m]) => m.is_enabled !== false)
+        .filter(([, m]) => m.is_enabled !== false && m.is_medical !== false)
         .map(([slug, m]) => ({ slug, name: isRtl.value ? m.name_ar : m.name_en }));
 });
 
