@@ -219,6 +219,31 @@ class InvoiceController extends Controller
         return redirect()->back()->with('success', 'Invoice updated successfully.');
     }
 
+    /**
+     * Soft-delete an invoice.
+     *
+     * Safety rails:
+     *   - Cannot delete invoices with the 'paid' status
+     *   - Cannot delete invoices that have any recorded payments
+     * These protect accounting integrity.
+     */
+    public function destroy(Invoice $invoice): RedirectResponse
+    {
+        if ($invoice->status === 'paid') {
+            return back()->with('error', 'لا يمكن حذف فاتورة مدفوعة.');
+        }
+
+        if ($invoice->payments()->exists()) {
+            return back()->with('error', 'لا يمكن حذف فاتورة بها مدفوعات مسجلة. قم بإلغاء المدفوعات أولاً أو أصدر إشعار دائن.');
+        }
+
+        AuditLogger::log('deleted', $invoice);
+        $invoice->delete();
+
+        return redirect()->route('admin.invoices.index')
+            ->with('success', 'تم حذف الفاتورة بنجاح.');
+    }
+
     public function downloadPdf(Invoice $invoice): HttpResponse
     {
         $invoice->load([

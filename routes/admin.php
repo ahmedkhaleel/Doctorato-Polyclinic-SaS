@@ -346,6 +346,7 @@ Route::middleware('admin.auth')->group(function () {
     Route::post('/invoices', [InvoiceController::class, 'store'])->name('admin.invoices.store')->middleware('permission:invoices.create');
     Route::get('/invoices/{invoice}', [InvoiceController::class, 'show'])->name('admin.invoices.show')->middleware('permission:invoices.view');
     Route::post('/invoices/{invoice}/update', [InvoiceController::class, 'update'])->name('admin.invoices.update')->middleware('permission:invoices.update');
+    Route::post('/invoices/{invoice}/delete', [InvoiceController::class, 'destroy'])->name('admin.invoices.destroy')->middleware('permission:invoices.delete');
     Route::get('/invoices/{invoice}/print', [InvoiceController::class, 'print'])->name('admin.invoices.print')->middleware('permission:invoices.view');
     Route::get('/invoices/{invoice}/pdf', [InvoiceController::class, 'downloadPdf'])->name('admin.invoices.pdf')->middleware('permission:invoices.view');
     Route::get('/invoices/{invoice}/payments/{payment}/receipt', [InvoiceController::class, 'printPaymentReceipt'])->name('admin.invoices.paymentReceipt')->middleware('permission:invoices.view');
