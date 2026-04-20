@@ -121,6 +121,7 @@ const isPediatricEnabled = computed(() => {
     const ped = Object.values(modules.value).find(m => m.slug === 'pediatric');
     return ped?.enabled ?? false;
 });
+const isTelemedicineEnabled = computed(() => modules.value?.telemedicine?.enabled === true);
 
 const isConsultation = computed(() =>
     ['dermatology_consultation', 'cosmetic_consultation', 'dental_consultation', 'pediatric_consultation'].includes(bookingType.value)
@@ -639,11 +640,23 @@ function getServiceLabel(id) {
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                             </svg>
                         </div>
-                        <div>
+                        <div class="flex-1">
                             <h3 class="text-sm md:text-base font-extrabold text-[#1B365D]">{{ $t('a_booking_type') }}</h3>
                             <p class="text-[11px] md:text-xs text-slate-500 mt-0.5">{{ isRtl ? 'اختر نوع الحجز المناسب' : 'Pick the booking type that fits the patient' }}</p>
                         </div>
+                        <Link v-if="isTelemedicineEnabled"
+                              href="/admin/online-consultations"
+                              class="hidden md:inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-[#1B365D] to-[#0F2444] hover:from-[#0F2444] hover:to-[#1B365D] shadow-md transition">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                            {{ isRtl ? 'استشارة أونلاين' : 'Online Consultation' }}
+                        </Link>
                     </div>
+                    <Link v-if="isTelemedicineEnabled"
+                          href="/admin/online-consultations"
+                          class="md:hidden mb-4 inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-[#1B365D] to-[#0F2444] shadow-md w-full justify-center">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                        {{ isRtl ? 'استشارة أونلاين' : 'Online Consultation' }}
+                    </Link>
 
                     <div class="grid gap-3 md:gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4" :class="{ 'xl:grid-cols-6': isDentalEnabled && isPediatricEnabled, 'xl:grid-cols-5': (isDentalEnabled || isPediatricEnabled) && !(isDentalEnabled && isPediatricEnabled) }">
 

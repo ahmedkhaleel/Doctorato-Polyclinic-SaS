@@ -108,6 +108,7 @@ const modules = computed(() => page.props.modules || {});
 const isDermaEnabled = computed(() => modules.value.derma?.enabled !== false);
 const isDentalEnabled = computed(() => modules.value.dental?.enabled === true);
 const isPediatricEnabled = computed(() => modules.value.pediatric?.enabled === true);
+const isTelemedicineEnabled = computed(() => modules.value?.telemedicine?.enabled === true);
 
 const isConsultation = computed(() =>
     bookingType.value === 'dermatology_consultation' || bookingType.value === 'cosmetic_consultation' || bookingType.value === 'dental_consultation' || bookingType.value === 'pediatric_consultation'
@@ -640,6 +641,20 @@ const stepLabels = computed(() => isRtl.value ? [
 
         <!-- Booking Type Selector -->
         <div class="mb-6 max-w-4xl mx-auto">
+          <!-- Online Consultation banner (shown when telemedicine module enabled) -->
+          <div v-if="isTelemedicineEnabled" class="mb-3 relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] to-[#0F2444] shadow-md">
+            <div class="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-[#C4A265] to-transparent"></div>
+            <div class="relative p-4 flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#C4A265] to-[#8B7043] flex items-center justify-center flex-shrink-0">
+                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="text-sm font-bold text-white">{{ isRtl ? 'استشارة أونلاين متاحة' : 'Online Consultation Available' }}</p>
+                <p class="text-[11px] text-white/70 mt-0.5">{{ isRtl ? 'يمكن للمريض حجز استشارة فيديو من حسابه الشخصي' : 'Patients can book a video consultation from their portal' }}</p>
+              </div>
+            </div>
+          </div>
+
           <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-5 overflow-hidden">
             <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4 text-center">
               {{ isRtl ? 'اختر نوع الحجز' : 'Select Booking Type' }}

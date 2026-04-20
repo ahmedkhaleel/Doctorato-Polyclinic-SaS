@@ -29,6 +29,8 @@ const locale = computed(() => page.props.locale || 'ar');
 const dir = computed(() => page.props.dir || 'rtl');
 const isRtl = computed(() => dir.value === 'rtl');
 const translations = computed(() => page.props.translations || {});
+const modules = computed(() => page.props.modules || {});
+const telemedicineEnabled = computed(() => modules.value?.telemedicine?.enabled === true);
 function t(key) { return translations.value[key] || key; }
 
 function $localized(obj, field) {
@@ -118,6 +120,10 @@ function $localized(obj, field) {
             <Link :href="lp('/bookings/create')" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-[var(--brand-primary)] to-[var(--brand-secondary)] hover:from-[var(--brand-primary-hover)] hover:to-[var(--brand-primary)] shadow-md shadow-[var(--brand-primary)]/20 transition-all duration-200">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
                 {{ isRtl ? 'حجز موعد' : 'Book Appointment' }}
+            </Link>
+            <Link v-if="telemedicineEnabled" :href="lp('/online-consultations/doctors')" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-[#1B365D] to-[#0F2444] hover:from-[#0F2444] hover:to-[#1B365D] shadow-md transition-all duration-200">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                {{ isRtl ? 'استشارة أونلاين' : 'Online Consultation' }}
             </Link>
             <Link :href="lp('/invoices')" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-gray-700 bg-white border border-gray-200 hover:bg-gray-50 shadow-sm transition-all duration-200">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" /></svg>

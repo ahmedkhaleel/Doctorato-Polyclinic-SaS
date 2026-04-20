@@ -468,7 +468,7 @@ function submit() {
                                 </div>
 
                                 <!-- ═══ Online Consultation CTA (if telemedicine enabled) ═══ -->
-                                <div v-if="telemedicineEnabled && onlineDoctorsCount > 0" class="mb-6">
+                                <div v-if="telemedicineEnabled" class="mb-6">
                                     <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] shadow-xl">
                                         <div class="pointer-events-none absolute -top-16 -end-16 h-56 w-56 rounded-full bg-[#C4A265]/20 blur-3xl"></div>
                                         <div class="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-[#C4A265] to-transparent"></div>
@@ -491,8 +491,12 @@ function submit() {
                                                     </h3>
                                                     <p class="text-xs md:text-sm text-white/70 mt-1">
                                                         {{ isRtl
-                                                            ? `تواصل مع ${onlineDoctorsCount} طبيب عبر مكالمة فيديو فورية مع وصفة طبية إلكترونية`
-                                                            : `Connect with ${onlineDoctorsCount} doctor(s) via instant video call, with digital prescription` }}
+                                                            ? (onlineDoctorsCount > 0
+                                                                ? `تواصل مع ${onlineDoctorsCount} طبيب عبر مكالمة فيديو فورية مع وصفة طبية إلكترونية`
+                                                                : 'تواصل مع طبيبك عبر مكالمة فيديو فورية مع وصفة طبية إلكترونية')
+                                                            : (onlineDoctorsCount > 0
+                                                                ? `Connect with ${onlineDoctorsCount} doctor(s) via instant video call, with digital prescription`
+                                                                : 'Connect with a doctor via instant video call, with digital prescription') }}
                                                     </p>
                                                 </div>
                                             </div>
