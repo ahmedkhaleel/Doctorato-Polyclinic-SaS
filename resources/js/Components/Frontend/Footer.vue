@@ -74,7 +74,7 @@ const socialLinks = computed(() => [
 
                 <!-- Brand block -->
                 <div class="col-span-2 md:col-span-4 lg:col-span-4">
-                    <img src="/images/logo/logo-light.png" alt="Doctorato Polyclinic" class="h-9 w-auto mb-3" />
+                    <img src="/images/logo/logo-light.png" alt="Doctorato Polyclinic" class="h-7 w-auto mb-3" />
                     <p class="text-white/45 text-[13px] leading-relaxed max-w-sm mb-4">
                         {{ t('footer_about_text') }}
                     </p>

@@ -111,7 +111,7 @@ onUnmounted(() => {
                     <img
                         src="/images/logo/logo.png"
                         alt="Doctorato Polyclinic"
-                        class="h-8 lg:h-10 w-auto transition-transform duration-300 group-hover:scale-105"
+                        class="h-7 lg:h-8 w-auto transition-transform duration-300 group-hover:scale-105"
                     />
                 </Link>
 
@@ -197,7 +197,7 @@ onUnmounted(() => {
                     <img
                         src="/images/logo/logo.png"
                         alt="Doctorato Polyclinic"
-                        class="h-8 w-auto"
+                        class="h-7 w-auto"
                     />
                     <button @click="closeMobileMenu" class="p-2 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
