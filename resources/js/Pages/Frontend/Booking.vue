@@ -497,7 +497,7 @@ function submit() {
                                                 </div>
                                             </div>
                                             <Link
-                                                href="/patient/online-consultations/doctors"
+                                                :href="`/${locale}/patient/online-consultations/doctors`"
                                                 class="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#C4A265] to-[#8B7043] hover:from-[#8B7043] hover:to-[#C4A265] text-white font-bold px-5 py-3 shadow-md hover:shadow-lg transition text-sm whitespace-nowrap flex-shrink-0"
                                             >
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
