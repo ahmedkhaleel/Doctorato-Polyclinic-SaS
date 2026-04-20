@@ -53,8 +53,14 @@ class OnlineConsultationController extends Controller
         ]);
     }
 
-    public function showDoctor(Request $request, Doctor $doctor, OnlineSlotGeneratorService $slots)
+    public function showDoctor(Request $request, $doctor, OnlineSlotGeneratorService $slots)
     {
+        // Manually resolve the Doctor from the route param to sidestep an edge case
+        // in Laravel 12's route-model-binding when combined with service DI in the
+        // same signature — production hit a TypeError where the string ID leaked
+        // into the $doctor slot.
+        $doctor = $doctor instanceof Doctor ? $doctor : Doctor::findOrFail($doctor);
+
         if (!$doctor->online_consultation_enabled) abort(404);
 
         $startDate = $request->input('date')
@@ -159,8 +165,12 @@ class OnlineConsultationController extends Controller
         ]);
     }
 
-    public function room(Request $request, OnlineConsultation $consultation)
+    public function room(Request $request, $consultation)
     {
+        $consultation = $consultation instanceof OnlineConsultation
+            ? $consultation
+            : OnlineConsultation::findOrFail($consultation);
+
         if ($consultation->patient_id !== $request->user()->patient?->id) abort(403);
 
         return Inertia::render('Patient/OnlineConsultation/Room', [
@@ -169,8 +179,12 @@ class OnlineConsultationController extends Controller
         ]);
     }
 
-    public function cancel(Request $request, OnlineConsultation $consultation, OnlineConsultationService $service)
+    public function cancel(Request $request, $consultation, OnlineConsultationService $service)
     {
+        $consultation = $consultation instanceof OnlineConsultation
+            ? $consultation
+            : OnlineConsultation::findOrFail($consultation);
+
         if ($consultation->patient_id !== $request->user()->patient?->id) abort(403);
 
         if (!$consultation->isCancellable((int) Setting::get('telemedicine_cancellation_hours', 24))) {
