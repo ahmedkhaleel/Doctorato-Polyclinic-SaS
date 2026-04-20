@@ -61,7 +61,7 @@ onUnmounted(() => {
             class="hidden lg:block transition-all duration-300 border-b border-white/10 brand-header-bg"
             :class="isScrolled ? 'py-1' : 'py-2'"
         >
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between text-sm">
+            <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between text-sm">
                 <!-- Contact Info -->
                 <div class="flex items-center gap-6 text-gray-300">
                     <a :href="`tel:${phone1}`" class="flex items-center gap-1.5 hover:text-[var(--brand-primary)] transition-colors">
@@ -104,7 +104,7 @@ onUnmounted(() => {
         </div>
 
         <!-- Main Navigation -->
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16 lg:h-20">
                 <!-- Logo -->
                 <Link :href="localizedRoute('/')" class="flex-shrink-0 group">

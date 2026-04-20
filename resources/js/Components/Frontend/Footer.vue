@@ -69,7 +69,7 @@ const socialLinks = computed(() => [
                     pointer-events-none"></div>
 
         <!-- ══ Main content ══ -->
-        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-5">
+        <div class="relative z-10 max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-5">
             <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-12 gap-x-6 gap-y-8">
 
                 <!-- Brand block -->
@@ -170,7 +170,7 @@ const socialLinks = computed(() => [
 
         <!-- ══ Bottom bar ══ -->
         <div class="relative z-10 border-t border-white/[0.06]">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col sm:flex-row items-center justify-between gap-2">
+            <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col sm:flex-row items-center justify-between gap-2">
                 <p class="text-[11px] text-white/35">
                     &copy; {{ new Date().getFullYear() }} Doctorato Polyclinic. {{ t('all_rights_reserved') }}
                 </p>
