@@ -2,11 +2,37 @@
 import { Link, usePage } from '@inertiajs/vue3';
 import { useLocale } from '@/Composables/useLocale';
 import { useSettings } from '@/Composables/useSettings';
-import { computed } from 'vue';
+import { computed, onMounted, onBeforeUnmount, ref } from 'vue';
 
 const { t, locale, isRtl, localizedRoute } = useLocale();
 const { phone1, phone2, email, facebook, instagram, tiktok, googleMaps, whatsappLink } = useSettings();
 const modules = computed(() => usePage().props.modules || {});
+
+/* ── Scroll-reveal: animate columns as the footer enters the viewport ── */
+const footerEl = ref(null);
+let observer = null;
+
+onMounted(() => {
+    if (!footerEl.value || typeof IntersectionObserver === 'undefined') return;
+
+    observer = new IntersectionObserver(
+        (entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    const cols = footerEl.value.querySelectorAll('.reveal-col');
+                    cols.forEach((el, i) => {
+                        setTimeout(() => el.classList.add('is-visible'), i * 120);
+                    });
+                    observer?.disconnect();
+                }
+            });
+        },
+        { threshold: 0.15 }
+    );
+    observer.observe(footerEl.value);
+});
+
+onBeforeUnmount(() => observer?.disconnect());
 
 const quickLinks = [
     { label: () => t('home'), route: '/' },
@@ -53,16 +79,54 @@ const socialLinks = [
 </script>
 
 <template>
-    <footer class="relative overflow-hidden">
-        <!-- Navy gradient background -->
-        <div class="absolute inset-0 bg-gradient-to-b from-[#0f2847] via-[#142f52] to-[#0d2240]"></div>
-        <!-- Dot texture -->
-        <div class="absolute inset-0 opacity-[0.025]"
-             style="background-image: radial-gradient(circle at 1px 1px, rgba(196,162,101,0.8) 1px, transparent 0); background-size: 32px 32px;"></div>
-        <!-- Subtle glow -->
-        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-[radial-gradient(ellipse,_rgba(196,162,101,0.04)_0%,_transparent_70%)]"></div>
+    <footer ref="footerEl" class="footer-premium relative overflow-hidden">
+        <!-- ══ BACKGROUND LAYERS (stacked, all decorative) ══ -->
 
-        <!-- Top gold accent line -->
+        <!-- 1. Deep navy gradient base -->
+        <div class="absolute inset-0 bg-gradient-to-br from-[#0a1e3d] via-[#142f52] to-[#0d2240]"></div>
+
+        <!-- 2. SVG texture: medical cross pattern (subtle gold) -->
+        <svg class="absolute inset-0 w-full h-full opacity-[0.035] pointer-events-none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <pattern id="doctorato-cross" x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse">
+                    <path d="M30 20 L30 40 M20 30 L40 30" stroke="#C4A265" stroke-width="1" fill="none" stroke-linecap="round"/>
+                    <circle cx="30" cy="30" r="1.5" fill="#C4A265"/>
+                </pattern>
+                <pattern id="doctorato-grid" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
+                    <circle cx="40" cy="40" r="1" fill="#C4A265" opacity="0.5"/>
+                    <circle cx="0" cy="0" r="0.8" fill="#C4A265" opacity="0.3"/>
+                    <circle cx="80" cy="80" r="0.8" fill="#C4A265" opacity="0.3"/>
+                </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#doctorato-cross)"/>
+            <rect width="100%" height="100%" fill="url(#doctorato-grid)"/>
+        </svg>
+
+        <!-- 3. Diagonal line texture -->
+        <div class="absolute inset-0 opacity-[0.015] pointer-events-none"
+             style="background-image: repeating-linear-gradient(45deg, transparent 0px, transparent 40px, #C4A265 40px, #C4A265 41px);"></div>
+
+        <!-- 4. Floating animated gold orbs (decorative glow) -->
+        <div class="pointer-events-none absolute inset-0 overflow-hidden">
+            <div class="footer-orb footer-orb--1"></div>
+            <div class="footer-orb footer-orb--2"></div>
+            <div class="footer-orb footer-orb--3"></div>
+        </div>
+
+        <!-- 5. Top vignette: soft gold radial glow at center-top -->
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[400px] opacity-60
+                    bg-[radial-gradient(ellipse_at_top,_rgba(196,162,101,0.08)_0%,_transparent_65%)]
+                    pointer-events-none"></div>
+
+        <!-- 6. Bottom vignette: deep shadow for depth -->
+        <div class="absolute bottom-0 inset-x-0 h-40 bg-gradient-to-t from-black/40 to-transparent pointer-events-none"></div>
+
+        <!-- 7. SVG wave divider at the very top -->
+        <svg class="relative block w-full h-8 md:h-12 -mt-px text-[#0a1e3d]" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true">
+            <path fill="currentColor" d="M0,32L40,37.3C80,43,160,53,240,58.7C320,64,400,64,480,56C560,48,640,32,720,26.7C800,21,880,27,960,32C1040,37,1120,43,1200,42.7C1280,43,1360,37,1400,34.7L1440,32L1440,80L0,80Z"/>
+        </svg>
+
+        <!-- 8. Top gold accent line -->
         <div class="relative h-[2px] bg-gradient-to-r from-transparent via-[#C4A265] to-transparent"></div>
 
         <!-- ══════════════════════════════════════════ -->
@@ -113,7 +177,7 @@ const socialLinks = [
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-10 md:gap-x-10 lg:gap-10">
 
                 <!-- Column 1: Quick Links -->
-                <div>
+                <div class="reveal-col">
                     <h3 class="text-white font-bold text-sm mb-5 flex items-center gap-2.5">
                         <span class="w-6 h-[2px] bg-gradient-to-r from-[#C4A265] to-transparent rounded-full"></span>
                         {{ t('quick_links') }}
@@ -134,7 +198,7 @@ const socialLinks = [
                 </div>
 
                 <!-- Column 2: Medical Specialties -->
-                <div>
+                <div class="reveal-col">
                     <h3 class="text-white font-bold text-sm mb-5 flex items-center gap-2.5">
                         <span class="w-6 h-[2px] bg-gradient-to-r from-[#C4A265] to-transparent rounded-full"></span>
                         {{ isRtl ? 'تخصصاتنا الطبية' : 'Medical Specialties' }}
@@ -156,7 +220,7 @@ const socialLinks = [
                 </div>
 
                 <!-- Column 3: Contact Info -->
-                <div>
+                <div class="reveal-col">
                     <h3 class="text-white font-bold text-sm mb-5 flex items-center gap-2.5">
                         <span class="w-6 h-[2px] bg-gradient-to-r from-[#C4A265] to-transparent rounded-full"></span>
                         {{ t('contact_us') }}
@@ -219,7 +283,7 @@ const socialLinks = [
                 </div>
 
                 <!-- Column 4: Social + Working Hours -->
-                <div>
+                <div class="reveal-col">
                     <h3 class="text-white font-bold text-sm mb-5 flex items-center gap-2.5">
                         <span class="w-6 h-[2px] bg-gradient-to-r from-[#C4A265] to-transparent rounded-full"></span>
                         {{ isRtl ? 'تابعنا' : 'Follow Us' }}
@@ -303,3 +367,87 @@ const socialLinks = [
         </div>
     </footer>
 </template>
+
+<style scoped>
+/* ══════ Floating gold orbs ══════ */
+.footer-orb {
+    position: absolute;
+    border-radius: 9999px;
+    filter: blur(70px);
+    opacity: 0.25;
+    will-change: transform;
+}
+.footer-orb--1 {
+    width: 360px;
+    height: 360px;
+    background: radial-gradient(circle, rgba(196,162,101,0.55) 0%, transparent 70%);
+    top: -60px;
+    left: -100px;
+    animation: orbFloat1 18s ease-in-out infinite;
+}
+.footer-orb--2 {
+    width: 280px;
+    height: 280px;
+    background: radial-gradient(circle, rgba(196,162,101,0.4) 0%, transparent 70%);
+    bottom: -80px;
+    right: 10%;
+    animation: orbFloat2 22s ease-in-out infinite;
+}
+.footer-orb--3 {
+    width: 220px;
+    height: 220px;
+    background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+    top: 40%;
+    left: 55%;
+    animation: orbFloat3 28s ease-in-out infinite;
+}
+
+@keyframes orbFloat1 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33%      { transform: translate(60px, 40px) scale(1.08); }
+    66%      { transform: translate(30px, -30px) scale(0.95); }
+}
+@keyframes orbFloat2 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50%      { transform: translate(-70px, -50px) scale(1.12); }
+}
+@keyframes orbFloat3 {
+    0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.3; }
+    50%      { transform: translate(-40px, 60px) scale(1.15); opacity: 0.5; }
+}
+
+/* ══════ Scroll-reveal columns ══════ */
+.reveal-col {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s cubic-bezier(0.25, 0.8, 0.3, 1),
+                transform 0.7s cubic-bezier(0.25, 0.8, 0.3, 1);
+}
+.reveal-col.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .footer-orb--1, .footer-orb--2, .footer-orb--3 {
+        animation: none;
+    }
+    .reveal-col {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+}
+
+/* Subtle shimmer for gold accent line on hover */
+.footer-premium:hover > .relative.h-\[2px\] {
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(196,162,101,0.3) 20%,
+        #C4A265 50%,
+        rgba(196,162,101,0.3) 80%,
+        transparent 100%);
+    transition: background 0.6s ease;
+}
+</style>
