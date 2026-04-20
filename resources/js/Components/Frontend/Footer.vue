@@ -45,23 +45,27 @@ const socialLinks = computed(() => [
         <!-- Texture layers -->
         <div class="absolute inset-0 bg-gradient-to-br from-[#0a1e3d] via-[#142f52] to-[#0d2240]"></div>
 
-        <svg class="absolute inset-0 w-full h-full opacity-[0.04] pointer-events-none" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-                <pattern id="dp-grid" x="0" y="0" width="48" height="48" patternUnits="userSpaceOnUse">
-                    <path d="M24 18 L24 30 M18 24 L30 24" stroke="#C4A265" stroke-width="0.8" fill="none" stroke-linecap="round"/>
-                    <circle cx="0" cy="0" r="0.8" fill="#C4A265"/>
-                    <circle cx="48" cy="48" r="0.8" fill="#C4A265"/>
-                </pattern>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#dp-grid)"/>
-        </svg>
+        <!-- Animated SVG medical-cross + grid pattern (drifts slowly) -->
+        <div class="footer-pattern absolute inset-0 opacity-[0.06] pointer-events-none"></div>
 
-        <!-- Top gold accent line -->
-        <div class="relative h-[2px] bg-gradient-to-r from-transparent via-[#C4A265] to-transparent"></div>
+        <!-- Diagonal lines that scroll -->
+        <div class="footer-stripes absolute inset-0 opacity-[0.035] pointer-events-none"></div>
+
+        <!-- Floating animated gold orbs (movement) -->
+        <div class="pointer-events-none absolute inset-0 overflow-hidden">
+            <span class="f-orb f-orb-1"></span>
+            <span class="f-orb f-orb-2"></span>
+            <span class="f-orb f-orb-3"></span>
+        </div>
+
+        <!-- Animated shimmer line across the top -->
+        <div class="relative h-[2px] bg-gradient-to-r from-transparent via-[#C4A265] to-transparent overflow-hidden">
+            <span class="footer-shimmer absolute inset-y-0 w-1/3 bg-gradient-to-r from-transparent via-white/60 to-transparent"></span>
+        </div>
 
         <!-- Soft radial glow (top-center) -->
-        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[260px] opacity-60
-                    bg-[radial-gradient(ellipse_at_top,_rgba(196,162,101,0.07)_0%,_transparent_70%)]
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[260px] opacity-70
+                    bg-[radial-gradient(ellipse_at_top,_rgba(196,162,101,0.09)_0%,_transparent_70%)]
                     pointer-events-none"></div>
 
         <!-- ══ Main content ══ -->
@@ -191,8 +195,91 @@ const socialLinks = computed(() => [
 </template>
 
 <style scoped>
-.footer-pro {
-    /* subtle diagonal line texture overlay */
-    background-image: repeating-linear-gradient(45deg, transparent 0px, transparent 60px, rgba(196,162,101,0.02) 60px, rgba(196,162,101,0.02) 61px);
+/* ══ Animated SVG grid + medical-cross pattern ══ */
+.footer-pattern {
+    background-image:
+        url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'><g fill='none' stroke='%23C4A265' stroke-width='0.8' stroke-linecap='round'><path d='M24 18 L24 30 M18 24 L30 24'/></g><circle cx='0' cy='0' r='1' fill='%23C4A265'/><circle cx='48' cy='48' r='1' fill='%23C4A265'/><circle cx='0' cy='48' r='0.6' fill='%23C4A265'/><circle cx='48' cy='0' r='0.6' fill='%23C4A265'/></svg>");
+    background-size: 48px 48px;
+    animation: patternDrift 40s linear infinite;
+    will-change: background-position;
+}
+@keyframes patternDrift {
+    from { background-position: 0 0; }
+    to   { background-position: 480px 240px; }
+}
+
+/* ══ Diagonal stripe texture that slowly slides ══ */
+.footer-stripes {
+    background-image: repeating-linear-gradient(45deg,
+        transparent 0 38px,
+        #C4A265 38px 39px);
+    background-size: 60px 60px;
+    animation: stripeSlide 22s linear infinite;
+    will-change: background-position;
+}
+@keyframes stripeSlide {
+    from { background-position: 0 0; }
+    to   { background-position: 120px 120px; }
+}
+
+/* ══ Floating gold orbs ══ */
+.f-orb {
+    position: absolute;
+    border-radius: 9999px;
+    filter: blur(60px);
+    will-change: transform;
+}
+.f-orb-1 {
+    width: 280px; height: 280px;
+    background: radial-gradient(circle, rgba(196,162,101,0.55) 0%, transparent 70%);
+    top: -80px; left: -60px;
+    opacity: 0.35;
+    animation: orbA 16s ease-in-out infinite;
+}
+.f-orb-2 {
+    width: 220px; height: 220px;
+    background: radial-gradient(circle, rgba(196,162,101,0.45) 0%, transparent 70%);
+    bottom: -70px; right: 8%;
+    opacity: 0.3;
+    animation: orbB 20s ease-in-out infinite;
+}
+.f-orb-3 {
+    width: 180px; height: 180px;
+    background: radial-gradient(circle, rgba(255,255,255,0.12) 0%, transparent 70%);
+    top: 30%; left: 55%;
+    opacity: 0.4;
+    animation: orbC 26s ease-in-out infinite;
+}
+@keyframes orbA {
+    0%,100% { transform: translate(0,0) scale(1); }
+    33%     { transform: translate(80px, 30px) scale(1.1); }
+    66%     { transform: translate(40px,-25px) scale(0.95); }
+}
+@keyframes orbB {
+    0%,100% { transform: translate(0,0) scale(1); }
+    50%     { transform: translate(-90px,-40px) scale(1.15); }
+}
+@keyframes orbC {
+    0%,100% { transform: translate(0,0) scale(1); opacity: 0.3; }
+    50%     { transform: translate(-50px,70px) scale(1.2); opacity: 0.55; }
+}
+
+/* ══ Shimmer along top accent line ══ */
+.footer-shimmer {
+    animation: shimmerSlide 4.5s ease-in-out infinite;
+    will-change: transform;
+}
+@keyframes shimmerSlide {
+    0%   { transform: translateX(-120%); }
+    60%  { transform: translateX(420%); }
+    100% { transform: translateX(420%); }
+}
+
+/* ══ Respect reduced-motion ══ */
+@media (prefers-reduced-motion: reduce) {
+    .footer-pattern, .footer-stripes,
+    .f-orb-1, .f-orb-2, .f-orb-3, .footer-shimmer {
+        animation: none;
+    }
 }
 </style>
