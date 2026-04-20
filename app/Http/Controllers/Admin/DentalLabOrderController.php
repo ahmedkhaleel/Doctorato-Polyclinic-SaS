@@ -539,7 +539,7 @@ class DentalLabOrderController extends Controller
         $skipped = 0;
 
         // Pre-load settings once (avoids 2 queries per order)
-        $clinicName = \App\Models\Setting::get('clinic_name_ar', 'Aura Derma Clinic');
+        $clinicName = \App\Models\Setting::get('clinic_name_ar', 'Doctorato Polyclinic');
         $clinicPhone = \App\Models\Setting::get('clinic_phone', '');
 
         foreach ($orders as $order) {
@@ -609,7 +609,7 @@ class DentalLabOrderController extends Controller
         // Group by lab for easy printing
         $groupedByLab = $orders->groupBy(fn ($o) => $o->lab_name ?: 'غير محدد');
 
-        $clinicName = Setting::get('clinic_name_ar', Setting::get('clinic_name_en', 'Aura Derma Clinic'));
+        $clinicName = Setting::get('clinic_name_ar', Setting::get('clinic_name_en', 'Doctorato Polyclinic'));
         $clinicPhone = Setting::get('clinic_phone', '');
 
         return Inertia::render('Admin/Dental/LabOrders/Print', [

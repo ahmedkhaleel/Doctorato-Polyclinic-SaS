@@ -16,7 +16,7 @@ class SmsService
     public static function send(string $phone, string $body, string $senderName = null): array
     {
         $provider = Setting::get('sms_provider', 'none');
-        $senderName = $senderName ?: Setting::get('sms_sender_name', 'AuraDerma');
+        $senderName = $senderName ?: Setting::get('sms_sender_name', 'Doctorato');
 
         if ($provider === 'none' || ! $provider) {
             Log::info('SMS not sent (no provider configured)', [
@@ -231,7 +231,7 @@ class SmsService
      */
     public static function sendToPatient(string $phone, string $messageTemplate, array $variables = []): array
     {
-        $clinicName = Setting::get('clinic_name_en', 'Aura Derma Clinic');
+        $clinicName = Setting::get('clinic_name_en', 'Doctorato Polyclinic');
         $clinicPhone = Setting::get('clinic_phone', '');
 
         $defaults = [
@@ -267,6 +267,6 @@ class SmsService
      */
     public static function sendTest(string $phone): array
     {
-        return static::send($phone, 'This is a test message from Aura Derma Clinic SMS system. If you received this, your SMS configuration is working correctly.');
+        return static::send($phone, 'This is a test message from Doctorato Polyclinic SMS system. If you received this, your SMS configuration is working correctly.');
     }
 }

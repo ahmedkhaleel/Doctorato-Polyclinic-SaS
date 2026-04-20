@@ -61,7 +61,7 @@ class SendPediatricVaccinationReminders extends Command
             ->get();
 
         $sent = 0;
-        $clinicName = Setting::get('clinic_name', 'Aura Derma Clinic');
+        $clinicName = Setting::get('clinic_name', 'Doctorato Polyclinic');
 
         foreach ($vaccinations as $vax) {
             $patient = $vax->patient;
@@ -118,7 +118,7 @@ class SendPediatricVaccinationReminders extends Command
             ->get();
 
         $sent = 0;
-        $clinicName = Setting::get('clinic_name', 'Aura Derma Clinic');
+        $clinicName = Setting::get('clinic_name', 'Doctorato Polyclinic');
 
         foreach ($vaccinations as $vax) {
             $patient = $vax->patient;

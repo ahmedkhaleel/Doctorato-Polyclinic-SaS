@@ -140,7 +140,7 @@ class DentalFollowupService
             return ['success' => false, 'message' => 'No phone'];
         }
 
-        $clinicName = Setting::get('clinic_name_ar', 'Aura Derma Clinic');
+        $clinicName = Setting::get('clinic_name_ar', 'Doctorato Polyclinic');
         $clinicPhone = Setting::get('clinic_phone', '');
         $rule = $followup->rule;
 
@@ -189,7 +189,7 @@ class DentalFollowupService
             return ['success' => false, 'message' => 'No phone'];
         }
 
-        $clinicName = Setting::get('clinic_name_ar', 'Aura Derma Clinic');
+        $clinicName = Setting::get('clinic_name_ar', 'Doctorato Polyclinic');
         $clinicPhone = Setting::get('clinic_phone', '');
         $rule = $followup->rule;
 

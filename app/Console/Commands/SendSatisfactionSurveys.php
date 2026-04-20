@@ -40,7 +40,7 @@ class SendSatisfactionSurveys extends Command
 
             // Send SMS with survey link
             $url = url("/survey/{$survey->token}");
-            $message = "شكراً لزيارتك عيادة أورا ديرما. نرجو تقييم تجربتك: {$url}";
+            $message = "شكراً لزيارتك عيادة دكتوراتو. نرجو تقييم تجربتك: {$url}";
 
             try {
                 $smsService = app(SmsService::class);

@@ -21,7 +21,7 @@ class LeadTemplateMail extends Mailable
 
     public function envelope(): Envelope
     {
-        $clinicName = Setting::get('clinic_name_en', 'Aura Derma Clinic');
+        $clinicName = Setting::get('clinic_name_en', 'Doctorato Polyclinic');
 
         return new Envelope(
             subject: $this->mailSubject,
@@ -40,7 +40,7 @@ class LeadTemplateMail extends Mailable
             with: [
                 'body' => $this->mailBody,
                 'recipientName' => $this->recipientName,
-                'clinicName' => Setting::get('clinic_name_en', 'Aura Derma Clinic'),
+                'clinicName' => Setting::get('clinic_name_en', 'Doctorato Polyclinic'),
                 'clinicPhone' => Setting::get('clinic_phone', ''),
             ],
         );

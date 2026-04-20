@@ -145,7 +145,7 @@ class PatientPediatricController extends BasePatientController
             'patient' => $patient,
             'vaccinations' => $vaccinations,
             'ageMonths' => $ageMonths,
-            'clinicName' => Setting::get('clinic_name', 'Aura Derma Clinic'),
+            'clinicName' => Setting::get('clinic_name', 'Doctorato Polyclinic'),
             'clinicPhone' => Setting::get('clinic_phone', ''),
         ]);
         $pdf->setPaper('A4', 'landscape');
@@ -172,7 +172,7 @@ class PatientPediatricController extends BasePatientController
             'patient' => $patient,
             'growthRecords' => $growthRecords,
             'ageMonths' => $ageMonths,
-            'clinicName' => Setting::get('clinic_name', 'Aura Derma Clinic'),
+            'clinicName' => Setting::get('clinic_name', 'Doctorato Polyclinic'),
             'clinicPhone' => Setting::get('clinic_phone', ''),
         ]);
         $pdf->setPaper('A4');

@@ -57,7 +57,7 @@ class DentalSmartNotificationService
 
             if (DentalSmartNotification::alreadySent($dedupKey)) continue;
 
-            $clinicName = Setting::get('clinic_name_ar', 'عيادة أورا ديرما');
+            $clinicName = Setting::get('clinic_name_ar', 'عيادة دكتوراتو');
             $clinicPhone = Setting::get('clinic_phone', '');
             $treatmentLabel = self::getTreatmentLabel($treatment->treatment_type);
             $daysSince = now()->diffInDays($treatment->completed_at);
@@ -118,7 +118,7 @@ class DentalSmartNotificationService
 
         if (DentalSmartNotification::alreadySent($dedupKey)) return null;
 
-        $clinicName = Setting::get('clinic_name_ar', 'عيادة أورا ديرما');
+        $clinicName = Setting::get('clinic_name_ar', 'عيادة دكتوراتو');
         $clinicPhone = Setting::get('clinic_phone', '');
 
         $itemLabels = [
@@ -205,7 +205,7 @@ class DentalSmartNotificationService
 
             if (DentalSmartNotification::alreadySent($dedupKey)) continue;
 
-            $clinicName = Setting::get('clinic_name_ar', 'عيادة أورا ديرما');
+            $clinicName = Setting::get('clinic_name_ar', 'عيادة دكتوراتو');
             $clinicPhone = Setting::get('clinic_phone', '');
             $planTitle = $plan->title_ar ?: $plan->title_en ?: 'خطة العلاج';
             $completedCount = $plan->treatments()->where('status', 'completed')->count();
@@ -275,7 +275,7 @@ class DentalSmartNotificationService
 
         if (DentalSmartNotification::alreadySent($dedupKey)) return null;
 
-        $clinicName = Setting::get('clinic_name_ar', 'عيادة أورا ديرما');
+        $clinicName = Setting::get('clinic_name_ar', 'عيادة دكتوراتو');
         $clinicPhone = Setting::get('clinic_phone', '');
         $treatmentLabel = self::getTreatmentLabel($treatment->treatment_type);
         $doctorName = $treatment->doctor?->name_ar ?? $treatment->doctor?->name_en ?? '';
@@ -371,7 +371,7 @@ class DentalSmartNotificationService
 
             if (DentalSmartNotification::alreadySent($dedupKey)) continue;
 
-            $clinicName = Setting::get('clinic_name_ar', 'عيادة أورا ديرما');
+            $clinicName = Setting::get('clinic_name_ar', 'عيادة دكتوراتو');
             $clinicPhone = Setting::get('clinic_phone', '');
 
             // Build specific medical instructions

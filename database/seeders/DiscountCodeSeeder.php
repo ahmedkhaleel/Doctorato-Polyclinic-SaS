@@ -67,7 +67,7 @@ class DiscountCodeSeeder extends Seeder
                 'first_booking_only'   => true,
                 'show_on_website'      => true,
                 'popup_title_en'       => 'Welcome to Doctorato!',
-                'popup_title_ar'       => 'مرحبا بك في اورا ديرما!',
+                'popup_title_ar'       => 'مرحبا بك في دكتوراتو!',
                 'popup_description_en' => 'Enjoy 10% off your first booking with us. Use the code below at checkout.',
                 'popup_description_ar' => 'استمتعي بخصم 10% على حجزك الاول معنا. استخدمي الكود ادناه عند الحجز.',
                 'popup_image'          => null,

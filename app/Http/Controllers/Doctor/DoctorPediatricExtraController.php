@@ -213,7 +213,7 @@ class DoctorPediatricExtraController extends BaseDoctorController
             'patient' => $patient,
             'vaccinations' => $vaccinations,
             'ageMonths' => $ageMonths,
-            'clinicName' => \App\Models\Setting::get('clinic_name', 'Aura Derma Clinic'),
+            'clinicName' => \App\Models\Setting::get('clinic_name', 'Doctorato Polyclinic'),
             'clinicPhone' => \App\Models\Setting::get('clinic_phone', ''),
         ]);
         $pdf->setPaper('A4', 'landscape');
@@ -237,7 +237,7 @@ class DoctorPediatricExtraController extends BaseDoctorController
             'patient' => $patient,
             'growthRecords' => $growthRecords,
             'ageMonths' => $ageMonths,
-            'clinicName' => \App\Models\Setting::get('clinic_name', 'Aura Derma Clinic'),
+            'clinicName' => \App\Models\Setting::get('clinic_name', 'Doctorato Polyclinic'),
             'clinicPhone' => \App\Models\Setting::get('clinic_phone', ''),
         ]);
         $pdf->setPaper('A4');
@@ -265,7 +265,7 @@ class DoctorPediatricExtraController extends BaseDoctorController
             'ageMonths' => $ageMonths,
             'ageDisplay' => $ageDisplay,
             'doctorName' => $doctor ? ($doctor->name_en ?? $doctor->name_ar ?? '-') : '-',
-            'clinicName' => Setting::get('clinic_name', 'Aura Derma Clinic'),
+            'clinicName' => Setting::get('clinic_name', 'Doctorato Polyclinic'),
             'clinicPhone' => Setting::get('clinic_phone', ''),
             'allergies' => PediatricAllergy::where('patient_id', $patient->id)->where('is_active', true)->get(),
             'chronicConditions' => PediatricChronicCondition::where('patient_id', $patient->id)->where('is_active', true)->get(),

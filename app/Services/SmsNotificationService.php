@@ -32,7 +32,7 @@ class SmsNotificationService
         $bookingNumber = $booking->booking_number ?? '#' . $booking->id;
         $date = $booking->preferred_date?->format('d/m/Y') ?? '';
         $time = $booking->preferred_time ?? '';
-        $clinicName = Setting::get('clinic_name_ar', Setting::get('clinic_name_en', 'Aura Derma Clinic'));
+        $clinicName = Setting::get('clinic_name_ar', Setting::get('clinic_name_en', 'Doctorato Polyclinic'));
         $clinicPhone = Setting::get('clinic_phone', '');
 
         $moduleLabel = $booking->module === 'dental' ? 'أسنان' : 'جلدية';
@@ -67,7 +67,7 @@ class SmsNotificationService
         $patientName = $booking->full_name ?? $booking->patient?->full_name ?? '';
         $date = $booking->preferred_date?->format('d/m/Y') ?? 'غداً';
         $time = $booking->preferred_time ?? '';
-        $clinicName = Setting::get('clinic_name_ar', Setting::get('clinic_name_en', 'Aura Derma Clinic'));
+        $clinicName = Setting::get('clinic_name_ar', Setting::get('clinic_name_en', 'Doctorato Polyclinic'));
         $clinicPhone = Setting::get('clinic_phone', '');
 
         $message = "تذكير 📋\n"
@@ -95,7 +95,7 @@ class SmsNotificationService
             return ['success' => false, 'message' => 'No phone number available.'];
         }
 
-        $clinicName = Setting::get('clinic_name_ar', Setting::get('clinic_name_en', 'Aura Derma Clinic'));
+        $clinicName = Setting::get('clinic_name_ar', Setting::get('clinic_name_en', 'Doctorato Polyclinic'));
 
         $message = "شكراً لزيارتك {$clinicName} 🙏\n"
             . "نتمنى لك دوام الصحة والعافية.\n"
@@ -118,7 +118,7 @@ class SmsNotificationService
             return ['success' => false, 'message' => 'No phone number available.'];
         }
 
-        $clinicName = Setting::get('clinic_name_ar', Setting::get('clinic_name_en', 'Aura Derma Clinic'));
+        $clinicName = Setting::get('clinic_name_ar', Setting::get('clinic_name_en', 'Doctorato Polyclinic'));
         $clinicPhone = Setting::get('clinic_phone', '');
 
         $message = "مرحباً {$patient->full_name}\n"
@@ -148,7 +148,7 @@ class SmsNotificationService
             return ['success' => false, 'message' => 'No phone number available.'];
         }
 
-        $clinicName = Setting::get('clinic_name_ar', Setting::get('clinic_name_en', 'Aura Derma Clinic'));
+        $clinicName = Setting::get('clinic_name_ar', Setting::get('clinic_name_en', 'Doctorato Polyclinic'));
         $clinicPhone = Setting::get('clinic_phone', '');
 
         $message = "مرحباً {$patient->full_name}\n"
@@ -181,7 +181,7 @@ class SmsNotificationService
 
         $patientName = $booking->full_name ?? $booking->patient?->full_name ?? '';
         $time = $booking->preferred_time ?? '';
-        $clinicName = Setting::get('clinic_name_ar', Setting::get('clinic_name_en', 'Aura Derma Clinic'));
+        $clinicName = Setting::get('clinic_name_ar', Setting::get('clinic_name_en', 'Doctorato Polyclinic'));
         $clinicPhone = Setting::get('clinic_phone', '');
 
         $message = "مرحبا {$patientName}\n"
@@ -207,7 +207,7 @@ class SmsNotificationService
             return ['success' => false, 'message' => 'No phone number available.'];
         }
 
-        $clinicName = Setting::get('clinic_name_ar', Setting::get('clinic_name_en', 'Aura Derma Clinic'));
+        $clinicName = Setting::get('clinic_name_ar', Setting::get('clinic_name_en', 'Doctorato Polyclinic'));
         $clinicPhone = Setting::get('clinic_phone', '');
 
         $typeLabel = match ($recallType) {
@@ -239,7 +239,7 @@ class SmsNotificationService
             return ['success' => false, 'message' => 'No phone number available.'];
         }
 
-        $clinicName = Setting::get('clinic_name_ar', Setting::get('clinic_name_en', 'Aura Derma Clinic'));
+        $clinicName = Setting::get('clinic_name_ar', Setting::get('clinic_name_en', 'Doctorato Polyclinic'));
         $clinicPhone = Setting::get('clinic_phone', '');
 
         $message = "مرحبا {$patient->full_name}\n"

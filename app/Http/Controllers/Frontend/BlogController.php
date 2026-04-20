@@ -55,7 +55,7 @@ class BlogController extends Controller
             'post' => $post,
             'relatedPosts' => $relatedPosts,
             'seo' => [
-                'title_ar' => ($post->title_ar ?? '') . ' - مدونة أورا ديرما',
+                'title_ar' => ($post->title_ar ?? '') . ' - مدونة دكتوراتو',
                 'title_en' => ($post->title_en ?? '') . ' - AURA Derma Blog',
                 'description_ar' => $post->excerpt_ar ?? '',
                 'description_en' => $post->excerpt_en ?? '',

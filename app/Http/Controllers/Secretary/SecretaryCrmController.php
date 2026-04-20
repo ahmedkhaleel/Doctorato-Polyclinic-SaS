@@ -1458,7 +1458,7 @@ class SecretaryCrmController extends BaseSecretaryController
             'first_name' => explode(' ', $lead->full_name)[0] ?? $lead->full_name,
             'phone' => $lead->phone,
             'email' => $lead->email ?? '',
-            'clinic_name' => config('app.name', 'Aura Derma Clinic'),
+            'clinic_name' => config('app.name', 'Doctorato Polyclinic'),
             'status' => $lead->status,
         ];
 

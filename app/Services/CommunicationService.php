@@ -69,7 +69,7 @@ class CommunicationService
      */
     public static function buildVariables(Lead $lead): array
     {
-        $clinicName = Setting::get('clinic_name_en', 'Aura Derma Clinic');
+        $clinicName = Setting::get('clinic_name_en', 'Doctorato Polyclinic');
 
         return [
             'name' => $lead->full_name,

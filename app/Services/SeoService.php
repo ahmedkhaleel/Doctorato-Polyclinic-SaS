@@ -37,21 +37,21 @@ class SeoService
     {
         $defaults = [
             'home' => [
-                'title_ar' => 'عيادة أورا ديرما للجلدية والتجميل',
+                'title_ar' => 'عيادة دكتوراتو للجلدية والتجميل',
                 'title_en' => 'AURA Derma Aesthetic Clinic',
-                'description_ar' => 'عيادة أورا ديرما للجلدية والتجميل - أحدث تقنيات العناية بالبشرة والتجميل في مصر.',
+                'description_ar' => 'عيادة دكتوراتو للجلدية والتجميل - أحدث تقنيات العناية بالبشرة والتجميل في مصر.',
                 'description_en' => 'AURA Derma Aesthetic Clinic - The latest skincare and cosmetic technologies in Egypt.',
             ],
             'about' => [
-                'title_ar' => 'عن العيادة - عيادة أورا ديرما',
+                'title_ar' => 'عن العيادة - عيادة دكتوراتو',
                 'title_en' => 'About Us - AURA Derma Clinic',
-                'description_ar' => 'تعرف على عيادة أورا ديرما للجلدية والتجميل.',
+                'description_ar' => 'تعرف على عيادة دكتوراتو للجلدية والتجميل.',
                 'description_en' => 'Learn about AURA Derma Aesthetic Clinic.',
             ],
         ];
 
         $base = $defaults[$pageIdentifier] ?? [
-            'title_ar' => 'عيادة أورا ديرما',
+            'title_ar' => 'عيادة دكتوراتو',
             'title_en' => 'AURA Derma Clinic',
             'description_ar' => '',
             'description_en' => '',

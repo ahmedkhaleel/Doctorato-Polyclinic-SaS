@@ -21,7 +21,7 @@ class SendWelcomeSms implements ShouldQueue
             return;
         }
 
-        $clinicName = Setting::get('clinic_name_ar', 'عيادة أورا ديرما');
+        $clinicName = Setting::get('clinic_name_ar', 'عيادة دكتوراتو');
 
         $message = "أهلاً وسهلاً {$patient->full_name}!\n"
             . "تم تسجيلك بنجاح في {$clinicName}.\n"
