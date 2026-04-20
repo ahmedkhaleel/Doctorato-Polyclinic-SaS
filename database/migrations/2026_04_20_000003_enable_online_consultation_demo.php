@@ -72,6 +72,20 @@ return new class extends Migration
                     'updated_at'                     => $now,
                 ]);
         }
+
+        // Flip existing in-person schedules to "both" so doctors are also
+        // bookable online during the same windows. Only touches rows that
+        // are still plain 'in_person' — never overrides operator choices.
+        if (Schema::hasColumn('doctor_schedules', 'mode')) {
+            DB::table('doctor_schedules')
+                ->where('is_active', true)
+                ->whereIn('doctor_id', function ($q) {
+                    $q->select('id')->from('doctors')
+                      ->where('online_consultation_enabled', true);
+                })
+                ->where('mode', 'in_person')
+                ->update(['mode' => 'both', 'updated_at' => $now]);
+        }
     }
 
     public function down(): void

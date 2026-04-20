@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Doctor;
+use App\Models\DoctorSchedule;
 use Illuminate\Database\Seeder;
 
 /**
@@ -45,7 +46,14 @@ class OnlineConsultationDemoSeeder extends Seeder
             ]);
         }
 
+        // Flip existing in-person schedules to "both" so the same weekly
+        // windows serve both clinic and online bookings.
+        $scheduleUpdates = DoctorSchedule::whereIn('doctor_id', $doctors->pluck('id'))
+            ->where('is_active', true)
+            ->where('mode', 'in_person')
+            ->update(['mode' => 'both']);
+
         $count = $doctors->count();
-        $this->command->info("✓ Enabled online consultation on {$count} doctor(s) with demo defaults.");
+        $this->command->info("✓ Enabled online consultation on {$count} doctor(s) + converted {$scheduleUpdates} schedule(s) to dual mode.");
     }
 }
