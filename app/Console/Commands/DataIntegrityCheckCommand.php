@@ -29,7 +29,8 @@ class DataIntegrityCheckCommand extends Command
 {
     protected $signature = 'data:integrity-check
                             {--json : Output JSON instead of a table}
-                            {--log : Write findings to laravel.log as well}';
+                            {--log : Write findings to laravel.log as well}
+                            {--alert : Email admin if issues are found (respects 24h cooldown)}';
 
     protected $description = 'Find orphaned, inconsistent, or stuck records';
 
@@ -140,8 +141,51 @@ class DataIntegrityCheckCommand extends Command
             Log::warning('[data:integrity-check] issues found', ['findings' => $findings]);
         }
 
+        if ($this->option('alert') && !empty($findings)) {
+            $this->sendAlertIfNotRecent($findings);
+        }
+
         // Non-zero exit when there's something to investigate, so cron
         // wrappers can pipe it to alerting if they want.
         return empty($findings) ? self::SUCCESS : 1;
+    }
+
+    private function sendAlertIfNotRecent(array $findings): void
+    {
+        $cacheKey = 'integrity_alert:last_sent';
+        $last = \Illuminate\Support\Facades\Cache::get($cacheKey, 0);
+        if ((time() - $last) < 86400) {  // 24h cooldown
+            $this->warn('Integrity alert skipped (cooldown — last sent ' . (time() - $last) . 's ago).');
+            return;
+        }
+
+        $email = \App\Models\Setting::get('health_alert_email')
+            ?: \App\Models\User::whereHas('role', fn ($q) => $q->where('name', 'super_admin'))->value('email');
+
+        if (! $email) {
+            $this->warn('No admin email configured — skipping alert.');
+            return;
+        }
+
+        $subject = '[Doctorato] Data integrity issues: ' . count($findings) . ' check(s)';
+        $body = "Weekly integrity sweep found issues that need attention.\n\n";
+        foreach ($findings as $f) {
+            $body .= "• {$f['check']}: {$f['count']} — {$f['detail']}\n";
+            if (!empty($f['ids'])) {
+                $body .= "  Sample IDs: " . implode(', ', array_slice($f['ids'], 0, 10)) . "\n";
+            }
+        }
+        $body .= "\nRun 'php artisan data:integrity-check' for full details.\n";
+        $body .= "Diagnostics: " . rtrim(config('app.url'), '/') . "/ar/admin/diagnostics\n";
+
+        try {
+            \Illuminate\Support\Facades\Mail::raw($body, function ($m) use ($email, $subject) {
+                $m->to($email)->subject($subject);
+            });
+            \Illuminate\Support\Facades\Cache::put($cacheKey, time(), 86400 * 2);
+            $this->info("Alert sent to {$email}");
+        } catch (\Throwable $e) {
+            Log::error('[data:integrity-check] alert mail failed', ['error' => $e->getMessage()]);
+        }
     }
 }

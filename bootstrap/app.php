@@ -52,6 +52,7 @@ return Application::configure(basePath: dirname(__DIR__))
             HandleInertiaRequests::class,
             SecurityHeaders::class,
             CaptureUtmParameters::class,
+            \App\Http\Middleware\QueryCountMonitor::class,
         ]);
 
         $middleware->validateCsrfTokens(except: [

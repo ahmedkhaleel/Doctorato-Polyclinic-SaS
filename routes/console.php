@@ -90,9 +90,16 @@ Schedule::command('health:alert')
     ->withoutOverlapping();
 
 // Data integrity sweep: weekly scan for orphans, drift, and stuck rows.
-// Writes findings to laravel.log; ops can grep for [data:integrity-check].
-Schedule::command('data:integrity-check --log')
+// Writes findings to laravel.log and emails admin if anything is found
+// (24h cooldown keeps the inbox sane).
+Schedule::command('data:integrity-check --log --alert')
     ->weeklyOn(1, '05:00')   // Mondays at 05:00
+    ->withoutOverlapping();
+
+// Reclaim slots from abandoned online consultations (payment never
+// completed). Runs hourly so patient-visible availability stays fresh.
+Schedule::command('telemedicine:cleanup-stuck')
+    ->hourlyAt(10)
     ->withoutOverlapping();
 
 // ─── Housekeeping ─────────────────────────────────────────────────────
