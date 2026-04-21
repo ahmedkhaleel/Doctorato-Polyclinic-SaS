@@ -15,7 +15,11 @@ use App\Http\Controllers\HealthController;
 use Illuminate\Support\Facades\Route;
 
 // ── Health check for uptime monitors + CI smoke tests ──────
-Route::get('/health', HealthController::class)->name('health');
+// Throttled per-IP so it's useless for recon but still works for the 1/min
+// cadence a typical uptime monitor polls at.
+Route::get('/health', HealthController::class)
+    ->name('health')
+    ->middleware('throttle:20,1');
 
 /*
 |--------------------------------------------------------------------------

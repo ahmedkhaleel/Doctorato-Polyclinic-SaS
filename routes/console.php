@@ -81,3 +81,16 @@ Schedule::command('backup:clean')->dailyAt('03:00');
 
 // Monitor backup health daily at 9:30 AM
 Schedule::command('backup:monitor')->dailyAt('09:30');
+
+// ─── Housekeeping ─────────────────────────────────────────────────────
+
+// Prune Laravel logs older than 14 days so storage/logs/*.log doesn't
+// grow forever on long-running hosts. Keeps recent logs for debugging.
+Schedule::call(function () {
+    $cutoff = now()->subDays(14);
+    foreach (glob(storage_path('logs/*.log')) as $file) {
+        if (filemtime($file) < $cutoff->timestamp) {
+            @unlink($file);
+        }
+    }
+})->dailyAt('04:00')->name('prune-old-logs')->onOneServer();
