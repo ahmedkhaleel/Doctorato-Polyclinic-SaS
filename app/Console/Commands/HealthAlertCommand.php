@@ -94,6 +94,12 @@ class HealthAlertCommand extends Command
             ->value('email');
     }
 
+    private const REASON_LABELS = [
+        'database'         => 'Database connection lost',
+        'telemedicine'     => 'Telemedicine module degraded (see Diagnostics for the specific blocker)',
+        'storage_writable' => 'Storage directory not writable',
+    ];
+
     private function sendAlert(array $data, array $reasons): void
     {
         $email = $this->adminEmail();
@@ -103,19 +109,26 @@ class HealthAlertCommand extends Command
             return;
         }
 
-        $subject = '[Doctorato] System alert: ' . implode(', ', $reasons);
-        $body = "System health check has reported a degraded subsystem.\n\n"
-              . "Affected: " . implode(', ', $reasons) . "\n"
-              . "Time: " . now()->toDateTimeString() . "\n"
-              . "Environment: " . app()->environment() . "\n\n"
-              . "Full report:\n"
-              . json_encode($data, JSON_PRETTY_PRINT)
-              . "\n\nDiagnostics page:\n"
-              . rtrim(config('app.url'), '/') . "/ar/admin/diagnostics\n";
+        $severity = in_array('database', $reasons, true) ? 'critical' : 'warning';
+        $subject  = 'System ' . ($severity === 'critical' ? 'down' : 'degraded') . ': ' . implode(', ', $reasons);
+        $prettyReasons = array_map(fn ($r) => self::REASON_LABELS[$r] ?? $r, $reasons);
+        $appUrl = rtrim(config('app.url'), '/');
+
+        $viewData = [
+            'subject'     => $subject,
+            'severity'    => $severity,
+            'reasons'     => $prettyReasons,
+            'timestamp'   => now()->toDateTimeString(),
+            'environment' => app()->environment(),
+            'appUrl'      => $appUrl,
+            'ctaUrl'      => "{$appUrl}/ar/admin/diagnostics",
+            'ctaLabel'    => 'Open Diagnostics',
+            'intro'       => 'System health check has reported a degraded subsystem. Full JSON report is available at the Diagnostics page.',
+        ];
 
         try {
-            Mail::raw($body, function ($m) use ($email, $subject) {
-                $m->to($email)->subject($subject);
+            Mail::send('emails.system-alert', $viewData, function ($m) use ($email, $subject) {
+                $m->to($email)->subject('[Doctorato] ' . $subject);
             });
             $this->info("Alert sent to {$email} for: " . implode(', ', $reasons));
         } catch (\Throwable $e) {
@@ -132,14 +145,18 @@ class HealthAlertCommand extends Command
         $email = $this->adminEmail();
         if (! $email) return;
 
-        $subject = '[Doctorato] RESOLVED — System back to healthy';
-        $body = "Previously-reported issues are now cleared.\n\n"
-              . "Previously failing: {$previousFingerprint}\n"
-              . "Recovered at: " . now()->toDateTimeString() . "\n";
+        $viewData = [
+            'subject'     => 'All systems restored',
+            'severity'    => 'resolved',
+            'reasons'     => [$previousFingerprint],
+            'timestamp'   => now()->toDateTimeString(),
+            'environment' => app()->environment(),
+            'intro'       => 'Previously-reported issues have cleared. All health checks are green again.',
+        ];
 
         try {
-            Mail::raw($body, function ($m) use ($email, $subject) {
-                $m->to($email)->subject($subject);
+            Mail::send('emails.system-alert', $viewData, function ($m) use ($email) {
+                $m->to($email)->subject('[Doctorato] RESOLVED — System back to healthy');
             });
             $this->info("Resolved notification sent to {$email}");
         } catch (\Throwable $e) {
