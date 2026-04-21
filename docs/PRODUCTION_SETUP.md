@@ -76,6 +76,27 @@ GET https://doctorato.net/health
 
 Throttled to 20 req/min per IP — safe for the typical 1/minute polling.
 
+### 5.1 Email alerts
+
+Beyond the external monitor, `php artisan health:alert` runs every 15
+minutes and emails the admin on any degraded subsystem. Recipient order:
+
+1. `Setting::set('health_alert_email', '…')` — optional dedicated address
+2. Otherwise: first super_admin user's email
+
+Same flow alerts weekly on `data:integrity-check` findings (orphans,
+drift, stuck rows).
+
+### 5.2 In-app operational page
+
+Logged-in admins see a live health dot in the header on every page, and
+`/admin/diagnostics` shows:
+- System card (env, PHP/Laravel versions, DB, storage)
+- Telemedicine card (blockers, counts, active gateway)
+- Scheduler card (last run, healthy flag, copy-paste cron if inactive)
+- Last 100 lines of laravel.log
+- Export JSON button (for support tickets)
+
 ---
 
 ## 6. Sensitive file hygiene

@@ -70,17 +70,39 @@ Patient routes are the only ones under a `{locale}` prefix — see the
 composer install && npm ci
 
 # Dev server (Laravel + Vite HMR + queue + logs via serve.sh)
-./serve.sh        # or: php artisan serve + npm run dev
+./serve.sh        # or: composer dev  → artisan serve + vite + pail + queue
 
 # Build for prod (manifest.json is committed — see CI)
-npm run build
+npm run build                # or: composer fresh-build
 
-# Tests (requires phpunit — add to composer if missing)
-vendor/bin/phpunit --filter=OnlineConsultationBookingTest
+# Tests (includes Feature/Patient + Feature/Security + Feature/Admin)
+composer test
+composer test:telemedicine    # just OnlineConsultation tests
+composer lint                 # pint --test
+composer check                # lint + test (what CI runs)
 
-# Anything in routes/console.php
-php artisan schedule:list
+# Ops / diagnostics
+composer health              # prints /health JSON for local env
+php artisan schedule:list    # all scheduled tasks
+
+# Deploy (remote server equivalent runs via deploy.yml)
+composer deploy              # git pull + composer install --no-dev + migrate + optimize
 ```
+
+## Operational commands (production)
+
+| Command                                  | When |
+|------------------------------------------|------|
+| `php artisan health:alert`               | Auto every 15 min. Emails admin on subsystem failure. |
+| `php artisan data:integrity-check --alert` | Auto Mondays 05:00. Scans for orphans/drift/stuck rows. |
+| `php artisan telemedicine:cleanup-stuck` | Auto hourly :10. Frees slots abandoned at checkout. |
+| `php artisan patients:link-users`        | On-demand. Creates portal User accounts for Patient rows missing a `user_id`. Patient must "Forgot password" to claim. |
+
+Human-facing admin pages:
+
+- `/admin/diagnostics` — System/Telemedicine/Scheduler cards + log tail + Export JSON button
+- `/admin/settings/telemedicine` — Readiness banner + per-blocker diagnostics
+- `GET /health` — JSON for uptime monitors (200/503)
 
 ---
 
