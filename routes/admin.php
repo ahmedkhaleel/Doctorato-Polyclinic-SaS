@@ -271,6 +271,11 @@ Route::middleware('admin.auth')->group(function () {
     Route::post('/settings', [SettingController::class, 'update'])->name('admin.settings.update')->middleware('permission:settings.update');
     Route::post('/settings/test-sms', [SettingController::class, 'testSms'])->name('admin.settings.testSms')->middleware('permission:settings.update');
 
+    // ─── Diagnostics (self-service system health) ──────────
+    Route::get('/diagnostics', [\App\Http\Controllers\Admin\DiagnosticsController::class, 'show'])
+        ->name('admin.diagnostics')
+        ->middleware('permission:settings.view');
+
     // ═══════════════════════════════════════════════════════
     // Backups (Super Admin only)
     // ═══════════════════════════════════════════════════════
