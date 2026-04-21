@@ -1,0 +1,57 @@
+name: Deploy to production
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Serialize deploys: if two pushes hit main close together, only the
+# later one runs to completion — no interleaved git pulls on the server.
+concurrency:
+  group: production-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Pull + migrate + optimize on cPanel host
+    runs-on: ubuntu-latest
+    # Wait for CI to pass before deploying
+    needs: []  # keep simple; uncomment next line to require CI workflow green
+    # needs: [test]
+
+    steps:
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          port: ${{ secrets.DEPLOY_PORT || 22 }}
+          script_stop: true
+          command_timeout: 10m
+          # DEPLOY_PATH is /home/doctoratonet/public_html (Laravel root on this cPanel).
+          # Commands run with -e so any failure aborts the deploy.
+          script: |
+            set -e
+            cd "$DEPLOY_PATH"
+            echo "=== git pull ==="
+            git pull --ff-only origin main
+            echo "=== composer install (no dev) ==="
+            php composer.phar install --no-dev --no-interaction --no-progress --prefer-dist --optimize-autoloader || composer install --no-dev --no-interaction --no-progress --prefer-dist --optimize-autoloader
+            echo "=== migrate ==="
+            php artisan migrate --force
+            echo "=== clear + optimize ==="
+            php artisan optimize:clear
+            php artisan optimize
+            echo "=== post-deploy health check ==="
+            php artisan tinker --execute='echo "doctors_online=" . App\Models\Doctor::onlineEnabled()->count() . " schedules_both=" . App\Models\DoctorSchedule::whereIn("mode",["online","both"])->count() . PHP_EOL;'
+            echo "=== Done ==="
+          envs: DEPLOY_PATH
+        env:
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+
+      - name: Notify deploy result
+        if: always()
+        run: |
+          STATUS="${{ job.status }}"
+          echo "Deploy finished with status: $STATUS"

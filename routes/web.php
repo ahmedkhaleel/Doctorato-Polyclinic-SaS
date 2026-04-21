@@ -11,7 +11,11 @@ use App\Http\Controllers\Frontend\ContactController;
 use App\Http\Controllers\Frontend\PackageBundleController;
 use App\Http\Controllers\Api\TimeSlotController;
 use App\Http\Controllers\Api\PromoCodeController;
+use App\Http\Controllers\HealthController;
 use Illuminate\Support\Facades\Route;
+
+// ── Health check for uptime monitors + CI smoke tests ──────
+Route::get('/health', HealthController::class)->name('health');
 
 /*
 |--------------------------------------------------------------------------
