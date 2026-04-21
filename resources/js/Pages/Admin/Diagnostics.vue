@@ -47,14 +47,24 @@ const blockerLabels = {
                     {{ isRtl ? 'لمحة سريعة عن صحة النظام وحالة الإعداد' : 'Quick snapshot of system health and setup state' }}
                 </p>
             </div>
-            <button @click="refresh"
-                class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white bg-[#1B365D] hover:bg-[#0F2444] transition">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                </svg>
-                {{ isRtl ? 'تحديث' : 'Refresh' }}
-            </button>
+            <div class="flex items-center gap-2">
+                <a href="/admin/diagnostics/export"
+                   class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    </svg>
+                    {{ isRtl ? 'تصدير JSON' : 'Export JSON' }}
+                </a>
+                <button @click="refresh"
+                    class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white bg-[#1B365D] hover:bg-[#0F2444] transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                    {{ isRtl ? 'تحديث' : 'Refresh' }}
+                </button>
+            </div>
         </div>
 
         <!-- Overall Verdict -->

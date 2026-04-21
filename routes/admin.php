@@ -275,6 +275,9 @@ Route::middleware('admin.auth')->group(function () {
     Route::get('/diagnostics', [\App\Http\Controllers\Admin\DiagnosticsController::class, 'show'])
         ->name('admin.diagnostics')
         ->middleware('permission:settings.view');
+    Route::get('/diagnostics/export', [\App\Http\Controllers\Admin\DiagnosticsController::class, 'export'])
+        ->name('admin.diagnostics.export')
+        ->middleware('permission:settings.view');
 
     // ═══════════════════════════════════════════════════════
     // Backups (Super Admin only)

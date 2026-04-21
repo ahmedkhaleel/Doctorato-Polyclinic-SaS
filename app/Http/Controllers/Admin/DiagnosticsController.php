@@ -105,4 +105,55 @@ class DiagnosticsController extends Controller
             'log_tail' => $logTail,
         ]);
     }
+
+    /**
+     * Download the diagnostics snapshot as JSON. Useful for pasting into
+     * a support ticket without copy-pasting the entire rendered page.
+     * Same data as show() but without the log tail, and with a
+     * machine-friendly shape.
+     */
+    public function export()
+    {
+        $moduleEnabled     = ModuleManager::isEnabled('telemedicine');
+        $gateway           = app(PaymentGatewayManager::class)->getActive();
+        $doctorsOnline     = Doctor::onlineEnabled()->count();
+        $schedulesBookable = DoctorSchedule::whereIn('mode', ['online', 'both'])
+            ->where('is_active', true)->count();
+
+        $blockers = [];
+        if (!$moduleEnabled)                $blockers[] = 'module_disabled';
+        if (!$gateway)                      $blockers[] = 'no_payment_gateway';
+        if ($doctorsOnline === 0)           $blockers[] = 'no_online_doctors';
+        if ($schedulesBookable === 0)       $blockers[] = 'no_bookable_schedules';
+
+        try { DB::connection()->getPdo(); $dbConnected = true; }
+        catch (\Throwable) { $dbConnected = false; }
+
+        $payload = [
+            'generated_at' => now()->toIso8601String(),
+            'app' => [
+                'env'              => app()->environment(),
+                'debug'            => (bool) config('app.debug'),
+                'php_version'      => PHP_VERSION,
+                'laravel_version'  => app()->version(),
+            ],
+            'system' => [
+                'db_connected'     => $dbConnected,
+                'storage_writable' => is_writable(storage_path('logs')),
+            ],
+            'telemedicine' => [
+                'module_enabled'     => $moduleEnabled,
+                'doctors_online'     => $doctorsOnline,
+                'schedules_bookable' => $schedulesBookable,
+                'payment_gateway'    => $gateway ? class_basename($gateway) : null,
+                'blockers'           => $blockers,
+                'is_ready'           => empty($blockers),
+            ],
+        ];
+
+        $filename = 'doctorato-diagnostics-' . now()->format('Ymd-His') . '.json';
+        return response()->json($payload, 200, [
+            'Content-Disposition' => "attachment; filename=\"{$filename}\"",
+        ], JSON_PRETTY_PRINT);
+    }
 }

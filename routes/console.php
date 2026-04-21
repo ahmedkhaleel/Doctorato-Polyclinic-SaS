@@ -89,6 +89,12 @@ Schedule::command('health:alert')
     ->everyFifteenMinutes()
     ->withoutOverlapping();
 
+// Data integrity sweep: weekly scan for orphans, drift, and stuck rows.
+// Writes findings to laravel.log; ops can grep for [data:integrity-check].
+Schedule::command('data:integrity-check --log')
+    ->weeklyOn(1, '05:00')   // Mondays at 05:00
+    ->withoutOverlapping();
+
 // ─── Housekeeping ─────────────────────────────────────────────────────
 
 // Prune Laravel logs older than 14 days so storage/logs/*.log doesn't
