@@ -102,6 +102,13 @@ Schedule::command('telemedicine:cleanup-stuck')
     ->hourlyAt(10)
     ->withoutOverlapping();
 
+// Weekly operations summary — emailed every Monday 08:00 to the admin,
+// collates bookings + revenue + telemedicine + system-blocker state
+// into one digest so the operator doesn't have to open five pages.
+Schedule::command('reports:weekly')
+    ->weeklyOn(1, '08:00')
+    ->withoutOverlapping();
+
 // ─── Housekeeping ─────────────────────────────────────────────────────
 
 // Prune Laravel logs older than 14 days so storage/logs/*.log doesn't
