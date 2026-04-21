@@ -10,9 +10,12 @@ use App\Models\User;
 use App\Services\AuditLogger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use App\Models\Setting;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password;
@@ -150,9 +153,38 @@ class PatientAuthController extends Controller
 
             AuditLogger::authEvent('register', $data['email'], 'patient');
 
+            // Best-effort welcome email. Non-fatal — registration completes
+            // even if Mail throws (misconfigured SMTP, etc).
+            $this->sendWelcomeEmail($user, $patient, $locale);
+
             return redirect()->route('patient.dashboard', ['locale' => $locale])
                 ->with('success', 'Welcome! Your account has been created successfully.');
         });
+    }
+
+    private function sendWelcomeEmail(User $user, Patient $patient, string $locale): void
+    {
+        try {
+            $appUrl = rtrim(config('app.url'), '/');
+            $view = [
+                'patientName'  => $patient->full_name ?? $user->name,
+                'locale'       => $locale,
+                'portalUrl'    => "{$appUrl}/{$locale}/patient",
+                'supportEmail' => Setting::get('email', 'info@doctorato.com'),
+            ];
+
+            Mail::send('emails.patient-welcome', $view, function ($m) use ($user, $locale) {
+                $subject = $locale === 'ar'
+                    ? 'أهلاً بك في Doctorato Polyclinic'
+                    : 'Welcome to Doctorato Polyclinic';
+                $m->to($user->email, $user->name)->subject($subject);
+            });
+        } catch (\Throwable $e) {
+            Log::warning('[patient-welcome] mail failed', [
+                'user_id' => $user->id,
+                'error'   => $e->getMessage(),
+            ]);
+        }
     }
 
     public function logout(Request $request): RedirectResponse
