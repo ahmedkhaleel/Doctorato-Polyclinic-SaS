@@ -53,11 +53,12 @@ class OnlineConsultationController extends Controller
         ]);
     }
 
-    public function showDoctor(Request $request, $docId, OnlineSlotGeneratorService $slots)
+    public function showDoctor(Request $request, OnlineSlotGeneratorService $slots)
     {
-        // Route param renamed to {docId} to bypass Laravel 12 implicit model-binding
-        // on {doctor}, which was returning 404 on production even when the doctor
-        // existed and was online_consultation_enabled = true.
+        // Read route params explicitly by name. Laravel 12 was filling a
+        // positional scalar $docId with the {locale} value because it resolves
+        // untyped method params positionally across ALL matched route params.
+        $docId = $request->route('docId');
         $doctor = Doctor::findOrFail((int) $docId);
 
         if (!$doctor->online_consultation_enabled) abort(404);
@@ -164,11 +165,9 @@ class OnlineConsultationController extends Controller
         ]);
     }
 
-    public function room(Request $request, $consultation)
+    public function room(Request $request)
     {
-        $consultation = $consultation instanceof OnlineConsultation
-            ? $consultation
-            : OnlineConsultation::findOrFail($consultation);
+        $consultation = OnlineConsultation::findOrFail($request->route('consultation'));
 
         if ($consultation->patient_id !== $request->user()->patient?->id) abort(403);
 
@@ -178,11 +177,9 @@ class OnlineConsultationController extends Controller
         ]);
     }
 
-    public function cancel(Request $request, $consultation, OnlineConsultationService $service)
+    public function cancel(Request $request, OnlineConsultationService $service)
     {
-        $consultation = $consultation instanceof OnlineConsultation
-            ? $consultation
-            : OnlineConsultation::findOrFail($consultation);
+        $consultation = OnlineConsultation::findOrFail($request->route('consultation'));
 
         if ($consultation->patient_id !== $request->user()->patient?->id) abort(403);
 
