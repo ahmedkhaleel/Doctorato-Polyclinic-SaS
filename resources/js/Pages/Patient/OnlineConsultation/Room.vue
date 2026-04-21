@@ -1,5 +1,13 @@
 <script setup>
-import VideoRoom from '@/Components/Telemedicine/VideoRoom.vue';
+import { defineAsyncComponent } from 'vue';
+
+// Lazy-load the VideoRoom component (includes the Agora SDK, ~1.5 MB gzipped).
+// Users only pay the download cost when they actually enter a consultation.
+const VideoRoom = defineAsyncComponent({
+    loader: () => import('@/Components/Telemedicine/VideoRoom.vue'),
+    delay: 0,
+    timeout: 15000,
+});
 
 defineOptions({ layout: null });
 
@@ -10,5 +18,15 @@ const props = defineProps({
 </script>
 
 <template>
-    <VideoRoom :consultation-id="consultationId" :role="role" />
+    <Suspense>
+        <VideoRoom :consultation-id="consultationId" :role="role" />
+        <template #fallback>
+            <div class="min-h-screen flex items-center justify-center bg-slate-900 text-white">
+                <div class="text-center">
+                    <div class="w-12 h-12 border-4 border-[#C4A265] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                    <p class="text-sm text-white/70">جارٍ تحميل غرفة الاستشارة…</p>
+                </div>
+            </div>
+        </template>
+    </Suspense>
 </template>
