@@ -701,6 +701,31 @@ function logout()        { router.post('/admin/logout'); }
 
                 <!-- Right side -->
                 <div class="flex items-center gap-1.5 md:gap-3">
+                    <!-- System health indicator (admin only) -->
+                    <Link
+                        v-if="page.props.systemHealth"
+                        :href="'/admin/diagnostics'"
+                        :title="page.props.systemHealth.ok
+                            ? (isRtl ? 'النظام يعمل بكفاءة' : 'All systems operational')
+                            : (isRtl ? `${page.props.systemHealth.blocker_count} تحذير — اضغط للتشخيص` : `${page.props.systemHealth.blocker_count} warning(s) — click to diagnose`)"
+                        class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] font-semibold transition-all duration-200 border"
+                        :class="page.props.systemHealth.ok
+                            ? 'border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100'
+                            : 'border-amber-300 bg-amber-50 text-amber-800 hover:bg-amber-100 animate-pulse'"
+                    >
+                        <span class="relative flex h-2 w-2">
+                            <span v-if="page.props.systemHealth.ok"
+                                  class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2"
+                                  :class="page.props.systemHealth.ok ? 'bg-emerald-500' : 'bg-amber-500'"></span>
+                        </span>
+                        <span class="hidden md:inline">
+                            {{ page.props.systemHealth.ok
+                                ? (isRtl ? 'نشط' : 'Healthy')
+                                : (isRtl ? `${page.props.systemHealth.blocker_count} تنبيه` : `${page.props.systemHealth.blocker_count} issue${page.props.systemHealth.blocker_count > 1 ? 's' : ''}`) }}
+                        </span>
+                    </Link>
+
                     <!-- Visit site (desktop) -->
                     <a
                         href="/"

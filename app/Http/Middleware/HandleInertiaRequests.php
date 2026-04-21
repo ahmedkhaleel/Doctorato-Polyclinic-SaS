@@ -82,6 +82,31 @@ class HandleInertiaRequests extends Middleware
                     return ['unread_bookings' => 0, 'unread_messages' => 0, 'unread_system' => 0, 'crm_overdue_count' => 0];
                 }
             },
+
+            // System health flag for admin header indicator. Kept intentionally
+            // minimal (1 cached bool + 1 count) so the Inertia response payload
+            // doesn't bloat on every request.
+            'systemHealth' => function () use ($request) {
+                if (! $request->user() || ! $request->user()->role) return null;
+                $role = $request->user()->role->name;
+                if (! in_array($role, ['admin', 'super_admin'], true)) return null;
+
+                return cache()->remember('inertia.system_health', 30, function () {
+                    $blockers = [];
+                    if (\App\Services\ModuleManager::isEnabled('telemedicine')) {
+                        if (! app(\App\Services\Payment\PaymentGatewayManager::class)->getActive()) {
+                            $blockers[] = 'no_payment_gateway';
+                        }
+                        if (\App\Models\Doctor::onlineEnabled()->count() === 0) {
+                            $blockers[] = 'no_online_doctors';
+                        }
+                    }
+                    return [
+                        'ok'            => empty($blockers),
+                        'blocker_count' => count($blockers),
+                    ];
+                });
+            },
             'doctor_notifications' => function () use ($isDoctorRoute, $request) {
                 if (!$isDoctorRoute || !$request->user()) return null;
                 try {
