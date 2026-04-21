@@ -43,8 +43,11 @@ jobs:
             echo "=== clear + optimize ==="
             php artisan optimize:clear
             php artisan optimize
-            echo "=== post-deploy health check ==="
-            php artisan tinker --execute='echo "doctors_online=" . App\Models\Doctor::onlineEnabled()->count() . " schedules_both=" . App\Models\DoctorSchedule::whereIn("mode",["online","both"])->count() . PHP_EOL;'
+            echo "=== smoke tests ==="
+            php artisan deploy:smoke || {
+              echo "::error::Smoke tests failed. Run 'php artisan deploy:rollback' on host if prod is broken."
+              exit 1
+            }
             echo "=== Done ==="
           envs: DEPLOY_PATH
         env:
