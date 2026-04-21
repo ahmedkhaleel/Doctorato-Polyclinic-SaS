@@ -82,6 +82,13 @@ Schedule::command('backup:clean')->dailyAt('03:00');
 // Monitor backup health daily at 9:30 AM
 Schedule::command('backup:monitor')->dailyAt('09:30');
 
+// Health alert: check /health every 15 minutes, email admin on degraded
+// subsystems (payment gateway down, DB unreachable, etc). Internal
+// 1-hour cooldown prevents alert spam for the same fingerprint.
+Schedule::command('health:alert')
+    ->everyFifteenMinutes()
+    ->withoutOverlapping();
+
 // ─── Housekeeping ─────────────────────────────────────────────────────
 
 // Prune Laravel logs older than 14 days so storage/logs/*.log doesn't
