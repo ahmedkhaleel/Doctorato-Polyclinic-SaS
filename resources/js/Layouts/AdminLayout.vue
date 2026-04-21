@@ -3,6 +3,7 @@ import { ref, computed, watch, onMounted, nextTick } from 'vue';
 import { Link, usePage, router } from '@inertiajs/vue3';
 import { usePermissions } from '@/Composables/usePermissions.js';
 import { useTheme } from '@/Composables/useTheme';
+import FlashMessages from '@/Components/FlashMessages.vue';
 
 import AttendanceReminder from '@/Components/AttendanceReminder.vue';
 useTheme();
@@ -374,6 +375,8 @@ function logout()        { router.post('/admin/logout'); }
 
 <template>
     <div :dir="dir" class="min-h-screen bg-[#f5f6fa]" :style="{ fontFamily: isRtl ? '\'Tajawal\', \'Poppins\', sans-serif' : '\'Poppins\', sans-serif' }">
+        <FlashMessages />
+
         <!-- Backdrop: mobile only when sidebar open -->
         <div
             v-if="sidebarOpen"

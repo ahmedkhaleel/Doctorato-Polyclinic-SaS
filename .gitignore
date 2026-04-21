@@ -22,3 +22,31 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# ── Sensitive / operational files ──────────────────────
+# SQL dumps must never be committed
+*.sql
+*.sql.gz
+*.sql.bz2
+*.dump
+backup_*
+/backups/
+
+# PHP opcache reset scripts (created ad-hoc during deploys)
+/public/opcache-reset.php
+/public/deploy.php
+/opcache-reset.php
+/deploy.php
+
+# Credentials / private keys
+*.pem
+*.key
+*.p12
+*.pfx
+!/public/build/**/*.key
+auth.json
+oauth-*.json
+
+# Test/scratch files
+/test-route.php
+/scratch.php

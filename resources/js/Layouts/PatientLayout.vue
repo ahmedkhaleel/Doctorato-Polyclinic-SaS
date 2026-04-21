@@ -2,6 +2,7 @@
 import { ref, computed, watch, watchEffect } from 'vue';
 import { Link, usePage, router } from '@inertiajs/vue3';
 import { useTheme } from '@/Composables/useTheme';
+import FlashMessages from '@/Components/FlashMessages.vue';
 
 useTheme();
 
@@ -186,6 +187,8 @@ function logout()        { router.post(lp('/logout')); }
 
 <template>
     <div :dir="dir" class="min-h-screen bg-[#f5f6fa]" :style="{ fontFamily: isRtl ? '\'Tajawal\', \'Poppins\', sans-serif' : '\'Poppins\', sans-serif' }">
+        <FlashMessages />
+
         <!-- Mobile overlay -->
         <div v-if="sidebarOpen" class="fixed inset-0 z-30 bg-black/40 lg:hidden" @click="closeSidebar"></div>
 

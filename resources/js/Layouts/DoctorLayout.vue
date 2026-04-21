@@ -5,6 +5,7 @@ import DoctorNotificationBell from '@/Components/Doctor/DoctorNotificationBell.v
 import ToastNotification from '@/Components/Doctor/ToastNotification.vue';
 import ChatIcon from '@/Components/Chat/ChatIcon.vue';
 import ChatToast from '@/Components/Chat/ChatToast.vue';
+import FlashMessages from '@/Components/FlashMessages.vue';
 
 import AttendanceReminder from '@/Components/AttendanceReminder.vue';
 const page = usePage();
@@ -287,6 +288,8 @@ onUnmounted(() => { document.removeEventListener('keydown', handleGlobalKey); })
 
 <template>
     <div :dir="dir" class="min-h-screen bg-[#f5f6fa]" :style="{ fontFamily: isRtl ? '\'Tajawal\', \'Poppins\', sans-serif' : '\'Poppins\', sans-serif' }">
+        <FlashMessages />
+
         <!-- Mobile overlay -->
         <div v-if="sidebarOpen" class="fixed inset-0 z-30 bg-black/40 lg:hidden" @click="closeSidebar"></div>
 

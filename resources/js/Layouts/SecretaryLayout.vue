@@ -4,6 +4,7 @@ import { Link, usePage, router } from '@inertiajs/vue3';
 import SecretaryNotificationBell from '@/Components/Secretary/SecretaryNotificationBell.vue';
 import SecretaryToastNotification from '@/Components/Secretary/SecretaryToastNotification.vue';
 import ChatIcon from '@/Components/Chat/ChatIcon.vue';
+import FlashMessages from '@/Components/FlashMessages.vue';
 import ChatToast from '@/Components/Chat/ChatToast.vue';
 
 import AttendanceReminder from '@/Components/AttendanceReminder.vue';
@@ -198,6 +199,8 @@ function logout()        { router.post('/secretary/logout'); }
 
 <template>
     <div :dir="dir" class="min-h-screen bg-[#f0f9f6]" :style="{ fontFamily: isRtl ? '\'Tajawal\', \'Poppins\', sans-serif' : '\'Poppins\', sans-serif' }">
+        <FlashMessages />
+
         <!-- Mobile overlay -->
         <div v-if="sidebarOpen" class="fixed inset-0 z-30 bg-black/40 lg:hidden" @click="closeSidebar"></div>
 
