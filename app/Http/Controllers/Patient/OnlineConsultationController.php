@@ -134,7 +134,14 @@ class OnlineConsultationController extends Controller
         // Initiate payment
         $gateway = $gateways->getActive();
         if (!$gateway) {
-            return back()->with('error', __('Payment gateway is not configured. Please contact support.'));
+            // Clean up the orphan consultation so the user can retry later
+            // once payment is configured — otherwise the slot looks booked
+            // but will never be paid for.
+            $consultation->delete();
+
+            return back()->with('error', __(
+                'Online booking is temporarily unavailable — our payment gateway is being set up. Please try again later or contact support.'
+            ));
         }
 
         $result = $gateway->initiatePayment($consultation);

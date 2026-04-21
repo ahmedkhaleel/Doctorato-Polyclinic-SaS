@@ -1,0 +1,90 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    name: PHP tests + frontend build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP 8.3
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, intl, pdo_sqlite, bcmath, gd, zip, curl
+          tools: composer:v2
+          coverage: none
+
+      - name: Cache Composer vendor
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: composer-${{ hashFiles('composer.lock') }}
+          restore-keys: composer-
+
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --no-progress --prefer-dist
+
+      - name: Copy env and generate key
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
+      - name: Configure SQLite test database
+        env:
+          WORKSPACE: ${{ github.workspace }}
+        run: |
+          mkdir -p database
+          touch database/testing.sqlite
+          {
+            echo "DB_CONNECTION=sqlite"
+            echo "DB_DATABASE=${WORKSPACE}/database/testing.sqlite"
+            echo "APP_ENV=testing"
+            echo "CACHE_DRIVER=array"
+            echo "SESSION_DRIVER=array"
+            echo "QUEUE_CONNECTION=sync"
+          } >> .env
+
+      - name: Run migrations
+        run: php artisan migrate --force
+
+      - name: Run PHPUnit
+        run: |
+          if [ -f vendor/bin/phpunit ]; then
+            vendor/bin/phpunit --stop-on-failure
+          else
+            echo "::warning::phpunit not installed — add 'phpunit/phpunit' to composer require-dev to run tests"
+          fi
+
+      - name: Setup Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install npm dependencies
+        run: npm ci
+
+      - name: Build assets
+        run: npm run build
+
+      - name: Check manifest integrity
+        run: |
+          test -f public/build/manifest.json || (echo "manifest.json missing" && exit 1)
+          for page in \
+            "resources/js/Pages/Patient/OnlineConsultation/Book.vue" \
+            "resources/js/Pages/Patient/OnlineConsultation/Doctors.vue" \
+            "resources/js/Pages/Patient/Dashboard.vue"; do
+            if ! grep -q "\"$page\"" public/build/manifest.json; then
+              echo "::error::Missing $page from manifest.json"
+              exit 1
+            fi
+          done
+          echo "Manifest contains all critical page components"
