@@ -88,14 +88,37 @@ class TelemedicineSettingsController extends Controller
         $stripe = app(StripeGateway::class);
         $reverb = app(ReverbService::class);
 
+        $moduleEnabled   = ModuleManager::isEnabled('telemedicine');
+        $agoraConfigured = $agora->isConfigured();
+        $paymobConfigured = $paymob->isEnabled();
+        $stripeConfigured = $stripe->isEnabled();
+        $reverbConfigured = $reverb->isConfigured();
+
+        $doctorsOnline      = \App\Models\Doctor::onlineEnabled()->count();
+        $schedulesBookable  = \App\Models\DoctorSchedule::whereIn('mode', ['online', 'both'])
+            ->where('is_active', true)->count();
+
+        // Derive an overall-readiness verdict so the admin sees at a glance
+        // whether a patient can actually complete a booking end-to-end.
+        $readiness = [];
+        if (!$moduleEnabled)                             $readiness[] = 'module_disabled';
+        if (!$agoraConfigured)                           $readiness[] = 'agora_missing';
+        if (!$paymobConfigured && !$stripeConfigured)    $readiness[] = 'no_payment_gateway';
+        if ($doctorsOnline === 0)                        $readiness[] = 'no_online_doctors';
+        if ($schedulesBookable === 0)                    $readiness[] = 'no_bookable_schedules';
+
         return Inertia::render('Admin/Settings/Telemedicine', [
             'settings' => $settings,
             'status' => [
-                'module_enabled' => ModuleManager::isEnabled('telemedicine'),
-                'agora_configured' => $agora->isConfigured(),
-                'paymob_configured' => $paymob->isEnabled(),
-                'stripe_configured' => $stripe->isEnabled(),
-                'reverb_configured' => $reverb->isConfigured(),
+                'module_enabled'     => $moduleEnabled,
+                'agora_configured'   => $agoraConfigured,
+                'paymob_configured'  => $paymobConfigured,
+                'stripe_configured'  => $stripeConfigured,
+                'reverb_configured'  => $reverbConfigured,
+                'doctors_online'     => $doctorsOnline,
+                'schedules_bookable' => $schedulesBookable,
+                'blockers'           => $readiness,
+                'is_ready'           => empty($readiness),
             ],
         ]);
     }

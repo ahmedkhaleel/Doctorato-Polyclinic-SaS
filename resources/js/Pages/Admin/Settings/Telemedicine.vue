@@ -85,6 +85,61 @@ function commitText(key) {
                 </Link>
             </div>
 
+            <!-- Overall Readiness Banner -->
+            <div class="rounded-2xl shadow-sm p-5 flex items-start gap-4 border-2"
+                 :class="status.is_ready
+                    ? 'bg-gradient-to-br from-emerald-50 to-emerald-100/50 border-emerald-300'
+                    : 'bg-gradient-to-br from-amber-50 to-amber-100/50 border-amber-300'">
+                <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
+                     :class="status.is_ready ? 'bg-emerald-500' : 'bg-amber-500'">
+                    <svg v-if="status.is_ready" class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <svg v-else class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M4.072 19h15.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L2.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <h3 class="text-base font-bold" :class="status.is_ready ? 'text-emerald-900' : 'text-amber-900'">
+                        {{ status.is_ready
+                            ? (isRtl ? '✓ النظام جاهز — يمكن للمرضى حجز استشارات أونلاين' : '✓ System ready — patients can book online consultations')
+                            : (isRtl ? '⚠ الإعداد غير مكتمل — الحجز الأونلاين مُعطّل حالياً' : '⚠ Setup incomplete — online booking is currently disabled') }}
+                    </h3>
+                    <ul v-if="!status.is_ready" class="mt-2 space-y-1 text-sm text-amber-800">
+                        <li v-if="status.blockers?.includes('module_disabled')" class="flex items-center gap-2">
+                            <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                            {{ isRtl ? 'الوحدة معطّلة — استخدم زر التفعيل أعلاه' : 'Module is disabled — use the toggle above' }}
+                        </li>
+                        <li v-if="status.blockers?.includes('agora_missing')" class="flex items-center gap-2">
+                            <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                            {{ isRtl ? 'إعدادات Agora غير مكتملة (App ID + App Certificate)' : 'Agora credentials missing (App ID + App Certificate)' }}
+                        </li>
+                        <li v-if="status.blockers?.includes('no_payment_gateway')" class="flex items-center gap-2">
+                            <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                            {{ isRtl ? 'لا توجد بوابة دفع مفعّلة (Stripe أو Paymob)' : 'No payment gateway is active (Stripe or Paymob)' }}
+                        </li>
+                        <li v-if="status.blockers?.includes('no_online_doctors')" class="flex items-center gap-2">
+                            <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                            {{ isRtl ? 'لا يوجد أطباء مفعّل لديهم الاستشارة الأونلاين' : 'No doctors have online consultations enabled' }}
+                        </li>
+                        <li v-if="status.blockers?.includes('no_bookable_schedules')" class="flex items-center gap-2">
+                            <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                            {{ isRtl ? 'لا يوجد جدول مواعيد بوضع online/both' : 'No doctor schedules with online/both mode' }}
+                        </li>
+                    </ul>
+                    <div v-else class="mt-2 flex flex-wrap gap-4 text-sm text-emerald-800">
+                        <span class="flex items-center gap-1.5">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z"/></svg>
+                            <strong>{{ status.doctors_online }}</strong> {{ isRtl ? 'طبيب متاح' : 'doctors available' }}
+                        </span>
+                        <span class="flex items-center gap-1.5">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"/></svg>
+                            <strong>{{ status.schedules_bookable }}</strong> {{ isRtl ? 'جدول مواعيد' : 'bookable schedules' }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
             <!-- Status Dashboard -->
             <div class="rounded-2xl bg-white border border-gray-200 shadow-sm p-5">
                 <div class="flex flex-wrap items-center gap-3">
