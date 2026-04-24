@@ -108,9 +108,9 @@ function submit() {
                             />
                             <label for="remember" class="ltr:ml-2 rtl:mr-2 text-sm text-white/50">{{ isRtl ? 'تذكرني' : 'Remember me' }}</label>
                         </div>
-                        <button type="button" @click="showForgotMsg = true" class="text-sm text-[var(--brand-primary)]/70 hover:text-[var(--brand-primary)] transition-colors">
+                        <Link :href="lp('/forgot-password')" class="text-sm text-[var(--brand-primary)]/70 hover:text-[var(--brand-primary)] transition-colors">
                             {{ isRtl ? 'نسيت كلمة المرور؟' : 'Forgot password?' }}
-                        </button>
+                        </Link>
                     </div>
 
                     <!-- Submit -->

@@ -166,6 +166,16 @@ class SmsService
             return ['success' => false, 'message' => 'SMS Gateway URL not configured.', 'provider' => 'gateway'];
         }
 
+        // SSRF guard: reject URLs that point at local/internal addresses or use
+        // a non-HTTP(S) scheme. Even though only an admin can set the gateway
+        // URL via the settings UI, a leaked admin credential should not turn
+        // into a free-form request to internal services like 127.0.0.1, the
+        // metadata IP (169.254.169.254), or file:// URLs.
+        if (! self::isSafeOutboundUrl($gatewayUrl)) {
+            Log::warning('[sms-gateway] refused unsafe URL', ['host' => parse_url($gatewayUrl, PHP_URL_HOST)]);
+            return ['success' => false, 'message' => 'SMS gateway URL is unsafe and was rejected.', 'provider' => 'gateway'];
+        }
+
         // Replace placeholders in URL
         $url = str_replace(
             ['{phone}', '{message}', '{sender}', '{api_key}'],
@@ -268,5 +278,37 @@ class SmsService
     public static function sendTest(string $phone): array
     {
         return static::send($phone, 'This is a test message from Doctorato Polyclinic SMS system. If you received this, your SMS configuration is working correctly.');
+    }
+
+    /**
+     * Validate that an outbound URL is HTTP(S) and does not target a private,
+     * loopback, link-local, or cloud-metadata address. Returns false for
+     * anything that looks remotely like an SSRF target.
+     */
+    private static function isSafeOutboundUrl(string $url): bool
+    {
+        $parts = parse_url($url);
+        if (! $parts || empty($parts['scheme']) || empty($parts['host'])) return false;
+        if (! in_array(strtolower($parts['scheme']), ['http', 'https'], true)) return false;
+
+        $host = strtolower($parts['host']);
+
+        // Reject obvious internal hostnames before DNS resolution.
+        if (in_array($host, ['localhost', 'localhost.localdomain', '127.0.0.1', '::1'], true)) return false;
+
+        // Resolve and reject any private/reserved address families.
+        $ip = filter_var($host, FILTER_VALIDATE_IP) ?: gethostbyname($host);
+        if (! $ip || $ip === $host) {
+            // gethostbyname returns the hostname unchanged on failure — treat as unresolved.
+            // Allow only if it's a literal IP that resolved as the same string.
+            if (! filter_var($host, FILTER_VALIDATE_IP)) return false;
+            $ip = $host;
+        }
+
+        return (bool) filter_var(
+            $ip,
+            FILTER_VALIDATE_IP,
+            FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6 | FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE
+        );
     }
 }

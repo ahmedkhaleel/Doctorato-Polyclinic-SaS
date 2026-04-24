@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Auth\Passwords\PasswordBroker;
+use Illuminate\Support\Facades\Password as PasswordFacade;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password;
@@ -185,6 +187,104 @@ class PatientAuthController extends Controller
                 'error'   => $e->getMessage(),
             ]);
         }
+    }
+
+    /* ============================================================
+     * Password reset
+     *
+     * Two-step flow:
+     *   1. POST /{locale}/patient/forgot-password  → emails a signed
+     *      token good for 60 min (Laravel default).
+     *   2. GET  /{locale}/patient/reset-password/{token}?email=…
+     *      → renders the reset form.
+     *   3. POST /{locale}/patient/reset-password   → consumes the
+     *      token (single use), updates the password, fires session
+     *      logout for any other devices.
+     *
+     * Both POSTs are throttled per-email+IP to defeat password guessing
+     * and to limit reset-email flooding to legitimate-looking traffic.
+     * ============================================================ */
+
+    public function showForgotPassword(Request $request): Response
+    {
+        return Inertia::render('Patient/Auth/ForgotPassword');
+    }
+
+    public function sendResetLink(Request $request): RedirectResponse
+    {
+        $request->validate(['email' => 'required|email']);
+
+        $key = 'patient-forgot:' . Str::lower($request->input('email')) . '|' . $request->ip();
+        if (RateLimiter::tooManyAttempts($key, 3)) {
+            $seconds = RateLimiter::availableIn($key);
+            return back()->with('error', "Too many attempts. Please try again in {$seconds} seconds.");
+        }
+        RateLimiter::hit($key, 600); // 10-minute window for 3 attempts
+
+        // Only patients can use this flow — no cross-portal reset.
+        $user = User::where('email', $request->input('email'))
+            ->whereHas('role', fn ($q) => $q->where('name', 'patient'))
+            ->first();
+
+        if ($user) {
+            PasswordFacade::sendResetLink(['email' => $user->email]);
+            AuditLogger::authEvent('password_reset_requested', $user->email, 'patient');
+        }
+
+        // Always show the same response — never reveal whether the email exists.
+        return back()->with('success', 'If that email belongs to a patient account, a reset link has been sent.');
+    }
+
+    public function showResetForm(Request $request, string $locale, string $token): Response
+    {
+        return Inertia::render('Patient/Auth/ResetPassword', [
+            'token' => $token,
+            'email' => $request->query('email', ''),
+        ]);
+    }
+
+    public function resetPassword(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'token'    => 'required|string',
+            'email'    => 'required|email',
+            'password' => ['required', 'confirmed', Password::min(8)],
+        ]);
+
+        $key = 'patient-reset:' . Str::lower($data['email']) . '|' . $request->ip();
+        if (RateLimiter::tooManyAttempts($key, 5)) {
+            $seconds = RateLimiter::availableIn($key);
+            return back()->with('error', "Too many attempts. Please try again in {$seconds} seconds.");
+        }
+        RateLimiter::hit($key, 600);
+
+        $status = PasswordFacade::reset(
+            $data,
+            function (User $user, string $password) use ($request) {
+                // Reject reset for non-patient roles (defense in depth).
+                if ($user->role?->name !== 'patient') {
+                    abort(403);
+                }
+                $user->forceFill([
+                    'password'       => Hash::make($password),
+                    'remember_token' => Str::random(60),
+                ])->save();
+
+                // Log out all of this user's other sessions.
+                Auth::logoutOtherDevices($password);
+
+                AuditLogger::authEvent('password_reset_completed', $user->email, 'patient');
+            }
+        );
+
+        $locale = $this->locale($request);
+        if ($status === PasswordBroker::PASSWORD_RESET) {
+            RateLimiter::clear($key);
+            return redirect()->route('patient.login', ['locale' => $locale])
+                ->with('success', 'Your password has been reset. You can now log in.');
+        }
+
+        return back()->with('error', __($status));
     }
 
     public function logout(Request $request): RedirectResponse
