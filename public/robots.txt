@@ -1,5 +1,26 @@
 User-agent: *
 Allow: /
+
+# Block all logged-in portal areas — these are user-specific and have no SEO value
 Disallow: /admin
 Disallow: /admin/*
-Sitemap: https://auraderma.com/sitemap.xml
+Disallow: /doctor
+Disallow: /doctor/*
+Disallow: /secretary
+Disallow: /secretary/*
+Disallow: /webmaster
+Disallow: /webmaster/*
+Disallow: /ar/patient
+Disallow: /ar/patient/*
+Disallow: /en/patient
+Disallow: /en/patient/*
+
+# Block API + webhook + ops paths
+Disallow: /api/
+Disallow: /webhooks/
+Disallow: /health
+
+# Block survey landing pages (one-time tokens)
+Disallow: /survey/
+
+Sitemap: https://doctorato.net/sitemap.xml

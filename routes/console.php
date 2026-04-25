@@ -102,6 +102,10 @@ Schedule::command('telemedicine:cleanup-stuck')
     ->hourlyAt(10)
     ->withoutOverlapping();
 
+// Regenerate /sitemap.xml so search engines see new services / posts /
+// pages added through the admin UI without a manual rebuild.
+Schedule::command('sitemap:generate')->dailyAt('06:00');
+
 // Weekly operations summary — emailed every Monday 08:00 to the admin,
 // collates bookings + revenue + telemedicine + system-blocker state
 // into one digest so the operator doesn't have to open five pages.
