@@ -47,6 +47,21 @@ function updatePassword() {
         onSuccess: () => passwordForm.reset(),
     });
 }
+
+// Notification preferences form
+const prefsForm = useForm({
+    preferred_language:     props.patient?.preferred_language ?? 'ar',
+    notify_email_bookings:  props.patient?.notify_email_bookings  ?? true,
+    notify_email_reminders: props.patient?.notify_email_reminders ?? true,
+    notify_email_marketing: props.patient?.notify_email_marketing ?? true,
+    notify_sms_bookings:    props.patient?.notify_sms_bookings    ?? true,
+    notify_sms_reminders:   props.patient?.notify_sms_reminders   ?? true,
+    notify_sms_marketing:   props.patient?.notify_sms_marketing   ?? false,
+});
+
+function updatePreferences() {
+    prefsForm.post(lp('/profile/preferences'), { preserveScroll: true });
+}
 </script>
 
 <template>
@@ -209,6 +224,103 @@ function updatePassword() {
                         </p>
                     </form>
                 </div>
+            </div>
+
+            <!-- ── Notification Preferences ────────────────────── -->
+            <div class="mt-6 bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="p-5 border-b border-gray-100 flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-[#1B365D] to-[#22406F] flex items-center justify-center">
+                        <svg class="w-4 h-4 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-800">{{ isRtl ? 'تفضيلات الإشعارات' : 'Notification Preferences' }}</h3>
+                        <p class="text-xs text-slate-500">{{ isRtl ? 'اختر ما تريد استلامه ومتى' : 'Choose what you want to receive — and where' }}</p>
+                    </div>
+                </div>
+
+                <form @submit.prevent="updatePreferences" class="p-5 space-y-5">
+                    <!-- Language -->
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">
+                            {{ isRtl ? 'لغة الإشعارات' : 'Notification Language' }}
+                        </label>
+                        <div class="flex gap-2">
+                            <label class="flex-1 cursor-pointer">
+                                <input v-model="prefsForm.preferred_language" type="radio" value="ar" class="peer sr-only" />
+                                <div class="px-4 py-2.5 rounded-xl border-2 text-center text-sm font-semibold text-slate-600 border-slate-200 peer-checked:border-[#C4A265] peer-checked:bg-[#C4A265]/5 peer-checked:text-[#1B365D] transition">العربية</div>
+                            </label>
+                            <label class="flex-1 cursor-pointer">
+                                <input v-model="prefsForm.preferred_language" type="radio" value="en" class="peer sr-only" />
+                                <div class="px-4 py-2.5 rounded-xl border-2 text-center text-sm font-semibold text-slate-600 border-slate-200 peer-checked:border-[#C4A265] peer-checked:bg-[#C4A265]/5 peer-checked:text-[#1B365D] transition">English</div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Channels grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <!-- Bookings -->
+                        <div class="rounded-xl border border-slate-200 p-4 bg-slate-50/40">
+                            <h4 class="font-bold text-slate-800 mb-3 text-sm">
+                                📅 {{ isRtl ? 'الحجوزات' : 'Bookings' }}
+                            </h4>
+                            <p class="text-[11px] text-slate-500 mb-3">{{ isRtl ? 'تأكيد، إلغاء، تغيير موعد' : 'Confirmations, cancellations, changes' }}</p>
+                            <label class="flex items-center gap-2 mb-2 cursor-pointer">
+                                <input v-model="prefsForm.notify_email_bookings" type="checkbox" class="rounded text-[#C4A265]" />
+                                <span class="text-sm text-slate-700">📧 {{ isRtl ? 'بريد إلكتروني' : 'Email' }}</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input v-model="prefsForm.notify_sms_bookings" type="checkbox" class="rounded text-[#C4A265]" />
+                                <span class="text-sm text-slate-700">📱 {{ isRtl ? 'رسائل SMS' : 'SMS' }}</span>
+                            </label>
+                        </div>
+
+                        <!-- Reminders -->
+                        <div class="rounded-xl border border-slate-200 p-4 bg-slate-50/40">
+                            <h4 class="font-bold text-slate-800 mb-3 text-sm">
+                                ⏰ {{ isRtl ? 'تذكيرات' : 'Reminders' }}
+                            </h4>
+                            <p class="text-[11px] text-slate-500 mb-3">{{ isRtl ? 'قبل الموعد بـ 24 ساعة + يوم الموعد' : '24h before + same-day' }}</p>
+                            <label class="flex items-center gap-2 mb-2 cursor-pointer">
+                                <input v-model="prefsForm.notify_email_reminders" type="checkbox" class="rounded text-[#C4A265]" />
+                                <span class="text-sm text-slate-700">📧 {{ isRtl ? 'بريد إلكتروني' : 'Email' }}</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input v-model="prefsForm.notify_sms_reminders" type="checkbox" class="rounded text-[#C4A265]" />
+                                <span class="text-sm text-slate-700">📱 {{ isRtl ? 'رسائل SMS' : 'SMS' }}</span>
+                            </label>
+                        </div>
+
+                        <!-- Marketing -->
+                        <div class="rounded-xl border border-slate-200 p-4 bg-slate-50/40">
+                            <h4 class="font-bold text-slate-800 mb-3 text-sm">
+                                🎁 {{ isRtl ? 'العروض' : 'Marketing' }}
+                            </h4>
+                            <p class="text-[11px] text-slate-500 mb-3">{{ isRtl ? 'كوبونات خصم، عروض موسمية' : 'Promo codes, seasonal offers' }}</p>
+                            <label class="flex items-center gap-2 mb-2 cursor-pointer">
+                                <input v-model="prefsForm.notify_email_marketing" type="checkbox" class="rounded text-[#C4A265]" />
+                                <span class="text-sm text-slate-700">📧 {{ isRtl ? 'بريد إلكتروني' : 'Email' }}</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input v-model="prefsForm.notify_sms_marketing" type="checkbox" class="rounded text-[#C4A265]" />
+                                <span class="text-sm text-slate-700">📱 {{ isRtl ? 'رسائل SMS' : 'SMS' }}</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="submit" :disabled="prefsForm.processing"
+                        class="w-full py-2.5 rounded-xl bg-gradient-to-r from-[#1B365D] to-[#22406F] text-white font-bold text-sm hover:shadow-lg transition disabled:opacity-50">
+                        {{ prefsForm.processing
+                            ? (isRtl ? 'جارٍ الحفظ...' : 'Saving...')
+                            : (isRtl ? 'حفظ التفضيلات' : 'Save Preferences') }}
+                    </button>
+
+                    <p v-if="prefsForm.recentlySuccessful" class="text-sm text-emerald-600 text-center">
+                        ✓ {{ isRtl ? 'تم حفظ التفضيلات' : 'Preferences saved' }}
+                    </p>
+                </form>
             </div>
         </div>
     </div>

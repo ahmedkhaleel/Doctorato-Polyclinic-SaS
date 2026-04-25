@@ -21,19 +21,31 @@ class SendBookingNotification
         SendEmailJob::dispatch($adminEmail, new NewBookingNotification($booking), 'new_booking');
 
         // 2. Notify the patient with the branded "we got your request" email.
-        // Best-effort — booking creation must not fail because mail is down.
-        try {
-            $recipient = $this->resolvePatientRecipient($booking);
-            if ($recipient) {
-                Notification::route('mail', $recipient['email'])
-                    ->notify(new BookingStatusEmail($booking, 'created'));
+        // Honors per-patient notify_email_bookings preference. Best-effort.
+        if ($this->patientWantsBookingEmails($booking)) {
+            try {
+                $recipient = $this->resolvePatientRecipient($booking);
+                if ($recipient) {
+                    Notification::route('mail', $recipient['email'])
+                        ->notify(new BookingStatusEmail($booking, 'created'));
+                }
+            } catch (\Throwable $e) {
+                Log::warning('[booking-created-email] failed', [
+                    'booking_id' => $booking->id,
+                    'error'      => $e->getMessage(),
+                ]);
             }
-        } catch (\Throwable $e) {
-            Log::warning('[booking-created-email] failed', [
-                'booking_id' => $booking->id,
-                'error'      => $e->getMessage(),
-            ]);
         }
+    }
+
+    /**
+     * Anonymous (no linked patient) bookings: assume opt-in. Linked
+     * patients: respect their notify_email_bookings preference.
+     */
+    private function patientWantsBookingEmails($booking): bool
+    {
+        if (! $booking->patient) return true;
+        return $booking->patient->wantsNotification('bookings', 'email');
     }
 
     /**

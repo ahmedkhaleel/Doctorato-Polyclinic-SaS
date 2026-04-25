@@ -52,6 +52,10 @@ class Patient extends Model
         'birth_weight_kg', 'birth_length_cm', 'birth_head_circumference_cm',
         'apgar_1min', 'apgar_5min', 'birth_complications', 'nicu_days',
         'newborn_screening', 'feeding_type', 'pregnancy_complications',
+        // Notification preferences
+        'preferred_language',
+        'notify_email_bookings', 'notify_email_reminders', 'notify_email_marketing',
+        'notify_sms_bookings', 'notify_sms_reminders', 'notify_sms_marketing',
     ];
 
     protected $casts = [
@@ -72,6 +76,12 @@ class Patient extends Model
         'is_smoker' => 'boolean',
         'jaw_problems' => 'boolean',
         'teeth_grinding' => 'boolean',
+        'notify_email_bookings' => 'boolean',
+        'notify_email_reminders' => 'boolean',
+        'notify_email_marketing' => 'boolean',
+        'notify_sms_bookings' => 'boolean',
+        'notify_sms_reminders' => 'boolean',
+        'notify_sms_marketing' => 'boolean',
         // Pediatric casts
         'birth_complications' => 'array',
         'newborn_screening' => 'array',
@@ -512,5 +522,33 @@ class Patient extends Model
                 $patient->is_active = true;
             }
         });
+    }
+
+    /**
+     * Should this patient receive a notification of the given category
+     * over the given channel?
+     *
+     * Defaults to TRUE if the column is null (legacy rows that pre-date
+     * the preferences migration). Marketing SMS defaults to false.
+     *
+     * @param 'bookings'|'reminders'|'marketing' $category
+     * @param 'email'|'sms' $channel
+     */
+    public function wantsNotification(string $category, string $channel): bool
+    {
+        $col = "notify_{$channel}_{$category}";
+        if (! in_array($col, [
+            'notify_email_bookings', 'notify_email_reminders', 'notify_email_marketing',
+            'notify_sms_bookings', 'notify_sms_reminders', 'notify_sms_marketing',
+        ], true)) {
+            return false;
+        }
+
+        $value = $this->getAttribute($col);
+        if (is_null($value)) {
+            // Legacy default: marketing-SMS off, everything else on.
+            return $col !== 'notify_sms_marketing';
+        }
+        return (bool) $value;
     }
 }

@@ -125,4 +125,5 @@ Route::middleware('patient.auth')->group(function () {
     Route::get('/profile', [PatientProfileController::class, 'index'])->name('patient.profile.index');
     Route::post('/profile', [PatientProfileController::class, 'update'])->name('patient.profile.update');
     Route::post('/profile/password', [PatientProfileController::class, 'updatePassword'])->name('patient.profile.password');
+    Route::post('/profile/preferences', [PatientProfileController::class, 'updatePreferences'])->name('patient.profile.preferences');
 });

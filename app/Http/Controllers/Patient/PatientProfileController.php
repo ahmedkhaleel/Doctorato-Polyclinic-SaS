@@ -25,6 +25,10 @@ class PatientProfileController extends BasePatientController
                 'nationality', 'address', 'occupation',
                 'emergency_contact_name', 'emergency_contact_phone',
                 'file_number',
+                // Notification preferences
+                'preferred_language',
+                'notify_email_bookings', 'notify_email_reminders', 'notify_email_marketing',
+                'notify_sms_bookings', 'notify_sms_reminders', 'notify_sms_marketing',
             ]),
         ]);
     }
@@ -75,5 +79,37 @@ class PatientProfileController extends BasePatientController
         AuditLogger::log('password_changed', $user);
 
         return redirect()->back()->with('success', 'Password changed successfully.');
+    }
+
+    /**
+     * Save the patient's notification preferences. All flags are
+     * boolean — checkbox-driven UI on the profile page.
+     */
+    public function updatePreferences(Request $request): RedirectResponse
+    {
+        $patient = $this->patient($request);
+
+        $data = $request->validate([
+            'preferred_language'      => 'nullable|in:ar,en',
+            'notify_email_bookings'   => 'sometimes|boolean',
+            'notify_email_reminders'  => 'sometimes|boolean',
+            'notify_email_marketing'  => 'sometimes|boolean',
+            'notify_sms_bookings'     => 'sometimes|boolean',
+            'notify_sms_reminders'    => 'sometimes|boolean',
+            'notify_sms_marketing'    => 'sometimes|boolean',
+        ]);
+
+        // Coerce missing checkboxes (browsers omit unchecked ones) to false.
+        foreach ([
+            'notify_email_bookings', 'notify_email_reminders', 'notify_email_marketing',
+            'notify_sms_bookings', 'notify_sms_reminders', 'notify_sms_marketing',
+        ] as $flag) {
+            if (! array_key_exists($flag, $data)) $data[$flag] = false;
+        }
+
+        $patient->update($data);
+        AuditLogger::log('notification_preferences_updated', $patient);
+
+        return redirect()->back()->with('success', 'Notification preferences saved.');
     }
 }

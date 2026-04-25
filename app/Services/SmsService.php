@@ -239,8 +239,18 @@ class SmsService
      * Send a quick SMS to a patient (convenience method).
      * Uses patient name for variable replacement.
      */
-    public static function sendToPatient(string $phone, string $messageTemplate, array $variables = []): array
+    public static function sendToPatient(string $phone, string $messageTemplate, array $variables = [], ?string $category = null, ?\App\Models\Patient $patient = null): array
     {
+        // Honor opt-out preferences when caller passes patient + category.
+        // Legacy callers that don't pass these still send (back-compat).
+        if ($patient && $category && ! $patient->wantsNotification($category, 'sms')) {
+            return [
+                'success'  => false,
+                'message'  => "Patient opted out of {$category} SMS.",
+                'provider' => 'skipped',
+            ];
+        }
+
         $clinicName = Setting::get('clinic_name_en', 'Doctorato Polyclinic');
         $clinicPhone = Setting::get('clinic_phone', '');
 

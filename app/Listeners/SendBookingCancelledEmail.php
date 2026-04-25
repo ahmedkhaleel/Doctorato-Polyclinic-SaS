@@ -17,6 +17,11 @@ class SendBookingCancelledEmail
             'appointments',
         ]);
 
+        // Respect patient's notify_email_bookings preference.
+        if ($booking->patient && ! $booking->patient->wantsNotification('bookings', 'email')) {
+            return;
+        }
+
         $email = $booking->email
             ?: $booking->patient?->email
             ?: $booking->patient?->user?->email;
