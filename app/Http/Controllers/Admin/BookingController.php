@@ -261,6 +261,11 @@ class BookingController extends Controller
             }
         }
 
+        // Email the patient on cancellation transitions.
+        if ($oldStatus !== 'cancelled' && $booking->status === 'cancelled') {
+            \App\Events\BookingCancelled::dispatch($booking, $data['admin_notes'] ?? null);
+        }
+
         return redirect()->back()->with('success', 'Booking updated successfully.');
     }
 

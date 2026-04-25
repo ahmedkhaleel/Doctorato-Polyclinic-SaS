@@ -129,6 +129,7 @@ class PatientBookingController extends BasePatientController
         }
 
         $booking->update(['status' => 'cancelled']);
+        \App\Events\BookingCancelled::dispatch($booking, 'Cancelled by patient');
 
         return back()->with('success', 'Booking cancelled successfully.');
     }

@@ -227,6 +227,13 @@ class SecretaryBookingController extends BaseSecretaryController
 
         AuditLogger::log('updated_status', $booking);
 
+        // Email the patient on cancellation. Confirmed status has its own
+        // SecretaryBookingController::confirm() flow that already dispatches
+        // BookingConfirmed; this branch only fires for direct cancel here.
+        if ($newStatus === 'cancelled' && $currentStatus !== 'cancelled') {
+            \App\Events\BookingCancelled::dispatch($booking, $data['admin_notes'] ?? null);
+        }
+
         return redirect()->back()->with('success', $this->msg('Booking status updated.', 'تم تحديث حالة الحجز.'));
     }
 

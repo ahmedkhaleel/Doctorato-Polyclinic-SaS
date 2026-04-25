@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Events\BookingCancelled;
 use App\Events\BookingConfirmed;
 use App\Events\BookingCreated;
 use App\Events\InvoiceOverdue;
@@ -15,6 +16,8 @@ use App\Listeners\LinkPendingBookings;
 use App\Listeners\LogPaymentReceived;
 use App\Listeners\LogVisitCancelled;
 use App\Listeners\LogVisitCompleted;
+use App\Listeners\SendBookingCancelledEmail;
+use App\Listeners\SendBookingConfirmedEmail;
 use App\Listeners\SendBookingConfirmedSms;
 use App\Listeners\SendBookingNotification;
 use App\Listeners\SendOverdueReminder;
@@ -53,6 +56,8 @@ class AppServiceProvider extends ServiceProvider
         // Booking lifecycle
         Event::listen(BookingCreated::class, SendBookingNotification::class);
         Event::listen(BookingConfirmed::class, SendBookingConfirmedSms::class);
+        Event::listen(BookingConfirmed::class, SendBookingConfirmedEmail::class);
+        Event::listen(BookingCancelled::class, SendBookingCancelledEmail::class);
 
         // Visit lifecycle
         Event::listen(VisitCompleted::class, LogVisitCompleted::class);
