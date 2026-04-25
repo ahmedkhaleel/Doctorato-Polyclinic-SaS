@@ -14,6 +14,14 @@ use Inertia\Response;
 
 class AuthController extends Controller
 {
+    use \App\Http\Controllers\Concerns\HandlesPasswordReset;
+
+    protected function portalKey(): string         { return 'secretary'; }
+    protected function portalRoles(): array        { return ['secretary']; }
+    protected function portalLoginRoute(): string  { return 'secretary.login'; }
+    protected function portalForgotForm(): string  { return 'Secretary/Auth/ForgotPassword'; }
+    protected function portalResetForm(): string   { return 'Secretary/Auth/ResetPassword'; }
+
     public function showLogin(): Response
     {
         return Inertia::render('Secretary/Auth/Login');

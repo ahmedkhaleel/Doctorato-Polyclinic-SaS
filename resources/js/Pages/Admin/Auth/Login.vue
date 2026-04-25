@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue';
-import { useForm, usePage, router } from '@inertiajs/vue3';
+import { useForm, usePage, router, Link } from '@inertiajs/vue3';
 
 const page = usePage();
 const locale = computed(() => page.props.locale || 'ar');
@@ -92,6 +92,9 @@ function switchLocale() {
                             style="color: #C4A265;"
                         />
                         <label for="remember" :class="isRtl ? 'mr-2' : 'ml-2'" class="text-sm text-gray-600">{{ $t('a_login_remember') }}</label>
+                        <Link href="/admin/forgot-password" class="ml-auto rtl:mr-auto rtl:ml-0 text-sm text-[#C4A265] hover:text-[#1B365D] transition-colors">
+                            {{ isRtl ? 'نسيت كلمة المرور؟' : 'Forgot password?' }}
+                        </Link>
                     </div>
 
                     <!-- Submit -->

@@ -35,6 +35,12 @@ Route::get('/login', [AuthController::class, 'showLogin'])->name('webmaster.logi
 Route::post('/login', [AuthController::class, 'login'])->name('webmaster.authenticate')->middleware('throttle:5,1');
 Route::post('/logout', [AuthController::class, 'logout'])->name('webmaster.logout');
 
+// Password reset
+Route::get('/forgot-password',          [AuthController::class, 'showForgotPassword'])->name('webmaster.password.request');
+Route::post('/forgot-password',         [AuthController::class, 'sendResetLink'])->name('webmaster.password.email')->middleware('throttle:5,15');
+Route::get('/reset-password/{token}',   [AuthController::class, 'showResetForm'])->name('webmaster.password.reset');
+Route::post('/reset-password',          [AuthController::class, 'resetPassword'])->name('webmaster.password.update')->middleware('throttle:5,15');
+
 // Protected webmaster routes (requires authentication + webmaster role)
 Route::middleware('webmaster.auth')->group(function () {
 

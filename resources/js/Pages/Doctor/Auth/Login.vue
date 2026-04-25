@@ -1,5 +1,5 @@
 <script setup>
-import { useForm, usePage } from '@inertiajs/vue3';
+import { useForm, usePage, Link } from '@inertiajs/vue3';
 import { computed, ref, onMounted } from 'vue';
 
 const page = usePage();
@@ -181,6 +181,9 @@ function submit() {
                                 />
                                 <span class="text-sm text-white/40 group-hover:text-white/60 transition-colors">{{ isRtl ? 'تذكرني' : 'Remember me' }}</span>
                             </label>
+                            <Link href="/doctor/forgot-password" class="ml-auto rtl:mr-auto rtl:ml-0 text-sm text-[#C4A265]/70 hover:text-[#C4A265] transition-colors">
+                                {{ isRtl ? 'نسيت كلمة المرور؟' : 'Forgot password?' }}
+                            </Link>
                         </div>
 
                         <!-- Submit -->

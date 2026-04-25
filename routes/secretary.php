@@ -37,6 +37,12 @@ Route::get('/login', [AuthController::class, 'showLogin'])->name('secretary.logi
 Route::post('/login', [AuthController::class, 'login'])->name('secretary.authenticate')->middleware('throttle:5,1');
 Route::post('/logout', [AuthController::class, 'logout'])->name('secretary.logout');
 
+// Password reset
+Route::get('/forgot-password',          [AuthController::class, 'showForgotPassword'])->name('secretary.password.request');
+Route::post('/forgot-password',         [AuthController::class, 'sendResetLink'])->name('secretary.password.email')->middleware('throttle:5,15');
+Route::get('/reset-password/{token}',   [AuthController::class, 'showResetForm'])->name('secretary.password.reset');
+Route::post('/reset-password',          [AuthController::class, 'resetPassword'])->name('secretary.password.update')->middleware('throttle:5,15');
+
 // Protected secretary routes (requires authentication + secretary role)
 Route::middleware('secretary.auth')->group(function () {
 

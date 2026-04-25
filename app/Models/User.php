@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Notifications\BrandedPasswordReset;
 use App\Traits\LogsActivity;
 
 class User extends Authenticatable
@@ -135,5 +136,15 @@ class User extends Authenticatable
     public function receivedMessages()
     {
         return $this->hasMany(Message::class, 'receiver_id');
+    }
+
+    /**
+     * Override the default Laravel reset-password notification with our
+     * branded HTML template that routes the link to the user's portal
+     * (admin/doctor/secretary/webmaster/patient).
+     */
+    public function sendPasswordResetNotification($token): void
+    {
+        $this->notify(new BrandedPasswordReset($token));
     }
 }

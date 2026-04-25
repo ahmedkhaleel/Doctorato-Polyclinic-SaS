@@ -36,7 +36,7 @@ Route::post('/logout', [PatientAuthController::class, 'logout'])->name('patient.
 // Password reset (forgot-password flow)
 Route::get('/forgot-password', [PatientAuthController::class, 'showForgotPassword'])->name('patient.password.request');
 Route::post('/forgot-password', [PatientAuthController::class, 'sendResetLink'])->name('patient.password.email')->middleware('throttle:5,15');
-Route::get('/reset-password/{token}', [PatientAuthController::class, 'showResetForm'])->name('patient.password.reset');
+Route::get('/reset-password/{token}', [PatientAuthController::class, 'showResetFormWithLocale'])->name('patient.password.reset');
 Route::post('/reset-password', [PatientAuthController::class, 'resetPassword'])->name('patient.password.update')->middleware('throttle:5,15');
 
 // Protected patient routes (requires authentication + linked patient)

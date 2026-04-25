@@ -1,5 +1,5 @@
 <script setup>
-import { useForm, usePage } from '@inertiajs/vue3';
+import { useForm, usePage, Link } from '@inertiajs/vue3';
 import { computed } from 'vue';
 
 const __page = usePage();
@@ -82,6 +82,9 @@ function submit() {
                             class="h-4 w-4 rounded border-white/20 bg-white/[0.06] text-[#1B365D] focus:ring-[#1B365D]/50"
                         />
                         <label for="remember" class="ltr:ml-2 rtl:mr-2 text-sm text-white/50">{{ isRtl ? 'تذكرني' : 'Remember me' }}</label>
+                        <Link href="/webmaster/forgot-password" class="ml-auto rtl:mr-auto rtl:ml-0 text-sm text-[#C4A265]/70 hover:text-[#C4A265] transition-colors">
+                            {{ isRtl ? 'نسيت كلمة المرور؟' : 'Forgot password?' }}
+                        </Link>
                     </div>
 
                     <!-- Submit -->

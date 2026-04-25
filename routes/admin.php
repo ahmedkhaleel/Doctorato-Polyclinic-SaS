@@ -113,6 +113,12 @@ Route::post('/login', [AuthController::class, 'login'])->name('admin.authenticat
 Route::post('/logout', [AuthController::class, 'logout'])->name('admin.logout');
 Route::post('/switch-locale-public', [AuthController::class, 'switchLocale'])->name('admin.switchLocalePublic');
 
+// Password reset
+Route::get('/forgot-password',          [AuthController::class, 'showForgotPassword'])->name('admin.password.request');
+Route::post('/forgot-password',         [AuthController::class, 'sendResetLink'])->name('admin.password.email')->middleware('throttle:5,15');
+Route::get('/reset-password/{token}',   [AuthController::class, 'showResetForm'])->name('admin.password.reset');
+Route::post('/reset-password',          [AuthController::class, 'resetPassword'])->name('admin.password.update')->middleware('throttle:5,15');
+
 // Protected admin routes (requires authentication + active account)
 Route::middleware('admin.auth')->group(function () {
 

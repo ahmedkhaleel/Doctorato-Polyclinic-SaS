@@ -44,6 +44,12 @@ Route::get('/login', [AuthController::class, 'showLogin'])->name('doctor.login')
 Route::post('/login', [AuthController::class, 'login'])->name('doctor.authenticate')->middleware('throttle:5,1');
 Route::post('/logout', [AuthController::class, 'logout'])->name('doctor.logout');
 
+// Password reset
+Route::get('/forgot-password',          [AuthController::class, 'showForgotPassword'])->name('doctor.password.request');
+Route::post('/forgot-password',         [AuthController::class, 'sendResetLink'])->name('doctor.password.email')->middleware('throttle:5,15');
+Route::get('/reset-password/{token}',   [AuthController::class, 'showResetForm'])->name('doctor.password.reset');
+Route::post('/reset-password',          [AuthController::class, 'resetPassword'])->name('doctor.password.update')->middleware('throttle:5,15');
+
 // Protected doctor routes (requires authentication + active doctor)
 Route::middleware('doctor.auth')->group(function () {
 

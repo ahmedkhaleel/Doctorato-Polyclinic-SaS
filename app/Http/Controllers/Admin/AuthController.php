@@ -14,10 +14,18 @@ use Inertia\Response;
 
 class AuthController extends Controller
 {
+    use \App\Http\Controllers\Concerns\HandlesPasswordReset;
+
     /**
      * Roles that have their own separate panels and are NOT allowed to login via admin.
      */
     private array $separatePanelRoles = ['secretary', 'doctor', 'webmaster'];
+
+    protected function portalKey(): string         { return 'admin'; }
+    protected function portalRoles(): array        { return ['admin', 'super_admin']; }
+    protected function portalLoginRoute(): string  { return 'admin.login'; }
+    protected function portalForgotForm(): string  { return 'Admin/Auth/ForgotPassword'; }
+    protected function portalResetForm(): string   { return 'Admin/Auth/ResetPassword'; }
 
     public function showLogin(): Response
     {
