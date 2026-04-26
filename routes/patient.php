@@ -13,6 +13,8 @@ use App\Http\Controllers\Patient\PatientComparisonController;
 use App\Http\Controllers\Patient\PatientConsentController;
 use App\Http\Controllers\Patient\PatientDentalController;
 use App\Http\Controllers\Patient\PatientPediatricController;
+use App\Http\Controllers\Patient\PatientLoyaltyController;
+use App\Http\Controllers\Patient\PatientReferralsController;
 use App\Http\Controllers\Patient\OnlineConsultationController;
 use Illuminate\Support\Facades\Route;
 
@@ -120,6 +122,12 @@ Route::middleware('patient.auth')->group(function () {
         ->name('patient.online-consultations.cancel');
     Route::get('/online-consultations/{consultation}/room', [OnlineConsultationController::class, 'room'])
         ->name('patient.online-consultations.room');
+
+    // ─── Loyalty Points ─────────────────────────────────────
+    Route::get('/loyalty', [PatientLoyaltyController::class, 'index'])->name('patient.loyalty.index');
+
+    // ─── Referrals ──────────────────────────────────────────
+    Route::get('/referrals', [PatientReferralsController::class, 'index'])->name('patient.referrals.index');
 
     // ─── My Profile ─────────────────────────────────────────
     Route::get('/profile', [PatientProfileController::class, 'index'])->name('patient.profile.index');

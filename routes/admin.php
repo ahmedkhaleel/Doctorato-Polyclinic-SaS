@@ -285,6 +285,18 @@ Route::middleware('admin.auth')->group(function () {
     Route::post('/sms-templates/{smsTemplate}/preview', [\App\Http\Controllers\Admin\SmsTemplateController::class, 'preview'])
         ->name('admin.sms-templates.preview')->middleware('permission:settings.view');
 
+    // ─── Loyalty Points (admin oversight + manual adjustments) ─
+    Route::get('/loyalty', [\App\Http\Controllers\Admin\LoyaltyController::class, 'index'])
+        ->name('admin.loyalty.index')->middleware('permission:patients.view');
+    Route::get('/loyalty/{patient}', [\App\Http\Controllers\Admin\LoyaltyController::class, 'show'])
+        ->name('admin.loyalty.show')->middleware('permission:patients.view');
+    Route::post('/loyalty/{patient}/adjust', [\App\Http\Controllers\Admin\LoyaltyController::class, 'adjust'])
+        ->name('admin.loyalty.adjust')->middleware('permission:patients.update');
+
+    // ─── Patient Referrals (admin oversight, read-only) ────────
+    Route::get('/patient-referrals', [\App\Http\Controllers\Admin\PatientReferralController::class, 'index'])
+        ->name('admin.patient-referrals.index')->middleware('permission:patients.view');
+
     // ─── Diagnostics (self-service system health) ──────────
     Route::get('/diagnostics', [\App\Http\Controllers\Admin\DiagnosticsController::class, 'show'])
         ->name('admin.diagnostics')
