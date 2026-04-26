@@ -13,6 +13,7 @@ const props = defineProps({
     categories: Array,
     doctors: Array,
     modules: Object,
+    patientCodes: { type: Array, default: () => [] },
 });
 
 const page = usePage();
@@ -255,7 +256,36 @@ function submit() {
 
                         <!-- Promo Code -->
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ isRtl ? 'رمز الخصم' : 'Promo Code' }}</label>
+                            <div class="flex items-center justify-between mb-1.5">
+                                <label class="block text-sm font-medium text-gray-700">{{ isRtl ? 'رمز الخصم' : 'Promo Code' }}</label>
+                                <Link v-if="!patientCodes.length" :href="lp('/loyalty')"
+                                      class="text-[11px] text-[#C4A265] hover:underline">
+                                    {{ isRtl ? '⭐ استبدل نقاطك للحصول على كود' : '⭐ Redeem points for a code' }}
+                                </Link>
+                            </div>
+
+                            <!-- Quick-pick chips for the patient's own active codes -->
+                            <div v-if="patientCodes.length" class="mb-2 p-3 bg-gradient-to-r from-emerald-50/50 to-white border border-emerald-200 rounded-xl">
+                                <p class="text-[11px] font-bold text-emerald-800 mb-2 flex items-center gap-1">
+                                    🎟 {{ isRtl ? 'أكوادك المتاحة (اضغط للتطبيق)' : 'Your active codes (tap to apply)' }}
+                                </p>
+                                <div class="flex flex-wrap gap-2">
+                                    <button v-for="c in patientCodes" :key="c.code" type="button"
+                                            @click="form.promo_code = c.code"
+                                            :class="[
+                                                'inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-mono font-bold border transition',
+                                                form.promo_code === c.code
+                                                    ? 'bg-emerald-500 text-white border-emerald-500'
+                                                    : 'bg-white text-emerald-700 border-emerald-300 hover:bg-emerald-50'
+                                            ]">
+                                        <span>{{ c.code }}</span>
+                                        <span class="text-[10px] font-sans opacity-75">
+                                            {{ c.type === 'percentage' ? `${c.amount}%` : `${c.amount} ${(c.type === 'fixed' ? '' : '')}` }}
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+
                             <input
                                 v-model="form.promo_code"
                                 type="text"

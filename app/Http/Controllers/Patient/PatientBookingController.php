@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Patient;
 
 use App\Models\Booking;
+use App\Models\DiscountCode;
 use App\Models\Doctor;
+use App\Models\LoyaltyPoint;
 use App\Models\ServiceCategory;
 use App\Services\ModuleManager;
 use Illuminate\Http\RedirectResponse;
@@ -60,11 +62,37 @@ class PatientBookingController extends BasePatientController
             ->only(ModuleManager::MEDICAL_MODULES)
             ->all();
 
+        // Patient's own active discount codes (LOYAL-* from loyalty
+        // redemptions, FRIEND-* from referrals, etc.) — shown as one-tap
+        // chips above the promo code field so they don't have to dig
+        // through email or the loyalty page to copy/paste.
+        $codeIds = LoyaltyPoint::where('patient_id', $patient->id)
+            ->where('type', LoyaltyPoint::TYPE_REDEEM)
+            ->where('reference_type', (new DiscountCode)->getMorphClass())
+            ->pluck('reference_id')
+            ->all();
+
+        $patientCodes = DiscountCode::whereIn('id', $codeIds)
+            ->where('is_active', true)
+            ->whereColumn('used_count', '<', 'max_uses')
+            ->where(function ($q) { $q->whereNull('end_date')->orWhere('end_date', '>=', now()); })
+            ->orderByDesc('created_at')
+            ->limit(5)
+            ->get(['code', 'discount_value', 'discount_type', 'end_date'])
+            ->map(fn ($d) => [
+                'code'       => $d->code,
+                'amount'     => (float) $d->discount_value,
+                'type'       => $d->discount_type, // 'fixed' or 'percentage'
+                'expires_at' => $d->end_date?->toDateString(),
+                'source'     => 'loyalty',
+            ]);
+
         return Inertia::render('Patient/Bookings/Create', [
             'patient' => $patient->only(['full_name', 'phone', 'email', 'file_number']),
             'categories' => $categories,
             'doctors' => $doctors,
             'modules' => $activeModules,
+            'patientCodes' => $patientCodes,
         ]);
     }
 

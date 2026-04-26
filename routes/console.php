@@ -50,6 +50,11 @@ Schedule::command('telemedicine:handle-missed')->everyFifteenMinutes();
 // Dental: Auto-expire pending treatment plan consents daily at midnight
 Schedule::command('dental:expire-consents')->dailyAt('00:30');
 
+// Loyalty: Tombstone expired earn points so patient history shows them.
+// Doesn't change balance (expired points already drop out via the filter)
+// — this run just makes the expiry visible in /patient/loyalty history.
+Schedule::command('loyalty:expire-points')->dailyAt('00:45')->withoutOverlapping();
+
 // Pediatric: Send upcoming vaccination reminders (7 days ahead) at 9:00 AM
 Schedule::command('pediatric:vaccination-reminders --type=upcoming --days=7')->dailyAt('09:00');
 

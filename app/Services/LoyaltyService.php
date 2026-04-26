@@ -35,11 +35,16 @@ class LoyaltyService
 
     public static function balance(Patient $patient): int
     {
-        return (int) LoyaltyPoint::where('patient_id', $patient->id)
+        $sum = (int) LoyaltyPoint::where('patient_id', $patient->id)
             ->where(function ($q) {
                 $q->whereNull('expires_at')->orWhere('expires_at', '>', now());
             })
             ->sum('points');
+
+        // Safety clamp: if a redemption was made before the source earn
+        // expired, the auto-filter drops the earn but keeps the redeem,
+        // pushing the sum negative. Real balance can't be < 0.
+        return max(0, $sum);
     }
 
     /**
