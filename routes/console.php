@@ -110,6 +110,14 @@ Schedule::command('telemedicine:send-recovery-emails')
     ->everyThirtyMinutes()
     ->withoutOverlapping();
 
+// Force-delete soft-deleted bookings/visits/invoices/payments/prescriptions
+// older than 90 days so the trash table doesn't grow without bound.
+// Patients + Doctors intentionally excluded (would break visit/invoice
+// foreign keys to historical data).
+Schedule::command('trash:prune --days=90')
+    ->weeklyOn(2, '03:30')   // Tuesdays 03:30
+    ->withoutOverlapping();
+
 // Regenerate /sitemap.xml so search engines see new services / posts /
 // pages added through the admin UI without a manual rebuild.
 Schedule::command('sitemap:generate')->dailyAt('06:00');

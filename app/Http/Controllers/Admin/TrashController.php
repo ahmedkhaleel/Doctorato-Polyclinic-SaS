@@ -179,6 +179,56 @@ class TrashController extends Controller
     }
 
     /**
+     * Restore a list of specific trashed items in one shot.
+     * Body: { type: 'patients', ids: [1, 2, 3] }
+     */
+    public function bulkRestore(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'type' => 'required|string|in:' . implode(',', array_keys(self::MODEL_MAP)),
+            'ids'  => 'required|array|min:1|max:200',
+            'ids.*' => 'integer',
+        ]);
+
+        $modelClass = self::MODEL_MAP[$data['type']];
+        $items = $modelClass::onlyTrashed()->whereIn('id', $data['ids'])->get();
+
+        $count = 0;
+        foreach ($items as $item) {
+            $item->restore();
+            // For patients, also restore the linked user
+            if ($data['type'] === 'patients' && $item->user_id) {
+                \App\Models\User::onlyTrashed()->where('id', $item->user_id)->first()?->restore();
+            }
+            $count++;
+        }
+
+        AuditLogger::log('bulk_restored', null, "Restored {$count} {$data['type']} items.");
+
+        return back()->with('success', "تم استعادة {$count} عنصر / Restored {$count} items.");
+    }
+
+    /**
+     * Force-delete a list of specific trashed items.
+     * Body: { type: 'patients', ids: [1, 2, 3] }
+     */
+    public function bulkForceDelete(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'type' => 'required|string|in:' . implode(',', array_keys(self::MODEL_MAP)),
+            'ids'  => 'required|array|min:1|max:200',
+            'ids.*' => 'integer',
+        ]);
+
+        $modelClass = self::MODEL_MAP[$data['type']];
+        $count = $modelClass::onlyTrashed()->whereIn('id', $data['ids'])->forceDelete();
+
+        AuditLogger::log('bulk_force_deleted', null, "Permanently deleted {$count} {$data['type']} items.");
+
+        return back()->with('success', "تم حذف {$count} عنصر نهائياً / Permanently deleted {$count} items.");
+    }
+
+    /**
      * Apply search filter based on model type.
      */
     private function applySearch($query, string $type, string $search)

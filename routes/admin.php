@@ -312,6 +312,8 @@ Route::middleware('admin.auth')->group(function () {
         Route::post('/trash/{type}/empty', [TrashController::class, 'emptyTrash'])->name('admin.trash.empty');
         Route::post('/trash/{type}/{id}/restore', [TrashController::class, 'restore'])->name('admin.trash.restore');
         Route::post('/trash/{type}/{id}/delete', [TrashController::class, 'forceDelete'])->name('admin.trash.forceDelete');
+        Route::post('/trash/bulk-restore',       [TrashController::class, 'bulkRestore'])->name('admin.trash.bulkRestore');
+        Route::post('/trash/bulk-delete',        [TrashController::class, 'bulkForceDelete'])->name('admin.trash.bulkForceDelete');
     });
 
     // ═══════════════════════════════════════════════════════════
