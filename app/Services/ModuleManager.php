@@ -101,6 +101,14 @@ class ModuleManager
     }
 
     /**
+     * Per-request in-process cache. Each request was hitting the cache
+     * store 2-3x per module — this collapses repeat calls into a single
+     * lookup per module per request.
+     */
+    protected static array $isEnabledMemo = [];
+    protected static array $infoMemo = [];
+
+    /**
      * Check if a module is enabled
      */
     public static function isEnabled(string $module): bool
@@ -109,11 +117,15 @@ class ModuleManager
             return false;
         }
 
-        if (! self::tableExists()) {
-            return false;
+        if (array_key_exists($module, self::$isEnabledMemo)) {
+            return self::$isEnabledMemo[$module];
         }
 
-        return Cache::remember("module_{$module}_enabled", 300, function () use ($module) {
+        if (! self::tableExists()) {
+            return self::$isEnabledMemo[$module] = false;
+        }
+
+        $value = Cache::remember("module_{$module}_enabled", 300, function () use ($module) {
             $setting = DB::table('module_settings')
                 ->where('module', $module)
                 ->where('key', 'enabled')
@@ -121,6 +133,8 @@ class ModuleManager
 
             return $setting === '1';
         });
+
+        return self::$isEnabledMemo[$module] = $value;
     }
 
     /**
@@ -142,10 +156,14 @@ class ModuleManager
      */
     public static function getModuleInfo(string $module): array
     {
+        if (array_key_exists($module, self::$infoMemo)) {
+            return self::$infoMemo[$module];
+        }
+
         $defaults = self::MODULES[$module] ?? [];
 
         if (! self::tableExists()) {
-            return [
+            return self::$infoMemo[$module] = [
                 'slug' => $module,
                 'name_ar' => $defaults['default_name_ar'] ?? $module,
                 'name_en' => $defaults['default_name_en'] ?? $module,
@@ -156,7 +174,7 @@ class ModuleManager
             ];
         }
 
-        return Cache::remember("module_{$module}_info", 300, function () use ($module, $defaults) {
+        return self::$infoMemo[$module] = Cache::remember("module_{$module}_info", 300, function () use ($module, $defaults) {
             $settings = DB::table('module_settings')
                 ->where('module', $module)
                 ->where('group', 'general')
@@ -387,6 +405,7 @@ class ModuleManager
     public static function clearCache(?string $module = null): void
     {
         if ($module) {
+            unset(self::$isEnabledMemo[$module], self::$infoMemo[$module]);
             Cache::forget("module_{$module}_enabled");
             Cache::forget("module_{$module}_info");
 
@@ -402,6 +421,8 @@ class ModuleManager
             }
         } else {
             // Clear all module caches
+            self::$isEnabledMemo = [];
+            self::$infoMemo = [];
             foreach (array_keys(self::MODULES) as $mod) {
                 self::clearCache($mod);
             }
