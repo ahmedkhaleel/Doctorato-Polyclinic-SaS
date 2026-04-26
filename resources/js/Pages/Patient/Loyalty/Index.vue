@@ -18,6 +18,7 @@ const props = defineProps({
     rules: Object,
     stats: Object,
     transactions: Object, // paginator
+    activeCodes: { type: Array, default: () => [] },
 });
 
 const page = usePage();
@@ -35,12 +36,12 @@ const redeemPreview = computed(() => {
 
 const redemption = computed(() => page.props.flash?.redemption || null);
 
-const codeCopied = ref(false);
+const codeCopied = ref(null);
 function copyCode(code) {
     if (!code) return;
     navigator.clipboard.writeText(code).then(() => {
-        codeCopied.value = true;
-        setTimeout(() => { codeCopied.value = false; }, 2000);
+        codeCopied.value = code;
+        setTimeout(() => { codeCopied.value = null; }, 2000);
     });
 }
 
@@ -139,9 +140,9 @@ function fmtDate(d) {
                         <span class="text-sm font-bold text-emerald-700">= {{ formatCurrency(redemption.amount) }}</span>
                         <button @click="copyCode(redemption.code)"
                                 class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-semibold transition">
-                            <svg v-if="!codeCopied" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                            <svg v-if="codeCopied !== redemption.code" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
                             <svg v-else class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                            {{ codeCopied ? (isRtl ? 'نُسخ' : 'Copied') : (isRtl ? 'نسخ' : 'Copy') }}
+                            {{ codeCopied === redemption.code ? (isRtl ? 'نُسخ' : 'Copied') : (isRtl ? 'نسخ' : 'Copy') }}
                         </button>
                     </div>
                 </div>
@@ -201,6 +202,38 @@ function fmtDate(d) {
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 text-center">
                 <p class="text-2xl font-extrabold text-gray-500 tabular-nums">{{ (stats?.total_expired || 0).toLocaleString() }}</p>
                 <p class="text-[11px] text-gray-500 uppercase tracking-wider mt-1">{{ isRtl ? 'منتهي الصلاحية' : 'Expired' }}</p>
+            </div>
+        </div>
+
+        <!-- ── Active Discount Codes (unused/unexpired LOYAL codes) ── -->
+        <div v-if="activeCodes.length" class="bg-white rounded-2xl shadow-sm border-2 border-emerald-200 p-5 mb-6">
+            <div class="flex items-center justify-between mb-3">
+                <h2 class="text-sm font-bold text-emerald-900 flex items-center gap-2">
+                    🎟 {{ isRtl ? 'أكواد خصم متاحة' : 'Active discount codes' }}
+                    <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-[10px]">{{ activeCodes.length }}</span>
+                </h2>
+                <span class="text-[10px] text-gray-500">{{ isRtl ? 'استخدمها قبل انتهائها' : 'Use before they expire' }}</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div v-for="c in activeCodes" :key="c.code"
+                     class="flex items-center justify-between gap-3 p-3 rounded-lg bg-gradient-to-r from-emerald-50/70 to-white border border-emerald-200">
+                    <div class="min-w-0">
+                        <code class="font-mono font-extrabold text-emerald-800 text-sm tracking-wider truncate block">{{ c.code }}</code>
+                        <p class="text-[11px] text-gray-500 mt-0.5">
+                            {{ formatCurrency(c.amount) }}
+                            <span v-if="c.expires_at" class="ms-1 text-amber-600">
+                                · {{ isRtl ? 'صالح حتى' : 'until' }} {{ c.expires_at }}
+                            </span>
+                        </p>
+                    </div>
+                    <button @click="copyCode(c.code)"
+                            :title="isRtl ? 'نسخ' : 'Copy'"
+                            class="flex-shrink-0 inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-semibold transition">
+                        <svg v-if="codeCopied !== c.code" class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                        <svg v-else class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                        {{ codeCopied === c.code ? (isRtl ? 'نُسخ' : 'Copied') : (isRtl ? 'نسخ' : 'Copy') }}
+                    </button>
+                </div>
             </div>
         </div>
 

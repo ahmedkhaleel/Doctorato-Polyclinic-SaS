@@ -63,6 +63,24 @@ class SmsTemplateSeeder extends Seeder
                 'description'  => 'Promotional broadcast (opt-IN only).',
                 'placeholders' => ['code', 'discount', 'clinic_phone'],
             ],
+
+            // ─── Loyalty ──────────────────────────────────────
+            [
+                'key'      => 'loyalty_earned',
+                'category' => 'loyalty',
+                'body_ar'  => '🎁 ربحت {{points}} نقطة من زيارتك. رصيدك الآن {{balance}} نقطة (≈ {{egp_value}}). استبدلها من حسابك على الموقع.',
+                'body_en'  => '🎁 You earned {{points}} points from your visit. Balance: {{balance}} pts (≈ {{egp_value}}). Redeem them in your account.',
+                'description'  => 'Sent after a visit when loyalty points are credited.',
+                'placeholders' => ['points', 'balance', 'egp_value'],
+            ],
+            [
+                'key'      => 'loyalty_redeemed',
+                'category' => 'loyalty',
+                'body_ar'  => '✅ تم استبدال {{points}} نقطة. كود الخصم: {{code}} (={{amount}}). صالح حتى {{expires_at}}.',
+                'body_en'  => '✅ Redeemed {{points}} pts. Discount code: {{code}} (={{amount}}). Valid until {{expires_at}}.',
+                'description'  => 'Sent after a patient redeems loyalty points for a code.',
+                'placeholders' => ['points', 'code', 'amount', 'expires_at'],
+            ],
         ];
 
         foreach ($templates as $t) {
