@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref, watch } from 'vue';
-import { router, Link, usePage } from '@inertiajs/vue3';
+import { router, Link, useForm, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { useCurrency } from '@/Composables/useCurrency';
 
@@ -26,6 +26,23 @@ watch(search, (v) => {
         router.get('/admin/loyalty', { search: v }, { preserveState: true, preserveScroll: true, replace: true });
     }, 300);
 });
+
+// ─── Rules edit form ───────────────────────────────
+const editRules = ref(false);
+const rulesForm = useForm({
+    loyalty_points_per_egp:    props.rules.points_per_egp,
+    loyalty_points_per_visit:  props.rules.points_per_visit,
+    loyalty_redeem_rate:       props.rules.redeem_rate,
+    loyalty_min_redeem_points: props.rules.min_redeem,
+    loyalty_expiry_months:     props.rules.expiry_months,
+});
+
+function saveRules() {
+    rulesForm.post('/admin/loyalty/settings', {
+        preserveScroll: true,
+        onSuccess: () => { editRules.value = false; },
+    });
+}
 </script>
 
 <template>
@@ -61,10 +78,17 @@ watch(search, (v) => {
             </div>
         </div>
 
-        <!-- Rules summary -->
+        <!-- Rules summary / editor -->
         <div class="bg-gradient-to-r from-[#FAF7F0] to-white rounded-xl border border-[#C4A265]/30 p-4 mb-6">
-            <p class="text-[11px] font-bold text-[#8B7043] tracking-wider uppercase mb-2">{{ isRtl ? 'القواعد الحالية' : 'Active rules' }}</p>
-            <div class="grid grid-cols-2 lg:grid-cols-5 gap-2 text-xs text-gray-700">
+            <div class="flex items-center justify-between mb-2">
+                <p class="text-[11px] font-bold text-[#8B7043] tracking-wider uppercase">{{ isRtl ? 'القواعد الحالية' : 'Active rules' }}</p>
+                <button @click="editRules = !editRules"
+                        class="text-xs font-semibold text-[#1B365D] hover:underline">
+                    {{ editRules ? (isRtl ? '× إلغاء' : '× Cancel') : (isRtl ? '✎ تعديل' : '✎ Edit') }}
+                </button>
+            </div>
+
+            <div v-if="!editRules" class="grid grid-cols-2 lg:grid-cols-5 gap-2 text-xs text-gray-700">
                 <p><span class="font-semibold">{{ isRtl ? 'لكل زيارة:' : 'Per visit:' }}</span> {{ rules.points_per_visit }} pts</p>
                 <p><span class="font-semibold">{{ isRtl ? 'لكل عملة:' : 'Per currency:' }}</span> {{ rules.points_per_egp }} pt/{{ rules.currency }}</p>
                 <p><span class="font-semibold">{{ isRtl ? 'سعر الاستبدال:' : 'Redeem rate:' }}</span> {{ rules.redeem_rate }} {{ rules.currency }}/pt</p>
@@ -73,9 +97,47 @@ watch(search, (v) => {
                     {{ rules.expiry_months > 0 ? rules.expiry_months + (isRtl ? ' شهر' : ' months') : (isRtl ? 'بدون' : 'never') }}
                 </p>
             </div>
-            <p class="text-[10px] text-gray-400 mt-2">
-                {{ isRtl ? 'لتعديل القواعد، انتقل إلى الإعدادات → القيم العامة' : 'Edit rules in Settings → General values' }}
-            </p>
+
+            <form v-else @submit.prevent="saveRules" class="space-y-3">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-600 uppercase mb-1">{{ isRtl ? 'لكل زيارة (pts)' : 'Per visit (pts)' }}</label>
+                        <input v-model.number="rulesForm.loyalty_points_per_visit" type="number" min="0" max="10000" required
+                               class="w-full px-2 py-1.5 border border-gray-300 rounded text-sm tabular-nums" />
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-600 uppercase mb-1">{{ isRtl ? `pts/${rules.currency}` : `pts/${rules.currency}` }}</label>
+                        <input v-model.number="rulesForm.loyalty_points_per_egp" type="number" min="0" max="100" step="0.1" required
+                               class="w-full px-2 py-1.5 border border-gray-300 rounded text-sm tabular-nums" />
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-600 uppercase mb-1">{{ isRtl ? `${rules.currency}/pt` : `${rules.currency}/pt` }}</label>
+                        <input v-model.number="rulesForm.loyalty_redeem_rate" type="number" min="0" max="10" step="0.01" required
+                               class="w-full px-2 py-1.5 border border-gray-300 rounded text-sm tabular-nums" />
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-600 uppercase mb-1">{{ isRtl ? 'حد الاستبدال' : 'Min redeem' }}</label>
+                        <input v-model.number="rulesForm.loyalty_min_redeem_points" type="number" min="1" max="100000" required
+                               class="w-full px-2 py-1.5 border border-gray-300 rounded text-sm tabular-nums" />
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-600 uppercase mb-1">{{ isRtl ? 'الانتهاء (شهر)' : 'Expiry (months)' }}</label>
+                        <input v-model.number="rulesForm.loyalty_expiry_months" type="number" min="0" max="120" required
+                               class="w-full px-2 py-1.5 border border-gray-300 rounded text-sm tabular-nums" />
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button type="submit" :disabled="rulesForm.processing"
+                            class="px-4 py-1.5 rounded-lg bg-[#1B365D] text-white text-xs font-semibold disabled:opacity-50">
+                        {{ rulesForm.processing ? '...' : (isRtl ? 'حفظ القواعد' : 'Save rules') }}
+                    </button>
+                    <p class="text-[10px] text-gray-500">
+                        {{ isRtl
+                            ? '💡 0 شهر = بدون انتهاء. التغييرات تنطبق على النقاط الجديدة فقط.'
+                            : '💡 0 months = never expire. Changes apply to new points only.' }}
+                    </p>
+                </div>
+            </form>
         </div>
 
         <!-- Search -->

@@ -288,6 +288,8 @@ Route::middleware('admin.auth')->group(function () {
     // ─── Loyalty Points (admin oversight + manual adjustments) ─
     Route::get('/loyalty', [\App\Http\Controllers\Admin\LoyaltyController::class, 'index'])
         ->name('admin.loyalty.index')->middleware('permission:patients.view');
+    Route::post('/loyalty/settings', [\App\Http\Controllers\Admin\LoyaltyController::class, 'updateSettings'])
+        ->name('admin.loyalty.settings')->middleware('permission:settings.update');
     Route::get('/loyalty/{patient}', [\App\Http\Controllers\Admin\LoyaltyController::class, 'show'])
         ->name('admin.loyalty.show')->middleware('permission:patients.view');
     Route::post('/loyalty/{patient}/adjust', [\App\Http\Controllers\Admin\LoyaltyController::class, 'adjust'])

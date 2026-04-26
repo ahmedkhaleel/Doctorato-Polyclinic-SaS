@@ -124,6 +124,29 @@ class LoyaltyController extends Controller
         ]);
     }
 
+    /**
+     * Edit the loyalty rules (Settings keys). Re-uses Setting::set() so
+     * the values land in the same table the rest of the app reads from.
+     */
+    public function updateSettings(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'loyalty_points_per_egp'    => 'required|numeric|min:0|max:100',
+            'loyalty_points_per_visit'  => 'required|integer|min:0|max:10000',
+            'loyalty_redeem_rate'       => 'required|numeric|min:0|max:10',
+            'loyalty_min_redeem_points' => 'required|integer|min:1|max:100000',
+            'loyalty_expiry_months'     => 'required|integer|min:0|max:120',
+        ]);
+
+        foreach ($data as $key => $value) {
+            Setting::set($key, (string) $value);
+        }
+
+        AuditLogger::log('loyalty_settings_updated', null, $data);
+
+        return back()->with('success', 'Loyalty rules updated.');
+    }
+
     public function adjust(Request $request, Patient $patient): RedirectResponse
     {
         $data = $request->validate([

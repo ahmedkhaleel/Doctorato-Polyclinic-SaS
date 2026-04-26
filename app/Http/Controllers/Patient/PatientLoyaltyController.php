@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Patient;
 
 use App\Models\LoyaltyPoint;
 use App\Models\Setting;
+use App\Services\AuditLogger;
 use App\Services\LoyaltyService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -60,6 +62,40 @@ class PatientLoyaltyController extends BasePatientController
             ],
             'stats'        => $stats,
             'transactions' => $transactions,
+        ]);
+    }
+
+    /**
+     * Patient redeems N points → backend mints a single-use discount code
+     * valid for 30 days. Code is shown on the next page (and emailed
+     * separately if we wire that up later).
+     */
+    public function redeem(Request $request): RedirectResponse
+    {
+        $patient = $this->patient($request);
+
+        $minRedeem = (int) Setting::get('loyalty_min_redeem_points', 100);
+
+        $data = $request->validate([
+            'points' => "required|integer|min:$minRedeem",
+        ]);
+
+        $result = LoyaltyService::redeemForCode($patient, (int) $data['points']);
+
+        if (!$result) {
+            return back()->withErrors(['points' => 'Insufficient balance or invalid amount.']);
+        }
+
+        AuditLogger::log('loyalty_redeemed', $patient, [
+            'points' => (int) $data['points'],
+            'code'   => $result['code'],
+            'amount' => $result['amount'],
+        ]);
+
+        return back()->with('redemption', [
+            'code'       => $result['code'],
+            'amount'     => $result['amount'],
+            'expires_at' => $result['expires_at']->toDateString(),
         ]);
     }
 }

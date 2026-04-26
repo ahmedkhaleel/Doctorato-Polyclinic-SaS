@@ -1,6 +1,6 @@
 <script setup>
-import { computed } from 'vue';
-import { usePage, Link } from '@inertiajs/vue3';
+import { computed, ref } from 'vue';
+import { usePage, Link, useForm } from '@inertiajs/vue3';
 import PatientLayout from '@/Layouts/PatientLayout.vue';
 import { usePatientLocale } from '@/Composables/usePatientLocale';
 import { useCurrency } from '@/Composables/useCurrency';
@@ -23,6 +23,37 @@ const props = defineProps({
 const page = usePage();
 const locale = computed(() => page.props.locale || 'ar');
 const isRtl  = computed(() => (page.props.dir || 'rtl') === 'rtl');
+
+// ── Redemption flow ─────────────────────────
+const showRedeem = ref(false);
+const form = useForm({ points: props.min_redeem });
+
+const redeemPreview = computed(() => {
+    const p = parseInt(form.points) || 0;
+    return (p * (props.rules?.redeem_rate || 0.10));
+});
+
+const redemption = computed(() => page.props.flash?.redemption || null);
+
+const codeCopied = ref(false);
+function copyCode(code) {
+    if (!code) return;
+    navigator.clipboard.writeText(code).then(() => {
+        codeCopied.value = true;
+        setTimeout(() => { codeCopied.value = false; }, 2000);
+    });
+}
+
+function submitRedeem() {
+    form.post(lp('/loyalty/redeem'), {
+        preserveScroll: true,
+        onSuccess: () => {
+            showRedeem.value = false;
+            form.reset('points');
+            form.points = props.min_redeem;
+        },
+    });
+}
 
 function typeLabel(t) {
     const ar = { earn: 'كسب', redeem: 'استبدال', expire: 'انتهاء', adjust: 'تسوية' };
@@ -72,11 +103,11 @@ function fmtDate(d) {
                     </p>
                 </div>
                 <div class="md:text-end">
-                    <div v-if="balance >= min_redeem"
-                         class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-500/20 border border-emerald-400/40 text-emerald-200 text-sm font-semibold">
+                    <button v-if="balance >= min_redeem" @click="showRedeem = !showRedeem"
+                            class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#C4A265] hover:bg-[#8B7043] text-white text-sm font-bold shadow-md transition">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                        {{ isRtl ? 'يمكنك الاستبدال' : 'Eligible to redeem' }}
-                    </div>
+                        {{ isRtl ? 'استبدال النقاط' : 'Redeem points' }}
+                    </button>
                     <p v-else class="text-xs text-white/60">
                         {{ isRtl
                             ? `تحتاج ${(min_redeem - balance).toLocaleString()} نقطة أخرى للاستبدال`
@@ -84,6 +115,77 @@ function fmtDate(d) {
                     </p>
                 </div>
             </div>
+        </div>
+
+        <!-- ── Redemption success banner ─────────────────────── -->
+        <div v-if="redemption" class="bg-gradient-to-r from-emerald-50 to-white border-2 border-emerald-200 rounded-2xl p-5 mb-6">
+            <div class="flex items-start gap-4">
+                <div class="w-12 h-12 rounded-xl bg-emerald-500 flex items-center justify-center flex-shrink-0">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <h3 class="text-base font-bold text-emerald-900 mb-1">
+                        {{ isRtl ? '🎉 تم الاستبدال بنجاح!' : '🎉 Redemption successful!' }}
+                    </h3>
+                    <p class="text-xs text-emerald-700 mb-3">
+                        {{ isRtl
+                            ? `استخدم هذا الكود في حجزك القادم — صالح حتى ${redemption.expires_at}`
+                            : `Use this code on your next booking — valid until ${redemption.expires_at}` }}
+                    </p>
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <code class="px-4 py-2 bg-white border-2 border-dashed border-emerald-400 rounded-lg text-emerald-800 font-mono font-extrabold text-lg tracking-wider">
+                            {{ redemption.code }}
+                        </code>
+                        <span class="text-sm font-bold text-emerald-700">= {{ formatCurrency(redemption.amount) }}</span>
+                        <button @click="copyCode(redemption.code)"
+                                class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-semibold transition">
+                            <svg v-if="!codeCopied" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                            <svg v-else class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                            {{ codeCopied ? (isRtl ? 'نُسخ' : 'Copied') : (isRtl ? 'نسخ' : 'Copy') }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Redeem form ─────────────────────────── -->
+        <div v-if="showRedeem" class="bg-[#FAF7F0] border-2 border-[#C4A265]/40 rounded-2xl p-5 mb-6">
+            <h3 class="text-sm font-bold text-[#1B365D] mb-3">
+                {{ isRtl ? 'كم نقطة تريد استبدالها؟' : 'How many points to redeem?' }}
+            </h3>
+            <form @submit.prevent="submitRedeem" class="space-y-3">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 items-end">
+                    <div class="sm:col-span-2">
+                        <input v-model="form.points" type="number" :min="min_redeem" :max="balance" step="1" required
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg text-base font-bold tabular-nums focus:outline-none focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]" />
+                        <p class="text-[11px] text-gray-500 mt-1">
+                            {{ isRtl
+                                ? `الحد الأدنى ${min_redeem} نقطة. رصيدك ${balance.toLocaleString()}.`
+                                : `Min ${min_redeem} pts. Your balance: ${balance.toLocaleString()}.` }}
+                        </p>
+                        <p v-if="form.errors.points" class="text-xs text-red-600 mt-1">{{ form.errors.points }}</p>
+                    </div>
+                    <div class="bg-white rounded-lg p-3 border border-[#C4A265]/30 text-center">
+                        <p class="text-[10px] text-gray-500 uppercase tracking-wider">{{ isRtl ? 'تحصل على' : 'You get' }}</p>
+                        <p class="text-2xl font-extrabold text-[#8B7043] tabular-nums">{{ formatCurrency(redeemPreview) }}</p>
+                    </div>
+                </div>
+                <div class="flex gap-2">
+                    <button type="submit" :disabled="form.processing"
+                            class="px-5 py-2.5 rounded-lg bg-[#1B365D] text-white text-sm font-bold disabled:opacity-50">
+                        {{ form.processing ? (isRtl ? 'جارٍ...' : 'Processing...') : (isRtl ? 'تأكيد الاستبدال' : 'Confirm redemption') }}
+                    </button>
+                    <button type="button" @click="showRedeem = false"
+                            class="px-5 py-2.5 rounded-lg bg-white border border-gray-300 text-gray-600 text-sm">
+                        {{ isRtl ? 'إلغاء' : 'Cancel' }}
+                    </button>
+                </div>
+                <p class="text-[11px] text-amber-700 bg-amber-50 border border-amber-100 rounded-lg p-2">
+                    💡 {{ isRtl
+                        ? 'بعد الاستبدال ستحصل على كود خصم مفرد الاستخدام صالح لـ 30 يوماً. يمكنك استخدامه عند الحجز.'
+                        : 'After redeeming, you receive a single-use discount code valid for 30 days. Use it when booking.' }}
+                </p>
+            </form>
         </div>
 
         <!-- Stat trio -->

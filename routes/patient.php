@@ -125,6 +125,8 @@ Route::middleware('patient.auth')->group(function () {
 
     // ─── Loyalty Points ─────────────────────────────────────
     Route::get('/loyalty', [PatientLoyaltyController::class, 'index'])->name('patient.loyalty.index');
+    Route::post('/loyalty/redeem', [PatientLoyaltyController::class, 'redeem'])
+        ->name('patient.loyalty.redeem')->middleware('throttle:5,1');
 
     // ─── Referrals ──────────────────────────────────────────
     Route::get('/referrals', [PatientReferralsController::class, 'index'])->name('patient.referrals.index');

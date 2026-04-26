@@ -2,11 +2,13 @@
 
 namespace App\Services;
 
+use App\Models\DiscountCode;
 use App\Models\LoyaltyPoint;
 use App\Models\Patient;
 use App\Models\Setting;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 /**
  * Loyalty points: earn on visits, redeem on bookings.
@@ -97,6 +99,65 @@ class LoyaltyService
                 'reference_type' => $reference?->getMorphClass(),
                 'reference_id'   => $reference?->getKey(),
             ]);
+        });
+    }
+
+    /**
+     * Patient self-service redemption: debit points AND mint a single-use
+     * discount code that the patient can use at checkout (or that staff
+     * can apply on the next invoice).
+     *
+     * Returns ['code' => 'LOYAL-XXXXXX', 'amount' => 25.50, 'expires_at' => Carbon]
+     * on success, or null if balance insufficient or under min threshold.
+     */
+    public static function redeemForCode(Patient $patient, int $points): ?array
+    {
+        if ($points <= 0) return null;
+        $minRedeem = (int) Setting::get('loyalty_min_redeem_points', self::DEFAULT_MIN_REDEEM);
+        if ($points < $minRedeem) return null;
+
+        return DB::transaction(function () use ($patient, $points) {
+            $balance = self::balance($patient);
+            if ($balance < $points) return null;
+
+            $amount = self::pointsToEgp($points);
+            if ($amount <= 0) return null;
+
+            // Generate a unique LOYAL-XXXXXX code
+            do {
+                $code = 'LOYAL-' . strtoupper(Str::random(6));
+            } while (DiscountCode::where('code', $code)->exists());
+
+            $discount = DiscountCode::create([
+                'code'             => $code,
+                'discount_type'    => 'fixed',
+                'discount_value'   => $amount,
+                'max_uses'         => 1,
+                'used_count'       => 0,
+                'start_date'       => now(),
+                'end_date'         => now()->addDays(30),
+                'is_active'        => true,
+                'per_patient_limit' => 1,
+                'first_booking_only' => false,
+                'show_on_website'  => false,
+                'notes'            => "Loyalty redemption for patient #{$patient->id} ({$patient->full_name}, file {$patient->file_number}) — {$points} points",
+            ]);
+
+            // Debit the points, referencing the discount code for audit trail
+            LoyaltyPoint::create([
+                'patient_id'     => $patient->id,
+                'points'         => -$points,
+                'type'           => LoyaltyPoint::TYPE_REDEEM,
+                'description'    => "Redeemed for code {$code} (≈ " . number_format($amount, 2) . ")",
+                'reference_type' => $discount->getMorphClass(),
+                'reference_id'   => $discount->id,
+            ]);
+
+            return [
+                'code'       => $code,
+                'amount'     => $amount,
+                'expires_at' => $discount->end_date,
+            ];
         });
     }
 
