@@ -114,4 +114,78 @@ class PatientReferralService
         $base = rtrim(config('app.url'), '/');
         return "{$base}/{$locale}/patient/register?ref={$patient->referral_code}";
     }
+
+    /**
+     * Generate a single-use DiscountCode tied to the referred friend.
+     * Called automatically when the friend creates their first booking.
+     */
+    public static function issueFriendDiscount(Patient $referred): ?\App\Models\DiscountCode
+    {
+        $referral = \App\Models\PatientReferral::where('referred_patient_id', $referred->id)
+            ->whereNull('first_booking_id')
+            ->first();
+        if (! $referral) return null;
+
+        $code = 'FRIEND-' . strtoupper(\Illuminate\Support\Str::random(6));
+
+        $discount = \App\Models\DiscountCode::create([
+            'code'               => $code,
+            'discount_type'      => 'fixed',
+            'discount_value'     => $referral->discount_amount,
+            'max_uses'           => 1,
+            'used_count'         => 0,
+            'start_date'         => now()->toDateString(),
+            'end_date'           => now()->addMonths(3)->toDateString(),
+            'is_active'          => true,
+            'first_booking_only' => false,
+            'show_on_website'    => false,
+            'notes'              => "Auto-generated from referral #{$referral->id} "
+                                  . "(referrer={$referral->referrer_patient_id} → friend={$referred->id})",
+        ]);
+
+        \Illuminate\Support\Facades\Log::info('[referral] friend discount issued', [
+            'referral_id' => $referral->id,
+            'code'        => $code,
+            'amount'      => $referral->discount_amount,
+        ]);
+
+        return $discount;
+    }
+
+    /**
+     * Generate a thank-you DiscountCode for the referrer once their
+     * friend completes a first booking. Different code template
+     * (THANKS-XXXXXX) so it's identifiable in reports.
+     */
+    public static function issueReferrerThankYou(Patient $referrer): ?\App\Models\DiscountCode
+    {
+        $amount = (float) Setting::get('referral_thank_you_amount', self::DEFAULT_DISCOUNT_AMOUNT);
+
+        $code = 'THANKS-' . strtoupper(\Illuminate\Support\Str::random(6));
+
+        return \App\Models\DiscountCode::create([
+            'code'               => $code,
+            'discount_type'      => 'fixed',
+            'discount_value'     => $amount,
+            'max_uses'           => 1,
+            'used_count'         => 0,
+            'start_date'         => now()->toDateString(),
+            'end_date'           => now()->addMonths(6)->toDateString(),
+            'is_active'          => true,
+            'first_booking_only' => false,
+            'show_on_website'    => false,
+            'notes'              => "Thank-you reward for referrer #{$referrer->id}",
+        ]);
+    }
+
+    /**
+     * Mark the referral as "consumed" by attaching the friend's first
+     * booking id. Idempotent — only writes if first_booking_id is null.
+     */
+    public static function attachFirstBooking(Patient $referred, int $bookingId): void
+    {
+        \App\Models\PatientReferral::where('referred_patient_id', $referred->id)
+            ->whereNull('first_booking_id')
+            ->update(['first_booking_id' => $bookingId]);
+    }
 }

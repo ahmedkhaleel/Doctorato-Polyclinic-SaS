@@ -15,6 +15,7 @@ use App\Listeners\CreatePatientFromLead;
 use App\Listeners\LinkPendingBookings;
 use App\Listeners\LogPaymentReceived;
 use App\Listeners\LogVisitCancelled;
+use App\Listeners\ApplyReferralReward;
 use App\Listeners\LogVisitCompleted;
 use App\Listeners\SendBookingCancelledEmail;
 use App\Listeners\SendBookingConfirmedEmail;
@@ -55,6 +56,7 @@ class AppServiceProvider extends ServiceProvider
         // ─── Events & Listeners ───────────────────────────
         // Booking lifecycle
         Event::listen(BookingCreated::class, SendBookingNotification::class);
+        Event::listen(BookingCreated::class, ApplyReferralReward::class);
         Event::listen(BookingConfirmed::class, SendBookingConfirmedSms::class);
         Event::listen(BookingConfirmed::class, SendBookingConfirmedEmail::class);
         Event::listen(BookingCancelled::class, SendBookingCancelledEmail::class);
