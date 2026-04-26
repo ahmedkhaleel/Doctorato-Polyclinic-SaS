@@ -260,6 +260,7 @@ class DoctorPatientController extends BaseDoctorController
             'dentalMedicalHistory' => $dentalMedicalHistory,
             'quickNotes' => $quickNotes,
             'isFavorite' => $isFavorite,
+            'engagement' => \App\Services\PatientEngagementService::forPatient($patient),
         ]);
     }
 

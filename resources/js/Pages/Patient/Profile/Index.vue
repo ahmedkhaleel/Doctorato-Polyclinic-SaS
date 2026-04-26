@@ -66,7 +66,16 @@ function updatePreferences() {
 
 <template>
     <div>
-        <h1 class="text-2xl font-bold text-gray-800 mb-6">{{ t('p_my_profile') }}</h1>
+        <div class="flex items-center justify-between flex-wrap gap-3 mb-6">
+            <h1 class="text-2xl font-bold text-gray-800">{{ t('p_my_profile') }}</h1>
+            <a :href="lp('/file/download')"
+               class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#1B365D] to-[#22406F] hover:from-[#22406F] hover:to-[#1B365D] text-white text-sm font-semibold shadow-md transition">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                </svg>
+                {{ isRtl ? 'تنزيل ملفي الطبي (PDF)' : 'Download my medical record (PDF)' }}
+            </a>
+        </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <!-- Personal Info -->

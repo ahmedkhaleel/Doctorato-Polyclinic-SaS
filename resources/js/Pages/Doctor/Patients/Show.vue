@@ -3,6 +3,7 @@ import { ref, computed, onMounted } from 'vue';
 import { Link, usePage, useForm } from '@inertiajs/vue3';
 import DoctorLayout from '@/Layouts/DoctorLayout.vue';
 import SpecialtyTabs from '@/Components/Patient/SpecialtyTabs.vue';
+import EngagementCard from '@/Components/Patient/EngagementCard.vue';
 
 defineOptions({ layout: DoctorLayout });
 
@@ -20,6 +21,7 @@ const props = defineProps({
     dentalMedicalHistory: { type: Object, default: null },
     quickNotes: { type: Array, default: () => [] },
     isFavorite: { type: Boolean, default: false },
+    engagement: { type: Object, default: null },
 });
 
 const headerLoaded = ref(false);
@@ -159,6 +161,9 @@ const visitStats = computed(() => {
                 <p v-else class="text-sm text-gray-400 italic">{{ isRtl ? 'لا توجد ملاحظات — اضغط تعديل لإضافة ملاحظاتك' : 'No notes yet — click Edit to add' }}</p>
             </div>
         </div>
+
+        <!-- Engagement (loyalty + referrals + active codes) -->
+        <EngagementCard v-if="engagement" :engagement="engagement" />
 
         <!-- Unified Specialty Tabs -->
         <div class="transition-all duration-700" :class="cardsLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'">

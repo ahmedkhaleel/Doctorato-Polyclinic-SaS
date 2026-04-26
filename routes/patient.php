@@ -13,6 +13,7 @@ use App\Http\Controllers\Patient\PatientComparisonController;
 use App\Http\Controllers\Patient\PatientConsentController;
 use App\Http\Controllers\Patient\PatientDentalController;
 use App\Http\Controllers\Patient\PatientPediatricController;
+use App\Http\Controllers\Patient\PatientExportController;
 use App\Http\Controllers\Patient\PatientLoyaltyController;
 use App\Http\Controllers\Patient\PatientReferralsController;
 use App\Http\Controllers\Patient\OnlineConsultationController;
@@ -122,6 +123,10 @@ Route::middleware('patient.auth')->group(function () {
         ->name('patient.online-consultations.cancel');
     Route::get('/online-consultations/{consultation}/room', [OnlineConsultationController::class, 'room'])
         ->name('patient.online-consultations.room');
+
+    // ─── My File Export (self-service medical record download) ─
+    Route::get('/file/download', [PatientExportController::class, 'downloadFullFile'])
+        ->name('patient.file.download')->middleware('throttle:5,10');
 
     // ─── Loyalty Points ─────────────────────────────────────
     Route::get('/loyalty', [PatientLoyaltyController::class, 'index'])->name('patient.loyalty.index');
