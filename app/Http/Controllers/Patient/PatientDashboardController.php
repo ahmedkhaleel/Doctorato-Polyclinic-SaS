@@ -91,6 +91,7 @@ class PatientDashboardController extends BasePatientController
 
         $referralStats = \App\Services\PatientReferralService::statsFor($patient);
         $locale = $request->route('locale', 'ar');
+        $loyaltyBalance = \App\Services\LoyaltyService::balance($patient);
 
         return Inertia::render('Patient/Dashboard', [
             'patient' => $patient->only(['id', 'full_name', 'file_number', 'photo_url', 'referral_code']),
@@ -114,6 +115,15 @@ class PatientDashboardController extends BasePatientController
                 'count'          => $referralStats['count'],
                 'total_discount' => $referralStats['total_discount'],
                 'currency'       => $referralStats['currency'],
+            ],
+            'loyalty' => [
+                'balance'      => $loyaltyBalance,
+                'egp_value'    => \App\Services\LoyaltyService::pointsToEgp($loyaltyBalance),
+                'currency'     => \App\Models\Setting::get('currency_code', 'EGP'),
+                'min_redeem'   => (int) \App\Models\Setting::get('loyalty_min_redeem_points', 100),
+                'recent'       => \App\Models\LoyaltyPoint::where('patient_id', $patient->id)
+                                    ->latest()->limit(5)
+                                    ->get(['id', 'points', 'type', 'description', 'created_at']),
             ],
         ]);
     }

@@ -23,6 +23,7 @@ const props = defineProps({
     dentalLabOrders: Array,
     pendingConsents: Array,
     referral: Object,
+    loyalty: Object,
 });
 
 const copied = ref(false);
@@ -55,6 +56,30 @@ function $localized(obj, field) {
     if (!obj) return '';
     const lang = locale.value === 'ar' ? 'ar' : 'en';
     return obj[field + '_' + lang] || obj[field + '_en'] || obj[field] || '';
+}
+
+function loyaltyTypeLabel(type) {
+    const ar = { earn: 'كسب', redeem: 'استبدال', expire: 'انتهاء', adjust: 'تسوية' };
+    const en = { earn: 'Earned', redeem: 'Redeemed', expire: 'Expired', adjust: 'Adjusted' };
+    return (locale.value === 'ar' ? ar[type] : en[type]) || type;
+}
+
+function loyaltyTypeColor(type) {
+    return {
+        earn:   'bg-emerald-100 text-emerald-700',
+        redeem: 'bg-amber-100 text-amber-700',
+        expire: 'bg-gray-100 text-gray-600',
+        adjust: 'bg-slate-100 text-slate-700',
+    }[type] || 'bg-gray-100 text-gray-700';
+}
+
+function formatLoyaltyDate(d) {
+    if (!d) return '';
+    try {
+        return new Date(d).toLocaleDateString(locale.value === 'ar' ? 'ar-EG' : 'en-US', {
+            year: 'numeric', month: 'short', day: 'numeric',
+        });
+    } catch { return d; }
 }
 
 </script>
@@ -194,6 +219,99 @@ function $localized(obj, field) {
                         </button>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- ── Loyalty Points card ─────────────────────── -->
+        <div v-if="loyalty" class="relative overflow-hidden bg-white rounded-2xl shadow-sm border border-[#C4A265]/30 mb-6">
+            <div class="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-[#C4A265] via-[#D9B985] to-[#C4A265]"></div>
+            <div class="absolute -top-16 -end-16 w-48 h-48 rounded-full bg-[#C4A265]/10 blur-3xl pointer-events-none"></div>
+
+            <div class="relative p-5 md:p-6">
+                <div class="flex flex-col md:flex-row md:items-center gap-4 md:gap-6">
+                    <!-- Icon + label -->
+                    <div class="flex items-center gap-3 md:flex-col md:items-start md:gap-2">
+                        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-[#C4A265] to-[#8B7043] flex items-center justify-center shadow-md flex-shrink-0">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.196-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2 mb-0.5">
+                                <span class="h-[3px] w-5 bg-[#C4A265] rounded-full"></span>
+                                <span class="text-[10px] font-bold text-[#8B7043] tracking-[0.25em] uppercase">
+                                    {{ isRtl ? 'نقاط الولاء' : 'Loyalty Points' }}
+                                </span>
+                            </div>
+                            <h3 class="text-base font-bold text-gray-800">
+                                {{ isRtl ? 'رصيدك ينمو مع كل زيارة' : 'Your balance grows with every visit' }}
+                            </h3>
+                        </div>
+                    </div>
+
+                    <!-- Balance + EGP value -->
+                    <div class="flex-1 flex items-center gap-4 md:gap-6 md:justify-center bg-gradient-to-br from-[#FAF7F0] to-white rounded-xl p-4 border border-[#C4A265]/15">
+                        <div class="text-center">
+                            <p class="text-3xl md:text-4xl font-extrabold text-[#1B365D] tabular-nums">{{ loyalty.balance.toLocaleString() }}</p>
+                            <p class="text-[10px] text-gray-500 mt-0.5 tracking-wider uppercase">
+                                {{ isRtl ? 'النقاط' : 'Points' }}
+                            </p>
+                        </div>
+                        <div class="h-10 w-px bg-[#C4A265]/30"></div>
+                        <div class="text-center">
+                            <p class="text-2xl font-bold text-[#8B7043] tabular-nums">≈ {{ formatCurrency(loyalty.egp_value) }}</p>
+                            <p class="text-[10px] text-gray-500 mt-0.5 tracking-wider uppercase">
+                                {{ isRtl ? 'قيمة تقريبية' : 'Approx. value' }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Eligibility badge -->
+                    <div class="md:w-40 text-center md:text-end">
+                        <div v-if="loyalty.balance >= loyalty.min_redeem"
+                             class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-semibold">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                            {{ isRtl ? 'يمكنك الاستبدال' : 'Ready to redeem' }}
+                        </div>
+                        <div v-else class="text-[11px] text-gray-500">
+                            {{ isRtl
+                                ? `تحتاج ${(loyalty.min_redeem - loyalty.balance).toLocaleString()} نقطة إضافية للاستبدال`
+                                : `Need ${(loyalty.min_redeem - loyalty.balance).toLocaleString()} more points to redeem` }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent transactions -->
+                <div v-if="loyalty.recent && loyalty.recent.length" class="mt-5 pt-4 border-t border-gray-100">
+                    <p class="text-[11px] font-semibold text-gray-500 uppercase tracking-wider mb-2">
+                        {{ isRtl ? 'آخر المعاملات' : 'Recent activity' }}
+                    </p>
+                    <div class="space-y-1.5">
+                        <div v-for="row in loyalty.recent" :key="row.id"
+                             class="flex items-center justify-between gap-3 p-2 rounded-lg hover:bg-gray-50 transition">
+                            <div class="flex items-center gap-2 min-w-0">
+                                <span :class="loyaltyTypeColor(row.type)" class="text-[10px] font-bold px-2 py-0.5 rounded-full uppercase whitespace-nowrap">
+                                    {{ loyaltyTypeLabel(row.type) }}
+                                </span>
+                                <span class="text-xs text-gray-700 truncate">
+                                    {{ row.description || (isRtl ? 'بدون وصف' : 'No description') }}
+                                </span>
+                            </div>
+                            <div class="flex items-center gap-3 flex-shrink-0">
+                                <span class="text-[10px] text-gray-400 tabular-nums hidden sm:inline">
+                                    {{ formatLoyaltyDate(row.created_at) }}
+                                </span>
+                                <span :class="row.points >= 0 ? 'text-emerald-600' : 'text-amber-600'"
+                                      class="text-sm font-bold tabular-nums whitespace-nowrap">
+                                    {{ row.points >= 0 ? '+' : '' }}{{ row.points.toLocaleString() }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p v-else class="mt-5 pt-4 border-t border-gray-100 text-xs text-gray-400 text-center">
+                    {{ isRtl ? 'لا توجد معاملات حتى الآن — قم بزيارة لكسب أولى النقاط!' : 'No activity yet — visit us to earn your first points!' }}
+                </p>
             </div>
         </div>
 

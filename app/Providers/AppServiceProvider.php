@@ -16,6 +16,7 @@ use App\Listeners\LinkPendingBookings;
 use App\Listeners\LogPaymentReceived;
 use App\Listeners\LogVisitCancelled;
 use App\Listeners\ApplyReferralReward;
+use App\Listeners\AwardLoyaltyOnVisit;
 use App\Listeners\LogVisitCompleted;
 use App\Listeners\SendBookingCancelledEmail;
 use App\Listeners\SendBookingConfirmedEmail;
@@ -64,6 +65,7 @@ class AppServiceProvider extends ServiceProvider
         // Visit lifecycle
         Event::listen(VisitCompleted::class, LogVisitCompleted::class);
         Event::listen(VisitCompleted::class, SendVisitCompletedSms::class);
+        Event::listen(VisitCompleted::class, AwardLoyaltyOnVisit::class);
         Event::listen(VisitCompleted::class, UpdateBookingStatusOnCompletion::class);
         Event::listen(VisitCancelled::class, LogVisitCancelled::class);
 
