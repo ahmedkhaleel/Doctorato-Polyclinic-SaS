@@ -107,6 +107,21 @@ class PatientReferralService
     }
 
     /**
+     * Clinic-wide referral metrics for admin dashboards. Cached 5 min.
+     */
+    public static function clinicStats(): array
+    {
+        return \Illuminate\Support\Facades\Cache::remember('referral:clinic-stats', 300, function () {
+            return [
+                'total_referrals'  => (int) PatientReferral::count(),
+                'redeemed_count'   => (int) PatientReferral::whereNotNull('redeemed_at')->count(),
+                'total_discount'   => (float) PatientReferral::sum('discount_amount'),
+                'this_month'       => (int) PatientReferral::where('created_at', '>=', now()->startOfMonth())->count(),
+            ];
+        });
+    }
+
+    /**
      * Build a shareable URL the patient can paste into WhatsApp/SMS.
      */
     public static function shareUrl(Patient $patient, string $locale = 'ar'): string

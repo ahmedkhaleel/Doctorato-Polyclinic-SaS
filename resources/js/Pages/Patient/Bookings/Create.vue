@@ -42,11 +42,21 @@ if (activeModules.value.length === 1) {
     selectedModule.value = activeModules.value[0].slug;
 }
 
+// Pre-fill from query string (powers "Book again" deep-links from past visits).
+const queryParams = (typeof window !== 'undefined') ? new URLSearchParams(window.location.search) : new URLSearchParams();
+const initialModule    = queryParams.get('module') || '';
+const initialDoctorId  = queryParams.get('doctor_id') || '';
+const initialServiceId = queryParams.get('service_id') || '';
+
+if (initialModule && activeModules.value.find(m => m.slug === initialModule)) {
+    selectedModule.value = initialModule;
+}
+
 const form = useForm({
     booking_type: '',
-    module: '',
-    service_id: '',
-    doctor_id: '',
+    module: initialModule,
+    service_id: initialServiceId,
+    doctor_id: initialDoctorId,
     preferred_date: '',
     preferred_time: '',
     notes: '',

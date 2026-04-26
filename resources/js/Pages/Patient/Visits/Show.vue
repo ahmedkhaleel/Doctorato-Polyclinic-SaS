@@ -34,6 +34,21 @@ const statusColors = {
     cancelled: 'bg-red-100 text-red-700',
     no_show: 'bg-gray-100 text-gray-500',
 };
+
+// Build a "book again" deep-link with the visit's doctor + service +
+// module pre-filled. The booking Create page will read these as query
+// params and populate the form. Only shown if we have enough info to
+// rebook (a doctor or a service must be present).
+const rebookUrl = computed(() => {
+    const v = props.visit;
+    if (!v) return null;
+    if (!v.doctor_id && !v.service_id) return null;
+    const params = new URLSearchParams();
+    if (v.module)     params.set('module', v.module);
+    if (v.doctor_id)  params.set('doctor_id', v.doctor_id);
+    if (v.service_id) params.set('service_id', v.service_id);
+    return lp('/bookings/create') + (params.toString() ? '?' + params.toString() : '');
+});
 </script>
 
 <template>
@@ -44,6 +59,14 @@ const statusColors = {
                 <svg class="w-4 h-4 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
             </Link>
             <h1 class="text-2xl font-bold text-gray-800">{{ isRtl ? 'تفاصيل الزيارة' : 'Visit Details' }}</h1>
+            <Link v-if="rebookUrl"
+                  :href="rebookUrl"
+                  class="ms-auto inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-[var(--brand-primary)] to-[var(--brand-secondary)] hover:opacity-90 text-white text-sm font-semibold shadow-md transition">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                </svg>
+                {{ isRtl ? 'احجز مرة أخرى' : 'Book again' }}
+            </Link>
         </div>
 
         <!-- Visit Info Card -->

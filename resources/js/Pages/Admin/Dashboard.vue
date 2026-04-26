@@ -24,6 +24,7 @@ const props = defineProps({
     recentBookings: Array,
     dental: Object,
     pediatric: Object,
+    engagement: { type: Object, default: null },
 });
 
 /* ── Helpers ─────────────────────────────────────────────── */
@@ -397,6 +398,89 @@ function labelX(index, total) {
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <!-- ── Row 3.5: Engagement (Loyalty + Referrals) ────── -->
+            <div v-if="engagement" class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-5">
+                <!-- Loyalty -->
+                <Link href="/admin/loyalty" class="group relative bg-gradient-to-br from-[#1B365D] to-[#22406F] rounded-2xl p-5 shadow-sm hover:shadow-xl border border-[#C4A265]/20 transition-all duration-300 overflow-hidden text-white block">
+                    <div class="absolute -top-12 -end-12 w-44 h-44 rounded-full bg-[#C4A265]/15 blur-3xl pointer-events-none"></div>
+                    <div class="relative flex items-start justify-between gap-4">
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="h-[3px] w-5 bg-[#C4A265] rounded-full"></span>
+                                <span class="text-[10px] font-bold text-[#C4A265] tracking-[0.25em] uppercase">
+                                    {{ isRtl ? 'الولاء' : 'Loyalty' }}
+                                </span>
+                            </div>
+                            <p class="text-3xl font-extrabold tabular-nums">{{ engagement.loyalty.outstanding_points.toLocaleString() }}</p>
+                            <p class="text-[11px] text-white/60 uppercase tracking-wider mt-0.5">
+                                {{ isRtl ? 'نقاط قائمة' : 'Outstanding points' }}
+                            </p>
+
+                            <div class="mt-4 grid grid-cols-3 gap-2 text-xs">
+                                <div class="bg-white/5 rounded-lg p-2 border border-white/10">
+                                    <p class="text-emerald-300 font-bold tabular-nums">+{{ engagement.loyalty.awarded_30d.toLocaleString() }}</p>
+                                    <p class="text-[9px] text-white/50 uppercase">{{ isRtl ? 'كُسب 30ي' : 'Earned 30d' }}</p>
+                                </div>
+                                <div class="bg-white/5 rounded-lg p-2 border border-white/10">
+                                    <p class="text-amber-300 font-bold tabular-nums">-{{ engagement.loyalty.redeemed_30d.toLocaleString() }}</p>
+                                    <p class="text-[9px] text-white/50 uppercase">{{ isRtl ? 'استُبدل 30ي' : 'Redeemed 30d' }}</p>
+                                </div>
+                                <div class="bg-white/5 rounded-lg p-2 border border-white/10">
+                                    <p class="text-[#C4A265] font-bold tabular-nums">{{ engagement.loyalty.patients_with_points.toLocaleString() }}</p>
+                                    <p class="text-[9px] text-white/50 uppercase">{{ isRtl ? 'مرضى' : 'Patients' }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-[#C4A265] to-[#8B7043] flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.196-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+                            </svg>
+                        </div>
+                    </div>
+                </Link>
+
+                <!-- Referrals -->
+                <Link href="/admin/patient-referrals" class="group relative bg-white rounded-2xl p-5 shadow-sm hover:shadow-xl border border-emerald-100 transition-all duration-300 overflow-hidden block">
+                    <div class="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-emerald-400 to-emerald-600 opacity-80"></div>
+                    <div class="flex items-start justify-between gap-4">
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="h-[3px] w-5 bg-emerald-500 rounded-full"></span>
+                                <span class="text-[10px] font-bold text-emerald-700 tracking-[0.25em] uppercase">
+                                    {{ isRtl ? 'الإحالات' : 'Referrals' }}
+                                </span>
+                            </div>
+                            <p class="text-3xl font-extrabold tabular-nums text-gray-900">{{ engagement.referral.total_referrals.toLocaleString() }}</p>
+                            <p class="text-[11px] text-gray-500 uppercase tracking-wider mt-0.5">
+                                {{ isRtl ? 'إجمالي الإحالات' : 'Total referrals' }}
+                            </p>
+
+                            <div class="mt-4 grid grid-cols-3 gap-2 text-xs">
+                                <div class="bg-emerald-50 rounded-lg p-2 border border-emerald-100">
+                                    <p class="text-emerald-700 font-bold tabular-nums">{{ engagement.referral.redeemed_count.toLocaleString() }}</p>
+                                    <p class="text-[9px] text-gray-500 uppercase">{{ isRtl ? 'استُبدل' : 'Redeemed' }}</p>
+                                </div>
+                                <div class="bg-blue-50 rounded-lg p-2 border border-blue-100">
+                                    <p class="text-blue-700 font-bold tabular-nums">{{ engagement.referral.this_month.toLocaleString() }}</p>
+                                    <p class="text-[9px] text-gray-500 uppercase">{{ isRtl ? 'هذا الشهر' : 'This month' }}</p>
+                                </div>
+                                <div class="bg-[#FAF7F0] rounded-lg p-2 border border-[#C4A265]/20">
+                                    <p class="text-[#8B7043] font-bold tabular-nums truncate">
+                                        {{ engagement.referral.total_discount > 0 ? engagement.referral.total_discount.toLocaleString() : '0' }}
+                                    </p>
+                                    <p class="text-[9px] text-gray-500 uppercase">{{ isRtl ? 'خصم ممنوح' : 'Discount issued' }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                            </svg>
+                        </div>
+                    </div>
+                </Link>
             </div>
 
             <!-- ── Row 4: SVG Bar Charts ────────────────────────── -->

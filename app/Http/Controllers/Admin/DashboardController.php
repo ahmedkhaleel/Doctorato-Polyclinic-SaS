@@ -247,6 +247,12 @@ class DashboardController extends Controller
             });
         }
 
+        // Engagement metrics — loyalty + referrals at a glance
+        $engagement = [
+            'loyalty'  => \App\Services\LoyaltyService::clinicStats(),
+            'referral' => \App\Services\PatientReferralService::clinicStats(),
+        ];
+
         return Inertia::render('Admin/Dashboard', [
             'financial' => $financial,
             'clinic' => $clinic,
@@ -260,6 +266,7 @@ class DashboardController extends Controller
             'recentBookings' => $recentBookings,
             'dental' => $dental,
             'pediatric' => $pediatric,
+            'engagement' => $engagement,
         ]);
     }
 }

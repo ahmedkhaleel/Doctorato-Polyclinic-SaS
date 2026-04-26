@@ -201,6 +201,33 @@ class LoyaltyService
     }
 
     /**
+     * Clinic-wide loyalty metrics for admin dashboards.
+     * Cached for 5 minutes to keep the dashboard snappy.
+     */
+    public static function clinicStats(): array
+    {
+        return \Illuminate\Support\Facades\Cache::remember('loyalty:clinic-stats', 300, function () {
+            return [
+                'outstanding_points' => (int) LoyaltyPoint::where(function ($q) {
+                                            $q->whereNull('expires_at')->orWhere('expires_at', '>', now());
+                                        })->sum('points'),
+                'patients_with_points' => (int) \Illuminate\Support\Facades\DB::table('loyalty_points')
+                                            ->where(function ($q) {
+                                                $q->whereNull('expires_at')->orWhere('expires_at', '>', now());
+                                            })
+                                            ->distinct('patient_id')
+                                            ->count('patient_id'),
+                'awarded_30d'   => (int) LoyaltyPoint::where('type', LoyaltyPoint::TYPE_EARN)
+                                            ->where('created_at', '>=', now()->subDays(30))
+                                            ->sum('points'),
+                'redeemed_30d'  => (int) abs(LoyaltyPoint::where('type', LoyaltyPoint::TYPE_REDEEM)
+                                            ->where('created_at', '>=', now()->subDays(30))
+                                            ->sum('points')),
+            ];
+        });
+    }
+
+    /**
      * Compute the points to award for a visit. Used by the
      * VisitCompleted listener.
      */
