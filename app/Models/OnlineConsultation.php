@@ -26,7 +26,7 @@ class OnlineConsultation extends Model
         'chief_complaint', 'diagnosis', 'doctor_notes',
         'patient_feedback', 'patient_rating',
         'recording_enabled', 'recording_url', 'recording_resource_id',
-        'fee', 'payment_status', 'payment_gateway_reference',
+        'fee', 'payment_status', 'payment_gateway_reference', 'recovery_email_sent_at',
         'cancellation_reason', 'cancelled_by', 'cancelled_at',
     ];
 
@@ -40,6 +40,7 @@ class OnlineConsultation extends Model
         'session_started_at' => 'datetime',
         'session_ended_at' => 'datetime',
         'cancelled_at' => 'datetime',
+        'recovery_email_sent_at' => 'datetime',
         'fee' => 'decimal:2',
         'recording_enabled' => 'boolean',
     ];

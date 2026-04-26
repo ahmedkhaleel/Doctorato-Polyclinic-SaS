@@ -102,6 +102,14 @@ Schedule::command('telemedicine:cleanup-stuck')
     ->hourlyAt(10)
     ->withoutOverlapping();
 
+// Recovery email — gives the patient one chance to come back and pay
+// before cleanup-stuck reclaims the slot. Runs every 30 minutes; only
+// hits each consultation once (recovery_email_sent_at), only fires
+// after a 30-minute settling window, and stops chasing after 12 h.
+Schedule::command('telemedicine:send-recovery-emails')
+    ->everyThirtyMinutes()
+    ->withoutOverlapping();
+
 // Regenerate /sitemap.xml so search engines see new services / posts /
 // pages added through the admin UI without a manual rebuild.
 Schedule::command('sitemap:generate')->dailyAt('06:00');
