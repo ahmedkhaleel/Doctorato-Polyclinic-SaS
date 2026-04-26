@@ -56,6 +56,8 @@ class Patient extends Model
         'preferred_language',
         'notify_email_bookings', 'notify_email_reminders', 'notify_email_marketing',
         'notify_sms_bookings', 'notify_sms_reminders', 'notify_sms_marketing',
+        // Referral
+        'referral_code',
     ];
 
     protected $casts = [
@@ -511,12 +513,52 @@ class Patient extends Model
         return $fileNumber;
     }
 
+    /**
+     * Patients I've referred (mine as the referrer).
+     */
+    public function referralsMade()
+    {
+        return $this->hasMany(PatientReferral::class, 'referrer_patient_id');
+    }
+
+    /**
+     * The (single) row marking how I joined the clinic, if any.
+     */
+    public function referralReceived()
+    {
+        return $this->hasOne(PatientReferral::class, 'referred_patient_id');
+    }
+
+    /**
+     * Generate a memorable referral code: NAME-XXXX (e.g. SARA-7K9X).
+     * Easy to share verbally, hard to guess.
+     */
+    public static function generateReferralCode(string $name): string
+    {
+        $prefix = strtoupper(\Illuminate\Support\Str::slug(\Illuminate\Support\Str::words($name, 1, '')) ?: 'REF');
+        $prefix = substr($prefix, 0, 8);
+
+        for ($attempt = 0; $attempt < 5; $attempt++) {
+            $suffix = strtoupper(\Illuminate\Support\Str::random(4));
+            $code = "{$prefix}-{$suffix}";
+            if (! static::where('referral_code', $code)->exists()) {
+                return $code;
+            }
+        }
+        return $prefix . '-' . strtoupper(\Illuminate\Support\Str::random(6));
+    }
+
     // ─── Model boot: guard against missing file_number ──
     protected static function booted(): void
     {
         static::creating(function (self $patient) {
             if (empty($patient->file_number)) {
                 $patient->file_number = static::generateFileNumber();
+            }
+            if (empty($patient->referral_code)) {
+                $patient->referral_code = static::generateReferralCode(
+                    $patient->full_name ?: 'Patient'
+                );
             }
             if (is_null($patient->is_active)) {
                 $patient->is_active = true;

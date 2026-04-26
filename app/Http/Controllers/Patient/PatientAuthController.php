@@ -109,6 +109,7 @@ class PatientAuthController extends Controller
             'phone' => 'required|string|max:20',
             'email' => 'required|email|max:255|unique:users,email',
             'password' => ['required', 'confirmed', Password::min(8)],
+            'referral_code' => 'nullable|string|max:20',
         ]);
 
         $patientRole = Role::where('name', 'patient')->first();
@@ -152,6 +153,19 @@ class PatientAuthController extends Controller
             $request->session()->regenerate();
 
             AuditLogger::authEvent('register', $data['email'], 'patient');
+
+            // Try to redeem a referral code, if one was supplied.
+            if (! empty($data['referral_code'])) {
+                try {
+                    \App\Services\PatientReferralService::redeem($data['referral_code'], $patient);
+                } catch (\Throwable $e) {
+                    \Illuminate\Support\Facades\Log::warning('[referral-redeem] failed', [
+                        'patient_id' => $patient->id,
+                        'code'       => $data['referral_code'],
+                        'error'      => $e->getMessage(),
+                    ]);
+                }
+            }
 
             // Best-effort welcome email. Non-fatal — registration completes
             // even if Mail throws (misconfigured SMTP, etc).

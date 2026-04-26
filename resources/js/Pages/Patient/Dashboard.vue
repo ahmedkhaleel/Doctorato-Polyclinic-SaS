@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { usePage, Link } from '@inertiajs/vue3';
 import PatientLayout from '@/Layouts/PatientLayout.vue';
 import { usePatientLocale } from '@/Composables/usePatientLocale';
@@ -22,7 +22,25 @@ const props = defineProps({
     pendingFollowups: Array,
     dentalLabOrders: Array,
     pendingConsents: Array,
+    referral: Object,
 });
+
+const copied = ref(false);
+function copyReferral() {
+    if (!props.referral?.share_url) return;
+    navigator.clipboard.writeText(props.referral.share_url).then(() => {
+        copied.value = true;
+        setTimeout(() => { copied.value = false; }, 2000);
+    });
+}
+function shareReferralWhatsApp() {
+    if (!props.referral?.share_url) return;
+    const text = encodeURIComponent(
+        (page.props.dir === 'rtl' ? 'انضم إليّ في عيادة Doctorato! استخدم كودي للحصول على خصم: ' : 'Join me at Doctorato Clinic! Use my code for a discount: ')
+        + props.referral.share_url
+    );
+    window.open(`https://wa.me/?text=${text}`, '_blank');
+}
 
 const page = usePage();
 const locale = computed(() => page.props.locale || 'ar');
@@ -129,6 +147,54 @@ function $localized(obj, field) {
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
                 {{ isRtl ? 'عرض الفواتير' : 'View Invoices' }}
             </Link>
+        </div>
+
+        <!-- ── Referral card ────────────────────────────── -->
+        <div v-if="referral?.code" class="relative overflow-hidden bg-gradient-to-br from-[#1B365D] to-[#22406F] rounded-2xl shadow-xl mb-6 p-5 md:p-6 text-white">
+            <div class="absolute -top-12 -end-12 w-44 h-44 rounded-full bg-[#C4A265]/15 blur-3xl"></div>
+            <div class="relative flex flex-col md:flex-row items-start md:items-center gap-5">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-[#C4A265] to-[#D9B985] flex items-center justify-center flex-shrink-0">
+                    <svg class="w-6 h-6 text-[#1B365D]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                    </svg>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="h-[3px] w-6 bg-[#C4A265] rounded-full"></span>
+                        <span class="text-[10px] font-bold text-[#C4A265] tracking-[0.25em] uppercase">
+                            {{ isRtl ? 'ادعُ صديقاً' : 'Refer a friend' }}
+                        </span>
+                    </div>
+                    <h3 class="text-base md:text-lg font-bold mb-1">
+                        {{ isRtl ? 'شارك الكود واحصل على مكافآت' : 'Share your code, earn rewards' }}
+                    </h3>
+                    <p class="text-xs text-white/60 mb-3">
+                        {{ isRtl
+                            ? `أحلت ${referral.count} ${referral.count === 1 ? 'صديق' : 'أصدقاء'} حتى الآن`
+                            : `${referral.count} friend${referral.count === 1 ? '' : 's'} referred so far` }}
+                    </p>
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <code class="px-3 py-1.5 bg-white/10 border border-[#C4A265]/40 rounded-lg text-[#C4A265] font-mono font-bold tracking-wider">{{ referral.code }}</code>
+                        <button @click="copyReferral"
+                                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 text-xs font-semibold transition">
+                            <svg v-if="!copied" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                            </svg>
+                            <svg v-else class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            {{ copied ? (isRtl ? 'تم النسخ' : 'Copied') : (isRtl ? 'نسخ الرابط' : 'Copy link') }}
+                        </button>
+                        <button @click="shareReferralWhatsApp"
+                                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-xs font-bold transition">
+                            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+                            </svg>
+                            {{ isRtl ? 'واتساب' : 'WhatsApp' }}
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Pending Consent Alert -->

@@ -89,8 +89,11 @@ class PatientDashboardController extends BasePatientController
                 ->get();
         }
 
+        $referralStats = \App\Services\PatientReferralService::statsFor($patient);
+        $locale = $request->route('locale', 'ar');
+
         return Inertia::render('Patient/Dashboard', [
-            'patient' => $patient->only(['id', 'full_name', 'file_number', 'photo_url']),
+            'patient' => $patient->only(['id', 'full_name', 'file_number', 'photo_url', 'referral_code']),
             'upcomingBookings' => $regularBookings,
             'recentVisits' => $recentVisits,
             'stats' => [
@@ -105,6 +108,13 @@ class PatientDashboardController extends BasePatientController
             'pendingFollowups' => $pendingFollowups,
             'dentalLabOrders' => $dentalLabOrders,
             'pendingConsents' => $pendingConsents ?? [],
+            'referral' => [
+                'code'           => $patient->referral_code,
+                'share_url'      => \App\Services\PatientReferralService::shareUrl($patient, $locale),
+                'count'          => $referralStats['count'],
+                'total_discount' => $referralStats['total_discount'],
+                'currency'       => $referralStats['currency'],
+            ],
         ]);
     }
 }

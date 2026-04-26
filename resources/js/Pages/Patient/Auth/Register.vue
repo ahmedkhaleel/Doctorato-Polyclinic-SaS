@@ -6,12 +6,17 @@ import { usePatientLocale } from '@/Composables/usePatientLocale';
 const { lp } = usePatientLocale();
 
 const page = usePage();
+// Pre-fill referral_code from ?ref=… query param so the share link
+// "just works" without the friend retyping the code.
+const initialReferral = new URLSearchParams(window.location.search).get('ref') || '';
+
 const form = useForm({
     full_name: '',
     phone: '',
     email: '',
     password: '',
     password_confirmation: '',
+    referral_code: initialReferral,
 });
 
 const locale = computed(() => page.props.locale || 'ar');
@@ -121,6 +126,25 @@ function submit() {
                             class="doctorato-input w-full px-4 py-3 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white placeholder-white/30 focus:ring-2 focus:ring-[var(--brand-primary)]/50 focus:border-[var(--brand-primary)]/50 text-sm transition-all duration-200"
                             :placeholder="isRtl ? 'أعد إدخال كلمة المرور' : 'Re-enter your password'"
                         />
+                    </div>
+
+                    <!-- Referral code (optional) -->
+                    <div>
+                        <label for="referral_code" class="block text-sm font-medium text-white/60 mb-1.5">
+                            {{ isRtl ? 'كود الإحالة (اختياري)' : 'Referral code (optional)' }}
+                        </label>
+                        <input
+                            id="referral_code"
+                            v-model="form.referral_code"
+                            type="text"
+                            class="w-full px-4 py-3 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white placeholder-white/30 font-mono uppercase focus:ring-2 focus:ring-[var(--brand-primary)]/50 focus:border-[var(--brand-primary)]/50 text-sm transition-all duration-200"
+                            :placeholder="isRtl ? 'مثال: SARA-7K9X' : 'e.g. SARA-7K9X'"
+                            :class="form.errors.referral_code ? 'border-red-500/50' : ''"
+                        />
+                        <p v-if="form.errors.referral_code" class="mt-1.5 text-sm text-red-400">{{ form.errors.referral_code }}</p>
+                        <p v-else-if="form.referral_code" class="mt-1.5 text-xs text-emerald-400/80">
+                            ✓ {{ isRtl ? 'سيتم احتساب الإحالة عند التسجيل' : 'Referral will be applied on signup' }}
+                        </p>
                     </div>
 
                     <!-- Submit -->
