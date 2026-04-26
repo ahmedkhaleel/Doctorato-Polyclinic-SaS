@@ -2,7 +2,7 @@
 import { ref, computed } from 'vue';
 import { Link, useForm, router , usePage } from '@inertiajs/vue3';
 import WebmasterLayout from '@/Layouts/WebmasterLayout.vue';
-import RichTextEditor from '@/Components/Admin/RichTextEditor.vue';
+import RichTextEditor from '@/Components/Admin/RichTextEditorLazy.vue';
 import SearchableSelect from '@/Components/Admin/SearchableSelect.vue';
 import { useCurrency } from '@/Composables/useCurrency.js';
 

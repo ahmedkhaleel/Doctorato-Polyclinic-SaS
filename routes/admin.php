@@ -277,6 +277,14 @@ Route::middleware('admin.auth')->group(function () {
     Route::post('/settings', [SettingController::class, 'update'])->name('admin.settings.update')->middleware('permission:settings.update');
     Route::post('/settings/test-sms', [SettingController::class, 'testSms'])->name('admin.settings.testSms')->middleware('permission:settings.update');
 
+    // ─── SMS Templates (admin-editable copy) ───────────────
+    Route::get('/sms-templates',   [\App\Http\Controllers\Admin\SmsTemplateController::class, 'index'])
+        ->name('admin.sms-templates.index')->middleware('permission:settings.view');
+    Route::post('/sms-templates/{smsTemplate}', [\App\Http\Controllers\Admin\SmsTemplateController::class, 'update'])
+        ->name('admin.sms-templates.update')->middleware('permission:settings.update');
+    Route::post('/sms-templates/{smsTemplate}/preview', [\App\Http\Controllers\Admin\SmsTemplateController::class, 'preview'])
+        ->name('admin.sms-templates.preview')->middleware('permission:settings.view');
+
     // ─── Diagnostics (self-service system health) ──────────
     Route::get('/diagnostics', [\App\Http\Controllers\Admin\DiagnosticsController::class, 'show'])
         ->name('admin.diagnostics')

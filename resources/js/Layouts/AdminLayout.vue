@@ -308,6 +308,7 @@ const navGroups = [
             { labelEn: 'Users',          labelAr: 'المستخدمين',    href: '/admin/users',              icon: 'users',    permission: 'users.view' },
             { labelEn: 'Roles',          labelAr: 'الصلاحيات',     href: '/admin/roles',              icon: 'shield',   permission: 'roles.view' },
             { labelEn: 'Diagnostics',    labelAr: 'التشخيص',        href: '/admin/diagnostics',        icon: 'activity', permission: 'settings.view' },
+            { labelEn: 'SMS Templates',  labelAr: 'قوالب الرسائل', href: '/admin/sms-templates',      icon: 'chat',     permission: 'settings.view' },
             { labelEn: 'Settings',       labelAr: 'الإعدادات',     href: '/admin/settings',           icon: 'cog',      permission: 'settings.view' },
             { labelEn: 'Modules',        labelAr: 'المديولات',     href: '/admin/settings/modules',   icon: 'layers',   permission: 'settings.view' },
             { labelEn: 'Recycle Bin',    labelAr: 'سلة المحذوفات', href: '/admin/trash',              icon: 'trash',    permission: 'settings.update' },

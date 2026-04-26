@@ -2,7 +2,7 @@
 import { computed } from 'vue';
 import { Link, useForm , usePage } from '@inertiajs/vue3';
 import WebmasterLayout from '@/Layouts/WebmasterLayout.vue';
-import RichTextEditor from '@/Components/Admin/RichTextEditor.vue';
+import RichTextEditor from '@/Components/Admin/RichTextEditorLazy.vue';
 import SearchableSelect from '@/Components/Admin/SearchableSelect.vue';
 
 const props = defineProps({

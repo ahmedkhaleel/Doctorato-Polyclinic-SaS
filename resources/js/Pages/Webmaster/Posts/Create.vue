@@ -2,7 +2,7 @@
 import { watch , computed } from 'vue';
 import { Link, useForm , usePage } from '@inertiajs/vue3';
 import WebmasterLayout from '@/Layouts/WebmasterLayout.vue';
-import RichTextEditor from '@/Components/Admin/RichTextEditor.vue';
+import RichTextEditor from '@/Components/Admin/RichTextEditorLazy.vue';
 
 const props = defineProps({
     categories: Array,

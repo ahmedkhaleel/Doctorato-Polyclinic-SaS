@@ -2,7 +2,7 @@
 import { computed, watch } from 'vue';
 import { Link, useForm, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
-import RichTextEditor from '@/Components/Admin/RichTextEditor.vue';
+import RichTextEditor from '@/Components/Admin/RichTextEditorLazy.vue';
 import { useCurrency } from '@/Composables/useCurrency.js';
 
 const { formatCurrency, currencyCode } = useCurrency();
