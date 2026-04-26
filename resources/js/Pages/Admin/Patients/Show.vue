@@ -3,6 +3,7 @@ import { ref, computed, onMounted } from 'vue';
 import { Link, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import SpecialtyTabs from '@/Components/Patient/SpecialtyTabs.vue';
+import EngagementCard from '@/Components/Patient/EngagementCard.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
 import { useCurrency } from '@/Composables/useCurrency.js';
 
@@ -26,6 +27,7 @@ const props = defineProps({
     dermaData: { type: Object, default: null },
     dentalData: { type: Object, default: null },
     pediatricData: { type: Object, default: null },
+    engagement: { type: Object, default: null },
     doctors: Array,
 });
 
@@ -145,6 +147,9 @@ const prescriptions = computed(() => props.patient?.prescriptions || []);
                     </div>
                 </div>
             </div>
+
+            <!-- Engagement (loyalty + referrals + active codes) -->
+            <EngagementCard v-if="engagement" :engagement="engagement" />
 
             <!-- Unified Specialty Tabs -->
             <div class="transition-all duration-500" :class="cardsLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'">

@@ -3,6 +3,7 @@ import { computed } from 'vue';
 import { Link, usePage } from '@inertiajs/vue3';
 import SecretaryLayout from '@/Layouts/SecretaryLayout.vue';
 import SpecialtyTabs from '@/Components/Patient/SpecialtyTabs.vue';
+import EngagementCard from '@/Components/Patient/EngagementCard.vue';
 import { useCurrency } from '@/Composables/useCurrency.js';
 
 defineOptions({ layout: SecretaryLayout });
@@ -17,6 +18,7 @@ const props = defineProps({
     dermaData: { type: Object, default: null },
     dentalData: { type: Object, default: null },
     pediatricData: { type: Object, default: null },
+    engagement: { type: Object, default: null },
     doctors: Array,
 });
 
@@ -146,6 +148,9 @@ const prescriptions = computed(() => props.patient?.prescriptions || []);
                 <p v-else class="text-sm text-gray-400 italic">{{ isRtl ? 'لا توجد ملاحظات طبية' : 'No medical notes recorded' }}</p>
             </div>
         </div>
+
+        <!-- Engagement (loyalty + referrals + active codes) -->
+        <EngagementCard v-if="engagement" :engagement="engagement" />
 
         <!-- Unified Specialty Tabs (read-only for secretary) -->
         <SpecialtyTabs

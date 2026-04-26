@@ -307,6 +307,7 @@ class PatientController extends Controller
             'activeInsurance' => $activeInsurance,
             'recentDocuments' => $recentDocuments,
             'expiringDocsCount' => $expiringDocs,
+            'engagement' => \App\Services\PatientEngagementService::forPatient($patient),
             'doctors' => Doctor::select('id', 'name_en', 'name_ar')->where('status', 'active')->orderBy('name_en')->get(),
         ]);
     }
