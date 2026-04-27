@@ -53,8 +53,17 @@ class PatientVisitController extends BasePatientController
 
         $visit->load($relations);
 
+        // Show "Rate this visit" CTA only for completed visits the patient
+        // hasn't already reviewed.
+        $canReview = $visit->status === 'completed'
+            && ! \App\Models\PatientSatisfaction::where('patient_id', $visit->patient_id)
+                ->where('visit_id', $visit->id)
+                ->whereNotNull('overall_rating')
+                ->exists();
+
         return Inertia::render('Patient/Visits/Show', [
-            'visit' => $visit,
+            'visit'     => $visit,
+            'canReview' => $canReview,
         ]);
     }
 }

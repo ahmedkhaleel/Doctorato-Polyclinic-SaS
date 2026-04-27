@@ -15,6 +15,7 @@ use App\Http\Controllers\Patient\PatientDentalController;
 use App\Http\Controllers\Patient\PatientPediatricController;
 use App\Http\Controllers\Patient\PatientDocumentController;
 use App\Http\Controllers\Patient\PatientExportController;
+use App\Http\Controllers\Patient\PatientFeedbackController;
 use App\Http\Controllers\Patient\PatientLoyaltyController;
 use App\Http\Controllers\Patient\PatientReferralsController;
 use App\Http\Controllers\Patient\OnlineConsultationController;
@@ -128,6 +129,12 @@ Route::middleware('patient.auth')->group(function () {
     // ─── My File Export (self-service medical record download) ─
     Route::get('/file/download', [PatientExportController::class, 'downloadFullFile'])
         ->name('patient.file.download')->middleware('throttle:5,10');
+
+    // ─── Feedback / Reviews (patient rates their completed visits) ─
+    Route::get('/feedback', [PatientFeedbackController::class, 'index'])->name('patient.feedback.index');
+    Route::get('/feedback/{visit}', [PatientFeedbackController::class, 'create'])->name('patient.feedback.create');
+    Route::post('/feedback/{visit}', [PatientFeedbackController::class, 'store'])
+        ->name('patient.feedback.store')->middleware('throttle:10,1');
 
     // ─── My Documents (self-uploaded medical records + admin-shared) ─
     Route::get('/documents', [PatientDocumentController::class, 'index'])->name('patient.documents.index');

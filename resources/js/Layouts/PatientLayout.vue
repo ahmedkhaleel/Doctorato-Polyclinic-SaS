@@ -81,6 +81,7 @@ const navGroups = computed(() => [
             { label: t('p_my_prescriptions'), href: lp('/prescriptions'), icon: 'pill' },
             { label: t('p_my_treatment_plans'), href: lp('/treatment-plans'), icon: 'plan' },
             { label: isRtl.value ? 'مستنداتي الطبية' : 'My Documents', href: lp('/documents'), icon: 'document' },
+            { label: isRtl.value ? 'تقييماتي'        : 'My Feedback',  href: lp('/feedback'),  icon: 'star' },
         ],
     },
     {
