@@ -10,6 +10,7 @@ use App\Http\Controllers\Doctor\DoctorBookingController;
 use App\Http\Controllers\Doctor\DoctorCommissionController;
 use App\Http\Controllers\Doctor\DoctorProfileController;
 use App\Http\Controllers\Doctor\DoctorNotificationController;
+use App\Http\Controllers\Doctor\DoctorReviewsController;
 use App\Http\Controllers\Doctor\DoctorChatController;
 use App\Http\Controllers\Doctor\DoctorAttendanceController;
 use App\Http\Controllers\Doctor\DoctorLeaveController;
@@ -111,6 +112,9 @@ Route::middleware('doctor.auth')->group(function () {
     Route::get('/bookings', [DoctorBookingController::class, 'index'])->name('doctor.bookings.index');
 
     // ─── Commission ─────────────────────────────────────────
+    // ─── My Reviews (read-only — patient feedback about this doctor)
+    Route::get('/reviews', [DoctorReviewsController::class, 'index'])->name('doctor.reviews.index');
+
     Route::get('/commission', [DoctorCommissionController::class, 'index'])->name('doctor.commission.index')->middleware('module:hr');
     Route::get('/commission/payouts/{payout}', [DoctorCommissionController::class, 'payoutShow'])->name('doctor.commission.payout-show')->middleware('module:hr');
     Route::get('/commission/payouts/{payout}/print', [DoctorCommissionController::class, 'payoutPrint'])->name('doctor.commission.payout-print')->middleware('module:hr');

@@ -29,6 +29,7 @@ const props = defineProps({
     pediatric: Object,
     pendingFollowups: Array,
     todayMedicalAlerts: Array,
+    reviewsSnapshot: { type: Object, default: null },
 });
 
 // Animation state
@@ -438,6 +439,45 @@ const completionDash = computed(() => {
 
             <!-- Right Sidebar -->
             <div class="space-y-5">
+
+                <!-- My Reviews snapshot -->
+                <Link v-if="reviewsSnapshot" href="/doctor/reviews"
+                      class="block bg-gradient-to-br from-[#1B365D] to-[#22406F] rounded-2xl shadow-sm border border-[#C4A265]/20 p-6 text-white relative overflow-hidden hover:shadow-xl transition"
+                      :class="mounted ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'"
+                      style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.05s">
+                    <div class="absolute -top-12 -end-12 w-44 h-44 rounded-full bg-[#C4A265]/15 blur-3xl pointer-events-none"></div>
+                    <div class="relative">
+                        <div class="flex items-center justify-between mb-3">
+                            <p class="text-[10px] font-bold text-[#C4A265] tracking-[0.25em] uppercase">{{ isRtl ? 'تقييماتي' : 'My Reviews' }}</p>
+                            <svg class="w-4 h-4 text-[#C4A265]" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.196-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+                            </svg>
+                        </div>
+                        <div v-if="reviewsSnapshot.total" class="space-y-3">
+                            <div>
+                                <p class="text-3xl font-extrabold tabular-nums">{{ reviewsSnapshot.avg?.toFixed(1) ?? '—' }}<span class="text-base font-light text-white/40 ms-1">/ 5</span></p>
+                                <div class="flex items-center gap-0.5 mt-1">
+                                    <svg v-for="i in 5" :key="i" class="w-3.5 h-3.5"
+                                         :class="i <= Math.round(reviewsSnapshot.avg) ? 'text-[#C4A265]' : 'text-white/15'"
+                                         fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.196-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+                                    </svg>
+                                </div>
+                                <p class="text-xs text-white/50 mt-1">{{ reviewsSnapshot.total.toLocaleString() }} {{ isRtl ? 'تقييم' : 'reviews' }}</p>
+                            </div>
+                            <div class="pt-3 border-t border-white/10 flex items-center justify-between text-xs">
+                                <span class="text-white/60">{{ isRtl ? 'آخر 30 يوم' : 'Last 30d' }}</span>
+                                <span v-if="reviewsSnapshot.last30_total" class="font-bold text-[#C4A265]">
+                                    {{ reviewsSnapshot.last30_avg?.toFixed(1) }} ({{ reviewsSnapshot.last30_total }})
+                                </span>
+                                <span v-else class="text-white/40">—</span>
+                            </div>
+                        </div>
+                        <div v-else class="text-center py-3">
+                            <p class="text-xs text-white/50">{{ isRtl ? 'لا توجد تقييمات بعد' : 'No reviews yet' }}</p>
+                        </div>
+                    </div>
+                </Link>
 
                 <!-- Completion Rate Ring -->
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6"

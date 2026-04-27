@@ -259,6 +259,20 @@ class DoctorDashboardController extends BaseDoctorController
             ];
         }
 
+        // ─── My Reviews snapshot (last 30d + all-time) ─────────
+        $reviewsBase = \App\Models\PatientSatisfaction::where('doctor_id', $doctorId)
+            ->whereNotNull('overall_rating');
+        $reviewsAll = (clone $reviewsBase)->selectRaw('COUNT(*) AS total, AVG(overall_rating) AS avg')->first();
+        $reviewsLast30 = (clone $reviewsBase)
+            ->where('created_at', '>=', now()->subDays(30))
+            ->selectRaw('COUNT(*) AS total, AVG(overall_rating) AS avg')->first();
+        $reviewsSnapshot = [
+            'total'        => (int) $reviewsAll->total,
+            'avg'          => $reviewsAll->total ? round((float) $reviewsAll->avg, 2) : null,
+            'last30_total' => (int) $reviewsLast30->total,
+            'last30_avg'   => $reviewsLast30->total ? round((float) $reviewsLast30->avg, 2) : null,
+        ];
+
         return Inertia::render('Doctor/Dashboard', [
             'today' => $today,
             'monthly' => $monthly,
@@ -274,6 +288,7 @@ class DoctorDashboardController extends BaseDoctorController
             'pediatric' => $pediatric,
             'pendingFollowups' => $pendingFollowups,
             'todayMedicalAlerts' => $todayMedicalAlerts,
+            'reviewsSnapshot' => $reviewsSnapshot,
         ]);
     }
 }
