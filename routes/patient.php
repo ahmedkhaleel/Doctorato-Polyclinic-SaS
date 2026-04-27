@@ -13,6 +13,7 @@ use App\Http\Controllers\Patient\PatientComparisonController;
 use App\Http\Controllers\Patient\PatientConsentController;
 use App\Http\Controllers\Patient\PatientDentalController;
 use App\Http\Controllers\Patient\PatientPediatricController;
+use App\Http\Controllers\Patient\PatientDocumentController;
 use App\Http\Controllers\Patient\PatientExportController;
 use App\Http\Controllers\Patient\PatientLoyaltyController;
 use App\Http\Controllers\Patient\PatientReferralsController;
@@ -127,6 +128,15 @@ Route::middleware('patient.auth')->group(function () {
     // ─── My File Export (self-service medical record download) ─
     Route::get('/file/download', [PatientExportController::class, 'downloadFullFile'])
         ->name('patient.file.download')->middleware('throttle:5,10');
+
+    // ─── My Documents (self-uploaded medical records + admin-shared) ─
+    Route::get('/documents', [PatientDocumentController::class, 'index'])->name('patient.documents.index');
+    Route::post('/documents', [PatientDocumentController::class, 'store'])
+        ->name('patient.documents.store')->middleware('throttle:20,10');
+    Route::get('/documents/{document}/download', [PatientDocumentController::class, 'download'])
+        ->name('patient.documents.download');
+    Route::delete('/documents/{document}', [PatientDocumentController::class, 'destroy'])
+        ->name('patient.documents.destroy');
 
     // ─── Loyalty Points ─────────────────────────────────────
     Route::get('/loyalty', [PatientLoyaltyController::class, 'index'])->name('patient.loyalty.index');
