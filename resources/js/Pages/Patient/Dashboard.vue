@@ -24,6 +24,7 @@ const props = defineProps({
     pendingConsents: Array,
     referral: Object,
     loyalty: Object,
+    topUnpaid: { type: Array, default: () => [] },
 });
 
 const copied = ref(false);
@@ -107,6 +108,55 @@ function formatLoyaltyDate(d) {
                         {{ isRtl ? 'إليك نظرة عامة على حسابك وحالتك الصحية' : 'Here is an overview of your account and health' }}
                     </p>
                 </div>
+            </div>
+        </div>
+
+        <!-- ── Outstanding Balance Banner ──────────────────── -->
+        <div v-if="stats?.unpaid_count > 0" class="relative overflow-hidden bg-gradient-to-r from-red-50 via-amber-50 to-amber-50 border-l-4 border-red-500 rtl:border-l-0 rtl:border-r-4 rtl:border-red-500 rounded-2xl p-5 mb-6 shadow-sm">
+            <div class="absolute -top-12 -end-12 w-44 h-44 rounded-full bg-red-100/40 blur-3xl pointer-events-none"></div>
+            <div class="relative flex flex-col md:flex-row md:items-center gap-4">
+                <div class="flex items-center gap-3 flex-1 min-w-0">
+                    <div class="w-12 h-12 rounded-xl bg-red-500 flex items-center justify-center flex-shrink-0 shadow-md">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                        <p class="text-[10px] font-bold text-red-700 tracking-[0.2em] uppercase mb-0.5">
+                            {{ isRtl ? 'رصيد متأخر' : 'Outstanding Balance' }}
+                        </p>
+                        <p class="text-xl md:text-2xl font-extrabold text-red-700 tabular-nums">
+                            {{ formatCurrency(stats.unpaid_amount) }}
+                        </p>
+                        <p class="text-xs text-gray-600 mt-0.5">
+                            {{ isRtl
+                                ? `${stats.unpaid_count} فاتورة بانتظار السداد — يرجى التواصل مع العيادة لإكمال الدفع`
+                                : `${stats.unpaid_count} invoice${stats.unpaid_count === 1 ? '' : 's'} awaiting payment — please contact the clinic` }}
+                        </p>
+                    </div>
+                </div>
+                <Link :href="lp('/invoices')"
+                      class="flex-shrink-0 inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-red-500 hover:bg-red-600 text-white text-sm font-bold shadow-md transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>
+                    </svg>
+                    {{ isRtl ? 'عرض الفواتير' : 'View Invoices' }}
+                </Link>
+            </div>
+
+            <!-- Top 3 unpaid invoice rows -->
+            <div v-if="topUnpaid && topUnpaid.length" class="mt-4 pt-4 border-t border-red-200/50 space-y-1.5">
+                <Link v-for="inv in topUnpaid" :key="inv.id"
+                      :href="lp(`/invoices/${inv.id}`)"
+                      class="flex items-center justify-between gap-2 p-2 rounded-lg bg-white/60 hover:bg-white border border-red-100 transition">
+                    <div class="min-w-0 flex-1">
+                        <p class="text-xs font-bold text-gray-800 font-mono">{{ inv.invoice_number }}</p>
+                        <p class="text-[10px] text-gray-500">{{ inv.invoice_date }}</p>
+                    </div>
+                    <span class="text-sm font-extrabold text-red-700 tabular-nums whitespace-nowrap">
+                        {{ formatCurrency(inv.outstanding) }}
+                    </span>
+                </Link>
             </div>
         </div>
 

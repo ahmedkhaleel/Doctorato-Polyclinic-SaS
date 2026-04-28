@@ -34,7 +34,20 @@ class PatientDashboardController extends BasePatientController
 
         $unpaidInvoices = $patient->invoices()
             ->whereIn('status', ['unpaid', 'partial'])
+            ->latest('invoice_date')
             ->get();
+
+        // Top 3 most-recent unpaid invoices for the dashboard banner —
+        // patient sees "you owe X — top invoices: ..." with deep links.
+        $topUnpaid = $unpaidInvoices->take(3)->map(fn ($inv) => [
+            'id'             => $inv->id,
+            'invoice_number' => $inv->invoice_number,
+            'invoice_date'   => $inv->invoice_date,
+            'total'          => (float) $inv->total,
+            'paid_amount'    => (float) $inv->paid_amount,
+            'outstanding'    => (float) ($inv->total - $inv->paid_amount),
+            'status'         => $inv->status,
+        ])->values();
 
         // Dental stats (only if module enabled)
         $hasDental = \App\Services\ModuleManager::isEnabled('dental') && $patient->visits()->where('module', 'dental')->exists();
@@ -101,9 +114,13 @@ class PatientDashboardController extends BasePatientController
                 'upcoming_count' => $regularBookings->count(),
                 'total_visits' => $patient->visits()->count(),
                 'unpaid_count' => $unpaidInvoices->count(),
-                'unpaid_amount' => $unpaidInvoices->sum(fn ($inv) => $inv->total - $inv->paid_amount),
+                'unpaid_amount' => (float) $unpaidInvoices->sum(fn ($inv) => $inv->total - $inv->paid_amount),
+                // Aliases preserved so any old templates still work
+                'unpaid_invoices_count'  => $unpaidInvoices->count(),
+                'unpaid_invoices_amount' => (float) $unpaidInvoices->sum(fn ($inv) => $inv->total - $inv->paid_amount),
                 'active_plans' => \App\Models\TreatmentPlan::where('patient_id', $patient->id)->where('status', 'active')->count(),
             ],
+            'topUnpaid' => $topUnpaid,
             'dentalStats' => $dentalStats,
             'nextDentalAppointment' => $nextDentalAppointment,
             'pendingFollowups' => $pendingFollowups,
