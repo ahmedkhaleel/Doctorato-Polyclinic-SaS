@@ -174,4 +174,8 @@ Route::middleware('patient.auth')->group(function () {
     Route::post('/profile', [PatientProfileController::class, 'update'])->name('patient.profile.update');
     Route::post('/profile/password', [PatientProfileController::class, 'updatePassword'])->name('patient.profile.password');
     Route::post('/profile/preferences', [PatientProfileController::class, 'updatePreferences'])->name('patient.profile.preferences');
+    Route::post('/profile/photo', [PatientProfileController::class, 'uploadPhoto'])
+        ->name('patient.profile.photo')->middleware('throttle:6,1');
+    Route::post('/profile/photo/delete', [PatientProfileController::class, 'deletePhoto'])
+        ->name('patient.profile.photo.delete');
 });

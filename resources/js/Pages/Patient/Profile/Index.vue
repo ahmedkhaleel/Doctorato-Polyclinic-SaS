@@ -1,6 +1,6 @@
 <script setup>
-import { computed } from 'vue';
-import { useForm, usePage } from '@inertiajs/vue3';
+import { computed, ref } from 'vue';
+import { useForm, usePage, router } from '@inertiajs/vue3';
 import PatientLayout from '@/Layouts/PatientLayout.vue';
 import { usePatientLocale } from '@/Composables/usePatientLocale';
 
@@ -62,6 +62,32 @@ const prefsForm = useForm({
 function updatePreferences() {
     prefsForm.post(lp('/profile/preferences'), { preserveScroll: true });
 }
+
+// ─── Photo upload ──────────────────────────────────
+const photoInput = ref(null);
+const photoForm = useForm({ photo: null });
+const photoPreview = ref(null);
+
+function pickPhoto() {
+    photoInput.value?.click();
+}
+
+function onPhotoChosen(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    photoForm.photo = file;
+    photoPreview.value = URL.createObjectURL(file);
+    photoForm.post(lp('/profile/photo'), {
+        preserveScroll: true,
+        forceFormData: true,
+        onSuccess: () => { photoForm.reset(); photoPreview.value = null; },
+    });
+}
+
+function deletePhoto() {
+    if (!confirm(isRtl.value ? 'هل تريد حذف الصورة الشخصية؟' : 'Remove your profile photo?')) return;
+    router.post(lp('/profile/photo/delete'), {}, { preserveScroll: true });
+}
 </script>
 
 <template>
@@ -81,6 +107,39 @@ function updatePreferences() {
             <!-- Personal Info -->
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                 <h2 class="text-lg font-semibold text-gray-800 mb-5">{{ isRtl ? 'المعلومات الشخصية' : 'Personal Information' }}</h2>
+
+                <!-- ── Profile photo ─────────────────────────── -->
+                <div class="flex items-center gap-4 mb-6 pb-6 border-b border-gray-100">
+                    <div class="relative w-20 h-20 rounded-2xl overflow-hidden bg-gradient-to-br from-[#1B365D] to-[#22406F] flex items-center justify-center text-white text-2xl font-extrabold flex-shrink-0 ring-2 ring-[#C4A265]/30">
+                        <img v-if="photoPreview || patient?.photo_url"
+                             :src="photoPreview || patient.photo_url"
+                             alt="" class="absolute inset-0 w-full h-full object-cover" />
+                        <span v-else>{{ (patient?.full_name || '?').charAt(0).toUpperCase() }}</span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-xs text-gray-400 mb-2">
+                            {{ isRtl ? 'JPG / PNG / WEBP، الحد الأقصى 4 ميجا' : 'JPG / PNG / WEBP, max 4MB' }}
+                        </p>
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <input ref="photoInput" type="file" accept="image/jpeg,image/png,image/webp"
+                                   @change="onPhotoChosen" class="hidden" />
+                            <button type="button" @click="pickPhoto" :disabled="photoForm.processing"
+                                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[var(--brand-primary)] text-white text-xs font-semibold disabled:opacity-50">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+                                </svg>
+                                {{ photoForm.processing
+                                    ? (isRtl ? 'جارٍ الرفع...' : 'Uploading...')
+                                    : (patient?.photo_url ? (isRtl ? 'تغيير الصورة' : 'Change photo') : (isRtl ? 'رفع صورة' : 'Upload photo')) }}
+                            </button>
+                            <button v-if="patient?.photo_url" type="button" @click="deletePhoto"
+                                    class="text-xs text-red-500 hover:text-red-700 font-medium">
+                                {{ isRtl ? 'حذف' : 'Remove' }}
+                            </button>
+                        </div>
+                        <p v-if="photoForm.errors.photo" class="text-xs text-red-600 mt-1">{{ photoForm.errors.photo }}</p>
+                    </div>
+                </div>
 
                 <!-- Read-only fields -->
                 <div class="space-y-4 mb-6 pb-6 border-b border-gray-100">
