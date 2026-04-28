@@ -299,6 +299,10 @@ Route::middleware('admin.auth')->group(function () {
     Route::get('/patient-referrals', [\App\Http\Controllers\Admin\PatientReferralController::class, 'index'])
         ->name('admin.patient-referrals.index')->middleware('permission:patients.view');
 
+    // ─── Patient Recall (lapsed patients to bring back) ────────
+    Route::get('/recall', [\App\Http\Controllers\Admin\RecallController::class, 'index'])
+        ->name('admin.recall.index')->middleware('permission:patients.view');
+
     // ─── Diagnostics (self-service system health) ──────────
     Route::get('/diagnostics', [\App\Http\Controllers\Admin\DiagnosticsController::class, 'show'])
         ->name('admin.diagnostics')

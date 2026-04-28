@@ -273,6 +273,7 @@ const navGroups = [
             { labelEn: 'Satisfaction',         labelAr: 'رضا المرضى',         href: '/admin/satisfaction',        icon: 'star',     permission: 'reports.view' },
             { labelEn: 'Loyalty Points',       labelAr: 'نقاط الولاء',        href: '/admin/loyalty',             icon: 'star',     permission: 'patients.view' },
             { labelEn: 'Patient Referrals',    labelAr: 'إحالات المرضى',      href: '/admin/patient-referrals',   icon: 'users',    permission: 'patients.view' },
+            { labelEn: 'Patient Recall',       labelAr: 'استعادة المنقطعين',   href: '/admin/recall',              icon: 'switch',   permission: 'patients.view' },
             { labelEn: 'Medical Referrals',    labelAr: 'التحويلات الطبية',   href: '/admin/referrals',           icon: 'switch',   permission: 'visits.view' },
         ],
     },
