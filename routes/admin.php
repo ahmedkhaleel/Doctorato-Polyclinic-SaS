@@ -302,6 +302,9 @@ Route::middleware('admin.auth')->group(function () {
     // ─── Patient Recall (lapsed patients to bring back) ────────
     Route::get('/recall', [\App\Http\Controllers\Admin\RecallController::class, 'index'])
         ->name('admin.recall.index')->middleware('permission:patients.view');
+    Route::post('/recall/send-sms', [\App\Http\Controllers\Admin\RecallController::class, 'sendBulkSms'])
+        ->name('admin.recall.send-sms')
+        ->middleware(['permission:patients.update', 'throttle:3,15']);
 
     // ─── Diagnostics (self-service system health) ──────────
     Route::get('/diagnostics', [\App\Http\Controllers\Admin\DiagnosticsController::class, 'show'])

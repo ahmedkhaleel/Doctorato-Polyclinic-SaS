@@ -3,9 +3,15 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendSmsJob;
 use App\Models\Doctor;
 use App\Models\Patient;
+use App\Models\Setting;
+use App\Models\SmsTemplate;
+use App\Services\AuditLogger;
 use App\Services\ModuleManager;
+use App\Services\SmsService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -115,5 +121,100 @@ class RecallController extends Controller
                 'search'    => $search,
             ],
         ]);
+    }
+
+    /**
+     * Bulk send the recall SMS to every patient currently matching the
+     * filters. Honors per-patient `notify_sms_marketing` opt-in. Hard-
+     * capped at 500 recipients per call to keep the queue reasonable
+     * and avoid surprise SMS bills.
+     */
+    public function sendBulkSms(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'days'      => 'required|integer|min:30|max:720',
+            'module'    => 'nullable|string',
+            'doctor_id' => 'nullable|integer|exists:doctors,id',
+            'search'    => 'nullable|string|max:120',
+        ]);
+
+        if (! SmsService::isEnabled()) {
+            return back()->with('error', 'SMS is not enabled in settings.');
+        }
+
+        $cohort = $this->matchingPatientIds($request)->limit(500)->get();
+
+        $clinicName  = Setting::get('clinic_name_ar', Setting::get('clinic_name_en', 'Doctorato'));
+        $clinicPhone = Setting::get('clinic_phone', '');
+        $sent = 0;
+        $skipped = 0;
+
+        foreach ($cohort as $row) {
+            $patient = Patient::find($row->id);
+            if (! $patient || ! $patient->phone) { $skipped++; continue; }
+            if (! $patient->wantsNotification('marketing', 'sms')) { $skipped++; continue; }
+
+            $body = SmsTemplate::render('recall_reminder', [
+                'patient_name' => explode(' ', (string) $patient->full_name)[0] ?: $clinicName,
+                'clinic_phone' => $clinicPhone,
+                'clinic_name'  => $clinicName,
+            ], $patient->preferred_language ?? 'ar');
+
+            if (! $body) { $skipped++; continue; }
+
+            SendSmsJob::dispatch($patient->phone, $body, null, 'recall_bulk');
+            $sent++;
+        }
+
+        AuditLogger::log('recall_bulk_sms_sent', null, [
+            'sent'    => $sent,
+            'skipped' => $skipped,
+            'days'    => (int) $request->input('days'),
+            'module'  => $request->input('module'),
+        ]);
+
+        return back()->with('success', "Recall SMS queued for {$sent} patient(s). {$skipped} skipped.");
+    }
+
+    /**
+     * Build the "lapsed patients" query the same way `index()` does, but
+     * return just patient ids — used by sendBulkSms() so the same
+     * filters drive both the list view and the SMS broadcast.
+     */
+    private function matchingPatientIds(Request $request)
+    {
+        $days   = max(30, min(720, (int) $request->input('days', 180)));
+        $module = $request->input('module');
+        $doctor = $request->input('doctor_id');
+        $search = trim((string) $request->input('search', ''));
+        $cutoff = now()->subDays($days);
+
+        $lastVisitSubquery = DB::table('visits')
+            ->select('patient_id', DB::raw('MAX(visit_date) as last_visit_date'),
+                     DB::raw('MAX(doctor_id) as last_doctor_id'))
+            ->whereIn('status', ['completed', 'in_progress'])
+            ->whereNull('deleted_at');
+
+        if ($module && in_array($module, ModuleManager::MEDICAL_MODULES, true)) {
+            $lastVisitSubquery->where('module', $module);
+        }
+        $lastVisitSubquery->groupBy('patient_id');
+
+        $q = Patient::query()
+            ->joinSub($lastVisitSubquery, 'lv', 'lv.patient_id', '=', 'patients.id')
+            ->where('lv.last_visit_date', '<', $cutoff->toDateString())
+            ->where('patients.is_active', true)
+            ->select('patients.id');
+
+        if ($search !== '') {
+            $q->where(function ($qq) use ($search) {
+                $qq->where('patients.full_name', 'like', "%$search%")
+                   ->orWhere('patients.file_number', 'like', "%$search%")
+                   ->orWhere('patients.phone', 'like', "%$search%");
+            });
+        }
+        if ($doctor) $q->where('lv.last_doctor_id', (int) $doctor);
+
+        return $q;
     }
 }

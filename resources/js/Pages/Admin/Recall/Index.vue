@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref, watch } from 'vue';
-import { Link, router, usePage } from '@inertiajs/vue3';
+import { Link, router, useForm, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import PhoneWithWhatsApp from '@/Components/Patient/PhoneWithWhatsApp.vue';
 
@@ -57,6 +57,32 @@ function recallMessage(p) {
 }
 
 const presets = [90, 180, 365, 540];
+
+// ─── Bulk SMS broadcast ──────────────────────────────────────
+const showBulkConfirm = ref(false);
+const bulkForm = useForm({
+    days: days,
+    module: module,
+    doctor_id: doctorId,
+    search: search,
+});
+
+function openBulk() {
+    bulkForm.days      = days.value;
+    bulkForm.module    = module.value;
+    bulkForm.doctor_id = doctorId.value;
+    bulkForm.search    = search.value;
+    showBulkConfirm.value = true;
+}
+
+function sendBulk() {
+    bulkForm.post('/admin/recall/send-sms', {
+        preserveScroll: true,
+        onSuccess: () => { showBulkConfirm.value = false; },
+    });
+}
+
+const cappedTotal = computed(() => Math.min(props.patients?.total || 0, 500));
 </script>
 
 <template>
@@ -120,12 +146,77 @@ const presets = [90, 180, 365, 540];
             </div>
         </div>
 
-        <!-- Result count -->
-        <div class="flex items-center justify-between mb-3 text-sm">
+        <!-- Result count + bulk send -->
+        <div class="flex items-center justify-between mb-3 text-sm flex-wrap gap-2">
             <p class="text-gray-600">
                 <span class="font-bold text-[#1B365D] tabular-nums">{{ patients.total.toLocaleString() }}</span>
                 {{ isRtl ? 'مريض منقطع' : 'lapsed patients found' }}
             </p>
+            <button v-if="patients.total > 0" type="button" @click="openBulk"
+                    class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1B365D] hover:bg-[#22406F] text-white text-xs font-bold shadow-sm transition">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                </svg>
+                {{ isRtl ? 'إرسال SMS لكل المنقطعين' : 'Send recall SMS to all' }}
+            </button>
+        </div>
+
+        <!-- Bulk SMS confirmation modal -->
+        <div v-if="showBulkConfirm"
+             class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+             @click.self="showBulkConfirm = false">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
+                <div class="flex items-start gap-3 mb-4">
+                    <div class="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center flex-shrink-0">
+                        <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                    </div>
+                    <div class="min-w-0">
+                        <h3 class="text-base font-bold text-gray-800">
+                            {{ isRtl ? 'تأكيد إرسال الرسائل' : 'Confirm bulk send' }}
+                        </h3>
+                        <p class="text-xs text-gray-500 mt-0.5">
+                            {{ isRtl ? 'هذا الإجراء لا يمكن التراجع عنه' : 'This action cannot be undone' }}
+                        </p>
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 rounded-lg p-3 mb-4 text-sm text-gray-700 space-y-1">
+                    <p>
+                        {{ isRtl ? 'سيتم إرسال SMS تذكير إلى' : 'A recall SMS will be sent to' }}
+                        <span class="font-bold text-[#1B365D]">{{ cappedTotal }}</span>
+                        {{ isRtl ? 'مريض كحد أقصى' : 'patients (max)' }}
+                    </p>
+                    <p class="text-[11px] text-gray-500">
+                        ⚠️ {{ isRtl
+                            ? 'يتجاهل المرضى الذين لم يفعّلوا الاستقبال التسويقي.'
+                            : 'Patients who opted out of marketing SMS will be skipped.' }}
+                    </p>
+                </div>
+
+                <div class="bg-gradient-to-r from-[#FAF7F0] to-white border border-[#C4A265]/30 rounded-lg p-3 mb-4">
+                    <p class="text-[10px] font-bold text-[#8B7043] uppercase tracking-wider mb-1">
+                        {{ isRtl ? 'مثال للرسالة' : 'Sample message' }}
+                    </p>
+                    <p class="text-xs text-gray-700">
+                        {{ isRtl
+                            ? 'مرحباً [اسم المريض]، حان وقت زيارتك الدورية. احجزي الآن: [رقم العيادة]'
+                            : 'Hi [Patient Name], time for your follow-up visit. Book now: [Clinic Phone]' }}
+                    </p>
+                </div>
+
+                <div class="flex items-center gap-2 justify-end">
+                    <button type="button" @click="showBulkConfirm = false"
+                            class="px-4 py-2 rounded-lg bg-white border border-gray-200 text-gray-600 text-sm hover:bg-gray-50">
+                        {{ isRtl ? 'إلغاء' : 'Cancel' }}
+                    </button>
+                    <button type="button" @click="sendBulk" :disabled="bulkForm.processing"
+                            class="px-4 py-2 rounded-lg bg-[#1B365D] hover:bg-[#22406F] text-white text-sm font-bold disabled:opacity-50">
+                        {{ bulkForm.processing
+                            ? (isRtl ? 'جارٍ الإرسال...' : 'Sending...')
+                            : (isRtl ? '✓ إرسال الآن' : '✓ Send now') }}
+                    </button>
+                </div>
+            </div>
         </div>
 
         <!-- Patients table -->
