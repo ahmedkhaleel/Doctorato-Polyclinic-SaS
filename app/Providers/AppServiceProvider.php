@@ -65,6 +65,7 @@ class AppServiceProvider extends ServiceProvider
         // Visit lifecycle
         Event::listen(VisitCompleted::class, LogVisitCompleted::class);
         Event::listen(VisitCompleted::class, SendVisitCompletedSms::class);
+        Event::listen(VisitCompleted::class, \App\Listeners\SendVisitSummaryEmail::class);
         Event::listen(VisitCompleted::class, AwardLoyaltyOnVisit::class);
         Event::listen(VisitCompleted::class, UpdateBookingStatusOnCompletion::class);
         Event::listen(VisitCancelled::class, LogVisitCancelled::class);
