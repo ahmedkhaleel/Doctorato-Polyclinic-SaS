@@ -57,6 +57,8 @@ Route::middleware('patient.auth')->group(function () {
     Route::get('/bookings/create', [PatientBookingController::class, 'create'])->name('patient.bookings.create');
     Route::post('/bookings', [PatientBookingController::class, 'store'])->name('patient.bookings.store')->middleware('throttle:10,1');
     Route::post('/bookings/{booking}/cancel', [PatientBookingController::class, 'cancel'])->name('patient.bookings.cancel');
+    Route::post('/bookings/{booking}/reschedule', [PatientBookingController::class, 'reschedule'])
+        ->name('patient.bookings.reschedule')->middleware('throttle:5,1');
 
     // ─── My Visits ──────────────────────────────────────────
     Route::get('/visits', [PatientVisitController::class, 'index'])->name('patient.visits.index');

@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref } from 'vue';
-import { usePage, Link, router } from '@inertiajs/vue3';
+import { usePage, Link, router, useForm } from '@inertiajs/vue3';
 import PatientLayout from '@/Layouts/PatientLayout.vue';
 import { usePatientLocale } from '@/Composables/usePatientLocale';
 import { usePatientStatus } from '@/Composables/usePatientStatus';
@@ -18,6 +18,37 @@ function cancelBooking(booking) {
         onFinish: () => cancellingId.value = null,
     });
 }
+
+// ─── Reschedule modal ──────────────────────────────
+const reschedulingBooking = ref(null);
+const rescheduleForm = useForm({
+    preferred_date: '',
+    preferred_time: '',
+    reason: '',
+});
+
+function openReschedule(booking) {
+    reschedulingBooking.value = booking;
+    rescheduleForm.reset();
+    // Pre-fill with existing date/time as a starting point
+    rescheduleForm.preferred_date = booking.preferred_date || '';
+    rescheduleForm.preferred_time = booking.preferred_time || '';
+}
+
+function submitReschedule() {
+    if (!reschedulingBooking.value) return;
+    rescheduleForm.post(lp(`/bookings/${reschedulingBooking.value.id}/reschedule`), {
+        preserveScroll: true,
+        onSuccess: () => { reschedulingBooking.value = null; },
+    });
+}
+
+function closeReschedule() {
+    reschedulingBooking.value = null;
+    rescheduleForm.reset();
+}
+
+const todayStr = new Date().toISOString().split('T')[0];
 
 defineOptions({ layout: PatientLayout });
 
@@ -78,12 +109,19 @@ function $localized(obj, field) {
                                 <span :class="bookingColor(booking.status)" class="text-xs font-medium px-2.5 py-1 rounded-full">{{ bookingLabel(booking.status) }}</span>
                             </td>
                             <td class="px-6 py-4">
-                                <button v-if="['unconfirmed', 'confirmed'].includes(booking.status)"
-                                    @click="cancelBooking(booking)"
-                                    :disabled="cancellingId === booking.id"
-                                    class="text-xs font-medium text-red-500 hover:text-red-700 transition-colors disabled:opacity-50">
-                                    {{ cancellingId === booking.id ? (isRtl ? 'جاري...' : 'Cancelling...') : (isRtl ? 'إلغاء' : 'Cancel') }}
-                                </button>
+                                <div class="flex items-center gap-3">
+                                    <button v-if="['unconfirmed', 'confirmed'].includes(booking.status)"
+                                        @click="openReschedule(booking)"
+                                        class="text-xs font-medium text-[var(--brand-primary)] hover:text-[var(--brand-primary-hover)] transition-colors">
+                                        {{ isRtl ? 'إعادة جدولة' : 'Reschedule' }}
+                                    </button>
+                                    <button v-if="['unconfirmed', 'confirmed'].includes(booking.status)"
+                                        @click="cancelBooking(booking)"
+                                        :disabled="cancellingId === booking.id"
+                                        class="text-xs font-medium text-red-500 hover:text-red-700 transition-colors disabled:opacity-50">
+                                        {{ cancellingId === booking.id ? (isRtl ? 'جاري...' : 'Cancelling...') : (isRtl ? 'إلغاء' : 'Cancel') }}
+                                    </button>
+                                </div>
                             </td>
                         </tr>
                     </tbody>
@@ -100,12 +138,19 @@ function $localized(obj, field) {
                     <p class="text-sm text-gray-600">{{ $localized(booking.service, 'name') || $localized(booking, 'service_name') }}</p>
                     <div class="flex items-center justify-between mt-1">
                         <p class="text-xs text-gray-400">{{ $localized(booking.doctor, 'name') || $localized(booking, 'doctor_name') }} &middot; {{ booking.preferred_date }} {{ booking.preferred_time }}</p>
-                        <button v-if="['unconfirmed', 'confirmed'].includes(booking.status)"
-                            @click="cancelBooking(booking)"
-                            :disabled="cancellingId === booking.id"
-                            class="text-xs font-medium text-red-500 hover:text-red-700 disabled:opacity-50">
-                            {{ isRtl ? 'إلغاء' : 'Cancel' }}
-                        </button>
+                        <div class="flex items-center gap-2">
+                            <button v-if="['unconfirmed', 'confirmed'].includes(booking.status)"
+                                @click="openReschedule(booking)"
+                                class="text-xs font-medium text-[var(--brand-primary)] hover:text-[var(--brand-primary-hover)]">
+                                {{ isRtl ? 'إعادة جدولة' : 'Reschedule' }}
+                            </button>
+                            <button v-if="['unconfirmed', 'confirmed'].includes(booking.status)"
+                                @click="cancelBooking(booking)"
+                                :disabled="cancellingId === booking.id"
+                                class="text-xs font-medium text-red-500 hover:text-red-700 disabled:opacity-50">
+                                {{ isRtl ? 'إلغاء' : 'Cancel' }}
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -132,6 +177,85 @@ function $localized(obj, field) {
                 />
                 <span v-else class="px-3 py-2 text-sm text-gray-300" v-html="link.label" />
             </template>
+        </div>
+
+        <!-- Reschedule modal -->
+        <div v-if="reschedulingBooking"
+             class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+             @click.self="closeReschedule">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 rounded-xl bg-[var(--brand-primary)]/10 flex items-center justify-center flex-shrink-0">
+                        <svg class="w-5 h-5 text-[var(--brand-primary)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <div class="min-w-0">
+                        <h3 class="text-base font-bold text-gray-800">
+                            {{ isRtl ? 'إعادة جدولة الموعد' : 'Reschedule appointment' }}
+                        </h3>
+                        <p class="text-xs text-gray-500 mt-0.5">
+                            {{ $localized(reschedulingBooking.service, 'name') }}
+                            · {{ $localized(reschedulingBooking.doctor, 'name') }}
+                        </p>
+                    </div>
+                </div>
+
+                <p class="text-xs text-gray-500 bg-gray-50 rounded-lg p-3 mb-4">
+                    {{ isRtl ? 'الموعد الحالي:' : 'Current:' }}
+                    <span class="font-bold text-gray-800">{{ reschedulingBooking.preferred_date }} {{ reschedulingBooking.preferred_time || '' }}</span>
+                </p>
+
+                <form @submit.prevent="submitReschedule" class="space-y-3">
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-[11px] font-semibold text-gray-700 mb-1">
+                                {{ isRtl ? 'التاريخ الجديد' : 'New date' }} <span class="text-red-500">*</span>
+                            </label>
+                            <input v-model="rescheduleForm.preferred_date" type="date" required
+                                   :min="todayStr"
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" />
+                            <p v-if="rescheduleForm.errors.preferred_date" class="text-xs text-red-600 mt-1">{{ rescheduleForm.errors.preferred_date }}</p>
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-gray-700 mb-1">
+                                {{ isRtl ? 'الوقت' : 'Time' }}
+                            </label>
+                            <input v-model="rescheduleForm.preferred_time" type="time"
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" />
+                            <p v-if="rescheduleForm.errors.preferred_time" class="text-xs text-red-600 mt-1">{{ rescheduleForm.errors.preferred_time }}</p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-semibold text-gray-700 mb-1">
+                            {{ isRtl ? 'السبب (اختياري)' : 'Reason (optional)' }}
+                        </label>
+                        <input v-model="rescheduleForm.reason" type="text" maxlength="255"
+                               :placeholder="isRtl ? 'مثلاً: ظرف عمل طارئ' : 'e.g. Work conflict'"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" />
+                    </div>
+
+                    <p class="text-[11px] text-amber-700 bg-amber-50 border border-amber-200 rounded-lg p-2">
+                        ⚠️ {{ isRtl
+                            ? 'بعد الإرسال، سيقوم فريق الاستقبال بإعادة تأكيد الموعد الجديد ضمن ساعات.'
+                            : 'After submitting, our front desk will reconfirm the new slot within hours.' }}
+                    </p>
+
+                    <div class="flex items-center gap-2 justify-end pt-2 border-t border-gray-100">
+                        <button type="button" @click="closeReschedule"
+                                class="px-4 py-2 rounded-lg bg-white border border-gray-200 text-gray-600 text-sm hover:bg-gray-50">
+                            {{ isRtl ? 'إلغاء' : 'Cancel' }}
+                        </button>
+                        <button type="submit" :disabled="rescheduleForm.processing"
+                                class="px-4 py-2 rounded-lg bg-gradient-to-r from-[var(--brand-primary)] to-[var(--brand-secondary)] text-white text-sm font-bold disabled:opacity-50">
+                            {{ rescheduleForm.processing
+                                ? (isRtl ? 'جارٍ الحفظ...' : 'Saving...')
+                                : (isRtl ? '✓ إعادة الجدولة' : '✓ Reschedule') }}
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </template>

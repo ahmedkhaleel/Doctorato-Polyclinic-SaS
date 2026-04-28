@@ -161,4 +161,51 @@ class PatientBookingController extends BasePatientController
 
         return back()->with('success', 'Booking cancelled successfully.');
     }
+
+    /**
+     * Patient self-reschedule. Keeps the same doctor / service / module —
+     * just shifts the date/time. Drops the booking back to `unconfirmed`
+     * so the front desk re-confirms (avoids a patient bypassing the
+     * doctor's actual availability via a self-confirmed reschedule).
+     */
+    public function reschedule(Request $request, string $locale, Booking $booking): RedirectResponse
+    {
+        $patient = $this->patient($request);
+
+        if ($booking->patient_id !== $patient->id) {
+            abort(403);
+        }
+
+        if (!in_array($booking->status, ['unconfirmed', 'confirmed'])) {
+            return back()->with('error', 'This booking cannot be rescheduled.');
+        }
+
+        $data = $request->validate([
+            'preferred_date' => ['required', 'date', 'after_or_equal:today'],
+            'preferred_time' => ['nullable', 'date_format:H:i'],
+            'reason'         => ['nullable', 'string', 'max:255'],
+        ]);
+
+        $booking->update([
+            'preferred_date' => $data['preferred_date'],
+            'preferred_time' => $data['preferred_time'] ?? $booking->preferred_time,
+            // Re-enter the queue so a human re-confirms availability.
+            'status'         => 'unconfirmed',
+            'notes'          => trim(
+                ($booking->notes ? $booking->notes . "\n" : '')
+                . '[' . now()->toDateString() . '] '
+                . 'Patient rescheduled.'
+                . ($data['reason'] ?? null ? ' Reason: ' . $data['reason'] : '')
+            ),
+        ]);
+
+        \App\Services\AuditLogger::log('booking_rescheduled_by_patient', $booking, [
+            'new_date'   => $data['preferred_date'],
+            'new_time'   => $data['preferred_time'] ?? null,
+            'reason'     => $data['reason'] ?? null,
+            'patient_id' => $patient->id,
+        ]);
+
+        return back()->with('success', 'Booking rescheduled. We will reconfirm shortly.');
+    }
 }
