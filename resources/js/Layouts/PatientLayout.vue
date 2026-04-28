@@ -75,6 +75,7 @@ const navGroups = computed(() => [
         title: isRtl.value ? 'رعايتي' : 'My Care',
         key: 'care',
         items: [
+            { label: isRtl.value ? 'تصفح الأطباء' : 'Browse Doctors', href: lp('/doctors'), icon: 'user' },
             { label: t('p_my_bookings'), href: lp('/bookings'), icon: 'calendar' },
             { label: t('p_my_visits'), href: lp('/visits'), icon: 'clipboard' },
             { label: t('p_my_photos'), href: lp('/photos'), icon: 'camera' },

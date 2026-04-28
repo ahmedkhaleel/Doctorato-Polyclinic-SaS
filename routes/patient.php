@@ -13,6 +13,7 @@ use App\Http\Controllers\Patient\PatientComparisonController;
 use App\Http\Controllers\Patient\PatientConsentController;
 use App\Http\Controllers\Patient\PatientDentalController;
 use App\Http\Controllers\Patient\PatientPediatricController;
+use App\Http\Controllers\Patient\PatientDoctorsController;
 use App\Http\Controllers\Patient\PatientDocumentController;
 use App\Http\Controllers\Patient\PatientExportController;
 use App\Http\Controllers\Patient\PatientFeedbackController;
@@ -131,6 +132,9 @@ Route::middleware('patient.auth')->group(function () {
     // ─── My File Export (self-service medical record download) ─
     Route::get('/file/download', [PatientExportController::class, 'downloadFullFile'])
         ->name('patient.file.download')->middleware('throttle:5,10');
+
+    // ─── Browse Doctors ─────────────────────────────────────
+    Route::get('/doctors', [PatientDoctorsController::class, 'index'])->name('patient.doctors.index');
 
     // ─── Feedback / Reviews (patient rates their completed visits) ─
     Route::get('/feedback', [PatientFeedbackController::class, 'index'])->name('patient.feedback.index');
