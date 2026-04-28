@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Frontend\DoctorController as FrontendDoctorController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\PageController;
 use App\Http\Controllers\Frontend\ServiceController;
@@ -82,6 +83,12 @@ Route::prefix('{locale}')
         // Services
         Route::get('/services', [ServiceController::class, 'index'])->name('services.index');
         Route::get('/services/{slug}', [ServiceController::class, 'show'])->name('services.show');
+
+        // Doctors (public profiles)
+        Route::get('/doctors', [FrontendDoctorController::class, 'index'])->name('doctors.index');
+        Route::get('/doctors/{id}', [FrontendDoctorController::class, 'show'])
+            ->where('id', '[0-9]+')
+            ->name('doctors.show');
 
         // Gallery
         Route::get('/gallery', [GalleryController::class, 'index'])->name('gallery');
