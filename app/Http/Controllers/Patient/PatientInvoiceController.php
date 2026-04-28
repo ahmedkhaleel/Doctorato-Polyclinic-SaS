@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Patient;
 
 use App\Models\Invoice;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response as HttpResponse;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -48,5 +50,40 @@ class PatientInvoiceController extends BasePatientController
         return Inertia::render('Patient/Invoices/Show', [
             'invoice' => $invoice,
         ]);
+    }
+
+    /**
+     * Patient self-service PDF download of their own invoice. Reuses
+     * the existing pdf.invoice blade template that the admin/secretary
+     * use — no new layout, no duplication.
+     *
+     * Authorization is enforced via authorizePatient() — patients can
+     * never download another patient's invoice even by guessing IDs.
+     */
+    public function downloadPdf(Request $request, string $locale, Invoice $invoice): HttpResponse
+    {
+        $this->authorizePatient($request, $invoice);
+
+        $invoice->load([
+            'items',
+            'payments.paymentMethod',
+            'patient',
+            'visit.doctor',
+            'visit.service',
+            'discountCode',
+            'creator',
+        ]);
+
+        $currency = \App\Models\Setting::get('currency_code', 'EGP');
+        $pdf = Pdf::loadView('pdf.invoice', compact('invoice', 'currency'))
+            ->setPaper('a4', 'portrait');
+
+        $filename = preg_replace('/[^A-Za-z0-9\-\.]/', '_', $invoice->invoice_number . '.pdf');
+
+        \App\Services\AuditLogger::log('patient_invoice_pdf_downloaded', $invoice, [
+            'patient_id' => $this->patientId($request),
+        ]);
+
+        return $pdf->download($filename);
     }
 }

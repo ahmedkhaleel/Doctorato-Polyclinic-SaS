@@ -66,6 +66,8 @@ Route::middleware('patient.auth')->group(function () {
     // ─── My Invoices ────────────────────────────────────────
     Route::get('/invoices', [PatientInvoiceController::class, 'index'])->name('patient.invoices.index');
     Route::get('/invoices/{invoice}', [PatientInvoiceController::class, 'show'])->name('patient.invoices.show');
+    Route::get('/invoices/{invoice}/pdf', [PatientInvoiceController::class, 'downloadPdf'])
+        ->name('patient.invoices.pdf')->middleware('throttle:10,1');
 
     // ─── My Prescriptions ───────────────────────────────────
     Route::get('/prescriptions', [PatientPrescriptionController::class, 'index'])->name('patient.prescriptions.index');

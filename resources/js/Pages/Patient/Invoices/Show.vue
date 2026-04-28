@@ -41,6 +41,13 @@ const balanceDue = computed(() => {
                 <svg class="w-4 h-4 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
             </Link>
             <h1 class="text-2xl font-bold text-gray-800">{{ isRtl ? 'تفاصيل الفاتورة' : 'Invoice Details' }}</h1>
+            <a :href="lp(`/invoices/${invoice?.id}/pdf`)"
+               class="ms-auto inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-[#1B365D] to-[#22406F] hover:from-[#22406F] hover:to-[#1B365D] text-white text-sm font-semibold shadow-md transition">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                </svg>
+                {{ isRtl ? 'تنزيل PDF' : 'Download PDF' }}
+            </a>
         </div>
 
         <!-- Invoice Header -->
