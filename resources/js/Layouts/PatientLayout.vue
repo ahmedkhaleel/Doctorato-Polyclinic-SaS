@@ -82,6 +82,7 @@ const navGroups = computed(() => [
             { label: t('p_my_photos'), href: lp('/photos'), icon: 'camera' },
             { label: t('p_my_prescriptions'), href: lp('/prescriptions'), icon: 'pill' },
             { label: t('p_my_treatment_plans'), href: lp('/treatment-plans'), icon: 'plan' },
+            { label: isRtl.value ? 'مؤشراتي الحيوية' : 'My Vitals', href: lp('/vitals'), icon: 'activity' },
             { label: isRtl.value ? 'مستنداتي الطبية' : 'My Documents', href: lp('/documents'), icon: 'document' },
             { label: isRtl.value ? 'تقييماتي'        : 'My Feedback',  href: lp('/feedback'),  icon: 'star' },
         ],
@@ -311,6 +312,8 @@ function logout()        { router.post(lp('/logout')); }
                         <svg v-else-if="item.icon === 'user'" class="w-[16px] h-[16px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                         <!-- Sparkles (Browse Services) -->
                         <svg v-else-if="item.icon === 'sparkles'" class="w-[16px] h-[16px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L20 12l-4.714 2.143L13 21l-2.286-6.857L6 12l4.714-2.143L13 3z" /></svg>
+                        <!-- Activity (Vitals) -->
+                        <svg v-else-if="item.icon === 'activity'" class="w-[16px] h-[16px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M22 12h-4l-3 9L9 3l-3 9H2" /></svg>
                         <!-- Video (Online Consultations) -->
                         <svg v-else-if="item.icon === 'video'" class="w-[16px] h-[16px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
                         <!-- Document (My Documents) -->
