@@ -2,6 +2,7 @@
 import { ref, watch, computed } from 'vue';
 import { Link, router, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import PhoneWithWhatsApp from '@/Components/Patient/PhoneWithWhatsApp.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
 
 const { can } = usePermissions();
@@ -266,7 +267,10 @@ function exportBookings() {
                                     </div>
                                 </td>
                                 <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">{{ getPatientName(booking) }}</td>
-                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500" dir="ltr">{{ getPatientPhone(booking) }}</td>
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500" dir="ltr">
+                                    <PhoneWithWhatsApp v-if="getPatientPhone(booking) !== '-'" :phone="getPatientPhone(booking)" variant="compact" />
+                                    <span v-else>-</span>
+                                </td>
                                 <td class="px-4 md:px-6 py-4 text-sm text-gray-500">
                                     <span class="max-w-[200px] truncate block">{{ getServicesText(booking) }}</span>
                                     <span v-if="booking.booking_services_count > 0" class="text-xs text-gray-400">({{ booking.booking_services_count }} {{ $t('a_services') }})</span>

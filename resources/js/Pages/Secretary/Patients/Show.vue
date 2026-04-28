@@ -4,6 +4,7 @@ import { Link, usePage } from '@inertiajs/vue3';
 import SecretaryLayout from '@/Layouts/SecretaryLayout.vue';
 import SpecialtyTabs from '@/Components/Patient/SpecialtyTabs.vue';
 import EngagementCard from '@/Components/Patient/EngagementCard.vue';
+import PhoneWithWhatsApp from '@/Components/Patient/PhoneWithWhatsApp.vue';
 import { useCurrency } from '@/Composables/useCurrency.js';
 
 defineOptions({ layout: SecretaryLayout });
@@ -95,13 +96,18 @@ const prescriptions = computed(() => props.patient?.prescriptions || []);
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-4 sm:p-6">
                 <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">{{ isRtl ? 'معلومات الاتصال' : 'Contact Details' }}</h3>
                 <div class="space-y-3 text-sm">
-                    <div class="flex justify-between">
+                    <div class="flex justify-between items-center">
                         <span class="text-gray-500">{{ isRtl ? 'الهاتف' : 'Phone' }}</span>
-                        <span class="font-medium text-gray-800">{{ patient.phone || '-' }}</span>
+                        <span class="font-medium text-gray-800">
+                            <PhoneWithWhatsApp v-if="patient.phone" :phone="patient.phone" />
+                            <span v-else>-</span>
+                        </span>
                     </div>
-                    <div v-if="patient.phone2" class="flex justify-between">
+                    <div v-if="patient.phone2" class="flex justify-between items-center">
                         <span class="text-gray-500">{{ isRtl ? 'الهاتف 2' : 'Phone 2' }}</span>
-                        <span class="font-medium text-gray-800">{{ patient.phone2 }}</span>
+                        <span class="font-medium text-gray-800">
+                            <PhoneWithWhatsApp :phone="patient.phone2" />
+                        </span>
                     </div>
                     <div class="flex justify-between">
                         <span class="text-gray-500">{{ isRtl ? 'البريد' : 'Email' }}</span>
