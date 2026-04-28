@@ -19,6 +19,7 @@ use App\Http\Controllers\Patient\PatientExportController;
 use App\Http\Controllers\Patient\PatientFeedbackController;
 use App\Http\Controllers\Patient\PatientLoyaltyController;
 use App\Http\Controllers\Patient\PatientReferralsController;
+use App\Http\Controllers\Patient\PatientServicesController;
 use App\Http\Controllers\Patient\OnlineConsultationController;
 use Illuminate\Support\Facades\Route;
 
@@ -135,6 +136,9 @@ Route::middleware('patient.auth')->group(function () {
 
     // ─── Browse Doctors ─────────────────────────────────────
     Route::get('/doctors', [PatientDoctorsController::class, 'index'])->name('patient.doctors.index');
+
+    // ─── Browse Services ────────────────────────────────────
+    Route::get('/services', [PatientServicesController::class, 'index'])->name('patient.services.index');
 
     // ─── Feedback / Reviews (patient rates their completed visits) ─
     Route::get('/feedback', [PatientFeedbackController::class, 'index'])->name('patient.feedback.index');
