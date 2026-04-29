@@ -69,6 +69,7 @@ const navGroups = computed(() => [
         key: 'main',
         items: [
             { label: t('p_dashboard'), href: lp(''), icon: 'grid' },
+            { label: isRtl.value ? 'سجل النشاط' : 'Activity', href: lp('/activity'), icon: 'clipboard' },
         ],
     },
     {

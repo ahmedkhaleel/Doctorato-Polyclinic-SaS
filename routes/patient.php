@@ -21,6 +21,7 @@ use App\Http\Controllers\Patient\PatientLoyaltyController;
 use App\Http\Controllers\Patient\PatientReferralsController;
 use App\Http\Controllers\Patient\PatientServicesController;
 use App\Http\Controllers\Patient\PatientVitalsController;
+use App\Http\Controllers\Patient\PatientActivityController;
 use App\Http\Controllers\Patient\OnlineConsultationController;
 use Illuminate\Support\Facades\Route;
 
@@ -145,6 +146,9 @@ Route::middleware('patient.auth')->group(function () {
 
     // ─── My Vitals (read-only — recorded by staff during visits) ─
     Route::get('/vitals', [PatientVitalsController::class, 'index'])->name('patient.vitals.index');
+
+    // ─── Activity feed (chronological account events) ─────────
+    Route::get('/activity', [PatientActivityController::class, 'index'])->name('patient.activity.index');
 
     // ─── Feedback / Reviews (patient rates their completed visits) ─
     Route::get('/feedback', [PatientFeedbackController::class, 'index'])->name('patient.feedback.index');
