@@ -12,6 +12,7 @@ const quickLinks = [
     { label: () => t('home'), route: '/' },
     { label: () => t('about'), route: '/about' },
     { label: () => t('services'), route: '/services' },
+    { label: () => t('doctors'), route: '/doctors' },
     { label: () => t('packages'), route: '/package-bundles' },
     { label: () => t('blog'), route: '/blog' },
     { label: () => t('contact'), route: '/contact' },

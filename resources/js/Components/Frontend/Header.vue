@@ -15,6 +15,7 @@ const navItems = computed(() => [
     { label: t('home'), route: localizedRoute('/') },
     { label: t('about'), route: localizedRoute('/about') },
     { label: t('services'), route: localizedRoute('/services') },
+    { label: t('doctors'), route: localizedRoute('/doctors') },
     { label: t('gallery'), route: localizedRoute('/gallery') },
     { label: t('packages'), route: localizedRoute('/package-bundles') },
     { label: t('blog'), route: localizedRoute('/blog') },
