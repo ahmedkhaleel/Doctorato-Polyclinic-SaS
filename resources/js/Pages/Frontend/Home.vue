@@ -15,8 +15,10 @@ const props = defineProps({
     medicalSpecialties: Array,
     packageBundles: Array,
     testimonials: Array,
+    patientReviews: { type: Array, default: () => [] },
     doctors: Array,
     heroSlides: Array,
+    clinicStats: { type: Object, default: null },
     seo: Object,
 });
 
@@ -730,6 +732,59 @@ const moduleImages = {
             </div>
         </section>
 
+
+        <!-- ═══════════════════════════════════════ -->
+        <!-- CLINIC STATS BANNER (real data, builds trust) -->
+        <!-- ═══════════════════════════════════════ -->
+        <section v-if="clinicStats" class="py-12 md:py-16 bg-gradient-to-br from-[#1B365D] via-[#22406F] to-[#0F2444] relative overflow-hidden">
+            <div class="absolute -top-16 -end-16 w-96 h-96 rounded-full bg-[#C4A265]/15 blur-3xl pointer-events-none"></div>
+            <div class="absolute -bottom-16 -start-16 w-96 h-96 rounded-full bg-[#C4A265]/10 blur-3xl pointer-events-none"></div>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="text-center mb-8" v-scroll-reveal="{ type: 'fade-up' }">
+                    <span class="inline-block text-[10px] font-bold text-[#C4A265] tracking-[0.3em] uppercase mb-2">
+                        {{ isRtl ? 'بالأرقام' : 'By the numbers' }}
+                    </span>
+                    <h2 class="text-2xl md:text-3xl font-bold text-white">
+                        {{ isRtl ? 'ثقة المرضى مبنية على نتائج حقيقية' : 'Patient trust built on real outcomes' }}
+                    </h2>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+                    <!-- Patients served -->
+                    <div class="bg-white/5 backdrop-blur border border-white/10 rounded-2xl p-5 md:p-6 text-center" v-scroll-reveal="{ type: 'fade-up', delay: 100 }">
+                        <p class="text-3xl md:text-5xl font-extrabold text-[#C4A265] tabular-nums">{{ clinicStats.patients_served.toLocaleString() }}+</p>
+                        <p class="text-[11px] md:text-xs text-white/60 uppercase tracking-wider mt-2">
+                            {{ isRtl ? 'مريض مسجّل' : 'Patients served' }}
+                        </p>
+                    </div>
+                    <!-- Visits in last 12 months -->
+                    <div class="bg-white/5 backdrop-blur border border-white/10 rounded-2xl p-5 md:p-6 text-center" v-scroll-reveal="{ type: 'fade-up', delay: 200 }">
+                        <p class="text-3xl md:text-5xl font-extrabold text-[#C4A265] tabular-nums">{{ clinicStats.visits_12m.toLocaleString() }}+</p>
+                        <p class="text-[11px] md:text-xs text-white/60 uppercase tracking-wider mt-2">
+                            {{ isRtl ? 'زيارة في 12 شهر' : 'Visits last 12 months' }}
+                        </p>
+                    </div>
+                    <!-- Doctors -->
+                    <div class="bg-white/5 backdrop-blur border border-white/10 rounded-2xl p-5 md:p-6 text-center" v-scroll-reveal="{ type: 'fade-up', delay: 300 }">
+                        <p class="text-3xl md:text-5xl font-extrabold text-[#C4A265] tabular-nums">{{ clinicStats.doctors }}</p>
+                        <p class="text-[11px] md:text-xs text-white/60 uppercase tracking-wider mt-2">
+                            {{ isRtl ? 'طبيب معتمد' : 'Board-certified doctors' }}
+                        </p>
+                    </div>
+                    <!-- Average rating -->
+                    <div class="bg-white/5 backdrop-blur border border-white/10 rounded-2xl p-5 md:p-6 text-center" v-scroll-reveal="{ type: 'fade-up', delay: 400 }">
+                        <p v-if="clinicStats.reviews_avg" class="text-3xl md:text-5xl font-extrabold text-[#C4A265] tabular-nums">
+                            {{ clinicStats.reviews_avg.toFixed(1) }}<span class="text-lg font-light text-white/40">/5</span>
+                        </p>
+                        <p v-else class="text-3xl md:text-5xl font-extrabold text-white/30">—</p>
+                        <p class="text-[11px] md:text-xs text-white/60 uppercase tracking-wider mt-2">
+                            {{ clinicStats.reviews_count > 0
+                                ? (isRtl ? `من ${clinicStats.reviews_count} تقييم` : `from ${clinicStats.reviews_count} reviews`)
+                                : (isRtl ? 'متوسط التقييم' : 'Average rating') }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
 
         <!-- ═══════════════════════════════════════ -->
         <!-- TESTIMONIALS                           -->
