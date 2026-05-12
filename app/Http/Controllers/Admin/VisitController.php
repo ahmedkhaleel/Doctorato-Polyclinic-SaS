@@ -114,8 +114,24 @@ class VisitController extends Controller
                 ->get();
         }
 
+        // Doctors + services for the reschedule/reassign modal — kept
+        // lean (id + display name) so we don't bloat the visit show
+        // payload for the common read-only case.
+        $doctors = Doctor::active()
+            ->where('module', $visit->module)
+            ->select('id', 'name_ar', 'name_en')
+            ->orderBy('name_en')
+            ->get();
+        $services = \App\Models\Service::active()
+            ->where('module', $visit->module)
+            ->select('id', 'name_ar', 'name_en', 'price')
+            ->orderBy('name_en')
+            ->get();
+
         return Inertia::render('Admin/Visits/Show', array_merge([
             'visit' => $visit,
+            'doctors' => $doctors,
+            'services' => $services,
         ], $extra));
     }
 
@@ -176,17 +192,46 @@ class VisitController extends Controller
         return redirect()->back()->with('success', 'Photo uploaded successfully.');
     }
 
+    /**
+     * Edit the scheduling details of a visit — visit date, scheduled
+     * time, doctor, and service. Used when a doctor calls in sick,
+     * the patient asks to switch providers, or the front desk needs
+     * to shift the time slot.
+     *
+     * Completed / cancelled visits are protected: their facts are
+     * historical and shouldn't move retroactively. Use a new visit
+     * for those cases.
+     */
     public function updateDetails(Request $request, Visit $visit): RedirectResponse
     {
+        if (in_array($visit->status, ['completed', 'cancelled'])) {
+            return back()->with('error', 'Completed or cancelled visits cannot be edited.');
+        }
+
         $data = $request->validate([
-            'visit_date' => 'required|date',
+            'visit_date'     => ['required', 'date'],
+            'scheduled_time' => ['nullable', 'date_format:H:i'],
+            'doctor_id'      => ['nullable', 'integer', 'exists:doctors,id'],
+            'service_id'     => ['nullable', 'integer', 'exists:services,id'],
         ]);
+
+        $changes = [];
+        foreach ($data as $key => $newValue) {
+            $oldValue = $visit->{$key};
+            // normalise date for comparison
+            if ($key === 'visit_date' && $oldValue instanceof \DateTimeInterface) {
+                $oldValue = $oldValue->format('Y-m-d');
+            }
+            if ((string) $oldValue !== (string) $newValue) {
+                $changes[$key] = ['from' => $oldValue, 'to' => $newValue];
+            }
+        }
 
         $visit->update($data);
 
-        AuditLogger::log('updated_details', $visit);
+        AuditLogger::log('visit_details_updated', $visit, $changes);
 
-        return redirect()->back()->with('success', 'Visit date updated successfully.');
+        return redirect()->back()->with('success', 'Visit updated successfully.');
     }
 
     public function cancel(Visit $visit): RedirectResponse

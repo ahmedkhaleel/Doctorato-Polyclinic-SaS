@@ -86,8 +86,22 @@ class SecretaryVisitController extends BaseSecretaryController
             $extra['treatmentTypes'] = \App\Models\DentalTreatment::TYPES;
         }
 
+        // Doctors + services for the reschedule/reassign editor.
+        $doctors = \App\Models\Doctor::active()
+            ->where('module', $visit->module)
+            ->select('id', 'name_ar', 'name_en')
+            ->orderBy('name_en')
+            ->get();
+        $services = \App\Models\Service::active()
+            ->where('module', $visit->module)
+            ->select('id', 'name_ar', 'name_en', 'price')
+            ->orderBy('name_en')
+            ->get();
+
         return Inertia::render('Secretary/Visits/Show', array_merge([
             'visit' => $visit,
+            'doctors' => $doctors,
+            'services' => $services,
         ], $extra));
     }
 
@@ -122,5 +136,46 @@ class SecretaryVisitController extends BaseSecretaryController
         AuditLogger::log('cancelled', $visit);
 
         return redirect()->back()->with('success', $this->msg('Visit cancelled.', 'تم إلغاء الزيارة.'));
+    }
+
+    /**
+     * Edit the scheduling details of a visit — date, time, doctor,
+     * or service. Used when a doctor is unavailable, the patient
+     * wants a different provider, or the time slot needs to shift.
+     * Mirrors Admin\VisitController::updateDetails so both portals
+     * share the same edit surface.
+     */
+    public function updateDetails(Request $request, Visit $visit): RedirectResponse
+    {
+        if (in_array($visit->status, ['completed', 'cancelled'])) {
+            return back()->with('error', $this->msg(
+                'Completed or cancelled visits cannot be edited.',
+                'لا يمكن تعديل الزيارات المكتملة أو الملغاة.',
+            ));
+        }
+
+        $data = $request->validate([
+            'visit_date'     => ['required', 'date'],
+            'scheduled_time' => ['nullable', 'date_format:H:i'],
+            'doctor_id'      => ['nullable', 'integer', 'exists:doctors,id'],
+            'service_id'     => ['nullable', 'integer', 'exists:services,id'],
+        ]);
+
+        $changes = [];
+        foreach ($data as $key => $newValue) {
+            $oldValue = $visit->{$key};
+            if ($key === 'visit_date' && $oldValue instanceof \DateTimeInterface) {
+                $oldValue = $oldValue->format('Y-m-d');
+            }
+            if ((string) $oldValue !== (string) $newValue) {
+                $changes[$key] = ['from' => $oldValue, 'to' => $newValue];
+            }
+        }
+
+        $visit->update($data);
+
+        AuditLogger::log('visit_details_updated', $visit, $changes);
+
+        return redirect()->back()->with('success', $this->msg('Visit updated successfully.', 'تم تحديث الزيارة بنجاح.'));
     }
 }

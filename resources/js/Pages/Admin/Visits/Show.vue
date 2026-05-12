@@ -14,6 +14,8 @@ const isRtl = computed(() => (page.props.dir || 'rtl') === 'rtl');
 
 const props = defineProps({
     visit: Object,
+    doctors: { type: Array, default: () => [] },
+    services: { type: Array, default: () => [] },
     dentalChart: Object,
     dentalXrays: Array,
     dentalConditions: Object,
@@ -64,23 +66,31 @@ const invoiceStatusColors = {
     unpaid: 'bg-red-100 text-red-800',
 };
 
-// Inline editing for visit date
+// Inline editing for visit scheduling (date / time / doctor / service)
 const editingVisitDate = ref(false);
 const visitDateForm = useForm({
-    visit_date: props.visit?.visit_date ? props.visit.visit_date.split('T')[0] : '',
+    visit_date:     props.visit?.visit_date ? props.visit.visit_date.split('T')[0] : '',
+    scheduled_time: props.visit?.scheduled_time || '',
+    doctor_id:      props.visit?.doctor_id || '',
+    service_id:     props.visit?.service_id || '',
 });
 
 function saveVisitDate() {
-    visitDateForm.put(`/admin/visits/${props.visit.id}/details`, {
+    visitDateForm.post(`/admin/visits/${props.visit.id}/details`, {
         preserveScroll: true,
         onSuccess: () => { editingVisitDate.value = false; },
     });
 }
 
 function cancelEditVisitDate() {
-    visitDateForm.visit_date = props.visit?.visit_date ? props.visit.visit_date.split('T')[0] : '';
+    visitDateForm.visit_date     = props.visit?.visit_date ? props.visit.visit_date.split('T')[0] : '';
+    visitDateForm.scheduled_time = props.visit?.scheduled_time || '';
+    visitDateForm.doctor_id      = props.visit?.doctor_id || '';
+    visitDateForm.service_id     = props.visit?.service_id || '';
     editingVisitDate.value = false;
 }
+
+const isLocked = computed(() => ['completed', 'cancelled'].includes(props.visit?.status));
 
 // Inline editing for diagnosis & notes
 const editingDiagnosis = ref(false);
@@ -400,44 +410,75 @@ function formatDateTime(date) {
                         <div class="space-y-4">
                             <h3 class="text-lg font-semibold text-gray-700">{{ $t('a_visit_info') }}</h3>
                             <dl class="space-y-2">
-                                <div class="flex justify-between items-center text-sm">
-                                    <dt class="text-gray-500">{{ $t('a_visit_date') }}</dt>
-                                    <dd v-if="!editingVisitDate" class="flex items-center gap-2">
-                                        <span class="text-gray-900">{{ formatDate(visit.visit_date) }}</span>
-                                        <button
-                                            v-if="can('visits.update')"
-                                            @click="editingVisitDate = true"
-                                            class="inline-flex items-center px-2 py-0.5 text-xs font-medium rounded hover:underline transition"
-                                            style="color: #C4A265;"
-                                        >
-                                            <svg class="w-3.5 h-3.5 mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                            </svg>
-                                            {{ $t('a_edit') }}
-                                        </button>
-                                    </dd>
-                                    <dd v-else class="flex items-center gap-2">
-                                        <input
-                                            v-model="visitDateForm.visit_date"
-                                            type="date"
-                                            class="doctorato-input px-2 py-1 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-transparent"
-                                        />
-                                        <button
-                                            @click="saveVisitDate"
-                                            :disabled="visitDateForm.processing"
-                                            class="px-3 py-1 rounded-lg text-white text-xs font-medium transition disabled:opacity-50"
-                                            style="background-color: #C4A265;"
-                                        >
-                                            {{ visitDateForm.processing ? $t('a_saving') : $t('a_save') }}
-                                        </button>
-                                        <button
-                                            @click="cancelEditVisitDate"
-                                            class="px-3 py-1 rounded-lg border border-gray-300 text-gray-700 text-xs font-medium transition hover:bg-gray-50"
-                                        >
-                                            {{ $t('a_cancel') }}
-                                        </button>
-                                        <p v-if="visitDateForm.errors.visit_date" class="text-xs text-red-600">{{ visitDateForm.errors.visit_date }}</p>
-                                    </dd>
+                                <div class="text-sm">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <dt class="text-gray-500">{{ $t('a_visit_date') }}</dt>
+                                        <dd v-if="!editingVisitDate" class="flex items-center gap-2">
+                                            <span class="text-gray-900">{{ formatDate(visit.visit_date) }}<span v-if="visit.scheduled_time" class="text-gray-500"> · {{ visit.scheduled_time }}</span></span>
+                                            <button
+                                                v-if="can('visits.update') && !isLocked"
+                                                @click="editingVisitDate = true"
+                                                class="inline-flex items-center px-2 py-0.5 text-xs font-medium rounded hover:underline transition"
+                                                style="color: #C4A265;"
+                                            >
+                                                <svg class="w-3.5 h-3.5 mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                                </svg>
+                                                {{ $t('a_edit') }}
+                                            </button>
+                                        </dd>
+                                    </div>
+
+                                    <!-- Inline multi-field edit form (date + time + doctor + service) -->
+                                    <div v-if="editingVisitDate" class="bg-[#FAF7F0] border border-[#C4A265]/30 rounded-lg p-3 mt-1 space-y-3">
+                                        <div class="grid grid-cols-2 gap-2">
+                                            <div>
+                                                <label class="block text-[10px] font-bold text-gray-600 uppercase mb-1">{{ $t('a_visit_date') }}</label>
+                                                <input v-model="visitDateForm.visit_date" type="date" required
+                                                       class="w-full px-2 py-1.5 border border-gray-300 rounded text-sm" />
+                                                <p v-if="visitDateForm.errors.visit_date" class="text-[10px] text-red-600 mt-0.5">{{ visitDateForm.errors.visit_date }}</p>
+                                            </div>
+                                            <div>
+                                                <label class="block text-[10px] font-bold text-gray-600 uppercase mb-1">{{ isRtl ? 'الوقت' : 'Time' }}</label>
+                                                <input v-model="visitDateForm.scheduled_time" type="time"
+                                                       class="w-full px-2 py-1.5 border border-gray-300 rounded text-sm" />
+                                                <p v-if="visitDateForm.errors.scheduled_time" class="text-[10px] text-red-600 mt-0.5">{{ visitDateForm.errors.scheduled_time }}</p>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label class="block text-[10px] font-bold text-gray-600 uppercase mb-1">{{ isRtl ? 'الطبيب' : 'Doctor' }}</label>
+                                            <select v-model="visitDateForm.doctor_id"
+                                                    class="w-full px-2 py-1.5 border border-gray-300 rounded text-sm">
+                                                <option :value="''">{{ isRtl ? '— بدون طبيب' : '— No doctor' }}</option>
+                                                <option v-for="d in doctors" :key="d.id" :value="d.id">
+                                                    {{ isRtl ? d.name_ar : d.name_en }}
+                                                </option>
+                                            </select>
+                                            <p v-if="visitDateForm.errors.doctor_id" class="text-[10px] text-red-600 mt-0.5">{{ visitDateForm.errors.doctor_id }}</p>
+                                        </div>
+                                        <div>
+                                            <label class="block text-[10px] font-bold text-gray-600 uppercase mb-1">{{ isRtl ? 'الخدمة' : 'Service' }}</label>
+                                            <select v-model="visitDateForm.service_id"
+                                                    class="w-full px-2 py-1.5 border border-gray-300 rounded text-sm">
+                                                <option :value="''">{{ isRtl ? '— بدون خدمة' : '— No service' }}</option>
+                                                <option v-for="s in services" :key="s.id" :value="s.id">
+                                                    {{ isRtl ? s.name_ar : s.name_en }}<span v-if="s.price"> ({{ s.price }})</span>
+                                                </option>
+                                            </select>
+                                            <p v-if="visitDateForm.errors.service_id" class="text-[10px] text-red-600 mt-0.5">{{ visitDateForm.errors.service_id }}</p>
+                                        </div>
+                                        <div class="flex items-center gap-2 pt-1">
+                                            <button @click="saveVisitDate" :disabled="visitDateForm.processing"
+                                                    class="px-3 py-1.5 rounded text-white text-xs font-bold disabled:opacity-50"
+                                                    style="background-color: #C4A265;">
+                                                {{ visitDateForm.processing ? $t('a_saving') : $t('a_save') }}
+                                            </button>
+                                            <button @click="cancelEditVisitDate"
+                                                    class="px-3 py-1.5 rounded border border-gray-300 text-gray-700 text-xs font-medium hover:bg-gray-50">
+                                                {{ $t('a_cancel') }}
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="flex justify-between text-sm"><dt class="text-gray-500">{{ $t('a_visit_type') }}</dt><dd class="text-gray-900">{{ {consultation: $t('a_consultation'), session: $t('a_session'), follow_up: $t('a_follow_up')}[visit.visit_type] || visit.visit_type }}</dd></div>
                                 <div class="flex justify-between text-sm"><dt class="text-gray-500">{{ $t('a_status') }}</dt>

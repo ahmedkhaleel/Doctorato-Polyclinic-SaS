@@ -1,6 +1,6 @@
 <script setup>
-import { computed } from 'vue';
-import { Link, router, usePage } from '@inertiajs/vue3';
+import { computed, ref } from 'vue';
+import { Link, router, useForm, usePage } from '@inertiajs/vue3';
 import SecretaryLayout from '@/Layouts/SecretaryLayout.vue';
 
 defineOptions({ layout: SecretaryLayout });
@@ -10,11 +10,39 @@ const isRtl = computed(() => (page.props.dir || 'rtl') === 'rtl');
 
 const props = defineProps({
     visit: Object,
+    doctors: { type: Array, default: () => [] },
+    services: { type: Array, default: () => [] },
     dentalChart: Object,
     dentalConditions: Object,
     allTeeth: Object,
     treatmentTypes: Object,
 });
+
+// ─── Reschedule / reassign form ───────────────────
+const editingDetails = ref(false);
+const detailsForm = useForm({
+    visit_date:     props.visit?.visit_date ? String(props.visit.visit_date).split('T')[0] : '',
+    scheduled_time: props.visit?.scheduled_time || '',
+    doctor_id:      props.visit?.doctor_id || '',
+    service_id:     props.visit?.service_id || '',
+});
+
+const isLocked = computed(() => ['completed', 'cancelled'].includes(props.visit?.status));
+
+function saveDetails() {
+    detailsForm.post(`/secretary/visits/${props.visit.id}/details`, {
+        preserveScroll: true,
+        onSuccess: () => { editingDetails.value = false; },
+    });
+}
+
+function cancelEditDetails() {
+    detailsForm.visit_date     = props.visit?.visit_date ? String(props.visit.visit_date).split('T')[0] : '';
+    detailsForm.scheduled_time = props.visit?.scheduled_time || '';
+    detailsForm.doctor_id      = props.visit?.doctor_id || '';
+    detailsForm.service_id     = props.visit?.service_id || '';
+    editingDetails.value = false;
+}
 
 const isDental = computed(() => props.visit?.module === 'dental');
 
@@ -169,8 +197,67 @@ function cancelVisit() {
                             </div>
 
                             <div>
-                                <dt class="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">{{ isRtl ? 'تاريخ الزيارة' : 'Visit Date' }}</dt>
-                                <dd class="text-sm text-gray-900">{{ formatDate(visit.visit_date) }}</dd>
+                                <div class="flex items-center justify-between mb-1">
+                                    <dt class="text-xs font-medium text-gray-400 uppercase tracking-wider">{{ isRtl ? 'تاريخ الزيارة' : 'Visit Date' }}</dt>
+                                    <button v-if="!isLocked && !editingDetails" type="button" @click="editingDetails = true"
+                                            class="text-[10px] font-bold text-[#C4A265] hover:underline">
+                                        {{ isRtl ? '✎ تعديل الموعد والطبيب' : '✎ Edit time / doctor' }}
+                                    </button>
+                                </div>
+                                <dd v-if="!editingDetails" class="text-sm text-gray-900">
+                                    {{ formatDate(visit.visit_date) }}<span v-if="visit.scheduled_time" class="text-gray-500"> · {{ visit.scheduled_time }}</span>
+                                </dd>
+
+                                <!-- Edit form -->
+                                <div v-else class="bg-[#FAF7F0] border border-[#C4A265]/30 rounded-lg p-3 mt-1 space-y-3">
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <div>
+                                            <label class="block text-[10px] font-bold text-gray-600 uppercase mb-1">{{ isRtl ? 'التاريخ' : 'Date' }}</label>
+                                            <input v-model="detailsForm.visit_date" type="date" required
+                                                   class="w-full px-2 py-1.5 border border-gray-300 rounded text-sm" />
+                                            <p v-if="detailsForm.errors.visit_date" class="text-[10px] text-red-600 mt-0.5">{{ detailsForm.errors.visit_date }}</p>
+                                        </div>
+                                        <div>
+                                            <label class="block text-[10px] font-bold text-gray-600 uppercase mb-1">{{ isRtl ? 'الوقت' : 'Time' }}</label>
+                                            <input v-model="detailsForm.scheduled_time" type="time"
+                                                   class="w-full px-2 py-1.5 border border-gray-300 rounded text-sm" />
+                                            <p v-if="detailsForm.errors.scheduled_time" class="text-[10px] text-red-600 mt-0.5">{{ detailsForm.errors.scheduled_time }}</p>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="block text-[10px] font-bold text-gray-600 uppercase mb-1">{{ isRtl ? 'الطبيب' : 'Doctor' }}</label>
+                                        <select v-model="detailsForm.doctor_id"
+                                                class="w-full px-2 py-1.5 border border-gray-300 rounded text-sm">
+                                            <option :value="''">{{ isRtl ? '— بدون طبيب' : '— No doctor' }}</option>
+                                            <option v-for="d in doctors" :key="d.id" :value="d.id">
+                                                {{ isRtl ? d.name_ar : d.name_en }}
+                                            </option>
+                                        </select>
+                                        <p v-if="detailsForm.errors.doctor_id" class="text-[10px] text-red-600 mt-0.5">{{ detailsForm.errors.doctor_id }}</p>
+                                    </div>
+                                    <div>
+                                        <label class="block text-[10px] font-bold text-gray-600 uppercase mb-1">{{ isRtl ? 'الخدمة' : 'Service' }}</label>
+                                        <select v-model="detailsForm.service_id"
+                                                class="w-full px-2 py-1.5 border border-gray-300 rounded text-sm">
+                                            <option :value="''">{{ isRtl ? '— بدون خدمة' : '— No service' }}</option>
+                                            <option v-for="s in services" :key="s.id" :value="s.id">
+                                                {{ isRtl ? s.name_ar : s.name_en }}<span v-if="s.price"> ({{ s.price }})</span>
+                                            </option>
+                                        </select>
+                                        <p v-if="detailsForm.errors.service_id" class="text-[10px] text-red-600 mt-0.5">{{ detailsForm.errors.service_id }}</p>
+                                    </div>
+                                    <div class="flex items-center gap-2 pt-1">
+                                        <button @click="saveDetails" :disabled="detailsForm.processing"
+                                                class="px-3 py-1.5 rounded text-white text-xs font-bold disabled:opacity-50"
+                                                style="background-color: #C4A265;">
+                                            {{ detailsForm.processing ? (isRtl ? 'جارٍ الحفظ...' : 'Saving...') : (isRtl ? 'حفظ' : 'Save') }}
+                                        </button>
+                                        <button @click="cancelEditDetails"
+                                                class="px-3 py-1.5 rounded border border-gray-300 text-gray-700 text-xs font-medium hover:bg-gray-50">
+                                            {{ isRtl ? 'إلغاء' : 'Cancel' }}
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
 
                             <div>
