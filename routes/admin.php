@@ -362,6 +362,7 @@ Route::middleware('admin.auth')->group(function () {
     Route::post('/visits/{visit}/start', [VisitController::class, 'start'])->name('admin.visits.start')->middleware('permission:visits.update');
     Route::post('/visits/{visit}/complete', [VisitController::class, 'complete'])->name('admin.visits.complete')->middleware('permission:visits.update');
     Route::post('/visits/{visit}/cancel', [VisitController::class, 'cancel'])->name('admin.visits.cancel')->middleware('permission:visits.update');
+    Route::post('/visits/{visit}/restore', [VisitController::class, 'restore'])->name('admin.visits.restore')->middleware('permission:visits.update');
     Route::post('/visits/{visit}/diagnosis', [VisitController::class, 'updateDiagnosis'])->name('admin.visits.updateDiagnosis')->middleware('permission:visits.update');
     Route::post('/visits/{visit}/details', [VisitController::class, 'updateDetails'])->name('admin.visits.updateDetails')->middleware('permission:visits.update');
     Route::post('/visits/{visit}/photos', [VisitController::class, 'uploadPhoto'])->name('admin.visits.uploadPhoto')->middleware('permission:visits.update');

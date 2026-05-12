@@ -76,7 +76,14 @@ const visitDateForm = useForm({
 });
 
 function saveVisitDate() {
-    visitDateForm.post(`/admin/visits/${props.visit.id}/details`, {
+    // Cancelled visits go through the restore endpoint (which reopens
+    // them as "waiting" + applies the new date/time/doctor/service in
+    // the same transaction).
+    const endpoint = props.visit.status === 'cancelled'
+        ? `/admin/visits/${props.visit.id}/restore`
+        : `/admin/visits/${props.visit.id}/details`;
+
+    visitDateForm.post(endpoint, {
         preserveScroll: true,
         onSuccess: () => { editingVisitDate.value = false; },
     });
@@ -90,7 +97,11 @@ function cancelEditVisitDate() {
     editingVisitDate.value = false;
 }
 
-const isLocked = computed(() => ['completed', 'cancelled'].includes(props.visit?.status));
+// Locked only for completed visits — cancelled visits can still be
+// restored back to "waiting" via the same form (which routes to the
+// /restore endpoint instead of /details).
+const isLocked = computed(() => props.visit?.status === 'completed');
+const isCancelled = computed(() => props.visit?.status === 'cancelled');
 
 // Inline editing for diagnosis & notes
 const editingDiagnosis = ref(false);
@@ -419,18 +430,29 @@ function formatDateTime(date) {
                                                 v-if="can('visits.update') && !isLocked"
                                                 @click="editingVisitDate = true"
                                                 class="inline-flex items-center px-2 py-0.5 text-xs font-medium rounded hover:underline transition"
-                                                style="color: #C4A265;"
+                                                :class="isCancelled ? 'text-emerald-600' : ''"
+                                                :style="!isCancelled ? 'color: #C4A265;' : ''"
                                             >
-                                                <svg class="w-3.5 h-3.5 mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <svg v-if="!isCancelled" class="w-3.5 h-3.5 mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                                 </svg>
-                                                {{ $t('a_edit') }}
+                                                <svg v-else class="w-3.5 h-3.5 mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                                                </svg>
+                                                {{ isCancelled ? (isRtl ? 'استعادة الزيارة' : 'Restore visit') : $t('a_edit') }}
                                             </button>
                                         </dd>
                                     </div>
 
                                     <!-- Inline multi-field edit form (date + time + doctor + service) -->
-                                    <div v-if="editingVisitDate" class="bg-[#FAF7F0] border border-[#C4A265]/30 rounded-lg p-3 mt-1 space-y-3">
+                                    <div v-if="editingVisitDate"
+                                         :class="isCancelled ? 'bg-emerald-50 border-emerald-300' : 'bg-[#FAF7F0] border-[#C4A265]/30'"
+                                         class="border rounded-lg p-3 mt-1 space-y-3">
+                                        <div v-if="isCancelled" class="text-xs bg-white border border-emerald-200 rounded p-2 text-emerald-800">
+                                            🔄 {{ isRtl
+                                                ? 'هذه الزيارة ملغاة. حفظ النموذج سيعيدها للنشاط (حالة: انتظار) ويرسل بريداً للمريض.'
+                                                : 'This visit is cancelled. Saving will restore it to "waiting" status and email the patient.' }}
+                                        </div>
                                         <div class="grid grid-cols-2 gap-2">
                                             <div>
                                                 <label class="block text-[10px] font-bold text-gray-600 uppercase mb-1">{{ $t('a_visit_date') }}</label>
@@ -470,8 +492,10 @@ function formatDateTime(date) {
                                         <div class="flex items-center gap-2 pt-1">
                                             <button @click="saveVisitDate" :disabled="visitDateForm.processing"
                                                     class="px-3 py-1.5 rounded text-white text-xs font-bold disabled:opacity-50"
-                                                    style="background-color: #C4A265;">
-                                                {{ visitDateForm.processing ? $t('a_saving') : $t('a_save') }}
+                                                    :style="isCancelled ? 'background-color: #059669;' : 'background-color: #C4A265;'">
+                                                {{ visitDateForm.processing
+                                                    ? $t('a_saving')
+                                                    : (isCancelled ? (isRtl ? '✓ استعادة الزيارة' : '✓ Restore visit') : $t('a_save')) }}
                                             </button>
                                             <button @click="cancelEditVisitDate"
                                                     class="px-3 py-1.5 rounded border border-gray-300 text-gray-700 text-xs font-medium hover:bg-gray-50">

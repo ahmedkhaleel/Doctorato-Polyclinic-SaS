@@ -84,6 +84,8 @@ Route::middleware('secretary.auth')->group(function () {
     Route::post('/visits/{visit}/cancel', [SecretaryVisitController::class, 'cancel'])->name('secretary.visits.cancel');
     Route::post('/visits/{visit}/details', [SecretaryVisitController::class, 'updateDetails'])
         ->name('secretary.visits.updateDetails');
+    Route::post('/visits/{visit}/restore', [SecretaryVisitController::class, 'restore'])
+        ->name('secretary.visits.restore');
 
     // ─── Bookings ───────────────────────────────────────────
     Route::get('/bookings', [SecretaryBookingController::class, 'index'])->name('secretary.bookings.index');

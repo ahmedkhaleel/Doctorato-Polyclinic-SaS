@@ -243,6 +243,55 @@ class VisitController extends Controller
     }
 
     /**
+     * Bring a CANCELLED visit back to life with a (possibly new) date,
+     * time, doctor, and service. Common workflow: patient initially
+     * cancelled then changed their mind; or staff cancelled by mistake.
+     *
+     * Goes to `waiting` so the patient still needs to be seen — never
+     * resurrects directly into `completed`. Always notifies the patient
+     * by email so they know the visit is back on the calendar.
+     */
+    public function restore(Request $request, Visit $visit): RedirectResponse
+    {
+        if ($visit->status !== 'cancelled') {
+            return back()->with('error', 'Only cancelled visits can be restored.');
+        }
+
+        $data = $request->validate([
+            'visit_date'     => ['required', 'date'],
+            'scheduled_time' => ['nullable', 'date_format:H:i'],
+            'doctor_id'      => ['nullable', 'integer', 'exists:doctors,id'],
+            'service_id'     => ['nullable', 'integer', 'exists:services,id'],
+        ]);
+
+        // Build a changes array for the patient email — status itself
+        // is the headline, then any scheduling shifts.
+        $changes = [
+            'status' => ['from' => 'cancelled', 'to' => 'waiting'],
+        ];
+        foreach ($data as $key => $newValue) {
+            $oldValue = $visit->{$key};
+            if ($key === 'visit_date' && $oldValue instanceof \DateTimeInterface) {
+                $oldValue = $oldValue->format('Y-m-d');
+            }
+            if ((string) $oldValue !== (string) $newValue) {
+                $changes[$key] = ['from' => $oldValue, 'to' => $newValue];
+            }
+        }
+
+        $this->resolveChangeNames($changes);
+
+        $visit->update(array_merge($data, ['status' => 'waiting']));
+
+        AuditLogger::log('visit_restored', $visit, $changes);
+
+        // Patient deserves to know the visit is back on the calendar.
+        $this->maybeEmailRescheduled($visit->fresh(['patient', 'doctor', 'service']), $changes);
+
+        return redirect()->back()->with('success', 'Visit restored and rescheduled.');
+    }
+
+    /**
      * Replace raw FK ids in $changes with from_name / to_name for use
      * in the patient email body. Edits the array in place.
      */

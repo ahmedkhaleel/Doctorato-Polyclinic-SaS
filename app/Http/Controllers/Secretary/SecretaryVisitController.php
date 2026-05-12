@@ -218,4 +218,81 @@ class SecretaryVisitController extends BaseSecretaryController
 
         return redirect()->back()->with('success', $this->msg('Visit updated successfully.', 'تم تحديث الزيارة بنجاح.'));
     }
+
+    /**
+     * Restore a CANCELLED visit back to the active queue, optionally
+     * with a fresh date / time / doctor / service. Mirrors
+     * Admin\VisitController::restore so the front desk can do this
+     * without admin escalation.
+     */
+    public function restore(Request $request, Visit $visit): RedirectResponse
+    {
+        if ($visit->status !== 'cancelled') {
+            return back()->with('error', $this->msg(
+                'Only cancelled visits can be restored.',
+                'يمكن استعادة الزيارات الملغاة فقط.',
+            ));
+        }
+
+        $data = $request->validate([
+            'visit_date'     => ['required', 'date'],
+            'scheduled_time' => ['nullable', 'date_format:H:i'],
+            'doctor_id'      => ['nullable', 'integer', 'exists:doctors,id'],
+            'service_id'     => ['nullable', 'integer', 'exists:services,id'],
+        ]);
+
+        $changes = ['status' => ['from' => 'cancelled', 'to' => 'waiting']];
+        foreach ($data as $key => $newValue) {
+            $oldValue = $visit->{$key};
+            if ($key === 'visit_date' && $oldValue instanceof \DateTimeInterface) {
+                $oldValue = $oldValue->format('Y-m-d');
+            }
+            if ((string) $oldValue !== (string) $newValue) {
+                $changes[$key] = ['from' => $oldValue, 'to' => $newValue];
+            }
+        }
+
+        // Hydrate FK display names for the patient email
+        if (isset($changes['doctor_id'])) {
+            $ids = array_filter([$changes['doctor_id']['from'] ?? null, $changes['doctor_id']['to'] ?? null]);
+            $doctors = \App\Models\Doctor::whereIn('id', $ids)->pluck('name_ar', 'id');
+            $changes['doctor_id']['from_name'] = $changes['doctor_id']['from'] ? ($doctors[$changes['doctor_id']['from']] ?? '—') : '—';
+            $changes['doctor_id']['to_name']   = $changes['doctor_id']['to']   ? ($doctors[$changes['doctor_id']['to']]   ?? '—') : '—';
+        }
+        if (isset($changes['service_id'])) {
+            $ids = array_filter([$changes['service_id']['from'] ?? null, $changes['service_id']['to'] ?? null]);
+            $services = \App\Models\Service::whereIn('id', $ids)->pluck('name_ar', 'id');
+            $changes['service_id']['from_name'] = $changes['service_id']['from'] ? ($services[$changes['service_id']['from']] ?? '—') : '—';
+            $changes['service_id']['to_name']   = $changes['service_id']['to']   ? ($services[$changes['service_id']['to']]   ?? '—') : '—';
+        }
+
+        $visit->update(array_merge($data, ['status' => 'waiting']));
+
+        AuditLogger::log('visit_restored', $visit, $changes);
+
+        // Notify patient — visit is back on the calendar.
+        $fresh = $visit->fresh(['patient', 'doctor', 'service']);
+        $patient = $fresh->patient;
+        if ($patient && $patient->email && $patient->wantsNotification('bookings', 'email')) {
+            try {
+                \Illuminate\Support\Facades\Notification::route('mail', $patient->email)
+                    ->notify(new \App\Notifications\VisitRescheduledEmail(
+                        $fresh,
+                        $changes,
+                        $fresh->doctor?->name_ar ?? $fresh->doctor?->name_en,
+                        $fresh->service?->name_ar ?? $fresh->service?->name_en,
+                    ));
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::warning('[visit.restored.email] failed', [
+                    'visit_id' => $fresh->id,
+                    'error'    => $e->getMessage(),
+                ]);
+            }
+        }
+
+        return redirect()->back()->with('success', $this->msg(
+            'Visit restored and rescheduled.',
+            'تم استعادة الزيارة وإعادة جدولتها.',
+        ));
+    }
 }

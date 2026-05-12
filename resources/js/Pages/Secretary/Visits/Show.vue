@@ -27,10 +27,17 @@ const detailsForm = useForm({
     service_id:     props.visit?.service_id || '',
 });
 
-const isLocked = computed(() => ['completed', 'cancelled'].includes(props.visit?.status));
+// Locked only for completed visits — cancelled visits can still be
+// restored via the same form (different endpoint).
+const isLocked = computed(() => props.visit?.status === 'completed');
+const isCancelled = computed(() => props.visit?.status === 'cancelled');
 
 function saveDetails() {
-    detailsForm.post(`/secretary/visits/${props.visit.id}/details`, {
+    const endpoint = props.visit.status === 'cancelled'
+        ? `/secretary/visits/${props.visit.id}/restore`
+        : `/secretary/visits/${props.visit.id}/details`;
+
+    detailsForm.post(endpoint, {
         preserveScroll: true,
         onSuccess: () => { editingDetails.value = false; },
     });
@@ -200,8 +207,11 @@ function cancelVisit() {
                                 <div class="flex items-center justify-between mb-1">
                                     <dt class="text-xs font-medium text-gray-400 uppercase tracking-wider">{{ isRtl ? 'تاريخ الزيارة' : 'Visit Date' }}</dt>
                                     <button v-if="!isLocked && !editingDetails" type="button" @click="editingDetails = true"
-                                            class="text-[10px] font-bold text-[#C4A265] hover:underline">
-                                        {{ isRtl ? '✎ تعديل الموعد والطبيب' : '✎ Edit time / doctor' }}
+                                            class="text-[10px] font-bold hover:underline"
+                                            :class="isCancelled ? 'text-emerald-600' : 'text-[#C4A265]'">
+                                        {{ isCancelled
+                                            ? (isRtl ? '🔄 استعادة الزيارة' : '🔄 Restore visit')
+                                            : (isRtl ? '✎ تعديل الموعد والطبيب' : '✎ Edit time / doctor') }}
                                     </button>
                                 </div>
                                 <dd v-if="!editingDetails" class="text-sm text-gray-900">
@@ -209,7 +219,14 @@ function cancelVisit() {
                                 </dd>
 
                                 <!-- Edit form -->
-                                <div v-else class="bg-[#FAF7F0] border border-[#C4A265]/30 rounded-lg p-3 mt-1 space-y-3">
+                                <div v-else
+                                     :class="isCancelled ? 'bg-emerald-50 border-emerald-300' : 'bg-[#FAF7F0] border-[#C4A265]/30'"
+                                     class="border rounded-lg p-3 mt-1 space-y-3">
+                                    <div v-if="isCancelled" class="text-xs bg-white border border-emerald-200 rounded p-2 text-emerald-800">
+                                        🔄 {{ isRtl
+                                            ? 'هذه الزيارة ملغاة. الحفظ سيستعيدها (انتظار) ويُرسل إيميل للمريض.'
+                                            : 'This visit is cancelled. Saving will restore it (waiting) and email the patient.' }}
+                                    </div>
                                     <div class="grid grid-cols-2 gap-2">
                                         <div>
                                             <label class="block text-[10px] font-bold text-gray-600 uppercase mb-1">{{ isRtl ? 'التاريخ' : 'Date' }}</label>
@@ -249,8 +266,12 @@ function cancelVisit() {
                                     <div class="flex items-center gap-2 pt-1">
                                         <button @click="saveDetails" :disabled="detailsForm.processing"
                                                 class="px-3 py-1.5 rounded text-white text-xs font-bold disabled:opacity-50"
-                                                style="background-color: #C4A265;">
-                                            {{ detailsForm.processing ? (isRtl ? 'جارٍ الحفظ...' : 'Saving...') : (isRtl ? 'حفظ' : 'Save') }}
+                                                :style="isCancelled ? 'background-color: #059669;' : 'background-color: #C4A265;'">
+                                            {{ detailsForm.processing
+                                                ? (isRtl ? 'جارٍ الحفظ...' : 'Saving...')
+                                                : (isCancelled
+                                                    ? (isRtl ? '✓ استعادة الزيارة' : '✓ Restore visit')
+                                                    : (isRtl ? 'حفظ' : 'Save')) }}
                                         </button>
                                         <button @click="cancelEditDetails"
                                                 class="px-3 py-1.5 rounded border border-gray-300 text-gray-700 text-xs font-medium hover:bg-gray-50">
