@@ -248,6 +248,22 @@ class BookingController extends Controller
             }
         }
 
+        // Capture scheduling changes BEFORE saving so we can email the
+        // patient about them. We only care about fields that are visible
+        // to the patient on /patient/bookings.
+        $watched = ['preferred_date', 'preferred_time', 'doctor_id', 'service_id'];
+        $changes = [];
+        foreach ($watched as $key) {
+            if (! array_key_exists($key, $data)) continue;
+            $oldValue = $booking->{$key};
+            if ($key === 'preferred_date' && $oldValue instanceof \DateTimeInterface) {
+                $oldValue = $oldValue->format('Y-m-d');
+            }
+            if ((string) $oldValue !== (string) $data[$key]) {
+                $changes[$key] = ['from' => $oldValue, 'to' => $data[$key]];
+            }
+        }
+
         $booking->update($data);
 
         AuditLogger::log('updated', $booking);
@@ -266,7 +282,59 @@ class BookingController extends Controller
             \App\Events\BookingCancelled::dispatch($booking, $data['admin_notes'] ?? null);
         }
 
+        // Booking restored from cancelled — add a status row to the
+        // changes diff so the email frames itself as a "restore".
+        if ($oldStatus === 'cancelled' && $booking->status !== 'cancelled') {
+            $changes['status'] = ['from' => 'cancelled', 'to' => $booking->status];
+        }
+
+        // Email the patient on scheduling / restore changes (but skip
+        // when the only delta was a cancel — that's handled above).
+        if ($changes && $booking->status !== 'cancelled') {
+            $this->maybeEmailBookingRescheduled($booking->fresh(['patient', 'doctor', 'service']), $changes);
+        }
+
         return redirect()->back()->with('success', 'Booking updated successfully.');
+    }
+
+    /**
+     * Resolve FK ids in the change diff to display names, then send
+     * the BookingRescheduledEmail (best-effort).
+     */
+    protected function maybeEmailBookingRescheduled(\App\Models\Booking $booking, array $changes): void
+    {
+        $patient = $booking->patient;
+        if (! $patient || ! $patient->email) return;
+        if (! $patient->wantsNotification('bookings', 'email')) return;
+
+        // Hydrate display names for the email body.
+        if (isset($changes['doctor_id'])) {
+            $ids = array_filter([$changes['doctor_id']['from'] ?? null, $changes['doctor_id']['to'] ?? null]);
+            $doctors = \App\Models\Doctor::whereIn('id', $ids)->pluck('name_ar', 'id');
+            $changes['doctor_id']['from_name'] = $changes['doctor_id']['from'] ? ($doctors[$changes['doctor_id']['from']] ?? '—') : '—';
+            $changes['doctor_id']['to_name']   = $changes['doctor_id']['to']   ? ($doctors[$changes['doctor_id']['to']]   ?? '—') : '—';
+        }
+        if (isset($changes['service_id'])) {
+            $ids = array_filter([$changes['service_id']['from'] ?? null, $changes['service_id']['to'] ?? null]);
+            $services = \App\Models\Service::whereIn('id', $ids)->pluck('name_ar', 'id');
+            $changes['service_id']['from_name'] = $changes['service_id']['from'] ? ($services[$changes['service_id']['from']] ?? '—') : '—';
+            $changes['service_id']['to_name']   = $changes['service_id']['to']   ? ($services[$changes['service_id']['to']]   ?? '—') : '—';
+        }
+
+        try {
+            \Illuminate\Support\Facades\Notification::route('mail', $patient->email)
+                ->notify(new \App\Notifications\BookingRescheduledEmail(
+                    $booking,
+                    $changes,
+                    $booking->doctor?->name_ar ?? $booking->doctor?->name_en,
+                    $booking->service?->name_ar ?? $booking->service?->name_en,
+                ));
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning('[booking.rescheduled.email] failed', [
+                'booking_id' => $booking->id,
+                'error'      => $e->getMessage(),
+            ]);
+        }
     }
 
     public function confirm(Request $request, Booking $booking): RedirectResponse
