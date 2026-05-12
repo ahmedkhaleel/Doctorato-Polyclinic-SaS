@@ -172,9 +172,49 @@ class SecretaryVisitController extends BaseSecretaryController
             }
         }
 
+        // Hydrate FK display names for the patient email body
+        if (isset($changes['doctor_id'])) {
+            $fromId = $changes['doctor_id']['from'] ?? null;
+            $toId   = $changes['doctor_id']['to']   ?? null;
+            $doctors = \App\Models\Doctor::whereIn('id', array_filter([$fromId, $toId]))
+                ->pluck('name_ar', 'id');
+            $changes['doctor_id']['from_name'] = $fromId ? ($doctors[$fromId] ?? '—') : '—';
+            $changes['doctor_id']['to_name']   = $toId   ? ($doctors[$toId]   ?? '—') : '—';
+        }
+        if (isset($changes['service_id'])) {
+            $fromId = $changes['service_id']['from'] ?? null;
+            $toId   = $changes['service_id']['to']   ?? null;
+            $services = \App\Models\Service::whereIn('id', array_filter([$fromId, $toId]))
+                ->pluck('name_ar', 'id');
+            $changes['service_id']['from_name'] = $fromId ? ($services[$fromId] ?? '—') : '—';
+            $changes['service_id']['to_name']   = $toId   ? ($services[$toId]   ?? '—') : '—';
+        }
+
         $visit->update($data);
 
         AuditLogger::log('visit_details_updated', $visit, $changes);
+
+        // Best-effort patient notification
+        if ($changes) {
+            $fresh = $visit->fresh(['patient', 'doctor', 'service']);
+            $patient = $fresh->patient;
+            if ($patient && $patient->email && $patient->wantsNotification('bookings', 'email')) {
+                try {
+                    \Illuminate\Support\Facades\Notification::route('mail', $patient->email)
+                        ->notify(new \App\Notifications\VisitRescheduledEmail(
+                            $fresh,
+                            $changes,
+                            $fresh->doctor?->name_ar ?? $fresh->doctor?->name_en,
+                            $fresh->service?->name_ar ?? $fresh->service?->name_en,
+                        ));
+                } catch (\Throwable $e) {
+                    \Illuminate\Support\Facades\Log::warning('[visit.rescheduled.email] failed', [
+                        'visit_id' => $fresh->id,
+                        'error'    => $e->getMessage(),
+                    ]);
+                }
+            }
+        }
 
         return redirect()->back()->with('success', $this->msg('Visit updated successfully.', 'تم تحديث الزيارة بنجاح.'));
     }

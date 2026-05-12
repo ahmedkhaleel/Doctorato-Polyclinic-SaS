@@ -227,11 +227,67 @@ class VisitController extends Controller
             }
         }
 
+        // Enrich FK changes with display names for the patient email
+        $this->resolveChangeNames($changes);
+
         $visit->update($data);
 
         AuditLogger::log('visit_details_updated', $visit, $changes);
 
+        // Notify the patient if anything actually moved
+        if ($changes) {
+            $this->maybeEmailRescheduled($visit->fresh(['patient', 'doctor', 'service']), $changes);
+        }
+
         return redirect()->back()->with('success', 'Visit updated successfully.');
+    }
+
+    /**
+     * Replace raw FK ids in $changes with from_name / to_name for use
+     * in the patient email body. Edits the array in place.
+     */
+    protected function resolveChangeNames(array &$changes): void
+    {
+        if (isset($changes['doctor_id'])) {
+            $fromId = $changes['doctor_id']['from'] ?? null;
+            $toId   = $changes['doctor_id']['to']   ?? null;
+            $doctors = Doctor::whereIn('id', array_filter([$fromId, $toId]))
+                ->pluck('name_ar', 'id');
+            $changes['doctor_id']['from_name'] = $fromId ? ($doctors[$fromId] ?? '—') : '—';
+            $changes['doctor_id']['to_name']   = $toId   ? ($doctors[$toId]   ?? '—') : '—';
+        }
+        if (isset($changes['service_id'])) {
+            $fromId = $changes['service_id']['from'] ?? null;
+            $toId   = $changes['service_id']['to']   ?? null;
+            $services = \App\Models\Service::whereIn('id', array_filter([$fromId, $toId]))
+                ->pluck('name_ar', 'id');
+            $changes['service_id']['from_name'] = $fromId ? ($services[$fromId] ?? '—') : '—';
+            $changes['service_id']['to_name']   = $toId   ? ($services[$toId]   ?? '—') : '—';
+        }
+    }
+
+    /**
+     * Best-effort email send — failures log but never break the update.
+     * Honors the patient's `notify_email_bookings` opt-in.
+     */
+    protected function maybeEmailRescheduled(Visit $visit, array $changes): void
+    {
+        $patient = $visit->patient;
+        if (! $patient || ! $patient->email) return;
+        if (! $patient->wantsNotification('bookings', 'email')) return;
+
+        try {
+            $newDoctorName  = $visit->doctor?->name_ar ?? $visit->doctor?->name_en;
+            $newServiceName = $visit->service?->name_ar ?? $visit->service?->name_en;
+
+            \Illuminate\Support\Facades\Notification::route('mail', $patient->email)
+                ->notify(new \App\Notifications\VisitRescheduledEmail($visit, $changes, $newDoctorName, $newServiceName));
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning('[visit.rescheduled.email] failed', [
+                'visit_id' => $visit->id,
+                'error'    => $e->getMessage(),
+            ]);
+        }
     }
 
     public function cancel(Visit $visit): RedirectResponse
