@@ -107,6 +107,29 @@
                 </div>
             @endif
 
+            {{-- One-click signed action buttons (no login required) --}}
+            @if(!empty($oneClickConfirm) || !empty($oneClickCancel))
+                <div style="margin: 22px 0 14px; padding: 14px 16px; background: #f0f9ff; border-radius: 8px; border: 1px solid #bae6fd; text-align: center;">
+                    <p style="font-size: 12px; color: #0c4a6e; margin: 0 0 12px; font-weight: 600;">
+                        {{ $isRtl ? 'بنقرة واحدة — بدون تسجيل دخول' : 'One-click actions — no login needed' }}
+                    </p>
+                    <div style="display: inline-block;">
+                        @if(!empty($oneClickConfirm))
+                            <a href="{{ $oneClickConfirm }}"
+                               style="display: inline-block; padding: 10px 22px; background: #059669; color: #fff !important; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 13px; margin: 0 4px 4px; box-shadow: 0 2px 6px rgba(5,150,105,.25);">
+                                ✓ {{ $isRtl ? 'تأكيد الحضور' : 'Confirm attendance' }}
+                            </a>
+                        @endif
+                        @if(!empty($oneClickCancel))
+                            <a href="{{ $oneClickCancel }}"
+                               style="display: inline-block; padding: 10px 22px; background: #fff; color: #dc2626 !important; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 13px; margin: 0 4px 4px; border: 1px solid #fecaca;">
+                                ✕ {{ $isRtl ? 'إلغاء الحجز' : 'Cancel booking' }}
+                            </a>
+                        @endif
+                    </div>
+                </div>
+            @endif
+
             @if(!empty($ctaUrl))
                 <div class="cta-wrap">
                     <a href="{{ $ctaUrl }}" class="cta">{{ $ctaLabel ?? ($isRtl ? 'عرض الحجز' : 'View Booking') }}</a>

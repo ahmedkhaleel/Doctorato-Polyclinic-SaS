@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Frontend\BookingActionController as FrontendBookingActionController;
 use App\Http\Controllers\Frontend\DoctorController as FrontendDoctorController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\PageController;
@@ -89,6 +90,14 @@ Route::prefix('{locale}')
         Route::get('/doctors/{id}', [FrontendDoctorController::class, 'show'])
             ->where('id', '[0-9]+')
             ->name('doctors.show');
+
+        // Booking one-click actions (signed links from emails — no login)
+        Route::get('/booking-action/{booking}/confirm', [FrontendBookingActionController::class, 'confirm'])
+            ->middleware('signed')
+            ->name('booking.confirm-link');
+        Route::get('/booking-action/{booking}/cancel', [FrontendBookingActionController::class, 'cancel'])
+            ->middleware('signed')
+            ->name('booking.cancel-link');
 
         // Gallery
         Route::get('/gallery', [GalleryController::class, 'index'])->name('gallery');

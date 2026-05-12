@@ -59,6 +59,26 @@ class BookingStatusEmail extends Notification
             ? "{$appUrl}/{$locale}/patient/bookings"
             : null;
 
+        // One-click signed action links — no login required. Valid for
+        // 30 days. Only useful for bookings the patient hasn't already
+        // closed the loop on (confirmed/cancelled both ok for unconfirmed).
+        $oneClickConfirm = null;
+        $oneClickCancel  = null;
+        if (in_array($this->status, ['unconfirmed', 'new', 'contacted'])) {
+            try {
+                $oneClickConfirm = \Illuminate\Support\Facades\URL::temporarySignedRoute(
+                    'booking.confirm-link', now()->addDays(30),
+                    ['locale' => $locale, 'booking' => $this->booking->id]
+                );
+                $oneClickCancel = \Illuminate\Support\Facades\URL::temporarySignedRoute(
+                    'booking.cancel-link', now()->addDays(30),
+                    ['locale' => $locale, 'booking' => $this->booking->id]
+                );
+            } catch (\Throwable $e) {
+                // Route may not be loaded yet in some contexts — fail silently.
+            }
+        }
+
         return (new MailMessage)
             ->subject($copy['subject'])
             ->view('emails.booking-status', [
@@ -82,6 +102,8 @@ class BookingStatusEmail extends Notification
                     : null,
                 'ctaUrl'           => $ctaUrl,
                 'ctaLabel'         => $isRtl ? 'عرض حجوزاتي' : 'View My Bookings',
+                'oneClickConfirm'  => $oneClickConfirm,
+                'oneClickCancel'   => $oneClickCancel,
             ]);
     }
 
