@@ -361,6 +361,7 @@ const flashError = computed(() => page.props.flash?.error);
     padding: 64px 56px;
     flex-direction: column;
     justify-content: center;
+    align-items: flex-start;   /* prevent column-flex from stretching children (logo) */
 }
 @media (min-width: 1024px) {
     .adm-brand { display: flex; }
@@ -447,6 +448,9 @@ const flashError = computed(() => page.props.flash?.error);
 .adm-brand-logo {
     height: 46px;
     width: auto;
+    max-width: 240px;
+    object-fit: contain;
+    align-self: flex-start;       /* don't let the column flex stretch it; direction-aware */
     margin-bottom: 28px;
     filter: drop-shadow(0 4px 16px rgba(196,162,101,0.25));
 }
