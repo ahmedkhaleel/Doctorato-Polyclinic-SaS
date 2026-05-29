@@ -53,7 +53,7 @@ class CosmeticDermaInvoiceService
             $labelAr = $procedure->name_ar ?? $procedure->name_en ?? 'إجراء تجميلي';
             $area = $session->area_treated ? " — {$session->area_treated}" : '';
 
-            InvoiceItem::create([
+            $item = InvoiceItem::create([
                 'invoice_id'     => $invoice->id,
                 'description_en' => $labelEn . $area,
                 'description_ar' => $labelAr . $area,
@@ -64,7 +64,7 @@ class CosmeticDermaInvoiceService
             ]);
 
             $this->recalculateInvoice($invoice);
-            $session->update(['invoice_id' => $invoice->id]);
+            $session->update(['invoice_id' => $invoice->id, 'invoice_item_id' => $item->id]);
 
             return $invoice->fresh(['items']);
         });
@@ -84,7 +84,7 @@ class CosmeticDermaInvoiceService
             $progress = ($session->total_sessions && $session->total_sessions > 1)
                 ? " ({$session->session_number}/{$session->total_sessions})" : '';
 
-            InvoiceItem::create([
+            $item = InvoiceItem::create([
                 'invoice_id'     => $invoice->id,
                 'description_en' => ucfirst($session->session_type) . ' session' . $area . $progress,
                 'description_ar' => $this->dermaArabicLabel($session->session_type) . $area . $progress,
@@ -95,9 +95,65 @@ class CosmeticDermaInvoiceService
             ]);
 
             $this->recalculateInvoice($invoice);
-            $session->update(['invoice_id' => $invoice->id]);
+            $session->update(['invoice_id' => $invoice->id, 'invoice_item_id' => $item->id]);
 
             return $invoice->fresh(['items']);
+        });
+    }
+
+    // ─── Reversal (on delete / un-complete) ─────────────────────
+
+    /**
+     * Void the invoice line a session produced and recalc its invoice.
+     * Safe to call on any session — no-op when none was billed. Works for
+     * both cosmetic and derma sessions (both carry invoice_item_id).
+     */
+    public function reverseBilling($session): void
+    {
+        if (! $session->invoice_item_id) {
+            return;
+        }
+
+        DB::transaction(function () use ($session) {
+            $item = InvoiceItem::find($session->invoice_item_id);
+            $invoice = $item?->invoice;
+            $item?->delete();
+            if ($invoice) {
+                $this->recalculateInvoice($invoice);
+            }
+            $session->update(['invoice_id' => null, 'invoice_item_id' => null]);
+        });
+    }
+
+    /**
+     * Restore inventory drawn by a cosmetic session: record a 'return'
+     * SupplyTransaction and add the quantity back to stock. No-op when the
+     * session never consumed anything. Idempotent (clears the link).
+     */
+    public function reverseInventoryForCosmeticSession(CosmeticSession $session): void
+    {
+        if (! $session->supply_transaction_id) {
+            return;
+        }
+
+        DB::transaction(function () use ($session) {
+            $usage = SupplyTransaction::find($session->supply_transaction_id);
+            if ($usage) {
+                $supply = \App\Models\Supply::lockForUpdate()->find($usage->supply_id);
+                if ($supply) {
+                    SupplyTransaction::create([
+                        'supply_id'        => $supply->id,
+                        'transaction_type' => 'return',
+                        'quantity'         => $usage->quantity,
+                        'unit_cost'        => $usage->unit_cost,
+                        'visit_id'         => $session->visit_id,
+                        'notes'            => 'Reversal of cosmetic session #' . $session->id,
+                        'created_by'       => auth()->id(),
+                    ]);
+                    $supply->increment('quantity', (float) $usage->quantity);
+                }
+            }
+            $session->update(['supply_transaction_id' => null]);
         });
     }
 

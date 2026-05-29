@@ -94,15 +94,31 @@ class CosmeticSessionController extends Controller
         $data = $this->validated($request);
         $this->enforceConsent($data + ['completed_at' => $data['completed_at'] ?? $session->completed_at]);
         $session->update($data);
-        // Bill + draw inventory on completion (both idempotent — never twice).
-        $this->invoicing->generateForCosmeticSession($session->fresh());
-        $this->invoicing->consumeInventoryForCosmeticSession($session->fresh());
+        $fresh = $session->fresh();
+
+        if ($fresh->completed_at === null) {
+            // Un-completed → reverse any prior billing / inventory draw.
+            $this->invoicing->reverseBilling($fresh);
+            $this->invoicing->reverseInventoryForCosmeticSession($fresh->fresh());
+        } else {
+            // Bill + draw inventory on completion (both idempotent — never twice).
+            $this->invoicing->generateForCosmeticSession($fresh);
+            $this->invoicing->consumeInventoryForCosmeticSession($fresh->fresh());
+        }
+        // Keep the prepaid-package balance coherent either way.
+        $this->invoicing->syncPackageBalance($fresh->packagePurchase);
+
         return back()->with('success', 'تم التحديث');
     }
 
     public function destroy(CosmeticSession $session)
     {
+        $purchase = $session->packagePurchase;
+        // Undo financial + inventory side effects before removing the row.
+        $this->invoicing->reverseBilling($session);
+        $this->invoicing->reverseInventoryForCosmeticSession($session->fresh());
         $session->delete();
+        $this->invoicing->syncPackageBalance($purchase);
         return back()->with('success', 'تم الحذف');
     }
 

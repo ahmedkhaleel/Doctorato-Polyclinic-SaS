@@ -15,7 +15,7 @@ class CosmeticSession extends Model
         'patient_id', 'doctor_id', 'package_id', 'package_purchase_id', 'procedure_id', 'visit_id',
         'supply_id', 'consumption_qty', 'supply_transaction_id',
         'session_number', 'area_treated', 'product_used', 'dose_units',
-        'cost', 'invoice_id', 'before_photo_path', 'after_photo_path',
+        'cost', 'invoice_id', 'invoice_item_id', 'before_photo_path', 'after_photo_path',
         'completed_at', 'notes',
     ];
 

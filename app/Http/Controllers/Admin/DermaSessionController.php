@@ -48,11 +48,18 @@ class DermaSessionController extends Controller
     {
         $original = $session->treatment_plan_id;
         $session->update($this->validated($request));
-        // Bill on completion (idempotent — never invoices the same session twice).
-        $this->invoicing->generateForDermaSession($session->fresh());
-        $this->syncPlan($session->fresh());
+        $fresh = $session->fresh();
+
+        if ($fresh->completed_at === null) {
+            // Un-completed → void any invoice line it had produced.
+            $this->invoicing->reverseBilling($fresh);
+        } else {
+            // Bill on completion (idempotent — never invoices the same session twice).
+            $this->invoicing->generateForDermaSession($fresh);
+        }
+        $this->syncPlan($fresh);
         // If the session was moved off a plan, refresh the old plan too.
-        if ($original && $original !== $session->treatment_plan_id) {
+        if ($original && $original !== $fresh->treatment_plan_id) {
             optional(\App\Models\DermaTreatmentPlan::find($original))->syncProgress();
         }
         return back()->with('success', 'تم التحديث');
@@ -69,6 +76,7 @@ class DermaSessionController extends Controller
     public function destroy(DermaSession $session)
     {
         $plan = $session->treatmentPlan;
+        $this->invoicing->reverseBilling($session); // void its invoice line first
         $session->delete();
         optional($plan)->syncProgress();
         return back()->with('success', 'تم الحذف');

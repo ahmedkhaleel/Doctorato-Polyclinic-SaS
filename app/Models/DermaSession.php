@@ -17,7 +17,7 @@ class DermaSession extends Model
         'patient_id', 'doctor_id', 'visit_id', 'treatment_plan_id',
         'session_type', 'area_treated', 'product_used',
         'settings_json', 'session_number', 'total_sessions',
-        'cost', 'invoice_id', 'completed_at', 'next_session_date', 'notes',
+        'cost', 'invoice_id', 'invoice_item_id', 'completed_at', 'next_session_date', 'notes',
     ];
 
     protected $casts = [
