@@ -14,6 +14,7 @@ class SalarySlip extends \Illuminate\Database\Eloquent\Model
     protected $fillable = [
         'slip_number',
         'employee_id',
+        'expense_id',
         'month',
         'year',
         'basic_salary',
@@ -74,6 +75,11 @@ class SalarySlip extends \Illuminate\Database\Eloquent\Model
     public function employee(): BelongsTo
     {
         return $this->belongsTo(Employee::class);
+    }
+
+    public function expense(): BelongsTo
+    {
+        return $this->belongsTo(Expense::class);
     }
 
     public function approvedByUser(): BelongsTo

@@ -12,7 +12,7 @@ class DoctorPayout extends Model
     use HasFactory, LogsActivity;
 
     protected $fillable = [
-        'payout_number', 'doctor_id', 'period_start', 'period_end',
+        'payout_number', 'doctor_id', 'expense_id', 'period_start', 'period_end',
         'total_visits', 'total_revenue', 'total_commission',
         'deductions', 'deduction_notes', 'net_amount', 'status', 'notes',
         'confirmed_at', 'confirmed_by', 'paid_at', 'paid_by',
@@ -40,6 +40,11 @@ class DoctorPayout extends Model
     public function doctor()
     {
         return $this->belongsTo(Doctor::class);
+    }
+
+    public function expense()
+    {
+        return $this->belongsTo(Expense::class);
     }
 
     public function visits()

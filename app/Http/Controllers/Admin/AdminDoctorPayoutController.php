@@ -278,6 +278,10 @@ class AdminDoctorPayoutController extends Controller
             'payment_reference' => $request->payment_reference,
         ]);
 
+        // Record the disbursement in the Expense ledger so doctor commissions
+        // appear in the financial reports (real cash out, previously invisible).
+        app(\App\Services\LaborExpenseService::class)->recordForDoctorPayout($payout->fresh());
+
         AuditLogger::log('marked_paid', $payout);
 
         return back()->with('success', 'Payout marked as paid successfully.');

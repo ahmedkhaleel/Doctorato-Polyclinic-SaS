@@ -148,6 +148,9 @@ class PayrollController extends Controller
             'payment_reference' => $data['payment_reference'] ?? null,
         ]);
 
+        // Record it in the Expense ledger so payroll appears in financial reports.
+        app(\App\Services\LaborExpenseService::class)->recordForSalarySlip($salarySlip->fresh());
+
         AuditLogger::log('marked_paid', $salarySlip);
 
         return back()->with('success', 'Salary slip marked as paid.');
