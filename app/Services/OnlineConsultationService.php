@@ -121,6 +121,22 @@ class OnlineConsultationService
 
             $consultation->update(['visit_id' => $visit->id]);
 
+            // Telemedicine ⟶ Derma: a completed derma online consultation also
+            // produces a derma session record (type 'other', cost 0 — the
+            // consultation fee is billed separately) so the encounter appears
+            // in the derma session log and the patient's portal timeline.
+            if ($consultation->module === 'derma') {
+                \App\Models\DermaSession::create([
+                    'patient_id'   => $consultation->patient_id,
+                    'doctor_id'    => $consultation->doctor_id,
+                    'visit_id'     => $visit->id,
+                    'session_type' => 'other',
+                    'cost'         => 0,
+                    'completed_at' => $endedAt,
+                    'notes'        => $consultation->diagnosis ?: $consultation->doctor_notes,
+                ]);
+            }
+
             try {
                 event(new \App\Events\OnlineConsultation\SessionEnded($consultation->fresh()));
             } catch (\Throwable $e) {
