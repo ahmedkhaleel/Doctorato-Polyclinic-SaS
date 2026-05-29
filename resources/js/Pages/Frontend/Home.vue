@@ -160,6 +160,12 @@ const moduleImages = {
     <FrontendLayout :title="t('home')">
         <SeoHead :title="seoTitle" :description="seoDescription" :keywords="seo?.keywords" :image="seo?.image" />
 
+        <!-- ═══════════════════════════════════════════════════ -->
+        <!-- AMBIENT BRAND MONOGRAM (decorative, page-level)     -->
+        <!-- A massive faded gold "D" anchors the page identity  -->
+        <!-- ═══════════════════════════════════════════════════ -->
+        <div class="hp-monogram" aria-hidden="true">D</div>
+
         <!-- ═══════════════════════════════════════ -->
         <!-- HERO — 5-Slide Cinematic Carousel      -->
         <!-- ═══════════════════════════════════════ -->
@@ -242,26 +248,73 @@ const moduleImages = {
                 </button>
             </div>
 
+            <!-- Hero floating gold particles -->
+            <div class="hp-hero-particles" aria-hidden="true">
+                <span class="hp-particle" style="--x:15%; --y:30%; --d:0s"></span>
+                <span class="hp-particle" style="--x:80%; --y:20%; --d:1.5s"></span>
+                <span class="hp-particle" style="--x:50%; --y:60%; --d:2.5s"></span>
+                <span class="hp-particle" style="--x:25%; --y:75%; --d:0.8s"></span>
+                <span class="hp-particle" style="--x:90%; --y:55%; --d:3.2s"></span>
+                <span class="hp-particle" style="--x:65%; --y:40%; --d:4s"></span>
+            </div>
+
+            <!-- Hero ECG line at bottom -->
+            <svg class="hp-hero-ecg" viewBox="0 0 1400 70" preserveAspectRatio="none" aria-hidden="true">
+                <path d="M0 35 L250 35 L275 12 L300 60 L325 5 L350 65 L375 35 L600 35 L625 18 L650 52 L675 8 L700 62 L725 35 L950 35 L975 22 L1000 48 L1025 14 L1050 56 L1075 35 L1400 35"
+                      fill="none" stroke="#C4A265" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"
+                      class="hp-hero-ecg-path" opacity="0.4" />
+            </svg>
+
+            <!-- Vignette overlay for cinematic depth -->
+            <div class="hp-hero-vignette" aria-hidden="true"></div>
+
             <!-- Gold bottom line (no wave) -->
             <div class="absolute bottom-0 left-0 w-full h-[3px] bg-gradient-to-r from-transparent via-[#C4A265]/60 to-transparent"></div>
         </section>
+
+        <!-- Decorative divider: hero → specialties -->
+        <div class="hp-divider hp-divider-hero" aria-hidden="true">
+            <span class="hp-divider-line"></span>
+            <svg class="hp-divider-ornament" viewBox="0 0 60 24">
+                <path d="M2 12 L20 12 M40 12 L58 12" stroke="#C4A265" stroke-width="1" stroke-linecap="round"/>
+                <path d="M22 6 L30 12 L22 18 M38 6 L30 12 L38 18" stroke="#C4A265" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="30" cy="12" r="2" fill="#C4A265"/>
+            </svg>
+            <span class="hp-divider-line"></span>
+        </div>
 
 
         <!-- ═══════════════════════════════════════ -->
         <!-- SPECIALTIES — 3 Module Cards           -->
         <!-- ═══════════════════════════════════════ -->
-        <section class="py-14 md:py-24 bg-[#FAFBFD] relative overflow-hidden" v-if="medicalSpecialties && medicalSpecialties.length">
+        <section class="py-14 md:py-24 bg-[#FAFBFD] relative overflow-hidden hp-section hp-section-spec" v-if="medicalSpecialties && medicalSpecialties.length">
+            <!-- Ambient decorations -->
+            <div class="hp-corner-ornament hp-corner-tl" aria-hidden="true">
+                <svg viewBox="0 0 120 120"><path d="M2 60 Q2 2 60 2" fill="none" stroke="#C4A265" stroke-width="1" opacity="0.3"/><path d="M16 60 Q16 16 60 16" fill="none" stroke="#C4A265" stroke-width="0.6" opacity="0.2"/></svg>
+            </div>
+            <div class="hp-corner-ornament hp-corner-br" aria-hidden="true">
+                <svg viewBox="0 0 120 120"><path d="M60 118 Q118 118 118 60" fill="none" stroke="#C4A265" stroke-width="1" opacity="0.3"/><path d="M60 104 Q104 104 104 60" fill="none" stroke="#C4A265" stroke-width="0.6" opacity="0.2"/></svg>
+            </div>
+
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                <!-- Section Header -->
-                <div class="text-center mb-10 md:mb-14" v-scroll-reveal="{ type: 'fade-up' }">
-                    <span class="inline-block px-4 py-1.5 rounded-full bg-[#1B365D]/5 text-[#1B365D] text-xs font-semibold tracking-wider uppercase mb-4">
+                <!-- Section Header — editorial premium treatment -->
+                <div class="text-center mb-10 md:mb-14 hp-head" v-scroll-reveal="{ type: 'fade-up' }">
+                    <span class="hp-head-eyebrow">
+                        <span class="hp-head-eyebrow-mark"></span>
                         {{ isRtl ? 'تخصصاتنا الطبية' : 'Our Specialties' }}
+                        <span class="hp-head-eyebrow-mark"></span>
                     </span>
-                    <h2 class="text-2xl sm:text-3xl lg:text-5xl font-bold text-[#1B365D] mb-3">
-                        {{ isRtl ? 'رعاية متكاملة في مكان واحد' : 'Complete Care Under One Roof' }}
+                    <h2 class="hp-head-title">
+                        <span class="hp-head-title-line">{{ isRtl ? 'رعاية متكاملة' : 'Complete Care' }}</span>
+                        <span class="hp-head-title-accent">{{ isRtl ? 'في مكان واحد' : 'Under One Roof' }}</span>
                     </h2>
-                    <div class="w-12 h-[2px] bg-[#C4A265]/50 mx-auto mb-4"></div>
-                    <p class="text-gray-500 text-sm md:text-lg max-w-2xl mx-auto">
+                    <svg class="hp-head-flourish" viewBox="0 0 80 20" aria-hidden="true">
+                        <path d="M2 10 L20 10 M60 10 L78 10" stroke="#C4A265" stroke-width="1" stroke-linecap="round"/>
+                        <path d="M22 4 L40 10 L22 16" stroke="#C4A265" stroke-width="1" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.5"/>
+                        <path d="M58 4 L40 10 L58 16" stroke="#C4A265" stroke-width="1" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.5"/>
+                        <circle cx="40" cy="10" r="1.6" fill="#C4A265"/>
+                    </svg>
+                    <p class="hp-head-sub">
                         {{ isRtl ? 'نجمع بين أفضل التخصصات الطبية لنقدم لك رعاية شاملة ومتكاملة' : 'We bring together the best medical specialties for comprehensive care' }}
                     </p>
                 </div>
@@ -1179,4 +1232,300 @@ const moduleImages = {
 .pkg-card-enter-from { opacity: 0; transform: translateY(20px) scale(0.95); }
 .pkg-card-leave-to { opacity: 0; transform: translateY(-10px) scale(0.95); }
 .pkg-card-move { transition: all 0.5s ease; }
+
+/* ═══════════════════════════════════════════════════════════════
+   HP — Editorial luxury enhancement layer
+   "Refined editorial-magazine, navy + gold, gentle motion"
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ─── Ambient brand monogram (massive faded D) ─── */
+.hp-monogram {
+    position: fixed;
+    top: 50%;
+    inset-inline-end: -120px;
+    transform: translateY(-50%);
+    font-family: 'Playfair Display', 'Tajawal', Georgia, serif;
+    font-size: 880px;
+    font-weight: 900;
+    line-height: 0.8;
+    color: rgba(196, 162, 101, 0.025);
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+    letter-spacing: -0.08em;
+    text-shadow: 0 0 60px rgba(196, 162, 101, 0.05);
+    animation: hpMonogramFloat 24s ease-in-out infinite;
+}
+
+@keyframes hpMonogramFloat {
+    0%, 100% { transform: translateY(-50%) translateX(0); }
+    50%      { transform: translateY(-52%) translateX(-20px); }
+}
+
+@media (max-width: 1024px) {
+    .hp-monogram { font-size: 560px; opacity: 0.7; }
+}
+@media (max-width: 640px) {
+    .hp-monogram { display: none; }
+}
+
+/* ─── HERO ENHANCEMENTS ─── */
+
+/* Floating gold particles */
+.hp-hero-particles {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 2;
+}
+.hp-particle {
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #C4A265 0%, rgba(196,162,101,0) 70%);
+    box-shadow: 0 0 12px rgba(196, 162, 101, 0.6);
+    animation: hpParticleFloat 6s ease-in-out infinite;
+    animation-delay: var(--d, 0s);
+    opacity: 0;
+}
+
+@keyframes hpParticleFloat {
+    0%   { opacity: 0; transform: translate(0, 0) scale(0.5); }
+    20%  { opacity: 0.9; }
+    50%  { opacity: 1; transform: translate(20px, -40px) scale(1.2); }
+    80%  { opacity: 0.6; }
+    100% { opacity: 0; transform: translate(40px, -80px) scale(0.8); }
+}
+
+/* Hero ECG line at bottom */
+.hp-hero-ecg {
+    position: absolute;
+    bottom: 60px;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    z-index: 2;
+    pointer-events: none;
+}
+.hp-hero-ecg-path {
+    stroke-dasharray: 3500;
+    stroke-dashoffset: 3500;
+    animation: hpEcgDraw 6s cubic-bezier(0.4, 0, 0.2, 1) forwards infinite;
+}
+@keyframes hpEcgDraw {
+    0%   { stroke-dashoffset: 3500; opacity: 0; }
+    5%   { opacity: 0.4; }
+    65%  { stroke-dashoffset: 0; opacity: 0.5; }
+    100% { stroke-dashoffset: 0; opacity: 0.15; }
+}
+
+/* Vignette overlay */
+.hp-hero-vignette {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background:
+        radial-gradient(ellipse at center, transparent 30%, rgba(15, 27, 45, 0.45) 100%);
+}
+
+/* ─── SECTION DIVIDER ─── */
+.hp-divider {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    padding: 40px 24px;
+    background: linear-gradient(to bottom, #FAFBFD 0%, #FAFBFD 100%);
+}
+.hp-divider-hero {
+    background: linear-gradient(to bottom, transparent 0%, #FAFBFD 100%);
+}
+.hp-divider-line {
+    flex: 1;
+    max-width: 160px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, rgba(196, 162, 101, 0.4) 50%, transparent 100%);
+}
+.hp-divider-ornament {
+    width: 60px;
+    height: 24px;
+    flex-shrink: 0;
+    animation: hpDividerPulse 4s ease-in-out infinite;
+}
+@keyframes hpDividerPulse {
+    0%, 100% { opacity: 0.8; }
+    50%      { opacity: 1; transform: scale(1.08); }
+}
+
+/* ─── CORNER ORNAMENTS ─── */
+.hp-corner-ornament {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    pointer-events: none;
+    z-index: 1;
+}
+.hp-corner-ornament svg { width: 100%; height: 100%; }
+.hp-corner-tl { top: 40px; inset-inline-start: 40px; }
+.hp-corner-br { bottom: 40px; inset-inline-end: 40px; transform: scaleX(-1) scaleY(-1); }
+[dir="rtl"] .hp-corner-br { transform: scaleY(-1); }
+
+@media (max-width: 768px) {
+    .hp-corner-ornament { width: 80px; height: 80px; }
+    .hp-corner-tl { top: 16px; inset-inline-start: 16px; }
+    .hp-corner-br { bottom: 16px; inset-inline-end: 16px; }
+}
+
+/* ─── PREMIUM SECTION HEAD (editorial typography) ─── */
+.hp-head {
+    position: relative;
+}
+
+.hp-head-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: #C4A265;
+    margin-bottom: 22px;
+}
+.hp-head-eyebrow-mark {
+    display: inline-block;
+    width: 28px;
+    height: 1.5px;
+    background: linear-gradient(90deg, transparent, #C4A265);
+    border-radius: 2px;
+}
+.hp-head-eyebrow-mark:last-child {
+    background: linear-gradient(90deg, #C4A265, transparent);
+}
+
+.hp-head-title {
+    font-size: clamp(28px, 4.5vw, 56px);
+    line-height: 1.05;
+    font-weight: 800;
+    color: #1B365D;
+    margin: 0 0 18px;
+    letter-spacing: -0.02em;
+    font-feature-settings: "ss01", "calt", "liga";
+}
+.hp-head-title-line {
+    display: block;
+    color: #1B365D;
+}
+.hp-head-title-accent {
+    display: block;
+    background: linear-gradient(120deg, #8B7043 0%, #C4A265 30%, #E2C99D 50%, #C4A265 70%, #8B7043 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 200% 100%;
+    animation: hpGoldShimmer 7s ease-in-out infinite;
+    font-style: italic;
+    font-weight: 700;
+}
+
+@keyframes hpGoldShimmer {
+    0%, 100% { background-position: 0% 50%; }
+    50%      { background-position: 100% 50%; }
+}
+
+.hp-head-flourish {
+    display: block;
+    width: 80px;
+    height: 20px;
+    margin: 0 auto 20px;
+    opacity: 0.85;
+    animation: hpFlourishBreathe 5s ease-in-out infinite;
+}
+@keyframes hpFlourishBreathe {
+    0%, 100% { transform: scale(1); opacity: 0.85; }
+    50%      { transform: scale(1.05); opacity: 1; }
+}
+
+.hp-head-sub {
+    font-size: clamp(14px, 1.4vw, 17px);
+    line-height: 1.6;
+    color: rgba(27, 54, 93, 0.55);
+    max-width: 620px;
+    margin: 0 auto;
+}
+
+/* ─── SECTION CONTAINER REFINEMENT ─── */
+.hp-section {
+    position: relative;
+}
+.hp-section-spec {
+    background: linear-gradient(180deg, #FAFBFD 0%, #F4F1EC 50%, #FAFBFD 100%);
+}
+.hp-section-spec::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: radial-gradient(ellipse at top, rgba(196, 162, 101, 0.04), transparent 70%);
+    pointer-events: none;
+}
+
+/* ─── SPEC CARD POLISH (subtle magnetic hover) ─── */
+.spec-card {
+    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                box-shadow 0.5s ease;
+}
+.spec-card:hover {
+    transform: translateY(-6px);
+    box-shadow:
+        0 30px 60px -20px rgba(27, 54, 93, 0.4),
+        0 0 0 1px rgba(196, 162, 101, 0.1);
+}
+/* Add subtle bottom gold underline that appears on hover */
+.spec-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #C4A265, transparent);
+    transform: translateX(-50%);
+    transition: width 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    z-index: 3;
+}
+.spec-card:hover::after {
+    width: 80%;
+}
+
+/* ─── ACCESSIBILITY: reduce motion ─── */
+@media (prefers-reduced-motion: reduce) {
+    .hp-monogram,
+    .hp-particle,
+    .hp-hero-ecg-path,
+    .hp-divider-ornament,
+    .hp-head-title-accent,
+    .hp-head-flourish,
+    .spec-card,
+    .spec-card::after {
+        animation: none !important;
+        transition: none !important;
+    }
+    .hp-monogram { transform: translateY(-50%); }
+    .hp-particle { opacity: 0.5; }
+    .hp-head-title-accent {
+        background: linear-gradient(120deg, #8B7043, #C4A265, #8B7043);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+}
 </style>
