@@ -43,35 +43,40 @@ function discountPercent(bundle) {
             <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_rgba(196,162,101,0.1)_0%,_transparent_50%)]"></div>
             <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[var(--brand-primary)]/50 to-transparent"></div>
             <div class="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[var(--brand-primary)]/50 to-transparent"></div>
+            <!-- Floating decorative orbs (match site-wide motion language) -->
+            <div class="absolute top-10 start-16 w-24 h-24 rounded-full bg-[var(--brand-primary)]/5 animate-float"></div>
+            <div class="absolute bottom-12 end-12 w-16 h-16 rounded-full bg-[var(--brand-primary)]/[0.07] animate-float-slow"></div>
+            <div class="absolute top-1/2 end-1/4 w-10 h-10 rounded-full bg-[var(--brand-primary)]/5 animate-float-delay"></div>
 
-            <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                <nav class="flex items-center justify-center gap-2 text-sm text-white/40 mb-8">
+            <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <nav class="flex items-center justify-center gap-2 text-sm text-white/40 mb-8" v-scroll-reveal="{ type: 'fade-up' }">
                     <Link :href="localizedRoute('/')" class="hover:text-white/70 transition">{{ t('home') }}</Link>
                     <span>/</span>
                     <span class="text-[var(--brand-primary)]">{{ t('packages') }}</span>
                 </nav>
 
-                <div class="flex items-center justify-center gap-3 mb-5">
+                <div class="flex items-center justify-center gap-3 mb-5" v-scroll-reveal="{ type: 'blur-in', delay: 80 }">
                     <span class="block w-10 h-px bg-gradient-to-r from-transparent to-[var(--brand-primary)]/70"></span>
-                    <svg class="w-6 h-6 text-[var(--brand-primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                    <svg class="w-6 h-6 text-[var(--brand-primary)] animate-pulse-glow" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                     </svg>
                     <span class="block w-10 h-px bg-gradient-to-l from-transparent to-[var(--brand-primary)]/70"></span>
                 </div>
 
-                <h1 class="text-3xl md:text-5xl font-bold text-white mb-4">
+                <h1 class="text-3xl md:text-5xl font-bold text-white mb-4" v-scroll-reveal="{ type: 'fade-up', delay: 120 }">
                     {{ t('package_bundles_title') }}
                 </h1>
-                <p class="text-lg text-white/45 max-w-2xl mx-auto leading-relaxed">
+                <p class="text-lg text-white/45 max-w-2xl mx-auto leading-relaxed" v-scroll-reveal="{ type: 'fade-up', delay: 200 }">
                     {{ t('packages_hero_subtitle') }}
                 </p>
             </div>
         </section>
 
         <!-- Bundles Grid -->
-        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20">
+        <section class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20 overflow-hidden">
+            <div class="absolute inset-0 pointer-events-none texture-dots"></div>
             <!-- Empty state -->
-            <div v-if="bundles.length === 0" class="text-center py-20">
+            <div v-if="bundles.length === 0" class="relative z-10 text-center py-20" v-scroll-reveal="{ type: 'fade-up' }">
                 <div class="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-[var(--brand-primary)]/10 to-[var(--brand-primary)]/5 flex items-center justify-center">
                     <svg class="w-10 h-10 text-[var(--brand-primary)]/40" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
@@ -81,12 +86,12 @@ function discountPercent(bundle) {
                 <p class="text-gray-400 text-sm">{{ t('services_coming_soon') }}</p>
             </div>
 
-            <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div v-else class="relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" v-scroll-reveal="{ type: 'stagger', staggerDelay: 100 }">
                 <div v-for="bundle in bundles" :key="bundle.id"
-                     class="group bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden
-                            hover:shadow-2xl hover:shadow-[var(--brand-primary)]/[0.08] hover:-translate-y-1.5 transition-all duration-500">
+                     class="group bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden card-hover-lift card-premium
+                            hover:shadow-2xl hover:shadow-[var(--brand-primary)]/[0.08] transition-all duration-500">
                     <!-- Image -->
-                    <div class="relative h-56 overflow-hidden">
+                    <div class="relative h-56 overflow-hidden img-hover-reveal">
                         <img v-if="bundle.image_url" :src="bundle.image_url" :alt="localized(bundle, 'name')"
                              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                         <div v-else class="w-full h-full bg-gradient-to-br from-[var(--brand-primary)]/20 to-[var(--brand-primary)]/5 flex items-center justify-center">

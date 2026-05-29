@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>توثيق نظام Doctorato — الدليل الشامل</title>
+<style>
+  :root{
+    --bg:#0f1729; --bg-soft:#16203a; --panel:#ffffff; --panel-soft:#f6f8fc;
+    --ink:#1f2a44; --ink-soft:#48566f; --muted:#8a96ad; --line:#e4e9f2;
+    --brand:#1d6fe0; --brand-2:#10b3a3; --brand-deep:#0b3d91;
+    --accent:#7c5cff; --warn:#e8a33d; --danger:#e5484d; --ok:#1fae6a;
+    --code-bg:#0f1729; --code-ink:#e6edf7;
+    --shadow:0 10px 30px rgba(15,23,41,.08);
+    --radius:14px;
+    --sans:"Segoe UI",Tahoma,"Helvetica Neue",Arial,"Noto Sans Arabic",sans-serif;
+    --mono:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:var(--sans);background:var(--panel-soft);color:var(--ink);line-height:1.85;font-size:16px}
+  a{color:var(--brand);text-decoration:none}
+  a:hover{text-decoration:underline}
+
+  /* Layout */
+  .shell{display:flex;min-height:100vh}
+  .sidebar{
+    width:310px;flex:0 0 310px;background:var(--bg);color:#cdd6e8;position:sticky;top:0;height:100vh;
+    overflow-y:auto;padding:26px 18px;border-left:1px solid rgba(255,255,255,.05)
+  }
+  .sidebar .brand{display:flex;align-items:center;gap:12px;margin-bottom:8px;padding:0 8px}
+  .sidebar .logo{width:42px;height:42px;border-radius:11px;background:linear-gradient(135deg,var(--brand),var(--brand-2));display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:20px;box-shadow:0 6px 18px rgba(29,111,224,.45)}
+  .sidebar .brand h1{font-size:18px;margin:0;color:#fff;letter-spacing:.3px}
+  .sidebar .brand span{font-size:11.5px;color:#8595b4}
+  .sidebar .ver{margin:12px 8px 18px;font-size:11.5px;color:#7e8db0;border:1px dashed rgba(255,255,255,.12);border-radius:9px;padding:8px 10px}
+  .nav-group{margin:14px 0 6px;padding:0 10px;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#5f6f93}
+  .sidebar nav a{display:block;color:#b6c1da;padding:7px 12px;border-radius:9px;font-size:13.7px;margin:1px 0;transition:.15s}
+  .sidebar nav a:hover{background:rgba(255,255,255,.06);color:#fff;text-decoration:none}
+  .sidebar nav a.active{background:linear-gradient(90deg,rgba(29,111,224,.22),transparent);color:#fff;border-right:3px solid var(--brand)}
+
+  .main{flex:1;min-width:0}
+  .content{max-width:980px;margin:0 auto;padding:0 40px 120px}
+
+  /* Hero */
+  .hero{background:linear-gradient(135deg,#0b3d91,#1d6fe0 55%,#10b3a3);color:#fff;padding:64px 40px 54px;margin-bottom:40px;position:relative;overflow:hidden}
+  .hero::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 85% 20%,rgba(255,255,255,.16),transparent 45%);pointer-events:none}
+  .hero-inner{max-width:980px;margin:0 auto;position:relative}
+  .hero .eyebrow{font-size:13px;letter-spacing:3px;text-transform:uppercase;opacity:.85;margin-bottom:14px}
+  .hero h1{font-size:44px;margin:0 0 14px;font-weight:800;line-height:1.25}
+  .hero p{font-size:18px;max-width:680px;opacity:.95;margin:0 0 24px}
+  .hero .pills{display:flex;flex-wrap:wrap;gap:10px}
+  .hero .pill{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:30px;padding:7px 16px;font-size:13px;backdrop-filter:blur(4px)}
+
+  /* Sections */
+  section{margin-bottom:46px;scroll-margin-top:24px}
+  h2.sec{font-size:27px;color:var(--brand-deep);border-bottom:3px solid var(--line);padding-bottom:12px;margin:10px 0 22px;display:flex;align-items:center;gap:12px}
+  h2.sec .num{background:linear-gradient(135deg,var(--brand),var(--brand-2));color:#fff;width:38px;height:38px;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;font-size:18px;flex:0 0 38px}
+  h3{font-size:20px;color:var(--ink);margin:30px 0 12px;padding-right:14px;border-right:4px solid var(--brand-2)}
+  h4{font-size:16.5px;color:var(--brand-deep);margin:20px 0 8px}
+  p{margin:0 0 14px}
+
+  /* Cards */
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:22px 24px;box-shadow:var(--shadow);margin:18px 0}
+  .grid{display:grid;gap:16px}
+  .grid.c2{grid-template-columns:repeat(2,1fr)}
+  .grid.c3{grid-template-columns:repeat(3,1fr)}
+  .grid.c4{grid-template-columns:repeat(4,1fr)}
+  .mini{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:0 4px 14px rgba(15,23,41,.05)}
+  .mini .ic{font-size:22px;margin-bottom:8px}
+  .mini h4{margin:0 0 6px}
+  .mini p{font-size:13.6px;color:var(--ink-soft);margin:0}
+
+  /* Tables */
+  table{width:100%;border-collapse:collapse;margin:16px 0;background:var(--panel);border-radius:12px;overflow:hidden;box-shadow:var(--shadow);font-size:14.3px}
+  thead th{background:linear-gradient(135deg,#15294f,#1d6fe0);color:#fff;text-align:right;padding:13px 15px;font-weight:600}
+  td,th{padding:11px 15px;border-bottom:1px solid var(--line);vertical-align:top;text-align:right}
+  tbody tr:nth-child(even){background:var(--panel-soft)}
+  tbody tr:hover{background:#eef4ff}
+  td code{white-space:nowrap}
+
+  /* Code */
+  code{font-family:var(--mono);background:#eef1f7;color:#0b3d91;padding:2px 6px;border-radius:5px;font-size:13px;direction:ltr;display:inline-block}
+  pre{background:var(--code-bg);color:var(--code-ink);padding:18px 20px;border-radius:12px;overflow-x:auto;direction:ltr;text-align:left;font-family:var(--mono);font-size:13px;line-height:1.7;margin:14px 0;box-shadow:var(--shadow)}
+  pre code{background:none;color:inherit;padding:0;font-size:13px}
+
+  /* Callouts */
+  .callout{border-radius:12px;padding:16px 18px 16px 18px;margin:16px 0;border-right:5px solid;font-size:14.6px}
+  .callout.info{background:#eaf3ff;border-color:var(--brand)}
+  .callout.warn{background:#fff6e6;border-color:var(--warn)}
+  .callout.danger{background:#fdeaea;border-color:var(--danger)}
+  .callout.ok{background:#e8f8ef;border-color:var(--ok)}
+  .callout b{display:block;margin-bottom:4px}
+
+  ul,ol{margin:8px 24px 16px 0;padding:0}
+  li{margin:6px 0}
+  .tag{display:inline-block;font-size:11.5px;padding:3px 10px;border-radius:20px;font-weight:600;margin:2px}
+  .tag.b{background:#e3edff;color:#1d4fb0}
+  .tag.g{background:#e2f6ec;color:#127a47}
+  .tag.p{background:#efeaff;color:#5a3fd0}
+  .tag.o{background:#fdeedd;color:#9a5a12}
+
+  .flow{counter-reset:step;margin:18px 0}
+  .flow .step{position:relative;padding:4px 56px 22px 0;border-right:2px dashed var(--line);margin-right:22px}
+  .flow .step:last-child{border-right:0}
+  .flow .step::before{counter-increment:step;content:counter(step);position:absolute;right:-21px;top:0;width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--brand),var(--brand-2));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;box-shadow:0 4px 12px rgba(29,111,224,.4)}
+  .flow .step h4{margin:4px 0 6px}
+  .flow .step p{font-size:14px;color:var(--ink-soft);margin:0}
+
+  .toc-top{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:20px 26px;margin:0 0 36px;box-shadow:var(--shadow)}
+  .toc-top ol{columns:2;column-gap:40px;margin:6px 0 0}
+  .toc-top li{margin:5px 0;font-size:14.5px}
+
+  footer{background:var(--bg);color:#8595b4;text-align:center;padding:30px;font-size:13px}
+  footer b{color:#cdd6e8}
+
+  @media(max-width:1024px){.grid.c3,.grid.c4{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:860px){
+    .sidebar{display:none}
+    .content,.hero-inner{padding-left:20px;padding-right:20px}
+    .hero h1{font-size:32px}
+    .grid.c2,.grid.c3,.grid.c4{grid-template-columns:1fr}
+    .toc-top ol{columns:1}
+  }
+  @media print{
+    .sidebar{display:none}.hero{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="logo">D</div>
+      <div><h1>Doctorato</h1><span>دليل النظام الشامل</span></div>
+    </div>
+    <div class="ver">الإصدار 1.0 · مايو 2026 · Laravel 12 + Vue 3</div>
+    <div class="nav-group">الأساسيات</div>
+    <nav>
+      <a href="#intro">1 · نظرة عامة</a>
+      <a href="#stack">2 · المنظومة التقنية (Stack)</a>
+      <a href="#architecture">3 · المعمارية واللوحات</a>
+      <a href="#roles">4 · الأدوار والصلاحيات</a>
+      <a href="#modules">5 · نظام الموديولات</a>
+    </nav>
+    <div class="nav-group">المجالات الوظيفية</div>
+    <nav>
+      <a href="#patients">6 · المرضى والملفات</a>
+      <a href="#bookings">7 · الحجوزات والزيارات</a>
+      <a href="#clinical">8 · الأنظمة الإكلينيكية</a>
+      <a href="#telemed">9 · الاستشارات الأونلاين</a>
+      <a href="#payments">10 · الفواتير والمدفوعات</a>
+      <a href="#crm">11 · CRM والتسويق</a>
+      <a href="#hr">12 · الموارد البشرية والمخزون</a>
+      <a href="#engagement">13 · الولاء والإحالة والرضا</a>
+    </nav>
+    <div class="nav-group">التقنية والتشغيل</div>
+    <nav>
+      <a href="#data">14 · قاعدة البيانات</a>
+      <a href="#scheduler">15 · المهام المجدولة</a>
+      <a href="#commands">16 · أوامر التشغيل</a>
+      <a href="#health">17 · الصحة والتشخيص</a>
+      <a href="#cicd">18 · النشر وCI/CD</a>
+      <a href="#security">19 · الأمان والخصوصية</a>
+      <a href="#gotchas">20 · دروس ومحاذير</a>
+    </nav>
+  </aside>
+
+  <div class="main">
+    <header class="hero">
+      <div class="hero-inner">
+        <div class="eyebrow">DOCTORATO POLYCLINIC · SYSTEM DOCUMENTATION</div>
+        <h1>منصة Doctorato لإدارة العيادات متعددة التخصصات</h1>
+        <p>نظام SaaS سحابي ثنائي اللغة (عربي/إنجليزي) يدير دورة العيادة بالكامل: من الموقع التعريفي والحجز، مرورًا بالملف الطبي والزيارة والوصفة والفاتورة، وصولًا إلى الاستشارات المرئية عن بُعد، والتسويق وإدارة العملاء، والموارد البشرية والمخزون.</p>
+        <div class="pills">
+          <span class="pill">Laravel 12 · PHP 8.3</span>
+          <span class="pill">Vue 3 · Inertia.js v2</span>
+          <span class="pill">6 لوحات تحكم</span>
+          <span class="pill">7 موديولات قابلة للتفعيل</span>
+          <span class="pill">137 موديل · 241 كنترولر</span>
+          <span class="pill">تيليمديسن عبر Agora</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="content">
+
+      <div class="toc-top">
+        <h3 style="margin-top:0;border:0;padding:0">فهرس المحتويات</h3>
+        <ol>
+          <li><a href="#intro">نظرة عامة على النظام</a></li>
+          <li><a href="#stack">المنظومة التقنية (Tech Stack)</a></li>
+          <li><a href="#architecture">المعمارية واللوحات الست</a></li>
+          <li><a href="#roles">الأدوار والصلاحيات</a></li>
+          <li><a href="#modules">نظام الموديولات (Feature Flags)</a></li>
+          <li><a href="#patients">إدارة المرضى والملفات الطبية</a></li>
+          <li><a href="#bookings">الحجوزات والزيارات والوصفات</a></li>
+          <li><a href="#clinical">الأنظمة الإكلينيكية المتخصصة</a></li>
+          <li><a href="#telemed">الاستشارات الأونلاين (Telemedicine)</a></li>
+          <li><a href="#payments">الفواتير وبوابات الدفع</a></li>
+          <li><a href="#crm">إدارة العملاء والتسويق (CRM)</a></li>
+          <li><a href="#hr">الموارد البشرية والمخزون</a></li>
+          <li><a href="#engagement">الولاء والإحالة ورضا المرضى</a></li>
+          <li><a href="#data">قاعدة البيانات والهجرات</a></li>
+          <li><a href="#scheduler">المهام المجدولة (Scheduler)</a></li>
+          <li><a href="#commands">أوامر التشغيل (Artisan)</a></li>
+          <li><a href="#health">الصحة والتشخيص والمراقبة</a></li>
+          <li><a href="#cicd">النشر وخطوط CI/CD</a></li>
+          <li><a href="#security">الأمان والخصوصية</a></li>
+          <li><a href="#gotchas">دروس ومحاذير هندسية</a></li>
+        </ol>
+      </div>
+
+      <!-- ============ 1. نظرة عامة ============ -->
+      <section id="intro">
+        <h2 class="sec"><span class="num">1</span> نظرة عامة على النظام</h2>
+        <p><b>Doctorato</b> هو نظام متكامل لإدارة العيادات والمراكز الطبية متعددة التخصصات، مبني كتطبيق ويب حديث (SaaS) يعمل من مكان واحد لإدارة كل ما يخص العيادة: الموقع التعريفي العام، حجز المواعيد، الملف الطبي الإلكتروني للمريض، الزيارات والوصفات الطبية، الفواتير والتحصيل، الاستشارات المرئية عن بُعد، التسويق وإدارة العملاء المحتملين، الموارد البشرية، المخزون، والتأمين الطبي.</p>
+        <p>النظام مصمم ليكون <b>ثنائي اللغة بالكامل</b> (العربية والإنجليزية) مع دعم كامل لاتجاه الكتابة من اليمين لليسار، ويعمل على استضافة <b>cPanel مشتركة</b> — وهو ما أثّر في كثير من قرارات التصميم الهندسية (مثل الاحتفاظ بملفات الواجهة المبنية داخل المستودع لعدم توفر <code>npm</code> على الخادم).</p>
+
+        <div class="grid c4">
+          <div class="mini"><div class="ic">🏥</div><h4>متعدد التخصصات</h4><p>جلدية، أسنان، أطفال، مع بنية قابلة للتوسّع.</p></div>
+          <div class="mini"><div class="ic">🌐</div><h4>ثنائي اللغة</h4><p>عربي/إنجليزي مع RTL كامل وملفات ترجمة.</p></div>
+          <div class="mini"><div class="ic">🎥</div><h4>تيليمديسن</h4><p>استشارات فيديو مباشرة عبر Agora RTC.</p></div>
+          <div class="mini"><div class="ic">🧩</div><h4>موديولات</h4><p>7 وحدات تُفعّل وتُطفأ حسب احتياج العيادة.</p></div>
+        </div>
+
+        <h3>حجم النظام في أرقام</h3>
+        <div class="grid c4">
+          <div class="mini"><h4 style="font-size:26px;color:var(--brand)">137</h4><p>موديل (Model)</p></div>
+          <div class="mini"><h4 style="font-size:26px;color:var(--brand)">241</h4><p>كنترولر (Controller)</p></div>
+          <div class="mini"><h4 style="font-size:26px;color:var(--brand)">209</h4><p>هجرة قاعدة بيانات (Migration)</p></div>
+          <div class="mini"><h4 style="font-size:26px;color:var(--brand)">~40</h4><p>خدمة منطق أعمال (Service)</p></div>
+          <div class="mini"><h4 style="font-size:26px;color:var(--brand)">31</h4><p>أمر تشغيل (Console Command)</p></div>
+          <div class="mini"><h4 style="font-size:26px;color:var(--brand)">6</h4><p>لوحات تحكم (Panels)</p></div>
+          <div class="mini"><h4 style="font-size:26px;color:var(--brand)">7</h4><p>موديولات قابلة للتفعيل</p></div>
+          <div class="mini"><h4 style="font-size:26px;color:var(--brand)">~25</h4><p>مهمة مجدولة (Cron)</p></div>
+        </div>
+
+        <div class="callout info">
+          <b>من يستخدم النظام؟</b>
+          ست فئات من المستخدمين، لكل منها لوحة مستقلة: <b>الزائر العام</b> (الموقع التعريفي والحجز)، <b>المريض</b> (البوابة الشخصية)، <b>الطبيب</b>، <b>السكرتارية/الاستقبال</b>، <b>الإدارة</b>، و<b>مدير الموقع (Webmaster)</b> المسؤول عن المحتوى التسويقي فقط.
+        </div>
+      </section>
+
+      <!-- ============ 2. Stack ============ -->
+      <section id="stack">
+        <h2 class="sec"><span class="num">2</span> المنظومة التقنية (Tech Stack)</h2>
+        <p>يعتمد النظام على معمارية حديثة تجمع بين خلفية Laravel قوية وواجهة Vue تفاعلية متصلة عبر <b>Inertia.js</b> — وهو ما يلغي الحاجة لبناء API منفصل لكل صفحة، إذ تُمرَّر بيانات كل صفحة مباشرة من الكنترولر إلى مكوّن Vue المقابل.</p>
+
+        <h3>الخلفية (Backend)</h3>
+        <table>
+          <thead><tr><th>المكوّن</th><th>الإصدار/الحزمة</th><th>الدور</th></tr></thead>
+          <tbody>
+            <tr><td>إطار العمل</td><td><code>laravel/framework ^12.0</code></td><td>النواة، ORM، التوجيه، الطوابير، المجدول</td></tr>
+            <tr><td>لغة</td><td>PHP ^8.2 (مثبّت على 8.3)</td><td>لغة الخلفية</td></tr>
+            <tr><td>الجسر للواجهة</td><td><code>inertiajs/inertia-laravel ^2.0</code></td><td>ربط الكنترولر بمكونات Vue بدون API منفصل</td></tr>
+            <tr><td>توليد PDF</td><td><code>barryvdh/laravel-dompdf ^3.1</code></td><td>الفواتير، الوصفات، التقارير، شهادات النمو</td></tr>
+            <tr><td>تصدير Excel</td><td><code>maatwebsite/excel ^3.1</code></td><td>تصدير البيانات CSV/Excel</td></tr>
+            <tr><td>تنقية HTML</td><td><code>mews/purifier ^3.4</code></td><td>تأمين المحتوى المُدخل من المحرر الغني</td></tr>
+            <tr><td>دعم العربية</td><td><code>khaled.alshamaa/ar-php ^7.0</code></td><td>معالجة النصوص العربية</td></tr>
+            <tr><td>نسخ احتياطي</td><td><code>spatie/laravel-backup ^10.2</code></td><td>نسخ قاعدة البيانات والملفات</td></tr>
+            <tr><td>مكتبة وسائط</td><td><code>spatie/laravel-medialibrary ^11.20</code></td><td>إدارة الصور والملفات المرفقة</td></tr>
+            <tr><td>خريطة الموقع</td><td><code>spatie/laravel-sitemap ^7.3</code></td><td>توليد sitemap لمحركات البحث</td></tr>
+            <tr><td>مسارات في JS</td><td><code>tightenco/ziggy ^2.6</code></td><td>استخدام مسارات Laravel داخل Vue</td></tr>
+          </tbody>
+        </table>
+
+        <h3>الواجهة (Frontend)</h3>
+        <table>
+          <thead><tr><th>المكوّن</th><th>الإصدار/الحزمة</th><th>الدور</th></tr></thead>
+          <tbody>
+            <tr><td>إطار الواجهة</td><td>Vue <code>^3.5</code> + <code>@inertiajs/vue3 ^2.3</code></td><td>واجهة تفاعلية (SPA-like)</td></tr>
+            <tr><td>التنسيق</td><td>Tailwind CSS 4 (عبر <code>@tailwindcss/vite</code>)</td><td>نظام تصميم utility-first</td></tr>
+            <tr><td>أداة البناء</td><td>Vite 7</td><td>تجميع الأصول + HMR أثناء التطوير</td></tr>
+            <tr><td>الفيديو</td><td><code>agora-rtc-sdk-ng ^4.24</code></td><td>الاستشارات المرئية المباشرة</td></tr>
+            <tr><td>المحرر الغني</td><td><code>@tiptap/* v3</code></td><td>تحرير المحتوى والملاحظات الطبية</td></tr>
+            <tr><td>إدارة الحالة</td><td>Pinia ^3 + <code>@vueuse/core</code></td><td>الحالة المشتركة في الواجهة</td></tr>
+            <tr><td>الزمن الحقيقي</td><td><code>laravel-echo ^2.3</code> + <code>pusher-js ^8.5</code></td><td>البث المباشر (Reverb) للإشعارات والدردشة</td></tr>
+          </tbody>
+        </table>
+
+        <h3>أوامر التطوير الأساسية</h3>
+        <pre><code># تثبيت الاعتماديات
+composer install &amp;&amp; npm ci
+
+# خادم التطوير (Laravel + Vite HMR + Queue + Logs)
+./serve.sh        # أو: composer dev
+
+# بناء الواجهة للإنتاج (manifest.json يُحفظ داخل المستودع)
+npm run build     # أو: composer fresh-build
+
+# الاختبارات والجودة
+composer test                 # كل الاختبارات
+composer test:telemedicine    # اختبارات الاستشارات الأونلاين فقط
+composer lint                 # Pint --test
+composer check                # lint + test (ما يشغّله الـ CI)
+
+# تشخيص محلي
+composer health               # طباعة JSON الخاص بـ /health</code></pre>
+        <div class="callout warn">
+          <b>لماذا الاستضافة المشتركة مهمة؟</b>
+          لأن جذر Laravel هو نفسه جذر المستند (<code>public_html/</code>) دون فصل <code>public/</code> منفصل، ولأن الخادم لا يملك <code>npm</code> — لذلك يُبنى الفرونت إند محليًا ويُرفع المجلد <code>public/build/</code> ضمن المستودع. لا تحذفه أبدًا ولا تضفه إلى <code>.gitignore</code>.
+        </div>
+      </section>
+
+      <!-- ============ 3. المعمارية ============ -->
+      <section id="architecture">
+        <h2 class="sec"><span class="num">3</span> المعمارية واللوحات الست</h2>
+        <p>يقسّم النظام نفسه إلى ست "لوحات" (Panels) منفصلة، لكل لوحة <b>ملف مسارات خاص</b>، و<b>Layout خاص</b> في Vue، و<b>Middleware حماية خاص</b>. هذا الفصل يضمن ألّا تتسرب جلسة مستخدم من فئة إلى لوحة فئة أخرى.</p>
+
+        <table>
+          <thead><tr><th>اللوحة</th><th>المسار (Prefix)</th><th>الـ Layout</th><th>الحماية (Middleware)</th><th>ملف المسارات</th></tr></thead>
+          <tbody>
+            <tr><td>الواجهة العامة</td><td><code>/{locale}</code></td><td>FrontendLayout</td><td><code>web</code></td><td>routes/web.php</td></tr>
+            <tr><td>المريض</td><td><code>/{locale}/patient/…</code></td><td>PatientLayout</td><td><code>patient.auth</code></td><td>routes/patient.php</td></tr>
+            <tr><td>الطبيب</td><td><code>/doctor/…</code></td><td>DoctorLayout</td><td><code>doctor.auth</code></td><td>routes/doctor.php</td></tr>
+            <tr><td>السكرتارية</td><td><code>/secretary/…</code></td><td>SecretaryLayout</td><td><code>secretary.auth</code></td><td>routes/secretary.php</td></tr>
+            <tr><td>الإدارة</td><td><code>/admin/…</code></td><td>AdminLayout</td><td><code>admin.auth</code></td><td>routes/admin.php</td></tr>
+            <tr><td>مدير الموقع</td><td><code>/webmaster/…</code></td><td>WebmasterLayout</td><td><code>webmaster.auth</code></td><td>routes/webmaster.php</td></tr>
+          </tbody>
+        </table>
+
+        <div class="callout info">
+          <b>قاعدة اللغة في المسار</b>
+          لوحة المريض والواجهة العامة فقط تعملان تحت بادئة اللغة <code>{locale}</code> التي يجب أن تكون <code>ar</code> أو <code>en</code> (مفروضة بقيد على المسار). أما لوحات الإدارة/الطبيب/السكرتارية فتعتمد على لغة محفوظة في الجلسة (<code>admin_locale</code>، الافتراضي عربي).
+        </div>
+
+        <h3>كيف تتدفق الصفحة (دورة Inertia)</h3>
+        <div class="flow">
+          <div class="step"><h4>طلب المتصفح</h4><p>يصل الطلب إلى مسار محمي بالـ Middleware المناسب الذي يتحقق من الدور والصلاحية والموديول.</p></div>
+          <div class="step"><h4>الكنترولر</h4><p>يجمع البيانات من الموديلات والخدمات، ثم يعيد <code>Inertia::render('Page', props)</code>.</p></div>
+          <div class="step"><h4>مكوّن Vue</h4><p>كل مسار يقابله مكوّن صفحة واحد تحت <code>resources/js/Pages/</code> يستقبل الـ props جاهزة.</p></div>
+          <div class="step"><h4>الخصائص المشتركة</h4><p><code>HandleInertiaRequests</code> يحقن بيانات عامة (المستخدم، الموديولات المفعّلة، الإعدادات، اللغة) في كل صفحة.</p></div>
+        </div>
+
+        <h3>طبقة الخدمات (Service Layer)</h3>
+        <p>يفصل النظام منطق الأعمال المعقّد في خدمات مستقلة تُستدعى من الكنترولرات، أبرزها:</p>
+        <div class="grid c2">
+          <div class="mini"><h4>ModuleManager</h4><p>تفعيل/إطفاء الموديولات والتحقق منها (Feature Flags).</p></div>
+          <div class="mini"><h4>OnlineConsultationService</h4><p>دورة حياة الاستشارة المرئية كاملة.</p></div>
+          <div class="mini"><h4>OnlineSlotGeneratorService</h4><p>توليد المواعيد المتاحة للحجز الأونلاين.</p></div>
+          <div class="mini"><h4>PaymentGatewayManager</h4><p>اختيار بوابة الدفع النشطة وإدارتها.</p></div>
+          <div class="mini"><h4>BookingWorkflowService / VisitWorkflowService</h4><p>سير عمل الحجوزات والزيارات.</p></div>
+          <div class="mini"><h4>PayrollService / CommissionCalculator</h4><p>الرواتب وعمولات الأطباء.</p></div>
+          <div class="mini"><h4>LeadService / FollowUpAutomationService</h4><p>إدارة العملاء المحتملين والمتابعات الآلية.</p></div>
+          <div class="mini"><h4>WhoGrowthStandardsService</h4><p>حساب منحنيات نمو الأطفال وفق معايير WHO.</p></div>
+        </div>
+      </section>
+
+      <!-- ============ 4. الأدوار ============ -->
+      <section id="roles">
+        <h2 class="sec"><span class="num">4</span> الأدوار والصلاحيات</h2>
+        <p>يقوم نظام الصلاحيات على ثلاثة عناصر: <b>المستخدم</b> (<code>User</code>) المرتبط بـ <b>دور</b> (<code>Role</code>) يحمل مصفوفة من <b>الصلاحيات</b> (Permissions). يدعم <code>User::can()</code> أسلوبين: التحقق عبر Gate/Policy (مع تمرير الموديل)، أو التحقق من سلسلة صلاحية ضمن الدور.</p>
+
+        <h3>الحماية على مستوى المسار</h3>
+        <p>تُحمى المسارات بثلاث طبقات تعمل معًا:</p>
+        <ul>
+          <li><b>مصادقة الدور</b> — كل لوحة لها Middleware خاص (<code>admin.auth</code>، <code>doctor.auth</code>…) يتحقق من تسجيل الدخول وأن الحساب نشط وأن الدور صحيح والملف المرتبط موجود.</li>
+          <li><b>الصلاحية</b> — <code>permission:perm1,perm2</code> يمرّ إذا امتلك المستخدم <em>أيًّا</em> من الصلاحيات المذكورة (منطق OR)، وإلا 403.</li>
+          <li><b>الموديول</b> — <code>module:slug</code> يتحقق من تفعيل الوحدة قبل السماح بالوصول.</li>
+        </ul>
+
+        <table>
+          <thead><tr><th>الـ Middleware</th><th>السلوك</th></tr></thead>
+          <tbody>
+            <tr><td><code>PatientAuth</code></td><td>يتطلب تسجيل دخول + حساب نشط + دور <code>patient</code> + ملف مريض مرتبط ونشط. أي فشل = تسجيل خروج وإبطال الجلسة وإعادة التوجيه لتسجيل الدخول.</td></tr>
+            <tr><td><code>AdminAuth</code></td><td>قائمة بيضاء <code>['admin','super_admin']</code>. الأدوار الأخرى المسجّلة <b>تُعاد إلى لوحتها الخاصة</b> دون تدمير جلستها (تجنّب تسريب الجلسات).</td></tr>
+            <tr><td><code>DoctorAuth</code></td><td>استعلام <code>User</code> جديد لتفادي العلاقات القديمة في الجلسة، يتحقق من النشاط + دور <code>doctor</code> + ملف طبيب بحالة <code>active</code>. يعيد 401 JSON لطلبات AJAX/Inertia.</td></tr>
+            <tr><td><code>SecretaryAuth</code></td><td>تسجيل دخول + حساب نشط + دور <code>secretary</code>؛ أي فشل = تسجيل خروج.</td></tr>
+            <tr><td><code>CheckModule</code></td><td>يتحقق من <code>ModuleManager::isEnabled()</code>؛ عند الفشل يعيد 403 لطلبات الـ API أو يوجّه للوحة الصحيحة برسالة ثنائية اللغة.</td></tr>
+            <tr><td><code>CheckPermission</code></td><td>منطق OR على قائمة الصلاحيات؛ 403 عند الفشل.</td></tr>
+            <tr><td><code>SetLocale</code></td><td>لوحات الإدارة تستخدم لغة الجلسة، والواجهة العامة تستخدم الجزء الأول من المسار (<code>ar|en</code>).</td></tr>
+            <tr><td><code>SecurityHeaders / CaptureUtmParameters / QueryCountMonitor</code></td><td>ترويسات أمان، التقاط مصادر التسويق UTM، ومراقبة عدد الاستعلامات.</td></tr>
+          </tbody>
+        </table>
+
+        <div class="callout danger">
+          <b>محذور أمني موثّق</b>
+          لا تُحوِّل <code>AdminAuth</code> إلى قائمة سوداء (blacklist). القائمة البيضاء مقصودة لأنها تمنع تسرّب جلسات المرضى إلى لوحة الإدارة.
+        </div>
+      </section>
+
+      <!-- ============ 5. الموديولات ============ -->
+      <section id="modules">
+        <h2 class="sec"><span class="num">5</span> نظام الموديولات (Feature Flags)</h2>
+        <p>يُدار النظام كمجموعة وحدات قابلة للتفعيل والإطفاء عبر خدمة <code>ModuleManager</code> المدعومة بجدول <code>module_settings</code>. هذا يسمح لكل عيادة بتشغيل ما تحتاجه فقط.</p>
+
+        <table>
+          <thead><tr><th>الموديول</th><th>الـ Slug</th><th>طبي؟</th><th>الوظيفة</th></tr></thead>
+          <tbody>
+            <tr><td>الجلدية</td><td><code>derma</code></td><td>✅</td><td>تخصص الجلدية والتجميل — أطباء وزيارات وحجوزات</td></tr>
+            <tr><td>الأسنان</td><td><code>dental</code></td><td>✅</td><td>مخطط الأسنان، خطط العلاج، الأشعة، الموافقات</td></tr>
+            <tr><td>الأطفال</td><td><code>pediatric</code></td><td>✅</td><td>التطعيمات، منحنيات النمو، زيارات الطفل السليم</td></tr>
+            <tr><td>الاستشارات الأونلاين</td><td><code>telemedicine</code></td><td>—</td><td>الفيديو عبر Agora + الدفع الإلكتروني</td></tr>
+            <tr><td>الموارد البشرية</td><td><code>hr</code></td><td>—</td><td>الموظفون، الرواتب، الحضور، الإجازات، العمولات</td></tr>
+            <tr><td>المخزون</td><td><code>inventory</code></td><td>—</td><td>المستلزمات، الفئات، حركات الصرف، تنبيهات النفاد</td></tr>
+            <tr><td>التأمين</td><td><code>insurance</code></td><td>—</td><td>وثائق التأمين، التغطية، مطالبات التأمين</td></tr>
+          </tbody>
+        </table>
+
+        <div class="callout info">
+          <b>الموديولات الطبية</b>
+          <code>MEDICAL_MODULES = ['derma','dental','pediatric']</code> هي الوحيدة التي تملك أطباء وزيارات وحجوزات. ولا يسمح النظام بإطفاء آخر موديول طبي نشط (تحمي العيادة من فقدان وظيفتها الأساسية).
+        </div>
+
+        <h3>ثلاث آليات للتحكم</h3>
+        <div class="grid c3">
+          <div class="mini"><div class="ic">🛣️</div><h4>على مستوى المسار</h4><p>Middleware <code>module:slug</code> يحجب المسار كاملًا إن كانت الوحدة مطفأة.</p></div>
+          <div class="mini"><div class="ic">📑</div><h4>على مستوى القائمة الجانبية</h4><p>كل قسم يحمل <code>moduleKey</code> يُطابَق مع الموديولات المفعّلة المشتركة عبر Inertia.</p></div>
+          <div class="mini"><div class="ic">⚙️</div><h4>على مستوى الخدمة</h4><p>فحوصات داخل الكنترولر/الخدمة عبر <code>ModuleManager::isEnabled()</code>.</p></div>
+        </div>
+
+        <pre><code>// أمثلة الاستخدام
+ModuleManager::enable('telemedicine');     // تفعيل
+ModuleManager::isEnabled('dental');         // فحص (مع كاش 300 ثانية)
+ModuleManager::getActiveMedicalModules();   // الموديولات الطبية النشطة
+ModuleManager::getForFrontend();            // تُمرَّر لـ Inertia مع علم is_medical</code></pre>
+        <p>تُخزَّن نتائج الفحص في كاش لمدة 300 ثانية مع ذاكرة لكل طلب (per-request memo)، وتُبطَّل الكاش تلقائيًا عند أي تفعيل/إطفاء. تفعيل <code>telemedicine</code> له شروط مسبقة إضافية (Agora + بوابة دفع) تُفرَض في <code>TelemedicineSettingsController</code>.</p>
+      </section>
+
+      <!-- ============ 6. المرضى ============ -->
+      <section id="patients">
+        <h2 class="sec"><span class="num">6</span> إدارة المرضى والملفات الطبية</h2>
+        <p>موديل <code>Patient</code> هو قلب النظام الإكلينيكي. يحمل بيانات ديموغرافية، وتاريخًا طبيًا للأسنان، وبيانات ميلاد ووصاية للأطفال، وتفضيلات الإشعارات، وكود إحالة. يستخدم <code>SoftDeletes</code> (الحذف الناعم) وسجل نشاط (<code>LogsActivity</code>).</p>
+
+        <h3>توليد رقم الملف تلقائيًا</h3>
+        <p>عند إنشاء أي مريض، يولّد خطّاف <code>booted()</code> القيم التالية تلقائيًا:</p>
+        <ul>
+          <li><b>رقم الملف</b> بصيغة <code>P-00001</code> (لا يُضاف إلى <code>$fillable</code> لأسباب أمنية — لمنع التلاعب به).</li>
+          <li><b>كود الإحالة</b> بصيغة <code>NAME-XXXX</code>.</li>
+          <li>تفعيل الحساب افتراضيًا (<code>is_active = true</code>).</li>
+        </ul>
+
+        <div class="callout danger">
+          <b>حماية الحقول الطبية الحسّاسة</b>
+          يعرّف الموديل ثابتًا <code>SENSITIVE_MEDICAL_FIELDS</code> (مثل فيروس نقص المناعة، التهاب الكبد، اضطرابات النزف، ملاحظات التخدير). هذه الحقول مخفية افتراضيًا (<code>$hidden</code>)، ولا تُكشف إلا عبر <code>withSensitiveFieldsVisible()</code> التي تسجّل كل وصول في جدول <code>MedicalDataAccessLog</code> (مسار تدقيق طبي). كما تُنقَّح الحقول المقيّدة عند استدعاء <code>getDentalMedicalHistory()</code>.
+        </div>
+
+        <h3>أبرز العلاقات</h3>
+        <p>المريض مرتبط بـ: المستخدم (حساب البوابة)، الحجوزات، الزيارات، الفواتير، المدفوعات، الوصفات، الصور، حجوزات الباقات، الاستشارات الأونلاين، 8 علاقات لطب الأطفال، علاقات الأسنان (مخططات، علاجات، خطط، أشعة، أوامر معمل، لثة)، العلامات الحيوية، المستندات، الإحالات، وثائق التأمين، ملاحظات الأطباء، ومفضّلات الأطباء.</p>
+        <p>دوال مساعدة: <code>hasDentalRecords()</code> / <code>hasPediatricRecords()</code> / <code>hasDermaRecords()</code>، و<code>getActiveSpecialties()</code> (مع كاش 10 دقائق)، و<code>wantsNotification($category,$channel)</code> لاحترام تفضيلات الإشعارات.</p>
+
+        <h3>ربط حسابات البوابة بالمرضى</h3>
+        <p>قد توجد سجلات مرضى دون حساب بوابة (<code>user_id = null</code>). يحلّ هذا الأمر <code>patients:link-users</code> الذي ينشئ/يربط حسابات بدور <code>patient</code>، ويطابق المستخدم الموجود عبر البريد/الهاتف، أو ينشئ بريدًا بديلًا حتميًا، ويترك للمريض استخدام "نسيت كلمة المرور" للمطالبة بحسابه.</p>
+      </section>
+
+      <!-- ============ 7. الحجوزات ============ -->
+      <section id="bookings">
+        <h2 class="sec"><span class="num">7</span> الحجوزات والزيارات والوصفات</h2>
+
+        <h3>الحجز (Booking)</h3>
+        <p>موديل <code>Booking</code> يربط: الخدمة، الطبيب، المريض/جهة الاتصال، التاريخ والوقت المفضّل، الحالة، الفاتورة، والمصدر (موقع/مكالمة/CRM). يولّد رقم حجز بصيغة <code>BK-YYYYMM-0001</code>، ويرتبط بخدمات الحجز والمواعيد والموافقات.</p>
+        <p>مصادر الحجز متعددة: الموقع العام (مع إمكانية تأكيد/إلغاء عبر رابط موقّع بدون تسجيل دخول)، البوابة الشخصية للمريض، أو من السكرتارية/الإدارة داخليًا. تدعم الإدارة سير عمل كامل: تأكيد، دفع، إيصال، صور قبل/بعد، موافقات، تسجيل حضور، إعادة جدولة.</p>
+
+        <h3>الزيارة (Visit)</h3>
+        <p>تُنشأ الزيارات إما يدويًا من الطابور أو آليًا عبر <code>bookings:create-daily-visits</code> (يوميًا 08:00). يدير الطبيب/السكرتارية دورة الزيارة: بدء، تشخيص، صور، علامات حيوية، إكمال، إلغاء. وتُربط استشارات الفيديو المكتملة بزيارة من نوع <code>online</code>.</p>
+
+        <h3>الوصفة الطبية (Prescription)</h3>
+        <p>يحرّر الطبيب الوصفات مع عناصرها، مع دعم القوالب الجاهزة والنسخ والطباعة وتصدير PDF. ولطب الأطفال والأسنان قوالب وصفات متخصصة.</p>
+
+        <div class="grid c3">
+          <div class="mini"><div class="ic">📅</div><h4>الحجز</h4><p>BK-YYYYMM-0001 · متعدد المصادر · روابط موقّعة</p></div>
+          <div class="mini"><div class="ic">🩺</div><h4>الزيارة</h4><p>طابور يومي · تشخيص · صور · علامات حيوية</p></div>
+          <div class="mini"><div class="ic">💊</div><h4>الوصفة</h4><p>قوالب · طباعة · PDF · تخصصية</p></div>
+        </div>
+      </section>
+
+      <!-- ============ 8. الأنظمة الإكلينيكية ============ -->
+      <section id="clinical">
+        <h2 class="sec"><span class="num">8</span> الأنظمة الإكلينيكية المتخصصة</h2>
+
+        <h3>طب الأسنان (Dental)</h3>
+        <p>وحدة متكاملة تشمل: مخطط الأسنان (Dental Chart)، خطط العلاج، العلاجات والأشعة (X-rays)، أوامر المعمل، مخطط اللثة، الموافقات الموقّعة رقميًا (مع انتهاء صلاحية)، ومقارنات الصور قبل/بعد، وقوالب الوصفات. تدعمها خدمات مخصصة (<code>DentalTreatmentService</code>, <code>DentalFollowupService</code>, <code>DentalSmartNotificationService</code>) ومهام مجدولة للتنبيهات والمتابعات وانتهاء الموافقات.</p>
+
+        <h3>طب الأطفال (Pediatric)</h3>
+        <p>وحدة شاملة لمتابعة الطفل: التطعيمات وبطاقة التطعيم، منحنيات النمو (عبر <code>WhoGrowthStandardsService</code> لحساب النسب المئوية وفق معايير منظمة الصحة العالمية)، زيارات الطفل السليم (Well-child)، مراحل النمو (Milestones)، الحساسية، الأمراض المزمنة، التغذية، والفحوصات. مع تقارير PDF متعددة وتذكيرات تطعيم مجدولة (القادمة والمتأخرة).</p>
+
+        <h3>الجلدية والتجميل (Derma)</h3>
+        <p>الموديول الطبي الافتراضي، يدير الأطباء والخدمات والزيارات وصور قبل/بعد ضمن نموذج الزيارة العام.</p>
+
+        <h3>التأمين الطبي (Insurance)</h3>
+        <p>إدارة وثائق التأمين للمريض، التغطية النشطة، ومطالبات التأمين المرتبطة بالفواتير، عبر <code>InsuranceCoverageService</code>.</p>
+
+        <div class="callout warn">
+          <b>اصطلاح أيام الأسبوع</b>
+          النظام يستخدم <code>day_of_week</code> بترتيب <code>0=السبت، 1=الأحد، …، 6=الجمعة</code> — وهو مختلف عن اصطلاح Carbon (0=الأحد). تُترجَم القيم عبر <code>OnlineSlotGeneratorService::carbonToSystemDay()</code>. أي منتقي أيام جديد يجب أن يتبع ترتيب "السبت أولًا".
+        </div>
+      </section>
+
+      <!-- ============ 9. التيليمديسن ============ -->
+      <section id="telemed">
+        <h2 class="sec"><span class="num">9</span> الاستشارات الأونلاين (Telemedicine)</h2>
+        <p>أحد أكثر أجزاء النظام تطورًا: استشارة فيديو مباشرة بين المريض والطبيب عبر <b>Agora RTC</b>، مدفوعة مسبقًا عبر بوابة دفع إلكتروني. موديل <code>OnlineConsultation</code> يولّد تلقائيًا رقم استشارة (<code>TELE-YYYYMM-0001</code>) واسم قناة Agora فريدًا (<code>consult_&lt;random16&gt;</code>).</p>
+
+        <h3>حالات الاستشارة</h3>
+        <p><span class="tag b">scheduled مجدولة</span><span class="tag b">waiting بالانتظار</span><span class="tag g">in_progress جارية</span><span class="tag g">completed مكتملة</span><span class="tag o">missed_patient غياب مريض</span><span class="tag o">missed_doctor غياب طبيب</span><span class="tag p">cancelled ملغاة</span><span class="tag p">refunded مستردة</span><span class="tag o">technical_issue مشكلة تقنية</span></p>
+
+        <h3>الفلو الكامل من البداية للنهاية</h3>
+        <div class="flow">
+          <div class="step"><h4>الاكتشاف</h4><p>يتصفح المريض الأطباء المتاحين للأونلاين عبر <code>Doctor::onlineEnabled()</code> على صفحة <code>online-consultations/doctors</code>.</p></div>
+          <div class="step"><h4>اختيار الموعد</h4><p><code>OnlineSlotGeneratorService::getAvailableSlots()</code> يبني ~14 يومًا من المواعيد من جداول الطبيب (online/both) مع مدة الموعد + فاصل، مستبعدًا المحجوز والماضي.</p></div>
+          <div class="step"><h4>الحجز وبدء الدفع</h4><p><code>store()</code> يتحقق من توفر الموعد، ثم <code>createConsultation()</code> (داخل معاملة DB) ينشئ السجل بحالة scheduled ودفع pending ويولّد رموز Agora. ثم يحوّل المريض لرابط بوابة الدفع. (إن لم تكن هناك بوابة، يُحذف السجل اليتيم نَعِمًا.)</p></div>
+          <div class="step"><h4>تأكيد الدفع</h4><p>تُعيد البوابة المريض لصفحة النجاح، ويصل Webhook موقّع إلى <code>/webhooks/{paymob|stripe}</code> فيُحدِّث المعاملة ويُعلِّم الاستشارة كمدفوعة عبر <code>markPaid()</code>.</p></div>
+          <div class="step"><h4>دخول الغرفة</h4><p>تطلب الواجهة <code>GET /api/online-consultations/{c}/token</code> الذي يتحقق من الصلاحية و<code>isJoinableNow()</code> (مدفوعة + ضمن نافذة: من 15 دقيقة قبل البدء إلى 30 دقيقة بعد النهاية)، ويعيد توليد الرموز إن انتهت.</p></div>
+          <div class="step"><h4>بدء الجلسة</h4><p>عند انضمام الطرفين عبر <code>markParticipantJoined()</code> تتحول الحالة إلى in_progress وتُطلق أحداث <code>ParticipantJoined</code> و<code>SessionStarted</code>.</p></div>
+          <div class="step"><h4>إنهاء الجلسة</h4><p>الطبيب فقط ينهي ويُدخل التشخيص؛ <code>completeSession()</code> يسجّل المدة ويضبط الحالة completed وينشئ <code>Visit</code> مرتبطة (نوع online) ويطلق <code>SessionEnded</code>.</p></div>
+        </div>
+
+        <h3>الحواجز الخمسة للجاهزية (Readiness Blockers)</h3>
+        <p>تُحسب بنفس المنطق في <code>HealthController</code> و<code>TelemedicineSettingsController</code>. النظام جاهز فقط عندما تكون القائمة فارغة:</p>
+        <table>
+          <thead><tr><th>الحاجز</th><th>المعنى</th></tr></thead>
+          <tbody>
+            <tr><td><code>module_disabled</code></td><td>موديول التيليمديسن مطفأ</td></tr>
+            <tr><td><code>agora_missing</code></td><td>بيانات Agora (App ID + Certificate) غير مهيّأة</td></tr>
+            <tr><td><code>no_payment_gateway</code></td><td>لا بوابة دفع مفعّلة (لا Paymob ولا Stripe)</td></tr>
+            <tr><td><code>no_online_doctors</code></td><td>لا يوجد أطباء مفعّل لديهم الأونلاين</td></tr>
+            <tr><td><code>no_bookable_schedules</code></td><td>لا توجد جداول نشطة من نوع online/both قابلة للحجز</td></tr>
+          </tbody>
+        </table>
+
+        <div class="callout info">
+          <b>مهام الخلفية الداعمة</b>
+          <code>telemedicine:handle-missed</code> (كل 15 دقيقة) يضبط حالات الغياب · <code>telemedicine:cleanup-stuck</code> (كل ساعة) يحذف الاستشارات العالقة في انتظار الدفع أقدم من 24 ساعة لتحرير المواعيد · <code>telemedicine:send-recovery-emails</code> (كل 30 دقيقة) يمنح فرصة العودة لإتمام الدفع.
+        </div>
+
+        <h3>خدمة Agora</h3>
+        <p><code>AgoraService</code> يقرأ بيانات الاعتماد من الإعدادات، ويتحقق من التهيئة (<code>isConfigured()</code>)، ويولّد رموز RTC (<code>generateRtcToken</code>) بصلاحية افتراضية 7200 ثانية. يُمنح الطبيب والمريض UID مختلفان (doctor = id×10000+1، patient = id×10000+2) وكلاهما "ناشر" (publisher).</p>
+      </section>
+
+      <!-- ============ 10. المدفوعات ============ -->
+      <section id="payments">
+        <h2 class="sec"><span class="num">10</span> الفواتير وبوابات الدفع</h2>
+
+        <h3>نموذجا الدفع</h3>
+        <div class="grid c2">
+          <div class="card"><h4 style="margin-top:0">PaymentTransaction</h4><p>مدفوعات البوابات الإلكترونية (التيليمديسن). يخزّن البوابة، معرّف النية، الاستشارة، المريض، المبلغ، العملة (EGP)، الحالة، ورابط الدفع.</p></div>
+          <div class="card"><h4 style="margin-top:0">Payment</h4><p>المدفوعات اليدوية داخل العيادة المرتبطة بـ <code>Invoice</code> (مسارات الإدارة/السكرتارية).</p></div>
+        </div>
+
+        <h3>الفاتورة (Invoice)</h3>
+        <p>تستخدم <code>SoftDeletes</code> و<code>LogsActivity</code>. <b>تستبعد</b> <code>$fillable</code> الحقلين <code>paid_amount</code> و<code>status</code> لمنع الاحتيال. تولّد رقمًا بصيغة <code>INV-YYYYMM-0001</code>، ولها مُلحِق <code>balance</code> (الإجمالي − المدفوع)، ودالة محورية <code>recalculateStatus()</code> التي تجمع المدفوعات وتضبط الحالة (مدفوعة/جزئية/غير مدفوعة). ترتبط بالمريض والزيارة والحجز وحجز الباقة وكود الخصم والعناصر والمدفوعات ومطالبات التأمين.</p>
+
+        <h3>مدير بوابات الدفع</h3>
+        <p><code>PaymentGatewayManager</code> يحلّ البوابة النشطة من إعداد <code>payment_active_gateway</code> (افتراضي <code>paymob</code>)، ويعيدها فقط إن كانت مفعّلة. كلا البوابتين تطبّق واجهة <code>PaymentGatewayInterface</code> الموحّدة:</p>
+        <pre><code>interface PaymentGatewayInterface {
+  getCode(); getDisplayName(); isEnabled(); isTestMode();
+  initiatePayment(OnlineConsultation): PaymentInitResult;
+  handleWebhook(Request): ?PaymentTransaction;
+  verifyWebhookSignature(); refund(); testConnection();
+}</code></pre>
+
+        <table>
+          <thead><tr><th>البوابة</th><th>التهيئة</th><th>التحقق من التوقيع</th><th>التدفق</th></tr></thead>
+          <tbody>
+            <tr><td><b>Paymob</b></td><td>api_key + integration_id</td><td>HMAC-SHA512 بترتيب الحقول الموثّق</td><td>3 خطوات: مصادقة ← إنشاء طلب ← مفتاح دفع ← iframe</td></tr>
+            <tr><td><b>Stripe</b></td><td>secret_key</td><td>HMAC-SHA256 على رأس <code>Stripe-Signature</code></td><td>إنشاء Checkout Session بالجنيه المصري</td></tr>
+          </tbody>
+        </table>
+
+        <div class="callout warn">
+          <b>ملاحظات</b>
+          الـ Webhooks عامة لكنها مُوقّعة ومُتحقَّق منها. عملية الاسترداد (<code>refund</code>) مُعلَّقة (TODO) في كلا السائقين حاليًا. توجد دالة <code>testConnection()</code> لكل بوابة (أزرار "اختبار Paymob/Stripe" في الإدارة). كل بيانات الاعتماد تُخزَّن مشفّرة في جدول <code>Setting</code>.
+        </div>
+      </section>
+
+      <!-- ============ 11. CRM ============ -->
+      <section id="crm">
+        <h2 class="sec"><span class="num">11</span> إدارة العملاء والتسويق (CRM)</h2>
+        <p>نظام CRM متكامل يديره فريق السكرتارية أساسًا، مبني حول موديل <code>Lead</code> (العميل المحتمل). يدعم خط أنابيب مبيعات (Pipeline) ولوحة Kanban، ومتابعات، وتحويل إلى مريض، واستيراد/تصدير، وقوالب تواصل، وتقارير أداء.</p>
+
+        <h3>مراحل العميل المحتمل</h3>
+        <p><span class="tag b">new جديد</span> ← <span class="tag b">contacted تم التواصل</span> ← <span class="tag b">qualified مؤهّل</span> ← <span class="tag b">appointment_booked حجز موعد</span> ← <span class="tag g">consultation_done استشارة تمت</span> ← <span class="tag g">negotiation تفاوض</span> ← <span class="tag g">converted تحوّل</span> / <span class="tag p">lost مفقود</span> / <span class="tag o">dormant خامل</span></p>
+        <p>الأولوية: <span class="tag o">hot</span> <span class="tag b">warm</span> <span class="tag p">cold</span>، مع تتبّع مصادر التسويق (UTM).</p>
+
+        <h3>الأتمتة الذكية</h3>
+        <p>عند تغيّر حالة العميل، يكتب خطّاف <code>boot()</code> سجلًا في <code>LeadStageHistory</code> (مع مدة المرحلة) ويُشعر المستخدم المسؤول. تشمل الدوال: <code>markAsContacted</code>، <code>convertToPatient</code> (يزيد تحويلات الحملة)، <code>markAsLost</code>، <code>addScore</code>، <code>assignTo</code> (مع إشعار).</p>
+        <p>تدعمها مهام مجدولة:</p>
+        <ul>
+          <li><code>leads:remind-follow-ups</code> — كل 30 دقيقة (08–20) لتذكير المتابعات المستحقة.</li>
+          <li><code>leads:check-dormant</code> — منتصف الليل لرصد العملاء الخاملين.</li>
+          <li><code>sequences:process</code> — كل 5 دقائق (08–22) لتشغيل تسلسلات المتابعة الآلية.</li>
+          <li><code>leads:daily-report</code> — تقرير يومي 09:00.</li>
+        </ul>
+        <p>خدمات داعمة: <code>LeadService</code>، <code>FollowUpAutomationService</code>، إضافة إلى بذور (Seeders) لقواعد التسجيل والتعيين والحملات وقوالب التواصل.</p>
+      </section>
+
+      <!-- ============ 12. HR والمخزون ============ -->
+      <section id="hr">
+        <h2 class="sec"><span class="num">12</span> الموارد البشرية والمخزون</h2>
+
+        <h3>الموارد البشرية (موديول <code>hr</code>)</h3>
+        <p>وحدة كاملة لإدارة فريق العيادة: الأقسام، الموظفون، الورديات (Shifts)، الحضور والانصراف، الإجازات، الرواتب وقسائم الراتب، السُّلف (Advances)، الجزاءات (Penalties)، وعمولات الأطباء (Doctor Payouts). تدعمها خدمتا <code>PayrollService</code> و<code>CommissionCalculator</code>. يطّلع الطبيب على عمولاته وقسائم راتبه وحضوره وإجازاته ضمن حدود صلاحياته.</p>
+
+        <h3>المخزون (موديول <code>inventory</code>)</h3>
+        <p>إدارة المستلزمات الطبية: الأصناف، الفئات، الموردون، أوامر الشراء، وحركات الصرف (مرتبطة بالخدمات عبر <code>service_supplies</code>). يدعمها <code>InventoryManager</code>، مع مهمة <code>inventory:check-low-stock</code> (يوميًا 09:00) لتنبيهات نفاد المخزون، وإمكانية تعديل سريع للكميات من السكرتارية.</p>
+
+        <div class="grid c2">
+          <div class="mini"><div class="ic">👥</div><h4>HR</h4><p>أقسام · موظفون · رواتب · حضور · إجازات · سُلف · جزاءات · عمولات</p></div>
+          <div class="mini"><div class="ic">📦</div><h4>المخزون</h4><p>أصناف · فئات · موردون · أوامر شراء · حركات صرف · تنبيهات نفاد</p></div>
+        </div>
+      </section>
+
+      <!-- ============ 13. الولاء ============ -->
+      <section id="engagement">
+        <h2 class="sec"><span class="num">13</span> الولاء والإحالة ورضا المرضى</h2>
+        <div class="grid c3">
+          <div class="card"><h4 style="margin-top:0">🎁 نظام الولاء</h4><p>نقاط ولاء قابلة للاستبدال يديرها <code>LoyaltyService</code>، مع صفحة استبدال للمريض، ومهمة <code>loyalty:expire-points</code> (يوميًا 00:45) لانتهاء النقاط.</p></div>
+          <div class="card"><h4 style="margin-top:0">🔗 الإحالة</h4><p>لكل مريض كود إحالة (<code>NAME-XXXX</code>). يديرها <code>PatientReferralService</code> لتتبّع من أحال من ومكافأته.</p></div>
+          <div class="card"><h4 style="margin-top:0">⭐ رضا المرضى</h4><p>استبيانات رضا عامة عبر رابط بالرمز (<code>/survey/{token}</code>)، تُرسَل آليًا عبر <code>satisfaction:send-surveys</code> (يوميًا 10:00).</p></div>
+        </div>
+        <p>تكمّلها أنظمة: الإشعارات ومركز الإشعارات، الدردشة/المراسلة الداخلية (poll-based)، التذكيرات عبر SMS (قبل الموعد بيوم وفي نفس اليوم)، تذكيرات الاستدعاء (Recall)، والمراجعات والتقييمات، إضافة إلى بث مباشر عبر Reverb للإشعارات الفورية.</p>
+      </section>
+
+      <!-- ============ 14. قاعدة البيانات ============ -->
+      <section id="data">
+        <h2 class="sec"><span class="num">14</span> قاعدة البيانات والهجرات</h2>
+        <p>يعمل النظام على <b>MySQL 8+</b> في الإنتاج و<b>SQLite</b> في الاختبارات/الـ CI. يضم <b>209 ملف هجرة</b> (Migration) موصوفة بأنها <em>idempotent وآمنة على البيانات</em>. الجداول الأساسية تنقسم لمجموعات منطقية:</p>
+        <table>
+          <thead><tr><th>المجموعة</th><th>أبرز الجداول</th></tr></thead>
+          <tbody>
+            <tr><td>نواة Laravel</td><td>users, cache, jobs</td></tr>
+            <tr><td>المحتوى/الموقع</td><td>services, service_categories, doctors, posts, post_categories, tags, gallery, testimonials, pages, faqs, hero_slides, seo_pages, contact_messages</td></tr>
+            <tr><td>الصلاحيات</td><td>roles, permissions, activity_logs (مع <code>role_id</code> على users)</td></tr>
+            <tr><td>الإكلينيكي</td><td>patients, patient_photos, visits, visit_photos, prescriptions, prescription_items, treatment_plans, medications</td></tr>
+            <tr><td>الحجوزات والمال</td><td>bookings, booking_services, booking_appointments, booking_consents, invoices, invoice_items, payments, discount_codes, discount_usage, expenses</td></tr>
+            <tr><td>الجدولة</td><td>doctor_schedules, doctor_vacations, service_rates</td></tr>
+            <tr><td>الباقات</td><td>package_bundles, package_bundle_bookings, …_services, …_appointments</td></tr>
+            <tr><td>الموارد البشرية</td><td>departments, employees, salary_slips, advances, penalties, shifts, employee_shifts, attendances, leaves, doctor_payouts</td></tr>
+            <tr><td>المخزون</td><td>supplies, supply_categories, supply_transactions, service_supplies</td></tr>
+            <tr><td>التيليمديسن</td><td>online_consultations, payment_transactions</td></tr>
+            <tr><td>أخرى</td><td>settings, module_settings, messages (دردشة), notifications + جداول الأسنان/الأطفال/التأمين/CRM</td></tr>
+          </tbody>
+        </table>
+        <p>يضم النظام نحو 50 بذرة (Seeder)، منها <code>RoleSeeder</code>, <code>SettingSeeder</code>, <code>ServiceSeeder</code>, وبذور تجريبية (<code>ComprehensiveDemoSeeder</code>, <code>OnlineConsultationDemoSeeder</code>) مخصّصة لبيئات التطوير/الاختبار فقط.</p>
+        <div class="callout info">
+          <b>الحذف الناعم (SoftDeletes)</b>
+          يُطبَّق على <code>Booking</code>, <code>Invoice</code>, <code>Patient</code>, <code>Lead</code>, <code>Doctor</code>, <code>User</code>, <code>OnlineConsultation</code> وغيرها. لذا <code>find()</code> و<code>findOrFail()</code> يستبعدان الصفوف المحذوفة افتراضيًا. توجد سلة محذوفات (Recycle Bin) في الإدارة، وتُنظَّف عبر <code>trash:prune --days=90</code>.
+        </div>
+      </section>
+
+      <!-- ============ 15. المهام المجدولة ============ -->
+      <section id="scheduler">
+        <h2 class="sec"><span class="num">15</span> المهام المجدولة (Scheduler)</h2>
+        <p>يُعرَّف جدول المهام في <code>routes/console.php</code> ويُشغَّل عبر Cron واحد على الخادم (<code>* * * * * php artisan schedule:run</code>). فيما يلي أبرز المهام مصنّفة:</p>
+
+        <h4>المرضى والحجوزات</h4>
+        <table><thead><tr><th>المهمة</th><th>التوقيت</th><th>الوظيفة</th></tr></thead><tbody>
+          <tr><td><code>bookings:send-reminders</code></td><td>07:00</td><td>تذكير المواعيد</td></tr>
+          <tr><td><code>bookings:create-daily-visits</code></td><td>08:00</td><td>إنشاء زيارات اليوم</td></tr>
+          <tr><td><code>patients:send-sms-reminders</code></td><td>18:00 / 08:00</td><td>SMS قبل الموعد بيوم / نفس اليوم</td></tr>
+          <tr><td><code>patients:send-recall-reminders</code></td><td>الأحد 10:00</td><td>تذكيرات الاستدعاء</td></tr>
+          <tr><td><code>satisfaction:send-surveys</code></td><td>10:00</td><td>إرسال استبيانات الرضا</td></tr>
+          <tr><td><code>invoices:check-overdue --days=7</code></td><td>11:00</td><td>الفواتير المتأخرة</td></tr>
+          <tr><td><code>loyalty:expire-points</code></td><td>00:45</td><td>انتهاء نقاط الولاء</td></tr>
+        </tbody></table>
+
+        <h4>CRM والأسنان والأطفال</h4>
+        <table><thead><tr><th>المهمة</th><th>التوقيت</th></tr></thead><tbody>
+          <tr><td><code>leads:remind-follow-ups</code></td><td>كل 30 دقيقة (08–20)</td></tr>
+          <tr><td><code>leads:check-dormant</code> · <code>leads:daily-report</code></td><td>00:00 · 09:00</td></tr>
+          <tr><td><code>sequences:process</code></td><td>كل 5 دقائق (08–22)</td></tr>
+          <tr><td><code>dental:check-alerts</code> · <code>dental:process-followups</code></td><td>07:30 · 08:30</td></tr>
+          <tr><td><code>dental:smart-notifications</code> · <code>dental:expire-consents</code></td><td>كل ساعتين · 00:30</td></tr>
+          <tr><td><code>pediatric:vaccination-reminders</code></td><td>القادمة 09:00 / المتأخرة الثلاثاء 10:30</td></tr>
+          <tr><td><code>inventory:check-low-stock</code></td><td>09:00</td></tr>
+        </tbody></table>
+
+        <h4>التيليمديسن والتشغيل والنسخ الاحتياطي</h4>
+        <table><thead><tr><th>المهمة</th><th>التوقيت</th></tr></thead><tbody>
+          <tr><td><code>telemedicine:handle-missed</code></td><td>كل 15 دقيقة</td></tr>
+          <tr><td><code>telemedicine:cleanup-stuck</code></td><td>كل ساعة عند الدقيقة :10</td></tr>
+          <tr><td><code>telemedicine:send-recovery-emails</code></td><td>كل 30 دقيقة</td></tr>
+          <tr><td><code>health:alert</code></td><td>كل 15 دقيقة</td></tr>
+          <tr><td><code>data:integrity-check --log --alert</code></td><td>الإثنين 05:00</td></tr>
+          <tr><td><code>backup:run</code> · <code>backup:run --only-db</code></td><td>02:00 · كل 6 ساعات</td></tr>
+          <tr><td><code>backup:clean</code> · <code>backup:monitor</code></td><td>03:00 · 09:30</td></tr>
+          <tr><td><code>trash:prune --days=90</code> · <code>sitemap:generate</code></td><td>الثلاثاء 03:30 · 06:00</td></tr>
+          <tr><td><code>reports:weekly</code></td><td>الإثنين 08:00</td></tr>
+        </tbody></table>
+      </section>
+
+      <!-- ============ 16. الأوامر ============ -->
+      <section id="commands">
+        <h2 class="sec"><span class="num">16</span> أوامر التشغيل (Artisan)</h2>
+        <p>يضم النظام 31 أمر تشغيل. الأوامر التشغيلية الحرجة:</p>
+        <table>
+          <thead><tr><th>الأمر</th><th>متى</th><th>الوظيفة</th></tr></thead>
+          <tbody>
+            <tr><td><code>health:alert</code></td><td>آليًا كل 15 دقيقة</td><td>يستدعي فحص الصحة، يبني "بصمة أعطال"، ويرسل بريدًا للإدارة عند تدهور أي نظام فرعي (مع تهدئة ساعة لمنع التكرار) وبريد "تم الحل" عند التعافي.</td></tr>
+            <tr><td><code>data:integrity-check --alert</code></td><td>الإثنين 05:00</td><td>فحص غير مُتلِف للصفوف اليتيمة (مريض محذوف)، وانحراف إجمالي الفاتورة عن مجموع عناصرها، وأطباء أونلاين بلا جدول، واستشارات عالقة >24 ساعة.</td></tr>
+            <tr><td><code>telemedicine:cleanup-stuck</code></td><td>كل ساعة :10</td><td>يحذف استشارات حالة الدفع pending الأقدم من المهلة (افتراضي 24 ساعة) لتحرير المواعيد. يدعم <code>--dry-run</code>.</td></tr>
+            <tr><td><code>patients:link-users</code></td><td>عند الحاجة</td><td>ينشئ/يربط حسابات بوابة للمرضى دون <code>user_id</code>. يطابق عبر البريد/الهاتف أو ينشئ حسابًا بكلمة مرور عشوائية (المريض يطالب به عبر "نسيت كلمة المرور").</td></tr>
+            <tr><td><code>deploy:smoke</code> / <code>deploy:rollback</code></td><td>بعد النشر</td><td>اختبارات دخان بعد النشر، وأمر تراجع عند الفشل.</td></tr>
+            <tr><td><code>reports:weekly</code></td><td>أسبوعيًا</td><td>تقرير أسبوعي مجمّع.</td></tr>
+          </tbody>
+        </table>
+        <p>معظم الأوامر التشغيلية تدعم خيارات مثل <code>--dry-run</code> (معاينة دون تنفيذ)، <code>--json</code>، <code>--log</code>، و<code>--alert</code> (إرسال تنبيه بريدي مع تهدئة).</p>
+      </section>
+
+      <!-- ============ 17. الصحة ============ -->
+      <section id="health">
+        <h2 class="sec"><span class="num">17</span> الصحة والتشخيص والمراقبة</h2>
+        <h3>نقطة <code>GET /health</code></h3>
+        <p>كنترولر <code>HealthController</code> (محدود بـ 20 طلب/دقيقة) يعيد JSON بحالة عامة (<code>ok</code>) وفحوصات فرعية:</p>
+        <ul>
+          <li><b>قاعدة البيانات</b> — اتصال <code>DB::getPdo()</code>.</li>
+          <li><b>التيليمديسن</b> — يُفحص فقط إن كان الموديول مفعّلًا: عدد الأطباء الأونلاين > 0، جداول online/both نشطة > 0، ووجود بوابة دفع مفعّلة (مع تقرير الأعداد واسم فئة البوابة).</li>
+          <li><b>قابلية الكتابة</b> — مجلدات السجلات والإطار قابلة للكتابة.</li>
+        </ul>
+        <p>يعيد <b>HTTP 200</b> إن نجحت كل الفحوص و<b>503</b> إن فشل أي فحص مطلوب — وهو ما تستهدفه أدوات مراقبة الـ Uptime.</p>
+
+        <h3>صفحات الإدارة البشرية</h3>
+        <div class="grid c3">
+          <div class="mini"><div class="ic">🩻</div><h4>/admin/diagnostics</h4><p>بطاقات النظام/التيليمديسن/المجدول + آخر 100 سطر سجل + زر تصدير JSON.</p></div>
+          <div class="mini"><div class="ic">🎥</div><h4>/admin/settings/telemedicine</h4><p>لافتة الجاهزية + تشخيص لكل حاجز من الحواجز الخمسة.</p></div>
+          <div class="mini"><div class="ic">💓</div><h4>GET /health</h4><p>JSON لمراقبات الأب تايم (200/503).</p></div>
+        </div>
+        <p>يتكامل ذلك مع <code>health:alert</code> الذي يرسل تنبيهات بريدية للإدارة (المستلم من إعداد <code>health_alert_email</code> أو أول super_admin) مع رابط مباشر للتشخيص.</p>
+      </section>
+
+      <!-- ============ 18. CI/CD ============ -->
+      <section id="cicd">
+        <h2 class="sec"><span class="num">18</span> النشر وخطوط CI/CD</h2>
+        <h3>التكامل المستمر (ci.yml)</h3>
+        <p>يعمل عند كل push/PR إلى <code>main</code> على Ubuntu + PHP 8.3. خطواته: تثبيت Composer، تهيئة بيئة اختبار SQLite، <code>migrate --force</code>، تشغيل <b>PHPUnit</b> (<code>--stop-on-failure</code>)، ثم Node 20 + <code>npm ci</code> + <code>npm run build</code>، وأخيرًا <b>فحص سلامة الـ manifest</b> الذي يفشل إن غاب <code>public/build/manifest.json</code> أو خلت منه صفحات حرجة (<code>Patient/OnlineConsultation/Book.vue</code>، <code>Doctors.vue</code>، <code>Patient/Dashboard.vue</code>).</p>
+
+        <h3>النشر التلقائي (deploy.yml)</h3>
+        <p>عند الدفع إلى <code>main</code> (ويدويًا) ضمن مجموعة تزامن مسلسلة. يتصل عبر SSH بخادم cPanel ويُنفّذ:</p>
+        <pre><code>git pull --ff-only
+composer install --no-dev --optimize-autoloader
+php artisan migrate --force
+php artisan optimize:clear &amp;&amp; php artisan optimize
+php artisan deploy:smoke      # يفشل النشر إن فشلت اختبارات الدخان</code></pre>
+        <div class="callout warn">
+          <b>لماذا <code>public/build/</code> داخل المستودع؟</b>
+          لأن الخادم المشترك لا يملك <code>npm</code>. الـ CI يعيد البناء وفحص سلامة الـ manifest هو ما يحفظ الإنتاج صحيحًا. أي صفحة Vue جديدة يجب تشغيل <code>npm run build</code> لها والـ commit، وإلا تظهر 404 صامتة في الإنتاج.
+        </div>
+
+        <h3>إعداد الإنتاج (PRODUCTION_SETUP.md)</h3>
+        <ol>
+          <li>إعداد Cron للمجدول: <code>* * * * * cd &lt;root&gt; &amp;&amp; php artisan schedule:run</code></li>
+          <li>تهيئة بوابة دفع عبر <code>/ar/admin/settings/telemedicine</code> والتحقق عبر <code>/health</code>.</li>
+          <li>إدخال Agora App ID + Certificate و"اختبار Agora".</li>
+          <li>ضبط أسرار النشر في GitHub (<code>DEPLOY_HOST/USER/SSH_KEY/PORT/PATH</code>).</li>
+          <li>توجيه مراقب Uptime إلى <code>GET /health</code>.</li>
+          <li>نظافة الملفات الحساسة (<code>*.sql</code>, <code>*.key</code>, <code>opcache-reset.php</code> مستبعدة من Git).</li>
+          <li>أذونات: مجلدات 775، ملفات 664، و<code>.env</code> بصلاحية 600.</li>
+        </ol>
+      </section>
+
+      <!-- ============ 19. الأمان ============ -->
+      <section id="security">
+        <h2 class="sec"><span class="num">19</span> الأمان والخصوصية</h2>
+        <div class="grid c2">
+          <div class="card"><h4 style="margin-top:0">🔐 تشفير الإعدادات الحساسة</h4><p>موديل <code>Setting</code> يعرّف <code>ENCRYPTED_KEYS</code> (Agora، Paymob، Stripe، Reverb). <code>get()</code> يفكّ التشفير تلقائيًا و<code>set()</code> يشفّر، و<code>maskedValue()</code> يعيد <code>••••</code> للعرض الآمن.</p></div>
+          <div class="card"><h4 style="margin-top:0">🩺 سجل الوصول الطبي</h4><p>الحقول الطبية الحساسة مخفية افتراضيًا، وكل كشف يُسجَّل في <code>MedicalDataAccessLog</code> — مسار تدقيق كامل لمن اطّلع على ماذا ومتى.</p></div>
+          <div class="card"><h4 style="margin-top:0">🛡️ منع الاحتيال بالـ Mass Assignment</h4><p>حقول حرجة مستبعدة من <code>$fillable</code>: رقم ملف المريض، <code>paid_amount</code> و<code>status</code> في الفاتورة، <code>user_id</code> و<code>is_active</code> للمريض.</p></div>
+          <div class="card"><h4 style="margin-top:0">🚪 عزل الجلسات بين اللوحات</h4><p>كل Middleware لوحة يتحقق من الدور والملف المرتبط، ويعيد توجيه الأدوار الخاطئة دون تسريب الجلسات.</p></div>
+          <div class="card"><h4 style="margin-top:0">✍️ تنقية المحتوى</h4><p><code>mews/purifier</code> + <code>dompurify</code> لتأمين أي HTML مُدخل من المحررات الغنية.</p></div>
+          <div class="card"><h4 style="margin-top:0">🔏 Webhooks مُوقّعة</h4><p>كل من Paymob (HMAC-SHA512) وStripe (HMAC-SHA256) يُتحقَّق من توقيعه قبل قبول أي تحديث دفع.</p></div>
+        </div>
+        <p>تُكمَّل المنظومة بترويسات أمان (<code>SecurityHeaders</code>)، نسخ احتياطي مُدار (spatie/backup) مع مراقبة، وسجل نشاط شامل (<code>LogsActivity</code>) على كل الموديلات الأساسية.</p>
+      </section>
+
+      <!-- ============ 20. الدروس ============ -->
+      <section id="gotchas">
+        <h2 class="sec"><span class="num">20</span> دروس ومحاذير هندسية</h2>
+        <p>مكاسب مُرّة موثّقة في الكود يجب على أي مطوّر معرفتها قبل التعديل:</p>
+
+        <div class="callout danger">
+          <b>1 · ترتيب معاملات الكنترولر تحت <code>{locale}</code></b>
+          في Laravel 12، يجب على كنترولرات المريض قراءة معاملات المسار <b>بالاسم</b>: <code>$docId = $request->route('docId')</code>. الاعتماد على المعاملات الموضعية يجعل <code>{locale:"ar", docId:"5"}</code> يعطي <code>$docId = "ar"</code> — سبّب حلقة تصحيح 404 استمرت ساعات.
+        </div>
+        <div class="callout danger">
+          <b>2 · صفحات Inertia يجب أن تكون في الـ manifest</b>
+          أي صفحة Vue جديدة تتطلب <code>npm run build</code> و commit؛ الصفحات الغائبة عن <code>manifest.json</code> تظهر 404 صامتة في الإنتاج (الـ CI يفحص الصفحات الحرجة).
+        </div>
+        <div class="callout warn">
+          <b>3 · OPcache على الاستضافة المشتركة</b>
+          تعديلات الكنترولر قد لا تظهر حتى يُبطَل OPcache. إن لم تنفع <code>route:cache</code> و<code>optimize:clear</code>، ضع <code>opcache-reset.php</code> في جذر الويب، اطلبه مرة، ثم احذفه.
+        </div>
+        <div class="callout warn">
+          <b>4 · ربط الموديل بالمسار (Route-Model Binding)</b>
+          تجنّب تسمية معامل مسار باسم موديل لا تريد ربطه (<code>{doctor}</code> → <code>Doctor</code>). فضّل <code>{docId}</code> مع بحث يدوي.
+        </div>
+        <div class="callout info">
+          <b>5 · أسماء أيام الأسبوع بالعربي</b>
+          صُحِّحت واجهات الجدول لتبدأ بالسبت (مطابقة للخلفية 0=السبت) بدل افتراض Carbon (الأحد أولًا).
+        </div>
+        <div class="callout info">
+          <b>6 · CTA الحجز للتيليمديسن في الواجهة</b>
+          يُعرض زر الحجز كلما كان الموديول مفعّلًا، بغض النظر عن عدد الأطباء الأونلاين؛ نص بديل يتولّى حالة "لا أطباء بعد".
+        </div>
+
+        <h3 style="margin-top:34px">ممنوعات قاطعة (Definitely Not)</h3>
+        <ul>
+          <li>لا تحذف <code>public/build/</code> ولا تضفه إلى <code>.gitignore</code>.</li>
+          <li>لا تشغّل هجرات مُتلِفة على الإنتاج دون <code>--force</code> + نسخة احتياطية.</li>
+          <li>لا تُضمّن الأسعار/الروابط/بيانات الاعتماد في الكود — استخدم <code>Setting::get()</code> أو <code>.env</code>.</li>
+          <li>لا تتجاوز Middleware المريض/الإدارة بـ <code>auth()->loginUsingId()</code> في كنترولرات الويب.</li>
+        </ul>
+
+        <h3>اصطلاح رسائل الـ Commit</h3>
+        <p>تبدأ بإحدى البادئات: <code>feat</code>, <code>fix</code>, <code>perf</code>, <code>style</code>, <code>chore</code>, <code>ci</code>, <code>test</code>, <code>docs</code> — مع شرح "لماذا" في المتن، وتذييل <code>Co-Authored-By</code> القياسي عند مشاركة Claude.</p>
+      </section>
+
+
+    </div>
+    <footer>
+      <p><b>Doctorato Polyclinic — الدليل الشامل للنظام</b></p>
+      <p>وثيقة فنية وتشغيلية · الإصدار 1.0 · مايو 2026 · أُعدّت بناءً على تحليل مباشر للكود المصدري</p>
+    </footer>
+  </div>
+</div>
+
+<script>
+  // Scrollspy للتنقل الجانبي
+  const links=[...document.querySelectorAll('.sidebar nav a')];
+  const map=links.map(a=>({a,el:document.querySelector(a.getAttribute('href'))})).filter(x=>x.el);
+  const spy=()=>{
+    let cur=map[0];
+    const y=window.scrollY+120;
+    for(const m of map){if(m.el.offsetTop<=y)cur=m;}
+    links.forEach(l=>l.classList.remove('active'));
+    if(cur)cur.a.classList.add('active');
+  };
+  window.addEventListener('scroll',spy);window.addEventListener('load',spy);
+</script>
+</body>
+</html>
