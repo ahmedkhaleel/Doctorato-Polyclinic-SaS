@@ -422,8 +422,9 @@ function logout()        { router.post('/admin/logout'); }
         <aside
             :class="[
                 sidebarOpen ? 'translate-x-0' : (isRtl ? 'translate-x-full' : '-translate-x-full'),
+                isRtl ? 'right-0' : 'left-0',
             ]"
-            class="fixed inset-y-0 z-40 w-[275px] transition-transform duration-300 ease-in-out flex flex-col admin-sidebar-navy shadow-2xl ltr:left-0 rtl:right-0"
+            class="fixed inset-y-0 z-40 w-[275px] transition-transform duration-300 ease-in-out flex flex-col admin-sidebar-navy shadow-2xl"
         >
             <!-- Ambient gold glow accent -->
             <div class="pointer-events-none absolute inset-x-0 top-0 h-40 admin-sidebar-glow"></div>
@@ -716,7 +717,7 @@ function logout()        { router.post('/admin/logout'); }
 
         <!-- ─── Main Content — padding-based layout (sidebar is fixed, not in flow) ─── -->
         <div
-            :class="sidebarOpen ? 'lg:ps-[275px]' : ''"
+            :class="sidebarOpen ? (isRtl ? 'lg:pr-[275px]' : 'lg:pl-[275px]') : ''"
             class="min-h-screen flex flex-col transition-[padding] duration-300 ease-in-out"
         >
             <!-- Top Header -->

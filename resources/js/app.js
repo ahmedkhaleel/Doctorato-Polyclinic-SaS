@@ -31,6 +31,29 @@ router.on('error', () => {
     }));
 });
 
+// ─── Keep <html dir/lang> in sync with the active locale ───────
+// Blade sets <html dir lang> ONLY on the initial full-page render.
+// Inertia is an SPA: switching locale swaps page props but never
+// touches the <html> element, leaving a STALE dir (e.g. dir="rtl"
+// after switching to English). That stale attribute makes Tailwind's
+// rtl:/ltr: logical utilities (e.g. the admin sidebar's rtl:right-0)
+// resolve against the wrong direction — the sidebar jumps to the
+// wrong side. Re-sync on every successful visit so dir always
+// matches the locale the server just rendered.
+function syncDocumentDirection(props) {
+    if (!props) return;
+    const locale = props.locale || 'ar';
+    const dir = props.dir || (locale === 'ar' ? 'rtl' : 'ltr');
+    const root = document.documentElement;
+    if (root.getAttribute('dir') !== dir) root.setAttribute('dir', dir);
+    if (root.getAttribute('lang') !== locale) root.setAttribute('lang', locale);
+}
+
+// Fires after every Inertia visit completes (incl. locale-switch redirect).
+router.on('success', (event) => {
+    syncDocumentDirection(event.detail?.page?.props);
+});
+
 // ModSecurity on cPanel blocks PUT, PATCH, DELETE HTTP methods.
 // This interceptor converts them to POST with _method spoofing,
 // which Laravel automatically understands.
