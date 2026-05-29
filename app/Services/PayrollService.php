@@ -6,6 +6,7 @@ use App\Models\Advance;
 use App\Models\Attendance;
 use App\Models\DoctorPayout;
 use App\Models\Employee;
+use App\Models\Leave;
 use App\Models\Penalty;
 use App\Models\SalarySlip;
 use Carbon\Carbon;
@@ -43,12 +44,32 @@ class PayrollService
         $hourlyRate = $dailyRate / 8;
         $overtimeAmount = round($overtimeHours * $hourlyRate * 1.5, 2);
 
-        // Absence deduction
+        // Absence deduction: raw absent records (status='absent')
         $absentDays = Attendance::where('user_id', $employee->user_id)
             ->whereBetween('date', [$startDate, $endDate])
             ->where('status', 'absent')
             ->count();
-        $absenceDeduction = round($absentDays * $dailyRate, 2);
+
+        // Unpaid leave deduction: approved unpaid leaves overlapping this month.
+        // Attendance rows for those days are marked 'leave' (not 'absent'), so we
+        // must count them separately. Days outside the month are clamped to its bounds.
+        $unpaidLeaveDays = 0;
+        if ($employee->user_id) {
+            $unpaidLeaves = Leave::where('user_id', $employee->user_id)
+                ->where('status', 'approved')
+                ->where('leave_type', 'unpaid')
+                ->where('start_date', '<=', $endDate)
+                ->where('end_date', '>=', $startDate)
+                ->get(['start_date', 'end_date']);
+
+            foreach ($unpaidLeaves as $leave) {
+                $from = $leave->start_date->max($startDate);
+                $to   = $leave->end_date->min($endDate);
+                $unpaidLeaveDays += $from->diffInDays($to) + 1;
+            }
+        }
+
+        $absenceDeduction = round(($absentDays + $unpaidLeaveDays) * $dailyRate, 2);
 
         // Active advance installment deduction
         $advanceDeduction = 0;

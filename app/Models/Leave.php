@@ -30,8 +30,31 @@ class Leave extends Model
         return $this->belongsTo(User::class, 'approved_by');
     }
 
+    /** Paid leave types don't deduct from salary. */
+    public function isPaid(): bool
+    {
+        return in_array($this->leave_type, ['annual', 'sick', 'personal'], true);
+    }
+
+    /** Count calendar days in this leave (inclusive). */
+    public function totalDays(): int
+    {
+        return $this->start_date->diffInDays($this->end_date) + 1;
+    }
+
+    /** Shortcut: the employee record linked through the leave's user. */
+    public function employee()
+    {
+        return $this->user?->employee ?? null;
+    }
+
     public function scopePending($query)
     {
         return $query->where('status', 'pending');
+    }
+
+    public function scopeApproved($query)
+    {
+        return $query->where('status', 'approved');
     }
 }

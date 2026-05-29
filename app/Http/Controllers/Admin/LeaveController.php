@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Attendance;
 use App\Models\Leave;
 use App\Models\User;
 use App\Services\AuditLogger;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -76,12 +78,58 @@ class LeaveController extends Controller
             $data['approved_by'] = auth()->id();
         }
 
+        $previousStatus = $leave->status;
         $leave->update($data);
+        $leave->refresh();
 
         AuditLogger::log('updated', $leave);
+
+        // ─── Attendance sync ─────────────────────────────────────────────
+        // On approval → write a 'leave' attendance row for every day in the
+        // range (idempotent: updateOrCreate). This keeps the attendance
+        // calendar accurate and ensures payroll can see leave days.
+        // On rejection (if it was previously approved) → remove those rows
+        // so the days revert to unrecorded (admin can enter actual status).
+        if ($data['status'] === 'approved') {
+            $this->syncLeaveAttendance($leave, create: true);
+        } elseif ($previousStatus === 'approved' && $data['status'] === 'rejected') {
+            $this->syncLeaveAttendance($leave, create: false);
+        }
 
         $statusLabel = ucfirst($data['status']);
 
         return redirect()->back()->with('success', "Leave request {$statusLabel}.");
+    }
+
+    /**
+     * Create or remove Attendance rows covering this leave's date range.
+     * Only rows with status='leave' are ever removed — we never touch rows
+     * the employee or admin wrote for another purpose.
+     */
+    private function syncLeaveAttendance(Leave $leave, bool $create): void
+    {
+        $userId = $leave->user_id;
+
+        if ($create) {
+            $current = $leave->start_date->copy();
+            while ($current->lte($leave->end_date)) {
+                Attendance::updateOrCreate(
+                    ['user_id' => $userId, 'date' => $current->toDateString()],
+                    [
+                        'status'         => 'leave',
+                        'check_in'       => null,
+                        'check_out'      => null,
+                        'overtime_hours' => 0,
+                        'leave_id'       => $leave->id,
+                        'notes'          => $leave->leave_type . ' leave',
+                    ]
+                );
+                $current->addDay();
+            }
+        } else {
+            // Delete only rows this specific leave created — safe even if
+            // the employee had a manual attendance row for the same day.
+            Attendance::where('leave_id', $leave->id)->delete();
+        }
     }
 }
