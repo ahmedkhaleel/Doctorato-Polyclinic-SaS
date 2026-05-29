@@ -327,6 +327,34 @@ function groupTitle(group) {
     return locale.value === 'ar' ? group.titleAr : group.titleEn;
 }
 
+/*
+ * Professional workflow ordering of the sidebar sections.
+ * Grouped by intent: overview → core clinical → specialties →
+ * telemedicine → money → growth → operations → content → system.
+ * Any group key NOT listed here gracefully sorts to the end, so
+ * adding a new group never silently hides it.
+ */
+const GROUP_ORDER = [
+    'main',          // الرئيسية — overview
+    'clinic',        // العيادة — core operations
+    'derma',         // الجلدية والتجميل (featured)
+    'dental',        // الأسنان
+    'pediatric',     // طب الأطفال
+    'telemedicine',  // الاستشارات الأونلاين (featured)
+    'finance',       // المالية
+    'insurance',     // التأمينات (featured)
+    'crm',           // إدارة العملاء
+    'quality',       // الجودة وتفاعل المرضى
+    'inventory',     // المخزون
+    'hr',            // الموارد البشرية
+    'website',       // الموقع
+    'system',        // النظام
+];
+function groupRank(key) {
+    const i = GROUP_ORDER.indexOf(key);
+    return i === -1 ? GROUP_ORDER.length : i;
+}
+
 const filteredGroups = computed(() =>
     navGroups
         .filter(g => {
@@ -345,6 +373,9 @@ const filteredGroups = computed(() =>
             }),
         }))
         .filter(g => g.items.length > 0)
+        // Reorder by the professional workflow ranking above.
+        .slice()
+        .sort((a, b) => groupRank(a.key) - groupRank(b.key))
 );
 
 function isActive(href) {
@@ -425,7 +456,7 @@ function logout()        { router.post('/admin/logout'); }
 
             <!-- Navigation Groups -->
             <nav class="flex-1 overflow-y-auto py-4 px-3 space-y-1.5 admin-sidebar-scroll relative">
-                <div v-for="group in filteredGroups" :key="group.key">
+                <div v-for="(group, gi) in filteredGroups" :key="group.key" class="adm-nav-group" :style="{ '--gi': gi }">
                     <!-- ─── FEATURED GROUP (Telemedicine, etc.) ─── -->
                     <template v-if="group.featured">
                         <button
@@ -508,10 +539,10 @@ function logout()        { router.post('/admin/logout'); }
                             :href="item.href"
                             :class="[
                                 isActive(item.href)
-                                    ? 'bg-[var(--brand-primary)]/[0.12] text-[var(--brand-secondary)]'
+                                    ? 'adm-item-active bg-[var(--brand-primary)]/[0.12] text-[var(--brand-secondary)]'
                                     : 'text-white/50 hover:bg-white/[0.04] hover:text-white/80',
                             ]"
-                            class="flex items-center gap-3 px-3 py-2 rounded-lg text-[13px] font-medium transition-all duration-200"
+                            class="adm-nav-item relative flex items-center gap-3 px-3 py-2 rounded-lg text-[13px] font-medium transition-all duration-200"
                             @click="closeSidebarOnMobile"
                         >
                             <!-- Icon wrapper -->
@@ -884,5 +915,75 @@ function logout()        { router.post('/admin/logout'); }
 }
 .nav-collapse {
     will-change: max-height, opacity;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PROFESSIONAL ENHANCEMENT LAYER — navy + gold, animated
+   ═══════════════════════════════════════════════════════════ */
+
+/* Staggered entrance for each nav group on page load */
+.adm-nav-group {
+    opacity: 0;
+    transform: translateY(8px);
+    animation: admGroupIn 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    animation-delay: calc(var(--gi, 0) * 55ms + 120ms);
+}
+@keyframes admGroupIn {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── Nav item: active gold indicator + hover slide ─── */
+.adm-nav-item {
+    isolation: isolate;
+}
+/* Gold rail that grows on the inline-start edge of the ACTIVE item */
+.adm-nav-item::before {
+    content: '';
+    position: absolute;
+    inset-inline-start: 0;
+    top: 50%;
+    width: 3px;
+    height: 0;
+    border-radius: 4px;
+    background: linear-gradient(180deg, #C4A265, #8B7043);
+    box-shadow: 0 0 10px rgba(196, 162, 101, 0.6);
+    transform: translateY(-50%);
+    transition: height 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    pointer-events: none;
+}
+.adm-item-active::before { height: 60%; }
+
+/* Subtle slide toward content on hover (direction-aware) */
+.adm-nav-item:not(.adm-item-active):hover {
+    transform: translateX(3px);
+}
+[dir="rtl"] .adm-nav-item:not(.adm-item-active):hover {
+    transform: translateX(-3px);
+}
+
+/* Active item: soft inner glow + icon lift */
+.adm-item-active {
+    box-shadow: inset 0 0 0 1px rgba(196, 162, 101, 0.18);
+}
+.adm-nav-item:hover :deep(.w-7),
+.adm-item-active :deep(.w-7) {
+    transform: scale(1.08);
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Featured card: gentle breathing glow when its section is the active one */
+.admin-featured-card { transition: all 0.3s ease; }
+
+/* ─── Accessibility ─── */
+@media (prefers-reduced-motion: reduce) {
+    .adm-nav-group {
+        animation: none;
+        opacity: 1;
+        transform: none;
+    }
+    .adm-nav-item:hover,
+    [dir="rtl"] .adm-nav-item:hover { transform: none; }
+    .adm-nav-item:hover :deep(.w-7),
+    .adm-item-active :deep(.w-7) { transform: none; }
 }
 </style>
