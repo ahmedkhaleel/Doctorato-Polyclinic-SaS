@@ -372,12 +372,20 @@ const selectedToothTreatments = computed(() => selectedTooth.value ? getToothTre
 <div class="space-y-5">
     <!-- ═══ HERO ═══ -->
     <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] p-5 sm:p-7 dental-hero-enter">
-        <div class="absolute top-0 right-0 w-72 h-72 bg-[#1B365D]/10 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl"></div>
-        <div class="absolute bottom-0 left-0 w-48 h-48 bg-emerald-500/8 rounded-full translate-y-1/3 -translate-x-1/4 blur-2xl"></div>
+        <div class="pointer-events-none absolute -top-16 -end-16 w-72 h-72 bg-[#C4A265]/20 rounded-full blur-3xl"></div>
+        <div class="pointer-events-none absolute -bottom-12 start-1/3 w-48 h-48 bg-[#C4A265]/10 rounded-full blur-3xl"></div>
+        <div class="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-[#C4A265] to-transparent"></div>
+        <!-- Floating tooth motif -->
+        <div class="pointer-events-none absolute ltr:right-6 rtl:left-6 top-1/2 -translate-y-1/2 opacity-[0.06]">
+            <svg class="w-40 h-40 text-white dental-float" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="0.5" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342" /></svg>
+        </div>
         <div class="relative z-10">
             <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
-                    <p class="text-[#2C4E7A] text-xs font-semibold tracking-wider uppercase mb-1">{{ isRtl ? 'طب الأسنان' : 'Dental' }}</p>
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="h-[3px] w-6 bg-[#C4A265] rounded-full"></span>
+                        <span class="text-[10px] font-bold text-[#C4A265] tracking-[0.25em] uppercase">{{ isRtl ? 'طب الأسنان' : 'DENTAL' }}</span>
+                    </div>
                     <h1 class="text-2xl sm:text-3xl font-bold text-white">{{ isRtl ? 'مخطط الأسنان المحسّن' : 'Enhanced Dental Chart' }}</h1>
                     <div class="flex items-center gap-3 mt-2">
                         <span class="text-gray-300 text-sm">{{ patient.full_name }}</span>
@@ -408,7 +416,8 @@ const selectedToothTreatments = computed(() => selectedTooth.value ? getToothTre
                     <Link :href="`/admin/dental/xrays/patient/${patient.id}`" class="inline-flex items-center px-3 py-2 text-xs font-medium text-slate-300 bg-[#1B365D]/15 rounded-xl hover:bg-[#1B365D]/25 border border-[#1B365D]/20 transition-all">
                         {{ isRtl ? 'الأشعة' : 'X-Rays' }}
                     </Link>
-                    <button @click="confirmInitializeChart" class="inline-flex items-center px-3 py-2 text-xs font-medium text-[#2C4E7A] bg-[#1B365D]/15 rounded-xl hover:bg-[#1B365D]/25 border border-[#1B365D]/20 transition-all">
+                    <button @click="confirmInitializeChart" class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-[#C4A265] bg-[#C4A265]/10 rounded-xl hover:bg-[#C4A265]/20 border border-[#C4A265]/25 transition-all">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
                         {{ isRtl ? 'تهيئة' : 'Init' }}
                     </button>
                 </div>
@@ -425,7 +434,7 @@ const selectedToothTreatments = computed(() => selectedTooth.value ? getToothTre
                 </template>
                 <div class="bg-white/5 backdrop-blur-sm rounded-lg px-2.5 py-1.5 border border-white/10 flex items-center gap-1.5 ms-auto">
                     <span class="text-[10px] text-gray-400">{{ isRtl ? 'مسجل' : 'Recorded' }}</span>
-                    <span class="text-xs font-bold text-[#2C4E7A]">{{ totalRecorded }}/{{ totalTeeth }}</span>
+                    <span class="text-xs font-bold text-[#C4A265]">{{ totalRecorded }}/{{ totalTeeth }}</span>
                 </div>
             </div>
 
@@ -1099,4 +1108,28 @@ const selectedToothTreatments = computed(() => selectedTooth.value ? getToothTre
 }
 .dental-hero-enter { animation: dentalHeroEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
 .dental-card-enter { animation: dentalCardEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+/* Floating hero tooth motif */
+@keyframes dentalFloat {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50%      { transform: translateY(-10px) rotate(3deg); }
+}
+.dental-float { animation: dentalFloat 7s ease-in-out infinite; }
+
+/* ── Accessibility: honor reduced-motion ───────────────── */
+@media (prefers-reduced-motion: reduce) {
+    .dental-hero-enter,
+    .dental-card-enter,
+    .dental-row-enter .dental-tooth-cell,
+    .dental-row-enter .dental-occlusal-cell {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+    .dental-float { animation: none !important; }
+    .dental-side-svg,
+    .dental-occlusal-svg { transition: none !important; }
+    /* Preserve the upper-jaw mirror flip even with motion off */
+    .upper-tooth { transform: scaleY(-1) !important; }
+}
 </style>
