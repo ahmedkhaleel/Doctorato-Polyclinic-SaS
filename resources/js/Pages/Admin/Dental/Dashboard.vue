@@ -36,7 +36,11 @@ const animatedStats = ref({
 
 function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
 
+const prefersReducedMotion = typeof window !== 'undefined'
+    && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+
 function animateCounter(key, target, duration = 1200) {
+    if (prefersReducedMotion) { animatedStats.value[key] = target; return; }
     const start = performance.now();
     const from = 0;
     function tick(now) {
@@ -199,7 +203,7 @@ const quickLinks = computed(() => [
 
 <template>
     <AdminLayout :title="$t('a_dental_dashboard')">
-        <div class="space-y-8">
+        <div class="dental-page space-y-8">
             <!-- ── Hero Header ───────────────────────────────────── -->
             <div class="dental-hero relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] shadow-xl p-8 md:p-10">
                 <!-- Gold orbs -->
@@ -257,11 +261,13 @@ const quickLinks = computed(() => [
                 <div
                     v-for="(card, index) in statCards"
                     :key="card.key"
-                    class="dental-card-enter group relative bg-white rounded-2xl p-5 shadow-sm hover:shadow-lg border border-gray-100/80 hover:border-gray-200/80 transition-all duration-300 overflow-hidden"
+                    class="dental-kpi dental-card-enter group relative bg-white rounded-2xl p-5 shadow-sm hover:shadow-lg border border-gray-100/80 hover:border-gray-200/80 transition-all duration-300 overflow-hidden hover:-translate-y-0.5"
                     :style="{ animationDelay: `${index * 0.1}s` }"
                 >
+                    <!-- Gold sheen sweep on hover -->
+                    <span class="dental-kpi-sheen" aria-hidden="true"></span>
                     <!-- Gradient accent top bar -->
-                    <div :class="`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${card.gradient} opacity-80`"></div>
+                    <div :class="`absolute top-0 inset-x-0 h-1 bg-gradient-to-r ${card.gradient} opacity-80`"></div>
 
                     <div class="flex items-start justify-between">
                         <div>
@@ -587,7 +593,7 @@ const quickLinks = computed(() => [
                             <svg class="w-5 h-5 text-[#1B365D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                         </div>
                         <div>
-                            <h2 class="text-[15px] font-semibold text-gray-900">{{ $t('a_monthly_revenue') ? (locale === 'ar' ? 'أداء الأطباء هذا الشهر' : 'Doctor Performance (This Month)') : 'Doctor Performance' }}</h2>
+                            <h2 class="text-[15px] font-semibold text-gray-900">{{ locale === 'ar' ? 'أداء الأطباء هذا الشهر' : 'Doctor Performance (This Month)' }}</h2>
                         </div>
                     </div>
                     <Link href="/admin/reports/dental" class="text-sm text-[#1B365D] hover:text-[#1B365D] font-medium hover:underline transition-colors">
@@ -682,7 +688,7 @@ const quickLinks = computed(() => [
 
                 <div v-else class="divide-y divide-gray-50">
                     <div v-for="(f, idx) in pendingFollowups" :key="f.id"
-                         class="dental-row-enter px-6 py-4 hover:bg-[#F5E7C8]/40/30 transition-colors duration-200"
+                         class="dental-row-enter px-6 py-4 hover:bg-[#F5E7C8]/30 transition-colors duration-200"
                          :class="daysUntil(f.scheduled_date) < 0 ? 'bg-red-50/30' : ''"
                          :style="{ animationDelay: `${0.9 + idx * 0.06}s` }">
                         <div class="flex items-center justify-between gap-4">
@@ -791,5 +797,52 @@ const quickLinks = computed(() => [
 @keyframes dentalRowEnterRtl {
     from { opacity: 0; transform: translateX(-12px); }
     to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ── Brand atmosphere (navy + gold radial mesh) ────────── */
+.dental-page {
+    position: relative;
+}
+.dental-page::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(60% 50% at 88% -5%, rgba(196, 162, 101, 0.07), transparent 60%),
+        radial-gradient(50% 45% at -8% 8%, rgba(27, 54, 93, 0.06), transparent 55%);
+}
+.dental-page > * { position: relative; z-index: 1; }
+
+/* ── KPI gold-sheen sweep on hover ─────────────────────── */
+.dental-kpi-sheen {
+    position: absolute;
+    top: 0;
+    inset-inline-start: -120%;
+    width: 70%;
+    height: 100%;
+    background: linear-gradient(115deg, transparent 30%, rgba(196, 162, 101, 0.18) 50%, transparent 70%);
+    transform: skewX(-18deg);
+    transition: inset-inline-start 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+    z-index: 0;
+}
+.dental-kpi:hover .dental-kpi-sheen {
+    inset-inline-start: 130%;
+}
+
+/* ── Accessibility: honor reduced-motion ───────────────── */
+@media (prefers-reduced-motion: reduce) {
+    .dental-hero-up,
+    .dental-card-enter,
+    .dental-row-enter {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+    .dental-float { animation: none !important; }
+    .dental-kpi:hover { transform: none !important; }
+    .dental-kpi-sheen { display: none; }
 }
 </style>
