@@ -160,6 +160,7 @@ const navGroups = [
     {
         key: 'dental', titleEn: 'Dental', titleAr: 'الأسنان', moduleKey: 'dental',
         color: '#06B6D4',
+        featured: true,
         groupIcon: 'M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342',
         items: [
             { labelEn: 'Dental Dashboard',   labelAr: 'لوحة الأسنان',      href: '/admin/dental',                    icon: 'grid',      permission: null },
@@ -180,6 +181,7 @@ const navGroups = [
     {
         key: 'pediatric', titleEn: 'Pediatrics', titleAr: 'طب الأطفال', moduleKey: 'pediatric',
         color: '#4CAF50',
+        featured: true,
         groupIcon: 'M12 8.25a3.75 3.75 0 100-7.5 3.75 3.75 0 000 7.5zM6.75 12a.75.75 0 00-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 00.75-.75v-.008a.75.75 0 00-.75-.75H6.75zm10.5 0a.75.75 0 00-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 00.75-.75v-.008a.75.75 0 00-.75-.75h-.008zM12 10.5c-3.315 0-6 2.685-6 6v3a.75.75 0 00.75.75h10.5a.75.75 0 00.75-.75v-3c0-3.315-2.685-6-6-6z',
         items: [
             { labelEn: 'Dashboard',     labelAr: 'لوحة التحكم',   href: '/admin/pediatric',              icon: 'grid',      permission: null },
@@ -254,8 +256,6 @@ const navGroups = [
     {
         key: 'insurance', titleEn: 'Insurance', titleAr: 'التأمينات', moduleKey: 'insurance',
         color: '#10B981',
-        accent: '#C4A265',
-        featured: true,
         groupIcon: 'M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z',
         items: [
             { labelEn: 'Reports Dashboard',  labelAr: 'لوحة التقارير',   href: '/admin/insurance/reports',   icon: 'chartUp',   permission: 'invoices.view' },
@@ -279,9 +279,7 @@ const navGroups = [
     },
     {
         key: 'telemedicine', titleEn: 'Telemedicine', titleAr: 'الاستشارات الأونلاين', moduleKey: 'telemedicine',
-        color: '#C4A265',
-        accent: '#1B365D',
-        featured: true,
+        color: '#0EA5E9',
         groupIcon: 'M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z',
         items: [
             { labelEn: 'Consultations',   labelAr: 'الاستشارات',        href: '/admin/online-consultations',          icon: 'video',     permission: 'visits.view' },
@@ -475,7 +473,7 @@ function logout()        { router.post('/admin/logout'); }
                                 </div>
                                 <div class="flex flex-col items-start leading-tight">
                                     <span class="text-white font-bold tracking-wide">{{ groupTitle(group) }}</span>
-                                    <span class="text-[9px] text-[#C4A265] uppercase tracking-widest">Featured</span>
+                                    <span class="text-[9px] text-[#C4A265] uppercase tracking-widest">{{ isRtl ? 'تخصص طبي' : 'Specialty' }}</span>
                                 </div>
                             </div>
                             <svg
