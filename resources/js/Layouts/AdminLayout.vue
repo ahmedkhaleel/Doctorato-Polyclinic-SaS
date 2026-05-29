@@ -204,6 +204,7 @@ const navGroups = [
             { labelEn: 'Visits',             labelAr: 'الزيارات',            href: '/admin/derma/visits',                   icon: 'clipboard', permission: 'derma.view' },
             // ─── Dermatology ──────────────────────────────────────
             { labelEn: 'Skin Conditions',    labelAr: 'الحالات الجلدية',     href: '/admin/derma/conditions',               icon: 'sparkles',  permission: 'derma.view' },
+            { labelEn: 'Treatment Plans',    labelAr: 'خطط العلاج',          href: '/admin/derma/treatment-plans',          icon: 'clipboard', permission: 'derma.view' },
             { labelEn: 'Derma Sessions',     labelAr: 'جلسات العلاج الجلدي', href: '/admin/derma/sessions',                 icon: 'activity',  permission: 'derma.view' },
             { labelEn: 'Rx Templates',       labelAr: 'قوالب الوصفات',       href: '/admin/derma/prescription-templates',   icon: 'file-text', permission: 'derma.view' },
             // ─── Cosmetic ─────────────────────────────────────────

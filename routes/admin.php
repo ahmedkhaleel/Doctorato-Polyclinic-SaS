@@ -970,6 +970,11 @@ Route::middleware('admin.auth')->group(function () {
         Route::post('/conditions/{condition}', [\App\Http\Controllers\Admin\SkinConditionController::class, 'update'])->name('conditions.update')->middleware('permission:derma.update');
         Route::delete('/conditions/{condition}', [\App\Http\Controllers\Admin\SkinConditionController::class, 'destroy'])->name('conditions.destroy')->middleware('permission:derma.delete');
 
+        Route::get('/treatment-plans', [\App\Http\Controllers\Admin\DermaTreatmentPlanController::class, 'index'])->name('treatmentPlans.index');
+        Route::post('/treatment-plans', [\App\Http\Controllers\Admin\DermaTreatmentPlanController::class, 'store'])->name('treatmentPlans.store')->middleware('permission:derma.create');
+        Route::post('/treatment-plans/{plan}', [\App\Http\Controllers\Admin\DermaTreatmentPlanController::class, 'update'])->name('treatmentPlans.update')->middleware('permission:derma.update');
+        Route::delete('/treatment-plans/{plan}', [\App\Http\Controllers\Admin\DermaTreatmentPlanController::class, 'destroy'])->name('treatmentPlans.destroy')->middleware('permission:derma.delete');
+
         Route::get('/sessions', [\App\Http\Controllers\Admin\DermaSessionController::class, 'index'])->name('sessions.index');
         Route::post('/sessions', [\App\Http\Controllers\Admin\DermaSessionController::class, 'store'])->name('sessions.store')->middleware('permission:derma.create');
         Route::post('/sessions/{session}', [\App\Http\Controllers\Admin\DermaSessionController::class, 'update'])->name('sessions.update')->middleware('permission:derma.update');
