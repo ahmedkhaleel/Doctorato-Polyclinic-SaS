@@ -2,14 +2,15 @@
 
 namespace App\Models;
 
+use App\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Crypt;
-use App\Traits\LogsActivity;
 
 class Setting extends Model
 {
     use LogsActivity;
+
     protected $fillable = ['key', 'value', 'group'];
 
     /**
@@ -110,6 +111,7 @@ class Setting extends Model
     public static function hasValue(string $key): bool
     {
         $value = self::get($key);
+
         return $value !== null && $value !== '';
     }
 
@@ -139,6 +141,23 @@ class Setting extends Model
             return static::pluck('value', 'key')->toArray();
         });
 
+        // CRITICAL: decrypt encrypted keys before seeding the memory cache.
+        // get() short-circuits on the in-memory layer (Layer 1) and returns the
+        // stored value WITHOUT running the decrypt step. Since the DB / settings:all
+        // cache holds ciphertext for ENCRYPTED_KEYS, seeding it raw would make every
+        // post-preload get('agora_app_id'|'paymob_api_key'|'stripe_secret_key'|…)
+        // return ciphertext, silently breaking payments, video, and broadcasting.
+        // Mirror get()'s decrypt logic here so all three cache layers agree.
+        foreach (self::ENCRYPTED_KEYS as $key) {
+            if (isset($settings[$key]) && $settings[$key] !== '') {
+                try {
+                    $settings[$key] = Crypt::decryptString($settings[$key]);
+                } catch (\Throwable) {
+                    // Legacy plain-text or corrupted payload — keep as-is.
+                }
+            }
+        }
+
         static::$memoryCache = array_merge(static::$memoryCache, $settings);
     }
 
@@ -160,4 +179,3 @@ class Setting extends Model
         }
     }
 }
-

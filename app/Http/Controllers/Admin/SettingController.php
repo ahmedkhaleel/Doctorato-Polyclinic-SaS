@@ -83,6 +83,13 @@ class SettingController extends Controller
 
         $updatedKeys = [];
         foreach ($data as $key => $value) {
+            // Defensive: never overwrite a stored secret with its masked
+            // placeholder ('••••') when the user leaves the field untouched.
+            // (Mirrors TelemedicineSettingsController; harmless for plain keys.)
+            if (Setting::isEncryptedKey($key) && is_string($value) && str_contains($value, '•')) {
+                continue;
+            }
+
             $group = self::KEY_GROUPS[$key] ?? 'general';
             Setting::set($key, $value ?? '', $group);
             $updatedKeys[] = $key;
