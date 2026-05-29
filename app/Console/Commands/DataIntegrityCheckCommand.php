@@ -225,6 +225,23 @@ class DataIntegrityCheckCommand extends Command
             // column may not exist yet; not fatal
         }
 
+        // ── 12. Paid online consultations with no invoice ─────
+        try {
+            $consultNoInvoice = \App\Models\OnlineConsultation::where('payment_status', 'paid')
+                ->whereNull('invoice_id')
+                ->where('fee', '>', 0)
+                ->count();
+            if ($consultNoInvoice > 0) {
+                $findings[] = [
+                    'check'  => 'paid_consultation_without_invoice',
+                    'count'  => $consultNoInvoice,
+                    'detail' => 'Paid telemedicine consultations not recorded as an invoice (income missing)',
+                ];
+            }
+        } catch (\Throwable $e) {
+            // not fatal
+        }
+
         // ── Report ──────────────────────────────────────────
         if ($this->option('json')) {
             $this->line(json_encode([
