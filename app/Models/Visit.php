@@ -105,6 +105,23 @@ class Visit extends Model
         return $this->hasMany(DentalXray::class);
     }
 
+    // ─── Dermatology & Cosmetic records attached to this visit ─
+
+    public function skinConditions()
+    {
+        return $this->hasMany(SkinCondition::class);
+    }
+
+    public function dermaSessions()
+    {
+        return $this->hasMany(DermaSession::class);
+    }
+
+    public function cosmeticSessions()
+    {
+        return $this->hasMany(CosmeticSession::class);
+    }
+
     public function booking()
     {
         return $this->belongsTo(Booking::class);

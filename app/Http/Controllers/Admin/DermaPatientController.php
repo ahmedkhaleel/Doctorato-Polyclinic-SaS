@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\DermaSession;
 use App\Models\Patient;
+use App\Models\SkinCondition;
 use App\Models\Visit;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -12,7 +14,13 @@ class DermaPatientController extends Controller
 {
     public function index(Request $request)
     {
-        $patientIds = Visit::where('module', 'derma')->distinct()->pluck('patient_id');
+        // A derma patient is anyone with a derma VISIT *or* a standalone
+        // derma clinical record (skin condition / session) — sessions can be
+        // logged without a visit, so visits alone undercount them.
+        $patientIds = Visit::where('module', 'derma')->distinct()->pluck('patient_id')
+            ->merge(SkinCondition::distinct()->pluck('patient_id'))
+            ->merge(DermaSession::distinct()->pluck('patient_id'))
+            ->filter()->unique()->values();
 
         $query = Patient::whereIn('id', $patientIds);
 

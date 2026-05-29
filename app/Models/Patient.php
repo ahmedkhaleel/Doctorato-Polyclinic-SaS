@@ -421,6 +421,33 @@ class Patient extends Model
         return $this->hasMany(DentalLabOrder::class);
     }
 
+    // ─── Dermatology & Cosmetic Relationships ─────────
+
+    public function skinConditions()
+    {
+        return $this->hasMany(SkinCondition::class);
+    }
+
+    public function dermaSessions()
+    {
+        return $this->hasMany(DermaSession::class);
+    }
+
+    public function cosmeticSessions()
+    {
+        return $this->hasMany(CosmeticSession::class);
+    }
+
+    public function cosmeticPackagePurchases()
+    {
+        return $this->hasMany(CosmeticPackagePurchase::class);
+    }
+
+    public function cosmeticConsents()
+    {
+        return $this->hasMany(CosmeticConsent::class);
+    }
+
     public function vitals()
     {
         return $this->hasMany(PatientVital::class);

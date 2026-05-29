@@ -17,7 +17,12 @@ class DermaController extends Controller
 {
     public function index(Request $request)
     {
-        $patientIds = Visit::where('module', 'derma')->distinct()->pluck('patient_id');
+        // Count every patient with a derma footprint — visit, skin condition,
+        // or session (sessions can exist without a visit).
+        $patientIds = Visit::where('module', 'derma')->distinct()->pluck('patient_id')
+            ->merge(SkinCondition::distinct()->pluck('patient_id'))
+            ->merge(DermaSession::distinct()->pluck('patient_id'))
+            ->filter()->unique()->values();
         $totalPatients = $patientIds->count();
         $totalVisits = Visit::where('module', 'derma')->count();
         $thisMonthVisits = Visit::where('module', 'derma')
