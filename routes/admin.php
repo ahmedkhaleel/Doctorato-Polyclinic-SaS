@@ -981,6 +981,8 @@ Route::middleware('admin.auth')->group(function () {
         Route::post('/sessions/{session}', [\App\Http\Controllers\Admin\DermaSessionController::class, 'update'])->name('sessions.update')->middleware('permission:derma.update');
         Route::delete('/sessions/{session}', [\App\Http\Controllers\Admin\DermaSessionController::class, 'destroy'])->name('sessions.destroy')->middleware('permission:derma.delete');
 
+        Route::get('/comparisons', [\App\Http\Controllers\Admin\DermaComparisonController::class, 'index'])->name('comparisons.index');
+
         Route::get('/gallery', [\App\Http\Controllers\Admin\DermaPhotoController::class, 'index'])->name('gallery');
         Route::post('/gallery', [\App\Http\Controllers\Admin\DermaPhotoController::class, 'store'])->name('gallery.store')->middleware('permission:derma.create');
         Route::delete('/gallery/{photo}', [\App\Http\Controllers\Admin\DermaPhotoController::class, 'destroy'])->name('gallery.destroy')->middleware('permission:derma.delete');

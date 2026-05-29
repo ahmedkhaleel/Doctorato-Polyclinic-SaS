@@ -215,6 +215,7 @@ const navGroups = [
             { labelEn: 'Consent Forms',       labelAr: 'نماذج الموافقة',     href: '/admin/cosmetic/consents',              icon: 'document',  permission: 'derma.view' },
             { labelEn: 'Consent Templates',   labelAr: 'قوالب الموافقة',     href: '/admin/cosmetic/consent-templates',     icon: 'file-text', permission: 'derma.view' },
             // ─── Shared ───────────────────────────────────────────
+            { labelEn: 'Before / After',     labelAr: 'مقارنات قبل/بعد',     href: '/admin/derma/comparisons',              icon: 'image',     permission: 'derma.view' },
             { labelEn: 'Gallery',            labelAr: 'المعرض (قبل/بعد)',    href: '/admin/derma/gallery',                  icon: 'image',     permission: 'derma.view' },
             { labelEn: 'Settings',           labelAr: 'الإعدادات',           href: '/admin/derma/settings',                 icon: 'cog',       permission: 'derma.view' },
         ],
