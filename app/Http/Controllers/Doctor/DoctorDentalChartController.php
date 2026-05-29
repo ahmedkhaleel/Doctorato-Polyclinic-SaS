@@ -111,6 +111,7 @@ class DoctorDentalChartController extends BaseDoctorController
             'deciduousTeeth' => DentalChart::ALL_DECIDUOUS_TEETH,
             'treatmentTypes' => DentalTreatment::TYPES,
             'isChild' => $isChild,
+            'supplies' => \App\Models\Supply::orderBy('name_ar')->get(['id', 'name_ar', 'name_en', 'unit', 'quantity']),
         ]);
     }
 

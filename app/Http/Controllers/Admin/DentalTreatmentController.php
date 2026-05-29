@@ -81,6 +81,7 @@ class DentalTreatmentController extends Controller
             'filters' => $request->only(['status', 'treatment_type', 'doctor_id', 'patient_id', 'search', 'tooth_number', 'date_from', 'date_to']),
             'doctors' => Doctor::dental()->active()->select('id', 'name_ar', 'name_en')->get(),
             'treatmentTypes' => DentalTreatment::TYPES,
+            'supplies' => \App\Models\Supply::orderBy('name_ar')->get(['id', 'name_ar', 'name_en', 'unit', 'quantity']),
         ]);
     }
 

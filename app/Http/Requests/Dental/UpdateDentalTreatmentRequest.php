@@ -26,6 +26,8 @@ class UpdateDentalTreatmentRequest extends FormRequest
             'description' => 'nullable|string|max:2000',
             'cost' => 'nullable|numeric|min:0|max:999999.99',
             'lab_cost' => 'nullable|numeric|min:0|max:999999.99',
+            'supply_id' => 'nullable|exists:supplies,id',
+            'consumption_qty' => 'nullable|numeric|min:0',
             'status' => ['nullable', 'string', Rule::in(['planned', 'in_progress', 'completed', 'cancelled'])],
             'notes' => 'nullable|string|max:5000',
         ];

@@ -137,6 +137,9 @@ class DentalTreatment extends Model
         'description',
         'cost',
         'lab_cost',
+        'supply_id',
+        'consumption_qty',
+        'supply_transaction_id',
         'status',
         'completed_at',
         'notes',
@@ -219,6 +222,16 @@ class DentalTreatment extends Model
     public function invoice(): BelongsTo
     {
         return $this->belongsTo(Invoice::class);
+    }
+
+    public function supply(): BelongsTo
+    {
+        return $this->belongsTo(Supply::class);
+    }
+
+    public function supplyTransaction(): BelongsTo
+    {
+        return $this->belongsTo(SupplyTransaction::class);
     }
 
     public function treatmentPlan(): BelongsTo

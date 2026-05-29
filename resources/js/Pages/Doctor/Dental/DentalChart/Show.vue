@@ -22,6 +22,7 @@ const props = defineProps({
     deciduousTeeth: Array,
     isChild: Boolean,
     treatmentTypes: { type: Array, default: () => [] },
+    supplies: { type: Array, default: () => [] },
 });
 
 const selectedTooth = ref(null);
@@ -42,10 +43,12 @@ const quickTreatmentForm = ref({
     description: '',
     status: 'planned',
     cost: '',
+    supply_id: '',
+    consumption_qty: '',
 });
 
 function resetQuickTreatment() {
-    quickTreatmentForm.value = { treatment_type: '', surfaces: [], description: '', status: 'planned', cost: '' };
+    quickTreatmentForm.value = { treatment_type: '', surfaces: [], description: '', status: 'planned', cost: '', supply_id: '', consumption_qty: '' };
     showQuickTreatment.value = false;
 }
 
@@ -66,6 +69,8 @@ function saveQuickTreatment() {
         description: quickTreatmentForm.value.description || null,
         status: quickTreatmentForm.value.status,
         cost: quickTreatmentForm.value.cost || null,
+        supply_id: quickTreatmentForm.value.supply_id || null,
+        consumption_qty: quickTreatmentForm.value.consumption_qty || null,
     }, {
         preserveScroll: true,
         onSuccess: () => { resetQuickTreatment(); },
@@ -856,6 +861,22 @@ function formatDate(d) {
                                     <input v-model="quickTreatmentForm.cost" type="number" step="0.01" min="0"
                                         class="doctorato-input w-full border border-gray-200 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-slate-200 focus:border-slate-300 transition-all"
                                         :placeholder="isRtl ? 'اختياري' : 'Optional'" />
+                                </div>
+                            </div>
+                            <!-- Material consumed (inventory) -->
+                            <div v-if="supplies.length" class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1.5">{{ isRtl ? 'المادة المستهلكة' : 'Material used' }}</label>
+                                    <select v-model="quickTreatmentForm.supply_id" class="doctorato-input w-full border border-gray-200 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-slate-200 focus:border-slate-300 transition-all">
+                                        <option value="">{{ isRtl ? 'بدون' : 'None' }}</option>
+                                        <option v-for="s in supplies" :key="s.id" :value="s.id">{{ (isRtl ? (s.name_ar || s.name_en) : (s.name_en || s.name_ar)) }}<span v-if="s.unit"> ({{ s.unit }})</span></option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1.5">{{ isRtl ? 'الكمية' : 'Qty' }}</label>
+                                    <input v-model="quickTreatmentForm.consumption_qty" type="number" step="0.01" min="0"
+                                        class="doctorato-input w-full border border-gray-200 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-slate-200 focus:border-slate-300 transition-all"
+                                        :placeholder="isRtl ? 'تُخصم عند الإكمال' : 'Drawn on completion'" />
                                 </div>
                             </div>
                             <!-- Description -->

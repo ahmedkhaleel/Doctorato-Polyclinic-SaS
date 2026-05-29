@@ -5,6 +5,8 @@ namespace App\Services;
 use App\Models\DentalChart;
 use App\Models\DentalTreatment;
 use App\Models\DentalTreatmentPlan;
+use App\Models\Supply;
+use App\Models\SupplyTransaction;
 use App\Models\User;
 use App\Notifications\DentalTreatmentCompletedNotification;
 use Illuminate\Support\Facades\DB;
@@ -83,8 +85,9 @@ class DentalTreatmentService
         DB::transaction(function () use ($treatment) {
             AuditLogger::log('deleted', $treatment);
 
-            // Void its invoice line first so deletion never leaves phantom revenue.
+            // Void its invoice line + restore any consumed material first.
             $this->invoiceService->reverseForTreatment($treatment);
+            $this->reverseInventory($treatment);
 
             $planId = $treatment->treatment_plan_id;
             $treatment->delete();
@@ -110,14 +113,16 @@ class DentalTreatmentService
             $this->updatePlanProgress($treatment->treatment_plan_id);
         }
 
-        // Un-completed (was completed, now reverted) → void its invoice line.
+        // Un-completed (was completed, now reverted) → void line + restore stock.
         if ($wasCompleted && $treatment->status !== 'completed') {
             $this->invoiceService->reverseForTreatment($treatment);
+            $this->reverseInventory($treatment);
         }
 
         // Auto-generate invoice and prescription when newly completed
         if (!$wasCompleted && $treatment->status === 'completed') {
             $this->invoiceService->generateForCompletedTreatment($treatment);
+            $this->consumeInventory($treatment);
             $this->prescriptionService->generateForCompletedTreatment($treatment);
 
             // Notify secretaries about completed treatment (for invoicing)
@@ -145,6 +150,69 @@ class DentalTreatmentService
                 ]);
             }
         }
+    }
+
+    /**
+     * Draw the treatment's material from inventory on completion. No-op
+     * unless a supply + positive qty are set and it wasn't already drawn.
+     * Records a 'usage' SupplyTransaction and decrements stock (negative
+     * stock allowed + recorded for later reconciliation), then links it.
+     */
+    protected function consumeInventory(DentalTreatment $treatment): void
+    {
+        $qty = (float) ($treatment->consumption_qty ?? 0);
+        if (! $treatment->supply_id || $qty <= 0 || $treatment->supply_transaction_id) {
+            return;
+        }
+
+        DB::transaction(function () use ($treatment, $qty) {
+            $supply = Supply::lockForUpdate()->find($treatment->supply_id);
+            if (! $supply) {
+                return;
+            }
+            $txn = SupplyTransaction::create([
+                'supply_id'        => $supply->id,
+                'transaction_type' => 'usage',
+                'quantity'         => $qty,
+                'unit_cost'        => $supply->purchase_price,
+                'visit_id'         => $treatment->visit_id,
+                'notes'            => 'Dental treatment #' . $treatment->id,
+                'created_by'       => auth()->id(),
+            ]);
+            $supply->decrement('quantity', $qty);
+            $treatment->update(['supply_transaction_id' => $txn->id]);
+        });
+    }
+
+    /**
+     * Restore material drawn by a treatment (on delete / un-complete):
+     * records a 'return' SupplyTransaction, adds the qty back, clears the link.
+     */
+    protected function reverseInventory(DentalTreatment $treatment): void
+    {
+        if (! $treatment->supply_transaction_id) {
+            return;
+        }
+
+        DB::transaction(function () use ($treatment) {
+            $usage = SupplyTransaction::find($treatment->supply_transaction_id);
+            if ($usage) {
+                $supply = Supply::lockForUpdate()->find($usage->supply_id);
+                if ($supply) {
+                    SupplyTransaction::create([
+                        'supply_id'        => $supply->id,
+                        'transaction_type' => 'return',
+                        'quantity'         => $usage->quantity,
+                        'unit_cost'        => $usage->unit_cost,
+                        'visit_id'         => $treatment->visit_id,
+                        'notes'            => 'Reversal of dental treatment #' . $treatment->id,
+                        'created_by'       => auth()->id(),
+                    ]);
+                    $supply->increment('quantity', (float) $usage->quantity);
+                }
+            }
+            $treatment->update(['supply_transaction_id' => null]);
+        });
     }
 
     /**
