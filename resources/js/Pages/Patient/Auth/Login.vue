@@ -85,7 +85,9 @@ onMounted(() => {
                         <span>{{ isRtl ? 'بوابة المريض' : 'Patient Portal' }}</span>
                     </div>
 
-                    <img src="/images/logo/logo-light.png" alt="Doctorato Polyclinic" class="brand-logo stagger" style="--i:1" />
+                    <a :href="`/${locale}`" class="brand-logo-link stagger" style="--i:1" :title="isRtl ? 'العودة للصفحة الرئيسية' : 'Back to home'">
+                        <img src="/images/logo/logo-light.png" alt="Doctorato Polyclinic" class="brand-logo" />
+                    </a>
 
                     <h1 class="brand-title stagger" style="--i:2">
                         {{ isRtl ? 'صحتك تحت عناية متكاملة' : 'Your health, end-to-end care' }}
@@ -124,7 +126,9 @@ onMounted(() => {
             <main class="form-panel">
                 <!-- Compact brand header (mobile only) -->
                 <div class="mobile-brand">
-                    <img src="/images/logo/logo-light.png" alt="Doctorato Polyclinic" />
+                    <a :href="`/${locale}`" :title="isRtl ? 'العودة للصفحة الرئيسية' : 'Back to home'">
+                        <img src="/images/logo/logo-light.png" alt="Doctorato Polyclinic" />
+                    </a>
                     <p>{{ isRtl ? 'بوابة المريض' : 'Patient Portal' }}</p>
                 </div>
 
@@ -384,11 +388,25 @@ onMounted(() => {
     border-radius: 2px;
 }
 
+.brand-logo-link {
+    display: inline-block;
+    margin-bottom: 36px;
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                filter 0.3s ease;
+    cursor: pointer;
+}
+.brand-logo-link:hover {
+    transform: translateY(-2px);
+}
+.brand-logo-link:hover .brand-logo {
+    filter: drop-shadow(0 8px 28px rgba(196,162,101,0.45));
+}
 .brand-logo {
     height: 56px;
     width: auto;
-    margin-bottom: 36px;
+    display: block;
     filter: drop-shadow(0 4px 18px rgba(196,162,101,0.25));
+    transition: filter 0.3s ease;
 }
 
 .brand-title {
@@ -465,11 +483,22 @@ onMounted(() => {
     text-align: center;
     margin-bottom: 28px;
 }
+.mobile-brand a {
+    display: inline-block;
+    margin-bottom: 8px;
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.mobile-brand a:hover { transform: translateY(-2px); }
+.mobile-brand a:hover img {
+    filter: drop-shadow(0 8px 22px rgba(196,162,101,0.5));
+}
 .mobile-brand img {
     height: 44px;
     width: auto;
-    margin: 0 auto 8px;
+    margin: 0 auto;
+    display: block;
     filter: drop-shadow(0 4px 14px rgba(196,162,101,0.3));
+    transition: filter 0.3s ease;
 }
 .mobile-brand p {
     font-size: 11px;
