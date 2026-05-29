@@ -114,7 +114,7 @@ return [
             'label_en' => 'Invoices',
             'label_ar' => 'الفواتير',
             'group' => 'finance',
-            'actions' => ['view', 'create', 'update'],
+            'actions' => ['view', 'create', 'update', 'delete'],
         ],
         'payments' => [
             'label_en' => 'Payments',
@@ -206,7 +206,7 @@ return [
             'label_en' => 'Attendance',
             'label_ar' => 'الحضور والانصراف',
             'group' => 'hr',
-            'actions' => ['view', 'create', 'update'],
+            'actions' => ['view', 'create', 'update', 'delete'],
         ],
         'leaves' => [
             'label_en' => 'Leaves',
@@ -292,7 +292,7 @@ return [
             'label_en' => 'Marketer Commissions',
             'label_ar' => 'عمولات المسوقين',
             'group' => 'crm',
-            'actions' => ['view', 'create', 'update', 'approve'],
+            'actions' => ['view', 'create', 'update', 'approve', 'delete'],
         ],
 
         // ─── Dental Module ─────────────────────────────────────
