@@ -484,7 +484,12 @@ Route::middleware('admin.auth')->group(function () {
         Route::post('/employees/{employee}/delete', [EmployeeController::class, 'destroy'])->name('admin.employees.destroy')->middleware('permission:employees.delete');
 
         // Payroll
-        Route::get('/payroll', [PayrollController::class, 'index'])->name('admin.payroll.index')->middleware('permission:salary_slips.view');
+        // Self-service: any logged-in admin-panel user can see their own payslips.
+    // No permission gate — scoped to the user's own employee record in controller.
+    Route::get('/my-payslips', [\App\Http\Controllers\Admin\AdminMyPayslipController::class, 'index'])->name('admin.my-payslips.index')->middleware('module:hr');
+    Route::get('/my-payslips/{salarySlip}', [\App\Http\Controllers\Admin\AdminMyPayslipController::class, 'show'])->name('admin.my-payslips.show')->middleware('module:hr');
+
+    Route::get('/payroll', [PayrollController::class, 'index'])->name('admin.payroll.index')->middleware('permission:salary_slips.view');
         Route::get('/payroll/create', [PayrollController::class, 'create'])->name('admin.payroll.create')->middleware('permission:salary_slips.create');
         Route::post('/payroll/generate', [PayrollController::class, 'generate'])->name('admin.payroll.generate')->middleware('permission:salary_slips.create');
         Route::get('/payroll/{salarySlip}', [PayrollController::class, 'show'])->name('admin.payroll.show')->middleware('permission:salary_slips.view');

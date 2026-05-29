@@ -308,6 +308,7 @@ const navGroups = [
             { labelEn: 'Dental Reports',   labelAr: 'تقارير الأسنان',  href: '/admin/reports/dental',            icon: 'tooth',   permission: 'reports.view', moduleKey: 'dental' },
             { labelEn: 'Derma Reports',    labelAr: 'تقارير الجلدية',  href: '/admin/reports/derma',             icon: 'sparkles', permission: 'reports.view', moduleKey: 'derma' },
             { labelEn: 'Backups',         labelAr: 'النسخ الاحتياطي', href: '/admin/backups',            icon: 'shield',   permission: 'settings.update' },
+            { labelEn: 'My Payslips',    labelAr: 'قسائم راتبي',    href: '/admin/my-payslips',         icon: 'receipt',    permission: null, moduleKey: 'hr' },
             { labelEn: 'Notifications',   labelAr: 'مركز الإشعارات', href: '/admin/notification-center', icon: 'bellCenter', permission: null },
             { labelEn: 'Activity Logs',  labelAr: 'سجل النشاطات',  href: '/admin/activity-logs',      icon: 'activity', permission: 'reports.view' },
             { labelEn: 'Medical Logs',   labelAr: 'سجل الوصول الطبي', href: '/admin/medical-access-logs', icon: 'shield', permission: 'patients.view_sensitive_medical' },
