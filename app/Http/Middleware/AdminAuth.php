@@ -64,7 +64,8 @@ class AdminAuth
                 return response()->json(['message' => 'You do not have access to the admin panel.'], 403);
             }
 
-            // Send user to their own panel home (or admin login if unknown role)
+            // Staff roles → their own panel. Patient / unknown → admin login
+            // (so an admin stuck in a patient session can sign in as admin).
             $home = $this->resolveHome($roleName, $request);
             if ($home) {
                 return redirect($home)
@@ -72,7 +73,7 @@ class AdminAuth
             }
 
             return redirect()->route('admin.login')
-                ->with('error', 'You do not have access to the admin panel.');
+                ->with('error', 'يرجى تسجيل الدخول بحساب إداري للوصول إلى لوحة الإدارة.');
         }
 
         return $next($request);
@@ -80,21 +81,22 @@ class AdminAuth
 
     /**
      * Build the correct home URL for a role bounced out of the admin panel.
-     * The patient portal is locale-prefixed, so it cannot use the flat
-     * $roleHomes map — it is resolved here with the active locale.
+     *
+     * Staff roles (doctor/secretary/webmaster) have their own dedicated
+     * panels, so we send them straight there — good UX, they belong there.
+     *
+     * The `patient` role intentionally returns null here so it falls
+     * through to the admin LOGIN page instead of the patient portal.
+     * Rationale: a patient never has a reason to type /admin, but an
+     * ADMIN who happens to be logged into a patient account (e.g. for
+     * testing) would otherwise be trapped — unable to reach the admin
+     * login. Routing them to admin.login lets them sign in as admin,
+     * which replaces the patient session. The session is never destroyed
+     * here, so a genuine patient just sees the login and can navigate
+     * back to their portal.
      */
     private function resolveHome(?string $roleName, Request $request): ?string
     {
-        if ($roleName === 'patient') {
-            $locale = session('admin_locale');
-            if (! in_array($locale, ['ar', 'en'], true)) {
-                $locale = config('app.locale', 'ar');
-            }
-
-            // route() yields a valid locale-prefixed URL (/ar/patient).
-            return route('patient.dashboard', ['locale' => $locale]);
-        }
-
         return $this->roleHomes[$roleName] ?? null;
     }
 }
