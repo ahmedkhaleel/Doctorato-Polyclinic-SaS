@@ -148,6 +148,16 @@ class InsuranceClaimController extends Controller
             $claim->save();
         });
 
+        // Money flow: record / sync / reverse the insurer reimbursement as a
+        // Payment on the linked invoice so it lands in revenue + the invoice
+        // balance (insurer reimbursements were previously invisible to finance).
+        $claimPayments = app(\App\Services\InsuranceClaimPaymentService::class);
+        if (in_array($newStatus, ['paid', 'partially_paid'], true)) {
+            $claimPayments->sync($claim->fresh());
+        } elseif (in_array($newStatus, ['rejected', 'draft', 'submitted', 'under_review'], true)) {
+            $claimPayments->reverse($claim->fresh());
+        }
+
         AuditLogger::log('status_changed', $claim, ['new_status' => $newStatus]);
         Cache::forget('insurance_claims_stats');
 

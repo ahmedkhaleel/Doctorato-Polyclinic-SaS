@@ -32,7 +32,7 @@ class InsuranceClaim extends Model
 
     protected $fillable = [
         'claim_number', 'patient_insurance_id', 'patient_id',
-        'invoice_id', 'visit_id',
+        'invoice_id', 'visit_id', 'payment_id',
         'service_date', 'diagnosis', 'services_description',
         'total_amount', 'covered_amount', 'patient_share',
         'approved_amount', 'paid_amount',
@@ -67,6 +67,11 @@ class InsuranceClaim extends Model
     public function invoice()
     {
         return $this->belongsTo(Invoice::class);
+    }
+
+    public function payment()
+    {
+        return $this->belongsTo(Payment::class);
     }
 
     public function visit()
