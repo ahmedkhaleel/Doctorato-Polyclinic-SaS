@@ -2,7 +2,11 @@
 
 namespace App\Services;
 
+use App\Models\Invoice;
+use App\Models\InvoiceItem;
 use App\Models\OnlineConsultation;
+use App\Models\Payment;
+use App\Models\PaymentMethod;
 use App\Models\User;
 use App\Models\Visit;
 use Illuminate\Support\Facades\DB;
@@ -40,10 +44,67 @@ class OnlineConsultationService
 
     public function markPaid(OnlineConsultation $consultation, string $gatewayRef): void
     {
-        $consultation->update([
-            'payment_status' => 'paid',
-            'payment_gateway_reference' => $gatewayRef,
+        DB::transaction(function () use ($consultation, $gatewayRef) {
+            $consultation->update([
+                'payment_status' => 'paid',
+                'payment_gateway_reference' => $gatewayRef,
+            ]);
+
+            // Record the gateway-collected fee as a real Invoice + Payment so
+            // telemedicine income appears in revenue reports and the patient's
+            // invoices (previously only payment_status was flipped → invisible).
+            $this->recordConsultationIncome($consultation->fresh(), $gatewayRef);
+        });
+    }
+
+    /**
+     * Turn a paid consultation's fee into an Invoice (module-tagged) settled
+     * by a Payment under the "Online Payment" method. Idempotent — skips if an
+     * invoice is already linked or the fee is zero.
+     */
+    protected function recordConsultationIncome(OnlineConsultation $consultation, string $gatewayRef): void
+    {
+        if ($consultation->invoice_id || (float) $consultation->fee <= 0) {
+            return;
+        }
+
+        $invoice = new Invoice([
+            'invoice_number'  => Invoice::generateInvoiceNumber(),
+            'invoice_date'    => now()->toDateString(),
+            'patient_id'      => $consultation->patient_id,
+            'visit_id'        => $consultation->visit_id,
+            'module'          => $consultation->module,
+            'subtotal'        => (float) $consultation->fee,
+            'discount_amount' => 0,
+            'tax_amount'      => 0,
+            'total'           => (float) $consultation->fee,
         ]);
+        $invoice->paid_amount = 0;
+        $invoice->status = 'unpaid';
+        $invoice->save();
+
+        InvoiceItem::create([
+            'invoice_id'     => $invoice->id,
+            'description_en' => 'Online consultation',
+            'description_ar' => 'استشارة أونلاين',
+            'quantity'       => 1,
+            'unit_price'     => (float) $consultation->fee,
+            'discount'       => 0,
+            'total'          => (float) $consultation->fee,
+        ]);
+
+        Payment::create([
+            'invoice_id'        => $invoice->id,
+            'patient_id'        => $consultation->patient_id,
+            'payment_method_id' => PaymentMethod::firstOrCreate(['name_en' => 'Online Payment'], ['name_ar' => 'دفع أونلاين', 'is_active' => true])->id,
+            'amount'            => (float) $consultation->fee,
+            'payment_date'      => now()->toDateString(),
+            'reference_number'  => $gatewayRef,
+            'notes'             => 'Telemedicine consultation ' . $consultation->consultation_number,
+        ]);
+
+        $invoice->recalculateStatus();
+        $consultation->update(['invoice_id' => $invoice->id]);
     }
 
     public function cancel(OnlineConsultation $consultation, User $by, string $reason): void
