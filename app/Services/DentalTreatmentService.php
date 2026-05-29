@@ -83,6 +83,9 @@ class DentalTreatmentService
         DB::transaction(function () use ($treatment) {
             AuditLogger::log('deleted', $treatment);
 
+            // Void its invoice line first so deletion never leaves phantom revenue.
+            $this->invoiceService->reverseForTreatment($treatment);
+
             $planId = $treatment->treatment_plan_id;
             $treatment->delete();
 
@@ -105,6 +108,11 @@ class DentalTreatmentService
         // Update treatment plan progress
         if ($treatment->treatment_plan_id) {
             $this->updatePlanProgress($treatment->treatment_plan_id);
+        }
+
+        // Un-completed (was completed, now reverted) → void its invoice line.
+        if ($wasCompleted && $treatment->status !== 'completed') {
+            $this->invoiceService->reverseForTreatment($treatment);
         }
 
         // Auto-generate invoice and prescription when newly completed

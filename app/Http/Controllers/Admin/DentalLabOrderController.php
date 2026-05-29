@@ -170,6 +170,8 @@ class DentalLabOrderController extends Controller
     public function destroy(DentalLabOrder $labOrder)
     {
         AuditLogger::log('deleted', $labOrder);
+        // Void its invoice line first so deletion leaves no phantom charge.
+        app(DentalInvoiceService::class)->reverseForLabOrder($labOrder);
         $labOrder->delete();
 
         return redirect()->route('admin.dental.lab-orders.index')

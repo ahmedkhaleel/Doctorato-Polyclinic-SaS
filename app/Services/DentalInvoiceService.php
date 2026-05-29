@@ -41,7 +41,7 @@ class DentalInvoiceService
             $treatmentType = str_replace('_', ' ', $treatment->treatment_type);
             $toothLabel = $treatment->tooth_number ? " (#{$treatment->tooth_number})" : '';
 
-            InvoiceItem::create([
+            $item = InvoiceItem::create([
                 'invoice_id' => $invoice->id,
                 'description_en' => ucfirst($treatmentType) . $toothLabel,
                 'description_ar' => $this->getArabicDescription($treatment->treatment_type) . $toothLabel,
@@ -57,10 +57,52 @@ class DentalInvoiceService
             // Recalculate invoice totals
             $this->recalculateInvoice($invoice);
 
-            // Link treatment to invoice
-            $treatment->update(['invoice_id' => $invoice->id]);
+            // Link treatment to invoice + its exact line (for clean reversal)
+            $treatment->update(['invoice_id' => $invoice->id, 'invoice_item_id' => $item->id]);
 
             return $invoice->fresh(['items']);
+        });
+    }
+
+    /**
+     * Void the invoice line a treatment produced and recalc its invoice.
+     * Safe to call on any treatment — no-op when none was billed. Used when a
+     * treatment is deleted or un-completed.
+     */
+    public function reverseForTreatment(DentalTreatment $treatment): void
+    {
+        if (! $treatment->invoice_item_id) {
+            return;
+        }
+
+        DB::transaction(function () use ($treatment) {
+            $item = InvoiceItem::find($treatment->invoice_item_id);
+            $invoice = $item?->invoice;
+            $item?->delete();
+            if ($invoice) {
+                $this->recalculateInvoice($invoice);
+            }
+            $treatment->update(['invoice_id' => null, 'invoice_item_id' => null]);
+        });
+    }
+
+    /**
+     * Void a lab order's invoice line (on lab-order delete). No-op if unbilled.
+     */
+    public function reverseForLabOrder(DentalLabOrder $labOrder): void
+    {
+        if (! $labOrder->invoice_item_id) {
+            return;
+        }
+
+        DB::transaction(function () use ($labOrder) {
+            $item = InvoiceItem::find($labOrder->invoice_item_id);
+            $invoice = $item?->invoice;
+            $item?->delete();
+            if ($invoice) {
+                $this->recalculateInvoice($invoice);
+            }
+            $labOrder->update(['invoice_item_id' => null]);
         });
     }
 

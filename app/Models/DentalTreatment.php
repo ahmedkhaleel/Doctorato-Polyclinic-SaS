@@ -129,6 +129,7 @@ class DentalTreatment extends Model
         'doctor_id',
         'visit_id',
         'invoice_id',
+        'invoice_item_id',
         'treatment_plan_id',
         'tooth_number',
         'treatment_type',
