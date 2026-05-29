@@ -24,20 +24,9 @@ class ReportController extends Controller
         $lastMonth = $now->copy()->subMonth();
         $module = $request->input('module');
 
-        // Helper: apply module filter via visits join for payments
-        $paymentModuleFilter = function ($query) use ($module) {
-            if ($module) {
-                $query->join('invoices', 'payments.invoice_id', '=', 'invoices.id')
-                    ->join('visits', 'invoices.visit_id', '=', 'visits.id')
-                    ->where('visits.module', $module);
-            }
-        };
-
         // Current month
         $revenueQuery = Payment::whereMonth('payment_date', $now->month)->whereYear('payment_date', $now->year);
-        if ($module) {
-            $revenueQuery->whereHas('invoice', fn ($q) => $q->whereHas('visit', fn ($q2) => $q2->where('module', $module)));
-        }
+        $this->applyPaymentModule($revenueQuery, $module);
         $revenue = round((float) $revenueQuery->sum('amount'), 2);
 
         $expenses = round((float) Expense::whereMonth('expense_date', $now->month)
@@ -57,9 +46,7 @@ class ReportController extends Controller
 
         // Last month for comparison
         $prevRevenueQuery = Payment::whereMonth('payment_date', $lastMonth->month)->whereYear('payment_date', $lastMonth->year);
-        if ($module) {
-            $prevRevenueQuery->whereHas('invoice', fn ($q) => $q->whereHas('visit', fn ($q2) => $q2->where('module', $module)));
-        }
+        $this->applyPaymentModule($prevRevenueQuery, $module);
         $prevRevenue = round((float) $prevRevenueQuery->sum('amount'), 2);
 
         $prevExpenses = round((float) Expense::whereMonth('expense_date', $lastMonth->month)
@@ -76,7 +63,7 @@ class ReportController extends Controller
         $dailyRevenueQuery = Payment::whereDate('payment_date', '>=', $now->copy()->subDays(13)->toDateString())
             ->whereDate('payment_date', '<=', $now->toDateString());
         if ($module) {
-            $dailyRevenueQuery->whereHas('invoice', fn ($q) => $q->whereHas('visit', fn ($q2) => $q2->where('module', $module)));
+            $this->applyPaymentModule($dailyRevenueQuery, $module);
         }
         $dailyRevenue = $dailyRevenueQuery
             ->select(DB::raw('DATE(payment_date) as date'), DB::raw('SUM(amount) as total'))
@@ -117,7 +104,8 @@ class ReportController extends Controller
 
         $unpaidQuery = Invoice::whereIn('status', ['unpaid', 'partial']);
         if ($module) {
-            $unpaidQuery->whereHas('visit', fn ($q) => $q->where('module', $module));
+            $unpaidQuery->where(fn ($q) => $q->where('module', $module)
+                ->orWhereHas('visit', fn ($v) => $v->where('module', $module)));
         }
 
         $summary = [
@@ -145,12 +133,12 @@ class ReportController extends Controller
         if ($enabledMedical->count() >= 2 && !$module) {
             $moduleComparison = [];
             foreach ($enabledMedical as $mod) {
-                $modRevenueQ = Payment::whereMonth('payment_date', $now->month)->whereYear('payment_date', $now->year)
-                    ->whereHas('invoice', fn ($q) => $q->whereHas('visit', fn ($q2) => $q2->where('module', $mod)));
+                $modRevenueQ = Payment::whereMonth('payment_date', $now->month)->whereYear('payment_date', $now->year);
+                $this->applyPaymentModule($modRevenueQ, $mod);
                 $modRevenue = round((float) $modRevenueQ->sum('amount'), 2);
 
-                $modPrevRevenueQ = Payment::whereMonth('payment_date', $lastMonth->month)->whereYear('payment_date', $lastMonth->year)
-                    ->whereHas('invoice', fn ($q) => $q->whereHas('visit', fn ($q2) => $q2->where('module', $mod)));
+                $modPrevRevenueQ = Payment::whereMonth('payment_date', $lastMonth->month)->whereYear('payment_date', $lastMonth->year);
+                $this->applyPaymentModule($modPrevRevenueQ, $mod);
                 $modPrevRevenue = round((float) $modPrevRevenueQ->sum('amount'), 2);
 
                 $modVisits = Visit::whereMonth('visit_date', $now->month)->whereYear('visit_date', $now->year)
@@ -198,7 +186,7 @@ class ReportController extends Controller
         $revenueQuery = Payment::whereDate('payment_date', '>=', $dateFrom)
             ->whereDate('payment_date', '<=', $dateTo);
         if ($module) {
-            $revenueQuery->whereHas('invoice', fn ($q) => $q->whereHas('visit', fn ($q2) => $q2->where('module', $module)));
+            $this->applyPaymentModule($revenueQuery, $module);
         }
         $totalRevenue = $revenueQuery->sum('amount');
 
@@ -210,14 +198,15 @@ class ReportController extends Controller
             ->whereDate('created_at', '>=', $dateFrom)
             ->whereDate('created_at', '<=', $dateTo);
         if ($module) {
-            $unpaidQuery->whereHas('visit', fn ($q) => $q->where('module', $module));
+            $unpaidQuery->where(fn ($q) => $q->where('module', $module)
+                ->orWhereHas('visit', fn ($v) => $v->where('module', $module)));
         }
         $unpaidInvoices = $unpaidQuery->sum(DB::raw('total - paid_amount'));
 
         $revenueByMethodQuery = Payment::whereDate('payment_date', '>=', $dateFrom)
             ->whereDate('payment_date', '<=', $dateTo);
         if ($module) {
-            $revenueByMethodQuery->whereHas('invoice', fn ($q) => $q->whereHas('visit', fn ($q2) => $q2->where('module', $module)));
+            $this->applyPaymentModule($revenueByMethodQuery, $module);
         }
         $revenueByMethod = $revenueByMethodQuery
             ->join('payment_methods', 'payments.payment_method_id', '=', 'payment_methods.id')
@@ -243,7 +232,7 @@ class ReportController extends Controller
         $dailyRevenueQuery = Payment::whereDate('payment_date', '>=', $dateFrom)
             ->whereDate('payment_date', '<=', $dateTo);
         if ($module) {
-            $dailyRevenueQuery->whereHas('invoice', fn ($q) => $q->whereHas('visit', fn ($q2) => $q2->where('module', $module)));
+            $this->applyPaymentModule($dailyRevenueQuery, $module);
         }
         $dailyRevenue = $dailyRevenueQuery
             ->select(DB::raw('DATE(payment_date) as label'), DB::raw('SUM(amount) as value'))
@@ -443,5 +432,26 @@ class ReportController extends Controller
                 'module' => $module,
             ],
         ]);
+    }
+
+    /**
+     * Restrict a Payment query to a clinic module.
+     *
+     * A payment counts toward a module when its invoice is tagged with that
+     * module (derma session / package invoices set invoice.module) OR the
+     * invoice's visit is in that module (visit-based invoices, e.g. dental).
+     * The OR is required because session/package invoices may have no visit —
+     * a visit-only filter silently dropped that revenue from module reports.
+     */
+    private function applyPaymentModule($query, ?string $module)
+    {
+        if ($module) {
+            $query->whereHas('invoice', function ($q) use ($module) {
+                $q->where('module', $module)
+                  ->orWhereHas('visit', fn ($v) => $v->where('module', $module));
+            });
+        }
+
+        return $query;
     }
 }
