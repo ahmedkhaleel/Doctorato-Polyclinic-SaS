@@ -120,6 +120,74 @@ class DataIntegrityCheckCommand extends Command
             ];
         }
 
+        // ── 7. Paid salary slips / doctor payouts with no expense ──
+        // Guards the labor→expense link: paid labor that never hit the ledger
+        // means the financial reports understate cost.
+        try {
+            $slipsNoExpense = \App\Models\SalarySlip::where('status', 'paid')
+                ->whereNull('expense_id')
+                ->where('net_salary', '>', 0)
+                ->count();
+            if ($slipsNoExpense > 0) {
+                $findings[] = [
+                    'check'  => 'paid_slip_without_expense',
+                    'count'  => $slipsNoExpense,
+                    'detail' => 'Paid salary slips not recorded in the expense ledger',
+                ];
+            }
+
+            $payoutsNoExpense = \App\Models\DoctorPayout::where('status', 'paid')
+                ->whereNull('expense_id')
+                ->where('net_amount', '>', 0)
+                ->count();
+            if ($payoutsNoExpense > 0) {
+                $findings[] = [
+                    'check'  => 'paid_payout_without_expense',
+                    'count'  => $payoutsNoExpense,
+                    'detail' => 'Paid doctor payouts not recorded in the expense ledger',
+                ];
+            }
+        } catch (\Throwable $e) {
+            // Columns may not exist on older schema; not fatal.
+        }
+
+        // ── 8. Visit-based invoices missing a module tag ──────
+        // Guards the invoice-module hook: untagged visit invoices vanish from
+        // per-module revenue dashboards.
+        try {
+            $untaggedInvoices = Invoice::whereNull('module')
+                ->whereNotNull('visit_id')
+                ->whereHas('visit', fn ($q) => $q->whereNotNull('module'))
+                ->count();
+            if ($untaggedInvoices > 0) {
+                $findings[] = [
+                    'check'  => 'invoice_missing_module',
+                    'count'  => $untaggedInvoices,
+                    'detail' => 'Visit-based invoices with no module tag (excluded from module revenue)',
+                ];
+            }
+        } catch (\Throwable $e) {
+            // not fatal
+        }
+
+        // ── 9. Salary-mode doctors with a cash-disbursed payout ──
+        // Guards the hybrid payment model: a salary-mode doctor should never
+        // have a 'paid' (cash-disbursed) payout — that would be a double pay.
+        try {
+            $doubleRisk = \App\Models\DoctorPayout::where('doctor_payouts.status', 'paid')
+                ->whereHas('doctor', fn ($q) => $q->where('payment_mode', 'salary'))
+                ->count();
+            if ($doubleRisk > 0) {
+                $findings[] = [
+                    'check'  => 'salary_doctor_cash_payout',
+                    'count'  => $doubleRisk,
+                    'detail' => 'Salary-mode doctors with a cash-paid payout (double-pay risk — commission also on slip)',
+                ];
+            }
+        } catch (\Throwable $e) {
+            // column may not exist yet; not fatal
+        }
+
         // ── Report ──────────────────────────────────────────
         if ($this->option('json')) {
             $this->line(json_encode([
