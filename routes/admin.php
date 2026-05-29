@@ -909,6 +909,12 @@ Route::middleware('admin.auth')->group(function () {
         Route::post('/insurance/claims', [InsuranceClaimController::class, 'store'])->name('admin.insurance.claims.store')->middleware('permission:invoices.create');
         Route::post('/insurance/claims/{claim}/status', [InsuranceClaimController::class, 'updateStatus'])->name('admin.insurance.claims.status')->middleware('permission:invoices.update');
 
+        // ─── Pre-authorizations ───────────────────────────────
+        Route::get('/insurance/pre-authorizations', [\App\Http\Controllers\Admin\InsurancePreAuthorizationController::class, 'index'])->name('admin.insurance.pre-authorizations.index')->middleware('permission:invoices.view');
+        Route::post('/insurance/pre-authorizations', [\App\Http\Controllers\Admin\InsurancePreAuthorizationController::class, 'store'])->name('admin.insurance.pre-authorizations.store')->middleware('permission:invoices.create');
+        Route::post('/insurance/pre-authorizations/{preAuthorization}/status', [\App\Http\Controllers\Admin\InsurancePreAuthorizationController::class, 'updateStatus'])->name('admin.insurance.pre-authorizations.status')->middleware('permission:invoices.update');
+        Route::post('/insurance/pre-authorizations/{preAuthorization}/delete', [\App\Http\Controllers\Admin\InsurancePreAuthorizationController::class, 'destroy'])->name('admin.insurance.pre-authorizations.destroy')->middleware('permission:invoices.update');
+
         Route::get('/insurance/reports', [InsuranceReportController::class, 'index'])->name('admin.insurance.reports')->middleware('permission:invoices.view');
 
         // Insurance Plans

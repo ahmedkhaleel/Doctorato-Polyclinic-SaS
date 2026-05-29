@@ -264,6 +264,7 @@ const navGroups = [
         items: [
             { labelEn: 'Reports Dashboard',  labelAr: 'لوحة التقارير',   href: '/admin/insurance/reports',   icon: 'chartUp',   permission: 'invoices.view' },
             { labelEn: 'Claims',             labelAr: 'المطالبات',        href: '/admin/insurance/claims',    icon: 'clipboard', permission: 'invoices.view' },
+            { labelEn: 'Pre-Authorizations', labelAr: 'الموافقات المسبقة', href: '/admin/insurance/pre-authorizations', icon: 'checklist', permission: 'invoices.view' },
             { labelEn: 'Companies',          labelAr: 'شركات التأمين',    href: '/admin/insurance/companies', icon: 'building',  permission: 'settings.view' },
             { labelEn: 'Plans',              labelAr: 'باقات التأمين',    href: '/admin/insurance/plans',     icon: 'layers',    permission: 'settings.view' },
             { labelEn: 'Patient Insurances', labelAr: 'تأمينات المرضى',   href: '/admin/insurance/patient-insurances', icon: 'heart', permission: 'patients.view' },

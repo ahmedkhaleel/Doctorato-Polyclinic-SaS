@@ -64,6 +64,9 @@ Schedule::command('pediatric:vaccination-reminders --type=overdue --days=14')->w
 // Inventory: Check low stock and auto-generate purchase orders daily at 9:00 AM
 Schedule::command('inventory:check-low-stock')->dailyAt('09:00');
 
+// Insurance: expire approved pre-authorizations past their validity, daily at 00:20.
+Schedule::command('insurance:expire-pre-auths')->dailyAt('00:20')->withoutOverlapping();
+
 // HR: Payroll close reminder on the last 2 days of each month at 09:00.
 // Lists employees still missing a salary slip so payroll can be closed before month-end.
 Schedule::command('hr:payroll-reminder')
