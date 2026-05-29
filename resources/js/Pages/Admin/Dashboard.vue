@@ -1,10 +1,42 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, ref, onMounted } from 'vue';
 import { Link, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { useCurrency } from '@/Composables/useCurrency.js';
 
 const { formatCurrency, currencyCode } = useCurrency();
+
+/* ── Page-load orchestration ─────────────────────────────── */
+const mounted = ref(false);
+onMounted(() => {
+    requestAnimationFrame(() => { mounted.value = true; });
+});
+
+/* ── Count-up directive (v-countup) ──────────────────────────
+   Animates an integer from 0 → target with easeOutCubic. Honors
+   prefers-reduced-motion. Used on the raw-number clinic KPIs.        */
+const prefersReducedMotion = typeof window !== 'undefined'
+    && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+
+function animateCount(el, target) {
+    const final = Number(target) || 0;
+    if (prefersReducedMotion) { el.textContent = final.toLocaleString(); return; }
+    const duration = 1000;
+    const start = performance.now();
+    function frame(now) {
+        const t = Math.min(1, (now - start) / duration);
+        const eased = 1 - Math.pow(1 - t, 3);
+        el.textContent = Math.round(final * eased).toLocaleString();
+        if (t < 1) requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+}
+const vCountup = {
+    mounted(el, binding) { animateCount(el, binding.value); },
+    updated(el, binding) {
+        if (binding.value !== binding.oldValue) animateCount(el, binding.value);
+    },
+};
 
 const page = usePage();
 const locale = computed(() => page.props.locale || 'ar');
@@ -275,10 +307,18 @@ function labelX(index, total) {
 
 <template>
     <AdminLayout :title="$t('a_dashboard')">
-        <div class="space-y-4 md:space-y-6 lg:space-y-8">
+        <!-- Ambient brand atmosphere behind the whole dashboard -->
+        <div class="dash-atmosphere" aria-hidden="true"></div>
+
+        <div class="dash-root space-y-4 md:space-y-6 lg:space-y-8" :class="{ 'is-mounted': mounted }">
 
             <!-- ═════════ Navy Hero Header ═════════ -->
-            <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] shadow-xl">
+            <div class="dash-stagger relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1B365D] via-[#1B365D] to-[#0F2444] shadow-xl" style="--i:0">
+                <!-- Animated heartbeat line across the hero -->
+                <svg class="dash-hero-ecg" viewBox="0 0 600 40" preserveAspectRatio="none" aria-hidden="true">
+                    <path d="M0 20 L120 20 L132 8 L144 32 L156 4 L168 36 L180 20 L300 20 L312 11 L324 29 L336 7 L348 33 L360 20 L600 20"
+                          fill="none" stroke="#C4A265" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="dash-hero-ecg-path" />
+                </svg>
                 <div class="pointer-events-none absolute -top-16 -end-16 h-56 w-56 rounded-full bg-[#C4A265]/20 blur-3xl"></div>
                 <div class="pointer-events-none absolute -bottom-20 start-1/3 h-48 w-48 rounded-full bg-[#C4A265]/10 blur-3xl"></div>
                 <div class="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-[#C4A265] to-transparent"></div>
@@ -314,13 +354,13 @@ function labelX(index, total) {
             </div>
 
             <!-- ── Row 2: Financial KPI Cards ───────────────────── -->
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+            <div class="dash-stagger grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4" style="--i:1">
                 <component
                     :is="card.href ? Link : 'div'"
                     v-for="card in financialCards"
                     :key="card.labelKey"
                     :href="card.href || undefined"
-                    class="group relative bg-white rounded-2xl p-5 shadow-sm hover:shadow-lg border border-gray-100/80 hover:border-gray-200/80 transition-all duration-300 overflow-hidden"
+                    class="dash-kpi group relative bg-white rounded-2xl p-5 shadow-sm hover:shadow-lg border border-gray-100/80 hover:border-[#C4A265]/40 transition-all duration-300 overflow-hidden"
                 >
                     <!-- Gradient accent top -->
                     <div :class="`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${card.gradient} opacity-80`"></div>
@@ -356,7 +396,7 @@ function labelX(index, total) {
             </div>
 
             <!-- ── Revenue by Department ──────────────────────── -->
-            <div v-if="revenueByModule.length > 1" class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100/80">
+            <div v-if="revenueByModule.length > 1" class="dash-stagger bg-white rounded-2xl p-5 shadow-sm border border-gray-100/80" style="--i:2">
                 <h3 class="text-sm font-semibold text-gray-700 mb-3">{{ isRtl ? 'الإيرادات حسب القسم' : 'Revenue by Department' }}</h3>
                 <div class="flex items-center gap-6">
                     <div v-for="mod in revenueByModule" :key="mod.slug" class="flex-1">
@@ -372,17 +412,17 @@ function labelX(index, total) {
             </div>
 
             <!-- ── Row 3: Clinic KPI Cards ──────────────────────── -->
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+            <div class="dash-stagger grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4" style="--i:3">
                 <div
                     v-for="card in clinicCards"
                     :key="card.labelKey"
-                    class="group relative bg-white rounded-2xl p-5 shadow-sm hover:shadow-lg border border-gray-100/80 hover:border-gray-200/80 transition-all duration-300 overflow-hidden"
+                    class="dash-kpi group relative bg-white rounded-2xl p-5 shadow-sm hover:shadow-lg border border-gray-100/80 hover:border-[#C4A265]/40 transition-all duration-300 overflow-hidden"
                 >
                     <div :class="`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${card.gradient} opacity-80`"></div>
                     <div class="flex items-start justify-between">
                         <div>
                             <p class="text-[13px] font-medium text-gray-500">{{ $t(card.labelKey) }}</p>
-                            <p class="text-2xl md:text-3xl font-bold text-gray-900 mt-2">{{ card.value }}</p>
+                            <p class="text-2xl md:text-3xl font-bold text-gray-900 mt-2 tabular-nums" v-countup="card.value">{{ card.value }}</p>
                             <p v-if="card.subDynamic" class="text-xs text-gray-400 mt-1">{{ clinic?.today_waiting ?? 0 }} {{ $t('a_waiting') }} / {{ clinic?.today_completed ?? 0 }} {{ $t('a_completed') }}</p>
                             <p v-else-if="card.subKey" class="text-xs text-gray-400 mt-1">{{ $t(card.subKey) }}</p>
                         </div>
@@ -401,7 +441,7 @@ function labelX(index, total) {
             </div>
 
             <!-- ── Row 3.5: Engagement (Loyalty + Referrals) ────── -->
-            <div v-if="engagement" class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-5">
+            <div v-if="engagement" class="dash-stagger grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-5" style="--i:4">
                 <!-- Loyalty -->
                 <Link href="/admin/loyalty" class="group relative bg-gradient-to-br from-[#1B365D] to-[#22406F] rounded-2xl p-5 shadow-sm hover:shadow-xl border border-[#C4A265]/20 transition-all duration-300 overflow-hidden text-white block">
                     <div class="absolute -top-12 -end-12 w-44 h-44 rounded-full bg-[#C4A265]/15 blur-3xl pointer-events-none"></div>
@@ -484,7 +524,7 @@ function labelX(index, total) {
             </div>
 
             <!-- ── Row 4: SVG Bar Charts ────────────────────────── -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-5">
+            <div class="dash-stagger grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-5" style="--i:5">
 
                 <!-- Revenue Trend Chart -->
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-6">
@@ -614,7 +654,7 @@ function labelX(index, total) {
             </div>
 
             <!-- ── Row 5: Today Queue + Alerts ──────────────────── -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
+            <div class="dash-stagger grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5" style="--i:6">
 
                 <!-- Today Queue Table (2/3) -->
                 <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
@@ -728,7 +768,7 @@ function labelX(index, total) {
             </div>
 
             <!-- ── Row 5b: CRM Summary Widget ──────────────────── -->
-            <div v-if="crm" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
+            <div v-if="crm" class="dash-stagger bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden" style="--i:7">
                 <div class="px-3 md:px-6 py-3 md:py-5 border-b border-gray-100 flex items-center justify-between gap-2 flex-wrap">
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 rounded-xl bg-[#C4A265]/10 flex items-center justify-center">
@@ -776,7 +816,7 @@ function labelX(index, total) {
             </div>
 
             <!-- ── Row 6: Unpaid Invoices + Top Services ────────── -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-5">
+            <div class="dash-stagger grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-5" style="--i:8">
 
                 <!-- Unpaid Invoices Table -->
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
@@ -872,7 +912,7 @@ function labelX(index, total) {
             </div>
 
             <!-- ── Row 7: Dental Overview ────────────────────────── -->
-            <div v-if="dental" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
+            <div v-if="dental" class="dash-stagger bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden" style="--i:9">
                 <div class="px-3 md:px-6 py-3 md:py-5 border-b border-gray-100 flex items-center justify-between gap-2 flex-wrap">
                     <div class="flex items-center gap-3">
                         <div class="w-9 h-9 rounded-xl bg-slate-50 flex items-center justify-center">
@@ -947,7 +987,7 @@ function labelX(index, total) {
             </div>
 
             <!-- ── Row 8: Pediatric Overview ─────────────────────── -->
-            <div v-if="pediatric" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
+            <div v-if="pediatric" class="dash-stagger bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden" style="--i:10">
                 <div class="px-3 md:px-6 py-3 md:py-5 border-b border-gray-100 flex items-center justify-between gap-2 flex-wrap">
                     <div class="flex items-center gap-3">
                         <div class="w-9 h-9 rounded-xl bg-emerald-50 flex items-center justify-center">
@@ -1007,3 +1047,107 @@ function labelX(index, total) {
         </div>
     </AdminLayout>
 </template>
+
+<style scoped>
+/* ═══════════════════════════════════════════════════════════
+   DASHBOARD — brand-cohesive atmosphere + page-load orchestration
+   Navy #1B365D · Gold #C4A265
+   ═══════════════════════════════════════════════════════════ */
+
+/* Ambient background behind the whole dashboard content */
+.dash-atmosphere {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(ellipse 50% 40% at 85% 0%, rgba(196,162,101,0.06), transparent 60%),
+        radial-gradient(ellipse 55% 45% at 0% 100%, rgba(27,54,93,0.05), transparent 60%);
+}
+.dash-atmosphere::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(27,54,93,0.035) 1px, transparent 1px);
+    background-size: 30px 30px;
+    mask-image: radial-gradient(ellipse 90% 80% at 50% 30%, #000 40%, transparent 85%);
+    -webkit-mask-image: radial-gradient(ellipse 90% 80% at 50% 30%, #000 40%, transparent 85%);
+}
+
+.dash-root {
+    position: relative;
+    z-index: 1;
+}
+
+/* ─── Staggered entrance ─── */
+.dash-stagger {
+    opacity: 0;
+    transform: translateY(18px);
+    transition:
+        opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition-delay: calc(var(--i, 0) * 75ms);
+}
+.is-mounted .dash-stagger {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ─── Hero heartbeat line ─── */
+.dash-hero-ecg {
+    position: absolute;
+    bottom: 8px;
+    left: 0;
+    width: 100%;
+    height: 40px;
+    opacity: 0.35;
+    pointer-events: none;
+}
+.dash-hero-ecg-path {
+    stroke-dasharray: 1600;
+    stroke-dashoffset: 1600;
+    animation: dashEcgDraw 5s cubic-bezier(0.4, 0, 0.2, 1) 0.4s forwards infinite;
+}
+@keyframes dashEcgDraw {
+    0%   { stroke-dashoffset: 1600; opacity: 0; }
+    10%  { opacity: 0.4; }
+    65%  { stroke-dashoffset: 0; opacity: 0.5; }
+    100% { stroke-dashoffset: 0; opacity: 0.2; }
+}
+
+/* ─── KPI card polish: gold sheen sweep on hover + lift ─── */
+.dash-kpi {
+    transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                box-shadow 0.35s ease,
+                border-color 0.35s ease;
+}
+.dash-kpi:hover {
+    transform: translateY(-4px);
+}
+.dash-kpi::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    inset-inline-start: -120%;
+    width: 55%;
+    height: 100%;
+    background: linear-gradient(115deg, transparent 30%, rgba(196,162,101,0.12) 50%, transparent 70%);
+    transform: skewX(-18deg);
+    transition: inset-inline-start 0.6s ease;
+    pointer-events: none;
+}
+.dash-kpi:hover::after {
+    inset-inline-start: 130%;
+}
+
+/* ─── Accessibility ─── */
+@media (prefers-reduced-motion: reduce) {
+    .dash-stagger {
+        transition-duration: 0.01s;
+        transition-delay: 0s;
+    }
+    .dash-hero-ecg-path { animation: none; }
+    .dash-kpi:hover { transform: none; }
+    .dash-kpi::after { display: none; }
+}
+</style>
