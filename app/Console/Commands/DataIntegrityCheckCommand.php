@@ -188,6 +188,26 @@ class DataIntegrityCheckCommand extends Command
             // column may not exist yet; not fatal
         }
 
+        // ── 10. Paid insurance claims with no recorded payment ──
+        // Guards the claim→payment link: a reimbursed claim with no Payment
+        // means the insurer's money never landed on the invoice / in revenue.
+        try {
+            $claimsNoPayment = \App\Models\InsuranceClaim::whereIn('status', ['paid', 'partially_paid'])
+                ->whereNotNull('invoice_id')
+                ->whereNull('payment_id')
+                ->where('paid_amount', '>', 0)
+                ->count();
+            if ($claimsNoPayment > 0) {
+                $findings[] = [
+                    'check'  => 'paid_claim_without_payment',
+                    'count'  => $claimsNoPayment,
+                    'detail' => 'Reimbursed insurance claims not recorded as an invoice payment (income missing)',
+                ];
+            }
+        } catch (\Throwable $e) {
+            // column may not exist yet; not fatal
+        }
+
         // ── Report ──────────────────────────────────────────
         if ($this->option('json')) {
             $this->line(json_encode([
