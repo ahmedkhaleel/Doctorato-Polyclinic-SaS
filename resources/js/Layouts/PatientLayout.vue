@@ -111,6 +111,14 @@ const navGroups = computed(() => [
         ],
     },
     {
+        title: isRtl.value ? 'الجلدية والتجميل' : 'Derma & Cosmetic',
+        key: 'derma',
+        moduleKey: 'derma',
+        items: [
+            { label: isRtl.value ? 'علاجاتي الجلدية' : 'My Treatments', href: lp('/derma'), icon: 'overview' },
+        ],
+    },
+    {
         title: isRtl.value ? 'المالية' : 'Financial',
         key: 'financial',
         items: [
