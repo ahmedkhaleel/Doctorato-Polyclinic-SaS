@@ -17,7 +17,7 @@ class DermaSession extends Model
         'patient_id', 'doctor_id', 'visit_id',
         'session_type', 'area_treated', 'product_used',
         'settings_json', 'session_number', 'total_sessions',
-        'cost', 'completed_at', 'next_session_date', 'notes',
+        'cost', 'invoice_id', 'completed_at', 'next_session_date', 'notes',
     ];
 
     protected $casts = [
@@ -30,5 +30,6 @@ class DermaSession extends Model
     public function patient() { return $this->belongsTo(Patient::class); }
     public function doctor() { return $this->belongsTo(Doctor::class); }
     public function visit() { return $this->belongsTo(Visit::class); }
+    public function invoice() { return $this->belongsTo(Invoice::class); }
     public function photos() { return $this->hasMany(DermaPhoto::class, 'session_id'); }
 }

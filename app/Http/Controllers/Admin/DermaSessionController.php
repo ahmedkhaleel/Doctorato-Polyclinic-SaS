@@ -6,11 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Models\DermaSession;
 use App\Models\Doctor;
 use App\Models\Patient;
+use App\Services\CosmeticDermaInvoiceService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class DermaSessionController extends Controller
 {
+    public function __construct(private CosmeticDermaInvoiceService $invoicing) {}
+
     public function index(Request $request)
     {
         $query = DermaSession::with(['patient:id,full_name,phone', 'doctor:id,name_ar,name_en']);
@@ -35,13 +38,16 @@ class DermaSessionController extends Controller
 
     public function store(Request $request)
     {
-        DermaSession::create($this->validated($request));
+        $session = DermaSession::create($this->validated($request));
+        $this->invoicing->generateForDermaSession($session);
         return back()->with('success', 'تم إضافة الجلسة');
     }
 
     public function update(Request $request, DermaSession $session)
     {
         $session->update($this->validated($request));
+        // Bill on completion (idempotent — never invoices the same session twice).
+        $this->invoicing->generateForDermaSession($session->fresh());
         return back()->with('success', 'تم التحديث');
     }
 

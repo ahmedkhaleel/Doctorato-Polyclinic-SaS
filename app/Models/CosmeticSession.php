@@ -14,7 +14,7 @@ class CosmeticSession extends Model
     protected $fillable = [
         'patient_id', 'doctor_id', 'package_id', 'procedure_id', 'visit_id',
         'session_number', 'area_treated', 'product_used', 'dose_units',
-        'cost', 'before_photo_path', 'after_photo_path',
+        'cost', 'invoice_id', 'before_photo_path', 'after_photo_path',
         'completed_at', 'notes',
     ];
 
@@ -29,5 +29,6 @@ class CosmeticSession extends Model
     public function procedure() { return $this->belongsTo(CosmeticProcedure::class, 'procedure_id'); }
     public function package() { return $this->belongsTo(CosmeticPackage::class, 'package_id'); }
     public function visit() { return $this->belongsTo(Visit::class); }
+    public function invoice() { return $this->belongsTo(Invoice::class); }
     public function consents() { return $this->hasMany(CosmeticConsent::class, 'session_id'); }
 }
