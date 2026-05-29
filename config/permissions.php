@@ -295,6 +295,15 @@ return [
         ],
 
         // ─── Dental Module ─────────────────────────────────────
+        // Module-wide permission gating ALL dental admin screens (chart,
+        // treatments, lab orders, dashboard…). The routes check dental.*,
+        // so this MUST exist as a real permission family.
+        'dental' => [
+            'label_en' => 'Dental Module',
+            'label_ar' => 'وحدة الأسنان',
+            'group' => 'dental',
+            'actions' => ['view', 'create', 'update', 'delete'],
+        ],
         'dental_treatment_plans' => [
             'label_en' => 'Treatment Plans',
             'label_ar' => 'خطط العلاج',
