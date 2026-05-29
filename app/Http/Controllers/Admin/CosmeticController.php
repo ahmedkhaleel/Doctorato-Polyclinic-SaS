@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Booking;
 use App\Models\CosmeticProcedure;
 use App\Models\CosmeticSession;
 use App\Models\Patient;
-use App\Models\Visit;
 use App\Services\ModuleManager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -16,11 +16,18 @@ class CosmeticController extends Controller
 {
     public function index(Request $request)
     {
-        $patientIds = Visit::where('module', 'cosmetic')->distinct()->pluck('patient_id');
+        // Cosmetic is a sub-feature of the `derma` module — there is no
+        // `module = 'cosmetic'` on visits. The authoritative source of
+        // "cosmetic patients" is who actually has cosmetic sessions.
+        // "Visits" here means cosmetic-consultation bookings (demand),
+        // while "sessions" below are the delivered procedures.
+        $patientIds = CosmeticSession::distinct()->pluck('patient_id');
         $totalPatients = $patientIds->count();
-        $totalVisits = Visit::where('module', 'cosmetic')->count();
-        $thisMonthVisits = Visit::where('module', 'cosmetic')
-            ->whereMonth('visit_date', now()->month)->whereYear('visit_date', now()->year)->count();
+
+        $cosmeticBookings = Booking::where('booking_type', 'cosmetic_consultation');
+        $totalVisits = (clone $cosmeticBookings)->count();
+        $thisMonthVisits = (clone $cosmeticBookings)
+            ->whereMonth('created_at', now()->month)->whereYear('created_at', now()->year)->count();
 
         $totalSessions = CosmeticSession::count();
         $thisMonthSessions = CosmeticSession::whereMonth('created_at', now()->month)->count();
