@@ -957,73 +957,76 @@ Route::middleware('admin.auth')->group(function () {
 
     // ═══ DERMA MODULE ═══════════════════════════════════════════
     // ═══════════════════════════════════════════════════════════
-    Route::prefix('derma')->name('admin.derma.')->middleware(['module:derma'])->group(function () {
+    // Group requires the derma module enabled AND at least derma.view.
+    // Mutating routes additionally require derma.create/update/delete.
+    Route::prefix('derma')->name('admin.derma.')->middleware(['module:derma', 'permission:derma.view'])->group(function () {
         Route::get('/', [\App\Http\Controllers\Admin\DermaController::class, 'index'])->name('dashboard');
         Route::get('/patients', [\App\Http\Controllers\Admin\DermaPatientController::class, 'index'])->name('patients');
         Route::get('/patients/{patient}', [\App\Http\Controllers\Admin\DermaPatientController::class, 'show'])->name('patients.show');
         Route::get('/visits', [\App\Http\Controllers\Admin\DermaVisitController::class, 'index'])->name('visits');
 
         Route::get('/conditions', [\App\Http\Controllers\Admin\SkinConditionController::class, 'index'])->name('conditions.index');
-        Route::post('/conditions', [\App\Http\Controllers\Admin\SkinConditionController::class, 'store'])->name('conditions.store');
-        Route::post('/conditions/{condition}', [\App\Http\Controllers\Admin\SkinConditionController::class, 'update'])->name('conditions.update');
-        Route::delete('/conditions/{condition}', [\App\Http\Controllers\Admin\SkinConditionController::class, 'destroy'])->name('conditions.destroy');
+        Route::post('/conditions', [\App\Http\Controllers\Admin\SkinConditionController::class, 'store'])->name('conditions.store')->middleware('permission:derma.create');
+        Route::post('/conditions/{condition}', [\App\Http\Controllers\Admin\SkinConditionController::class, 'update'])->name('conditions.update')->middleware('permission:derma.update');
+        Route::delete('/conditions/{condition}', [\App\Http\Controllers\Admin\SkinConditionController::class, 'destroy'])->name('conditions.destroy')->middleware('permission:derma.delete');
 
         Route::get('/sessions', [\App\Http\Controllers\Admin\DermaSessionController::class, 'index'])->name('sessions.index');
-        Route::post('/sessions', [\App\Http\Controllers\Admin\DermaSessionController::class, 'store'])->name('sessions.store');
-        Route::post('/sessions/{session}', [\App\Http\Controllers\Admin\DermaSessionController::class, 'update'])->name('sessions.update');
-        Route::delete('/sessions/{session}', [\App\Http\Controllers\Admin\DermaSessionController::class, 'destroy'])->name('sessions.destroy');
+        Route::post('/sessions', [\App\Http\Controllers\Admin\DermaSessionController::class, 'store'])->name('sessions.store')->middleware('permission:derma.create');
+        Route::post('/sessions/{session}', [\App\Http\Controllers\Admin\DermaSessionController::class, 'update'])->name('sessions.update')->middleware('permission:derma.update');
+        Route::delete('/sessions/{session}', [\App\Http\Controllers\Admin\DermaSessionController::class, 'destroy'])->name('sessions.destroy')->middleware('permission:derma.delete');
 
         Route::get('/gallery', [\App\Http\Controllers\Admin\DermaPhotoController::class, 'index'])->name('gallery');
-        Route::post('/gallery', [\App\Http\Controllers\Admin\DermaPhotoController::class, 'store'])->name('gallery.store');
-        Route::delete('/gallery/{photo}', [\App\Http\Controllers\Admin\DermaPhotoController::class, 'destroy'])->name('gallery.destroy');
+        Route::post('/gallery', [\App\Http\Controllers\Admin\DermaPhotoController::class, 'store'])->name('gallery.store')->middleware('permission:derma.create');
+        Route::delete('/gallery/{photo}', [\App\Http\Controllers\Admin\DermaPhotoController::class, 'destroy'])->name('gallery.destroy')->middleware('permission:derma.delete');
 
         Route::get('/prescription-templates', [\App\Http\Controllers\Admin\DermaPrescriptionTemplateController::class, 'index'])->name('prescriptionTemplates.index');
-        Route::post('/prescription-templates', [\App\Http\Controllers\Admin\DermaPrescriptionTemplateController::class, 'store'])->name('prescriptionTemplates.store');
-        Route::post('/prescription-templates/{template}', [\App\Http\Controllers\Admin\DermaPrescriptionTemplateController::class, 'update'])->name('prescriptionTemplates.update');
-        Route::delete('/prescription-templates/{template}', [\App\Http\Controllers\Admin\DermaPrescriptionTemplateController::class, 'destroy'])->name('prescriptionTemplates.destroy');
+        Route::post('/prescription-templates', [\App\Http\Controllers\Admin\DermaPrescriptionTemplateController::class, 'store'])->name('prescriptionTemplates.store')->middleware('permission:derma.create');
+        Route::post('/prescription-templates/{template}', [\App\Http\Controllers\Admin\DermaPrescriptionTemplateController::class, 'update'])->name('prescriptionTemplates.update')->middleware('permission:derma.update');
+        Route::delete('/prescription-templates/{template}', [\App\Http\Controllers\Admin\DermaPrescriptionTemplateController::class, 'destroy'])->name('prescriptionTemplates.destroy')->middleware('permission:derma.delete');
 
         Route::get('/settings', [\App\Http\Controllers\Admin\DermaController::class, 'settings'])->name('settings');
-        Route::post('/settings', [\App\Http\Controllers\Admin\DermaController::class, 'updateSettings'])->name('settings.update');
+        Route::post('/settings', [\App\Http\Controllers\Admin\DermaController::class, 'updateSettings'])->name('settings.update')->middleware('permission:derma.update');
     });
 
     // ═══ COSMETIC FEATURES (part of Dermatology & Cosmetic module) ═══
     // ═══════════════════════════════════════════════════════════════
-    Route::prefix('cosmetic')->name('admin.cosmetic.')->middleware(['module:derma'])->group(function () {
+    // Cosmetic shares the derma.* permission family (same module).
+    Route::prefix('cosmetic')->name('admin.cosmetic.')->middleware(['module:derma', 'permission:derma.view'])->group(function () {
         Route::get('/', [\App\Http\Controllers\Admin\CosmeticController::class, 'index'])->name('dashboard');
         Route::get('/patients', [\App\Http\Controllers\Admin\CosmeticPatientController::class, 'index'])->name('patients');
         Route::get('/patients/{patient}', [\App\Http\Controllers\Admin\CosmeticPatientController::class, 'show'])->name('patients.show');
 
         Route::get('/procedures', [\App\Http\Controllers\Admin\CosmeticProcedureController::class, 'index'])->name('procedures.index');
-        Route::post('/procedures', [\App\Http\Controllers\Admin\CosmeticProcedureController::class, 'store'])->name('procedures.store');
-        Route::post('/procedures/{procedure}', [\App\Http\Controllers\Admin\CosmeticProcedureController::class, 'update'])->name('procedures.update');
-        Route::delete('/procedures/{procedure}', [\App\Http\Controllers\Admin\CosmeticProcedureController::class, 'destroy'])->name('procedures.destroy');
+        Route::post('/procedures', [\App\Http\Controllers\Admin\CosmeticProcedureController::class, 'store'])->name('procedures.store')->middleware('permission:derma.create');
+        Route::post('/procedures/{procedure}', [\App\Http\Controllers\Admin\CosmeticProcedureController::class, 'update'])->name('procedures.update')->middleware('permission:derma.update');
+        Route::delete('/procedures/{procedure}', [\App\Http\Controllers\Admin\CosmeticProcedureController::class, 'destroy'])->name('procedures.destroy')->middleware('permission:derma.delete');
 
         Route::get('/packages', [\App\Http\Controllers\Admin\CosmeticPackageController::class, 'index'])->name('packages.index');
-        Route::post('/packages', [\App\Http\Controllers\Admin\CosmeticPackageController::class, 'store'])->name('packages.store');
-        Route::post('/packages/{package}', [\App\Http\Controllers\Admin\CosmeticPackageController::class, 'update'])->name('packages.update');
-        Route::delete('/packages/{package}', [\App\Http\Controllers\Admin\CosmeticPackageController::class, 'destroy'])->name('packages.destroy');
+        Route::post('/packages', [\App\Http\Controllers\Admin\CosmeticPackageController::class, 'store'])->name('packages.store')->middleware('permission:derma.create');
+        Route::post('/packages/{package}', [\App\Http\Controllers\Admin\CosmeticPackageController::class, 'update'])->name('packages.update')->middleware('permission:derma.update');
+        Route::delete('/packages/{package}', [\App\Http\Controllers\Admin\CosmeticPackageController::class, 'destroy'])->name('packages.destroy')->middleware('permission:derma.delete');
 
         // Patient package purchases (prepaid enrollments + session balance)
         Route::get('/package-purchases', [\App\Http\Controllers\Admin\CosmeticPackagePurchaseController::class, 'index'])->name('packagePurchases.index');
-        Route::post('/package-purchases', [\App\Http\Controllers\Admin\CosmeticPackagePurchaseController::class, 'store'])->name('packagePurchases.store');
-        Route::post('/package-purchases/{purchase}/cancel', [\App\Http\Controllers\Admin\CosmeticPackagePurchaseController::class, 'cancel'])->name('packagePurchases.cancel');
+        Route::post('/package-purchases', [\App\Http\Controllers\Admin\CosmeticPackagePurchaseController::class, 'store'])->name('packagePurchases.store')->middleware('permission:derma.create');
+        Route::post('/package-purchases/{purchase}/cancel', [\App\Http\Controllers\Admin\CosmeticPackagePurchaseController::class, 'cancel'])->name('packagePurchases.cancel')->middleware('permission:derma.update');
 
         Route::get('/sessions', [\App\Http\Controllers\Admin\CosmeticSessionController::class, 'index'])->name('sessions.index');
-        Route::post('/sessions', [\App\Http\Controllers\Admin\CosmeticSessionController::class, 'store'])->name('sessions.store');
-        Route::post('/sessions/{session}', [\App\Http\Controllers\Admin\CosmeticSessionController::class, 'update'])->name('sessions.update');
-        Route::delete('/sessions/{session}', [\App\Http\Controllers\Admin\CosmeticSessionController::class, 'destroy'])->name('sessions.destroy');
+        Route::post('/sessions', [\App\Http\Controllers\Admin\CosmeticSessionController::class, 'store'])->name('sessions.store')->middleware('permission:derma.create');
+        Route::post('/sessions/{session}', [\App\Http\Controllers\Admin\CosmeticSessionController::class, 'update'])->name('sessions.update')->middleware('permission:derma.update');
+        Route::delete('/sessions/{session}', [\App\Http\Controllers\Admin\CosmeticSessionController::class, 'destroy'])->name('sessions.destroy')->middleware('permission:derma.delete');
 
         Route::get('/gallery', [\App\Http\Controllers\Admin\CosmeticPhotoController::class, 'index'])->name('gallery');
-        Route::post('/gallery', [\App\Http\Controllers\Admin\CosmeticPhotoController::class, 'store'])->name('gallery.store');
-        Route::delete('/gallery/{photo}', [\App\Http\Controllers\Admin\CosmeticPhotoController::class, 'destroy'])->name('gallery.destroy');
+        Route::post('/gallery', [\App\Http\Controllers\Admin\CosmeticPhotoController::class, 'store'])->name('gallery.store')->middleware('permission:derma.create');
+        Route::delete('/gallery/{photo}', [\App\Http\Controllers\Admin\CosmeticPhotoController::class, 'destroy'])->name('gallery.destroy')->middleware('permission:derma.delete');
 
         Route::get('/consents', [\App\Http\Controllers\Admin\CosmeticConsentController::class, 'index'])->name('consents.index');
-        Route::post('/consents', [\App\Http\Controllers\Admin\CosmeticConsentController::class, 'store'])->name('consents.store');
-        Route::post('/consents/{consent}', [\App\Http\Controllers\Admin\CosmeticConsentController::class, 'update'])->name('consents.update');
-        Route::delete('/consents/{consent}', [\App\Http\Controllers\Admin\CosmeticConsentController::class, 'destroy'])->name('consents.destroy');
+        Route::post('/consents', [\App\Http\Controllers\Admin\CosmeticConsentController::class, 'store'])->name('consents.store')->middleware('permission:derma.create');
+        Route::post('/consents/{consent}', [\App\Http\Controllers\Admin\CosmeticConsentController::class, 'update'])->name('consents.update')->middleware('permission:derma.update');
+        Route::delete('/consents/{consent}', [\App\Http\Controllers\Admin\CosmeticConsentController::class, 'destroy'])->name('consents.destroy')->middleware('permission:derma.delete');
 
         Route::get('/settings', [\App\Http\Controllers\Admin\CosmeticController::class, 'settings'])->name('settings');
-        Route::post('/settings', [\App\Http\Controllers\Admin\CosmeticController::class, 'updateSettings'])->name('settings.update');
+        Route::post('/settings', [\App\Http\Controllers\Admin\CosmeticController::class, 'updateSettings'])->name('settings.update')->middleware('permission:derma.update');
     });
 
     // ═══ PATIENT WALLETS ════════════════════════════════════════

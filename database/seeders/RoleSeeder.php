@@ -73,6 +73,7 @@ class RoleSeeder extends Seeder
                     'bookings.view', 'bookings.update',
                     'queue.view', 'queue.update',
                     'calendar.view',
+                    'derma.view', 'derma.create', 'derma.update',
                     'leads.view', 'leads.create', 'leads.update',
                     'lead_activities.view', 'lead_activities.create',
                     'lead_follow_ups.view', 'lead_follow_ups.create', 'lead_follow_ups.update',
@@ -97,6 +98,7 @@ class RoleSeeder extends Seeder
                     'contact_messages.view',
                     'queue.view', 'queue.update',
                     'calendar.view',
+                    'derma.view', 'derma.create', 'derma.update',
                     'leads.view', 'leads.create', 'leads.update',
                     'lead_activities.view', 'lead_activities.create',
                     'lead_follow_ups.view', 'lead_follow_ups.create', 'lead_follow_ups.update',
@@ -123,6 +125,7 @@ class RoleSeeder extends Seeder
                     'dental_followups.view', 'dental_followups.create', 'dental_followups.update',
                     'dental_xrays.view', 'dental_xrays.create', 'dental_xrays.update',
                     'dental_charts.view', 'dental_charts.update',
+                    'derma.view', 'derma.create', 'derma.update',
                 ],
             ]
         );
@@ -149,6 +152,7 @@ class RoleSeeder extends Seeder
                     'assignment_rules.view', 'marketer_commissions.view',
                     'dental_treatment_plans.view', 'dental_lab_orders.view', 'dental_followups.view',
                     'dental_xrays.view', 'dental_charts.view',
+                    'derma.view',
                     'insurance_companies.view', 'insurance_claims.view',
                     'supplies.view', 'supply_categories.view', 'purchase_orders.view', 'suppliers.view',
                     'posts.view', 'post_categories.view', 'tags.view', 'services.view',
