@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Models\CosmeticPackage;
+use App\Models\CosmeticPackagePurchase;
 use App\Models\CosmeticSession;
 use App\Models\DermaSession;
 use App\Models\Invoice;
@@ -30,6 +32,14 @@ class CosmeticDermaInvoiceService
     // ─── Cosmetic ───────────────────────────────────────────────
     public function generateForCosmeticSession(CosmeticSession $session): ?Invoice
     {
+        // A session drawn from a prepaid package is NOT billed per-session —
+        // it consumes the package balance instead (the package was paid up
+        // front via its own invoice).
+        if ($session->package_purchase_id) {
+            $this->syncPackageBalance($session->packagePurchase);
+            return null;
+        }
+
         if (! $this->billable($session)) {
             return $session->invoice_id ? $session->invoice : null;
         }
@@ -88,6 +98,94 @@ class CosmeticDermaInvoiceService
 
             return $invoice->fresh(['items']);
         });
+    }
+
+    // ─── Package purchases (prepaid enrollments) ────────────────
+
+    /**
+     * Enroll a patient in a package: create the purchase ledger row and a
+     * prepayment invoice for the package price. The patient then pays that
+     * invoice once; subsequent sessions draw down the balance for free.
+     */
+    public function createPackagePurchase(
+        int $patientId,
+        CosmeticPackage $package,
+        ?float $amount = null,
+        ?string $notes = null
+    ): CosmeticPackagePurchase {
+        return DB::transaction(function () use ($patientId, $package, $amount, $notes) {
+            $price = $amount ?? (float) $package->total_price;
+
+            $invoice = new Invoice([
+                'invoice_number'  => Invoice::generateInvoiceNumber(),
+                'invoice_date'    => now()->toDateString(),
+                'patient_id'      => $patientId,
+                'subtotal'        => $price,
+                'discount_amount' => 0,
+                'tax_amount'      => 0,
+                'total'           => $price,
+                'module'          => self::MODULE,
+                'created_by'      => auth()->id(),
+            ]);
+            $invoice->paid_amount = 0;
+            $invoice->status = 'unpaid';
+            $invoice->save();
+
+            $label = $package->name_ar ?? $package->name_en ?? 'باقة تجميل';
+            InvoiceItem::create([
+                'invoice_id'     => $invoice->id,
+                'description_en' => ($package->name_en ?? $package->name_ar ?? 'Cosmetic package')
+                    . " ({$package->total_sessions} sessions)",
+                'description_ar' => $label . " ({$package->total_sessions} جلسات)",
+                'quantity'       => 1,
+                'unit_price'     => $price,
+                'discount'       => 0,
+                'total'          => $price,
+            ]);
+
+            $validity = (int) ($package->validity_days ?: 365);
+
+            return CosmeticPackagePurchase::create([
+                'patient_id'     => $patientId,
+                'package_id'     => $package->id,
+                'invoice_id'     => $invoice->id,
+                'created_by'     => auth()->id(),
+                'total_sessions' => (int) $package->total_sessions,
+                'sessions_used'  => 0,
+                'amount'         => $price,
+                'purchased_at'   => now()->toDateString(),
+                'expires_at'     => now()->addDays($validity)->toDateString(),
+                'status'         => CosmeticPackagePurchase::STATUS_ACTIVE,
+                'notes'          => $notes,
+            ]);
+        });
+    }
+
+    /**
+     * Recompute a purchase's used-session count from its completed sessions.
+     * Idempotent by construction (counts rows rather than incrementing), so
+     * it self-corrects on edits/deletes and never double-charges a session.
+     */
+    public function syncPackageBalance(?CosmeticPackagePurchase $purchase): void
+    {
+        if (! $purchase) {
+            return;
+        }
+
+        $used = $purchase->sessions()->whereNotNull('completed_at')->count();
+        $status = $purchase->status;
+
+        if ($status !== CosmeticPackagePurchase::STATUS_CANCELLED) {
+            if ($used >= $purchase->total_sessions) {
+                $status = CosmeticPackagePurchase::STATUS_COMPLETED;
+            } elseif ($purchase->isExpired()) {
+                $status = CosmeticPackagePurchase::STATUS_EXPIRED;
+            } else {
+                $status = CosmeticPackagePurchase::STATUS_ACTIVE;
+            }
+        }
+
+        $purchase->update(['sessions_used' => $used, 'status' => $status]);
     }
 
     // ─── Shared ─────────────────────────────────────────────────

@@ -69,6 +69,7 @@ class CosmeticSessionController extends Controller
             'patient_id' => 'required|exists:patients,id',
             'doctor_id' => 'nullable|exists:doctors,id',
             'package_id' => 'nullable|exists:cosmetic_packages,id',
+            'package_purchase_id' => 'nullable|exists:cosmetic_package_purchases,id',
             'procedure_id' => 'nullable|exists:cosmetic_procedures,id',
             'visit_id' => 'nullable|exists:visits,id',
             'session_number' => 'nullable|integer|min:1',

@@ -209,6 +209,7 @@ const navGroups = [
             // ─── Cosmetic ─────────────────────────────────────────
             { labelEn: 'Cosmetic Procedures', labelAr: 'إجراءات التجميل',    href: '/admin/cosmetic/procedures',            icon: 'sparkles',  permission: null },
             { labelEn: 'Cosmetic Packages',   labelAr: 'باقات التجميل',      href: '/admin/cosmetic/packages',              icon: 'layers',    permission: null },
+            { labelEn: 'Package Purchases',   labelAr: 'اشتراكات الباقات',   href: '/admin/cosmetic/package-purchases',     icon: 'receipt',   permission: null },
             { labelEn: 'Cosmetic Sessions',   labelAr: 'جلسات التجميل',      href: '/admin/cosmetic/sessions',              icon: 'activity',  permission: null },
             { labelEn: 'Consent Forms',       labelAr: 'نماذج الموافقة',     href: '/admin/cosmetic/consents',              icon: 'document',  permission: null },
             // ─── Shared ───────────────────────────────────────────

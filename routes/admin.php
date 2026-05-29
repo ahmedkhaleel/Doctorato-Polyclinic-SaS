@@ -1003,6 +1003,11 @@ Route::middleware('admin.auth')->group(function () {
         Route::post('/packages/{package}', [\App\Http\Controllers\Admin\CosmeticPackageController::class, 'update'])->name('packages.update');
         Route::delete('/packages/{package}', [\App\Http\Controllers\Admin\CosmeticPackageController::class, 'destroy'])->name('packages.destroy');
 
+        // Patient package purchases (prepaid enrollments + session balance)
+        Route::get('/package-purchases', [\App\Http\Controllers\Admin\CosmeticPackagePurchaseController::class, 'index'])->name('packagePurchases.index');
+        Route::post('/package-purchases', [\App\Http\Controllers\Admin\CosmeticPackagePurchaseController::class, 'store'])->name('packagePurchases.store');
+        Route::post('/package-purchases/{purchase}/cancel', [\App\Http\Controllers\Admin\CosmeticPackagePurchaseController::class, 'cancel'])->name('packagePurchases.cancel');
+
         Route::get('/sessions', [\App\Http\Controllers\Admin\CosmeticSessionController::class, 'index'])->name('sessions.index');
         Route::post('/sessions', [\App\Http\Controllers\Admin\CosmeticSessionController::class, 'store'])->name('sessions.store');
         Route::post('/sessions/{session}', [\App\Http\Controllers\Admin\CosmeticSessionController::class, 'update'])->name('sessions.update');
