@@ -559,6 +559,7 @@ Route::middleware('admin.auth')->group(function () {
     Route::get('/reports/patients', [ReportController::class, 'patients'])->name('admin.reports.patients')->middleware('permission:reports.view');
     Route::get('/reports/services', [ReportController::class, 'services'])->name('admin.reports.services')->middleware('permission:reports.view');
     Route::get('/reports/dental', [DentalReportController::class, 'index'])->name('admin.reports.dental')->middleware('permission:reports.view', 'module:dental');
+    Route::get('/reports/derma', [\App\Http\Controllers\Admin\DermaReportController::class, 'index'])->name('admin.reports.derma')->middleware('permission:reports.view', 'module:derma');
     Route::get('/reports/dental/chart-pdf/{patient}', [DentalReportController::class, 'chartPdf'])->name('admin.reports.dental.chartPdf')->middleware('permission:reports.view', 'module:dental');
 
     // ─── Excel Exports ────────────────────────────────────────

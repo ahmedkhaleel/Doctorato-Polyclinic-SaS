@@ -305,6 +305,7 @@ const navGroups = [
             { labelEn: 'Patients Report',  labelAr: 'تقرير المرضى',    href: '/admin/reports/patients',          icon: 'heart',   permission: 'reports.view' },
             { labelEn: 'Services Report',  labelAr: 'تقرير الخدمات',   href: '/admin/reports/services',          icon: 'sparkles', permission: 'reports.view' },
             { labelEn: 'Dental Reports',   labelAr: 'تقارير الأسنان',  href: '/admin/reports/dental',            icon: 'tooth',   permission: 'reports.view', moduleKey: 'dental' },
+            { labelEn: 'Derma Reports',    labelAr: 'تقارير الجلدية',  href: '/admin/reports/derma',             icon: 'sparkles', permission: 'reports.view', moduleKey: 'derma' },
             { labelEn: 'Backups',         labelAr: 'النسخ الاحتياطي', href: '/admin/backups',            icon: 'shield',   permission: 'settings.update' },
             { labelEn: 'Notifications',   labelAr: 'مركز الإشعارات', href: '/admin/notification-center', icon: 'bellCenter', permission: null },
             { labelEn: 'Activity Logs',  labelAr: 'سجل النشاطات',  href: '/admin/activity-logs',      icon: 'activity', permission: 'reports.view' },
