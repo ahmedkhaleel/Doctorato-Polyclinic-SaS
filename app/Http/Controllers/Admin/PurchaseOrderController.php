@@ -159,6 +159,8 @@ class PurchaseOrderController extends Controller
         ]);
 
         DB::transaction(function () use ($validated, $purchaseOrder) {
+            $receivedValue = 0.0;
+
             foreach ($validated['items'] as $itemData) {
                 $item = PurchaseOrderItem::find($itemData['id']);
                 if (!$item || $item->purchase_order_id !== $purchaseOrder->id) continue;
@@ -185,17 +187,34 @@ class PurchaseOrderController extends Controller
                         $supply->update(['expiry_date' => $itemData['expiry_date']]);
                     }
 
-                    // Create supply transaction record
+                    // Audit-trail transaction (field names must match the
+                    // supply_transactions schema: transaction_type / unit_cost).
                     $supply->transactions()->create([
-                        'type' => 'purchase',
-                        'quantity' => $added,
-                        'unit_price' => $item->unit_price,
-                        'reference_type' => 'purchase_order',
-                        'reference_id' => $purchaseOrder->id,
-                        'notes' => "PO #{$purchaseOrder->po_number}",
-                        'created_by' => auth()->id(),
+                        'transaction_type' => 'purchase',
+                        'quantity'         => $added,
+                        'unit_cost'        => $item->unit_price,
+                        'notes'            => "PO #{$purchaseOrder->po_number}",
+                        'created_by'       => auth()->id(),
                     ]);
+
+                    $receivedValue += $added * (float) $item->unit_price;
                 }
+            }
+
+            // Money flow: record the received stock value as a purchase expense
+            // so inventory cost shows in the financial reports. One expense per
+            // receive action; partial receives book only their delta value.
+            if ($receivedValue > 0) {
+                \App\Models\Expense::create([
+                    'expense_category_id' => \App\Models\ExpenseCategory::firstOrCreate(
+                        ['name_en' => 'Medical Supplies'],
+                        ['name_ar' => 'مستلزمات طبية', 'is_active' => true]
+                    )->id,
+                    'amount'       => round($receivedValue, 2),
+                    'expense_date' => now()->toDateString(),
+                    'description'  => "Inventory received — PO #{$purchaseOrder->po_number}",
+                    'created_by'   => auth()->id(),
+                ]);
             }
 
             // Auto-update PO status
