@@ -266,6 +266,7 @@ class VisitWorkflowService
             'invoice_number' => Invoice::generateInvoiceNumber(),
             'patient_id' => $visit->patient_id,
             'visit_id' => $visit->id,
+            'module' => $visit->module,
             'subtotal' => $price,
             'total' => $price,
             'created_by' => auth()->id(),

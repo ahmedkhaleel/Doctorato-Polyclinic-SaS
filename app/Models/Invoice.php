@@ -38,6 +38,21 @@ class Invoice extends Model
 
     protected $appends = ['balance'];
 
+    /**
+     * Auto-tag the invoice with its visit's clinic module when not set
+     * explicitly. Guarantees every visit-based invoice (dental, pediatric,
+     * derma…) is module-tagged regardless of which service created it, so
+     * per-module revenue dashboards/reports are accurate.
+     */
+    protected static function booted(): void
+    {
+        static::creating(function (Invoice $invoice) {
+            if (empty($invoice->module) && $invoice->visit_id) {
+                $invoice->module = optional(Visit::find($invoice->visit_id))->module;
+            }
+        });
+    }
+
     // ─── Relationships ──────────────────────────────────
 
     public function patient()

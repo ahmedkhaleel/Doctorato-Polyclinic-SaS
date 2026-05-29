@@ -20,6 +20,7 @@ return [
         'crm'        => ['label_en' => 'CRM & Marketing',       'label_ar' => 'إدارة العملاء والتسويق', 'icon' => 'funnel',      'color' => '#F59E0B'],
         'dental'     => ['label_en' => 'Dental Module',         'label_ar' => 'وحدة الأسنان',           'icon' => 'tooth',       'color' => '#06B6D4'],
         'derma'      => ['label_en' => 'Dermatology & Cosmetic', 'label_ar' => 'الجلدية والتجميل',      'icon' => 'sparkles',    'color' => '#1B365D'],
+        'pediatric'  => ['label_en' => 'Pediatrics',            'label_ar' => 'طب الأطفال',             'icon' => 'child',       'color' => '#4CAF50'],
         'insurance'  => ['label_en' => 'Insurance',             'label_ar' => 'التأمين',                'icon' => 'shield',      'color' => '#EC4899'],
         'inventory'  => ['label_en' => 'Inventory & Supplies',  'label_ar' => 'المخزون والمستلزمات',    'icon' => 'box',         'color' => '#F97316'],
         'content'    => ['label_en' => 'Content & Website',     'label_ar' => 'المحتوى والموقع',        'icon' => 'globe',       'color' => '#6366F1'],
@@ -342,6 +343,14 @@ return [
             'label_en' => 'Dermatology & Cosmetic',
             'label_ar' => 'الجلدية والتجميل',
             'group' => 'derma',
+            'actions' => ['view', 'create', 'update', 'delete'],
+        ],
+
+        // ─── Pediatrics Module ─────────────────────────────────
+        'pediatric' => [
+            'label_en' => 'Pediatrics',
+            'label_ar' => 'طب الأطفال',
+            'group' => 'pediatric',
             'actions' => ['view', 'create', 'update', 'delete'],
         ],
 

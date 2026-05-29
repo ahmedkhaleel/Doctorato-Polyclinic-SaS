@@ -184,12 +184,12 @@ const navGroups = [
         featured: true,
         groupIcon: 'M12 8.25a3.75 3.75 0 100-7.5 3.75 3.75 0 000 7.5zM6.75 12a.75.75 0 00-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 00.75-.75v-.008a.75.75 0 00-.75-.75H6.75zm10.5 0a.75.75 0 00-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 00.75-.75v-.008a.75.75 0 00-.75-.75h-.008zM12 10.5c-3.315 0-6 2.685-6 6v3a.75.75 0 00.75.75h10.5a.75.75 0 00.75-.75v-3c0-3.315-2.685-6-6-6z',
         items: [
-            { labelEn: 'Dashboard',     labelAr: 'لوحة التحكم',   href: '/admin/pediatric',              icon: 'grid',      permission: null },
-            { labelEn: 'Patients',      labelAr: 'المرضى',        href: '/admin/pediatric/patients',     icon: 'heart',     permission: null },
-            { labelEn: 'Vaccinations',  labelAr: 'التطعيمات',     href: '/admin/pediatric/vaccinations', icon: 'checklist', permission: null },
-            { labelEn: 'Visits',        labelAr: 'الزيارات',      href: '/admin/pediatric/visits',       icon: 'clipboard', permission: null },
-            { labelEn: 'Growth',        labelAr: 'النمو',         href: '/admin/pediatric/growth',       icon: 'activity',  permission: null },
-            { labelEn: 'Settings',      labelAr: 'الإعدادات',     href: '/admin/pediatric/settings',     icon: 'cog',       permission: null },
+            { labelEn: 'Dashboard',     labelAr: 'لوحة التحكم',   href: '/admin/pediatric',              icon: 'grid',      permission: 'pediatric.view' },
+            { labelEn: 'Patients',      labelAr: 'المرضى',        href: '/admin/pediatric/patients',     icon: 'heart',     permission: 'pediatric.view' },
+            { labelEn: 'Vaccinations',  labelAr: 'التطعيمات',     href: '/admin/pediatric/vaccinations', icon: 'checklist', permission: 'pediatric.view' },
+            { labelEn: 'Visits',        labelAr: 'الزيارات',      href: '/admin/pediatric/visits',       icon: 'clipboard', permission: 'pediatric.view' },
+            { labelEn: 'Growth',        labelAr: 'النمو',         href: '/admin/pediatric/growth',       icon: 'activity',  permission: 'pediatric.view' },
+            { labelEn: 'Settings',      labelAr: 'الإعدادات',     href: '/admin/pediatric/settings',     icon: 'cog',       permission: 'pediatric.view' },
         ],
     },
     {
