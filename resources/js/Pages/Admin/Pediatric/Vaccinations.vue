@@ -16,6 +16,7 @@ const props = defineProps({
     stats: Object,
     filters: Object,
     pediatricPatients: { type: Array, default: () => [] },
+    supplies: { type: Array, default: () => [] },
 });
 
 /* ── Filters ───────────────────────────────────────────── */
@@ -135,6 +136,7 @@ const statusForm = useForm({
     site_of_injection: '',
     side_effects: '',
     notes: '',
+    supply_id: '',
 });
 
 function openNewModal() {
@@ -568,6 +570,13 @@ function deleteVaccination(v) {
                     <div v-if="statusForm.status === 'given'">
                         <label class="block text-xs font-semibold text-gray-500 mb-1">{{ isRtl ? 'تاريخ التطعيم' : 'Given Date' }} *</label>
                         <input v-model="statusForm.given_date" type="date" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-xl text-sm" />
+                    </div>
+                    <div v-if="statusForm.status === 'given' && supplies.length">
+                        <label class="block text-xs font-semibold text-gray-500 mb-1">{{ isRtl ? 'صنف اللقاح بالمخزون (يُخصم جرعة)' : 'Vaccine stock item (1 dose deducted)' }}</label>
+                        <select v-model="statusForm.supply_id" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-xl text-sm">
+                            <option value="">{{ isRtl ? 'بدون خصم' : 'No deduction' }}</option>
+                            <option v-for="s in supplies" :key="s.id" :value="s.id">{{ (isRtl ? (s.name_ar || s.name_en) : (s.name_en || s.name_ar)) }} ({{ isRtl ? 'المتاح' : 'avail' }}: {{ s.quantity }})</option>
+                        </select>
                     </div>
                     <div v-if="statusForm.status === 'given'" class="grid grid-cols-2 gap-3">
                         <div>

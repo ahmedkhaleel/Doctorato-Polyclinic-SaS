@@ -313,6 +313,7 @@ class AdminPediatricController extends Controller
             'stats' => $stats,
             'filters' => ['search' => $search, 'status' => $status],
             'pediatricPatients' => $pediatricPatients,
+            'supplies' => \App\Models\Supply::orderBy('name_ar')->get(['id', 'name_ar', 'name_en', 'unit', 'quantity']),
         ]);
     }
 
@@ -397,9 +398,18 @@ class AdminPediatricController extends Controller
             'site_of_injection' => 'nullable|string|max:100',
             'side_effects' => 'nullable|string|max:500',
             'notes' => 'nullable|string|max:500',
+            'supply_id' => 'nullable|exists:supplies,id',
         ]);
 
         $vaccination->update($validated);
+        $fresh = $vaccination->fresh();
+
+        // Inventory: draw a dose when given, restore it when no longer given.
+        if ($fresh->status === PediatricVaccination::STATUS_GIVEN) {
+            $fresh->consumeStock();
+        } else {
+            $fresh->reverseStock();
+        }
 
         return redirect()->back()->with('success', 'تم تحديث حالة التطعيم بنجاح');
     }
@@ -409,6 +419,7 @@ class AdminPediatricController extends Controller
      */
     public function destroyVaccination(PediatricVaccination $vaccination)
     {
+        $vaccination->reverseStock(); // restore any consumed dose first
         $vaccination->delete();
         return redirect()->back()->with('success', 'تم حذف التطعيم بنجاح');
     }

@@ -63,6 +63,7 @@ class PediatricVaccination extends Model
         'dose_number', 'scheduled_age', 'scheduled_date', 'given_date',
         'batch_number', 'manufacturer', 'site_of_injection', 'status',
         'side_effects', 'notes', 'next_dose_date',
+        'supply_id', 'supply_transaction_id',
         'reminder_sent_at', 'overdue_reminder_sent_at',
     ];
 
@@ -82,5 +83,73 @@ class PediatricVaccination extends Model
     public function doctor()
     {
         return $this->belongsTo(Doctor::class);
+    }
+
+    public function supply()
+    {
+        return $this->belongsTo(Supply::class);
+    }
+
+    public function supplyTransaction()
+    {
+        return $this->belongsTo(SupplyTransaction::class);
+    }
+
+    /**
+     * Draw one dose from inventory when the vaccine is given. No-op unless a
+     * supply is linked and it wasn't already drawn. Records a 'usage'
+     * SupplyTransaction and decrements stock; links it for idempotency.
+     */
+    public function consumeStock(): void
+    {
+        if ($this->status !== self::STATUS_GIVEN || ! $this->supply_id || $this->supply_transaction_id) {
+            return;
+        }
+
+        \Illuminate\Support\Facades\DB::transaction(function () {
+            $supply = Supply::lockForUpdate()->find($this->supply_id);
+            if (! $supply) {
+                return;
+            }
+            $txn = SupplyTransaction::create([
+                'supply_id'        => $supply->id,
+                'transaction_type' => 'usage',
+                'quantity'         => 1,
+                'unit_cost'        => $supply->purchase_price,
+                'notes'            => 'Vaccine dose: ' . $this->vaccine_name . ' (vaccination #' . $this->id . ')',
+                'created_by'       => auth()->id(),
+            ]);
+            $supply->decrement('quantity', 1);
+            $this->forceFill(['supply_transaction_id' => $txn->id])->saveQuietly();
+        });
+    }
+
+    /**
+     * Restore the dose if a 'given' vaccine is reverted/deleted.
+     */
+    public function reverseStock(): void
+    {
+        if (! $this->supply_transaction_id) {
+            return;
+        }
+
+        \Illuminate\Support\Facades\DB::transaction(function () {
+            $usage = SupplyTransaction::find($this->supply_transaction_id);
+            if ($usage) {
+                $supply = Supply::lockForUpdate()->find($usage->supply_id);
+                if ($supply) {
+                    SupplyTransaction::create([
+                        'supply_id'        => $supply->id,
+                        'transaction_type' => 'return',
+                        'quantity'         => $usage->quantity,
+                        'unit_cost'        => $usage->unit_cost,
+                        'notes'            => 'Reversal of vaccine dose (vaccination #' . $this->id . ')',
+                        'created_by'       => auth()->id(),
+                    ]);
+                    $supply->increment('quantity', (float) $usage->quantity);
+                }
+            }
+            $this->forceFill(['supply_transaction_id' => null])->saveQuietly();
+        });
     }
 }
