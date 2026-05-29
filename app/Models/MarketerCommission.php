@@ -25,6 +25,7 @@ class MarketerCommission extends Model
         'paid_date',
         'notes',
         'approved_by',
+        'expense_id',
     ];
 
     protected function casts(): array
@@ -62,6 +63,11 @@ class MarketerCommission extends Model
     public function approver(): BelongsTo
     {
         return $this->belongsTo(User::class, 'approved_by');
+    }
+
+    public function expense(): BelongsTo
+    {
+        return $this->belongsTo(Expense::class);
     }
 
     // ─── Scopes ──────────────────────────────────────────

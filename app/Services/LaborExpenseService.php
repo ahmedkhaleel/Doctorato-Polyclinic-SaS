@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\DoctorPayout;
 use App\Models\Expense;
 use App\Models\ExpenseCategory;
+use App\Models\MarketerCommission;
 use App\Models\SalarySlip;
 use Illuminate\Support\Facades\DB;
 
@@ -62,6 +63,31 @@ class LaborExpenseService
             ]);
 
             $payout->forceFill(['expense_id' => $expense->id])->saveQuietly();
+
+            return $expense;
+        });
+    }
+
+    /** Record a paid marketer commission as a 'Marketer Commissions' expense. */
+    public function recordForMarketerCommission(MarketerCommission $commission): ?Expense
+    {
+        if ($commission->expense_id || (float) $commission->commission_amount <= 0) {
+            return $commission->expense_id ? $commission->expense : null;
+        }
+
+        return DB::transaction(function () use ($commission) {
+            $commission->loadMissing('marketer');
+            $name = $commission->marketer?->name ?? "User #{$commission->user_id}";
+
+            $expense = Expense::create([
+                'expense_category_id' => $this->categoryId('Marketer Commissions', 'عمولات المسوّقين'),
+                'amount'              => (float) $commission->commission_amount,
+                'expense_date'        => ($commission->paid_date ?? now())->toDateString(),
+                'description'         => "Marketer commission: {$name}" . ($commission->lead_id ? " — lead #{$commission->lead_id}" : ''),
+                'created_by'          => auth()->id(),
+            ]);
+
+            $commission->forceFill(['expense_id' => $expense->id])->saveQuietly();
 
             return $expense;
         });

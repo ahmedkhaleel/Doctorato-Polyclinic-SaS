@@ -208,6 +208,23 @@ class DataIntegrityCheckCommand extends Command
             // column may not exist yet; not fatal
         }
 
+        // ── 11. Paid marketer commissions with no expense ─────
+        try {
+            $commNoExpense = \App\Models\MarketerCommission::where('status', 'paid')
+                ->whereNull('expense_id')
+                ->where('commission_amount', '>', 0)
+                ->count();
+            if ($commNoExpense > 0) {
+                $findings[] = [
+                    'check'  => 'paid_commission_without_expense',
+                    'count'  => $commNoExpense,
+                    'detail' => 'Paid marketer commissions not recorded in the expense ledger',
+                ];
+            }
+        } catch (\Throwable $e) {
+            // column may not exist yet; not fatal
+        }
+
         // ── Report ──────────────────────────────────────────
         if ($this->option('json')) {
             $this->line(json_encode([

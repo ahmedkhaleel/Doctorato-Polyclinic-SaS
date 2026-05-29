@@ -115,6 +115,10 @@ class MarketerCommissionController extends Controller
 
         $commission->markAsPaid();
 
+        // Record it in the Expense ledger so sales-commission cost appears in
+        // the financial reports (real cash out, like doctor payouts/payroll).
+        app(\App\Services\LaborExpenseService::class)->recordForMarketerCommission($commission->fresh());
+
         return back()->with('success', 'Commission marked as paid.');
     }
 
