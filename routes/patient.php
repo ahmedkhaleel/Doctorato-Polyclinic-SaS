@@ -3,6 +3,7 @@
 use App\Http\Controllers\Patient\PatientAuthController;
 use App\Http\Controllers\Patient\PatientDashboardController;
 use App\Http\Controllers\Patient\PatientDermaController;
+use App\Http\Controllers\Patient\PatientCosmeticConsentController;
 use App\Http\Controllers\Patient\PatientBookingController;
 use App\Http\Controllers\Patient\PatientVisitController;
 use App\Http\Controllers\Patient\PatientPhotoController;
@@ -108,6 +109,8 @@ Route::middleware('patient.auth')->group(function () {
     // ─── Dermatology & Cosmetic ───────────────────────────────
     Route::middleware('module:derma')->group(function () {
         Route::get('/derma', [PatientDermaController::class, 'overview'])->name('patient.derma.overview');
+        Route::get('/derma/consents', [PatientCosmeticConsentController::class, 'index'])->name('patient.derma.consents');
+        Route::post('/derma/consents/{consent}/sign', [PatientCosmeticConsentController::class, 'sign'])->name('patient.derma.consents.sign')->middleware('throttle:10,1');
     });
 
     // ─── Pediatric ──────────────────────────────────────────

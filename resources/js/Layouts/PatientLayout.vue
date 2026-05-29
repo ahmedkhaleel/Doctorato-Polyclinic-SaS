@@ -116,6 +116,7 @@ const navGroups = computed(() => [
         moduleKey: 'derma',
         items: [
             { label: isRtl.value ? 'علاجاتي الجلدية' : 'My Treatments', href: lp('/derma'), icon: 'overview' },
+            { label: isRtl.value ? 'الموافقات والتوقيع' : 'Consents', href: lp('/derma/consents'), icon: 'document' },
         ],
     },
     {
