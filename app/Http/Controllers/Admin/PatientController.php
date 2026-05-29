@@ -231,11 +231,28 @@ class PatientController extends Controller
                 ->where('is_active', true)
                 ->get();
 
+            // Clinical oversight records (read-only in admin; managed by doctors).
+            $chronicConditions = \App\Models\PediatricChronicCondition::where('patient_id', $patient->id)
+                ->where('is_active', true)
+                ->latest('diagnosed_date')
+                ->get();
+
+            $milestones = \App\Models\PediatricMilestone::where('patient_id', $patient->id)
+                ->latest('assessment_date')
+                ->get();
+
+            $screeningTests = \App\Models\PediatricScreeningTest::where('patient_id', $patient->id)
+                ->latest('test_date')
+                ->get();
+
             $pediatricData = [
                 'is_pediatric' => true,
                 'growthRecords' => $growthRecords,
                 'vaccinations' => $vaccinations,
                 'allergies' => $allergies,
+                'chronicConditions' => $chronicConditions,
+                'milestones' => $milestones,
+                'screeningTests' => $screeningTests,
                 'stats' => [
                     'total_visits' => $patient->visits()->where('module', 'pediatric')->count(),
                     'growth_records' => $growthRecords->count(),
@@ -243,6 +260,9 @@ class PatientController extends Controller
                     'given_vaccinations' => $vaccinations->where('status', 'given')->count(),
                     'scheduled_vaccinations' => $vaccinations->where('status', 'scheduled')->count(),
                     'active_allergies' => $allergies->count(),
+                    'chronic_conditions' => $chronicConditions->count(),
+                    'milestones_recorded' => $milestones->count(),
+                    'screening_tests' => $screeningTests->count(),
                     'latest_weight' => $growthRecords->last()?->weight_kg,
                     'latest_height' => $growthRecords->last()?->height_cm,
                     'latest_bmi' => $growthRecords->last()?->bmi,

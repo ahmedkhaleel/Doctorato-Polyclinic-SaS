@@ -17,6 +17,9 @@ const stats = computed(() => props.data?.stats || {});
 const growthRecords = computed(() => props.data?.growthRecords || []);
 const vaccinations = computed(() => props.data?.vaccinations || []);
 const allergies = computed(() => props.data?.allergies || []);
+const chronicConditions = computed(() => props.data?.chronicConditions || []);
+const milestones = computed(() => props.data?.milestones || []);
+const screeningTests = computed(() => props.data?.screeningTests || []);
 
 const vaccinationsLink = computed(() => {
     if (props.role === 'admin') return `/admin/pediatric/patients/${props.patient.id}/vaccinations`;
@@ -148,6 +151,57 @@ const gender = computed(() => props.patient?.gender || 'male');
                             {{ a.severity }}
                         </span>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chronic Conditions (read-only oversight) -->
+        <div v-if="chronicConditions.length" class="bg-white rounded-xl border border-gray-100 overflow-hidden">
+            <div class="px-5 py-3 border-b border-gray-100">
+                <h3 class="text-sm font-bold text-gray-800">{{ isRtl ? 'الأمراض المزمنة' : 'Chronic Conditions' }}</h3>
+            </div>
+            <div class="divide-y divide-gray-50">
+                <div v-for="c in chronicConditions" :key="c.id" class="px-5 py-3 flex items-center justify-between gap-3">
+                    <div class="min-w-0">
+                        <p class="text-sm font-semibold text-gray-800 truncate">{{ isRtl ? (c.condition_name_ar || c.condition_name) : c.condition_name }}</p>
+                        <p v-if="c.diagnosed_date" class="text-[10px] text-gray-400">{{ isRtl ? 'تشخيص' : 'Dx' }}: {{ formatDate(c.diagnosed_date) }}</p>
+                    </div>
+                    <span v-if="c.severity" class="text-[10px] font-bold px-2 py-0.5 rounded-full uppercase"
+                        :class="c.severity === 'severe' ? 'bg-red-100 text-red-700' : c.severity === 'moderate' ? 'bg-amber-100 text-amber-700' : 'bg-emerald-50 text-emerald-700'">
+                        {{ c.severity }}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Developmental Milestones (read-only) -->
+        <div v-if="milestones.length" class="bg-white rounded-xl border border-gray-100 overflow-hidden">
+            <div class="px-5 py-3 border-b border-gray-100">
+                <h3 class="text-sm font-bold text-gray-800">{{ isRtl ? 'المعالم التطورية' : 'Developmental Milestones' }}</h3>
+            </div>
+            <div class="divide-y divide-gray-50">
+                <div v-for="m in milestones.slice(0, 12)" :key="m.id" class="px-5 py-2.5 flex items-center justify-between gap-3">
+                    <p class="text-sm text-gray-700 truncate">{{ isRtl ? (m.milestone_name_ar || m.milestone_name_en) : m.milestone_name_en }}</p>
+                    <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full"
+                        :class="m.status === 'achieved' ? 'bg-emerald-50 text-emerald-700' : m.status === 'emerging' ? 'bg-amber-50 text-amber-700' : 'bg-red-50 text-red-600'">
+                        {{ m.status === 'achieved' ? (isRtl ? 'مكتمل' : 'Achieved') : m.status === 'emerging' ? (isRtl ? 'ناشئ' : 'Emerging') : (isRtl ? 'متأخر' : 'Not yet') }}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screening Tests (read-only) -->
+        <div v-if="screeningTests.length" class="bg-white rounded-xl border border-gray-100 overflow-hidden">
+            <div class="px-5 py-3 border-b border-gray-100">
+                <h3 class="text-sm font-bold text-gray-800">{{ isRtl ? 'فحوص الكشف' : 'Screening Tests' }}</h3>
+            </div>
+            <div class="divide-y divide-gray-50">
+                <div v-for="s in screeningTests" :key="s.id" class="px-5 py-3 flex items-center justify-between gap-3">
+                    <div class="min-w-0">
+                        <p class="text-sm font-medium text-gray-800 truncate">{{ s.test_type }}</p>
+                        <p v-if="s.test_date" class="text-[10px] text-gray-400">{{ formatDate(s.test_date) }}<span v-if="s.total_score !== null"> · {{ isRtl ? 'النتيجة' : 'Score' }}: {{ s.total_score }}</span></p>
+                    </div>
+                    <span v-if="s.result" class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-[#1B365D]">{{ s.result }}</span>
                 </div>
             </div>
         </div>
