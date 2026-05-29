@@ -1030,6 +1030,12 @@ Route::middleware('admin.auth')->group(function () {
         Route::post('/consents/{consent}', [\App\Http\Controllers\Admin\CosmeticConsentController::class, 'update'])->name('consents.update')->middleware('permission:derma.update');
         Route::delete('/consents/{consent}', [\App\Http\Controllers\Admin\CosmeticConsentController::class, 'destroy'])->name('consents.destroy')->middleware('permission:derma.delete');
 
+        // Consent templates (drive mandatory-signature enforcement)
+        Route::get('/consent-templates', [\App\Http\Controllers\Admin\CosmeticConsentTemplateController::class, 'index'])->name('consentTemplates.index');
+        Route::post('/consent-templates', [\App\Http\Controllers\Admin\CosmeticConsentTemplateController::class, 'store'])->name('consentTemplates.store')->middleware('permission:derma.create');
+        Route::post('/consent-templates/{template}', [\App\Http\Controllers\Admin\CosmeticConsentTemplateController::class, 'update'])->name('consentTemplates.update')->middleware('permission:derma.update');
+        Route::delete('/consent-templates/{template}', [\App\Http\Controllers\Admin\CosmeticConsentTemplateController::class, 'destroy'])->name('consentTemplates.destroy')->middleware('permission:derma.delete');
+
         Route::get('/settings', [\App\Http\Controllers\Admin\CosmeticController::class, 'settings'])->name('settings');
         Route::post('/settings', [\App\Http\Controllers\Admin\CosmeticController::class, 'updateSettings'])->name('settings.update')->middleware('permission:derma.update');
     });

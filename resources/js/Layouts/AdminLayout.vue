@@ -213,6 +213,7 @@ const navGroups = [
             { labelEn: 'Package Purchases',   labelAr: 'اشتراكات الباقات',   href: '/admin/cosmetic/package-purchases',     icon: 'receipt',   permission: 'derma.view' },
             { labelEn: 'Cosmetic Sessions',   labelAr: 'جلسات التجميل',      href: '/admin/cosmetic/sessions',              icon: 'activity',  permission: 'derma.view' },
             { labelEn: 'Consent Forms',       labelAr: 'نماذج الموافقة',     href: '/admin/cosmetic/consents',              icon: 'document',  permission: 'derma.view' },
+            { labelEn: 'Consent Templates',   labelAr: 'قوالب الموافقة',     href: '/admin/cosmetic/consent-templates',     icon: 'file-text', permission: 'derma.view' },
             // ─── Shared ───────────────────────────────────────────
             { labelEn: 'Gallery',            labelAr: 'المعرض (قبل/بعد)',    href: '/admin/derma/gallery',                  icon: 'image',     permission: 'derma.view' },
             { labelEn: 'Settings',           labelAr: 'الإعدادات',           href: '/admin/derma/settings',                 icon: 'cog',       permission: 'derma.view' },

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\CosmeticConsent;
+use App\Models\CosmeticConsentTemplate;
 use App\Models\CosmeticPackage;
 use App\Models\CosmeticProcedure;
 use App\Models\CosmeticSession;
@@ -10,6 +12,7 @@ use App\Models\Doctor;
 use App\Models\Patient;
 use App\Services\CosmeticDermaInvoiceService;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 
 class CosmeticSessionController extends Controller
@@ -44,9 +47,44 @@ class CosmeticSessionController extends Controller
 
     public function store(Request $request)
     {
-        $session = CosmeticSession::create($this->validated($request));
+        $data = $this->validated($request);
+        $this->enforceConsent($data);
+        $session = CosmeticSession::create($data);
         $this->invoicing->generateForCosmeticSession($session);
         return back()->with('success', 'تم إضافة الجلسة');
+    }
+
+    /**
+     * Block a completed cosmetic session when its procedure has an active
+     * consent template flagged requires_signature and the patient has no
+     * signed consent on file (for that procedure, or a general one).
+     * No template / no requires_signature → no enforcement (backward safe).
+     */
+    private function enforceConsent(array $data): void
+    {
+        if (empty($data['completed_at']) || empty($data['procedure_id'])) {
+            return;
+        }
+
+        $needsConsent = CosmeticConsentTemplate::active()
+            ->where('requires_signature', true)
+            ->where(fn ($q) => $q->where('procedure_id', $data['procedure_id'])->orWhereNull('procedure_id'))
+            ->exists();
+
+        if (! $needsConsent) {
+            return;
+        }
+
+        $hasSigned = CosmeticConsent::where('patient_id', $data['patient_id'])
+            ->whereNotNull('signed_at')
+            ->where(fn ($q) => $q->where('procedure_id', $data['procedure_id'])->orWhereNull('procedure_id'))
+            ->exists();
+
+        if (! $hasSigned) {
+            throw ValidationException::withMessages([
+                'consent' => 'يتطلب هذا الإجراء موافقة موقّعة من المريض قبل تنفيذ الجلسة. / This procedure requires a signed patient consent before the session.',
+            ]);
+        }
     }
 
     public function update(Request $request, CosmeticSession $session)

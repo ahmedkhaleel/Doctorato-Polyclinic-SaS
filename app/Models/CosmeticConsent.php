@@ -12,7 +12,7 @@ class CosmeticConsent extends Model
     use HasFactory, LogsActivity, SoftDeletes;
 
     protected $fillable = [
-        'patient_id', 'procedure_id', 'session_id',
+        'patient_id', 'procedure_id', 'template_id', 'session_id',
         'consent_text', 'signed_at', 'signature_path', 'witnessed_by',
     ];
 
@@ -22,5 +22,6 @@ class CosmeticConsent extends Model
 
     public function patient() { return $this->belongsTo(Patient::class); }
     public function procedure() { return $this->belongsTo(CosmeticProcedure::class, 'procedure_id'); }
+    public function template() { return $this->belongsTo(CosmeticConsentTemplate::class, 'template_id'); }
     public function session() { return $this->belongsTo(CosmeticSession::class, 'session_id'); }
 }
