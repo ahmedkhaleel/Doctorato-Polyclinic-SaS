@@ -19,12 +19,15 @@ class AdminAuth
 
     /**
      * Per-role redirect destinations for authenticated users who hit the wrong panel.
+     *
+     * NOTE: the patient portal lives under a {locale} prefix (ar|en), so a bare
+     * "/patient" is a 404. The patient destination is resolved at runtime in
+     * resolveHome() with the active locale; it is intentionally absent here.
      */
     private array $roleHomes = [
         'doctor'    => '/doctor',
         'secretary' => '/secretary',
         'webmaster' => '/webmaster',
-        'patient'   => '/patient',
     ];
 
     public function handle(Request $request, Closure $next): Response
@@ -62,7 +65,7 @@ class AdminAuth
             }
 
             // Send user to their own panel home (or admin login if unknown role)
-            $home = $this->roleHomes[$roleName] ?? null;
+            $home = $this->resolveHome($roleName, $request);
             if ($home) {
                 return redirect($home)
                     ->with('error', 'ليس لديك صلاحية الوصول إلى لوحة الإدارة. تم توجيهك إلى لوحتك الخاصة.');
@@ -73,5 +76,25 @@ class AdminAuth
         }
 
         return $next($request);
+    }
+
+    /**
+     * Build the correct home URL for a role bounced out of the admin panel.
+     * The patient portal is locale-prefixed, so it cannot use the flat
+     * $roleHomes map — it is resolved here with the active locale.
+     */
+    private function resolveHome(?string $roleName, Request $request): ?string
+    {
+        if ($roleName === 'patient') {
+            $locale = session('admin_locale');
+            if (! in_array($locale, ['ar', 'en'], true)) {
+                $locale = config('app.locale', 'ar');
+            }
+
+            // route() yields a valid locale-prefixed URL (/ar/patient).
+            return route('patient.dashboard', ['locale' => $locale]);
+        }
+
+        return $this->roleHomes[$roleName] ?? null;
     }
 }
