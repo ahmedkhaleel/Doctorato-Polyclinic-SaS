@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Advance;
 use App\Models\Attendance;
+use App\Models\Doctor;
 use App\Models\DoctorPayout;
 use App\Models\Employee;
 use App\Models\Leave;
@@ -103,13 +104,18 @@ class PayrollService
         $penaltyDeduction = (float) $penaltyAmount;
         $bonus = (float) $rewardAmount;
 
-        // Doctor commission from paid DoctorPayout records (if applicable)
+        // Doctor commission — ONLY for doctors paid via payroll (payment_mode
+        // = 'salary'). Contractor doctors (payment_mode = 'payout') are paid
+        // their commission through Doctor Payouts, so adding it here would
+        // double-pay them. The hybrid flag guarantees exactly one channel pays.
+        // For salary-mode doctors we pull confirmed|paid payouts in the period
+        // (their payouts are calculation-only and never cash-disbursed).
         $commissionAmount = 0;
         if ($employee->user && class_exists(DoctorPayout::class)) {
             $doctor = $employee->user->doctor ?? null;
-            if ($doctor) {
+            if ($doctor && $doctor->payment_mode === Doctor::PAY_SALARY) {
                 $commissionAmount = (float) DoctorPayout::where('doctor_id', $doctor->id)
-                    ->where('status', 'paid')
+                    ->whereIn('status', ['confirmed', 'paid'])
                     ->whereMonth('period_start', $month)
                     ->whereYear('period_start', $year)
                     ->sum('total_commission');

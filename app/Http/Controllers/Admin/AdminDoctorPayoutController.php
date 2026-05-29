@@ -258,6 +258,13 @@ class AdminDoctorPayoutController extends Controller
             return back()->withErrors(['status' => 'Only confirmed payouts can be marked as paid.']);
         }
 
+        // Hybrid payment model: a salary-mode doctor's commission is paid via
+        // the monthly salary slip, NOT cash-disbursed here. Blocking this is
+        // what prevents paying the same commission twice.
+        if (optional($payout->doctor)->payment_mode === \App\Models\Doctor::PAY_SALARY) {
+            return back()->withErrors(['status' => 'هذا الطبيب يُدفع له عبر الرواتب (وضع الراتب) — العمولة تُضاف لقسيمة الراتب الشهرية ولا تُصرف هنا. / This doctor is paid via payroll (salary mode); commission goes onto the monthly salary slip — not disbursed here.']);
+        }
+
         $request->validate([
             'payment_method' => 'required|string|in:cash,bank_transfer,check,mobile_wallet',
             'payment_reference' => 'nullable|string|max:255',

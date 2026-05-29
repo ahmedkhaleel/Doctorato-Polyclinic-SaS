@@ -27,6 +27,7 @@ class UpdateDoctorRequest extends FormRequest
             'display_order' => 'nullable|integer',
             'status' => 'required|in:active,inactive',
             'doctor_type' => 'nullable|in:consultant,specialist',
+            'payment_mode' => 'nullable|in:payout,salary',
             // Clinic fields
             'user_id' => 'nullable|exists:users,id',
             'phone' => 'nullable|string|max:20',

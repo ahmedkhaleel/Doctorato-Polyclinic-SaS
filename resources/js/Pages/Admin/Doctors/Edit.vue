@@ -123,6 +123,7 @@ const form = useForm({
     dermatology_fee: props.doctor.dermatology_fee || '',
     cosmetic_fee: props.doctor.cosmetic_fee || '',
     default_commission_percentage: props.doctor.default_commission_percentage || '',
+    payment_mode: props.doctor.payment_mode || 'payout',
     dermatology_commission: props.doctor.dermatology_commission || '',
     cosmetic_commission: props.doctor.cosmetic_commission || '',
     followup_commission: props.doctor.followup_commission || '',
@@ -749,6 +750,22 @@ function serviceRateOptions(currentIndex) {
                                             <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400 font-medium">%</span>
                                         </div>
                                     </div>
+                                </div>
+
+                                <!-- Payment mode (hybrid: payout vs salary) -->
+                                <div class="flex items-center justify-between gap-4 pt-3 mt-3 border-t border-gray-100">
+                                    <div>
+                                        <label class="block text-sm font-semibold text-gray-700">{{ isRtl ? 'طريقة دفع العمولة' : 'Commission Payment' }}</label>
+                                        <p class="text-xs text-gray-400">
+                                            {{ form.payment_mode === 'salary'
+                                                ? (isRtl ? 'تُضاف لقسيمة الراتب الشهرية (موظّف)' : 'Added to the monthly salary slip (employee)')
+                                                : (isRtl ? 'تُصرف عبر مستحقات الأطباء (متعاقد)' : 'Disbursed via Doctor Payouts (contractor)') }}
+                                        </p>
+                                    </div>
+                                    <select v-model="form.payment_mode" class="doctorato-input w-44 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265]">
+                                        <option value="payout">{{ isRtl ? 'مستحقات (متعاقد)' : 'Payout (contractor)' }}</option>
+                                        <option value="salary">{{ isRtl ? 'راتب (موظّف)' : 'Salary (employee)' }}</option>
+                                    </select>
                                 </div>
                             </div>
 

@@ -12,6 +12,17 @@ class Doctor extends Model
 {
     use HasFactory, SoftDeletes, LogsActivity;
 
+    /** Commission paid via Doctor Payouts (contractor). */
+    const PAY_PAYOUT = 'payout';
+    /** Commission consolidated into the monthly salary slip (employee). */
+    const PAY_SALARY = 'salary';
+
+    /** True when this doctor's commission flows through payroll, not payouts. */
+    public function isSalaryPaid(): bool
+    {
+        return $this->payment_mode === self::PAY_SALARY;
+    }
+
     protected $fillable = [
         'name_ar', 'name_en', 'photo',
         'specialization_ar', 'specialization_en',
@@ -20,7 +31,7 @@ class Doctor extends Model
         'display_order', 'status', 'doctor_type', 'module',
         // Clinic management fields
         'user_id', 'phone', 'email',
-        'default_commission_percentage', 'consultation_fee',
+        'default_commission_percentage', 'payment_mode', 'consultation_fee',
         'dermatology_fee', 'cosmetic_fee',
         'dental_consultation_fee', 'dental_service_fee',
         'dermatology_commission', 'cosmetic_commission', 'followup_commission',
