@@ -27,6 +27,8 @@ class CosmeticConsentController extends Controller
             'filters' => $request->only(['search', 'procedure_id']),
             'procedures' => CosmeticProcedure::where('is_active', true)->orderBy('name_ar')->get(['id', 'name_ar', 'name_en']),
             'patients' => Patient::orderBy('full_name')->limit(500)->get(['id', 'full_name', 'phone']),
+            'templates' => CosmeticConsentTemplate::active()
+                ->get(['id', 'procedure_id', 'title_ar', 'title_en', 'body_ar', 'body_en', 'requires_signature']),
         ]);
     }
 

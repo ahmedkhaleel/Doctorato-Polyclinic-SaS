@@ -8,7 +8,7 @@ defineOptions({ layout: AdminLayout });
 const page = usePage();
 const isRtl = computed(() => (page.props.dir || 'rtl') === 'rtl');
 
-const props = defineProps({ sessions: Object, filters: Object, procedures: Array, packages: Array, patients: Array, doctors: Array });
+const props = defineProps({ sessions: Object, filters: Object, procedures: Array, packages: Array, patients: Array, doctors: Array, supplies: { type: Array, default: () => [] }, packagePurchases: { type: Array, default: () => [] } });
 
 const search = ref(props.filters?.search || '');
 const procId = ref(props.filters?.procedure_id || '');
@@ -25,10 +25,14 @@ watch([search, procId, pid], apply);
 const showModal = ref(false);
 const editing = ref(null);
 const form = useForm({
-    patient_id: '', doctor_id: '', package_id: '', procedure_id: '', visit_id: null,
+    patient_id: '', doctor_id: '', package_id: '', package_purchase_id: '', procedure_id: '', visit_id: null,
+    supply_id: '', consumption_qty: null,
     session_number: 1, area_treated: '', product_used: '', dose_units: null,
     cost: 0, completed_at: '', notes: '',
 });
+// Active prepaid packages for the chosen patient (draw a session from one).
+const patientPurchases = computed(() => props.packagePurchases.filter(p => p.patient_id === Number(form.patient_id)));
+function supplyName(s) { return isRtl.value ? (s.name_ar || s.name_en) : (s.name_en || s.name_ar); }
 function open(s = null) {
     editing.value = s;
     form.reset();
@@ -147,6 +151,14 @@ function fmt(d) { if (!d) return '-'; return new Date(d).toLocaleDateString(isRt
                         </select>
                     </div>
                     <div>
+                        <label class="block text-xs font-medium mb-1">{{ t('Draw from prepaid package', 'خصم من باقة مدفوعة') }}</label>
+                        <select v-model="form.package_purchase_id" class="doctorato-input w-full px-3 py-2 border rounded-lg text-sm">
+                            <option value="">{{ t('No — bill separately', 'لا — فوترة منفصلة') }}</option>
+                            <option v-for="pp in patientPurchases" :key="pp.id" :value="pp.id">{{ pp.name }} ({{ pp.remaining }} {{ t('left', 'متبقية') }})</option>
+                        </select>
+                        <p v-if="form.patient_id && !patientPurchases.length" class="text-[10px] text-slate-400 mt-1">{{ t('No active packages for this patient', 'لا باقات نشطة لهذا المريض') }}</p>
+                    </div>
+                    <div>
                         <label class="block text-xs font-medium mb-1">{{ t('Doctor', 'الطبيب') }}</label>
                         <select v-model="form.doctor_id" class="doctorato-input w-full px-3 py-2 border rounded-lg text-sm">
                             <option value="">—</option>
@@ -168,6 +180,17 @@ function fmt(d) { if (!d) return '-'; return new Date(d).toLocaleDateString(isRt
                     <div>
                         <label class="block text-xs font-medium mb-1">{{ t('Dose (units)', 'الجرعة (وحدات)') }}</label>
                         <input v-model.number="form.dose_units" type="number" min="0" step="0.01" class="doctorato-input w-full px-3 py-2 border rounded-lg text-sm" />
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium mb-1">{{ t('Inventory override (optional)', 'تجاوز المخزون (اختياري)') }}</label>
+                        <select v-model="form.supply_id" class="doctorato-input w-full px-3 py-2 border rounded-lg text-sm">
+                            <option value="">{{ t('Use procedure default', 'افتراضي الإجراء') }}</option>
+                            <option v-for="s in supplies" :key="s.id" :value="s.id">{{ supplyName(s) }}<span v-if="s.unit"> ({{ s.unit }})</span></option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium mb-1">{{ t('Qty consumed', 'الكمية المستهلكة') }}</label>
+                        <input v-model.number="form.consumption_qty" type="number" min="0" step="0.01" :placeholder="t('default', 'افتراضي')" class="doctorato-input w-full px-3 py-2 border rounded-lg text-sm" />
                     </div>
                     <div>
                         <label class="block text-xs font-medium mb-1">{{ t('Cost', 'التكلفة') }}</label>

@@ -8,7 +8,7 @@ defineOptions({ layout: AdminLayout });
 const page = usePage();
 const isRtl = computed(() => (page.props.dir || 'rtl') === 'rtl');
 
-const props = defineProps({ consents: Object, filters: Object, procedures: Array, patients: Array });
+const props = defineProps({ consents: Object, filters: Object, procedures: Array, patients: Array, templates: { type: Array, default: () => [] } });
 
 const search = ref(props.filters?.search || '');
 const procId = ref(props.filters?.procedure_id || '');
@@ -23,9 +23,17 @@ watch([search, procId], apply);
 
 const showModal = ref(false);
 const form = useForm({
-    patient_id: '', procedure_id: '', session_id: null,
+    patient_id: '', procedure_id: '', template_id: '', session_id: null,
     consent_text: '', signed_at: '', signature: null, witnessed_by: '',
 });
+// Picking a template prefills the consent text (and procedure) from it.
+function onTemplateChange() {
+    const tpl = props.templates.find(x => x.id === Number(form.template_id));
+    if (!tpl) return;
+    form.consent_text = isRtl.value ? (tpl.body_ar || tpl.body_en) : (tpl.body_en || tpl.body_ar);
+    if (!form.procedure_id && tpl.procedure_id) form.procedure_id = tpl.procedure_id;
+}
+function tplTitle(t) { return isRtl.value ? (t.title_ar || t.title_en) : (t.title_en || t.title_ar); }
 function submit() {
     form.post('/admin/cosmetic/consents', { preserveScroll: true, onSuccess: () => { showModal.value = false; form.reset(); } });
 }
@@ -113,6 +121,10 @@ function fmt(d) { if (!d) return '-'; return new Date(d).toLocaleDateString(isRt
                     <select v-model="form.procedure_id" class="doctorato-input w-full px-3 py-2 border rounded-lg text-sm">
                         <option value="">{{ t('Procedure', 'الإجراء') }}</option>
                         <option v-for="p in procedures" :key="p.id" :value="p.id">{{ p.name_ar }}</option>
+                    </select>
+                    <select v-if="templates.length" v-model="form.template_id" @change="onTemplateChange" class="doctorato-input w-full px-3 py-2 border rounded-lg text-sm">
+                        <option value="">{{ t('Use a template (optional)', 'استخدم قالباً (اختياري)') }}</option>
+                        <option v-for="tpl in templates" :key="tpl.id" :value="tpl.id">{{ tplTitle(tpl) }}</option>
                     </select>
                     <textarea v-model="form.consent_text" :placeholder="t('Consent text', 'نص الموافقة')" rows="4" class="doctorato-input w-full px-3 py-2 border rounded-lg text-sm"></textarea>
                     <input v-model="form.signed_at" type="date" class="doctorato-input w-full px-3 py-2 border rounded-lg text-sm" />

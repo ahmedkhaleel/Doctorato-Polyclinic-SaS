@@ -43,6 +43,15 @@ class CosmeticSessionController extends Controller
             'patients' => Patient::orderBy('full_name')->limit(500)->get(['id', 'full_name', 'phone']),
             'doctors' => Doctor::orderBy('name_ar')->get(['id', 'name_ar', 'name_en']),
             'supplies' => \App\Models\Supply::orderBy('name_ar')->get(['id', 'name_ar', 'name_en', 'unit', 'quantity']),
+            'packagePurchases' => \App\Models\CosmeticPackagePurchase::active()
+                ->with('package:id,name_ar,name_en')
+                ->get()
+                ->filter(fn ($p) => $p->is_usable)
+                ->map(fn ($p) => [
+                    'id' => $p->id, 'patient_id' => $p->patient_id,
+                    'name' => $p->package?->name_ar ?? $p->package?->name_en ?? '—',
+                    'remaining' => $p->sessions_remaining,
+                ])->values(),
         ]);
     }
 

@@ -8,7 +8,7 @@ defineOptions({ layout: AdminLayout });
 const page = usePage();
 const isRtl = computed(() => (page.props.dir || 'rtl') === 'rtl');
 
-const props = defineProps({ sessions: Object, filters: Object, types: Array, patients: Array, doctors: Array });
+const props = defineProps({ sessions: Object, filters: Object, types: Array, patients: Array, doctors: Array, plans: { type: Array, default: () => [] } });
 
 const search = ref(props.filters?.search || '');
 const type = ref(props.filters?.type || '');
@@ -25,11 +25,14 @@ watch([search, type, pid], apply);
 const showModal = ref(false);
 const editing = ref(null);
 const form = useForm({
-    patient_id: '', doctor_id: '', visit_id: null,
+    patient_id: '', doctor_id: '', visit_id: null, treatment_plan_id: '',
     session_type: 'other', area_treated: '', product_used: '',
     session_number: 1, total_sessions: 1, cost: 0,
     completed_at: '', next_session_date: '', notes: '',
 });
+// Active courses for the chosen patient (link the session to a course).
+const patientPlans = computed(() => props.plans.filter(p => p.patient_id === Number(form.patient_id)));
+function planTitle(p) { return isRtl.value ? (p.title_ar || p.title_en) : (p.title_en || p.title_ar); }
 function open(s = null) {
     editing.value = s;
     form.reset();
@@ -139,6 +142,14 @@ function fmt(d) { if (!d) return '-'; return new Date(d).toLocaleDateString(isRt
                             <option value="">—</option>
                             <option v-for="d in doctors" :key="d.id" :value="d.id">{{ d.name_ar || d.name_en }}</option>
                         </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium mb-1">{{ t('Treatment course', 'كورس العلاج') }}</label>
+                        <select v-model="form.treatment_plan_id" class="doctorato-input w-full px-3 py-2 border rounded-lg text-sm">
+                            <option value="">{{ t('Not part of a course', 'ليست ضمن كورس') }}</option>
+                            <option v-for="pl in patientPlans" :key="pl.id" :value="pl.id">{{ planTitle(pl) }} ({{ pl.completed_sessions }}/{{ pl.estimated_sessions }})</option>
+                        </select>
+                        <p v-if="form.patient_id && !patientPlans.length" class="text-[10px] text-slate-400 mt-1">{{ t('No active courses for this patient', 'لا كورسات نشطة لهذا المريض') }}</p>
                     </div>
                     <div>
                         <label class="block text-xs font-medium mb-1">{{ t('Type', 'النوع') }} *</label>

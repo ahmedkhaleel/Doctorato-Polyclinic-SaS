@@ -33,6 +33,8 @@ class DermaSessionController extends Controller
             'types' => DermaSession::TYPES,
             'patients' => Patient::orderBy('full_name')->limit(500)->get(['id', 'full_name', 'phone']),
             'doctors' => Doctor::orderBy('name_ar')->get(['id', 'name_ar', 'name_en']),
+            'plans' => \App\Models\DermaTreatmentPlan::active()
+                ->get(['id', 'patient_id', 'title_ar', 'title_en', 'session_type', 'completed_sessions', 'estimated_sessions']),
         ]);
     }
 
