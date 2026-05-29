@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\CosmeticProcedure;
+use App\Models\Supply;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -22,9 +23,10 @@ class CosmeticProcedureController extends Controller
         if ($request->filled('active') && $request->active !== '') $query->where('is_active', $request->active === '1');
 
         return Inertia::render('Admin/Cosmetic/Procedures/Index', [
-            'procedures' => $query->orderBy('display_order')->orderBy('name_ar')->paginate(20)->withQueryString(),
+            'procedures' => $query->with('supply:id,name_ar,name_en,unit')->orderBy('display_order')->orderBy('name_ar')->paginate(20)->withQueryString(),
             'filters' => $request->only(['search', 'category', 'active']),
             'categories' => CosmeticProcedure::CATEGORIES,
+            'supplies' => Supply::orderBy('name_ar')->get(['id', 'name_ar', 'name_en', 'unit', 'quantity']),
         ]);
     }
 
@@ -54,6 +56,8 @@ class CosmeticProcedureController extends Controller
             'category' => 'required|in:' . implode(',', CosmeticProcedure::CATEGORIES),
             'description' => 'nullable|string',
             'default_price' => 'nullable|numeric|min:0',
+            'supply_id' => 'nullable|exists:supplies,id',
+            'default_consumption_qty' => 'nullable|numeric|min:0',
             'default_duration_minutes' => 'nullable|integer|min:0',
             'recovery_days' => 'nullable|integer|min:0',
             'is_active' => 'nullable|boolean',

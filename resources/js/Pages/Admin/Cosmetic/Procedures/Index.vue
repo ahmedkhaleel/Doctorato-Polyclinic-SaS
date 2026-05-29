@@ -8,7 +8,7 @@ defineOptions({ layout: AdminLayout });
 const page = usePage();
 const isRtl = computed(() => (page.props.dir || 'rtl') === 'rtl');
 
-const props = defineProps({ procedures: Object, filters: Object, categories: Array });
+const props = defineProps({ procedures: Object, filters: Object, categories: Array, supplies: { type: Array, default: () => [] } });
 
 const search = ref(props.filters?.search || '');
 const cat = ref(props.filters?.category || '');
@@ -26,9 +26,11 @@ const showModal = ref(false);
 const editing = ref(null);
 const form = useForm({
     name_ar: '', name_en: '', category: 'other', description: '',
-    default_price: 0, default_duration_minutes: 30, recovery_days: 0,
+    default_price: 0, supply_id: '', default_consumption_qty: 0,
+    default_duration_minutes: 30, recovery_days: 0,
     is_active: true, display_order: 0,
 });
+function supplyName(s) { return isRtl?.value ? (s.name_ar || s.name_en) : (s.name_en || s.name_ar); }
 function open(p = null) {
     editing.value = p;
     form.reset();
@@ -141,6 +143,17 @@ function t(en, ar) { return isRtl.value ? ar : en; }
                     <div>
                         <label class="block text-xs font-medium mb-1">{{ t('Default Price', 'السعر الافتراضي') }}</label>
                         <input v-model.number="form.default_price" type="number" min="0" step="0.01" class="doctorato-input w-full px-3 py-2 border rounded-lg text-sm" />
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium mb-1">{{ t('Inventory item (consumed)', 'صنف المخزون (يُخصم)') }}</label>
+                        <select v-model="form.supply_id" class="doctorato-input w-full px-3 py-2 border rounded-lg text-sm">
+                            <option value="">{{ t('None', 'بدون') }}</option>
+                            <option v-for="s in supplies" :key="s.id" :value="s.id">{{ supplyName(s) }}<span v-if="s.unit"> ({{ s.unit }})</span></option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium mb-1">{{ t('Qty consumed / session', 'الكمية المستهلكة / جلسة') }}</label>
+                        <input v-model.number="form.default_consumption_qty" type="number" min="0" step="0.01" class="doctorato-input w-full px-3 py-2 border rounded-lg text-sm" />
                     </div>
                     <div>
                         <label class="block text-xs font-medium mb-1">{{ t('Duration (min)', 'المدة (دقائق)') }}</label>

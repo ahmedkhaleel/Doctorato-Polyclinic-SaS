@@ -8,6 +8,7 @@ use App\Models\CosmeticSession;
 use App\Models\DermaSession;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
+use App\Models\SupplyTransaction;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -97,6 +98,55 @@ class CosmeticDermaInvoiceService
             $session->update(['invoice_id' => $invoice->id]);
 
             return $invoice->fresh(['items']);
+        });
+    }
+
+    // ─── Inventory consumption ──────────────────────────────────
+
+    /**
+     * Draw the procedure's supply down from inventory when a session is
+     * completed. Resolution: session.supply_id/consumption_qty override the
+     * procedure's default supply_id/default_consumption_qty. Creates a
+     * 'usage' SupplyTransaction, decrements the supply stock (negative stock
+     * is allowed and recorded truthfully for later reconciliation), and links
+     * the session so it is never deducted twice.
+     */
+    public function consumeInventoryForCosmeticSession(CosmeticSession $session): ?SupplyTransaction
+    {
+        if ($session->completed_at === null || $session->supply_transaction_id) {
+            return $session->supply_transaction_id ? $session->supplyTransaction : null;
+        }
+
+        $procedure = $session->procedure;
+        $supplyId = $session->supply_id ?: ($procedure->supply_id ?? null);
+        $qty = $session->consumption_qty !== null
+            ? (float) $session->consumption_qty
+            : (float) ($procedure->default_consumption_qty ?? 0);
+
+        if (! $supplyId || $qty <= 0) {
+            return null;
+        }
+
+        return DB::transaction(function () use ($session, $supplyId, $qty) {
+            $supply = \App\Models\Supply::lockForUpdate()->find($supplyId);
+            if (! $supply) {
+                return null;
+            }
+
+            $txn = SupplyTransaction::create([
+                'supply_id'        => $supply->id,
+                'transaction_type' => 'usage',
+                'quantity'         => $qty,
+                'unit_cost'        => $supply->purchase_price,
+                'visit_id'         => $session->visit_id,
+                'notes'            => 'Cosmetic session #' . $session->id,
+                'created_by'       => auth()->id(),
+            ]);
+
+            $supply->decrement('quantity', $qty);
+            $session->update(['supply_transaction_id' => $txn->id]);
+
+            return $txn;
         });
     }
 

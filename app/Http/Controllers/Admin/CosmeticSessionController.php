@@ -38,10 +38,11 @@ class CosmeticSessionController extends Controller
         return Inertia::render('Admin/Cosmetic/Sessions/Index', [
             'sessions' => $query->latest()->paginate(20)->withQueryString(),
             'filters' => $request->only(['search', 'procedure_id', 'patient_id']),
-            'procedures' => CosmeticProcedure::where('is_active', true)->orderBy('name_ar')->get(['id', 'name_ar', 'name_en', 'category', 'default_price']),
+            'procedures' => CosmeticProcedure::where('is_active', true)->orderBy('name_ar')->get(['id', 'name_ar', 'name_en', 'category', 'default_price', 'supply_id', 'default_consumption_qty']),
             'packages' => CosmeticPackage::where('is_active', true)->orderBy('name_ar')->get(['id', 'name_ar', 'name_en', 'procedure_id']),
             'patients' => Patient::orderBy('full_name')->limit(500)->get(['id', 'full_name', 'phone']),
             'doctors' => Doctor::orderBy('name_ar')->get(['id', 'name_ar', 'name_en']),
+            'supplies' => \App\Models\Supply::orderBy('name_ar')->get(['id', 'name_ar', 'name_en', 'unit', 'quantity']),
         ]);
     }
 
@@ -51,6 +52,7 @@ class CosmeticSessionController extends Controller
         $this->enforceConsent($data);
         $session = CosmeticSession::create($data);
         $this->invoicing->generateForCosmeticSession($session);
+        $this->invoicing->consumeInventoryForCosmeticSession($session->fresh());
         return back()->with('success', 'تم إضافة الجلسة');
     }
 
@@ -89,9 +91,12 @@ class CosmeticSessionController extends Controller
 
     public function update(Request $request, CosmeticSession $session)
     {
-        $session->update($this->validated($request));
-        // Bill on completion (idempotent — never invoices the same session twice).
+        $data = $this->validated($request);
+        $this->enforceConsent($data + ['completed_at' => $data['completed_at'] ?? $session->completed_at]);
+        $session->update($data);
+        // Bill + draw inventory on completion (both idempotent — never twice).
         $this->invoicing->generateForCosmeticSession($session->fresh());
+        $this->invoicing->consumeInventoryForCosmeticSession($session->fresh());
         return back()->with('success', 'تم التحديث');
     }
 
@@ -109,6 +114,8 @@ class CosmeticSessionController extends Controller
             'package_id' => 'nullable|exists:cosmetic_packages,id',
             'package_purchase_id' => 'nullable|exists:cosmetic_package_purchases,id',
             'procedure_id' => 'nullable|exists:cosmetic_procedures,id',
+            'supply_id' => 'nullable|exists:supplies,id',
+            'consumption_qty' => 'nullable|numeric|min:0',
             'visit_id' => 'nullable|exists:visits,id',
             'session_number' => 'nullable|integer|min:1',
             'area_treated' => 'nullable|string|max:255',
