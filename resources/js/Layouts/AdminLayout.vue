@@ -453,31 +453,31 @@ function logout()        { router.post('/admin/logout'); }
             </div>
 
             <!-- Navigation Groups -->
-            <nav class="flex-1 overflow-y-auto py-4 px-3 space-y-1.5 admin-sidebar-scroll relative">
+            <nav class="flex-1 overflow-y-auto py-3 px-3 space-y-1 admin-sidebar-scroll relative">
                 <div v-for="(group, gi) in filteredGroups" :key="group.key" class="adm-nav-group" :style="{ '--gi': gi }">
                     <!-- ─── FEATURED GROUP (Telemedicine, etc.) ─── -->
                     <template v-if="group.featured">
                         <button
                             @click="toggleGroup(group.key)"
-                            class="w-full flex items-center justify-between px-3 py-3 rounded-xl text-[12px] font-bold transition-all duration-300 relative overflow-hidden group/header admin-featured-card"
+                            class="w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12px] font-bold transition-all duration-300 relative overflow-hidden group/header admin-featured-card"
                             :class="isGroupOpen(group.key) ? 'shadow-lg' : 'hover:shadow-md'"
                         >
                             <!-- Shimmer effect -->
                             <div class="absolute inset-0 bg-gradient-to-r from-transparent via-[#C4A265]/10 to-transparent -translate-x-full group-hover/header:translate-x-full transition-transform duration-1000 pointer-events-none"></div>
 
-                            <div class="flex items-center gap-3 relative z-10">
-                                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-[#C4A265] to-[#8B7043] flex items-center justify-center shadow-md shadow-[#C4A265]/30 flex-shrink-0">
-                                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="flex items-center gap-2.5 relative z-10">
+                                <div class="w-7 h-7 rounded-lg bg-gradient-to-br from-[#C4A265] to-[#8B7043] flex items-center justify-center shadow-md shadow-[#C4A265]/30 flex-shrink-0">
+                                    <svg class="w-[15px] h-[15px] text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="group.groupIcon" />
                                     </svg>
                                 </div>
                                 <div class="flex flex-col items-start leading-tight">
-                                    <span class="text-white font-bold tracking-wide">{{ groupTitle(group) }}</span>
-                                    <span class="text-[9px] text-[#C4A265] uppercase tracking-widest">{{ isRtl ? 'تخصص طبي' : 'Specialty' }}</span>
+                                    <span class="text-white font-bold tracking-wide text-[13px]">{{ groupTitle(group) }}</span>
+                                    <span class="text-[8px] text-[#C4A265] uppercase tracking-[0.2em]">{{ isRtl ? 'تخصص طبي' : 'Specialty' }}</span>
                                 </div>
                             </div>
                             <svg
-                                class="w-4 h-4 text-[#C4A265] transition-transform duration-300 ease-out relative z-10"
+                                class="w-3.5 h-3.5 text-[#C4A265] transition-transform duration-300 ease-out relative z-10"
                                 :class="[!isGroupOpen(group.key) ? (isRtl ? 'rotate-90' : '-rotate-90') : 'rotate-0']"
                                 fill="none" stroke="currentColor" viewBox="0 0 24 24"
                             >
@@ -490,7 +490,7 @@ function logout()        { router.post('/admin/logout'); }
                     <button
                         v-else
                         @click="toggleGroup(group.key)"
-                        class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-[11px] font-semibold uppercase tracking-[0.12em] transition-all duration-200 group/header"
+                        class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-[11px] font-semibold uppercase tracking-[0.1em] transition-all duration-200 group/header"
                         :class="isGroupOpen(group.key) ? 'bg-white/[0.04]' : 'hover:bg-white/[0.02]'"
                         :style="{ color: isGroupOpen(group.key) ? (group.color || 'var(--brand-primary)') : undefined }"
                     >
