@@ -50,6 +50,10 @@ class VisitWorkflowService
                 'completed_at' => now(),
             ]);
 
+            // 1b. Consume the service's configured supplies from inventory
+            // (ServiceSupply links). Idempotent — skipped if already consumed.
+            $results['inventory'] = app(ServiceSupplyConsumptionService::class)->consumeForVisit($visit);
+
             // 2. Update booking tracking if linked
             if ($visit->booking_appointment_id) {
                 $this->bookingWorkflowService->handleVisitCompleted($visit);
