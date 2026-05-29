@@ -406,16 +406,98 @@ function submit() {
             :image="seo?.image"
         />
 
-        <PageHero :title="isRtl ? 'احجز موعدك' : 'Book Appointment'" :subtitle="isRtl ? 'احجز موعدك الآن واستمتع برعاية صحية متميزة' : 'Book your appointment and enjoy outstanding healthcare'" :breadcrumb="isRtl ? 'الحجز' : 'Booking'" />
+        <!-- ════════════════════════════════════════════════════ -->
+        <!-- CINEMATIC HERO                                       -->
+        <!-- ════════════════════════════════════════════════════ -->
+        <section class="bk-hero">
+            <div class="bk-hero-orb bk-hero-orb-1"></div>
+            <div class="bk-hero-orb bk-hero-orb-2"></div>
+            <div class="bk-hero-grid"></div>
 
-        <!-- Booking Form Section -->
-        <section class="relative py-16 lg:py-24 bg-[#FDF8F0] overflow-hidden">
-            <!-- Subtle dot pattern -->
-            <div class="absolute inset-0 pointer-events-none texture-dots-lg"></div>
-            <!-- Floating decorative elements -->
+            <svg class="bk-hero-ecg" viewBox="0 0 1200 100" preserveAspectRatio="none" aria-hidden="true">
+                <path d="M0 50 L200 50 L225 20 L250 80 L275 10 L300 90 L325 50 L520 50 L545 30 L570 70 L595 20 L620 80 L645 50 L820 50 L845 25 L870 75 L895 15 L920 85 L945 50 L1200 50"
+                      fill="none" stroke="currentColor" stroke-width="1.2"
+                      stroke-linecap="round" stroke-linejoin="round" class="bk-hero-ecg-path" />
+            </svg>
+
+            <div class="bk-hero-inner">
+                <Link :href="`/${locale}`" class="bk-hero-crumb">
+                    <span>{{ isRtl ? 'الرئيسية' : 'Home' }}</span>
+                    <span class="bk-hero-crumb-sep">/</span>
+                    <span class="bk-hero-crumb-current">{{ isRtl ? 'الحجز' : 'Booking' }}</span>
+                </Link>
+
+                <span class="bk-hero-eyebrow stagger" style="--i:0">
+                    <span class="bk-hero-eyebrow-dash"></span>
+                    {{ isRtl ? 'حجز موعد عيادة' : 'Clinic Booking' }}
+                </span>
+
+                <h1 class="bk-hero-title stagger" style="--i:1">
+                    <span class="bk-hero-title-line">{{ isRtl ? 'احجز موعدك' : 'Book your' }}</span>
+                    <span class="bk-hero-title-accent">{{ isRtl ? 'بثقة' : 'appointment' }}</span>
+                </h1>
+
+                <p class="bk-hero-sub stagger" style="--i:2">
+                    {{ isRtl
+                        ? 'املأ النموذج خلال دقيقة، وسيتواصل فريقنا لتأكيد الموعد.'
+                        : 'Fill the form in under a minute. Our team will confirm shortly.' }}
+                </p>
+
+                <div class="bk-hero-meta stagger" style="--i:3">
+                    <div class="bk-hero-meta-item">
+                        <div class="bk-hero-meta-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                        </div>
+                        <div>
+                            <p class="bk-hero-meta-l">{{ isRtl ? 'مشفّر' : 'Secure' }}</p>
+                            <p class="bk-hero-meta-s">{{ isRtl ? 'بياناتك محمية' : 'Encrypted data' }}</p>
+                        </div>
+                    </div>
+                    <div class="bk-hero-meta-sep"></div>
+                    <div class="bk-hero-meta-item">
+                        <div class="bk-hero-meta-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                        </div>
+                        <div>
+                            <p class="bk-hero-meta-l">{{ isRtl ? 'سريع' : 'Fast' }}</p>
+                            <p class="bk-hero-meta-s">{{ isRtl ? 'تأكيد خلال ساعات' : 'Reply in hours' }}</p>
+                        </div>
+                    </div>
+                    <div class="bk-hero-meta-sep"></div>
+                    <div class="bk-hero-meta-item">
+                        <div class="bk-hero-meta-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3"/></svg>
+                        </div>
+                        <div>
+                            <p class="bk-hero-meta-l">{{ isRtl ? 'موثوق' : 'Trusted' }}</p>
+                            <p class="bk-hero-meta-s">{{ isRtl ? 'مرضى راضون' : 'Real reviews' }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bk-hero-fade"></div>
+        </section>
+
+        <!-- ════════════════════════════════════════════════════ -->
+        <!-- BOOKING FORM SECTION                                 -->
+        <!-- ════════════════════════════════════════════════════ -->
+        <section class="relative py-16 lg:py-24 bk-section overflow-hidden">
+            <!-- Background atmosphere -->
+            <div class="absolute inset-0 pointer-events-none bk-section-bg"></div>
+            <div class="absolute inset-0 pointer-events-none texture-dots-lg opacity-50"></div>
             <div class="absolute top-16 start-6 w-24 h-24 rounded-full bg-gold-primary/5 animate-float"></div>
             <div class="absolute bottom-24 end-8 w-18 h-18 rounded-full bg-gold-primary/8 animate-float-slow"></div>
             <div class="absolute top-1/2 start-1/3 w-12 h-12 rounded-full bg-gold-light/5 animate-float-delay"></div>
+            <!-- Decorative corner ornaments -->
+            <svg class="bk-corner bk-corner-tl" viewBox="0 0 120 120" aria-hidden="true">
+                <path d="M2 60 Q2 2 60 2" fill="none" stroke="#C4A265" stroke-width="0.8" opacity="0.25" />
+                <path d="M16 60 Q16 16 60 16" fill="none" stroke="#C4A265" stroke-width="0.5" opacity="0.18" />
+            </svg>
+            <svg class="bk-corner bk-corner-br" viewBox="0 0 120 120" aria-hidden="true">
+                <path d="M60 118 Q118 118 118 60" fill="none" stroke="#C4A265" stroke-width="0.8" opacity="0.25" />
+                <path d="M60 104 Q104 104 104 60" fill="none" stroke="#C4A265" stroke-width="0.5" opacity="0.18" />
+            </svg>
             <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
                 <!-- Success Flash Message -->
@@ -444,11 +526,20 @@ function submit() {
 
                     <!-- Booking Form (Left 2/3) -->
                     <div class="lg:col-span-2" v-scroll-reveal="{ type: 'fade-up' }">
-                        <div class="bg-white rounded-2xl shadow-lg p-6 sm:p-8 lg:p-10 border border-gray-100 card-hover-lift">
-                            <h2 class="text-2xl font-bold text-[#3A3A3A] mb-2">
+                        <div class="bk-form-card relative bg-white rounded-2xl shadow-lg p-6 sm:p-8 lg:p-10 border border-[#C4A265]/15 overflow-hidden">
+                            <!-- Gold top accent line -->
+                            <div class="bk-form-card-accent"></div>
+                            <!-- Number badge -->
+                            <div class="bk-form-card-tag">
+                                <span class="bk-form-card-tag-dot"></span>
+                                <span>{{ isRtl ? 'استمارة الحجز' : 'Booking Form' }}</span>
+                            </div>
+
+                            <h2 class="bk-form-title">
+                                <span class="bk-form-title-mark"></span>
                                 {{ t('fill_booking_form') }}
                             </h2>
-                            <p class="text-gray-500 mb-8">
+                            <p class="text-gray-500 mb-8 text-[15px] leading-relaxed">
                                 {{ t('booking_form_description') }}
                             </p>
 
@@ -1211,3 +1302,395 @@ function submit() {
 
     </FrontendLayout>
 </template>
+
+<style scoped>
+/* ═══════════════════════════════════════════════════════════
+   FONT REFINEMENT — distinctive display feel without imports
+   (Tajawal for Arabic + system serif fallback for accents)
+   ═══════════════════════════════════════════════════════════ */
+.bk-hero-title-accent,
+.bk-form-title {
+    font-feature-settings: "ss01", "calt", "liga";
+    letter-spacing: -0.015em;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   CINEMATIC HERO
+   ═══════════════════════════════════════════════════════════ */
+.bk-hero {
+    position: relative;
+    padding: 90px 24px 64px;
+    overflow: hidden;
+    color: #fff;
+    background:
+        radial-gradient(at 80% 10%, rgba(196,162,101,0.15), transparent 50%),
+        radial-gradient(at 20% 110%, rgba(34,64,111,0.5), transparent 55%),
+        linear-gradient(135deg, #0F1B2D 0%, #16213E 50%, #1B365D 100%);
+    isolation: isolate;
+}
+
+@media (min-width: 1024px) {
+    .bk-hero { padding: 130px 56px 90px; }
+}
+
+.bk-hero-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    pointer-events: none;
+    z-index: 0;
+}
+.bk-hero-orb-1 {
+    top: -120px;
+    inset-inline-end: -120px;
+    width: 480px;
+    height: 480px;
+    background: radial-gradient(circle, rgba(196,162,101,0.35), transparent 70%);
+    animation: bk-float-slow 18s ease-in-out infinite;
+}
+.bk-hero-orb-2 {
+    bottom: -160px;
+    inset-inline-start: -160px;
+    width: 540px;
+    height: 540px;
+    background: radial-gradient(circle, rgba(27,54,93,0.5), transparent 70%);
+    animation: bk-float-slow 22s ease-in-out infinite reverse;
+}
+
+.bk-hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 32px 32px;
+    z-index: 0;
+}
+
+.bk-hero-ecg {
+    position: absolute;
+    bottom: 24%;
+    left: -5%;
+    width: 110%;
+    height: 100px;
+    color: rgba(196,162,101,0.18);
+    z-index: 0;
+    pointer-events: none;
+}
+.bk-hero-ecg-path {
+    stroke-dasharray: 3200;
+    stroke-dashoffset: 3200;
+    animation: bk-ecg-draw 5s cubic-bezier(0.4, 0, 0.2, 1) forwards infinite;
+}
+
+.bk-hero-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+/* Breadcrumb */
+.bk-hero-crumb {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    text-decoration: none;
+    margin-bottom: 28px;
+    transition: color 0.2s;
+}
+.bk-hero-crumb:hover { color: rgba(255,255,255,0.85); }
+.bk-hero-crumb-sep { color: rgba(196,162,101,0.5); }
+.bk-hero-crumb-current { color: #C4A265; }
+
+/* Eyebrow */
+.bk-hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: #C4A265;
+    margin-bottom: 22px;
+}
+.bk-hero-eyebrow-dash {
+    width: 36px;
+    height: 2px;
+    background: linear-gradient(90deg, #C4A265, rgba(196,162,101,0.2));
+    border-radius: 2px;
+}
+
+/* Title */
+.bk-hero-title {
+    font-size: clamp(38px, 6vw, 70px);
+    line-height: 0.98;
+    font-weight: 800;
+    margin: 0 0 18px;
+    letter-spacing: -0.022em;
+    color: #fff;
+    text-wrap: balance;
+}
+.bk-hero-title-line {
+    display: block;
+    color: rgba(255,255,255,0.92);
+}
+.bk-hero-title-accent {
+    display: block;
+    background: linear-gradient(120deg, #C4A265 0%, #E2C99D 35%, #C4A265 60%, #8B7043 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 200% 100%;
+    animation: bk-gold-shimmer 6s ease-in-out infinite;
+    font-style: italic;
+    font-weight: 700;
+}
+
+/* Subtitle */
+.bk-hero-sub {
+    font-size: clamp(15px, 1.6vw, 18px);
+    line-height: 1.65;
+    color: rgba(255,255,255,0.55);
+    max-width: 560px;
+    margin: 0 0 36px;
+}
+
+/* Meta strip */
+.bk-hero-meta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0;
+    padding: 14px 20px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    backdrop-filter: blur(12px);
+    flex-wrap: wrap;
+}
+.bk-hero-meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 4px 16px;
+}
+.bk-hero-meta-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: rgba(196,162,101,0.14);
+    color: #C4A265;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.bk-hero-meta-icon svg { width: 16px; height: 16px; }
+.bk-hero-meta-l {
+    font-size: 13px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.92);
+    margin: 0;
+    line-height: 1.2;
+}
+.bk-hero-meta-s {
+    font-size: 10px;
+    color: rgba(255,255,255,0.45);
+    margin: 0;
+    letter-spacing: 0.04em;
+}
+.bk-hero-meta-sep {
+    width: 1px;
+    height: 28px;
+    background: rgba(196,162,101,0.18);
+}
+
+/* Bottom fade into next section */
+.bk-hero-fade {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 120px;
+    background: linear-gradient(to bottom, transparent, #FDF8F0);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SECTION
+   ═══════════════════════════════════════════════════════════ */
+.bk-section {
+    background: linear-gradient(180deg, #FDF8F0 0%, #FAF2E4 50%, #FDF8F0 100%);
+}
+.bk-section-bg {
+    background:
+        radial-gradient(at 10% 20%, rgba(196,162,101,0.06), transparent 40%),
+        radial-gradient(at 90% 80%, rgba(27,54,93,0.04), transparent 40%);
+}
+
+/* Corner ornaments */
+.bk-corner {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    pointer-events: none;
+    z-index: 0;
+}
+.bk-corner-tl { top: 32px; inset-inline-start: 32px; }
+.bk-corner-br { bottom: 32px; inset-inline-end: 32px; transform: scaleX(-1) scaleY(-1); }
+[dir="rtl"] .bk-corner-br { transform: scaleY(-1); }
+
+/* ═══════════════════════════════════════════════════════════
+   FORM CARD — premium treatment
+   ═══════════════════════════════════════════════════════════ */
+.bk-form-card {
+    box-shadow:
+        0 30px 70px -30px rgba(27,54,93,0.18),
+        0 0 0 1px rgba(196,162,101,0.06),
+        inset 0 1px 0 rgba(255,255,255,0.8);
+    transition: box-shadow 0.4s ease, transform 0.4s ease;
+}
+.bk-form-card:hover {
+    box-shadow:
+        0 40px 90px -30px rgba(27,54,93,0.22),
+        0 0 0 1px rgba(196,162,101,0.1),
+        inset 0 1px 0 rgba(255,255,255,0.9);
+}
+
+.bk-form-card-accent {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(196,162,101,0.3) 15%,
+        #C4A265 50%,
+        rgba(196,162,101,0.3) 85%,
+        transparent 100%);
+    pointer-events: none;
+}
+
+.bk-form-card-tag {
+    position: absolute;
+    top: 18px;
+    inset-inline-end: 18px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    background: linear-gradient(135deg, #FAF7F0, #fff);
+    border: 1px solid rgba(196,162,101,0.25);
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: #8B7043;
+    z-index: 1;
+}
+.bk-form-card-tag-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #C4A265;
+    box-shadow: 0 0 0 3px rgba(196,162,101,0.2);
+    animation: bk-pulse-soft 2s ease-in-out infinite;
+}
+
+.bk-form-title {
+    position: relative;
+    font-size: 28px;
+    font-weight: 800;
+    color: #1B365D;
+    margin: 0 0 8px;
+    padding-inline-start: 18px;
+    line-height: 1.15;
+    letter-spacing: -0.018em;
+}
+.bk-form-title-mark {
+    position: absolute;
+    inset-inline-start: 0;
+    top: 6px;
+    bottom: 6px;
+    width: 4px;
+    border-radius: 4px;
+    background: linear-gradient(180deg, #C4A265, #8B7043);
+    box-shadow: 0 0 12px rgba(196,162,101,0.4);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   STAGGER ENTRANCE
+   ═══════════════════════════════════════════════════════════ */
+.stagger {
+    opacity: 0;
+    transform: translateY(16px);
+    animation: bk-fade-up 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    animation-delay: calc(var(--i, 0) * 100ms + 150ms);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   KEYFRAMES
+   ═══════════════════════════════════════════════════════════ */
+@keyframes bk-fade-up {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes bk-float-slow {
+    0%, 100% { transform: translate(0, 0); }
+    50%      { transform: translate(24px, -32px); }
+}
+
+@keyframes bk-ecg-draw {
+    0%   { stroke-dashoffset: 3200; opacity: 0; }
+    8%   { opacity: 1; }
+    65%  { stroke-dashoffset: 0; opacity: 1; }
+    100% { stroke-dashoffset: 0; opacity: 0.5; }
+}
+
+@keyframes bk-gold-shimmer {
+    0%, 100% { background-position: 0% 50%; }
+    50%      { background-position: 100% 50%; }
+}
+
+@keyframes bk-pulse-soft {
+    0%, 100% { box-shadow: 0 0 0 3px rgba(196,162,101,0.2); }
+    50%      { box-shadow: 0 0 0 6px rgba(196,162,101,0.08); }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   RESPONSIVE NICETIES
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 640px) {
+    .bk-hero-meta-sep { display: none; }
+    .bk-hero-meta { padding: 12px; gap: 4px; }
+    .bk-hero-meta-item { padding: 4px 8px; flex: 1 1 100%; }
+    .bk-form-card-tag {
+        position: static;
+        margin-bottom: 16px;
+    }
+    .bk-corner { width: 80px; height: 80px; }
+    .bk-corner-tl { top: 12px; inset-inline-start: 12px; }
+    .bk-corner-br { bottom: 12px; inset-inline-end: 12px; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ACCESSIBILITY
+   ═══════════════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+    .bk-hero-orb,
+    .bk-hero-ecg-path,
+    .bk-hero-title-accent,
+    .bk-form-card-tag-dot,
+    .stagger {
+        animation: none !important;
+    }
+    .stagger { opacity: 1; transform: none; }
+}
+</style>
