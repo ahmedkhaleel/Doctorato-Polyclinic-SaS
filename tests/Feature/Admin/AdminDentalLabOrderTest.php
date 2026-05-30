@@ -16,7 +16,9 @@ class AdminDentalLabOrderTest extends TestCase
     use RefreshDatabase;
 
     private User $admin;
+
     private Patient $patient;
+
     private Doctor $doctor;
 
     protected function setUp(): void
@@ -132,7 +134,7 @@ class AdminDentalLabOrderTest extends TestCase
             'status' => 'ordered',
         ]);
 
-        $this->actingAs($this->admin)->delete("/admin/dental/lab-orders/{$order->id}")->assertRedirect();
+        $this->actingAs($this->admin)->post("/admin/dental/lab-orders/{$order->id}/delete")->assertRedirect();
         $this->assertDatabaseMissing('dental_lab_orders', ['id' => $order->id]);
     }
 

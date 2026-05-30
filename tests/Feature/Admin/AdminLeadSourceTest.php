@@ -97,7 +97,7 @@ class AdminLeadSourceTest extends TestCase
             'slug' => 'delete-me', 'channel_type' => 'offline', 'is_active' => true,
         ]);
 
-        $this->actingAs($this->admin)->delete("/admin/lead-sources/{$source->id}")->assertRedirect();
+        $this->actingAs($this->admin)->post("/admin/lead-sources/{$source->id}/delete")->assertRedirect();
         $this->assertDatabaseMissing('lead_sources', ['id' => $source->id]);
     }
 
@@ -116,7 +116,7 @@ class AdminLeadSourceTest extends TestCase
             'priority' => 1,
         ]);
 
-        $this->actingAs($this->admin)->delete("/admin/lead-sources/{$source->id}")->assertRedirect();
+        $this->actingAs($this->admin)->post("/admin/lead-sources/{$source->id}/delete")->assertRedirect();
         // Should still exist because it has leads
         $this->assertDatabaseHas('lead_sources', ['id' => $source->id]);
     }

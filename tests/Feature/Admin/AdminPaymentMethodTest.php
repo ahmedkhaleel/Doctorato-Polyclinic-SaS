@@ -58,7 +58,7 @@ class AdminPaymentMethodTest extends TestCase
             'name_ar' => 'نقدي', 'name_en' => 'Cash', 'is_active' => true,
         ]);
 
-        $this->actingAs($this->admin)->put("/admin/payment-methods/{$pm->id}", [
+        $this->actingAs($this->admin)->post("/admin/payment-methods/{$pm->id}/update", [
             'name_ar' => 'بطاقة',
             'name_en' => 'Card',
             'is_active' => true,
@@ -73,7 +73,7 @@ class AdminPaymentMethodTest extends TestCase
             'name_ar' => 'شيك', 'name_en' => 'Check', 'is_active' => true,
         ]);
 
-        $this->actingAs($this->admin)->put("/admin/payment-methods/{$pm->id}", [
+        $this->actingAs($this->admin)->post("/admin/payment-methods/{$pm->id}/update", [
             'name_ar' => 'شيك',
             'name_en' => 'Check',
             'is_active' => false,

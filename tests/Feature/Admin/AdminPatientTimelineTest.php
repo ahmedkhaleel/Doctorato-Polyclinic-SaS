@@ -3,13 +3,12 @@
 namespace Tests\Feature\Admin;
 
 use App\Models\Booking;
+use App\Models\Doctor;
 use App\Models\Invoice;
 use App\Models\Patient;
-use App\Models\Prescription;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Visit;
-use App\Models\Doctor;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -18,7 +17,9 @@ class AdminPatientTimelineTest extends TestCase
     use RefreshDatabase;
 
     private User $adminUser;
+
     private Patient $patient;
+
     private Doctor $doctor;
 
     protected function setUp(): void

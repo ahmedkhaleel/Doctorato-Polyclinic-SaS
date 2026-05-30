@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Admin;
 
-use App\Models\CreditNote;
 use App\Models\Invoice;
 use App\Models\Patient;
 use App\Models\Role;
@@ -15,7 +14,9 @@ class AdminCreditNoteTest extends TestCase
     use RefreshDatabase;
 
     protected User $admin;
+
     protected Patient $patient;
+
     protected Invoice $invoice;
 
     protected function setUp(): void

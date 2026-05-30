@@ -86,7 +86,7 @@ class AdminDoctorTest extends TestCase
             'status' => 'active',
         ]);
 
-        $this->actingAs($this->admin)->delete("/admin/doctors/{$doctor->id}")->assertRedirect();
+        $this->actingAs($this->admin)->post("/admin/doctors/{$doctor->id}/delete")->assertRedirect();
     }
 
     public function test_status_must_be_valid(): void

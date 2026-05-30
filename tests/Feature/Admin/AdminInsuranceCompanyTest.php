@@ -59,7 +59,7 @@ class AdminInsuranceCompanyTest extends TestCase
             'name_ar' => 'قديم', 'name_en' => 'Old Company', 'is_active' => true,
         ]);
 
-        $this->actingAs($this->admin)->put("/admin/insurance/companies/{$company->id}", [
+        $this->actingAs($this->admin)->post("/admin/insurance/companies/{$company->id}/update", [
             'name_ar' => 'محدث',
             'name_en' => 'Updated Company',
             'is_active' => true,
@@ -74,7 +74,7 @@ class AdminInsuranceCompanyTest extends TestCase
             'name_ar' => 'حذف', 'name_en' => 'Delete Co', 'is_active' => true,
         ]);
 
-        $this->actingAs($this->admin)->delete("/admin/insurance/companies/{$company->id}")
+        $this->actingAs($this->admin)->post("/admin/insurance/companies/{$company->id}/delete")
             ->assertRedirect();
 
         $this->assertDatabaseMissing('insurance_companies', ['id' => $company->id]);

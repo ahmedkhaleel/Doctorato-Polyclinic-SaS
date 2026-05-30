@@ -114,7 +114,7 @@ class AdminLeadAssignmentRuleTest extends TestCase
             'assign_to_user_id' => $this->admin->id, 'priority' => 1, 'is_active' => true,
         ]);
 
-        $this->actingAs($this->admin)->delete("/admin/assignment-rules/{$rule->id}")->assertRedirect();
+        $this->actingAs($this->admin)->post("/admin/assignment-rules/{$rule->id}/delete")->assertRedirect();
         $this->assertDatabaseMissing('lead_assignment_rules', ['id' => $rule->id]);
     }
 }

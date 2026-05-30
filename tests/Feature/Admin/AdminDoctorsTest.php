@@ -124,7 +124,7 @@ class AdminDoctorsTest extends TestCase
 
         $this->actingAs($this->admin);
 
-        $response = $this->delete("/admin/doctors/{$doctor->id}");
+        $response = $this->post("/admin/doctors/{$doctor->id}/delete");
 
         $response->assertRedirect();
         $this->assertSoftDeleted('doctors', ['id' => $doctor->id]);

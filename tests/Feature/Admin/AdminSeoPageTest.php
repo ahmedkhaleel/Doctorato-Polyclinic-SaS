@@ -57,7 +57,7 @@ class AdminSeoPageTest extends TestCase
             'title_ar' => 'عن العيادة',
         ]);
 
-        $this->actingAs($this->admin)->put("/admin/seo-pages/{$page->id}", [
+        $this->actingAs($this->admin)->post("/admin/seo-pages/{$page->id}/update", [
             'title_en' => 'About Aura Derma Clinic',
             'title_ar' => 'عن عيادة أورا ديرما',
             'description_en' => 'Leading dermatology clinic',
@@ -82,7 +82,7 @@ class AdminSeoPageTest extends TestCase
             'title_ar' => 'الخدمات',
         ]);
 
-        $response = $this->actingAs($this->admin)->put("/admin/seo-pages/{$page->id}", [
+        $response = $this->actingAs($this->admin)->post("/admin/seo-pages/{$page->id}/update", [
             'structured_data' => 'invalid json {{{',
         ]);
 
@@ -100,7 +100,7 @@ class AdminSeoPageTest extends TestCase
             'title_ar' => 'اتصل بنا',
         ]);
 
-        $this->actingAs($this->admin)->put("/admin/seo-pages/{$page->id}", [
+        $this->actingAs($this->admin)->post("/admin/seo-pages/{$page->id}/update", [
             'title_en' => 'Contact Us',
             'structured_data' => '{"@type": "LocalBusiness", "name": "Aura Clinic"}',
             'is_indexable' => true,

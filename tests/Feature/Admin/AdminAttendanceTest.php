@@ -14,6 +14,7 @@ class AdminAttendanceTest extends TestCase
     use RefreshDatabase;
 
     private User $admin;
+
     private User $employee;
 
     protected function setUp(): void
@@ -94,7 +95,7 @@ class AdminAttendanceTest extends TestCase
             'check_in' => '08:00',
         ]);
 
-        $this->actingAs($this->admin)->put("/admin/attendances/{$attendance->id}", [
+        $this->actingAs($this->admin)->post("/admin/attendances/{$attendance->id}/update", [
             'check_in' => '09:00',
             'check_out' => '17:00',
             'status' => 'late',

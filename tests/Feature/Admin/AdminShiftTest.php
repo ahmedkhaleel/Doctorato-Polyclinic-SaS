@@ -63,7 +63,7 @@ class AdminShiftTest extends TestCase
             'start_time' => '08:00', 'end_time' => '16:00', 'is_active' => true,
         ]);
 
-        $this->actingAs($this->admin)->put("/admin/shifts/{$shift->id}", [
+        $this->actingAs($this->admin)->post("/admin/shifts/{$shift->id}/update", [
             'name_ar' => 'مسائي',
             'name_en' => 'Evening',
             'start_time' => '16:00',
@@ -81,7 +81,7 @@ class AdminShiftTest extends TestCase
             'start_time' => '00:00', 'end_time' => '08:00', 'is_active' => true,
         ]);
 
-        $this->actingAs($this->admin)->delete("/admin/shifts/{$shift->id}")->assertRedirect();
+        $this->actingAs($this->admin)->post("/admin/shifts/{$shift->id}/delete")->assertRedirect();
         $this->assertDatabaseMissing('shifts', ['id' => $shift->id]);
     }
 

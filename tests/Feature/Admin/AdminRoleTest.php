@@ -12,6 +12,7 @@ class AdminRoleTest extends TestCase
     use RefreshDatabase;
 
     private User $admin;
+
     private Role $adminRole;
 
     protected function setUp(): void
@@ -87,7 +88,7 @@ class AdminRoleTest extends TestCase
             'permissions' => ['patients.view'],
         ]);
 
-        $this->actingAs($this->admin)->put("/admin/roles/{$role->id}", [
+        $this->actingAs($this->admin)->post("/admin/roles/{$role->id}/update", [
             'display_name_en' => 'Updated Role',
             'display_name_ar' => 'دور محدث',
             'permissions' => ['patients.view', 'patients.create'],
@@ -98,7 +99,7 @@ class AdminRoleTest extends TestCase
 
     public function test_cannot_update_system_role(): void
     {
-        $this->actingAs($this->admin)->put("/admin/roles/{$this->adminRole->id}", [
+        $this->actingAs($this->admin)->post("/admin/roles/{$this->adminRole->id}/update", [
             'display_name_en' => 'Hacked Admin',
             'display_name_ar' => 'مخترق',
             'permissions' => ['patients.view'],
@@ -110,7 +111,7 @@ class AdminRoleTest extends TestCase
 
     public function test_cannot_delete_system_role(): void
     {
-        $this->actingAs($this->admin)->delete("/admin/roles/{$this->adminRole->id}")
+        $this->actingAs($this->admin)->post("/admin/roles/{$this->adminRole->id}/delete")
             ->assertRedirect();
 
         $this->assertDatabaseHas('roles', ['id' => $this->adminRole->id]);
@@ -130,7 +131,7 @@ class AdminRoleTest extends TestCase
             'password' => bcrypt('password'), 'role_id' => $role->id, 'is_active' => true,
         ]);
 
-        $this->actingAs($this->admin)->delete("/admin/roles/{$role->id}")
+        $this->actingAs($this->admin)->post("/admin/roles/{$role->id}/delete")
             ->assertRedirect();
 
         $this->assertDatabaseHas('roles', ['id' => $role->id]);
@@ -145,7 +146,7 @@ class AdminRoleTest extends TestCase
             'permissions' => ['patients.view'],
         ]);
 
-        $this->actingAs($this->admin)->delete("/admin/roles/{$role->id}")
+        $this->actingAs($this->admin)->post("/admin/roles/{$role->id}/delete")
             ->assertRedirect();
 
         $this->assertDatabaseMissing('roles', ['id' => $role->id]);

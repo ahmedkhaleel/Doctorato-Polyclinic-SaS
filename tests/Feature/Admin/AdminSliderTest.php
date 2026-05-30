@@ -85,7 +85,7 @@ class AdminSliderTest extends TestCase
             'image' => 'slides/old.jpg', 'is_active' => true, 'display_order' => 1,
         ]);
 
-        $this->actingAs($this->admin)->put("/admin/slider/{$slide->id}", [
+        $this->actingAs($this->admin)->post("/admin/slider/{$slide->id}/update", [
             'title_ar' => 'جديد',
             'title_en' => 'Updated',
             'is_active' => true,
@@ -103,7 +103,7 @@ class AdminSliderTest extends TestCase
             'image' => 'slides/delete.jpg', 'is_active' => true, 'display_order' => 1,
         ]);
 
-        $this->actingAs($this->admin)->delete("/admin/slider/{$slide->id}")->assertRedirect();
+        $this->actingAs($this->admin)->post("/admin/slider/{$slide->id}/delete")->assertRedirect();
         $this->assertDatabaseMissing('hero_slides', ['id' => $slide->id]);
     }
 

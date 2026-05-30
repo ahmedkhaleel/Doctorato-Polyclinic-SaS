@@ -101,7 +101,7 @@ class AdminCommunicationTemplateTest extends TestCase
             'body_en' => 'Del', 'body_ar' => 'حذف', 'created_by' => $this->admin->id,
         ]);
 
-        $this->actingAs($this->admin)->delete("/admin/templates/{$tpl->id}")->assertRedirect();
+        $this->actingAs($this->admin)->post("/admin/templates/{$tpl->id}/delete")->assertRedirect();
         $this->assertDatabaseMissing('communication_templates', ['id' => $tpl->id]);
     }
 

@@ -105,7 +105,7 @@ class AdminLeadScoringRuleTest extends TestCase
             'event' => 'referral_provided', 'points' => 25, 'is_active' => true,
         ]);
 
-        $this->actingAs($this->admin)->delete("/admin/scoring-rules/{$rule->id}")->assertRedirect();
+        $this->actingAs($this->admin)->post("/admin/scoring-rules/{$rule->id}/delete")->assertRedirect();
         $this->assertDatabaseMissing('lead_scoring_rules', ['id' => $rule->id]);
     }
 }

@@ -3,7 +3,6 @@
 namespace Tests\Feature\Admin;
 
 use App\Models\Invoice;
-use App\Models\InvoiceItem;
 use App\Models\Patient;
 use App\Models\PaymentMethod;
 use App\Models\Role;
@@ -16,7 +15,9 @@ class AdminInvoiceTest extends TestCase
     use RefreshDatabase;
 
     protected User $admin;
+
     protected Patient $patient;
+
     protected PaymentMethod $paymentMethod;
 
     protected function setUp(): void

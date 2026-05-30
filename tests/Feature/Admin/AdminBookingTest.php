@@ -3,8 +3,6 @@
 namespace Tests\Feature\Admin;
 
 use App\Models\Booking;
-use App\Models\BookingAppointment;
-use App\Models\BookingService;
 use App\Models\Doctor;
 use App\Models\DoctorSchedule;
 use App\Models\Invoice;
@@ -23,10 +21,15 @@ class AdminBookingTest extends TestCase
     use RefreshDatabase;
 
     protected User $admin;
+
     protected Patient $patient;
+
     protected Doctor $doctor;
+
     protected Service $service;
+
     protected ServiceCategory $category;
+
     protected PaymentMethod $paymentMethod;
 
     protected function setUp(): void
@@ -423,7 +426,7 @@ class AdminBookingTest extends TestCase
 
         $this->actingAs($this->admin);
 
-        $response = $this->patch("/admin/bookings/{$booking->id}", [
+        $response = $this->post("/admin/bookings/{$booking->id}/update", [
             'status' => 'cancelled',
         ]);
 

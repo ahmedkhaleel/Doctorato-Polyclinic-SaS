@@ -57,7 +57,7 @@ class AdminSupplierTest extends TestCase
     {
         $supplier = Supplier::create(['name_ar' => 'قديم', 'name_en' => 'Old', 'is_active' => true]);
 
-        $this->actingAs($this->admin)->put("/admin/suppliers/{$supplier->id}", [
+        $this->actingAs($this->admin)->post("/admin/suppliers/{$supplier->id}/update", [
             'name_ar' => 'محدث',
             'name_en' => 'Updated Supplier',
             'is_active' => true,
@@ -70,7 +70,7 @@ class AdminSupplierTest extends TestCase
     {
         $supplier = Supplier::create(['name_ar' => 'حذف', 'name_en' => 'Delete', 'is_active' => true]);
 
-        $this->actingAs($this->admin)->delete("/admin/suppliers/{$supplier->id}")
+        $this->actingAs($this->admin)->post("/admin/suppliers/{$supplier->id}/delete")
             ->assertRedirect();
 
         $this->assertDatabaseMissing('suppliers', ['id' => $supplier->id]);

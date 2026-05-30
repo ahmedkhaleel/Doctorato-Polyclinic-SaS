@@ -18,7 +18,9 @@ class AdminVisitTest extends TestCase
     use RefreshDatabase;
 
     private User $admin;
+
     private Patient $patient;
+
     private Doctor $doctor;
 
     protected function setUp(): void
@@ -145,7 +147,7 @@ class AdminVisitTest extends TestCase
         $visit = $this->createVisitWithBooking(['status' => 'in_progress']);
 
         $this->actingAs($this->admin)
-            ->put("/admin/visits/{$visit->id}/diagnosis", [
+            ->post("/admin/visits/{$visit->id}/diagnosis", [
                 'diagnosis' => 'Test diagnosis content',
                 'doctor_notes' => 'Some doctor notes',
             ])->assertRedirect();

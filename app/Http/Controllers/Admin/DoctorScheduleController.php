@@ -94,8 +94,10 @@ class DoctorScheduleController extends Controller
                 'end_time' => $schedule['end_time'],
                 'is_active' => (bool) $schedule['is_active'],
                 'mode' => $schedule['mode'] ?? 'in_person',
-                'slot_duration_minutes' => isset($schedule['slot_duration_minutes']) ? (int) $schedule['slot_duration_minutes'] : null,
-                'buffer_minutes' => isset($schedule['buffer_minutes']) ? (int) $schedule['buffer_minutes'] : null,
+                // Sensible defaults — the column is NOT NULL, so a form that
+                // omits these must not 500 (validation allows them to be absent).
+                'slot_duration_minutes' => isset($schedule['slot_duration_minutes']) ? (int) $schedule['slot_duration_minutes'] : 30,
+                'buffer_minutes' => isset($schedule['buffer_minutes']) ? (int) $schedule['buffer_minutes'] : 0,
             ]);
         }
 

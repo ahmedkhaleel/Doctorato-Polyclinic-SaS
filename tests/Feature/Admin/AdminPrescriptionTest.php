@@ -20,7 +20,9 @@ class AdminPrescriptionTest extends TestCase
     use RefreshDatabase;
 
     private User $admin;
+
     private Patient $patient;
+
     private Doctor $doctor;
 
     protected function setUp(): void
@@ -169,7 +171,7 @@ class AdminPrescriptionTest extends TestCase
             'duration' => '3 days',
         ]);
 
-        $this->actingAs($this->admin)->put("/admin/prescriptions/{$prescription->id}", [
+        $this->actingAs($this->admin)->post("/admin/prescriptions/{$prescription->id}/update", [
             'patient_id' => $this->patient->id,
             'doctor_id' => $this->doctor->id,
             'diagnosis' => 'Updated diagnosis',
@@ -196,7 +198,7 @@ class AdminPrescriptionTest extends TestCase
         ]);
 
         $this->actingAs($this->admin)
-            ->delete("/admin/prescriptions/{$prescription->id}")
+            ->post("/admin/prescriptions/{$prescription->id}/delete")
             ->assertRedirect();
 
         $this->assertSoftDeleted('prescriptions', ['id' => $prescription->id]);

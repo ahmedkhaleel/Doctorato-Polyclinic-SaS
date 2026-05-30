@@ -15,8 +15,11 @@ class AdminPaymentTest extends TestCase
     use RefreshDatabase;
 
     protected User $admin;
+
     protected Patient $patient;
+
     protected Invoice $invoice;
+
     protected PaymentMethod $paymentMethod;
 
     protected function setUp(): void

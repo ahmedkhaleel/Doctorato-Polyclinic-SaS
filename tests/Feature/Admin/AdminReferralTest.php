@@ -14,6 +14,7 @@ class AdminReferralTest extends TestCase
     use RefreshDatabase;
 
     private User $admin;
+
     private Patient $patient;
 
     protected function setUp(): void
@@ -94,7 +95,7 @@ class AdminReferralTest extends TestCase
             'status' => 'pending',
         ]);
 
-        $this->actingAs($this->admin)->put("/admin/referrals/{$referral->id}/status", [
+        $this->actingAs($this->admin)->post("/admin/referrals/{$referral->id}/status", [
             'status' => 'accepted',
         ])->assertRedirect();
 
@@ -117,7 +118,7 @@ class AdminReferralTest extends TestCase
             'status' => 'pending',
         ]);
 
-        $this->actingAs($this->admin)->put("/admin/referrals/{$referral->id}/status", [
+        $this->actingAs($this->admin)->post("/admin/referrals/{$referral->id}/status", [
             'status' => 'declined',
             'response_notes' => 'Patient does not require cosmetic referral',
         ])->assertRedirect();

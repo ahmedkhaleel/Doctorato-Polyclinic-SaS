@@ -13,6 +13,7 @@ class AdminDoctorScheduleTest extends TestCase
     use RefreshDatabase;
 
     private User $admin;
+
     private Doctor $doctor;
 
     protected function setUp(): void
@@ -43,7 +44,7 @@ class AdminDoctorScheduleTest extends TestCase
 
     public function test_can_update_doctor_schedule(): void
     {
-        $this->actingAs($this->admin)->put("/admin/schedules/{$this->doctor->id}", [
+        $this->actingAs($this->admin)->post("/admin/schedules/{$this->doctor->id}/update", [
             'schedules' => [
                 ['day_of_week' => 1, 'start_time' => '09:00', 'end_time' => '17:00', 'is_active' => true],
                 ['day_of_week' => 2, 'start_time' => '09:00', 'end_time' => '17:00', 'is_active' => true],
@@ -62,14 +63,14 @@ class AdminDoctorScheduleTest extends TestCase
 
     public function test_schedule_requires_array(): void
     {
-        $this->actingAs($this->admin)->put("/admin/schedules/{$this->doctor->id}", [])
+        $this->actingAs($this->admin)->post("/admin/schedules/{$this->doctor->id}/update", [])
             ->assertSessionHasErrors('schedules');
     }
 
     public function test_schedule_replaces_existing(): void
     {
         // First set 5 days
-        $this->actingAs($this->admin)->put("/admin/schedules/{$this->doctor->id}", [
+        $this->actingAs($this->admin)->post("/admin/schedules/{$this->doctor->id}/update", [
             'schedules' => [
                 ['day_of_week' => 0, 'start_time' => '08:00', 'end_time' => '16:00', 'is_active' => true],
                 ['day_of_week' => 1, 'start_time' => '08:00', 'end_time' => '16:00', 'is_active' => true],
@@ -82,7 +83,7 @@ class AdminDoctorScheduleTest extends TestCase
         $this->assertEquals(5, $this->doctor->schedules()->count());
 
         // Now replace with 2 days
-        $this->actingAs($this->admin)->put("/admin/schedules/{$this->doctor->id}", [
+        $this->actingAs($this->admin)->post("/admin/schedules/{$this->doctor->id}/update", [
             'schedules' => [
                 ['day_of_week' => 1, 'start_time' => '10:00', 'end_time' => '18:00', 'is_active' => true],
                 ['day_of_week' => 3, 'start_time' => '10:00', 'end_time' => '18:00', 'is_active' => true],
@@ -94,7 +95,7 @@ class AdminDoctorScheduleTest extends TestCase
 
     public function test_day_of_week_must_be_valid(): void
     {
-        $this->actingAs($this->admin)->put("/admin/schedules/{$this->doctor->id}", [
+        $this->actingAs($this->admin)->post("/admin/schedules/{$this->doctor->id}/update", [
             'schedules' => [
                 ['day_of_week' => 7, 'start_time' => '09:00', 'end_time' => '17:00', 'is_active' => true],
             ],

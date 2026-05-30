@@ -55,7 +55,7 @@ class AdminSupplyCategoryTest extends TestCase
     {
         $cat = SupplyCategory::create(['name_ar' => 'قديم', 'name_en' => 'Old', 'is_active' => true]);
 
-        $this->actingAs($this->admin)->put("/admin/supply-categories/{$cat->id}", [
+        $this->actingAs($this->admin)->post("/admin/supply-categories/{$cat->id}/update", [
             'name_ar' => 'محدث',
             'name_en' => 'Updated',
             'is_active' => true,
@@ -68,7 +68,7 @@ class AdminSupplyCategoryTest extends TestCase
     {
         $cat = SupplyCategory::create(['name_ar' => 'حذف', 'name_en' => 'Delete', 'is_active' => true]);
 
-        $this->actingAs($this->admin)->delete("/admin/supply-categories/{$cat->id}")
+        $this->actingAs($this->admin)->post("/admin/supply-categories/{$cat->id}/delete")
             ->assertRedirect();
 
         $this->assertDatabaseMissing('supply_categories', ['id' => $cat->id]);

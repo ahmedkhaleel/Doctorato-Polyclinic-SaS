@@ -64,7 +64,7 @@ class AdminTagTest extends TestCase
             'name_ar' => 'قديم', 'name_en' => 'Old Tag', 'slug' => 'old-tag',
         ]);
 
-        $this->actingAs($this->admin)->put("/admin/tags/{$tag->id}", [
+        $this->actingAs($this->admin)->post("/admin/tags/{$tag->id}/update", [
             'name_ar' => 'جديد',
             'name_en' => 'New Tag',
         ])->assertRedirect();
@@ -78,7 +78,7 @@ class AdminTagTest extends TestCase
             'name_ar' => 'للحذف', 'name_en' => 'Delete Me', 'slug' => 'delete-me',
         ]);
 
-        $this->actingAs($this->admin)->delete("/admin/tags/{$tag->id}")->assertRedirect();
+        $this->actingAs($this->admin)->post("/admin/tags/{$tag->id}/delete")->assertRedirect();
         $this->assertDatabaseMissing('tags', ['id' => $tag->id]);
     }
 

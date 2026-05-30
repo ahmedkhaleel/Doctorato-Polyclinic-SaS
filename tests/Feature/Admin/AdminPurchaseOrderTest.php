@@ -15,7 +15,9 @@ class AdminPurchaseOrderTest extends TestCase
     use RefreshDatabase;
 
     private User $admin;
+
     private Supply $supply;
+
     private Supplier $supplier;
 
     protected function setUp(): void

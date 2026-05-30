@@ -14,6 +14,7 @@ class AdminLeaveTest extends TestCase
     use RefreshDatabase;
 
     private User $admin;
+
     private User $employee;
 
     protected function setUp(): void
@@ -102,7 +103,7 @@ class AdminLeaveTest extends TestCase
             'status' => 'pending',
         ]);
 
-        $this->actingAs($this->admin)->put("/admin/leaves/{$leave->id}", [
+        $this->actingAs($this->admin)->post("/admin/leaves/{$leave->id}/update", [
             'status' => 'approved',
         ])->assertRedirect();
 
@@ -123,7 +124,7 @@ class AdminLeaveTest extends TestCase
             'status' => 'pending',
         ]);
 
-        $this->actingAs($this->admin)->put("/admin/leaves/{$leave->id}", [
+        $this->actingAs($this->admin)->post("/admin/leaves/{$leave->id}/update", [
             'status' => 'rejected',
             'reason' => 'Insufficient staff coverage',
         ])->assertRedirect();

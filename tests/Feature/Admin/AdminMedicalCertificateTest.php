@@ -15,7 +15,9 @@ class AdminMedicalCertificateTest extends TestCase
     use RefreshDatabase;
 
     private User $admin;
+
     private Patient $patient;
+
     private Doctor $doctor;
 
     protected function setUp(): void
@@ -101,7 +103,7 @@ class AdminMedicalCertificateTest extends TestCase
         ]);
 
         $this->actingAs($this->admin)
-            ->put("/admin/medical-certificates/{$cert->id}/issue")
+            ->post("/admin/medical-certificates/{$cert->id}/issue")
             ->assertRedirect();
 
         $cert->refresh();
@@ -122,7 +124,7 @@ class AdminMedicalCertificateTest extends TestCase
         ]);
 
         $this->actingAs($this->admin)
-            ->put("/admin/medical-certificates/{$cert->id}/issue")
+            ->post("/admin/medical-certificates/{$cert->id}/issue")
             ->assertRedirect()
             ->assertSessionHas('error');
     }
@@ -140,7 +142,7 @@ class AdminMedicalCertificateTest extends TestCase
         ]);
 
         $this->actingAs($this->admin)
-            ->put("/admin/medical-certificates/{$cert->id}/cancel")
+            ->post("/admin/medical-certificates/{$cert->id}/cancel")
             ->assertRedirect();
 
         $cert->refresh();
@@ -160,7 +162,7 @@ class AdminMedicalCertificateTest extends TestCase
         ]);
 
         $this->actingAs($this->admin)
-            ->put("/admin/medical-certificates/{$cert->id}/cancel")
+            ->post("/admin/medical-certificates/{$cert->id}/cancel")
             ->assertRedirect()
             ->assertSessionHas('error');
     }

@@ -150,7 +150,7 @@ class AdminEmployeeTest extends TestCase
             'status' => 'active',
         ]);
 
-        $this->actingAs($this->admin)->delete("/admin/employees/{$employee->id}")
+        $this->actingAs($this->admin)->post("/admin/employees/{$employee->id}/delete")
             ->assertRedirect();
 
         $this->assertDatabaseHas('employees', ['id' => $employee->id, 'status' => 'terminated']);

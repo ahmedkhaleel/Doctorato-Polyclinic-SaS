@@ -15,6 +15,7 @@ class AdminPackageBundleTest extends TestCase
     use RefreshDatabase;
 
     private User $admin;
+
     private Service $service;
 
     protected function setUp(): void
@@ -120,7 +121,7 @@ class AdminPackageBundleTest extends TestCase
             'total_price' => 500, 'is_active' => true,
         ]);
 
-        $this->actingAs($this->admin)->delete("/admin/package-bundles/{$bundle->id}")->assertRedirect();
+        $this->actingAs($this->admin)->post("/admin/package-bundles/{$bundle->id}/delete")->assertRedirect();
         $this->assertDatabaseMissing('package_bundles', ['id' => $bundle->id]);
     }
 }

@@ -2,16 +2,11 @@
 
 namespace Tests\Feature\Admin;
 
-use App\Models\Booking;
 use App\Models\Doctor;
 use App\Models\Invoice;
 use App\Models\Patient;
-use App\Models\Payment;
-use App\Models\PaymentMethod;
-use App\Models\Prescription;
 use App\Models\Role;
 use App\Models\User;
-use App\Models\Visit;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -91,7 +86,7 @@ class AdminTrashTest extends TestCase
         $patient->delete();
 
         $this->actingAs($this->adminUser)
-            ->delete("/admin/trash/patients/{$patientId}")
+            ->post("/admin/trash/patients/{$patientId}/delete")
             ->assertRedirect();
 
         // Confirm it's gone completely
@@ -168,7 +163,7 @@ class AdminTrashTest extends TestCase
         }
 
         $this->actingAs($this->adminUser)
-            ->delete('/admin/trash/patients/empty')
+            ->post('/admin/trash/patients/empty')
             ->assertRedirect();
 
         $this->assertEquals(0, Patient::onlyTrashed()->count());

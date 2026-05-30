@@ -87,7 +87,7 @@ class AdminTestimonialTest extends TestCase
             'status' => 'published',
         ]);
 
-        $this->actingAs($this->admin)->put("/admin/testimonials/{$testimonial->id}", [
+        $this->actingAs($this->admin)->post("/admin/testimonials/{$testimonial->id}/update", [
             'client_name_ar' => 'جديد',
             'client_name_en' => 'Updated',
             'rating' => 5,
@@ -107,7 +107,7 @@ class AdminTestimonialTest extends TestCase
             'status' => 'published',
         ]);
 
-        $this->actingAs($this->admin)->delete("/admin/testimonials/{$testimonial->id}")->assertRedirect();
+        $this->actingAs($this->admin)->post("/admin/testimonials/{$testimonial->id}/delete")->assertRedirect();
         $this->assertDatabaseMissing('testimonials', ['id' => $testimonial->id]);
     }
 }

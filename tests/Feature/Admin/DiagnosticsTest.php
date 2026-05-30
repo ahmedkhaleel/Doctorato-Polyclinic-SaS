@@ -22,17 +22,17 @@ class DiagnosticsTest extends TestCase
             [
                 'display_name_en' => ucfirst($roleName),
                 'display_name_ar' => $roleName,
-                'permissions'     => $permissions,
-                'is_system'       => true,
+                'permissions' => $permissions,
+                'is_system' => true,
             ]
         );
         $role->update(['permissions' => $permissions]);
 
         return User::create([
-            'name'      => "Test {$roleName}",
-            'email'     => $email,
-            'password'  => bcrypt('password'),
-            'role_id'   => $role->id,
+            'name' => "Test {$roleName}",
+            'email' => $email,
+            'password' => bcrypt('password'),
+            'role_id' => $role->id,
             'is_active' => true,
         ]);
     }
@@ -87,7 +87,9 @@ class DiagnosticsTest extends TestCase
         ];
 
         foreach ($forbidden as $needle) {
-            if ($needle === '' || $needle === null) continue;
+            if ($needle === '' || $needle === null) {
+                continue;
+            }
             $this->assertStringNotContainsString(
                 $needle, $content,
                 "Diagnostics response must not leak '{$needle}'"

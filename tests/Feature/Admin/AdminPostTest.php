@@ -15,7 +15,9 @@ class AdminPostTest extends TestCase
     use RefreshDatabase;
 
     private User $admin;
+
     private Doctor $doctor;
+
     private PostCategory $category;
 
     protected function setUp(): void

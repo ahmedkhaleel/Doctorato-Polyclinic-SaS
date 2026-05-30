@@ -3,23 +3,20 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreDoctorRequest;
+use App\Http\Requests\UpdateDoctorRequest;
+use App\Models\Attendance;
 use App\Models\Booking;
 use App\Models\Doctor;
 use App\Models\DoctorPayout;
-use App\Models\DoctorSchedule;
-use App\Models\DoctorServiceRate;
-use App\Models\DoctorVacation;
 use App\Models\Leave;
 use App\Models\Patient;
+use App\Models\Role;
 use App\Models\Service;
 use App\Models\Setting;
-use App\Models\Role;
 use App\Models\User;
 use App\Models\Visit;
-use App\Models\Attendance;
 use App\Services\AuditLogger;
-use App\Http\Requests\StoreDoctorRequest;
-use App\Http\Requests\UpdateDoctorRequest;
 use App\Services\ModuleManager;
 use App\Traits\SanitizesHtml;
 use Illuminate\Http\RedirectResponse;
@@ -43,7 +40,7 @@ class DoctorController extends Controller
             ->when($request->search, function ($query, $search) {
                 $query->where(function ($q) use ($search) {
                     $q->where('name_ar', 'like', "%{$search}%")
-                      ->orWhere('name_en', 'like', "%{$search}%");
+                        ->orWhere('name_en', 'like', "%{$search}%");
                 });
             })
             ->orderBy('display_order')
@@ -123,8 +120,8 @@ class DoctorController extends Controller
                     'end_time' => $schedule['end_time'],
                     'is_active' => filter_var($schedule['is_active'] ?? false, FILTER_VALIDATE_BOOLEAN),
                     'mode' => $schedule['mode'] ?? 'in_person',
-                    'slot_duration_minutes' => isset($schedule['slot_duration_minutes']) ? (int) $schedule['slot_duration_minutes'] : null,
-                    'buffer_minutes' => isset($schedule['buffer_minutes']) ? (int) $schedule['buffer_minutes'] : null,
+                    'slot_duration_minutes' => isset($schedule['slot_duration_minutes']) ? (int) $schedule['slot_duration_minutes'] : 30,
+                    'buffer_minutes' => isset($schedule['buffer_minutes']) ? (int) $schedule['buffer_minutes'] : 0,
                 ]);
             }
 
@@ -416,8 +413,8 @@ class DoctorController extends Controller
                         'end_time' => $schedule['end_time'],
                         'is_active' => filter_var($schedule['is_active'] ?? false, FILTER_VALIDATE_BOOLEAN),
                         'mode' => $schedule['mode'] ?? 'in_person',
-                        'slot_duration_minutes' => isset($schedule['slot_duration_minutes']) ? (int) $schedule['slot_duration_minutes'] : null,
-                        'buffer_minutes' => isset($schedule['buffer_minutes']) ? (int) $schedule['buffer_minutes'] : null,
+                        'slot_duration_minutes' => isset($schedule['slot_duration_minutes']) ? (int) $schedule['slot_duration_minutes'] : 30,
+                        'buffer_minutes' => isset($schedule['buffer_minutes']) ? (int) $schedule['buffer_minutes'] : 0,
                     ]);
                 }
             }

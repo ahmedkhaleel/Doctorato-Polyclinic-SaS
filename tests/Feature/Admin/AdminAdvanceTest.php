@@ -14,6 +14,7 @@ class AdminAdvanceTest extends TestCase
     use RefreshDatabase;
 
     private User $admin;
+
     private Employee $employee;
 
     protected function setUp(): void

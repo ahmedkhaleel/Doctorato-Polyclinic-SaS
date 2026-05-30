@@ -88,7 +88,7 @@ class AdminDiscountCodeTest extends TestCase
             'is_active' => true,
         ]);
 
-        $this->actingAs($this->admin)->delete("/admin/discount-codes/{$code->id}")
+        $this->actingAs($this->admin)->post("/admin/discount-codes/{$code->id}/delete")
             ->assertRedirect();
 
         $this->assertDatabaseMissing('discount_codes', ['id' => $code->id]);

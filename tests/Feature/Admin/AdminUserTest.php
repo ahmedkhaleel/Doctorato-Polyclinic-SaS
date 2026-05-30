@@ -12,6 +12,7 @@ class AdminUserTest extends TestCase
     use RefreshDatabase;
 
     private User $admin;
+
     private Role $adminRole;
 
     protected function setUp(): void
@@ -91,7 +92,7 @@ class AdminUserTest extends TestCase
             'password' => bcrypt('password'), 'role_id' => $this->adminRole->id, 'is_active' => true,
         ]);
 
-        $this->actingAs($this->admin)->put("/admin/users/{$user->id}", [
+        $this->actingAs($this->admin)->post("/admin/users/{$user->id}/update", [
             'name' => 'Updated Name',
             'email' => 'editme@test.com',
             'role_id' => $this->adminRole->id,
@@ -110,7 +111,7 @@ class AdminUserTest extends TestCase
 
         $oldHash = $user->password;
 
-        $this->actingAs($this->admin)->put("/admin/users/{$user->id}", [
+        $this->actingAs($this->admin)->post("/admin/users/{$user->id}/update", [
             'name' => 'Keep Pass Updated',
             'email' => 'keeppass@test.com',
             'role_id' => $this->adminRole->id,
@@ -124,7 +125,7 @@ class AdminUserTest extends TestCase
 
     public function test_cannot_delete_own_account(): void
     {
-        $this->actingAs($this->admin)->delete("/admin/users/{$this->admin->id}")
+        $this->actingAs($this->admin)->post("/admin/users/{$this->admin->id}/delete")
             ->assertRedirect();
 
         // Admin should still exist
@@ -138,7 +139,7 @@ class AdminUserTest extends TestCase
             'password' => bcrypt('password'), 'role_id' => $this->adminRole->id, 'is_active' => true,
         ]);
 
-        $this->actingAs($this->admin)->delete("/admin/users/{$user->id}")
+        $this->actingAs($this->admin)->post("/admin/users/{$user->id}/delete")
             ->assertRedirect();
 
         $this->assertSoftDeleted('users', ['id' => $user->id]);

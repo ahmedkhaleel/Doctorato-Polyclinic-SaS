@@ -90,7 +90,7 @@ class AdminPatientsTest extends TestCase
 
         $this->actingAs($this->admin);
 
-        $response = $this->put("/admin/patients/{$patient->id}", [
+        $response = $this->post("/admin/patients/{$patient->id}/update", [
             'full_name' => 'Updated Name',
             'phone' => '01234567890',
             'gender' => 'male',

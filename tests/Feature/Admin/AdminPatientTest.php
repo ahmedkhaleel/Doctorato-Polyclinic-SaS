@@ -102,7 +102,7 @@ class AdminPatientTest extends TestCase
         $patient->is_active = true;
         $patient->save();
 
-        $this->actingAs($this->admin)->put("/admin/patients/{$patient->id}", [
+        $this->actingAs($this->admin)->post("/admin/patients/{$patient->id}/update", [
             'full_name' => 'Updated Name',
             'phone' => '0500000005',
             'gender' => 'female',
@@ -124,7 +124,7 @@ class AdminPatientTest extends TestCase
         $patient->is_active = true;
         $patient->save();
 
-        $this->actingAs($this->admin)->delete("/admin/patients/{$patient->id}")->assertRedirect();
+        $this->actingAs($this->admin)->post("/admin/patients/{$patient->id}/delete")->assertRedirect();
     }
 
     public function test_quick_create_returns_json(): void

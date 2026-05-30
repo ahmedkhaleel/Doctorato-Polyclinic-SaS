@@ -76,7 +76,7 @@ class AdminServiceCategoryTest extends TestCase
             'name_ar' => 'قديم', 'name_en' => 'Old', 'slug' => 'old', 'module' => 'derma',
         ]);
 
-        $this->actingAs($this->admin)->put("/admin/service-categories/{$cat->id}", [
+        $this->actingAs($this->admin)->post("/admin/service-categories/{$cat->id}/update", [
             'name_ar' => 'جديد',
             'name_en' => 'New Category',
             'module' => 'dental',
@@ -95,7 +95,7 @@ class AdminServiceCategoryTest extends TestCase
             'name_ar' => 'حذف', 'name_en' => 'Delete', 'slug' => 'delete', 'module' => 'derma',
         ]);
 
-        $this->actingAs($this->admin)->delete("/admin/service-categories/{$cat->id}")->assertRedirect();
+        $this->actingAs($this->admin)->post("/admin/service-categories/{$cat->id}/delete")->assertRedirect();
         $this->assertDatabaseMissing('service_categories', ['id' => $cat->id]);
     }
 }

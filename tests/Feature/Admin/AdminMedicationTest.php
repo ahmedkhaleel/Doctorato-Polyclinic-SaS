@@ -70,7 +70,7 @@ class AdminMedicationTest extends TestCase
     {
         $med = Medication::create(['name' => 'Old Med', 'is_active' => true]);
 
-        $this->actingAs($this->admin)->put("/admin/medications/{$med->id}", [
+        $this->actingAs($this->admin)->post("/admin/medications/{$med->id}/update", [
             'name' => 'Updated Med',
             'category' => 'Updated Category',
         ])->assertRedirect();
@@ -82,7 +82,7 @@ class AdminMedicationTest extends TestCase
     {
         $med = Medication::create(['name' => 'Delete Me', 'is_active' => true]);
 
-        $this->actingAs($this->admin)->delete("/admin/medications/{$med->id}")->assertRedirect();
+        $this->actingAs($this->admin)->post("/admin/medications/{$med->id}/delete")->assertRedirect();
         $this->assertDatabaseMissing('medications', ['id' => $med->id]);
     }
 

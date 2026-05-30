@@ -14,6 +14,7 @@ class AdminExpenseTest extends TestCase
     use RefreshDatabase;
 
     private User $admin;
+
     private ExpenseCategory $category;
 
     protected function setUp(): void
@@ -103,7 +104,7 @@ class AdminExpenseTest extends TestCase
             'created_by' => $this->admin->id,
         ]);
 
-        $this->actingAs($this->admin)->put("/admin/expenses/{$expense->id}", [
+        $this->actingAs($this->admin)->post("/admin/expenses/{$expense->id}/update", [
             'expense_category_id' => $this->category->id,
             'amount' => 200,
             'expense_date' => now()->toDateString(),
@@ -122,7 +123,7 @@ class AdminExpenseTest extends TestCase
             'created_by' => $this->admin->id,
         ]);
 
-        $this->actingAs($this->admin)->delete("/admin/expenses/{$expense->id}")
+        $this->actingAs($this->admin)->post("/admin/expenses/{$expense->id}/delete")
             ->assertRedirect();
 
         $this->assertDatabaseMissing('expenses', ['id' => $expense->id]);

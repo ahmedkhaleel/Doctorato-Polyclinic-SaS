@@ -75,7 +75,7 @@ class AdminGalleryTest extends TestCase
             'is_visible' => true,
         ]);
 
-        $this->actingAs($this->admin)->put("/admin/gallery/{$gallery->id}", [
+        $this->actingAs($this->admin)->post("/admin/gallery/{$gallery->id}/update", [
             'category' => 'Updated Category',
             'caption_ar' => 'محدث',
             'caption_en' => 'Updated',
@@ -93,7 +93,7 @@ class AdminGalleryTest extends TestCase
             'caption_en' => 'Delete',
         ]);
 
-        $this->actingAs($this->admin)->delete("/admin/gallery/{$gallery->id}")
+        $this->actingAs($this->admin)->post("/admin/gallery/{$gallery->id}/delete")
             ->assertRedirect();
 
         $this->assertDatabaseMissing('gallery', ['id' => $gallery->id]);

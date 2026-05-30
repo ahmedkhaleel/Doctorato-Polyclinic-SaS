@@ -54,7 +54,7 @@ class AdminExpenseCategoryTest extends TestCase
     {
         $cat = ExpenseCategory::create(['name_ar' => 'قديم', 'name_en' => 'Old']);
 
-        $this->actingAs($this->admin)->put("/admin/expense-categories/{$cat->id}", [
+        $this->actingAs($this->admin)->post("/admin/expense-categories/{$cat->id}/update", [
             'name_ar' => 'محدث',
             'name_en' => 'Updated',
         ])->assertRedirect();
@@ -66,7 +66,7 @@ class AdminExpenseCategoryTest extends TestCase
     {
         $cat = ExpenseCategory::create(['name_ar' => 'حذف', 'name_en' => 'Delete Me']);
 
-        $this->actingAs($this->admin)->delete("/admin/expense-categories/{$cat->id}")
+        $this->actingAs($this->admin)->post("/admin/expense-categories/{$cat->id}/delete")
             ->assertRedirect();
 
         $this->assertDatabaseMissing('expense_categories', ['id' => $cat->id]);

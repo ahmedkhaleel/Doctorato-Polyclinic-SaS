@@ -14,6 +14,7 @@ class AdminLeadTest extends TestCase
     use RefreshDatabase;
 
     private User $admin;
+
     private LeadSource $source;
 
     protected function setUp(): void
@@ -95,7 +96,7 @@ class AdminLeadTest extends TestCase
             'priority' => 2, 'created_by' => $this->admin->id,
         ]);
 
-        $this->actingAs($this->admin)->delete("/admin/leads/{$lead->id}")
+        $this->actingAs($this->admin)->post("/admin/leads/{$lead->id}/delete")
             ->assertRedirect();
 
         $this->assertSoftDeleted('leads', ['id' => $lead->id]);

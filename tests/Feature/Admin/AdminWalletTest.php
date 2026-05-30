@@ -14,6 +14,7 @@ class AdminWalletTest extends TestCase
     use RefreshDatabase;
 
     private User $admin;
+
     private Patient $patient;
 
     protected function setUp(): void

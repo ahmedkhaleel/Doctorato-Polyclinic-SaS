@@ -54,7 +54,7 @@ class AdminPostCategoryTest extends TestCase
     {
         $cat = PostCategory::create(['name_ar' => 'قديم', 'name_en' => 'Old', 'slug' => 'old']);
 
-        $this->actingAs($this->admin)->put("/admin/post-categories/{$cat->id}", [
+        $this->actingAs($this->admin)->post("/admin/post-categories/{$cat->id}/update", [
             'name_ar' => 'محدث',
             'name_en' => 'Updated',
         ])->assertRedirect();
@@ -66,7 +66,7 @@ class AdminPostCategoryTest extends TestCase
     {
         $cat = PostCategory::create(['name_ar' => 'حذف', 'name_en' => 'Delete', 'slug' => 'delete']);
 
-        $this->actingAs($this->admin)->delete("/admin/post-categories/{$cat->id}")
+        $this->actingAs($this->admin)->post("/admin/post-categories/{$cat->id}/delete")
             ->assertRedirect();
 
         $this->assertDatabaseMissing('post_categories', ['id' => $cat->id]);

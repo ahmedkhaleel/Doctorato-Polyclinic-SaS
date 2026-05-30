@@ -16,7 +16,9 @@ class AdminDentalTreatmentPlanTest extends TestCase
     use RefreshDatabase;
 
     private User $admin;
+
     private Patient $patient;
+
     private Doctor $doctor;
 
     protected function setUp(): void
@@ -141,7 +143,7 @@ class AdminDentalTreatmentPlanTest extends TestCase
             'status' => 'draft',
         ]);
 
-        $this->actingAs($this->admin)->delete("/admin/dental/treatment-plans/{$plan->id}")->assertRedirect();
+        $this->actingAs($this->admin)->post("/admin/dental/treatment-plans/{$plan->id}/delete")->assertRedirect();
         $this->assertDatabaseMissing('dental_treatment_plans', ['id' => $plan->id]);
     }
 

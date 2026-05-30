@@ -14,6 +14,7 @@ class AdminPenaltyTest extends TestCase
     use RefreshDatabase;
 
     private User $admin;
+
     private Employee $employee;
 
     protected function setUp(): void
@@ -114,7 +115,7 @@ class AdminPenaltyTest extends TestCase
             'created_by' => $this->admin->id,
         ]);
 
-        $this->actingAs($this->admin)->delete("/admin/penalties/{$penalty->id}")->assertRedirect();
+        $this->actingAs($this->admin)->post("/admin/penalties/{$penalty->id}/delete")->assertRedirect();
         $this->assertDatabaseMissing('penalties', ['id' => $penalty->id]);
     }
 
@@ -129,7 +130,7 @@ class AdminPenaltyTest extends TestCase
             'applied_to_salary' => true,
         ]);
 
-        $this->actingAs($this->admin)->delete("/admin/penalties/{$penalty->id}")->assertRedirect();
+        $this->actingAs($this->admin)->post("/admin/penalties/{$penalty->id}/delete")->assertRedirect();
         // Should still exist because it was applied to salary
         $this->assertDatabaseHas('penalties', ['id' => $penalty->id]);
     }

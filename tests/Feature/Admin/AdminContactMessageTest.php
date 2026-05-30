@@ -64,7 +64,7 @@ class AdminContactMessageTest extends TestCase
             'subject' => 'Delete', 'message' => 'Delete me.',
         ]);
 
-        $this->actingAs($this->admin)->delete("/admin/contact-messages/{$msg->id}")
+        $this->actingAs($this->admin)->post("/admin/contact-messages/{$msg->id}/delete")
             ->assertRedirect();
 
         $this->assertDatabaseMissing('contact_messages', ['id' => $msg->id]);

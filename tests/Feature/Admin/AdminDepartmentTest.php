@@ -69,7 +69,7 @@ class AdminDepartmentTest extends TestCase
     {
         $dept = Department::create(['name_ar' => 'حذف', 'name_en' => 'Delete', 'is_active' => true]);
 
-        $this->actingAs($this->admin)->delete("/admin/departments/{$dept->id}")
+        $this->actingAs($this->admin)->post("/admin/departments/{$dept->id}/delete")
             ->assertRedirect();
 
         $this->assertDatabaseMissing('departments', ['id' => $dept->id]);

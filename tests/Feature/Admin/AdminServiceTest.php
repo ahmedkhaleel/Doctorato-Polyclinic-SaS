@@ -14,6 +14,7 @@ class AdminServiceTest extends TestCase
     use RefreshDatabase;
 
     private User $admin;
+
     private ServiceCategory $category;
 
     protected function setUp(): void
@@ -107,7 +108,7 @@ class AdminServiceTest extends TestCase
             'slug' => 'old-service', 'status' => 'active',
         ]);
 
-        $this->actingAs($this->admin)->put("/admin/services/{$service->id}", [
+        $this->actingAs($this->admin)->post("/admin/services/{$service->id}/update", [
             'category_id' => $this->category->id,
             'name_ar' => 'محدث',
             'name_en' => 'Updated Service',
@@ -125,7 +126,7 @@ class AdminServiceTest extends TestCase
             'slug' => 'delete-me', 'status' => 'active',
         ]);
 
-        $this->actingAs($this->admin)->delete("/admin/services/{$service->id}")
+        $this->actingAs($this->admin)->post("/admin/services/{$service->id}/delete")
             ->assertRedirect();
 
         $this->assertDatabaseMissing('services', ['id' => $service->id]);

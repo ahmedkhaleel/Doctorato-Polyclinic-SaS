@@ -78,7 +78,7 @@ class AdminSupplyTest extends TestCase
             'quantity' => 50, 'is_active' => true,
         ]);
 
-        $this->actingAs($this->admin)->put("/admin/supplies/{$supply->id}", [
+        $this->actingAs($this->admin)->post("/admin/supplies/{$supply->id}/update", [
             'name_ar' => 'جديد',
             'name_en' => 'Updated',
             'min_quantity' => 10,
@@ -94,7 +94,7 @@ class AdminSupplyTest extends TestCase
             'quantity' => 5, 'is_active' => true,
         ]);
 
-        $this->actingAs($this->admin)->delete("/admin/supplies/{$supply->id}")->assertRedirect();
+        $this->actingAs($this->admin)->post("/admin/supplies/{$supply->id}/delete")->assertRedirect();
         $this->assertDatabaseMissing('supplies', ['id' => $supply->id]);
     }
 
