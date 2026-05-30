@@ -31,7 +31,7 @@ class DatabaseSeeder extends Seeder
         $this->call(RoleSeeder::class);
 
         $superAdminRole = Role::where('name', 'super_admin')->first();
-        $secretaryRole  = Role::where('name', 'secretary')->first();
+        $secretaryRole = Role::where('name', 'secretary')->first();
 
         // Super Admin
         User::firstOrCreate(
@@ -82,6 +82,7 @@ class DatabaseSeeder extends Seeder
             GallerySeeder::class,
             HeroSlideSeeder::class,
             SeoPageSeeder::class,
+            ObgynServiceSeeder::class,
         ]);
 
         // ── 3. Clinic reference data (always required for clinic system) ──
@@ -116,6 +117,7 @@ class DatabaseSeeder extends Seeder
                 ExpenseSeeder::class,
                 AttendanceSeeder::class,
                 ComprehensiveDemoSeeder::class,
+                ObgynDemoSeeder::class,
             ]);
         } else {
             $this->command->info('Production mode: Skipping demo data. Only essential data seeded.');
