@@ -2,6 +2,7 @@
 import { Link, router, useForm, usePage } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
 import DoctorLayout from '@/Layouts/DoctorLayout.vue';
+import { useEscapeKey } from '@/Composables/useEscapeKey';
 
 defineOptions({ layout: DoctorLayout });
 
@@ -23,6 +24,7 @@ function applyFilters() {
 }
 
 const showModal = ref(false);
+useEscapeKey(() => { showModal.value = false; });
 const form = useForm({
     patient_id: '', lmp: '', edd: '', gravida: '', para: '',
     conception_method: 'natural', blood_group: '', rh_factor: '', is_high_risk: false, notes: '',
@@ -124,7 +126,7 @@ function statusText(s) {
             <Transition name="modal">
                 <div v-if="showModal" class="fixed inset-0 z-50 flex items-center justify-center p-4" :dir="isRtl ? 'rtl' : 'ltr'">
                     <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" @click="showModal = false"></div>
-                    <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+                    <div role="dialog" aria-modal="true" class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
                         <div class="p-5 border-b border-gray-100 flex items-center justify-between sticky top-0 bg-white rounded-t-2xl">
                             <h3 class="font-bold text-gray-800">{{ isRtl ? 'فتح ملف حمل جديد' : 'Open New Pregnancy' }}</h3>
                             <button @click="showModal = false" class="text-gray-400 hover:text-gray-600"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>

@@ -2,6 +2,7 @@
 import { useForm, usePage } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
 import DoctorLayout from '@/Layouts/DoctorLayout.vue';
+import { useEscapeKey } from '@/Composables/useEscapeKey';
 
 defineOptions({ layout: DoctorLayout });
 
@@ -20,6 +21,7 @@ const papForm = useForm({ patient_id: '', test_date: new Date().toISOString().sl
 const contraForm = useForm({ patient_id: '', method: '', start_date: new Date().toISOString().slice(0, 10), follow_up_date: '', status: 'active', notes: '' });
 
 const close = () => { modal.value = null; };
+useEscapeKey(close);
 function savePap() { papForm.post(route('doctor.obgyn.pap-smear.store'), { preserveScroll: true, onSuccess: () => { close(); papForm.reset(); } }); }
 function saveContra() { contraForm.post(route('doctor.obgyn.contraception.store'), { preserveScroll: true, onSuccess: () => { close(); contraForm.reset(); } }); }
 
@@ -76,7 +78,7 @@ function papBadge(r) { return r === 'normal' ? 'bg-emerald-100 text-emerald-700'
             <Transition name="modal">
                 <div v-if="modal" class="fixed inset-0 z-50 flex items-center justify-center p-4" :dir="isRtl ? 'rtl' : 'ltr'">
                     <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" @click="close"></div>
-                    <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md">
+                    <div role="dialog" aria-modal="true" class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md">
                         <div class="p-5 border-b border-gray-100 flex items-center justify-between">
                             <h3 class="font-bold text-gray-800">{{ modal === 'pap' ? (isRtl ? 'مسحة عنق الرحم' : 'Pap Smear') : (isRtl ? 'سجل منع الحمل' : 'Contraception') }}</h3>
                             <button @click="close" class="text-gray-400 hover:text-gray-600"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>

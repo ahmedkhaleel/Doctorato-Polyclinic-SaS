@@ -2,6 +2,7 @@
 import { Link, useForm, usePage } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
 import DoctorLayout from '@/Layouts/DoctorLayout.vue';
+import { useEscapeKey } from '@/Composables/useEscapeKey';
 
 defineOptions({ layout: DoctorLayout });
 
@@ -58,6 +59,7 @@ const labForm = useForm({ test_type: '', value: '', unit: '', reference_range: '
 const delForm = useForm({ delivery_date: new Date().toISOString().slice(0, 10), delivery_mode: 'nvd', place: '', gestational_age_at_delivery: '', outcome: 'live', baby_weight_grams: '', baby_sex: '', apgar_1: '', apgar_5: '', complications: '', notes: '', supply_id: '', consumption_qty: '', create_newborn: true, bill: true });
 
 const close = () => { modal.value = null; };
+useEscapeKey(close);
 const submit = (form, routeName) => form.post(route(routeName, pid), { preserveScroll: true, onSuccess: () => { close(); form.reset(); } });
 
 function fmtDate(d) { return d ? new Date(d).toLocaleDateString(isRtl.value ? 'ar-EG' : 'en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '—'; }
@@ -175,7 +177,7 @@ function fmtDate(d) { return d ? new Date(d).toLocaleDateString(isRtl.value ? 'a
             <Transition name="modal">
                 <div v-if="modal" class="fixed inset-0 z-50 flex items-center justify-center p-4" :dir="isRtl ? 'rtl' : 'ltr'">
                     <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" @click="close"></div>
-                    <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+                    <div role="dialog" aria-modal="true" class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
                         <div class="p-5 border-b border-gray-100 flex items-center justify-between sticky top-0 bg-white rounded-t-2xl">
                             <h3 class="font-bold text-gray-800">
                                 {{ modal === 'anc' ? (isRtl ? 'زيارة متابعة حمل' : 'Antenatal Visit') : modal === 'us' ? (isRtl ? 'سونار توليد' : 'Obstetric Ultrasound') : modal === 'lab' ? (isRtl ? 'تحليل' : 'Lab Test') : (isRtl ? 'تسجيل الولادة' : 'Record Delivery') }}
