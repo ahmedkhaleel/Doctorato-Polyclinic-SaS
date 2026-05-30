@@ -40,9 +40,11 @@ Patient routes are the only ones under a `{locale}` prefix — see the
 ## Key systems
 
 - **ModuleManager** (`app/Services/ModuleManager.php`) — feature flags per
-  clinic module. Slugs: `derma`, `dental`, `pediatric`, `telemedicine`.
-  `MEDICAL_MODULES = ['derma','dental','pediatric']` — only these have
-  doctors/visits/bookings. Enable with `ModuleManager::enable('slug')`.
+  clinic module. Slugs: `derma`, `dental`, `pediatric`, `obgyn`,
+  `telemedicine`.
+  `MEDICAL_MODULES = ['derma','dental','pediatric','obgyn']` — only these
+  have doctors/visits/bookings. Enable with `ModuleManager::enable('slug')`.
+  OB/GYN module design + build notes: `docs/OBGYN_MODULE_PLAN.md`.
 
 - **Settings** (`app/Models/Setting.php`) — key/value table, used for
   everything runtime-configurable (clinic name, payment keys, Agora

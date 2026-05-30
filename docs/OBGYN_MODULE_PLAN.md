@@ -217,6 +217,21 @@
 11. i18n: مفاتيح `lang/ar.json` + `en.json` صريحة في P5.
 12. تنبيه: إضافة obgyn إلى `MEDICAL_MODULES` تُدخله في حلقات الجاهزية (health/telemedicine) — آمن خلف flag التفعيل، نتحقّق ألا يكسر الجاهزية قبل وجود أطباء.
 
+## 8.2 حالة التنفيذ (مكتمل ✅)
+
+| المرحلة | الحالة | أهم الملفات |
+|--------|--------|------------|
+| P1 الأساس | ✅ | ModuleManager + permissions + 13 migration + 8 models + `ObstetricCalculatorService` |
+| P2 الفوترة | ✅ | `ObgynBillingService` (موسوم/idempotent/reverse) |
+| P2ب لوحة الطبيبة | ✅ | `DoctorObgynController` + 3 صفحات (Dashboard/Pregnancies/Show) |
+| P3 لوحة الأدمن | ✅ | `AdminObgynController` + Dashboard/Pregnancies/Reports/Settings |
+| P4 بوابة المريضة | ✅ | `PatientObgynController` + Overview (عدّاد EDD) |
+| P6 الأتمتة | ✅ | `obgyn:reminders` (anc/edd/pap) + 3 فحوصات `data:integrity-check` |
+| P7 البذور | ✅ | `ObgynServiceSeeder` (كتالوج) + `ObgynDemoSeeder` (بيانات حيّة) |
+| P8 التوثيق/البناء | ✅ | تحديث CLAUDE.md + بناء الأصول |
+
+**التغطية الاختبارية:** 33 اختبار obgyn (calculator/foundation/billing/doctor-flow/admin/patient/automation). كل المسارات مقيّدة بالصلاحيات/الموديل، وكل التدفّق المالي موسوم `obgyn`.
+
 ## 9. مفاضلات (Trade-offs) وما سنراجعه مستقبلاً
 - **ObgynProfile كجدول منفصل** (لا حقول في patients): أنظف لأن الحقول أنثوية كثيرة، بثمن join إضافي — مقبول.
 - **DeliveryRecord 1:1 مع الحمل** يكفي الآن؛ التوائم المتعددة الولادات نادرة — نراجع لو ظهرت الحاجة.
