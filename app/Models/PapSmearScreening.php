@@ -25,6 +25,7 @@ class PapSmearScreening extends Model
     protected $fillable = [
         'patient_id', 'visit_id', 'doctor_id', 'test_date', 'result',
         'hpv_status', 'next_due_date', 'notes',
+        'invoice_id', 'invoice_item_id',
     ];
 
     protected $casts = [
@@ -45,6 +46,11 @@ class PapSmearScreening extends Model
     public function doctor()
     {
         return $this->belongsTo(Doctor::class);
+    }
+
+    public function invoice()
+    {
+        return $this->belongsTo(Invoice::class);
     }
 
     public function isAbnormal(): bool

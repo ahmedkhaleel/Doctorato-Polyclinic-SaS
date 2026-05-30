@@ -15,6 +15,7 @@ class ObstetricUltrasound extends Model
         'pregnancy_id', 'visit_id', 'doctor_id', 'scan_date', 'scan_type',
         'gestational_age_weeks', 'bpd_mm', 'hc_mm', 'ac_mm', 'fl_mm', 'efw_grams',
         'placenta_position', 'afi', 'fetal_count', 'fetal_heart', 'presentation', 'findings',
+        'invoice_id', 'invoice_item_id',
     ];
 
     protected $casts = [
@@ -43,5 +44,10 @@ class ObstetricUltrasound extends Model
     public function doctor()
     {
         return $this->belongsTo(Doctor::class);
+    }
+
+    public function invoice()
+    {
+        return $this->belongsTo(Invoice::class);
     }
 }

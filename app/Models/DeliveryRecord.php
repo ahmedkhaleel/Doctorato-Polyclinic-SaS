@@ -21,6 +21,7 @@ class DeliveryRecord extends Model
         'pregnancy_id', 'visit_id', 'doctor_id', 'delivery_date', 'delivery_mode',
         'place', 'gestational_age_at_delivery', 'outcome', 'baby_weight_grams',
         'baby_sex', 'apgar_1', 'apgar_5', 'complications', 'newborn_patient_id', 'notes',
+        'invoice_id', 'invoice_item_id',
     ];
 
     protected $casts = [
@@ -50,5 +51,10 @@ class DeliveryRecord extends Model
     public function newbornPatient()
     {
         return $this->belongsTo(Patient::class, 'newborn_patient_id');
+    }
+
+    public function invoice()
+    {
+        return $this->belongsTo(Invoice::class);
     }
 }

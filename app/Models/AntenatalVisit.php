@@ -24,6 +24,7 @@ class AntenatalVisit extends Model
         'gestational_age_weeks', 'weight_kg', 'bp_systolic', 'bp_diastolic',
         'fundal_height_cm', 'fetal_heart_rate', 'presentation', 'edema',
         'urine_protein', 'urine_glucose', 'complaints', 'plan', 'next_visit_date',
+        'invoice_id', 'invoice_item_id',
     ];
 
     protected $casts = [
@@ -51,6 +52,11 @@ class AntenatalVisit extends Model
     public function doctor()
     {
         return $this->belongsTo(Doctor::class);
+    }
+
+    public function invoice()
+    {
+        return $this->belongsTo(Invoice::class);
     }
 
     /** Blood pressure as a display string, e.g. "120/80". */
