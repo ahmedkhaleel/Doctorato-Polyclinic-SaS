@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Doctor;
 
+use App\Models\CosmeticConsent;
+use App\Models\CosmeticProcedure;
 use App\Models\CosmeticSession;
 use App\Models\DermaPhoto;
 use App\Models\DermaSession;
@@ -98,6 +100,8 @@ class DoctorDermaController extends BaseDoctorController
             ->with('procedure:id,name_ar,name_en')->latest('created_at')->get();
         $plans = DermaTreatmentPlan::where('patient_id', $patient->id)->latest()->get();
         $photos = DermaPhoto::where('patient_id', $patient->id)->latest('taken_at')->get();
+        $consents = CosmeticConsent::where('patient_id', $patient->id)
+            ->with('procedure:id,name_ar,name_en')->latest('signed_at')->get();
 
         return Inertia::render('Doctor/Derma/Patients/Show', [
             'patient' => $patient->only(['id', 'full_name', 'phone', 'file_number', 'gender']),
@@ -105,8 +109,60 @@ class DoctorDermaController extends BaseDoctorController
             'cosmeticSessions' => $cosmeticSessions,
             'plans' => $plans,
             'photos' => $photos,
+            'consents' => $consents,
             'sessionTypes' => DermaSession::TYPES,
+            'procedures' => CosmeticProcedure::where('is_active', true)->orderBy('name_ar')
+                ->get(['id', 'name_ar', 'name_en', 'default_price']),
         ]);
+    }
+
+    public function storeCosmeticSession(Request $request, Patient $patient): RedirectResponse
+    {
+        $data = $request->validate([
+            'procedure_id' => 'nullable|exists:cosmetic_procedures,id',
+            'area_treated' => 'nullable|string|max:255',
+            'product_used' => 'nullable|string|max:255',
+            'dose_units' => 'nullable|numeric|min:0',
+            'session_number' => 'nullable|integer|min:1',
+            'cost' => 'nullable|numeric|min:0',
+            'completed_at' => 'nullable|date',
+            'notes' => 'nullable|string',
+        ]);
+        $data['patient_id'] = $patient->id;
+        $data['doctor_id'] = $this->doctorId($request);
+        $data['completed_at'] ??= now();
+
+        $session = CosmeticSession::create($data);
+        $this->invoicing->generateForCosmeticSession($session);
+        $this->invoicing->consumeInventoryForCosmeticSession($session->fresh());
+
+        AuditLogger::log('created', $session, ['patient_id' => $patient->id], 'Logged cosmetic session');
+
+        return back()->with('success', $this->msg('Cosmetic session logged.', 'تم تسجيل جلسة التجميل.'));
+    }
+
+    public function uploadPhoto(Request $request, Patient $patient): RedirectResponse
+    {
+        $data = $request->validate([
+            'category' => 'required|in:before,after,progress',
+            'body_area' => 'nullable|string|max:255',
+            'notes' => 'nullable|string|max:1000',
+            'image' => 'required|image|max:8192',
+        ]);
+
+        $path = $request->file('image')->store('derma/photos', 'public');
+        DermaPhoto::create([
+            'patient_id' => $patient->id,
+            'category' => $data['category'],
+            'body_area' => $data['body_area'] ?? null,
+            'notes' => $data['notes'] ?? null,
+            'taken_at' => now(),
+            'image_path' => $path,
+        ]);
+
+        AuditLogger::log('created', $patient, ['category' => $data['category']], 'Uploaded derma photo');
+
+        return back()->with('success', $this->msg('Photo uploaded.', 'تم رفع الصورة.'));
     }
 
     public function storeDermaSession(Request $request, Patient $patient): RedirectResponse

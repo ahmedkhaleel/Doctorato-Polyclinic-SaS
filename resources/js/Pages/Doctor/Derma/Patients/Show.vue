@@ -17,18 +17,35 @@ const props = defineProps({
     cosmeticSessions: { type: Array, default: () => [] },
     plans: { type: Array, default: () => [] },
     photos: { type: Array, default: () => [] },
+    consents: { type: Array, default: () => [] },
     sessionTypes: { type: Array, default: () => [] },
+    procedures: { type: Array, default: () => [] },
 });
 
-const showModal = ref(false);
+const modal = ref(null); // 'derma' | 'cosmetic' | 'photo'
+const close = () => { modal.value = null; };
+
 const form = useForm({
     session_type: 'laser', treatment_plan_id: '', area_treated: '', product_used: '',
     session_number: '', total_sessions: '', cost: '', next_session_date: '', notes: '',
 });
 function logSession() {
     form.post(route('doctor.derma.sessions.store', props.patient.id), {
-        preserveScroll: true,
-        onSuccess: () => { showModal.value = false; form.reset(); },
+        preserveScroll: true, onSuccess: () => { close(); form.reset(); },
+    });
+}
+
+const cosForm = useForm({ procedure_id: '', area_treated: '', product_used: '', dose_units: '', session_number: '', cost: '', notes: '' });
+function logCosmetic() {
+    cosForm.post(route('doctor.derma.cosmetic-sessions.store', props.patient.id), {
+        preserveScroll: true, onSuccess: () => { close(); cosForm.reset(); },
+    });
+}
+
+const photoForm = useForm({ category: 'before', body_area: '', notes: '', image: null });
+function uploadPhoto() {
+    photoForm.post(route('doctor.derma.photos.store', props.patient.id), {
+        preserveScroll: true, forceFormData: true, onSuccess: () => { close(); photoForm.reset(); },
     });
 }
 
@@ -60,10 +77,19 @@ function typeLabel(t) {
                         <p class="text-white/70 text-sm">{{ patient.phone }} · {{ patient.file_number }}</p>
                     </div>
                 </div>
-                <button @click="showModal = true" class="inline-flex items-center gap-2 bg-white/15 hover:bg-white/25 backdrop-blur px-5 py-3 rounded-xl font-semibold transition">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                    {{ isRtl ? 'تسجيل جلسة' : 'Log Session' }}
-                </button>
+                <div class="flex items-center gap-2 flex-wrap">
+                    <button @click="modal = 'derma'" class="inline-flex items-center gap-1.5 bg-white/15 hover:bg-white/25 backdrop-blur px-4 py-2.5 rounded-xl font-semibold transition text-sm">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                        {{ isRtl ? 'جلسة جلدية' : 'Derma Session' }}
+                    </button>
+                    <button @click="modal = 'cosmetic'" class="inline-flex items-center gap-1.5 bg-white/15 hover:bg-white/25 backdrop-blur px-4 py-2.5 rounded-xl font-semibold transition text-sm">
+                        + {{ isRtl ? 'جلسة تجميل' : 'Cosmetic' }}
+                    </button>
+                    <button @click="modal = 'photo'" class="inline-flex items-center gap-1.5 bg-white/15 hover:bg-white/25 backdrop-blur px-4 py-2.5 rounded-xl font-semibold transition text-sm">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                        {{ isRtl ? 'رفع صورة' : 'Photo' }}
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -114,17 +140,32 @@ function typeLabel(t) {
             </div>
         </div>
 
-        <!-- Log Session Modal -->
+        <!-- Consents -->
+        <div v-if="consents.length" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+            <h2 class="font-bold text-gray-800 mb-3">{{ isRtl ? 'الموافقات الموقّعة' : 'Signed Consents' }}</h2>
+            <ul class="divide-y divide-gray-50">
+                <li v-for="c in consents" :key="c.id" class="py-2.5 flex items-center justify-between text-sm">
+                    <span class="text-gray-800">{{ (isRtl ? c.procedure?.name_ar : c.procedure?.name_en) || (isRtl ? 'موافقة عامة' : 'General consent') }}</span>
+                    <span class="text-xs font-semibold px-2.5 py-1 rounded-full" :class="c.signed_at ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'">
+                        {{ c.signed_at ? (isRtl ? 'موقّعة ' : 'Signed ') + fmt(c.signed_at) : (isRtl ? 'غير موقّعة' : 'Unsigned') }}
+                    </span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Modals -->
         <Teleport to="body">
             <Transition name="modal">
-                <div v-if="showModal" class="fixed inset-0 z-50 flex items-center justify-center p-4" :dir="isRtl ? 'rtl' : 'ltr'">
-                    <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" @click="showModal = false"></div>
+                <div v-if="modal" class="fixed inset-0 z-50 flex items-center justify-center p-4" :dir="isRtl ? 'rtl' : 'ltr'">
+                    <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" @click="close"></div>
                     <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
                         <div class="p-5 border-b border-gray-100 flex items-center justify-between sticky top-0 bg-white rounded-t-2xl">
-                            <h3 class="font-bold text-gray-800">{{ isRtl ? 'تسجيل جلسة جلدية' : 'Log Derma Session' }}</h3>
-                            <button @click="showModal = false" class="text-gray-400 hover:text-gray-600"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+                            <h3 class="font-bold text-gray-800">{{ modal === 'derma' ? (isRtl ? 'تسجيل جلسة جلدية' : 'Log Derma Session') : modal === 'cosmetic' ? (isRtl ? 'تسجيل جلسة تجميل' : 'Log Cosmetic Session') : (isRtl ? 'رفع صورة' : 'Upload Photo') }}</h3>
+                            <button @click="close" class="text-gray-400 hover:text-gray-600"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
                         </div>
-                        <form @submit.prevent="logSession" class="p-5 space-y-3">
+
+                        <!-- Derma session -->
+                        <form v-if="modal === 'derma'" @submit.prevent="logSession" class="p-5 space-y-3">
                             <div>
                                 <label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'نوع الجلسة' : 'Session type' }} *</label>
                                 <select v-model="form.session_type" required class="w-full rounded-xl border-gray-200 text-sm focus:border-violet-400 focus:ring-violet-400">
@@ -144,8 +185,57 @@ function typeLabel(t) {
                             <div><label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label><textarea v-model="form.notes" rows="2" class="w-full rounded-xl border-gray-200 text-sm focus:border-violet-400 focus:ring-violet-400"></textarea></div>
                             <p class="text-xs text-gray-400">{{ isRtl ? 'عند إدخال تكلفة، تُصدَر فاتورة تلقائياً موسومة بالجلدية.' : 'Entering a cost auto-creates a derma-tagged invoice.' }}</p>
                             <div class="flex justify-end gap-2 pt-2">
-                                <button type="button" @click="showModal = false" class="px-4 py-2.5 rounded-xl text-gray-600 hover:bg-gray-100 text-sm font-medium">{{ isRtl ? 'إلغاء' : 'Cancel' }}</button>
+                                <button type="button" @click="close" class="px-4 py-2.5 rounded-xl text-gray-600 hover:bg-gray-100 text-sm font-medium">{{ isRtl ? 'إلغاء' : 'Cancel' }}</button>
                                 <button type="submit" :disabled="form.processing" class="px-5 py-2.5 rounded-xl text-white text-sm font-semibold disabled:opacity-50" :style="{ background: ACCENT }">{{ isRtl ? 'حفظ' : 'Save' }}</button>
+                            </div>
+                        </form>
+
+                        <!-- Cosmetic session -->
+                        <form v-else-if="modal === 'cosmetic'" @submit.prevent="logCosmetic" class="p-5 space-y-3">
+                            <div>
+                                <label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'الإجراء' : 'Procedure' }}</label>
+                                <select v-model="cosForm.procedure_id" class="w-full rounded-xl border-gray-200 text-sm focus:border-violet-400 focus:ring-violet-400">
+                                    <option value="">{{ isRtl ? '—' : '—' }}</option>
+                                    <option v-for="pr in procedures" :key="pr.id" :value="pr.id">{{ isRtl ? pr.name_ar : pr.name_en }}</option>
+                                </select>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div><label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'المنطقة' : 'Area' }}</label><input v-model="cosForm.area_treated" type="text" class="w-full rounded-xl border-gray-200 text-sm focus:border-violet-400 focus:ring-violet-400" /></div>
+                                <div><label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'الوحدات' : 'Dose units' }}</label><input v-model="cosForm.dose_units" type="number" step="0.1" min="0" class="w-full rounded-xl border-gray-200 text-sm focus:border-violet-400 focus:ring-violet-400" /></div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div><label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'رقم الجلسة' : 'Session #' }}</label><input v-model="cosForm.session_number" type="number" min="1" class="w-full rounded-xl border-gray-200 text-sm focus:border-violet-400 focus:ring-violet-400" /></div>
+                                <div><label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'التكلفة' : 'Cost' }}</label><input v-model="cosForm.cost" type="number" step="0.01" min="0" class="w-full rounded-xl border-gray-200 text-sm focus:border-violet-400 focus:ring-violet-400" /></div>
+                            </div>
+                            <div><label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'ملاحظات' : 'Notes' }}</label><textarea v-model="cosForm.notes" rows="2" class="w-full rounded-xl border-gray-200 text-sm focus:border-violet-400 focus:ring-violet-400"></textarea></div>
+                            <p class="text-xs text-gray-400">{{ isRtl ? 'يُخصم المستلزم من المخزون وتُصدَر فاتورة تلقائياً.' : 'Consumes inventory + auto-bills if priced.' }}</p>
+                            <div class="flex justify-end gap-2 pt-2">
+                                <button type="button" @click="close" class="px-4 py-2.5 rounded-xl text-gray-600 hover:bg-gray-100 text-sm font-medium">{{ isRtl ? 'إلغاء' : 'Cancel' }}</button>
+                                <button type="submit" :disabled="cosForm.processing" class="px-5 py-2.5 rounded-xl text-white text-sm font-semibold disabled:opacity-50" style="background:#C4A265">{{ isRtl ? 'حفظ' : 'Save' }}</button>
+                            </div>
+                        </form>
+
+                        <!-- Photo upload -->
+                        <form v-else @submit.prevent="uploadPhoto" class="p-5 space-y-3">
+                            <div>
+                                <label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'التصنيف' : 'Category' }} *</label>
+                                <select v-model="photoForm.category" class="w-full rounded-xl border-gray-200 text-sm focus:border-violet-400 focus:ring-violet-400">
+                                    <option value="before">{{ isRtl ? 'قبل' : 'Before' }}</option>
+                                    <option value="after">{{ isRtl ? 'بعد' : 'After' }}</option>
+                                    <option value="progress">{{ isRtl ? 'أثناء' : 'Progress' }}</option>
+                                </select>
+                            </div>
+                            <div><label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'المنطقة' : 'Body area' }}</label><input v-model="photoForm.body_area" type="text" class="w-full rounded-xl border-gray-200 text-sm focus:border-violet-400 focus:ring-violet-400" /></div>
+                            <div>
+                                <label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'الصورة' : 'Image' }} *</label>
+                                <input type="file" accept="image/*" required @input="photoForm.image = $event.target.files[0]"
+                                       class="w-full text-sm text-gray-600 file:me-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100" />
+                                <p v-if="photoForm.errors.image" class="text-xs text-red-600 mt-1">{{ photoForm.errors.image }}</p>
+                                <p v-if="photoForm.progress" class="text-xs text-gray-400 mt-1">{{ photoForm.progress.percentage }}%</p>
+                            </div>
+                            <div class="flex justify-end gap-2 pt-2">
+                                <button type="button" @click="close" class="px-4 py-2.5 rounded-xl text-gray-600 hover:bg-gray-100 text-sm font-medium">{{ isRtl ? 'إلغاء' : 'Cancel' }}</button>
+                                <button type="submit" :disabled="photoForm.processing" class="px-5 py-2.5 rounded-xl text-white text-sm font-semibold disabled:opacity-50" :style="{ background: ACCENT }">{{ isRtl ? 'رفع' : 'Upload' }}</button>
                             </div>
                         </form>
                     </div>

@@ -9,6 +9,8 @@ use App\Models\Role;
 use App\Models\User;
 use App\Services\ModuleManager;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
@@ -82,6 +84,39 @@ class DoctorDermaFlowTest extends TestCase
 
         $this->assertDatabaseHas('derma_sessions', ['patient_id' => $patient->id, 'session_type' => 'peel']);
         $this->assertSame(0, Invoice::where('module', 'derma')->count());
+    }
+
+    #[Test]
+    public function logging_a_cosmetic_session_with_cost_bills_a_derma_invoice(): void
+    {
+        $patient = Patient::create(['full_name' => 'Cosmo', 'phone' => '0103']);
+
+        $this->actingAs($this->doctorUser)
+            ->post("/doctor/derma/patients/{$patient->id}/cosmetic-sessions", [
+                'area_treated' => 'forehead', 'cost' => 600,
+            ])->assertRedirect();
+
+        $this->assertDatabaseHas('cosmetic_sessions', ['patient_id' => $patient->id, 'doctor_id' => $this->doctor->id]);
+        $this->assertEquals(600, (float) Invoice::where('module', 'derma')->first()?->total);
+    }
+
+    #[Test]
+    public function uploading_a_before_photo_stores_a_derma_photo(): void
+    {
+        Storage::fake('public');
+        $patient = Patient::create(['full_name' => 'Pic', 'phone' => '0104']);
+
+        $this->actingAs($this->doctorUser)
+            ->post("/doctor/derma/patients/{$patient->id}/photos", [
+                'category' => 'before',
+                'body_area' => 'face',
+                'image' => UploadedFile::fake()->image('before.jpg', 600, 600),
+            ])->assertRedirect();
+
+        $photo = \App\Models\DermaPhoto::where('patient_id', $patient->id)->first();
+        $this->assertNotNull($photo);
+        $this->assertSame('before', $photo->category);
+        Storage::disk('public')->assertExists($photo->image_path);
     }
 
     #[Test]
