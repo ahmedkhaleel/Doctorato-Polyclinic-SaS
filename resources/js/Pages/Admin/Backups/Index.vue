@@ -11,6 +11,20 @@ const props = defineProps({
         type: Array,
         default: () => [],
     },
+    summary: {
+        type: Object,
+        default: () => ({ count: 0, last_backup_at: null, last_backup_age_hours: null, is_stale: true, max_age_hours: 24, total_size: '0 B' }),
+    },
+});
+
+// Human-readable age of the most recent backup.
+const lastBackupAge = computed(() => {
+    const h = props.summary?.last_backup_age_hours;
+    if (h === null || h === undefined) return null;
+    if (h < 1) return isRtl.value ? 'منذ أقل من ساعة' : 'less than an hour ago';
+    if (h < 24) return isRtl.value ? `منذ ${h} ساعة` : `${h}h ago`;
+    const d = Math.floor(h / 24);
+    return isRtl.value ? `منذ ${d} يوم` : `${d}d ago`;
 });
 
 const loading = ref({
@@ -67,8 +81,7 @@ function deleteBackup(path) {
     if (!confirm(isRtl.value ? 'هل أنت متأكد من حذف هذه النسخة الاحتياطية؟' : 'Are you sure you want to delete this backup?')) return;
 
     loading.value.delete = path;
-    router.post(route('admin.backups.destroy'), {
-        data: { path },
+    router.post(route('admin.backups.destroy'), { path }, {
         preserveScroll: true,
         onFinish: () => { loading.value.delete = null; },
     });
@@ -129,6 +142,54 @@ function runCleanup() {
         </div>
         <div v-if="$page.props.flash?.error" class="mb-4 rounded-lg bg-red-50 border border-red-200 p-4 text-red-800">
             {{ $page.props.flash.error }}
+        </div>
+
+        <!-- Backup Health Banner -->
+        <div
+            class="mb-6 rounded-xl p-4 md:p-5 shadow-sm border flex items-center gap-4"
+            :class="summary.is_stale ? 'bg-red-50 border-red-200' : 'bg-emerald-50 border-emerald-200'"
+        >
+            <div
+                class="flex-shrink-0 rounded-full p-2.5"
+                :class="summary.is_stale ? 'bg-red-100' : 'bg-emerald-100'"
+            >
+                <svg v-if="summary.is_stale" class="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M5.07 19h13.86a2 2 0 001.71-3.03L13.71 4.97a2 2 0 00-3.42 0L3.36 15.97A2 2 0 005.07 19z" />
+                </svg>
+                <svg v-else class="h-6 w-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+            </div>
+            <div class="flex-1 min-w-0">
+                <h3 class="font-semibold" :class="summary.is_stale ? 'text-red-800' : 'text-emerald-800'">
+                    <template v-if="summary.count === 0">
+                        {{ isRtl ? 'لا توجد نسخ احتياطية بعد' : 'No backups found yet' }}
+                    </template>
+                    <template v-else-if="summary.is_stale">
+                        {{ isRtl ? 'تحذير: آخر نسخة احتياطية قديمة' : 'Warning: latest backup is stale' }}
+                    </template>
+                    <template v-else>
+                        {{ isRtl ? 'النسخ الاحتياطي يعمل بشكل سليم' : 'Backups are healthy' }}
+                    </template>
+                </h3>
+                <p class="text-sm mt-0.5" :class="summary.is_stale ? 'text-red-700' : 'text-emerald-700'">
+                    <template v-if="summary.count === 0">
+                        {{ isRtl ? 'لم يتم إنشاء أي نسخة بعد — يُتوقّع تشغيلها تلقائياً يومياً الساعة 2:00 صباحاً.' : 'No backup has run yet — the scheduled job runs daily at 2:00 AM.' }}
+                    </template>
+                    <template v-else>
+                        {{ isRtl ? 'آخر نسخة' : 'Last backup' }}: {{ lastBackupAge }}
+                        <span class="text-gray-400 mx-1">•</span>
+                        <span dir="ltr">{{ summary.last_backup_at }}</span>
+                        <span class="text-gray-400 mx-1">•</span>
+                        {{ summary.count }} {{ isRtl ? 'نسخة' : 'backups' }}
+                        <span class="text-gray-400 mx-1">•</span>
+                        {{ summary.total_size }}
+                    </template>
+                </p>
+                <p v-if="summary.is_stale && summary.count > 0" class="text-xs mt-1 text-red-600">
+                    {{ isRtl ? 'لم تُنشأ نسخة خلال آخر 24 ساعة. تحقّق من جدول المهام (cron) أو شغّل نسخة يدوياً الآن.' : 'No backup in the last 24 hours. Check the scheduler (cron) or run one manually now.' }}
+                </p>
+            </div>
         </div>
 
         <!-- Info Card -->

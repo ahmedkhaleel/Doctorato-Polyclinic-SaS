@@ -75,13 +75,19 @@ return [
     ],
 
     'notifications' => [
+        // Only notify on the events that need a human to act. A daily full
+        // backup + every-6h DB backup + daily cleanup would otherwise email
+        // ~6 "success/healthy" messages a day — training the admin to ignore
+        // the inbox and miss the failure alerts that actually matter. Keep
+        // failures + unhealthy only. (Success confirmation is visible on the
+        // admin Backups page and via backup:monitor.)
         'notifications' => [
             BackupHasFailedNotification::class => ['mail'],
             UnhealthyBackupWasFoundNotification::class => ['mail'],
             CleanupHasFailedNotification::class => ['mail'],
-            BackupWasSuccessfulNotification::class => ['mail'],
-            HealthyBackupWasFoundNotification::class => ['mail'],
-            CleanupWasSuccessfulNotification::class => ['mail'],
+            BackupWasSuccessfulNotification::class => [],
+            HealthyBackupWasFoundNotification::class => [],
+            CleanupWasSuccessfulNotification::class => [],
         ],
 
         'notifiable' => Notifiable::class,

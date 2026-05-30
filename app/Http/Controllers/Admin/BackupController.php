@@ -21,7 +21,41 @@ class BackupController extends Controller
 
         return Inertia::render('Admin/Backups/Index', [
             'backups' => $backups,
+            'summary' => $this->buildSummary($backups),
         ]);
+    }
+
+    /**
+     * Freshness/health summary so the page shows "last backup X ago / stale"
+     * rather than just a file list. Mirrors the backup.monitor max-age check
+     * (MaximumAgeInDays => 1) so the UI and the daily backup:monitor agree.
+     */
+    private function buildSummary(array $backups): array
+    {
+        if (empty($backups)) {
+            return [
+                'count' => 0,
+                'last_backup_at' => null,
+                'last_backup_age_hours' => null,
+                'is_stale' => true,
+                'max_age_hours' => 24,
+                'total_size' => '0 B',
+            ];
+        }
+
+        // getBackupList() already sorts newest-first by date.
+        $lastDate = $backups[0]['date'];
+        $ageHours = (int) round((time() - strtotime($lastDate)) / 3600);
+        $totalBytes = array_sum(array_column($backups, 'size_bytes'));
+
+        return [
+            'count' => count($backups),
+            'last_backup_at' => $lastDate,
+            'last_backup_age_hours' => $ageHours,
+            'is_stale' => $ageHours > 24,
+            'max_age_hours' => 24,
+            'total_size' => $this->formatBytes($totalBytes),
+        ];
     }
 
     /**
@@ -47,7 +81,7 @@ class BackupController extends Controller
                 'error' => $e->getMessage(),
             ]);
 
-            return back()->with('error', 'فشل النسخ الاحتياطي: ' . $e->getMessage());
+            return back()->with('error', 'فشل النسخ الاحتياطي: '.$e->getMessage());
         }
     }
 
@@ -74,7 +108,7 @@ class BackupController extends Controller
                 'error' => $e->getMessage(),
             ]);
 
-            return back()->with('error', 'فشل نسخ قاعدة البيانات: ' . $e->getMessage());
+            return back()->with('error', 'فشل نسخ قاعدة البيانات: '.$e->getMessage());
         }
     }
 
@@ -91,7 +125,7 @@ class BackupController extends Controller
 
         // Prevent path traversal — only allow files within the backup directory
         $appName = config('backup.backup.name');
-        if (! str_starts_with($path, $appName . '/') || str_contains($path, '..')) {
+        if (! str_starts_with($path, $appName.'/') || str_contains($path, '..')) {
             return back()->with('error', 'مسار غير صالح.');
         }
 
@@ -106,7 +140,7 @@ class BackupController extends Controller
             'path' => $path,
         ]);
 
-        AuditLogger::log('downloaded', null, ['path' => $path], 'Downloaded backup file: ' . basename($path));
+        AuditLogger::log('downloaded', null, ['path' => $path], 'Downloaded backup file: '.basename($path));
 
         return $disk->download($path);
     }
@@ -124,7 +158,7 @@ class BackupController extends Controller
 
         // Prevent path traversal — only allow files within the backup directory
         $appName = config('backup.backup.name');
-        if (! str_starts_with($path, $appName . '/') || str_contains($path, '..')) {
+        if (! str_starts_with($path, $appName.'/') || str_contains($path, '..')) {
             return back()->with('error', 'مسار غير صالح.');
         }
 
@@ -141,7 +175,7 @@ class BackupController extends Controller
             'path' => $path,
         ]);
 
-        AuditLogger::log('deleted', null, ['path' => $path], 'Deleted backup file: ' . basename($path));
+        AuditLogger::log('deleted', null, ['path' => $path], 'Deleted backup file: '.basename($path));
 
         return back()->with('success', 'تم حذف النسخة الاحتياطية.');
     }
@@ -156,7 +190,7 @@ class BackupController extends Controller
 
             return back()->with('success', 'تم تنظيف النسخ الاحتياطية القديمة.');
         } catch (\Throwable $e) {
-            return back()->with('error', 'فشل التنظيف: ' . $e->getMessage());
+            return back()->with('error', 'فشل التنظيف: '.$e->getMessage());
         }
     }
 
@@ -208,6 +242,6 @@ class BackupController extends Controller
             $i++;
         }
 
-        return round($bytes, 2) . ' ' . $units[$i];
+        return round($bytes, 2).' '.$units[$i];
     }
 }
