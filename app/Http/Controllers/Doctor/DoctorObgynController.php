@@ -112,7 +112,7 @@ class DoctorObgynController extends BaseDoctorController
             'antenatalVisits',
             'ultrasounds',
             'labTests',
-            'delivery',
+            'delivery.newbornPatient:id,full_name,file_number',
         ]);
 
         $supplies = \App\Services\ModuleManager::isEnabled('inventory')

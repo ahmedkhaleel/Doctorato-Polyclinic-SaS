@@ -1,8 +1,9 @@
 <script setup>
 import { Link, usePage } from '@inertiajs/vue3';
-import { ref, computed, onMounted } from 'vue';
+import { computed } from 'vue';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { useCurrency } from '@/Composables/useCurrency';
+import { useCountUp } from '@/Composables/useCountUp';
 
 // AdminLayout is applied via the <AdminLayout> wrapper below — do NOT also
 // set it via defineOptions, or the layout (and its header) renders twice.
@@ -18,14 +19,18 @@ const props = defineProps({
     upcomingDue: { type: Array, default: () => [] },
 });
 
-const mounted = ref(false);
-onMounted(() => setTimeout(() => { mounted.value = true; }, 50));
+const { values: counters, mounted } = useCountUp({
+    active_pregnancies: props.stats.active_pregnancies || 0,
+    high_risk: props.stats.high_risk || 0,
+    anc_this_month: props.stats.anc_this_month || 0,
+    deliveries_this_month: props.stats.deliveries_this_month || 0,
+});
 
 const cards = computed(() => [
-    { key: 'active_pregnancies', v: props.stats.active_pregnancies || 0, label: isRtl.value ? 'حمل نشط' : 'Active Pregnancies', color: ACCENT },
-    { key: 'high_risk', v: props.stats.high_risk || 0, label: isRtl.value ? 'عالي الخطورة' : 'High-Risk', color: '#EF4444' },
-    { key: 'anc_this_month', v: props.stats.anc_this_month || 0, label: isRtl.value ? 'متابعات هذا الشهر' : 'ANC This Month', color: '#1B365D' },
-    { key: 'deliveries_this_month', v: props.stats.deliveries_this_month || 0, label: isRtl.value ? 'ولادات هذا الشهر' : 'Deliveries', color: '#10B981' },
+    { key: 'active_pregnancies', label: isRtl.value ? 'حمل نشط' : 'Active Pregnancies', color: ACCENT },
+    { key: 'high_risk', label: isRtl.value ? 'عالي الخطورة' : 'High-Risk', color: '#EF4444' },
+    { key: 'anc_this_month', label: isRtl.value ? 'متابعات هذا الشهر' : 'ANC This Month', color: '#1B365D' },
+    { key: 'deliveries_this_month', label: isRtl.value ? 'ولادات هذا الشهر' : 'Deliveries', color: '#10B981' },
 ]);
 
 const trimesterTotal = computed(() => (props.trimesters[1] || 0) + (props.trimesters[2] || 0) + (props.trimesters[3] || 0) || 1);
@@ -50,7 +55,7 @@ function dueLabel(d) {
                      class="relative bg-white rounded-2xl shadow-sm border border-gray-100 p-5 overflow-hidden transition-all duration-500"
                      :class="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'" :style="{ transitionDelay: `${i*70}ms` }">
                     <span class="absolute top-0 inset-x-0 h-1" :style="{ background: c.color }"></span>
-                    <p class="text-3xl font-bold text-gray-900 tabular-nums">{{ c.v }}</p>
+                    <p class="text-3xl font-bold text-gray-900 tabular-nums">{{ counters[c.key] }}</p>
                     <p class="text-sm text-gray-500 mt-1">{{ c.label }}</p>
                 </div>
             </div>

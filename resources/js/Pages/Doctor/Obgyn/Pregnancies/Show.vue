@@ -159,6 +159,12 @@ function fmtDate(d) { return d ? new Date(d).toLocaleDateString(isRtl.value ? 'a
                             <span v-if="item.data.baby_weight_grams">{{ item.data.baby_weight_grams }}g</span>
                             <span v-if="item.data.baby_sex">{{ item.data.baby_sex }}</span>
                         </div>
+                        <div v-if="item.type === 'delivery' && item.data.newborn_patient" class="mt-2">
+                            <span class="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4"/></svg>
+                                {{ isRtl ? 'سُجّل المولود بطب الأطفال' : 'Newborn registered in Pediatrics' }} — {{ item.data.newborn_patient.full_name }} ({{ item.data.newborn_patient.file_number }})
+                            </span>
+                        </div>
                     </div>
                 </li>
             </ol>

@@ -136,6 +136,28 @@ class ObgynDoctorFlowTest extends TestCase
     }
 
     #[Test]
+    public function delivery_can_register_a_newborn_and_link_it(): void
+    {
+        $patient = $this->female();
+        $pregnancy = Pregnancy::create(['patient_id' => $patient->id, 'doctor_id' => $this->doctor->id, 'lmp' => '2026-01-01', 'status' => 'active']);
+
+        $this->actingAs($this->doctorUser)
+            ->post("/doctor/obgyn/pregnancies/{$pregnancy->id}/delivery", [
+                'delivery_date' => '2026-10-05', 'delivery_mode' => 'nvd', 'outcome' => 'live',
+                'baby_sex' => 'female', 'baby_weight_grams' => 3200, 'create_newborn' => true, 'bill' => false,
+            ])->assertRedirect();
+
+        $delivery = $pregnancy->fresh()->delivery;
+        $this->assertNotNull($delivery->newborn_patient_id);
+        $this->assertDatabaseHas('patients', ['id' => $delivery->newborn_patient_id, 'gender' => 'female']);
+
+        // The pregnancy page exposes the linked newborn.
+        $this->actingAs($this->doctorUser)
+            ->get("/doctor/obgyn/pregnancies/{$pregnancy->id}")
+            ->assertInertia(fn ($p) => $p->where('delivery.newborn_patient.id', $delivery->newborn_patient_id));
+    }
+
+    #[Test]
     public function non_doctor_cannot_access_the_module(): void
     {
         $patientRole = Role::firstOrCreate(

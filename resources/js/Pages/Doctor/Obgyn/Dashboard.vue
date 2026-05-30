@@ -1,7 +1,8 @@
 <script setup>
 import { Link, usePage } from '@inertiajs/vue3';
-import { ref, computed, onMounted } from 'vue';
+import { computed } from 'vue';
 import DoctorLayout from '@/Layouts/DoctorLayout.vue';
+import { useCountUp } from '@/Composables/useCountUp';
 
 defineOptions({ layout: DoctorLayout });
 
@@ -16,21 +17,11 @@ const props = defineProps({
 
 const ACCENT = '#DB2777'; // OB/GYN rose
 
-const mounted = ref(false);
-const counters = ref({ active_pregnancies: 0, high_risk: 0, anc_this_month: 0, deliveries_this_month: 0 });
-
-onMounted(() => {
-    setTimeout(() => { mounted.value = true; }, 50);
-    const targets = { ...counters.value, ...props.stats };
-    const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
-    if (reduce) { counters.value = targets; return; }
-    const start = performance.now(), dur = 1100;
-    const step = (now) => {
-        const e = 1 - Math.pow(1 - Math.min((now - start) / dur, 1), 3);
-        for (const k in targets) counters.value[k] = Math.round((targets[k] || 0) * e);
-        if (e < 1) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
+const { values: counters, mounted } = useCountUp({
+    active_pregnancies: props.stats.active_pregnancies || 0,
+    high_risk: props.stats.high_risk || 0,
+    anc_this_month: props.stats.anc_this_month || 0,
+    deliveries_this_month: props.stats.deliveries_this_month || 0,
 });
 
 const greeting = computed(() => {
