@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 use App\Models\Booking;
 use App\Models\Doctor;
-use App\Models\DoctorSchedule;
 use App\Models\Invoice;
 use App\Models\OnlineConsultation;
 use App\Models\Patient;
@@ -42,8 +41,8 @@ class DataIntegrityCheckCommand extends Command
         $orphanBookings = Booking::whereDoesntHave('patient')->count();
         if ($orphanBookings > 0) {
             $findings[] = [
-                'check'  => 'orphan_bookings',
-                'count'  => $orphanBookings,
+                'check' => 'orphan_bookings',
+                'count' => $orphanBookings,
                 'detail' => 'Bookings whose patient no longer exists (even in trashed)',
             ];
         }
@@ -52,8 +51,8 @@ class DataIntegrityCheckCommand extends Command
         $orphanInvoices = Invoice::whereDoesntHave('patient')->count();
         if ($orphanInvoices > 0) {
             $findings[] = [
-                'check'  => 'orphan_invoices',
-                'count'  => $orphanInvoices,
+                'check' => 'orphan_invoices',
+                'count' => $orphanInvoices,
                 'detail' => 'Invoices whose patient no longer exists',
             ];
         }
@@ -63,17 +62,17 @@ class DataIntegrityCheckCommand extends Command
             $invoiceDrift = DB::table('invoices')
                 ->join('invoice_items', 'invoices.id', '=', 'invoice_items.invoice_id')
                 ->select('invoices.id', 'invoices.total_amount',
-                         DB::raw('SUM(invoice_items.total_price) as items_total'))
+                    DB::raw('SUM(invoice_items.total_price) as items_total'))
                 ->groupBy('invoices.id', 'invoices.total_amount')
                 ->havingRaw('ABS(invoices.total_amount - SUM(invoice_items.total_price)) > 0.01')
                 ->limit(50)
                 ->get();
             if ($invoiceDrift->isNotEmpty()) {
                 $findings[] = [
-                    'check'  => 'invoice_total_drift',
-                    'count'  => $invoiceDrift->count(),
+                    'check' => 'invoice_total_drift',
+                    'count' => $invoiceDrift->count(),
                     'detail' => 'Invoices whose total_amount disagrees with sum(items.total_price)',
-                    'ids'    => $invoiceDrift->pluck('id')->toArray(),
+                    'ids' => $invoiceDrift->pluck('id')->toArray(),
                 ];
             }
         } catch (\Throwable $e) {
@@ -87,12 +86,12 @@ class DataIntegrityCheckCommand extends Command
                 ->where('is_active', true))
             ->pluck('id')
             ->toArray();
-        if (!empty($badDoctors)) {
+        if (! empty($badDoctors)) {
             $findings[] = [
-                'check'  => 'online_doctor_no_schedule',
-                'count'  => count($badDoctors),
+                'check' => 'online_doctor_no_schedule',
+                'count' => count($badDoctors),
                 'detail' => 'Doctors with online_consultation_enabled=true but zero online/both schedules',
-                'ids'    => $badDoctors,
+                'ids' => $badDoctors,
             ];
         }
 
@@ -101,12 +100,12 @@ class DataIntegrityCheckCommand extends Command
             ->where('created_at', '<', now()->subDay())
             ->pluck('id')
             ->toArray();
-        if (!empty($stuck)) {
+        if (! empty($stuck)) {
             $findings[] = [
-                'check'  => 'stuck_pending_consultations',
-                'count'  => count($stuck),
+                'check' => 'stuck_pending_consultations',
+                'count' => count($stuck),
                 'detail' => 'OnlineConsultation rows still pending payment for 24h+',
-                'ids'    => array_slice($stuck, 0, 50),
+                'ids' => array_slice($stuck, 0, 50),
             ];
         }
 
@@ -114,8 +113,8 @@ class DataIntegrityCheckCommand extends Command
         $patientsNoUser = Patient::whereNull('user_id')->where('is_active', true)->count();
         if ($patientsNoUser > 0) {
             $findings[] = [
-                'check'  => 'active_patients_without_user',
-                'count'  => $patientsNoUser,
+                'check' => 'active_patients_without_user',
+                'count' => $patientsNoUser,
                 'detail' => 'Active patients with no linked user — cannot log in to the portal',
             ];
         }
@@ -130,8 +129,8 @@ class DataIntegrityCheckCommand extends Command
                 ->count();
             if ($slipsNoExpense > 0) {
                 $findings[] = [
-                    'check'  => 'paid_slip_without_expense',
-                    'count'  => $slipsNoExpense,
+                    'check' => 'paid_slip_without_expense',
+                    'count' => $slipsNoExpense,
                     'detail' => 'Paid salary slips not recorded in the expense ledger',
                 ];
             }
@@ -142,8 +141,8 @@ class DataIntegrityCheckCommand extends Command
                 ->count();
             if ($payoutsNoExpense > 0) {
                 $findings[] = [
-                    'check'  => 'paid_payout_without_expense',
-                    'count'  => $payoutsNoExpense,
+                    'check' => 'paid_payout_without_expense',
+                    'count' => $payoutsNoExpense,
                     'detail' => 'Paid doctor payouts not recorded in the expense ledger',
                 ];
             }
@@ -161,8 +160,8 @@ class DataIntegrityCheckCommand extends Command
                 ->count();
             if ($untaggedInvoices > 0) {
                 $findings[] = [
-                    'check'  => 'invoice_missing_module',
-                    'count'  => $untaggedInvoices,
+                    'check' => 'invoice_missing_module',
+                    'count' => $untaggedInvoices,
                     'detail' => 'Visit-based invoices with no module tag (excluded from module revenue)',
                 ];
             }
@@ -179,8 +178,8 @@ class DataIntegrityCheckCommand extends Command
                 ->count();
             if ($doubleRisk > 0) {
                 $findings[] = [
-                    'check'  => 'salary_doctor_cash_payout',
-                    'count'  => $doubleRisk,
+                    'check' => 'salary_doctor_cash_payout',
+                    'count' => $doubleRisk,
                     'detail' => 'Salary-mode doctors with a cash-paid payout (double-pay risk — commission also on slip)',
                 ];
             }
@@ -199,8 +198,8 @@ class DataIntegrityCheckCommand extends Command
                 ->count();
             if ($claimsNoPayment > 0) {
                 $findings[] = [
-                    'check'  => 'paid_claim_without_payment',
-                    'count'  => $claimsNoPayment,
+                    'check' => 'paid_claim_without_payment',
+                    'count' => $claimsNoPayment,
                     'detail' => 'Reimbursed insurance claims not recorded as an invoice payment (income missing)',
                 ];
             }
@@ -216,8 +215,8 @@ class DataIntegrityCheckCommand extends Command
                 ->count();
             if ($commNoExpense > 0) {
                 $findings[] = [
-                    'check'  => 'paid_commission_without_expense',
-                    'count'  => $commNoExpense,
+                    'check' => 'paid_commission_without_expense',
+                    'count' => $commNoExpense,
                     'detail' => 'Paid marketer commissions not recorded in the expense ledger',
                 ];
             }
@@ -233,9 +232,60 @@ class DataIntegrityCheckCommand extends Command
                 ->count();
             if ($consultNoInvoice > 0) {
                 $findings[] = [
-                    'check'  => 'paid_consultation_without_invoice',
-                    'count'  => $consultNoInvoice,
+                    'check' => 'paid_consultation_without_invoice',
+                    'count' => $consultNoInvoice,
                     'detail' => 'Paid telemedicine consultations not recorded as an invoice (income missing)',
+                ];
+            }
+        } catch (\Throwable $e) {
+            // not fatal
+        }
+
+        // ── 13. Delivered pregnancies with no delivery record ──
+        // Guards the obstetric flow: a pregnancy marked delivered must carry a
+        // DeliveryRecord, else the delivery (and its billing) is unrecorded.
+        try {
+            $deliveredNoRecord = \App\Models\Pregnancy::where('status', 'delivered')
+                ->whereDoesntHave('delivery')
+                ->count();
+            if ($deliveredNoRecord > 0) {
+                $findings[] = [
+                    'check' => 'pregnancy_delivered_without_record',
+                    'count' => $deliveredNoRecord,
+                    'detail' => 'Pregnancies marked delivered with no delivery record',
+                ];
+            }
+        } catch (\Throwable $e) {
+            // not fatal
+        }
+
+        // ── 14. Active pregnancies with no antenatal visit in 6+ weeks ──
+        try {
+            $stalePregnancies = \App\Models\Pregnancy::where('status', 'active')
+                ->where('created_at', '<', now()->subWeeks(6))
+                ->whereDoesntHave('antenatalVisits', fn ($q) => $q->where('visit_date', '>=', now()->subWeeks(6)))
+                ->count();
+            if ($stalePregnancies > 0) {
+                $findings[] = [
+                    'check' => 'active_pregnancy_no_recent_anc',
+                    'count' => $stalePregnancies,
+                    'detail' => 'Active pregnancies with no antenatal visit in the last 6 weeks',
+                ];
+            }
+        } catch (\Throwable $e) {
+            // not fatal
+        }
+
+        // ── 15. Obstetric records on a non-female patient ──────
+        // OB/GYN is female-only; a pregnancy on a non-female patient is a
+        // data-entry error worth surfacing.
+        try {
+            $wrongGender = \App\Models\Pregnancy::whereHas('patient', fn ($q) => $q->where('gender', '!=', 'female'))->count();
+            if ($wrongGender > 0) {
+                $findings[] = [
+                    'check' => 'pregnancy_non_female_patient',
+                    'count' => $wrongGender,
+                    'detail' => 'Pregnancy records linked to a non-female patient',
                 ];
             }
         } catch (\Throwable $e) {
@@ -245,25 +295,25 @@ class DataIntegrityCheckCommand extends Command
         // ── Report ──────────────────────────────────────────
         if ($this->option('json')) {
             $this->line(json_encode([
-                'ok'       => empty($findings),
-                'at'       => now()->toIso8601String(),
+                'ok' => empty($findings),
+                'at' => now()->toIso8601String(),
                 'findings' => $findings,
             ], JSON_PRETTY_PRINT));
         } else {
             if (empty($findings)) {
                 $this->info('✓ No integrity issues found.');
             } else {
-                $this->warn("Found " . count($findings) . " integrity issue(s):\n");
+                $this->warn('Found '.count($findings)." integrity issue(s):\n");
                 $rows = array_map(fn ($f) => [$f['check'], $f['count'], $f['detail']], $findings);
                 $this->table(['Check', 'Count', 'Detail'], $rows);
             }
         }
 
-        if ($this->option('log') && !empty($findings)) {
+        if ($this->option('log') && ! empty($findings)) {
             Log::warning('[data:integrity-check] issues found', ['findings' => $findings]);
         }
 
-        if ($this->option('alert') && !empty($findings)) {
+        if ($this->option('alert') && ! empty($findings)) {
             $this->sendAlertIfNotRecent($findings);
         }
 
@@ -277,7 +327,8 @@ class DataIntegrityCheckCommand extends Command
         $cacheKey = 'integrity_alert:last_sent';
         $last = \Illuminate\Support\Facades\Cache::get($cacheKey, 0);
         if ((time() - $last) < 86400) {  // 24h cooldown
-            $this->warn('Integrity alert skipped (cooldown — last sent ' . (time() - $last) . 's ago).');
+            $this->warn('Integrity alert skipped (cooldown — last sent '.(time() - $last).'s ago).');
+
             return;
         }
 
@@ -286,19 +337,20 @@ class DataIntegrityCheckCommand extends Command
 
         if (! $email) {
             $this->warn('No admin email configured — skipping alert.');
+
             return;
         }
 
-        $subject = '[Doctorato] Data integrity issues: ' . count($findings) . ' check(s)';
+        $subject = '[Doctorato] Data integrity issues: '.count($findings).' check(s)';
         $body = "Weekly integrity sweep found issues that need attention.\n\n";
         foreach ($findings as $f) {
             $body .= "• {$f['check']}: {$f['count']} — {$f['detail']}\n";
-            if (!empty($f['ids'])) {
-                $body .= "  Sample IDs: " . implode(', ', array_slice($f['ids'], 0, 10)) . "\n";
+            if (! empty($f['ids'])) {
+                $body .= '  Sample IDs: '.implode(', ', array_slice($f['ids'], 0, 10))."\n";
             }
         }
         $body .= "\nRun 'php artisan data:integrity-check' for full details.\n";
-        $body .= "Diagnostics: " . rtrim(config('app.url'), '/') . "/ar/admin/diagnostics\n";
+        $body .= 'Diagnostics: '.rtrim(config('app.url'), '/')."/ar/admin/diagnostics\n";
 
         try {
             \Illuminate\Support\Facades\Mail::raw($body, function ($m) use ($email, $subject) {

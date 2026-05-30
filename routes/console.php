@@ -61,6 +61,11 @@ Schedule::command('pediatric:vaccination-reminders --type=upcoming --days=7')->d
 // Pediatric: Send overdue vaccination alerts weekly on Tuesdays at 10:30 AM
 Schedule::command('pediatric:vaccination-reminders --type=overdue --days=14')->weeklyOn(2, '10:30');
 
+// OB/GYN: antenatal-visit reminders + EDD-approaching alerts daily 09:30; pap recall daily 10:00.
+Schedule::command('obgyn:reminders --type=anc')->dailyAt('09:30');
+Schedule::command('obgyn:reminders --type=edd')->dailyAt('09:30');
+Schedule::command('obgyn:reminders --type=pap')->dailyAt('10:00');
+
 // Inventory: Check low stock and auto-generate purchase orders daily at 9:00 AM
 Schedule::command('inventory:check-low-stock')->dailyAt('09:00');
 
