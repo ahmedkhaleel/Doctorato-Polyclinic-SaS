@@ -30,6 +30,7 @@ class OnlineConsultationBookingTest extends TestCase
     use RefreshDatabase;
 
     private User $patientUser;
+
     private Doctor $doctor;
 
     protected function setUp(): void
@@ -52,12 +53,12 @@ class OnlineConsultationBookingTest extends TestCase
             'is_active' => true,
         ]);
 
-        Patient::create([
-            'user_id' => $this->patientUser->id,
+        // user_id + is_active are guarded against mass assignment — set directly.
+        $patient = Patient::create([
             'full_name' => 'Test Patient',
             'phone' => '+971500000000',
-            'is_active' => true,
         ]);
+        $patient->forceFill(['user_id' => $this->patientUser->id, 'is_active' => true])->save();
 
         $this->doctor = Doctor::create([
             'name_ar' => 'د. اختبار', 'name_en' => 'Dr. Test',
@@ -75,12 +76,12 @@ class OnlineConsultationBookingTest extends TestCase
         $tomorrow = Carbon::tomorrow();
         $systemDay = [0 => 1, 1 => 2, 2 => 3, 3 => 4, 4 => 5, 5 => 6, 6 => 0][$tomorrow->dayOfWeek];
         DoctorSchedule::create([
-            'doctor_id'  => $this->doctor->id,
+            'doctor_id' => $this->doctor->id,
             'day_of_week' => $systemDay,
             'start_time' => '10:00:00',
-            'end_time'   => '13:00:00',
-            'mode'       => 'both',
-            'is_active'  => true,
+            'end_time' => '13:00:00',
+            'mode' => 'both',
+            'is_active' => true,
         ]);
     }
 
@@ -140,6 +141,7 @@ class OnlineConsultationBookingTest extends TestCase
         $response->assertInertia(fn ($page) => $page
             ->where('availability', function ($availability) {
                 $withSlots = collect($availability)->where('has_available', true);
+
                 return $withSlots->isNotEmpty();
             })
         );
