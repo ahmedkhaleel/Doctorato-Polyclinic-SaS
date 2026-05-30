@@ -6,10 +6,12 @@ use App\Models\AntenatalVisit;
 use App\Models\DeliveryRecord;
 use App\Models\Patient;
 use App\Models\Pregnancy;
+use App\Models\Setting;
 use App\Models\Visit;
 use App\Services\AuditLogger;
 use App\Services\ObgynBillingService;
 use App\Services\ObstetricCalculatorService;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -299,6 +301,26 @@ class DoctorObgynController extends BaseDoctorController
         AuditLogger::log('updated', $pregnancy, ['delivery' => $delivery->id], 'Recorded delivery');
 
         return back()->with('success', $this->msg('Delivery recorded.', 'تم تسجيل الولادة.'));
+    }
+
+    /**
+     * Printable antenatal card — pregnancy summary + ANC visits + ultrasounds.
+     */
+    public function antenatalCard(Request $request, Pregnancy $pregnancy)
+    {
+        $pregnancy->load(['patient', 'doctor:id,name_ar,name_en', 'antenatalVisits', 'ultrasounds']);
+
+        $pdf = Pdf::loadView('pdf.obgyn-antenatal-card', [
+            'pregnancy' => $pregnancy,
+            'gaLabel' => $pregnancy->lmp ? $this->calc->gestationalAgeLabel($pregnancy->lmp) : '—',
+            'clinicName' => Setting::get('clinic_name', 'Doctorato Polyclinic'),
+            'clinicPhone' => Setting::get('clinic_phone', ''),
+        ]);
+        $pdf->setPaper('A4', 'portrait');
+
+        $filename = 'AntenatalCard-'.($pregnancy->patient->file_number ?? $pregnancy->id).'.pdf';
+
+        return $pdf->stream($filename);
     }
 
     /**

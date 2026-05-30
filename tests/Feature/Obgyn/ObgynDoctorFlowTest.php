@@ -119,6 +119,23 @@ class ObgynDoctorFlowTest extends TestCase
     }
 
     #[Test]
+    public function antenatal_card_pdf_renders(): void
+    {
+        $patient = $this->female();
+        $pregnancy = Pregnancy::create([
+            'patient_id' => $patient->id, 'doctor_id' => $this->doctor->id,
+            'lmp' => '2026-01-01', 'edd' => '2026-10-08', 'status' => 'active',
+        ]);
+        \App\Models\AntenatalVisit::create(['pregnancy_id' => $pregnancy->id, 'visit_date' => '2026-04-01', 'weight_kg' => 64]);
+
+        $response = $this->actingAs($this->doctorUser)
+            ->get("/doctor/obgyn/pregnancies/{$pregnancy->id}/antenatal-card");
+
+        $response->assertOk();
+        $this->assertSame('application/pdf', $response->headers->get('content-type'));
+    }
+
+    #[Test]
     public function non_doctor_cannot_access_the_module(): void
     {
         $patientRole = Role::firstOrCreate(
