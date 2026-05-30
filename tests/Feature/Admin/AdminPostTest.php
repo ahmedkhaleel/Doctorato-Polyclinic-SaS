@@ -95,7 +95,7 @@ class AdminPostTest extends TestCase
             'author_id' => $this->doctor->id,
         ]);
 
-        $this->actingAs($this->admin)->put("/admin/posts/{$post->id}", [
+        $this->actingAs($this->admin)->post("/admin/posts/{$post->id}/update", [
             'title_ar' => 'محدث',
             'title_en' => 'Updated Post',
             'content_ar' => 'محتوى محدث',
@@ -116,7 +116,7 @@ class AdminPostTest extends TestCase
             'author_id' => $this->doctor->id,
         ]);
 
-        $this->actingAs($this->admin)->delete("/admin/posts/{$post->id}")
+        $this->actingAs($this->admin)->post("/admin/posts/{$post->id}/delete")
             ->assertRedirect();
 
         $this->assertDatabaseMissing('posts', ['id' => $post->id]);
