@@ -3,7 +3,8 @@ import { useForm, usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 
-defineOptions({ layout: AdminLayout });
+// AdminLayout is applied via the <AdminLayout> wrapper below — do NOT also
+// set it via defineOptions, or the layout (and its header) renders twice.
 
 const page = usePage();
 const isRtl = computed(() => (page.props.dir || 'rtl') === 'rtl');

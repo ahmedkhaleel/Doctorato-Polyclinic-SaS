@@ -46,8 +46,7 @@ function dueLabel(d) {
 </script>
 
 <template>
-    <SecretaryLayout>
-        <div class="space-y-4" :dir="isRtl ? 'rtl' : 'ltr'">
+    <div class="space-y-4" :dir="isRtl ? 'rtl' : 'ltr'">
             <div class="flex items-center justify-between flex-wrap gap-3">
                 <div class="flex items-center gap-3">
                     <span class="w-2 h-8 rounded-full" :style="{ background: ACCENT }"></span>
@@ -132,7 +131,6 @@ function dueLabel(d) {
                 </Transition>
             </Teleport>
         </div>
-    </SecretaryLayout>
 </template>
 
 <style scoped>
