@@ -74,6 +74,16 @@ const navGroups = computed(() => [
         ],
     },
     {
+        title: isRtl.value ? 'الجلدية والتجميل' : 'Derma & Cosmetic',
+        key: 'derma',
+        moduleKey: 'derma',
+        items: [
+            { label: isRtl.value ? 'لوحة التحكم' : 'Dashboard',     href: '/doctor/derma',                 icon: 'grid' },
+            { label: isRtl.value ? 'المرضى' : 'Patients',           href: '/doctor/derma/patients',        icon: 'heart' },
+            { label: isRtl.value ? 'خطط العلاج' : 'Treatment Plans', href: '/doctor/derma/treatment-plans', icon: 'clipboard' },
+        ],
+    },
+    {
         title: isRtl.value ? 'طب الأسنان' : 'Dental',
         key: 'dental',
         moduleKey: 'dental',

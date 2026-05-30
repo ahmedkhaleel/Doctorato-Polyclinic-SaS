@@ -244,6 +244,15 @@ Route::middleware('doctor.auth')->group(function () {
         Route::get('/patients/{patient}/medical-leave', [DoctorPediatricExtraController::class, 'medicalLeavePdf'])->name('doctor.pediatric.patients.medicalLeave');
     });
 
+    // ─── Dermatology & Cosmetic Module ──────────────────────
+    Route::prefix('derma')->middleware('module:derma')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Doctor\DoctorDermaController::class, 'dashboard'])->name('doctor.derma.dashboard');
+        Route::get('/patients', [\App\Http\Controllers\Doctor\DoctorDermaController::class, 'patients'])->name('doctor.derma.patients.index');
+        Route::get('/patients/{patient}', [\App\Http\Controllers\Doctor\DoctorDermaController::class, 'patientShow'])->name('doctor.derma.patients.show');
+        Route::post('/patients/{patient}/sessions', [\App\Http\Controllers\Doctor\DoctorDermaController::class, 'storeDermaSession'])->name('doctor.derma.sessions.store');
+        Route::get('/treatment-plans', [\App\Http\Controllers\Doctor\DoctorDermaController::class, 'treatmentPlans'])->name('doctor.derma.treatment-plans.index');
+    });
+
     // ─── OB/GYN Module ──────────────────────────────────────
     Route::prefix('obgyn')->middleware('module:obgyn')->group(function () {
         Route::get('/', [\App\Http\Controllers\Doctor\DoctorObgynController::class, 'dashboard'])->name('doctor.obgyn.dashboard');
