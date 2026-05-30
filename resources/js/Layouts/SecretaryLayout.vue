@@ -105,6 +105,13 @@ const navGroups = [
         ],
     },
     {
+        key: 'obgyn', titleEn: 'OB/GYN', titleAr: 'النساء والتوليد',
+        moduleKey: 'obgyn',
+        items: [
+            { labelEn: 'Pregnancies', labelAr: 'ملفات الحمل', href: '/secretary/obgyn/pregnancies', icon: 'patients' },
+        ],
+    },
+    {
         key: 'hr', titleEn: 'HR', titleAr: 'الموارد البشرية',
         moduleKey: 'hr',
         items: [

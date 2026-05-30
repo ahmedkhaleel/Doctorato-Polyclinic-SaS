@@ -224,6 +224,12 @@ Route::middleware('secretary.auth')->group(function () {
         Route::post('/vaccinations/batch-status', [\App\Http\Controllers\Secretary\SecretaryPediatricVaccinationController::class, 'batchUpdateStatus'])->name('secretary.pediatric.vaccinations.batchUpdateStatus');
     });
 
+    // ─── OB/GYN Module ──────────────────────────────────────
+    Route::prefix('obgyn')->middleware('module:obgyn')->group(function () {
+        Route::get('/pregnancies', [\App\Http\Controllers\Secretary\SecretaryObgynController::class, 'pregnancies'])->name('secretary.obgyn.pregnancies.index');
+        Route::post('/pregnancies', [\App\Http\Controllers\Secretary\SecretaryObgynController::class, 'storePregnancy'])->name('secretary.obgyn.pregnancies.store');
+    });
+
     // ─── Profile ────────────────────────────────────────────
     Route::get('/profile', [SecretaryProfileController::class, 'index'])->name('secretary.profile.index');
     Route::post('/profile/update', [SecretaryProfileController::class, 'update'])->name('secretary.profile.update');
