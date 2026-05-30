@@ -244,6 +244,18 @@ Route::middleware('doctor.auth')->group(function () {
         Route::get('/patients/{patient}/medical-leave', [DoctorPediatricExtraController::class, 'medicalLeavePdf'])->name('doctor.pediatric.patients.medicalLeave');
     });
 
+    // ─── OB/GYN Module ──────────────────────────────────────
+    Route::prefix('obgyn')->middleware('module:obgyn')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Doctor\DoctorObgynController::class, 'dashboard'])->name('doctor.obgyn.dashboard');
+        Route::get('/pregnancies', [\App\Http\Controllers\Doctor\DoctorObgynController::class, 'pregnancies'])->name('doctor.obgyn.pregnancies.index');
+        Route::get('/pregnancies/{pregnancy}', [\App\Http\Controllers\Doctor\DoctorObgynController::class, 'pregnancyShow'])->name('doctor.obgyn.pregnancies.show');
+        Route::post('/pregnancies', [\App\Http\Controllers\Doctor\DoctorObgynController::class, 'storePregnancy'])->name('doctor.obgyn.pregnancies.store');
+        Route::post('/pregnancies/{pregnancy}/antenatal', [\App\Http\Controllers\Doctor\DoctorObgynController::class, 'storeAntenatalVisit'])->name('doctor.obgyn.antenatal.store');
+        Route::post('/pregnancies/{pregnancy}/ultrasound', [\App\Http\Controllers\Doctor\DoctorObgynController::class, 'storeUltrasound'])->name('doctor.obgyn.ultrasound.store');
+        Route::post('/pregnancies/{pregnancy}/lab', [\App\Http\Controllers\Doctor\DoctorObgynController::class, 'storeLab'])->name('doctor.obgyn.lab.store');
+        Route::post('/pregnancies/{pregnancy}/delivery', [\App\Http\Controllers\Doctor\DoctorObgynController::class, 'storeDelivery'])->name('doctor.obgyn.delivery.store');
+    });
+
     // ─── Online Consultations ──────────────────────────────
     Route::get('/online-consultations', [\App\Http\Controllers\Doctor\OnlineConsultationController::class, 'index'])
         ->name('doctor.online-consultations.index');

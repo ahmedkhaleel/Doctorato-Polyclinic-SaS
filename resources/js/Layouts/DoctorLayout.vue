@@ -100,6 +100,15 @@ const navGroups = computed(() => [
         ],
     },
     {
+        title: isRtl.value ? 'النساء والتوليد' : 'OB/GYN',
+        key: 'obgyn',
+        moduleKey: 'obgyn',
+        items: [
+            { label: isRtl.value ? 'لوحة التحكم' : 'Dashboard',  href: '/doctor/obgyn',             icon: 'grid' },
+            { label: isRtl.value ? 'ملفات الحمل' : 'Pregnancies', href: '/doctor/obgyn/pregnancies', icon: 'heart' },
+        ],
+    },
+    {
         title: isRtl.value ? 'خدمات عن بُعد' : 'Telemedicine',
         key: 'telemedicine',
         moduleKey: 'telemedicine',
