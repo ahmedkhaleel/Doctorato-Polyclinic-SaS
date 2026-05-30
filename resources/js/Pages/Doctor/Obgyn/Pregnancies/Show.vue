@@ -15,6 +15,7 @@ const props = defineProps({
     ultrasounds: { type: Array, default: () => [] },
     labTests: { type: Array, default: () => [] },
     delivery: { type: Object, default: null },
+    supplies: { type: Array, default: () => [] },
 });
 
 const isActive = computed(() => props.pregnancy.status === 'active');
@@ -52,9 +53,9 @@ const modal = ref(null); // 'anc' | 'us' | 'lab' | 'delivery'
 const pid = props.pregnancy.id;
 
 const ancForm = useForm({ visit_date: new Date().toISOString().slice(0, 10), weight_kg: '', bp_systolic: '', bp_diastolic: '', fundal_height_cm: '', fetal_heart_rate: '', presentation: '', edema: false, urine_protein: '', urine_glucose: '', complaints: '', plan: '', next_visit_date: '', bill: true });
-const usForm = useForm({ scan_date: new Date().toISOString().slice(0, 10), scan_type: 'growth', gestational_age_weeks: '', bpd_mm: '', hc_mm: '', ac_mm: '', fl_mm: '', efw_grams: '', placenta_position: '', afi: '', fetal_count: 1, fetal_heart: true, presentation: '', findings: '', bill: true });
+const usForm = useForm({ scan_date: new Date().toISOString().slice(0, 10), scan_type: 'growth', gestational_age_weeks: '', bpd_mm: '', hc_mm: '', ac_mm: '', fl_mm: '', efw_grams: '', placenta_position: '', afi: '', fetal_count: 1, fetal_heart: true, presentation: '', findings: '', supply_id: '', consumption_qty: '', bill: true });
 const labForm = useForm({ test_type: '', value: '', unit: '', reference_range: '', result_date: new Date().toISOString().slice(0, 10), is_abnormal: false, notes: '' });
-const delForm = useForm({ delivery_date: new Date().toISOString().slice(0, 10), delivery_mode: 'nvd', place: '', gestational_age_at_delivery: '', outcome: 'live', baby_weight_grams: '', baby_sex: '', apgar_1: '', apgar_5: '', complications: '', notes: '', create_newborn: true, bill: true });
+const delForm = useForm({ delivery_date: new Date().toISOString().slice(0, 10), delivery_mode: 'nvd', place: '', gestational_age_at_delivery: '', outcome: 'live', baby_weight_grams: '', baby_sex: '', apgar_1: '', apgar_5: '', complications: '', notes: '', supply_id: '', consumption_qty: '', create_newborn: true, bill: true });
 
 const close = () => { modal.value = null; };
 const submit = (form, routeName) => form.post(route(routeName, pid), { preserveScroll: true, onSuccess: () => { close(); form.reset(); } });
@@ -215,6 +216,12 @@ function fmtDate(d) { return d ? new Date(d).toLocaleDateString(isRtl.value ? 'a
                                 <div><label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'عدد الأجنّة' : 'Fetuses' }}</label><input v-model="usForm.fetal_count" type="number" min="1" class="w-full rounded-xl border-gray-200 text-sm focus:border-rose-400 focus:ring-rose-400" /></div>
                             </div>
                             <div><label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'الملاحظات' : 'Findings' }}</label><textarea v-model="usForm.findings" rows="2" class="w-full rounded-xl border-gray-200 text-sm focus:border-rose-400 focus:ring-rose-400"></textarea></div>
+                            <div v-if="supplies.length" class="grid grid-cols-3 gap-3">
+                                <div class="col-span-2"><label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'مستلزم (اختياري)' : 'Supply (optional)' }}</label>
+                                    <select v-model="usForm.supply_id" class="w-full rounded-xl border-gray-200 text-sm focus:border-rose-400 focus:ring-rose-400"><option value="">—</option><option v-for="s in supplies" :key="s.id" :value="s.id">{{ isRtl ? s.name_ar : s.name_en }}</option></select>
+                                </div>
+                                <div><label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'الكمية' : 'Qty' }}</label><input v-model="usForm.consumption_qty" type="number" step="0.1" min="0" class="w-full rounded-xl border-gray-200 text-sm focus:border-rose-400 focus:ring-rose-400" /></div>
+                            </div>
                             <label class="flex items-center gap-2 text-sm text-gray-700"><input v-model="usForm.bill" type="checkbox" class="rounded text-rose-600" /> {{ isRtl ? 'إصدار فاتورة' : 'Create invoice' }}</label>
                             <div class="flex justify-end gap-2 pt-2"><button type="button" @click="close" class="px-4 py-2.5 rounded-xl text-gray-600 hover:bg-gray-100 text-sm font-medium">{{ isRtl ? 'إلغاء' : 'Cancel' }}</button><button type="submit" :disabled="usForm.processing" class="px-5 py-2.5 rounded-xl text-white text-sm font-semibold disabled:opacity-50" :style="{ background: ACCENT }">{{ isRtl ? 'حفظ' : 'Save' }}</button></div>
                         </form>
@@ -246,6 +253,12 @@ function fmtDate(d) { return d ? new Date(d).toLocaleDateString(isRtl.value ? 'a
                                 <div><label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'الجنس' : 'Sex' }}</label><select v-model="delForm.baby_sex" class="w-full rounded-xl border-gray-200 text-sm focus:border-rose-400 focus:ring-rose-400"><option value="">—</option><option value="male">{{ isRtl ? 'ذكر' : 'Male' }}</option><option value="female">{{ isRtl ? 'أنثى' : 'Female' }}</option></select></div>
                                 <div><label class="block text-xs font-medium text-gray-600 mb-1">Apgar 1'</label><input v-model="delForm.apgar_1" type="number" min="0" max="10" class="w-full rounded-xl border-gray-200 text-sm focus:border-rose-400 focus:ring-rose-400" /></div>
                                 <div><label class="block text-xs font-medium text-gray-600 mb-1">Apgar 5'</label><input v-model="delForm.apgar_5" type="number" min="0" max="10" class="w-full rounded-xl border-gray-200 text-sm focus:border-rose-400 focus:ring-rose-400" /></div>
+                            </div>
+                            <div v-if="supplies.length" class="grid grid-cols-3 gap-3">
+                                <div class="col-span-2"><label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'مستلزم (اختياري)' : 'Supply (optional)' }}</label>
+                                    <select v-model="delForm.supply_id" class="w-full rounded-xl border-gray-200 text-sm focus:border-rose-400 focus:ring-rose-400"><option value="">—</option><option v-for="s in supplies" :key="s.id" :value="s.id">{{ isRtl ? s.name_ar : s.name_en }}</option></select>
+                                </div>
+                                <div><label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'الكمية' : 'Qty' }}</label><input v-model="delForm.consumption_qty" type="number" step="0.1" min="0" class="w-full rounded-xl border-gray-200 text-sm focus:border-rose-400 focus:ring-rose-400" /></div>
                             </div>
                             <label class="flex items-center gap-2 text-sm text-gray-700"><input v-model="delForm.create_newborn" type="checkbox" class="rounded text-emerald-600" /> {{ isRtl ? 'إنشاء ملف طفل (طب الأطفال) للمولود' : 'Create pediatric file for newborn' }}</label>
                             <label class="flex items-center gap-2 text-sm text-gray-700"><input v-model="delForm.bill" type="checkbox" class="rounded text-emerald-600" /> {{ isRtl ? 'إصدار فاتورة الولادة' : 'Create delivery invoice' }}</label>

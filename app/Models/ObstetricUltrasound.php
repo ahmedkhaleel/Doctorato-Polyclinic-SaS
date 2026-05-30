@@ -16,6 +16,7 @@ class ObstetricUltrasound extends Model
         'gestational_age_weeks', 'bpd_mm', 'hc_mm', 'ac_mm', 'fl_mm', 'efw_grams',
         'placenta_position', 'afi', 'fetal_count', 'fetal_heart', 'presentation', 'findings',
         'invoice_id', 'invoice_item_id',
+        'supply_id', 'consumption_qty', 'supply_transaction_id',
     ];
 
     protected $casts = [
@@ -49,5 +50,10 @@ class ObstetricUltrasound extends Model
     public function invoice()
     {
         return $this->belongsTo(Invoice::class);
+    }
+
+    public function supplyTransaction()
+    {
+        return $this->belongsTo(SupplyTransaction::class);
     }
 }

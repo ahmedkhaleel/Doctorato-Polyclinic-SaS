@@ -124,6 +124,45 @@ class ObgynBillingService
     }
 
     /**
+     * Deduct an encounter's consumable from inventory via a SupplyTransaction
+     * (usage), linking it back through supply_transaction_id. Idempotent;
+     * no-op when no supply/qty is set. Mirrors the cosmetic-session pattern.
+     */
+    public function consumeInventory(Model $encounter): ?\App\Models\SupplyTransaction
+    {
+        if ($encounter->supply_transaction_id) {
+            return $encounter->supplyTransaction;
+        }
+        $supplyId = $encounter->supply_id;
+        $qty = (float) ($encounter->consumption_qty ?? 0);
+        if (! $supplyId || $qty <= 0) {
+            return null;
+        }
+
+        return DB::transaction(function () use ($encounter, $supplyId, $qty) {
+            $supply = \App\Models\Supply::lockForUpdate()->find($supplyId);
+            if (! $supply) {
+                return null;
+            }
+
+            $txn = \App\Models\SupplyTransaction::create([
+                'supply_id' => $supply->id,
+                'transaction_type' => 'usage',
+                'quantity' => $qty,
+                'unit_cost' => $supply->purchase_price,
+                'visit_id' => $encounter->visit_id,
+                'notes' => 'OB/GYN '.class_basename($encounter).' #'.$encounter->id,
+                'created_by' => auth()->id(),
+            ]);
+
+            $supply->decrement('quantity', $qty);
+            $encounter->forceFill(['supply_transaction_id' => $txn->id])->save();
+
+            return $txn;
+        });
+    }
+
+    /**
      * Void the invoice line an encounter produced and clear its links.
      * No-op when nothing was billed.
      */

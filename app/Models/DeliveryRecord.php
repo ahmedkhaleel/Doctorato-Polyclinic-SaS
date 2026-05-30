@@ -22,6 +22,7 @@ class DeliveryRecord extends Model
         'place', 'gestational_age_at_delivery', 'outcome', 'baby_weight_grams',
         'baby_sex', 'apgar_1', 'apgar_5', 'complications', 'newborn_patient_id', 'notes',
         'invoice_id', 'invoice_item_id',
+        'supply_id', 'consumption_qty', 'supply_transaction_id',
     ];
 
     protected $casts = [
@@ -56,5 +57,10 @@ class DeliveryRecord extends Model
     public function invoice()
     {
         return $this->belongsTo(Invoice::class);
+    }
+
+    public function supplyTransaction()
+    {
+        return $this->belongsTo(SupplyTransaction::class);
     }
 }

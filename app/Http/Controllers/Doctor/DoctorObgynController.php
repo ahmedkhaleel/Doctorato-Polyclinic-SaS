@@ -115,12 +115,17 @@ class DoctorObgynController extends BaseDoctorController
             'delivery',
         ]);
 
+        $supplies = \App\Services\ModuleManager::isEnabled('inventory')
+            ? \App\Models\Supply::orderBy('name_ar')->get(['id', 'name_ar', 'name_en', 'unit', 'quantity'])
+            : [];
+
         return Inertia::render('Doctor/Obgyn/Pregnancies/Show', [
             'pregnancy' => $this->decoratePregnancy($pregnancy),
             'antenatalVisits' => $pregnancy->antenatalVisits,
             'ultrasounds' => $pregnancy->ultrasounds,
             'labTests' => $pregnancy->labTests,
             'delivery' => $pregnancy->delivery,
+            'supplies' => $supplies,
             'ancSchedule' => ObstetricCalculatorService::WHO_ANC_WEEKS,
         ]);
     }
@@ -224,6 +229,8 @@ class DoctorObgynController extends BaseDoctorController
             'fetal_heart' => 'boolean',
             'presentation' => 'nullable|string|max:30',
             'findings' => 'nullable|string',
+            'supply_id' => 'nullable|exists:supplies,id',
+            'consumption_qty' => 'nullable|numeric|min:0',
             'bill' => 'boolean',
         ]);
         $data['doctor_id'] = $this->doctorId($request);
@@ -233,6 +240,7 @@ class DoctorObgynController extends BaseDoctorController
         if ($request->boolean('bill', true)) {
             $this->billing->billUltrasound($scan);
         }
+        $this->billing->consumeInventory($scan->fresh());
 
         return back()->with('success', $this->msg('Ultrasound recorded.', 'تم تسجيل السونار.'));
     }
@@ -270,6 +278,8 @@ class DoctorObgynController extends BaseDoctorController
             'apgar_5' => 'nullable|integer|min:0|max:10',
             'complications' => 'nullable|string',
             'notes' => 'nullable|string',
+            'supply_id' => 'nullable|exists:supplies,id',
+            'consumption_qty' => 'nullable|numeric|min:0',
             'create_newborn' => 'boolean',
             'bill' => 'boolean',
         ]);
@@ -299,6 +309,7 @@ class DoctorObgynController extends BaseDoctorController
         if ($request->boolean('bill', true)) {
             $this->billing->billDelivery($delivery);
         }
+        $this->billing->consumeInventory($delivery->fresh());
 
         AuditLogger::log('updated', $pregnancy, ['delivery' => $delivery->id], 'Recorded delivery');
 
