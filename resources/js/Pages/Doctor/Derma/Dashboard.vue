@@ -1,8 +1,9 @@
 <script setup>
 import { Link, usePage } from '@inertiajs/vue3';
-import { ref, computed, onMounted } from 'vue';
+import { computed } from 'vue';
 import DoctorLayout from '@/Layouts/DoctorLayout.vue';
 import { useCurrency } from '@/Composables/useCurrency';
+import { useCountUp } from '@/Composables/useCountUp';
 
 defineOptions({ layout: DoctorLayout });
 
@@ -17,21 +18,11 @@ const props = defineProps({
     recentSessions: { type: Array, default: () => [] },
 });
 
-const mounted = ref(false);
-const counters = ref({ visits_today: 0, sessions_this_month: 0, active_plans: 0 });
-onMounted(() => {
-    setTimeout(() => { mounted.value = true; }, 50);
-    const targets = { ...counters.value, ...props.stats };
-    const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
-    if (reduce) { counters.value = targets; return; }
-    const start = performance.now(), dur = 1000;
-    const step = (now) => {
-        const e = 1 - Math.pow(1 - Math.min((now - start) / dur, 1), 3);
-        for (const k in counters.value) counters.value[k] = Math.round((targets[k] || 0) * e);
-        if (e < 1) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
-});
+const { values: counters, mounted } = useCountUp({
+    visits_today: props.stats.visits_today || 0,
+    sessions_this_month: props.stats.sessions_this_month || 0,
+    active_plans: props.stats.active_plans || 0,
+}, 1000);
 
 const greeting = computed(() => {
     const h = new Date().getHours();
