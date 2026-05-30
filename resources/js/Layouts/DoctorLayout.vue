@@ -116,6 +116,7 @@ const navGroups = computed(() => [
         items: [
             { label: isRtl.value ? 'لوحة التحكم' : 'Dashboard',  href: '/doctor/obgyn',             icon: 'grid' },
             { label: isRtl.value ? 'ملفات الحمل' : 'Pregnancies', href: '/doctor/obgyn/pregnancies', icon: 'heart' },
+            { label: isRtl.value ? 'أمراض النساء' : 'Gynecology', href: '/doctor/obgyn/gynecology',  icon: 'clipboard' },
         ],
     },
     {

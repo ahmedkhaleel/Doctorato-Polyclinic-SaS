@@ -264,6 +264,9 @@ Route::middleware('doctor.auth')->group(function () {
         Route::post('/pregnancies/{pregnancy}/lab', [\App\Http\Controllers\Doctor\DoctorObgynController::class, 'storeLab'])->name('doctor.obgyn.lab.store');
         Route::post('/pregnancies/{pregnancy}/delivery', [\App\Http\Controllers\Doctor\DoctorObgynController::class, 'storeDelivery'])->name('doctor.obgyn.delivery.store');
         Route::get('/pregnancies/{pregnancy}/antenatal-card', [\App\Http\Controllers\Doctor\DoctorObgynController::class, 'antenatalCard'])->name('doctor.obgyn.antenatal-card');
+        Route::get('/gynecology', [\App\Http\Controllers\Doctor\DoctorObgynController::class, 'gynecology'])->name('doctor.obgyn.gynecology');
+        Route::post('/gynecology/pap-smear', [\App\Http\Controllers\Doctor\DoctorObgynController::class, 'storePapSmear'])->name('doctor.obgyn.pap-smear.store');
+        Route::post('/gynecology/contraception', [\App\Http\Controllers\Doctor\DoctorObgynController::class, 'storeContraception'])->name('doctor.obgyn.contraception.store');
     });
 
     // ─── Online Consultations ──────────────────────────────

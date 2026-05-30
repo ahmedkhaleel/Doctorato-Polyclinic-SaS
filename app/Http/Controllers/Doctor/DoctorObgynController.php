@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Doctor;
 
 use App\Models\AntenatalVisit;
+use App\Models\ContraceptionRecord;
 use App\Models\DeliveryRecord;
+use App\Models\PapSmearScreening;
 use App\Models\Patient;
 use App\Models\Pregnancy;
 use App\Models\Setting;
@@ -301,6 +303,81 @@ class DoctorObgynController extends BaseDoctorController
         AuditLogger::log('updated', $pregnancy, ['delivery' => $delivery->id], 'Recorded delivery');
 
         return back()->with('success', $this->msg('Delivery recorded.', 'تم تسجيل الولادة.'));
+    }
+
+    /**
+     * Gynecology workspace — pap-smear screenings + contraception records.
+     * The obstetrics side lives under pregnancies; this covers the gyn side.
+     */
+    public function gynecology(Request $request): Response
+    {
+        $doctorId = $this->doctorId($request);
+
+        $papSmears = PapSmearScreening::where('doctor_id', $doctorId)
+            ->with('patient:id,full_name,phone')
+            ->latest('test_date')->limit(40)->get();
+
+        $contraception = ContraceptionRecord::where('doctor_id', $doctorId)
+            ->with('patient:id,full_name,phone')
+            ->latest('start_date')->limit(40)->get();
+
+        $patients = Patient::where('gender', 'female')->where('is_active', true)
+            ->orderBy('full_name')->limit(50)
+            ->get(['id', 'full_name', 'phone', 'file_number']);
+
+        return Inertia::render('Doctor/Obgyn/Gynecology', [
+            'papSmears' => $papSmears,
+            'contraception' => $contraception,
+            'patients' => $patients,
+        ]);
+    }
+
+    public function storePapSmear(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'patient_id' => 'required|exists:patients,id',
+            'test_date' => 'required|date',
+            'result' => 'nullable|in:normal,ascus,lsil,hsil,cancer',
+            'hpv_status' => 'nullable|in:positive,negative,unknown',
+            'next_due_date' => 'nullable|date',
+            'notes' => 'nullable|string',
+            'bill' => 'boolean',
+        ]);
+        $patient = Patient::findOrFail($data['patient_id']);
+        if ($patient->gender !== 'female') {
+            throw ValidationException::withMessages(['patient_id' => 'Gynecology records are only for female patients.']);
+        }
+        $data['doctor_id'] = $this->doctorId($request);
+
+        $pap = PapSmearScreening::create($data);
+        if ($request->boolean('bill', true)) {
+            $this->billing->billPapSmear($pap);
+        }
+
+        return back()->with('success', $this->msg('Pap smear recorded.', 'تم تسجيل المسحة.'));
+    }
+
+    public function storeContraception(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'patient_id' => 'required|exists:patients,id',
+            'method' => 'required|string|max:100',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date',
+            'follow_up_date' => 'nullable|date',
+            'status' => 'nullable|in:active,stopped',
+            'notes' => 'nullable|string',
+        ]);
+        $patient = Patient::findOrFail($data['patient_id']);
+        if ($patient->gender !== 'female') {
+            throw ValidationException::withMessages(['patient_id' => 'Gynecology records are only for female patients.']);
+        }
+        $data['doctor_id'] = $this->doctorId($request);
+        $data['status'] ??= ContraceptionRecord::STATUS_ACTIVE;
+
+        ContraceptionRecord::create($data);
+
+        return back()->with('success', $this->msg('Contraception record saved.', 'تم حفظ سجل منع الحمل.'));
     }
 
     /**
