@@ -123,6 +123,11 @@ Route::middleware('patient.auth')->group(function () {
         Route::get('/pediatric/growth-report', [PatientPediatricController::class, 'growthReport'])->name('patient.pediatric.growth-report');
     });
 
+    // ─── OB/GYN ─────────────────────────────────────────────
+    Route::middleware('module:obgyn')->group(function () {
+        Route::get('/obgyn', [\App\Http\Controllers\Patient\PatientObgynController::class, 'overview'])->name('patient.obgyn.overview');
+    });
+
     // ─── Online Consultations ───────────────────────────────
     Route::get('/online-consultations', [OnlineConsultationController::class, 'index'])
         ->name('patient.online-consultations.index');

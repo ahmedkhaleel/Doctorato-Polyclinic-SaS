@@ -120,6 +120,14 @@ const navGroups = computed(() => [
         ],
     },
     {
+        title: isRtl.value ? 'النساء والتوليد' : 'OB/GYN',
+        key: 'obgyn',
+        moduleKey: 'obgyn',
+        items: [
+            { label: isRtl.value ? 'متابعة حملي' : 'My Pregnancy', href: lp('/obgyn'), icon: 'overview' },
+        ],
+    },
+    {
         title: isRtl.value ? 'المالية' : 'Financial',
         key: 'financial',
         items: [
