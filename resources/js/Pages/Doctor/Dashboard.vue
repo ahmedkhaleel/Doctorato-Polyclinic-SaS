@@ -27,6 +27,9 @@ const props = defineProps({
     doctorInfo: Object,
     dental: Object,
     pediatric: Object,
+    derma: Object,
+    obgyn: Object,
+    telemedicine: Object,
     pendingFollowups: Array,
     todayMedicalAlerts: Array,
     reviewsSnapshot: { type: Object, default: null },
@@ -574,6 +577,81 @@ const completionDash = computed(() => {
                         <div class="text-center p-2.5 rounded-xl" :class="(dental.overdue_followups ?? 0) > 0 ? 'bg-red-50/50' : 'bg-gray-50/50'">
                             <p class="text-lg font-bold tabular-nums" :class="(dental.overdue_followups ?? 0) > 0 ? 'text-red-600' : 'text-gray-400'">{{ dental.overdue_followups ?? 0 }}</p>
                             <p class="text-[10px] font-medium text-gray-500 mt-0.5">{{ isRtl ? 'متأخرة' : 'Overdue' }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Derma Quick Stats -->
+                <div v-if="derma" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden"
+                    :class="mounted ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'"
+                    style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.25s">
+                    <div class="px-5 py-3.5 border-b border-gray-100 bg-gradient-to-r from-violet-50/40 to-white flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full" style="background:#8B5CF6"></span>
+                        <h3 class="text-xs font-bold text-gray-700 uppercase tracking-wider">{{ isRtl ? 'ملخص الجلدية' : 'Derma Quick Stats' }}</h3>
+                    </div>
+                    <div class="p-5 grid grid-cols-3 gap-3">
+                        <div class="text-center p-2.5 rounded-xl bg-violet-50/50">
+                            <p class="text-lg font-bold tabular-nums" style="color:#8B5CF6">{{ derma.visits_today ?? 0 }}</p>
+                            <p class="text-[10px] font-medium text-gray-500 mt-0.5">{{ isRtl ? 'زيارات اليوم' : 'Visits Today' }}</p>
+                        </div>
+                        <div class="text-center p-2.5 rounded-xl bg-slate-50/50">
+                            <p class="text-lg font-bold text-[#1B365D] tabular-nums">{{ derma.sessions_this_month ?? 0 }}</p>
+                            <p class="text-[10px] font-medium text-gray-500 mt-0.5">{{ isRtl ? 'جلسات الشهر' : 'Sessions' }}</p>
+                        </div>
+                        <div class="text-center p-2.5 rounded-xl bg-amber-50/50">
+                            <p class="text-lg font-bold text-[#C4A265] tabular-nums">{{ derma.active_plans ?? 0 }}</p>
+                            <p class="text-[10px] font-medium text-gray-500 mt-0.5">{{ isRtl ? 'خطط نشطة' : 'Active Plans' }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- OB/GYN Quick Stats -->
+                <div v-if="obgyn" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden"
+                    :class="mounted ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'"
+                    style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.25s">
+                    <div class="px-5 py-3.5 border-b border-gray-100 bg-gradient-to-r from-rose-50/40 to-white flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full" style="background:#DB2777"></span>
+                        <h3 class="text-xs font-bold text-gray-700 uppercase tracking-wider">{{ isRtl ? 'ملخص النساء والتوليد' : 'OB/GYN Quick Stats' }}</h3>
+                    </div>
+                    <div class="p-5 grid grid-cols-4 gap-3">
+                        <div class="text-center p-2.5 rounded-xl bg-rose-50/50">
+                            <p class="text-lg font-bold tabular-nums" style="color:#DB2777">{{ obgyn.active_pregnancies ?? 0 }}</p>
+                            <p class="text-[10px] font-medium text-gray-500 mt-0.5">{{ isRtl ? 'حمل نشط' : 'Active' }}</p>
+                        </div>
+                        <div class="text-center p-2.5 rounded-xl" :class="(obgyn.high_risk ?? 0) > 0 ? 'bg-red-50/50' : 'bg-gray-50/50'">
+                            <p class="text-lg font-bold tabular-nums" :class="(obgyn.high_risk ?? 0) > 0 ? 'text-red-600' : 'text-gray-400'">{{ obgyn.high_risk ?? 0 }}</p>
+                            <p class="text-[10px] font-medium text-gray-500 mt-0.5">{{ isRtl ? 'خطورة' : 'High-risk' }}</p>
+                        </div>
+                        <div class="text-center p-2.5 rounded-xl bg-slate-50/50">
+                            <p class="text-lg font-bold text-[#1B365D] tabular-nums">{{ obgyn.anc_this_month ?? 0 }}</p>
+                            <p class="text-[10px] font-medium text-gray-500 mt-0.5">{{ isRtl ? 'متابعات' : 'ANC' }}</p>
+                        </div>
+                        <div class="text-center p-2.5 rounded-xl bg-amber-50/50">
+                            <p class="text-lg font-bold text-[#C4A265] tabular-nums">{{ obgyn.due_soon ?? 0 }}</p>
+                            <p class="text-[10px] font-medium text-gray-500 mt-0.5">{{ isRtl ? 'قرب الولادة' : 'Due soon' }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Telemedicine Quick Stats -->
+                <div v-if="telemedicine" class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden"
+                    :class="mounted ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'"
+                    style="transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.25s">
+                    <div class="px-5 py-3.5 border-b border-gray-100 bg-gradient-to-r from-emerald-50/40 to-white flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                            <h3 class="text-xs font-bold text-gray-700 uppercase tracking-wider">{{ isRtl ? 'الاستشارات الأونلاين' : 'Telemedicine' }}</h3>
+                        </div>
+                        <Link href="/doctor/online-consultations" class="text-[10px] font-semibold text-emerald-600 hover:text-emerald-700">{{ isRtl ? 'فتح' : 'Open' }}</Link>
+                    </div>
+                    <div class="p-5 grid grid-cols-2 gap-3">
+                        <div class="text-center p-2.5 rounded-xl bg-emerald-50/50">
+                            <p class="text-lg font-bold text-emerald-600 tabular-nums">{{ telemedicine.today ?? 0 }}</p>
+                            <p class="text-[10px] font-medium text-gray-500 mt-0.5">{{ isRtl ? 'اليوم' : 'Today' }}</p>
+                        </div>
+                        <div class="text-center p-2.5 rounded-xl bg-slate-50/50">
+                            <p class="text-lg font-bold text-[#1B365D] tabular-nums">{{ telemedicine.upcoming ?? 0 }}</p>
+                            <p class="text-[10px] font-medium text-gray-500 mt-0.5">{{ isRtl ? 'قادمة' : 'Upcoming' }}</p>
                         </div>
                     </div>
                 </div>

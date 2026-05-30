@@ -96,12 +96,12 @@ class DoctorDashboardController extends BaseDoctorController
 
         // ─── Recent Completed Visits (with commission info) ────
         $recentVisits = Visit::with([
-                'patient:id,full_name',
-                'service:id,name_en,name_ar,price,price_after_discount',
-                'invoice:id,visit_id,total,status',
-                'booking.invoice:id,booking_id,total,status',
-                'booking.bookingServices:id,booking_id,service_id,unit_price,discount_per_session,sessions_count',
-            ])
+            'patient:id,full_name',
+            'service:id,name_en,name_ar,price,price_after_discount',
+            'invoice:id,visit_id,total,status',
+            'booking.invoice:id,booking_id,total,status',
+            'booking.bookingServices:id,booking_id,service_id,unit_price,discount_per_session,sessions_count',
+        ])
             ->where('doctor_id', $doctorId)
             ->where('status', 'completed')
             ->latest('completed_at')
@@ -186,9 +186,9 @@ class DoctorDashboardController extends BaseDoctorController
 
             // Pending follow-ups for this doctor
             $pendingFollowups = DentalScheduledFollowup::with([
-                    'patient:id,full_name,file_number,phone',
-                    'treatment:id,treatment_type,tooth_number',
-                ])
+                'patient:id,full_name,file_number,phone',
+                'treatment:id,treatment_type,tooth_number',
+            ])
                 ->where('doctor_id', $doctorId)
                 ->where('status', DentalScheduledFollowup::STATUS_PENDING)
                 ->whereNull('booking_id')
@@ -211,7 +211,7 @@ class DoctorDashboardController extends BaseDoctorController
             foreach ($todayQueue as $visit) {
                 if ($visit->patient) {
                     $riskFlags = $visit->patient->getDentalRiskFlags();
-                    if (!empty($riskFlags)) {
+                    if (! empty($riskFlags)) {
                         $todayMedicalAlerts[] = [
                             'visit_id' => $visit->id,
                             'patient_name' => $visit->patient->full_name,
@@ -259,6 +259,44 @@ class DoctorDashboardController extends BaseDoctorController
             ];
         }
 
+        // ─── Derma overview (for derma doctors) ────────────────
+        $derma = null;
+        if ($doctor->module === 'derma' && ModuleManager::isEnabled('derma')) {
+            $derma = [
+                'visits_today' => Visit::where('doctor_id', $doctorId)->where('module', 'derma')->whereDate('visit_date', today())->count(),
+                'sessions_this_month' => \App\Models\DermaSession::where('doctor_id', $doctorId)
+                    ->whereMonth('completed_at', $now->month)->whereYear('completed_at', $now->year)->count(),
+                'active_plans' => \App\Models\DermaTreatmentPlan::where('doctor_id', $doctorId)
+                    ->whereColumn('completed_sessions', '<', 'estimated_sessions')->count(),
+                'revenue_this_month' => round((float) Invoice::where('module', 'derma')
+                    ->whereMonth('invoice_date', $now->month)->whereYear('invoice_date', $now->year)->sum('total'), 2),
+            ];
+        }
+
+        // ─── OB/GYN overview (for obgyn doctors) ───────────────
+        $obgyn = null;
+        if ($doctor->module === 'obgyn' && ModuleManager::isEnabled('obgyn')) {
+            $obgyn = [
+                'active_pregnancies' => \App\Models\Pregnancy::where('doctor_id', $doctorId)->where('status', 'active')->count(),
+                'high_risk' => \App\Models\Pregnancy::where('doctor_id', $doctorId)->where('status', 'active')->where('is_high_risk', true)->count(),
+                'anc_this_month' => \App\Models\AntenatalVisit::where('doctor_id', $doctorId)
+                    ->whereMonth('visit_date', $now->month)->whereYear('visit_date', $now->year)->count(),
+                'due_soon' => \App\Models\Pregnancy::where('doctor_id', $doctorId)->where('status', 'active')
+                    ->whereNotNull('edd')->whereBetween('edd', [today()->toDateString(), today()->addDays(30)->toDateString()])->count(),
+            ];
+        }
+
+        // ─── Telemedicine snapshot (online-enabled doctors) ────
+        $telemedicine = null;
+        if ($doctor->online_consultation_enabled && ModuleManager::isEnabled('telemedicine')) {
+            $telemedicine = [
+                'today' => \App\Models\OnlineConsultation::where('doctor_id', $doctorId)
+                    ->whereDate('scheduled_date', today())->whereIn('status', ['scheduled', 'in_progress'])->count(),
+                'upcoming' => \App\Models\OnlineConsultation::where('doctor_id', $doctorId)
+                    ->whereDate('scheduled_date', '>', today())->where('status', 'scheduled')->count(),
+            ];
+        }
+
         // ─── My Reviews snapshot (last 30d + all-time) ─────────
         $reviewsBase = \App\Models\PatientSatisfaction::where('doctor_id', $doctorId)
             ->whereNotNull('overall_rating');
@@ -267,10 +305,10 @@ class DoctorDashboardController extends BaseDoctorController
             ->where('created_at', '>=', now()->subDays(30))
             ->selectRaw('COUNT(*) AS total, AVG(overall_rating) AS avg')->first();
         $reviewsSnapshot = [
-            'total'        => (int) $reviewsAll->total,
-            'avg'          => $reviewsAll->total ? round((float) $reviewsAll->avg, 2) : null,
+            'total' => (int) $reviewsAll->total,
+            'avg' => $reviewsAll->total ? round((float) $reviewsAll->avg, 2) : null,
             'last30_total' => (int) $reviewsLast30->total,
-            'last30_avg'   => $reviewsLast30->total ? round((float) $reviewsLast30->avg, 2) : null,
+            'last30_avg' => $reviewsLast30->total ? round((float) $reviewsLast30->avg, 2) : null,
         ];
 
         return Inertia::render('Doctor/Dashboard', [
@@ -286,6 +324,9 @@ class DoctorDashboardController extends BaseDoctorController
             'doctorInfo' => $doctorInfo,
             'dental' => $dental,
             'pediatric' => $pediatric,
+            'derma' => $derma,
+            'obgyn' => $obgyn,
+            'telemedicine' => $telemedicine,
             'pendingFollowups' => $pendingFollowups,
             'todayMedicalAlerts' => $todayMedicalAlerts,
             'reviewsSnapshot' => $reviewsSnapshot,
