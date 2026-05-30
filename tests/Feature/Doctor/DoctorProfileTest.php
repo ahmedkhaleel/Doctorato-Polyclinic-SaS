@@ -43,7 +43,7 @@ class DoctorProfileTest extends TestCase
 
     public function test_can_update_profile(): void
     {
-        $this->actingAs($this->doctorUser)->put('/doctor/profile', [
+        $this->actingAs($this->doctorUser)->post('/doctor/profile/update', [
             'phone' => '0501234567',
             'email' => 'doctor@clinic.com',
             'bio_en' => 'Experienced dermatologist',
@@ -55,7 +55,7 @@ class DoctorProfileTest extends TestCase
 
     public function test_can_change_password(): void
     {
-        $this->actingAs($this->doctorUser)->put('/doctor/profile/password', [
+        $this->actingAs($this->doctorUser)->post('/doctor/profile/password', [
             'current_password' => 'password',
             'password' => 'newpassword123',
             'password_confirmation' => 'newpassword123',
@@ -67,7 +67,7 @@ class DoctorProfileTest extends TestCase
 
     public function test_wrong_current_password_rejected(): void
     {
-        $this->actingAs($this->doctorUser)->put('/doctor/profile/password', [
+        $this->actingAs($this->doctorUser)->post('/doctor/profile/password', [
             'current_password' => 'wrongpassword',
             'password' => 'newpassword123',
             'password_confirmation' => 'newpassword123',
@@ -76,7 +76,7 @@ class DoctorProfileTest extends TestCase
 
     public function test_password_must_be_confirmed(): void
     {
-        $this->actingAs($this->doctorUser)->put('/doctor/profile/password', [
+        $this->actingAs($this->doctorUser)->post('/doctor/profile/password', [
             'current_password' => 'password',
             'password' => 'newpassword123',
             'password_confirmation' => 'different',

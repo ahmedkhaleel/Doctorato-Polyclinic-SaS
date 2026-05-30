@@ -88,7 +88,7 @@ class DoctorPatientTest extends TestCase
     public function test_doctor_can_update_notes_on_own_patient(): void
     {
         $this->actingAs($this->doctorUser)
-            ->put("/doctor/patients/{$this->patient->id}/notes", [
+            ->post("/doctor/patients/{$this->patient->id}/notes", [
                 'doctor_notes' => 'Sensitive to retinoids. Monitor for dryness.',
             ])
             ->assertRedirect();
@@ -107,7 +107,7 @@ class DoctorPatientTest extends TestCase
         $otherPatient->save();
 
         $this->actingAs($this->doctorUser)
-            ->put("/doctor/patients/{$otherPatient->id}/notes", [
+            ->post("/doctor/patients/{$otherPatient->id}/notes", [
                 'doctor_notes' => 'Should not save.',
             ])
             ->assertForbidden();
@@ -116,7 +116,7 @@ class DoctorPatientTest extends TestCase
     public function test_doctor_notes_validates_max_length(): void
     {
         $this->actingAs($this->doctorUser)
-            ->put("/doctor/patients/{$this->patient->id}/notes", [
+            ->post("/doctor/patients/{$this->patient->id}/notes", [
                 'doctor_notes' => str_repeat('a', 5001),
             ])
             ->assertSessionHasErrors('doctor_notes');
@@ -127,7 +127,7 @@ class DoctorPatientTest extends TestCase
         $this->patient->update(['doctor_notes' => 'Old notes']);
 
         $this->actingAs($this->doctorUser)
-            ->put("/doctor/patients/{$this->patient->id}/notes", [
+            ->post("/doctor/patients/{$this->patient->id}/notes", [
                 'doctor_notes' => null,
             ])
             ->assertRedirect();

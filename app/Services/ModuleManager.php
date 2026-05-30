@@ -418,6 +418,20 @@ class ModuleManager
     /**
      * Clear all caches for a module
      */
+    /**
+     * Reset ALL process-level static caches (table-exists flag + per-module
+     * memos). Intended for the test harness: RefreshDatabase rolls back the
+     * database between tests but these statics survive the whole process, so
+     * a stale "module disabled" memo would leak into later tests and 302
+     * their module-gated routes. Call once at the start of every test.
+     */
+    public static function flushStaticCache(): void
+    {
+        self::$tableExists = null;
+        self::$isEnabledMemo = [];
+        self::$infoMemo = [];
+    }
+
     public static function clearCache(?string $module = null): void
     {
         if ($module) {
