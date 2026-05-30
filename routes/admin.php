@@ -860,6 +860,13 @@ Route::middleware('admin.auth')->group(function () {
     Route::get('/pediatric/settings', [\App\Http\Controllers\Admin\AdminPediatricController::class, 'settings'])->name('admin.pediatric.settings')->middleware(['module:pediatric', 'permission:pediatric.view']);
     Route::post('/pediatric/settings', [\App\Http\Controllers\Admin\AdminPediatricController::class, 'updateSettings'])->name('admin.pediatric.settings.update')->middleware(['module:pediatric', 'permission:pediatric.update']);
 
+    // ═══ OB/GYN MODULE ════════════════════════════════════════
+    Route::get('/obgyn', [\App\Http\Controllers\Admin\AdminObgynController::class, 'dashboard'])->name('admin.obgyn.dashboard')->middleware(['module:obgyn', 'permission:obgyn.view']);
+    Route::get('/obgyn/pregnancies', [\App\Http\Controllers\Admin\AdminObgynController::class, 'pregnancies'])->name('admin.obgyn.pregnancies')->middleware(['module:obgyn', 'permission:obgyn.view']);
+    Route::get('/obgyn/reports', [\App\Http\Controllers\Admin\AdminObgynController::class, 'reports'])->name('admin.obgyn.reports')->middleware(['module:obgyn', 'permission:obgyn.view']);
+    Route::get('/obgyn/settings', [\App\Http\Controllers\Admin\AdminObgynController::class, 'settings'])->name('admin.obgyn.settings')->middleware(['module:obgyn', 'permission:obgyn.view']);
+    Route::post('/obgyn/settings', [\App\Http\Controllers\Admin\AdminObgynController::class, 'updateSettings'])->name('admin.obgyn.settings.update')->middleware(['module:obgyn', 'permission:obgyn.update']);
+
     // ═══════════════════════════════════════════════════════════
     // ═══ SUPPLIERS & PURCHASE ORDERS ══════════════════════════
     // ═══════════════════════════════════════════════════════════
