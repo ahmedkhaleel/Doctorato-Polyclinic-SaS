@@ -59,9 +59,11 @@ class DiagnosticsTest extends TestCase
     {
         $patient = $this->userWithRole('patient', 'p@test.com');
 
+        // A non-admin hitting an admin page is bounced to the admin login by
+        // the AdminAuth guard (it never leaks the patient session into admin).
         $this->actingAs($patient)
             ->get('/admin/diagnostics')
-            ->assertRedirect('/patient');
+            ->assertRedirect('/admin/login');
     }
 
     public function test_unauthenticated_redirected_to_login(): void
