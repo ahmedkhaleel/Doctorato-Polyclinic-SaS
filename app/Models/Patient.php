@@ -2,15 +2,15 @@
 
 namespace App\Models;
 
+use App\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use App\Traits\LogsActivity;
 
 class Patient extends Model
 {
-    use HasFactory, SoftDeletes, LogsActivity;
+    use HasFactory, LogsActivity, SoftDeletes;
 
     /**
      * Highly sensitive medical fields (infectious diseases, etc.)
@@ -193,6 +193,38 @@ class Patient extends Model
         return $this->hasMany(PediatricScreeningTest::class);
     }
 
+    // ─── OB/GYN Relationships ──────────────────────────
+    public function obgynProfile()
+    {
+        return $this->hasOne(ObgynProfile::class);
+    }
+
+    public function pregnancies()
+    {
+        return $this->hasMany(Pregnancy::class)->latest('lmp');
+    }
+
+    public function papSmearScreenings()
+    {
+        return $this->hasMany(PapSmearScreening::class)->latest('test_date');
+    }
+
+    public function contraceptionRecords()
+    {
+        return $this->hasMany(ContraceptionRecord::class)->latest('start_date');
+    }
+
+    public function obgynLabTests()
+    {
+        return $this->hasMany(ObgynLabTest::class)->latest('result_date');
+    }
+
+    /** The active pregnancy, if any. */
+    public function activePregnancy()
+    {
+        return $this->hasOne(Pregnancy::class)->where('status', Pregnancy::STATUS_ACTIVE)->orderByDesc('id');
+    }
+
     // ─── Sensitive Data Access ─────────────────────────
 
     /**
@@ -282,7 +314,7 @@ class Patient extends Model
     public function hasPediatricRecords(): bool
     {
         // Guardian info → definitely pediatric
-        if (!empty($this->guardian_name)) {
+        if (! empty($this->guardian_name)) {
             return true;
         }
 
@@ -290,8 +322,11 @@ class Patient extends Model
         if ($this->date_of_birth) {
             try {
                 $age = \Carbon\Carbon::parse($this->date_of_birth)->age;
-                if ($age < 18) return true;
-            } catch (\Throwable) { /* ignore */ }
+                if ($age < 18) {
+                    return true;
+                }
+            } catch (\Throwable) { /* ignore */
+            }
         }
 
         // Has pediatric visits or records
@@ -307,7 +342,7 @@ class Patient extends Model
      * Cached for 10 minutes; busted automatically by model event hooks on
      * Visit / DentalTreatment / PediatricGrowthRecord / PediatricVaccination.
      *
-     * @return array<int, string>  e.g. ['derma', 'dental', 'pediatric']
+     * @return array<int, string> e.g. ['derma', 'dental', 'pediatric']
      */
     public function getActiveSpecialties(): array
     {
@@ -358,7 +393,7 @@ class Patient extends Model
             || $this->is_pregnant
             || $this->is_breastfeeding
             || $this->has_dental_anxiety
-            || !empty($this->allergies);
+            || ! empty($this->allergies);
     }
 
     /**
@@ -368,18 +403,42 @@ class Patient extends Model
     {
         $flags = [];
 
-        if ($this->latex_allergy)            $flags[] = ['key' => 'latex_allergy', 'label_en' => 'Latex Allergy', 'label_ar' => 'حساسية اللاتكس', 'severity' => 'high'];
-        if ($this->anesthesia_complications) $flags[] = ['key' => 'anesthesia', 'label_en' => 'Anesthesia Complications', 'label_ar' => 'مضاعفات التخدير', 'severity' => 'high'];
-        if ($this->has_bleeding_disorder)    $flags[] = ['key' => 'bleeding', 'label_en' => 'Bleeding Disorder', 'label_ar' => 'اضطراب نزيف', 'severity' => 'high'];
-        if ($this->takes_blood_thinners)     $flags[] = ['key' => 'blood_thinners', 'label_en' => 'Blood Thinners: ' . ($this->blood_thinner_name ?? ''), 'label_ar' => 'مميعات الدم: ' . ($this->blood_thinner_name ?? ''), 'severity' => 'high'];
-        if ($this->has_heart_condition)      $flags[] = ['key' => 'heart', 'label_en' => 'Heart Condition', 'label_ar' => 'مشاكل قلبية', 'severity' => 'high'];
-        if ($this->has_hepatitis)            $flags[] = ['key' => 'hepatitis', 'label_en' => 'Hepatitis ' . ($this->hepatitis_type ?? ''), 'label_ar' => 'التهاب كبد ' . ($this->hepatitis_type ?? ''), 'severity' => 'high'];
-        if ($this->has_hiv)                  $flags[] = ['key' => 'hiv', 'label_en' => 'HIV Positive', 'label_ar' => 'فيروس نقص المناعة', 'severity' => 'high'];
-        if ($this->is_pregnant)              $flags[] = ['key' => 'pregnant', 'label_en' => 'Pregnant', 'label_ar' => 'حامل', 'severity' => 'medium'];
-        if ($this->is_breastfeeding)         $flags[] = ['key' => 'breastfeeding', 'label_en' => 'Breastfeeding', 'label_ar' => 'مرضعة', 'severity' => 'medium'];
-        if ($this->has_dental_anxiety)       $flags[] = ['key' => 'anxiety', 'label_en' => 'Dental Anxiety (' . ($this->dental_anxiety_level ?? 'unknown') . ')', 'label_ar' => 'قلق من الأسنان (' . ($this->dental_anxiety_level ?? 'غير محدد') . ')', 'severity' => 'low'];
-        if ($this->has_diabetes)             $flags[] = ['key' => 'diabetes', 'label_en' => 'Diabetes (' . ($this->diabetes_type ?? '') . ')', 'label_ar' => 'سكري (' . ($this->diabetes_type ?? '') . ')', 'severity' => 'medium'];
-        if (!empty($this->allergies))        $flags[] = ['key' => 'allergies', 'label_en' => 'Allergies: ' . $this->allergies, 'label_ar' => 'حساسية: ' . $this->allergies, 'severity' => 'high'];
+        if ($this->latex_allergy) {
+            $flags[] = ['key' => 'latex_allergy', 'label_en' => 'Latex Allergy', 'label_ar' => 'حساسية اللاتكس', 'severity' => 'high'];
+        }
+        if ($this->anesthesia_complications) {
+            $flags[] = ['key' => 'anesthesia', 'label_en' => 'Anesthesia Complications', 'label_ar' => 'مضاعفات التخدير', 'severity' => 'high'];
+        }
+        if ($this->has_bleeding_disorder) {
+            $flags[] = ['key' => 'bleeding', 'label_en' => 'Bleeding Disorder', 'label_ar' => 'اضطراب نزيف', 'severity' => 'high'];
+        }
+        if ($this->takes_blood_thinners) {
+            $flags[] = ['key' => 'blood_thinners', 'label_en' => 'Blood Thinners: '.($this->blood_thinner_name ?? ''), 'label_ar' => 'مميعات الدم: '.($this->blood_thinner_name ?? ''), 'severity' => 'high'];
+        }
+        if ($this->has_heart_condition) {
+            $flags[] = ['key' => 'heart', 'label_en' => 'Heart Condition', 'label_ar' => 'مشاكل قلبية', 'severity' => 'high'];
+        }
+        if ($this->has_hepatitis) {
+            $flags[] = ['key' => 'hepatitis', 'label_en' => 'Hepatitis '.($this->hepatitis_type ?? ''), 'label_ar' => 'التهاب كبد '.($this->hepatitis_type ?? ''), 'severity' => 'high'];
+        }
+        if ($this->has_hiv) {
+            $flags[] = ['key' => 'hiv', 'label_en' => 'HIV Positive', 'label_ar' => 'فيروس نقص المناعة', 'severity' => 'high'];
+        }
+        if ($this->is_pregnant) {
+            $flags[] = ['key' => 'pregnant', 'label_en' => 'Pregnant', 'label_ar' => 'حامل', 'severity' => 'medium'];
+        }
+        if ($this->is_breastfeeding) {
+            $flags[] = ['key' => 'breastfeeding', 'label_en' => 'Breastfeeding', 'label_ar' => 'مرضعة', 'severity' => 'medium'];
+        }
+        if ($this->has_dental_anxiety) {
+            $flags[] = ['key' => 'anxiety', 'label_en' => 'Dental Anxiety ('.($this->dental_anxiety_level ?? 'unknown').')', 'label_ar' => 'قلق من الأسنان ('.($this->dental_anxiety_level ?? 'غير محدد').')', 'severity' => 'low'];
+        }
+        if ($this->has_diabetes) {
+            $flags[] = ['key' => 'diabetes', 'label_en' => 'Diabetes ('.($this->diabetes_type ?? '').')', 'label_ar' => 'سكري ('.($this->diabetes_type ?? '').')', 'severity' => 'medium'];
+        }
+        if (! empty($this->allergies)) {
+            $flags[] = ['key' => 'allergies', 'label_en' => 'Allergies: '.$this->allergies, 'label_ar' => 'حساسية: '.$this->allergies, 'severity' => 'high'];
+        }
 
         return $flags;
     }
@@ -497,7 +556,7 @@ class Patient extends Model
 
     protected function photoUrl(): Attribute
     {
-        return Attribute::get(fn () => $this->photo ? '/storage/' . $this->photo : null);
+        return Attribute::get(fn () => $this->photo ? '/storage/'.$this->photo : null);
     }
 
     protected function age(): Attribute
@@ -516,9 +575,9 @@ class Patient extends Model
     {
         return $query->where(function ($q) use ($term) {
             $q->where('full_name', 'like', "%{$term}%")
-              ->orWhere('phone', 'like', "%{$term}%")
-              ->orWhere('file_number', 'like', "%{$term}%")
-              ->orWhere('email', 'like', "%{$term}%");
+                ->orWhere('phone', 'like', "%{$term}%")
+                ->orWhere('file_number', 'like', "%{$term}%")
+                ->orWhere('email', 'like', "%{$term}%");
         });
     }
 
@@ -529,12 +588,12 @@ class Patient extends Model
         $last = static::orderByDesc('file_number')->value('file_number');
         $number = $last ? (int) str_replace('P-', '', $last) + 1 : 1;
 
-        $fileNumber = 'P-' . str_pad($number, 5, '0', STR_PAD_LEFT);
+        $fileNumber = 'P-'.str_pad($number, 5, '0', STR_PAD_LEFT);
 
         // Safety: if it already exists (race condition), keep incrementing
         while (static::where('file_number', $fileNumber)->exists()) {
             $number++;
-            $fileNumber = 'P-' . str_pad($number, 5, '0', STR_PAD_LEFT);
+            $fileNumber = 'P-'.str_pad($number, 5, '0', STR_PAD_LEFT);
         }
 
         return $fileNumber;
@@ -572,7 +631,8 @@ class Patient extends Model
                 return $code;
             }
         }
-        return $prefix . '-' . strtoupper(\Illuminate\Support\Str::random(6));
+
+        return $prefix.'-'.strtoupper(\Illuminate\Support\Str::random(6));
     }
 
     // ─── Model boot: guard against missing file_number ──
@@ -600,8 +660,8 @@ class Patient extends Model
      * Defaults to TRUE if the column is null (legacy rows that pre-date
      * the preferences migration). Marketing SMS defaults to false.
      *
-     * @param 'bookings'|'reminders'|'marketing' $category
-     * @param 'email'|'sms' $channel
+     * @param  'bookings'|'reminders'|'marketing'  $category
+     * @param  'email'|'sms'  $channel
      */
     public function wantsNotification(string $category, string $channel): bool
     {
@@ -618,6 +678,7 @@ class Patient extends Model
             // Legacy default: marketing-SMS off, everything else on.
             return $col !== 'notify_sms_marketing';
         }
+
         return (bool) $value;
     }
 }

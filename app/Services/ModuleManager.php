@@ -22,6 +22,7 @@ class ModuleManager
                 self::$tableExists = false;
             }
         }
+
         return self::$tableExists;
     }
 
@@ -77,6 +78,14 @@ class ModuleManager
             'color' => '#4CAF50',
             'is_core' => false,
         ],
+        'obgyn' => [
+            'slug' => 'obgyn',
+            'default_name_ar' => 'النساء والتوليد',
+            'default_name_en' => 'Obstetrics & Gynecology',
+            'icon' => 'M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z',
+            'color' => '#DB2777',
+            'is_core' => false,
+        ],
         'telemedicine' => [
             'slug' => 'telemedicine',
             'default_name_ar' => 'الاستشارات الأونلاين',
@@ -90,7 +99,7 @@ class ModuleManager
     /**
      * Medical specialty modules (have doctors, visits, bookings)
      */
-    const MEDICAL_MODULES = ['derma', 'dental', 'pediatric'];
+    const MEDICAL_MODULES = ['derma', 'dental', 'pediatric', 'obgyn'];
 
     /**
      * Get all registered modules
@@ -106,6 +115,7 @@ class ModuleManager
      * lookup per module per request.
      */
     protected static array $isEnabledMemo = [];
+
     protected static array $infoMemo = [];
 
     /**
@@ -113,7 +123,7 @@ class ModuleManager
      */
     public static function isEnabled(string $module): bool
     {
-        if (!isset(self::MODULES[$module])) {
+        if (! isset(self::MODULES[$module])) {
             return false;
         }
 
@@ -148,6 +158,7 @@ class ModuleManager
                 $active[$slug] = array_merge($module, self::getModuleInfo($slug));
             }
         }
+
         return $active;
     }
 
@@ -198,7 +209,7 @@ class ModuleManager
      */
     public static function enable(string $module): bool
     {
-        if (!isset(self::MODULES[$module])) {
+        if (! isset(self::MODULES[$module])) {
             return false;
         }
 
@@ -224,6 +235,7 @@ class ModuleManager
         self::ensureModuleSettingsExist($module);
 
         self::clearCache($module);
+
         return true;
     }
 
@@ -232,7 +244,7 @@ class ModuleManager
      */
     public static function disable(string $module): bool
     {
-        if (!isset(self::MODULES[$module])) {
+        if (! isset(self::MODULES[$module])) {
             return false;
         }
 
@@ -262,6 +274,7 @@ class ModuleManager
         );
 
         self::clearCache($module);
+
         return true;
     }
 
@@ -276,6 +289,7 @@ class ModuleManager
                 $active[] = $mod;
             }
         }
+
         return $active;
     }
 
@@ -286,6 +300,7 @@ class ModuleManager
     public static function getDefaultModule(): string
     {
         $active = self::getActiveMedicalModules();
+
         return $active[0] ?? 'derma'; // ultimate fallback
     }
 
@@ -396,6 +411,7 @@ class ModuleManager
             $info['is_medical'] = in_array($slug, self::MEDICAL_MODULES, true);
             $modules[$slug] = $info;
         }
+
         return $modules;
     }
 

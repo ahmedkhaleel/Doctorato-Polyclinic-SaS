@@ -14,17 +14,18 @@ return [
     */
 
     'groups' => [
-        'clinic'     => ['label_en' => 'Clinic Management',     'label_ar' => 'إدارة العيادة',         'icon' => 'hospital',    'color' => '#3B82F6'],
-        'finance'    => ['label_en' => 'Finance & Billing',     'label_ar' => 'المالية والفواتير',      'icon' => 'banknotes',   'color' => '#10B981'],
-        'hr'         => ['label_en' => 'Human Resources',       'label_ar' => 'الموارد البشرية',        'icon' => 'users',       'color' => '#8B5CF6'],
-        'crm'        => ['label_en' => 'CRM & Marketing',       'label_ar' => 'إدارة العملاء والتسويق', 'icon' => 'funnel',      'color' => '#F59E0B'],
-        'dental'     => ['label_en' => 'Dental Module',         'label_ar' => 'وحدة الأسنان',           'icon' => 'tooth',       'color' => '#06B6D4'],
-        'derma'      => ['label_en' => 'Dermatology & Cosmetic', 'label_ar' => 'الجلدية والتجميل',      'icon' => 'sparkles',    'color' => '#1B365D'],
-        'pediatric'  => ['label_en' => 'Pediatrics',            'label_ar' => 'طب الأطفال',             'icon' => 'child',       'color' => '#4CAF50'],
-        'insurance'  => ['label_en' => 'Insurance',             'label_ar' => 'التأمين',                'icon' => 'shield',      'color' => '#EC4899'],
-        'inventory'  => ['label_en' => 'Inventory & Supplies',  'label_ar' => 'المخزون والمستلزمات',    'icon' => 'box',         'color' => '#F97316'],
-        'content'    => ['label_en' => 'Content & Website',     'label_ar' => 'المحتوى والموقع',        'icon' => 'globe',       'color' => '#6366F1'],
-        'system'     => ['label_en' => 'System & Settings',     'label_ar' => 'النظام والإعدادات',      'icon' => 'cog',         'color' => '#64748B'],
+        'clinic' => ['label_en' => 'Clinic Management',     'label_ar' => 'إدارة العيادة',         'icon' => 'hospital',    'color' => '#3B82F6'],
+        'finance' => ['label_en' => 'Finance & Billing',     'label_ar' => 'المالية والفواتير',      'icon' => 'banknotes',   'color' => '#10B981'],
+        'hr' => ['label_en' => 'Human Resources',       'label_ar' => 'الموارد البشرية',        'icon' => 'users',       'color' => '#8B5CF6'],
+        'crm' => ['label_en' => 'CRM & Marketing',       'label_ar' => 'إدارة العملاء والتسويق', 'icon' => 'funnel',      'color' => '#F59E0B'],
+        'dental' => ['label_en' => 'Dental Module',         'label_ar' => 'وحدة الأسنان',           'icon' => 'tooth',       'color' => '#06B6D4'],
+        'derma' => ['label_en' => 'Dermatology & Cosmetic', 'label_ar' => 'الجلدية والتجميل',      'icon' => 'sparkles',    'color' => '#1B365D'],
+        'pediatric' => ['label_en' => 'Pediatrics',            'label_ar' => 'طب الأطفال',             'icon' => 'child',       'color' => '#4CAF50'],
+        'obgyn' => ['label_en' => 'Obstetrics & Gynecology', 'label_ar' => 'النساء والتوليد',     'icon' => 'heart',       'color' => '#DB2777'],
+        'insurance' => ['label_en' => 'Insurance',             'label_ar' => 'التأمين',                'icon' => 'shield',      'color' => '#EC4899'],
+        'inventory' => ['label_en' => 'Inventory & Supplies',  'label_ar' => 'المخزون والمستلزمات',    'icon' => 'box',         'color' => '#F97316'],
+        'content' => ['label_en' => 'Content & Website',     'label_ar' => 'المحتوى والموقع',        'icon' => 'globe',       'color' => '#6366F1'],
+        'system' => ['label_en' => 'System & Settings',     'label_ar' => 'النظام والإعدادات',      'icon' => 'cog',         'color' => '#64748B'],
     ],
 
     'modules' => [
@@ -351,6 +352,14 @@ return [
             'label_en' => 'Pediatrics',
             'label_ar' => 'طب الأطفال',
             'group' => 'pediatric',
+            'actions' => ['view', 'create', 'update', 'delete'],
+        ],
+
+        // ─── Obstetrics & Gynecology Module ────────────────────
+        'obgyn' => [
+            'label_en' => 'Obstetrics & Gynecology',
+            'label_ar' => 'النساء والتوليد',
+            'group' => 'obgyn',
             'actions' => ['view', 'create', 'update', 'delete'],
         ],
 

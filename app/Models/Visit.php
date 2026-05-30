@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Traits\LogsActivity;
 
 class Visit extends Model
 {
-    use HasFactory, SoftDeletes, LogsActivity;
+    use HasFactory, LogsActivity, SoftDeletes;
 
     protected static function boot()
     {
@@ -17,7 +17,7 @@ class Visit extends Model
 
         static::creating(function (Visit $visit) {
             $isOnline = ($visit->consultation_type === 'online');
-            if (empty($visit->booking_id) && empty($visit->package_bundle_booking_id) && !$isOnline) {
+            if (empty($visit->booking_id) && empty($visit->package_bundle_booking_id) && ! $isOnline) {
                 throw new \RuntimeException('A visit must be linked to a booking or a package bundle booking.');
             }
         });
@@ -25,7 +25,7 @@ class Visit extends Model
         // Bust the patient's cached active-specialties list whenever
         // a visit is created/updated/deleted (module may have changed).
         $forget = function (Visit $visit) {
-            if (!empty($visit->patient_id)) {
+            if (! empty($visit->patient_id)) {
                 Patient::forgetSpecialtyCache((int) $visit->patient_id);
             }
         };
@@ -206,6 +206,11 @@ class Visit extends Model
     public function scopeDerma($query)
     {
         return $query->where('module', 'derma');
+    }
+
+    public function scopeObgyn($query)
+    {
+        return $query->where('module', 'obgyn');
     }
 
     // ─── Pediatric Relationships ────────────────────────

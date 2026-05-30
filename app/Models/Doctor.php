@@ -2,18 +2,19 @@
 
 namespace App\Models;
 
+use App\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Traits\LogsActivity;
 
 class Doctor extends Model
 {
-    use HasFactory, SoftDeletes, LogsActivity;
+    use HasFactory, LogsActivity, SoftDeletes;
 
     /** Commission paid via Doctor Payouts (contractor). */
     const PAY_PAYOUT = 'payout';
+
     /** Commission consolidated into the monthly salary slip (employee). */
     const PAY_SALARY = 'salary';
 
@@ -38,6 +39,7 @@ class Doctor extends Model
         'dental_consultation_commission', 'dental_service_commission',
         'pediatric_consultation_commission', 'pediatric_followup_commission',
         'pediatric_consultation_fee',
+        'obgyn_consultation_fee', 'obgyn_consultation_commission',
         'clinic_notes',
         // Telemedicine
         'online_consultation_enabled',
@@ -62,6 +64,8 @@ class Doctor extends Model
         'pediatric_consultation_commission' => 'decimal:2',
         'pediatric_followup_commission' => 'decimal:2',
         'pediatric_consultation_fee' => 'decimal:2',
+        'obgyn_consultation_fee' => 'decimal:2',
+        'obgyn_consultation_commission' => 'decimal:2',
         'online_consultation_enabled' => 'boolean',
         'online_consultation_fee' => 'decimal:2',
     ];
@@ -72,7 +76,7 @@ class Doctor extends Model
     {
         return Attribute::make(
             get: fn () => $this->photo
-                ? '/storage/' . $this->photo
+                ? '/storage/'.$this->photo
                 : null,
         );
     }
@@ -102,10 +106,15 @@ class Doctor extends Model
         return $query->where('module', 'pediatric');
     }
 
+    public function scopeObgyn($query)
+    {
+        return $query->where('module', 'obgyn');
+    }
+
     public function scopeOnlineEnabled($query)
     {
         return $query->where('online_consultation_enabled', true)
-                     ->where('status', 'active');
+            ->where('status', 'active');
     }
 
     // ─── Clinic Relationships ───────────────────────────
