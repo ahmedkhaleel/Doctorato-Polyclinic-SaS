@@ -73,6 +73,31 @@ return Application::configure(basePath: dirname(__DIR__))
             'module' => CheckModule::class,
             'branch.context' => \App\Http\Middleware\SetActiveBranch::class,
         ]);
+
+        // SetActiveBranch must pin the active branch BEFORE route-model binding
+        // (SubstituteBindings) resolves {model} params — otherwise implicit
+        // binding queries run under the fallback branch and a non-default-branch
+        // user can't open their own records (and cross-branch isolation relies on
+        // the wrong branch). Give it priority just ahead of SubstituteBindings.
+        $middleware->priority([
+            \Illuminate\Cookie\Middleware\EncryptCookies::class,
+            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+            \Illuminate\Session\Middleware\StartSession::class,
+            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+            \Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class,
+            \Illuminate\Routing\Middleware\ThrottleRequests::class,
+            \Illuminate\Routing\Middleware\ThrottleRequestsWithRedis::class,
+            \Illuminate\Contracts\Session\Middleware\AuthenticatesSessions::class,
+            AdminAuth::class,
+            DoctorAuth::class,
+            SecretaryAuth::class,
+            WebmasterAuth::class,
+            PatientAuth::class,
+            \App\Http\Middleware\SetActiveBranch::class,
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            CheckPermission::class,
+            CheckModule::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         // Handle PostTooLargeException - redirect back with error message
