@@ -69,6 +69,7 @@ const navGroups = computed(() => [
         key: 'clinical',
         items: [
             { label: t('a_patients'),        href: '/doctor/patients',     icon: 'heart' },
+            { label: isRtl.value ? 'مرضاي المفضّلون' : 'Favorite Patients', href: '/doctor/patients/favorites', icon: 'star' },
             { label: t('a_visits'),          href: '/doctor/visits',       icon: 'clipboard' },
             { label: t('a_prescriptions'),   href: '/doctor/prescriptions', icon: 'pill' },
             { label: t('a_bookings'),        href: '/doctor/bookings',     icon: 'calendar' },
@@ -93,6 +94,7 @@ const navGroups = computed(() => [
             { label: isRtl.value ? 'مخطط الأسنان' : 'Dental Chart',   href: '/doctor/dental/chart-search', icon: 'tooth' },
             { label: isRtl.value ? 'خطط العلاج' : 'Treatment Plans', href: '/doctor/dental/treatment-plans', icon: 'clipboard' },
             { label: isRtl.value ? 'العلاجات' : 'Treatments',        href: '/doctor/dental/treatments',      icon: 'pill' },
+            { label: isRtl.value ? 'قوالب الوصفات' : 'Rx Templates', href: '/doctor/dental/prescription-templates', icon: 'file-text' },
             { label: isRtl.value ? 'الأشعة' : 'X-rays',             href: '/doctor/dental/xrays',           icon: 'camera' },
             { label: isRtl.value ? 'المتابعات' : 'Follow-ups',      href: '/doctor/dental/followups',       icon: 'clock' },
             { label: isRtl.value ? 'مقارنات قبل/بعد' : 'Comparisons', href: '/doctor/dental/comparisons',    icon: 'camera' },
@@ -145,6 +147,7 @@ const navGroups = computed(() => [
         key: 'account',
         items: [
             { label: t('a_chat'),            href: '/doctor/chat',         icon: 'chat' },
+            { label: isRtl.value ? 'سجل الإشعارات' : 'Notification History', href: '/doctor/notifications/history', icon: 'bell' },
             { label: isRtl.value ? 'تقييماتي' : 'My Reviews', href: '/doctor/reviews', icon: 'star' },
             { label: t('a_profile'),         href: '/doctor/profile',      icon: 'user' },
         ],
@@ -221,6 +224,7 @@ const quickSearchPages = computed(() => {
         { label: isRtl.value ? 'لوحة التحكم' : 'Dashboard', href: '/doctor', icon: 'grid', group: isRtl.value ? 'الرئيسية' : 'Main' },
         { label: isRtl.value ? 'طابور اليوم' : "Today's Queue", href: '/doctor/queue', icon: 'queue', group: isRtl.value ? 'الرئيسية' : 'Main' },
         { label: isRtl.value ? 'المرضى' : 'Patients', href: '/doctor/patients', icon: 'heart', group: isRtl.value ? 'العيادة' : 'Clinical' },
+        { label: isRtl.value ? 'مرضاي المفضّلون' : 'Favorite Patients', href: '/doctor/patients/favorites', icon: 'star', group: isRtl.value ? 'العيادة' : 'Clinical' },
         { label: isRtl.value ? 'الزيارات' : 'Visits', href: '/doctor/visits', icon: 'clipboard', group: isRtl.value ? 'العيادة' : 'Clinical' },
         { label: isRtl.value ? 'الوصفات' : 'Prescriptions', href: '/doctor/prescriptions', icon: 'pill', group: isRtl.value ? 'العيادة' : 'Clinical' },
         { label: isRtl.value ? 'الحجوزات' : 'Bookings', href: '/doctor/bookings', icon: 'calendar', group: isRtl.value ? 'العيادة' : 'Clinical' },
@@ -250,6 +254,7 @@ const quickSearchPages = computed(() => {
             { label: isRtl.value ? 'مخطط الأسنان' : 'Dental Chart', href: '/doctor/dental/chart-search', icon: 'tooth', group: isRtl.value ? 'طب الأسنان' : 'Dental' },
             { label: isRtl.value ? 'خطط العلاج' : 'Treatment Plans', href: '/doctor/dental/treatment-plans', icon: 'clipboard', group: isRtl.value ? 'طب الأسنان' : 'Dental' },
             { label: isRtl.value ? 'العلاجات' : 'Treatments', href: '/doctor/dental/treatments', icon: 'pill', group: isRtl.value ? 'طب الأسنان' : 'Dental' },
+            { label: isRtl.value ? 'قوالب الوصفات' : 'Rx Templates', href: '/doctor/dental/prescription-templates', icon: 'file-text', group: isRtl.value ? 'طب الأسنان' : 'Dental' },
             { label: isRtl.value ? 'الأشعة' : 'X-rays', href: '/doctor/dental/xrays', icon: 'camera', group: isRtl.value ? 'طب الأسنان' : 'Dental' },
         );
     }
