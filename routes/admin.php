@@ -625,6 +625,7 @@ Route::middleware(['admin.auth', 'branch.context'])->group(function () {
 
     // ─── Reports ─────────────────────────────────────────────
     Route::get('/reports', [ReportController::class, 'index'])->name('admin.reports.index')->middleware('permission:reports.view');
+    Route::get('/reports/branch-comparison', [\App\Http\Controllers\Admin\BranchComparisonController::class, 'index'])->name('admin.reports.branch-comparison')->middleware('permission:reports.view');
     Route::get('/reports/financial', [ReportController::class, 'financial'])->name('admin.reports.financial')->middleware('permission:reports.view');
     Route::get('/reports/revenue-analytics', [RevenueAnalyticsController::class, 'index'])->name('admin.reports.revenue-analytics')->middleware('permission:reports.view');
     Route::get('/reports/queue-analytics', [QueueAnalyticsController::class, 'index'])->name('admin.reports.queue-analytics')->middleware('permission:reports.view');

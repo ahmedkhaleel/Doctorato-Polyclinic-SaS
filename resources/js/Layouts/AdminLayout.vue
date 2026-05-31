@@ -311,6 +311,7 @@ const navGroups = [
         groupIcon: 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z',
         items: [
             { labelEn: 'Reports',        labelAr: 'التقارير',       href: '/admin/reports',            icon: 'chart',    permission: 'reports.view' },
+            { labelEn: 'Branch Comparison', labelAr: 'مقارنة الفروع', href: '/admin/reports/branch-comparison', icon: 'chartUp', permission: 'reports.view' },
             { labelEn: 'Revenue Analytics', labelAr: 'تحليل الإيرادات', href: '/admin/reports/revenue-analytics', icon: 'chartUp', permission: 'reports.view' },
             { labelEn: 'Queue Analytics',   labelAr: 'تحليل الانتظار',  href: '/admin/reports/queue-analytics',   icon: 'queue',   permission: 'reports.view' },
             { labelEn: 'Doctor KPIs',      labelAr: 'أداء الأطباء',    href: '/admin/reports/doctor-kpi',        icon: 'user',    permission: 'reports.view', moduleKey: 'hr' },
