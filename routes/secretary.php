@@ -67,6 +67,10 @@ Route::middleware('secretary.auth')->group(function () {
     Route::post('/my-notifications/{id}/read', [\App\Http\Controllers\StaffNotificationController::class, 'markRead'])->whereNumber('id')->name('secretary.my-notifications.read');
     Route::post('/my-notifications/read-all', [\App\Http\Controllers\StaffNotificationController::class, 'markAllRead'])->name('secretary.my-notifications.readAll');
 
+    // ─── Notifications Inbox (two-way conversations) ────────
+    Route::get('/inbox', [\App\Http\Controllers\NotificationInboxController::class, 'show'])->defaults('panel', 'secretary')->name('secretary.notifications-inbox.index')->middleware('permission:notifications.view');
+    Route::post('/inbox/reply', [\App\Http\Controllers\NotificationInboxController::class, 'reply'])->name('secretary.notifications-inbox.reply')->middleware('permission:notifications.send');
+
     // ─── Notifications ──────────────────────────────────────
     Route::get('/notifications', [SecretaryNotificationController::class, 'index'])->name('secretary.notifications.index');
     Route::post('/notifications/mark-all-read', [SecretaryNotificationController::class, 'markAllRead'])->name('secretary.notifications.markAllRead');

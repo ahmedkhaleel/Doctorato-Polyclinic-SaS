@@ -309,6 +309,10 @@ Route::middleware('admin.auth')->group(function () {
             ->name('test')->middleware('permission:notifications.send');
     });
 
+    // ─── Notifications Inbox (two-way conversations) ───────
+    Route::get('/inbox', [\App\Http\Controllers\NotificationInboxController::class, 'show'])->defaults('panel', 'admin')->name('admin.notifications-inbox.index')->middleware('permission:notifications.view');
+    Route::post('/inbox/reply', [\App\Http\Controllers\NotificationInboxController::class, 'reply'])->name('admin.notifications-inbox.reply')->middleware('permission:notifications.send');
+
     // ─── SMS Templates (admin-editable copy) ───────────────
     Route::get('/sms-templates',   [\App\Http\Controllers\Admin\SmsTemplateController::class, 'index'])
         ->name('admin.sms-templates.index')->middleware('permission:settings.view');
