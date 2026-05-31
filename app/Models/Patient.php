@@ -661,7 +661,7 @@ class Patient extends Model
      * the preferences migration). Marketing SMS defaults to false.
      *
      * @param  'bookings'|'reminders'|'marketing'  $category
-     * @param  'email'|'sms'  $channel
+     * @param  'email'|'sms'|'whatsapp'  $channel
      */
     public function wantsNotification(string $category, string $channel): bool
     {
@@ -669,14 +669,15 @@ class Patient extends Model
         if (! in_array($col, [
             'notify_email_bookings', 'notify_email_reminders', 'notify_email_marketing',
             'notify_sms_bookings', 'notify_sms_reminders', 'notify_sms_marketing',
+            'notify_whatsapp_bookings', 'notify_whatsapp_reminders', 'notify_whatsapp_marketing',
         ], true)) {
             return false;
         }
 
         $value = $this->getAttribute($col);
         if (is_null($value)) {
-            // Legacy default: marketing-SMS off, everything else on.
-            return $col !== 'notify_sms_marketing';
+            // Legacy default: marketing (sms+whatsapp) is opt-IN/off, everything else on.
+            return ! in_array($col, ['notify_sms_marketing', 'notify_whatsapp_marketing'], true);
         }
 
         return (bool) $value;

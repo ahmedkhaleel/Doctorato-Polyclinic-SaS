@@ -152,9 +152,9 @@ class NotificationService
             return true;
         }
 
-        // Patient consent today tracks email + sms only. WhatsApp consent columns
-        // land in P5 — until then don't block channels the model can't express.
-        if (! in_array($channel, ['email', 'sms'], true)) {
+        // Consent is tracked for email, sms and whatsapp. Any other channel
+        // the model can't express defaults to allowed.
+        if (! in_array($channel, ['email', 'sms', 'whatsapp'], true)) {
             return true;
         }
 
