@@ -181,6 +181,9 @@ class NotificationService
                 'to' => $to,
                 'channel' => $channel,
                 'event_key' => $eventKey,
+                // Promote campaign attribution from meta to indexed columns (A/B analytics).
+                'campaign_id' => $meta['campaign_id'] ?? null,
+                'ab_variant' => $meta['variant'] ?? null,
                 'template_id' => $templateId,
                 'status' => NotificationLog::STATUS_QUEUED,
                 'dedup_key' => $dedupKey,

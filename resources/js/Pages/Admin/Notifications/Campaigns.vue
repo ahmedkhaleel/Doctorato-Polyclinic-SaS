@@ -22,6 +22,7 @@ const statusStyle = { draft: 'bg-gray-100 text-gray-600', scheduled: 'bg-amber-1
 const showForm = ref(false);
 const form = reactive({
     name: '', channel: 'whatsapp', subject: '', body_ar: '', body_en: '',
+    ab_enabled: false, subject_b: '', body_ar_b: '', body_en_b: '',
     scheduled_at: '', send_now: false,
     rules: { gender: '', age_min: '', age_max: '', created_within_days: '', inactive_days: '', marketing_channel: '' },
 });
@@ -56,7 +57,8 @@ function submit(sendNow) {
     });
 }
 function resetForm() {
-    Object.assign(form, { name: '', channel: 'whatsapp', subject: '', body_ar: '', body_en: '', scheduled_at: '', send_now: false,
+    Object.assign(form, { name: '', channel: 'whatsapp', subject: '', body_ar: '', body_en: '',
+        ab_enabled: false, subject_b: '', body_ar_b: '', body_en_b: '', scheduled_at: '', send_now: false,
         rules: { gender: '', age_min: '', age_max: '', created_within_days: '', inactive_days: '', marketing_channel: '' } });
     audience.value = null;
 }
@@ -95,6 +97,15 @@ const fmt = (iso) => iso ? new Date(iso).toLocaleString(isRtl.value ? 'ar-EG' : 
                     <textarea v-model="form.body_ar" rows="3" class="mt-1 w-full rounded-lg border-gray-200 text-sm"></textarea></label>
                 <label class="block"><span class="text-xs text-gray-500">{{ t('النص (إنجليزي)', 'Body (English)') }}</span>
                     <textarea v-model="form.body_en" rows="2" class="mt-1 w-full rounded-lg border-gray-200 text-sm"></textarea></label>
+
+                <!-- A/B -->
+                <label class="inline-flex items-center gap-2 text-sm"><input type="checkbox" v-model="form.ab_enabled" class="rounded" /> {{ t('اختبار A/B (نسخة بديلة)', 'A/B test (variant B)') }}</label>
+                <div v-if="form.ab_enabled" class="rounded-xl border border-dashed border-[#C4A265]/40 bg-[#C4A265]/5 p-4 space-y-2">
+                    <p class="text-xs font-semibold text-[#C4A265]">{{ t('النسخة B (تُرسل لنصف الجمهور)', 'Variant B (sent to half the audience)') }}</p>
+                    <input v-if="form.channel === 'email'" v-model="form.subject_b" :placeholder="t('موضوع B', 'Subject B')" class="w-full rounded-lg border-gray-200 text-sm" />
+                    <textarea v-model="form.body_ar_b" rows="2" :placeholder="t('نص B بالعربية', 'Body B (Arabic)')" class="w-full rounded-lg border-gray-200 text-sm"></textarea>
+                    <textarea v-model="form.body_en_b" rows="2" :placeholder="t('نص B بالإنجليزية', 'Body B (English)')" class="w-full rounded-lg border-gray-200 text-sm"></textarea>
+                </div>
 
                 <!-- Audience rules -->
                 <div class="rounded-xl border border-dashed border-gray-200 p-4">
@@ -136,7 +147,14 @@ const fmt = (iso) => iso ? new Date(iso).toLocaleString(isRtl.value ? 'ar-EG' : 
                     </tr></thead>
                     <tbody>
                         <tr v-for="c in campaigns" :key="c.id" class="border-b border-gray-50">
-                            <td class="px-4 py-3 font-medium text-gray-800">{{ c.name }}</td>
+                            <td class="px-4 py-3">
+                                <span class="font-medium text-gray-800">{{ c.name }}</span>
+                                <span v-if="c.ab_enabled" class="ms-2 text-[10px] font-bold px-1.5 py-0.5 rounded bg-[#C4A265]/15 text-[#C4A265]">A/B</span>
+                                <div v-if="c.ab_results" class="text-[11px] text-gray-400 mt-0.5">
+                                    A: {{ c.ab_results.A.read_rate ?? '—' }}% · B: {{ c.ab_results.B.read_rate ?? '—' }}%
+                                    <span v-if="c.ab_results.winner" class="text-green-600 font-semibold">· {{ t('الفائز', 'winner') }} {{ c.ab_results.winner }}</span>
+                                </div>
+                            </td>
                             <td class="px-4 py-3 text-center"><span class="text-xs font-bold px-2 py-0.5 rounded-full text-white" :style="{ background: channelMeta[c.channel]?.color }">{{ t(channelMeta[c.channel]?.ar, channelMeta[c.channel]?.en) }}</span></td>
                             <td class="px-4 py-3 text-center"><span class="text-xs font-semibold px-2 py-0.5 rounded-full" :class="statusStyle[c.status]">{{ c.status }}</span></td>
                             <td class="px-4 py-3 text-center text-gray-600">{{ c.sent_count }} / {{ c.audience_count }}</td>

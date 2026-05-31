@@ -17,9 +17,11 @@ class NotificationCampaign extends Model
     protected $fillable = [
         'name', 'channel', 'subject', 'body_ar', 'body_en', 'rules',
         'status', 'scheduled_at', 'sent_at', 'audience_count', 'sent_count', 'created_by',
+        'ab_enabled', 'subject_b', 'body_ar_b', 'body_en_b',
     ];
 
     protected $casts = [
+        'ab_enabled' => 'boolean',
         'rules' => 'array',
         'scheduled_at' => 'datetime',
         'sent_at' => 'datetime',

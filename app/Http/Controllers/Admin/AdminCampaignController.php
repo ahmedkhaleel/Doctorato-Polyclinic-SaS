@@ -22,9 +22,11 @@ class AdminCampaignController extends Controller
             'campaigns' => NotificationCampaign::latest()->limit(100)->get()->map(fn ($c) => [
                 'id' => $c->id, 'name' => $c->name, 'channel' => $c->channel, 'status' => $c->status,
                 'audience_count' => $c->audience_count, 'sent_count' => $c->sent_count,
+                'ab_enabled' => (bool) $c->ab_enabled,
                 'scheduled_at' => $c->scheduled_at?->toIso8601String(),
                 'sent_at' => $c->sent_at?->toIso8601String(),
                 'created_at' => $c->created_at?->toIso8601String(),
+                'ab_results' => $c->ab_enabled ? $this->abResults($c) : null,
             ]),
         ]);
     }
@@ -45,6 +47,10 @@ class AdminCampaignController extends Controller
             'subject' => $data['subject'] ?? null,
             'body_ar' => $data['body_ar'],
             'body_en' => $data['body_en'] ?? null,
+            'ab_enabled' => $data['ab_enabled'] ?? false,
+            'subject_b' => $data['subject_b'] ?? null,
+            'body_ar_b' => $data['body_ar_b'] ?? null,
+            'body_en_b' => $data['body_en_b'] ?? null,
             'rules' => $data['rules'] ?? [],
             'created_by' => $request->user()?->id,
             'audience_count' => $this->resolver->count($data['rules'] ?? []),
@@ -79,6 +85,35 @@ class AdminCampaignController extends Controller
         return back()->with('success', __('Campaign deleted.'));
     }
 
+    /** Per-variant delivery/read counts for an A/B campaign. */
+    private function abResults(NotificationCampaign $campaign): array
+    {
+        $rows = \App\Models\NotificationLog::where('campaign_id', $campaign->id)
+            ->whereNotNull('ab_variant')
+            ->selectRaw('ab_variant,
+                COUNT(*) as total,
+                SUM(CASE WHEN status IN (\'sent\',\'delivered\',\'read\') THEN 1 ELSE 0 END) as reached,
+                SUM(CASE WHEN status=\'read\' THEN 1 ELSE 0 END) as read_count')
+            ->groupBy('ab_variant')->get()->keyBy('ab_variant');
+
+        $out = [];
+        foreach (['A', 'B'] as $v) {
+            $r = $rows->get($v);
+            $reached = (int) ($r->reached ?? 0);
+            $reads = (int) ($r->read_count ?? 0);
+            $out[$v] = [
+                'total' => (int) ($r->total ?? 0),
+                'reached' => $reached,
+                'reads' => $reads,
+                'read_rate' => $reached > 0 ? round($reads / $reached * 100, 1) : null,
+            ];
+        }
+        $out['winner'] = ($out['A']['read_rate'] ?? -1) === ($out['B']['read_rate'] ?? -1)
+            ? null : (($out['A']['read_rate'] ?? -1) > ($out['B']['read_rate'] ?? -1) ? 'A' : 'B');
+
+        return $out;
+    }
+
     private function validateCampaign(Request $request): array
     {
         return $request->validate([
@@ -87,6 +122,10 @@ class AdminCampaignController extends Controller
             'subject' => 'nullable|string|max:255',
             'body_ar' => 'required|string|max:2000',
             'body_en' => 'nullable|string|max:2000',
+            'ab_enabled' => 'sometimes|boolean',
+            'subject_b' => 'nullable|string|max:255',
+            'body_ar_b' => 'nullable|string|max:2000',
+            'body_en_b' => 'nullable|string|max:2000',
             'scheduled_at' => 'nullable|date|after:now',
             'rules' => 'nullable|array',
             'rules.gender' => 'nullable|in:male,female',
