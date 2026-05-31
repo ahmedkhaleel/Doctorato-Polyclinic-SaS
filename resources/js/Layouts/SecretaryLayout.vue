@@ -51,6 +51,8 @@ const navGroups = [
         key: 'main', titleEn: 'Main', titleAr: 'الرئيسية',
         items: [
             { labelEn: 'Dashboard',   labelAr: 'لوحة التحكم',   href: '/secretary',              icon: 'grid' },
+            { labelEn: 'My Notifications', labelAr: 'إشعاراتي', href: '/secretary/my-notifications', icon: 'bell' },
+            { labelEn: 'Inbox',       labelAr: 'صندوق المراسلات', href: '/secretary/inbox',      icon: 'chat' },
             { labelEn: 'Calendar',    labelAr: 'التقويم',       href: '/secretary/calendar',     icon: 'calendarView' },
             { labelEn: 'Today Queue', labelAr: 'طابور اليوم',   href: '/secretary/queue',        icon: 'queue' },
         ],
