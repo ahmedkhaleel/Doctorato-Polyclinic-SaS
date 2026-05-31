@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\BelongsToBranch;
+use App\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\LogsActivity;
 
 class DoctorSchedule extends Model
 {
-    use HasFactory, LogsActivity;
+    use BelongsToBranch, HasFactory, LogsActivity;
 
     protected $fillable = [
         'doctor_id', 'day_of_week', 'start_time', 'end_time', 'is_active',
@@ -33,7 +34,9 @@ class DoctorSchedule extends Model
     ];
 
     public const MODE_IN_PERSON = 'in_person';
+
     public const MODE_ONLINE = 'online';
+
     public const MODE_BOTH = 'both';
 
     public function doctor()
