@@ -289,6 +289,8 @@ Route::middleware('admin.auth')->group(function () {
             ->name('index')->middleware('permission:notifications.view');
         Route::get('/logs', [\App\Http\Controllers\Admin\AdminNotificationHubController::class, 'logs'])
             ->name('logs')->middleware('permission:notifications.view');
+        Route::get('/analytics', [\App\Http\Controllers\Admin\AdminNotificationHubController::class, 'analytics'])
+            ->name('analytics')->middleware('permission:notifications.view');
         Route::post('/channels/{channel}', [\App\Http\Controllers\Admin\AdminNotificationHubController::class, 'updateChannel'])
             ->name('channels.update')->middleware('permission:notifications.update');
         Route::post('/routes', [\App\Http\Controllers\Admin\AdminNotificationHubController::class, 'updateRoute'])

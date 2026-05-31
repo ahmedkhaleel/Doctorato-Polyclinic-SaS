@@ -150,9 +150,14 @@ const statusColor = (ch) => (channelMeta[ch]?.color || '#64748B');
                         <p class="text-sm text-gray-500">{{ t('تحكم كامل في واتساب و SMS والبريد والإشعارات الداخلية', 'Unified control over WhatsApp, SMS, Email & In-App notifications') }}</p>
                     </div>
                 </div>
-                <Link href="/admin/notifications-hub/logs" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-white text-sm font-semibold shadow-sm hover:opacity-90 transition" style="background:#1B365D">
-                    {{ t('سجل الإرسال', 'Delivery Log') }}
-                </Link>
+                <div class="flex items-center gap-2">
+                    <Link href="/admin/notifications-hub/analytics" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-50 transition">
+                        {{ t('التحليلات', 'Analytics') }}
+                    </Link>
+                    <Link href="/admin/notifications-hub/logs" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-white text-sm font-semibold shadow-sm hover:opacity-90 transition" style="background:#1B365D">
+                        {{ t('سجل الإرسال', 'Delivery Log') }}
+                    </Link>
+                </div>
             </div>
 
             <!-- Stats -->

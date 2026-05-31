@@ -137,6 +137,76 @@ class AdminNotificationHubController extends Controller
         ]);
     }
 
+    public function analytics(Request $request)
+    {
+        $days = (int) $request->input('days', 30);
+        $days = max(1, min(365, $days));
+        $since = now()->subDays($days)->startOfDay();
+
+        $counted = [NotificationLog::STATUS_SENT, NotificationLog::STATUS_DELIVERED, NotificationLog::STATUS_READ];
+
+        // Per-channel status matrix + cost.
+        $rows = NotificationLog::where('created_at', '>=', $since)
+            ->select('channel', 'status', DB::raw('count(*) as c'), DB::raw('COALESCE(SUM(cost),0) as cost'))
+            ->groupBy('channel', 'status')->get();
+
+        $byChannel = [];
+        foreach (self::CHANNELS as $ch) {
+            $byChannel[$ch] = ['total' => 0, 'sent' => 0, 'delivered' => 0, 'read' => 0, 'failed' => 0, 'skipped' => 0, 'cost' => 0.0];
+        }
+        foreach ($rows as $r) {
+            if (! isset($byChannel[$r->channel])) {
+                continue;
+            }
+            $byChannel[$r->channel][$r->status] = ($byChannel[$r->channel][$r->status] ?? 0) + (int) $r->c;
+            $byChannel[$r->channel]['total'] += (int) $r->c;
+            $byChannel[$r->channel]['cost'] += (float) $r->cost;
+        }
+        foreach ($byChannel as $ch => &$m) {
+            $reached = $m['sent'] + $m['delivered'] + $m['read'];
+            $attempted = $reached + $m['failed'];
+            $m['delivery_rate'] = $attempted > 0 ? round($reached / $attempted * 100, 1) : null;
+            $m['read_rate'] = $reached > 0 ? round($m['read'] / $reached * 100, 1) : null;
+        }
+        unset($m);
+
+        // Per-event breakdown (top 15 by volume).
+        $perEvent = NotificationLog::where('created_at', '>=', $since)
+            ->select('event_key',
+                DB::raw('count(*) as total'),
+                DB::raw("SUM(CASE WHEN status='failed' THEN 1 ELSE 0 END) as failed"),
+                DB::raw('COALESCE(SUM(cost),0) as cost'))
+            ->groupBy('event_key')->orderByDesc('total')->limit(15)->get();
+
+        // Daily series for the trend chart.
+        $daily = NotificationLog::where('created_at', '>=', $since)
+            ->select(DB::raw('DATE(created_at) as d'),
+                DB::raw('count(*) as total'),
+                DB::raw('COALESCE(SUM(cost),0) as cost'))
+            ->groupBy('d')->orderBy('d')->get();
+
+        // Top failure reasons.
+        $failures = NotificationLog::where('created_at', '>=', $since)
+            ->where('status', NotificationLog::STATUS_FAILED)->whereNotNull('error')
+            ->select('error', DB::raw('count(*) as c'))
+            ->groupBy('error')->orderByDesc('c')->limit(10)->get();
+
+        return Inertia::render('Admin/Notifications/Analytics', [
+            'days' => $days,
+            'channelKeys' => self::CHANNELS,
+            'byChannel' => $byChannel,
+            'totals' => [
+                'sent' => array_sum(array_column($byChannel, 'sent')) + array_sum(array_column($byChannel, 'delivered')) + array_sum(array_column($byChannel, 'read')),
+                'failed' => array_sum(array_column($byChannel, 'failed')),
+                'skipped' => array_sum(array_column($byChannel, 'skipped')),
+                'cost' => round(array_sum(array_column($byChannel, 'cost')), 2),
+            ],
+            'perEvent' => $perEvent,
+            'daily' => $daily,
+            'failures' => $failures,
+        ]);
+    }
+
     public function updateChannel(Request $request, string $channel)
     {
         abort_unless(in_array($channel, self::CHANNELS, true), 404);
