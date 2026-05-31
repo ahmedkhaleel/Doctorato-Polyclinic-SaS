@@ -96,6 +96,25 @@ class DashboardController extends Controller
             'pending_leaves' => ModuleManager::isEnabled('hr') ? Leave::where('status', 'pending')->count() : 0,
         ];
 
+        // ─── Operations snapshot (actionable counts across subsystems) ──
+        // Each metric is wrapped so a missing table/column can never 500 the
+        // dashboard. Frontend gates each tile by permission/module.
+        $safe = fn (callable $cb) => (function () use ($cb) {
+            try { return (int) $cb(); } catch (\Throwable $e) { return 0; }
+        })();
+        $operations = [
+            'overdue_invoices' => $safe(fn () => Invoice::whereIn('status', ['unpaid', 'partial'])->count()),
+            'low_stock' => $alerts['low_stock_count'],
+            'insurance_pending' => $safe(fn () => \App\Models\InsuranceClaim::whereIn('status', ['draft', 'pending', 'submitted', 'under_review'])->count()),
+            'preauth_pending' => $safe(fn () => \App\Models\InsurancePreAuthorization::where('status', 'pending')->count()),
+            'notifications_failed' => $safe(fn () => \App\Models\NotificationLog::where('status', 'failed')->whereDate('created_at', today())->count()),
+            'satisfaction_pending' => $safe(fn () => \App\Models\PatientSatisfaction::whereNull('overall_rating')->count()),
+            'recall_this_month' => $safe(fn () => \App\Models\PatientRecallReminder::whereMonth('created_at', $now->month)->whereYear('created_at', $now->year)->count()),
+            'expiring_documents' => $safe(fn () => ModuleManager::isEnabled('hr') ? \App\Models\Employee::whereNotNull('contract_end_date')->whereBetween('contract_end_date', [today(), today()->addDays(30)])->count() : 0),
+            'pending_leaves' => $alerts['pending_leaves'],
+            'overdue_followups' => $safe(fn () => LeadFollowUp::where('status', 'pending')->where('scheduled_at', '<', now())->count()),
+        ];
+
         // ─── Cached: Revenue Trend (refreshed every 30 min) ─────
         $revenueTrendData = Cache::remember('admin-dashboard:revenue-trend:' . today()->format('Y-m-d'), 1800, function () use ($now) {
             $revenueTrend = Payment::select(
@@ -258,6 +277,7 @@ class DashboardController extends Controller
             'financial' => $financial,
             'clinic' => $clinic,
             'alerts' => $alerts,
+            'operations' => $operations,
             'crm' => $crm,
             'revenueTrend' => $revenueTrendData,
             'visitTrend' => $visitTrendData,

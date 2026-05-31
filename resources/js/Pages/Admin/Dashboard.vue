@@ -59,6 +59,25 @@ const props = defineProps({
     dental: Object,
     pediatric: Object,
     engagement: { type: Object, default: null },
+    operations: { type: Object, default: () => ({}) },
+});
+
+/* ── Operations snapshot (actionable counts, gated by permission/module) ── */
+const opsItems = computed(() => {
+    const o = props.operations || {};
+    const items = [
+        { key: 'overdue_invoices', ar: 'فواتير غير مدفوعة', en: 'Unpaid Invoices', href: '/admin/invoices?status=unpaid', color: '#DC2626', show: can('invoices.view') },
+        { key: 'overdue_followups', ar: 'متابعات متأخرة', en: 'Overdue Follow-ups', href: '/admin/leads/pipeline', color: '#F59E0B', show: can('leads.view') },
+        { key: 'low_stock', ar: 'مخزون منخفض', en: 'Low Stock', href: '/admin/supplies', color: '#0891B2', show: can('inventory.view') && modEnabled('inventory') },
+        { key: 'insurance_pending', ar: 'مطالبات تأمين معلّقة', en: 'Pending Claims', href: '/admin/insurance/claims', color: '#7C3AED', show: can('insurance.view') },
+        { key: 'preauth_pending', ar: 'موافقات مسبقة معلّقة', en: 'Pending Pre-Auths', href: '/admin/insurance/pre-authorizations', color: '#9333EA', show: can('insurance.view') },
+        { key: 'notifications_failed', ar: 'إشعارات فاشلة اليوم', en: 'Failed Notifications', href: '/admin/notifications-hub/logs', color: '#E11D48', show: can('notifications.view') },
+        { key: 'satisfaction_pending', ar: 'استبيانات معلّقة', en: 'Pending Surveys', href: '/admin/satisfaction', color: '#0D9488', show: can('visits.view') },
+        { key: 'recall_this_month', ar: 'استدعاءات الشهر', en: 'Recalls (Month)', href: '/admin/recall', color: '#2563EB', show: can('patients.view') },
+        { key: 'pending_leaves', ar: 'إجازات معلّقة', en: 'Pending Leaves', href: '/admin/leaves', color: '#EA580C', show: can('hr.view') && modEnabled('hr') },
+        { key: 'expiring_documents', ar: 'عقود تنتهي قريباً', en: 'Expiring Contracts', href: '/admin/documents/expiring', color: '#CA8A04', show: can('hr.view') && modEnabled('hr') },
+    ];
+    return items.filter(i => i.show).map(i => ({ ...i, value: Number(o[i.key] ?? 0) }));
 });
 
 /* ── Quick Access tiles ───────────────────────────────────────
@@ -443,6 +462,21 @@ function labelX(index, total) {
                           class="qa-tile group flex items-center gap-2.5 rounded-xl bg-white border border-gray-100 px-3 py-3 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
                         <span class="qa-dot w-2.5 h-2.5 rounded-full flex-shrink-0" :style="{ backgroundColor: q.color }"></span>
                         <span class="text-[13px] font-semibold text-gray-700 group-hover:text-[#1B365D] truncate">{{ isRtl ? q.ar : q.en }}</span>
+                    </Link>
+                </div>
+            </div>
+
+            <!-- ── Operations snapshot ────────────────────────── -->
+            <div v-if="opsItems.length" class="dash-stagger" style="--i:1">
+                <h3 class="text-sm font-semibold text-gray-700 mb-3">{{ isRtl ? 'مؤشرات تشغيلية' : 'Operations' }}</h3>
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2.5">
+                    <Link v-for="op in opsItems" :key="op.key" :href="op.href"
+                          class="qa-tile group flex items-center justify-between gap-2 rounded-xl bg-white border border-gray-100 px-3 py-3 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
+                        <span class="min-w-0">
+                            <span class="block text-[12px] font-medium text-gray-500 truncate">{{ isRtl ? op.ar : op.en }}</span>
+                            <span class="block text-lg font-extrabold mt-0.5" :style="{ color: op.value > 0 ? op.color : '#9CA3AF' }">{{ op.value }}</span>
+                        </span>
+                        <span class="w-2.5 h-2.5 rounded-full flex-shrink-0" :style="{ backgroundColor: op.value > 0 ? op.color : '#E5E7EB' }"></span>
                     </Link>
                 </div>
             </div>
