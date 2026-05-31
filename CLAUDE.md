@@ -58,6 +58,21 @@ Patient routes are the only ones under a `{locale}` prefix — see the
   Different from Carbon's `dayOfWeek` (0=Sun). Use the map in
   `OnlineSlotGeneratorService::carbonToSystemDay()` to translate.
 
+- **Multi-branch** (in progress — see `docs/MULTI_BRANCH_ADR.md` + `_CHECKLIST.md`)
+  — `Branch` model + `branches` table (Main Branch id=1). Scoped models use the
+  `App\Models\Concerns\BelongsToBranch` trait (global scope + auto-stamps
+  `branch_id` from `App\Services\Branch\BranchContext`). **Kill-switch:**
+  `config('branches.enabled')` (env `BRANCHES_ENABLED`, default **false**) — while
+  off the global scope is a no-op (single-clinic behaviour); `branch_id` is still
+  stamped on create. Patients are SHARED (no `branch_id`); services, CRM,
+  suppliers, and notification channels are shared too. Scoped so far: bookings,
+  finance, visits, inventory, doctor-schedules, HR. Staff↔branch via `branch_user`
+  (super_admin sees all); active branch resolved per request by the
+  `branch.context` middleware (session) + `/admin/switch-branch`. To add a domain:
+  migration (nullable `branch_id` + backfill→1 + index) → add the trait to the
+  query-root models → isolation test. Do NOT use perl to insert the trait (the
+  `use ...\BelongsToBranch;` import must be top-of-file, not inside the class).
+
 - **Telemedicine readiness** — `/health` and the admin Telemedicine
   settings page both compute the same 5-blocker readiness list:
   `module_disabled`, `agora_missing`, `no_payment_gateway`,
