@@ -38,10 +38,28 @@ class NotificationService
      * @param  array|null  $forceChannels  override the routed channels for this send
      * @return NotificationLog[]
      */
-    public function process(string $eventKey, ?Model $recipient, array $data = [], ?array $forceChannels = null): array
+    public function process(string $eventKey, ?Model $recipient, array $data = [], ?array $forceChannels = null, bool $allowDefer = true): array
     {
         $event = NotificationEvent::where('key', $eventKey)->first();
         if (! $event || ! $event->is_active) {
+            return [];
+        }
+
+        // Quiet hours: hold reminder/marketing until the window opens instead of
+        // dropping them. Transactional always proceeds. $allowDefer is false when
+        // the scheduled-dispatch worker re-runs a held notification.
+        if ($allowDefer && $forceChannels === null && $event->category !== 'transactional'
+            && ! $this->withinSendWindow($event->category)) {
+            \App\Models\ScheduledNotification::create([
+                'event_key' => $eventKey,
+                'recipient_type' => $recipient?->getMorphClass(),
+                'recipient_id' => $recipient?->getKey(),
+                'data' => $data,
+                'channels' => null,
+                'reason' => 'quiet_hours',
+                'send_after' => $this->quietWindowEnd(),
+            ]);
+
             return [];
         }
 
@@ -78,14 +96,6 @@ class NotificationService
 
             if (! $this->hasConsent($recipient, $event->category, $channel)) {
                 $logs[] = $this->logSkipped($recipient, $channel, $event, 'no consent', $data);
-
-                continue;
-            }
-
-            // Quiet hours: suppress non-essential (reminder/marketing) sends in the
-            // configured quiet window. in_app is silent so it always records.
-            if ($channel !== 'in_app' && ! $this->withinSendWindow($event->category)) {
-                $logs[] = $this->logSkipped($recipient, $channel, $event, 'quiet hours', $data);
 
                 continue;
             }
@@ -297,6 +307,18 @@ class NotificationService
         }
 
         return ! ($now >= $start || $now < $end);
+    }
+
+    /** The next datetime the quiet window closes (when held sends resume). */
+    private function quietWindowEnd(): \Illuminate\Support\Carbon
+    {
+        $end = \App\Models\Setting::get('notifications_quiet_end') ?: '08:00';
+        $resume = now()->setTimeFromTimeString($end);
+        if ($resume->lessThanOrEqualTo(now())) {
+            $resume->addDay();
+        }
+
+        return $resume;
     }
 
     /** Marketing-only rolling-window cap per recipient (0 / no recipient = unlimited). */

@@ -93,6 +93,10 @@ Schedule::command('notifications:retry')->everyThirtyMinutes()->between('07:00',
 // (every 5 min during waking hours; respects quiet hours + consent downstream).
 Schedule::command('notifications:dispatch-campaigns')->everyFiveMinutes()->between('08:00', '21:00')->withoutOverlapping();
 
+// Notifications Hub: release notifications held by quiet hours once their window
+// opens — runs every 15 min around the clock (quiet windows close at any hour).
+Schedule::command('notifications:dispatch-scheduled')->everyFifteenMinutes()->withoutOverlapping();
+
 // ─── Backup ──────────────────────────────────────────────────────────
 
 // Full backup (DB + files) daily at 2:00 AM

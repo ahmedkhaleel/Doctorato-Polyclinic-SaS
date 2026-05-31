@@ -43,8 +43,8 @@ class PreferenceCenterTest extends TestCase
         return $p;
     }
 
-    // ── Quiet hours ─────────────────────────────────────
-    public function test_quiet_hours_suppress_marketing_but_not_transactional(): void
+    // ── Quiet hours (now DEFERS, not drops) ─────────────
+    public function test_quiet_hours_defer_marketing_but_not_transactional(): void
     {
         $this->legacySms();
         Setting::set('notifications_quiet_start', '22:00');
@@ -53,12 +53,38 @@ class PreferenceCenterTest extends TestCase
 
         $patient = $this->patient(['notify_sms_marketing' => true]);
 
+        // Marketing in quiet window → held (no immediate send), scheduled for 08:00.
         $marketing = Notifier::eventNow('lead.reactivation', $patient, ['body' => 'عرض']);
-        $this->assertSame(NotificationLog::STATUS_SKIPPED, collect($marketing)->firstWhere('channel', 'sms')->status);
-        $this->assertSame('quiet hours', collect($marketing)->firstWhere('channel', 'sms')->error);
+        $this->assertSame([], $marketing);
+        $held = \App\Models\ScheduledNotification::where('event_key', 'lead.reactivation')->first();
+        $this->assertNotNull($held);
+        $this->assertSame('quiet_hours', $held->reason);
+        $this->assertSame('2026-06-02 08:00:00', $held->send_after->format('Y-m-d H:i:s'));
+        $this->assertFalse(NotificationLog::where('event_key', 'lead.reactivation')->exists());
 
+        // Transactional still sends immediately during quiet hours.
         $txn = Notifier::eventNow('payment.received', $patient, ['body' => 'دفعة']);
         $this->assertSame(NotificationLog::STATUS_SENT, collect($txn)->firstWhere('channel', 'sms')->status);
+    }
+
+    public function test_held_notification_is_dispatched_when_window_opens(): void
+    {
+        $this->legacySms();
+        Setting::set('notifications_quiet_start', '22:00');
+        Setting::set('notifications_quiet_end', '08:00');
+        Carbon::setTestNow(Carbon::parse('2026-06-01 23:30:00'));
+
+        $patient = $this->patient(['notify_sms_marketing' => true]);
+        Notifier::eventNow('lead.reactivation', $patient, ['body' => 'عرض', 'to' => $patient->phone]);
+        $this->assertSame(1, \App\Models\ScheduledNotification::where('status', 'pending')->count());
+
+        // Jump past the window open and run the worker.
+        Carbon::setTestNow(Carbon::parse('2026-06-02 08:05:00'));
+        $this->artisan('notifications:dispatch-scheduled')->assertExitCode(0);
+
+        $this->assertSame('processed', \App\Models\ScheduledNotification::first()->status);
+        $this->assertSame(NotificationLog::STATUS_SENT,
+            NotificationLog::where('event_key', 'lead.reactivation')->where('channel', 'sms')->first()->status);
     }
 
     public function test_outside_quiet_hours_marketing_sends(): void
