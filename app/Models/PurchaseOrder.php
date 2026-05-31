@@ -80,7 +80,7 @@ class PurchaseOrder extends Model
 
     public static function generatePoNumber(): string
     {
-        $prefix = 'PO-'.now()->format('Ym').'-';
+        $prefix = \App\Services\Branch\BranchNumber::prefix('PO');
         $last = static::where('po_number', 'like', $prefix.'%')
             ->orderByDesc('po_number')
             ->value('po_number');

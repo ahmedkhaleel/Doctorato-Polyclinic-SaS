@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Visit;
 use App\Models\PatientSatisfaction;
+use App\Services\Branch\BranchContext;
 use App\Services\SmsService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
@@ -30,13 +31,18 @@ class SendSatisfactionSurveys extends Command
                 continue;
             }
 
-            // Create pending survey record
-            $survey = PatientSatisfaction::create([
-                'patient_id' => $visit->patient_id,
-                'visit_id' => $visit->id,
-                'doctor_id' => $visit->doctor_id,
-                'source' => 'sms',
-            ]);
+            // Create pending survey record — inherit the visit's branch
+            // (cron runs in all-branches mode, so the create would otherwise
+            // fall back to the default branch).
+            $survey = app(BranchContext::class)->runForBranch(
+                (int) ($visit->branch_id ?? config('branches.default_id', 1)),
+                fn () => PatientSatisfaction::create([
+                    'patient_id' => $visit->patient_id,
+                    'visit_id' => $visit->id,
+                    'doctor_id' => $visit->doctor_id,
+                    'source' => 'sms',
+                ])
+            );
 
             // Send SMS with survey link
             $url = url("/survey/{$survey->token}");

@@ -2,9 +2,11 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Branch;
 use App\Models\Supply;
 use App\Models\PurchaseOrder;
 use App\Models\PurchaseOrderItem;
+use App\Services\Branch\BranchContext;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -15,6 +17,23 @@ class CheckLowStockAlerts extends Command
     protected $description = 'Check for low stock items and auto-generate purchase orders if enabled';
 
     public function handle(): void
+    {
+        // Inventory is per-branch: when branches are enabled, process each branch
+        // independently (scoped supplies → branch-scoped POs). When disabled, run
+        // once over the (single) clinic as before.
+        if (config('branches.enabled')) {
+            $ctx = app(BranchContext::class);
+            foreach (Branch::where('is_active', true)->pluck('id') as $bid) {
+                $ctx->runForBranch((int) $bid, fn () => $this->processBranch());
+            }
+
+            return;
+        }
+
+        $this->processBranch();
+    }
+
+    private function processBranch(): void
     {
         $lowStockItems = Supply::active()
             ->lowStock()

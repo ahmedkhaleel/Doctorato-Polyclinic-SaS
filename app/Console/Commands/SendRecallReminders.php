@@ -86,7 +86,7 @@ class SendRecallReminders extends Command
             try {
                 $result = SmsNotificationService::dentalRecallReminder($patient, 'checkup', $months);
 
-                PatientRecallReminder::create([
+                $this->createRecall([
                     'patient_id' => $patient->id,
                     'module' => 'dental',
                     'type' => 'checkup',
@@ -105,7 +105,7 @@ class SendRecallReminders extends Command
                     'error' => $e->getMessage(),
                 ]);
 
-                PatientRecallReminder::create([
+                $this->createRecall([
                     'patient_id' => $patient->id,
                     'module' => 'dental',
                     'type' => 'checkup',
@@ -152,7 +152,7 @@ class SendRecallReminders extends Command
             try {
                 $result = SmsNotificationService::dermaRecallReminder($patient, $months);
 
-                PatientRecallReminder::create([
+                $this->createRecall([
                     'patient_id' => $patient->id,
                     'module' => 'derma',
                     'type' => 'checkup',
@@ -171,7 +171,7 @@ class SendRecallReminders extends Command
                     'error' => $e->getMessage(),
                 ]);
 
-                PatientRecallReminder::create([
+                $this->createRecall([
                     'patient_id' => $patient->id,
                     'module' => 'derma',
                     'type' => 'checkup',
@@ -215,5 +215,22 @@ class SendRecallReminders extends Command
             ->select('patients.*', "lv.last_visit as {$moduleColumn}")
             ->limit($limit)
             ->get();
+    }
+
+    /**
+     * Create a recall reminder attributed to the patient's most recent visit
+     * branch (the patient is shared; the reminder belongs to the branch that
+     * last saw them). Cron runs in all-branches mode, so without this the create
+     * would fall back to the default branch.
+     */
+    private function createRecall(array $attrs): PatientRecallReminder
+    {
+        $branchId = (int) (Visit::withoutGlobalScope('branch')
+            ->where('patient_id', $attrs['patient_id'])
+            ->orderByDesc('visit_date')
+            ->value('branch_id') ?? config('branches.default_id', 1));
+
+        return app(\App\Services\Branch\BranchContext::class)
+            ->runForBranch($branchId, fn () => PatientRecallReminder::create($attrs));
     }
 }
