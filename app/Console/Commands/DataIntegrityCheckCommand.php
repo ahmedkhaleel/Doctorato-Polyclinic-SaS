@@ -344,6 +344,57 @@ class DataIntegrityCheckCommand extends Command
             // tables may not exist yet on older schemas; not fatal
         }
 
+        // ── Multi-branch integrity ──────────────────────────
+        // Scoped tables must always carry a valid branch_id. A NULL value would
+        // vanish from every branch-scoped query once the switch is on; an orphan
+        // value points at a branch that no longer exists.
+        try {
+            if (\Illuminate\Support\Facades\Schema::hasTable('branches')) {
+                $validBranchIds = \App\Models\Branch::pluck('id')->all();
+                $scopedTables = [
+                    'bookings', 'invoices', 'payments', 'credit_notes', 'visits', 'prescriptions',
+                    'medical_certificates', 'online_consultations', 'package_bundle_bookings',
+                    'supplies', 'supply_transactions', 'purchase_orders', 'doctor_schedules',
+                    'employees', 'expenses', 'insurance_claims', 'patient_recall_reminders',
+                    'dental_treatments', 'derma_sessions', 'cosmetic_sessions',
+                    'pediatric_well_child_visits', 'antenatal_visits',
+                ];
+                $missing = [];
+                $orphan = [];
+                foreach ($scopedTables as $t) {
+                    if (! \Illuminate\Support\Facades\Schema::hasTable($t) || ! \Illuminate\Support\Facades\Schema::hasColumn($t, 'branch_id')) {
+                        continue;
+                    }
+                    $nullCount = DB::table($t)->whereNull('branch_id')->count();
+                    if ($nullCount > 0) {
+                        $missing[$t] = $nullCount;
+                    }
+                    $orphanCount = DB::table($t)->whereNotNull('branch_id')
+                        ->whereNotIn('branch_id', $validBranchIds)->count();
+                    if ($orphanCount > 0) {
+                        $orphan[$t] = $orphanCount;
+                    }
+                }
+                if (! empty($missing)) {
+                    $findings[] = [
+                        'check' => 'branch_id_missing',
+                        'count' => array_sum($missing),
+                        'detail' => 'Scoped rows with NULL branch_id (would disappear when branches are enabled): '
+                            .json_encode($missing),
+                    ];
+                }
+                if (! empty($orphan)) {
+                    $findings[] = [
+                        'check' => 'branch_id_orphan',
+                        'count' => array_sum($orphan),
+                        'detail' => 'Rows whose branch_id points to a non-existent branch: '.json_encode($orphan),
+                    ];
+                }
+            }
+        } catch (\Throwable $e) {
+            // branch tables may not exist yet; not fatal
+        }
+
         // ── Report ──────────────────────────────────────────
         if ($this->option('json')) {
             $this->line(json_encode([
