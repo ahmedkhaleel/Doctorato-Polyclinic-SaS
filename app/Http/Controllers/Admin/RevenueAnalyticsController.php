@@ -68,7 +68,8 @@ class RevenueAnalyticsController extends Controller
         }
 
         // ── Top Services (current month) ──────────────────────
-        $topServices = DB::table('invoice_items')
+        $topServices = app(\App\Services\Branch\BranchContext::class)
+            ->applyToBuilder(DB::table('invoice_items'), 'invoice_items.branch_id')
             ->join('invoices', 'invoice_items.invoice_id', '=', 'invoices.id')
             ->whereBetween('invoices.created_at', [$curStart, $curEnd])
             ->when($module, fn ($q) => $q->where('invoices.module', $module))
@@ -85,7 +86,8 @@ class RevenueAnalyticsController extends Controller
             ->get();
 
         // ── Revenue by Doctor (current month) ─────────────────
-        $doctorRevenue = DB::table('payments')
+        $doctorRevenue = app(\App\Services\Branch\BranchContext::class)
+            ->applyToBuilder(DB::table('payments'), 'payments.branch_id')
             ->join('invoices', 'payments.invoice_id', '=', 'invoices.id')
             ->join('visits', 'invoices.visit_id', '=', 'visits.id')
             ->join('doctors', 'visits.doctor_id', '=', 'doctors.id')

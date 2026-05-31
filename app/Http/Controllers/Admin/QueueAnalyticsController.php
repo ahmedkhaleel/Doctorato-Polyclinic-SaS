@@ -32,11 +32,13 @@ class QueueAnalyticsController extends Controller
             ->value('avg_duration');
 
         // No-show rate from booking_appointments
-        $totalAppointments = DB::table('booking_appointments')
+        $totalAppointments = app(\App\Services\Branch\BranchContext::class)
+            ->applyToBuilder(DB::table('booking_appointments'), 'booking_appointments.branch_id')
             ->whereDate('appointment_date', '>=', $dateFrom)
             ->whereDate('appointment_date', '<=', $dateTo)
             ->count();
-        $noShows = DB::table('booking_appointments')
+        $noShows = app(\App\Services\Branch\BranchContext::class)
+            ->applyToBuilder(DB::table('booking_appointments'), 'booking_appointments.branch_id')
             ->whereDate('appointment_date', '>=', $dateFrom)
             ->whereDate('appointment_date', '<=', $dateTo)
             ->where('status', 'no_show')

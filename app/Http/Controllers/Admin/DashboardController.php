@@ -55,7 +55,8 @@ class DashboardController extends Controller
                 ->selectRaw('SUM(total - paid_amount) as balance')
                 ->value('balance') ?? 0;
 
-            $revenueByModule = DB::table('payments')
+            $revenueByModule = app(\App\Services\Branch\BranchContext::class)
+                ->applyToBuilder(DB::table('payments'), 'payments.branch_id')
                 ->join('invoices', 'payments.invoice_id', '=', 'invoices.id')
                 ->whereMonth('payments.payment_date', $now->month)
                 ->whereYear('payments.payment_date', $now->year)

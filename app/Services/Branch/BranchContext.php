@@ -67,6 +67,21 @@ class BranchContext
         }
     }
 
+    /**
+     * Apply the active-branch filter to a raw query builder (DB::table reports
+     * that bypass the Eloquent global scope). No-op when the kill-switch is off
+     * or in all-branches mode, so single-clinic and super-admin views are
+     * unchanged. Pass a qualified column ('payments.branch_id') when joining.
+     */
+    public function applyToBuilder($query, string $column = 'branch_id')
+    {
+        if (config('branches.enabled') && ! $this->isAllBranches() && ($id = $this->currentId())) {
+            $query->where($column, $id);
+        }
+
+        return $query;
+    }
+
     /** Run a callback with branch filtering disabled (cross-branch reports / cron). */
     public function runWithoutScope(callable $callback)
     {

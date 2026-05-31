@@ -32,14 +32,16 @@ class DoctorKpiController extends Controller
             $prevVisits = $baseVisits($prevFrom, $prevTo)->count();
 
             // Revenue
-            $currentRevenue = (float) DB::table('payments')
+            $currentRevenue = (float) app(\App\Services\Branch\BranchContext::class)
+                ->applyToBuilder(DB::table('payments'), 'payments.branch_id')
                 ->join('invoices', 'payments.invoice_id', '=', 'invoices.id')
                 ->join('visits', 'invoices.visit_id', '=', 'visits.id')
                 ->where('visits.doctor_id', $doc->id)
                 ->whereBetween('payments.payment_date', [$dateFrom, $dateTo])
                 ->sum('payments.amount');
 
-            $prevRevenue = (float) DB::table('payments')
+            $prevRevenue = (float) app(\App\Services\Branch\BranchContext::class)
+                ->applyToBuilder(DB::table('payments'), 'payments.branch_id')
                 ->join('invoices', 'payments.invoice_id', '=', 'invoices.id')
                 ->join('visits', 'invoices.visit_id', '=', 'visits.id')
                 ->where('visits.doctor_id', $doc->id)
