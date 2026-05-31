@@ -53,6 +53,13 @@ class NotificationService
                 ->pluck('channel')
                 ->all();
 
+        // Smart routing: reorder the fallback group by the recipient's learned
+        // channel preference (opt-in via setting; only for routed sends).
+        if ($forceChannels === null && $recipient
+            && \App\Models\Setting::get('notifications_smart_routing') === '1') {
+            $channels = app(ChannelPreferenceService::class)->reorder($recipient, $channels);
+        }
+
         $logs = [];
         $externalSucceeded = false;
 

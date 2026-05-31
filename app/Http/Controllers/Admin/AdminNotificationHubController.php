@@ -105,6 +105,7 @@ class AdminNotificationHubController extends Controller
                 'notifications_quiet_start' => Setting::get('notifications_quiet_start', ''),
                 'notifications_quiet_end' => Setting::get('notifications_quiet_end', ''),
                 'notifications_marketing_weekly_cap' => (int) Setting::get('notifications_marketing_weekly_cap', '0'),
+                'notifications_smart_routing' => Setting::get('notifications_smart_routing', '0') === '1',
             ],
             'stats' => $this->stats(),
         ]);
@@ -310,7 +311,12 @@ class AdminNotificationHubController extends Controller
             'notifications_quiet_start' => 'nullable|date_format:H:i',
             'notifications_quiet_end' => 'nullable|date_format:H:i',
             'notifications_marketing_weekly_cap' => 'nullable|integer|min:0',
+            'notifications_smart_routing' => 'nullable|boolean',
         ]);
+
+        if (array_key_exists('notifications_smart_routing', $data)) {
+            Setting::set('notifications_smart_routing', $request->boolean('notifications_smart_routing') ? '1' : '0');
+        }
 
         if (array_key_exists('notifications_global_daily_cap', $data)) {
             Setting::set('notifications_global_daily_cap', (string) ($data['notifications_global_daily_cap'] ?? 0));

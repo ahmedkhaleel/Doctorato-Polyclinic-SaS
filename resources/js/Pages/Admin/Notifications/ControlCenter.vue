@@ -121,6 +121,7 @@ const settingsForm = reactive({
     notifications_quiet_start: props.globalSettings.notifications_quiet_start || '',
     notifications_quiet_end: props.globalSettings.notifications_quiet_end || '',
     notifications_marketing_weekly_cap: props.globalSettings.notifications_marketing_weekly_cap,
+    notifications_smart_routing: props.globalSettings.notifications_smart_routing,
 });
 function saveSettings() {
     router.post('/admin/notifications-hub/settings', settingsForm, { preserveScroll: true });
@@ -396,6 +397,10 @@ const statusColor = (ch) => (channelMeta[ch]?.color || '#64748B');
                                 </label>
                             </div>
                             <p class="text-[11px] text-gray-400">{{ t('خلال أوقات الهدوء تُمنع رسائل التذكير والتسويق فقط (المعاملات تُرسَل دائماً).', 'During quiet hours only reminder/marketing messages are held — transactional always sends.') }}</p>
+                            <label class="flex items-center gap-2 pt-1">
+                                <input type="checkbox" v-model="settingsForm.notifications_smart_routing" :disabled="!canEdit" class="rounded text-[#1B365D]" />
+                                <span class="text-sm text-gray-700">{{ t('التوجيه الذكي (ترتيب القنوات حسب تفاعل كل مريض)', 'Smart routing (order channels by each patient\'s engagement)') }}</span>
+                            </label>
                             <label class="block">
                                 <span class="text-xs text-gray-500">{{ t('رمز تحقق Webhook لواتساب', 'WhatsApp webhook verify token') }}</span>
                                 <input v-model="settingsForm.whatsapp_webhook_verify_token" :disabled="!canEdit" class="mt-1 w-full rounded-lg border-gray-200 text-sm" :placeholder="globalSettings.has_whatsapp_verify_token ? '••••••• (' + t('محفوظ', 'saved') + ')' : ''" />
