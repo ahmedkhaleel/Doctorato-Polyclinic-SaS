@@ -56,6 +56,12 @@ Route::get('/webhooks/whatsapp', [\App\Http\Controllers\Webhooks\WhatsAppWebhook
 Route::post('/webhooks/whatsapp', [\App\Http\Controllers\Webhooks\WhatsAppWebhookController::class, 'receive'])
     ->name('webhooks.whatsapp.receive');
 
+// ─── SMS Delivery Receipts (Twilio StatusCallback + SMS Misr DLR) ────
+Route::post('/webhooks/sms/twilio', [\App\Http\Controllers\Webhooks\SmsDlrController::class, 'twilio'])
+    ->name('webhooks.sms.twilio');
+Route::post('/webhooks/sms/smsmisr', [\App\Http\Controllers\Webhooks\SmsDlrController::class, 'smsmisr'])
+    ->name('webhooks.sms.smsmisr');
+
 // ─── Attendance Reminder API (Doctor / Secretary / Admin popup) ─────
 Route::middleware('auth')->prefix('api/attendance')->group(function () {
     Route::get('/status',     [\App\Http\Controllers\AttendanceReminderController::class, 'status'])->name('api.attendance.status');

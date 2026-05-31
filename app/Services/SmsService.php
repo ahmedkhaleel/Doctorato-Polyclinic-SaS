@@ -97,6 +97,7 @@ class SmsService
                 'success' => true,
                 'message' => 'SMS sent successfully via Unifonic.',
                 'provider' => 'unifonic',
+                'ref' => $data['data']['MessageID'] ?? null,
             ];
         }
 
@@ -123,13 +124,19 @@ class SmsService
             return ['success' => false, 'message' => 'Twilio credentials not configured.', 'provider' => 'twilio'];
         }
 
+        $payload = [
+            'To' => '+'.$phone,
+            'From' => $fromNumber,
+            'Body' => $body,
+        ];
+        // Ask Twilio to POST delivery receipts back to our DLR endpoint.
+        if ($callback = static::dlrUrl('twilio')) {
+            $payload['StatusCallback'] = $callback;
+        }
+
         $response = Http::withBasicAuth($accountSid, $authToken)
             ->asForm()
-            ->post("https://api.twilio.com/2010-04-01/Accounts/{$accountSid}/Messages.json", [
-                'To' => '+'.$phone,
-                'From' => $fromNumber,
-                'Body' => $body,
-            ]);
+            ->post("https://api.twilio.com/2010-04-01/Accounts/{$accountSid}/Messages.json", $payload);
 
         $data = $response->json();
 
@@ -140,6 +147,7 @@ class SmsService
                 'success' => true,
                 'message' => 'SMS sent successfully via Twilio.',
                 'provider' => 'twilio',
+                'ref' => $data['sid'],
             ];
         }
 
@@ -195,7 +203,7 @@ class SmsService
         if ($response->successful() && $code === '1901') {
             Log::info('SMS sent via SMS Misr', ['phone' => $phone, 'smsid' => $data['SMSID'] ?? null]);
 
-            return ['success' => true, 'message' => 'SMS sent successfully via SMS Misr.', 'provider' => 'smsmisr'];
+            return ['success' => true, 'message' => 'SMS sent successfully via SMS Misr.', 'provider' => 'smsmisr', 'ref' => $data['SMSID'] ?? null];
         }
 
         Log::warning('SMS Misr send failed', ['phone' => $phone, 'code' => $code, 'body' => $response->body()]);
@@ -342,6 +350,28 @@ class SmsService
     public static function sendTest(string $phone): array
     {
         return static::send($phone, 'This is a test message from Doctorato Polyclinic SMS system. If you received this, your SMS configuration is working correctly.');
+    }
+
+    /**
+     * Absolute delivery-receipt (DLR) callback URL for a provider, or null when
+     * the app URL isn't a public https host (so we don't ask providers to POST
+     * to localhost). Twilio uses this as StatusCallback; SMS Misr is configured
+     * in their portal to hit the same path.
+     */
+    protected static function dlrUrl(string $provider): ?string
+    {
+        try {
+            $url = route("webhooks.sms.{$provider}");
+        } catch (\Throwable $e) {
+            return null;
+        }
+
+        $host = parse_url($url, PHP_URL_HOST);
+        if (! $host || in_array($host, ['localhost', '127.0.0.1'], true) || ! str_starts_with($url, 'https://')) {
+            return null;
+        }
+
+        return $url;
     }
 
     /**

@@ -59,6 +59,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'webhooks/paymob',
             'webhooks/stripe',
             'webhooks/whatsapp',
+            'webhooks/sms/*',
         ]);
 
         $middleware->alias([

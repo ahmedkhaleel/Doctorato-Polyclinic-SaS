@@ -44,7 +44,7 @@ class SmsChannel implements ChannelDriver
         $provider = $result['provider'] ?? 'sms';
 
         if ($result['success'] ?? false) {
-            return DeliveryResult::ok($provider, (float) SmsService::estimateCost($message->body));
+            return DeliveryResult::ok($provider, (float) SmsService::estimateCost($message->body), $result['ref'] ?? null);
         }
 
         return DeliveryResult::fail($result['message'] ?? 'SMS send failed.', $provider);
