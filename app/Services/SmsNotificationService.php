@@ -6,7 +6,7 @@ use App\Models\Booking;
 use App\Models\Patient;
 use App\Models\Setting;
 use App\Models\Visit;
-use Illuminate\Support\Facades\Log;
+use App\Services\Notifications\Notifier;
 
 /**
  * Sends SMS notifications for bookings, appointments, and patient events.
@@ -19,17 +19,13 @@ class SmsNotificationService
      */
     public static function bookingConfirmed(Booking $booking): array
     {
-        if (! SmsService::isEnabled()) {
-            return ['success' => false, 'message' => 'SMS not enabled.'];
-        }
-
         $phone = $booking->phone ?? $booking->patient?->phone;
         if (! $phone) {
             return ['success' => false, 'message' => 'No phone number available.'];
         }
 
         $patientName = $booking->full_name ?? $booking->patient?->full_name ?? '';
-        $bookingNumber = $booking->booking_number ?? '#' . $booking->id;
+        $bookingNumber = $booking->booking_number ?? '#'.$booking->id;
         $date = $booking->preferred_date?->format('d/m/Y') ?? '';
         $time = $booking->preferred_time ?? '';
         $clinicName = Setting::get('clinic_name_ar', Setting::get('clinic_name_en', 'Doctorato Polyclinic'));
@@ -38,16 +34,24 @@ class SmsNotificationService
         $moduleLabel = $booking->module === 'dental' ? 'أسنان' : 'جلدية';
 
         $message = "مرحباً {$patientName} 👋\n"
-            . "تم تأكيد حجزك في {$clinicName}\n"
-            . "رقم الحجز: {$bookingNumber}\n"
-            . ($date ? "التاريخ: {$date}\n" : '')
-            . ($time ? "الوقت: {$time}\n" : '')
-            . "القسم: {$moduleLabel}\n"
-            . ($clinicPhone ? "للاستفسار: {$clinicPhone}\n" : '')
-            . "شكراً لاختياركم 🌟";
+            ."تم تأكيد حجزك في {$clinicName}\n"
+            ."رقم الحجز: {$bookingNumber}\n"
+            .($date ? "التاريخ: {$date}\n" : '')
+            .($time ? "الوقت: {$time}\n" : '')
+            ."القسم: {$moduleLabel}\n"
+            .($clinicPhone ? "للاستفسار: {$clinicPhone}\n" : '')
+            .'شكراً لاختياركم 🌟';
 
-        \App\Jobs\SendSmsJob::dispatch($phone, $message, null, 'booking_confirmed');
-        return ['success' => true, 'message' => 'SMS queued for delivery.'];
+        // Unified hub: routing (whatsapp→sms→in_app), consent, logging, fallback.
+        // A stored template (if any) wins over $body; otherwise this rich body sends.
+        Notifier::event('booking.confirmed', $booking->patient, [
+            'to' => $phone, 'body' => $message,
+            'name' => $patientName, 'booking_number' => $bookingNumber,
+            'date' => $date, 'time' => $time,
+            'clinic_name' => $clinicName, 'clinic_phone' => $clinicPhone, 'module' => $moduleLabel,
+        ]);
+
+        return ['success' => true, 'message' => 'Queued via notifications hub.'];
     }
 
     /**
@@ -55,10 +59,6 @@ class SmsNotificationService
      */
     public static function bookingReminder(Booking $booking): array
     {
-        if (! SmsService::isEnabled()) {
-            return ['success' => false, 'message' => 'SMS not enabled.'];
-        }
-
         $phone = $booking->phone ?? $booking->patient?->phone;
         if (! $phone) {
             return ['success' => false, 'message' => 'No phone number available.'];
@@ -71,14 +71,21 @@ class SmsNotificationService
         $clinicPhone = Setting::get('clinic_phone', '');
 
         $message = "تذكير 📋\n"
-            . "مرحباً {$patientName}\n"
-            . "لديك موعد غداً في {$clinicName}\n"
-            . ($time ? "الوقت: {$time}\n" : '')
-            . ($clinicPhone ? "لإعادة الجدولة: {$clinicPhone}\n" : '')
-            . "نتطلع لرؤيتك! 😊";
+            ."مرحباً {$patientName}\n"
+            ."لديك موعد غداً في {$clinicName}\n"
+            .($time ? "الوقت: {$time}\n" : '')
+            .($clinicPhone ? "لإعادة الجدولة: {$clinicPhone}\n" : '')
+            .'نتطلع لرؤيتك! 😊';
 
-        \App\Jobs\SendSmsJob::dispatch($phone, $message, null, 'booking_reminder');
-        return ['success' => true, 'message' => 'SMS queued for delivery.'];
+        // Reminder category → respects per-channel consent in the hub.
+        Notifier::event('appointment.reminder.day_before', $booking->patient, [
+            'to' => $phone, 'body' => $message,
+            'name' => $patientName, 'date' => $date, 'time' => $time,
+            'clinic_name' => $clinicName, 'clinic_phone' => $clinicPhone,
+            'dedup_key' => "appointment.reminder.day_before:booking:{$booking->id}",
+        ]);
+
+        return ['success' => true, 'message' => 'Queued via notifications hub.'];
     }
 
     /**
@@ -98,10 +105,11 @@ class SmsNotificationService
         $clinicName = Setting::get('clinic_name_ar', Setting::get('clinic_name_en', 'Doctorato Polyclinic'));
 
         $message = "شكراً لزيارتك {$clinicName} 🙏\n"
-            . "نتمنى لك دوام الصحة والعافية.\n"
-            . "لأي استفسار لا تتردد بالتواصل معنا.";
+            ."نتمنى لك دوام الصحة والعافية.\n"
+            .'لأي استفسار لا تتردد بالتواصل معنا.';
 
         \App\Jobs\SendSmsJob::dispatch($patient->phone, $message, null, 'visit_completed');
+
         return ['success' => true, 'message' => 'SMS queued for delivery.'];
     }
 
@@ -122,16 +130,17 @@ class SmsNotificationService
         $clinicPhone = Setting::get('clinic_phone', '');
 
         $message = "مرحباً {$patient->full_name}\n"
-            . "نود إعلامكم أن طلبكم من المعمل جاهز";
+            .'نود إعلامكم أن طلبكم من المعمل جاهز';
         if ($itemType) {
             $message .= " ({$itemType})";
         }
         $message .= ".\n"
-            . "يرجى التواصل لتحديد موعد التركيب.\n"
-            . ($clinicPhone ? "للحجز: {$clinicPhone}\n" : '')
-            . "{$clinicName}";
+            ."يرجى التواصل لتحديد موعد التركيب.\n"
+            .($clinicPhone ? "للحجز: {$clinicPhone}\n" : '')
+            ."{$clinicName}";
 
         \App\Jobs\SendSmsJob::dispatch($patient->phone, $message, null, 'dental_lab_ready');
+
         return ['success' => true, 'message' => 'SMS queued for delivery.'];
     }
 
@@ -152,16 +161,17 @@ class SmsNotificationService
         $clinicPhone = Setting::get('clinic_phone', '');
 
         $message = "مرحباً {$patient->full_name}\n"
-            . "تمت الموافقة على خطة علاجك";
+            .'تمت الموافقة على خطة علاجك';
         if ($planTitle) {
             $message .= ": {$planTitle}";
         }
         $message .= ".\n"
-            . "يرجى التواصل لبدء جلسات العلاج.\n"
-            . ($clinicPhone ? "للحجز: {$clinicPhone}\n" : '')
-            . "{$clinicName}";
+            ."يرجى التواصل لبدء جلسات العلاج.\n"
+            .($clinicPhone ? "للحجز: {$clinicPhone}\n" : '')
+            ."{$clinicName}";
 
         \App\Jobs\SendSmsJob::dispatch($patient->phone, $message, null, 'treatment_plan_approved');
+
         return ['success' => true, 'message' => 'SMS queued for delivery.'];
     }
 
@@ -170,10 +180,6 @@ class SmsNotificationService
      */
     public static function sameDayReminder(Booking $booking): array
     {
-        if (! SmsService::isEnabled()) {
-            return ['success' => false, 'message' => 'SMS not enabled.'];
-        }
-
         $phone = $booking->phone ?? $booking->patient?->phone;
         if (! $phone) {
             return ['success' => false, 'message' => 'No phone number available.'];
@@ -185,13 +191,19 @@ class SmsNotificationService
         $clinicPhone = Setting::get('clinic_phone', '');
 
         $message = "مرحبا {$patientName}\n"
-            . "نذكركم بموعدكم اليوم في {$clinicName}\n"
-            . ($time ? "الوقت: {$time}\n" : '')
-            . ($clinicPhone ? "للاستفسار: {$clinicPhone}\n" : '')
-            . "نتمنى لكم زيارة طيبة.";
+            ."نذكركم بموعدكم اليوم في {$clinicName}\n"
+            .($time ? "الوقت: {$time}\n" : '')
+            .($clinicPhone ? "للاستفسار: {$clinicPhone}\n" : '')
+            .'نتمنى لكم زيارة طيبة.';
 
-        \App\Jobs\SendSmsJob::dispatch($phone, $message, null, 'same_day_reminder');
-        return ['success' => true, 'message' => 'SMS queued for delivery.'];
+        Notifier::event('appointment.reminder.same_day', $booking->patient, [
+            'to' => $phone, 'body' => $message,
+            'name' => $patientName, 'time' => $time,
+            'clinic_name' => $clinicName, 'clinic_phone' => $clinicPhone,
+            'dedup_key' => "appointment.reminder.same_day:booking:{$booking->id}",
+        ]);
+
+        return ['success' => true, 'message' => 'Queued via notifications hub.'];
     }
 
     /**
@@ -217,12 +229,13 @@ class SmsNotificationService
         };
 
         $message = "مرحبا {$patient->full_name}\n"
-            . "مضى {$monthsSinceVisit} اشهر منذ اخر زيارة لك.\n"
-            . "ننصحك بحجز موعد {$typeLabel} للحفاظ على صحة اسنانك.\n"
-            . ($clinicPhone ? "للحجز: {$clinicPhone}\n" : '')
-            . "{$clinicName}";
+            ."مضى {$monthsSinceVisit} اشهر منذ اخر زيارة لك.\n"
+            ."ننصحك بحجز موعد {$typeLabel} للحفاظ على صحة اسنانك.\n"
+            .($clinicPhone ? "للحجز: {$clinicPhone}\n" : '')
+            ."{$clinicName}";
 
         \App\Jobs\SendSmsJob::dispatch($patient->phone, $message, null, 'dental_recall');
+
         return ['success' => true, 'message' => 'SMS queued for delivery.'];
     }
 
@@ -243,12 +256,13 @@ class SmsNotificationService
         $clinicPhone = Setting::get('clinic_phone', '');
 
         $message = "مرحبا {$patient->full_name}\n"
-            . "مضى {$monthsSinceVisit} اشهر منذ اخر زيارة لك.\n"
-            . "ننصحك بحجز موعد متابعة للحفاظ على صحة بشرتك.\n"
-            . ($clinicPhone ? "للحجز: {$clinicPhone}\n" : '')
-            . "{$clinicName}";
+            ."مضى {$monthsSinceVisit} اشهر منذ اخر زيارة لك.\n"
+            ."ننصحك بحجز موعد متابعة للحفاظ على صحة بشرتك.\n"
+            .($clinicPhone ? "للحجز: {$clinicPhone}\n" : '')
+            ."{$clinicName}";
 
         \App\Jobs\SendSmsJob::dispatch($patient->phone, $message, null, 'derma_recall');
+
         return ['success' => true, 'message' => 'SMS queued for delivery.'];
     }
 }

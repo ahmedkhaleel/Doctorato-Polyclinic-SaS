@@ -3,8 +3,7 @@
 namespace Tests\Feature\Integration;
 
 use App\Events\BookingCreated;
-use App\Jobs\SendEmailJob;
-use App\Jobs\SendSmsJob;
+use App\Jobs\ProcessNotificationJob;
 use App\Models\Booking;
 use App\Models\Setting;
 use App\Services\SmsNotificationService;
@@ -48,8 +47,9 @@ class QueueIntegrationTest extends TestCase
 
         SmsNotificationService::bookingConfirmed($booking);
 
-        Queue::assertPushed(SendSmsJob::class, function (SendSmsJob $job) {
-            return $job->context === 'booking_confirmed';
+        // Booking confirmation now routes through the unified hub.
+        Queue::assertPushed(ProcessNotificationJob::class, function (ProcessNotificationJob $job) {
+            return $job->eventKey === 'booking.confirmed';
         });
     }
 
@@ -76,11 +76,12 @@ class QueueIntegrationTest extends TestCase
         $this->assertTrue(true, 'BookingCreated event fired without errors.');
     }
 
-    public function test_sms_notification_service_does_not_dispatch_when_disabled(): void
+    public function test_sms_notification_service_hands_off_to_hub_even_when_sms_disabled(): void
     {
         Queue::fake();
 
-        // SMS is disabled by default (no settings configured)
+        // SMS disabled — but the service still hands off to the hub, which decides
+        // per-channel delivery (in_app always records; sms/whatsapp gated there).
 
         $booking = Booking::create([
             'full_name' => 'Test Patient',
@@ -93,8 +94,8 @@ class QueueIntegrationTest extends TestCase
 
         $result = SmsNotificationService::bookingConfirmed($booking);
 
-        $this->assertFalse($result['success']);
-        Queue::assertNotPushed(SendSmsJob::class);
+        $this->assertTrue($result['success']);
+        Queue::assertPushed(ProcessNotificationJob::class);
     }
 
     public function test_sms_notification_service_does_not_dispatch_without_phone(): void
@@ -116,7 +117,7 @@ class QueueIntegrationTest extends TestCase
         $result = SmsNotificationService::bookingConfirmed($booking);
 
         $this->assertFalse($result['success']);
-        Queue::assertNotPushed(SendSmsJob::class);
+        Queue::assertNotPushed(ProcessNotificationJob::class);
     }
 
     public function test_booking_reminder_dispatches_sms_job(): void
@@ -137,9 +138,9 @@ class QueueIntegrationTest extends TestCase
 
         SmsNotificationService::bookingReminder($booking);
 
-        Queue::assertPushed(SendSmsJob::class, function (SendSmsJob $job) {
-            return $job->phone === '+966511111111'
-                && $job->context === 'booking_reminder';
+        Queue::assertPushed(ProcessNotificationJob::class, function (ProcessNotificationJob $job) {
+            return $job->eventKey === 'appointment.reminder.day_before'
+                && ($job->data['to'] ?? null) === '+966511111111';
         });
     }
 
@@ -160,9 +161,8 @@ class QueueIntegrationTest extends TestCase
 
         SmsNotificationService::bookingConfirmed($booking);
 
-        // Verify job was pushed to queue (not executed synchronously)
-        Queue::assertPushed(SendSmsJob::class);
-        // Exactly one SMS job should be pushed
-        Queue::assertPushed(SendSmsJob::class, 1);
+        // Verify exactly one hub job was pushed (not executed synchronously,
+        // and not double-sent across channels at dispatch time).
+        Queue::assertPushed(ProcessNotificationJob::class, 1);
     }
 }

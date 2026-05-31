@@ -23,8 +23,13 @@ class SmsChannel implements ChannelDriver
     public function isConfigured(): bool
     {
         $channel = NotificationChannel::for('sms');
+        if ($channel && $channel->enabled) {
+            return true;
+        }
 
-        return $channel && $channel->enabled;
+        // Back-compat: deployments configured via the legacy SMS settings (before
+        // the hub existed) keep sending without flipping the hub channel toggle.
+        return SmsService::isEnabled();
     }
 
     public function send(NotificationMessage $message): DeliveryResult
