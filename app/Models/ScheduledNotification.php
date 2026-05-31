@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\StampsBranch;
 use Illuminate\Database\Eloquent\Model;
 
 class ScheduledNotification extends Model
 {
+    use StampsBranch;
+
     public const STATUS_PENDING = 'pending';
 
     public const STATUS_PROCESSED = 'processed';

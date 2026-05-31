@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\StampsBranch;
 use Illuminate\Database\Eloquent\Model;
 
 class NotificationLog extends Model
 {
+    use StampsBranch;
+
     public const STATUS_QUEUED = 'queued';
 
     public const STATUS_SENT = 'sent';
