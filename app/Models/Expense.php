@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\BelongsToBranch;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -9,6 +10,7 @@ use App\Traits\LogsActivity;
 
 class Expense extends Model
 {
+    use BelongsToBranch;
     use HasFactory, LogsActivity;
 
     protected $fillable = [

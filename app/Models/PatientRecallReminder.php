@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\BelongsToBranch;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class PatientRecallReminder extends Model
 {
+    use BelongsToBranch;
     protected $fillable = [
         'patient_id', 'module', 'type', 'last_visit_date',
         'reminder_sent_at', 'sms_status', 'notes',

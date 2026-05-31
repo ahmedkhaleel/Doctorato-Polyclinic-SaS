@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\BelongsToBranch;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\HasStatusTransitions;
 
 class InsuranceClaim extends Model
 {
+    use BelongsToBranch;
     use HasFactory, HasStatusTransitions;
 
     const STATUS_DRAFT = 'draft';
