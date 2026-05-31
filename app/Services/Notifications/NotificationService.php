@@ -187,6 +187,7 @@ class NotificationService
                 'template_id' => $templateId,
                 'status' => NotificationLog::STATUS_QUEUED,
                 'dedup_key' => $dedupKey,
+                'branch_id' => $this->branchIdFromData($data),
                 'meta' => $meta,
             ]);
 
@@ -404,6 +405,30 @@ class NotificationService
         return $count < $cap;
     }
 
+    /**
+     * Best-effort branch attribution for a notification log (analytics only —
+     * the hub is a single org-wide sender, so this never filters). Uses an
+     * explicit $data['branch_id'] if given, otherwise the branch_id of any
+     * model in the payload (booking/invoice/visit/…). Returns null when the
+     * payload carries no branch (StampsBranch then falls back to request context).
+     */
+    private function branchIdFromData(array $data): ?int
+    {
+        if (! empty($data['branch_id'])) {
+            return (int) $data['branch_id'];
+        }
+        foreach ($data as $value) {
+            if (is_object($value) && $value instanceof Model) {
+                $bid = $value->getAttribute('branch_id');
+                if (! empty($bid)) {
+                    return (int) $bid;
+                }
+            }
+        }
+
+        return null;
+    }
+
     private function localeFor(?Model $recipient): string
     {
         // Patients store this as `preferred_language`; other models may use `preferred_locale`.
@@ -426,6 +451,7 @@ class NotificationService
             'status' => NotificationLog::STATUS_SKIPPED,
             'error' => $reason,
             'dedup_key' => $dedupKey,
+            'branch_id' => $this->branchIdFromData($data),
         ]);
     }
 }

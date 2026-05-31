@@ -24,7 +24,7 @@ class NotificationLog extends Model
     protected $fillable = [
         'recipient_type', 'recipient_id', 'to', 'channel', 'provider', 'provider_ref', 'event_key',
         'campaign_id', 'ab_variant', 'template_id', 'status', 'cost', 'error', 'dedup_key', 'meta',
-        'sent_at', 'delivered_at', 'read_at',
+        'sent_at', 'delivered_at', 'read_at', 'branch_id',
     ];
 
     protected $casts = [
