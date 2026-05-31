@@ -35,6 +35,36 @@ const props = defineProps({
     reviewsSnapshot: { type: Object, default: null },
 });
 
+/* ── Quick Access tiles (gated by enabled module + doctor's specialty) ── */
+const modules = computed(() => page.props.modules || {});
+const docModule = computed(() => page.props.auth?.doctor?.module || page.props.defaultModule || '');
+const modOn = (k) => modules.value?.[k]?.enabled || modules.value?.[k]?.is_core;
+
+const quickLinks = computed(() => {
+    const m = docModule.value;
+    const L = [
+        { ar: 'طابور اليوم', en: "Today's Queue", href: '/doctor/queue', color: '#C4A265', show: true },
+        { ar: 'مرضاي', en: 'My Patients', href: '/doctor/patients', color: '#1B365D', show: true },
+        { ar: 'المفضّلون', en: 'Favorites', href: '/doctor/patients/favorites', color: '#EAB308', show: true },
+        { ar: 'الزيارات', en: 'Visits', href: '/doctor/visits', color: '#6366F1', show: true },
+        { ar: 'الوصفات', en: 'Prescriptions', href: '/doctor/prescriptions', color: '#16A34A', show: true },
+        { ar: 'الحجوزات', en: 'Bookings', href: '/doctor/bookings', color: '#0EA5E9', show: true },
+        { ar: 'المخزون', en: 'Inventory', href: '/doctor/inventory', color: '#0891B2', show: modOn('inventory') },
+        // Specialty-specific (only for the doctor's own module)
+        { ar: 'مخطط الأسنان', en: 'Dental Chart', href: '/doctor/dental/chart-search', color: '#0284C7', show: m === 'dental' && modOn('dental') },
+        { ar: 'لوحة الجلدية', en: 'Derma', href: '/doctor/derma', color: '#C4A265', show: m === 'derma' && modOn('derma') },
+        { ar: 'لوحة الأطفال', en: 'Pediatric', href: '/doctor/pediatric', color: '#F472B6', show: m === 'pediatric' && modOn('pediatric') },
+        { ar: 'النساء والتوليد', en: 'OB/GYN', href: '/doctor/obgyn', color: '#BE185D', show: m === 'obgyn' && modOn('obgyn') },
+        { ar: 'الاستشارات الأونلاين', en: 'Telemedicine', href: '/doctor/online-consultations', color: '#0D9488', show: modOn('telemedicine') },
+        // Personal / HR
+        { ar: 'عمولتي', en: 'Commission', href: '/doctor/commission', color: '#CA8A04', show: true },
+        { ar: 'حضوري', en: 'Attendance', href: '/doctor/my-attendance', color: '#EA580C', show: modOn('hr') },
+        { ar: 'إجازاتي', en: 'Leaves', href: '/doctor/my-leaves', color: '#DC2626', show: modOn('hr') },
+        { ar: 'محادثاتي', en: 'Chat', href: '/doctor/chat', color: '#7C3AED', show: true },
+    ];
+    return L.filter(i => i.show);
+});
+
 // Animation state
 const mounted = ref(false);
 const dataLoading = ref(true);
@@ -210,6 +240,18 @@ const completionDash = computed(() => {
                     <p class="text-xl font-bold text-[#C4A265] tabular-nums">{{ formatCurrency(animatedValues.commission) }}</p>
                     <p class="text-[10px] text-gray-500 mt-0.5">{{ currencyCode }} {{ isRtl ? 'هذا الشهر' : 'this month' }}</p>
                 </div>
+            </div>
+        </div>
+
+        <!-- Quick Access -->
+        <div class="mb-6">
+            <h3 class="text-sm font-semibold text-gray-700 mb-3">{{ isRtl ? 'وصول سريع' : 'Quick Access' }}</h3>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2.5">
+                <Link v-for="q in quickLinks" :key="q.href" :href="q.href"
+                      class="dq-tile group flex items-center gap-2.5 rounded-xl bg-white border border-gray-100 px-3 py-3 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
+                    <span class="w-2.5 h-2.5 rounded-full flex-shrink-0" :style="{ backgroundColor: q.color }"></span>
+                    <span class="text-[13px] font-semibold text-gray-700 group-hover:text-[#1B365D] truncate">{{ isRtl ? q.ar : q.en }}</span>
+                </Link>
             </div>
         </div>
 
@@ -1130,5 +1172,9 @@ const completionDash = computed(() => {
 @keyframes pulse {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.4; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .dq-tile { transition: none; }
+    .dq-tile:hover { transform: none; }
 }
 </style>

@@ -23,6 +23,27 @@ const props = defineProps({
 
 const { formatCurrency, currencyCode } = useCurrency();
 
+/* ── Quick Access tiles (gated by enabled module) ── */
+const modules = computed(() => page.props.modules || {});
+const modOn = (k) => modules.value?.[k]?.enabled || modules.value?.[k]?.is_core;
+const quickLinks = computed(() => {
+    const L = [
+        { ar: 'طابور اليوم', en: "Today's Queue", href: '/secretary/queue', color: '#C4A265', show: true },
+        { ar: 'الحجوزات', en: 'Bookings', href: '/secretary/bookings', color: '#0EA5E9', show: true },
+        { ar: 'المرضى', en: 'Patients', href: '/secretary/patients', color: '#1B365D', show: true },
+        { ar: 'الزيارات', en: 'Visits', href: '/secretary/visits', color: '#6366F1', show: true },
+        { ar: 'الفواتير', en: 'Invoices', href: '/secretary/invoices', color: '#16A34A', show: true },
+        { ar: 'المدفوعات', en: 'Payments', href: '/secretary/payments', color: '#059669', show: true },
+        { ar: 'CRM / العملاء', en: 'CRM / Leads', href: '/secretary/crm/leads', color: '#F59E0B', show: true },
+        { ar: 'المخزون', en: 'Inventory', href: '/secretary/inventory', color: '#0891B2', show: modOn('inventory') },
+        { ar: 'طلبات معمل الأسنان', en: 'Dental Lab', href: '/secretary/dental/lab-orders', color: '#0284C7', show: modOn('dental') },
+        { ar: 'مرضى الأطفال', en: 'Pediatric', href: '/secretary/pediatric/patients', color: '#F472B6', show: modOn('pediatric') },
+        { ar: 'ملفات الحمل', en: 'OB/GYN', href: '/secretary/obgyn/pregnancies', color: '#BE185D', show: modOn('obgyn') },
+        { ar: 'محادثاتي', en: 'Chat', href: '/secretary/chat', color: '#7C3AED', show: true },
+    ];
+    return L.filter(i => i.show);
+});
+
 /* -- Helpers -------------------------------------------------- */
 
 function formatDate(date) {
@@ -230,6 +251,18 @@ const severityStyles = {
                         </svg>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Quick Access -->
+        <div>
+            <h3 class="text-sm font-semibold text-gray-700 mb-3">{{ isRtl ? 'وصول سريع' : 'Quick Access' }}</h3>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2.5">
+                <Link v-for="q in quickLinks" :key="q.href" :href="q.href"
+                      class="sq-tile group flex items-center gap-2.5 rounded-xl bg-white border border-gray-100 px-3 py-3 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
+                    <span class="w-2.5 h-2.5 rounded-full flex-shrink-0" :style="{ backgroundColor: q.color }"></span>
+                    <span class="text-[13px] font-semibold text-gray-700 group-hover:text-[#1B365D] truncate">{{ isRtl ? q.ar : q.en }}</span>
+                </Link>
             </div>
         </div>
 
@@ -779,3 +812,10 @@ const severityStyles = {
 
     </div>
 </template>
+
+<style scoped>
+@media (prefers-reduced-motion: reduce) {
+    .sq-tile { transition: none; }
+    .sq-tile:hover { transform: none; }
+}
+</style>
