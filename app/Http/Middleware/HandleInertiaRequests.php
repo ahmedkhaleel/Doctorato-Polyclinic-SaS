@@ -61,6 +61,7 @@ class HandleInertiaRequests extends Middleware
                     : null,
                 'patient' => fn () => $this->getPatientData($isPatientRoute, $request),
             ],
+            'branch' => fn () => $this->getBranchData($request, $isPatientRoute),
             'flash' => [
                 'success' => fn () => $request->session()->get('success'),
                 'error' => fn () => $request->session()->get('error'),
@@ -70,7 +71,9 @@ class HandleInertiaRequests extends Middleware
             'modules' => fn () => ModuleManager::getForFrontend(),
             'defaultModule' => fn () => ModuleManager::getDefaultModule(),
             'notifications' => function () use ($request) {
-                if (!$request->user()) return null;
+                if (! $request->user()) {
+                    return null;
+                }
                 try {
                     return [
                         'unread_bookings' => Booking::where('is_read', false)->count(),
@@ -87,9 +90,13 @@ class HandleInertiaRequests extends Middleware
             // minimal (1 cached bool + 1 count) so the Inertia response payload
             // doesn't bloat on every request.
             'systemHealth' => function () use ($request) {
-                if (! $request->user() || ! $request->user()->role) return null;
+                if (! $request->user() || ! $request->user()->role) {
+                    return null;
+                }
                 $role = $request->user()->role->name;
-                if (! in_array($role, ['admin', 'super_admin'], true)) return null;
+                if (! in_array($role, ['admin', 'super_admin'], true)) {
+                    return null;
+                }
 
                 return cache()->remember('inertia.system_health', 30, function () {
                     $blockers = [];
@@ -101,14 +108,17 @@ class HandleInertiaRequests extends Middleware
                             $blockers[] = 'no_online_doctors';
                         }
                     }
+
                     return [
-                        'ok'            => empty($blockers),
+                        'ok' => empty($blockers),
                         'blocker_count' => count($blockers),
                     ];
                 });
             },
             'doctor_notifications' => function () use ($isDoctorRoute, $request) {
-                if (!$isDoctorRoute || !$request->user()) return null;
+                if (! $isDoctorRoute || ! $request->user()) {
+                    return null;
+                }
                 try {
                     return ['unread_count' => $request->user()->unreadNotifications()->count()];
                 } catch (\Throwable) {
@@ -116,7 +126,9 @@ class HandleInertiaRequests extends Middleware
                 }
             },
             'secretary_notifications' => function () use ($isSecretaryRoute, $request) {
-                if (!$isSecretaryRoute || !$request->user()) return null;
+                if (! $isSecretaryRoute || ! $request->user()) {
+                    return null;
+                }
                 try {
                     return [
                         'unread_bookings' => Booking::where('is_read', false)->count(),
@@ -152,6 +164,38 @@ class HandleInertiaRequests extends Middleware
      * Only expose public-safe settings to the frontend.
      * Tracking IDs, API keys, and custom scripts are NOT exposed here.
      */
+    /** Active branch + the staff member's branch list for the switcher. */
+    private function getBranchData(Request $request, bool $isPatientRoute): ?array
+    {
+        $user = $request->user();
+        if ($isPatientRoute || ! $user) {
+            return null;
+        }
+
+        try {
+            $ctx = app(\App\Services\Branch\BranchContext::class);
+            $list = $user->canSwitchAllBranches()
+                ? \App\Models\Branch::where('is_active', true)->get(['id', 'name_ar', 'name_en'])
+                : $user->branches()->where('branches.is_active', true)->get(['branches.id', 'name_ar', 'name_en']);
+
+            if ($list->isEmpty()) {
+                return null;
+            }
+
+            $ar = app()->getLocale() === 'ar';
+
+            return [
+                'enabled' => (bool) config('branches.enabled'),
+                'current' => $ctx->isAllBranches() ? null : $ctx->currentId(),
+                'is_all' => $ctx->isAllBranches(),
+                'can_all' => $user->canSwitchAllBranches(),
+                'list' => $list->map(fn ($b) => ['id' => $b->id, 'name' => $ar ? $b->name_ar : $b->name_en])->values(),
+            ];
+        } catch (\Throwable $e) {
+            return null;
+        }
+    }
+
     private function getPatientData(bool $isPatientRoute, Request $request): ?array
     {
         if (! $isPatientRoute || ! $request->user()) {

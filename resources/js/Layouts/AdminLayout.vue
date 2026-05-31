@@ -8,6 +8,7 @@ import FlashMessages from '@/Components/FlashMessages.vue';
 import AttendanceReminder from '@/Components/AttendanceReminder.vue';
 useTheme();
 import NotificationBell from '@/Components/Admin/NotificationBell.vue';
+import BranchSwitcher from '@/Components/BranchSwitcher.vue';
 import AdminToastNotification from '@/Components/Admin/AdminToastNotification.vue';
 import CommandPalette from '@/Components/Admin/CommandPalette.vue';
 import ChatIcon from '@/Components/Chat/ChatIcon.vue';
@@ -335,6 +336,7 @@ const navGroups = [
             { labelEn: 'Drip Sequences', labelAr: 'سلاسل التنقيط', href: '/admin/notification-sequences', icon: 'automation', permission: 'notifications.view' },
             { labelEn: 'Delivery Log',   labelAr: 'سجل الإرسال',   href: '/admin/notifications-hub/logs', icon: 'activity', permission: 'notifications.view' },
             { labelEn: 'SMS Templates',  labelAr: 'قوالب الرسائل', href: '/admin/sms-templates',      icon: 'chat',     permission: 'settings.view' },
+            { labelEn: 'Branches',       labelAr: 'الفروع',        href: '/admin/branches',           icon: 'building', permission: 'settings.view' },
             { labelEn: 'Settings',       labelAr: 'الإعدادات',     href: '/admin/settings',           icon: 'cog',      permission: 'settings.view' },
             { labelEn: 'Modules',        labelAr: 'المديولات',     href: '/admin/settings/modules',   icon: 'layers',   permission: 'settings.view' },
             { labelEn: 'Recycle Bin',    labelAr: 'سلة المحذوفات', href: '/admin/trash',              icon: 'trash',    permission: 'settings.update' },
@@ -761,6 +763,9 @@ function logout()        { router.post('/admin/logout'); }
 
                 <!-- Right side -->
                 <div class="flex items-center gap-1.5 md:gap-3">
+                    <!-- Branch switcher (multi-branch) -->
+                    <BranchSwitcher />
+
                     <!-- System health indicator (admin only) -->
                     <Link
                         v-if="page.props.systemHealth"

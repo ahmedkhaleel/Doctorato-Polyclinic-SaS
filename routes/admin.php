@@ -120,7 +120,14 @@ Route::get('/reset-password/{token}',   [AuthController::class, 'showResetForm']
 Route::post('/reset-password',          [AuthController::class, 'resetPassword'])->name('admin.password.update')->middleware('throttle:5,15');
 
 // Protected admin routes (requires authentication + active account)
-Route::middleware('admin.auth')->group(function () {
+Route::middleware(['admin.auth', 'branch.context'])->group(function () {
+
+    // ─── Branch switch + registry (multi-branch) ─────────────
+    Route::post('/switch-branch', [\App\Http\Controllers\Admin\BranchSwitchController::class, 'switch'])->name('admin.switch-branch');
+    Route::get('/branches', [\App\Http\Controllers\Admin\AdminBranchController::class, 'index'])->name('admin.branches.index')->middleware('permission:settings.view');
+    Route::post('/branches', [\App\Http\Controllers\Admin\AdminBranchController::class, 'store'])->name('admin.branches.store')->middleware('permission:settings.update');
+    Route::post('/branches/{branch}/update', [\App\Http\Controllers\Admin\AdminBranchController::class, 'update'])->name('admin.branches.update')->middleware('permission:settings.update');
+    Route::post('/branches/{branch}/delete', [\App\Http\Controllers\Admin\AdminBranchController::class, 'destroy'])->name('admin.branches.destroy')->middleware('permission:settings.update');
 
     // Dashboard (all authenticated users)
     Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');

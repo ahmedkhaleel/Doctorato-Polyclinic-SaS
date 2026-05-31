@@ -71,6 +71,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'patient.auth' => PatientAuth::class,
             'permission' => CheckPermission::class,
             'module' => CheckModule::class,
+            'branch.context' => \App\Http\Middleware\SetActiveBranch::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

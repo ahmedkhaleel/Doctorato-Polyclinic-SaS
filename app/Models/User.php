@@ -2,18 +2,33 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 use App\Notifications\BrandedPasswordReset;
 use App\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, SoftDeletes, LogsActivity;
+    use HasFactory, LogsActivity, Notifiable, SoftDeletes;
+
+    protected static function booted(): void
+    {
+        // Multi-branch: every new user is assigned to the default branch (primary)
+        // so they always have at least one branch (mirrors the B3 backfill).
+        static::created(function (self $user) {
+            try {
+                if (\Illuminate\Support\Facades\Schema::hasTable('branch_user') && ! $user->branches()->exists()) {
+                    $user->branches()->attach((int) config('branches.default_id', 1), ['is_primary' => true]);
+                }
+            } catch (\Throwable $e) {
+                // table not ready (early migrations) — ignore
+            }
+        });
+    }
 
     protected array $activityExcludedFields = [
         'password', 'remember_token', 'updated_at', 'created_at', 'last_seen_at',
@@ -85,6 +100,36 @@ class User extends Authenticatable
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('is_active', true);
+    }
+
+    // ─── Branch (multi-branch) ──────────────────────────
+
+    public function branches()
+    {
+        return $this->belongsToMany(Branch::class, 'branch_user')->withPivot('is_primary')->withTimestamps();
+    }
+
+    /** super_admin sees all branches; others only their assigned ones. */
+    public function canSwitchAllBranches(): bool
+    {
+        return $this->role?->name === 'super_admin';
+    }
+
+    public function belongsToBranch(int $branchId): bool
+    {
+        if ($this->canSwitchAllBranches()) {
+            return true;
+        }
+
+        return $this->branches()->where('branches.id', $branchId)->exists();
+    }
+
+    public function primaryBranchId(): int
+    {
+        $primary = $this->branches()->wherePivot('is_primary', true)->value('branches.id')
+            ?? $this->branches()->value('branches.id');
+
+        return (int) ($primary ?? config('branches.default_id', 1));
     }
 
     // ─── Clinic Relationships ───────────────────────────
