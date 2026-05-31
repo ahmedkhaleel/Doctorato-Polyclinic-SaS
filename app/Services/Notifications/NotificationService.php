@@ -9,6 +9,7 @@ use App\Models\NotificationTemplate;
 use App\Services\Notifications\Channels\EmailChannel;
 use App\Services\Notifications\Channels\InAppChannel;
 use App\Services\Notifications\Channels\SmsChannel;
+use App\Services\Notifications\Channels\WhatsAppChannel;
 use App\Services\Notifications\Contracts\ChannelDriver;
 use Illuminate\Database\Eloquent\Model;
 
@@ -111,6 +112,7 @@ class NotificationService
             $log->update([
                 'status' => $result->success ? NotificationLog::STATUS_SENT : NotificationLog::STATUS_FAILED,
                 'provider' => $result->provider,
+                'provider_ref' => $result->providerRef,
                 'cost' => $result->cost,
                 'error' => $result->error,
                 'sent_at' => $result->success ? now() : null,
@@ -133,7 +135,7 @@ class NotificationService
             'in_app' => app(InAppChannel::class),
             'email' => app(EmailChannel::class),
             'sms' => app(SmsChannel::class),
-            // 'whatsapp' => app(WhatsAppChannel::class), // P3
+            'whatsapp' => app(WhatsAppChannel::class),
             default => null,
         };
     }

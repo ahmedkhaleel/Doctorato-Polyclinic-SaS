@@ -50,6 +50,12 @@ Route::post('/webhooks/paymob', [\App\Http\Controllers\Webhooks\PaymentWebhookCo
 Route::post('/webhooks/stripe', [\App\Http\Controllers\Webhooks\PaymentWebhookController::class, 'stripe'])
     ->name('webhooks.stripe');
 
+// ─── WhatsApp Webhook (delivery receipts + Meta verification) ────────
+Route::get('/webhooks/whatsapp', [\App\Http\Controllers\Webhooks\WhatsAppWebhookController::class, 'verify'])
+    ->name('webhooks.whatsapp.verify');
+Route::post('/webhooks/whatsapp', [\App\Http\Controllers\Webhooks\WhatsAppWebhookController::class, 'receive'])
+    ->name('webhooks.whatsapp.receive');
+
 // ─── Attendance Reminder API (Doctor / Secretary / Admin popup) ─────
 Route::middleware('auth')->prefix('api/attendance')->group(function () {
     Route::get('/status',     [\App\Http\Controllers\AttendanceReminderController::class, 'status'])->name('api.attendance.status');

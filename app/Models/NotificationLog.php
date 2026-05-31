@@ -19,7 +19,7 @@ class NotificationLog extends Model
     public const STATUS_SKIPPED = 'skipped';
 
     protected $fillable = [
-        'recipient_type', 'recipient_id', 'to', 'channel', 'provider', 'event_key',
+        'recipient_type', 'recipient_id', 'to', 'channel', 'provider', 'provider_ref', 'event_key',
         'template_id', 'status', 'cost', 'error', 'dedup_key', 'meta',
         'sent_at', 'delivered_at', 'read_at',
     ];

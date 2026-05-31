@@ -58,6 +58,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->validateCsrfTokens(except: [
             'webhooks/paymob',
             'webhooks/stripe',
+            'webhooks/whatsapp',
         ]);
 
         $middleware->alias([

@@ -38,6 +38,8 @@ class Setting extends Model
         // SMS Misr (اس ام اس مصر) — new keys, safe to encrypt at rest
         'sms_smsmisr_password',
         'sms_smsmisr_token',
+        // WhatsApp webhook shared secret
+        'whatsapp_webhook_verify_token',
     ];
 
     /**
