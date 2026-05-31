@@ -6,6 +6,7 @@ use App\Mail\LeadTemplateMail;
 use App\Models\CommunicationTemplate;
 use App\Models\Lead;
 use App\Models\LeadActivity;
+use App\Models\NotificationLog;
 use App\Models\Setting;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -55,6 +56,10 @@ class CommunicationService
             ],
         ]);
 
+        // Mirror into the unified hub log for cross-channel reporting (Delivery Log,
+        // analytics, cost) — visibility only; CRM keeps its own delivery + threads.
+        static::logToHub($lead, $channel, $renderedBody, $renderedSubject, $result);
+
         // Increment template usage
         $template->incrementUsage();
 
@@ -62,6 +67,34 @@ class CommunicationService
         $lead->markAsContacted();
 
         return $result;
+    }
+
+    /**
+     * Record a CRM lead message in the unified notification log (reporting only).
+     * WhatsApp here is click-to-chat (a link is generated) so it's logged as sent.
+     */
+    protected static function logToHub(Lead $lead, string $channel, string $body, ?string $subject, array $result): void
+    {
+        try {
+            $to = $channel === 'email' ? $lead->email : $lead->phone;
+            $sent = (bool) ($result['success'] ?? false);
+
+            NotificationLog::create([
+                'recipient_type' => $lead->getMorphClass(),
+                'recipient_id' => $lead->getKey(),
+                'to' => $to,
+                'channel' => $channel,
+                'provider' => 'crm',
+                'event_key' => 'crm.message',
+                'status' => $sent ? NotificationLog::STATUS_SENT : NotificationLog::STATUS_FAILED,
+                'cost' => ($channel === 'sms' && $sent) ? SmsService::estimateCost($body) : 0,
+                'error' => $sent ? null : ($result['message'] ?? null),
+                'meta' => ['body' => $body, 'subject' => $subject, 'source' => 'crm'],
+                'sent_at' => $sent ? now() : null,
+            ]);
+        } catch (\Throwable $e) {
+            Log::warning('[crm.hub-log] failed', ['lead_id' => $lead->id ?? null, 'error' => $e->getMessage()]);
+        }
     }
 
     /**
@@ -92,7 +125,7 @@ class CommunicationService
         }
 
         $phone = preg_replace('/[^0-9]/', '', $lead->phone);
-        $redirectUrl = 'https://wa.me/' . $phone . '?text=' . urlencode($body);
+        $redirectUrl = 'https://wa.me/'.$phone.'?text='.urlencode($body);
 
         return [
             'success' => true,
@@ -127,7 +160,7 @@ class CommunicationService
 
             return [
                 'success' => false,
-                'message' => 'Failed to queue email: ' . $e->getMessage(),
+                'message' => 'Failed to queue email: '.$e->getMessage(),
                 'redirect_url' => null,
             ];
         }
@@ -157,7 +190,7 @@ class CommunicationService
     protected static function replaceVariables(string $text, array $variables): string
     {
         foreach ($variables as $key => $value) {
-            $text = str_replace('{{' . $key . '}}', $value, $text);
+            $text = str_replace('{{'.$key.'}}', $value, $text);
         }
 
         return $text;
