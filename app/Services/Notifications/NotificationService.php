@@ -135,6 +135,11 @@ class NotificationService
                 $meta['subject'] = $subject;
             }
 
+            // One-click unsubscribe link for marketing email (compliance).
+            if ($channel === 'email' && $event->category === 'marketing' && $recipient && $recipient->getKey()) {
+                $meta['unsubscribe_url'] = $this->unsubscribeUrl($recipient);
+            }
+
             $log = NotificationLog::create([
                 'recipient_type' => $recipient ? $recipient->getMorphClass() : null,
                 'recipient_id' => $recipient?->getKey(),
@@ -147,7 +152,7 @@ class NotificationService
                 'meta' => $meta,
             ]);
 
-            $result = $driver->send(new NotificationMessage($channel, $to, $body, $subject, $eventKey, $data['meta'] ?? []));
+            $result = $driver->send(new NotificationMessage($channel, $to, $body, $subject, $eventKey, $meta));
 
             $log->update([
                 'status' => $result->success ? NotificationLog::STATUS_SENT : NotificationLog::STATUS_FAILED,
@@ -307,6 +312,22 @@ class NotificationService
         }
 
         return ! ($now >= $start || $now < $end);
+    }
+
+    /** Signed one-click unsubscribe URL for a patient recipient (90-day validity). */
+    private function unsubscribeUrl(Model $recipient): ?string
+    {
+        if ($recipient->getMorphClass() !== (new \App\Models\Patient)->getMorphClass()) {
+            return null;
+        }
+
+        try {
+            return \Illuminate\Support\Facades\URL::temporarySignedRoute(
+                'notifications.unsubscribe', now()->addDays(90), ['patient' => $recipient->getKey()]
+            );
+        } catch (\Throwable $e) {
+            return null;
+        }
     }
 
     /** The next datetime the quiet window closes (when held sends resume). */

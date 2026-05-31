@@ -41,9 +41,14 @@ class EmailChannel implements ChannelDriver
 
         try {
             $subject = $message->subject ?: ($config['default_subject'] ?? 'Doctorato');
-            Mail::raw($message->body, function ($mail) use ($message, $subject) {
-                $mail->to($message->to)->subject($subject);
-            });
+            $mailable = new \App\Mail\HubNotificationMail(
+                $subject,
+                $message->body,
+                $message->meta['unsubscribe_url'] ?? null,
+                \App\Models\Setting::get('clinic_name_ar', \App\Models\Setting::get('clinic_name_en', 'Doctorato')),
+            );
+
+            Mail::to($message->to)->send($mailable);
 
             return DeliveryResult::ok('smtp', 0.0);
         } catch (\Throwable $e) {

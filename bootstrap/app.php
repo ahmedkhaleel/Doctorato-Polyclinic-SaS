@@ -60,6 +60,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'webhooks/stripe',
             'webhooks/whatsapp',
             'webhooks/sms/*',
+            'unsubscribe/*',
         ]);
 
         $middleware->alias([

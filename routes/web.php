@@ -56,6 +56,10 @@ Route::get('/webhooks/whatsapp', [\App\Http\Controllers\Webhooks\WhatsAppWebhook
 Route::post('/webhooks/whatsapp', [\App\Http\Controllers\Webhooks\WhatsAppWebhookController::class, 'receive'])
     ->name('webhooks.whatsapp.receive');
 
+// ─── One-click marketing unsubscribe (signed link in emails) ─────────
+Route::match(['get', 'post'], '/unsubscribe/{patient}', \App\Http\Controllers\UnsubscribeController::class)
+    ->name('notifications.unsubscribe')->middleware('signed')->whereNumber('patient');
+
 // ─── SMS Delivery Receipts (Twilio StatusCallback + SMS Misr DLR) ────
 Route::post('/webhooks/sms/twilio', [\App\Http\Controllers\Webhooks\SmsDlrController::class, 'twilio'])
     ->name('webhooks.sms.twilio');
