@@ -398,14 +398,14 @@ const priorityLabels = computed(() => ({ 1: isRtl.value ? 'ساخن' : 'Hot', 2:
 const priorityColors = { 1: 'bg-red-100 text-red-700', 2: 'bg-amber-100 text-amber-700', 3: 'bg-slate-100 text-[#1B365D]' };
 const priorityDotColors = { 1: '#ef4444', 2: '#f59e0b', 3: '#3b82f6' };
 
-// Only show enabled medical departments (derma/dental) in convert modal
+// Only show enabled medical departments in convert modal
 const enabledDepartments = computed(() => {
     const allModules = page.props.modules || {};
     const deptIcons = {
         derma: 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z',
         dental: 'M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z',
     };
-    return ['derma', 'dental', 'pediatric']
+    return ['derma', 'dental', 'pediatric', 'obgyn']
         .filter(slug => allModules[slug]?.enabled || allModules[slug]?.is_core)
         .map(slug => ({
             slug,

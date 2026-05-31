@@ -6,6 +6,7 @@ use App\Models\Branch;
 use App\Services\Branch\BranchContext;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Schema;
 
 /**
  * Scopes a model to the active branch (BranchContext).
@@ -21,26 +22,55 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * Bypass filtering for a query with: Model::query()->withoutGlobalScope('branch')
  * or via BranchContext::runWithoutScope() / setAllBranches().
+ *
+ * Deploy-safety: every branch operation is a no-op until the branch_id column
+ * actually exists on the table (memoized check). This means the code can be
+ * deployed BEFORE its migration runs without breaking inserts — the trait simply
+ * does nothing until the column is present.
  */
 trait BelongsToBranch
 {
+    /** Memoized table => has branch_id column. */
+    protected static array $branchColumnCache = [];
+
+    protected static function branchColumnExists(string $table): bool
+    {
+        if (! array_key_exists($table, static::$branchColumnCache)) {
+            try {
+                static::$branchColumnCache[$table] = Schema::hasColumn($table, 'branch_id');
+            } catch (\Throwable $e) {
+                static::$branchColumnCache[$table] = false;
+            }
+        }
+
+        return static::$branchColumnCache[$table];
+    }
+
     public static function bootBelongsToBranch(): void
     {
         static::addGlobalScope('branch', function (Builder $query) {
             if (! config('branches.enabled')) {
                 return; // kill-switch off → no filtering
             }
+            $table = $query->getModel()->getTable();
+            if (! static::branchColumnExists($table)) {
+                return; // column not migrated yet → no filtering
+            }
             $ctx = app(BranchContext::class);
             if ($ctx->isAllBranches()) {
                 return;
             }
             if ($id = $ctx->currentId()) {
-                $query->where($query->getModel()->getTable().'.branch_id', $id);
+                $query->where($table.'.branch_id', $id);
             }
         });
 
         static::creating(function ($model) {
             if (! empty($model->branch_id)) {
+                return;
+            }
+            // Skip until the column exists (code deployed before migration).
+            if (! static::branchColumnExists($model->getTable())) {
                 return;
             }
             // Always stamp a concrete branch so scoped data is never branchless,

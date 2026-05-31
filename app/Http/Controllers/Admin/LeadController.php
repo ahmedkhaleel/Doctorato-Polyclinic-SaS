@@ -477,7 +477,7 @@ class LeadController extends Controller
         // Validate optional booking data
         $data = $request->validate([
             'create_booking' => 'nullable|boolean',
-            'booking_type' => 'required_if:create_booking,true|nullable|in:dermatology_consultation,cosmetic_consultation,dental_consultation,pediatric_consultation,pediatric_service,service,package_bundle',
+            'booking_type' => 'required_if:create_booking,true|nullable|in:dermatology_consultation,cosmetic_consultation,dental_consultation,pediatric_consultation,pediatric_service,obgyn_consultation,obgyn_service,service,package_bundle',
             'service_id' => 'nullable|exists:services,id',
             'doctor_id' => 'nullable|exists:doctors,id',
             'appointment_date' => 'required_if:create_booking,true|nullable|date|after_or_equal:today',
@@ -494,6 +494,7 @@ class LeadController extends Controller
                 $bookingType = match ($data['department']) {
                     'dental' => 'dental_service',
                     'pediatric' => 'pediatric_service',
+                    'obgyn' => 'obgyn_service',
                     default => 'service',
                 };
             } elseif ($bookingType === 'consultation' && isset($data['department'])) {
@@ -501,6 +502,7 @@ class LeadController extends Controller
                     'derma' => 'dermatology_consultation',
                     'dental' => 'dental_consultation',
                     'pediatric' => 'pediatric_consultation',
+                    'obgyn' => 'obgyn_consultation',
                     default => 'dermatology_consultation',
                 };
             }
@@ -536,6 +538,8 @@ class LeadController extends Controller
                 $feeKey = $data['booking_type'] === 'dermatology_consultation'
                     ? 'default_dermatology_fee' : 'cosmetic_consultation_fee';
                 $unitPrice = (float) \App\Models\Setting::get($feeKey, $unitPrice);
+            } elseif ($data['booking_type'] === 'obgyn_consultation') {
+                $unitPrice = (float) \App\Models\Setting::get('obgyn_consultation_fee', $unitPrice);
             }
 
             $bookingData = [

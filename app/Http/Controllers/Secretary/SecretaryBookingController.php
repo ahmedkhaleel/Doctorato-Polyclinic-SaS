@@ -35,7 +35,7 @@ class SecretaryBookingController extends BaseSecretaryController
             'search' => 'nullable|string|max:100',
             'status' => 'nullable|string|in:unconfirmed,confirmed,in_progress,completed,cancelled',
             'source' => 'nullable|string|in:website,secretary,walk_in,phone',
-            'module' => 'nullable|string|in:derma,dental,pediatric',
+            'module' => 'nullable|string|in:derma,dental,pediatric,obgyn',
         ]);
 
         $query = Booking::with(['patient', 'bookingServices.service', 'invoice'])

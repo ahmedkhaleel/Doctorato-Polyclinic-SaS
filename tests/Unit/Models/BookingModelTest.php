@@ -53,18 +53,28 @@ class BookingModelTest extends TestCase
 
     // ─── Booking Type Enum ─────────────────────────────
 
-    public function test_booking_type_enum_rejects_invalid_values(): void
+    public function test_invalid_booking_type_is_rejected_by_validation(): void
     {
-        $this->expectException(QueryException::class);
+        // booking_type is now a VARCHAR at the DB layer (flexible so medical
+        // modules like OB/GYN can be added without an enum migration); the
+        // allowed values are enforced by BookingRequest validation instead.
+        $validator = \Illuminate\Support\Facades\Validator::make(
+            ['booking_type' => 'consultation'], // not an allowed value
+            (new \App\Http\Requests\BookingRequest)->rules()
+        );
 
-        Booking::create([
-            'booking_number' => 'BK-TEST-0002',
-            'source' => 'website',
-            'status' => 'unconfirmed',
-            'full_name' => 'Test',
-            'phone' => '0123456',
-            'booking_type' => 'consultation', // Invalid enum value
-        ]);
+        $this->assertTrue($validator->errors()->has('booking_type'));
+    }
+
+    public function test_obgyn_booking_type_is_accepted(): void
+    {
+        // OB/GYN is a medical module → its booking types must validate.
+        $validator = \Illuminate\Support\Facades\Validator::make(
+            ['booking_type' => 'obgyn_consultation', 'full_name' => 'X', 'phone' => '0100', 'privacy_consent' => true],
+            (new \App\Http\Requests\BookingRequest)->rules()
+        );
+
+        $this->assertFalse($validator->errors()->has('booking_type'));
     }
 
     // ─── Relationships ─────────────────────────────────

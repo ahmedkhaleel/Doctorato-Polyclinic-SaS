@@ -112,8 +112,8 @@ class PatientBookingController extends BasePatientController
         $patient = $this->patient($request);
 
         $data = $request->validate([
-            'booking_type' => 'required|in:dermatology_consultation,cosmetic_consultation,service,dental_consultation,dental_service,pediatric_consultation,pediatric_service',
-            'module' => 'nullable|string|in:derma,dental,pediatric',
+            'booking_type' => 'required|in:dermatology_consultation,cosmetic_consultation,service,dental_consultation,dental_service,pediatric_consultation,pediatric_service,obgyn_consultation,obgyn_service',
+            'module' => 'nullable|string|in:derma,dental,pediatric,obgyn',
             'service_id' => 'nullable|exists:services,id',
             'doctor_id' => 'nullable|exists:doctors,id',
             'preferred_date' => 'required|date|after_or_equal:today',
@@ -130,6 +130,9 @@ class PatientBookingController extends BasePatientController
         }
         if (in_array($data['booking_type'] ?? '', ['pediatric_consultation', 'pediatric_service'])) {
             $module = 'pediatric';
+        }
+        if (in_array($data['booking_type'] ?? '', ['obgyn_consultation', 'obgyn_service'])) {
+            $module = 'obgyn';
         }
 
         $create = fn () => Booking::create([
