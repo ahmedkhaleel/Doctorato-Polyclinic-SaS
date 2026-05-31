@@ -14,6 +14,7 @@ const props = defineProps({
     doctors: Array,
     modules: Object,
     patientCodes: { type: Array, default: () => [] },
+    branches: { type: Array, default: () => [] },
 });
 
 const page = usePage();
@@ -61,6 +62,7 @@ const form = useForm({
     preferred_time: '',
     notes: '',
     promo_code: '',
+    branch_id: '',
 });
 
 /* Booking types per module */
@@ -211,6 +213,20 @@ function submit() {
                                 </optgroup>
                             </select>
                             <p v-if="form.errors.service_id" class="mt-1.5 text-sm text-red-500">{{ form.errors.service_id }}</p>
+                        </div>
+
+                        <!-- Branch (only when multiple branches) -->
+                        <div v-if="branches.length">
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ isRtl ? 'الفرع' : 'Branch' }}</label>
+                            <select
+                                v-model="form.branch_id"
+                                class="doctorato-input w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[var(--brand-primary)]/50 focus:border-[var(--brand-primary)]/50 transition-all"
+                                :class="form.errors.branch_id ? 'border-red-300' : ''"
+                            >
+                                <option value="">{{ isRtl ? 'اختر الفرع' : 'Select branch' }}</option>
+                                <option v-for="b in branches" :key="b.id" :value="b.id">{{ isRtl ? b.name_ar : b.name_en }}</option>
+                            </select>
+                            <p v-if="form.errors.branch_id" class="mt-1.5 text-sm text-red-500">{{ form.errors.branch_id }}</p>
                         </div>
 
                         <!-- Doctor -->

@@ -87,12 +87,23 @@ class PatientBookingController extends BasePatientController
                 'source'     => 'loyalty',
             ]);
 
+        // Multi-branch: offer a branch picker only when enabled with >1 branch.
+        $branches = [];
+        if (config('branches.enabled')) {
+            $branches = \App\Models\Branch::where('is_active', true)
+                ->orderBy('id')->get(['id', 'name_ar', 'name_en']);
+            if ($branches->count() < 2) {
+                $branches = [];
+            }
+        }
+
         return Inertia::render('Patient/Bookings/Create', [
             'patient' => $patient->only(['full_name', 'phone', 'email', 'file_number']),
             'categories' => $categories,
             'doctors' => $doctors,
             'modules' => $activeModules,
             'patientCodes' => $patientCodes,
+            'branches' => $branches,
         ]);
     }
 

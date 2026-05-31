@@ -56,6 +56,24 @@ class PatientBookingTest extends TestCase
             ->assertOk();
     }
 
+    public function test_patient_booking_attributed_to_selected_branch(): void
+    {
+        config(['branches.enabled' => true]);
+        $b2 = \App\Models\Branch::create(['name_ar' => 'B2', 'name_en' => 'B2', 'code' => 'B2']);
+
+        $this->actingAs($this->user)
+            ->post('/en/patient/bookings', [
+                'booking_type' => 'dermatology_consultation',
+                'preferred_date' => now()->addDays(3)->toDateString(),
+                'preferred_time' => '10:00',
+                'branch_id' => $b2->id,
+            ])
+            ->assertRedirect();
+
+        $booking = Booking::withoutGlobalScope('branch')->where('patient_id', $this->patient->id)->latest('id')->first();
+        $this->assertSame($b2->id, (int) $booking->branch_id);
+    }
+
     public function test_patient_can_create_booking(): void
     {
         $this->actingAs($this->user)
