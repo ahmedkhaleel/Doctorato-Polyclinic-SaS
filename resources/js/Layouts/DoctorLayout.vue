@@ -6,6 +6,7 @@ import ToastNotification from '@/Components/Doctor/ToastNotification.vue';
 import ChatIcon from '@/Components/Chat/ChatIcon.vue';
 import ChatToast from '@/Components/Chat/ChatToast.vue';
 import FlashMessages from '@/Components/FlashMessages.vue';
+import BranchSwitcher from '@/Components/BranchSwitcher.vue';
 
 import AttendanceReminder from '@/Components/AttendanceReminder.vue';
 const page = usePage();
@@ -483,6 +484,9 @@ onUnmounted(() => { document.removeEventListener('keydown', handleGlobalKey); })
 
                 <!-- Right side -->
                 <div class="flex items-center gap-1.5 md:gap-3">
+                    <!-- Branch switcher (multi-branch) -->
+                    <BranchSwitcher />
+
                     <!-- Chat -->
                     <ChatIcon panelPrefix="doctor" accentColor="#C4A265" />
 

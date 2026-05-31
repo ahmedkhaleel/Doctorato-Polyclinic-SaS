@@ -44,7 +44,10 @@ Route::get('/reset-password/{token}',   [AuthController::class, 'showResetForm']
 Route::post('/reset-password',          [AuthController::class, 'resetPassword'])->name('secretary.password.update')->middleware('throttle:5,15');
 
 // Protected secretary routes (requires authentication + secretary role)
-Route::middleware('secretary.auth')->group(function () {
+Route::middleware(['secretary.auth', 'branch.context'])->group(function () {
+
+    // ─── Branch Switching (multi-branch) ─────────────────────
+    Route::post('/switch-branch', [\App\Http\Controllers\Admin\BranchSwitchController::class, 'switch'])->name('secretary.switch-branch');
 
     // ─── Locale Switch ─────────────────────────────────────
     Route::post('/switch-locale', function (\Illuminate\Http\Request $request) {

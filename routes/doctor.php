@@ -52,7 +52,10 @@ Route::get('/reset-password/{token}',   [AuthController::class, 'showResetForm']
 Route::post('/reset-password',          [AuthController::class, 'resetPassword'])->name('doctor.password.update')->middleware('throttle:5,15');
 
 // Protected doctor routes (requires authentication + active doctor)
-Route::middleware('doctor.auth')->group(function () {
+Route::middleware(['doctor.auth', 'branch.context'])->group(function () {
+
+    // ─── Branch Switching (multi-branch) ─────────────────────
+    Route::post('/switch-branch', [\App\Http\Controllers\Admin\BranchSwitchController::class, 'switch'])->name('doctor.switch-branch');
 
     // ─── Locale Switching ────────────────────────────────────
     Route::post('/switch-locale', function (\Illuminate\Http\Request $request) {

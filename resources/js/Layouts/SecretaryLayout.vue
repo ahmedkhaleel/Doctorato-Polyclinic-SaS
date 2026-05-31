@@ -5,6 +5,7 @@ import SecretaryNotificationBell from '@/Components/Secretary/SecretaryNotificat
 import SecretaryToastNotification from '@/Components/Secretary/SecretaryToastNotification.vue';
 import ChatIcon from '@/Components/Chat/ChatIcon.vue';
 import FlashMessages from '@/Components/FlashMessages.vue';
+import BranchSwitcher from '@/Components/BranchSwitcher.vue';
 import ChatToast from '@/Components/Chat/ChatToast.vue';
 
 import AttendanceReminder from '@/Components/AttendanceReminder.vue';
@@ -406,6 +407,9 @@ function logout()        { router.post('/secretary/logout'); }
 
                 <!-- Right side -->
                 <div class="flex items-center gap-1.5 md:gap-3">
+                    <!-- Branch switcher (multi-branch) -->
+                    <BranchSwitcher />
+
                     <!-- Language Switcher -->
                     <button
                         @click="switchLocale"

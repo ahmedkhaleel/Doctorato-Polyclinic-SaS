@@ -184,11 +184,22 @@ class HandleInertiaRequests extends Middleware
 
             $ar = app()->getLocale() === 'ar';
 
+            // Post the switch to the route of the panel we're in (each panel has
+            // its own branch.context-protected /switch-branch endpoint).
+            $path = $request->path();
+            $switchUrl = '/admin/switch-branch';
+            if (str_starts_with($path, 'doctor')) {
+                $switchUrl = '/doctor/switch-branch';
+            } elseif (str_starts_with($path, 'secretary')) {
+                $switchUrl = '/secretary/switch-branch';
+            }
+
             return [
                 'enabled' => (bool) config('branches.enabled'),
                 'current' => $ctx->isAllBranches() ? null : $ctx->currentId(),
                 'is_all' => $ctx->isAllBranches(),
                 'can_all' => $user->canSwitchAllBranches(),
+                'switch_url' => $switchUrl,
                 'list' => $list->map(fn ($b) => ['id' => $b->id, 'name' => $ar ? $b->name_ar : $b->name_en])->values(),
             ];
         } catch (\Throwable $e) {

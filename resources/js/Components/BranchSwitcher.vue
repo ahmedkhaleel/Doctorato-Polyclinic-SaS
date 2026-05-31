@@ -20,7 +20,8 @@ const currentLabel = computed(() => {
 
 function choose(value) {
     open.value = false;
-    router.post('/admin/switch-branch', { branch: String(value) }, { preserveScroll: false });
+    const url = branch.value?.switch_url || '/admin/switch-branch';
+    router.post(url, { branch: String(value) }, { preserveScroll: false });
 }
 </script>
 
