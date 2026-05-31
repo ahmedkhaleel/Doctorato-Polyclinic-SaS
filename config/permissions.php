@@ -494,7 +494,7 @@ return [
             'label_en' => 'Notifications',
             'label_ar' => 'الإشعارات',
             'group' => 'system',
-            'actions' => ['view', 'create', 'update'],
+            'actions' => ['view', 'create', 'update', 'send'],
         ],
         'audit_logs' => [
             'label_en' => 'Audit Logs',

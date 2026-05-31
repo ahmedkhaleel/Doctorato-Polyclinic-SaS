@@ -1,0 +1,242 @@
+<?php
+
+namespace App\Services\Notifications;
+
+use App\Models\NotificationChannelRoute;
+use App\Models\NotificationEvent;
+use App\Models\NotificationLog;
+use App\Models\NotificationTemplate;
+use App\Services\Notifications\Channels\EmailChannel;
+use App\Services\Notifications\Channels\InAppChannel;
+use App\Services\Notifications\Channels\SmsChannel;
+use App\Services\Notifications\Contracts\ChannelDriver;
+use Illuminate\Database\Eloquent\Model;
+
+/**
+ * Central dispatcher for the Notifications Hub.
+ *
+ * Pipeline per event:
+ *   resolveRoute → (per channel) consent → quota → dedup → render → send → log
+ *
+ * External channels (whatsapp/sms/email) form a FALLBACK group ordered by route
+ * priority — the first one that succeeds wins, so the recipient is never charged
+ * on two channels for the same event. in_app is free and always recorded.
+ */
+class NotificationService
+{
+    private const EXTERNAL = ['whatsapp', 'sms', 'email'];
+
+    public function __construct(private NotificationQuota $quota) {}
+
+    /**
+     * Process an event for a recipient. Returns the NotificationLog rows created.
+     *
+     * @param  string  $eventKey  e.g. "booking.confirmed"
+     * @param  Model|null  $recipient  Patient | Lead | User | null
+     * @param  array  $data  template vars + optional 'body','subject','to','dedup_key','locale'
+     * @param  array|null  $forceChannels  override the routed channels for this send
+     * @return NotificationLog[]
+     */
+    public function process(string $eventKey, ?Model $recipient, array $data = [], ?array $forceChannels = null): array
+    {
+        $event = NotificationEvent::where('key', $eventKey)->first();
+        if (! $event || ! $event->is_active) {
+            return [];
+        }
+
+        $channels = $forceChannels !== null
+            ? $forceChannels
+            : NotificationChannelRoute::where('event_key', $eventKey)
+                ->where('enabled', true)
+                ->orderBy('priority')
+                ->pluck('channel')
+                ->all();
+
+        $logs = [];
+        $externalSucceeded = false;
+
+        foreach ($channels as $channel) {
+            $isExternal = in_array($channel, self::EXTERNAL, true);
+
+            // Fallback group: once one external channel succeeds, skip the rest.
+            if ($isExternal && $externalSucceeded) {
+                continue;
+            }
+
+            $driver = $this->driverFor($channel);
+            if (! $driver || ! $driver->isConfigured()) {
+                continue; // channel disabled / unknown — silently skip
+            }
+
+            if (! $this->hasConsent($recipient, $event->category, $channel)) {
+                $logs[] = $this->logSkipped($recipient, $channel, $event, 'no consent', $data);
+
+                continue;
+            }
+
+            if (! $this->quota->allows($channel)) {
+                $logs[] = $this->logSkipped($recipient, $channel, $event, $this->quota->blockReason($channel), $data);
+
+                continue;
+            }
+
+            $dedupKey = isset($data['dedup_key']) ? $data['dedup_key'].':'.$channel : null;
+            if ($dedupKey && $this->isDuplicate($dedupKey)) {
+                $logs[] = $this->logSkipped($recipient, $channel, $event, 'duplicate', $data, $dedupKey);
+
+                continue;
+            }
+
+            $to = $this->resolveTo($recipient, $channel, $data);
+            if ($isExternal && ! $to) {
+                continue; // can't reach the recipient on this channel
+            }
+
+            [$body, $subject, $templateId] = $this->render($eventKey, $channel, $recipient, $data);
+
+            $log = NotificationLog::create([
+                'recipient_type' => $recipient ? $recipient->getMorphClass() : null,
+                'recipient_id' => $recipient?->getKey(),
+                'to' => $to,
+                'channel' => $channel,
+                'event_key' => $eventKey,
+                'template_id' => $templateId,
+                'status' => NotificationLog::STATUS_QUEUED,
+                'dedup_key' => $dedupKey,
+                'meta' => $data['meta'] ?? null,
+            ]);
+
+            $result = $driver->send(new NotificationMessage($channel, $to, $body, $subject, $eventKey, $data['meta'] ?? []));
+
+            $log->update([
+                'status' => $result->success ? NotificationLog::STATUS_SENT : NotificationLog::STATUS_FAILED,
+                'provider' => $result->provider,
+                'cost' => $result->cost,
+                'error' => $result->error,
+                'sent_at' => $result->success ? now() : null,
+            ]);
+
+            $logs[] = $log;
+
+            if ($isExternal && $result->success) {
+                $externalSucceeded = true;
+            }
+        }
+
+        return $logs;
+    }
+
+    /** Map a channel key to its driver instance. */
+    private function driverFor(string $channel): ?ChannelDriver
+    {
+        return match ($channel) {
+            'in_app' => app(InAppChannel::class),
+            'email' => app(EmailChannel::class),
+            'sms' => app(SmsChannel::class),
+            // 'whatsapp' => app(WhatsAppChannel::class), // P3
+            default => null,
+        };
+    }
+
+    /** Transactional always sends; reminder/marketing respect per-channel consent. */
+    private function hasConsent(?Model $recipient, string $category, string $channel): bool
+    {
+        // Essential (transactional) messages and free in-app records always go out.
+        if ($category === 'transactional' || $channel === 'in_app' || ! $recipient) {
+            return true;
+        }
+
+        if (! method_exists($recipient, 'wantsNotification')) {
+            return true;
+        }
+
+        // Patient consent today tracks email + sms only. WhatsApp consent columns
+        // land in P5 — until then don't block channels the model can't express.
+        if (! in_array($channel, ['email', 'sms'], true)) {
+            return true;
+        }
+
+        // Event categories (reminder/marketing) → patient preference categories.
+        $consentCategory = ['reminder' => 'reminders', 'marketing' => 'marketing'][$category] ?? $category;
+
+        return (bool) $recipient->wantsNotification($consentCategory, $channel);
+    }
+
+    private function isDuplicate(string $dedupKey): bool
+    {
+        return NotificationLog::where('dedup_key', $dedupKey)
+            ->whereIn('status', [
+                NotificationLog::STATUS_QUEUED,
+                NotificationLog::STATUS_SENT,
+                NotificationLog::STATUS_DELIVERED,
+                NotificationLog::STATUS_READ,
+            ])
+            ->exists();
+    }
+
+    private function resolveTo(?Model $recipient, string $channel, array $data): ?string
+    {
+        if (isset($data['to'])) {
+            return $data['to'];
+        }
+        if (! $recipient) {
+            return null;
+        }
+
+        return match ($channel) {
+            'email' => $recipient->email ?? null,
+            'sms', 'whatsapp' => $recipient->whatsapp ?? $recipient->phone ?? null,
+            default => null,
+        };
+    }
+
+    /**
+     * Render body/subject for a channel. Prefers a stored template; falls back to
+     * an explicit body in $data, then the event label.
+     *
+     * @return array{0:string,1:?string,2:?int}
+     */
+    private function render(string $eventKey, string $channel, ?Model $recipient, array $data): array
+    {
+        $locale = $data['locale'] ?? $this->localeFor($recipient);
+
+        $template = NotificationTemplate::where('event_key', $eventKey)
+            ->where('channel', $channel)
+            ->where('is_active', true)
+            ->first();
+
+        if ($template) {
+            return [$template->render($locale, $data), $template->subject, $template->id];
+        }
+
+        $body = $data['body'] ?? '';
+        $subject = $data['subject'] ?? null;
+
+        return [$body, $subject, null];
+    }
+
+    private function localeFor(?Model $recipient): string
+    {
+        // Patients store this as `preferred_language`; other models may use `preferred_locale`.
+        $pref = $recipient->preferred_language ?? $recipient->preferred_locale ?? null;
+        if (! empty($pref)) {
+            return $pref;
+        }
+
+        return app()->getLocale() ?: 'ar';
+    }
+
+    private function logSkipped(?Model $recipient, string $channel, NotificationEvent $event, string $reason, array $data, ?string $dedupKey = null): NotificationLog
+    {
+        return NotificationLog::create([
+            'recipient_type' => $recipient ? $recipient->getMorphClass() : null,
+            'recipient_id' => $recipient?->getKey(),
+            'to' => $this->resolveTo($recipient, $channel, $data),
+            'channel' => $channel,
+            'event_key' => $event->key,
+            'status' => NotificationLog::STATUS_SKIPPED,
+            'error' => $reason,
+            'dedup_key' => $dedupKey,
+        ]);
+    }
+}
