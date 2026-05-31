@@ -24,6 +24,7 @@ const props = defineProps({
     services: Array,
     doctors: Array,
     doctorSchedules: Array,
+    branches: { type: Array, default: () => [] },
     seo: Object,
     modules: Object,
     telemedicineEnabled: { type: Boolean, default: false },
@@ -115,6 +116,7 @@ const form = useForm({
     preferred_time: '',
     notes: '',
     promo_code: '',
+    branch_id: '',
     privacy_consent: false,
     _honeypot: '',
 });
@@ -255,7 +257,7 @@ watch([() => form.doctor_id, () => form.preferred_date], async ([doctorId, date]
     loadingSlots.value = true;
     try {
         const res = await axios.get('/api/time-slots', {
-            params: { doctor_id: doctorId, date: date, duration: selectedServiceDuration.value },
+            params: { doctor_id: doctorId, date: date, duration: selectedServiceDuration.value, branch_id: form.branch_id || undefined },
         });
         availableSlots.value = res.data.slots || [];
         if (availableSlots.value.length === 0) {
@@ -556,6 +558,20 @@ function submit() {
                                         autocomplete="off"
                                         tabindex="-1"
                                     class="doctorato-input"/>
+                                </div>
+
+                                <!-- ═══ Branch selection (only when multiple branches) ═══ -->
+                                <div v-if="branches.length" class="mb-2">
+                                    <label class="block text-sm font-semibold mb-1.5 text-[#1B365D]">
+                                        {{ isRtl ? 'الفرع' : 'Branch' }}
+                                    </label>
+                                    <select v-model="form.branch_id" class="doctorato-input">
+                                        <option value="">{{ isRtl ? 'اختر الفرع' : 'Select a branch' }}</option>
+                                        <option v-for="b in branches" :key="b.id" :value="b.id">
+                                            {{ isRtl ? b.name_ar : b.name_en }}
+                                        </option>
+                                    </select>
+                                    <p v-if="form.errors.branch_id" class="mt-1.5 text-sm text-red-500">{{ form.errors.branch_id }}</p>
                                 </div>
 
                                 <!-- ═══ Online Consultation CTA (if telemedicine enabled) ═══ -->

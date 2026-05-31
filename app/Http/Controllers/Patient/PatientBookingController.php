@@ -109,6 +109,7 @@ class PatientBookingController extends BasePatientController
             'preferred_time' => 'required|string',
             'notes' => 'nullable|string|max:1000',
             'promo_code' => 'nullable|string|max:50',
+            'branch_id' => 'nullable|integer|exists:branches,id',
         ]);
 
         // Auto-detect module from booking type
@@ -120,7 +121,7 @@ class PatientBookingController extends BasePatientController
             $module = 'pediatric';
         }
 
-        $booking = Booking::create([
+        $create = fn () => Booking::create([
             'booking_number' => Booking::generateBookingNumber(),
             'source' => 'patient_portal',
             'module' => $module,
@@ -137,6 +138,11 @@ class PatientBookingController extends BasePatientController
             'promo_code' => $data['promo_code'] ?? null,
             'status' => 'unconfirmed',
         ]);
+
+        // Pin to the chosen branch so the booking + its number inherit it.
+        $booking = ! empty($data['branch_id'])
+            ? app(\App\Services\Branch\BranchContext::class)->runForBranch((int) $data['branch_id'], $create)
+            : $create();
 
         return redirect()->route('patient.bookings.index', ['locale' => app()->getLocale()])
             ->with('success', 'Booking created successfully! We will confirm your appointment soon.');

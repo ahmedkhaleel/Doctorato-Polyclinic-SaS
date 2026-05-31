@@ -58,6 +58,7 @@ class BookingRequest extends FormRequest
             'preferred_time'  => ['nullable', 'string'],
             'notes'           => ['nullable', 'string', 'max:1000'],
             'promo_code'      => ['nullable', 'string', 'max:50'],
+            'branch_id'       => ['nullable', 'integer', 'exists:branches,id'],
             'privacy_consent' => ['required', 'accepted'],
             '_honeypot'       => ['nullable', 'max:0'],
         ];

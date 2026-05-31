@@ -52,11 +52,22 @@ class BookingController extends Controller
             ->only(ModuleManager::MEDICAL_MODULES)
             ->all();
 
+        // Multi-branch: offer a branch picker only when enabled with >1 active branch.
+        $branches = [];
+        if (config('branches.enabled')) {
+            $branches = \App\Models\Branch::where('is_active', true)
+                ->orderBy('id')->get(['id', 'name_ar', 'name_en']);
+            if ($branches->count() < 2) {
+                $branches = [];
+            }
+        }
+
         return Inertia::render('Frontend/Booking', [
             'serviceCategories' => $serviceCategories,
             'services' => $services,
             'doctors' => $doctors,
             'doctorSchedules' => $doctorSchedules,
+            'branches' => $branches,
             'seo' => SeoService::get('booking'),
             'modules' => $activeModules,
             // Online consultation availability — shows as a CTA banner on the booking page

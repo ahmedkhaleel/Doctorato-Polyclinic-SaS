@@ -32,6 +32,18 @@ class BookingWorkflowService
      */
     public function createFromWebsite(array $data): Booking
     {
+        // Branch selection: run the whole creation pinned to the chosen branch so
+        // the booking, its number prefix and appointments all inherit it. Recurse
+        // once with branch_id cleared to avoid a loop. (Validated as an active
+        // branch upstream in BookingRequest.)
+        if (! empty($data['branch_id'])) {
+            $branchId = (int) $data['branch_id'];
+            $data['branch_id'] = null;
+
+            return app(\App\Services\Branch\BranchContext::class)
+                ->runForBranch($branchId, fn () => $this->createFromWebsite($data));
+        }
+
         // Determine module from booking type if not explicitly set
         $module = $data['module'] ?? 'derma';
         if (in_array($data['booking_type'] ?? '', ['dental_consultation', 'dental_service'])) {
