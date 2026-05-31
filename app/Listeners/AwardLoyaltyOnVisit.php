@@ -3,12 +3,11 @@
 namespace App\Listeners;
 
 use App\Events\VisitCompleted;
-use App\Jobs\SendSmsJob;
 use App\Models\LoyaltyPoint;
 use App\Models\Setting;
 use App\Models\SmsTemplate;
 use App\Services\LoyaltyService;
-use App\Services\SmsService;
+use App\Services\Notifications\Notifier;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -20,27 +19,35 @@ class AwardLoyaltyOnVisit
     public function handle(VisitCompleted $event): void
     {
         $visit = $event->visit;
-        if (! $visit->patient_id) return;
+        if (! $visit->patient_id) {
+            return;
+        }
 
         // Idempotency — has this visit already credited points?
         $alreadyCredited = LoyaltyPoint::where('reference_type', $visit->getMorphClass())
             ->where('reference_id', $visit->id)
             ->where('type', LoyaltyPoint::TYPE_EARN)
             ->exists();
-        if ($alreadyCredited) return;
+        if ($alreadyCredited) {
+            return;
+        }
 
         try {
             $billed = $visit->total_amount ?? $visit->fee ?? null;
             $points = LoyaltyService::pointsForVisit($billed ? (float) $billed : null);
-            if ($points <= 0) return;
+            if ($points <= 0) {
+                return;
+            }
 
             $patient = $visit->patient;
-            if (! $patient) return;
+            if (! $patient) {
+                return;
+            }
 
             LoyaltyService::award(
                 $patient,
                 $points,
-                "Visit #{$visit->id} on " . ($visit->visit_date ?? now()->toDateString()),
+                "Visit #{$visit->id} on ".($visit->visit_date ?? now()->toDateString()),
                 $visit
             );
 
@@ -52,7 +59,7 @@ class AwardLoyaltyOnVisit
         } catch (\Throwable $e) {
             Log::warning('[loyalty.award] failed', [
                 'visit_id' => $visit->id,
-                'error'    => $e->getMessage(),
+                'error' => $e->getMessage(),
             ]);
         }
     }
@@ -60,29 +67,39 @@ class AwardLoyaltyOnVisit
     private function sendEarnedSms($patient, int $points): void
     {
         try {
-            if (! SmsService::isEnabled()) return;
-            if (! $patient->phone) return;
-            if (! $patient->wantsNotification('marketing', 'sms')) return;
-            if (Setting::get('sms_on_loyalty_earned', '1') !== '1') return;
+            if (! $patient->phone) {
+                return;
+            }
+            // Master feature toggle; per-channel marketing consent is enforced by
+            // the hub (loyalty.earned is a marketing-category event).
+            if (Setting::get('sms_on_loyalty_earned', '1') !== '1') {
+                return;
+            }
 
-            $balance   = LoyaltyService::balance($patient);
-            $egpValue  = LoyaltyService::pointsToEgp($balance);
-            $currency  = Setting::get('currency_code', 'EGP');
-            $locale    = $patient->preferred_language ?? 'ar';
+            $balance = LoyaltyService::balance($patient);
+            $egpValue = LoyaltyService::pointsToEgp($balance);
+            $currency = Setting::get('currency_code', 'EGP');
+            $locale = $patient->preferred_language ?? 'ar';
 
+            // Legacy SMS template as the fallback body; the hub's loyalty.earned
+            // template (if present) takes precedence.
             $body = SmsTemplate::render('loyalty_earned', [
-                'points'    => $points,
-                'balance'   => $balance,
-                'egp_value' => number_format($egpValue, 0) . ' ' . $currency,
+                'points' => $points,
+                'balance' => $balance,
+                'egp_value' => number_format($egpValue, 0).' '.$currency,
             ], $locale);
 
-            if (! $body) return;
-
-            SendSmsJob::dispatch($patient->phone, $body, null, 'loyalty_earned');
+            Notifier::event('loyalty.earned', $patient, [
+                'to' => $patient->phone,
+                'body' => $body ?: "حصلت على {$points} نقطة ولاء. رصيدك: {$balance}.",
+                'points' => $points,
+                'balance' => $balance,
+                'egp_value' => number_format($egpValue, 0).' '.$currency,
+            ]);
         } catch (\Throwable $e) {
             Log::warning('[loyalty.earned.sms] failed', [
                 'patient_id' => $patient->id ?? null,
-                'error'      => $e->getMessage(),
+                'error' => $e->getMessage(),
             ]);
         }
     }

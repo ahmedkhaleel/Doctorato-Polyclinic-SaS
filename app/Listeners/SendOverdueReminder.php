@@ -3,9 +3,9 @@
 namespace App\Listeners;
 
 use App\Events\InvoiceOverdue;
-use App\Jobs\SendSmsJob;
 use App\Models\Setting;
 use App\Models\User;
+use App\Services\Notifications\Notifier;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Support\Str;
@@ -18,15 +18,23 @@ class SendOverdueReminder implements ShouldQueue
         $patient = $invoice->patient;
         $remaining = $invoice->total - $invoice->paid_amount;
 
-        // 1) SMS to patient (if enabled)
-        if (Setting::get('sms_enabled') === '1' && $patient?->phone) {
+        // 1) Patient reminder via the unified hub (transactional → always sends;
+        //    sms via legacy fallback, email/whatsapp if configured, in_app logged).
+        if ($patient?->phone) {
             $clinicName = Setting::get('clinic_name_ar', 'العيادة');
             $message = "عزيزي/تي {$patient->full_name}،\n"
-                . "نذكّركم بوجود مبلغ مستحق بقيمة {$remaining} ر.س (فاتورة #{$invoice->invoice_number}).\n"
-                . "يرجى مراجعة الاستقبال للسداد.\n"
-                . "شكراً — {$clinicName}";
+                ."نذكّركم بوجود مبلغ مستحق بقيمة {$remaining} ر.س (فاتورة #{$invoice->invoice_number}).\n"
+                ."يرجى مراجعة الاستقبال للسداد.\n"
+                ."شكراً — {$clinicName}";
 
-            SendSmsJob::dispatch($patient->phone, $message);
+            Notifier::event('invoice.overdue', $patient, [
+                'to' => $patient->phone,
+                'body' => $message,
+                'subject' => "فاتورة مستحقة #{$invoice->invoice_number}",
+                'name' => $patient->full_name,
+                'amount' => $remaining,
+                'clinic_name' => $clinicName,
+            ]);
         }
 
         // 2) In-app notification to admins

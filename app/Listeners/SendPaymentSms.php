@@ -3,18 +3,14 @@
 namespace App\Listeners;
 
 use App\Events\PaymentReceived;
-use App\Jobs\SendSmsJob;
 use App\Models\Setting;
+use App\Services\Notifications\Notifier;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 class SendPaymentSms implements ShouldQueue
 {
     public function handle(PaymentReceived $event): void
     {
-        if (Setting::get('sms_enabled') !== '1') {
-            return;
-        }
-
         $payment = $event->payment;
         $invoice = $event->invoice;
         $patient = $payment->patient;
@@ -27,7 +23,7 @@ class SendPaymentSms implements ShouldQueue
         $clinicName = Setting::get('clinic_name_ar', 'العيادة');
 
         $message = "عزيزي/تي {$patient->full_name}،\n"
-            . "تم استلام دفعة بقيمة {$payment->amount} ر.س بنجاح.\n";
+            ."تم استلام دفعة بقيمة {$payment->amount} ر.س بنجاح.\n";
 
         if ($remaining > 0) {
             $message .= "المتبقي: {$remaining} ر.س\n";
@@ -37,6 +33,14 @@ class SendPaymentSms implements ShouldQueue
 
         $message .= "شكراً لكم — {$clinicName}";
 
-        SendSmsJob::dispatch($patient->phone, $message);
+        // payment.received is transactional → always sends through the hub
+        // (sms via legacy fallback, whatsapp if enabled, in_app always logged).
+        Notifier::event('payment.received', $patient, [
+            'to' => $patient->phone,
+            'body' => $message,
+            'name' => $patient->full_name,
+            'amount' => $payment->amount,
+            'clinic_name' => $clinicName,
+        ]);
     }
 }
