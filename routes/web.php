@@ -65,6 +65,8 @@ Route::post('/webhooks/sms/twilio', [\App\Http\Controllers\Webhooks\SmsDlrContro
     ->name('webhooks.sms.twilio');
 Route::post('/webhooks/sms/smsmisr', [\App\Http\Controllers\Webhooks\SmsDlrController::class, 'smsmisr'])
     ->name('webhooks.sms.smsmisr');
+Route::post('/webhooks/sms/inbound', [\App\Http\Controllers\Webhooks\SmsDlrController::class, 'inbound'])
+    ->name('webhooks.sms.inbound');
 
 // ─── Attendance Reminder API (Doctor / Secretary / Admin popup) ─────
 Route::middleware('auth')->prefix('api/attendance')->group(function () {

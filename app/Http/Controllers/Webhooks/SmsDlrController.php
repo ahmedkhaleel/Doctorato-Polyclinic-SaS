@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Webhooks;
 use App\Http\Controllers\Controller;
 use App\Models\NotificationLog;
 use App\Services\Notifications\DeliveryReceiptService;
+use App\Services\Notifications\InboundMessageService;
 use Illuminate\Http\Request;
 
 /**
@@ -53,5 +54,24 @@ class SmsDlrController extends Controller
         }
 
         return response()->json(['received' => true]);
+    }
+
+    /**
+     * Inbound SMS (Twilio: From/Body/MessageSid; SMS Misr: Mobile/Message).
+     * Records a conversation entry + runs STOP handling. Returns empty TwiML so
+     * Twilio doesn't auto-reply.
+     */
+    public function inbound(Request $request, InboundMessageService $inbound)
+    {
+        $from = (string) $request->input('From', $request->input('Mobile', $request->input('msisdn', '')));
+        $body = (string) $request->input('Body', $request->input('Message', $request->input('text', '')));
+        $ref = $request->input('MessageSid', $request->input('SMSID'));
+
+        if ($from !== '' && $body !== '') {
+            $inbound->record('sms', $from, $body, $ref);
+        }
+
+        return response('<?xml version="1.0" encoding="UTF-8"?><Response></Response>', 200)
+            ->header('Content-Type', 'text/xml');
     }
 }

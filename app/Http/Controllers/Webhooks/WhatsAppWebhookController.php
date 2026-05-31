@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Webhooks;
 
 use App\Http\Controllers\Controller;
-use App\Models\NotificationChannel;
 use App\Models\NotificationLog;
 use App\Models\Setting;
 use Illuminate\Http\Request;
@@ -81,7 +80,7 @@ class WhatsAppWebhookController extends Controller
         }
     }
 
-    /** Log an inbound WhatsApp message as an in_app record for the conversation view. */
+    /** Log an inbound WhatsApp message (conversation entry + STOP handling). */
     private function recordInbound(array $msg): void
     {
         $from = $msg['from'] ?? null;
@@ -90,44 +89,7 @@ class WhatsAppWebhookController extends Controller
             return;
         }
 
-        NotificationLog::create([
-            'to' => $from,
-            'channel' => 'whatsapp',
-            'provider' => optional(NotificationChannel::for('whatsapp'))->provider ?? 'cloud_api',
-            'provider_ref' => $msg['id'] ?? null,
-            'event_key' => 'inbound.whatsapp',
-            'status' => NotificationLog::STATUS_DELIVERED,
-            'meta' => ['direction' => 'inbound', 'body' => $body, 'wa_type' => $msg['type'] ?? 'text'],
-            'delivered_at' => now(),
-        ]);
-
-        Log::info('Inbound WhatsApp message recorded', ['from' => $from]);
-
-        $this->handleStopKeyword($from, $body);
-    }
-
-    /** STOP / إلغاء / unsubscribe in an inbound message opts the patient out of marketing. */
-    private function handleStopKeyword(string $from, string $body): void
-    {
-        $normalized = trim(mb_strtolower($body));
-        $stopWords = ['stop', 'unsubscribe', 'الغاء', 'إلغاء', 'ايقاف', 'إيقاف'];
-        if (! in_array($normalized, $stopWords, true)) {
-            return;
-        }
-
-        // Match the patient by the last 9 digits of the phone (format-agnostic).
-        $tail = substr(preg_replace('/[^0-9]/', '', $from), -9);
-        if (! $tail) {
-            return;
-        }
-
-        $patient = \App\Models\Patient::whereRaw(
-            "REPLACE(REPLACE(REPLACE(phone,'+',''),' ',''),'-','') LIKE ?", ["%{$tail}"]
-        )->first();
-
-        if ($patient) {
-            \App\Services\Notifications\ConsentService::optOutMarketing($patient, 'stop_keyword');
-            Log::info('STOP keyword → marketing opt-out', ['patient_id' => $patient->id]);
-        }
+        app(\App\Services\Notifications\InboundMessageService::class)
+            ->record('whatsapp', $from, $body, $msg['id'] ?? null);
     }
 }
