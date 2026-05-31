@@ -332,9 +332,16 @@
                         @else
                             <div class="clinic-logo-fallback">A</div>
                         @endif
-                        <div class="clinic-name">AURA Derma Clinic</div>
-                        <div class="clinic-address">Dermatology &amp; Cosmetic Center</div>
-                        <div class="clinic-address">Cairo, Egypt</div>
+                        <div class="clinic-name">{{ $clinic['name'] ?? 'AURA Derma Clinic' }}</div>
+                        @if(!empty($clinic['tagline']))
+                            <div class="clinic-address">{{ $clinic['tagline'] }}</div>
+                        @endif
+                        @if(!empty($clinic['address']))
+                            <div class="clinic-address">{{ $clinic['address'] }}</div>
+                        @endif
+                        @if(!empty($clinic['phone']))
+                            <div class="clinic-address">{{ $clinic['phone'] }}</div>
+                        @endif
                     </td>
                     <td style="width: 50%;">
                         <div class="invoice-title">INVOICE</div>

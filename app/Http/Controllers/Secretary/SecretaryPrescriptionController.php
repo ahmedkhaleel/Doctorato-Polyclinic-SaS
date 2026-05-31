@@ -57,7 +57,8 @@ class SecretaryPrescriptionController extends BaseSecretaryController
     {
         $prescription->load(['items', 'patient', 'doctor', 'visit']);
 
-        $pdf = Pdf::loadView('pdf.prescription', compact('prescription'))
+        $clinic = \App\Services\Branch\BranchLetterhead::for($prescription->branch_id);
+        $pdf = Pdf::loadView('pdf.prescription', compact('prescription', 'clinic'))
             ->setPaper('a4', 'portrait');
 
         $filename = 'prescription-' . ($prescription->patient->full_name ?? 'patient') . '-' . $prescription->created_at->format('Y-m-d') . '.pdf';

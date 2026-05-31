@@ -186,7 +186,7 @@ class DoctorPrescriptionController extends BaseDoctorController
 
         $prescription->load(['patient', 'doctor', 'items']);
 
-        $pdf = Pdf::loadView('pdf.prescription', ['prescription' => $prescription]);
+        $pdf = Pdf::loadView('pdf.prescription', ['prescription' => $prescription, 'clinic' => \App\Services\Branch\BranchLetterhead::for($prescription->branch_id)]);
         $pdf->setPaper('A4');
 
         $filename = 'Rx-' . ($prescription->patient->file_number ?? $prescription->id) . '-' . $prescription->created_at->format('Ymd') . '.pdf';
@@ -200,7 +200,7 @@ class DoctorPrescriptionController extends BaseDoctorController
 
         $prescription->load(['patient', 'doctor', 'items']);
 
-        $pdf = Pdf::loadView('pdf.prescription', ['prescription' => $prescription]);
+        $pdf = Pdf::loadView('pdf.prescription', ['prescription' => $prescription, 'clinic' => \App\Services\Branch\BranchLetterhead::for($prescription->branch_id)]);
         $pdf->setPaper('A4');
 
         return $pdf->stream('prescription.pdf');

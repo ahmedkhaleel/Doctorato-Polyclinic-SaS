@@ -474,9 +474,14 @@
                 @else
                     <div class="clinic-logo-fallback">A</div>
                 @endif
-                <div class="clinic-name">AURA Derma Clinic</div>
-                <div class="clinic-name-ar">{{ $ar('اورا ديرما كلينيك') }}</div>
-                <div class="clinic-subtitle">Dermatology &amp; Aesthetic Medicine</div>
+                <div class="clinic-name">{{ $clinic['name'] ?? 'AURA Derma Clinic' }}</div>
+                @if(empty($clinic['name']))
+                    <div class="clinic-name-ar">{{ $ar('اورا ديرما كلينيك') }}</div>
+                @endif
+                <div class="clinic-subtitle">{{ $clinic['tagline'] ?? '' ?: 'Dermatology & Aesthetic Medicine' }}</div>
+                @if(!empty($clinic['address']))
+                    <div class="clinic-subtitle">{{ $clinic['address'] }}</div>
+                @endif
             </div>
         </div>
 
@@ -627,7 +632,7 @@
         <!-- ═══ Footer ═══ -->
         <div class="footer">
             <div class="footer-line">
-                AURA Derma Clinic &middot; Dermatology &amp; Aesthetic Medicine
+                {{ $clinic['name'] ?? 'AURA Derma Clinic' }}{{ !empty($clinic['phone']) ? ' · '.$clinic['phone'] : ' · Dermatology & Aesthetic Medicine' }}
             </div>
             <div class="footer-validity">
                 This prescription is valid for one month from the date of issue &middot; Rx #{{ str_pad($prescription->id, 5, '0', STR_PAD_LEFT) }}

@@ -257,7 +257,10 @@ class InvoiceController extends Controller
         ]);
 
         $currency = \App\Models\Setting::get('currency_code', 'EGP');
-        $pdf = Pdf::loadView('pdf.invoice', compact('invoice', 'currency'))
+        // Letterhead reflects the invoice's branch (name/address/phone), not the
+        // viewer's active branch.
+        $clinic = \App\Services\Branch\BranchLetterhead::for($invoice->branch_id);
+        $pdf = Pdf::loadView('pdf.invoice', compact('invoice', 'currency', 'clinic'))
             ->setPaper('a4', 'portrait');
 
         $filename = $invoice->invoice_number . '.pdf';

@@ -75,7 +75,8 @@ class PatientInvoiceController extends BasePatientController
         ]);
 
         $currency = \App\Models\Setting::get('currency_code', 'EGP');
-        $pdf = Pdf::loadView('pdf.invoice', compact('invoice', 'currency'))
+        $clinic = \App\Services\Branch\BranchLetterhead::for($invoice->branch_id);
+        $pdf = Pdf::loadView('pdf.invoice', compact('invoice', 'currency', 'clinic'))
             ->setPaper('a4', 'portrait');
 
         $filename = preg_replace('/[^A-Za-z0-9\-\.]/', '_', $invoice->invoice_number . '.pdf');
