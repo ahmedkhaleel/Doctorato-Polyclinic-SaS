@@ -20,11 +20,14 @@ class BranchFoundationTest extends TestCase
         $this->assertTrue($main->is_active);
     }
 
-    public function test_context_defaults_to_main_branch(): void
+    public function test_console_context_defaults_to_all_branches(): void
     {
+        // Tests run under the CLI SAPI (like cron/queue), so the context must
+        // default to all-branches — a scheduled job must never silently scope
+        // to one branch. HTTP requests resolve a concrete branch instead.
         $ctx = app(BranchContext::class);
-        $this->assertSame((int) config('branches.default_id', 1), $ctx->currentId());
-        $this->assertFalse($ctx->isAllBranches());
+        $this->assertTrue($ctx->isAllBranches());
+        $this->assertNull($ctx->currentId());
     }
 
     public function test_set_and_all_branches_toggle(): void

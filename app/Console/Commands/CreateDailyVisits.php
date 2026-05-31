@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Booking;
 use App\Services\BookingWorkflowService;
+use App\Services\Branch\BranchContext;
 use Illuminate\Console\Command;
 
 class CreateDailyVisits extends Command
@@ -12,8 +13,9 @@ class CreateDailyVisits extends Command
 
     protected $description = 'Auto-create visits for today\'s appointments in all in-progress bookings';
 
-    public function handle(BookingWorkflowService $workflowService): int
+    public function handle(BookingWorkflowService $workflowService, BranchContext $branch): int
     {
+        // Runs in all-branches mode (cron), so this query spans every branch.
         $bookings = Booking::where('status', 'in_progress')
             ->whereHas('appointments', function ($q) {
                 $q->whereDate('appointment_date', today())
@@ -25,7 +27,12 @@ class CreateDailyVisits extends Command
         $totalVisits = 0;
 
         foreach ($bookings as $booking) {
-            $visits = $workflowService->createVisitsForTodayAppointments($booking, $booking->created_by ?? 1);
+            // Pin the branch to the booking's so the created visit inherits it
+            // (instead of falling back to the default branch).
+            $visits = $branch->runForBranch(
+                (int) ($booking->branch_id ?? config('branches.default_id', 1)),
+                fn () => $workflowService->createVisitsForTodayAppointments($booking, $booking->created_by ?? 1)
+            );
             $totalVisits += count($visits);
         }
 

@@ -96,6 +96,12 @@ class DentalFollowupService
         $patient = $treatment->patient;
         if (!$patient) return null;
 
+        // Inherit the originating treatment's branch so the auto-created booking
+        // (and its number prefix) belong to the right branch even under cron's
+        // all-branches context.
+        $branchId = (int) ($treatment->branch_id ?? config('branches.default_id', 1));
+
+        return app(\App\Services\Branch\BranchContext::class)->runForBranch($branchId, function () use ($patient, $treatment, $followup, $rule) {
         try {
             $booking = Booking::create([
                 'patient_id'     => $patient->id,
@@ -128,6 +134,7 @@ class DentalFollowupService
             ]);
             return null;
         }
+        });
     }
 
     /**

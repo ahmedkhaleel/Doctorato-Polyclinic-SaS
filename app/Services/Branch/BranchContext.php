@@ -84,6 +84,21 @@ class BranchContext
         $this->resolved = true;
         $default = (int) config('branches.default_id', 1);
 
+        // Console contexts (scheduled commands, queue:work, CLI) have no session.
+        // They must operate across ALL branches so a cron/job never silently
+        // scopes to a single branch. Commands that must act per-branch can still
+        // wrap their work in runForBranch(). Creates still stamp a concrete branch
+        // (see BelongsToBranch — currentId() ?? default), so data stays consistent.
+        try {
+            if (app()->runningInConsole()) {
+                $this->allBranches = true;
+
+                return;
+            }
+        } catch (\Throwable $e) {
+            // container not ready — fall through
+        }
+
         try {
             $sessionKey = config('branches.session_key', 'current_branch_id');
             if (function_exists('session') && app()->bound('session') && session()->isStarted() && session()->has($sessionKey)) {
@@ -92,7 +107,7 @@ class BranchContext
                 return;
             }
         } catch (\Throwable $e) {
-            // no session (cron/jobs) — fall through to default
+            // no session — fall through to default
         }
 
         $this->currentId = $default;
