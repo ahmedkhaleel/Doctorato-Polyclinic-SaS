@@ -2,14 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\BelongsToBranch;
+use App\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use App\Traits\LogsActivity;
 
 class Supply extends Model
 {
-    use HasFactory, LogsActivity;
+    use BelongsToBranch, HasFactory, LogsActivity;
 
     protected $fillable = [
         'supply_category_id', 'module', 'name_ar', 'name_en', 'sku', 'barcode', 'category', 'unit',

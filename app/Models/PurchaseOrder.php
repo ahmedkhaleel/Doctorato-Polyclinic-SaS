@@ -2,19 +2,26 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\BelongsToBranch;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class PurchaseOrder extends Model
 {
-    use HasFactory;
+    use BelongsToBranch, HasFactory;
 
     const STATUS_DRAFT = 'draft';
+
     const STATUS_PENDING = 'pending_approval';
+
     const STATUS_APPROVED = 'approved';
+
     const STATUS_ORDERED = 'ordered';
+
     const STATUS_PARTIAL = 'partially_received';
+
     const STATUS_RECEIVED = 'received';
+
     const STATUS_CANCELLED = 'cancelled';
 
     protected $fillable = [
@@ -73,12 +80,13 @@ class PurchaseOrder extends Model
 
     public static function generatePoNumber(): string
     {
-        $prefix = 'PO-' . now()->format('Ym') . '-';
-        $last = static::where('po_number', 'like', $prefix . '%')
+        $prefix = 'PO-'.now()->format('Ym').'-';
+        $last = static::where('po_number', 'like', $prefix.'%')
             ->orderByDesc('po_number')
             ->value('po_number');
         $number = $last ? (int) substr($last, -4) + 1 : 1;
-        return $prefix . str_pad($number, 4, '0', STR_PAD_LEFT);
+
+        return $prefix.str_pad($number, 4, '0', STR_PAD_LEFT);
     }
 
     public function scopePending($query)
