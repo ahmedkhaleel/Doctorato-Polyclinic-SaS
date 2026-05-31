@@ -2,14 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\BelongsToBranch;
+use App\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Traits\LogsActivity;
 
 class Prescription extends Model
 {
-    use HasFactory, SoftDeletes, LogsActivity;
+    use BelongsToBranch, HasFactory, LogsActivity, SoftDeletes;
 
     protected $fillable = ['visit_id', 'patient_id', 'doctor_id', 'dental_treatment_id', 'diagnosis', 'notes'];
 

@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\BelongsToBranch;
 use App\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Model;
 
 class MedicalCertificate extends Model
 {
-    use LogsActivity;
+    use BelongsToBranch, LogsActivity;
 
     const TYPES = ['sick_leave', 'fitness', 'medical_report', 'referral_letter', 'follow_up'];
 
@@ -26,14 +27,14 @@ class MedicalCertificate extends Model
 
     public static function generateNumber(): string
     {
-        $prefix = 'MC-' . now()->format('Ym') . '-';
-        $last = static::where('certificate_number', 'like', $prefix . '%')
+        $prefix = 'MC-'.now()->format('Ym').'-';
+        $last = static::where('certificate_number', 'like', $prefix.'%')
             ->orderByDesc('certificate_number')
             ->value('certificate_number');
 
         $next = $last ? ((int) substr($last, -4)) + 1 : 1;
 
-        return $prefix . str_pad($next, 4, '0', STR_PAD_LEFT);
+        return $prefix.str_pad($next, 4, '0', STR_PAD_LEFT);
     }
 
     public function patient()
