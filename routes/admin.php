@@ -373,6 +373,9 @@ Route::middleware('admin.auth')->group(function () {
     Route::get('/patients/search', [PatientController::class, 'search'])->name('admin.patients.search');
     Route::get('/patients/{patient}', [PatientController::class, 'show'])->name('admin.patients.show')->middleware('permission:patients.view');
     Route::get('/patients/{patient}/timeline', [PatientController::class, 'timeline'])->name('admin.patients.timeline')->middleware('permission:patients.view');
+    Route::get('/patients/{patient}/communications', [\App\Http\Controllers\Admin\PatientCommunicationController::class, 'index'])->name('admin.patients.communications')->middleware('permission:patients.view');
+    Route::post('/patients/{patient}/communications/send', [\App\Http\Controllers\Admin\PatientCommunicationController::class, 'send'])->name('admin.patients.communications.send')->middleware('permission:notifications.send');
+    Route::post('/patients/{patient}/communications/preferences', [\App\Http\Controllers\Admin\PatientCommunicationController::class, 'updatePreferences'])->name('admin.patients.communications.preferences')->middleware('permission:patients.update');
     Route::get('/patients/{patient}/export-file', [\App\Http\Controllers\Admin\PatientExportController::class, 'exportFullFile'])->name('admin.patients.export')->middleware('permission:patients.view');
     Route::get('/patients/{patient}/edit', [PatientController::class, 'edit'])->name('admin.patients.edit')->middleware('permission:patients.update');
     Route::post('/patients/{patient}/update', [PatientController::class, 'update'])->name('admin.patients.update')->middleware('permission:patients.update');

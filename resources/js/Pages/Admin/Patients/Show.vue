@@ -97,6 +97,13 @@ const prescriptions = computed(() => props.patient?.prescriptions || []);
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                 {{ isRtl ? 'السجل الزمني' : 'Timeline' }}
                             </Link>
+                            <Link
+                                :href="`/admin/patients/${patient.id}/communications`"
+                                class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-sm font-semibold text-white/80 hover:text-white bg-white/10 hover:bg-white/15 backdrop-blur-sm border border-white/10 transition-all duration-200"
+                            >
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.86 9.86 0 01-4-.8L3 20l1.3-3.5A7.9 7.9 0 013 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
+                                {{ isRtl ? 'المراسلات' : 'Communications' }}
+                            </Link>
                             <a
                                 :href="`/admin/patients/${patient.id}/export-file`"
                                 target="_blank"
