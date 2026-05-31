@@ -109,6 +109,20 @@ const navGroups = computed(() => [
             { label: t('p_dental_plans'), href: lp('/dental/treatment-plans'), icon: 'plan' },
             { label: isRtl.value ? 'طلبات المعمل' : 'Lab Orders', href: lp('/dental/lab-orders'), icon: 'lab' },
             { label: isRtl.value ? 'المتابعات' : 'Follow-ups', href: lp('/dental/followups'), icon: 'followup' },
+            { label: isRtl.value ? 'مقارنات قبل/بعد' : 'Before / After', href: lp('/dental/comparisons'), icon: 'camera' },
+        ],
+    },
+    {
+        title: isRtl.value ? 'طب الأطفال' : 'Pediatric',
+        key: 'pediatric',
+        moduleKey: 'pediatric',
+        items: [
+            { label: isRtl.value ? 'نظرة عامة' : 'Overview', href: lp('/pediatric/overview'), icon: 'overview' },
+            { label: isRtl.value ? 'الزيارات' : 'Visits', href: lp('/pediatric/visits'), icon: 'clipboard' },
+            { label: isRtl.value ? 'النمو' : 'Growth', href: lp('/pediatric/growth'), icon: 'activity' },
+            { label: isRtl.value ? 'تقرير النمو' : 'Growth Report', href: lp('/pediatric/growth-report'), icon: 'plan' },
+            { label: isRtl.value ? 'التطعيمات' : 'Vaccinations', href: lp('/pediatric/vaccinations'), icon: 'pill' },
+            { label: isRtl.value ? 'بطاقة التطعيمات' : 'Vaccination Card', href: lp('/pediatric/vaccination-card'), icon: 'document' },
         ],
     },
     {
