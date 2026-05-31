@@ -6,6 +6,27 @@
 
 ---
 
+## 📦 حالة التنفيذ (Implementation status — كل المراحل مكتملة)
+
+| المرحلة | الوصف | الحالة | الاختبارات |
+|--------|-------|--------|-----------|
+| P0 | الصلاحيات (`notifications` + `send`) | ✅ | — |
+| P1 | النواة: 6 migrations + المحرّك (Notifier/NotificationService/Drivers/Quota/Job) | ✅ | NotificationHubTest (12) |
+| P2 | مزوّد SMS Misr + تطبيع الهاتف المصري | ✅ | SmsMisrProviderTest (6) |
+| P3 | واتساب (Cloud API + Bridge) + Webhook استلام/قراءة | ✅ | WhatsAppChannelTest (8) |
+| P4 | لوحة التحكم الإدارية (ControlCenter + Logs) | ✅ | AdminNotificationHubTest (11) |
+| P5 | موافقة واتساب + fallback + الحصص | ✅ | WhatsAppConsentFallbackTest (4) |
+| P6 | تبويب المراسلات في ملف المريض (سجل + إرسال يدوي + تفضيلات) | ✅ | PatientCommunicationTest (4) |
+| P7 | أمر إعادة المحاولة + فحوص السلامة + قوالب افتراضية | ✅ | NotificationsRetryTest (7) |
+
+**إجمالي اختبارات الميديول: 52 أخضر.**
+
+**متابعة لاحقة (incremental — غير مكتمل عمداً لتفادي الإرسال المزدوج على الإنتاج):**
+ترحيل مرسِلات SMS الحالية (تأكيد الحجز/التذكيرات/الفواتير/الولاء/CRM) لتمرّ عبر `Notifier`
+بدلاً من `SmsService` المباشر — تُنفَّذ تدفقاً تلو الآخر مع اختبار كل واحد.
+
+---
+
 ## ✅ P0 — التحضير (Foundation prep)
 - [ ] تأكيد تشغيل قاعدة البيانات (MySQL :3308) وأن `composer test` أخضر كنقطة بداية.
 - [ ] إضافة عائلة صلاحيات `notifications` في `config/permissions.php` (group=system، actions: view/update/send/delete).

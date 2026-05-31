@@ -95,6 +95,14 @@ class NotificationService
 
             [$body, $subject, $templateId] = $this->render($eventKey, $channel, $recipient, $data);
 
+            // Persist the rendered body + subject so the patient history shows the
+            // real message text and notifications:retry can resend without re-render.
+            $meta = $data['meta'] ?? [];
+            $meta['body'] = $meta['body'] ?? $body;
+            if ($subject) {
+                $meta['subject'] = $subject;
+            }
+
             $log = NotificationLog::create([
                 'recipient_type' => $recipient ? $recipient->getMorphClass() : null,
                 'recipient_id' => $recipient?->getKey(),
@@ -104,7 +112,7 @@ class NotificationService
                 'template_id' => $templateId,
                 'status' => NotificationLog::STATUS_QUEUED,
                 'dedup_key' => $dedupKey,
-                'meta' => $data['meta'] ?? null,
+                'meta' => $meta,
             ]);
 
             $result = $driver->send(new NotificationMessage($channel, $to, $body, $subject, $eventKey, $data['meta'] ?? []));
@@ -126,6 +134,36 @@ class NotificationService
         }
 
         return $logs;
+    }
+
+    /**
+     * Re-send a previously-failed log in place (used by notifications:retry).
+     * Respects channel config + quota; increments meta.retry_count.
+     */
+    public function resend(NotificationLog $log): bool
+    {
+        $driver = $this->driverFor($log->channel);
+        if (! $driver || ! $driver->isConfigured() || ! $this->quota->allows($log->channel)) {
+            return false;
+        }
+
+        $meta = $log->meta ?? [];
+        $result = $driver->send(new NotificationMessage(
+            $log->channel, $log->to, $meta['body'] ?? '', $meta['subject'] ?? null, $log->event_key, $meta
+        ));
+
+        $meta['retry_count'] = ($meta['retry_count'] ?? 0) + 1;
+        $log->update([
+            'status' => $result->success ? NotificationLog::STATUS_SENT : NotificationLog::STATUS_FAILED,
+            'provider' => $result->provider,
+            'provider_ref' => $result->providerRef,
+            'cost' => $result->cost,
+            'error' => $result->error,
+            'sent_at' => $result->success ? now() : $log->sent_at,
+            'meta' => $meta,
+        ]);
+
+        return $result->success;
     }
 
     /** Map a channel key to its driver instance. */

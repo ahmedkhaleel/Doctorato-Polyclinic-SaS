@@ -292,6 +292,58 @@ class DataIntegrityCheckCommand extends Command
             // not fatal
         }
 
+        // ── 16. Notifications Hub anomalies ─────────────────
+        try {
+            // Channels switched on but missing the credentials they need.
+            $enabledUnconfigured = [];
+            foreach (\App\Models\NotificationChannel::where('enabled', true)->get() as $ch) {
+                $cfg = $ch->config ?? [];
+                $ready = match ($ch->channel) {
+                    'in_app' => true,
+                    'sms' => \App\Models\Setting::get('sms_provider', 'none') !== 'none',
+                    'email' => ! empty($cfg['host']) && ! empty($cfg['username']),
+                    'whatsapp' => $ch->provider === 'bridge'
+                        ? ! empty($cfg['base_url'])
+                        : (! empty($cfg['phone_number_id']) && ! empty($cfg['access_token'])),
+                    default => true,
+                };
+                if (! $ready) {
+                    $enabledUnconfigured[] = $ch->channel;
+                }
+            }
+            if (! empty($enabledUnconfigured)) {
+                $findings[] = [
+                    'check' => 'notification_channel_enabled_unconfigured',
+                    'count' => count($enabledUnconfigured),
+                    'detail' => 'Channels enabled but missing credentials: '.implode(', ', $enabledUnconfigured),
+                ];
+            }
+
+            // Notifications stuck in "queued" for over an hour (worker not draining).
+            $stuckQueued = \App\Models\NotificationLog::where('status', 'queued')
+                ->where('created_at', '<', now()->subHour())->count();
+            if ($stuckQueued > 0) {
+                $findings[] = [
+                    'check' => 'notifications_stuck_queued',
+                    'count' => $stuckQueued,
+                    'detail' => 'Notification logs queued 1h+ — is the queue worker running?',
+                ];
+            }
+
+            // Routes pointing at an event that no longer exists.
+            $orphanRoutes = \App\Models\NotificationChannelRoute::whereNotIn('event_key',
+                \App\Models\NotificationEvent::pluck('key'))->count();
+            if ($orphanRoutes > 0) {
+                $findings[] = [
+                    'check' => 'orphan_notification_routes',
+                    'count' => $orphanRoutes,
+                    'detail' => 'Channel routes referencing a non-existent event',
+                ];
+            }
+        } catch (\Throwable $e) {
+            // tables may not exist yet on older schemas; not fatal
+        }
+
         // ── Report ──────────────────────────────────────────
         if ($this->option('json')) {
             $this->line(json_encode([

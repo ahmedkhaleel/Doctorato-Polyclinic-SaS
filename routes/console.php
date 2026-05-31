@@ -85,6 +85,10 @@ Schedule::command('satisfaction:send-surveys')->dailyAt('10:00');
 // Invoice: Check for overdue invoices (7+ days) daily at 11:00 AM
 Schedule::command('invoices:check-overdue --days=7')->dailyAt('11:00');
 
+// Notifications Hub: retry recently-failed WhatsApp/SMS/Email deliveries
+// every 30 min during waking hours (up to 3 attempts per message).
+Schedule::command('notifications:retry')->everyThirtyMinutes()->between('07:00', '23:00')->withoutOverlapping();
+
 // ─── Backup ──────────────────────────────────────────────────────────
 
 // Full backup (DB + files) daily at 2:00 AM
