@@ -128,6 +128,7 @@ Route::middleware(['admin.auth', 'branch.context'])->group(function () {
     Route::post('/branches', [\App\Http\Controllers\Admin\AdminBranchController::class, 'store'])->name('admin.branches.store')->middleware('permission:settings.update');
     Route::post('/branches/{branch}/update', [\App\Http\Controllers\Admin\AdminBranchController::class, 'update'])->name('admin.branches.update')->middleware('permission:settings.update');
     Route::post('/branches/{branch}/delete', [\App\Http\Controllers\Admin\AdminBranchController::class, 'destroy'])->name('admin.branches.destroy')->middleware('permission:settings.update');
+    Route::post('/branches/{branch}/members', [\App\Http\Controllers\Admin\AdminBranchController::class, 'syncMembers'])->name('admin.branches.members')->middleware('permission:settings.update');
 
     // Dashboard (all authenticated users)
     Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
