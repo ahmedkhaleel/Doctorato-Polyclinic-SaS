@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\BelongsToBranch;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class DermaPhoto extends Model
 {
+    use BelongsToBranch;
     use HasFactory;
 
     const CATEGORIES = ['before', 'after', 'progress'];

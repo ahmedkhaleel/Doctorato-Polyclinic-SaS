@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\BelongsToBranch;
 use App\Traits\HasStatusTransitions;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class TreatmentPlanConsent extends Model
 {
+    use BelongsToBranch;
     use HasStatusTransitions;
 
     /**

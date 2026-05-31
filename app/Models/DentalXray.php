@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\BelongsToBranch;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class DentalXray extends Model
 {
+    use BelongsToBranch;
     protected $fillable = [
         'patient_id',
         'doctor_id',
