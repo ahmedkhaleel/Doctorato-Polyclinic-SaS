@@ -117,10 +117,6 @@ class SmsNotificationService
      */
     public static function dentalLabOrderReady(Patient $patient, string $itemType = ''): array
     {
-        if (! SmsService::isEnabled()) {
-            return ['success' => false, 'message' => 'SMS not enabled.'];
-        }
-
         if (! $patient->phone) {
             return ['success' => false, 'message' => 'No phone number available.'];
         }
@@ -138,9 +134,12 @@ class SmsNotificationService
             .($clinicPhone ? "للحجز: {$clinicPhone}\n" : '')
             ."{$clinicName}";
 
-        \App\Jobs\SendSmsJob::dispatch($patient->phone, $message, null, 'dental_lab_ready');
+        Notifier::event('dental.lab_ready', $patient, [
+            'to' => $patient->phone, 'body' => $message,
+            'name' => $patient->full_name, 'clinic_name' => $clinicName, 'clinic_phone' => $clinicPhone,
+        ]);
 
-        return ['success' => true, 'message' => 'SMS queued for delivery.'];
+        return ['success' => true, 'message' => 'Queued via notifications hub.'];
     }
 
     /**
@@ -148,10 +147,6 @@ class SmsNotificationService
      */
     public static function treatmentPlanApproved(Patient $patient, string $planTitle = ''): array
     {
-        if (! SmsService::isEnabled()) {
-            return ['success' => false, 'message' => 'SMS not enabled.'];
-        }
-
         if (! $patient->phone) {
             return ['success' => false, 'message' => 'No phone number available.'];
         }
@@ -169,9 +164,12 @@ class SmsNotificationService
             .($clinicPhone ? "للحجز: {$clinicPhone}\n" : '')
             ."{$clinicName}";
 
-        \App\Jobs\SendSmsJob::dispatch($patient->phone, $message, null, 'treatment_plan_approved');
+        Notifier::event('dental.treatment_plan_approved', $patient, [
+            'to' => $patient->phone, 'body' => $message,
+            'name' => $patient->full_name, 'clinic_name' => $clinicName, 'clinic_phone' => $clinicPhone,
+        ]);
 
-        return ['success' => true, 'message' => 'SMS queued for delivery.'];
+        return ['success' => true, 'message' => 'Queued via notifications hub.'];
     }
 
     /**

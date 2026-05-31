@@ -3,18 +3,14 @@
 namespace App\Listeners;
 
 use App\Events\PatientRegistered;
-use App\Jobs\SendSmsJob;
 use App\Models\Setting;
+use App\Services\Notifications\Notifier;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 class SendWelcomeSms implements ShouldQueue
 {
     public function handle(PatientRegistered $event): void
     {
-        if (Setting::get('sms_enabled') !== '1') {
-            return;
-        }
-
         $patient = $event->patient;
 
         if (! $patient->phone) {
@@ -24,10 +20,16 @@ class SendWelcomeSms implements ShouldQueue
         $clinicName = Setting::get('clinic_name_ar', 'عيادة دكتوراتو');
 
         $message = "أهلاً وسهلاً {$patient->full_name}!\n"
-            . "تم تسجيلك بنجاح في {$clinicName}.\n"
-            . "رقم ملفك: {$patient->file_number}\n"
-            . "نتمنى لكم دوام الصحة والعافية.";
+            ."تم تسجيلك بنجاح في {$clinicName}.\n"
+            ."رقم ملفك: {$patient->file_number}\n"
+            .'نتمنى لكم دوام الصحة والعافية.';
 
-        SendSmsJob::dispatch($patient->phone, $message);
+        // account.created is transactional → always sends via the hub.
+        Notifier::event('account.created', $patient, [
+            'to' => $patient->phone,
+            'body' => $message,
+            'name' => $patient->full_name,
+            'clinic_name' => $clinicName,
+        ]);
     }
 }

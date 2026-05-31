@@ -257,7 +257,7 @@ class AdminNotificationHubController extends Controller
             'to' => 'required|string|max:190',
         ]);
 
-        $logs = Notifier::eventNow('account.created', null, [
+        $logs = Notifier::eventNow('manual.message', null, [
             'to' => $data['to'],
             'body' => __('Test message from the Doctorato Notifications Hub.'),
             'subject' => 'Doctorato — Test',

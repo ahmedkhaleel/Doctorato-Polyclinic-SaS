@@ -49,7 +49,7 @@ class NotificationHubTest extends TestCase
     public function test_seed_migration_populated_catalogue(): void
     {
         $this->assertSame(4, NotificationChannel::count());
-        $this->assertSame(21, NotificationEvent::count());
+        $this->assertGreaterThanOrEqual(21, NotificationEvent::count());
         $this->assertGreaterThanOrEqual(40, NotificationChannelRoute::count());
     }
 

@@ -64,8 +64,9 @@ class PatientCommunicationController extends Controller
         ]);
 
         // Manual sends are staff-initiated and intentional → bypass routing/consent
-        // by forcing the chosen channel on a transactional event.
-        $logs = Notifier::eventNow('account.created', $patient, [
+        // by forcing the chosen channel on the template-free manual.message event
+        // (so the typed body is used verbatim, never overridden by a template).
+        $logs = Notifier::eventNow('manual.message', $patient, [
             'body' => $data['body'],
             'subject' => $data['subject'] ?? null,
             'meta' => ['manual' => true, 'body' => $data['body']],
