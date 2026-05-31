@@ -342,6 +342,55 @@ class AdminNotificationHubController extends Controller
         return back()->with('success', __('Settings updated.'));
     }
 
+    // ── WhatsApp template registry ─────────────────────────
+
+    public function whatsappTemplates()
+    {
+        return Inertia::render('Admin/Notifications/WhatsAppTemplates', [
+            'templates' => \App\Models\WhatsappTemplate::orderBy('event_key')->get(),
+            'events' => NotificationEvent::orderBy('key')->get(['key', 'label_ar', 'label_en']),
+        ]);
+    }
+
+    public function storeWhatsappTemplate(Request $request)
+    {
+        $data = $request->validate([
+            'name' => 'required|string|max:150',
+            'language' => 'required|string|max:10',
+            'event_key' => 'nullable|string|exists:notification_events,key',
+            'variables' => 'nullable|array',
+            'variables.*' => 'string|max:60',
+            'body_preview' => 'nullable|string|max:2000',
+            'is_active' => 'sometimes|boolean',
+        ]);
+
+        \App\Models\WhatsappTemplate::create($data);
+
+        return back()->with('success', __('WhatsApp template saved.'));
+    }
+
+    public function updateWhatsappTemplate(Request $request, \App\Models\WhatsappTemplate $whatsappTemplate)
+    {
+        $whatsappTemplate->update($request->validate([
+            'name' => 'sometimes|string|max:150',
+            'language' => 'sometimes|string|max:10',
+            'event_key' => 'nullable|string|exists:notification_events,key',
+            'variables' => 'nullable|array',
+            'variables.*' => 'string|max:60',
+            'body_preview' => 'nullable|string|max:2000',
+            'is_active' => 'sometimes|boolean',
+        ]));
+
+        return back()->with('success', __('WhatsApp template updated.'));
+    }
+
+    public function destroyWhatsappTemplate(\App\Models\WhatsappTemplate $whatsappTemplate)
+    {
+        $whatsappTemplate->delete();
+
+        return back()->with('success', __('WhatsApp template deleted.'));
+    }
+
     /** Send a one-off test message on a channel (permission: notifications.send). */
     public function test(Request $request)
     {

@@ -140,6 +140,16 @@ class NotificationService
                 $meta['unsubscribe_url'] = $this->unsubscribeUrl($recipient);
             }
 
+            // WhatsApp: if an approved Meta template is registered for this event
+            // and the caller didn't pass one, send as a template (required for
+            // business-initiated messages outside the 24h window).
+            if ($channel === 'whatsapp' && empty($meta['template_name'])) {
+                $tplMeta = app(WhatsAppTemplateResolver::class)->metaFor($eventKey, $data);
+                if ($tplMeta) {
+                    $meta = array_merge($meta, $tplMeta);
+                }
+            }
+
             $log = NotificationLog::create([
                 'recipient_type' => $recipient ? $recipient->getMorphClass() : null,
                 'recipient_id' => $recipient?->getKey(),

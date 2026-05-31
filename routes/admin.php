@@ -307,6 +307,16 @@ Route::middleware('admin.auth')->group(function () {
             ->name('settings.update')->middleware('permission:notifications.update');
         Route::post('/test', [\App\Http\Controllers\Admin\AdminNotificationHubController::class, 'test'])
             ->name('test')->middleware('permission:notifications.send');
+
+        // WhatsApp template registry (Meta-approved templates)
+        Route::get('/whatsapp-templates', [\App\Http\Controllers\Admin\AdminNotificationHubController::class, 'whatsappTemplates'])
+            ->name('whatsapp-templates')->middleware('permission:notifications.view');
+        Route::post('/whatsapp-templates', [\App\Http\Controllers\Admin\AdminNotificationHubController::class, 'storeWhatsappTemplate'])
+            ->name('whatsapp-templates.store')->middleware('permission:notifications.create');
+        Route::post('/whatsapp-templates/{whatsappTemplate}/update', [\App\Http\Controllers\Admin\AdminNotificationHubController::class, 'updateWhatsappTemplate'])
+            ->name('whatsapp-templates.update')->middleware('permission:notifications.update');
+        Route::post('/whatsapp-templates/{whatsappTemplate}/delete', [\App\Http\Controllers\Admin\AdminNotificationHubController::class, 'destroyWhatsappTemplate'])
+            ->name('whatsapp-templates.destroy')->middleware('permission:notifications.update');
     });
 
     // ─── Notifications Inbox (two-way conversations) ───────
