@@ -124,7 +124,7 @@ class SalarySlip extends \Illuminate\Database\Eloquent\Model
 
     public static function generateSlipNumber(int $month, int $year): string
     {
-        $prefix = sprintf('SAL-%04d%02d-', $year, $month);
+        $prefix = sprintf('SAL-%s%04d%02d-', \App\Services\Branch\BranchNumber::segment(), $year, $month);
         $last = static::where('slip_number', 'like', $prefix.'%')->max('slip_number');
         $seq = $last ? (int) substr($last, -4) + 1 : 1;
 

@@ -109,7 +109,10 @@ class Employee extends \Illuminate\Database\Eloquent\Model
 
     public static function generateEmployeeNumber(): string
     {
-        $last = static::max('id') ?? 0;
+        // Global sequence across branches (the number has a single org-wide
+        // unique). Bypass the branch scope so two branches never derive the
+        // same EMP-#### from their local max id.
+        $last = static::withoutGlobalScope('branch')->max('id') ?? 0;
 
         return 'EMP-'.str_pad($last + 1, 4, '0', STR_PAD_LEFT);
     }

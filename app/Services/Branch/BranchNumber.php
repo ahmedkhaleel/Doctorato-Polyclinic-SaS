@@ -22,16 +22,26 @@ class BranchNumber
 {
     public static function prefix(string $base): string
     {
+        return $base.'-'.self::segment().now()->format('Ym').'-';
+    }
+
+    /**
+     * The branch code segment ("CODE-") to inject into a number for non-default
+     * branches, or "" for the main branch / when disabled. Use this for custom
+     * formats that prefix() can't build (e.g. salary slips keyed by year+month).
+     */
+    public static function segment(): string
+    {
         $ctx = app(BranchContext::class);
         $default = (int) config('branches.default_id', 1);
         $branchId = $ctx->currentId() ?? $default;
 
-        $seg = '';
         if (config('branches.enabled') && $branchId !== $default) {
             $code = Branch::where('id', $branchId)->value('code');
-            $seg = ($code ?: 'B'.$branchId).'-';
+
+            return ($code ?: 'B'.$branchId).'-';
         }
 
-        return $base.'-'.$seg.now()->format('Ym').'-';
+        return '';
     }
 }

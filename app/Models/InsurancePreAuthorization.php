@@ -55,7 +55,7 @@ class InsurancePreAuthorization extends Model
 
     public static function generateAuthNumber(): string
     {
-        $prefix = 'PA-' . now()->format('Ym') . '-';
+        $prefix = \App\Services\Branch\BranchNumber::prefix('PA');
         $last = static::where('auth_number', 'like', $prefix . '%')
             ->orderByDesc('auth_number')
             ->value('auth_number');

@@ -130,7 +130,7 @@ class DoctorPayout extends Model
 
     public static function generatePayoutNumber(): string
     {
-        $prefix = 'PAY-'.now()->format('Ym').'-';
+        $prefix = \App\Services\Branch\BranchNumber::prefix('PAY');
         $last = static::where('payout_number', 'like', $prefix.'%')
             ->orderByDesc('payout_number')
             ->value('payout_number');

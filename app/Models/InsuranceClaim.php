@@ -95,7 +95,7 @@ class InsuranceClaim extends Model
 
     public static function generateClaimNumber(): string
     {
-        $prefix = 'CLM-' . now()->format('Ym') . '-';
+        $prefix = \App\Services\Branch\BranchNumber::prefix('CLM');
         $last = static::where('claim_number', 'like', $prefix . '%')
             ->orderByDesc('claim_number')
             ->value('claim_number');
