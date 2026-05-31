@@ -193,7 +193,9 @@ return [
             'label_en' => 'Reports & Analytics',
             'label_ar' => 'التقارير والتحليلات',
             'group' => 'finance',
-            'actions' => ['view', 'export'],
+            // 'financial' gates the sensitive money reports (P&L, revenue) so a
+            // role can hold general reports.view without seeing revenue figures.
+            'actions' => ['view', 'export', 'financial'],
         ],
 
         // ─── Human Resources ───────────────────────────────────
