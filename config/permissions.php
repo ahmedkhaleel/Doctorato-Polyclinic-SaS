@@ -191,6 +191,12 @@ return [
             'group' => 'hr',
             'actions' => ['view', 'create', 'update', 'delete'],
         ],
+        'hr' => [
+            'label_en' => 'HR Dashboard',
+            'label_ar' => 'لوحة الموارد البشرية',
+            'group' => 'hr',
+            'actions' => ['view'],
+        ],
         'employees' => [
             'label_en' => 'Employees',
             'label_ar' => 'الموظفين',
@@ -213,7 +219,7 @@ return [
             'label_en' => 'Leaves',
             'label_ar' => 'الإجازات',
             'group' => 'hr',
-            'actions' => ['view', 'create', 'update'],
+            'actions' => ['view', 'create', 'update', 'approve', 'delete'],
         ],
         'salary_slips' => [
             'label_en' => 'Payroll / Salary Slips',
@@ -246,6 +252,12 @@ return [
             'label_ar' => 'العملاء المحتملين',
             'group' => 'crm',
             'actions' => ['view', 'create', 'update', 'delete', 'assign', 'convert', 'export'],
+        ],
+        'loyalty' => [
+            'label_en' => 'Loyalty & Referrals',
+            'label_ar' => 'الولاء والإحالات',
+            'group' => 'crm',
+            'actions' => ['view'],
         ],
         'lead_activities' => [
             'label_en' => 'Lead Activities',
@@ -364,6 +376,12 @@ return [
         ],
 
         // ─── Insurance ─────────────────────────────────────────
+        'insurance' => [
+            'label_en' => 'Insurance Access',
+            'label_ar' => 'الوصول للتأمين',
+            'group' => 'insurance',
+            'actions' => ['view'],
+        ],
         'insurance_companies' => [
             'label_en' => 'Insurance Companies',
             'label_ar' => 'شركات التأمين',
@@ -378,6 +396,12 @@ return [
         ],
 
         // ─── Inventory & Supplies ──────────────────────────────
+        'inventory' => [
+            'label_en' => 'Inventory Access',
+            'label_ar' => 'الوصول للمخزون',
+            'group' => 'inventory',
+            'actions' => ['view'],
+        ],
         'supplies' => [
             'label_en' => 'Supplies & Inventory',
             'label_ar' => 'المستلزمات والمخزون',
