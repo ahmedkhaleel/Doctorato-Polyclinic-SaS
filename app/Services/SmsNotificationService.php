@@ -93,10 +93,6 @@ class SmsNotificationService
      */
     public static function visitCompleted(Visit $visit): array
     {
-        if (! SmsService::isEnabled()) {
-            return ['success' => false, 'message' => 'SMS not enabled.'];
-        }
-
         $patient = $visit->patient;
         if (! $patient?->phone) {
             return ['success' => false, 'message' => 'No phone number available.'];
@@ -108,9 +104,12 @@ class SmsNotificationService
             ."نتمنى لك دوام الصحة والعافية.\n"
             .'لأي استفسار لا تتردد بالتواصل معنا.';
 
-        \App\Jobs\SendSmsJob::dispatch($patient->phone, $message, null, 'visit_completed');
+        Notifier::event('visit.completed', $patient, [
+            'to' => $patient->phone, 'body' => $message,
+            'name' => $patient->full_name, 'clinic_name' => $clinicName,
+        ]);
 
-        return ['success' => true, 'message' => 'SMS queued for delivery.'];
+        return ['success' => true, 'message' => 'Queued via notifications hub.'];
     }
 
     /**
@@ -211,10 +210,6 @@ class SmsNotificationService
      */
     public static function dentalRecallReminder(Patient $patient, string $recallType = 'checkup', int $monthsSinceVisit = 6): array
     {
-        if (! SmsService::isEnabled()) {
-            return ['success' => false, 'message' => 'SMS not enabled.'];
-        }
-
         if (! $patient->phone) {
             return ['success' => false, 'message' => 'No phone number available.'];
         }
@@ -234,9 +229,13 @@ class SmsNotificationService
             .($clinicPhone ? "للحجز: {$clinicPhone}\n" : '')
             ."{$clinicName}";
 
-        \App\Jobs\SendSmsJob::dispatch($patient->phone, $message, null, 'dental_recall');
+        // Recall = reminder category → respects per-channel consent.
+        Notifier::event('dental.followup', $patient, [
+            'to' => $patient->phone, 'body' => $message,
+            'name' => $patient->full_name, 'clinic_name' => $clinicName, 'clinic_phone' => $clinicPhone,
+        ]);
 
-        return ['success' => true, 'message' => 'SMS queued for delivery.'];
+        return ['success' => true, 'message' => 'Queued via notifications hub.'];
     }
 
     /**
@@ -244,10 +243,6 @@ class SmsNotificationService
      */
     public static function dermaRecallReminder(Patient $patient, int $monthsSinceVisit = 6): array
     {
-        if (! SmsService::isEnabled()) {
-            return ['success' => false, 'message' => 'SMS not enabled.'];
-        }
-
         if (! $patient->phone) {
             return ['success' => false, 'message' => 'No phone number available.'];
         }
@@ -261,8 +256,11 @@ class SmsNotificationService
             .($clinicPhone ? "للحجز: {$clinicPhone}\n" : '')
             ."{$clinicName}";
 
-        \App\Jobs\SendSmsJob::dispatch($patient->phone, $message, null, 'derma_recall');
+        Notifier::event('derma.recall', $patient, [
+            'to' => $patient->phone, 'body' => $message,
+            'name' => $patient->full_name, 'clinic_name' => $clinicName, 'clinic_phone' => $clinicPhone,
+        ]);
 
-        return ['success' => true, 'message' => 'SMS queued for delivery.'];
+        return ['success' => true, 'message' => 'Queued via notifications hub.'];
     }
 }
