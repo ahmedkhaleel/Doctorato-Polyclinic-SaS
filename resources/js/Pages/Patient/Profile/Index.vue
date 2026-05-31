@@ -57,6 +57,9 @@ const prefsForm = useForm({
     notify_sms_bookings:    props.patient?.notify_sms_bookings    ?? true,
     notify_sms_reminders:   props.patient?.notify_sms_reminders   ?? true,
     notify_sms_marketing:   props.patient?.notify_sms_marketing   ?? false,
+    notify_whatsapp_bookings:  props.patient?.notify_whatsapp_bookings  ?? true,
+    notify_whatsapp_reminders: props.patient?.notify_whatsapp_reminders ?? true,
+    notify_whatsapp_marketing: props.patient?.notify_whatsapp_marketing ?? false,
 });
 
 function updatePreferences() {
@@ -339,9 +342,13 @@ function deletePhoto() {
                                 <input v-model="prefsForm.notify_email_bookings" type="checkbox" class="rounded text-[#C4A265]" />
                                 <span class="text-sm text-slate-700">📧 {{ isRtl ? 'بريد إلكتروني' : 'Email' }}</span>
                             </label>
-                            <label class="flex items-center gap-2 cursor-pointer">
+                            <label class="flex items-center gap-2 mb-2 cursor-pointer">
                                 <input v-model="prefsForm.notify_sms_bookings" type="checkbox" class="rounded text-[#C4A265]" />
                                 <span class="text-sm text-slate-700">📱 {{ isRtl ? 'رسائل SMS' : 'SMS' }}</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input v-model="prefsForm.notify_whatsapp_bookings" type="checkbox" class="rounded text-[#C4A265]" />
+                                <span class="text-sm text-slate-700">💬 {{ isRtl ? 'واتساب' : 'WhatsApp' }}</span>
                             </label>
                         </div>
 
@@ -355,9 +362,13 @@ function deletePhoto() {
                                 <input v-model="prefsForm.notify_email_reminders" type="checkbox" class="rounded text-[#C4A265]" />
                                 <span class="text-sm text-slate-700">📧 {{ isRtl ? 'بريد إلكتروني' : 'Email' }}</span>
                             </label>
-                            <label class="flex items-center gap-2 cursor-pointer">
+                            <label class="flex items-center gap-2 mb-2 cursor-pointer">
                                 <input v-model="prefsForm.notify_sms_reminders" type="checkbox" class="rounded text-[#C4A265]" />
                                 <span class="text-sm text-slate-700">📱 {{ isRtl ? 'رسائل SMS' : 'SMS' }}</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input v-model="prefsForm.notify_whatsapp_reminders" type="checkbox" class="rounded text-[#C4A265]" />
+                                <span class="text-sm text-slate-700">💬 {{ isRtl ? 'واتساب' : 'WhatsApp' }}</span>
                             </label>
                         </div>
 
@@ -371,9 +382,13 @@ function deletePhoto() {
                                 <input v-model="prefsForm.notify_email_marketing" type="checkbox" class="rounded text-[#C4A265]" />
                                 <span class="text-sm text-slate-700">📧 {{ isRtl ? 'بريد إلكتروني' : 'Email' }}</span>
                             </label>
-                            <label class="flex items-center gap-2 cursor-pointer">
+                            <label class="flex items-center gap-2 mb-2 cursor-pointer">
                                 <input v-model="prefsForm.notify_sms_marketing" type="checkbox" class="rounded text-[#C4A265]" />
                                 <span class="text-sm text-slate-700">📱 {{ isRtl ? 'رسائل SMS' : 'SMS' }}</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input v-model="prefsForm.notify_whatsapp_marketing" type="checkbox" class="rounded text-[#C4A265]" />
+                                <span class="text-sm text-slate-700">💬 {{ isRtl ? 'واتساب' : 'WhatsApp' }}</span>
                             </label>
                         </div>
                     </div>

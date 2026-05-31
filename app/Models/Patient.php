@@ -56,6 +56,7 @@ class Patient extends Model
         'preferred_language',
         'notify_email_bookings', 'notify_email_reminders', 'notify_email_marketing',
         'notify_sms_bookings', 'notify_sms_reminders', 'notify_sms_marketing',
+        'notify_whatsapp_bookings', 'notify_whatsapp_reminders', 'notify_whatsapp_marketing',
         // Referral
         'referral_code',
     ];
@@ -84,6 +85,9 @@ class Patient extends Model
         'notify_sms_bookings' => 'boolean',
         'notify_sms_reminders' => 'boolean',
         'notify_sms_marketing' => 'boolean',
+        'notify_whatsapp_bookings' => 'boolean',
+        'notify_whatsapp_reminders' => 'boolean',
+        'notify_whatsapp_marketing' => 'boolean',
         // Pediatric casts
         'birth_complications' => 'array',
         'newborn_screening' => 'array',

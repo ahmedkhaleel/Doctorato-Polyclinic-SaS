@@ -31,6 +31,7 @@ class PatientProfileController extends BasePatientController
                     'preferred_language',
                     'notify_email_bookings', 'notify_email_reminders', 'notify_email_marketing',
                     'notify_sms_bookings', 'notify_sms_reminders', 'notify_sms_marketing',
+                    'notify_whatsapp_bookings', 'notify_whatsapp_reminders', 'notify_whatsapp_marketing',
                 ]),
                 ['photo_url' => $patient->photo_url]
             ),
@@ -109,8 +110,10 @@ class PatientProfileController extends BasePatientController
 
         // Best-effort cleanup of the previous file.
         if ($oldPath) {
-            try { Storage::disk('public')->delete($oldPath); }
-            catch (\Throwable $e) { /* swallow — log fallback below */ }
+            try {
+                Storage::disk('public')->delete($oldPath);
+            } catch (\Throwable $e) { /* swallow — log fallback below */
+            }
         }
 
         AuditLogger::log('patient_photo_uploaded', $patient, ['path' => $path]);
@@ -128,8 +131,10 @@ class PatientProfileController extends BasePatientController
         }
 
         $patient->update(['photo' => null]);
-        try { Storage::disk('public')->delete($oldPath); }
-        catch (\Throwable $e) {}
+        try {
+            Storage::disk('public')->delete($oldPath);
+        } catch (\Throwable $e) {
+        }
 
         AuditLogger::log('patient_photo_deleted', $patient);
 
@@ -145,21 +150,27 @@ class PatientProfileController extends BasePatientController
         $patient = $this->patient($request);
 
         $data = $request->validate([
-            'preferred_language'      => 'nullable|in:ar,en',
-            'notify_email_bookings'   => 'sometimes|boolean',
-            'notify_email_reminders'  => 'sometimes|boolean',
-            'notify_email_marketing'  => 'sometimes|boolean',
-            'notify_sms_bookings'     => 'sometimes|boolean',
-            'notify_sms_reminders'    => 'sometimes|boolean',
-            'notify_sms_marketing'    => 'sometimes|boolean',
+            'preferred_language' => 'nullable|in:ar,en',
+            'notify_email_bookings' => 'sometimes|boolean',
+            'notify_email_reminders' => 'sometimes|boolean',
+            'notify_email_marketing' => 'sometimes|boolean',
+            'notify_sms_bookings' => 'sometimes|boolean',
+            'notify_sms_reminders' => 'sometimes|boolean',
+            'notify_sms_marketing' => 'sometimes|boolean',
+            'notify_whatsapp_bookings' => 'sometimes|boolean',
+            'notify_whatsapp_reminders' => 'sometimes|boolean',
+            'notify_whatsapp_marketing' => 'sometimes|boolean',
         ]);
 
         // Coerce missing checkboxes (browsers omit unchecked ones) to false.
         foreach ([
             'notify_email_bookings', 'notify_email_reminders', 'notify_email_marketing',
             'notify_sms_bookings', 'notify_sms_reminders', 'notify_sms_marketing',
+            'notify_whatsapp_bookings', 'notify_whatsapp_reminders', 'notify_whatsapp_marketing',
         ] as $flag) {
-            if (! array_key_exists($flag, $data)) $data[$flag] = false;
+            if (! array_key_exists($flag, $data)) {
+                $data[$flag] = false;
+            }
         }
 
         $patient->update($data);

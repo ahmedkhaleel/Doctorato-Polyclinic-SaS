@@ -95,4 +95,34 @@ class NotificationPreferencesTest extends TestCase
         $this->post('/ar/patient/profile/preferences', ['preferred_language' => 'en'])
             ->assertRedirect();  // patient.auth middleware → /patient/login
     }
+
+    public function test_whatsapp_defaults_match_policy(): void
+    {
+        $p = $this->makePatient();
+        $p->refresh();
+
+        $this->assertTrue($p->wantsNotification('bookings', 'whatsapp'));
+        $this->assertTrue($p->wantsNotification('reminders', 'whatsapp'));
+        $this->assertFalse($p->wantsNotification('marketing', 'whatsapp')); // opt-in
+    }
+
+    public function test_post_preferences_updates_whatsapp(): void
+    {
+        $p = $this->makePatient();
+
+        $resp = $this->actingAs($p->user)->post('/ar/patient/profile/preferences', [
+            'preferred_language' => 'ar',
+            'notify_whatsapp_bookings' => '1',
+            'notify_whatsapp_marketing' => '1',  // opting INTO marketing whatsapp
+            // notify_whatsapp_reminders omitted → should become false
+        ]);
+
+        $resp->assertRedirect();
+        $p->refresh();
+
+        $this->assertTrue((bool) $p->notify_whatsapp_bookings);
+        $this->assertFalse((bool) $p->notify_whatsapp_reminders); // omitted → false
+        $this->assertTrue((bool) $p->notify_whatsapp_marketing);
+        $this->assertTrue($p->wantsNotification('marketing', 'whatsapp'));
+    }
 }
