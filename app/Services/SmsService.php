@@ -46,6 +46,7 @@ class SmsService
             return match ($provider) {
                 'unifonic' => static::sendViaUnifonic($phone, $body, $senderName),
                 'twilio' => static::sendViaTwilio($phone, $body, $senderName),
+                'smsmisr' => static::sendViaSmsMisr($phone, $body, $senderName),
                 'gateway' => static::sendViaGateway($phone, $body, $senderName),
                 default => [
                     'success' => false,
@@ -153,6 +154,56 @@ class SmsService
     }
 
     /**
+     * Send SMS via SMS Misr (اس ام اس مصر), the Egyptian provider.
+     *
+     * API: https://smsmisr.com/api/SMS/  (token OR username/password auth).
+     * environment: 1 = live, 2 = test. language: 1 = English, 2 = Arabic-Unicode.
+     * A successful send returns JSON {"code":"1901", "SMSID": ...}.
+     */
+    protected static function sendViaSmsMisr(string $phone, string $body, string $senderName): array
+    {
+        $username = Setting::get('sms_smsmisr_username', '');
+        $password = Setting::get('sms_smsmisr_password', '');
+        $token = Setting::get('sms_smsmisr_token', '');
+        $sender = $senderName ?: Setting::get('sms_smsmisr_sender', '');
+        $environment = Setting::get('sms_smsmisr_environment', '1') === '2' ? '2' : '1';
+
+        // Auth is either a token, or a username+password pair.
+        if ((! $token && (! $username || ! $password)) || ! $sender) {
+            return ['success' => false, 'message' => 'SMS Misr credentials not configured.', 'provider' => 'smsmisr'];
+        }
+
+        // Arabic content must be flagged as Unicode (language=2); otherwise English (1).
+        $language = preg_match('/[\x{0600}-\x{06FF}]/u', $body) ? '2' : '1';
+
+        $payload = array_filter([
+            'environment' => $environment,
+            'token' => $token ?: null,
+            'username' => $token ? null : $username,
+            'password' => $token ? null : $password,
+            'sender' => $sender,
+            'mobile' => $phone,
+            'language' => $language,
+            'message' => $body,
+        ], fn ($v) => $v !== null);
+
+        $response = Http::asForm()->post('https://smsmisr.com/api/SMS/', $payload);
+        $data = $response->json() ?? [];
+        $code = (string) ($data['code'] ?? $data['Code'] ?? '');
+
+        // 1901 = success. Anything else is an error code from the provider.
+        if ($response->successful() && $code === '1901') {
+            Log::info('SMS sent via SMS Misr', ['phone' => $phone, 'smsid' => $data['SMSID'] ?? null]);
+
+            return ['success' => true, 'message' => 'SMS sent successfully via SMS Misr.', 'provider' => 'smsmisr'];
+        }
+
+        Log::warning('SMS Misr send failed', ['phone' => $phone, 'code' => $code, 'body' => $response->body()]);
+
+        return ['success' => false, 'message' => "SMS Misr error (code {$code}).", 'provider' => 'smsmisr'];
+    }
+
+    /**
      * Send SMS via a generic HTTP gateway.
      * Configurable URL with placeholder substitution.
      */
@@ -223,9 +274,11 @@ class SmsService
         // Remove leading +
         $phone = ltrim($phone, '+');
 
-        // If starts with 0, assume Iraqi number → add 964
+        // If it starts with 0 it's a local number — prepend the configured
+        // country code (default 20 = Egypt, for the SMS Misr deployment).
         if (str_starts_with($phone, '0')) {
-            $phone = '964'.substr($phone, 1);
+            $cc = preg_replace('/[^0-9]/', '', (string) Setting::get('sms_default_country_code', '20')) ?: '20';
+            $phone = $cc.substr($phone, 1);
         }
 
         // Must have at least 10 digits

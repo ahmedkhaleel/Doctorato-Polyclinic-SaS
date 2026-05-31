@@ -35,6 +35,9 @@ class Setting extends Model
         // Reverb
         'reverb_app_key',
         'reverb_app_secret',
+        // SMS Misr (اس ام اس مصر) — new keys, safe to encrypt at rest
+        'sms_smsmisr_password',
+        'sms_smsmisr_token',
     ];
 
     /**
