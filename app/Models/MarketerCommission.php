@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\BelongsToBranch;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -10,6 +11,7 @@ use App\Traits\LogsActivity;
 
 class MarketerCommission extends Model
 {
+    use BelongsToBranch;
     use HasFactory, LogsActivity;
 
     protected $fillable = [
