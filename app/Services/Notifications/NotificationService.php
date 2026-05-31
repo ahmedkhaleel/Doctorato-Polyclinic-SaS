@@ -45,6 +45,11 @@ class NotificationService
             return [];
         }
 
+        // Auto-enrol into any drip sequence triggered by this event (live entry only).
+        if ($allowDefer && $recipient && $eventKey !== 'sequence.message') {
+            app(SequenceService::class)->enrollForEvent($eventKey, $recipient);
+        }
+
         // Quiet hours: hold reminder/marketing until the window opens instead of
         // dropping them. Transactional always proceeds. $allowDefer is false when
         // the scheduled-dispatch worker re-runs a held notification.

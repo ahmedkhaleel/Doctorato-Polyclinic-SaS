@@ -100,6 +100,9 @@ Schedule::command('notifications:dispatch-scheduled')->everyFifteenMinutes()->wi
 // Notifications Hub: alert admins once if monthly notification spend exceeds the cap.
 Schedule::command('notifications:cost-check')->dailyAt('08:15');
 
+// Notifications Hub: advance due drip-sequence enrolments (every 15 min).
+Schedule::command('notifications:run-sequences')->everyFifteenMinutes()->withoutOverlapping();
+
 // ─── Backup ──────────────────────────────────────────────────────────
 
 // Full backup (DB + files) daily at 2:00 AM

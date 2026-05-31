@@ -323,6 +323,13 @@ Route::middleware('admin.auth')->group(function () {
     Route::get('/inbox', [\App\Http\Controllers\NotificationInboxController::class, 'show'])->defaults('panel', 'admin')->name('admin.notifications-inbox.index')->middleware('permission:notifications.view');
     Route::post('/inbox/reply', [\App\Http\Controllers\NotificationInboxController::class, 'reply'])->name('admin.notifications-inbox.reply')->middleware('permission:notifications.send');
 
+    // ─── Notification Drip Sequences ───────────────────────
+    Route::get('/notification-sequences', [\App\Http\Controllers\Admin\AdminSequenceController::class, 'index'])->name('admin.notification-sequences.index')->middleware('permission:notifications.view');
+    Route::post('/notification-sequences', [\App\Http\Controllers\Admin\AdminSequenceController::class, 'store'])->name('admin.notification-sequences.store')->middleware('permission:notifications.create');
+    Route::post('/notification-sequences/{sequence}/update', [\App\Http\Controllers\Admin\AdminSequenceController::class, 'update'])->name('admin.notification-sequences.update')->middleware('permission:notifications.update');
+    Route::post('/notification-sequences/{sequence}/delete', [\App\Http\Controllers\Admin\AdminSequenceController::class, 'destroy'])->name('admin.notification-sequences.destroy')->middleware('permission:notifications.update');
+    Route::post('/notification-sequences/{sequence}/enroll', [\App\Http\Controllers\Admin\AdminSequenceController::class, 'enroll'])->name('admin.notification-sequences.enroll')->middleware('permission:notifications.send');
+
     // ─── Notification Campaigns (distinct path from CRM /campaigns) ──
     Route::get('/notification-campaigns', [\App\Http\Controllers\Admin\AdminCampaignController::class, 'index'])->name('admin.notification-campaigns.index')->middleware('permission:notifications.view');
     Route::post('/notification-campaigns/preview', [\App\Http\Controllers\Admin\AdminCampaignController::class, 'preview'])->name('admin.notification-campaigns.preview')->middleware('permission:notifications.view');
