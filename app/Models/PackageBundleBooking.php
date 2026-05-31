@@ -2,14 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\BelongsToBranch;
+use App\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use App\Traits\LogsActivity;
 
 class PackageBundleBooking extends Model
 {
-    use HasFactory, LogsActivity;
+    use BelongsToBranch, HasFactory, LogsActivity;
 
     protected $fillable = [
         'booking_number', 'package_bundle_id', 'patient_id',
@@ -87,13 +88,13 @@ class PackageBundleBooking extends Model
 
     public static function generateBookingNumber(): string
     {
-        $prefix = 'PB-' . now()->format('Ym') . '-';
-        $last = static::where('booking_number', 'like', $prefix . '%')
+        $prefix = 'PB-'.now()->format('Ym').'-';
+        $last = static::where('booking_number', 'like', $prefix.'%')
             ->orderByDesc('booking_number')
             ->value('booking_number');
         $number = $last ? (int) substr($last, -4) + 1 : 1;
 
-        return $prefix . str_pad($number, 4, '0', STR_PAD_LEFT);
+        return $prefix.str_pad($number, 4, '0', STR_PAD_LEFT);
     }
 
     public function recalculateBalance(): void
