@@ -313,6 +313,13 @@ Route::middleware('admin.auth')->group(function () {
     Route::get('/inbox', [\App\Http\Controllers\NotificationInboxController::class, 'show'])->defaults('panel', 'admin')->name('admin.notifications-inbox.index')->middleware('permission:notifications.view');
     Route::post('/inbox/reply', [\App\Http\Controllers\NotificationInboxController::class, 'reply'])->name('admin.notifications-inbox.reply')->middleware('permission:notifications.send');
 
+    // ─── Notification Campaigns (distinct path from CRM /campaigns) ──
+    Route::get('/notification-campaigns', [\App\Http\Controllers\Admin\AdminCampaignController::class, 'index'])->name('admin.notification-campaigns.index')->middleware('permission:notifications.view');
+    Route::post('/notification-campaigns/preview', [\App\Http\Controllers\Admin\AdminCampaignController::class, 'preview'])->name('admin.notification-campaigns.preview')->middleware('permission:notifications.view');
+    Route::post('/notification-campaigns', [\App\Http\Controllers\Admin\AdminCampaignController::class, 'store'])->name('admin.notification-campaigns.store')->middleware('permission:notifications.send');
+    Route::post('/notification-campaigns/{campaign}/send', [\App\Http\Controllers\Admin\AdminCampaignController::class, 'send'])->name('admin.notification-campaigns.send')->middleware('permission:notifications.send');
+    Route::post('/notification-campaigns/{campaign}/delete', [\App\Http\Controllers\Admin\AdminCampaignController::class, 'destroy'])->name('admin.notification-campaigns.destroy')->middleware('permission:notifications.update');
+
     // ─── SMS Templates (admin-editable copy) ───────────────
     Route::get('/sms-templates',   [\App\Http\Controllers\Admin\SmsTemplateController::class, 'index'])
         ->name('admin.sms-templates.index')->middleware('permission:settings.view');

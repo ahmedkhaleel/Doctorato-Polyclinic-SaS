@@ -331,6 +331,7 @@ const navGroups = [
             { labelEn: 'My Notifications', labelAr: 'إشعاراتي', href: '/admin/my-notifications', icon: 'bellCenter', permission: null },
             { labelEn: 'Notifications Hub', labelAr: 'مركز الإشعارات الموحد', href: '/admin/notifications-hub', icon: 'megaphone', permission: 'notifications.view' },
             { labelEn: 'Inbox', labelAr: 'صندوق المراسلات', href: '/admin/inbox', icon: 'chat', permission: 'notifications.view' },
+            { labelEn: 'Campaigns', labelAr: 'حملات الإشعارات', href: '/admin/notification-campaigns', icon: 'megaphone', permission: 'notifications.view' },
             { labelEn: 'Delivery Log',   labelAr: 'سجل الإرسال',   href: '/admin/notifications-hub/logs', icon: 'activity', permission: 'notifications.view' },
             { labelEn: 'SMS Templates',  labelAr: 'قوالب الرسائل', href: '/admin/sms-templates',      icon: 'chat',     permission: 'settings.view' },
             { labelEn: 'Settings',       labelAr: 'الإعدادات',     href: '/admin/settings',           icon: 'cog',      permission: 'settings.view' },

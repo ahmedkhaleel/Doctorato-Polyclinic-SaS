@@ -89,6 +89,10 @@ Schedule::command('invoices:check-overdue --days=7')->dailyAt('11:00');
 // every 30 min during waking hours (up to 3 attempts per message).
 Schedule::command('notifications:retry')->everyThirtyMinutes()->between('07:00', '23:00')->withoutOverlapping();
 
+// Notifications Hub: dispatch scheduled marketing campaigns when they fall due
+// (every 5 min during waking hours; respects quiet hours + consent downstream).
+Schedule::command('notifications:dispatch-campaigns')->everyFiveMinutes()->between('08:00', '21:00')->withoutOverlapping();
+
 // ─── Backup ──────────────────────────────────────────────────────────
 
 // Full backup (DB + files) daily at 2:00 AM
