@@ -2,15 +2,16 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\BelongsToBranch;
+use App\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use App\Traits\LogsActivity;
 
 class Employee extends \Illuminate\Database\Eloquent\Model
 {
-    use HasFactory, LogsActivity;
+    use BelongsToBranch, HasFactory, LogsActivity;
 
     protected $fillable = [
         'user_id',
@@ -109,6 +110,7 @@ class Employee extends \Illuminate\Database\Eloquent\Model
     public static function generateEmployeeNumber(): string
     {
         $last = static::max('id') ?? 0;
-        return 'EMP-' . str_pad($last + 1, 4, '0', STR_PAD_LEFT);
+
+        return 'EMP-'.str_pad($last + 1, 4, '0', STR_PAD_LEFT);
     }
 }

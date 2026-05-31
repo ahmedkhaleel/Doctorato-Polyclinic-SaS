@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\BelongsToBranch;
+use App\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\LogsActivity;
 
 class EmployeeShift extends Model
 {
-    use HasFactory, LogsActivity;
+    use BelongsToBranch, HasFactory, LogsActivity;
 
     protected $fillable = [
         'user_id', 'shift_id', 'day_of_week', 'effective_from', 'effective_to',

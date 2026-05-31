@@ -2,14 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\BelongsToBranch;
+use App\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use App\Traits\LogsActivity;
 
 class SalarySlip extends \Illuminate\Database\Eloquent\Model
 {
-    use HasFactory, LogsActivity;
+    use BelongsToBranch, HasFactory, LogsActivity;
 
     protected $fillable = [
         'slip_number',
@@ -124,10 +125,10 @@ class SalarySlip extends \Illuminate\Database\Eloquent\Model
     public static function generateSlipNumber(int $month, int $year): string
     {
         $prefix = sprintf('SAL-%04d%02d-', $year, $month);
-        $last = static::where('slip_number', 'like', $prefix . '%')->max('slip_number');
+        $last = static::where('slip_number', 'like', $prefix.'%')->max('slip_number');
         $seq = $last ? (int) substr($last, -4) + 1 : 1;
 
-        return $prefix . str_pad($seq, 4, '0', STR_PAD_LEFT);
+        return $prefix.str_pad($seq, 4, '0', STR_PAD_LEFT);
     }
 
     public function recalculateTotals(): void
@@ -153,6 +154,7 @@ class SalarySlip extends \Illuminate\Database\Eloquent\Model
     public function getPeriodLabelAttribute(): string
     {
         $months = ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-        return ($months[$this->month] ?? '') . ' ' . $this->year;
+
+        return ($months[$this->month] ?? '').' '.$this->year;
     }
 }

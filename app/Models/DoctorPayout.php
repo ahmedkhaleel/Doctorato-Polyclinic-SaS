@@ -2,14 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\BelongsToBranch;
+use App\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\LogsActivity;
 
 class DoctorPayout extends Model
 {
-    use HasFactory, LogsActivity;
+    use BelongsToBranch, HasFactory, LogsActivity;
 
     protected $fillable = [
         'payout_number', 'doctor_id', 'expense_id', 'period_start', 'period_end',
@@ -129,14 +130,14 @@ class DoctorPayout extends Model
 
     public static function generatePayoutNumber(): string
     {
-        $prefix = 'PAY-' . now()->format('Ym') . '-';
-        $last = static::where('payout_number', 'like', $prefix . '%')
+        $prefix = 'PAY-'.now()->format('Ym').'-';
+        $last = static::where('payout_number', 'like', $prefix.'%')
             ->orderByDesc('payout_number')
             ->value('payout_number');
 
         $number = $last ? (int) substr($last, -4) + 1 : 1;
 
-        return $prefix . str_pad($number, 4, '0', STR_PAD_LEFT);
+        return $prefix.str_pad($number, 4, '0', STR_PAD_LEFT);
     }
 
     // ─── Helpers ────────────────────────────────────────
