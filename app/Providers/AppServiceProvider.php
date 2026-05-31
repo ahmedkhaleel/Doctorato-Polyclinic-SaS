@@ -11,12 +11,12 @@ use App\Events\PatientRegistered;
 use App\Events\PaymentReceived;
 use App\Events\VisitCancelled;
 use App\Events\VisitCompleted;
+use App\Listeners\ApplyReferralReward;
+use App\Listeners\AwardLoyaltyOnVisit;
 use App\Listeners\CreatePatientFromLead;
 use App\Listeners\LinkPendingBookings;
 use App\Listeners\LogPaymentReceived;
 use App\Listeners\LogVisitCancelled;
-use App\Listeners\ApplyReferralReward;
-use App\Listeners\AwardLoyaltyOnVisit;
 use App\Listeners\LogVisitCompleted;
 use App\Listeners\SendBookingCancelledEmail;
 use App\Listeners\SendBookingConfirmedEmail;
@@ -49,7 +49,8 @@ class AppServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        //
+        // Multi-branch: one active-branch context per request/process.
+        $this->app->singleton(\App\Services\Branch\BranchContext::class);
     }
 
     public function boot(): void
