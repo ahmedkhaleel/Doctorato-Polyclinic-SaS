@@ -122,6 +122,7 @@ const settingsForm = reactive({
     notifications_quiet_end: props.globalSettings.notifications_quiet_end || '',
     notifications_marketing_weekly_cap: props.globalSettings.notifications_marketing_weekly_cap,
     notifications_smart_routing: props.globalSettings.notifications_smart_routing,
+    notifications_monthly_cost_cap: props.globalSettings.notifications_monthly_cost_cap,
 });
 function saveSettings() {
     router.post('/admin/notifications-hub/settings', settingsForm, { preserveScroll: true });
@@ -385,6 +386,10 @@ const statusColor = (ch) => (channelMeta[ch]?.color || '#64748B');
                             <label class="block">
                                 <span class="text-xs text-gray-500">{{ t('سقف الرسائل التسويقية / أسبوع', 'Marketing cap / week (per recipient)') }}</span>
                                 <input type="number" min="0" v-model="settingsForm.notifications_marketing_weekly_cap" :disabled="!canEdit" class="mt-1 w-full rounded-lg border-gray-200 text-sm" :placeholder="t('0 = بلا حد', '0 = no limit')" />
+                            </label>
+                            <label class="block">
+                                <span class="text-xs text-gray-500">{{ t('سقف التكلفة الشهري (تنبيه)', 'Monthly cost cap (alert)') }}</span>
+                                <input type="number" step="0.01" min="0" v-model="settingsForm.notifications_monthly_cost_cap" :disabled="!canEdit" class="mt-1 w-full rounded-lg border-gray-200 text-sm" :placeholder="t('0 = بلا تنبيه', '0 = no alert')" />
                             </label>
                             <div class="grid grid-cols-2 gap-3">
                                 <label class="block">

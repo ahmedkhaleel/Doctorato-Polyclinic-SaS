@@ -97,6 +97,9 @@ Schedule::command('notifications:dispatch-campaigns')->everyFiveMinutes()->betwe
 // opens — runs every 15 min around the clock (quiet windows close at any hour).
 Schedule::command('notifications:dispatch-scheduled')->everyFifteenMinutes()->withoutOverlapping();
 
+// Notifications Hub: alert admins once if monthly notification spend exceeds the cap.
+Schedule::command('notifications:cost-check')->dailyAt('08:15');
+
 // ─── Backup ──────────────────────────────────────────────────────────
 
 // Full backup (DB + files) daily at 2:00 AM
