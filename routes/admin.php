@@ -277,6 +277,30 @@ Route::middleware('admin.auth')->group(function () {
     Route::post('/settings', [SettingController::class, 'update'])->name('admin.settings.update')->middleware('permission:settings.update');
     Route::post('/settings/test-sms', [SettingController::class, 'testSms'])->name('admin.settings.testSms')->middleware('permission:settings.update');
 
+    // ─── Notifications Hub (unified control center) ────────
+    Route::prefix('notifications-hub')->name('admin.notifications-hub.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Admin\AdminNotificationHubController::class, 'index'])
+            ->name('index')->middleware('permission:notifications.view');
+        Route::get('/logs', [\App\Http\Controllers\Admin\AdminNotificationHubController::class, 'logs'])
+            ->name('logs')->middleware('permission:notifications.view');
+        Route::post('/channels/{channel}', [\App\Http\Controllers\Admin\AdminNotificationHubController::class, 'updateChannel'])
+            ->name('channels.update')->middleware('permission:notifications.update');
+        Route::post('/routes', [\App\Http\Controllers\Admin\AdminNotificationHubController::class, 'updateRoute'])
+            ->name('routes.update')->middleware('permission:notifications.update');
+        Route::post('/events/{key}', [\App\Http\Controllers\Admin\AdminNotificationHubController::class, 'updateEvent'])
+            ->name('events.update')->middleware('permission:notifications.update');
+        Route::post('/templates', [\App\Http\Controllers\Admin\AdminNotificationHubController::class, 'storeTemplate'])
+            ->name('templates.store')->middleware('permission:notifications.create');
+        Route::post('/templates/{template}/update', [\App\Http\Controllers\Admin\AdminNotificationHubController::class, 'updateTemplate'])
+            ->name('templates.update')->middleware('permission:notifications.update');
+        Route::post('/templates/{template}/delete', [\App\Http\Controllers\Admin\AdminNotificationHubController::class, 'destroyTemplate'])
+            ->name('templates.destroy')->middleware('permission:notifications.update');
+        Route::post('/settings', [\App\Http\Controllers\Admin\AdminNotificationHubController::class, 'updateSettings'])
+            ->name('settings.update')->middleware('permission:notifications.update');
+        Route::post('/test', [\App\Http\Controllers\Admin\AdminNotificationHubController::class, 'test'])
+            ->name('test')->middleware('permission:notifications.send');
+    });
+
     // ─── SMS Templates (admin-editable copy) ───────────────
     Route::get('/sms-templates',   [\App\Http\Controllers\Admin\SmsTemplateController::class, 'index'])
         ->name('admin.sms-templates.index')->middleware('permission:settings.view');
