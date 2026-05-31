@@ -11,7 +11,32 @@ class Setting extends Model
 {
     use LogsActivity;
 
-    protected $fillable = ['key', 'value', 'group'];
+    protected $fillable = ['key', 'value', 'group', 'branch_id'];
+
+    /** branch_id sentinel for a GLOBAL setting (applies to every branch). */
+    public const GLOBAL_BRANCH = 0;
+
+    /**
+     * The branch whose overrides apply right now, or 0 (global) when the
+     * kill-switch is off, in all-branches mode, or no branch is resolved.
+     * Keeps single-clinic behaviour identical while branches are disabled.
+     */
+    protected static function activeBranchId(): int
+    {
+        if (! config('branches.enabled')) {
+            return self::GLOBAL_BRANCH;
+        }
+        try {
+            $ctx = app(\App\Services\Branch\BranchContext::class);
+            if ($ctx->isAllBranches()) {
+                return self::GLOBAL_BRANCH;
+            }
+
+            return (int) ($ctx->currentId() ?? self::GLOBAL_BRANCH);
+        } catch (\Throwable) {
+            return self::GLOBAL_BRANCH;
+        }
+    }
 
     /**
      * Keys whose values are encrypted at rest.
@@ -59,14 +84,26 @@ class Setting extends Model
      */
     public static function get(string $key, $default = null)
     {
+        $branchId = self::activeBranchId();
+        $memKey = $branchId ? "b{$branchId}:{$key}" : $key;
+
         // Layer 1: In-memory cache (same request)
-        if (array_key_exists($key, static::$memoryCache)) {
-            return static::$memoryCache[$key] ?? $default;
+        if (array_key_exists($memKey, static::$memoryCache)) {
+            return static::$memoryCache[$memKey] ?? $default;
         }
 
-        // Layer 2: Cache store (database/redis/file)
-        $value = Cache::remember("setting:{$key}", self::CACHE_TTL, function () use ($key) {
-            return static::where('key', $key)->value('value');
+        // Layer 2: Cache store (database/redis/file).
+        // Branch overrides fall back to the global (branch_id = 0) value.
+        $cacheKey = $branchId ? "setting:b{$branchId}:{$key}" : "setting:{$key}";
+        $value = Cache::remember($cacheKey, self::CACHE_TTL, function () use ($key, $branchId) {
+            if ($branchId !== self::GLOBAL_BRANCH) {
+                $override = static::where('key', $key)->where('branch_id', $branchId)->value('value');
+                if ($override !== null) {
+                    return $override;
+                }
+            }
+
+            return static::where('key', $key)->where('branch_id', self::GLOBAL_BRANCH)->value('value');
         });
 
         // Auto-decrypt encrypted keys (gracefully handle legacy plain-text values)
@@ -79,15 +116,18 @@ class Setting extends Model
         }
 
         // Store in memory for repeated calls within same request
-        static::$memoryCache[$key] = $value;
+        static::$memoryCache[$memKey] = $value;
 
         return $value ?? $default;
     }
 
     /**
      * Set a setting value and bust caches.
+     *
+     * Writes the GLOBAL row (branch_id = 0) by default — backward compatible.
+     * Pass $branchId to store a per-branch override (see setForBranch()).
      */
-    public static function set(string $key, $value, string $group = 'general'): void
+    public static function set(string $key, $value, string $group = 'general', int $branchId = self::GLOBAL_BRANCH): void
     {
         $storedValue = $value;
 
@@ -97,17 +137,34 @@ class Setting extends Model
         }
 
         static::updateOrCreate(
-            ['key' => $key],
+            ['key' => $key, 'branch_id' => $branchId],
             ['value' => $storedValue, 'group' => $group]
         );
 
-        // Bust caches
+        // Bust caches (both the global and the per-branch cache keys)
         Cache::forget("setting:{$key}");
+        Cache::forget("setting:b{$branchId}:{$key}");
+        unset(static::$memoryCache["b{$branchId}:{$key}"]);
         // Keep plain (decrypted) value in memory cache for same-request reads
-        static::$memoryCache[$key] = $value;
+        $memKey = $branchId ? "b{$branchId}:{$key}" : $key;
+        static::$memoryCache[$memKey] = $value;
 
         // Also bust the "all settings" cache if it exists
         Cache::forget('settings:all');
+    }
+
+    /** Store a per-branch override for $key. */
+    public static function setForBranch(int $branchId, string $key, $value, string $group = 'general'): void
+    {
+        self::set($key, $value, $group, $branchId);
+    }
+
+    /** Remove a branch override so the branch falls back to the global value. */
+    public static function clearBranchOverride(int $branchId, string $key): void
+    {
+        static::where('key', $key)->where('branch_id', $branchId)->delete();
+        Cache::forget("setting:b{$branchId}:{$key}");
+        unset(static::$memoryCache["b{$branchId}:{$key}"]);
     }
 
     /**
