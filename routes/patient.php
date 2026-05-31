@@ -187,6 +187,12 @@ Route::middleware('patient.auth')->group(function () {
     // ─── Referrals ──────────────────────────────────────────
     Route::get('/referrals', [PatientReferralsController::class, 'index'])->name('patient.referrals.index');
 
+    // ─── Notifications (in-app feed + bell) ─────────────────
+    Route::get('/notifications', [\App\Http\Controllers\Patient\PatientNotificationController::class, 'index'])->name('patient.notifications.index');
+    Route::get('/notifications/bell', [\App\Http\Controllers\Patient\PatientNotificationController::class, 'bell'])->name('patient.notifications.bell');
+    Route::post('/notifications/{id}/read', [\App\Http\Controllers\Patient\PatientNotificationController::class, 'markRead'])->whereNumber('id')->name('patient.notifications.read');
+    Route::post('/notifications/read-all', [\App\Http\Controllers\Patient\PatientNotificationController::class, 'markAllRead'])->name('patient.notifications.readAll');
+
     // ─── My Profile ─────────────────────────────────────────
     Route::get('/profile', [PatientProfileController::class, 'index'])->name('patient.profile.index');
     Route::post('/profile', [PatientProfileController::class, 'update'])->name('patient.profile.update');

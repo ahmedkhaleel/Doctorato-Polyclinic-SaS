@@ -3,6 +3,7 @@ import { ref, computed, watch, watchEffect } from 'vue';
 import { Link, usePage, router } from '@inertiajs/vue3';
 import { useTheme } from '@/Composables/useTheme';
 import FlashMessages from '@/Components/FlashMessages.vue';
+import NotificationBell from '@/Components/NotificationBell.vue';
 
 useTheme();
 
@@ -390,6 +391,15 @@ function logout()        { router.post(lp('/logout')); }
 
                 <!-- Right side -->
                 <div class="flex items-center gap-1.5 md:gap-3">
+                    <!-- Notifications bell -->
+                    <NotificationBell
+                        :bell-url="lp('/notifications/bell')"
+                        :index-url="lp('/notifications')"
+                        :read-url-base="lp('/notifications/{id}/read')"
+                        :read-all-url="lp('/notifications/read-all')"
+                        :rtl="isRtl"
+                    />
+
                     <!-- Patient badge -->
                     <div class="flex items-center gap-2.5">
                         <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-[var(--brand-primary)] to-[var(--brand-secondary)] flex items-center justify-center text-white text-sm font-bold shadow-md shadow-[var(--brand-primary)]/15">
