@@ -299,6 +299,10 @@ Route::middleware(['admin.auth', 'branch.context'])->group(function () {
             ->name('logs')->middleware('permission:notifications.view');
         Route::get('/analytics', [\App\Http\Controllers\Admin\AdminNotificationHubController::class, 'analytics'])
             ->name('analytics')->middleware('permission:notifications.view');
+        Route::get('/scheduled', [\App\Http\Controllers\Admin\AdminNotificationHubController::class, 'scheduled'])
+            ->name('scheduled')->middleware('permission:notifications.view');
+        Route::post('/scheduled/{scheduledNotification}/cancel', [\App\Http\Controllers\Admin\AdminNotificationHubController::class, 'cancelScheduled'])
+            ->name('scheduled.cancel')->middleware('permission:notifications.update');
         Route::post('/channels/{channel}', [\App\Http\Controllers\Admin\AdminNotificationHubController::class, 'updateChannel'])
             ->name('channels.update')->middleware('permission:notifications.update');
         Route::post('/routes', [\App\Http\Controllers\Admin\AdminNotificationHubController::class, 'updateRoute'])

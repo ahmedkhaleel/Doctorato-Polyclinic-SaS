@@ -140,6 +140,60 @@ class AdminNotificationHubController extends Controller
         ]);
     }
 
+    /**
+     * Scheduled / queued notifications waiting to be dispatched by the
+     * notifications:dispatch-scheduled cron — with the ability to cancel one.
+     */
+    public function scheduled(Request $request)
+    {
+        $query = \App\Models\ScheduledNotification::query()
+            ->with('recipient')
+            ->orderByRaw("CASE WHEN status = 'pending' THEN 0 ELSE 1 END")
+            ->orderBy('send_after');
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->input('status'));
+        }
+        if ($request->filled('event_key')) {
+            $query->where('event_key', $request->input('event_key'));
+        }
+
+        $rows = $query->paginate(30)->withQueryString();
+        $rows->getCollection()->transform(function ($n) {
+            return [
+                'id' => $n->id,
+                'event_key' => $n->event_key,
+                'channels' => is_array($n->channels) ? $n->channels : (json_decode($n->channels ?? '[]', true) ?: []),
+                'recipient' => $n->recipient?->full_name ?? $n->recipient?->name ?? ($n->recipient_type ? class_basename($n->recipient_type).' #'.$n->recipient_id : '—'),
+                'reason' => $n->reason,
+                'send_after' => optional($n->send_after)->toDateTimeString(),
+                'status' => $n->status,
+                'processed_at' => optional($n->processed_at)->toDateTimeString(),
+            ];
+        });
+
+        return Inertia::render('Admin/Notifications/Scheduled', [
+            'scheduled' => $rows,
+            'filters' => $request->only(['status', 'event_key']),
+            'statuses' => ['pending', 'processed', 'cancelled'],
+            'counts' => [
+                'pending' => \App\Models\ScheduledNotification::where('status', 'pending')->count(),
+                'processed' => \App\Models\ScheduledNotification::where('status', 'processed')->count(),
+                'cancelled' => \App\Models\ScheduledNotification::where('status', 'cancelled')->count(),
+            ],
+        ]);
+    }
+
+    /** Cancel a pending scheduled notification so the cron skips it. */
+    public function cancelScheduled(\App\Models\ScheduledNotification $scheduledNotification)
+    {
+        if ($scheduledNotification->status === 'pending') {
+            $scheduledNotification->update(['status' => 'cancelled']);
+        }
+
+        return back()->with('success', __('Scheduled notification cancelled.'));
+    }
+
     public function analytics(Request $request)
     {
         $days = (int) $request->input('days', 30);
