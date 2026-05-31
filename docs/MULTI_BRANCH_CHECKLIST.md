@@ -56,8 +56,9 @@
 - ☐ `invoices` ⚠️(رقم) · `invoice_items` · `payments` · `payment_transactions` · `credit_notes` ⚠️(رقم) · `discount_usage` · `marketer_commissions`
 - ☐ (قرار) `patient_wallets`/`wallet_transactions`: تتبع المريض المشترك → **بلا** branch_id (محفظة واحدة للمريض). تأكيد المنطق المحاسبي.
 
-### 2.4 المخزون
-- ☐ `supplies` · `supply_transactions` · `purchase_orders` · `purchase_order_items` · `suppliers`(قرار: مشترك أم per-branch؟ غالباً مشترك) · `supply_categories`(مشترك)
+### 2.4 المخزون 🔒 (مخزون لكل فرع + موردون مشتركون)
+- ☐ يأخذ `branch_id`: `supplies` · `supply_transactions` · `purchase_orders` · `purchase_order_items`
+- ☐ **مشترك بلا branch_id**: `suppliers` · `supply_categories`
 
 ### 2.5 الموارد البشرية
 - ☐ `employees` · `employee_shifts` · `shifts` · `attendances` · `leaves` · `salary_slips` · `penalties` · `advances` · `doctor_payouts` · `doctor_payout_visits`
@@ -66,9 +67,9 @@
 - ☐ `doctor_schedules` · `doctor_vacations` · `doctor_service_rates`
 - ☐ pivot `branch_doctor`
 
-### 2.7 CRM (قرار: مشترك أم per-branch؟)
-- ☐ `leads, lead_activities, lead_follow_ups, lead_stage_history, lead_sequence_enrollments, crm_campaigns, marketer_commissions`
-- ⚠️ قرار مطلوب: هل التسويق مركزي (مشترك) أم لكل فرع قمعه؟ (الافتراضي المقترح: **مشترك** مع `branch_id` اختياري لإسناد العميل لفرع).
+### 2.7 CRM 🔒 (مركزي مشترك)
+- 🔒 **مشترك بلا branch_id إلزامي**: `leads, lead_activities, lead_follow_ups, lead_stage_history, lead_sequence_enrollments, crm_campaigns`.
+- ☐ `branch_id` **اختياري** على `leads` لإسناد العميل لفرع (للتقارير فقط) — وعلى `marketer_commissions` لنسب العمولة لفرع الزيارة. لا Global Scope على CRM (يبقى مرئياً مركزياً).
 
 ### 2.8 المتابعات والرضا والتأمين
 - ☐ `patient_recall_reminders` · `patient_satisfactions` · `insurance_claims` · `insurance_pre_authorizations`
@@ -108,7 +109,7 @@
 - ☐ `settings.branch_id` (nullable) + فهرس.
 - ☐ `Setting::get($key)` branch-aware مع **fallback**: قيمة الفرع ← ثم العامة (`branch_id IS NULL`). الحفاظ على التوقيع (توافق خلفي).
 - ☐ مراجعة الكاش (مفاتيح الكاش تصبح per-branch: `setting:{branch}:{key}`).
-- ☐ مفاتيح حسّاسة per-branch: اعتمادات الدفع/الواتساب/SMTP/مرسِل SMS (يربط بميديول الإشعارات).
+- 🔒 **اعتمادات الإشعارات (واتساب/SMS/SMTP) تبقى عامة** (قرار: مرسِل واحد للمنشأة) — لا تُجعَل per-branch. طبقة الإعدادات per-branch تُستخدم لأشياء تشغيلية مثل اسم/عنوان/هاتف الفرع وساعات العمل، لا لاعتمادات الإرسال.
 
 ### 5.2 الأرقام التسلسلية (الـ 6 نماذج المولِّدة) ⚠️
 - ☐ `Booking::booted` (`booking_number`) → بادئة فرع `{BR}-BK-…` + تسلسل لكل فرع.
@@ -158,11 +159,10 @@
 ---
 
 ## 8) ميديول الإشعارات (المبني حديثاً) — تكامل الفرع
-- ☐ `notification_channels` per-branch (مرسِل/اعتمادات لكل فرع) عبر طبقة B4.
-- ☐ `notification_logs.branch_id` (للتحليلات لكل فرع + سجل التسليم).
-- ☐ الحملات/السلاسل/القوالب: قرار per-branch أم مشترك (الافتراضي مشترك مع استهداف per-branch).
-- ☐ `NotificationHealthService` + `/health` + Diagnostics: إظهار per-branch.
-- ☐ `StaffNotifier`: تنبيهات الطاقم تذهب لمستخدمي الفرع المعني.
+- 🔒 **مرسِل واحد للمنشأة**: `notification_channels` والاعتمادات والقوالب/الأحداث/الحملات/السلاسل تبقى **عامة** (بلا per-branch). لا تغيير على المحرّك.
+- ☐ `notification_logs.branch_id` (اختياري) لنسب الإرسال لفرع المعاملة في التحليلات لكل فرع.
+- ☐ `StaffNotifier`: تنبيهات الطاقم تذهب لمستخدمي الفرع المعني (عبر `branch_user`).
+- ☐ `NotificationHealthService` + `/health` + Diagnostics: تبقى كما هي (المرسِل واحد).
 
 ---
 
@@ -223,8 +223,12 @@
 
 ---
 
-### نقاط قرار مفتوحة تحتاج إجابتك قبل B2 (لا تمنع B0/B1)
-1. **CRM (leads/campaigns)**: مشترك مركزي أم لكل فرع قمعه؟
-2. **الموردون والمخزون**: مورد مشترك ومخزون per-branch (الافتراضي)؟ أم مورد per-branch أيضاً؟
-3. **الخدمات والأسعار**: نفس الخدمات/الأسعار لكل الفروع، أم سعر/توفّر per-branch (Service↔Branch)؟
-4. **قنوات الإشعارات**: مرسِل واحد للمنشأة أم رقم واتساب/SMS مختلف لكل فرع؟
+### نقاط القرار — 🔒 مُثبّتة (2026-05-31)
+1. ✅ **CRM مركزي مشترك** — `leads/campaigns` بلا Global Scope؛ `branch_id` اختياري للإسناد/التقارير فقط.
+2. ✅ **المخزون لكل فرع + الموردون مشتركون** — `supplies/supply_transactions/purchase_orders` تأخذ branch_id؛ `suppliers/supply_categories` عامة.
+3. ✅ **الخدمات والأسعار موحّدة** — `services/service_categories/service_packages/doctor_service_rates?` تبقى **عامة**؛ **لا** جدول Service↔Branch ولا تسعير per-branch (حُذفت هذه من النطاق → أبسط وأقل خطراً).
+4. ✅ **مرسِل إشعارات واحد للمنشأة** — قنوات/اعتمادات الإشعارات عامة (لا per-branch).
+
+> أثر هذه القرارات: **تقليص النطاق** — لا Service↔Branch (يُلغي جزءاً من B5)، ولا per-branch لاعتمادات الإشعارات (يُبسّط B4)، و CRM بلا scope (أقل مخاطرة تسرّب). الفئة 2 (المشتركة) تتوسّع، والفئة 1 (المربوطة) تنكمش قليلاً → تنفيذ أأمن.
+
+ملاحظة: `doctor_service_rates` — بما أن الأسعار موحّدة، تبقى عامة **إلا** لو ربطنا توفّر الطبيب بفرع لاحقاً (تُراجَع في B3 مع `branch_doctor`).
