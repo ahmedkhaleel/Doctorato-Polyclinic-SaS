@@ -78,7 +78,7 @@ class OnlineConsultation extends Model
 
     public static function generateConsultationNumber(): string
     {
-        $prefix = 'TELE-'.now()->format('Ym').'-';
+        $prefix = \App\Services\Branch\BranchNumber::prefix('TELE');
         $lastNumber = (int) (self::where('consultation_number', 'like', $prefix.'%')
             ->orderByDesc('id')
             ->value(DB::raw("SUBSTRING_INDEX(consultation_number, '-', -1)")) ?? 0);

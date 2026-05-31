@@ -88,7 +88,7 @@ class PackageBundleBooking extends Model
 
     public static function generateBookingNumber(): string
     {
-        $prefix = 'PB-'.now()->format('Ym').'-';
+        $prefix = \App\Services\Branch\BranchNumber::prefix('PB');
         $last = static::where('booking_number', 'like', $prefix.'%')
             ->orderByDesc('booking_number')
             ->value('booking_number');

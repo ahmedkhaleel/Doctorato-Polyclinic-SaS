@@ -71,7 +71,7 @@ class Booking extends Model
 
     public static function generateBookingNumber(): string
     {
-        $prefix = 'BK-'.now()->format('Ym').'-';
+        $prefix = \App\Services\Branch\BranchNumber::prefix('BK');
         $last = static::where('booking_number', 'like', $prefix.'%')
             ->orderByDesc('booking_number')
             ->value('booking_number');

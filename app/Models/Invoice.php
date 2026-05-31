@@ -124,7 +124,7 @@ class Invoice extends Model
 
     public static function generateInvoiceNumber(): string
     {
-        $prefix = 'INV-'.now()->format('Ym').'-';
+        $prefix = \App\Services\Branch\BranchNumber::prefix('INV');
         $last = static::where('invoice_number', 'like', $prefix.'%')
             ->orderByDesc('invoice_number')
             ->value('invoice_number');

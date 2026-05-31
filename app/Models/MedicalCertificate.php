@@ -27,7 +27,7 @@ class MedicalCertificate extends Model
 
     public static function generateNumber(): string
     {
-        $prefix = 'MC-'.now()->format('Ym').'-';
+        $prefix = \App\Services\Branch\BranchNumber::prefix('MC');
         $last = static::where('certificate_number', 'like', $prefix.'%')
             ->orderByDesc('certificate_number')
             ->value('certificate_number');

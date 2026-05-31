@@ -52,7 +52,7 @@ class CreditNote extends Model
 
     public static function generateNumber(): string
     {
-        $prefix = 'CN-'.now()->format('Ym').'-';
+        $prefix = \App\Services\Branch\BranchNumber::prefix('CN');
         $last = static::where('credit_note_number', 'like', $prefix.'%')
             ->orderByDesc('credit_note_number')
             ->value('credit_note_number');
