@@ -2,15 +2,16 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\BelongsToBranch;
+use App\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use App\Traits\LogsActivity;
 
 class Invoice extends Model
 {
-    use HasFactory, SoftDeletes, LogsActivity;
+    use BelongsToBranch, HasFactory, LogsActivity, SoftDeletes;
 
     /**
      * Mass-assignable fields.
@@ -123,14 +124,14 @@ class Invoice extends Model
 
     public static function generateInvoiceNumber(): string
     {
-        $prefix = 'INV-' . now()->format('Ym') . '-';
-        $last = static::where('invoice_number', 'like', $prefix . '%')
+        $prefix = 'INV-'.now()->format('Ym').'-';
+        $last = static::where('invoice_number', 'like', $prefix.'%')
             ->orderByDesc('invoice_number')
             ->value('invoice_number');
 
         $number = $last ? (int) substr($last, -4) + 1 : 1;
 
-        return $prefix . str_pad($number, 4, '0', STR_PAD_LEFT);
+        return $prefix.str_pad($number, 4, '0', STR_PAD_LEFT);
     }
 
     // ─── Update status based on payments ────────────────

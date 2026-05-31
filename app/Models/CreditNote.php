@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\BelongsToBranch;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class CreditNote extends Model
 {
-    use HasFactory;
+    use BelongsToBranch, HasFactory;
 
     const TYPES = ['full_refund', 'partial_refund', 'adjustment', 'cancellation'];
 
@@ -51,13 +52,13 @@ class CreditNote extends Model
 
     public static function generateNumber(): string
     {
-        $prefix = 'CN-' . now()->format('Ym') . '-';
-        $last = static::where('credit_note_number', 'like', $prefix . '%')
+        $prefix = 'CN-'.now()->format('Ym').'-';
+        $last = static::where('credit_note_number', 'like', $prefix.'%')
             ->orderByDesc('credit_note_number')
             ->value('credit_note_number');
         $number = $last ? (int) substr($last, -4) + 1 : 1;
 
-        return $prefix . str_pad($number, 4, '0', STR_PAD_LEFT);
+        return $prefix.str_pad($number, 4, '0', STR_PAD_LEFT);
     }
 
     public function canTransitionTo(string $status): bool
