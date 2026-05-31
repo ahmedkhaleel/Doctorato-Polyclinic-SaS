@@ -75,6 +75,21 @@ class NotificationService
                 continue;
             }
 
+            // Quiet hours: suppress non-essential (reminder/marketing) sends in the
+            // configured quiet window. in_app is silent so it always records.
+            if ($channel !== 'in_app' && ! $this->withinSendWindow($event->category)) {
+                $logs[] = $this->logSkipped($recipient, $channel, $event, 'quiet hours', $data);
+
+                continue;
+            }
+
+            // Marketing frequency cap (per recipient, rolling 7 days).
+            if ($channel !== 'in_app' && ! $this->frequencyOk($recipient, $event->category)) {
+                $logs[] = $this->logSkipped($recipient, $channel, $event, 'frequency cap', $data);
+
+                continue;
+            }
+
             if (! $this->quota->allows($channel)) {
                 $logs[] = $this->logSkipped($recipient, $channel, $event, $this->quota->blockReason($channel), $data);
 
@@ -253,6 +268,52 @@ class NotificationService
         $subject = $data['subject'] ?? null;
 
         return [$body, $subject, null];
+    }
+
+    /** Reminder/marketing are suppressed inside the quiet window; transactional always passes. */
+    private function withinSendWindow(string $category): bool
+    {
+        if ($category === 'transactional') {
+            return true;
+        }
+
+        $start = \App\Models\Setting::get('notifications_quiet_start'); // "HH:MM"
+        $end = \App\Models\Setting::get('notifications_quiet_end');
+        if (! $start || ! $end) {
+            return true; // no quiet hours configured
+        }
+
+        $now = now()->format('H:i');
+        // Window may wrap past midnight (e.g. 22:00 → 08:00).
+        if ($start <= $end) {
+            return ! ($now >= $start && $now < $end);
+        }
+
+        return ! ($now >= $start || $now < $end);
+    }
+
+    /** Marketing-only rolling-window cap per recipient (0 / no recipient = unlimited). */
+    private function frequencyOk(?Model $recipient, string $category): bool
+    {
+        if ($category !== 'marketing' || ! $recipient) {
+            return true;
+        }
+
+        $cap = (int) \App\Models\Setting::get('notifications_marketing_weekly_cap', '0');
+        if ($cap <= 0) {
+            return true;
+        }
+
+        $marketingKeys = NotificationEvent::where('category', 'marketing')->pluck('key');
+        $count = NotificationLog::where('recipient_type', $recipient->getMorphClass())
+            ->where('recipient_id', $recipient->getKey())
+            ->where('channel', '!=', 'in_app')
+            ->whereIn('event_key', $marketingKeys)
+            ->whereIn('status', [NotificationLog::STATUS_SENT, NotificationLog::STATUS_DELIVERED, NotificationLog::STATUS_READ])
+            ->where('created_at', '>=', now()->subDays(7))
+            ->count();
+
+        return $count < $cap;
     }
 
     private function localeFor(?Model $recipient): string

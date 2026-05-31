@@ -118,6 +118,9 @@ const settingsForm = reactive({
     notifications_global_daily_cap: props.globalSettings.notifications_global_daily_cap,
     sms_cost_per_segment: props.globalSettings.sms_cost_per_segment,
     whatsapp_webhook_verify_token: '',
+    notifications_quiet_start: props.globalSettings.notifications_quiet_start || '',
+    notifications_quiet_end: props.globalSettings.notifications_quiet_end || '',
+    notifications_marketing_weekly_cap: props.globalSettings.notifications_marketing_weekly_cap,
 });
 function saveSettings() {
     router.post('/admin/notifications-hub/settings', settingsForm, { preserveScroll: true });
@@ -373,6 +376,21 @@ const statusColor = (ch) => (channelMeta[ch]?.color || '#64748B');
                                 <span class="text-xs text-gray-500">{{ t('تكلفة الرسالة (لكل جزء)', 'SMS cost per segment') }}</span>
                                 <input type="number" step="0.0001" min="0" v-model="settingsForm.sms_cost_per_segment" :disabled="!canEdit" class="mt-1 w-full rounded-lg border-gray-200 text-sm" />
                             </label>
+                            <label class="block">
+                                <span class="text-xs text-gray-500">{{ t('سقف الرسائل التسويقية / أسبوع', 'Marketing cap / week (per recipient)') }}</span>
+                                <input type="number" min="0" v-model="settingsForm.notifications_marketing_weekly_cap" :disabled="!canEdit" class="mt-1 w-full rounded-lg border-gray-200 text-sm" :placeholder="t('0 = بلا حد', '0 = no limit')" />
+                            </label>
+                            <div class="grid grid-cols-2 gap-3">
+                                <label class="block">
+                                    <span class="text-xs text-gray-500">{{ t('بداية أوقات الهدوء', 'Quiet hours start') }}</span>
+                                    <input type="time" v-model="settingsForm.notifications_quiet_start" :disabled="!canEdit" class="mt-1 w-full rounded-lg border-gray-200 text-sm" />
+                                </label>
+                                <label class="block">
+                                    <span class="text-xs text-gray-500">{{ t('نهاية أوقات الهدوء', 'Quiet hours end') }}</span>
+                                    <input type="time" v-model="settingsForm.notifications_quiet_end" :disabled="!canEdit" class="mt-1 w-full rounded-lg border-gray-200 text-sm" />
+                                </label>
+                            </div>
+                            <p class="text-[11px] text-gray-400">{{ t('خلال أوقات الهدوء تُمنع رسائل التذكير والتسويق فقط (المعاملات تُرسَل دائماً).', 'During quiet hours only reminder/marketing messages are held — transactional always sends.') }}</p>
                             <label class="block">
                                 <span class="text-xs text-gray-500">{{ t('رمز تحقق Webhook لواتساب', 'WhatsApp webhook verify token') }}</span>
                                 <input v-model="settingsForm.whatsapp_webhook_verify_token" :disabled="!canEdit" class="mt-1 w-full rounded-lg border-gray-200 text-sm" :placeholder="globalSettings.has_whatsapp_verify_token ? '••••••• (' + t('محفوظ', 'saved') + ')' : ''" />

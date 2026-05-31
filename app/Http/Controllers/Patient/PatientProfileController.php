@@ -173,6 +173,7 @@ class PatientProfileController extends BasePatientController
             }
         }
 
+        \App\Services\Notifications\ConsentService::sync($patient, $data, 'patient_portal', $request->ip());
         $patient->update($data);
         AuditLogger::log('notification_preferences_updated', $patient);
 

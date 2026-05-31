@@ -91,6 +91,7 @@ class PatientCommunicationController extends Controller
 
         $validated = $request->validate(array_map(fn ($r) => "sometimes|{$r}", $cols));
 
+        \App\Services\Notifications\ConsentService::sync($patient, $validated, 'admin', $request->ip());
         // notify_* are not in $fillable (consent is sensitive) → forceFill.
         $patient->forceFill($validated)->save();
 

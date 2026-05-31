@@ -102,6 +102,9 @@ class AdminNotificationHubController extends Controller
                 'notifications_global_daily_cap' => (int) Setting::get('notifications_global_daily_cap', '0'),
                 'sms_cost_per_segment' => (float) Setting::get('sms_cost_per_segment', '0'),
                 'has_whatsapp_verify_token' => (bool) Setting::get('whatsapp_webhook_verify_token'),
+                'notifications_quiet_start' => Setting::get('notifications_quiet_start', ''),
+                'notifications_quiet_end' => Setting::get('notifications_quiet_end', ''),
+                'notifications_marketing_weekly_cap' => (int) Setting::get('notifications_marketing_weekly_cap', '0'),
             ],
             'stats' => $this->stats(),
         ]);
@@ -234,6 +237,9 @@ class AdminNotificationHubController extends Controller
             'notifications_global_daily_cap' => 'nullable|integer|min:0',
             'sms_cost_per_segment' => 'nullable|numeric|min:0',
             'whatsapp_webhook_verify_token' => 'nullable|string|max:255',
+            'notifications_quiet_start' => 'nullable|date_format:H:i',
+            'notifications_quiet_end' => 'nullable|date_format:H:i',
+            'notifications_marketing_weekly_cap' => 'nullable|integer|min:0',
         ]);
 
         if (array_key_exists('notifications_global_daily_cap', $data)) {
@@ -244,6 +250,11 @@ class AdminNotificationHubController extends Controller
         }
         if (! empty($data['whatsapp_webhook_verify_token'])) {
             Setting::set('whatsapp_webhook_verify_token', $data['whatsapp_webhook_verify_token']);
+        }
+        foreach (['notifications_quiet_start', 'notifications_quiet_end', 'notifications_marketing_weekly_cap'] as $k) {
+            if (array_key_exists($k, $data)) {
+                Setting::set($k, (string) ($data[$k] ?? ''));
+            }
         }
 
         return back()->with('success', __('Settings updated.'));

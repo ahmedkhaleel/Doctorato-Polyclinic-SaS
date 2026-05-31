@@ -133,5 +133,32 @@ class WhatsAppWebhookController extends Controller
         ]);
 
         Log::info('Inbound WhatsApp message recorded', ['from' => $from]);
+
+        $this->handleStopKeyword($from, $body);
+    }
+
+    /** STOP / إلغاء / unsubscribe in an inbound message opts the patient out of marketing. */
+    private function handleStopKeyword(string $from, string $body): void
+    {
+        $normalized = trim(mb_strtolower($body));
+        $stopWords = ['stop', 'unsubscribe', 'الغاء', 'إلغاء', 'ايقاف', 'إيقاف'];
+        if (! in_array($normalized, $stopWords, true)) {
+            return;
+        }
+
+        // Match the patient by the last 9 digits of the phone (format-agnostic).
+        $tail = substr(preg_replace('/[^0-9]/', '', $from), -9);
+        if (! $tail) {
+            return;
+        }
+
+        $patient = \App\Models\Patient::whereRaw(
+            "REPLACE(REPLACE(REPLACE(phone,'+',''),' ',''),'-','') LIKE ?", ["%{$tail}"]
+        )->first();
+
+        if ($patient) {
+            \App\Services\Notifications\ConsentService::optOutMarketing($patient, 'stop_keyword');
+            Log::info('STOP keyword → marketing opt-out', ['patient_id' => $patient->id]);
+        }
     }
 }
