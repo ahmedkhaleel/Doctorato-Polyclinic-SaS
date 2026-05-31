@@ -97,15 +97,17 @@
 
 ## 3. خارطة الطريق المرحلية (Phases 8 → 14)
 
-| المرحلة | العنوان | المحاور | الناتج | الأولوية |
-|--------|---------|---------|--------|----------|
-| **P8** | In-App Feed + Bell | B | جرس + خلاصة لحظية (Reverb) في 4 بوابات | 🔴 عالية (Quick win) |
-| **P9** | Staff Notifications | D + A | إشعارات الطاقم التشغيلية عبر المركز | 🔴 عالية |
-| **P10** | Preference Center 2.0 | C + H | quiet hours + STOP + frequency cap + unsubscribe + consent log | 🟠 متوسطة |
-| **P11** | Analytics Dashboard | G | لوحة قياس + تنبيهات تكلفة/فشل + DLR لكل القنوات | 🟠 متوسطة |
-| **P12** | Two-Way Inbox | E | محادثات واردة + Inbox سكرتارية + قوالب ردّ | 🟠 متوسطة |
-| **P13** | Campaigns + Segmentation + Drip | F | شرائح + سلاسل تنقيط + حملات موسمية + A/B | 🟢 لاحقة |
-| **P14** | Smart Layer + دمج CRM الكامل | I + E | smart send-time + تعلّم القناة + دمج CommunicationService | 🟢 لاحقة (Big bet) |
+| المرحلة | العنوان | المحاور | الناتج | الحالة |
+|--------|---------|---------|--------|--------|
+| **P8** | In-App Feed + Bell | B | جرس + خلاصة (polling) في بوابة المريض + خدمة قابلة لإعادة الاستخدام | ✅ مكتمل (InAppFeedTest 7) |
+| **P9** | Staff Notifications | D + A | أحداث طاقم + StaffNotifier + تنبيه الحجز الجديد + خلاصة 3 بوابات | ✅ مكتمل (StaffNotificationTest 5) |
+| **P10** | Preference Center 2.0 | C + H | quiet hours + frequency cap + STOP + سجل موافقة | ✅ مكتمل (PreferenceCenterTest 6) |
+| **P11** | Analytics Dashboard | G | لوحة تحليلات (تسليم/تكلفة/قمع/أعطال) | ✅ مكتمل (NotificationAnalyticsTest 3) |
+| **P12** | Two-Way Inbox | E | محادثات + Inbox مشترك (admin/secretary) + ردّ | ✅ مكتمل (NotificationInboxTest 5) |
+| **P13** | Campaigns + Segmentation | F | شرائح + حملات + جدولة + أمر إرسال مجدول | ✅ مكتمل (CampaignTest 6) |
+| **P14** | Smart Layer (channel learning) | I | ترتيب القنوات حسب تفاعل المريض | ✅ مكتمل (SmartRoutingTest 4) |
+
+> **الحالة الإجمالية:** كل مراحل خارطة الطريق (P8→P14) مكتملة ومُختبَرة ومدفوعة. ما تبقّى مفتوحاً عمداً (يحتاج بنية جدولة/dedup إضافية): **Smart send-time** (تأجيل التسليم لأفضل وقت قراءة)، **A/B testing + drip sequences** للحملات، و**دمج CommunicationService الكامل** للـ CRM. **DLR لمزوّدي SMS** (Twilio/SMS Misr) يحتاج تمرير معرّف رسالة المزوّد عبر SmsService.
 
 > منطق الترتيب: P8/P9 يحققان قيمة فورية ظاهرة للمستخدمين بأقل مخاطرة (يبنيان فوق ما هو قائم). P10/P11 يرفعان النضج (امتثال + قياس). P12/P13/P14 توسّعات استراتيجية.
 
