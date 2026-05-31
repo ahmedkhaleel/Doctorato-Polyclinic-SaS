@@ -61,6 +61,12 @@ Route::middleware('secretary.auth')->group(function () {
     // ─── Dashboard ──────────────────────────────────────────
     Route::get('/', [SecretaryDashboardController::class, 'index'])->name('secretary.dashboard');
 
+    // ─── Unified Hub in-app feed (bell) ─────────────────────
+    Route::get('/my-notifications', [\App\Http\Controllers\StaffNotificationController::class, 'index'])->defaults('panel', 'secretary')->name('secretary.my-notifications.index');
+    Route::get('/my-notifications/bell', [\App\Http\Controllers\StaffNotificationController::class, 'bell'])->name('secretary.my-notifications.bell');
+    Route::post('/my-notifications/{id}/read', [\App\Http\Controllers\StaffNotificationController::class, 'markRead'])->whereNumber('id')->name('secretary.my-notifications.read');
+    Route::post('/my-notifications/read-all', [\App\Http\Controllers\StaffNotificationController::class, 'markAllRead'])->name('secretary.my-notifications.readAll');
+
     // ─── Notifications ──────────────────────────────────────
     Route::get('/notifications', [SecretaryNotificationController::class, 'index'])->name('secretary.notifications.index');
     Route::post('/notifications/mark-all-read', [SecretaryNotificationController::class, 'markAllRead'])->name('secretary.notifications.markAllRead');

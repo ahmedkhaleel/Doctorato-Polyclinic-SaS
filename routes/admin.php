@@ -128,6 +128,12 @@ Route::middleware('admin.auth')->group(function () {
     // ─── Locale Switching ─────────────────────────────────────
     Route::post('/switch-locale', [SettingController::class, 'switchLocale'])->name('admin.switchLocale');
 
+    // ─── Unified Hub in-app feed (bell) ──────────────────────
+    Route::get('/my-notifications', [\App\Http\Controllers\StaffNotificationController::class, 'index'])->defaults('panel', 'admin')->name('admin.my-notifications.index');
+    Route::get('/my-notifications/bell', [\App\Http\Controllers\StaffNotificationController::class, 'bell'])->name('admin.my-notifications.bell');
+    Route::post('/my-notifications/{id}/read', [\App\Http\Controllers\StaffNotificationController::class, 'markRead'])->whereNumber('id')->name('admin.my-notifications.read');
+    Route::post('/my-notifications/read-all', [\App\Http\Controllers\StaffNotificationController::class, 'markAllRead'])->name('admin.my-notifications.readAll');
+
     // ─── Notifications ───────────────────────────────────────
     Route::get('/notifications', [NotificationController::class, 'index'])->name('admin.notifications.index');
     Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllRead'])->name('admin.notifications.markAllRead');

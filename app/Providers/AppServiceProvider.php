@@ -58,6 +58,7 @@ class AppServiceProvider extends ServiceProvider
         // Booking lifecycle
         Event::listen(BookingCreated::class, SendBookingNotification::class);
         Event::listen(BookingCreated::class, ApplyReferralReward::class);
+        Event::listen(BookingCreated::class, \App\Listeners\NotifyStaffOnBooking::class);
         Event::listen(BookingConfirmed::class, SendBookingConfirmedSms::class);
         Event::listen(BookingConfirmed::class, SendBookingConfirmedEmail::class);
         Event::listen(BookingCancelled::class, SendBookingCancelledEmail::class);

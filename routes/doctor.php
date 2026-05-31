@@ -64,6 +64,12 @@ Route::middleware('doctor.auth')->group(function () {
     // ─── Dashboard ──────────────────────────────────────────
     Route::get('/', [DoctorDashboardController::class, 'index'])->name('doctor.dashboard');
 
+    // ─── Unified Hub in-app feed (bell) ─────────────────────
+    Route::get('/my-notifications', [\App\Http\Controllers\StaffNotificationController::class, 'index'])->defaults('panel', 'doctor')->name('doctor.my-notifications.index');
+    Route::get('/my-notifications/bell', [\App\Http\Controllers\StaffNotificationController::class, 'bell'])->name('doctor.my-notifications.bell');
+    Route::post('/my-notifications/{id}/read', [\App\Http\Controllers\StaffNotificationController::class, 'markRead'])->whereNumber('id')->name('doctor.my-notifications.read');
+    Route::post('/my-notifications/read-all', [\App\Http\Controllers\StaffNotificationController::class, 'markAllRead'])->name('doctor.my-notifications.readAll');
+
     // ─── Notifications ──────────────────────────────────────
     Route::get('/notifications', [DoctorNotificationController::class, 'index'])->name('doctor.notifications.index');
     Route::get('/notifications/history', [DoctorNotificationController::class, 'history'])->name('doctor.notifications.history');

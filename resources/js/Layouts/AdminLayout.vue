@@ -328,6 +328,7 @@ const navGroups = [
             { labelEn: 'Users',          labelAr: 'المستخدمين',    href: '/admin/users',              icon: 'users',    permission: 'users.view' },
             { labelEn: 'Roles',          labelAr: 'الصلاحيات',     href: '/admin/roles',              icon: 'shield',   permission: 'roles.view' },
             { labelEn: 'Diagnostics',    labelAr: 'التشخيص',        href: '/admin/diagnostics',        icon: 'activity', permission: 'settings.view' },
+            { labelEn: 'My Notifications', labelAr: 'إشعاراتي', href: '/admin/my-notifications', icon: 'bellCenter', permission: null },
             { labelEn: 'Notifications Hub', labelAr: 'مركز الإشعارات الموحد', href: '/admin/notifications-hub', icon: 'megaphone', permission: 'notifications.view' },
             { labelEn: 'Delivery Log',   labelAr: 'سجل الإرسال',   href: '/admin/notifications-hub/logs', icon: 'activity', permission: 'notifications.view' },
             { labelEn: 'SMS Templates',  labelAr: 'قوالب الرسائل', href: '/admin/sms-templates',      icon: 'chat',     permission: 'settings.view' },
