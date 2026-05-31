@@ -3,8 +3,10 @@ import { computed, ref, onMounted } from 'vue';
 import { Link, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { useCurrency } from '@/Composables/useCurrency.js';
+import { usePermissions } from '@/Composables/usePermissions.js';
 
 const { formatCurrency, currencyCode } = useCurrency();
+const { can } = usePermissions();
 
 /* ── Page-load orchestration ─────────────────────────────── */
 const mounted = ref(false);
@@ -57,6 +59,44 @@ const props = defineProps({
     dental: Object,
     pediatric: Object,
     engagement: { type: Object, default: null },
+});
+
+/* ── Quick Access tiles ───────────────────────────────────────
+   Surfaces every major area from the dashboard, gated by permission
+   and enabled module so nothing built stays hidden. branchesEnabled
+   comes from shared props. */
+const branchesEnabled = computed(() => !!page.props.branch?.enabled);
+const modEnabled = (key) => modules.value?.[key]?.enabled || modules.value?.[key]?.is_core;
+
+const quickLinks = computed(() => {
+    const L = [
+        { ar: 'الحجوزات', en: 'Bookings', href: '/admin/bookings', color: '#1B365D', show: can('bookings.view') },
+        { ar: 'المرضى', en: 'Patients', href: '/admin/patients', color: '#0EA5E9', show: can('patients.view') },
+        { ar: 'الزيارات', en: 'Visits', href: '/admin/visits', color: '#6366F1', show: can('visits.view') },
+        { ar: 'طابور اليوم', en: "Today's Queue", href: '/admin/visits/today-queue', color: '#8B5CF6', show: can('visits.view') },
+        { ar: 'الفواتير', en: 'Invoices', href: '/admin/invoices', color: '#16A34A', show: can('invoices.view') },
+        { ar: 'المدفوعات', en: 'Payments', href: '/admin/payments', color: '#059669', show: can('payments.view') },
+        { ar: 'CRM / العملاء', en: 'CRM / Leads', href: '/admin/leads', color: '#F59E0B', show: can('leads.view') },
+        { ar: 'خط الأنابيب', en: 'Pipeline', href: '/admin/leads/pipeline', color: '#D97706', show: can('leads.view') },
+        { ar: 'مركز الإشعارات', en: 'Notifications Hub', href: '/admin/notifications-hub', color: '#DB2777', show: can('notifications.view') },
+        { ar: 'المخزون', en: 'Inventory', href: '/admin/inventory', color: '#0891B2', show: can('inventory.view') && modEnabled('inventory') },
+        { ar: 'التأمين', en: 'Insurance', href: '/admin/insurance/claims', color: '#7C3AED', show: can('insurance.view') },
+        { ar: 'الولاء', en: 'Loyalty', href: '/admin/loyalty', color: '#CA8A04', show: can('loyalty.view') },
+        { ar: 'الموارد البشرية', en: 'HR', href: '/admin/hr-dashboard', color: '#EA580C', show: can('hr.view') && modEnabled('hr') },
+        { ar: 'الأطباء', en: 'Doctors', href: '/admin/doctors', color: '#2563EB', show: can('doctors.view') },
+        { ar: 'الجداول', en: 'Schedules', href: '/admin/schedules', color: '#4F46E5', show: can('doctors.view') },
+        { ar: 'التقارير', en: 'Reports', href: '/admin/reports', color: '#0D9488', show: can('reports.view') },
+        { ar: 'مقارنة الفروع', en: 'Branch Comparison', href: '/admin/reports/branch-comparison', color: '#C4A265', show: can('reports.view') && branchesEnabled.value },
+        { ar: 'الفروع', en: 'Branches', href: '/admin/branches', color: '#1B365D', show: can('settings.view') && branchesEnabled.value },
+        // Medical modules
+        { ar: 'الأسنان', en: 'Dental', href: '/admin/dental', color: '#0EA5E9', show: can('dental.view') && modEnabled('dental') },
+        { ar: 'الجلدية والتجميل', en: 'Derma & Cosmetic', href: '/admin/derma', color: '#C4A265', show: can('derma.view') && modEnabled('derma') },
+        { ar: 'الأطفال', en: 'Pediatric', href: '/admin/pediatric', color: '#F472B6', show: can('pediatric.view') && modEnabled('pediatric') },
+        { ar: 'النساء والتوليد', en: 'OB/GYN', href: '/admin/obgyn', color: '#BE185D', show: can('obgyn.view') && modEnabled('obgyn') },
+        { ar: 'الاستشارات الأونلاين', en: 'Telemedicine', href: '/admin/online-consultations', color: '#0284C7', show: modEnabled('telemedicine') },
+        { ar: 'الإعدادات', en: 'Settings', href: '/admin/settings', color: '#64748B', show: can('settings.view') },
+    ];
+    return L.filter(l => l.show);
 });
 
 /* ── Helpers ─────────────────────────────────────────────── */
@@ -393,6 +433,18 @@ function labelX(index, total) {
                         </div>
                     </div>
                 </component>
+            </div>
+
+            <!-- ── Quick Access ───────────────────────────────── -->
+            <div class="dash-stagger" style="--i:1">
+                <h3 class="text-sm font-semibold text-gray-700 mb-3">{{ isRtl ? 'وصول سريع' : 'Quick Access' }}</h3>
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2.5">
+                    <Link v-for="q in quickLinks" :key="q.href" :href="q.href"
+                          class="qa-tile group flex items-center gap-2.5 rounded-xl bg-white border border-gray-100 px-3 py-3 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
+                        <span class="qa-dot w-2.5 h-2.5 rounded-full flex-shrink-0" :style="{ backgroundColor: q.color }"></span>
+                        <span class="text-[13px] font-semibold text-gray-700 group-hover:text-[#1B365D] truncate">{{ isRtl ? q.ar : q.en }}</span>
+                    </Link>
+                </div>
             </div>
 
             <!-- ── Revenue by Department ──────────────────────── -->
@@ -1149,5 +1201,7 @@ function labelX(index, total) {
     .dash-hero-ecg-path { animation: none; }
     .dash-kpi:hover { transform: none; }
     .dash-kpi::after { display: none; }
+    .qa-tile { transition: none; }
+    .qa-tile:hover { transform: none; }
 }
 </style>

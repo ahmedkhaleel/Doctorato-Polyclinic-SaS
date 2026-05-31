@@ -221,6 +221,8 @@ const navGroups = [
             { labelEn: 'Derma Sessions',     labelAr: 'جلسات العلاج الجلدي', href: '/admin/derma/sessions',                 icon: 'activity',  permission: 'derma.view' },
             { labelEn: 'Rx Templates',       labelAr: 'قوالب الوصفات',       href: '/admin/derma/prescription-templates',   icon: 'file-text', permission: 'derma.view' },
             // ─── Cosmetic ─────────────────────────────────────────
+            { labelEn: 'Cosmetic Dashboard',  labelAr: 'لوحة التجميل',       href: '/admin/cosmetic',                       icon: 'grid',      permission: 'derma.view' },
+            { labelEn: 'Cosmetic Patients',   labelAr: 'مرضى التجميل',       href: '/admin/cosmetic/patients',              icon: 'heart',     permission: 'derma.view' },
             { labelEn: 'Cosmetic Procedures', labelAr: 'إجراءات التجميل',    href: '/admin/cosmetic/procedures',            icon: 'sparkles',  permission: 'derma.view' },
             { labelEn: 'Cosmetic Packages',   labelAr: 'باقات التجميل',      href: '/admin/cosmetic/packages',              icon: 'layers',    permission: 'derma.view' },
             { labelEn: 'Package Purchases',   labelAr: 'اشتراكات الباقات',   href: '/admin/cosmetic/package-purchases',     icon: 'receipt',   permission: 'derma.view' },
@@ -336,6 +338,8 @@ const navGroups = [
             { labelEn: 'Campaigns', labelAr: 'حملات الإشعارات', href: '/admin/notification-campaigns', icon: 'megaphone', permission: 'notifications.view' },
             { labelEn: 'Drip Sequences', labelAr: 'سلاسل التنقيط', href: '/admin/notification-sequences', icon: 'automation', permission: 'notifications.view' },
             { labelEn: 'Delivery Log',   labelAr: 'سجل الإرسال',   href: '/admin/notifications-hub/logs', icon: 'activity', permission: 'notifications.view' },
+            { labelEn: 'Hub Analytics',  labelAr: 'تحليلات الإشعارات', href: '/admin/notifications-hub/analytics', icon: 'chartUp', permission: 'notifications.view' },
+            { labelEn: 'WhatsApp Templates', labelAr: 'قوالب واتساب', href: '/admin/notifications-hub/whatsapp-templates', icon: 'chat', permission: 'notifications.view' },
             { labelEn: 'SMS Templates',  labelAr: 'قوالب الرسائل', href: '/admin/sms-templates',      icon: 'chat',     permission: 'settings.view' },
             { labelEn: 'Branches',       labelAr: 'الفروع',        href: '/admin/branches',           icon: 'building', permission: 'settings.view' },
             { labelEn: 'Settings',       labelAr: 'الإعدادات',     href: '/admin/settings',           icon: 'cog',      permission: 'settings.view' },
