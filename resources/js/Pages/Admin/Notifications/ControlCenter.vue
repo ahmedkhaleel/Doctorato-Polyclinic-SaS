@@ -123,6 +123,7 @@ const settingsForm = reactive({
     notifications_marketing_weekly_cap: props.globalSettings.notifications_marketing_weekly_cap,
     notifications_smart_routing: props.globalSettings.notifications_smart_routing,
     notifications_monthly_cost_cap: props.globalSettings.notifications_monthly_cost_cap,
+    notifications_smart_send_time: props.globalSettings.notifications_smart_send_time,
 });
 function saveSettings() {
     router.post('/admin/notifications-hub/settings', settingsForm, { preserveScroll: true });
@@ -408,6 +409,10 @@ const statusColor = (ch) => (channelMeta[ch]?.color || '#64748B');
                             <label class="flex items-center gap-2 pt-1">
                                 <input type="checkbox" v-model="settingsForm.notifications_smart_routing" :disabled="!canEdit" class="rounded text-[#1B365D]" />
                                 <span class="text-sm text-gray-700">{{ t('التوجيه الذكي (ترتيب القنوات حسب تفاعل كل مريض)', 'Smart routing (order channels by each patient\'s engagement)') }}</span>
+                            </label>
+                            <label class="flex items-center gap-2">
+                                <input type="checkbox" v-model="settingsForm.notifications_smart_send_time" :disabled="!canEdit" class="rounded text-[#1B365D]" />
+                                <span class="text-sm text-gray-700">{{ t('التوقيت الذكي للرسائل التسويقية (أفضل وقت قراءة)', 'Smart send-time for marketing (best read-hour)') }}</span>
                             </label>
                             <label class="block">
                                 <span class="text-xs text-gray-500">{{ t('رمز تحقق Webhook لواتساب', 'WhatsApp webhook verify token') }}</span>

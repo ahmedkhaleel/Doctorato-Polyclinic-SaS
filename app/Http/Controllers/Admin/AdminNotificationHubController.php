@@ -107,6 +107,7 @@ class AdminNotificationHubController extends Controller
                 'notifications_marketing_weekly_cap' => (int) Setting::get('notifications_marketing_weekly_cap', '0'),
                 'notifications_smart_routing' => Setting::get('notifications_smart_routing', '0') === '1',
                 'notifications_monthly_cost_cap' => (float) Setting::get('notifications_monthly_cost_cap', '0'),
+                'notifications_smart_send_time' => Setting::get('notifications_smart_send_time', '0') === '1',
             ],
             'stats' => $this->stats(),
         ]);
@@ -314,10 +315,14 @@ class AdminNotificationHubController extends Controller
             'notifications_marketing_weekly_cap' => 'nullable|integer|min:0',
             'notifications_smart_routing' => 'nullable|boolean',
             'notifications_monthly_cost_cap' => 'nullable|numeric|min:0',
+            'notifications_smart_send_time' => 'nullable|boolean',
         ]);
 
         if (array_key_exists('notifications_monthly_cost_cap', $data)) {
             Setting::set('notifications_monthly_cost_cap', (string) ($data['notifications_monthly_cost_cap'] ?? 0));
+        }
+        if (array_key_exists('notifications_smart_send_time', $data)) {
+            Setting::set('notifications_smart_send_time', $request->boolean('notifications_smart_send_time') ? '1' : '0');
         }
 
         if (array_key_exists('notifications_smart_routing', $data)) {

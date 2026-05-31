@@ -63,6 +63,26 @@ class NotificationService
             return [];
         }
 
+        // Smart send-time: hold MARKETING for the recipient's best read-hour
+        // (opt-in setting). Only when meaningfully in the future; never reminders.
+        if ($allowDefer && $forceChannels === null && $recipient && $event->category === 'marketing'
+            && \App\Models\Setting::get('notifications_smart_send_time') === '1') {
+            $sendAt = app(SmartSendTimeService::class)->bestSendAt($recipient);
+            if ($sendAt && $sendAt->isFuture() && now()->diffInMinutes($sendAt, false) > 10) {
+                \App\Models\ScheduledNotification::create([
+                    'event_key' => $eventKey,
+                    'recipient_type' => $recipient->getMorphClass(),
+                    'recipient_id' => $recipient->getKey(),
+                    'data' => $data,
+                    'channels' => null,
+                    'reason' => 'smart_time',
+                    'send_after' => $sendAt,
+                ]);
+
+                return [];
+            }
+        }
+
         $channels = $forceChannels !== null
             ? $forceChannels
             : NotificationChannelRoute::where('event_key', $eventKey)
