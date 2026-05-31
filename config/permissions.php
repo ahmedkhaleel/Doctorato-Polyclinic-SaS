@@ -109,6 +109,18 @@ return [
             'group' => 'clinic',
             'actions' => ['view', 'create', 'update', 'delete'],
         ],
+        'recall' => [
+            'label_en' => 'Patient Recall',
+            'label_ar' => 'استدعاء المرضى',
+            'group' => 'clinic',
+            'actions' => ['view', 'send'],
+        ],
+        'telemedicine' => [
+            'label_en' => 'Telemedicine / Online Consultations',
+            'label_ar' => 'التطبيب عن بُعد',
+            'group' => 'clinic',
+            'actions' => ['view', 'manage'],
+        ],
 
         // ─── Finance & Billing ─────────────────────────────────
         'invoices' => [
@@ -257,7 +269,7 @@ return [
             'label_en' => 'Loyalty & Referrals',
             'label_ar' => 'الولاء والإحالات',
             'group' => 'crm',
-            'actions' => ['view'],
+            'actions' => ['view', 'manage'],
         ],
         'lead_activities' => [
             'label_en' => 'Lead Activities',
@@ -490,6 +502,12 @@ return [
         ],
 
         // ─── System & Settings ─────────────────────────────────
+        'branches' => [
+            'label_en' => 'Branches',
+            'label_ar' => 'الفروع',
+            'group' => 'system',
+            'actions' => ['view', 'manage'],
+        ],
         'users' => [
             'label_en' => 'Users',
             'label_ar' => 'المستخدمين',

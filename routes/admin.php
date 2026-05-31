@@ -124,11 +124,11 @@ Route::middleware(['admin.auth', 'branch.context'])->group(function () {
 
     // ─── Branch switch + registry (multi-branch) ─────────────
     Route::post('/switch-branch', [\App\Http\Controllers\Admin\BranchSwitchController::class, 'switch'])->name('admin.switch-branch');
-    Route::get('/branches', [\App\Http\Controllers\Admin\AdminBranchController::class, 'index'])->name('admin.branches.index')->middleware('permission:settings.view');
-    Route::post('/branches', [\App\Http\Controllers\Admin\AdminBranchController::class, 'store'])->name('admin.branches.store')->middleware('permission:settings.update');
-    Route::post('/branches/{branch}/update', [\App\Http\Controllers\Admin\AdminBranchController::class, 'update'])->name('admin.branches.update')->middleware('permission:settings.update');
-    Route::post('/branches/{branch}/delete', [\App\Http\Controllers\Admin\AdminBranchController::class, 'destroy'])->name('admin.branches.destroy')->middleware('permission:settings.update');
-    Route::post('/branches/{branch}/members', [\App\Http\Controllers\Admin\AdminBranchController::class, 'syncMembers'])->name('admin.branches.members')->middleware('permission:settings.update');
+    Route::get('/branches', [\App\Http\Controllers\Admin\AdminBranchController::class, 'index'])->name('admin.branches.index')->middleware('permission:branches.view,settings.view');
+    Route::post('/branches', [\App\Http\Controllers\Admin\AdminBranchController::class, 'store'])->name('admin.branches.store')->middleware('permission:branches.manage,settings.update');
+    Route::post('/branches/{branch}/update', [\App\Http\Controllers\Admin\AdminBranchController::class, 'update'])->name('admin.branches.update')->middleware('permission:branches.manage,settings.update');
+    Route::post('/branches/{branch}/delete', [\App\Http\Controllers\Admin\AdminBranchController::class, 'destroy'])->name('admin.branches.destroy')->middleware('permission:branches.manage,settings.update');
+    Route::post('/branches/{branch}/members', [\App\Http\Controllers\Admin\AdminBranchController::class, 'syncMembers'])->name('admin.branches.members')->middleware('permission:branches.manage,settings.update');
 
     // Dashboard (all authenticated users)
     Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
@@ -355,24 +355,24 @@ Route::middleware(['admin.auth', 'branch.context'])->group(function () {
 
     // ─── Loyalty Points (admin oversight + manual adjustments) ─
     Route::get('/loyalty', [\App\Http\Controllers\Admin\LoyaltyController::class, 'index'])
-        ->name('admin.loyalty.index')->middleware('permission:patients.view');
+        ->name('admin.loyalty.index')->middleware('permission:loyalty.view,patients.view');
     Route::post('/loyalty/settings', [\App\Http\Controllers\Admin\LoyaltyController::class, 'updateSettings'])
-        ->name('admin.loyalty.settings')->middleware('permission:settings.update');
+        ->name('admin.loyalty.settings')->middleware('permission:loyalty.manage,settings.update');
     Route::get('/loyalty/{patient}', [\App\Http\Controllers\Admin\LoyaltyController::class, 'show'])
-        ->name('admin.loyalty.show')->middleware('permission:patients.view');
+        ->name('admin.loyalty.show')->middleware('permission:loyalty.view,patients.view');
     Route::post('/loyalty/{patient}/adjust', [\App\Http\Controllers\Admin\LoyaltyController::class, 'adjust'])
-        ->name('admin.loyalty.adjust')->middleware('permission:patients.update');
+        ->name('admin.loyalty.adjust')->middleware('permission:loyalty.manage,patients.update');
 
     // ─── Patient Referrals (admin oversight, read-only) ────────
     Route::get('/patient-referrals', [\App\Http\Controllers\Admin\PatientReferralController::class, 'index'])
-        ->name('admin.patient-referrals.index')->middleware('permission:patients.view');
+        ->name('admin.patient-referrals.index')->middleware('permission:referrals.view,patients.view');
 
     // ─── Patient Recall (lapsed patients to bring back) ────────
     Route::get('/recall', [\App\Http\Controllers\Admin\RecallController::class, 'index'])
-        ->name('admin.recall.index')->middleware('permission:patients.view');
+        ->name('admin.recall.index')->middleware('permission:recall.view,patients.view');
     Route::post('/recall/send-sms', [\App\Http\Controllers\Admin\RecallController::class, 'sendBulkSms'])
         ->name('admin.recall.send-sms')
-        ->middleware(['permission:patients.update', 'throttle:3,15']);
+        ->middleware(['permission:recall.send,patients.update', 'throttle:3,15']);
 
     // ─── Diagnostics (self-service system health) ──────────
     Route::get('/diagnostics', [\App\Http\Controllers\Admin\DiagnosticsController::class, 'show'])
@@ -806,10 +806,10 @@ Route::middleware(['admin.auth', 'branch.context'])->group(function () {
     // Admin Online Consultations Dashboard
     Route::get('/online-consultations', [\App\Http\Controllers\Admin\OnlineConsultationController::class, 'index'])
         ->name('admin.online-consultations.index')
-        ->middleware('permission:visits.view');
+        ->middleware('permission:telemedicine.view,visits.view');
     Route::get('/online-consultations/doctors', [\App\Http\Controllers\Admin\OnlineConsultationController::class, 'doctors'])
         ->name('admin.online-consultations.doctors')
-        ->middleware('permission:visits.view');
+        ->middleware('permission:telemedicine.view,visits.view');
     Route::get('/online-consultations/{consultation}', [\App\Http\Controllers\Admin\OnlineConsultationController::class, 'show'])
         ->name('admin.online-consultations.show')
         ->middleware('permission:visits.view');
@@ -1015,7 +1015,7 @@ Route::middleware(['admin.auth', 'branch.context'])->group(function () {
     // ═══════════════════════════════════════════════════════════
     // ═══ PATIENT SATISFACTION ═════════════════════════════════
     // ═══════════════════════════════════════════════════════════
-    Route::get('/satisfaction', [PatientSatisfactionController::class, 'index'])->name('admin.satisfaction.index')->middleware('permission:reports.view');
+    Route::get('/satisfaction', [PatientSatisfactionController::class, 'index'])->name('admin.satisfaction.index')->middleware('permission:satisfaction.view,reports.view');
 
     // ═══════════════════════════════════════════════════════════
     // ═══ REFERRALS ═════════════════════════════════════════════

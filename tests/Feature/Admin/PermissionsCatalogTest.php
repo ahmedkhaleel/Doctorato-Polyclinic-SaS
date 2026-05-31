@@ -36,8 +36,8 @@ class PermissionsCatalogTest extends TestCase
         $found = [];
 
         $patterns = [
-            // permission:module.action  (route middleware)
-            ['#permission:([a-z_]+\.[a-z_]+)#', [base_path('routes')]],
+            // permission:a.b  or  permission:a.b,c.d  (route middleware, OR-list)
+            ['#permission:((?:[a-z_]+\.[a-z_]+)(?:,[a-z_]+\.[a-z_]+)*)#', [base_path('routes')]],
             // can('module.action') / hasPermission('module.action')
             ['#(?:can|hasPermission)\(\s*[\'\"]([a-z_]+\.[a-z_]+)[\'\"]#', [base_path('app'), base_path('resources/js')]],
             // sidebar nav: permission: 'module.action'
@@ -57,7 +57,10 @@ class PermissionsCatalogTest extends TestCase
                     }
                     if (preg_match_all($regex, file_get_contents($file->getPathname()), $m)) {
                         foreach ($m[1] as $perm) {
-                            $found[$perm] = true;
+                            // OR-lists (a.b,c.d) → split into individual permissions
+                            foreach (explode(',', $perm) as $single) {
+                                $found[trim($single)] = true;
+                            }
                         }
                     }
                 }
