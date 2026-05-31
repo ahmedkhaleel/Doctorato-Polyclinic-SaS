@@ -117,6 +117,39 @@ class Doctor extends Model
             ->where('status', 'active');
     }
 
+    protected static function booted(): void
+    {
+        // Multi-branch: every new doctor is assigned to the default branch so
+        // they always have at least one branch (mirrors the B3 backfill).
+        static::created(function (self $doctor) {
+            try {
+                if (\Illuminate\Support\Facades\Schema::hasTable('branch_doctor') && ! $doctor->branches()->exists()) {
+                    $doctor->branches()->attach((int) config('branches.default_id', 1));
+                }
+            } catch (\Throwable $e) {
+                // table not ready (early migrations) — ignore
+            }
+        });
+    }
+
+    // ─── Branch (multi-branch) ──────────────────────────
+
+    public function branches()
+    {
+        return $this->belongsToMany(Branch::class, 'branch_doctor')->withTimestamps();
+    }
+
+    /** Branch ids this doctor practises at (for slot/schedule resolution). */
+    public function branchIds(): array
+    {
+        return $this->branches()->pluck('branches.id')->map(fn ($id) => (int) $id)->all();
+    }
+
+    public function practisesAtBranch(int $branchId): bool
+    {
+        return $this->branches()->where('branches.id', $branchId)->exists();
+    }
+
     // ─── Clinic Relationships ───────────────────────────
 
     public function user()
