@@ -24,13 +24,13 @@ class HealthController extends Controller
     public function __invoke(): JsonResponse
     {
         $report = [
-            'ok'        => true,
+            'ok' => true,
             'timestamp' => now()->toIso8601String(),
-            'app'       => [
-                'env'   => app()->environment(),
+            'app' => [
+                'env' => app()->environment(),
                 'debug' => (bool) config('app.debug'),
             ],
-            'checks'    => [],
+            'checks' => [],
         ];
 
         // ── DB ────────────────────────────────────────────
@@ -44,7 +44,7 @@ class HealthController extends Controller
 
         // ── Telemedicine ──────────────────────────────────
         if (ModuleManager::isEnabled('telemedicine')) {
-            $onlineDoctors   = Doctor::onlineEnabled()->count();
+            $onlineDoctors = Doctor::onlineEnabled()->count();
             $onlineSchedules = DoctorSchedule::whereIn('mode', ['online', 'both'])
                 ->where('is_active', true)
                 ->count();
@@ -52,11 +52,11 @@ class HealthController extends Controller
             $gateway = app(PaymentGatewayManager::class)->getActive();
 
             $report['checks']['telemedicine'] = [
-                'ok'                 => $onlineDoctors > 0 && $onlineSchedules > 0 && $gateway !== null,
-                'module_enabled'     => true,
-                'doctors_online'     => $onlineDoctors,
+                'ok' => $onlineDoctors > 0 && $onlineSchedules > 0 && $gateway !== null,
+                'module_enabled' => true,
+                'doctors_online' => $onlineDoctors,
                 'schedules_bookable' => $onlineSchedules,
-                'payment_gateway'    => $gateway ? class_basename($gateway) : null,
+                'payment_gateway' => $gateway ? class_basename($gateway) : null,
             ];
 
             if (! $report['checks']['telemedicine']['ok']) {
@@ -72,6 +72,13 @@ class HealthController extends Controller
         ];
         if (! $report['checks']['storage_writable']['ok']) {
             $report['ok'] = false;
+        }
+
+        // ── Notifications pipeline (informational — does not flip 503) ──
+        try {
+            $report['checks']['notifications'] = app(\App\Services\Notifications\NotificationHealthService::class)->report();
+        } catch (\Throwable $e) {
+            $report['checks']['notifications'] = ['ok' => true, 'error' => 'unavailable'];
         }
 
         return response()->json($report, $report['ok'] ? 200 : 503);

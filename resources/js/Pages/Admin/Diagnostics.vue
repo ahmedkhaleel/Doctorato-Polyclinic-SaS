@@ -9,6 +9,7 @@ const props = defineProps({
     system: Object,
     telemedicine: Object,
     scheduler: Object,
+    notifications: Object,
     log_tail: String,
 });
 
@@ -213,6 +214,39 @@ const blockerLabels = {
                 <code v-if="!scheduler.is_healthy" class="mt-2 block text-xs p-2 bg-slate-900 text-emerald-300 rounded font-mono overflow-x-auto whitespace-nowrap">
                     * * * * * cd /home/doctoratonet/public_html && /usr/bin/php artisan schedule:run &gt;&gt; /dev/null 2&gt;&amp;1
                 </code>
+            </div>
+
+            <!-- Notifications pipeline -->
+            <div v-if="notifications" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+                <div class="flex items-center gap-2 mb-4">
+                    <svg class="w-5 h-5" :class="notifications.ok ? 'text-emerald-600' : 'text-red-600'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.4-1.4A2 2 0 0118 14.2V11a6 6 0 10-12 0v3.2c0 .5-.2 1-.6 1.4L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+                    </svg>
+                    <h3 class="font-bold text-slate-800">{{ isRtl ? 'خط الإشعارات' : 'Notifications pipeline' }}</h3>
+                </div>
+                <dl class="space-y-2 text-sm">
+                    <div class="flex items-center justify-between">
+                        <dt class="text-slate-500">{{ isRtl ? 'الحالة' : 'Status' }}</dt>
+                        <dd :class="notifications.ok ? 'text-emerald-600 font-semibold' : 'text-red-600 font-semibold'">
+                            {{ notifications.ok ? '✓ ' + (isRtl ? 'سليم' : 'healthy') : '✗ ' + (isRtl ? 'يحتاج انتباه' : 'needs attention') }}
+                        </dd>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <dt class="text-slate-500">{{ isRtl ? 'متراكم في الطابور (>ساعة)' : 'Queue backlog (>1h)' }}</dt>
+                        <dd :class="notifications.queue_backlog > 0 ? 'text-red-600 font-semibold' : 'text-slate-800'">{{ notifications.queue_backlog }}</dd>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <dt class="text-slate-500">{{ isRtl ? 'أُرسلت / فشلت (24س)' : 'Sent / failed (24h)' }}</dt>
+                        <dd class="text-slate-800">{{ notifications.sent_24h }} / <span :class="notifications.failed_24h > 0 ? 'text-red-600' : ''">{{ notifications.failed_24h }}</span> ({{ notifications.failure_rate }}%)</dd>
+                    </div>
+                    <div v-if="notifications.channels_unconfigured && notifications.channels_unconfigured.length" class="flex items-center justify-between">
+                        <dt class="text-slate-500">{{ isRtl ? 'قنوات مفعّلة بلا إعداد' : 'Enabled but unconfigured' }}</dt>
+                        <dd class="text-amber-600 font-semibold">{{ notifications.channels_unconfigured.join(', ') }}</dd>
+                    </div>
+                </dl>
+                <p v-if="notifications.queue_backlog > 0" class="text-xs text-amber-700 mt-3 pt-3 border-t border-amber-100">
+                    {{ isRtl ? 'تراكم رسائل = عامل الطابور متوقف. شغّل: php artisan queue:work (أو عبر supervisor/cron).' : 'Backlog = the queue worker is down. Run: php artisan queue:work (or via supervisor/cron).' }}
+                </p>
             </div>
 
             <!-- Log tail -->

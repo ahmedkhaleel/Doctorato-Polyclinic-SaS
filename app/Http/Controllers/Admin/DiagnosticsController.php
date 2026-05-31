@@ -27,17 +27,25 @@ class DiagnosticsController extends Controller
     public function show()
     {
         // ── System state ───────────────────────────────────
-        $moduleEnabled     = ModuleManager::isEnabled('telemedicine');
-        $gateway           = app(PaymentGatewayManager::class)->getActive();
-        $doctorsOnline     = Doctor::onlineEnabled()->count();
+        $moduleEnabled = ModuleManager::isEnabled('telemedicine');
+        $gateway = app(PaymentGatewayManager::class)->getActive();
+        $doctorsOnline = Doctor::onlineEnabled()->count();
         $schedulesBookable = DoctorSchedule::whereIn('mode', ['online', 'both'])
             ->where('is_active', true)->count();
 
         $blockers = [];
-        if (!$moduleEnabled)                $blockers[] = 'module_disabled';
-        if (!$gateway)                      $blockers[] = 'no_payment_gateway';
-        if ($doctorsOnline === 0)           $blockers[] = 'no_online_doctors';
-        if ($schedulesBookable === 0)       $blockers[] = 'no_bookable_schedules';
+        if (! $moduleEnabled) {
+            $blockers[] = 'module_disabled';
+        }
+        if (! $gateway) {
+            $blockers[] = 'no_payment_gateway';
+        }
+        if ($doctorsOnline === 0) {
+            $blockers[] = 'no_online_doctors';
+        }
+        if ($schedulesBookable === 0) {
+            $blockers[] = 'no_bookable_schedules';
+        }
 
         // ── DB connectivity ────────────────────────────────
         try {
@@ -59,7 +67,7 @@ class DiagnosticsController extends Controller
 
         // Fallback: check the default log file mtime (scheduler writes via Log).
         $logFile = storage_path('logs/laravel.log');
-        if (!$schedulerLastRun && File::exists($logFile)) {
+        if (! $schedulerLastRun && File::exists($logFile)) {
             $schedulerLastRun = filemtime($logFile);
         }
 
@@ -81,27 +89,28 @@ class DiagnosticsController extends Controller
 
         return Inertia::render('Admin/Diagnostics', [
             'system' => [
-                'app_env'          => app()->environment(),
-                'app_debug'        => (bool) config('app.debug'),
-                'php_version'      => PHP_VERSION,
-                'laravel_version'  => app()->version(),
-                'db_connected'     => $dbConnected,
+                'app_env' => app()->environment(),
+                'app_debug' => (bool) config('app.debug'),
+                'php_version' => PHP_VERSION,
+                'laravel_version' => app()->version(),
+                'db_connected' => $dbConnected,
                 'storage_writable' => is_writable(storage_path('logs')) && is_writable(storage_path('framework')),
             ],
             'telemedicine' => [
-                'module_enabled'     => $moduleEnabled,
-                'doctors_online'     => $doctorsOnline,
+                'module_enabled' => $moduleEnabled,
+                'doctors_online' => $doctorsOnline,
                 'schedules_bookable' => $schedulesBookable,
-                'payment_gateway'    => $gateway ? class_basename($gateway) : null,
-                'blockers'           => $blockers,
-                'is_ready'           => empty($blockers),
+                'payment_gateway' => $gateway ? class_basename($gateway) : null,
+                'blockers' => $blockers,
+                'is_ready' => empty($blockers),
             ],
             'scheduler' => [
                 'last_run_at' => $schedulerLastRun ? date('Y-m-d H:i:s', $schedulerLastRun) : null,
                 'minutes_ago' => $schedulerLastRun ? (int) floor((time() - $schedulerLastRun) / 60) : null,
                 // Healthy cron setup runs at least every minute, so >5 min is suspicious
-                'is_healthy'  => $schedulerLastRun && (time() - $schedulerLastRun) < 300,
+                'is_healthy' => $schedulerLastRun && (time() - $schedulerLastRun) < 300,
             ],
+            'notifications' => app(\App\Services\Notifications\NotificationHealthService::class)->report(),
             'log_tail' => $logTail,
         ]);
     }
@@ -114,44 +123,58 @@ class DiagnosticsController extends Controller
      */
     public function export()
     {
-        $moduleEnabled     = ModuleManager::isEnabled('telemedicine');
-        $gateway           = app(PaymentGatewayManager::class)->getActive();
-        $doctorsOnline     = Doctor::onlineEnabled()->count();
+        $moduleEnabled = ModuleManager::isEnabled('telemedicine');
+        $gateway = app(PaymentGatewayManager::class)->getActive();
+        $doctorsOnline = Doctor::onlineEnabled()->count();
         $schedulesBookable = DoctorSchedule::whereIn('mode', ['online', 'both'])
             ->where('is_active', true)->count();
 
         $blockers = [];
-        if (!$moduleEnabled)                $blockers[] = 'module_disabled';
-        if (!$gateway)                      $blockers[] = 'no_payment_gateway';
-        if ($doctorsOnline === 0)           $blockers[] = 'no_online_doctors';
-        if ($schedulesBookable === 0)       $blockers[] = 'no_bookable_schedules';
+        if (! $moduleEnabled) {
+            $blockers[] = 'module_disabled';
+        }
+        if (! $gateway) {
+            $blockers[] = 'no_payment_gateway';
+        }
+        if ($doctorsOnline === 0) {
+            $blockers[] = 'no_online_doctors';
+        }
+        if ($schedulesBookable === 0) {
+            $blockers[] = 'no_bookable_schedules';
+        }
 
-        try { DB::connection()->getPdo(); $dbConnected = true; }
-        catch (\Throwable) { $dbConnected = false; }
+        try {
+            DB::connection()->getPdo();
+            $dbConnected = true;
+        } catch (\Throwable) {
+            $dbConnected = false;
+        }
 
         $payload = [
             'generated_at' => now()->toIso8601String(),
             'app' => [
-                'env'              => app()->environment(),
-                'debug'            => (bool) config('app.debug'),
-                'php_version'      => PHP_VERSION,
-                'laravel_version'  => app()->version(),
+                'env' => app()->environment(),
+                'debug' => (bool) config('app.debug'),
+                'php_version' => PHP_VERSION,
+                'laravel_version' => app()->version(),
             ],
             'system' => [
-                'db_connected'     => $dbConnected,
+                'db_connected' => $dbConnected,
                 'storage_writable' => is_writable(storage_path('logs')),
             ],
             'telemedicine' => [
-                'module_enabled'     => $moduleEnabled,
-                'doctors_online'     => $doctorsOnline,
+                'module_enabled' => $moduleEnabled,
+                'doctors_online' => $doctorsOnline,
                 'schedules_bookable' => $schedulesBookable,
-                'payment_gateway'    => $gateway ? class_basename($gateway) : null,
-                'blockers'           => $blockers,
-                'is_ready'           => empty($blockers),
+                'payment_gateway' => $gateway ? class_basename($gateway) : null,
+                'blockers' => $blockers,
+                'is_ready' => empty($blockers),
             ],
+            'notifications' => app(\App\Services\Notifications\NotificationHealthService::class)->report(),
         ];
 
-        $filename = 'doctorato-diagnostics-' . now()->format('Ymd-His') . '.json';
+        $filename = 'doctorato-diagnostics-'.now()->format('Ymd-His').'.json';
+
         return response()->json($payload, 200, [
             'Content-Disposition' => "attachment; filename=\"{$filename}\"",
         ], JSON_PRETTY_PRINT);
