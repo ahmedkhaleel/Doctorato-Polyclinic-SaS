@@ -58,20 +58,46 @@ Patient routes are the only ones under a `{locale}` prefix — see the
   Different from Carbon's `dayOfWeek` (0=Sun). Use the map in
   `OnlineSlotGeneratorService::carbonToSystemDay()` to translate.
 
-- **Multi-branch** (in progress — see `docs/MULTI_BRANCH_ADR.md` + `_CHECKLIST.md`)
-  — `Branch` model + `branches` table (Main Branch id=1). Scoped models use the
-  `App\Models\Concerns\BelongsToBranch` trait (global scope + auto-stamps
-  `branch_id` from `App\Services\Branch\BranchContext`). **Kill-switch:**
-  `config('branches.enabled')` (env `BRANCHES_ENABLED`, default **false**) — while
-  off the global scope is a no-op (single-clinic behaviour); `branch_id` is still
-  stamped on create. Patients are SHARED (no `branch_id`); services, CRM,
-  suppliers, and notification channels are shared too. Scoped so far: bookings,
-  finance, visits, inventory, doctor-schedules, HR. Staff↔branch via `branch_user`
-  (super_admin sees all); active branch resolved per request by the
-  `branch.context` middleware (session) + `/admin/switch-branch`. To add a domain:
-  migration (nullable `branch_id` + backfill→1 + index) → add the trait to the
-  query-root models → isolation test. Do NOT use perl to insert the trait (the
-  `use ...\BelongsToBranch;` import must be top-of-file, not inside the class).
+- **Multi-branch** (built, behind a kill-switch — see `docs/MULTI_BRANCH_ADR.md`
+  + `_CHECKLIST.md`) — `Branch` model + `branches` table (Main Branch id=1).
+  - **Two traits** (`App\Models\Concerns\…`): `BelongsToBranch` = global scope
+    (filter) **+** stamp-on-create; `StampsBranch` = stamp/attribution only, **no
+    filter** (used by the org-wide notification hub + central CRM `leads`).
+  - **Kill-switch:** `config('branches.enabled')` (env `BRANCHES_ENABLED`, default
+    **false**). While off the global scope is a no-op (single-clinic behaviour);
+    `branch_id` is still stamped so data is ready. Always stamps a CONCRETE branch
+    (`currentId() ?? default`) — never branchless.
+  - **`BranchContext`** resolves the active branch: explicit `set()` → session →
+    default. **Console (cron, `queue:work`, CLI) defaults to ALL-BRANCHES** so jobs
+    process every branch (never silently scope to branch 1). HTTP resolves a
+    concrete branch (`branch.context` middleware / default). Cron paths that CREATE
+    from a parent wrap work in `runForBranch($parent->branch_id, …)` so children
+    inherit the parent's branch (e.g. `CreateDailyVisits`, `DentalFollowupService`).
+  - **Shared, NOT scoped:** patients (+ their records), services/prices, suppliers,
+    notification channels/credentials, CRM pipeline, per-patient clinical state
+    (allergies, obgyn_profiles, odontogram), templates/catalogs.
+  - **Scoped:** bookings, finance, visits, inventory, doctor-schedules, HR, and all
+    clinical EVENT tables (dental/derma/cosmetic/pediatric/obgyn), expenses,
+    insurance, recall/satisfaction.
+  - **Numbering** is branch-aware via `BranchNumber::prefix()` — main branch keeps
+    the legacy `XX-YYYYMM-####`; other branches get `XX-CODE-YYYYMM-####` (no
+    collisions, no index surgery). `file_number` stays global.
+  - **Settings** support per-branch overrides: `settings.branch_id` (0 = global),
+    `Setting::get()` prefers the branch override then falls back to global;
+    `setForBranch()/clearBranchOverride()`. Gated by the kill-switch.
+  - **Staff/doctor↔branch** via `branch_user`/`branch_doctor` (super_admin sees
+    all). Switcher in admin/doctor/secretary headers → per-panel
+    `/{panel}/switch-branch`. Assign members from `/admin/branches` (Members modal).
+  - **Reports:** existing reports auto-scope; `BranchReportService` +
+    `/admin/reports/branch-comparison` give the cross-branch view. `data:integrity-check`
+    flags `branch_id_missing` / `branch_id_orphan`.
+  - **To add a domain:** migration (nullable `branch_id` + backfill→1 + composite
+    index, idempotent) → add `BelongsToBranch` to the query-root models → isolation
+    test (`tests/Feature/Branch/`). Do NOT use perl to insert the trait (the import
+    must be top-of-file; use a standalone `use BelongsToBranch;` line in the class).
+  - **To activate:** assign staff/doctors to branches, set per-branch settings,
+    create the branches, run `data:integrity-check`, then set `BRANCHES_ENABLED=true`
+    on staging and verify end-to-end before production.
 
 - **Telemedicine readiness** — `/health` and the admin Telemedicine
   settings page both compute the same 5-blocker readiness list:
