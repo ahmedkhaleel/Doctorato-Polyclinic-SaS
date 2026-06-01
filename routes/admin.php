@@ -303,6 +303,8 @@ Route::middleware(['admin.auth', 'branch.context'])->group(function () {
         Route::post('/prompts/{prompt}', [$ai, 'updatePrompt'])->name('admin.ai.prompts.update')->middleware('permission:ai.prompts,ai.manage');
         Route::get('/usage', [$ai, 'usage'])->name('admin.ai.usage')->middleware('permission:ai.logs,ai.view');
         Route::get('/logs', [$ai, 'logs'])->name('admin.ai.logs')->middleware('permission:ai.logs,ai.view');
+        Route::get('/insights', [$ai, 'insights'])->name('admin.ai.insights')->middleware('permission:ai.view');
+        Route::post('/insights/ask', [$ai, 'analyticsAsk'])->name('admin.ai.insights.ask')->middleware('permission:ai.view');
 
         // AI Assistant workspace (Wave 1 text tools) + generic generation endpoint.
         $assist = \App\Http\Controllers\Admin\AiAssistController::class;

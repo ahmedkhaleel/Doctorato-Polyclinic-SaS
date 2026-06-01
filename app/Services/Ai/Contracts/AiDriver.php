@@ -12,6 +12,9 @@ interface AiDriver
     /** @param string|array<int,string> $input @return array<int,array<float>> */
     public function embed(string|array $input, array $options = []): array;
 
+    /** Transcribe audio (Whisper). $contents is the raw file bytes. Returns text. */
+    public function transcribe(string $contents, string $filename, array $options = []): string;
+
     /** Lightweight connectivity check. Returns [ok=>bool, message=>string, model=>?string]. */
     public function ping(): array;
 

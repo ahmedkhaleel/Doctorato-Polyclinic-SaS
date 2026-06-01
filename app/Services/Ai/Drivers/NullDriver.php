@@ -18,6 +18,11 @@ class NullDriver implements AiDriver
         throw new AiUnavailableException('disabled', 'AI layer is disabled.');
     }
 
+    public function transcribe(string $contents, string $filename, array $options = []): string
+    {
+        throw new AiUnavailableException('disabled', 'AI layer is disabled.');
+    }
+
     public function ping(): array
     {
         return ['ok' => false, 'message' => 'AI layer is disabled or no API key configured.', 'model' => null];

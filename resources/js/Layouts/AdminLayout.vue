@@ -335,6 +335,7 @@ const navGroups = [
             { labelEn: 'Patient Assistant', labelAr: 'مساعد المريض', href: '/admin/ai/patient-assistant', icon: 'chat', permission: 'ai.view' },
             { labelEn: 'Features',      labelAr: 'الميزات',          href: '/admin/ai/features', icon: 'grid',     permission: 'ai.view' },
             { labelEn: 'Prompts',       labelAr: 'القوالب',          href: '/admin/ai/prompts',  icon: 'document', permission: 'ai.view' },
+            { labelEn: 'Insights (NL)', labelAr: 'تحليلات بلغة طبيعية', href: '/admin/ai/insights', icon: 'chartUp', permission: 'ai.view' },
             { labelEn: 'Usage & Cost',  labelAr: 'الاستهلاك والتكلفة', href: '/admin/ai/usage',   icon: 'chartUp',  permission: 'ai.view' },
             { labelEn: 'Request Logs',  labelAr: 'سجل الطلبات',      href: '/admin/ai/logs',     icon: 'activity', permission: 'ai.view' },
         ],

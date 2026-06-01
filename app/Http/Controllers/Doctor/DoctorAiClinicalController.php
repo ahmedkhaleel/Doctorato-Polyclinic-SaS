@@ -94,6 +94,42 @@ class DoctorAiClinicalController extends BaseDoctorController
         return $this->wrap(fn () => $assistant->report($v['type'], $v['content'], $this->opts($request)));
     }
 
+    /** D12/D16 — image analysis (dental X-ray / dermatology). Advisory. */
+    public function vision(Request $request, \App\Services\Ai\Features\VisionAnalyzer $vision): JsonResponse
+    {
+        $v = $request->validate([
+            'mode' => 'required|in:dental_xray_vision,derma_image_vision',
+            'image' => 'required|image|max:8192',
+            'note' => 'nullable|string|max:500',
+        ]);
+
+        $file = $request->file('image');
+        $dataUri = 'data:'.$file->getMimeType().';base64,'.base64_encode(file_get_contents($file->getRealPath()));
+
+        return $this->wrap(fn () => $vision->analyze($v['mode'], $dataUri, $v['note'] ?? '', $this->opts($request)));
+    }
+
+    /** D14/D20 — audio transcription (Whisper) for dictation / consults. */
+    public function transcribe(Request $request, \App\Services\Ai\Features\Transcriber $transcriber): JsonResponse
+    {
+        $request->validate([
+            'audio' => 'required|file|max:25600|mimes:mp3,mp4,mpeg,mpga,m4a,wav,webm,ogg',
+        ]);
+
+        $file = $request->file('audio');
+        $opts = array_merge($this->opts($request), ['language' => app()->getLocale()]);
+
+        try {
+            $text = $transcriber->transcribe(file_get_contents($file->getRealPath()), $file->getClientOriginalName(), $opts);
+        } catch (AiUnavailableException $e) {
+            return response()->json(['ok' => false, 'reason' => $e->reason, 'message' => $this->reasonMessage($e->reason)], 422);
+        } catch (\Throwable $e) {
+            return response()->json(['ok' => false, 'reason' => 'error', 'message' => $e->getMessage()], 500);
+        }
+
+        return response()->json(['ok' => true, 'text' => $text]);
+    }
+
     // ─── helpers ─────────────────────────────────────────────
     private function opts(Request $request): array
     {

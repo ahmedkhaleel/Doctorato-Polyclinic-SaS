@@ -43,10 +43,13 @@ class AiManager
 
         $this->gate->authorize($feature, $rateKey);
 
-        // Redact PHI from every message before it leaves the system.
+        // Redact PHI from every message before it leaves the system. Vision
+        // messages carry array content (text + image parts) — only redact strings.
         $this->redactor->reset();
         $messages = array_map(function ($m) {
-            $m['content'] = $this->redactor->redact($m['content'] ?? '');
+            if (is_string($m['content'] ?? null)) {
+                $m['content'] = $this->redactor->redact($m['content']);
+            }
 
             return $m;
         }, $messages);
@@ -98,6 +101,31 @@ class AiManager
         $this->gate->authorize(null);
 
         return $this->driver->embed($input, $options);
+    }
+
+    /**
+     * Transcribe audio via Whisper. Gated by the feature flag + budget; logs cost.
+     */
+    public function transcribe(string $feature, string $contents, string $filename, array $options = []): string
+    {
+        $this->gate->authorize($feature, $options['rate_key'] ?? null);
+        $model = $options['model'] ?? Setting::get('ai_transcribe_model', config('ai.defaults.transcribe_model'));
+
+        $start = microtime(true);
+        try {
+            $text = $this->driver->transcribe($contents, $filename, $options);
+        } catch (\Throwable $e) {
+            $this->meter->recordFailure($feature, 'failed', $e->getMessage(), ['model' => $model]);
+            throw $e;
+        }
+
+        $this->meter->record($feature, new AiResult($text, $model, 0, 0), [
+            'latency_ms' => (int) round((microtime(true) - $start) * 1000),
+            'actor_type' => $options['actor']['type'] ?? null,
+            'actor_id' => $options['actor']['id'] ?? null,
+        ]);
+
+        return $this->redactor->restore($text);
     }
 
     /** Resolve the admin-editable prompt for a feature/locale. */

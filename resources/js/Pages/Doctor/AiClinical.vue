@@ -19,7 +19,15 @@ const tools = [
     { key: 'icd10', ar: 'ترميز ICD-10', en: 'ICD-10' },
     { key: 'prescription', ar: 'اقتراح وصفة', en: 'Prescription' },
     { key: 'report', ar: 'تقرير/إحالة', en: 'Report/Referral' },
+    { key: 'vision', ar: 'تحليل صورة/أشعة', en: 'Image / X-ray' },
+    { key: 'dictation', ar: 'إملاء صوتي', en: 'Voice dictation' },
 ];
+
+const visionMode = ref('dental_xray_vision');
+const imageFile = ref(null);
+const audioFile = ref(null);
+const onImage = (e) => { imageFile.value = e.target.files?.[0] || null; };
+const onAudio = (e) => { audioFile.value = e.target.files?.[0] || null; };
 
 const active = ref('summary');
 const f = reactive({
@@ -53,6 +61,18 @@ const run = async () => {
         else if (active.value === 'icd10') data = await post('/doctor/ai/icd10', { diagnosis: f.diagnosis });
         else if (active.value === 'prescription') data = await post('/doctor/ai/prescription', { diagnosis: f.rx_diagnosis, patient_age: f.patient_age });
         else if (active.value === 'report') data = await post('/doctor/ai/report', { type: f.report_type, content: f.report_content });
+        else if (active.value === 'vision') {
+            if (!imageFile.value) { error.value = t('اختر صورة.', 'Choose an image.'); loading.value = false; return; }
+            const fd = new FormData();
+            fd.append('mode', visionMode.value);
+            fd.append('image', imageFile.value);
+            data = (await axios.post('/doctor/ai/vision', fd, { headers: { 'Content-Type': 'multipart/form-data' } })).data;
+        } else if (active.value === 'dictation') {
+            if (!audioFile.value) { error.value = t('اختر ملفًا صوتيًا.', 'Choose an audio file.'); loading.value = false; return; }
+            const fd = new FormData();
+            fd.append('audio', audioFile.value);
+            data = (await axios.post('/doctor/ai/transcribe', fd, { headers: { 'Content-Type': 'multipart/form-data' } })).data;
+        }
         if (data.ok) output.value = data.text;
         else error.value = data.message;
     } catch (e) {
@@ -136,6 +156,23 @@ const copyOut = () => navigator.clipboard?.writeText(output.value);
                         <input v-model="f.report_type" type="text" class="w-full rounded-lg border-gray-300 text-sm" />
                         <label class="block text-sm text-gray-600">{{ t('التفاصيل', 'Details') }}</label>
                         <textarea v-model="f.report_content" rows="4" class="w-full rounded-lg border-gray-300 text-sm"></textarea>
+                    </template>
+                    <!-- Vision -->
+                    <template v-else-if="active === 'vision'">
+                        <label class="block text-sm text-gray-600">{{ t('نوع الصورة', 'Image type') }}</label>
+                        <select v-model="visionMode" class="w-full rounded-lg border-gray-300 text-sm">
+                            <option value="dental_xray_vision">{{ t('أشعة أسنان', 'Dental X-ray') }}</option>
+                            <option value="derma_image_vision">{{ t('صورة جلدية', 'Dermatology photo') }}</option>
+                        </select>
+                        <label class="block text-sm text-gray-600">{{ t('الصورة', 'Image') }}</label>
+                        <input type="file" accept="image/*" @change="onImage" class="w-full text-sm" />
+                        <p class="text-xs text-amber-600">{{ t('استشاري فقط — ليس تشخيصًا.', 'Advisory only — not a diagnosis.') }}</p>
+                    </template>
+                    <!-- Dictation -->
+                    <template v-else-if="active === 'dictation'">
+                        <label class="block text-sm text-gray-600">{{ t('ملف صوتي', 'Audio file') }}</label>
+                        <input type="file" accept="audio/*" @change="onAudio" class="w-full text-sm" />
+                        <p class="text-xs text-gray-400">{{ t('يُفرَّغ النص ويمكنك تحويله لملاحظة SOAP.', 'Transcribed text can then be turned into a SOAP note.') }}</p>
                     </template>
 
                     <button @click="run" :disabled="loading"

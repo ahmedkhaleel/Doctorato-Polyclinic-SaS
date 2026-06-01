@@ -65,6 +65,7 @@ class AiSettingsSeeder extends Seeder
             ['derma_image_vision', 'تقييم صور الجلدية', 'Derma Image Vision', 'vision', 31],
             ['consult_transcription', 'تفريغ الاستشارة', 'Consult Transcription', 'vision', 32],
             ['nl_analytics', 'تحليلات بلغة طبيعية', 'NL Analytics', 'vision', 33],
+            ['insurance_ocr', 'استخراج بيانات التأمين', 'Insurance OCR', 'vision', 34],
         ];
         foreach ($features as [$key, $ar, $en, $group, $order]) {
             AiFeatureFlag::firstOrCreate(

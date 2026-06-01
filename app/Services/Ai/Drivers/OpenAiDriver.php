@@ -94,6 +94,29 @@ class OpenAiDriver implements AiDriver
         return array_map(fn ($d) => $d['embedding'], $resp->json('data', []));
     }
 
+    public function transcribe(string $contents, string $filename, array $options = []): string
+    {
+        if (! $this->isReady()) {
+            throw new AiUnavailableException('no_key', 'OpenAI API key is not configured.');
+        }
+
+        $model = $options['model'] ?? Setting::get('ai_transcribe_model', config('ai.defaults.transcribe_model'));
+
+        $resp = Http::withToken($this->apiKey())
+            ->timeout((int) config('ai.openai.timeout', 60))
+            ->attach('file', $contents, $filename)
+            ->post($this->baseUrl().'/audio/transcriptions', array_filter([
+                'model' => $model,
+                'language' => $options['language'] ?? null,
+            ]));
+
+        if ($resp->failed()) {
+            throw new AiUnavailableException('provider_error', 'OpenAI transcription error: '.$resp->status());
+        }
+
+        return (string) $resp->json('text', '');
+    }
+
     public function ping(): array
     {
         if (! $this->isReady()) {

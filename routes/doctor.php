@@ -93,6 +93,8 @@ Route::middleware(['doctor.auth', 'branch.context'])->group(function () {
         Route::post('/prescription', [$c, 'prescription'])->name('doctor.ai.prescription');
         Route::post('/drug-check', [$c, 'drugCheck'])->name('doctor.ai.drugCheck');
         Route::post('/report', [$c, 'report'])->name('doctor.ai.report');
+        Route::post('/vision', [$c, 'vision'])->name('doctor.ai.vision');
+        Route::post('/transcribe', [$c, 'transcribe'])->name('doctor.ai.transcribe');
     });
 
     // ─── My Patients ────────────────────────────────────────

@@ -136,6 +136,31 @@ class AiController extends Controller
         ]);
     }
 
+    // ─── Natural-language analytics (Wave 4) ─────────────────
+    public function insights(\App\Services\Ai\Features\InsightAnalyst $analyst): Response
+    {
+        return Inertia::render('Admin/Ai/Insights', [
+            'snapshot' => $analyst->snapshot(),
+        ]);
+    }
+
+    public function analyticsAsk(Request $request, \App\Services\Ai\Features\InsightAnalyst $analyst): \Illuminate\Http\JsonResponse
+    {
+        $validated = $request->validate(['question' => 'required|string|max:500']);
+
+        try {
+            $result = $analyst->ask($validated['question'], [
+                'locale' => app()->getLocale(),
+                'rate_key' => 'user:'.$request->user()?->id,
+                'actor' => ['type' => 'user', 'id' => $request->user()?->id],
+            ]);
+        } catch (\App\Services\Ai\Exceptions\AiUnavailableException $e) {
+            return response()->json(['ok' => false, 'reason' => $e->reason, 'message' => $e->getMessage()], 422);
+        }
+
+        return response()->json(['ok' => true, 'text' => $result->text]);
+    }
+
     // ─── Request logs ────────────────────────────────────────
     public function logs(Request $request): Response
     {
