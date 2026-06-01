@@ -210,7 +210,7 @@ function cancelVisit() {
                                             class="text-[10px] font-bold hover:underline"
                                             :class="isCancelled ? 'text-emerald-600' : 'text-[#C4A265]'">
                                         {{ isCancelled
-                                            ? (isRtl ? '🔄 استعادة الزيارة' : '🔄 Restore visit')
+                                            ? (isRtl ? ' استعادة الزيارة' : ' Restore visit')
                                             : (isRtl ? '✎ تعديل الموعد والطبيب' : '✎ Edit time / doctor') }}
                                     </button>
                                 </div>
@@ -223,7 +223,7 @@ function cancelVisit() {
                                      :class="isCancelled ? 'bg-emerald-50 border-emerald-300' : 'bg-[#FAF7F0] border-[#C4A265]/30'"
                                      class="border rounded-lg p-3 mt-1 space-y-3">
                                     <div v-if="isCancelled" class="text-xs bg-white border border-emerald-200 rounded p-2 text-emerald-800">
-                                        🔄 {{ isRtl
+                                         {{ isRtl
                                             ? 'هذه الزيارة ملغاة. الحفظ سيستعيدها (انتظار) ويُرسل إيميل للمريض.'
                                             : 'This visit is cancelled. Saving will restore it (waiting) and email the patient.' }}
                                     </div>

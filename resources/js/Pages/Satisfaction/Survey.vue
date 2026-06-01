@@ -122,12 +122,12 @@ function submit() {
                             <button type="button" @click="form.would_recommend = true"
                                 class="px-6 py-2 rounded-xl text-sm font-medium transition"
                                 :class="form.would_recommend === true ? 'bg-emerald-500 text-white' : 'bg-gray-100 text-gray-600 hover:bg-emerald-50'">
-                                {{ isRtl ? 'نعم' : 'Yes' }} 👍
+                                {{ isRtl ? 'نعم' : 'Yes' }}
                             </button>
                             <button type="button" @click="form.would_recommend = false"
                                 class="px-6 py-2 rounded-xl text-sm font-medium transition"
                                 :class="form.would_recommend === false ? 'bg-red-500 text-white' : 'bg-gray-100 text-gray-600 hover:bg-red-50'">
-                                {{ isRtl ? 'لا' : 'No' }} 👎
+                                {{ isRtl ? 'لا' : 'No' }}
                             </button>
                         </div>
                     </div>

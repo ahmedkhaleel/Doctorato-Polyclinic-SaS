@@ -28,10 +28,10 @@ const isRtl  = computed(() => (page.props.dir || 'rtl') === 'rtl');
                 <div class="p-8 text-center">
                     <div class="text-6xl mb-4">
                         {{ {
-                            confirmed: '✅', cancelled: '🚫',
-                            already_confirmed: 'ℹ️', already_cancelled: 'ℹ️',
-                            not_confirmable: '⚠️', not_cancellable: '⚠️',
-                        }[outcome] || '✉️' }}
+                            confirmed: '✅', cancelled: '',
+                            already_confirmed: 'ℹ', already_cancelled: 'ℹ',
+                            not_confirmable: '', not_cancellable: '',
+                        }[outcome] || '✉' }}
                     </div>
 
                     <h1 class="text-2xl font-extrabold text-gray-800 mb-2">
@@ -88,11 +88,11 @@ const isRtl  = computed(() => (page.props.dir || 'rtl') === 'rtl');
                     <div class="flex flex-col sm:flex-row gap-3">
                         <Link :href="`/${locale}`"
                               class="flex-1 px-5 py-3 rounded-xl bg-[#1B365D] hover:bg-[#22406F] text-white text-sm font-bold transition">
-                            {{ isRtl ? '🏠 الصفحة الرئيسية' : '🏠 Home' }}
+                            {{ isRtl ? ' الصفحة الرئيسية' : ' Home' }}
                         </Link>
                         <Link :href="`/${locale}/booking`"
                               class="flex-1 px-5 py-3 rounded-xl bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 text-sm font-semibold transition">
-                            {{ isRtl ? '📅 حجز جديد' : '📅 New booking' }}
+                            {{ isRtl ? ' حجز جديد' : ' New booking' }}
                         </Link>
                     </div>
                 </div>

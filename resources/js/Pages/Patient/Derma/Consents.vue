@@ -82,7 +82,7 @@ onMounted(() => { requestAnimationFrame(() => { mounted.value = true; }); });
         </div>
 
         <div v-if="!consents.length" class="pc-card pc-stagger text-center py-20 mt-6" style="--i:1">
-            <div class="text-5xl mb-3 opacity-40">✍️</div>
+            <svg class="w-12 h-12 mx-auto mb-3 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>
             <p class="text-sm text-gray-400">{{ isRtl ? 'لا توجد موافقات حالياً' : 'No consents on file' }}</p>
         </div>
 
@@ -106,7 +106,7 @@ onMounted(() => { requestAnimationFrame(() => { mounted.value = true; }); });
                         <img v-if="c.signature" :src="c.signature" class="h-12 border border-gray-100 rounded bg-white" />
                         <span class="text-[11px] text-gray-400">{{ isRtl ? 'وُقّعت في' : 'Signed on' }} {{ fmtDate(c.signed_at) }}</span>
                     </div>
-                    <button v-else @click="openSign(c)" class="pc-sign-btn">{{ isRtl ? '✍️ التوقيع الآن' : '✍️ Sign now' }}</button>
+                    <button v-else @click="openSign(c)" class="pc-sign-btn">{{ isRtl ? '✍ التوقيع الآن' : '✍ Sign now' }}</button>
                 </div>
             </div>
         </div>
@@ -127,7 +127,7 @@ onMounted(() => { requestAnimationFrame(() => { mounted.value = true; }); });
                                 <canvas ref="canvasRef"
                                         @pointerdown="start" @pointermove="move" @pointerup="end" @pointerleave="end"
                                         @touchstart="start" @touchmove="move" @touchend="end"></canvas>
-                                <span v-if="!hasDrawn" class="pc-pad-hint">{{ isRtl ? '✍️ وقّع هنا' : '✍️ Sign here' }}</span>
+                                <span v-if="!hasDrawn" class="pc-pad-hint">{{ isRtl ? '✍ وقّع هنا' : '✍ Sign here' }}</span>
                             </div>
                             <div class="flex justify-between items-center mt-4">
                                 <button @click="clearPad" class="text-xs font-semibold text-gray-500 hover:text-gray-700 px-3 py-1.5 rounded-lg hover:bg-gray-100 transition">{{ isRtl ? 'مسح' : 'Clear' }}</button>

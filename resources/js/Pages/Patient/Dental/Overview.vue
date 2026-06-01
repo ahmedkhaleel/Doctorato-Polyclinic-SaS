@@ -46,10 +46,10 @@ const completionRate = computed(() => {
 });
 
 const labStatusConfig = {
-    ordered: { ar: 'تم الطلب', en: 'Ordered', color: 'bg-gray-100 text-gray-600', icon: '📦' },
-    in_production: { ar: 'قيد التصنيع', en: 'In Production', color: 'bg-slate-100 text-[#1B365D]', icon: '⚙️' },
+    ordered: { ar: 'تم الطلب', en: 'Ordered', color: 'bg-gray-100 text-gray-600', icon: '' },
+    in_production: { ar: 'قيد التصنيع', en: 'In Production', color: 'bg-slate-100 text-[#1B365D]', icon: '' },
     ready: { ar: 'جاهز للاستلام', en: 'Ready for Pickup', color: 'bg-emerald-100 text-emerald-700', icon: '✅' },
-    delivered: { ar: 'تم التسليم', en: 'Delivered', color: 'bg-teal-100 text-teal-700', icon: '📋' },
+    delivered: { ar: 'تم التسليم', en: 'Delivered', color: 'bg-teal-100 text-teal-700', icon: '' },
 };
 
 const conditionLabels = {
@@ -301,7 +301,7 @@ const quickLinks = computed(() => [
                 <div v-for="lo in pendingLabOrders" :key="lo.id" class="px-5 py-4">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-3">
-                            <span class="text-lg">{{ labStatusConfig[lo.status]?.icon || '📦' }}</span>
+                            <span class="text-lg">{{ labStatusConfig[lo.status]?.icon || '' }}</span>
                             <div>
                                 <p class="text-sm font-semibold text-gray-800 capitalize">{{ lo.item_type?.replace(/_/g, ' ') }}</p>
                                 <p class="text-xs text-gray-400 mt-0.5">{{ $localized(lo.doctor, 'name') }}

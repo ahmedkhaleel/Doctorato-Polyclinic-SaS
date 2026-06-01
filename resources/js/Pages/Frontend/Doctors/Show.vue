@@ -78,7 +78,7 @@ const recommendRate = computed(() => {
                                 <span class="text-[10px] text-white/50 ms-1">({{ rating.total }})</span>
                             </div>
                             <span v-if="recommendRate !== null" class="inline-flex items-center gap-1.5 text-sm font-semibold text-emerald-300">
-                                👍 {{ recommendRate }}% {{ isRtl ? 'يوصي بنا' : 'recommend' }}
+                                 {{ recommendRate }}% {{ isRtl ? 'يوصي بنا' : 'recommend' }}
                             </span>
                         </div>
 
@@ -86,11 +86,11 @@ const recommendRate = computed(() => {
                         <div class="flex items-center gap-3 flex-wrap">
                             <Link href="/booking"
                                   class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-[#C4A265] to-[#D9B985] hover:from-[#D9B985] hover:to-[#C4A265] text-[#1B365D] font-bold text-sm shadow-lg transition">
-                                {{ isRtl ? '📅 احجز الآن' : '📅 Book Now' }}
+                                {{ isRtl ? ' احجز الآن' : ' Book Now' }}
                             </Link>
                             <Link v-if="doctor.online_consultation_enabled" href="/booking"
                                   class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-sm shadow-lg transition">
-                                {{ isRtl ? '💻 استشارة أونلاين' : '💻 Online Consultation' }}
+                                {{ isRtl ? ' استشارة أونلاين' : ' Online Consultation' }}
                                 <span v-if="doctor.online_consultation_fee" class="text-[11px] font-normal opacity-90">
                                     ({{ doctor.online_consultation_fee }})
                                 </span>
@@ -185,7 +185,7 @@ const recommendRate = computed(() => {
 
                         <Link href="/booking"
                               class="block w-full text-center px-6 py-3 rounded-xl bg-[#1B365D] hover:bg-[#22406F] text-white font-bold text-sm shadow-md transition">
-                            {{ isRtl ? '📅 احجز موعداً الآن' : '📅 Book an appointment' }}
+                            {{ isRtl ? ' احجز موعداً الآن' : ' Book an appointment' }}
                         </Link>
                     </div>
                 </div>

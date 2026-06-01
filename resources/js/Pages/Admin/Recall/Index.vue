@@ -187,7 +187,7 @@ const cappedTotal = computed(() => Math.min(props.patients?.total || 0, 500));
                         {{ isRtl ? 'مريض كحد أقصى' : 'patients (max)' }}
                     </p>
                     <p class="text-[11px] text-gray-500">
-                        ⚠️ {{ isRtl
+                         {{ isRtl
                             ? 'يتجاهل المرضى الذين لم يفعّلوا الاستقبال التسويقي.'
                             : 'Patients who opted out of marketing SMS will be skipped.' }}
                     </p>

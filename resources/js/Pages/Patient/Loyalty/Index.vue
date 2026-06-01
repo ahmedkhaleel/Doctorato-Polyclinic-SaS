@@ -126,7 +126,7 @@ function fmtDate(d) {
                 </div>
                 <div class="flex-1 min-w-0">
                     <h3 class="text-base font-bold text-emerald-900 mb-1">
-                        {{ isRtl ? '🎉 تم الاستبدال بنجاح!' : '🎉 Redemption successful!' }}
+                        {{ isRtl ? ' تم الاستبدال بنجاح!' : ' Redemption successful!' }}
                     </h3>
                     <p class="text-xs text-emerald-700 mb-3">
                         {{ isRtl
@@ -182,7 +182,7 @@ function fmtDate(d) {
                     </button>
                 </div>
                 <p class="text-[11px] text-amber-700 bg-amber-50 border border-amber-100 rounded-lg p-2">
-                    💡 {{ isRtl
+                     {{ isRtl
                         ? 'بعد الاستبدال ستحصل على كود خصم مفرد الاستخدام صالح لـ 30 يوماً. يمكنك استخدامه عند الحجز.'
                         : 'After redeeming, you receive a single-use discount code valid for 30 days. Use it when booking.' }}
                 </p>
@@ -209,7 +209,7 @@ function fmtDate(d) {
         <div v-if="activeCodes.length" class="bg-white rounded-2xl shadow-sm border-2 border-emerald-200 p-5 mb-6">
             <div class="flex items-center justify-between mb-3">
                 <h2 class="text-sm font-bold text-emerald-900 flex items-center gap-2">
-                    🎟 {{ isRtl ? 'أكواد خصم متاحة' : 'Active discount codes' }}
+                     {{ isRtl ? 'أكواد خصم متاحة' : 'Active discount codes' }}
                     <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-[10px]">{{ activeCodes.length }}</span>
                 </h2>
                 <span class="text-[10px] text-gray-500">{{ isRtl ? 'استخدمها قبل انتهائها' : 'Use before they expire' }}</span>

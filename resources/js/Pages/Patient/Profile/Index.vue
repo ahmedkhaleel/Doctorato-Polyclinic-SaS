@@ -335,20 +335,20 @@ function deletePhoto() {
                         <!-- Bookings -->
                         <div class="rounded-xl border border-slate-200 p-4 bg-slate-50/40">
                             <h4 class="font-bold text-slate-800 mb-3 text-sm">
-                                📅 {{ isRtl ? 'الحجوزات' : 'Bookings' }}
+                                 {{ isRtl ? 'الحجوزات' : 'Bookings' }}
                             </h4>
                             <p class="text-[11px] text-slate-500 mb-3">{{ isRtl ? 'تأكيد، إلغاء، تغيير موعد' : 'Confirmations, cancellations, changes' }}</p>
                             <label class="flex items-center gap-2 mb-2 cursor-pointer">
                                 <input v-model="prefsForm.notify_email_bookings" type="checkbox" class="rounded text-[#C4A265]" />
-                                <span class="text-sm text-slate-700">📧 {{ isRtl ? 'بريد إلكتروني' : 'Email' }}</span>
+                                <span class="text-sm text-slate-700"> {{ isRtl ? 'بريد إلكتروني' : 'Email' }}</span>
                             </label>
                             <label class="flex items-center gap-2 mb-2 cursor-pointer">
                                 <input v-model="prefsForm.notify_sms_bookings" type="checkbox" class="rounded text-[#C4A265]" />
-                                <span class="text-sm text-slate-700">📱 {{ isRtl ? 'رسائل SMS' : 'SMS' }}</span>
+                                <span class="text-sm text-slate-700"> {{ isRtl ? 'رسائل SMS' : 'SMS' }}</span>
                             </label>
                             <label class="flex items-center gap-2 cursor-pointer">
                                 <input v-model="prefsForm.notify_whatsapp_bookings" type="checkbox" class="rounded text-[#C4A265]" />
-                                <span class="text-sm text-slate-700">💬 {{ isRtl ? 'واتساب' : 'WhatsApp' }}</span>
+                                <span class="text-sm text-slate-700"> {{ isRtl ? 'واتساب' : 'WhatsApp' }}</span>
                             </label>
                         </div>
 
@@ -360,35 +360,35 @@ function deletePhoto() {
                             <p class="text-[11px] text-slate-500 mb-3">{{ isRtl ? 'قبل الموعد بـ 24 ساعة + يوم الموعد' : '24h before + same-day' }}</p>
                             <label class="flex items-center gap-2 mb-2 cursor-pointer">
                                 <input v-model="prefsForm.notify_email_reminders" type="checkbox" class="rounded text-[#C4A265]" />
-                                <span class="text-sm text-slate-700">📧 {{ isRtl ? 'بريد إلكتروني' : 'Email' }}</span>
+                                <span class="text-sm text-slate-700"> {{ isRtl ? 'بريد إلكتروني' : 'Email' }}</span>
                             </label>
                             <label class="flex items-center gap-2 mb-2 cursor-pointer">
                                 <input v-model="prefsForm.notify_sms_reminders" type="checkbox" class="rounded text-[#C4A265]" />
-                                <span class="text-sm text-slate-700">📱 {{ isRtl ? 'رسائل SMS' : 'SMS' }}</span>
+                                <span class="text-sm text-slate-700"> {{ isRtl ? 'رسائل SMS' : 'SMS' }}</span>
                             </label>
                             <label class="flex items-center gap-2 cursor-pointer">
                                 <input v-model="prefsForm.notify_whatsapp_reminders" type="checkbox" class="rounded text-[#C4A265]" />
-                                <span class="text-sm text-slate-700">💬 {{ isRtl ? 'واتساب' : 'WhatsApp' }}</span>
+                                <span class="text-sm text-slate-700"> {{ isRtl ? 'واتساب' : 'WhatsApp' }}</span>
                             </label>
                         </div>
 
                         <!-- Marketing -->
                         <div class="rounded-xl border border-slate-200 p-4 bg-slate-50/40">
                             <h4 class="font-bold text-slate-800 mb-3 text-sm">
-                                🎁 {{ isRtl ? 'العروض' : 'Marketing' }}
+                                 {{ isRtl ? 'العروض' : 'Marketing' }}
                             </h4>
                             <p class="text-[11px] text-slate-500 mb-3">{{ isRtl ? 'كوبونات خصم، عروض موسمية' : 'Promo codes, seasonal offers' }}</p>
                             <label class="flex items-center gap-2 mb-2 cursor-pointer">
                                 <input v-model="prefsForm.notify_email_marketing" type="checkbox" class="rounded text-[#C4A265]" />
-                                <span class="text-sm text-slate-700">📧 {{ isRtl ? 'بريد إلكتروني' : 'Email' }}</span>
+                                <span class="text-sm text-slate-700"> {{ isRtl ? 'بريد إلكتروني' : 'Email' }}</span>
                             </label>
                             <label class="flex items-center gap-2 mb-2 cursor-pointer">
                                 <input v-model="prefsForm.notify_sms_marketing" type="checkbox" class="rounded text-[#C4A265]" />
-                                <span class="text-sm text-slate-700">📱 {{ isRtl ? 'رسائل SMS' : 'SMS' }}</span>
+                                <span class="text-sm text-slate-700"> {{ isRtl ? 'رسائل SMS' : 'SMS' }}</span>
                             </label>
                             <label class="flex items-center gap-2 cursor-pointer">
                                 <input v-model="prefsForm.notify_whatsapp_marketing" type="checkbox" class="rounded text-[#C4A265]" />
-                                <span class="text-sm text-slate-700">💬 {{ isRtl ? 'واتساب' : 'WhatsApp' }}</span>
+                                <span class="text-sm text-slate-700"> {{ isRtl ? 'واتساب' : 'WhatsApp' }}</span>
                             </label>
                         </div>
                     </div>

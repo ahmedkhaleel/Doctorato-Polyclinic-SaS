@@ -47,7 +47,7 @@ const cards = computed(() => [
             <div class="relative z-10 flex items-center justify-between flex-wrap gap-4">
                 <div>
                     <p class="text-white/70 text-sm">{{ today }}</p>
-                    <h1 class="text-2xl md:text-3xl font-bold mt-1">{{ greeting }} 👋</h1>
+                    <h1 class="text-2xl md:text-3xl font-bold mt-1">{{ greeting }} </h1>
                     <p class="text-white/80 mt-2">{{ isRtl ? 'قسم الجلدية والتجميل' : 'Dermatology & Cosmetic' }}</p>
                 </div>
                 <Link :href="route('doctor.derma.patients.index')"

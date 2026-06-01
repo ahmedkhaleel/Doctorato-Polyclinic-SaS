@@ -237,7 +237,7 @@ function $localized(obj, field) {
                     </div>
 
                     <p class="text-[11px] text-amber-700 bg-amber-50 border border-amber-200 rounded-lg p-2">
-                        ⚠️ {{ isRtl
+                         {{ isRtl
                             ? 'بعد الإرسال، سيقوم فريق الاستقبال بإعادة تأكيد الموعد الجديد ضمن ساعات.'
                             : 'After submitting, our front desk will reconfirm the new slot within hours.' }}
                     </p>

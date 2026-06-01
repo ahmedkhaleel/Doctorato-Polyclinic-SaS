@@ -95,9 +95,9 @@ function formatTime(time) {
 
 const genderIcon = computed(() => {
     const g = props.visit?.patient?.gender;
-    if (g === 'male') return '👦';
-    if (g === 'female') return '👧';
-    return '👶';
+    if (g === 'male') return '';
+    if (g === 'female') return '';
+    return '';
 });
 
 const genderLabel = computed(() => {

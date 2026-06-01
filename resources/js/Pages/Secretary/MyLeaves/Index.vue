@@ -54,10 +54,10 @@ function daysBetween(start, end) {
 }
 
 const typeConfig = {
-    annual:   { label: 'Annual',   labelAr: 'سنوية',   bg: 'bg-slate-50',    text: 'text-[#1B365D]',   icon: '☀️' },
-    sick:     { label: 'Sick',     labelAr: 'مرضية',   bg: 'bg-red-50',     text: 'text-red-700',    icon: '🏥' },
-    personal: { label: 'Personal', labelAr: 'شخصية',   bg: 'bg-slate-50',  text: 'text-[#1B365D]', icon: '👤' },
-    unpaid:   { label: 'Unpaid',   labelAr: 'بدون راتب', bg: 'bg-gray-100', text: 'text-gray-700',   icon: '📋' },
+    annual:   { label: 'Annual',   labelAr: 'سنوية',   bg: 'bg-slate-50',    text: 'text-[#1B365D]',   icon: '' },
+    sick:     { label: 'Sick',     labelAr: 'مرضية',   bg: 'bg-red-50',     text: 'text-red-700',    icon: '' },
+    personal: { label: 'Personal', labelAr: 'شخصية',   bg: 'bg-slate-50',  text: 'text-[#1B365D]', icon: '' },
+    unpaid:   { label: 'Unpaid',   labelAr: 'بدون راتب', bg: 'bg-gray-100', text: 'text-gray-700',   icon: '' },
 };
 
 const statusConfig = {
@@ -67,7 +67,7 @@ const statusConfig = {
 };
 
 function getType(type) {
-    return typeConfig[type] || { label: type, labelAr: type, bg: 'bg-gray-100', text: 'text-gray-700', icon: '📋' };
+    return typeConfig[type] || { label: type, labelAr: type, bg: 'bg-gray-100', text: 'text-gray-700', icon: '' };
 }
 
 function getStatusStyle(status) {

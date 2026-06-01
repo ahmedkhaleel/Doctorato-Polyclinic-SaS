@@ -182,7 +182,7 @@ onMounted(() => { requestAnimationFrame(() => { mounted.value = true; }); });
         <!-- Empty -->
         <div v-if="!packages.length && !plans.length && !sessions.length && !gallery.length && !conditions.length"
              class="pd-card pd-stagger text-center py-16" style="--i:1">
-            <div class="text-5xl mb-3 opacity-40">🧖</div>
+            <svg class="w-12 h-12 mx-auto mb-3 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>
             <p class="text-sm text-gray-400">{{ isRtl ? 'لا توجد سجلات جلدية أو تجميلية بعد' : 'No dermatology or cosmetic records yet' }}</p>
         </div>
     </div>
