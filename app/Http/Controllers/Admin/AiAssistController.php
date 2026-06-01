@@ -19,6 +19,11 @@ class AiAssistController extends Controller
         'seo_content' => ['type', 'topic'],
         'lead_reply' => ['message', 'tone'],
         'campaign_copy' => ['product', 'channel', 'goal'],
+        // Wave 2 text features
+        'satisfaction_sentiment' => ['feedback'],
+        'followup_message' => ['context', 'channel'],
+        'doctor_review_reply' => ['review', 'tone'],
+        'doctor_bio' => ['name', 'specialty', 'highlights'],
     ];
 
     public function workspace(): Response

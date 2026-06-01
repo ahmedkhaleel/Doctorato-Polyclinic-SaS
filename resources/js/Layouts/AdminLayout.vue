@@ -332,6 +332,7 @@ const navGroups = [
         items: [
             { labelEn: 'AI Settings',   labelAr: 'إعدادات الذكاء',   href: '/admin/ai/settings', icon: 'cog',      permission: 'ai.view' },
             { labelEn: 'AI Assistant',  labelAr: 'مساعد الذكاء',     href: '/admin/ai/assistant', icon: 'sparkles', permission: 'ai.view' },
+            { labelEn: 'Patient Assistant', labelAr: 'مساعد المريض', href: '/admin/ai/patient-assistant', icon: 'chat', permission: 'ai.view' },
             { labelEn: 'Features',      labelAr: 'الميزات',          href: '/admin/ai/features', icon: 'grid',     permission: 'ai.view' },
             { labelEn: 'Prompts',       labelAr: 'القوالب',          href: '/admin/ai/prompts',  icon: 'document', permission: 'ai.view' },
             { labelEn: 'Usage & Cost',  labelAr: 'الاستهلاك والتكلفة', href: '/admin/ai/usage',   icon: 'chartUp',  permission: 'ai.view' },

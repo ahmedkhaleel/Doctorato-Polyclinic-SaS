@@ -51,6 +51,7 @@ class AiSettingsSeeder extends Seeder
             ['satisfaction_sentiment', 'تحليل مشاعر الرضا', 'Satisfaction Sentiment', 'patient', 11],
             ['followup_message', 'رسائل المتابعة', 'Follow-up Message', 'patient', 12],
             ['doctor_review_reply', 'رد تقييمات الطبيب', 'Doctor Review Reply', 'patient', 13],
+            ['doctor_bio', 'سيرة الطبيب المهنية', 'Doctor Bio', 'patient', 14],
             // Wave 3 — clinical (doctor)
             ['patient_summary', 'تلخيص ملف المريض', 'Patient Summary', 'clinical', 20],
             ['soap_note', 'ملاحظة SOAP', 'SOAP Note', 'clinical', 21],

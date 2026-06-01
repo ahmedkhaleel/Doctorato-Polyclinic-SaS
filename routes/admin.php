@@ -308,6 +308,12 @@ Route::middleware(['admin.auth', 'branch.context'])->group(function () {
         $assist = \App\Http\Controllers\Admin\AiAssistController::class;
         Route::get('/assistant', [$assist, 'workspace'])->name('admin.ai.assistant')->middleware('permission:ai.view');
         Route::post('/assist', [$assist, 'generate'])->name('admin.ai.assist')->middleware('permission:ai.view');
+
+        // Patient Assistant (RAG) — index management + playground.
+        $pa = \App\Http\Controllers\Admin\AiPatientAssistantController::class;
+        Route::get('/patient-assistant', [$pa, 'index'])->name('admin.ai.patient-assistant')->middleware('permission:ai.view');
+        Route::post('/patient-assistant/rebuild', [$pa, 'rebuild'])->name('admin.ai.patient-assistant.rebuild')->middleware('permission:ai.manage');
+        Route::post('/patient-assistant/test', [$pa, 'test'])->name('admin.ai.patient-assistant.test')->middleware('permission:ai.view');
     });
 
     // ─── Notifications Hub (unified control center) ────────

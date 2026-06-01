@@ -86,6 +86,20 @@ class AiManager
         );
     }
 
+    /**
+     * Create embeddings for one or more strings. Gated by the global kill-switch
+     * (no per-feature flag — used internally by the RAG index/search).
+     *
+     * @param  string|array<int,string>  $input
+     * @return array<int,array<float>>
+     */
+    public function embed(string|array $input, array $options = []): array
+    {
+        $this->gate->authorize(null);
+
+        return $this->driver->embed($input, $options);
+    }
+
     /** Resolve the admin-editable prompt for a feature/locale. */
     public function prompt(string $feature, string $locale = 'ar'): ?AiPromptTemplate
     {

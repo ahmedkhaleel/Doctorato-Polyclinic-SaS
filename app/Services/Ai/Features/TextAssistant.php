@@ -37,6 +37,22 @@ class TextAssistant
             'system' => 'You are a healthcare marketing copywriter. Write compliant, compelling campaign copy.',
             'user' => 'Write {{channel}} campaign copy for: {{product}}. Goal: {{goal}}.',
         ],
+        'satisfaction_sentiment' => [
+            'system' => 'You analyse patient feedback. Return: sentiment (positive/neutral/negative), key themes, and one suggested action. Be concise.',
+            'user' => "Analyse this patient feedback:\n{{feedback}}",
+        ],
+        'followup_message' => [
+            'system' => 'You write warm, brief post-visit follow-up messages for a clinic. Match the channel and the patient language.',
+            'user' => 'Write a {{channel}} follow-up message. Context: {{context}}',
+        ],
+        'doctor_review_reply' => [
+            'system' => 'You write professional, gracious public replies to patient reviews on behalf of a clinic. Never disclose medical details.',
+            'user' => "Patient review:\n{{review}}\n\nWrite a {{tone}} public reply.",
+        ],
+        'doctor_bio' => [
+            'system' => 'You write polished professional doctor bios for a clinic website, in the requested language.',
+            'user' => 'Write a professional bio for Dr. {{name}}, specialty {{specialty}}. Highlights: {{highlights}}',
+        ],
     ];
 
     public function __construct(private readonly AiManager $ai) {}

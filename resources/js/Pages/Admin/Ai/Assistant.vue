@@ -46,6 +46,34 @@ const tools = [
             { name: 'goal', ar: 'الهدف', en: 'Goal', type: 'text' },
         ],
     },
+    {
+        key: 'satisfaction_sentiment', ar: 'تحليل مشاعر', en: 'Sentiment',
+        fields: [
+            { name: 'feedback', ar: 'رأي المريض', en: 'Patient feedback', type: 'textarea' },
+        ],
+    },
+    {
+        key: 'followup_message', ar: 'رسالة متابعة', en: 'Follow-up',
+        fields: [
+            { name: 'context', ar: 'السياق', en: 'Context', type: 'textarea' },
+            { name: 'channel', ar: 'القناة', en: 'Channel', type: 'select', options: ['WhatsApp', 'SMS', 'Email'] },
+        ],
+    },
+    {
+        key: 'doctor_review_reply', ar: 'رد على تقييم', en: 'Review reply',
+        fields: [
+            { name: 'review', ar: 'التقييم', en: 'Review', type: 'textarea' },
+            { name: 'tone', ar: 'النبرة', en: 'Tone', type: 'select', options: [t('ممتن', 'gracious'), t('مهني', 'professional')] },
+        ],
+    },
+    {
+        key: 'doctor_bio', ar: 'سيرة طبيب', en: 'Doctor bio',
+        fields: [
+            { name: 'name', ar: 'الاسم', en: 'Name', type: 'text' },
+            { name: 'specialty', ar: 'التخصص', en: 'Specialty', type: 'text' },
+            { name: 'highlights', ar: 'أبرز النقاط', en: 'Highlights', type: 'textarea' },
+        ],
+    },
 ];
 
 const active = ref(tools[0]);
