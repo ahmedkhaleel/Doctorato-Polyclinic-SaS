@@ -61,6 +61,7 @@ const navGroups = computed(() => [
         items: [
             { label: t('a_dashboard'),       href: '/doctor',              icon: 'grid' },
             { label: t('a_today_queue'),     href: '/doctor/queue',        icon: 'queue' },
+            { label: isRtl.value ? 'المساعد السريري' : 'AI Clinical Assistant', href: '/doctor/ai', icon: 'sparkles' },
             { label: isRtl.value ? 'إشعاراتي' : 'My Notifications', href: '/doctor/my-notifications', icon: 'bell' },
         ],
     },

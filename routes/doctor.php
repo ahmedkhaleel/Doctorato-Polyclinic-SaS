@@ -82,6 +82,19 @@ Route::middleware(['doctor.auth', 'branch.context'])->group(function () {
     // ─── My Queue (Today) ───────────────────────────────────
     Route::get('/queue', [DoctorQueueController::class, 'index'])->name('doctor.queue.index');
 
+    // ─── AI Clinical Assistant (Wave 3) — decision support, gated by ai.doctor ──
+    Route::middleware('permission:ai.doctor')->prefix('ai')->group(function () {
+        $c = \App\Http\Controllers\Doctor\DoctorAiClinicalController::class;
+        Route::get('/', [$c, 'index'])->name('doctor.ai.index');
+        Route::post('/summary', [$c, 'summary'])->name('doctor.ai.summary');
+        Route::post('/soap', [$c, 'soap'])->name('doctor.ai.soap');
+        Route::post('/differential', [$c, 'differential'])->name('doctor.ai.differential');
+        Route::post('/icd10', [$c, 'icd10'])->name('doctor.ai.icd10');
+        Route::post('/prescription', [$c, 'prescription'])->name('doctor.ai.prescription');
+        Route::post('/drug-check', [$c, 'drugCheck'])->name('doctor.ai.drugCheck');
+        Route::post('/report', [$c, 'report'])->name('doctor.ai.report');
+    });
+
     // ─── My Patients ────────────────────────────────────────
     Route::get('/patients', [DoctorPatientController::class, 'index'])->name('doctor.patients.index');
     Route::get('/patients/favorites', [DoctorFavoritePatientController::class, 'index'])->name('doctor.patients.favorites');
