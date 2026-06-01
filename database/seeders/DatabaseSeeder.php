@@ -143,6 +143,8 @@ class DatabaseSeeder extends Seeder
                 ComprehensiveDemoSeeder::class,
                 ObgynDemoSeeder::class,
                 OnlineConsultationDemoSeeder::class,
+                // Fills every remaining operational table so all screens show data.
+                ShowcaseDemoSeeder::class,
             ]);
         } else {
             $this->command->info('Production mode: Skipping demo data (set SEED_DEMO_DATA=true to fill).');

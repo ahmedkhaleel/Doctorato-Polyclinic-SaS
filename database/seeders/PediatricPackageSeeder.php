@@ -56,7 +56,11 @@ class PediatricPackageSeeder extends Seeder
                 array_merge($data, ['is_active' => true])
             );
 
-            $bundle->services()->delete();
+            // Idempotent: skip if already linked, so re-deleting never fails against
+            // package_bundle_booking_services FK references on a later db:seed run.
+            if ($bundle->services()->exists()) {
+                continue;
+            }
             foreach ($slugs as $i => $slug) {
                 $service = Service::where('slug', $slug)->first();
                 if ($service) {

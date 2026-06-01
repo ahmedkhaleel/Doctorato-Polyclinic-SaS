@@ -18,6 +18,7 @@ class PackageBundleSeeder extends Seeder
 
         if ($services->isEmpty()) {
             $this->command->warn('No services found. Skipping PackageBundleSeeder.');
+
             return;
         }
 
@@ -30,15 +31,15 @@ class PackageBundleSeeder extends Seeder
         $brideBundle = PackageBundle::updateOrCreate(
             ['name_en' => 'Bride Package'],
             [
-                'name_ar'        => 'باقة العروس',
-                'name_en'        => 'Bride Package',
+                'name_ar' => 'باقة العروس',
+                'name_en' => 'Bride Package',
                 'description_ar' => 'باقة متكاملة لتحضير العروس تشمل العناية بالبشرة وازالة الشعر والنضارة. استعدي ليومك المميز بأفضل النتائج وأسعار حصرية.',
                 'description_en' => 'A comprehensive bridal preparation package including skincare, hair removal, and radiance treatments. Get ready for your special day with the best results at exclusive prices.',
                 'original_price' => 8000.00,
-                'total_price'    => 5500.00,
-                'is_active'      => true,
-                'image'          => 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=800&q=80',
-                'display_order'  => 1,
+                'total_price' => 5500.00,
+                'is_active' => true,
+                'image' => 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=800&q=80',
+                'display_order' => 1,
             ]
         );
 
@@ -55,15 +56,15 @@ class PackageBundleSeeder extends Seeder
         $skinBundle = PackageBundle::updateOrCreate(
             ['name_en' => 'Skin Rejuvenation Package'],
             [
-                'name_ar'        => 'باقة تجديد البشرة',
-                'name_en'        => 'Skin Rejuvenation Package',
+                'name_ar' => 'باقة تجديد البشرة',
+                'name_en' => 'Skin Rejuvenation Package',
                 'description_ar' => 'برنامج متكامل لتجديد البشرة واستعادة نضارتها وحيويتها. يشمل جلسات الهيدرافيشل والتقشير والبلازما للحصول على بشرة مشرقة وشابة.',
                 'description_en' => 'A complete skin renewal program to restore radiance and vitality. Includes HydraFacial, peeling, and plasma sessions for bright, youthful skin.',
                 'original_price' => 4500.00,
-                'total_price'    => 3200.00,
-                'is_active'      => true,
-                'image'          => 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=800&q=80',
-                'display_order'  => 2,
+                'total_price' => 3200.00,
+                'is_active' => true,
+                'image' => 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=800&q=80',
+                'display_order' => 2,
             ]
         );
 
@@ -79,15 +80,15 @@ class PackageBundleSeeder extends Seeder
         $laserBundle = PackageBundle::updateOrCreate(
             ['name_en' => 'Complete Laser Package'],
             [
-                'name_ar'        => 'باقة الليزر المتكاملة',
-                'name_en'        => 'Complete Laser Package',
+                'name_ar' => 'باقة الليزر المتكاملة',
+                'name_en' => 'Complete Laser Package',
                 'description_ar' => 'باقة ازالة الشعر بالليزر لكامل الجسم باستخدام احدث الاجهزة المعتمدة عالميا. تشمل الباقة جلسات متعددة مع متابعة طبية شاملة ونتائج مضمونة.',
                 'description_en' => 'Full body laser hair removal package using the latest internationally certified devices. Includes multiple sessions with comprehensive medical follow-up and guaranteed results.',
                 'original_price' => 5000.00,
-                'total_price'    => 3800.00,
-                'is_active'      => true,
-                'image'          => 'https://images.unsplash.com/photo-1598524374912-6b0b0bab3da4?w=800&q=80',
-                'display_order'  => 3,
+                'total_price' => 3800.00,
+                'is_active' => true,
+                'image' => 'https://images.unsplash.com/photo-1598524374912-6b0b0bab3da4?w=800&q=80',
+                'display_order' => 3,
             ]
         );
 
@@ -102,15 +103,15 @@ class PackageBundleSeeder extends Seeder
         $antiAgingBundle = PackageBundle::updateOrCreate(
             ['name_en' => 'Anti-Aging & Glow Package'],
             [
-                'name_ar'        => 'باقة مكافحة الشيخوخة والنضارة',
-                'name_en'        => 'Anti-Aging & Glow Package',
+                'name_ar' => 'باقة مكافحة الشيخوخة والنضارة',
+                'name_en' => 'Anti-Aging & Glow Package',
                 'description_ar' => 'باقة شاملة لمكافحة علامات تقدم السن واستعادة نضارة البشرة. تتضمن جلسات البروفايلو والهيدرافيشل والبلازما مع حقن النضارة للحصول على بشرة مشدودة ومتوهجة.',
                 'description_en' => 'A comprehensive anti-aging and radiance package. Includes Profhilo, HydraFacial, PRP, and Glow Injections for firm, glowing, youthful skin.',
                 'original_price' => 15500.00,
-                'total_price'    => 11000.00,
-                'is_active'      => true,
-                'image'          => null,
-                'display_order'  => 4,
+                'total_price' => 11000.00,
+                'is_active' => true,
+                'image' => null,
+                'display_order' => 4,
             ]
         );
 
@@ -129,23 +130,27 @@ class PackageBundleSeeder extends Seeder
      */
     private function attachServices(PackageBundle $bundle, array $serviceConfigs, callable $findService): void
     {
-        // Remove old services for this bundle (for re-seeding)
-        $bundle->services()->delete();
+        // Idempotent: if this bundle already has services, leave them untouched.
+        // Deleting them would fail once package_bundle_booking_services (demo bundle
+        // bookings) reference these rows via FK, breaking any later db:seed run.
+        if ($bundle->services()->exists()) {
+            return;
+        }
 
         $order = 1;
         foreach ($serviceConfigs as $config) {
             $service = $findService($config['partial']);
-            if (!$service) {
+            if (! $service) {
                 continue;
             }
 
             PackageBundleService::create([
-                'package_bundle_id'   => $bundle->id,
-                'service_id'          => $service->id,
-                'sessions_count'      => $config['sessions'],
+                'package_bundle_id' => $bundle->id,
+                'service_id' => $service->id,
+                'sessions_count' => $config['sessions'],
                 'discount_percentage' => $config['discount'],
-                'bundle_price'        => $config['price'],
-                'display_order'       => $order++,
+                'bundle_price' => $config['price'],
+                'display_order' => $order++,
             ]);
         }
     }

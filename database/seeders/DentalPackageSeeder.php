@@ -56,8 +56,11 @@ class DentalPackageSeeder extends Seeder
                 array_merge($data, ['is_active' => true])
             );
 
-            // Link services
-            $bundle->services()->delete();
+            // Link services — idempotent: skip if already linked, so re-deleting
+            // never fails against package_bundle_booking_services FK references.
+            if ($bundle->services()->exists()) {
+                continue;
+            }
             foreach ($slugs as $i => $slug) {
                 $service = Service::where('slug', $slug)->first();
                 if ($service) {
