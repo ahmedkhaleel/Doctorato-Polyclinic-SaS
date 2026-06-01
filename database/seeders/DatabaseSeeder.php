@@ -107,6 +107,7 @@ class DatabaseSeeder extends Seeder
             PediatricServiceSeeder::class,
             PediatricPackageSeeder::class,
             SmsTemplateSeeder::class,
+            AiSettingsSeeder::class,
         ]);
 
         // ── 3b. CRM reference data ──────────────────────────────

@@ -65,6 +65,8 @@ class Setting extends Model
         'sms_smsmisr_token',
         // WhatsApp webhook shared secret
         'whatsapp_webhook_verify_token',
+        // AI / OpenAI
+        'ai_openai_api_key',
     ];
 
     /**

@@ -198,6 +198,17 @@ return [
             'actions' => ['view', 'export', 'financial'],
         ],
 
+        // ─── Artificial Intelligence ───────────────────────────
+        'ai' => [
+            'label_en' => 'Artificial Intelligence',
+            'label_ar' => 'الذكاء الاصطناعي',
+            'group' => 'system',
+            // view: see AI screens; manage: change settings/feature flags;
+            // prompts: edit prompt templates; logs: view usage/logs; doctor: allow
+            // clinical AI features in the doctor panel.
+            'actions' => ['view', 'manage', 'prompts', 'logs', 'doctor'],
+        ],
+
         // ─── Human Resources ───────────────────────────────────
         'departments' => [
             'label_en' => 'Departments',

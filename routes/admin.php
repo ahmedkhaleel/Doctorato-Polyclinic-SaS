@@ -291,6 +291,20 @@ Route::middleware(['admin.auth', 'branch.context'])->group(function () {
     Route::post('/settings', [SettingController::class, 'update'])->name('admin.settings.update')->middleware('permission:settings.update');
     Route::post('/settings/test-sms', [SettingController::class, 'testSms'])->name('admin.settings.testSms')->middleware('permission:settings.update');
 
+    // ─── Artificial Intelligence ───────────────────────────
+    Route::prefix('ai')->group(function () {
+        $ai = \App\Http\Controllers\Admin\AiController::class;
+        Route::get('/settings', [$ai, 'settings'])->name('admin.ai.settings')->middleware('permission:ai.view');
+        Route::post('/settings', [$ai, 'updateSettings'])->name('admin.ai.settings.update')->middleware('permission:ai.manage');
+        Route::post('/settings/test', [$ai, 'testConnection'])->name('admin.ai.test')->middleware('permission:ai.manage');
+        Route::get('/features', [$ai, 'features'])->name('admin.ai.features')->middleware('permission:ai.view');
+        Route::post('/features', [$ai, 'updateFeatures'])->name('admin.ai.features.update')->middleware('permission:ai.manage');
+        Route::get('/prompts', [$ai, 'prompts'])->name('admin.ai.prompts')->middleware('permission:ai.prompts,ai.manage');
+        Route::post('/prompts/{prompt}', [$ai, 'updatePrompt'])->name('admin.ai.prompts.update')->middleware('permission:ai.prompts,ai.manage');
+        Route::get('/usage', [$ai, 'usage'])->name('admin.ai.usage')->middleware('permission:ai.logs,ai.view');
+        Route::get('/logs', [$ai, 'logs'])->name('admin.ai.logs')->middleware('permission:ai.logs,ai.view');
+    });
+
     // ─── Notifications Hub (unified control center) ────────
     Route::prefix('notifications-hub')->name('admin.notifications-hub.')->group(function () {
         Route::get('/', [\App\Http\Controllers\Admin\AdminNotificationHubController::class, 'index'])

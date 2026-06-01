@@ -132,6 +132,7 @@ class RoleSeeder extends Seeder
                     'dental_xrays.view', 'dental_xrays.create', 'dental_xrays.update',
                     'dental_charts.view', 'dental_charts.update',
                     'derma.view', 'derma.create', 'derma.update',
+                    'ai.view', 'ai.doctor',
                 ],
             ]
         );
@@ -170,6 +171,7 @@ class RoleSeeder extends Seeder
                     'pages.view', 'seo_pages.view',
                     'users.view', 'roles.view', 'settings.view', 'contact_messages.view',
                     'notifications.view', 'audit_logs.view', 'modules_management.view',
+                    'ai.view', 'ai.logs',
                 ],
             ]
         );
