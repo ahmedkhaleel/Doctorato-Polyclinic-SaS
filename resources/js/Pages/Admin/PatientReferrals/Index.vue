@@ -62,8 +62,9 @@ watch(search, (v) => {
 
         <!-- Top referrers -->
         <div v-if="topReferrers.length" class="bg-white rounded-xl border border-gray-100 p-5 mb-6">
-            <h2 class="text-sm font-bold text-gray-800 mb-3">
-                🏆 {{ isRtl ? 'أفضل المُحيلين' : 'Top referrers' }}
+            <h2 class="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">
+                <svg class="w-4 h-4 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3h14M6 3v5a6 6 0 0012 0V3M9 21h6M12 17v4"/></svg>
+                {{ isRtl ? 'أفضل المُحيلين' : 'Top referrers' }}
             </h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
                 <div v-for="(r, i) in topReferrers" :key="r.patient_id"

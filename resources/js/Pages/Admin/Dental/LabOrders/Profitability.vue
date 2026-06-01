@@ -155,10 +155,10 @@ const comparisonByItemType = computed(() => {
                 <div class="inline-flex gap-1 bg-slate-100 p-1 rounded-xl min-w-full sm:min-w-0">
                     <button v-for="tab in [
                         { key: 'quality', icon: '⭐', ar: 'تصنيف الجودة', en: 'Quality Ranking' },
-                        { key: 'prices', icon: '💰', ar: 'مقارنة الأسعار', en: 'Price Comparison' },
-                        { key: 'recommendations', icon: '🏆', ar: 'التوصيات', en: 'Recommendations' },
-                        { key: 'profitability', icon: '📊', ar: 'الربحية حسب النوع', en: 'Profit by Type' },
-                        { key: 'trend', icon: '📈', ar: 'الاتجاه الشهري', en: 'Monthly Trend' },
+                        { key: 'prices', ar: 'مقارنة الأسعار', en: 'Price Comparison' },
+                        { key: 'recommendations', ar: 'التوصيات', en: 'Recommendations' },
+                        { key: 'profitability', ar: 'الربحية حسب النوع', en: 'Profit by Type' },
+                        { key: 'trend', ar: 'الاتجاه الشهري', en: 'Monthly Trend' },
                     ]" :key="tab.key" @click="activeTab = tab.key"
                         :class="[
                             'px-4 py-2 rounded-lg text-xs font-semibold transition whitespace-nowrap',
@@ -166,7 +166,7 @@ const comparisonByItemType = computed(() => {
                                 ? 'bg-gradient-to-r from-[#1B365D] to-[#2C4E7A] text-white shadow-sm'
                                 : 'text-slate-600 hover:bg-white hover:text-[#1B365D]'
                         ]">
-                        {{ tab.icon }} {{ isRtl ? tab.ar : tab.en }}
+                        {{ isRtl ? tab.ar : tab.en }}
                     </button>
                 </div>
             </div>
@@ -198,10 +198,10 @@ const comparisonByItemType = computed(() => {
                                 class="border-b border-gray-50 hover:bg-gray-50/50 transition-colors"
                                 :class="idx === 0 ? 'bg-emerald-50/30' : ''">
                                 <td class="px-5 py-3.5">
-                                    <span v-if="idx === 0" class="text-lg">🥇</span>
-                                    <span v-else-if="idx === 1" class="text-lg">🥈</span>
-                                    <span v-else-if="idx === 2" class="text-lg">🥉</span>
-                                    <span v-else class="text-xs text-gray-400 font-mono">{{ idx + 1 }}</span>
+                                    
+                                    
+                                    
+                                    <span class="text-xs text-gray-400 font-mono">{{ idx + 1 }}</span>
                                 </td>
                                 <td class="px-5 py-3.5 font-semibold text-gray-900">{{ lab.lab_name }}</td>
                                 <td class="px-4 py-3.5 text-center">
@@ -307,8 +307,8 @@ const comparisonByItemType = computed(() => {
                             :class="idx === 0 ? 'bg-emerald-50/40' : ''">
                             <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
                                 :class="idx === 0 ? 'bg-emerald-100' : idx === 1 ? 'bg-gray-100' : 'bg-gray-50'">
-                                <span v-if="idx === 0" class="text-sm">🏆</span>
-                                <span v-else class="text-xs text-gray-400 font-bold">{{ idx + 1 }}</span>
+                                
+                                <span class="text-xs text-gray-400 font-bold">{{ idx + 1 }}</span>
                             </div>
                             <div class="flex-1 min-w-0">
                                 <p class="text-sm font-semibold text-gray-900">{{ lab.lab_name }}</p>

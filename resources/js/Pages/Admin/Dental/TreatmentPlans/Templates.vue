@@ -34,8 +34,8 @@ const categoryLabels = computed(() => ({
 }));
 
 const categoryIcons = {
-    general: '🦷', orthodontic: '🔧', implant: '🔩', cosmetic: '✨',
-    restorative: '🏗️', surgical: '🔪', periodontal: '🩺', pediatric: '👶',
+    general: '', orthodontic: '', implant: '', cosmetic: '',
+    restorative: '', surgical: '', periodontal: '', pediatric: '',
 };
 
 const categoryColors = {

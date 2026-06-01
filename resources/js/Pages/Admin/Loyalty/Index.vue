@@ -202,8 +202,8 @@ function initial(name) {
                         </button>
                         <p class="text-[10px] text-gray-500">
                             {{ isRtl
-                                ? '💡 0 شهر = بدون انتهاء. التغييرات تنطبق على النقاط الجديدة فقط.'
-                                : '💡 0 months = never expire. Changes apply to new points only.' }}
+                                ? '0 شهر = بدون انتهاء. التغييرات تنطبق على النقاط الجديدة فقط.'
+                                : '0 months = never expire. Changes apply to new points only.' }}
                         </p>
                     </div>
                 </form>
@@ -260,7 +260,7 @@ function initial(name) {
                         </tr>
                         <tr v-if="!patients.data.length">
                             <td colspan="6" class="px-4 py-16 text-center">
-                                <div class="text-5xl mb-3 opacity-40">🎁</div>
+                                <svg class="w-12 h-12 mx-auto mb-3 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>
                                 <p class="text-sm text-gray-400">{{ isRtl ? 'لا يوجد مرضى مطابقين' : 'No matching patients' }}</p>
                             </td>
                         </tr>

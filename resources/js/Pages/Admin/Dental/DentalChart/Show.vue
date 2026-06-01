@@ -148,7 +148,7 @@ const entryTypeLabels = computed(() => ({
     complication: isRtl.value ? 'مضاعفة' : 'Complication', media_only: isRtl.value ? 'صور/ملفات' : 'Media',
 }));
 
-const entryTypeIcons = { examination: '🔍', treatment: '🦷', note: '📝', follow_up: '🔄', complication: '⚠️', media_only: '📎' };
+const entryTypeIcons = {};
 
 // Deciduous tooth name mapping
 const deciduousNames = computed(() => ({
@@ -749,7 +749,6 @@ const selectedToothTreatments = computed(() => selectedTooth.value ? getToothTre
                     <div class="bg-gray-50/50 rounded-xl p-3.5 hover:bg-gray-50 transition-colors border border-transparent hover:border-gray-100">
                         <div class="flex items-center justify-between gap-2 mb-1.5">
                             <div class="flex items-center gap-2 flex-wrap">
-                                <span class="text-base">{{ entryTypeIcons[entry.entry_type] || '📋' }}</span>
                                 <span class="text-xs font-bold px-2 py-0.5 rounded-full" :class="{'bg-slate-100 text-[#1B365D]':entry.entry_type==='examination','bg-emerald-100 text-emerald-700':entry.entry_type==='treatment','bg-[#F5E7C8]/60 text-[#8B7043]':entry.entry_type==='note','bg-slate-100 text-[#1B365D]':entry.entry_type==='follow_up','bg-red-100 text-red-700':entry.entry_type==='complication','bg-gray-100 text-gray-600':entry.entry_type==='media_only'}">{{ entryTypeLabels[entry.entry_type] }}</span>
                                 <span v-if="entry.title" class="text-sm font-semibold text-gray-800">{{ entry.title }}</span>
                             </div>
