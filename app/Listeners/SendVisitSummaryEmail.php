@@ -19,8 +19,12 @@ class SendVisitSummaryEmail
         $visit = $event->visit;
         $patient = $visit->patient;
 
-        if (! $patient || ! $patient->email) return;
-        if (! $patient->wantsNotification('bookings', 'email')) return;
+        if (! $patient || ! $patient->email) {
+            return;
+        }
+        if (! $patient->wantsNotification('bookings', 'email')) {
+            return;
+        }
 
         try {
             // Eager-load relations the email template reads from.
@@ -28,7 +32,7 @@ class SendVisitSummaryEmail
                 'doctor:id,name_ar,name_en',
                 'service:id,name_ar,name_en',
                 'invoice:id,visit_id',
-                'prescriptions.items.medication:id,name_ar,name_en',
+                'prescriptions.items',
             ]);
 
             Notification::route('mail', $patient->email)
@@ -36,7 +40,7 @@ class SendVisitSummaryEmail
         } catch (\Throwable $e) {
             Log::warning('[visit.summary.email] failed', [
                 'visit_id' => $visit->id,
-                'error'    => $e->getMessage(),
+                'error' => $e->getMessage(),
             ]);
         }
     }

@@ -38,4 +38,10 @@ class Prescription extends Model
     {
         return $this->hasMany(PrescriptionItem::class)->orderBy('sort_order');
     }
+
+    /** Alias used by the patient portal view (prescription.medications). */
+    public function medications()
+    {
+        return $this->hasMany(PrescriptionItem::class)->orderBy('sort_order');
+    }
 }

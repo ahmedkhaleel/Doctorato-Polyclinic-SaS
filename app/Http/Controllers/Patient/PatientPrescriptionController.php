@@ -28,7 +28,9 @@ class PatientPrescriptionController extends BasePatientController
         $prescription->load([
             'doctor:id,name_en,name_ar,specialization_en,specialization_ar',
             'visit:id,visit_date',
-            'items.medication:id,name_en,name_ar',
+            // medication is a string column (medication_name) on each item —
+            // there is no related model to eager-load.
+            'medications',
         ]);
 
         return Inertia::render('Patient/Prescriptions/Show', [

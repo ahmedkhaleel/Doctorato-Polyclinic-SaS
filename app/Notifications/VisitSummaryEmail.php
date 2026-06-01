@@ -26,11 +26,11 @@ class VisitSummaryEmail extends Notification
 
     public function toMail(object $notifiable): MailMessage
     {
-        $visit   = $this->visit;
+        $visit = $this->visit;
         $patient = $visit->patient;
 
         $locale = $patient?->preferred_language ?? 'ar';
-        $isRtl  = $locale === 'ar';
+        $isRtl = $locale === 'ar';
 
         $doctorName = $isRtl
             ? ($visit->doctor?->name_ar ?? $visit->doctor?->name_en ?? '—')
@@ -42,44 +42,44 @@ class VisitSummaryEmail extends Notification
         // Pull prescriptions written for this visit (if any).
         $prescriptions = collect($visit->prescriptions ?? [])
             ->flatMap(fn ($rx) => collect($rx->items ?? [])->map(fn ($it) => [
-                'name'     => $isRtl ? ($it->medication?->name_ar ?? $it->medication?->name_en ?? $it->name) : ($it->medication?->name_en ?? $it->medication?->name_ar ?? $it->name),
-                'dosage'   => $it->dosage,
+                'name' => $it->medication_name,
+                'dosage' => $it->dosage,
                 'duration' => $it->duration,
             ]))
             ->take(15) // safety cap on huge prescriptions
             ->values()
             ->all();
 
-        $appUrl     = rtrim(config('app.url'), '/');
+        $appUrl = rtrim(config('app.url'), '/');
         $invoiceUrl = $visit->invoice
             ? "{$appUrl}/{$locale}/patient/invoices/{$visit->invoice->id}"
             : null;
-        $portalUrl  = "{$appUrl}/{$locale}/patient";
+        $portalUrl = "{$appUrl}/{$locale}/patient";
 
         $subject = $isRtl
-            ? '[Doctorato] ملخّص زيارتك بتاريخ ' . $visit->visit_date
-            : '[Doctorato] Your visit summary — ' . $visit->visit_date;
+            ? '[Doctorato] ملخّص زيارتك بتاريخ '.$visit->visit_date
+            : '[Doctorato] Your visit summary — '.$visit->visit_date;
 
         $heading = $isRtl ? 'شكراً لزيارتك' : 'Thanks for your visit';
-        $intro   = $isRtl
+        $intro = $isRtl
             ? 'فيما يلي ملخّص زيارتك. احتفظ بهذا البريد للرجوع إليه لاحقاً.'
             : 'Here is a summary of your visit. Save this email for your records.';
 
         return (new MailMessage)
             ->subject($subject)
             ->view('emails.visit-summary', [
-                'subject'       => $subject,
-                'heading'       => $heading,
-                'intro'         => $intro,
-                'locale'        => $locale,
-                'patientName'   => $patient?->full_name ?: ($isRtl ? 'عميلنا الكريم' : 'there'),
-                'visitDate'     => $visit->visit_date,
-                'doctorName'    => $doctorName,
-                'serviceName'   => $serviceName,
-                'diagnosis'     => $visit->diagnosis,
+                'subject' => $subject,
+                'heading' => $heading,
+                'intro' => $intro,
+                'locale' => $locale,
+                'patientName' => $patient?->full_name ?: ($isRtl ? 'عميلنا الكريم' : 'there'),
+                'visitDate' => $visit->visit_date,
+                'doctorName' => $doctorName,
+                'serviceName' => $serviceName,
+                'diagnosis' => $visit->diagnosis,
                 'prescriptions' => $prescriptions,
-                'invoiceUrl'    => $invoiceUrl,
-                'portalUrl'     => $portalUrl,
+                'invoiceUrl' => $invoiceUrl,
+                'portalUrl' => $portalUrl,
             ]);
     }
 }

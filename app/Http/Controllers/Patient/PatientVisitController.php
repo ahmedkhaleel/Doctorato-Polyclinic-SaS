@@ -42,7 +42,7 @@ class PatientVisitController extends BasePatientController
             'doctor:id,name_en,name_ar,specialization_en,specialization_ar',
             'service:id,name_en,name_ar',
             'photos',
-            'prescriptions.items.medication:id,name_en,name_ar',
+            'prescription.medications',
             'invoice.items',
             'invoice.payments.paymentMethod:id,name_en,name_ar',
         ];
@@ -62,7 +62,7 @@ class PatientVisitController extends BasePatientController
                 ->exists();
 
         return Inertia::render('Patient/Visits/Show', [
-            'visit'     => $visit,
+            'visit' => $visit,
             'canReview' => $canReview,
         ]);
     }

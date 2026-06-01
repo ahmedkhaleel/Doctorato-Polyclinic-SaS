@@ -86,6 +86,12 @@ class Visit extends Model
         return $this->hasMany(Prescription::class);
     }
 
+    /** Latest prescription — used by the patient visit view (visit.prescription). */
+    public function prescription()
+    {
+        return $this->hasOne(Prescription::class)->latestOfMany();
+    }
+
     public function invoice()
     {
         return $this->hasOne(Invoice::class);
