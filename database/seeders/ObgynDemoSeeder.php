@@ -53,9 +53,11 @@ class ObgynDemoSeeder extends Seeder
         ];
 
         foreach ($cases as [$name, $phone, $weeks]) {
+            // file_number is set explicitly: DatabaseSeeder runs WithoutModelEvents,
+            // so Patient::booted()'s auto-generation hook does not fire here.
             $patient = Patient::firstOrCreate(
                 ['phone' => $phone],
-                ['full_name' => $name, 'gender' => 'female']
+                ['full_name' => $name, 'gender' => 'female', 'file_number' => Patient::generateFileNumber()]
             );
             $patient->forceFill(['gender' => 'female', 'is_active' => true])->save();
 
@@ -73,7 +75,7 @@ class ObgynDemoSeeder extends Seeder
         }
 
         // A standalone gynaecology patient: pap smear + contraception.
-        $gyn = Patient::firstOrCreate(['phone' => '01010000105'], ['full_name' => 'منى فؤاد', 'gender' => 'female']);
+        $gyn = Patient::firstOrCreate(['phone' => '01010000105'], ['full_name' => 'منى فؤاد', 'gender' => 'female', 'file_number' => Patient::generateFileNumber()]);
         $gyn->forceFill(['gender' => 'female', 'is_active' => true])->save();
 
         PapSmearScreening::firstOrCreate(

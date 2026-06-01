@@ -26,6 +26,12 @@ class InvoiceSeeder extends Seeder
         }
 
         foreach ($completedVisits as $visit) {
+            // Idempotent: skip a visit that already has an invoice, so re-running
+            // the seed (e.g. a second SEED_DEMO_DATA fill) never duplicates invoices.
+            if (Invoice::where('visit_id', $visit->id)->exists()) {
+                continue;
+            }
+
             $isConsultation = $visit->visit_type === 'consultation';
             $price = $isConsultation
                 ? (float) ($visit->doctor?->consultation_fee ?? 300)

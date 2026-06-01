@@ -66,6 +66,9 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
+        // Administrative Manager role + user (idempotent)
+        $this->call(AdminManagerSeeder::class);
+
         // ── 2. Website content (always required for the website to display) ──
         $this->call([
             ServiceSeeder::class,
@@ -86,11 +89,24 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // ── 3. Clinic reference data (always required for clinic system) ──
+        // All idempotent (firstOrCreate). Order respects dependencies:
+        // SupplyCategory → Supply; ServiceSeeder (section 2) → Dental/Pediatric
+        // service catalogs → packages; DentalSeeder needs Role (section 1) + Service.
         $this->call([
             PaymentMethodSeeder::class,
             MedicationSeeder::class,
             ShiftSeeder::class,
             ExpenseCategorySeeder::class,
+            DepartmentSeeder::class,
+            SupplyCategorySeeder::class,
+            SupplySeeder::class,
+            DentalServiceSeeder::class,
+            DentalSeeder::class,
+            DentalPackageSeeder::class,
+            DentalPrescriptionTemplateSeeder::class,
+            PediatricServiceSeeder::class,
+            PediatricPackageSeeder::class,
+            SmsTemplateSeeder::class,
         ]);
 
         // ── 3b. CRM reference data ──────────────────────────────
@@ -100,11 +116,19 @@ class DatabaseSeeder extends Seeder
             LeadAssignmentRuleSeeder::class,
             CommunicationTemplateSeeder::class,
             FollowUpSequenceSeeder::class,
+            CrmCampaignSeeder::class,
         ]);
 
-        // ── 4. Demo data (development only — skip in production) ──
-        if (! $isProduction) {
-            $this->command->info('Development mode: Seeding demo data (patients, visits, invoices...)');
+        // ── 4. Demo data (dev always; production only with explicit opt-in) ──
+        // Every demo seeder is guarded (skips rows that already exist by phone /
+        // count), so this block is SAFE to re-run. On the live server it runs ONLY
+        // when SEED_DEMO_DATA=true is set in .env — set it once to fill the site,
+        // run the seed, then remove the flag so a later deploy never re-injects
+        // demo data onto a real clinic.
+        $seedDemo = ! $isProduction || filter_var(env('SEED_DEMO_DATA', false), FILTER_VALIDATE_BOOLEAN);
+
+        if ($seedDemo) {
+            $this->command->info('Seeding demo data (patients, visits, invoices...)');
 
             $this->call([
                 BookingSeeder::class,
@@ -118,9 +142,10 @@ class DatabaseSeeder extends Seeder
                 AttendanceSeeder::class,
                 ComprehensiveDemoSeeder::class,
                 ObgynDemoSeeder::class,
+                OnlineConsultationDemoSeeder::class,
             ]);
         } else {
-            $this->command->info('Production mode: Skipping demo data. Only essential data seeded.');
+            $this->command->info('Production mode: Skipping demo data (set SEED_DEMO_DATA=true to fill).');
             $this->command->info('');
             $this->command->info('Roles & admin users created');
             $this->command->info('Website content seeded (services, doctors, FAQs, pages, posts, etc.)');

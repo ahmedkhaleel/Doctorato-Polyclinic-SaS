@@ -23,6 +23,14 @@ class ClinicVisitSeeder extends Seeder
             return;
         }
 
+        // Idempotent: this seeder generates standalone demo visits (no booking_id).
+        // DemoDataSeeder's visits all carry a booking_id, so this guard skips only a
+        // previous ClinicVisitSeeder batch — the first fill still proceeds, but a
+        // re-run (second SEED_DEMO_DATA pass) will not pile on 50 more visits.
+        if (Visit::whereNull('booking_id')->exists()) {
+            return;
+        }
+
         $statuses = ['waiting', 'in_progress', 'completed', 'cancelled'];
         $visits = [];
 

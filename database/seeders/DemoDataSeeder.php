@@ -33,8 +33,11 @@ use Illuminate\Support\Str;
 class DemoDataSeeder extends Seeder
 {
     private array $doctorRecords = [];
+
     private array $serviceRecords = [];
+
     private array $patientRecords = [];
+
     private array $visitRecords = [];
 
     public function run(): void
@@ -65,115 +68,116 @@ class DemoDataSeeder extends Seeder
         $doctorRole = Role::where('name', 'doctor')->first();
         if (! $doctorRole) {
             $this->command->warn('    Doctor role not found — skipping doctors.');
+
             return;
         }
 
         $doctors = [
             // ── Derma doctors (module = null) ───────────────────
             [
-                'email'   => 'doctor-sarah-alrashid@demo.doctorato.com',
-                'name'    => 'Dr. Sarah Al-Rashid',
+                'email' => 'doctor-sarah-alrashid@demo.doctorato.com',
+                'name' => 'Dr. Sarah Al-Rashid',
                 'name_ar' => 'د. سارة الراشد',
                 'name_en' => 'Dr. Sarah Al-Rashid',
                 'specialization_ar' => 'استشاري أمراض جلدية',
                 'specialization_en' => 'Consultant Dermatologist',
                 'doctor_type' => 'consultant',
-                'module'      => 'derma',
+                'module' => 'derma',
                 'dermatology_fee' => 300,
-                'cosmetic_fee'    => 250,
+                'cosmetic_fee' => 250,
             ],
             [
-                'email'   => 'doctor-omar-hasan@demo.doctorato.com',
-                'name'    => 'Dr. Omar Hasan',
+                'email' => 'doctor-omar-hasan@demo.doctorato.com',
+                'name' => 'Dr. Omar Hasan',
                 'name_ar' => 'د. عمر حسن',
                 'name_en' => 'Dr. Omar Hasan',
                 'specialization_ar' => 'أخصائي أمراض جلدية',
                 'specialization_en' => 'Specialist Dermatologist',
                 'doctor_type' => 'specialist',
-                'module'      => 'derma',
+                'module' => 'derma',
                 'dermatology_fee' => 200,
-                'cosmetic_fee'    => 180,
+                'cosmetic_fee' => 180,
             ],
             [
-                'email'   => 'doctor-layla-nour@demo.doctorato.com',
-                'name'    => 'Dr. Layla Nour',
+                'email' => 'doctor-layla-nour@demo.doctorato.com',
+                'name' => 'Dr. Layla Nour',
                 'name_ar' => 'د. ليلى نور',
                 'name_en' => 'Dr. Layla Nour',
                 'specialization_ar' => 'أخصائي أمراض جلدية',
                 'specialization_en' => 'Specialist Dermatologist',
                 'doctor_type' => 'specialist',
-                'module'      => 'derma',
+                'module' => 'derma',
                 'dermatology_fee' => 200,
-                'cosmetic_fee'    => 180,
+                'cosmetic_fee' => 180,
             ],
 
             // ── Dental doctors ──────────────────────────────────
             [
-                'email'   => 'doctor-khalid-alamri@demo.doctorato.com',
-                'name'    => 'Dr. Khalid Al-Amri',
+                'email' => 'doctor-khalid-alamri@demo.doctorato.com',
+                'name' => 'Dr. Khalid Al-Amri',
                 'name_ar' => 'د. خالد العمري',
                 'name_en' => 'Dr. Khalid Al-Amri',
                 'specialization_ar' => 'استشاري طب أسنان',
                 'specialization_en' => 'Consultant Dentist',
                 'doctor_type' => 'consultant',
-                'module'      => 'dental',
+                'module' => 'dental',
                 'dental_consultation_fee' => 350,
             ],
             [
-                'email'   => 'doctor-nada-saleh@demo.doctorato.com',
-                'name'    => 'Dr. Nada Saleh',
+                'email' => 'doctor-nada-saleh@demo.doctorato.com',
+                'name' => 'Dr. Nada Saleh',
                 'name_ar' => 'د. ندى صالح',
                 'name_en' => 'Dr. Nada Saleh',
                 'specialization_ar' => 'أخصائي طب أسنان',
                 'specialization_en' => 'Specialist Dentist',
                 'doctor_type' => 'specialist',
-                'module'      => 'dental',
+                'module' => 'dental',
                 'dental_consultation_fee' => 250,
             ],
             [
-                'email'   => 'doctor-faisal-qasim@demo.doctorato.com',
-                'name'    => 'Dr. Faisal Qasim',
+                'email' => 'doctor-faisal-qasim@demo.doctorato.com',
+                'name' => 'Dr. Faisal Qasim',
                 'name_ar' => 'د. فيصل قاسم',
                 'name_en' => 'Dr. Faisal Qasim',
                 'specialization_ar' => 'أخصائي طب أسنان',
                 'specialization_en' => 'Specialist Dentist',
                 'doctor_type' => 'specialist',
-                'module'      => 'dental',
+                'module' => 'dental',
                 'dental_consultation_fee' => 250,
             ],
 
             // ── Pediatric doctors ───────────────────────────────
             [
-                'email'   => 'doctor-huda-mansour@demo.doctorato.com',
-                'name'    => 'Dr. Huda Mansour',
+                'email' => 'doctor-huda-mansour@demo.doctorato.com',
+                'name' => 'Dr. Huda Mansour',
                 'name_ar' => 'د. هدى منصور',
                 'name_en' => 'Dr. Huda Mansour',
                 'specialization_ar' => 'استشاري طب أطفال',
                 'specialization_en' => 'Consultant Pediatrician',
                 'doctor_type' => 'consultant',
-                'module'      => 'pediatric',
+                'module' => 'pediatric',
                 'pediatric_consultation_fee' => 300,
             ],
             [
-                'email'   => 'doctor-youssef-karim@demo.doctorato.com',
-                'name'    => 'Dr. Youssef Karim',
+                'email' => 'doctor-youssef-karim@demo.doctorato.com',
+                'name' => 'Dr. Youssef Karim',
                 'name_ar' => 'د. يوسف كريم',
                 'name_en' => 'Dr. Youssef Karim',
                 'specialization_ar' => 'أخصائي طب أطفال',
                 'specialization_en' => 'Specialist Pediatrician',
                 'doctor_type' => 'specialist',
-                'module'      => 'pediatric',
+                'module' => 'pediatric',
                 'pediatric_consultation_fee' => 200,
             ],
             [
-                'email'   => 'doctor-mariam-taha@demo.doctorato.com',
-                'name'    => 'Dr. Mariam Taha',
+                'email' => 'doctor-mariam-taha@demo.doctorato.com',
+                'name' => 'Dr. Mariam Taha',
                 'name_ar' => 'د. مريم طه',
                 'name_en' => 'Dr. Mariam Taha',
                 'specialization_ar' => 'أخصائي طب أطفال',
                 'specialization_en' => 'Specialist Pediatrician',
                 'doctor_type' => 'specialist',
-                'module'      => 'pediatric',
+                'module' => 'pediatric',
                 'pediatric_consultation_fee' => 200,
             ],
         ];
@@ -182,9 +186,9 @@ class DemoDataSeeder extends Seeder
             $user = User::firstOrCreate(
                 ['email' => $data['email']],
                 [
-                    'name'      => $data['name'],
-                    'password'  => Hash::make('password'),
-                    'role_id'   => $doctorRole->id,
+                    'name' => $data['name'],
+                    'password' => Hash::make('password'),
+                    'role_id' => $doctorRole->id,
                     'is_active' => true,
                 ]
             );
@@ -192,17 +196,17 @@ class DemoDataSeeder extends Seeder
             $doctor = Doctor::updateOrCreate(
                 ['name_en' => $data['name_en']],
                 [
-                    'user_id'            => $user->id,
-                    'name_ar'            => $data['name_ar'],
-                    'name_en'            => $data['name_en'],
-                    'specialization_ar'  => $data['specialization_ar'],
-                    'specialization_en'  => $data['specialization_en'],
-                    'doctor_type'        => $data['doctor_type'],
-                    'module'             => $data['module'],
-                    'status'             => 'active',
-                    'dermatology_fee'    => $data['dermatology_fee'] ?? null,
-                    'cosmetic_fee'       => $data['cosmetic_fee'] ?? null,
-                    'dental_consultation_fee'    => $data['dental_consultation_fee'] ?? null,
+                    'user_id' => $user->id,
+                    'name_ar' => $data['name_ar'],
+                    'name_en' => $data['name_en'],
+                    'specialization_ar' => $data['specialization_ar'],
+                    'specialization_en' => $data['specialization_en'],
+                    'doctor_type' => $data['doctor_type'],
+                    'module' => $data['module'],
+                    'status' => 'active',
+                    'dermatology_fee' => $data['dermatology_fee'] ?? null,
+                    'cosmetic_fee' => $data['cosmetic_fee'] ?? null,
+                    'dental_consultation_fee' => $data['dental_consultation_fee'] ?? null,
                     'pediatric_consultation_fee' => $data['pediatric_consultation_fee'] ?? null,
                 ]
             );
@@ -232,7 +236,7 @@ class DemoDataSeeder extends Seeder
             $this->doctorRecords[] = $doctor;
         }
 
-        $this->command->info('    Created/updated ' . count($this->doctorRecords) . ' doctors with schedules.');
+        $this->command->info('    Created/updated '.count($this->doctorRecords).' doctors with schedules.');
     }
 
     // =========================================================================
@@ -343,9 +347,9 @@ class DemoDataSeeder extends Seeder
                 $category = ServiceCategory::updateOrCreate(
                     ['slug' => $catData['slug']],
                     [
-                        'name_ar'  => $catData['name_ar'],
-                        'name_en'  => $catData['name_en'],
-                        'module'   => $module,
+                        'name_ar' => $catData['name_ar'],
+                        'name_en' => $catData['name_en'],
+                        'module' => $module,
                     ]
                 );
 
@@ -353,16 +357,16 @@ class DemoDataSeeder extends Seeder
                     $service = Service::updateOrCreate(
                         ['slug' => $svcData['slug']],
                         [
-                            'category_id'            => $category->id,
-                            'name_ar'                => $svcData['name_ar'],
-                            'name_en'                => $svcData['name_en'],
-                            'price'                  => $svcData['price'],
-                            'default_sessions'       => 1,
+                            'category_id' => $category->id,
+                            'name_ar' => $svcData['name_ar'],
+                            'name_en' => $svcData['name_en'],
+                            'price' => $svcData['price'],
+                            'default_sessions' => 1,
                             'session_duration_minutes' => $svcData['duration'],
-                            'bookable'               => true,
-                            'show_on_website'        => true,
-                            'status'                 => 'active',
-                            'module'                 => $module,
+                            'bookable' => true,
+                            'show_on_website' => true,
+                            'status' => 'active',
+                            'module' => $module,
                         ]
                     );
 
@@ -418,13 +422,14 @@ class DemoDataSeeder extends Seeder
             // Skip if patient already exists with this phone
             if (Patient::where('phone', $data['phone'])->exists()) {
                 $this->patientRecords[] = Patient::where('phone', $data['phone'])->first();
+
                 continue;
             }
 
             $attributes = [
-                'full_name'     => $data['full_name'],
-                'phone'         => $data['phone'],
-                'gender'        => $data['gender'],
+                'full_name' => $data['full_name'],
+                'phone' => $data['phone'],
+                'gender' => $data['gender'],
                 'date_of_birth' => $data['dob'],
             ];
 
@@ -446,7 +451,7 @@ class DemoDataSeeder extends Seeder
             $this->patientRecords[] = $patient;
         }
 
-        $this->command->info('    Created/verified ' . count($this->patientRecords) . ' patients.');
+        $this->command->info('    Created/verified '.count($this->patientRecords).' patients.');
     }
 
     // =========================================================================
@@ -458,27 +463,29 @@ class DemoDataSeeder extends Seeder
         $this->command->info('  → Seeding bookings with appointments...');
 
         // Per-module idempotency: skip a module only if it already has >= 5 demo bookings
-        $dermaExists     = Booking::where('source', 'clinic')->where('module', 'derma')->count() >= 5;
-        $dentalExists    = Booking::where('source', 'clinic')->where('module', 'dental')->count() >= 5;
+        $dermaExists = Booking::where('source', 'clinic')->where('module', 'derma')->count() >= 5;
+        $dentalExists = Booking::where('source', 'clinic')->where('module', 'dental')->count() >= 5;
         $pediatricExists = Booking::where('source', 'clinic')->where('module', 'pediatric')->count() >= 5;
 
         if ($dermaExists && $dentalExists && $pediatricExists) {
             $this->command->info('    Demo bookings already exist for all modules — skipping.');
+
             return;
         }
 
         if (count($this->patientRecords) < 15 || count($this->doctorRecords) < 9) {
             $this->command->warn('    Not enough patients or doctors — skipping bookings.');
+
             return;
         }
 
-        $dermaServices     = $this->serviceRecords['derma'] ?? [];
-        $dentalServices    = $this->serviceRecords['dental'] ?? [];
+        $dermaServices = $this->serviceRecords['derma'] ?? [];
+        $dentalServices = $this->serviceRecords['dental'] ?? [];
         $pediatricServices = $this->serviceRecords['pediatric'] ?? [];
 
         // Derma doctors (first 3), dental (next 3), pediatric (last 3)
-        $dermaDoctors     = array_slice($this->doctorRecords, 0, 3);
-        $dentalDoctors    = array_slice($this->doctorRecords, 3, 3);
+        $dermaDoctors = array_slice($this->doctorRecords, 0, 3);
+        $dentalDoctors = array_slice($this->doctorRecords, 3, 3);
         $pediatricDoctors = array_slice($this->doctorRecords, 6, 3);
 
         $statuses = ['confirmed', 'confirmed', 'in_progress', 'in_progress', 'completed'];
@@ -486,46 +493,46 @@ class DemoDataSeeder extends Seeder
         $baseDate = Carbon::today();
 
         // ── Derma bookings (patients 0-4) ───────────────────
-        for ($i = 0; $i < 5 && !$dermaExists; $i++) {
+        for ($i = 0; $i < 5 && ! $dermaExists; $i++) {
             $patient = $this->patientRecords[$i];
-            $doctor  = $dermaDoctors[$i % 3];
-            $status  = $statuses[$i];
+            $doctor = $dermaDoctors[$i % 3];
+            $status = $statuses[$i];
             $isConsultation = $i < 3; // first 3 = consultation, last 2 = service
 
             $booking = Booking::create([
-                'patient_id'     => $patient->id,
+                'patient_id' => $patient->id,
                 'booking_number' => Booking::generateBookingNumber(),
-                'source'         => 'clinic',
-                'module'         => 'derma',
-                'booking_type'   => $isConsultation ? 'dermatology_consultation' : 'service',
-                'full_name'      => $patient->full_name,
-                'phone'          => $patient->phone,
-                'status'         => $status,
+                'source' => 'clinic',
+                'module' => 'derma',
+                'booking_type' => $isConsultation ? 'dermatology_consultation' : 'service',
+                'full_name' => $patient->full_name,
+                'phone' => $patient->phone,
+                'status' => $status,
             ]);
 
             if ($isConsultation) {
                 // Consultation booking — fee comes from doctor
                 $fee = $doctor->dermatology_fee ?? 200;
                 $bs = BookingService::create([
-                    'booking_id'     => $booking->id,
-                    'doctor_id'      => $doctor->id,
+                    'booking_id' => $booking->id,
+                    'doctor_id' => $doctor->id,
                     'sessions_count' => 1,
-                    'unit_price'     => $fee,
-                    'total_price'    => $fee,
-                    'status'         => $status === 'completed' ? 'completed' : 'in_progress',
+                    'unit_price' => $fee,
+                    'total_price' => $fee,
+                    'status' => $status === 'completed' ? 'completed' : 'in_progress',
                 ]);
             } else {
                 // Service booking — pick a random derma service
                 $service = $dermaServices[array_rand($dermaServices)] ?? null;
                 if ($service) {
                     $bs = BookingService::create([
-                        'booking_id'     => $booking->id,
-                        'service_id'     => $service->id,
-                        'doctor_id'      => $doctor->id,
+                        'booking_id' => $booking->id,
+                        'service_id' => $service->id,
+                        'doctor_id' => $doctor->id,
                         'sessions_count' => 1,
-                        'unit_price'     => $service->price,
-                        'total_price'    => $service->price,
-                        'status'         => $status === 'completed' ? 'completed' : 'in_progress',
+                        'unit_price' => $service->price,
+                        'total_price' => $service->price,
+                        'status' => $status === 'completed' ? 'completed' : 'in_progress',
                     ]);
                 }
             }
@@ -534,14 +541,16 @@ class DemoDataSeeder extends Seeder
             if (isset($bs)) {
                 $appointmentDate = $baseDate->copy()->addDays(rand(1, 28));
                 BookingAppointment::create([
-                    'booking_id'         => $booking->id,
+                    'booking_id' => $booking->id,
                     'booking_service_id' => $bs->id,
-                    'doctor_id'          => $doctor->id,
-                    'appointment_date'   => $appointmentDate,
-                    'start_time'         => '10:00',
-                    'end_time'           => '10:30',
-                    'session_number'     => 1,
-                    'status'             => $status === 'completed' ? 'completed' : 'scheduled',
+                    'doctor_id' => $doctor->id,
+                    'appointment_date' => $appointmentDate,
+                    // Stagger by loop index so the same doctor never collides on the
+                    // unique_doctor_timeslot (doctor_id, appointment_date, start_time).
+                    'start_time' => sprintf('%02d:00', 9 + $i),
+                    'end_time' => sprintf('%02d:30', 9 + $i),
+                    'session_number' => 1,
+                    'status' => $status === 'completed' ? 'completed' : 'scheduled',
                 ]);
             }
 
@@ -549,44 +558,44 @@ class DemoDataSeeder extends Seeder
         }
 
         // ── Dental bookings (patients 5-9) ──────────────────
-        for ($i = 0; $i < 5 && !$dentalExists; $i++) {
+        for ($i = 0; $i < 5 && ! $dentalExists; $i++) {
             $patient = $this->patientRecords[$i + 5];
-            $doctor  = $dentalDoctors[$i % 3];
-            $status  = $statuses[$i];
+            $doctor = $dentalDoctors[$i % 3];
+            $status = $statuses[$i];
             $isConsultation = $i < 3;
 
             $booking = Booking::create([
-                'patient_id'     => $patient->id,
+                'patient_id' => $patient->id,
                 'booking_number' => Booking::generateBookingNumber(),
-                'source'         => 'clinic',
-                'module'         => 'dental',
-                'booking_type'   => $isConsultation ? 'dental_consultation' : 'dental_service',
-                'full_name'      => $patient->full_name,
-                'phone'          => $patient->phone,
-                'status'         => $status,
+                'source' => 'clinic',
+                'module' => 'dental',
+                'booking_type' => $isConsultation ? 'dental_consultation' : 'dental_service',
+                'full_name' => $patient->full_name,
+                'phone' => $patient->phone,
+                'status' => $status,
             ]);
 
             if ($isConsultation) {
                 $fee = $doctor->dental_consultation_fee ?? 250;
                 $bs = BookingService::create([
-                    'booking_id'     => $booking->id,
-                    'doctor_id'      => $doctor->id,
+                    'booking_id' => $booking->id,
+                    'doctor_id' => $doctor->id,
                     'sessions_count' => 1,
-                    'unit_price'     => $fee,
-                    'total_price'    => $fee,
-                    'status'         => $status === 'completed' ? 'completed' : 'in_progress',
+                    'unit_price' => $fee,
+                    'total_price' => $fee,
+                    'status' => $status === 'completed' ? 'completed' : 'in_progress',
                 ]);
             } else {
                 $service = $dentalServices[array_rand($dentalServices)] ?? null;
                 if ($service) {
                     $bs = BookingService::create([
-                        'booking_id'     => $booking->id,
-                        'service_id'     => $service->id,
-                        'doctor_id'      => $doctor->id,
+                        'booking_id' => $booking->id,
+                        'service_id' => $service->id,
+                        'doctor_id' => $doctor->id,
                         'sessions_count' => 1,
-                        'unit_price'     => $service->price,
-                        'total_price'    => $service->price,
-                        'status'         => $status === 'completed' ? 'completed' : 'in_progress',
+                        'unit_price' => $service->price,
+                        'total_price' => $service->price,
+                        'status' => $status === 'completed' ? 'completed' : 'in_progress',
                     ]);
                 }
             }
@@ -594,14 +603,16 @@ class DemoDataSeeder extends Seeder
             if (isset($bs)) {
                 $appointmentDate = $baseDate->copy()->addDays(rand(1, 28));
                 BookingAppointment::create([
-                    'booking_id'         => $booking->id,
+                    'booking_id' => $booking->id,
                     'booking_service_id' => $bs->id,
-                    'doctor_id'          => $doctor->id,
-                    'appointment_date'   => $appointmentDate,
-                    'start_time'         => '11:00',
-                    'end_time'           => '11:45',
-                    'session_number'     => 1,
-                    'status'             => $status === 'completed' ? 'completed' : 'scheduled',
+                    'doctor_id' => $doctor->id,
+                    'appointment_date' => $appointmentDate,
+                    // Stagger by loop index — dental doctors differ from derma, and
+                    // index $i keeps each (doctor, date, time) unique within this loop.
+                    'start_time' => sprintf('%02d:00', 9 + $i),
+                    'end_time' => sprintf('%02d:45', 9 + $i),
+                    'session_number' => 1,
+                    'status' => $status === 'completed' ? 'completed' : 'scheduled',
                 ]);
             }
 
@@ -609,44 +620,44 @@ class DemoDataSeeder extends Seeder
         }
 
         // ── Pediatric bookings (patients 10-14) ─────────────
-        for ($i = 0; $i < 5 && !$pediatricExists; $i++) {
+        for ($i = 0; $i < 5 && ! $pediatricExists; $i++) {
             $patient = $this->patientRecords[$i + 10];
-            $doctor  = $pediatricDoctors[$i % 3];
-            $status  = $statuses[$i];
+            $doctor = $pediatricDoctors[$i % 3];
+            $status = $statuses[$i];
             $isConsultation = $i < 3;
 
             $booking = Booking::create([
-                'patient_id'     => $patient->id,
+                'patient_id' => $patient->id,
                 'booking_number' => Booking::generateBookingNumber(),
-                'source'         => 'clinic',
-                'module'         => 'pediatric',
-                'booking_type'   => $isConsultation ? 'pediatric_consultation' : 'pediatric_service',
-                'full_name'      => $patient->full_name,
-                'phone'          => $patient->phone,
-                'status'         => $status,
+                'source' => 'clinic',
+                'module' => 'pediatric',
+                'booking_type' => $isConsultation ? 'pediatric_consultation' : 'pediatric_service',
+                'full_name' => $patient->full_name,
+                'phone' => $patient->phone,
+                'status' => $status,
             ]);
 
             if ($isConsultation) {
                 $fee = $doctor->pediatric_consultation_fee ?? 200;
                 $bs = BookingService::create([
-                    'booking_id'     => $booking->id,
-                    'doctor_id'      => $doctor->id,
+                    'booking_id' => $booking->id,
+                    'doctor_id' => $doctor->id,
                     'sessions_count' => 1,
-                    'unit_price'     => $fee,
-                    'total_price'    => $fee,
-                    'status'         => $status === 'completed' ? 'completed' : 'in_progress',
+                    'unit_price' => $fee,
+                    'total_price' => $fee,
+                    'status' => $status === 'completed' ? 'completed' : 'in_progress',
                 ]);
             } else {
                 $service = $pediatricServices[array_rand($pediatricServices)] ?? null;
                 if ($service) {
                     $bs = BookingService::create([
-                        'booking_id'     => $booking->id,
-                        'service_id'     => $service->id,
-                        'doctor_id'      => $doctor->id,
+                        'booking_id' => $booking->id,
+                        'service_id' => $service->id,
+                        'doctor_id' => $doctor->id,
                         'sessions_count' => 1,
-                        'unit_price'     => $service->price,
-                        'total_price'    => $service->price,
-                        'status'         => $status === 'completed' ? 'completed' : 'in_progress',
+                        'unit_price' => $service->price,
+                        'total_price' => $service->price,
+                        'status' => $status === 'completed' ? 'completed' : 'in_progress',
                     ]);
                 }
             }
@@ -654,14 +665,15 @@ class DemoDataSeeder extends Seeder
             if (isset($bs)) {
                 $appointmentDate = $baseDate->copy()->addDays(rand(1, 28));
                 BookingAppointment::create([
-                    'booking_id'         => $booking->id,
+                    'booking_id' => $booking->id,
                     'booking_service_id' => $bs->id,
-                    'doctor_id'          => $doctor->id,
-                    'appointment_date'   => $appointmentDate,
-                    'start_time'         => '14:00',
-                    'end_time'           => '14:30',
-                    'session_number'     => 1,
-                    'status'             => $status === 'completed' ? 'completed' : 'scheduled',
+                    'doctor_id' => $doctor->id,
+                    'appointment_date' => $appointmentDate,
+                    // Stagger by loop index to avoid unique_doctor_timeslot collisions.
+                    'start_time' => sprintf('%02d:00', 9 + $i),
+                    'end_time' => sprintf('%02d:30', 9 + $i),
+                    'session_number' => 1,
+                    'status' => $status === 'completed' ? 'completed' : 'scheduled',
                 ]);
             }
 
@@ -688,6 +700,7 @@ class DemoDataSeeder extends Seeder
 
             if ($bookings->isEmpty()) {
                 $this->command->warn('    No eligible bookings for visits.');
+
                 return;
             }
 
@@ -718,11 +731,12 @@ class DemoDataSeeder extends Seeder
                     foreach (Visit::where('booking_id', $booking->id)->get() as $v) {
                         $this->visitRecords[] = $v;
                     }
+
                     continue;
                 }
 
-                $module   = $booking->module;
-                $patient  = $booking->patient;
+                $module = $booking->module;
+                $patient = $booking->patient;
                 $services = $booking->bookingServices;
 
                 foreach ($booking->appointments as $appointment) {
@@ -741,21 +755,21 @@ class DemoDataSeeder extends Seeder
                     $completedAt = $visitStatus === 'completed' ? $startedAt->copy()->addMinutes(30) : null;
 
                     $visit = Visit::create([
-                        'patient_id'             => $patient->id,
-                        'doctor_id'              => $doctorId,
-                        'booking_id'             => $booking->id,
+                        'patient_id' => $patient->id,
+                        'doctor_id' => $doctorId,
+                        'booking_id' => $booking->id,
                         'booking_appointment_id' => $appointment->id,
-                        'module'                 => $module,
-                        'visit_type'             => $visitType,
-                        'service_id'             => $bookingService->service_id ?? null,
-                        'session_number'         => $appointment->session_number,
-                        'status'                 => $visitStatus,
-                        'visit_date'             => $apptDate->toDateString(),
-                        'scheduled_time'         => $appointment->start_time,
-                        'started_at'             => $startedAt,
-                        'completed_at'           => $completedAt,
-                        'diagnosis'              => $dxData['dx'],
-                        'doctor_notes'           => $dxData['notes'],
+                        'module' => $module,
+                        'visit_type' => $visitType,
+                        'service_id' => $bookingService->service_id ?? null,
+                        'session_number' => $appointment->session_number,
+                        'status' => $visitStatus,
+                        'visit_date' => $apptDate->toDateString(),
+                        'scheduled_time' => $appointment->start_time,
+                        'started_at' => $startedAt,
+                        'completed_at' => $completedAt,
+                        'diagnosis' => $dxData['dx'],
+                        'doctor_notes' => $dxData['notes'],
                     ]);
 
                     $appointment->update(['visit_id' => $visit->id]);
@@ -767,7 +781,7 @@ class DemoDataSeeder extends Seeder
 
             $this->command->info("    Created {$count} visit records.");
         } catch (\Throwable $e) {
-            $this->command->error('    Failed to seed visits: ' . $e->getMessage());
+            $this->command->error('    Failed to seed visits: '.$e->getMessage());
         }
     }
 
@@ -786,6 +800,7 @@ class DemoDataSeeder extends Seeder
 
         if (empty($this->visitRecords)) {
             $this->command->warn('    No visits available — skipping.');
+
             return;
         }
 
@@ -798,6 +813,7 @@ class DemoDataSeeder extends Seeder
             $paymentMethods = PaymentMethod::active()->get();
             if ($paymentMethods->isEmpty()) {
                 $this->command->warn('    No active payment methods — skipping payments.');
+
                 return;
             }
 
@@ -806,13 +822,19 @@ class DemoDataSeeder extends Seeder
             $seq = 0;
 
             foreach ($this->visitRecords as $visit) {
-                if ($visit->status !== 'completed') continue;
+                if ($visit->status !== 'completed') {
+                    continue;
+                }
 
-                if (Invoice::where('visit_id', $visit->id)->exists()) continue;
+                if (Invoice::where('visit_id', $visit->id)->exists()) {
+                    continue;
+                }
 
                 $seq++;
                 $booking = $visit->booking;
-                if (! $booking) continue;
+                if (! $booking) {
+                    continue;
+                }
 
                 $bookingServices = $booking->bookingServices;
                 $subtotal = (float) $bookingServices->sum('total_price');
@@ -822,23 +844,23 @@ class DemoDataSeeder extends Seeder
 
                 $invoiceNumber = method_exists(Invoice::class, 'generateInvoiceNumber')
                     ? Invoice::generateInvoiceNumber()
-                    : 'INV-' . date('Ym') . '-' . str_pad((string) $seq, 4, '0', STR_PAD_LEFT);
+                    : 'INV-'.date('Ym').'-'.str_pad((string) $seq, 4, '0', STR_PAD_LEFT);
 
                 $invoiceDate = $visit->visit_date ? Carbon::parse($visit->visit_date) : Carbon::today();
 
                 $invoice = Invoice::create([
-                    'invoice_number'  => $invoiceNumber,
-                    'invoice_date'    => $invoiceDate,
-                    'patient_id'      => $visit->patient_id,
-                    'visit_id'        => $visit->id,
-                    'booking_id'      => $booking->id,
-                    'module'          => $visit->module,
-                    'subtotal'        => $subtotal,
+                    'invoice_number' => $invoiceNumber,
+                    'invoice_date' => $invoiceDate,
+                    'patient_id' => $visit->patient_id,
+                    'visit_id' => $visit->id,
+                    'booking_id' => $booking->id,
+                    'module' => $visit->module,
+                    'subtotal' => $subtotal,
                     'discount_amount' => 0,
-                    'tax_amount'      => 0,
-                    'total'           => $subtotal,
-                    'created_by'      => $adminId,
-                    'notes'           => 'فاتورة تلقائية من الزيارة',
+                    'tax_amount' => 0,
+                    'total' => $subtotal,
+                    'created_by' => $adminId,
+                    'notes' => 'فاتورة تلقائية من الزيارة',
                 ]);
 
                 // Create invoice items — one per booking service
@@ -849,13 +871,13 @@ class DemoDataSeeder extends Seeder
                     $descEn = $bs->service->name_en ?? ($booking->booking_type ?? 'Medical Service');
 
                     InvoiceItem::create([
-                        'invoice_id'     => $invoice->id,
+                        'invoice_id' => $invoice->id,
                         'description_ar' => $descAr,
                         'description_en' => $descEn,
-                        'quantity'       => 1,
-                        'unit_price'     => (float) $bs->unit_price,
-                        'discount'       => 0,
-                        'total'          => (float) $bs->total_price,
+                        'quantity' => 1,
+                        'unit_price' => (float) $bs->unit_price,
+                        'discount' => 0,
+                        'total' => (float) $bs->total_price,
                     ]);
                 }
 
@@ -867,41 +889,41 @@ class DemoDataSeeder extends Seeder
 
                 if ($isFullPayment) {
                     Payment::create([
-                        'invoice_id'        => $invoice->id,
-                        'patient_id'        => $visit->patient_id,
+                        'invoice_id' => $invoice->id,
+                        'patient_id' => $visit->patient_id,
                         'payment_method_id' => $method->id,
-                        'amount'            => $subtotal,
-                        'payment_date'      => $invoiceDate,
-                        'reference_number'  => 'PAY-' . strtoupper(Str::random(6)),
-                        'received_by'       => $adminId,
+                        'amount' => $subtotal,
+                        'payment_date' => $invoiceDate,
+                        'reference_number' => 'PAY-'.strtoupper(Str::random(6)),
+                        'received_by' => $adminId,
                     ]);
                     $paymentCount++;
                 } else {
                     // Partial: 60-80% first, then remainder
-                    $firstPct   = random_int(60, 80) / 100;
+                    $firstPct = random_int(60, 80) / 100;
                     $firstAmount = round($subtotal * $firstPct, 2);
-                    $remaining  = round($subtotal - $firstAmount, 2);
+                    $remaining = round($subtotal - $firstAmount, 2);
 
                     Payment::create([
-                        'invoice_id'        => $invoice->id,
-                        'patient_id'        => $visit->patient_id,
+                        'invoice_id' => $invoice->id,
+                        'patient_id' => $visit->patient_id,
                         'payment_method_id' => $method->id,
-                        'amount'            => $firstAmount,
-                        'payment_date'      => $invoiceDate,
-                        'reference_number'  => 'PAY-' . strtoupper(Str::random(6)),
-                        'received_by'       => $adminId,
+                        'amount' => $firstAmount,
+                        'payment_date' => $invoiceDate,
+                        'reference_number' => 'PAY-'.strtoupper(Str::random(6)),
+                        'received_by' => $adminId,
                     ]);
                     $paymentCount++;
 
                     if ($remaining > 0) {
                         Payment::create([
-                            'invoice_id'        => $invoice->id,
-                            'patient_id'        => $visit->patient_id,
+                            'invoice_id' => $invoice->id,
+                            'patient_id' => $visit->patient_id,
                             'payment_method_id' => $paymentMethods->random()->id,
-                            'amount'            => $remaining,
-                            'payment_date'      => $invoiceDate->copy()->addDays(random_int(2, 5)),
-                            'reference_number'  => 'PAY-' . strtoupper(Str::random(6)),
-                            'received_by'       => $adminId,
+                            'amount' => $remaining,
+                            'payment_date' => $invoiceDate->copy()->addDays(random_int(2, 5)),
+                            'reference_number' => 'PAY-'.strtoupper(Str::random(6)),
+                            'received_by' => $adminId,
                         ]);
                         $paymentCount++;
                     }
@@ -920,7 +942,7 @@ class DemoDataSeeder extends Seeder
 
             $this->command->info("    Created {$invoiceCount} invoices and {$paymentCount} payments.");
         } catch (\Throwable $e) {
-            $this->command->error('    Failed to seed invoices/payments: ' . $e->getMessage());
+            $this->command->error('    Failed to seed invoices/payments: '.$e->getMessage());
         }
     }
 
@@ -938,6 +960,7 @@ class DemoDataSeeder extends Seeder
 
         if (empty($this->visitRecords)) {
             $this->command->warn('    No visits — skipping.');
+
             return;
         }
 
@@ -970,21 +993,25 @@ class DemoDataSeeder extends Seeder
             $itemCount = 0;
 
             foreach ($this->visitRecords as $visit) {
-                if ($visit->status !== 'completed') continue;
+                if ($visit->status !== 'completed') {
+                    continue;
+                }
 
-                if (Prescription::where('visit_id', $visit->id)->exists()) continue;
+                if (Prescription::where('visit_id', $visit->id)->exists()) {
+                    continue;
+                }
 
                 $module = $visit->module ?? 'derma';
-                $meds   = $medsByModule[$module] ?? $medsByModule['derma'];
+                $meds = $medsByModule[$module] ?? $medsByModule['derma'];
 
                 $numPrescriptions = random_int(1, 2);
                 for ($p = 0; $p < $numPrescriptions; $p++) {
                     $prescription = Prescription::create([
-                        'visit_id'   => $visit->id,
+                        'visit_id' => $visit->id,
                         'patient_id' => $visit->patient_id,
-                        'doctor_id'  => $visit->doctor_id,
-                        'diagnosis'  => $visit->diagnosis,
-                        'notes'      => 'خطة العلاج: ' . ($visit->doctor_notes ?? 'يرجى اتباع التعليمات'),
+                        'doctor_id' => $visit->doctor_id,
+                        'diagnosis' => $visit->diagnosis,
+                        'notes' => 'خطة العلاج: '.($visit->doctor_notes ?? 'يرجى اتباع التعليمات'),
                     ]);
                     $prescriptionCount++;
 
@@ -999,11 +1026,11 @@ class DemoDataSeeder extends Seeder
                         PrescriptionItem::create([
                             'prescription_id' => $prescription->id,
                             'medication_name' => $med['name'],
-                            'dosage'          => $med['dosage'],
-                            'frequency'       => $med['frequency'],
-                            'duration'        => $med['duration'],
-                            'instructions'    => $med['notes'],
-                            'sort_order'      => $sort++,
+                            'dosage' => $med['dosage'],
+                            'frequency' => $med['frequency'],
+                            'duration' => $med['duration'],
+                            'instructions' => $med['notes'],
+                            'sort_order' => $sort++,
                         ]);
                         $itemCount++;
                     }
@@ -1012,7 +1039,7 @@ class DemoDataSeeder extends Seeder
 
             $this->command->info("    Created {$prescriptionCount} prescriptions with {$itemCount} items.");
         } catch (\Throwable $e) {
-            $this->command->error('    Failed to seed prescriptions: ' . $e->getMessage());
+            $this->command->error('    Failed to seed prescriptions: '.$e->getMessage());
         }
     }
 
@@ -1034,6 +1061,7 @@ class DemoDataSeeder extends Seeder
 
             if (empty($dentalPatients)) {
                 $this->command->warn('    No dental patients — skipping.');
+
                 return;
             }
 
@@ -1043,6 +1071,7 @@ class DemoDataSeeder extends Seeder
             }
             if (empty($dentalDoctors)) {
                 $this->command->warn('    No dental doctors — skipping.');
+
                 return;
             }
 
@@ -1105,12 +1134,12 @@ class DemoDataSeeder extends Seeder
                     }
 
                     DentalChart::create([
-                        'patient_id'   => $patient->id,
+                        'patient_id' => $patient->id,
                         'tooth_number' => $tooth,
-                        'condition'    => $condition,
-                        'surfaces'     => $toothSurfaces,
-                        'notes'        => 'ملاحظة: السن بحالة ' . $condition,
-                        'status'       => $condition === DentalChart::CONDITION_MISSING ? 'missing' : 'present',
+                        'condition' => $condition,
+                        'surfaces' => $toothSurfaces,
+                        'notes' => 'ملاحظة: السن بحالة '.$condition,
+                        'status' => $condition === DentalChart::CONDITION_MISSING ? 'missing' : 'present',
                     ]);
                     $chartCount++;
                 }
@@ -1123,7 +1152,7 @@ class DemoDataSeeder extends Seeder
                 }
                 for ($t = 0; $t < $numTreatments; $t++) {
                     $tooth = $teeth[array_rand($teeth)];
-                    $type  = $treatmentTypes[array_rand($treatmentTypes)];
+                    $type = $treatmentTypes[array_rand($treatmentTypes)];
                     $isCompleted = (bool) random_int(0, 1);
                     $status = $isCompleted ? DentalTreatment::STATUS_COMPLETED : DentalTreatment::STATUS_PLANNED;
 
@@ -1137,18 +1166,18 @@ class DemoDataSeeder extends Seeder
                     $linkedVisit = $patientVisits->isNotEmpty() ? $patientVisits->random() : null;
 
                     DentalTreatment::create([
-                        'patient_id'    => $patient->id,
-                        'doctor_id'     => $doctor->id,
-                        'visit_id'      => $linkedVisit?->id,
-                        'tooth_number'  => $tooth,
+                        'patient_id' => $patient->id,
+                        'doctor_id' => $doctor->id,
+                        'visit_id' => $linkedVisit?->id,
+                        'tooth_number' => $tooth,
                         'treatment_type' => $type,
-                        'surfaces'      => $treatmentSurfaces,
-                        'description'   => 'علاج ' . $type . ' للسن رقم ' . $tooth,
-                        'cost'          => random_int(300, 2000),
-                        'lab_cost'      => 0,
-                        'status'        => $status,
-                        'completed_at'  => $isCompleted ? Carbon::now()->subDays(random_int(1, 60))->toDateString() : null,
-                        'notes'         => 'تمت خطة العلاج بناءً على الفحص السريري',
+                        'surfaces' => $treatmentSurfaces,
+                        'description' => 'علاج '.$type.' للسن رقم '.$tooth,
+                        'cost' => random_int(300, 2000),
+                        'lab_cost' => 0,
+                        'status' => $status,
+                        'completed_at' => $isCompleted ? Carbon::now()->subDays(random_int(1, 60))->toDateString() : null,
+                        'notes' => 'تمت خطة العلاج بناءً على الفحص السريري',
                     ]);
                     $treatmentCount++;
                 }
@@ -1162,14 +1191,14 @@ class DemoDataSeeder extends Seeder
                 for ($x = 0; $x < $numXrays; $x++) {
                     $type = $xrayTypes[array_rand($xrayTypes)];
                     DentalXray::create([
-                        'patient_id'   => $patient->id,
-                        'doctor_id'    => $doctor->id,
-                        'type'         => $type,
-                        'image_path'   => 'demo/xrays/' . $type . '-' . $patient->id . '.jpg',
+                        'patient_id' => $patient->id,
+                        'doctor_id' => $doctor->id,
+                        'type' => $type,
+                        'image_path' => 'demo/xrays/'.$type.'-'.$patient->id.'.jpg',
                         'tooth_number' => $type === DentalXray::TYPE_PANORAMIC ? null : (string) $teeth[array_rand($teeth)],
-                        'findings'     => 'النتائج: لا يوجد كسور ظاهرة، توجد علامات تسوس بسيط في بعض الأسنان.',
-                        'notes'        => 'أخذت صورة بجودة عالية للمراجعة.',
-                        'taken_date'   => Carbon::now()->subDays(random_int(5, 120))->toDateString(),
+                        'findings' => 'النتائج: لا يوجد كسور ظاهرة، توجد علامات تسوس بسيط في بعض الأسنان.',
+                        'notes' => 'أخذت صورة بجودة عالية للمراجعة.',
+                        'taken_date' => Carbon::now()->subDays(random_int(5, 120))->toDateString(),
                     ]);
                     $xrayCount++;
                 }
@@ -1177,7 +1206,7 @@ class DemoDataSeeder extends Seeder
 
             $this->command->info("    Created {$chartCount} chart entries, {$treatmentCount} treatments, {$xrayCount} x-rays.");
         } catch (\Throwable $e) {
-            $this->command->error('    Failed to seed dental records: ' . $e->getMessage());
+            $this->command->error('    Failed to seed dental records: '.$e->getMessage());
         }
     }
 
@@ -1199,6 +1228,7 @@ class DemoDataSeeder extends Seeder
 
             if (empty($pediatricPatients)) {
                 $this->command->warn('    No pediatric patients — skipping.');
+
                 return;
             }
 
@@ -1231,174 +1261,186 @@ class DemoDataSeeder extends Seeder
                 // ── Vaccinations ──
                 // Use VACCINE_SCHEDULE — pick those already due for this child (months <= age), plus some scheduled ones
                 if (! $hasVaccinations) {
-                $schedule = PediatricVaccination::VACCINE_SCHEDULE;
-                $dueVaccines      = array_filter($schedule, fn ($v) => $v['months'] <= $ageMonths);
-                $upcomingVaccines = array_filter($schedule, fn ($v) => $v['months'] > $ageMonths);
+                    $schedule = PediatricVaccination::VACCINE_SCHEDULE;
+                    $dueVaccines = array_filter($schedule, fn ($v) => $v['months'] <= $ageMonths);
+                    $upcomingVaccines = array_filter($schedule, fn ($v) => $v['months'] > $ageMonths);
 
-                $numGiven = min(random_int(4, 6), count($dueVaccines));
-                $numScheduled = min(random_int(1, 2), count($upcomingVaccines));
+                    $numGiven = min(random_int(4, 6), count($dueVaccines));
+                    $numScheduled = min(random_int(1, 2), count($upcomingVaccines));
 
-                // Shuffle and pick
-                $givenPicks = [];
-                if (! empty($dueVaccines)) {
-                    $due = array_values($dueVaccines);
-                    shuffle($due);
-                    $givenPicks = array_slice($due, 0, $numGiven);
-                }
-                $schedPicks = [];
-                if (! empty($upcomingVaccines)) {
-                    $up = array_values($upcomingVaccines);
-                    shuffle($up);
-                    $schedPicks = array_slice($up, 0, $numScheduled);
-                }
+                    // Shuffle and pick
+                    $givenPicks = [];
+                    if (! empty($dueVaccines)) {
+                        $due = array_values($dueVaccines);
+                        shuffle($due);
+                        $givenPicks = array_slice($due, 0, $numGiven);
+                    }
+                    $schedPicks = [];
+                    if (! empty($upcomingVaccines)) {
+                        $up = array_values($upcomingVaccines);
+                        shuffle($up);
+                        $schedPicks = array_slice($up, 0, $numScheduled);
+                    }
 
-                foreach ($givenPicks as $v) {
-                    $scheduledDate = $dob->copy()->addMonths($v['months']);
-                    // Don't duplicate
-                    $exists = PediatricVaccination::where('patient_id', $patient->id)
-                        ->where('vaccine_name', $v['vaccine'])
-                        ->where('dose_number', $v['dose'])
-                        ->exists();
-                    if ($exists) continue;
+                    foreach ($givenPicks as $v) {
+                        $scheduledDate = $dob->copy()->addMonths($v['months']);
+                        // Don't duplicate
+                        $exists = PediatricVaccination::where('patient_id', $patient->id)
+                            ->where('vaccine_name', $v['vaccine'])
+                            ->where('dose_number', $v['dose'])
+                            ->exists();
+                        if ($exists) {
+                            continue;
+                        }
 
-                    $givenDate = $scheduledDate->copy()->addDays(random_int(-3, 7));
-                    if ($givenDate->isFuture()) $givenDate = Carbon::now()->subDays(random_int(1, 30));
+                        $givenDate = $scheduledDate->copy()->addDays(random_int(-3, 7));
+                        if ($givenDate->isFuture()) {
+                            $givenDate = Carbon::now()->subDays(random_int(1, 30));
+                        }
 
-                    PediatricVaccination::create([
-                        'patient_id'        => $patient->id,
-                        'doctor_id'         => $doctor?->id,
-                        'vaccine_name'      => $v['vaccine'],
-                        'vaccine_name_ar'   => $v['vaccine_ar'],
-                        'dose_number'       => $v['dose'],
-                        'scheduled_age'     => $v['age'],
-                        'scheduled_date'    => $scheduledDate->toDateString(),
-                        'given_date'        => $givenDate->toDateString(),
-                        'batch_number'      => 'BT' . str_pad((string) random_int(1, 999999), 6, '0', STR_PAD_LEFT),
-                        'manufacturer'      => $manufacturers[array_rand($manufacturers)],
-                        'site_of_injection' => $injectionSites[array_rand($injectionSites)],
-                        'status'            => 'given',
-                    ]);
-                    $vaccineCount++;
-                }
+                        PediatricVaccination::create([
+                            'patient_id' => $patient->id,
+                            'doctor_id' => $doctor?->id,
+                            'vaccine_name' => $v['vaccine'],
+                            'vaccine_name_ar' => $v['vaccine_ar'],
+                            'dose_number' => $v['dose'],
+                            'scheduled_age' => $v['age'],
+                            'scheduled_date' => $scheduledDate->toDateString(),
+                            'given_date' => $givenDate->toDateString(),
+                            'batch_number' => 'BT'.str_pad((string) random_int(1, 999999), 6, '0', STR_PAD_LEFT),
+                            'manufacturer' => $manufacturers[array_rand($manufacturers)],
+                            'site_of_injection' => $injectionSites[array_rand($injectionSites)],
+                            'status' => 'given',
+                        ]);
+                        $vaccineCount++;
+                    }
 
-                foreach ($schedPicks as $v) {
-                    $scheduledDate = $dob->copy()->addMonths($v['months']);
-                    $exists = PediatricVaccination::where('patient_id', $patient->id)
-                        ->where('vaccine_name', $v['vaccine'])
-                        ->where('dose_number', $v['dose'])
-                        ->exists();
-                    if ($exists) continue;
+                    foreach ($schedPicks as $v) {
+                        $scheduledDate = $dob->copy()->addMonths($v['months']);
+                        $exists = PediatricVaccination::where('patient_id', $patient->id)
+                            ->where('vaccine_name', $v['vaccine'])
+                            ->where('dose_number', $v['dose'])
+                            ->exists();
+                        if ($exists) {
+                            continue;
+                        }
 
-                    PediatricVaccination::create([
-                        'patient_id'      => $patient->id,
-                        'doctor_id'       => $doctor?->id,
-                        'vaccine_name'    => $v['vaccine'],
-                        'vaccine_name_ar' => $v['vaccine_ar'],
-                        'dose_number'     => $v['dose'],
-                        'scheduled_age'   => $v['age'],
-                        'scheduled_date'  => $scheduledDate->toDateString(),
-                        'status'          => 'scheduled',
-                    ]);
-                    $vaccineCount++;
-                }
+                        PediatricVaccination::create([
+                            'patient_id' => $patient->id,
+                            'doctor_id' => $doctor?->id,
+                            'vaccine_name' => $v['vaccine'],
+                            'vaccine_name_ar' => $v['vaccine_ar'],
+                            'dose_number' => $v['dose'],
+                            'scheduled_age' => $v['age'],
+                            'scheduled_date' => $scheduledDate->toDateString(),
+                            'status' => 'scheduled',
+                        ]);
+                        $vaccineCount++;
+                    }
                 } // end if (! $hasVaccinations)
 
                 // ── Growth Records ──
                 // Benchmarks used to approximate values across age points
                 if (! $hasGrowth) {
-                $benchmarks = [
-                    0  => ['w' => 3.5,  'h' => 50, 'hc' => 35],
-                    1  => ['w' => 4.5,  'h' => 54, 'hc' => 37],
-                    3  => ['w' => 6.0,  'h' => 60, 'hc' => 40],
-                    6  => ['w' => 7.5,  'h' => 66, 'hc' => 43],
-                    9  => ['w' => 8.5,  'h' => 71, 'hc' => 45],
-                    12 => ['w' => 9.0,  'h' => 76, 'hc' => 46],
-                    18 => ['w' => 10.5, 'h' => 81, 'hc' => 47.5],
-                    24 => ['w' => 12.0, 'h' => 85, 'hc' => 49],
-                    36 => ['w' => 14.0, 'h' => 95, 'hc' => 50],
-                    48 => ['w' => 16.0, 'h' => 103, 'hc' => 50.5],
-                ];
+                    $benchmarks = [
+                        0 => ['w' => 3.5,  'h' => 50, 'hc' => 35],
+                        1 => ['w' => 4.5,  'h' => 54, 'hc' => 37],
+                        3 => ['w' => 6.0,  'h' => 60, 'hc' => 40],
+                        6 => ['w' => 7.5,  'h' => 66, 'hc' => 43],
+                        9 => ['w' => 8.5,  'h' => 71, 'hc' => 45],
+                        12 => ['w' => 9.0,  'h' => 76, 'hc' => 46],
+                        18 => ['w' => 10.5, 'h' => 81, 'hc' => 47.5],
+                        24 => ['w' => 12.0, 'h' => 85, 'hc' => 49],
+                        36 => ['w' => 14.0, 'h' => 95, 'hc' => 50],
+                        48 => ['w' => 16.0, 'h' => 103, 'hc' => 50.5],
+                    ];
 
-                $ageCheckpoints = [0, 1, 3, 6, 9, 12, 18, 24, 36, 48];
-                $validCheckpoints = array_filter($ageCheckpoints, fn ($m) => $m <= $ageMonths);
-                // Limit 5-8 records
-                shuffle($validCheckpoints);
-                $validCheckpoints = array_slice($validCheckpoints, 0, random_int(5, 8));
-                sort($validCheckpoints);
+                    $ageCheckpoints = [0, 1, 3, 6, 9, 12, 18, 24, 36, 48];
+                    $validCheckpoints = array_filter($ageCheckpoints, fn ($m) => $m <= $ageMonths);
+                    // Limit 5-8 records
+                    shuffle($validCheckpoints);
+                    $validCheckpoints = array_slice($validCheckpoints, 0, random_int(5, 8));
+                    sort($validCheckpoints);
 
-                foreach ($validCheckpoints as $m) {
-                    $bm = $benchmarks[$m] ?? $benchmarks[array_key_last($benchmarks)];
-                    $measurementDate = $dob->copy()->addMonths($m);
-                    if ($measurementDate->isFuture()) continue;
+                    foreach ($validCheckpoints as $m) {
+                        $bm = $benchmarks[$m] ?? $benchmarks[array_key_last($benchmarks)];
+                        $measurementDate = $dob->copy()->addMonths($m);
+                        if ($measurementDate->isFuture()) {
+                            continue;
+                        }
 
-                    // Avoid duplicates
-                    $exists = PediatricGrowthRecord::where('patient_id', $patient->id)
-                        ->whereDate('measurement_date', $measurementDate->toDateString())
-                        ->exists();
-                    if ($exists) continue;
+                        // Avoid duplicates
+                        $exists = PediatricGrowthRecord::where('patient_id', $patient->id)
+                            ->whereDate('measurement_date', $measurementDate->toDateString())
+                            ->exists();
+                        if ($exists) {
+                            continue;
+                        }
 
-                    $weight = round($bm['w'] + (random_int(-5, 5) / 10), 2);
-                    $height = round($bm['h'] + (random_int(-2, 2)), 1);
-                    $hc     = round($bm['hc'] + (random_int(-5, 5) / 10), 1);
-                    $bmi    = PediatricGrowthRecord::calculateBmi($weight, $height);
+                        $weight = round($bm['w'] + (random_int(-5, 5) / 10), 2);
+                        $height = round($bm['h'] + (random_int(-2, 2)), 1);
+                        $hc = round($bm['hc'] + (random_int(-5, 5) / 10), 1);
+                        $bmi = PediatricGrowthRecord::calculateBmi($weight, $height);
 
-                    PediatricGrowthRecord::create([
-                        'patient_id'            => $patient->id,
-                        'doctor_id'             => $doctor?->id,
-                        'measurement_date'      => $measurementDate->toDateString(),
-                        'age_months'            => $m,
-                        'weight_kg'             => $weight,
-                        'height_cm'             => $height,
-                        'head_circumference_cm' => $hc,
-                        'bmi'                   => $bmi,
-                    ]);
-                    $growthCount++;
-                }
+                        PediatricGrowthRecord::create([
+                            'patient_id' => $patient->id,
+                            'doctor_id' => $doctor?->id,
+                            'measurement_date' => $measurementDate->toDateString(),
+                            'age_months' => $m,
+                            'weight_kg' => $weight,
+                            'height_cm' => $height,
+                            'head_circumference_cm' => $hc,
+                            'bmi' => $bmi,
+                        ]);
+                        $growthCount++;
+                    }
                 } // end if (! $hasGrowth)
 
                 // ── Allergies (0-2) ──
                 if (! $hasAllergies) {
-                $allergyOptions = [
-                    ['allergy_type' => 'food',        'allergen' => 'البيض',        'severity' => 'mild',     'symptoms' => ['rash', 'itching']],
-                    ['allergy_type' => 'food',        'allergen' => 'الفول السوداني', 'severity' => 'severe',   'symptoms' => ['swelling', 'breathing_difficulty']],
-                    ['allergy_type' => 'food',        'allergen' => 'الألبان',       'severity' => 'moderate', 'symptoms' => ['rash', 'vomiting']],
-                    ['allergy_type' => 'food',        'allergen' => 'القمح',        'severity' => 'mild',     'symptoms' => ['stomach_pain']],
-                    ['allergy_type' => 'drug',        'allergen' => 'Penicillin',    'severity' => 'severe',   'symptoms' => ['rash', 'swelling']],
-                    ['allergy_type' => 'drug',        'allergen' => 'Aspirin',       'severity' => 'moderate', 'symptoms' => ['rash']],
-                ];
+                    $allergyOptions = [
+                        ['allergy_type' => 'food',        'allergen' => 'البيض',        'severity' => 'mild',     'symptoms' => ['rash', 'itching']],
+                        ['allergy_type' => 'food',        'allergen' => 'الفول السوداني', 'severity' => 'severe',   'symptoms' => ['swelling', 'breathing_difficulty']],
+                        ['allergy_type' => 'food',        'allergen' => 'الألبان',       'severity' => 'moderate', 'symptoms' => ['rash', 'vomiting']],
+                        ['allergy_type' => 'food',        'allergen' => 'القمح',        'severity' => 'mild',     'symptoms' => ['stomach_pain']],
+                        ['allergy_type' => 'drug',        'allergen' => 'Penicillin',    'severity' => 'severe',   'symptoms' => ['rash', 'swelling']],
+                        ['allergy_type' => 'drug',        'allergen' => 'Aspirin',       'severity' => 'moderate', 'symptoms' => ['rash']],
+                    ];
 
-                $numAllergies = random_int(0, 2);
-                if ($numAllergies > 0) {
-                    $keys = array_rand($allergyOptions, min($numAllergies, count($allergyOptions)));
-                    $keys = is_array($keys) ? $keys : [$keys];
+                    $numAllergies = random_int(0, 2);
+                    if ($numAllergies > 0) {
+                        $keys = array_rand($allergyOptions, min($numAllergies, count($allergyOptions)));
+                        $keys = is_array($keys) ? $keys : [$keys];
 
-                    foreach ($keys as $k) {
-                        $opt = $allergyOptions[$k];
-                        $exists = PediatricAllergy::where('patient_id', $patient->id)
-                            ->where('allergen', $opt['allergen'])
-                            ->exists();
-                        if ($exists) continue;
+                        foreach ($keys as $k) {
+                            $opt = $allergyOptions[$k];
+                            $exists = PediatricAllergy::where('patient_id', $patient->id)
+                                ->where('allergen', $opt['allergen'])
+                                ->exists();
+                            if ($exists) {
+                                continue;
+                            }
 
-                        PediatricAllergy::create([
-                            'patient_id'      => $patient->id,
-                            'doctor_id'       => $doctor?->id,
-                            'allergy_type'    => $opt['allergy_type'],
-                            'allergen'        => $opt['allergen'],
-                            'severity'        => $opt['severity'],
-                            'symptoms'        => $opt['symptoms'],
-                            'discovered_date' => Carbon::now()->subDays(random_int(30, 365))->toDateString(),
-                            'is_active'       => true,
-                            'notes'           => 'تم اكتشاف الحساسية أثناء الفحص الطبي.',
-                        ]);
-                        $allergyCount++;
+                            PediatricAllergy::create([
+                                'patient_id' => $patient->id,
+                                'doctor_id' => $doctor?->id,
+                                'allergy_type' => $opt['allergy_type'],
+                                'allergen' => $opt['allergen'],
+                                'severity' => $opt['severity'],
+                                'symptoms' => $opt['symptoms'],
+                                'discovered_date' => Carbon::now()->subDays(random_int(30, 365))->toDateString(),
+                                'is_active' => true,
+                                'notes' => 'تم اكتشاف الحساسية أثناء الفحص الطبي.',
+                            ]);
+                            $allergyCount++;
+                        }
                     }
-                }
                 } // end if (! $hasAllergies)
             }
 
             $this->command->info("    Created {$vaccineCount} vaccinations, {$growthCount} growth records, {$allergyCount} allergies.");
         } catch (\Throwable $e) {
-            $this->command->error('    Failed to seed pediatric records: ' . $e->getMessage());
+            $this->command->error('    Failed to seed pediatric records: '.$e->getMessage());
         }
     }
 }
