@@ -303,6 +303,11 @@ Route::middleware(['admin.auth', 'branch.context'])->group(function () {
         Route::post('/prompts/{prompt}', [$ai, 'updatePrompt'])->name('admin.ai.prompts.update')->middleware('permission:ai.prompts,ai.manage');
         Route::get('/usage', [$ai, 'usage'])->name('admin.ai.usage')->middleware('permission:ai.logs,ai.view');
         Route::get('/logs', [$ai, 'logs'])->name('admin.ai.logs')->middleware('permission:ai.logs,ai.view');
+
+        // AI Assistant workspace (Wave 1 text tools) + generic generation endpoint.
+        $assist = \App\Http\Controllers\Admin\AiAssistController::class;
+        Route::get('/assistant', [$assist, 'workspace'])->name('admin.ai.assistant')->middleware('permission:ai.view');
+        Route::post('/assist', [$assist, 'generate'])->name('admin.ai.assist')->middleware('permission:ai.view');
     });
 
     // ─── Notifications Hub (unified control center) ────────
