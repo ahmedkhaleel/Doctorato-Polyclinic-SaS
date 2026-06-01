@@ -86,19 +86,146 @@ class DemoUserSeeder extends Seeder
 
     private function attachDoctor(User $user): void
     {
-        // Prefer a demo doctor that already has visits, so the panel is populated.
-        $doctorId = DB::table('visits')->select('doctor_id')->whereNotNull('doctor_id')
-            ->groupBy('doctor_id')->orderByRaw('COUNT(*) DESC')->value('doctor_id');
-
-        $doctor = $doctorId ? Doctor::find($doctorId) : Doctor::first();
-
-        if (! $doctor) {
-            $doctor = Doctor::create([
-                'name_ar' => 'طبيب تجريبي', 'name_en' => 'Demo Doctor', 'status' => 'active',
-            ]);
+        // Dedicated demo doctor so the panel data is clearly "this doctor's".
+        $module = 'derma';
+        $doctor = Doctor::firstOrNew(['user_id' => $user->id]);
+        $doctor->fill([
+            'name_ar' => 'د. سامي الديمو',
+            'name_en' => 'Dr. Sami Demo',
+            'specialization_ar' => 'جلدية وتجميل',
+            'specialization_en' => 'Dermatology & Cosmetics',
+            'status' => 'active',
+            'user_id' => $user->id,
+        ]);
+        if (DB::getSchemaBuilder()->hasColumn('doctors', 'module')) {
+            $doctor->module = $module;
         }
-        $doctor->user_id = $user->id;
         $doctor->save();
+
+        $this->seedDoctorHistory($doctor, $module);
+    }
+
+    /** Builds the demo doctor's own patients/queue/visits/prescriptions. */
+    private function seedDoctorHistory(Doctor $doctor, string $module): void
+    {
+        // Idempotent: only build once (6 appointments are always created, even
+        // though the future one has no visit yet).
+        if (DB::table('booking_appointments')->where('doctor_id', $doctor->id)->count() >= 6) {
+            return;
+        }
+
+        $now = now();
+        $branchId = 1;
+        $hasBranch = fn (string $t) => DB::getSchemaBuilder()->hasColumn($t, 'branch_id');
+
+        $service = DB::table('services')->whereNotNull('price')->where('price', '>', 0)->first();
+        $pmId = DB::table('payment_methods')->value('id');
+        $adminId = User::whereHas('role', fn ($q) => $q->whereIn('name', ['super_admin', 'admin']))->value('id');
+        // Reuse existing demo patients (exclude none); fall back to the linked demo patient.
+        $patients = Patient::orderBy('id')->limit(6)->get();
+
+        if (! $service || $patients->isEmpty()) {
+            return;
+        }
+
+        // i => [visit_date, status, started] — mix of today's queue + history.
+        $plan = [
+            ['date' => $now->copy(), 'status' => 'waiting', 'started' => false, 'dx' => null],
+            ['date' => $now->copy(), 'status' => 'in_progress', 'started' => true, 'dx' => 'كشف متابعة'],
+            ['date' => $now->copy()->subDays(3), 'status' => 'completed', 'started' => true, 'dx' => 'حب شباب'],
+            ['date' => $now->copy()->subDays(9), 'status' => 'completed', 'started' => true, 'dx' => 'تصبغات'],
+            ['date' => $now->copy()->subDays(16), 'status' => 'completed', 'started' => true, 'dx' => 'إكزيما'],
+            ['date' => $now->copy()->addDays(2), 'status' => 'scheduled', 'started' => false, 'dx' => null],
+        ];
+
+        foreach ($plan as $i => $p) {
+            $patient = $patients[$i % $patients->count()];
+            $price = (float) $service->price;
+            $date = $p['date'];
+
+            $bookingId = DB::table('bookings')->insertGetId(array_filter([
+                'branch_id' => $hasBranch('bookings') ? $branchId : null,
+                'patient_id' => $patient->id, 'booking_number' => \App\Models\Booking::generateBookingNumber(),
+                'source' => 'clinic', 'module' => $module, 'booking_type' => $module.'_service',
+                'full_name' => $patient->full_name, 'phone' => $patient->phone,
+                'status' => $p['status'] === 'completed' ? 'completed' : 'confirmed',
+                'created_at' => $date, 'updated_at' => $date,
+            ], fn ($v) => $v !== null));
+
+            $bsId = DB::table('booking_services')->insertGetId(array_filter([
+                'branch_id' => $hasBranch('booking_services') ? $branchId : null,
+                'booking_id' => $bookingId, 'service_id' => $service->id, 'doctor_id' => $doctor->id,
+                'sessions_count' => 1, 'unit_price' => $price, 'total_price' => $price,
+                'status' => $p['status'] === 'completed' ? 'completed' : 'in_progress',
+                'created_at' => $date, 'updated_at' => $date,
+            ], fn ($v) => $v !== null));
+
+            DB::table('booking_appointments')->insert(array_filter([
+                'branch_id' => $hasBranch('booking_appointments') ? $branchId : null,
+                'booking_id' => $bookingId, 'booking_service_id' => $bsId, 'doctor_id' => $doctor->id,
+                'appointment_date' => $date->toDateString(), 'start_time' => sprintf('%02d:00', 9 + $i),
+                'end_time' => sprintf('%02d:30', 9 + $i), 'session_number' => 1,
+                'status' => $p['status'] === 'completed' ? 'completed' : 'scheduled',
+                'created_at' => $date, 'updated_at' => $date,
+            ], fn ($v) => $v !== null));
+
+            // A future appointment has no visit yet (created at check-in). The
+            // visits.status enum has no 'scheduled' value, so skip the visit here.
+            if ($p['status'] === 'scheduled') {
+                continue;
+            }
+
+            $visitId = DB::table('visits')->insertGetId(array_filter([
+                'branch_id' => $hasBranch('visits') ? $branchId : null,
+                'patient_id' => $patient->id, 'booking_id' => $bookingId, 'doctor_id' => $doctor->id,
+                'service_id' => $service->id, 'visit_type' => 'session', 'module' => $module,
+                'status' => $p['status'], 'diagnosis' => $p['dx'],
+                'doctor_notes' => $p['status'] === 'completed' ? 'تم العلاج والمتابعة.' : null,
+                'visit_date' => $date->toDateString(),
+                'started_at' => $p['started'] ? $date->copy()->setTime(9 + $i, 0) : null,
+                'completed_at' => $p['status'] === 'completed' ? $date->copy()->setTime(9 + $i, 30) : null,
+                'created_at' => $date, 'updated_at' => $date,
+            ], fn ($v) => $v !== null));
+
+            if ($p['status'] !== 'completed') {
+                continue;
+            }
+
+            // Completed visits get a prescription + invoice + payment.
+            $rxId = DB::table('prescriptions')->insertGetId(array_filter([
+                'branch_id' => $hasBranch('prescriptions') ? $branchId : null,
+                'patient_id' => $patient->id, 'visit_id' => $visitId, 'doctor_id' => $doctor->id,
+                'diagnosis' => $p['dx'], 'created_at' => $date, 'updated_at' => $date,
+            ], fn ($v) => $v !== null));
+            DB::table('prescription_items')->insert(array_filter([
+                'branch_id' => $hasBranch('prescription_items') ? $branchId : null,
+                'prescription_id' => $rxId, 'medication_name' => 'Topical Cream', 'dosage' => '-',
+                'frequency' => 'مرتين يومياً', 'duration' => '4 أسابيع', 'sort_order' => 0,
+                'created_at' => $date, 'updated_at' => $date,
+            ], fn ($v) => $v !== null));
+
+            $invId = DB::table('invoices')->insertGetId(array_filter([
+                'branch_id' => $hasBranch('invoices') ? $branchId : null,
+                'invoice_number' => \App\Models\Invoice::generateInvoiceNumber(),
+                'invoice_date' => $date->toDateString(), 'patient_id' => $patient->id, 'visit_id' => $visitId,
+                'booking_id' => $bookingId, 'subtotal' => $price, 'discount_amount' => 0, 'tax_amount' => 0,
+                'total' => $price, 'paid_amount' => $price, 'status' => 'paid', 'module' => $module,
+                'created_by' => $adminId, 'created_at' => $date, 'updated_at' => $date,
+            ], fn ($v) => $v !== null));
+            DB::table('invoice_items')->insert([
+                'invoice_id' => $invId, 'description_ar' => $p['dx'], 'description_en' => 'Session',
+                'quantity' => 1, 'unit_price' => $price, 'discount' => 0, 'total' => $price,
+                'created_at' => $date, 'updated_at' => $date,
+            ]);
+            if ($pmId) {
+                DB::table('payments')->insert(array_filter([
+                    'branch_id' => $hasBranch('payments') ? $branchId : null,
+                    'invoice_id' => $invId, 'patient_id' => $patient->id, 'payment_method_id' => $pmId,
+                    'amount' => $price, 'payment_date' => $date->toDateString(), 'received_by' => $adminId,
+                    'created_at' => $date, 'updated_at' => $date,
+                ], fn ($v) => $v !== null));
+            }
+        }
     }
 
     private function attachPatient(User $user): void
