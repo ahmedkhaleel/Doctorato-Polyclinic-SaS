@@ -96,7 +96,7 @@ class AdminAuthTest extends TestCase
         $admin = $this->createAdminUser();
 
         $response = $this->post('/admin/login', [
-            'email' => 'admin@test.com',
+            'login' => 'admin@test.com',
             'password' => 'password',
         ]);
 

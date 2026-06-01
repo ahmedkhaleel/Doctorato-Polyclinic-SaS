@@ -94,7 +94,7 @@ class BookingStatusWorkflowTest extends TestCase
         $this->actingAs($this->secretary);
         $booking = $this->createBooking('unconfirmed');
 
-        $response = $this->put("/secretary/bookings/{$booking->id}/status", [
+        $response = $this->post("/secretary/bookings/{$booking->id}/status", [
             'status' => 'confirmed',
         ]);
 
@@ -107,7 +107,7 @@ class BookingStatusWorkflowTest extends TestCase
         $this->actingAs($this->secretary);
         $booking = $this->createBooking('unconfirmed');
 
-        $response = $this->put("/secretary/bookings/{$booking->id}/status", [
+        $response = $this->post("/secretary/bookings/{$booking->id}/status", [
             'status' => 'cancelled',
         ]);
 
@@ -120,7 +120,7 @@ class BookingStatusWorkflowTest extends TestCase
         $this->actingAs($this->secretary);
         $booking = $this->createBooking('unconfirmed');
 
-        $response = $this->put("/secretary/bookings/{$booking->id}/status", [
+        $response = $this->post("/secretary/bookings/{$booking->id}/status", [
             'status' => 'completed',
         ]);
 
@@ -134,7 +134,7 @@ class BookingStatusWorkflowTest extends TestCase
         $this->actingAs($this->secretary);
         $booking = $this->createBooking('completed');
 
-        $response = $this->put("/secretary/bookings/{$booking->id}/status", [
+        $response = $this->post("/secretary/bookings/{$booking->id}/status", [
             'status' => 'cancelled',
         ]);
 
@@ -147,7 +147,7 @@ class BookingStatusWorkflowTest extends TestCase
         $this->actingAs($this->secretary);
         $booking = $this->createBooking('cancelled');
 
-        $response = $this->put("/secretary/bookings/{$booking->id}/status", [
+        $response = $this->post("/secretary/bookings/{$booking->id}/status", [
             'status' => 'unconfirmed',
         ]);
 

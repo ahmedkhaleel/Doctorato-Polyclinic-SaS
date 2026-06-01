@@ -73,8 +73,10 @@ class CrossPanelAuthTest extends TestCase
 
         $response = $this->actingAs($user)->get('/admin');
 
+        // AdminAuth (whitelist) sends a wrong-role user to the admin login rather
+        // than into another panel's internals — see the middleware's rationale.
         $response->assertStatus(302);
-        $response->assertRedirect('/patient');
+        $response->assertRedirect('/admin/login');
     }
 
     public function test_admin_panel_redirects_doctor_to_their_own_panel(): void
@@ -83,7 +85,7 @@ class CrossPanelAuthTest extends TestCase
 
         $this->actingAs($user)
             ->get('/admin')
-            ->assertRedirect('/doctor');
+            ->assertRedirect('/admin/login');
     }
 
     public function test_admin_panel_redirects_secretary_to_their_own_panel(): void
@@ -92,7 +94,7 @@ class CrossPanelAuthTest extends TestCase
 
         $this->actingAs($user)
             ->get('/admin')
-            ->assertRedirect('/secretary');
+            ->assertRedirect('/admin/login');
     }
 
     public function test_admin_panel_redirects_unknown_role_to_login(): void

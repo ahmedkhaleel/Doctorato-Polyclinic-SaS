@@ -36,7 +36,7 @@ class SecretaryProfileTest extends TestCase
 
     public function test_can_update_profile(): void
     {
-        $this->actingAs($this->secretary)->put('/secretary/profile', [
+        $this->actingAs($this->secretary)->post('/secretary/profile/update', [
             'name' => 'Updated Name',
             'email' => 'updated@test.com',
         ])->assertRedirect();
@@ -48,13 +48,13 @@ class SecretaryProfileTest extends TestCase
 
     public function test_profile_requires_name_and_email(): void
     {
-        $this->actingAs($this->secretary)->put('/secretary/profile', [])
+        $this->actingAs($this->secretary)->post('/secretary/profile/update', [])
             ->assertSessionHasErrors(['name', 'email']);
     }
 
     public function test_can_change_password(): void
     {
-        $this->actingAs($this->secretary)->put('/secretary/profile/password', [
+        $this->actingAs($this->secretary)->post('/secretary/profile/password', [
             'current_password' => 'password',
             'password' => 'newpassword123',
             'password_confirmation' => 'newpassword123',
@@ -66,7 +66,7 @@ class SecretaryProfileTest extends TestCase
 
     public function test_wrong_current_password_rejected(): void
     {
-        $this->actingAs($this->secretary)->put('/secretary/profile/password', [
+        $this->actingAs($this->secretary)->post('/secretary/profile/password', [
             'current_password' => 'wrongpassword',
             'password' => 'newpassword123',
             'password_confirmation' => 'newpassword123',
@@ -75,7 +75,7 @@ class SecretaryProfileTest extends TestCase
 
     public function test_password_confirmation_required(): void
     {
-        $this->actingAs($this->secretary)->put('/secretary/profile/password', [
+        $this->actingAs($this->secretary)->post('/secretary/profile/password', [
             'current_password' => 'password',
             'password' => 'newpassword123',
             'password_confirmation' => 'different',

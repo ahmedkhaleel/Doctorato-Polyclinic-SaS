@@ -141,7 +141,7 @@ class SecretaryBookingTest extends TestCase
         ]);
 
         $response->assertRedirect();
-        $response->assertSessionHas('success', 'Booking created successfully.');
+        $response->assertSessionHas('success'); // message is locale-aware (ar/en)
 
         $this->assertDatabaseHas('bookings', [
             'patient_id' => $this->patient->id,

@@ -4,7 +4,7 @@ namespace Tests\Feature\Patient;
 
 use App\Models\Role;
 use App\Models\User;
-use Illuminate\Auth\Notifications\ResetPassword;
+use App\Notifications\BrandedPasswordReset;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Password;
@@ -54,7 +54,7 @@ class PasswordResetTest extends TestCase
         $this->post('/ar/patient/forgot-password', ['email' => 'reset-me@test.com'])
             ->assertRedirect();
 
-        Notification::assertSentTo($patient, ResetPassword::class);
+        Notification::assertSentTo($patient, BrandedPasswordReset::class);
     }
 
     public function test_forgot_password_does_not_email_admin(): void

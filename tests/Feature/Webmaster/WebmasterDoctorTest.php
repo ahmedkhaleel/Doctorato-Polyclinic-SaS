@@ -74,7 +74,7 @@ class WebmasterDoctorTest extends TestCase
             'status' => 'active',
         ]);
 
-        $this->actingAs($this->webmaster)->put("/webmaster/doctors/{$doctor->id}", [
+        $this->actingAs($this->webmaster)->post("/webmaster/doctors/{$doctor->id}/update", [
             'name_ar' => 'دكتور محدث',
             'name_en' => 'Updated Doctor',
             'specialization_ar' => 'أسنان',
@@ -93,7 +93,7 @@ class WebmasterDoctorTest extends TestCase
             'status' => 'active',
         ]);
 
-        $this->actingAs($this->webmaster)->delete("/webmaster/doctors/{$doctor->id}")
+        $this->actingAs($this->webmaster)->post("/webmaster/doctors/{$doctor->id}/delete")
             ->assertRedirect();
 
         $this->assertSoftDeleted('doctors', ['id' => $doctor->id]);

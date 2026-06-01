@@ -66,7 +66,7 @@ class WebmasterFaqTest extends TestCase
             'answer_ar' => 'إجابة قديمة', 'answer_en' => 'Old Answer',
         ]);
 
-        $this->actingAs($this->webmaster)->put("/webmaster/faqs/{$faq->id}", [
+        $this->actingAs($this->webmaster)->post("/webmaster/faqs/{$faq->id}/update", [
             'category' => 'General',
             'question_ar' => 'سؤال محدث', 'question_en' => 'Updated Question',
             'answer_ar' => 'إجابة محدثة', 'answer_en' => 'Updated Answer',
@@ -83,7 +83,7 @@ class WebmasterFaqTest extends TestCase
             'answer_ar' => 'إجابة', 'answer_en' => 'Answer',
         ]);
 
-        $this->actingAs($this->webmaster)->delete("/webmaster/faqs/{$faq->id}")
+        $this->actingAs($this->webmaster)->post("/webmaster/faqs/{$faq->id}/delete")
             ->assertRedirect();
 
         $this->assertDatabaseMissing('faqs', ['id' => $faq->id]);

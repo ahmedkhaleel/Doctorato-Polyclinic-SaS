@@ -4,7 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Role;
 use App\Models\User;
-use Illuminate\Auth\Notifications\ResetPassword;
+use App\Notifications\BrandedPasswordReset;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Password;
@@ -66,7 +66,7 @@ class StaffPasswordResetTest extends TestCase
         $this->post("{$prefix}/forgot-password", ['email' => $user->email])
             ->assertRedirect();
 
-        Notification::assertSentTo($user, ResetPassword::class);
+        Notification::assertSentTo($user, BrandedPasswordReset::class);
     }
 
     /**

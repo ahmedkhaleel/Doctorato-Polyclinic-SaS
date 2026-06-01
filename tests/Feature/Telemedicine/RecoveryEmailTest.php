@@ -73,8 +73,10 @@ class RecoveryEmailTest extends TestCase
         Artisan::call('telemedicine:send-recovery-emails');
 
         $c->refresh();
+        // recovery_email_sent_at is the behavioral proof the email was dispatched.
+        // The command sends via Mail::send('emails.consultation-recovery', ...) — a Blade
+        // view, not a Mailable — so Mail::assertSent(Mailable::class) can never match it.
         $this->assertNotNull($c->recovery_email_sent_at);
-        Mail::assertSent(\Illuminate\Mail\Mailable::class);
     }
 
     public function test_too_fresh_consultation_is_skipped(): void

@@ -94,6 +94,8 @@ Route::middleware(['secretary.auth', 'branch.context'])->group(function () {
     // ─── Visits ─────────────────────────────────────────────
     Route::get('/visits', [SecretaryVisitController::class, 'index'])->name('secretary.visits.index');
     Route::get('/visits/{visit}', [SecretaryVisitController::class, 'show'])->name('secretary.visits.show');
+    Route::post('/visits/{visit}/start', [SecretaryVisitController::class, 'start'])->name('secretary.visits.start');
+    Route::post('/visits/{visit}/complete', [SecretaryVisitController::class, 'complete'])->name('secretary.visits.complete');
     Route::post('/visits/{visit}/cancel', [SecretaryVisitController::class, 'cancel'])->name('secretary.visits.cancel');
     Route::post('/visits/{visit}/details', [SecretaryVisitController::class, 'updateDetails'])
         ->name('secretary.visits.updateDetails');
