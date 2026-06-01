@@ -66,6 +66,9 @@ class AiSettingsSeeder extends Seeder
             ['consult_transcription', 'تفريغ الاستشارة', 'Consult Transcription', 'vision', 32],
             ['nl_analytics', 'تحليلات بلغة طبيعية', 'NL Analytics', 'vision', 33],
             ['insurance_ocr', 'استخراج بيانات التأمين', 'Insurance OCR', 'vision', 34],
+            // Wave 5 — predictive
+            ['no_show_prediction', 'توقّع الغياب', 'No-show Prediction', 'predictive', 40],
+            ['inventory_reorder', 'اقتراح إعادة طلب المخزون', 'Inventory Reorder', 'predictive', 41],
         ];
         foreach ($features as [$key, $ar, $en, $group, $order]) {
             AiFeatureFlag::firstOrCreate(

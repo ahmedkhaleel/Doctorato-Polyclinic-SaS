@@ -161,6 +161,47 @@ class AiController extends Controller
         return response()->json(['ok' => true, 'text' => $result->text]);
     }
 
+    // ─── Predictive (Wave 5) ─────────────────────────────────
+    public function predictions(
+        \App\Services\Ai\Features\NoShowPredictor $noShow,
+        \App\Services\Ai\Features\InventoryReorderAdvisor $reorder,
+    ): Response {
+        return Inertia::render('Admin/Ai/Predictions', [
+            'attendance' => $noShow->snapshot(),
+            'lowStock' => $reorder->lowStock(20),
+        ]);
+    }
+
+    public function predictNoShow(Request $request, \App\Services\Ai\Features\NoShowPredictor $noShow): \Illuminate\Http\JsonResponse
+    {
+        return $this->predictWrap(fn () => $noShow->analyze($this->actorOpts($request)));
+    }
+
+    public function suggestReorder(Request $request, \App\Services\Ai\Features\InventoryReorderAdvisor $reorder): \Illuminate\Http\JsonResponse
+    {
+        return $this->predictWrap(fn () => $reorder->suggest($this->actorOpts($request)));
+    }
+
+    private function actorOpts(Request $request): array
+    {
+        return [
+            'locale' => app()->getLocale(),
+            'rate_key' => 'user:'.$request->user()?->id,
+            'actor' => ['type' => 'user', 'id' => $request->user()?->id],
+        ];
+    }
+
+    private function predictWrap(callable $cb): \Illuminate\Http\JsonResponse
+    {
+        try {
+            $result = $cb();
+        } catch (\App\Services\Ai\Exceptions\AiUnavailableException $e) {
+            return response()->json(['ok' => false, 'reason' => $e->reason, 'message' => $e->getMessage()], 422);
+        }
+
+        return response()->json(['ok' => true, 'text' => $result->text]);
+    }
+
     // ─── Request logs ────────────────────────────────────────
     public function logs(Request $request): Response
     {

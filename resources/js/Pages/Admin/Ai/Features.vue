@@ -25,6 +25,7 @@ const groupLabel = (k) => ({
     patient: t('الموجة 2 — تفاعل المريض', 'Wave 2 — Patient'),
     clinical: t('الموجة 3 — سريري', 'Wave 3 — Clinical'),
     vision: t('الموجة 4 — رؤية/صوت', 'Wave 4 — Vision/Voice'),
+    predictive: t('الموجة 5 — تنبؤية', 'Wave 5 — Predictive'),
 }[k] || k);
 
 const models = ['', 'gpt-4o-mini', 'gpt-4o', 'gpt-4.1-mini', 'gpt-4.1'];
