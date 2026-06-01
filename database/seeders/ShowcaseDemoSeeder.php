@@ -334,7 +334,9 @@ class ShowcaseDemoSeeder extends Seeder
             DB::table('patient_referrals')->insert([
                 'referrer_patient_id' => $arr[$i]->id, 'referred_patient_id' => $arr[$i + 1]->id,
                 'code' => 'REF-'.strtoupper(Str::random(6)), 'discount_amount' => 50,
-                'discount_currency' => 'EGP', 'redeemed_at' => $i === 0 ? $now->copy()->subDays(3) : null,
+                // redeemed_at is NOT NULL (migration uses ->useCurrent()), so always
+                // provide a real timestamp — never null.
+                'discount_currency' => 'EGP', 'redeemed_at' => $now->copy()->subDays(rand(1, 20)),
                 'created_at' => $now->copy()->subDays(rand(5, 30)), 'updated_at' => $now,
             ]);
         }
