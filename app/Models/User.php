@@ -41,6 +41,7 @@ class User extends Authenticatable
         'password',
         'role_id',
         'is_active',
+        'is_demo',
         'last_seen_at',
     ];
 
@@ -59,6 +60,7 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'is_active' => 'boolean',
+            'is_demo' => 'boolean',
             'last_seen_at' => 'datetime',
         ];
     }

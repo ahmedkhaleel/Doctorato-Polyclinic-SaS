@@ -179,3 +179,10 @@ Schedule::call(function () {
         }
     }
 })->dailyAt('04:00')->name('prune-old-logs')->onOneServer();
+
+// Nightly demo reset — only runs when DEMO_ENV=true (the command self-guards),
+// so it is a no-op on real installs. Keeps the sales demo clean each morning.
+Schedule::command('demo:reset --force')
+    ->dailyAt('03:30')
+    ->name('demo-nightly-reset')
+    ->onOneServer();

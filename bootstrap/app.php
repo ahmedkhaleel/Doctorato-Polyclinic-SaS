@@ -53,6 +53,8 @@ return Application::configure(basePath: dirname(__DIR__))
             SecurityHeaders::class,
             CaptureUtmParameters::class,
             \App\Http\Middleware\QueryCountMonitor::class,
+            // Read-mostly guard for demo accounts: no delete, no core-settings changes.
+            \App\Http\Middleware\DemoModeGuard::class,
         ]);
 
         $middleware->validateCsrfTokens(except: [
