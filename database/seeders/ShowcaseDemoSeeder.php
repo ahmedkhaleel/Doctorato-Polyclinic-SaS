@@ -64,6 +64,7 @@ class ShowcaseDemoSeeder extends Seeder
         $this->messages($now, $staff);
         $this->branchDoctor($now, $doctors);
         $this->accessLogs($now, $patients, $admin);
+        $this->currentMonthActivity($now, $patients, $admin);
 
         $this->command->info('    Showcase data complete.');
     }
@@ -696,6 +697,58 @@ class ShowcaseDemoSeeder extends Seeder
             DB::table('branch_doctor')->insert([
                 'branch_id' => $this->branch, 'doctor_id' => $d->id,
                 'created_at' => $now, 'updated_at' => $now,
+            ]);
+        }
+    }
+
+    /**
+     * Guarantees the dashboard's headline KPIs (revenue / net income / expenses)
+     * are non-zero on ANY demo date. The bulk demo data is dated across the past
+     * ~1-3 months, so near a month boundary the *current-month* figures would read
+     * ~0. This seeds paid invoices + payments + expenses dated within the current
+     * month-to-date. Idempotent: keyed on a DEMO-MTD reference so it never piles on.
+     */
+    private function currentMonthActivity($now, $patients, $admin): void
+    {
+        $already = DB::table('payments')->where('reference_number', 'like', 'DEMO-MTD-%')->exists();
+        if ($already || $patients->isEmpty()) {
+            return;
+        }
+
+        $method = DB::table('payment_methods')->value('id');
+        $cat = DB::table('expense_categories')->value('id');
+        // Span only within the current month: today back to the 1st (clamped to 20d).
+        $span = max(0, min(20, (int) $now->day - 1));
+        $pats = $patients->values();
+
+        for ($i = 0; $i < 18; $i++) {
+            $p = $pats[$i % $pats->count()];
+            $date = $now->copy()->subDays(rand(0, $span));
+            $amount = (float) (rand(6, 40) * 100);
+            $invId = DB::table('invoices')->insertGetId([
+                'branch_id' => $this->branch,
+                'invoice_number' => 'INV-MTD-'.$now->format('Ym').'-'.str_pad((string) ($i + 1), 4, '0', STR_PAD_LEFT),
+                'invoice_date' => $date->toDateString(), 'patient_id' => $p->id,
+                'subtotal' => $amount, 'discount_amount' => 0, 'tax_amount' => 0,
+                'total' => $amount, 'paid_amount' => $amount, 'status' => 'paid',
+                'module' => ['derma', 'dental', 'pediatric', 'obgyn'][$i % 4],
+                'created_by' => $admin?->id, 'created_at' => $date, 'updated_at' => $date,
+            ]);
+            DB::table('payments')->insert([
+                'branch_id' => $this->branch, 'invoice_id' => $invId, 'patient_id' => $p->id,
+                'payment_method_id' => $method, 'amount' => $amount, 'payment_date' => $date->toDateString(),
+                'reference_number' => 'DEMO-MTD-'.($i + 1), 'received_by' => $admin?->id,
+                'created_at' => $date, 'updated_at' => $date,
+            ]);
+        }
+
+        for ($i = 0; $i < 8; $i++) {
+            $date = $now->copy()->subDays(rand(0, $span));
+            DB::table('expenses')->insert([
+                'branch_id' => $this->branch, 'expense_category_id' => $cat,
+                'amount' => (float) (rand(3, 20) * 100), 'expense_date' => $date->toDateString(),
+                'description' => 'مصروف تشغيلي تجريبي', 'created_by' => $admin?->id,
+                'created_at' => $date, 'updated_at' => $date,
             ]);
         }
     }
