@@ -53,10 +53,10 @@ function deleteLeave(id) {
 }
 
 const typeConfig = {
-    annual:   { key: 'a_annual',   icon: '☀️', bg: 'bg-slate-50',     text: 'text-[#1B365D]',    border: 'border-slate-200',    dot: 'bg-[#1B365D]' },
-    sick:     { key: 'a_sick',     icon: '🏥', bg: 'bg-amber-50',    text: 'text-[#C4A265]',   border: 'border-amber-200',   dot: 'bg-[#C4A265]' },
-    personal: { key: 'a_personal', icon: '👤', bg: 'bg-slate-50',  text: 'text-[#1B365D]', border: 'border-slate-200', dot: 'bg-[#1B365D]' },
-    unpaid:   { key: 'a_unpaid',   icon: '📋', bg: 'bg-slate-50',   text: 'text-slate-700',  border: 'border-slate-200',  dot: 'bg-slate-500' },
+    annual:   { key: 'a_annual',   bg: 'bg-slate-50',     text: 'text-[#1B365D]',    border: 'border-slate-200',    dot: 'bg-[#1B365D]' },
+    sick:     { key: 'a_sick',     bg: 'bg-amber-50',    text: 'text-[#C4A265]',   border: 'border-amber-200',   dot: 'bg-[#C4A265]' },
+    personal: { key: 'a_personal', bg: 'bg-slate-50',  text: 'text-[#1B365D]', border: 'border-slate-200', dot: 'bg-[#1B365D]' },
+    unpaid:   { key: 'a_unpaid',   bg: 'bg-slate-50',   text: 'text-slate-700',  border: 'border-slate-200',  dot: 'bg-slate-500' },
 };
 
 const statusConfig = {
@@ -65,7 +65,7 @@ const statusConfig = {
     rejected: { key: 'a_rejected', bg: 'bg-red-50',     text: 'text-red-700',     border: 'border-red-200',     dot: 'bg-red-500',     icon: 'M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z' },
 };
 
-function getType(t) { return typeConfig[t] || { key: t, icon: '📋', bg: 'bg-gray-50', text: 'text-gray-700', border: 'border-gray-200', dot: 'bg-gray-500' }; }
+function getType(t) { return typeConfig[t] || { key: t, bg: 'bg-gray-50', text: 'text-gray-700', border: 'border-gray-200', dot: 'bg-gray-500' }; }
 function getStatus(s) { return statusConfig[s] || { key: s, bg: 'bg-gray-50', text: 'text-gray-700', border: 'border-gray-200', dot: 'bg-gray-500', icon: '' }; }
 
 function formatDate(d) {

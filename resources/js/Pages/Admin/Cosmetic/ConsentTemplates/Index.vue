@@ -106,7 +106,7 @@ onMounted(() => { requestAnimationFrame(() => { mounted.value = true; }); });
             </div>
 
             <div v-if="!templates.length" class="ct-card ct-stagger col-span-full text-center py-16" style="--i:1">
-                <div class="text-5xl mb-3 opacity-40">📋</div>
+                <svg class="w-12 h-12 mx-auto mb-3 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
                 <p class="text-sm text-gray-400">{{ isRtl ? 'لا توجد قوالب موافقة بعد' : 'No consent templates yet' }}</p>
             </div>
         </div>
@@ -161,8 +161,9 @@ onMounted(() => { requestAnimationFrame(() => { mounted.value = true; }); });
                                     {{ isRtl ? 'مفعّل' : 'Active' }}
                                 </label>
                             </div>
-                            <p class="text-[11px] text-gray-500 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2">
-                                ⚠️ {{ isRtl ? 'عند تفعيل «توقيع إلزامي»، لن يُسمح بتسجيل جلسة مكتملة لهذا الإجراء قبل وجود موافقة موقّعة للمريض.' : 'With "require signature" on, a completed session for this procedure is blocked until the patient has a signed consent.' }}
+                            <p class="text-[11px] text-amber-700 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2 flex items-start gap-1.5">
+                                <svg class="w-3.5 h-3.5 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4.5c-.77-.833-2.694-.833-3.464 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z" /></svg>
+                                <span>{{ isRtl ? 'عند تفعيل «توقيع إلزامي»، لن يُسمح بتسجيل جلسة مكتملة لهذا الإجراء قبل وجود موافقة موقّعة للمريض.' : 'With "require signature" on, a completed session for this procedure is blocked until the patient has a signed consent.' }}</span>
                             </p>
                             <div class="flex justify-end gap-3 pt-1">
                                 <button type="button" @click="showForm = false" class="px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 transition">{{ isRtl ? 'إلغاء' : 'Cancel' }}</button>

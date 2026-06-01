@@ -203,7 +203,7 @@ onMounted(() => { requestAnimationFrame(() => { mounted.value = true; }); });
                         </tr>
                         <tr v-if="!purchases.data.length">
                             <td colspan="8" class="px-4 py-16 text-center">
-                                <div class="text-5xl mb-3 opacity-40">📦</div>
+                                <svg class="w-12 h-12 mx-auto mb-3 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
                                 <p class="text-sm text-gray-400">{{ isRtl ? 'لا توجد اشتراكات باقات بعد' : 'No package purchases yet' }}</p>
                             </td>
                         </tr>
@@ -274,8 +274,9 @@ onMounted(() => { requestAnimationFrame(() => { mounted.value = true; }); });
                                 <input v-model="form.notes" type="text" class="pkg-field" />
                             </div>
 
-                            <p class="text-[11px] text-gray-500 bg-slate-50 rounded-lg px-3 py-2">
-                                💡 {{ isRtl ? 'سيتم إنشاء فاتورة دفع مقدّم بقيمة الباقة. الجلسات اللاحقة المرتبطة بالباقة تُخصم من الرصيد دون فوترة إضافية.' : 'A prepayment invoice for the package price will be created. Sessions linked to this package draw down the balance with no extra charge.' }}
+                            <p class="text-[11px] text-gray-500 bg-slate-50 rounded-lg px-3 py-2 flex items-start gap-1.5">
+                                <svg class="w-3.5 h-3.5 mt-0.5 flex-shrink-0 text-[#C4A265]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                <span>{{ isRtl ? 'سيتم إنشاء فاتورة دفع مقدّم بقيمة الباقة. الجلسات اللاحقة المرتبطة بالباقة تُخصم من الرصيد دون فوترة إضافية.' : 'A prepayment invoice for the package price will be created. Sessions linked to this package draw down the balance with no extra charge.' }}</span>
                             </p>
 
                             <div class="flex justify-end gap-3 pt-1">

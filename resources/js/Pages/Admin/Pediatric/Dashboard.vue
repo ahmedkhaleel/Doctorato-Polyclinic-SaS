@@ -220,8 +220,6 @@ function getAllergyColor(type) {
     return allergyColors[type?.toLowerCase()] || allergyColors.other;
 }
 
-const allergyIcons = { food: '🍎', drug: '💊', environmental: '🌿', contact: '🧤', insect: '🐝', other: '⚕️' };
-function getAllergyIcon(type) { return allergyIcons[type?.toLowerCase()] || '⚕️'; }
 
 /* ── Helpers ────────────────────────────────────────────── */
 function formatDate(date) {
@@ -682,7 +680,7 @@ const hoveredBar = ref(null);
                         :key="a.allergy_type"
                         :class="`group flex flex-col items-center gap-2 p-4 rounded-2xl border ring-1 transition-all duration-300 hover:shadow-md hover:scale-[1.02] cursor-default ${getAllergyColor(a.allergy_type)}`"
                     >
-                        <span class="text-2xl">{{ getAllergyIcon(a.allergy_type) }}</span>
+                        <svg class="w-6 h-6 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 9v3m0 3h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" /></svg>
                         <span class="text-sm font-semibold capitalize">{{ a.allergy_type }}</span>
                         <span class="text-xl font-bold">{{ a.count }}</span>
                     </div>
@@ -764,7 +762,7 @@ const hoveredBar = ref(null);
                     >
                         <div class="w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold shrink-0 shadow-sm transition-transform duration-300 group-hover:scale-110"
                             :class="i === 0 ? 'bg-gradient-to-br from-amber-100 to-amber-200 text-amber-700 ring-1 ring-amber-300' : i === 1 ? 'bg-gradient-to-br from-gray-100 to-gray-200 text-gray-600 ring-1 ring-gray-300' : i === 2 ? 'bg-gradient-to-br from-[#F5E7C8]/60 to-[#F5E7C8] text-[#8B7043] ring-1 ring-[#E6CF9A]' : 'bg-gray-50 text-gray-500 ring-1 ring-gray-200'">
-                            {{ i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : i + 1 }}
+                            {{ i + 1 }}
                         </div>
                         <div class="flex-1 min-w-0">
                             <p class="text-sm font-semibold text-gray-800 truncate group-hover:text-emerald-700 transition-colors">

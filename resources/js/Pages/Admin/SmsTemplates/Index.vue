@@ -47,7 +47,6 @@ const categoryLabel = (c) => ({
     marketing: isRtl.value ? 'العروض'   : 'Marketing',
 })[c] ?? c;
 
-const categoryEmoji = (c) => ({ bookings: '📅', reminders: '⏰', marketing: '🎁' })[c] ?? '📨';
 </script>
 
 <template>
@@ -62,8 +61,8 @@ const categoryEmoji = (c) => ({ bookings: '📅', reminders: '⏰', marketing: '
         </div>
 
         <div v-for="(items, cat) in grouped" :key="cat" class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-            <div class="px-5 py-3 bg-slate-50 border-b border-gray-100 font-bold text-slate-700">
-                {{ categoryEmoji(cat) }} {{ categoryLabel(cat) }}
+            <div class="px-5 py-3 bg-slate-50 border-b border-gray-100 font-bold text-slate-700 flex items-center gap-2">
+                <span class="w-1.5 h-4 rounded-full bg-[#C4A265]"></span>{{ categoryLabel(cat) }}
             </div>
 
             <div v-for="t in items" :key="t.id" class="border-b border-gray-100 last:border-b-0">

@@ -99,8 +99,8 @@ const filteredModules = computed(() => {
 });
 
 const statusOptions = computed(() => [
-    { value: 'active', label: isRtl.value ? 'نشطة' : 'Active', icon: '🟢' },
-    { value: 'inactive', label: isRtl.value ? 'غير نشطة' : 'Inactive', icon: '🔴' },
+    { value: 'active', label: isRtl.value ? 'نشطة' : 'Active' },
+    { value: 'inactive', label: isRtl.value ? 'غير نشطة' : 'Inactive' },
 ]);
 
 const filteredStatuses = computed(() => {
@@ -311,8 +311,10 @@ function toggleActive(bundle) {
                                     <button v-for="m in filteredModules" :key="m.slug" type="button" @click="selectModule(m.slug)"
                                             class="w-full flex items-center gap-2.5 px-3 py-2 text-xs transition-colors"
                                             :class="moduleFilter === m.slug ? 'bg-[#C4A265]/10 text-[#C4A265] font-semibold' : 'text-gray-600 hover:bg-gray-50'">
-                                        <span class="w-5 h-5 rounded-md flex items-center justify-center text-[10px]"
-                                              :class="moduleFilter === m.slug ? 'bg-[#C4A265] text-white' : 'bg-gray-100 text-gray-400'">🏥</span>
+                                        <span class="w-5 h-5 rounded-md flex items-center justify-center"
+                                              :class="moduleFilter === m.slug ? 'bg-[#C4A265] text-white' : 'bg-gray-100 text-gray-400'">
+                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0H5m14 0h2M5 21H3m4-14h.01M11 7h.01M7 11h.01M11 11h.01M7 15h.01M11 15h.01" /></svg>
+                                        </span>
                                         {{ m.name }}
                                         <svg v-if="moduleFilter === m.slug" class="w-3.5 h-3.5 text-[#C4A265]" :class="isRtl ? 'mr-auto' : 'ml-auto'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" /></svg>
                                     </button>

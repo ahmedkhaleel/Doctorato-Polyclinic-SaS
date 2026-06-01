@@ -126,7 +126,7 @@ const maxEvent = computed(() => Math.max(1, ...props.perEvent.map((e) => Number(
                 <!-- Top failures -->
                 <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
                     <h2 class="font-bold text-gray-900 mb-4">{{ t('أعلى أسباب الفشل', 'Top Failure Reasons') }}</h2>
-                    <div v-if="!failures.length" class="text-center text-gray-400 py-6 text-sm">{{ t('لا أخطاء 🎉', 'No failures 🎉') }}</div>
+                    <div v-if="!failures.length" class="text-center text-gray-400 py-6 text-sm">{{ t('لا توجد أخطاء', 'No failures') }}</div>
                     <ul class="space-y-2">
                         <li v-for="f in failures" :key="f.error" class="flex justify-between items-start gap-3 text-sm border-b border-gray-50 pb-2">
                             <span class="text-gray-700 break-words">{{ f.error }}</span>

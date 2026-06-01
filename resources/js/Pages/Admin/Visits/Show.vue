@@ -448,10 +448,11 @@ function formatDateTime(date) {
                                     <div v-if="editingVisitDate"
                                          :class="isCancelled ? 'bg-emerald-50 border-emerald-300' : 'bg-[#FAF7F0] border-[#C4A265]/30'"
                                          class="border rounded-lg p-3 mt-1 space-y-3">
-                                        <div v-if="isCancelled" class="text-xs bg-white border border-emerald-200 rounded p-2 text-emerald-800">
-                                            🔄 {{ isRtl
+                                        <div v-if="isCancelled" class="text-xs bg-white border border-emerald-200 rounded p-2 text-emerald-800 flex items-start gap-1.5">
+                                            <svg class="w-3.5 h-3.5 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                                            <span>{{ isRtl
                                                 ? 'هذه الزيارة ملغاة. حفظ النموذج سيعيدها للنشاط (حالة: انتظار) ويرسل بريداً للمريض.'
-                                                : 'This visit is cancelled. Saving will restore it to "waiting" status and email the patient.' }}
+                                                : 'This visit is cancelled. Saving will restore it to "waiting" status and email the patient.' }}</span>
                                         </div>
                                         <div class="grid grid-cols-2 gap-2">
                                             <div>
