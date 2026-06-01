@@ -230,6 +230,11 @@ class DemoUserSeeder extends Seeder
 
     private function attachPatient(User $user): void
     {
+        // Free the demo user from any previously-linked patient first
+        // (patients.user_id is unique — an earlier run may have linked another row).
+        Patient::withTrashed()->where('user_id', $user->id)->where('phone', '!=', '01000000099')
+            ->update(['user_id' => null]);
+
         // Dedicated demo patient with a full medical history under their own name,
         // so the portal dashboard is populated (not empty). Keyed on a fixed phone.
         $patient = Patient::withTrashed()->firstOrNew(['phone' => '01000000099']);
