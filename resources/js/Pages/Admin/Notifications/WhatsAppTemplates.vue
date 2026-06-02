@@ -2,6 +2,7 @@
 import { ref, reactive, computed } from 'vue';
 import { usePage, router, Link } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import AiAssist from '@/Components/Ai/AiAssist.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
 
 const props = defineProps({ templates: Array, events: Array });
@@ -75,6 +76,9 @@ function remove(tpl) {
                 </div>
                 <label class="block"><span class="text-xs text-gray-500">{{ t('نص القالب المعتمد (للمرجعية)', 'Approved body (reference)') }}</span>
                     <textarea v-model="form.body_preview" rows="2" class="mt-1 w-full rounded-lg border-gray-200 text-sm" placeholder="مرحبا {{1}}، موعدك {{2}} الساعة {{3}}"></textarea></label>
+                <AiAssist feature="comms_drafting" label-ar="صياغة نص الرسالة" label-en="Draft message"
+                    :build-vars="() => ({ channel: 'WhatsApp', topic: form.name || form.event_key })"
+                    @insert="(txt) => form.body_preview = txt" />
                 <label class="inline-flex items-center gap-2 text-sm"><input type="checkbox" v-model="form.is_active" class="rounded" /> {{ t('مُفعّل', 'Active') }}</label>
                 <div class="flex justify-end gap-2">
                     <button @click="showForm = false" class="px-4 py-2 rounded-lg border border-gray-200 text-gray-600 text-sm">{{ t('إلغاء', 'Cancel') }}</button>

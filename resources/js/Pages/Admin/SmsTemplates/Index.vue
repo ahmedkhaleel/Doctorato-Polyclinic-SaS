@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue';
 import { useForm, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import AiAssist from '@/Components/Ai/AiAssist.vue';
 
 defineOptions({ layout: AdminLayout });
 
@@ -94,12 +95,18 @@ const categoryLabel = (c) => ({
                             <textarea v-model="getForm(t).body_ar" rows="3" dir="rtl"
                                 class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:border-[#C4A265] focus:ring-2 focus:ring-[#C4A265]/30 outline-none font-mono"></textarea>
                             <p class="text-[11px] text-slate-400 mt-1">{{ getForm(t).body_ar.length }} {{ isRtl ? 'حرف' : 'chars' }}</p>
+                            <AiAssist feature="comms_drafting" label-ar="صياغة (عربي)" label-en="Draft (AR)"
+                                :build-vars="() => ({ channel: 'SMS', topic: t.name || t.event_key })"
+                                @insert="(txt) => getForm(t).body_ar = txt" />
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-slate-600 mb-1.5">English body</label>
                             <textarea v-model="getForm(t).body_en" rows="3" dir="ltr"
                                 class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:border-[#C4A265] focus:ring-2 focus:ring-[#C4A265]/30 outline-none font-mono"></textarea>
                             <p class="text-[11px] text-slate-400 mt-1">{{ getForm(t).body_en.length }} chars</p>
+                            <AiAssist feature="comms_drafting" label-ar="صياغة (إنجليزي)" label-en="Draft (EN)"
+                                :build-vars="() => ({ channel: 'SMS', topic: t.name || t.event_key })"
+                                @insert="(txt) => getForm(t).body_en = txt" />
                         </div>
                     </div>
 

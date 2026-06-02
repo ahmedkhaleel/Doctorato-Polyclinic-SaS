@@ -2,6 +2,7 @@
 import { ref, reactive, computed, watch } from 'vue';
 import { usePage, router, Link } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import AiAssist from '@/Components/Ai/AiAssist.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
 
 const props = defineProps({ campaigns: Array });
@@ -95,8 +96,14 @@ const fmt = (iso) => iso ? new Date(iso).toLocaleString(isRtl.value ? 'ar-EG' : 
                 <input v-if="form.channel === 'email'" v-model="form.subject" :placeholder="t('الموضوع', 'Subject')" class="w-full rounded-lg border-gray-200 text-sm" />
                 <label class="block"><span class="text-xs text-gray-500">{{ t('النص (عربي)', 'Body (Arabic)') }}</span>
                     <textarea v-model="form.body_ar" rows="3" class="mt-1 w-full rounded-lg border-gray-200 text-sm"></textarea></label>
+                <AiAssist feature="campaign_copy" label-ar="صياغة نص الحملة (عربي)" label-en="Draft campaign copy (AR)"
+                    :build-vars="() => ({ product: form.name, channel: form.channel, goal: form.name })"
+                    @insert="(txt) => form.body_ar = txt" />
                 <label class="block"><span class="text-xs text-gray-500">{{ t('النص (إنجليزي)', 'Body (English)') }}</span>
                     <textarea v-model="form.body_en" rows="2" class="mt-1 w-full rounded-lg border-gray-200 text-sm"></textarea></label>
+                <AiAssist feature="campaign_copy" label-ar="صياغة نص الحملة (إنجليزي)" label-en="Draft campaign copy (EN)"
+                    :build-vars="() => ({ product: form.name, channel: form.channel, goal: form.name })"
+                    @insert="(txt) => form.body_en = txt" />
 
                 <!-- A/B -->
                 <label class="inline-flex items-center gap-2 text-sm"><input type="checkbox" v-model="form.ab_enabled" class="rounded" /> {{ t('اختبار A/B (نسخة بديلة)', 'A/B test (variant B)') }}</label>
