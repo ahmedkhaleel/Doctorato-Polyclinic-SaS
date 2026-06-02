@@ -53,6 +53,8 @@ return Application::configure(basePath: dirname(__DIR__))
             SecurityHeaders::class,
             CaptureUtmParameters::class,
             \App\Http\Middleware\QueryCountMonitor::class,
+            // Block accounts whose trial period has ended → "trial ended" page.
+            \App\Http\Middleware\EnforceTrialExpiry::class,
             // Read-mostly guard for demo accounts: no delete, no core-settings changes.
             \App\Http\Middleware\DemoModeGuard::class,
         ]);

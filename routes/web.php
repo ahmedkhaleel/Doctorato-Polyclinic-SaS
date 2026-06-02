@@ -23,6 +23,14 @@ Route::get('/health', HealthController::class)
     ->name('health')
     ->middleware('throttle:20,1');
 
+// Shown when a trial/demo account's period has ended (public, no auth).
+Route::get('/trial-expired', function () {
+    return \Inertia\Inertia::render('TrialExpired', [
+        'contactUrl' => \App\Models\Setting::get('trial_contact_url', 'https://doctorato.com/contact'),
+        'clinicName' => \App\Models\Setting::get('clinic_name', 'Doctorato Polyclinic'),
+    ]);
+})->name('trial.expired');
+
 /*
 |--------------------------------------------------------------------------
 | Frontend Web Routes

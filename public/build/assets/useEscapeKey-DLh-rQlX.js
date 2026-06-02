@@ -1,1 +1,0 @@
-import{C as t,D as s}from"./app-Bt7_AJO0.js";function i(o){const e=n=>{n.key==="Escape"&&o(n)};t(()=>window.addEventListener("keydown",e)),s(()=>window.removeEventListener("keydown",e))}export{i as u};

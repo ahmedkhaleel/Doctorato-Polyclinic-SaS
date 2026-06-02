@@ -20,9 +20,20 @@ use Illuminate\Support\Facades\Hash;
  */
 class DemoUserSeeder extends Seeder
 {
+    private int $trialDays = 14;
+
     public function run(): void
     {
         $password = env('DEMO_PASSWORD', 'DemoClinic@2026');
+
+        // Trial defaults (admin-configurable). Demo accounts expire after this many days.
+        if (\App\Models\Setting::where('key', 'trial_days')->doesntExist()) {
+            \App\Models\Setting::set('trial_days', (string) env('DEMO_TRIAL_DAYS', 14), 'general');
+        }
+        if (\App\Models\Setting::where('key', 'trial_contact_url')->doesntExist()) {
+            \App\Models\Setting::set('trial_contact_url', 'https://doctorato.com/contact', 'general');
+        }
+        $this->trialDays = (int) \App\Models\Setting::get('trial_days', 14);
 
         // ── Demo admin role (named 'admin' to pass AdminAuth whitelist) ──
         $adminRole = Role::updateOrCreate(
@@ -74,6 +85,8 @@ class DemoUserSeeder extends Seeder
             'role_id' => $roleId,
             'is_active' => true,
             'is_demo' => true,
+            // Trial window: the account stops working after this many days.
+            'trial_ends_at' => now()->addDays($this->trialDays),
             'password' => Hash::make($password),
         ]);
         if (method_exists($user, 'restore') && $user->trashed()) {

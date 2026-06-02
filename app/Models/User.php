@@ -42,6 +42,7 @@ class User extends Authenticatable
         'role_id',
         'is_active',
         'is_demo',
+        'trial_ends_at',
         'last_seen_at',
     ];
 
@@ -61,6 +62,7 @@ class User extends Authenticatable
             'password' => 'hashed',
             'is_active' => 'boolean',
             'is_demo' => 'boolean',
+            'trial_ends_at' => 'datetime',
             'last_seen_at' => 'datetime',
         ];
     }
@@ -68,6 +70,28 @@ class User extends Authenticatable
     public function role(): BelongsTo
     {
         return $this->belongsTo(Role::class);
+    }
+
+    /** Whether this account is on a (time-limited) trial. */
+    public function onTrial(): bool
+    {
+        return $this->trial_ends_at !== null;
+    }
+
+    /** Whether the trial period has ended. */
+    public function trialExpired(): bool
+    {
+        return $this->trial_ends_at !== null && $this->trial_ends_at->isPast();
+    }
+
+    /** Days remaining in the trial (0 if expired or no trial). */
+    public function trialDaysLeft(): int
+    {
+        if (! $this->onTrial()) {
+            return 0;
+        }
+
+        return max(0, (int) ceil(now()->floatDiffInDays($this->trial_ends_at, false)));
     }
 
     /**

@@ -191,3 +191,6 @@ Schedule::command('demo:reset --force')
 // (no-op when AI is disabled), so they are safe on every install.
 Schedule::command('ai:budget-alert')->hourly()->name('ai-budget-alert')->onOneServer();
 Schedule::command('ai:rebuild-embeddings')->dailyAt('04:15')->name('ai-rebuild-embeddings')->onOneServer();
+
+// Lock out demo/trial accounts whose trial has ended (rotate password + deactivate).
+Schedule::command('trials:rotate-expired')->dailyAt('02:00')->name('trials-rotate-expired')->onOneServer();
