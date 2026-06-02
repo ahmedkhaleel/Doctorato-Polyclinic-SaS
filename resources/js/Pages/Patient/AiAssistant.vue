@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, nextTick } from 'vue';
+import { computed, ref, reactive, nextTick } from 'vue';
 import { usePage } from '@inertiajs/vue3';
 import axios from 'axios';
 import PatientLayout from '@/Layouts/PatientLayout.vue';
@@ -23,6 +23,15 @@ const scroller = ref(null);
 
 const scrollDown = () => nextTick(() => { if (scroller.value) scroller.value.scrollTop = scroller.value.scrollHeight; });
 
+const xsrf = () => decodeURIComponent((document.cookie.match(/XSRF-TOKEN=([^;]+)/) || [])[1] || '');
+
+// Non-streaming fallback (used if streaming isn't available).
+const askJson = async (q, assistantMsg) => {
+    const { data } = await axios.post(lp('/assistant/ask'), { question: q, session_id: sessionId.value });
+    if (data.ok) { sessionId.value = data.session_id; assistantMsg.content = data.text; }
+    else assistantMsg.content = data.message;
+};
+
 const ask = async () => {
     const q = question.value.trim();
     if (!q || loading.value) return;
@@ -30,16 +39,35 @@ const ask = async () => {
     question.value = '';
     loading.value = true;
     scrollDown();
+
+    const assistantMsg = reactive({ role: 'assistant', content: '' });
+    messages.value.push(assistantMsg);
+
     try {
-        const { data } = await axios.post(lp('/assistant/ask'), { question: q, session_id: sessionId.value });
-        if (data.ok) {
-            sessionId.value = data.session_id;
-            messages.value.push({ role: 'assistant', content: data.text });
-        } else {
-            messages.value.push({ role: 'assistant', content: data.message });
+        const res = await fetch(lp('/assistant/stream'), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-XSRF-TOKEN': xsrf(), Accept: 'text/plain' },
+            credentials: 'same-origin',
+            body: JSON.stringify({ question: q, session_id: sessionId.value }),
+        });
+
+        if (! res.ok || ! res.body) { await askJson(q, assistantMsg); return; }
+
+        const sess = res.headers.get('X-Session-Id');
+        if (sess) sessionId.value = sess;
+
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        for (;;) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            assistantMsg.content += decoder.decode(value, { stream: true });
+            scrollDown();
         }
+        if (! assistantMsg.content) await askJson(q, assistantMsg);
     } catch (e) {
-        messages.value.push({ role: 'assistant', content: e.response?.data?.message || t('تعذّر الرد حاليًا.', 'Could not respond right now.') });
+        try { await askJson(q, assistantMsg); }
+        catch (e2) { assistantMsg.content = t('تعذّر الرد حاليًا.', 'Could not respond right now.'); }
     } finally {
         loading.value = false;
         scrollDown();

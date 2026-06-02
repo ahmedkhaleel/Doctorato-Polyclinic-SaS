@@ -18,6 +18,11 @@ class NullDriver implements AiDriver
         throw new AiUnavailableException('disabled', 'AI layer is disabled.');
     }
 
+    public function chatStream(array $messages, callable $onDelta, array $options = []): \App\Services\Ai\AiResult
+    {
+        throw new AiUnavailableException('disabled', 'AI layer is disabled.');
+    }
+
     public function transcribe(string $contents, string $filename, array $options = []): string
     {
         throw new AiUnavailableException('disabled', 'AI layer is disabled.');

@@ -75,6 +75,55 @@ class OpenAiDriver implements AiDriver
         );
     }
 
+    public function chatStream(array $messages, callable $onDelta, array $options = []): AiResult
+    {
+        if (! $this->isReady()) {
+            throw new AiUnavailableException('no_key', 'OpenAI API key is not configured.');
+        }
+
+        $model = $options['model'] ?? Setting::get('ai_default_model', config('ai.defaults.model'));
+
+        $resp = $this->http()->withOptions(['stream' => true])->post($this->baseUrl().'/chat/completions', [
+            'model' => $model,
+            'messages' => $messages,
+            'temperature' => $options['temperature'] ?? (float) config('ai.defaults.temperature'),
+            'max_tokens' => $options['max_tokens'] ?? (int) config('ai.defaults.max_tokens'),
+            'stream' => true,
+        ]);
+
+        if ($resp->failed()) {
+            throw new AiUnavailableException('provider_error', 'OpenAI stream error: '.$resp->status());
+        }
+
+        $body = $resp->toPsrResponse()->getBody();
+        $buffer = '';
+        $text = '';
+
+        // Read the SSE stream line-by-line: "data: {json}\n\n", terminated by [DONE].
+        while (! $body->eof()) {
+            $buffer .= $body->read(1024);
+            while (($nl = strpos($buffer, "\n")) !== false) {
+                $line = trim(substr($buffer, 0, $nl));
+                $buffer = substr($buffer, $nl + 1);
+                if ($line === '' || ! str_starts_with($line, 'data:')) {
+                    continue;
+                }
+                $payload = trim(substr($line, 5));
+                if ($payload === '[DONE]') {
+                    break 2;
+                }
+                $json = json_decode($payload, true);
+                $delta = $json['choices'][0]['delta']['content'] ?? '';
+                if ($delta !== '') {
+                    $text .= $delta;
+                    $onDelta($delta);
+                }
+            }
+        }
+
+        return new AiResult(text: $text, model: $model);
+    }
+
     public function embed(string|array $input, array $options = []): array
     {
         if (! $this->isReady()) {

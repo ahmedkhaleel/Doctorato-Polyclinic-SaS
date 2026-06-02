@@ -59,6 +59,7 @@ Route::middleware('patient.auth')->group(function () {
     // AI Assistant (RAG chatbot)
     Route::get('/assistant', [\App\Http\Controllers\Patient\AiAssistantController::class, 'index'])->name('patient.assistant');
     Route::post('/assistant/ask', [\App\Http\Controllers\Patient\AiAssistantController::class, 'ask'])->name('patient.assistant.ask')->middleware('throttle:20,1');
+    Route::post('/assistant/stream', [\App\Http\Controllers\Patient\AiAssistantController::class, 'stream'])->name('patient.assistant.stream')->middleware('throttle:20,1');
 
     // ─── My Bookings ────────────────────────────────────────
     Route::get('/bookings', [PatientBookingController::class, 'index'])->name('patient.bookings.index');

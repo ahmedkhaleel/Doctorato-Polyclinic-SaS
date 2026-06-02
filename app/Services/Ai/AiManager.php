@@ -117,6 +117,52 @@ class AiManager
     }
 
     /**
+     * Streamed feature-gated generation. Calls $onDelta($chunk) per token and
+     * returns the final AiResult (cost logged at the end). Not cached.
+     *
+     * @param  array<int,array{role:string,content:string}>  $messages
+     */
+    public function stream(string $feature, array $messages, callable $onDelta, array $options = []): AiResult
+    {
+        $actor = $options['actor'] ?? [];
+        $this->gate->authorize($feature, $options['rate_key'] ?? null);
+
+        $this->redactor->reset();
+        $messages = array_map(function ($m) {
+            if (is_string($m['content'] ?? null)) {
+                $m['content'] = $this->redactor->redact($m['content']);
+            }
+
+            return $m;
+        }, $messages);
+
+        $options['model'] = $options['model']
+            ?? AiFeatureFlag::modelFor($feature)
+            ?? Setting::get('ai_default_model', config('ai.defaults.model'));
+
+        $start = microtime(true);
+        try {
+            $result = $this->driver->chatStream($messages, $onDelta, $options);
+        } catch (\Throwable $e) {
+            $this->meter->recordFailure($feature, 'failed', $e->getMessage(), [
+                'actor_type' => $actor['type'] ?? null,
+                'actor_id' => $actor['id'] ?? null,
+                'model' => $options['model'],
+            ]);
+            throw $e;
+        }
+
+        $this->meter->record($feature, $result, [
+            'actor_type' => $actor['type'] ?? null,
+            'actor_id' => $actor['id'] ?? null,
+            'latency_ms' => (int) round((microtime(true) - $start) * 1000),
+            'meta' => ['streamed' => true],
+        ]);
+
+        return new AiResult($this->redactor->restore($result->text), $result->model);
+    }
+
+    /**
      * Create embeddings for one or more strings. Gated by the global kill-switch
      * (no per-feature flag — used internally by the RAG index/search).
      *

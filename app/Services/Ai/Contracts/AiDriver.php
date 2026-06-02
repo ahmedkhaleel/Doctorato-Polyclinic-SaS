@@ -9,6 +9,14 @@ interface AiDriver
     /** @param array<int,array{role:string,content:string}> $messages */
     public function chat(array $messages, array $options = []): AiResult;
 
+    /**
+     * Streamed chat. Invokes $onDelta($chunk) for each text delta and returns the
+     * final assembled AiResult.
+     *
+     * @param  array<int,array{role:string,content:string}>  $messages
+     */
+    public function chatStream(array $messages, callable $onDelta, array $options = []): AiResult;
+
     /** @param string|array<int,string> $input @return array<int,array<float>> */
     public function embed(string|array $input, array $options = []): array;
 

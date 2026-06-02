@@ -53,4 +53,42 @@ class AiAssistantController extends Controller
 
         return response()->json(['ok' => true, 'text' => $result->text, 'session_id' => $session]);
     }
+
+    /** Streamed answer — flushes tokens as they arrive (plain-text chunks). */
+    public function stream(Request $request, PatientAssistant $assistant): \Symfony\Component\HttpFoundation\StreamedResponse
+    {
+        $validated = $request->validate([
+            'question' => 'required|string|max:1000',
+            'session_id' => 'nullable|string|max:64',
+        ]);
+
+        $patient = $request->user('patient') ?? auth()->user();
+        $session = $validated['session_id'] ?: ('patient-'.($patient->id ?? 'guest').'-'.Str::random(8));
+
+        return response()->stream(function () use ($assistant, $validated, $session, $patient, $request) {
+            try {
+                $assistant->askStream($validated['question'], $session, function ($delta) {
+                    echo $delta;
+                    if (ob_get_level() > 0) {
+                        @ob_flush();
+                    }
+                    flush();
+                }, [
+                    'locale' => app()->getLocale(),
+                    'patient_id' => $patient->id ?? null,
+                    'rate_key' => 'patient:'.($patient->id ?? $request->ip()),
+                    'actor' => ['type' => 'patient', 'id' => $patient->id ?? null],
+                ]);
+            } catch (AiUnavailableException $e) {
+                echo app()->getLocale() === 'ar'
+                    ? 'المساعد غير متاح حاليًا.'
+                    : 'The assistant is currently unavailable.';
+            }
+        }, 200, [
+            'Content-Type' => 'text/plain; charset=utf-8',
+            'Cache-Control' => 'no-cache',
+            'X-Accel-Buffering' => 'no',
+            'X-Session-Id' => $session,
+        ]);
+    }
 }
