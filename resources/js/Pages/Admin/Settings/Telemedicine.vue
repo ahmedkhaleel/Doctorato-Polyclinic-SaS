@@ -100,10 +100,12 @@ function commitText(key) {
                     </svg>
                 </div>
                 <div class="flex-1 min-w-0">
-                    <h3 class="text-base font-bold" :class="status.is_ready ? 'text-emerald-900' : 'text-amber-900'">
+                    <h3 class="text-base font-bold inline-flex items-center gap-1.5" :class="status.is_ready ? 'text-emerald-900' : 'text-amber-900'">
+                        <svg v-if="status.is_ready" class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M5 13l4 4L19 7" /></svg>
+                        <svg v-else class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 9v4m0 4h.01M10.3 3.86l-8.06 14A1 1 0 003.1 19.4h17.8a1 1 0 00.86-1.5l-8.06-14a1 1 0 00-1.74 0z" /></svg>
                         {{ status.is_ready
-                            ? (isRtl ? '✓ النظام جاهز — يمكن للمرضى حجز استشارات أونلاين' : '✓ System ready — patients can book online consultations')
-                            : (isRtl ? '⚠ الإعداد غير مكتمل — الحجز الأونلاين مُعطّل حالياً' : '⚠ Setup incomplete — online booking is currently disabled') }}
+                            ? (isRtl ? 'النظام جاهز — يمكن للمرضى حجز استشارات أونلاين' : 'System ready — patients can book online consultations')
+                            : (isRtl ? 'الإعداد غير مكتمل — الحجز الأونلاين مُعطّل حالياً' : 'Setup incomplete — online booking is currently disabled') }}
                     </h3>
                     <ul v-if="!status.is_ready" class="mt-2 space-y-1 text-sm text-amber-800">
                         <li v-if="status.blockers?.includes('module_disabled')" class="flex items-center gap-2">

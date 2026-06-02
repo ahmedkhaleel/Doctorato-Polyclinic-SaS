@@ -34,4 +34,34 @@ class NoEmojiInPagesTest extends TestCase
         $this->assertSame([], $offenders,
             'These pages contain emoji pictographs (use SVG icons instead): '.implode(', ', $offenders));
     }
+
+    /**
+     * Stricter rule for the admin panel (audited in docs/ADMIN_UI_AUDIT_PLAN.md):
+     * NO symbol glyphs used as icons either — the Miscellaneous Symbols + Dingbats
+     * block (2600-27BF: ★ ☆ ✓ ✗ ✕ ✦ ✎ ⚠ ♂ ♀ …) plus ⏰ (23F0) and ⭐ (2B50).
+     * Typographic arrows (2190-21FF: → ↑ ↓ ←) remain allowed as text separators.
+     *
+     * Scoped to resources/js/Pages/Admin only; other panels are cleaned in later
+     * audit phases. This guard prevents the Phase-0 cleanup from regressing.
+     */
+    public function test_no_symbol_glyph_icons_in_admin_pages(): void
+    {
+        $dir = resource_path('js/Pages/Admin');
+        $glyphs = '/[\x{2600}-\x{27BF}\x{23F0}\x{2B50}]/u';
+
+        $offenders = [];
+        $it = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir, \FilesystemIterator::SKIP_DOTS));
+        foreach ($it as $file) {
+            if ($file->getExtension() !== 'vue') {
+                continue;
+            }
+            $content = file_get_contents($file->getPathname());
+            if (preg_match($glyphs, $content)) {
+                $offenders[] = str_replace(resource_path('js/Pages').'/', '', $file->getPathname());
+            }
+        }
+
+        $this->assertSame([], $offenders,
+            'These admin pages use symbol glyphs as icons (use SVG instead): '.implode(', ', $offenders));
+    }
 }

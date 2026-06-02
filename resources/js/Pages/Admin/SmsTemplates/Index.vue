@@ -136,8 +136,9 @@ const categoryLabel = (c) => ({
                                 : (isRtl ? 'حفظ' : 'Save') }}
                         </button>
                     </div>
-                    <p v-if="getForm(t).recentlySuccessful" class="text-sm text-emerald-600 mt-2">
-                        ✓ {{ isRtl ? 'تم الحفظ' : 'Saved' }}
+                    <p v-if="getForm(t).recentlySuccessful" class="text-sm text-emerald-600 mt-2 inline-flex items-center gap-1">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M5 13l4 4L19 7" /></svg>
+                        {{ isRtl ? 'تم الحفظ' : 'Saved' }}
                     </p>
                 </div>
             </div>

@@ -212,8 +212,11 @@ const maxDailyTotal = computed(() => Math.max(...(props.dailyTrend?.map(d => d.t
                                     <div class="bg-red-400 rounded-b transition-all"
                                         :style="{ height: `${(d.absent / maxDailyTotal) * 100}%`, minHeight: d.absent > 0 ? '1px' : '0' }"></div>
                                 </div>
-                                <div class="absolute bottom-full mb-1 hidden group-hover:block bg-gray-800 text-white rounded px-1.5 py-0.5 text-[9px] whitespace-nowrap z-10">
-                                    {{ d.day }}: {{ d.present }}✓ {{ d.late }}⏰ {{ d.absent }}✗
+                                <div class="absolute bottom-full mb-1 hidden group-hover:flex items-center gap-1 bg-gray-800 text-white rounded px-1.5 py-0.5 text-[9px] whitespace-nowrap z-10">
+                                    {{ d.day }}:
+                                    <span class="inline-flex items-center gap-0.5 text-emerald-300">{{ d.present }}<svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg></span>
+                                    <span class="inline-flex items-center gap-0.5 text-amber-300">{{ d.late }}<svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" d="M12 8v4l3 2m6-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg></span>
+                                    <span class="inline-flex items-center gap-0.5 text-red-300">{{ d.absent }}<svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12" /></svg></span>
                                 </div>
                             </div>
                         </div>

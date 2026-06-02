@@ -82,7 +82,9 @@ const prescriptions = computed(() => props.patient?.prescriptions || []);
                                     <PhoneWithWhatsApp :phone="patient.phone" variant="compact" />
                                 </span>
                                 <span v-if="patient.gender" class="flex items-center gap-1">
-                                    {{ patient.gender === 'male' ? '♂' : '♀' }} {{ patient.gender === 'male' ? $t('a_male') : $t('a_female') }}
+                                    <svg v-if="patient.gender === 'male'" class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 5h-5m5 0v5m0-5l-6 6m-1 8a5 5 0 100-10 5 5 0 000 10z" /></svg>
+                                    <svg v-else class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 14a5 5 0 100-10 5 5 0 000 10zm0 0v7m-3-3h6" /></svg>
+                                    {{ patient.gender === 'male' ? $t('a_male') : $t('a_female') }}
                                 </span>
                                 <span v-if="patient.age">{{ patient.age }} {{ isRtl ? 'سنة' : 'yrs' }}</span>
                             </div>

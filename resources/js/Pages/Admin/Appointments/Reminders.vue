@@ -2,6 +2,7 @@
 import { computed } from 'vue';
 import { usePage, Link } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import BoolIcon from '@/Components/Ui/BoolIcon.vue';
 
 const page = usePage();
 const locale = computed(() => page.props.locale || 'ar');
@@ -135,10 +136,10 @@ function initials(name) {
                                 <div class="text-sm font-bold" :class="smsSettings.sms_enabled ? 'text-emerald-300' : 'text-red-300'">
                                     {{ smsSettings.sms_enabled ? (isRtl ? 'SMS مفعل' : 'SMS Active') : (isRtl ? 'SMS معطل' : 'SMS Disabled') }}
                                 </div>
-                                <div class="text-[10px] text-white/60 flex gap-2 mt-0.5" dir="ltr">
-                                    <span>{{ isRtl ? 'قبل يوم' : 'Day-before' }} {{ smsSettings.sms_reminder_day_before ? '✓' : '✗' }}</span>
+                                <div class="text-[10px] text-white/60 flex items-center gap-2 mt-0.5" dir="ltr">
+                                    <span class="inline-flex items-center gap-1">{{ isRtl ? 'قبل يوم' : 'Day-before' }} <BoolIcon :ok="!!smsSettings.sms_reminder_day_before" :size="12" /></span>
                                     <span>•</span>
-                                    <span>{{ isRtl ? 'نفس اليوم' : 'Same-day' }} {{ smsSettings.sms_reminder_same_day ? '✓' : '✗' }}</span>
+                                    <span class="inline-flex items-center gap-1">{{ isRtl ? 'نفس اليوم' : 'Same-day' }} <BoolIcon :ok="!!smsSettings.sms_reminder_same_day" :size="12" /></span>
                                 </div>
                             </div>
                         </div>

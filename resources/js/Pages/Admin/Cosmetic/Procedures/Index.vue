@@ -2,6 +2,7 @@
 import { ref, computed, watch } from 'vue';
 import { usePage, router, useForm } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import BoolIcon from '@/Components/Ui/BoolIcon.vue';
 
 defineOptions({ layout: AdminLayout });
 
@@ -109,7 +110,7 @@ function t(en, ar) { return isRtl.value ? ar : en; }
                             <td class="px-5 py-3 hidden lg:table-cell text-slate-600">{{ p.default_price }}</td>
                             <td class="px-5 py-3 hidden lg:table-cell text-slate-600">{{ p.default_duration_minutes }} min</td>
                             <td class="px-5 py-3 hidden lg:table-cell">
-                                <span :class="p.is_active ? 'text-emerald-600' : 'text-slate-400'">{{ p.is_active ? '✓' : '✗' }}</span>
+                                <BoolIcon :ok="!!p.is_active" />
                             </td>
                             <td class="px-5 py-3 text-end space-x-2 rtl:space-x-reverse">
                                 <button @click="open(p)" class="text-[#C4A265] hover:text-[#8B7043] text-xs font-bold">{{ t('Edit', 'تعديل') }}</button>

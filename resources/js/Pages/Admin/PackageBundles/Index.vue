@@ -304,7 +304,7 @@ function toggleActive(bundle) {
                                             class="w-full flex items-center gap-2.5 px-3 py-2 text-xs transition-colors"
                                             :class="!moduleFilter ? 'bg-[#C4A265]/10 text-[#C4A265] font-semibold' : 'text-gray-600 hover:bg-gray-50'">
                                         <span class="w-5 h-5 rounded-md flex items-center justify-center text-[10px]"
-                                              :class="!moduleFilter ? 'bg-[#C4A265] text-white' : 'bg-gray-100 text-gray-400'">✦</span>
+                                              :class="!moduleFilter ? 'bg-[#C4A265] text-white' : 'bg-gray-100 text-gray-400'"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l1.6 6.4L20 10l-6.4 1.6L12 18l-1.6-6.4L4 10l6.4-1.6L12 2z" /></svg></span>
                                         {{ isRtl ? 'كل الأقسام' : 'All Departments' }}
                                         <svg v-if="!moduleFilter" class="w-3.5 h-3.5 text-[#C4A265]" :class="isRtl ? 'mr-auto' : 'ml-auto'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" /></svg>
                                     </button>
@@ -352,7 +352,7 @@ function toggleActive(bundle) {
                                             class="w-full flex items-center gap-2.5 px-3 py-2.5 text-xs transition-colors"
                                             :class="!statusFilter ? 'bg-[#C4A265]/10 text-[#C4A265] font-semibold' : 'text-gray-600 hover:bg-gray-50'">
                                         <span class="w-5 h-5 rounded-md flex items-center justify-center text-[10px]"
-                                              :class="!statusFilter ? 'bg-[#C4A265] text-white' : 'bg-gray-100 text-gray-400'">✦</span>
+                                              :class="!statusFilter ? 'bg-[#C4A265] text-white' : 'bg-gray-100 text-gray-400'"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l1.6 6.4L20 10l-6.4 1.6L12 18l-1.6-6.4L4 10l6.4-1.6L12 2z" /></svg></span>
                                         {{ isRtl ? 'كل الحالات' : 'All Status' }}
                                         <svg v-if="!statusFilter" class="w-3.5 h-3.5 text-[#C4A265]" :class="isRtl ? 'mr-auto' : 'ml-auto'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" /></svg>
                                     </button>

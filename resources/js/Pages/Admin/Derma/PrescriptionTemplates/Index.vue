@@ -2,6 +2,7 @@
 import { ref, computed, watch } from 'vue';
 import { usePage, router, useForm } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import BoolIcon from '@/Components/Ui/BoolIcon.vue';
 
 defineOptions({ layout: AdminLayout });
 
@@ -106,7 +107,7 @@ function t(en, ar) { return isRtl.value ? ar : en; }
                             <td class="px-5 py-3 hidden md:table-cell text-slate-600">{{ tpl.condition_category || '-' }}</td>
                             <td class="px-5 py-3 hidden lg:table-cell text-slate-600">{{ tpl.items?.length || 0 }}</td>
                             <td class="px-5 py-3 hidden lg:table-cell">
-                                <span :class="tpl.is_active ? 'text-emerald-600' : 'text-slate-400'">{{ tpl.is_active ? '✓' : '✗' }}</span>
+                                <BoolIcon :ok="!!tpl.is_active" />
                             </td>
                             <td class="px-5 py-3 text-end space-x-2 rtl:space-x-reverse">
                                 <button @click="open(tpl)" class="text-[#C4A265] hover:text-[#8B7043] text-xs font-bold">{{ t('Edit', 'تعديل') }}</button>
@@ -161,7 +162,9 @@ function t(en, ar) { return isRtl.value ? ar : en; }
                             <input v-model="it.duration" :placeholder="t('Duration', 'المدة')" class="doctorato-input px-2 py-1.5 border rounded text-xs" />
                             <div class="flex gap-1">
                                 <input v-model="it.instructions" :placeholder="t('Instructions', 'تعليمات')" class="doctorato-input flex-1 px-2 py-1.5 border rounded text-xs" />
-                                <button type="button" @click="removeItem(i)" class="text-red-600 text-xs px-2">✕</button>
+                                <button type="button" @click="removeItem(i)" class="text-red-600 hover:text-red-800 px-2" :title="t('Remove', 'إزالة')">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                                </button>
                             </div>
                         </div>
                     </div>

@@ -2,6 +2,7 @@
 import { ref, computed, watch } from 'vue';
 import { router, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import RatingStars from '@/Components/Ui/RatingStars.vue';
 import { useCurrency } from '@/Composables/useCurrency.js';
 
 const { formatCurrency } = useCurrency();
@@ -45,10 +46,6 @@ const sortedDoctors = computed(() => {
 function pctChange(cur, prev) {
     if (!prev) return cur > 0 ? 100 : 0;
     return Math.round(((cur - prev) / prev) * 100);
-}
-
-function stars(rating) {
-    return '★'.repeat(Math.round(rating)) + '☆'.repeat(5 - Math.round(rating));
 }
 </script>
 
@@ -139,7 +136,7 @@ function stars(rating) {
                             <p class="text-xs text-gray-500">{{ isRtl ? doc.specialty_ar : doc.specialty_en }}</p>
                         </div>
                         <div v-if="doc.rating > 0" class="text-end">
-                            <div class="text-[#C4A265] text-xs tracking-wider">{{ stars(doc.rating) }}</div>
+                            <RatingStars :value="doc.rating" :size="13" />
                             <div class="text-[10px] text-gray-400">{{ doc.rating }}/5 ({{ doc.rating_count }})</div>
                         </div>
                     </div>

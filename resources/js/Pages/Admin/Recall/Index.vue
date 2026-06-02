@@ -213,7 +213,7 @@ const cappedTotal = computed(() => Math.min(props.patients?.total || 0, 500));
                             class="px-4 py-2 rounded-lg bg-[#1B365D] hover:bg-[#22406F] text-white text-sm font-bold disabled:opacity-50">
                         {{ bulkForm.processing
                             ? (isRtl ? 'جارٍ الإرسال...' : 'Sending...')
-                            : (isRtl ? '✓ إرسال الآن' : '✓ Send now') }}
+                            : (isRtl ? 'إرسال الآن' : 'Send now') }}
                     </button>
                 </div>
             </div>

@@ -496,7 +496,7 @@ function formatDateTime(date) {
                                                     :style="isCancelled ? 'background-color: #059669;' : 'background-color: #C4A265;'">
                                                 {{ visitDateForm.processing
                                                     ? $t('a_saving')
-                                                    : (isCancelled ? (isRtl ? '✓ استعادة الزيارة' : '✓ Restore visit') : $t('a_save')) }}
+                                                    : (isCancelled ? (isRtl ? 'استعادة الزيارة' : 'Restore visit') : $t('a_save')) }}
                                             </button>
                                             <button @click="cancelEditVisitDate"
                                                     class="px-3 py-1.5 rounded border border-gray-300 text-gray-700 text-xs font-medium hover:bg-gray-50">

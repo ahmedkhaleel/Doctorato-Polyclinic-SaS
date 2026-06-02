@@ -117,7 +117,7 @@ const maxEvent = computed(() => Math.max(1, ...props.perEvent.map((e) => Number(
                     <div v-for="e in perEvent" :key="e.event_key" class="mb-2">
                         <div class="flex justify-between text-xs mb-0.5">
                             <span class="font-mono text-gray-600 truncate">{{ e.event_key }}</span>
-                            <span class="text-gray-500">{{ e.total }}<span v-if="Number(e.failed) > 0" class="text-red-400"> · {{ e.failed }} ✗</span></span>
+                            <span class="text-gray-500">{{ e.total }}<span v-if="Number(e.failed) > 0" class="text-red-400 inline-flex items-center gap-0.5"> · {{ e.failed }} <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M6 18L18 6M6 6l12 12" /></svg></span></span>
                         </div>
                         <div class="h-2 rounded-full bg-gray-100 overflow-hidden"><div class="h-full rounded-full" :style="{ width: `${Number(e.total) / maxEvent * 100}%`, background: '#C4A265' }"></div></div>
                     </div>

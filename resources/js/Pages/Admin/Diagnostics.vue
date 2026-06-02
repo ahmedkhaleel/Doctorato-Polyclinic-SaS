@@ -2,6 +2,7 @@
 import { computed } from 'vue';
 import { usePage, router } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import BoolIcon from '@/Components/Ui/BoolIcon.vue';
 
 defineOptions({ layout: AdminLayout });
 
@@ -108,8 +109,9 @@ const blockerLabels = {
                     </div>
                     <div class="flex items-center justify-between">
                         <dt class="text-slate-500">Debug</dt>
-                        <dd :class="system.app_debug ? 'text-amber-600 font-bold' : 'text-slate-600'">
-                            {{ system.app_debug ? 'ON ⚠' : 'OFF' }}
+                        <dd :class="system.app_debug ? 'text-amber-600 font-bold' : 'text-slate-600'" class="inline-flex items-center gap-1">
+                            {{ system.app_debug ? 'ON' : 'OFF' }}
+                            <svg v-if="system.app_debug" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 9v4m0 4h.01M10.3 3.86l-8.06 14A1 1 0 003.1 19.4h17.8a1 1 0 00.86-1.5l-8.06-14a1 1 0 00-1.74 0z" /></svg>
                         </dd>
                     </div>
                     <div class="flex items-center justify-between">
@@ -122,14 +124,15 @@ const blockerLabels = {
                     </div>
                     <div class="flex items-center justify-between">
                         <dt class="text-slate-500">{{ isRtl ? 'قاعدة البيانات' : 'Database' }}</dt>
-                        <dd :class="system.db_connected ? 'text-emerald-600 font-semibold' : 'text-red-600 font-semibold'">
-                            {{ system.db_connected ? '✓ ' + (isRtl ? 'متصلة' : 'connected') : '✗ ' + (isRtl ? 'مقطوعة' : 'unreachable') }}
+                        <dd :class="system.db_connected ? 'text-emerald-600 font-semibold' : 'text-red-600 font-semibold'" class="inline-flex items-center gap-1">
+                            <BoolIcon :ok="!!system.db_connected" :size="14" />
+                            {{ system.db_connected ? (isRtl ? 'متصلة' : 'connected') : (isRtl ? 'مقطوعة' : 'unreachable') }}
                         </dd>
                     </div>
                     <div class="flex items-center justify-between">
                         <dt class="text-slate-500">{{ isRtl ? 'صلاحية الكتابة' : 'Storage writable' }}</dt>
                         <dd :class="system.storage_writable ? 'text-emerald-600 font-semibold' : 'text-red-600 font-semibold'">
-                            {{ system.storage_writable ? '✓' : '✗' }}
+                            <BoolIcon :ok="!!system.storage_writable" :size="14" />
                         </dd>
                     </div>
                 </dl>
@@ -201,8 +204,9 @@ const blockerLabels = {
                     </div>
                     <div class="flex items-center justify-between">
                         <dt class="text-slate-500">{{ isRtl ? 'الحالة' : 'Status' }}</dt>
-                        <dd :class="scheduler.is_healthy ? 'text-emerald-600 font-semibold' : 'text-red-600 font-semibold'">
-                            {{ scheduler.is_healthy ? '✓ ' + (isRtl ? 'يعمل' : 'running') : '✗ ' + (isRtl ? 'غير نشط — أضف cron' : 'inactive — add cron job') }}
+                        <dd :class="scheduler.is_healthy ? 'text-emerald-600 font-semibold' : 'text-red-600 font-semibold'" class="inline-flex items-center gap-1">
+                            <BoolIcon :ok="!!scheduler.is_healthy" :size="14" />
+                            {{ scheduler.is_healthy ? (isRtl ? 'يعمل' : 'running') : (isRtl ? 'غير نشط — أضف cron' : 'inactive — add cron job') }}
                         </dd>
                     </div>
                 </dl>
@@ -227,8 +231,9 @@ const blockerLabels = {
                 <dl class="space-y-2 text-sm">
                     <div class="flex items-center justify-between">
                         <dt class="text-slate-500">{{ isRtl ? 'الحالة' : 'Status' }}</dt>
-                        <dd :class="notifications.ok ? 'text-emerald-600 font-semibold' : 'text-red-600 font-semibold'">
-                            {{ notifications.ok ? '✓ ' + (isRtl ? 'سليم' : 'healthy') : '✗ ' + (isRtl ? 'يحتاج انتباه' : 'needs attention') }}
+                        <dd :class="notifications.ok ? 'text-emerald-600 font-semibold' : 'text-red-600 font-semibold'" class="inline-flex items-center gap-1">
+                            <BoolIcon :ok="!!notifications.ok" :size="14" />
+                            {{ notifications.ok ? (isRtl ? 'سليم' : 'healthy') : (isRtl ? 'يحتاج انتباه' : 'needs attention') }}
                         </dd>
                     </div>
                     <div class="flex items-center justify-between">

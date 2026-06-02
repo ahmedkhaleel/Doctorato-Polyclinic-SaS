@@ -1,5 +1,7 @@
 <script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue'
+import RatingStars from '@/Components/Ui/RatingStars.vue'
+import BoolIcon from '@/Components/Ui/BoolIcon.vue'
 import { ref, computed } from 'vue'
 import { router, Link, usePage } from '@inertiajs/vue3'
 
@@ -31,10 +33,6 @@ function applyFilters() {
         date_from: dateFrom.value || undefined,
         date_to: dateTo.value || undefined,
     }, { preserveState: true, replace: true })
-}
-
-function stars(count) {
-    return '★'.repeat(count) + '☆'.repeat(5 - count)
 }
 
 function npsColor(score) {
@@ -90,7 +88,7 @@ function npsColor(score) {
                 <h3 class="font-bold text-gray-700 mb-4">{{ isRtl ? 'توزيع التقييمات' : 'Rating Distribution' }}</h3>
                 <div class="space-y-3">
                     <div v-for="i in [5,4,3,2,1]" :key="i" class="flex items-center gap-3">
-                        <span class="text-sm font-medium text-gray-600 w-6">{{ i }}★</span>
+                        <span class="text-sm font-medium text-gray-600 w-10 inline-flex items-center gap-0.5">{{ i }}<RatingStars :value="1" :max="1" :size="12" /></span>
                         <div class="flex-1 bg-gray-100 rounded-full h-4 overflow-hidden">
                             <div class="h-full rounded-full transition-all" :class="i >= 4 ? 'bg-emerald-500' : i === 3 ? 'bg-amber-500' : 'bg-red-500'"
                                 :style="{ width: stats.total > 0 ? ((stats.distribution[i-1] / stats.total) * 100) + '%' : '0%' }" />
@@ -125,7 +123,7 @@ function npsColor(score) {
                             <p class="text-sm font-medium text-gray-700 truncate">{{ isRtl ? ranking.doctor?.name_ar : ranking.doctor?.name_en }}</p>
                             <p class="text-xs text-gray-400">{{ ranking.review_count }} {{ isRtl ? 'تقييم' : 'reviews' }}</p>
                         </div>
-                        <span class="text-amber-500 font-bold text-sm">{{ ranking.avg_rating }}★</span>
+                        <span class="text-amber-500 font-bold text-sm inline-flex items-center gap-1">{{ ranking.avg_rating }}<RatingStars :value="1" :max="1" :size="13" /></span>
                     </div>
                 </div>
                 <div v-else class="text-center py-8 text-gray-400 text-sm">{{ isRtl ? 'لا توجد بيانات كافية' : 'Not enough data' }}</div>
@@ -140,7 +138,7 @@ function npsColor(score) {
             </select>
             <select v-model="ratingFilter" @change="applyFilters" class="doctorato-input px-4 py-2 border border-gray-200 rounded-xl text-sm focus:ring-[#1B365D] focus:border-[#1B365D]">
                 <option value="">{{ isRtl ? 'كل التقييمات' : 'All Ratings' }}</option>
-                <option v-for="r in [5,4,3,2,1]" :key="r" :value="r">{{ r }}★ {{ isRtl ? 'فأعلى' : '& up' }}</option>
+                <option v-for="r in [5,4,3,2,1]" :key="r" :value="r">{{ r }} {{ isRtl ? 'نجوم فأعلى' : 'stars & up' }}</option>
             </select>
             <input v-model="dateFrom" @change="applyFilters" type="date" class="doctorato-input px-3 py-2 border border-gray-200 rounded-xl text-sm" />
             <input v-model="dateTo" @change="applyFilters" type="date" class="doctorato-input px-3 py-2 border border-gray-200 rounded-xl text-sm" />
@@ -159,21 +157,21 @@ function npsColor(score) {
                             <p class="text-xs text-gray-400">{{ fb.created_at?.split('T')[0] }} &middot; {{ isRtl ? fb.doctor?.name_ar : fb.doctor?.name_en }}</p>
                         </div>
                     </div>
-                    <div class="text-amber-500 text-lg tracking-wider">{{ stars(fb.overall_rating) }}</div>
+                    <RatingStars :value="fb.overall_rating" :size="18" />
                 </div>
 
                 <div v-if="fb.comments" class="text-sm text-gray-600 mb-3 bg-gray-50 rounded-xl p-3">{{ fb.comments }}</div>
 
                 <div class="flex flex-wrap gap-4 text-xs text-gray-500">
-                    <span v-if="fb.doctor_rating">{{ isRtl ? 'الطبيب' : 'Doctor' }}: <strong class="text-amber-500">{{ fb.doctor_rating }}★</strong></span>
-                    <span v-if="fb.staff_rating">{{ isRtl ? 'الموظفين' : 'Staff' }}: <strong class="text-amber-500">{{ fb.staff_rating }}★</strong></span>
-                    <span v-if="fb.cleanliness_rating">{{ isRtl ? 'النظافة' : 'Clean' }}: <strong class="text-amber-500">{{ fb.cleanliness_rating }}★</strong></span>
-                    <span v-if="fb.waiting_time_rating">{{ isRtl ? 'الانتظار' : 'Wait' }}: <strong class="text-amber-500">{{ fb.waiting_time_rating }}★</strong></span>
+                    <span v-if="fb.doctor_rating">{{ isRtl ? 'الطبيب' : 'Doctor' }}: <strong class="text-amber-500">{{ fb.doctor_rating }}<RatingStars :value="1" :max="1" :size="11" /></strong></span>
+                    <span v-if="fb.staff_rating">{{ isRtl ? 'الموظفين' : 'Staff' }}: <strong class="text-amber-500">{{ fb.staff_rating }}<RatingStars :value="1" :max="1" :size="11" /></strong></span>
+                    <span v-if="fb.cleanliness_rating">{{ isRtl ? 'النظافة' : 'Clean' }}: <strong class="text-amber-500">{{ fb.cleanliness_rating }}<RatingStars :value="1" :max="1" :size="11" /></strong></span>
+                    <span v-if="fb.waiting_time_rating">{{ isRtl ? 'الانتظار' : 'Wait' }}: <strong class="text-amber-500">{{ fb.waiting_time_rating }}<RatingStars :value="1" :max="1" :size="11" /></strong></span>
                     <span v-if="fb.nps_score !== null" class="px-2 py-0.5 rounded-full" :class="fb.nps_category?.color === 'green' ? 'bg-emerald-50 text-emerald-600' : fb.nps_category?.color === 'yellow' ? 'bg-amber-50 text-amber-600' : 'bg-red-50 text-red-600'">
                         NPS: {{ fb.nps_score }} ({{ isRtl ? fb.nps_category?.ar : fb.nps_category?.en }})
                     </span>
-                    <span v-if="fb.would_recommend === true" class="text-emerald-600">{{ isRtl ? '✓ يوصي' : '✓ Recommends' }}</span>
-                    <span v-else-if="fb.would_recommend === false" class="text-red-600">{{ isRtl ? '✗ لا يوصي' : '✗ Does not recommend' }}</span>
+                    <span v-if="fb.would_recommend === true" class="text-emerald-600 inline-flex items-center gap-1"><BoolIcon :ok="true" :size="14" />{{ isRtl ? 'يوصي' : 'Recommends' }}</span>
+                    <span v-else-if="fb.would_recommend === false" class="text-red-600 inline-flex items-center gap-1"><BoolIcon :ok="false" :size="14" />{{ isRtl ? 'لا يوصي' : 'Does not recommend' }}</span>
                 </div>
             </div>
         </div>

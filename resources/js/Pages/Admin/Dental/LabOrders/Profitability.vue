@@ -154,7 +154,7 @@ const comparisonByItemType = computed(() => {
             <div class="dental-card-enter overflow-x-auto" style="animation-delay:0.3s">
                 <div class="inline-flex gap-1 bg-slate-100 p-1 rounded-xl min-w-full sm:min-w-0">
                     <button v-for="tab in [
-                        { key: 'quality', icon: '⭐', ar: 'تصنيف الجودة', en: 'Quality Ranking' },
+                        { key: 'quality', ar: 'تصنيف الجودة', en: 'Quality Ranking' },
                         { key: 'prices', ar: 'مقارنة الأسعار', en: 'Price Comparison' },
                         { key: 'recommendations', ar: 'التوصيات', en: 'Recommendations' },
                         { key: 'profitability', ar: 'الربحية حسب النوع', en: 'Profit by Type' },
@@ -270,7 +270,7 @@ const comparisonByItemType = computed(() => {
                                     class="border-b border-gray-50 hover:bg-gray-50/50"
                                     :class="idx === 0 ? 'bg-emerald-50/30' : ''">
                                     <td class="px-5 py-3 font-medium text-gray-900">
-                                        <span v-if="idx === 0" class="text-emerald-500 me-1">★</span>
+                                        <svg v-if="idx === 0" class="inline-block w-3.5 h-3.5 text-emerald-500 me-1 align-middle" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l2.9 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77 5.82 21l1.18-6.88-5-4.87 7.1-1.01L12 2z" /></svg>
                                         {{ lab.lab_name }}
                                         <span v-if="idx === 0" class="text-[10px] bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded-full ms-1 font-semibold">
                                             {{ isRtl ? 'الأرخص' : 'Best Price' }}
