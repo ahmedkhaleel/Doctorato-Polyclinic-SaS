@@ -186,3 +186,8 @@ Schedule::command('demo:reset --force')
     ->dailyAt('03:30')
     ->name('demo-nightly-reset')
     ->onOneServer();
+
+// AI: early budget warning (hourly) + nightly RAG index rebuild. Both self-guard
+// (no-op when AI is disabled), so they are safe on every install.
+Schedule::command('ai:budget-alert')->hourly()->name('ai-budget-alert')->onOneServer();
+Schedule::command('ai:rebuild-embeddings')->dailyAt('04:15')->name('ai-rebuild-embeddings')->onOneServer();
