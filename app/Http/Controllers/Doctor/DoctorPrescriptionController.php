@@ -57,7 +57,7 @@ class DoctorPrescriptionController extends BaseDoctorController
         // global kill-switch + the per-feature flag). Buttons hide when unusable.
         $aiReady = (bool) $request->user()?->role?->hasPermission('ai.doctor')
             && app(\App\Services\Ai\AiManager::class)->isReady();
-        $ai = [
+        $aiRx = [
             'suggest' => $aiReady && \App\Models\AiFeatureFlag::isEnabled('prescription_suggest'),
             'drugCheck' => $aiReady && \App\Models\AiFeatureFlag::isEnabled('drug_interaction'),
         ];
@@ -66,7 +66,7 @@ class DoctorPrescriptionController extends BaseDoctorController
             'prescriptions' => $prescriptions,
             'presets' => $presets,
             'filters' => $request->only(['search']),
-            'ai' => $ai,
+            'aiRx' => $aiRx,
         ]);
     }
 

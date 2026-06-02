@@ -31,7 +31,7 @@ class AiPrescriptionEmbedTest extends TestCase
     {
         $this->actingAs($this->doctorUser())->get('/doctor/prescriptions')
             ->assertOk()
-            ->assertInertia(fn (Assert $p) => $p->where('ai.suggest', false)->where('ai.drugCheck', false));
+            ->assertInertia(fn (Assert $p) => $p->where('aiRx.suggest', false)->where('aiRx.drugCheck', false));
     }
 
     public function test_ai_buttons_shown_when_enabled_and_permitted(): void
@@ -43,7 +43,7 @@ class AiPrescriptionEmbedTest extends TestCase
 
         $this->actingAs($this->doctorUser())->get('/doctor/prescriptions')
             ->assertOk()
-            ->assertInertia(fn (Assert $p) => $p->where('ai.suggest', true)->where('ai.drugCheck', true));
+            ->assertInertia(fn (Assert $p) => $p->where('aiRx.suggest', true)->where('aiRx.drugCheck', true));
     }
 
     public function test_ai_buttons_hidden_without_ai_doctor_permission(): void
@@ -55,6 +55,6 @@ class AiPrescriptionEmbedTest extends TestCase
         // doctor without ai.doctor permission
         $this->actingAs($this->doctorUser(['prescriptions.view', 'prescriptions.create']))->get('/doctor/prescriptions')
             ->assertOk()
-            ->assertInertia(fn (Assert $p) => $p->where('ai.suggest', false));
+            ->assertInertia(fn (Assert $p) => $p->where('aiRx.suggest', false));
     }
 }

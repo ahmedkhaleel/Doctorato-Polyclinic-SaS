@@ -62,6 +62,8 @@ class HandleInertiaRequests extends Middleware
                 'patient' => fn () => $this->getPatientData($isPatientRoute, $request),
             ],
             'branch' => fn () => $this->getBranchData($request, $isPatientRoute),
+            // AI availability for in-screen assist buttons (any page can read it).
+            'ai' => fn () => $this->getAiData($request),
             'flash' => [
                 'success' => fn () => $request->session()->get('success'),
                 'error' => fn () => $request->session()->get('error'),
@@ -165,6 +167,31 @@ class HandleInertiaRequests extends Middleware
      * Tracking IDs, API keys, and custom scripts are NOT exposed here.
      */
     /** Active branch + the staff member's branch list for the switcher. */
+    /**
+     * AI availability for in-screen assist buttons. enabled = the layer is ready
+     * AND the user may use AI; features = the list of enabled feature keys.
+     */
+    private function getAiData(Request $request): array
+    {
+        $off = ['enabled' => false, 'features' => []];
+        $user = $request->user();
+        if (! $user) {
+            return $off;
+        }
+
+        try {
+            $role = $user->role;
+            $canUse = $role && ($role->hasPermission('ai.view') || $role->hasPermission('ai.doctor'));
+            if (! $canUse || ! app(\App\Services\Ai\AiManager::class)->isReady()) {
+                return $off;
+            }
+
+            return ['enabled' => true, 'features' => \App\Models\AiFeatureFlag::enabledKeys()];
+        } catch (\Throwable) {
+            return $off;
+        }
+    }
+
     private function getBranchData(Request $request, bool $isPatientRoute): ?array
     {
         $user = $request->user();

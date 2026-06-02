@@ -15,7 +15,7 @@ const props = defineProps({
     prescriptions: Object,
     presets: Object,
     filters: Object,
-    ai: { type: Object, default: () => ({ suggest: false, drugCheck: false }) },
+    aiRx: { type: Object, default: () => ({ suggest: false, drugCheck: false }) },
 });
 
 const search = ref(props.filters?.search || '');
@@ -297,23 +297,23 @@ function hasMedicalNotes(patient) {
                         </div>
                     </div>
                     <!-- ══════ AI ASSIST (in-screen) ══════ -->
-                    <div v-if="ai.suggest || ai.drugCheck" class="mb-4 rounded-xl border border-[#7C3AED]/20 bg-[#7C3AED]/5 p-4">
+                    <div v-if="aiRx.suggest || aiRx.drugCheck" class="mb-4 rounded-xl border border-[#7C3AED]/20 bg-[#7C3AED]/5 p-4">
                         <div class="flex items-center gap-2 mb-3">
                             <svg class="w-4 h-4 text-[#7C3AED]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m0 16v1m-8-9H3m3.34-5.66l-.7-.7M21 12h-1M6.34 6.34l-.7-.7M12 7a5 5 0 015 5c0 1.9-1.1 3.5-2.6 4.3V17a1 1 0 01-1 1h-2.8a1 1 0 01-1-1v-.7C8.1 15.5 7 13.9 7 12a5 5 0 015-5z"/></svg>
                             <span class="text-xs font-bold text-[#7C3AED]">{{ isRtl ? 'مساعد الذكاء الاصطناعي' : 'AI Assistant' }}</span>
                             <span class="text-[10px] text-gray-400">{{ isRtl ? 'اقتراحات للمراجعة فقط — ليست وصفة نهائية' : 'Suggestions only — not a final prescription' }}</span>
                         </div>
                         <div class="flex flex-wrap gap-2">
-                            <button v-if="ai.suggest" type="button" @click="aiSuggestRx" :disabled="aiBusy"
+                            <button v-if="aiRx.suggest" type="button" @click="aiSuggestRx" :disabled="aiBusy"
                                 class="px-3 py-1.5 text-xs rounded-lg bg-[#1B365D] text-white hover:opacity-90 disabled:opacity-50">
                                 {{ isRtl ? 'اقترح أدوية من التشخيص' : 'Suggest meds from diagnosis' }}
                             </button>
-                            <button v-if="ai.drugCheck" type="button" @click="aiDrugCheck" :disabled="aiBusy"
+                            <button v-if="aiRx.drugCheck" type="button" @click="aiDrugCheck" :disabled="aiBusy"
                                 class="px-3 py-1.5 text-xs rounded-lg bg-red-600 text-white hover:opacity-90 disabled:opacity-50">
                                 {{ isRtl ? 'فحص تعارض الأدوية والحساسية' : 'Check drug interactions & allergies' }}
                             </button>
                         </div>
-                        <div v-if="ai.drugCheck" class="grid sm:grid-cols-2 gap-2 mt-2">
+                        <div v-if="aiRx.drugCheck" class="grid sm:grid-cols-2 gap-2 mt-2">
                             <input v-model="ai.allergies.value" type="text" :placeholder="isRtl ? 'حساسية المريض (اختياري)' : 'Patient allergies (optional)'" class="px-3 py-2 border border-gray-200 rounded-lg text-xs" />
                             <input v-model="ai.currentMeds.value" type="text" :placeholder="isRtl ? 'الأدوية الحالية (اختياري)' : 'Current medications (optional)'" class="px-3 py-2 border border-gray-200 rounded-lg text-xs" />
                         </div>

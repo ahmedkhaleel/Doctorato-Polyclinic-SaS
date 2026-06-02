@@ -3,6 +3,7 @@ import { computed } from 'vue';
 import { Link, useForm, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import RichTextEditor from '@/Components/Admin/RichTextEditorLazy.vue';
+import AiAssist from '@/Components/Ai/AiAssist.vue';
 
 const props = defineProps({
     post: Object,
@@ -88,6 +89,7 @@ function submit() {
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_content_en') }}</label>
                             <RichTextEditor v-model="form.content_en" dir="ltr" placeholder="Write content..." />
+                            <AiAssist feature="seo_content" label-ar="توليد مقال (إنجليزي)" label-en="Generate article (EN)" :build-vars="() => ({ type: 'article', topic: form.title_en || form.title_ar })" @insert="(t) => form.content_en = t" />
                             <p v-if="form.errors.content_en" class="mt-1 text-sm text-red-600">{{ form.errors.content_en }}</p>
                         </div>
 
@@ -95,6 +97,7 @@ function submit() {
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('a_content_ar') }}</label>
                             <RichTextEditor v-model="form.content_ar" dir="rtl" placeholder="اكتب المحتوى..." />
+                            <AiAssist feature="seo_content" label-ar="توليد مقال (عربي)" label-en="Generate article (AR)" :build-vars="() => ({ type: 'مقال', topic: form.title_ar || form.title_en })" @insert="(t) => form.content_ar = t" />
                             <p v-if="form.errors.content_ar" class="mt-1 text-sm text-red-600">{{ form.errors.content_ar }}</p>
                         </div>
                     </div>

@@ -2,6 +2,7 @@
 import { ref, computed, onMounted } from 'vue';
 import { Link, router, useForm, usePage } from '@inertiajs/vue3';
 import DoctorLayout from '@/Layouts/DoctorLayout.vue';
+import AiAssist from '@/Components/Ai/AiAssist.vue';
 import PrescriptionsSection from '@/Components/Doctor/Visit/PrescriptionsSection.vue';
 import VitalsHistorySection from '@/Components/Doctor/Visit/VitalsHistorySection.vue';
 import { useCurrency } from '@/Composables/useCurrency.js';
@@ -394,6 +395,10 @@ function formatDate(date) {
                             <div>
                                 <label class="text-xs text-gray-500 font-medium mb-1.5 block">{{ isRtl ? 'ملاحظات الطبيب' : 'Doctor Notes' }}</label>
                                 <textarea v-model="diagnosisForm.doctor_notes" rows="3" class="doctorato-input w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#C4A265] transition-all" :placeholder="isRtl ? 'أدخل الملاحظات...' : 'Enter notes...'"></textarea>
+                                <AiAssist feature="soap_note" endpoint="/doctor/ai/soap"
+                                    label-ar="حوّل الملاحظات إلى SOAP" label-en="Turn notes into SOAP"
+                                    :payload="() => ({ notes: diagnosisForm.doctor_notes || diagnosisForm.diagnosis })"
+                                    @insert="(t) => diagnosisForm.doctor_notes = t" />
                             </div>
                             <div class="flex gap-2">
                                 <button type="submit" :disabled="diagnosisForm.processing" class="px-5 py-2 text-xs font-semibold text-white bg-[#C4A265] hover:bg-[#A68B52] rounded-lg transition-colors shadow-sm">{{ isRtl ? 'حفظ' : 'Save' }}</button>

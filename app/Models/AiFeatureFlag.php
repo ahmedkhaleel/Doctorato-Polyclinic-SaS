@@ -31,11 +31,18 @@ class AiFeatureFlag extends Model
         });
     }
 
+    /** All enabled feature keys (cached). Used to gate in-screen AI buttons. */
+    public static function enabledKeys(): array
+    {
+        return Cache::remember('ai_enabled_keys', 300, fn () => static::where('enabled', true)->pluck('key')->all());
+    }
+
     protected static function booted(): void
     {
         $bust = function (self $flag) {
             Cache::forget("ai_flag:{$flag->key}");
             Cache::forget("ai_flag_model:{$flag->key}");
+            Cache::forget('ai_enabled_keys');
         };
         static::saved($bust);
         static::deleted($bust);
