@@ -286,6 +286,16 @@ Route::middleware(['admin.auth', 'branch.context'])->group(function () {
     Route::post('/roles/{role}/update', [RoleController::class, 'update'])->name('admin.roles.update')->middleware('permission:roles.update');
     Route::post('/roles/{role}/delete', [RoleController::class, 'destroy'])->name('admin.roles.destroy')->middleware('permission:roles.delete');
 
+    // ─── Demo & Trial (super_admin only; controller hard-gates each action) ─
+    Route::get('/demo-trial', [\App\Http\Controllers\Admin\DemoTrialController::class, 'index'])
+        ->name('admin.demo-trial.index')->middleware('permission:settings.view');
+    Route::post('/demo-trial/settings', [\App\Http\Controllers\Admin\DemoTrialController::class, 'updateSettings'])
+        ->name('admin.demo-trial.settings')->middleware('permission:settings.update');
+    Route::post('/demo-trial/extend', [\App\Http\Controllers\Admin\DemoTrialController::class, 'extendTrials'])
+        ->name('admin.demo-trial.extend')->middleware('permission:settings.update');
+    Route::post('/demo-trial/reset-password', [\App\Http\Controllers\Admin\DemoTrialController::class, 'resetPassword'])
+        ->name('admin.demo-trial.reset-password')->middleware('permission:settings.update');
+
     // ─── Settings (view + update) ──────────────────────────
     Route::get('/settings', [SettingController::class, 'index'])->name('admin.settings.index')->middleware('permission:settings.view');
     Route::post('/settings', [SettingController::class, 'update'])->name('admin.settings.update')->middleware('permission:settings.update');

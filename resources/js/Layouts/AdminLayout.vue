@@ -42,7 +42,7 @@ if (typeof window !== 'undefined') {
     const onBreakpointChange = (e) => { if (!e.matches) sidebarOpen.value = false; };
     mqlDesktop.addEventListener ? mqlDesktop.addEventListener('change', onBreakpointChange) : mqlDesktop.addListener(onBreakpointChange);
 }
-const { can } = usePermissions();
+const { can, isSuperAdmin } = usePermissions();
 
 const adminName = computed(() => page.props.auth?.user?.name || 'Admin');
 const adminRole = computed(() => page.props.auth?.user?.role_display || page.props.auth?.user?.role || '');
@@ -371,6 +371,7 @@ const navGroups = [
             { labelEn: 'Diagnostics',    labelAr: 'التشخيص',        href: '/admin/diagnostics',        icon: 'activity', permission: 'settings.view' },
             { labelEn: 'Branches',       labelAr: 'الفروع',        href: '/admin/branches',           icon: 'building', permission: 'settings.view' },
             { labelEn: 'Settings',       labelAr: 'الإعدادات',     href: '/admin/settings',           icon: 'cog',      permission: 'settings.view' },
+            { labelEn: 'Demo & Trial',   labelAr: 'الديمو والتجربة', href: '/admin/demo-trial',       icon: 'clock',    permission: 'settings.view', superAdmin: true },
             { labelEn: 'Modules',        labelAr: 'المديولات',     href: '/admin/settings/modules',   icon: 'layers',   permission: 'settings.view' },
             { labelEn: 'Recycle Bin',    labelAr: 'سلة المحذوفات', href: '/admin/trash',              icon: 'trash',    permission: 'settings.update' },
         ],
@@ -427,6 +428,7 @@ const filteredGroups = computed(() =>
             ...g,
             items: g.items.filter(i => {
                 if (i.moduleKey && modules.value[i.moduleKey]?.enabled !== true) return false;
+                if (i.superAdmin && !isSuperAdmin()) return false;
                 if (i.permission && !can(i.permission)) return false;
                 return true;
             }),
