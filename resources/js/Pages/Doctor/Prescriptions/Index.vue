@@ -1,6 +1,7 @@
 <script setup>
 import { ref, watch, computed } from 'vue';
 import { Link, router, useForm, usePage } from '@inertiajs/vue3';
+import axios from 'axios';
 import DoctorLayout from '@/Layouts/DoctorLayout.vue';
 import PatientSearchSelect from '@/Components/Doctor/PatientSearchSelect.vue';
 
@@ -14,6 +15,7 @@ const props = defineProps({
     prescriptions: Object,
     presets: Object,
     filters: Object,
+    ai: { type: Object, default: () => ({ suggest: false, drugCheck: false }) },
 });
 
 const search = ref(props.filters?.search || '');
@@ -54,6 +56,36 @@ const form = useForm({
 
 function addItem() {
     form.items.push({ medication_name: '', dosage: '', frequency: '', duration: '', instructions: '' });
+}
+
+// ─── AI assist (in-screen) ───────────────────────
+const ai = { allergies: ref(''), currentMeds: ref('') };
+const aiBusy = ref(false);
+const aiError = ref('');
+const aiSuggestion = ref('');
+const aiDrugResult = ref('');
+
+async function aiSuggestRx() {
+    if (!form.diagnosis) { aiError.value = isRtl.value ? 'أدخل التشخيص أولاً.' : 'Enter a diagnosis first.'; return; }
+    aiBusy.value = true; aiError.value = ''; aiSuggestion.value = '';
+    try {
+        const { data } = await axios.post('/doctor/ai/prescription', { diagnosis: form.diagnosis });
+        data.ok ? (aiSuggestion.value = data.text) : (aiError.value = data.message);
+    } catch (e) { aiError.value = e.response?.data?.message || (isRtl.value ? 'تعذّر الاقتراح.' : 'Suggestion failed.'); }
+    finally { aiBusy.value = false; }
+}
+
+async function aiDrugCheck() {
+    const meds = form.items.map((i) => i.medication_name).filter(Boolean);
+    if (!meds.length) { aiError.value = isRtl.value ? 'أضف دواءً واحداً على الأقل.' : 'Add at least one medication.'; return; }
+    aiBusy.value = true; aiError.value = ''; aiDrugResult.value = '';
+    try {
+        const { data } = await axios.post('/doctor/ai/drug-check', {
+            medications: meds, allergies: ai.allergies.value, current_meds: ai.currentMeds.value,
+        });
+        data.ok ? (aiDrugResult.value = data.text) : (aiError.value = data.message);
+    } catch (e) { aiError.value = e.response?.data?.message || (isRtl.value ? 'تعذّر الفحص.' : 'Check failed.'); }
+    finally { aiBusy.value = false; }
 }
 function removeItem(index) {
     if (form.items.length > 1) form.items.splice(index, 1);
@@ -264,6 +296,33 @@ function hasMedicalNotes(patient) {
                             </div>
                         </div>
                     </div>
+                    <!-- ══════ AI ASSIST (in-screen) ══════ -->
+                    <div v-if="ai.suggest || ai.drugCheck" class="mb-4 rounded-xl border border-[#7C3AED]/20 bg-[#7C3AED]/5 p-4">
+                        <div class="flex items-center gap-2 mb-3">
+                            <svg class="w-4 h-4 text-[#7C3AED]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m0 16v1m-8-9H3m3.34-5.66l-.7-.7M21 12h-1M6.34 6.34l-.7-.7M12 7a5 5 0 015 5c0 1.9-1.1 3.5-2.6 4.3V17a1 1 0 01-1 1h-2.8a1 1 0 01-1-1v-.7C8.1 15.5 7 13.9 7 12a5 5 0 015-5z"/></svg>
+                            <span class="text-xs font-bold text-[#7C3AED]">{{ isRtl ? 'مساعد الذكاء الاصطناعي' : 'AI Assistant' }}</span>
+                            <span class="text-[10px] text-gray-400">{{ isRtl ? 'اقتراحات للمراجعة فقط — ليست وصفة نهائية' : 'Suggestions only — not a final prescription' }}</span>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <button v-if="ai.suggest" type="button" @click="aiSuggestRx" :disabled="aiBusy"
+                                class="px-3 py-1.5 text-xs rounded-lg bg-[#1B365D] text-white hover:opacity-90 disabled:opacity-50">
+                                {{ isRtl ? 'اقترح أدوية من التشخيص' : 'Suggest meds from diagnosis' }}
+                            </button>
+                            <button v-if="ai.drugCheck" type="button" @click="aiDrugCheck" :disabled="aiBusy"
+                                class="px-3 py-1.5 text-xs rounded-lg bg-red-600 text-white hover:opacity-90 disabled:opacity-50">
+                                {{ isRtl ? 'فحص تعارض الأدوية والحساسية' : 'Check drug interactions & allergies' }}
+                            </button>
+                        </div>
+                        <div v-if="ai.drugCheck" class="grid sm:grid-cols-2 gap-2 mt-2">
+                            <input v-model="ai.allergies.value" type="text" :placeholder="isRtl ? 'حساسية المريض (اختياري)' : 'Patient allergies (optional)'" class="px-3 py-2 border border-gray-200 rounded-lg text-xs" />
+                            <input v-model="ai.currentMeds.value" type="text" :placeholder="isRtl ? 'الأدوية الحالية (اختياري)' : 'Current medications (optional)'" class="px-3 py-2 border border-gray-200 rounded-lg text-xs" />
+                        </div>
+                        <p v-if="aiBusy" class="text-xs text-gray-400 mt-2">{{ isRtl ? 'جارٍ المعالجة…' : 'Working…' }}</p>
+                        <p v-if="aiError" class="text-xs text-amber-700 bg-amber-50 rounded-lg p-2 mt-2">{{ aiError }}</p>
+                        <div v-if="aiSuggestion" class="mt-2 text-xs text-gray-700 bg-white rounded-lg p-3 whitespace-pre-wrap border border-gray-100">{{ aiSuggestion }}</div>
+                        <div v-if="aiDrugResult" class="mt-2 text-xs text-gray-800 bg-red-50 rounded-lg p-3 whitespace-pre-wrap border border-red-100">{{ aiDrugResult }}</div>
+                    </div>
+
                     <div class="flex justify-end pt-2">
                         <button type="submit" :disabled="form.processing" class="inline-flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-[#C4A265] to-[#D4B87A] hover:from-[#A68B52] hover:to-[#C4A265] rounded-xl transition-all disabled:opacity-50 shadow-lg shadow-[#C4A265]/20">
                             <svg v-if="!form.processing" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>

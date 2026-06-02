@@ -6,7 +6,6 @@ use App\Models\DentalPrescriptionTemplate;
 use App\Models\Medication;
 use App\Models\Prescription;
 use App\Models\Visit;
-use Illuminate\Support\Facades\DB;
 use App\Services\AuditLogger;
 use App\Services\DentalPrescriptionService;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -14,6 +13,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response as HttpResponse;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -53,10 +53,20 @@ class DoctorPrescriptionController extends BaseDoctorController
             ],
         ];
 
+        // AI availability for the in-screen assist buttons (gated by permission +
+        // global kill-switch + the per-feature flag). Buttons hide when unusable.
+        $aiReady = (bool) $request->user()?->role?->hasPermission('ai.doctor')
+            && app(\App\Services\Ai\AiManager::class)->isReady();
+        $ai = [
+            'suggest' => $aiReady && \App\Models\AiFeatureFlag::isEnabled('prescription_suggest'),
+            'drugCheck' => $aiReady && \App\Models\AiFeatureFlag::isEnabled('drug_interaction'),
+        ];
+
         return Inertia::render('Doctor/Prescriptions/Index', [
             'prescriptions' => $prescriptions,
             'presets' => $presets,
             'filters' => $request->only(['search']),
+            'ai' => $ai,
         ]);
     }
 
@@ -80,12 +90,12 @@ class DoctorPrescriptionController extends BaseDoctorController
         // Verify patient belongs to this doctor (has at least one visit with them)
         $hasPatient = Visit::where('doctor_id', $doctor->id)
             ->where('patient_id', $data['patient_id'])->exists();
-        if (!$hasPatient) {
+        if (! $hasPatient) {
             abort(403, 'This patient is not in your records.');
         }
 
         // Verify visit belongs to this doctor (if provided)
-        if (!empty($data['visit_id'])) {
+        if (! empty($data['visit_id'])) {
             $visit = Visit::findOrFail($data['visit_id']);
             if ((int) $visit->doctor_id !== (int) $doctor->id) {
                 abort(403, 'This visit does not belong to you.');
@@ -158,20 +168,20 @@ class DoctorPrescriptionController extends BaseDoctorController
 
         $new = Prescription::create([
             'patient_id' => $prescription->patient_id,
-            'doctor_id'  => $prescription->doctor_id,
-            'visit_id'   => null,
-            'diagnosis'  => $prescription->diagnosis,
-            'notes'      => $prescription->notes,
+            'doctor_id' => $prescription->doctor_id,
+            'visit_id' => null,
+            'diagnosis' => $prescription->diagnosis,
+            'notes' => $prescription->notes,
         ]);
 
         foreach ($prescription->items as $item) {
             $new->items()->create([
                 'medication_name' => $item->medication_name,
-                'dosage'          => $item->dosage,
-                'frequency'       => $item->frequency,
-                'duration'        => $item->duration,
-                'instructions'    => $item->instructions,
-                'sort_order'      => $item->sort_order,
+                'dosage' => $item->dosage,
+                'frequency' => $item->frequency,
+                'duration' => $item->duration,
+                'instructions' => $item->instructions,
+                'sort_order' => $item->sort_order,
             ]);
         }
 
@@ -189,7 +199,7 @@ class DoctorPrescriptionController extends BaseDoctorController
         $pdf = Pdf::loadView('pdf.prescription', ['prescription' => $prescription, 'clinic' => \App\Services\Branch\BranchLetterhead::for($prescription->branch_id)]);
         $pdf->setPaper('A4');
 
-        $filename = 'Rx-' . ($prescription->patient->file_number ?? $prescription->id) . '-' . $prescription->created_at->format('Ymd') . '.pdf';
+        $filename = 'Rx-'.($prescription->patient->file_number ?? $prescription->id).'-'.$prescription->created_at->format('Ymd').'.pdf';
 
         return $pdf->download($filename);
     }
@@ -272,12 +282,12 @@ class DoctorPrescriptionController extends BaseDoctorController
         $hasVisit = Visit::where('doctor_id', $doctor->id)
             ->where('patient_id', $data['patient_id'])
             ->exists();
-        if (!$hasVisit) {
+        if (! $hasVisit) {
             abort(403, 'You can only prescribe for your own patients.');
         }
 
         // If visit_id provided, verify it belongs to this doctor
-        if (!empty($data['visit_id'])) {
+        if (! empty($data['visit_id'])) {
             $visit = Visit::findOrFail($data['visit_id']);
             if ((int) $visit->doctor_id !== (int) $doctor->id) {
                 abort(403, 'This visit does not belong to you.');
