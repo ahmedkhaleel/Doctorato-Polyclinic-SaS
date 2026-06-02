@@ -16,6 +16,10 @@ import ChatToast from '@/Components/Chat/ChatToast.vue';
 
 const page = usePage();
 
+// Foundational page-enter animation: re-keys the content on each navigation so
+// every admin page animates in (gated by prefers-reduced-motion in CSS).
+const pageKey = computed(() => page.component);
+
 /* ── Sidebar state (persisted + breakpoint-aware) ─────── */
 const SIDEBAR_STORAGE_KEY = 'admin_sidebar_open_v2';
 const getInitialSidebarState = () => {
@@ -880,9 +884,13 @@ function logout()        { router.post('/admin/logout'); }
                 </div>
             </header>
 
-            <!-- Page content -->
+            <!-- Page content — foundational page-enter animation on every navigation -->
             <main class="flex-1 p-4 md:p-6 lg:p-8 overflow-x-hidden">
-                <slot />
+                <Transition name="page" mode="out-in" appear>
+                    <div :key="pageKey">
+                        <slot />
+                    </div>
+                </Transition>
             </main>
 
             <!-- Footer -->
