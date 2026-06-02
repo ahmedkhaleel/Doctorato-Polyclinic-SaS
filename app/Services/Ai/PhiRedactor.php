@@ -52,4 +52,10 @@ class PhiRedactor
     {
         $this->map = [];
     }
+
+    /** Whether any identifier was redacted in the current cycle (PHI present). */
+    public function hasReplacements(): bool
+    {
+        return $this->map !== [];
+    }
 }

@@ -31,6 +31,8 @@ class AiSettingsSeeder extends Seeder
             'ai_phi_redaction' => '1',
             'ai_log_prompts' => '0',
             'ai_patient_consent_required' => '1',
+            'ai_cache_enabled' => '1',
+            'ai_cache_ttl' => '86400',
         ];
         foreach ($defaults as $key => $value) {
             if (Setting::where('key', $key)->where('branch_id', Setting::GLOBAL_BRANCH)->doesntExist()) {

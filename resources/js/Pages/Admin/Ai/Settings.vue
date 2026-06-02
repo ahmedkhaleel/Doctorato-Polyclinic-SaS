@@ -29,6 +29,7 @@ const form = useForm({
     ai_phi_redaction: props.settings.ai_phi_redaction === '1' || props.settings.ai_phi_redaction === 1,
     ai_log_prompts: props.settings.ai_log_prompts === '1' || props.settings.ai_log_prompts === 1,
     ai_patient_consent_required: props.settings.ai_patient_consent_required === '1' || props.settings.ai_patient_consent_required === 1,
+    ai_cache_enabled: props.settings.ai_cache_enabled === '1' || props.settings.ai_cache_enabled === 1,
 });
 
 const submit = () => {
@@ -38,6 +39,7 @@ const submit = () => {
         ai_phi_redaction: d.ai_phi_redaction ? '1' : '0',
         ai_log_prompts: d.ai_log_prompts ? '1' : '0',
         ai_patient_consent_required: d.ai_patient_consent_required ? '1' : '0',
+        ai_cache_enabled: d.ai_cache_enabled ? '1' : '0',
     })).post('/admin/ai/settings', { preserveScroll: true });
 };
 
@@ -186,6 +188,10 @@ const tabs = [
                     <label class="flex items-center gap-3 cursor-pointer">
                         <input type="checkbox" v-model="form.ai_log_prompts" class="w-5 h-5 rounded text-[#1B365D]">
                         <span class="text-sm text-gray-700">{{ t('تسجيل نص الـ prompt في السجلات (للتدقيق)', 'Log prompt text in request logs (audit)') }}</span>
+                    </label>
+                    <label class="flex items-center gap-3 cursor-pointer">
+                        <input type="checkbox" v-model="form.ai_cache_enabled" class="w-5 h-5 rounded text-[#1B365D]">
+                        <span class="text-sm text-gray-700">{{ t('تخزين مؤقت للنتائج المتكررة (توفير التكلفة)', 'Cache repeated results (cost saver)') }}</span>
                     </label>
                 </section>
 

@@ -70,6 +70,9 @@ class TextAssistant
         }
         $messages[] = ['role' => 'user', 'content' => $this->fill($userTemplate, $vars)];
 
+        // Wave-1 text features are deterministic and worth caching (cost saver).
+        $options['cacheable'] = $options['cacheable'] ?? true;
+
         return $this->ai->generate($feature, $messages, $options);
     }
 

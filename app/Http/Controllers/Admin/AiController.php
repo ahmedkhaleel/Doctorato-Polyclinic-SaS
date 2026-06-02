@@ -21,6 +21,7 @@ class AiController extends Controller
         'ai_vision_model', 'ai_embedding_model', 'ai_transcribe_model',
         'ai_monthly_budget_usd', 'ai_budget_alert_pct', 'ai_rate_limit_per_min',
         'ai_phi_redaction', 'ai_log_prompts', 'ai_patient_consent_required',
+        'ai_cache_enabled',
     ];
 
     // ─── Settings ────────────────────────────────────────────

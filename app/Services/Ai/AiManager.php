@@ -6,6 +6,7 @@ use App\Models\AiFeatureFlag;
 use App\Models\AiPromptTemplate;
 use App\Models\Setting;
 use App\Services\Ai\Contracts\AiDriver;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * Single entry point for all AI features. Resolves the driver, applies the gate
@@ -58,6 +59,26 @@ class AiManager
             ?? AiFeatureFlag::modelFor($feature)
             ?? Setting::get('ai_default_model', config('ai.defaults.model'));
 
+        // Cache deterministic, PHI-free generations to avoid paying twice for the
+        // same request (translations, SEO copy, message drafts...). Only when the
+        // caller opts in, caching is enabled, and NO identifier was redacted (so
+        // the cached text needs no per-request restore).
+        $cacheable = ($options['cacheable'] ?? false)
+            && (bool) Setting::get('ai_cache_enabled', true)
+            && ! $this->redactor->hasReplacements();
+        $cacheKey = 'ai_gen:'.md5($feature.'|'.$options['model'].'|'.json_encode($messages));
+
+        if ($cacheable && ($hit = Cache::get($cacheKey))) {
+            $this->meter->record($feature, new AiResult($hit['text'], $hit['model'], 0, 0), [
+                'actor_type' => $actor['type'] ?? null,
+                'actor_id' => $actor['id'] ?? null,
+                'latency_ms' => 0,
+                'meta' => ['cached' => true],
+            ]);
+
+            return new AiResult($hit['text'], $hit['model']);
+        }
+
         $start = microtime(true);
         try {
             $result = $this->driver->chat($messages, $options);
@@ -78,6 +99,12 @@ class AiManager
             'latency_ms' => $latency,
             'meta' => $logPrompts ? ['messages' => $messages] : null,
         ]);
+
+        // Store PHI-free results for reuse (output has no placeholders to restore).
+        if ($cacheable) {
+            Cache::put($cacheKey, ['text' => $result->text, 'model' => $result->model],
+                (int) Setting::get('ai_cache_ttl', 86400));
+        }
 
         // Restore any redacted identifiers in the model output.
         return new AiResult(
