@@ -105,9 +105,11 @@ const tabs = [
                     <div class="grid sm:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm text-gray-600 mb-1">{{ t('المزوّد', 'Provider') }}</label>
-                            <select v-model="form.ai_provider" class="w-full rounded-lg border-gray-300">
-                                <option value="openai">OpenAI</option>
-                            </select>
+                            <div class="w-full rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-700 flex items-center gap-2">
+                                <svg class="w-4 h-4 text-[#10A37F]" viewBox="0 0 24 24" fill="currentColor"><path d="M22.28 9.82a5.98 5.98 0 0 0-.52-4.91 6.05 6.05 0 0 0-6.51-2.9A6.07 6.07 0 0 0 4.98 4.18a5.98 5.98 0 0 0-3.998 2.9 6.05 6.05 0 0 0 .743 7.1 5.98 5.98 0 0 0 .51 4.91 6.05 6.05 0 0 0 6.51 2.9A5.98 5.98 0 0 0 13.26 24a6.06 6.06 0 0 0 5.77-4.21 5.99 5.99 0 0 0 4-2.9 6.06 6.06 0 0 0-.75-7.07z"/></svg>
+                                OpenAI (ChatGPT)
+                            </div>
+                            <p class="text-xs text-gray-400 mt-1">{{ t('المزوّد الوحيد المعتمد للنظام.', 'The system\'s sole configured provider.') }}</p>
                         </div>
                         <div>
                             <label class="block text-sm text-gray-600 mb-1">{{ t('المؤسسة (اختياري)', 'Organization (optional)') }}</label>
