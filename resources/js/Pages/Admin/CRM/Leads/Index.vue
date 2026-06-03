@@ -273,7 +273,7 @@ function deleteLead(lead) {
 </script>
 
 <template>
-    <AdminLayout title="Leads">
+    <AdminLayout :title="isRtl ? 'العملاء المحتملون' : 'Leads'">
         <div class="space-y-6">
             <!-- Header -->
             <div

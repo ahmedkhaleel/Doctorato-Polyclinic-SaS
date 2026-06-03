@@ -157,7 +157,7 @@ const kpiCards = [
 </script>
 
 <template>
-    <AdminLayout title="CRM Reports">
+    <AdminLayout :title="isRtl ? 'تقارير CRM' : 'CRM Reports'">
         <div class="space-y-8">
 
             <!-- Module Tabs -->

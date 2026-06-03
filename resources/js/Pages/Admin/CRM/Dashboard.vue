@@ -323,7 +323,7 @@ function missFollowUp(fuId) {
 </script>
 
 <template>
-    <AdminLayout title="CRM Dashboard">
+    <AdminLayout :title="isRtl ? 'لوحة CRM' : 'CRM Dashboard'">
         <div class="space-y-4 md:space-y-6">
             <!-- ═════════ Navy Hero Header ═════════ -->
             <div

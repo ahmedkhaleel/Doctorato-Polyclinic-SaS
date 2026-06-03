@@ -53,7 +53,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <AdminLayout title="Bundle Booking Receipt">
+    <AdminLayout :title="isRtl ? 'إيصال حجز الباقة' : 'Bundle Booking Receipt'">
         <!-- Top Bar (Screen Only) -->
         <div class="screen-only flex items-center justify-between mb-6">
             <Link

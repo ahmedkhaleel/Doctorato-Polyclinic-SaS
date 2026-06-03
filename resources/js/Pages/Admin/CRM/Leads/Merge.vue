@@ -96,7 +96,7 @@ function isDifferent(key) {
 </script>
 
 <template>
-    <AdminLayout title="Merge Leads">
+    <AdminLayout :title="isRtl ? 'دمج العملاء' : 'Merge Leads'">
         <div class="space-y-6">
             <!-- Header Card -->
             <div

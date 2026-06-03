@@ -53,7 +53,7 @@ function getProgress(booking) {
 </script>
 
 <template>
-    <AdminLayout title="Package Bundle Bookings">
+    <AdminLayout :title="isRtl ? 'حجوزات الباقات' : 'Package Bundle Bookings'">
         <div class="space-y-6">
             <div class="flex items-center justify-between">
                 <h1 class="text-xl md:text-2xl font-bold text-gray-800">Package Bundle Bookings</h1>

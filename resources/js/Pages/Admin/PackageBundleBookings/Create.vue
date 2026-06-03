@@ -305,7 +305,7 @@ function submit() {
 </script>
 
 <template>
-    <AdminLayout title="Create Bundle Booking">
+    <AdminLayout :title="isRtl ? 'إنشاء حجز باقة' : 'Create Bundle Booking'">
         <div class="space-y-6">
             <!-- Header -->
             <div class="flex items-center justify-between">
