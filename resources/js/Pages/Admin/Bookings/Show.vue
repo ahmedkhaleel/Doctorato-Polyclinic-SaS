@@ -993,7 +993,7 @@ function submitEditServices() {
                                     <!-- Service Row -->
                                     <tr class="hover:bg-gray-50/50 transition-colors cursor-pointer" @click="toggleServiceExpand(bsIndex)">
                                         <td class="px-4 md:px-6 py-3">
-                                            <button type="button" class="text-gray-400 hover:text-gray-600 transition">
+                                            <button type="button" class="text-gray-400 hover:text-gray-600 transition" :aria-label="isRtl ? 'توسيع' : 'Expand'" :title="isRtl ? 'توسيع' : 'Expand'">
                                                 <svg class="w-4 h-4 transition-transform duration-200" :class="{ 'rotate-90': expandedServices[bsIndex] }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                                                 </svg>

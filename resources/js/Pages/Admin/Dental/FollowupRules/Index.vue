@@ -263,12 +263,12 @@ const activeTab = ref('rules');
                             </div>
                         </div>
                         <div class="flex items-center gap-2 shrink-0">
-                            <button @click="openEdit(rule)" class="w-8 h-8 rounded-lg bg-gray-50 hover:bg-slate-50 flex items-center justify-center text-gray-400 hover:text-[#1B365D] transition">
+                            <button @click="openEdit(rule)" class="w-8 h-8 rounded-lg bg-gray-50 hover:bg-slate-50 flex items-center justify-center text-gray-400 hover:text-[#1B365D] transition" :aria-label="isRtl ? 'تعديل' : 'Edit'" :title="isRtl ? 'تعديل' : 'Edit'">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
                             </button>
                             <button @click="toggleRule(rule)"
                                 class="w-8 h-8 rounded-lg flex items-center justify-center transition"
-                                :class="rule.is_active ? 'bg-emerald-50 text-emerald-600 hover:bg-emerald-100' : 'bg-red-50 text-red-400 hover:bg-red-100'">
+                                :class="rule.is_active ? 'bg-emerald-50 text-emerald-600 hover:bg-emerald-100' : 'bg-red-50 text-red-400 hover:bg-red-100'" :aria-label="isRtl ? 'تبديل التفعيل' : 'Toggle'" :title="isRtl ? 'تبديل التفعيل' : 'Toggle'">
                                 <svg v-if="rule.is_active" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
                                 <svg v-else class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" /></svg>
                             </button>

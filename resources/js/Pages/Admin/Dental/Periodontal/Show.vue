@@ -378,7 +378,7 @@ function toggleToothDetail(tooth) {
                                 </td>
                                 <td v-for="tooth in upperTeeth" :key="'ubop-' + tooth" class="px-0 py-0.5 border-e border-gray-50">
                                     <div class="flex">
-                                        <button v-for="i in 3" :key="i" @click="toggleBleeding(tooth, i-1)" type="button" class="perio-bop-btn" :class="measurements[tooth].bleeding_on_probing[i-1] ? 'bg-red-500 border-red-500' : 'bg-gray-50 border-gray-200 hover:border-red-300'">
+                                        <button v-for="i in 3" :key="i" @click="toggleBleeding(tooth, i-1)" type="button" class="perio-bop-btn" :class="measurements[tooth].bleeding_on_probing[i-1] ? 'bg-red-500 border-red-500' : 'bg-gray-50 border-gray-200 hover:border-red-300'" :aria-label="isRtl ? 'نزيف' : 'Bleeding'" :title="isRtl ? 'نزيف' : 'Bleeding'">
                                             <svg v-if="measurements[tooth].bleeding_on_probing[i-1]" class="w-2 h-2 text-white" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" /></svg>
                                         </button>
                                     </div>
@@ -411,7 +411,7 @@ function toggleToothDetail(tooth) {
                                 </td>
                                 <td v-for="tooth in upperTeeth" :key="'ulbop-' + tooth" class="px-0 py-0.5 border-e border-gray-50">
                                     <div class="flex">
-                                        <button v-for="i in 3" :key="i" @click="toggleBleeding(tooth, i+2)" type="button" class="perio-bop-btn" :class="measurements[tooth].bleeding_on_probing[i+2] ? 'bg-red-500 border-red-500' : 'bg-gray-50 border-gray-200 hover:border-red-300'">
+                                        <button v-for="i in 3" :key="i" @click="toggleBleeding(tooth, i+2)" type="button" class="perio-bop-btn" :class="measurements[tooth].bleeding_on_probing[i+2] ? 'bg-red-500 border-red-500' : 'bg-gray-50 border-gray-200 hover:border-red-300'" :aria-label="isRtl ? 'نزيف' : 'Bleeding'" :title="isRtl ? 'نزيف' : 'Bleeding'">
                                             <svg v-if="measurements[tooth].bleeding_on_probing[i+2]" class="w-2 h-2 text-white" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" /></svg>
                                         </button>
                                     </div>
@@ -515,7 +515,7 @@ function toggleToothDetail(tooth) {
                                 </td>
                                 <td v-for="tooth in lowerTeeth" :key="'lbop-' + tooth" class="px-0 py-0.5 border-e border-gray-50">
                                     <div class="flex">
-                                        <button v-for="i in 3" :key="i" @click="toggleBleeding(tooth, i-1)" type="button" class="perio-bop-btn" :class="measurements[tooth].bleeding_on_probing[i-1] ? 'bg-red-500 border-red-500' : 'bg-gray-50 border-gray-200 hover:border-red-300'">
+                                        <button v-for="i in 3" :key="i" @click="toggleBleeding(tooth, i-1)" type="button" class="perio-bop-btn" :class="measurements[tooth].bleeding_on_probing[i-1] ? 'bg-red-500 border-red-500' : 'bg-gray-50 border-gray-200 hover:border-red-300'" :aria-label="isRtl ? 'نزيف' : 'Bleeding'" :title="isRtl ? 'نزيف' : 'Bleeding'">
                                             <svg v-if="measurements[tooth].bleeding_on_probing[i-1]" class="w-2 h-2 text-white" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" /></svg>
                                         </button>
                                     </div>
@@ -547,7 +547,7 @@ function toggleToothDetail(tooth) {
                                 </td>
                                 <td v-for="tooth in lowerTeeth" :key="'llbop-' + tooth" class="px-0 py-0.5 border-e border-gray-50">
                                     <div class="flex">
-                                        <button v-for="i in 3" :key="i" @click="toggleBleeding(tooth, i+2)" type="button" class="perio-bop-btn" :class="measurements[tooth].bleeding_on_probing[i+2] ? 'bg-red-500 border-red-500' : 'bg-gray-50 border-gray-200 hover:border-red-300'">
+                                        <button v-for="i in 3" :key="i" @click="toggleBleeding(tooth, i+2)" type="button" class="perio-bop-btn" :class="measurements[tooth].bleeding_on_probing[i+2] ? 'bg-red-500 border-red-500' : 'bg-gray-50 border-gray-200 hover:border-red-300'" :aria-label="isRtl ? 'نزيف' : 'Bleeding'" :title="isRtl ? 'نزيف' : 'Bleeding'">
                                             <svg v-if="measurements[tooth].bleeding_on_probing[i+2]" class="w-2 h-2 text-white" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" /></svg>
                                         </button>
                                     </div>

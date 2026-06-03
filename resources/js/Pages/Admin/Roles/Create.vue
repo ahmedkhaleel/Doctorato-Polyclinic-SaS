@@ -317,7 +317,7 @@ function submit() {
                                                     <button type="button" @click="toggleModuleAll(mod.key, mod.actions)"
                                                         class="w-6 h-6 rounded-md flex items-center justify-center transition-all duration-200"
                                                         :class="isModuleAllChecked(mod.key, mod.actions) ? 'text-white' : 'bg-gray-100 text-gray-400 hover:bg-gray-200'"
-                                                        :style="isModuleAllChecked(mod.key, mod.actions) ? { backgroundColor: groupConfig.color } : {}">
+                                                        :style="isModuleAllChecked(mod.key, mod.actions) ? { backgroundColor: groupConfig.color } : {}" :aria-label="isRtl ? 'تبديل التفعيل' : 'Toggle'" :title="isRtl ? 'تبديل التفعيل' : 'Toggle'">
                                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" /></svg>
                                                     </button>
                                                 </td>

@@ -514,7 +514,7 @@ onMounted(() => {
                                 <p class="text-xs text-gray-400">{{ liveDate }}</p>
                                 <p class="text-lg font-bold text-gray-800 tabular-nums" dir="ltr">{{ liveTime }}</p>
                             </div>
-                            <button @click="quickPanel = !quickPanel" class="p-2 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-all">
+                            <button @click="quickPanel = !quickPanel" class="p-2 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-all" :aria-label="isRtl ? 'خيارات سريعة' : 'Quick options'" :title="isRtl ? 'خيارات سريعة' : 'Quick options'">
                                 <svg class="w-5 h-5 transition-transform duration-300" :class="quickPanel ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
                             </button>
                         </div>

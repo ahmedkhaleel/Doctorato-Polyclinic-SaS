@@ -246,7 +246,7 @@ const filteredTemplates = computed(() => (actionType) => {
                                     <button v-if="index > 0" type="button" @click="moveStep(index, -1)" class="p-1 rounded hover:bg-white/60 transition-colors">
                                         <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/></svg>
                                     </button>
-                                    <button v-if="index < form.steps.length - 1" type="button" @click="moveStep(index, 1)" class="p-1 rounded hover:bg-white/60 transition-colors">
+                                    <button v-if="index < form.steps.length - 1" type="button" @click="moveStep(index, 1)" class="p-1 rounded hover:bg-white/60 transition-colors" :aria-label="isRtl ? 'تحريك لأسفل' : 'Move down'" :title="isRtl ? 'تحريك لأسفل' : 'Move down'">
                                         <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                                     </button>
                                     <button v-if="form.steps.length > 1" type="button" @click="removeStep(index)" class="p-1 rounded hover:bg-red-100 transition-colors">

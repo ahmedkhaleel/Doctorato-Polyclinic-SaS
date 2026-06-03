@@ -156,7 +156,7 @@ const filters = [
                 <!-- Month nav -->
                 <div class="flex items-center gap-2">
                     <button @click="prevMonth"
-                            class="p-2 rounded-xl border border-gray-200 hover:bg-gray-50 transition">
+                            class="p-2 rounded-xl border border-gray-200 hover:bg-gray-50 transition" :aria-label="isRtl ? 'الشهر السابق' : 'Previous month'" :title="isRtl ? 'الشهر السابق' : 'Previous month'">
                         <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                   :d="isRtl ? 'M9 5l7 7-7 7' : 'M15 19l-7-7 7-7'" />
@@ -166,7 +166,7 @@ const filters = [
                         {{ monthNames[month - 1] }} {{ year }}
                     </span>
                     <button @click="nextMonth"
-                            class="p-2 rounded-xl border border-gray-200 hover:bg-gray-50 transition">
+                            class="p-2 rounded-xl border border-gray-200 hover:bg-gray-50 transition" :aria-label="isRtl ? 'الشهر التالي' : 'Next month'" :title="isRtl ? 'الشهر التالي' : 'Next month'">
                         <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                   :d="isRtl ? 'M15 19l-7-7 7-7' : 'M9 5l7 7-7 7'" />

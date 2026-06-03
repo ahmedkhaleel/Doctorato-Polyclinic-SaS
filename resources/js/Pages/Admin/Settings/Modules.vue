@@ -103,7 +103,7 @@ function toggleModule(mod) {
                                     class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
                                     :class="mod.enabled ? '' : 'bg-gray-200'"
                                     :style="mod.enabled ? { backgroundColor: mod.color || '#0891b2' } : {}"
-                                >
+                                 :aria-label="isRtl ? 'تبديل التفعيل' : 'Toggle'" :title="isRtl ? 'تبديل التفعيل' : 'Toggle'">
                                     <span v-if="togglingModule === mod.slug" class="absolute inset-0 flex items-center justify-center">
                                         <svg class="w-4 h-4 text-white animate-spin" fill="none" viewBox="0 0 24 24">
                                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
@@ -185,7 +185,7 @@ function toggleModule(mod) {
                                     class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
                                     :class="mod.enabled ? '' : 'bg-gray-200'"
                                     :style="mod.enabled ? { backgroundColor: mod.color || '#0891b2' } : {}"
-                                >
+                                 :aria-label="isRtl ? 'تبديل التفعيل' : 'Toggle'" :title="isRtl ? 'تبديل التفعيل' : 'Toggle'">
                                     <span v-if="togglingModule === mod.slug" class="absolute inset-0 flex items-center justify-center">
                                         <svg class="w-4 h-4 text-white animate-spin" fill="none" viewBox="0 0 24 24">
                                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
