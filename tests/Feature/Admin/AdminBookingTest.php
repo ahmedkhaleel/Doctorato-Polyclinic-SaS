@@ -636,4 +636,26 @@ class AdminBookingTest extends TestCase
         $response->assertStatus(200);
         $this->assertStringContainsString('text/csv', $response->headers->get('Content-Type'));
     }
+
+    // ─── Delete (§2-أ CRUD protocol: soft-delete) ───────
+
+    public function test_admin_can_delete_booking_soft_delete(): void
+    {
+        $booking = Booking::create([
+            'booking_number' => 'BK-202602-9999',
+            'source' => 'website',
+            'status' => 'unconfirmed',
+            'full_name' => 'To Delete',
+            'phone' => '0100000000',
+            'booking_type' => 'service',
+        ]);
+
+        $this->actingAs($this->admin);
+
+        $response = $this->post("/admin/bookings/{$booking->id}/delete");
+        $response->assertRedirect();
+
+        $this->assertSoftDeleted('bookings', ['id' => $booking->id]);
+        $this->assertNull(Booking::find($booking->id));
+    }
 }

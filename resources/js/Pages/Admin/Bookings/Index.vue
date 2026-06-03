@@ -259,10 +259,10 @@ function exportBookings() {
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            <tr v-for="booking in bookings.data" :key="booking.id" class="hover:bg-gray-50">
+                            <tr v-for="(booking, i) in bookings.data" :key="booking.id" class="bk-row hover:bg-gray-50" :style="{ '--row-i': i }">
                                 <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center gap-1.5">
-                                        <svg v-if="booking.module === 'dental'" class="w-3.5 h-3.5 text-[#1B365D] inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24" title="Dental"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342" /></svg>
+                                        <svg v-if="booking.module === 'dental'" class="w-3.5 h-3.5 text-[#1B365D] inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24" :title="$t('a_dental')"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342" /></svg>
                                         <span class="font-mono text-xs text-gray-600">{{ booking.booking_number || `#${booking.id}` }}</span>
                                     </div>
                                 </td>
@@ -335,3 +335,18 @@ function exportBookings() {
         </div>
     </AdminLayout>
 </template>
+
+<style scoped>
+/* Staggered row entrance (foundational animation; honors reduced-motion) */
+.bk-row {
+    animation: bkRowIn 0.4s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    animation-delay: calc(var(--row-i, 0) * 35ms);
+}
+@keyframes bkRowIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .bk-row { animation: none !important; }
+}
+</style>
