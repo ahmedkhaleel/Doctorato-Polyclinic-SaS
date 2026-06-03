@@ -98,7 +98,7 @@ function getProgress(booking) {
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            <tr v-for="b in bookings.data" :key="b.id" class="hover:bg-gray-50">
+                            <tr v-for="(b, i) in bookings.data" :key="b.id" class="lst-row hover:bg-gray-50" :style="{ '--row-i': i }">
                                 <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                     <div class="text-sm font-medium" style="color: #C4A265;">{{ b.booking_number }}</div>
                                     <div class="text-xs text-gray-400">{{ new Date(b.created_at).toLocaleDateString() }}</div>
@@ -162,3 +162,17 @@ function getProgress(booking) {
         </div>
     </AdminLayout>
 </template>
+
+<style scoped>
+.lst-row {
+    animation: lstRowIn 0.4s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    animation-delay: calc(var(--row-i, 0) * 35ms);
+}
+@keyframes lstRowIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .lst-row { animation: none !important; }
+}
+</style>

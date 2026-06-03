@@ -183,7 +183,7 @@ function deleteRecord(id) {
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            <tr v-for="record in penalties.data" :key="record.id" class="hover:bg-gray-50">
+                            <tr v-for="(record, i) in penalties.data" :key="record.id" class="lst-row hover:bg-gray-50" :style="{ '--row-i': i }">
                                 <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center">
                                         <div :class="['w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center text-white text-xs font-bold', isRtl ? 'ml-3' : 'mr-3']" style="background-color: #C4A265;">
@@ -298,3 +298,17 @@ function deleteRecord(id) {
         </Teleport>
     </AdminLayout>
 </template>
+
+<style scoped>
+.lst-row {
+    animation: lstRowIn 0.4s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    animation-delay: calc(var(--row-i, 0) * 35ms);
+}
+@keyframes lstRowIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .lst-row { animation: none !important; }
+}
+</style>

@@ -101,7 +101,7 @@ watch(search, (v) => {
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-50">
-                        <tr v-for="r in referrals.data" :key="r.id" class="hover:bg-gray-50/50 transition">
+                        <tr v-for="(r, i) in referrals.data" :key="r.id" class="lst-row hover:bg-gray-50/50 transition" :style="{ '--row-i': i }">
                             <td class="px-4 py-3">
                                 <p class="font-medium text-gray-800">{{ r.referrer_name }}</p>
                                 <p class="text-[10px] text-gray-400 font-mono">{{ r.referrer_file || '—' }}</p>
@@ -152,3 +152,17 @@ watch(search, (v) => {
         </div>
     </div>
 </template>
+
+<style scoped>
+.lst-row {
+    animation: lstRowIn 0.4s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    animation-delay: calc(var(--row-i, 0) * 35ms);
+}
+@keyframes lstRowIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .lst-row { animation: none !important; }
+}
+</style>

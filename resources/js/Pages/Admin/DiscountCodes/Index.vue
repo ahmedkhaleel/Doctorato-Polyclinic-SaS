@@ -139,7 +139,7 @@ function applicableCount(code) {
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            <tr v-for="code in discountCodes.data" :key="code.id" class="hover:bg-gray-50">
+                            <tr v-for="(code, i) in discountCodes.data" :key="code.id" class="lst-row hover:bg-gray-50" :style="{ '--row-i': i }">
                                 <!-- Code -->
                                 <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center space-x-2">
@@ -239,3 +239,17 @@ function applicableCount(code) {
         </div>
     </AdminLayout>
 </template>
+
+<style scoped>
+.lst-row {
+    animation: lstRowIn 0.4s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    animation-delay: calc(var(--row-i, 0) * 35ms);
+}
+@keyframes lstRowIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .lst-row { animation: none !important; }
+}
+</style>

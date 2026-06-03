@@ -80,7 +80,7 @@ function deleteTag(id) {
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            <tr v-for="tag in tags.data" :key="tag.id" class="hover:bg-gray-50">
+                            <tr v-for="(tag, i) in tags.data" :key="tag.id" class="lst-row hover:bg-gray-50" :style="{ '--row-i': i }">
                                 <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ tag.id }}</td>
                                 <td class="px-4 md:px-6 py-4 text-sm font-medium text-gray-900">{{ tag.name_en }}</td>
                                 <td class="px-4 md:px-6 py-4 text-sm text-gray-500" dir="rtl">{{ tag.name_ar }}</td>
@@ -118,3 +118,17 @@ function deleteTag(id) {
         </div>
     </AdminLayout>
 </template>
+
+<style scoped>
+.lst-row {
+    animation: lstRowIn 0.4s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    animation-delay: calc(var(--row-i, 0) * 35ms);
+}
+@keyframes lstRowIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .lst-row { animation: none !important; }
+}
+</style>

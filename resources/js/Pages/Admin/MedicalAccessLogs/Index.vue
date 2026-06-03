@@ -155,7 +155,7 @@ function formatDate(dateStr) {
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100">
-                            <tr v-for="log in logs.data" :key="log.id" class="hover:bg-gray-50/50">
+                            <tr v-for="(log, i) in logs.data" :key="log.id" class="lst-row hover:bg-gray-50/50" :style="{ '--row-i': i }">
                                 <td class="px-4 py-3 whitespace-nowrap text-gray-600">{{ formatDate(log.created_at) }}</td>
                                 <td class="px-4 py-3 whitespace-nowrap font-medium text-gray-900">{{ log.user?.name || '-' }}</td>
                                 <td class="px-4 py-3 whitespace-nowrap">
@@ -206,3 +206,17 @@ function formatDate(dateStr) {
         </div>
     </AdminLayout>
 </template>
+
+<style scoped>
+.lst-row {
+    animation: lstRowIn 0.4s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    animation-delay: calc(var(--row-i, 0) * 35ms);
+}
+@keyframes lstRowIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .lst-row { animation: none !important; }
+}
+</style>

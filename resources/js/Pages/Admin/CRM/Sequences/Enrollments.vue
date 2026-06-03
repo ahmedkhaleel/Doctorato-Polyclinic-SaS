@@ -91,7 +91,7 @@ function formatDate(d) {
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-50">
-                        <tr v-for="e in enrollments.data" :key="e.id" class="hover:bg-gray-50/50 transition-colors">
+                        <tr v-for="(e, i) in enrollments.data" :key="e.id" class="lst-row hover:bg-gray-50/50 transition-colors" :style="{ '--row-i': i }">
                             <td class="px-5 py-3">
                                 <Link v-if="e.lead" :href="`/admin/leads/${e.lead.id}`" class="text-[#C4A265] hover:underline font-medium">
                                     {{ e.lead.full_name }}
@@ -119,3 +119,17 @@ function formatDate(d) {
         </div>
     </AdminLayout>
 </template>
+
+<style scoped>
+.lst-row {
+    animation: lstRowIn 0.4s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    animation-delay: calc(var(--row-i, 0) * 35ms);
+}
+@keyframes lstRowIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .lst-row { animation: none !important; }
+}
+</style>

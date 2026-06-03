@@ -78,7 +78,7 @@ function deleteFaq(id) {
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            <tr v-for="faq in faqs.data" :key="faq.id" class="hover:bg-gray-50">
+                            <tr v-for="(faq, i) in faqs.data" :key="faq.id" class="lst-row hover:bg-gray-50" :style="{ '--row-i': i }">
                                 <td class="px-4 md:px-6 py-4 text-sm font-medium text-gray-900 max-w-md truncate">{{ $localized(faq, 'question') }}</td>
                                 <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500 capitalize">{{ faq.category || '-' }}</td>
                                 <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ faq.display_order ?? '-' }}</td>
@@ -115,3 +115,17 @@ function deleteFaq(id) {
         </div>
     </AdminLayout>
 </template>
+
+<style scoped>
+.lst-row {
+    animation: lstRowIn 0.4s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    animation-delay: calc(var(--row-i, 0) * 35ms);
+}
+@keyframes lstRowIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .lst-row { animation: none !important; }
+}
+</style>
