@@ -2,8 +2,11 @@
 import AdminLayout from '@/Layouts/AdminLayout.vue'
 import { ref, computed } from 'vue'
 import { router, Link, usePage } from '@inertiajs/vue3'
+import { useConfirm } from '@/Composables/useConfirm.js'
 
 defineOptions({ layout: AdminLayout })
+
+const { confirm } = useConfirm()
 
 const props = defineProps({
     plans: Object,
@@ -28,9 +31,9 @@ function applyFilters() {
 }
 
 function deletePlan(plan) {
-    if (confirm(isRtl.value ? 'هل أنت متأكد من حذف هذه الباقة؟' : 'Delete this plan?')) {
+    confirm(isRtl.value ? 'هل أنت متأكد من حذف هذه الباقة؟' : 'Delete this plan?', () => {
         router.post(`/admin/insurance/plans/${plan.id}/delete`)
-    }
+    })
 }
 
 const classColors = {

@@ -2,8 +2,11 @@
 import AdminLayout from '@/Layouts/AdminLayout.vue'
 import { ref, computed } from 'vue'
 import { router, Link, usePage } from '@inertiajs/vue3'
+import { useConfirm } from '@/Composables/useConfirm.js'
 
 defineOptions({ layout: AdminLayout })
+
+const { confirm } = useConfirm()
 
 const props = defineProps({
     insurances: Object,
@@ -34,9 +37,9 @@ function verify(ins) {
 }
 
 function deactivate(ins) {
-    if (confirm(isRtl.value ? 'هل تريد إلغاء تفعيل هذا التأمين؟' : 'Deactivate this insurance?')) {
+    confirm(isRtl.value ? 'هل تريد إلغاء تفعيل هذا التأمين؟' : 'Deactivate this insurance?', () => {
         router.post(`/admin/patient-insurances/${ins.id}/delete`, {}, { preserveScroll: true })
-    }
+    })
 }
 
 function expiryStatus(ins) {

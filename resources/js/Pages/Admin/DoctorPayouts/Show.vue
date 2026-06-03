@@ -3,8 +3,11 @@ import { ref, computed } from 'vue';
 import { Link, useForm, router, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { useCurrency } from '@/Composables/useCurrency.js';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 defineOptions({ layout: AdminLayout });
+
+const { confirm } = useConfirm();
 
 const pg = usePage();
 const locale = computed(() => pg.props.locale || 'ar');
@@ -43,9 +46,9 @@ const paymentLabels = {
 // Confirm action
 const confirmForm = useForm({});
 function confirmPayout() {
-    if (confirm('Are you sure you want to confirm this payout?')) {
+    confirm({ message: 'Are you sure you want to confirm this payout?', confirmColor: 'green' }, () => {
         confirmForm.put(`/admin/doctor-payouts/${props.payout.id}/confirm`);
-    }
+    });
 }
 
 // Mark paid modal

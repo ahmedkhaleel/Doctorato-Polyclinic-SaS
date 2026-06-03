@@ -3,8 +3,10 @@ import { ref, onMounted , computed } from 'vue';
 import { useForm, router , usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 const { can } = usePermissions();
+const { confirm } = useConfirm();
 
 const props = defineProps({ rules: Array });
 
@@ -59,9 +61,9 @@ function submit() {
 }
 
 function deleteRule(id) {
-    if (confirm('Delete this scoring rule?')) {
+    confirm('Delete this scoring rule?', () => {
         router.post(`/admin/scoring-rules/${id}/delete`);
-    }
+    });
 }
 
 function pointsColor(points) {

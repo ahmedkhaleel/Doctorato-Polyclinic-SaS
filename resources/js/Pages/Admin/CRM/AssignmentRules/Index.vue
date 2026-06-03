@@ -3,8 +3,10 @@ import { ref, onMounted , computed } from 'vue';
 import { useForm, router , usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 const { can } = usePermissions();
+const { confirm } = useConfirm();
 
 const props = defineProps({ rules: Array, sources: Array, users: Array });
 
@@ -67,9 +69,9 @@ function submit() {
 }
 
 function deleteRule(id) {
-    if (confirm('Delete this assignment rule?')) {
+    confirm('Delete this assignment rule?', () => {
         router.post(`/admin/assignment-rules/${id}/delete`);
-    }
+    });
 }
 
 function toggleActive(rule) {

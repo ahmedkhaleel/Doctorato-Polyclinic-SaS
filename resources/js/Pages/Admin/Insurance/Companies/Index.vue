@@ -2,8 +2,11 @@
 import AdminLayout from '@/Layouts/AdminLayout.vue'
 import { ref, computed } from 'vue'
 import { router, Link, usePage } from '@inertiajs/vue3'
+import { useConfirm } from '@/Composables/useConfirm.js'
 
 defineOptions({ layout: AdminLayout })
+
+const { confirm } = useConfirm()
 
 const props = defineProps({
     companies: Object,
@@ -60,9 +63,9 @@ function submit() {
 }
 
 function deleteCompany(company) {
-    if (confirm(isRtl.value ? 'هل أنت متأكد من حذف هذه الشركة؟' : 'Are you sure you want to delete this company?')) {
+    confirm(isRtl.value ? 'هل أنت متأكد من حذف هذه الشركة؟' : 'Are you sure you want to delete this company?', () => {
         router.post(`/admin/insurance/companies/${company.id}/delete`)
-    }
+    })
 }
 </script>
 

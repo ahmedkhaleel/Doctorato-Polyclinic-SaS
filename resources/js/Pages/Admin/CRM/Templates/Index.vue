@@ -3,8 +3,10 @@ import { ref, watch, onMounted, computed } from 'vue';
 import { Link, router, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 const { can } = usePermissions();
+const { confirm } = useConfirm();
 
 const props = defineProps({ templates: Object, filters: Object });
 
@@ -96,9 +98,9 @@ function truncateBody(body, len = 80) {
 }
 
 function deleteTemplate(id) {
-    if (confirm('Are you sure you want to delete this template?')) {
+    confirm('Are you sure you want to delete this template?', () => {
         router.post(`/admin/templates/${id}/delete`);
-    }
+    });
 }
 </script>
 

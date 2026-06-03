@@ -4,8 +4,10 @@ import { Link, router , usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
 import { useCurrency } from '@/Composables/useCurrency.js';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 const { can } = usePermissions();
+const { confirm } = useConfirm();
 const { formatCurrency } = useCurrency();
 
 const props = defineProps({
@@ -60,21 +62,21 @@ function formatDate(d) {
 }
 
 function approve(id) {
-    if (confirm('Approve this commission?')) {
+    confirm({ message: 'Approve this commission?', confirmColor: 'green' }, () => {
         router.post(`/admin/commissions/${id}/approve`);
-    }
+    });
 }
 
 function markPaid(id) {
-    if (confirm('Mark this commission as paid?')) {
+    confirm({ message: 'Mark this commission as paid?', confirmColor: 'green' }, () => {
         router.post(`/admin/commissions/${id}/mark-paid`);
-    }
+    });
 }
 
 function deleteCommission(id) {
-    if (confirm('Delete this commission?')) {
+    confirm('Delete this commission?', () => {
         router.post(`/admin/commissions/${id}/delete`);
-    }
+    });
 }
 </script>
 

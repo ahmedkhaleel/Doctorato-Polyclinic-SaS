@@ -3,8 +3,10 @@ import { ref, onMounted , computed } from 'vue';
 import { useForm, router , usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 const { can } = usePermissions();
+const { confirm } = useConfirm();
 
 const props = defineProps({ sources: Array });
 
@@ -58,9 +60,9 @@ function submit() {
 }
 
 function deleteSource(id) {
-    if (confirm('Are you sure? Sources with existing leads cannot be deleted.')) {
+    confirm('Are you sure? Sources with existing leads cannot be deleted.', () => {
         router.post(`/admin/lead-sources/${id}/delete`, { preserveScroll: true });
-    }
+    });
 }
 
 function generateSlug() {

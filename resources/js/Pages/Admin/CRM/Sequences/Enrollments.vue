@@ -2,6 +2,9 @@
 import { ref, onMounted , computed } from 'vue';
 import { router, Link , usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import { useConfirm } from '@/Composables/useConfirm.js';
+
+const { confirm } = useConfirm();
 
 const props = defineProps({
     sequence: Object,
@@ -25,9 +28,9 @@ function applyFilters() {
 }
 
 function cancelEnrollment(enrollment) {
-    if (confirm('Cancel this enrollment?')) {
+    confirm('Cancel this enrollment?', () => {
         router.post(`/admin/enrollments/${enrollment.id}/cancel`, {}, { preserveScroll: true });
-    }
+    });
 }
 
 const statusColors = {
