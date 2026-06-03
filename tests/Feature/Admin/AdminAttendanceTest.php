@@ -113,4 +113,21 @@ class AdminAttendanceTest extends TestCase
             ->get('/admin/attendances?status=present')
             ->assertOk();
     }
+
+    /** §2-أ CRUD protocol: the Attendance list delete action removes the record. */
+    public function test_can_delete_attendance(): void
+    {
+        $attendance = Attendance::create([
+            'user_id' => $this->employee->id,
+            'date' => '2026-03-31',
+            'status' => 'present',
+            'check_in' => '08:00',
+        ]);
+
+        $this->actingAs($this->admin)
+            ->post("/admin/attendances/{$attendance->id}/delete")
+            ->assertRedirect();
+
+        $this->assertDatabaseMissing('attendances', ['id' => $attendance->id]);
+    }
 }
