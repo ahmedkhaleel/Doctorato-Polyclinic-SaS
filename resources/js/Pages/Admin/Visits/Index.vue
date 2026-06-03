@@ -293,9 +293,10 @@ function getInitials(name) {
                         </thead>
                         <tbody class="divide-y divide-gray-50">
                             <tr
-                                v-for="visit in visits.data"
+                                v-for="(visit, i) in visits.data"
                                 :key="visit.id"
-                                class="group hover:bg-gray-50/60 transition-colors duration-150"
+                                class="group vis-row hover:bg-gray-50/60 transition-colors duration-150"
+                                :style="{ '--row-i': i }"
                             >
                                 <!-- Date -->
                                 <td class="px-4 md:px-6 py-4 whitespace-nowrap">
@@ -446,5 +447,16 @@ function getInitials(name) {
 }
 tr:hover .hover-gold {
     color: #C4A265;
+}
+.vis-row {
+    animation: visRowIn 0.4s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    animation-delay: calc(var(--row-i, 0) * 35ms);
+}
+@keyframes visRowIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .vis-row { animation: none !important; }
 }
 </style>

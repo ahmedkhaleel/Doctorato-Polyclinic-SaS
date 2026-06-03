@@ -481,6 +481,7 @@ Route::middleware(['admin.auth', 'branch.context'])->group(function () {
     Route::post('/visits/{visit}/diagnosis', [VisitController::class, 'updateDiagnosis'])->name('admin.visits.updateDiagnosis')->middleware('permission:visits.update');
     Route::post('/visits/{visit}/details', [VisitController::class, 'updateDetails'])->name('admin.visits.updateDetails')->middleware('permission:visits.update');
     Route::post('/visits/{visit}/photos', [VisitController::class, 'uploadPhoto'])->name('admin.visits.uploadPhoto')->middleware('permission:visits.update');
+    Route::post('/visits/{visit}/delete', [VisitController::class, 'destroy'])->name('admin.visits.destroy')->middleware('permission:visits.delete');
 
     // ─── Prescriptions ───────────────────────────────────────
     Route::get('/prescriptions', [PrescriptionController::class, 'index'])->name('admin.prescriptions.index')->middleware('permission:prescriptions.view');

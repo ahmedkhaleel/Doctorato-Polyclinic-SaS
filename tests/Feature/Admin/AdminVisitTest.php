@@ -179,4 +179,17 @@ class AdminVisitTest extends TestCase
         $response = $this->get('/admin/visits');
         $this->assertContains($response->status(), [302, 401, 403, 404]);
     }
+
+    /** §2-أ CRUD protocol: the Visits list delete action soft-deletes the visit. */
+    public function test_admin_can_delete_visit_soft_delete(): void
+    {
+        $visit = $this->createVisitWithBooking();
+
+        $this->actingAs($this->admin)
+            ->post("/admin/visits/{$visit->id}/delete")
+            ->assertRedirect();
+
+        $this->assertSoftDeleted('visits', ['id' => $visit->id]);
+        $this->assertNull(Visit::find($visit->id));
+    }
 }

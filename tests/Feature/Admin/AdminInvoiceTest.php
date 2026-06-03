@@ -173,4 +173,29 @@ class AdminInvoiceTest extends TestCase
         // The controller throws RuntimeException caught as session error
         $response->assertSessionHas('error', 'Discount amount cannot exceed the subtotal.');
     }
+
+    /** §2-أ CRUD protocol: the Invoices list delete action soft-deletes the invoice. */
+    public function test_admin_can_delete_invoice_soft_delete(): void
+    {
+        $invoice = new Invoice([
+            'invoice_number' => 'INV-DEL-0001',
+            'invoice_date' => now()->toDateString(),
+            'patient_id' => $this->patient->id,
+            'subtotal' => 100,
+            'discount_amount' => 0,
+            'tax_amount' => 0,
+            'total' => 100,
+            'created_by' => $this->admin->id,
+        ]);
+        $invoice->paid_amount = 0;
+        $invoice->status = 'unpaid';
+        $invoice->save();
+
+        $this->actingAs($this->admin)
+            ->post("/admin/invoices/{$invoice->id}/delete")
+            ->assertRedirect();
+
+        $this->assertSoftDeleted('invoices', ['id' => $invoice->id]);
+        $this->assertNull(Invoice::find($invoice->id));
+    }
 }

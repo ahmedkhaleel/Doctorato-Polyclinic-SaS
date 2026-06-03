@@ -133,7 +133,7 @@ function formatDate(date) {
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            <tr v-for="payment in payments.data" :key="payment.id" class="hover:bg-gray-50">
+                            <tr v-for="(payment, i) in payments.data" :key="payment.id" class="pay-row hover:bg-gray-50" :style="{ '--row-i': i }">
                                 <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ formatDate(payment.payment_date) }}</td>
                                 <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                     <Link
@@ -202,3 +202,17 @@ function formatDate(date) {
         </div>
     </AdminLayout>
 </template>
+
+<style scoped>
+.pay-row {
+    animation: payRowIn 0.4s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    animation-delay: calc(var(--row-i, 0) * 35ms);
+}
+@keyframes payRowIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .pay-row { animation: none !important; }
+}
+</style>

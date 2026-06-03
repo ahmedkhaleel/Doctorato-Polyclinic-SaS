@@ -347,4 +347,18 @@ class VisitController extends Controller
 
         return redirect()->back()->with('success', 'Visit cancelled.');
     }
+
+    /**
+     * Soft-delete a visit (the Visits list exposes a delete action gated by the
+     * visits.delete permission; this is its backend). The Visit model uses
+     * SoftDeletes, so the row is retained with deleted_at for audit/restore.
+     */
+    public function destroy(Visit $visit): RedirectResponse
+    {
+        AuditLogger::log('deleted', $visit);
+
+        $visit->delete();
+
+        return redirect()->route('admin.visits.index')->with('success', __('Visit deleted.'));
+    }
 }

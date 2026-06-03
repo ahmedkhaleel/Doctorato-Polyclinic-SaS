@@ -174,7 +174,7 @@ function statusLabel(status) {
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            <tr v-for="invoice in invoices.data" :key="invoice.id" class="hover:bg-gray-50">
+                            <tr v-for="(invoice, i) in invoices.data" :key="invoice.id" class="inv-row hover:bg-gray-50" :style="{ '--row-i': i }">
                                 <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm font-mono" style="color: #C4A265;">{{ invoice.invoice_number }}</td>
                                 <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                     <div>
@@ -231,3 +231,17 @@ function statusLabel(status) {
         </div>
     </AdminLayout>
 </template>
+
+<style scoped>
+.inv-row {
+    animation: invRowIn 0.4s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    animation-delay: calc(var(--row-i, 0) * 35ms);
+}
+@keyframes invRowIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .inv-row { animation: none !important; }
+}
+</style>

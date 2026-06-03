@@ -4,6 +4,7 @@ namespace Tests\Feature\Admin;
 
 use App\Models\Invoice;
 use App\Models\Patient;
+use App\Models\Payment;
 use App\Models\PaymentMethod;
 use App\Models\Role;
 use App\Models\User;
@@ -162,5 +163,26 @@ class AdminPaymentTest extends TestCase
         ]);
 
         $response->assertSessionHasErrors('amount');
+    }
+
+    /** §2-أ CRUD protocol: the Payments list delete action soft-deletes the payment. */
+    public function test_admin_can_delete_payment_soft_delete(): void
+    {
+        $this->actingAs($this->admin);
+
+        // Record a payment via the real endpoint, then delete it.
+        $this->post('/admin/payments', [
+            'invoice_id' => $this->invoice->id,
+            'payment_method_id' => $this->paymentMethod->id,
+            'amount' => 300,
+            'payment_date' => now()->toDateString(),
+        ])->assertRedirect();
+
+        $payment = Payment::where('invoice_id', $this->invoice->id)->firstOrFail();
+
+        $this->post("/admin/payments/{$payment->id}/delete")->assertRedirect();
+
+        $this->assertSoftDeleted('payments', ['id' => $payment->id]);
+        $this->assertNull(Payment::find($payment->id));
     }
 }

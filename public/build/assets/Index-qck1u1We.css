@@ -1,0 +1,1 @@
+.inv-row[data-v-ea9b49c5]{animation:invRowIn-ea9b49c5 .4s cubic-bezier(.22,.61,.36,1) both;animation-delay:calc(var(--row-i, 0) * 35ms)}@keyframes invRowIn-ea9b49c5{0%{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}@media(prefers-reduced-motion:reduce){.inv-row[data-v-ea9b49c5]{animation:none!important}}
