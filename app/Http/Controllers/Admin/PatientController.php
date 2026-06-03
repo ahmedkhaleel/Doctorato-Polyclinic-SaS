@@ -317,6 +317,7 @@ class PatientController extends Controller
 
         return Inertia::render('Admin/Patients/Show', [
             'patient' => $patient,
+            'medicalAlerts' => $patient->getMedicalAlerts(),
             'financialSummary' => $financialSummary,
             'activeSpecialties' => $activeSpecialties,
             'dermaData' => $dermaData,
@@ -355,8 +356,8 @@ class PatientController extends Controller
                 'type' => 'visit',
                 'date' => $v->visit_date ?? $v->created_at->toDateString(),
                 'time' => $v->created_at->format('H:i'),
-                'title_en' => 'Visit: ' . ($v->service?->name_en ?? $v->visit_type),
-                'title_ar' => 'زيارة: ' . ($v->service?->name_ar ?? $v->visit_type),
+                'title_en' => 'Visit: '.($v->service?->name_en ?? $v->visit_type),
+                'title_ar' => 'زيارة: '.($v->service?->name_ar ?? $v->visit_type),
                 'subtitle' => $v->doctor?->name_en,
                 'status' => $v->status,
                 'details' => $v->diagnosis,
@@ -373,7 +374,7 @@ class PatientController extends Controller
                 'time' => $i->created_at->format('H:i'),
                 'title_en' => "Invoice #{$i->invoice_number}",
                 'title_ar' => "فاتورة #{$i->invoice_number}",
-                'subtitle' => number_format($i->total, 2) . ' - ' . $i->status,
+                'subtitle' => number_format($i->total, 2).' - '.$i->status,
                 'status' => $i->status,
                 'id' => $i->id,
                 'url' => "/admin/invoices/{$i->id}",
@@ -420,8 +421,8 @@ class PatientController extends Controller
                 'type' => 'document',
                 'date' => $d->document_date ?? $d->created_at->toDateString(),
                 'time' => $d->created_at->format('H:i'),
-                'title_en' => 'Document: ' . $d->title,
-                'title_ar' => 'مستند: ' . $d->title,
+                'title_en' => 'Document: '.$d->title,
+                'title_ar' => 'مستند: '.$d->title,
                 'subtitle' => $d->type_label,
                 'status' => $d->is_expired ? 'expired' : 'active',
                 'id' => $d->id,
@@ -436,7 +437,7 @@ class PatientController extends Controller
                 'time' => $r->created_at->format('H:i'),
                 'title_en' => "Referral: {$r->from_department} → {$r->to_department}",
                 'title_ar' => "تحويل: {$r->from_department} → {$r->to_department}",
-                'subtitle' => $r->referringDoctor?->name . ' → ' . ($r->referredToDoctor?->name ?? '?'),
+                'subtitle' => $r->referringDoctor?->name.' → '.($r->referredToDoctor?->name ?? '?'),
                 'details' => $r->reason,
                 'status' => $r->status,
                 'id' => $r->id,
@@ -444,7 +445,7 @@ class PatientController extends Controller
         });
 
         // Sort by date descending
-        $timeline = $events->sortByDesc(fn ($e) => $e['date'] . ' ' . $e['time'])->values();
+        $timeline = $events->sortByDesc(fn ($e) => $e['date'].' '.$e['time'])->values();
 
         return Inertia::render('Admin/Patients/Timeline', [
             'patient' => $patient->only('id', 'full_name', 'phone', 'file_number', 'gender', 'date_of_birth'),
@@ -480,7 +481,7 @@ class PatientController extends Controller
         $sensitiveFields = Patient::SENSITIVE_MEDICAL_FIELDS;
         $hasSensitiveChanges = collect($request->keys())->intersect($sensitiveFields)->isNotEmpty();
 
-        if ($hasSensitiveChanges && !$request->user()->can('patients.update_sensitive_medical')) {
+        if ($hasSensitiveChanges && ! $request->user()->can('patients.update_sensitive_medical')) {
             abort(403, 'You do not have permission to update sensitive medical data.');
         }
 

@@ -23,6 +23,7 @@ const isRtl = computed(() => (page.props.dir || 'rtl') === 'rtl');
 
 const props = defineProps({
     patient: Object,
+    medicalAlerts: { type: Array, default: () => [] },
     financialSummary: Object,
     activeSpecialties: { type: Array, default: () => [] },
     dermaData: { type: Object, default: null },
@@ -31,6 +32,12 @@ const props = defineProps({
     engagement: { type: Object, default: null },
     doctors: Array,
 });
+
+// Safety-critical medical alerts (allergies, blood thinners, heart/HIV/hepatitis,
+// diabetes, pregnancy, chronic conditions, current meds). High = red, medium = amber.
+const highAlerts = computed(() => (props.medicalAlerts || []).filter(a => a.severity === 'high'));
+const mediumAlerts = computed(() => (props.medicalAlerts || []).filter(a => a.severity !== 'high'));
+const hasAlerts = computed(() => (props.medicalAlerts || []).length > 0);
 
 const visits = computed(() => props.patient?.visits || []);
 const invoices = computed(() => props.patient?.invoices || []);
@@ -158,6 +165,32 @@ const prescriptions = computed(() => props.patient?.prescriptions || []);
                 </div>
             </div>
 
+            <!-- ═══ Medical alerts banner (patient safety — shown before anything clinical) ═══ -->
+            <div v-if="hasAlerts" class="med-alert rounded-2xl border overflow-hidden"
+                :class="highAlerts.length ? 'border-red-200 bg-red-50/70' : 'border-amber-200 bg-amber-50/70'">
+                <div class="px-4 md:px-5 py-3 flex items-start gap-3">
+                    <div class="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 mt-0.5"
+                        :class="highAlerts.length ? 'bg-red-100 text-red-600' : 'bg-amber-100 text-amber-600'">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 9v4m0 4h.01M10.3 3.86l-8.06 14A1 1 0 003.1 19.4h17.8a1 1 0 00.86-1.5l-8.06-14a1 1 0 00-1.74 0z" /></svg>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                        <p class="text-sm font-bold" :class="highAlerts.length ? 'text-red-800' : 'text-amber-800'">
+                            {{ isRtl ? 'تنبيهات طبية' : 'Medical Alerts' }}
+                        </p>
+                        <div class="mt-1.5 flex flex-wrap gap-1.5">
+                            <span v-for="a in highAlerts" :key="a.key"
+                                class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-red-100 text-red-700 border border-red-200">
+                                <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>{{ isRtl ? a.ar : a.en }}
+                            </span>
+                            <span v-for="a in mediumAlerts" :key="a.key"
+                                class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium bg-amber-100 text-amber-700 border border-amber-200">
+                                <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>{{ isRtl ? a.ar : a.en }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Engagement (loyalty + referrals + active codes) -->
             <EngagementCard v-if="engagement" :engagement="engagement" />
 
@@ -179,3 +212,16 @@ const prescriptions = computed(() => props.patient?.prescriptions || []);
         </div>
     </AdminLayout>
 </template>
+
+<style scoped>
+.med-alert {
+    animation: medAlertIn 0.45s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+@keyframes medAlertIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .med-alert { animation: none !important; }
+}
+</style>

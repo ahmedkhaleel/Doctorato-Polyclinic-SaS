@@ -182,4 +182,45 @@ class AdminPatientsTest extends TestCase
             ->where('patients.data.0.full_name', 'Aisha Ahmed')
         );
     }
+
+    /**
+     * Patient-safety feature: the profile must surface medical alerts (allergies =
+     * high/red, chronic conditions = medium/amber) so a clinician sees them before
+     * treating. Verifies getMedicalAlerts() + the Show prop.
+     */
+    public function test_patient_show_surfaces_medical_alerts(): void
+    {
+        $patient = new Patient([
+            'full_name' => 'Alert Patient', 'phone' => '01277778888', 'gender' => 'female',
+            'allergies' => 'Penicillin', 'chronic_conditions' => 'Hypertension',
+        ]);
+        $patient->file_number = Patient::generateFileNumber();
+        $patient->is_active = true;
+        $patient->save();
+
+        // Model: allergies = high severity, chronic = medium.
+        $alerts = collect($patient->getMedicalAlerts());
+        $this->assertTrue($alerts->contains(fn ($a) => $a['key'] === 'allergies' && $a['severity'] === 'high'));
+        $this->assertTrue($alerts->contains(fn ($a) => $a['key'] === 'chronic' && $a['severity'] === 'medium'));
+
+        // Page: the prop is passed for the banner.
+        $this->actingAs($this->admin)
+            ->get("/admin/patients/{$patient->id}")
+            ->assertStatus(200)
+            ->assertInertia(fn ($page) => $page
+                ->component('Admin/Patients/Show')
+                ->has('medicalAlerts', 2)
+            );
+    }
+
+    /** A patient with no clinical risk data shows no alerts (no false banner). */
+    public function test_patient_with_no_conditions_has_no_alerts(): void
+    {
+        $patient = new Patient(['full_name' => 'Healthy', 'phone' => '01266667777', 'gender' => 'male', 'chronic_conditions' => 'None']);
+        $patient->file_number = Patient::generateFileNumber();
+        $patient->is_active = true;
+        $patient->save();
+
+        $this->assertSame([], $patient->getMedicalAlerts());
+    }
 }

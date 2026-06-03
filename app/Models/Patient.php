@@ -447,6 +447,37 @@ class Patient extends Model
         return $flags;
     }
 
+    /**
+     * Safety-critical medical alerts for the patient-profile banner — the facts
+     * a clinician must see *before* treating, independent of specialty module.
+     * Reuses the proven risk-flag detection (allergies, blood thinners, bleeding,
+     * heart, hepatitis, HIV, latex, anesthesia, diabetes, pregnancy) and adds
+     * general chronic conditions + current medications. Returns en/ar + severity
+     * (high = red, medium = amber). Empty array → no banner shown.
+     */
+    public function getMedicalAlerts(): array
+    {
+        $alerts = [];
+
+        foreach ($this->getDentalRiskFlags() as $f) {
+            if ($f['key'] === 'anxiety') {
+                continue; // behavioural note, not a medical safety alert
+            }
+            $alerts[] = ['key' => $f['key'], 'en' => $f['label_en'], 'ar' => $f['label_ar'], 'severity' => $f['severity']];
+        }
+
+        $none = ['none', 'لا يوجد', 'لا يوجد ', '-', 'na', 'n/a'];
+
+        if (! empty($this->chronic_conditions) && ! in_array(strtolower(trim($this->chronic_conditions)), $none, true)) {
+            $alerts[] = ['key' => 'chronic', 'en' => 'Chronic: '.$this->chronic_conditions, 'ar' => 'أمراض مزمنة: '.$this->chronic_conditions, 'severity' => 'medium'];
+        }
+        if (! empty($this->current_medications) && ! in_array(strtolower(trim($this->current_medications)), $none, true)) {
+            $alerts[] = ['key' => 'meds', 'en' => 'Current meds: '.$this->current_medications, 'ar' => 'أدوية حالية: '.$this->current_medications, 'severity' => 'medium'];
+        }
+
+        return $alerts;
+    }
+
     // ─── Dental Relationships ─────────────────────────
 
     public function dentalCharts()
