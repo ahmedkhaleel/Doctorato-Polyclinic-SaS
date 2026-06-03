@@ -968,10 +968,10 @@ function missFollowUp(fuId) {
                             <span class="text-xs text-gray-500 hidden sm:block">{{ fu.assigned_user?.name }}</span>
                             <!-- Quick action buttons -->
                             <div v-if="can('leads.update')" class="flex items-center gap-1 opacity-60 group-hover:opacity-100 transition-opacity">
-                                <button @click="completeFollowUp(fu.id)" title="Mark Complete" class="p-2 rounded-lg text-emerald-500 hover:bg-emerald-50 hover:text-emerald-600 transition-all duration-200 hover:shadow-sm">
+                                <button @click="completeFollowUp(fu.id)" :title="$t('a_mark_complete')" class="p-2 rounded-lg text-emerald-500 hover:bg-emerald-50 hover:text-emerald-600 transition-all duration-200 hover:shadow-sm">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
                                 </button>
-                                <button @click="missFollowUp(fu.id)" title="Mark Missed" class="p-2 rounded-lg text-red-400 hover:bg-red-50 hover:text-red-500 transition-all duration-200 hover:shadow-sm">
+                                <button @click="missFollowUp(fu.id)" :title="$t('a_mark_missed')" class="p-2 rounded-lg text-red-400 hover:bg-red-50 hover:text-red-500 transition-all duration-200 hover:shadow-sm">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                                 </button>
                             </div>
@@ -1018,10 +1018,10 @@ function missFollowUp(fuId) {
                             <span class="text-xs text-gray-500 hidden sm:block">{{ fu.assigned_user?.name }}</span>
                             <!-- Quick action buttons -->
                             <div v-if="can('leads.update')" class="flex items-center gap-1 opacity-60 group-hover:opacity-100 transition-opacity">
-                                <button @click="completeFollowUp(fu.id)" title="Mark Complete" class="p-2 rounded-lg text-emerald-500 hover:bg-emerald-50 hover:text-emerald-600 transition-all duration-200 hover:shadow-sm">
+                                <button @click="completeFollowUp(fu.id)" :title="$t('a_mark_complete')" class="p-2 rounded-lg text-emerald-500 hover:bg-emerald-50 hover:text-emerald-600 transition-all duration-200 hover:shadow-sm">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
                                 </button>
-                                <button @click="missFollowUp(fu.id)" title="Mark Missed" class="p-2 rounded-lg text-red-400 hover:bg-red-50 hover:text-red-500 transition-all duration-200 hover:shadow-sm">
+                                <button @click="missFollowUp(fu.id)" :title="$t('a_mark_missed')" class="p-2 rounded-lg text-red-400 hover:bg-red-50 hover:text-red-500 transition-all duration-200 hover:shadow-sm">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                                 </button>
                             </div>

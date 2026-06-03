@@ -293,21 +293,21 @@ function deleteLead(lead) {
                 <div class="flex items-center gap-2">
                     <!-- View Toggle -->
                     <div class="flex items-center bg-gray-100 rounded-lg p-0.5">
-                        <button @click="viewMode = 'table'" :class="viewMode === 'table' ? 'bg-white shadow-sm text-[#C4A265]' : 'text-gray-500 hover:text-gray-700'" class="p-2 rounded-md transition-all duration-200" title="Table view">
+                        <button @click="viewMode = 'table'" :class="viewMode === 'table' ? 'bg-white shadow-sm text-[#C4A265]' : 'text-gray-500 hover:text-gray-700'" class="p-2 rounded-md transition-all duration-200" :title="$t('a_table_view')">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" /></svg>
                         </button>
-                        <button @click="viewMode = 'grid'" :class="viewMode === 'grid' ? 'bg-white shadow-sm text-[#C4A265]' : 'text-gray-500 hover:text-gray-700'" class="p-2 rounded-md transition-all duration-200" title="Grid view">
+                        <button @click="viewMode = 'grid'" :class="viewMode === 'grid' ? 'bg-white shadow-sm text-[#C4A265]' : 'text-gray-500 hover:text-gray-700'" class="p-2 rounded-md transition-all duration-200" :title="$t('a_grid_view')">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM14 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1v-4zM14 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" /></svg>
                         </button>
-                        <button @click="viewMode = 'kanban'" :class="viewMode === 'kanban' ? 'bg-white shadow-sm text-[#C4A265]' : 'text-gray-500 hover:text-gray-700'" class="p-2 rounded-md transition-all duration-200" title="Kanban view">
+                        <button @click="viewMode = 'kanban'" :class="viewMode === 'kanban' ? 'bg-white shadow-sm text-[#C4A265]' : 'text-gray-500 hover:text-gray-700'" class="p-2 rounded-md transition-all duration-200" :title="$t('a_kanban_view')">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" /></svg>
                         </button>
                     </div>
                     <Link v-if="can('leads.create')" href="/admin/leads-import"
-                        class="inline-flex items-center px-3.5 py-2.5 rounded-xl border border-gray-200 bg-white text-sm font-medium text-gray-600 hover:bg-gray-50 hover:border-gray-300 transition-all duration-200 shadow-sm hover:shadow" title="Import CSV"
+                        class="inline-flex items-center px-3.5 py-2.5 rounded-xl border border-gray-200 bg-white text-sm font-medium text-gray-600 hover:bg-gray-50 hover:border-gray-300 transition-all duration-200 shadow-sm hover:shadow" :title="$t('a_import_csv')"
                     >
                         <svg class="w-4 h-4 ltr:mr-1.5 rtl:ml-1.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>{{ $t('a_import') }}</Link>
-                    <button @click="exportLeads" class="inline-flex items-center px-3.5 py-2.5 rounded-xl border border-gray-200 bg-white text-sm font-medium text-gray-600 hover:bg-gray-50 hover:border-gray-300 transition-all duration-200 shadow-sm hover:shadow" title="Export CSV">
+                    <button @click="exportLeads" class="inline-flex items-center px-3.5 py-2.5 rounded-xl border border-gray-200 bg-white text-sm font-medium text-gray-600 hover:bg-gray-50 hover:border-gray-300 transition-all duration-200 shadow-sm hover:shadow" :title="$t('a_export_csv')">
                         <svg class="w-4 h-4 ltr:mr-1.5 rtl:ml-1.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
                         {{ selectedLeads.length ? (isRtl ? `تصدير ${selectedLeads.length} محدد` : `Export ${selectedLeads.length} selected`) : $t('a_export') }}</button>
                     <Link href="/admin/leads/pipeline"
