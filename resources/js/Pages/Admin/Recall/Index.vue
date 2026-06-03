@@ -233,7 +233,7 @@ const cappedTotal = computed(() => Math.min(props.patients?.total || 0, 500));
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-50">
-                        <tr v-for="p in patients.data" :key="p.id" class="hover:bg-gray-50/50 transition">
+                        <tr v-for="(p, i) in patients.data" :key="p.id" class="lst-row hover:bg-gray-50/50 transition" :style="{ '--row-i': i }">
                             <td class="px-4 py-3">
                                 <Link :href="`/admin/patients/${p.id}`" class="font-medium text-gray-800 hover:text-[#1B365D] hover:underline">
                                     {{ p.full_name }}
@@ -281,3 +281,17 @@ const cappedTotal = computed(() => Math.min(props.patients?.total || 0, 500));
         </div>
     </div>
 </template>
+
+<style scoped>
+.lst-row {
+    animation: lstRowIn 0.4s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    animation-delay: calc(var(--row-i, 0) * 35ms);
+}
+@keyframes lstRowIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .lst-row { animation: none !important; }
+}
+</style>
