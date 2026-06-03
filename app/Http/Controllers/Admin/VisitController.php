@@ -152,7 +152,7 @@ class VisitController extends Controller
 
         $message = 'Visit completed.';
         if ($results['invoice']) {
-            $message .= ' Invoice #' . $results['invoice']->invoice_number . ' generated.';
+            $message .= ' Invoice #'.$results['invoice']->invoice_number.' generated.';
         }
 
         return redirect()->back()->with('success', $message);
@@ -180,7 +180,7 @@ class VisitController extends Controller
             'photo_type' => 'nullable|string|in:before,after,during',
         ]);
 
-        $path = $request->file('photo')->store('visit-photos/' . $visit->id, 'public');
+        $path = $request->file('photo')->store('visit-photos/'.$visit->id, 'public');
 
         $visit->photos()->create([
             'photo_path' => $path,
@@ -209,10 +209,10 @@ class VisitController extends Controller
         }
 
         $data = $request->validate([
-            'visit_date'     => ['required', 'date'],
+            'visit_date' => ['required', 'date'],
             'scheduled_time' => ['nullable', 'date_format:H:i'],
-            'doctor_id'      => ['nullable', 'integer', 'exists:doctors,id'],
-            'service_id'     => ['nullable', 'integer', 'exists:services,id'],
+            'doctor_id' => ['nullable', 'integer', 'exists:doctors,id'],
+            'service_id' => ['nullable', 'integer', 'exists:services,id'],
         ]);
 
         $changes = [];
@@ -258,10 +258,10 @@ class VisitController extends Controller
         }
 
         $data = $request->validate([
-            'visit_date'     => ['required', 'date'],
+            'visit_date' => ['required', 'date'],
             'scheduled_time' => ['nullable', 'date_format:H:i'],
-            'doctor_id'      => ['nullable', 'integer', 'exists:doctors,id'],
-            'service_id'     => ['nullable', 'integer', 'exists:services,id'],
+            'doctor_id' => ['nullable', 'integer', 'exists:doctors,id'],
+            'service_id' => ['nullable', 'integer', 'exists:services,id'],
         ]);
 
         // Build a changes array for the patient email — status itself
@@ -299,19 +299,19 @@ class VisitController extends Controller
     {
         if (isset($changes['doctor_id'])) {
             $fromId = $changes['doctor_id']['from'] ?? null;
-            $toId   = $changes['doctor_id']['to']   ?? null;
+            $toId = $changes['doctor_id']['to'] ?? null;
             $doctors = Doctor::whereIn('id', array_filter([$fromId, $toId]))
                 ->pluck('name_ar', 'id');
             $changes['doctor_id']['from_name'] = $fromId ? ($doctors[$fromId] ?? '—') : '—';
-            $changes['doctor_id']['to_name']   = $toId   ? ($doctors[$toId]   ?? '—') : '—';
+            $changes['doctor_id']['to_name'] = $toId ? ($doctors[$toId] ?? '—') : '—';
         }
         if (isset($changes['service_id'])) {
             $fromId = $changes['service_id']['from'] ?? null;
-            $toId   = $changes['service_id']['to']   ?? null;
+            $toId = $changes['service_id']['to'] ?? null;
             $services = \App\Models\Service::whereIn('id', array_filter([$fromId, $toId]))
                 ->pluck('name_ar', 'id');
             $changes['service_id']['from_name'] = $fromId ? ($services[$fromId] ?? '—') : '—';
-            $changes['service_id']['to_name']   = $toId   ? ($services[$toId]   ?? '—') : '—';
+            $changes['service_id']['to_name'] = $toId ? ($services[$toId] ?? '—') : '—';
         }
     }
 
@@ -322,11 +322,15 @@ class VisitController extends Controller
     protected function maybeEmailRescheduled(Visit $visit, array $changes): void
     {
         $patient = $visit->patient;
-        if (! $patient || ! $patient->email) return;
-        if (! $patient->wantsNotification('bookings', 'email')) return;
+        if (! $patient || ! $patient->email) {
+            return;
+        }
+        if (! $patient->wantsNotification('bookings', 'email')) {
+            return;
+        }
 
         try {
-            $newDoctorName  = $visit->doctor?->name_ar ?? $visit->doctor?->name_en;
+            $newDoctorName = $visit->doctor?->name_ar ?? $visit->doctor?->name_en;
             $newServiceName = $visit->service?->name_ar ?? $visit->service?->name_en;
 
             \Illuminate\Support\Facades\Notification::route('mail', $patient->email)
@@ -334,7 +338,7 @@ class VisitController extends Controller
         } catch (\Throwable $e) {
             \Illuminate\Support\Facades\Log::warning('[visit.rescheduled.email] failed', [
                 'visit_id' => $visit->id,
-                'error'    => $e->getMessage(),
+                'error' => $e->getMessage(),
             ]);
         }
     }
