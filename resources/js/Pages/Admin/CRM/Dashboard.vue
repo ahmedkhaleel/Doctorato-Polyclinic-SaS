@@ -1269,7 +1269,7 @@ function missFollowUp(fuId) {
                                             <p class="text-xs text-gray-400">{{ isRtl ? 'أدخل البيانات الأساسية' : 'Enter basic info' }}</p>
                                         </div>
                                     </div>
-                                    <button @click="showQuickAdd = false" class="text-gray-400 hover:text-gray-600 transition">
+                                    <button @click="showQuickAdd = false" class="text-gray-400 hover:text-gray-600 transition" :aria-label="isRtl ? 'إغلاق' : 'Close'" :title="isRtl ? 'إغلاق' : 'Close'">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
                                     </button>
                                 </div>

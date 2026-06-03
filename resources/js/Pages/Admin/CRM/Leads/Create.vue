@@ -365,7 +365,7 @@ const notesLength = computed(() => form.notes.length);
                             <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">{{ $t('a_source') }}</label>
                             <div v-if="form.lead_source_id" class="flex items-center gap-2 w-full ltr:pl-4 rtl:pr-4 ltr:pr-2 rtl:pl-2 py-3 text-sm border border-[#C4A265]/40 rounded-xl bg-[#C4A265]/5">
                                 <span class="flex-1 text-gray-800">{{ selectedSourceLabel }}</span>
-                                <button type="button" @click="clearSource" class="flex items-center justify-center w-6 h-6 rounded-full hover:bg-gray-200 transition">
+                                <button type="button" @click="clearSource" class="flex items-center justify-center w-6 h-6 rounded-full hover:bg-gray-200 transition" :aria-label="isRtl ? 'إغلاق' : 'Close'" :title="isRtl ? 'إغلاق' : 'Close'">
                                     <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                                 </button>
                             </div>
@@ -409,7 +409,7 @@ const notesLength = computed(() => form.notes.length);
                             <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">{{ $t('a_campaign') }}</label>
                             <div v-if="form.campaign_id" class="flex items-center gap-2 w-full ltr:pl-4 rtl:pr-4 ltr:pr-2 rtl:pl-2 py-3 text-sm border border-[#C4A265]/40 rounded-xl bg-[#C4A265]/5">
                                 <span class="flex-1 text-gray-800">{{ selectedCampaignLabel }}</span>
-                                <button type="button" @click="clearCampaign" class="flex items-center justify-center w-6 h-6 rounded-full hover:bg-gray-200 transition">
+                                <button type="button" @click="clearCampaign" class="flex items-center justify-center w-6 h-6 rounded-full hover:bg-gray-200 transition" :aria-label="isRtl ? 'إغلاق' : 'Close'" :title="isRtl ? 'إغلاق' : 'Close'">
                                     <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                                 </button>
                             </div>
@@ -453,7 +453,7 @@ const notesLength = computed(() => form.notes.length);
                             <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">{{ $t('a_assign_to') }}</label>
                             <div v-if="form.assigned_to" class="flex items-center gap-2 w-full ltr:pl-4 rtl:pr-4 ltr:pr-2 rtl:pl-2 py-3 text-sm border border-[#C4A265]/40 rounded-xl bg-[#C4A265]/5">
                                 <span class="flex-1 text-gray-800">{{ selectedAssigneeLabel }}</span>
-                                <button type="button" @click="clearAssignee" class="flex items-center justify-center w-6 h-6 rounded-full hover:bg-gray-200 transition">
+                                <button type="button" @click="clearAssignee" class="flex items-center justify-center w-6 h-6 rounded-full hover:bg-gray-200 transition" :aria-label="isRtl ? 'إغلاق' : 'Close'" :title="isRtl ? 'إغلاق' : 'Close'">
                                     <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                                 </button>
                             </div>

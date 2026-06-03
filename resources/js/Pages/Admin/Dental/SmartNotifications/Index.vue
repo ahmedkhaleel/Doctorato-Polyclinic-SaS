@@ -505,7 +505,7 @@ const responseRate = computed(() => {
                         <h3 class="text-lg font-bold text-gray-800">
                             {{ locale === 'ar' ? 'إرسال تنبيه يدوي' : 'Send Manual Notification' }}
                         </h3>
-                        <button @click="showManualModal = false" class="w-8 h-8 rounded-lg hover:bg-gray-100 flex items-center justify-center text-gray-400">
+                        <button @click="showManualModal = false" class="w-8 h-8 rounded-lg hover:bg-gray-100 flex items-center justify-center text-gray-400" aria-label="Close">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                         </button>
                     </div>

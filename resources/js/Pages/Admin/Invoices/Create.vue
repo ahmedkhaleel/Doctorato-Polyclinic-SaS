@@ -515,7 +515,7 @@ function submit() {
                                         <span class="discount-code-text">{{ form.discount_code }}</span>
                                         <span class="discount-amount-text">-{{ formatCurrency(form.discount_amount) }}</span>
                                     </div>
-                                    <button type="button" @click="removeDiscount" class="discount-remove-btn">
+                                    <button type="button" @click="removeDiscount" class="discount-remove-btn" :aria-label="isRtl ? 'إغلاق' : 'Close'" :title="isRtl ? 'إغلاق' : 'Close'">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                                     </button>
                                 </div>

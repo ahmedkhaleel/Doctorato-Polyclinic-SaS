@@ -288,7 +288,7 @@ function submit() {
                                 <div class="flex items-start space-x-4">
                                     <div v-if="imagePreview || existingImage" class="relative w-32 h-20 rounded-lg overflow-hidden border border-gray-200 flex-shrink-0">
                                         <img :src="imagePreview || existingImage" alt="Preview" class="w-full h-full object-cover" />
-                                        <button type="button" @click="removeImage" class="absolute top-1 right-1 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center text-xs hover:bg-red-600">
+                                        <button type="button" @click="removeImage" class="absolute top-1 right-1 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center text-xs hover:bg-red-600" :aria-label="isRtl ? 'إغلاق' : 'Close'" :title="isRtl ? 'إغلاق' : 'Close'">
                                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                                         </button>
                                     </div>

@@ -318,7 +318,7 @@ function getCategoryColor(index) {
                                             {{ editingCategory ? $t('a_edit_category') : $t('a_add_category') }}
                                         </h2>
                                     </div>
-                                    <button @click="closeModal" class="text-gray-400 hover:text-white transition p-1">
+                                    <button @click="closeModal" class="text-gray-400 hover:text-white transition p-1" :aria-label="isRtl ? 'إغلاق' : 'Close'" :title="isRtl ? 'إغلاق' : 'Close'">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                                         </svg>

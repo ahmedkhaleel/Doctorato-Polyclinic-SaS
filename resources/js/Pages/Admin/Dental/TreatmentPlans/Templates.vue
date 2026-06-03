@@ -329,7 +329,7 @@ function useTemplate(template) {
                 <h3 class="text-white font-bold text-lg">{{ editingTemplate ? (isRtl ? 'تعديل القالب' : 'Edit Template') : (isRtl ? 'قالب جديد' : 'New Template') }}</h3>
                 <p class="text-slate-100 text-xs mt-0.5">{{ isRtl ? 'أنشئ قالب خطة علاج قابل لإعادة الاستخدام' : 'Create a reusable treatment plan template' }}</p>
             </div>
-            <button @click="showModal=false" class="text-slate-200 hover:text-white"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg></button>
+            <button @click="showModal=false" class="text-slate-200 hover:text-white" :aria-label="isRtl ? 'إغلاق' : 'Close'" :title="isRtl ? 'إغلاق' : 'Close'"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg></button>
         </div>
 
         <div class="p-6 space-y-5 max-h-[70vh] overflow-y-auto">
@@ -389,7 +389,7 @@ function useTemplate(template) {
 
                 <div class="space-y-3">
                     <div v-for="(tr, ti) in form.treatments" :key="ti" class="bg-gray-50/50 rounded-xl p-4 border border-gray-100 relative group">
-                        <button type="button" @click="removeTreatment(ti)" class="absolute top-2 end-2 p-1 text-gray-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all">
+                        <button type="button" @click="removeTreatment(ti)" class="absolute top-2 end-2 p-1 text-gray-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all" :aria-label="isRtl ? 'إغلاق' : 'Close'" :title="isRtl ? 'إغلاق' : 'Close'">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                         </button>
                         <div class="text-[10px] font-bold text-gray-400 mb-2">{{ isRtl ? 'إجراء' : 'Step' }} #{{ ti + 1 }}</div>

@@ -114,7 +114,7 @@ const genderConfig = {
                             :placeholder="$t('a_search_patients_placeholder')"
                             class="doctorato-input w-full ltr:pl-10 ltr:pr-9 rtl:pr-10 rtl:pl-9 py-2.5 border border-gray-200 bg-gray-50/50 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30 focus:border-[#1B365D] focus:bg-white hover:border-gray-300 transition-all duration-200"
                         />
-                        <button v-if="search" @click="clearSearch" class="absolute inset-y-0 ltr:right-0 rtl:left-0 ltr:pr-3 rtl:pl-3 flex items-center text-gray-400 hover:text-gray-600 transition">
+                        <button v-if="search" @click="clearSearch" class="absolute inset-y-0 ltr:right-0 rtl:left-0 ltr:pr-3 rtl:pl-3 flex items-center text-gray-400 hover:text-gray-600 transition" :aria-label="isRtl ? 'إغلاق' : 'Close'" :title="isRtl ? 'إغلاق' : 'Close'">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                         </button>
                     </div>

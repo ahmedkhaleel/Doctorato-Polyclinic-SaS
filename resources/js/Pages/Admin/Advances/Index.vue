@@ -302,7 +302,7 @@ const months = [
                         <div class="px-4 md:px-6 py-4 border-b border-gray-200">
                             <div class="flex items-center justify-between">
                                 <h3 class="text-lg font-semibold text-gray-800">{{ $t('a_new_advance') }}</h3>
-                                <button @click="closeModal" class="text-gray-400 hover:text-gray-600">
+                                <button @click="closeModal" class="text-gray-400 hover:text-gray-600" :aria-label="isRtl ? 'إغلاق' : 'Close'" :title="isRtl ? 'إغلاق' : 'Close'">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                                     </svg>

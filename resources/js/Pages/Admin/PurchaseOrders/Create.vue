@@ -204,7 +204,7 @@ function submit() {
                                     {{ formatCurrency(item.quantity_ordered * item.unit_price) }}
                                 </td>
                                 <td class="px-4 py-2.5">
-                                    <button type="button" @click="removeItem(idx)" class="p-1 text-gray-400 hover:text-red-600 rounded transition">
+                                    <button type="button" @click="removeItem(idx)" class="p-1 text-gray-400 hover:text-red-600 rounded transition" :aria-label="isRtl ? 'إغلاق' : 'Close'" :title="isRtl ? 'إغلاق' : 'Close'">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                                     </button>
                                 </td>

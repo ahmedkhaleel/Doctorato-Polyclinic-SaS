@@ -434,7 +434,7 @@ function copyAllCredentials() {
                                         <p class="text-sm text-white/80">{{ credentials.name }}</p>
                                     </div>
                                 </div>
-                                <button @click="showCredentials = false" class="absolute top-4 end-4 w-8 h-8 rounded-xl bg-white/20 hover:bg-white/30 flex items-center justify-center transition">
+                                <button @click="showCredentials = false" class="absolute top-4 end-4 w-8 h-8 rounded-xl bg-white/20 hover:bg-white/30 flex items-center justify-center transition" :aria-label="isRtl ? 'إغلاق' : 'Close'" :title="isRtl ? 'إغلاق' : 'Close'">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                                 </button>
                             </div>

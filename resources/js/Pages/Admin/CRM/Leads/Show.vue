@@ -783,7 +783,7 @@ function translateDescription(desc) {
                             </div>
                             <h3 class="text-sm font-bold text-gray-800 uppercase tracking-wider">{{ $t('a_quick_send_message') }}</h3>
                         </div>
-                        <button @click="showQuickSend = false" class="p-2 rounded-xl text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-all duration-200">
+                        <button @click="showQuickSend = false" class="p-2 rounded-xl text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-all duration-200" :aria-label="isRtl ? 'إغلاق' : 'Close'" :title="isRtl ? 'إغلاق' : 'Close'">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                         </button>
                     </div>
@@ -1343,7 +1343,7 @@ function translateDescription(desc) {
                                 <p class="text-xs font-bold text-amber-800">{{ $t('a_late_hour_warning') }}</p>
                                 <p class="text-[11px] text-amber-700 mt-0.5">{{ $t('a_late_hour_description') }}</p>
                             </div>
-                            <button @click="lateHourDismissed = true" class="p-1 rounded-lg text-amber-400 hover:text-amber-600 hover:bg-amber-100 transition-colors shrink-0">
+                            <button @click="lateHourDismissed = true" class="p-1 rounded-lg text-amber-400 hover:text-amber-600 hover:bg-amber-100 transition-colors shrink-0" :aria-label="isRtl ? 'إغلاق' : 'Close'" :title="isRtl ? 'إغلاق' : 'Close'">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                             </button>
                         </div>

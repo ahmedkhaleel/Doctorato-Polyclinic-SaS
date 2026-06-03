@@ -360,7 +360,7 @@ function submit() {
                                 <div class="text-xs text-gray-500">{{ selectedPatient.phone }} <span v-if="selectedPatient.file_number" class="ml-2 font-mono" style="color: #C4A265;">#{{ selectedPatient.file_number }}</span></div>
                             </div>
                         </div>
-                        <button @click="clearPatient" class="text-gray-400 hover:text-red-500 transition p-1">
+                        <button @click="clearPatient" class="text-gray-400 hover:text-red-500 transition p-1" :aria-label="isRtl ? 'إغلاق' : 'Close'" :title="isRtl ? 'إغلاق' : 'Close'">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                         </button>
                     </div>

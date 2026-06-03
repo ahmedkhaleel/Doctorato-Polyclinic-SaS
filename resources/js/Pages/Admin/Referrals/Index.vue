@@ -287,7 +287,7 @@ function formatDate(d) {
                             <label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'المريض' : 'Patient' }} *</label>
                             <div v-if="selectedPatient" class="flex items-center justify-between px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl">
                                 <div><span class="font-medium text-sm text-gray-800">{{ selectedPatient.full_name }}</span><span class="text-xs text-gray-400 ms-2">{{ selectedPatient.file_number }}</span></div>
-                                <button type="button" @click="selectedPatient = null; createForm.patient_id = ''" class="text-gray-400 hover:text-red-500"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+                                <button type="button" @click="selectedPatient = null; createForm.patient_id = ''" class="text-gray-400 hover:text-red-500" :aria-label="isRtl ? 'إغلاق' : 'Close'" :title="isRtl ? 'إغلاق' : 'Close'"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
                             </div>
                             <div v-else class="relative">
                                 <input v-model="patientSearch" @input="searchPatients" type="text" :placeholder="isRtl ? 'ابحث عن مريض...' : 'Search patient...'" class="doctorato-input w-full px-3 py-2 border border-gray-200 rounded-xl text-sm" />

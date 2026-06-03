@@ -1288,7 +1288,7 @@ onMounted(() => {
                                     <p class="text-xs text-gray-400">{{ mapRecord?.user?.name }} - {{ formatDate(mapRecord?.date) }}</p>
                                 </div>
                             </div>
-                            <button @click="closeMap" class="p-2 rounded-xl text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-all duration-200">
+                            <button @click="closeMap" class="p-2 rounded-xl text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-all duration-200" :aria-label="isRtl ? 'إغلاق' : 'Close'" :title="isRtl ? 'إغلاق' : 'Close'">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                             </button>
                         </div>
