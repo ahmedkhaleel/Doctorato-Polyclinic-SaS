@@ -139,7 +139,7 @@ function formatDate(d) {
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-50">
-                    <tr v-for="o in orders.data" :key="o.id" class="hover:bg-gray-50/50">
+                    <tr v-for="(o, i) in orders.data" :key="o.id" class="po-row hover:bg-gray-50/50" :style="{ '--row-i': i }">
                         <td class="px-4 py-3">
                             <span class="font-mono font-medium text-gray-800">{{ o.po_number }}</span>
                         </td>
@@ -179,3 +179,17 @@ function formatDate(d) {
         </div>
     </div>
 </template>
+
+<style scoped>
+.po-row {
+    animation: poRowIn 0.4s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    animation-delay: calc(var(--row-i, 0) * 35ms);
+}
+@keyframes poRowIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .po-row { animation: none !important; }
+}
+</style>
