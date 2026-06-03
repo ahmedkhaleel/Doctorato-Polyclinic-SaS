@@ -27,8 +27,8 @@ class VisionAnalyzer
         ],
         'insurance_ocr' => [
             'feature' => 'insurance_ocr',
-            'ar' => 'استخرج بيانات بطاقة التأمين كحقول منظمة (الاسم، رقم العضوية، الشركة، تاريخ الانتهاء) بصيغة JSON إن أمكن.',
-            'en' => 'Extract the insurance card fields as structured data (name, member id, company, expiry) as JSON if possible.',
+            'ar' => 'استخرج بيانات بطاقة التأمين وأعِدها كـ JSON فقط (بدون أي نص آخر) بالمفاتيح: member_id, policy_number, card_number, company_name, plan_name, principal_name, expiry_date (بصيغة YYYY-MM-DD). ضع null لأي حقل غير ظاهر.',
+            'en' => 'Extract the insurance card data and return ONLY a JSON object (no other text) with keys: member_id, policy_number, card_number, company_name, plan_name, principal_name, expiry_date (as YYYY-MM-DD). Use null for any field not visible.',
             'clinical' => false,
         ],
     ];

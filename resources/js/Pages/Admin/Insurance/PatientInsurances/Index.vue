@@ -1,7 +1,8 @@
 <script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue'
 import { ref, computed } from 'vue'
-import { router, Link, usePage } from '@inertiajs/vue3'
+import { router, Link, usePage, useForm } from '@inertiajs/vue3'
+import axios from 'axios'
 import { useConfirm } from '@/Composables/useConfirm.js'
 
 defineOptions({ layout: AdminLayout })
@@ -11,12 +12,99 @@ const { confirm } = useConfirm()
 const props = defineProps({
     insurances: Object,
     companies: Array,
+    companiesWithPlans: { type: Array, default: () => [] },
     filters: Object,
 })
 
 const page = usePage()
 const locale = computed(() => page.props.locale || 'ar')
 const isRtl = computed(() => locale.value === 'ar')
+const cn = (o) => (o ? (isRtl.value ? o.name_ar : o.name_en) : '')
+
+// ── Add-insurance modal ──────────────────────────────────
+const showAdd = ref(false)
+const selectedPatient = ref(null)
+const patientQuery = ref('')
+const patientResults = ref([])
+let patientTimer = null
+const form = useForm({
+    insurance_company_id: '', insurance_plan_id: '', member_id: '', policy_number: '',
+    card_number: '', relationship: 'self', principal_name: '', start_date: '', expiry_date: '',
+    max_annual_limit: '', notes: '', card_image_front: null,
+})
+const plansForCompany = computed(() => {
+    const c = props.companiesWithPlans.find(x => String(x.id) === String(form.insurance_company_id))
+    return c?.plans || []
+})
+
+function searchPatients() {
+    clearTimeout(patientTimer)
+    const q = patientQuery.value.trim()
+    if (q.length < 2) { patientResults.value = []; return }
+    patientTimer = setTimeout(async () => {
+        try {
+            const { data } = await axios.get('/admin/patients/search', { params: { q } })
+            patientResults.value = data
+        } catch { patientResults.value = [] }
+    }, 300)
+}
+function pickPatient(p) {
+    selectedPatient.value = p
+    patientResults.value = []
+    patientQuery.value = p.full_name
+}
+function openAdd() {
+    showAdd.value = true
+    selectedPatient.value = null
+    patientQuery.value = ''
+    patientResults.value = []
+    ocrHint.value = ''
+    ocrError.value = ''
+    form.reset()
+}
+function submitAdd() {
+    if (!selectedPatient.value) return
+    form.post(`/admin/patients/${selectedPatient.value.id}/insurances`, {
+        forceFormData: true,
+        preserveScroll: true,
+        onSuccess: () => { showAdd.value = false },
+    })
+}
+
+// ── AI OCR (gated by insurance_ocr) ──────────────────────
+const aiOcrEnabled = computed(() => {
+    const ai = page.props.ai
+    return !!ai?.enabled && Array.isArray(ai?.features) && ai.features.includes('insurance_ocr')
+})
+const ocrBusy = ref(false)
+const ocrHint = ref('')
+const ocrError = ref('')
+function onCardChange(e) {
+    form.card_image_front = e.target.files?.[0] || null
+}
+async function extractFromCard() {
+    if (!form.card_image_front || ocrBusy.value) return
+    ocrBusy.value = true; ocrError.value = ''; ocrHint.value = ''
+    try {
+        const fd = new FormData()
+        fd.append('image', form.card_image_front)
+        const { data } = await axios.post('/admin/insurance/patient-insurances/ocr', fd)
+        if (data.ok) {
+            const f = data.fields || {}
+            if (f.member_id) form.member_id = f.member_id
+            if (f.policy_number) form.policy_number = f.policy_number
+            if (f.card_number) form.card_number = f.card_number
+            if (f.principal_name) form.principal_name = f.principal_name
+            if (f.expiry_date) form.expiry_date = f.expiry_date
+            const hints = [f.company_name, f.plan_name].filter(Boolean)
+            ocrHint.value = hints.length
+                ? (isRtl.value ? 'من البطاقة: ' : 'From card: ') + hints.join(' · ') + (isRtl.value ? ' (اختر الشركة/الباقة المطابقة)' : ' (select the matching company/plan)')
+                : (isRtl.value ? 'تم استخراج الحقول المتاحة.' : 'Extracted available fields.')
+        } else { ocrError.value = data.message }
+    } catch (e) {
+        ocrError.value = e.response?.data?.message || (isRtl.value ? 'تعذّر الاستخراج.' : 'Extraction failed.')
+    } finally { ocrBusy.value = false }
+}
 
 const search = ref(props.filters?.search || '')
 const companyFilter = ref(props.filters?.company_id || '')
@@ -72,6 +160,11 @@ function fmt(n) {
                     {{ isRtl ? 'تأمينات المرضى' : 'Patient Insurances' }}
                 </h1>
                 <p class="text-sm text-white/70 mt-2">{{ isRtl ? 'جميع تأمينات المرضى مع التحقق وحدود الاستخدام' : 'All patient insurance cards with verification and usage' }}</p>
+                <button type="button" @click="openAdd"
+                    class="mt-4 inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#C4A265] text-[#1B365D] text-sm font-bold hover:opacity-90 transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+                    {{ isRtl ? 'إضافة تأمين' : 'Add Insurance' }}
+                </button>
             </div>
         </div>
 
@@ -172,6 +265,107 @@ function fmt(n) {
             </table>
         </div>
 
+        <!-- ═══ Add Insurance modal ═══ -->
+        <Transition name="ins-modal">
+            <div v-if="showAdd" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40" @click.self="showAdd = false">
+                <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[92vh] overflow-y-auto p-5 md:p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-bold text-[#1B365D]">{{ isRtl ? 'إضافة تأمين لمريض' : 'Add Patient Insurance' }}</h3>
+                        <button type="button" @click="showAdd = false" class="text-gray-400 hover:text-gray-600" :title="isRtl ? 'إغلاق' : 'Close'">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                        </button>
+                    </div>
+
+                    <!-- Patient picker -->
+                    <div class="relative mb-3">
+                        <label class="block text-xs font-semibold text-gray-500 mb-1">{{ isRtl ? 'المريض' : 'Patient' }} <span class="text-red-500">*</span></label>
+                        <input v-model="patientQuery" @input="searchPatients" type="text" dir="auto"
+                            :placeholder="isRtl ? 'ابحث بالاسم/الملف/الهاتف' : 'Search name / file # / phone'"
+                            class="w-full rounded-lg border-gray-300 text-sm focus:ring-[#C4A265] focus:border-[#C4A265]" />
+                        <ul v-if="patientResults.length" class="absolute z-10 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-48 overflow-y-auto">
+                            <li v-for="p in patientResults" :key="p.id" @click="pickPatient(p)"
+                                class="px-3 py-2 text-sm hover:bg-[#C4A265]/10 cursor-pointer flex justify-between">
+                                <span>{{ p.full_name }}</span><span class="text-xs text-gray-400 font-mono">{{ p.file_number }}</span>
+                            </li>
+                        </ul>
+                        <p v-if="selectedPatient" class="text-xs text-emerald-600 mt-1">{{ isRtl ? 'محدد: ' : 'Selected: ' }}{{ selectedPatient.full_name }}</p>
+                    </div>
+
+                    <!-- AI OCR card upload -->
+                    <div class="mb-4 rounded-xl border border-dashed border-[#C4A265]/50 bg-[#C4A265]/5 p-3">
+                        <label class="block text-xs font-semibold text-gray-600 mb-1.5">{{ isRtl ? 'صورة بطاقة التأمين (الوجه)' : 'Insurance card photo (front)' }}</label>
+                        <input type="file" accept="image/*" @change="onCardChange" class="block w-full text-xs text-gray-600 file:mr-2 file:rtl:ml-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-[#1B365D] file:text-white file:text-xs" />
+                        <button v-if="aiOcrEnabled" type="button" @click="extractFromCard" :disabled="!form.card_image_front || ocrBusy"
+                            class="mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#7C3AED] text-white text-xs font-semibold disabled:opacity-50">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>
+                            {{ ocrBusy ? (isRtl ? 'جارٍ الاستخراج…' : 'Extracting…') : (isRtl ? 'استخراج البيانات بالـ AI' : 'Extract data with AI') }}
+                        </button>
+                        <p v-if="ocrHint" class="text-xs text-[#1B365D] mt-1.5">{{ ocrHint }}</p>
+                        <p v-if="ocrError" class="text-xs text-amber-700 mt-1.5">{{ ocrError }}</p>
+                    </div>
+
+                    <!-- Fields -->
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-500 mb-1">{{ isRtl ? 'الشركة' : 'Company' }} <span class="text-red-500">*</span></label>
+                            <select v-model="form.insurance_company_id" class="w-full rounded-lg border-gray-300 text-sm">
+                                <option value="">—</option>
+                                <option v-for="c in companiesWithPlans" :key="c.id" :value="c.id">{{ cn(c) }}</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-500 mb-1">{{ isRtl ? 'الباقة' : 'Plan' }}</label>
+                            <select v-model="form.insurance_plan_id" class="w-full rounded-lg border-gray-300 text-sm" :disabled="!plansForCompany.length">
+                                <option value="">—</option>
+                                <option v-for="p in plansForCompany" :key="p.id" :value="p.id">{{ cn(p) }}</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-500 mb-1">{{ isRtl ? 'رقم العضوية' : 'Member ID' }} <span class="text-red-500">*</span></label>
+                            <input v-model="form.member_id" type="text" class="w-full rounded-lg border-gray-300 text-sm" />
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-500 mb-1">{{ isRtl ? 'رقم الوثيقة' : 'Policy #' }}</label>
+                            <input v-model="form.policy_number" type="text" class="w-full rounded-lg border-gray-300 text-sm" />
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-500 mb-1">{{ isRtl ? 'الصلة' : 'Relationship' }} <span class="text-red-500">*</span></label>
+                            <select v-model="form.relationship" class="w-full rounded-lg border-gray-300 text-sm">
+                                <option value="self">{{ isRtl ? 'نفسه' : 'Self' }}</option>
+                                <option value="spouse">{{ isRtl ? 'زوج/ة' : 'Spouse' }}</option>
+                                <option value="child">{{ isRtl ? 'ابن/ة' : 'Child' }}</option>
+                                <option value="parent">{{ isRtl ? 'والد/ة' : 'Parent' }}</option>
+                                <option value="other">{{ isRtl ? 'أخرى' : 'Other' }}</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-500 mb-1">{{ isRtl ? 'تاريخ الانتهاء' : 'Expiry date' }}</label>
+                            <input v-model="form.expiry_date" type="date" class="w-full rounded-lg border-gray-300 text-sm" />
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-500 mb-1">{{ isRtl ? 'الحد السنوي' : 'Annual limit' }}</label>
+                            <input v-model="form.max_annual_limit" type="number" min="0" class="w-full rounded-lg border-gray-300 text-sm" />
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-500 mb-1">{{ isRtl ? 'اسم حامل البطاقة' : 'Principal name' }}</label>
+                            <input v-model="form.principal_name" type="text" class="w-full rounded-lg border-gray-300 text-sm" />
+                        </div>
+                    </div>
+                    <p v-if="form.errors.member_id || form.errors.insurance_company_id" class="text-xs text-red-600 mt-2">
+                        {{ form.errors.member_id || form.errors.insurance_company_id }}
+                    </p>
+
+                    <div class="flex justify-end gap-2 mt-5">
+                        <button type="button" @click="showAdd = false" class="px-4 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-100">{{ isRtl ? 'إلغاء' : 'Cancel' }}</button>
+                        <button type="button" @click="submitAdd" :disabled="!selectedPatient || !form.insurance_company_id || !form.member_id || form.processing"
+                            class="px-4 py-2 rounded-lg bg-[#1B365D] text-white text-sm font-semibold disabled:opacity-50">
+                            {{ form.processing ? (isRtl ? 'جارٍ الحفظ…' : 'Saving…') : (isRtl ? 'حفظ' : 'Save') }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </Transition>
+
         <!-- Pagination -->
         <div v-if="insurances.last_page > 1" class="flex justify-center gap-1 mt-6">
             <Link v-for="link in insurances.links" :key="link.label" :href="link.url || '#'"
@@ -193,4 +387,6 @@ function fmt(n) {
 @media (prefers-reduced-motion: reduce) {
     .lst-row { animation: none !important; }
 }
+.ins-modal-enter-active, .ins-modal-leave-active { transition: opacity .2s ease; }
+.ins-modal-enter-from, .ins-modal-leave-to { opacity: 0; }
 </style>

@@ -1055,6 +1055,7 @@ Route::middleware(['admin.auth', 'branch.context'])->group(function () {
 
         // Patient Insurances
         Route::get('/insurance/patient-insurances', [PatientInsuranceController::class, 'index'])->name('admin.insurance.patient-insurances.index')->middleware('permission:patients.view');
+        Route::post('/insurance/patient-insurances/ocr', [PatientInsuranceController::class, 'ocr'])->name('admin.patient-insurances.ocr')->middleware('permission:patients.update');
         Route::post('/patients/{patient}/insurances', [PatientInsuranceController::class, 'storeForPatient'])->name('admin.patient-insurances.store')->middleware('permission:patients.update');
         Route::post('/patient-insurances/{insurance}/update', [PatientInsuranceController::class, 'update'])->name('admin.patient-insurances.update')->middleware('permission:patients.update');
         Route::post('/patient-insurances/{insurance}/verify', [PatientInsuranceController::class, 'verify'])->name('admin.patient-insurances.verify')->middleware('permission:patients.update');
