@@ -236,7 +236,7 @@ function formatDelay(minutes) {
 
         <ConfirmModal v-if="deleteModal"
             :show="deleteModal"
-            title="Delete Sequence"
+            :title="$t('a_delete_sequence')"
             message="Are you sure? All active enrollments will be cancelled."
             confirm-text="Delete"
             @confirm="performDelete"

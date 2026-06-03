@@ -144,7 +144,7 @@ function applicableCount(code) {
                                 <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center space-x-2">
                                         <span class="text-sm font-mono font-semibold" style="color: #C4A265;">{{ code.code }}</span>
-                                        <span v-if="code.show_on_website" class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-slate-100 text-[#1B365D]" title="Shown as website popup">
+                                        <span v-if="code.show_on_website" class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-slate-100 text-[#1B365D]" :title="t('a_shown_as_popup')">
                                             <svg class="w-3 h-3 mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
                                             {{ $t('a_popup') }}
                                         </span>

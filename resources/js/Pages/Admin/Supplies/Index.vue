@@ -235,7 +235,7 @@ const moduleOptions = [
                             v-if="hasActiveFilters"
                             @click="clearFilters"
                             class="px-3 py-2.5 text-sm text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-xl transition-colors"
-                            title="Clear filters"
+                            :title="t('a_clear_filters')"
                         >
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -251,7 +251,7 @@ const moduleOptions = [
                                 @click="viewMode = 'grid'"
                                 :class="viewMode === 'grid' ? 'bg-white text-[#1B365D] shadow-sm' : 'text-gray-400 hover:text-gray-600'"
                                 class="p-2 rounded-lg transition-all duration-200"
-                                title="Grid View"
+                                :title="t('a_grid_view')"
                             >
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
@@ -261,7 +261,7 @@ const moduleOptions = [
                                 @click="viewMode = 'table'"
                                 :class="viewMode === 'table' ? 'bg-white text-[#1B365D] shadow-sm' : 'text-gray-400 hover:text-gray-600'"
                                 class="p-2 rounded-lg transition-all duration-200"
-                                title="Table View"
+                                :title="t('a_table_view')"
                             >
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
@@ -522,7 +522,7 @@ const moduleOptions = [
                                                     v-if="can('supplies.view')"
                                                     :href="`/admin/supplies/${supply.id}/transactions`"
                                                     class="p-2 rounded-lg text-[#1B365D] hover:bg-slate-50 transition-colors duration-200"
-                                                    title="View"
+                                                    :title="t('a_view')"
                                                 >
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -533,7 +533,7 @@ const moduleOptions = [
                                                     v-if="can('supplies.update')"
                                                     :href="`/admin/supplies/${supply.id}/edit`"
                                                     class="p-2 rounded-lg text-[#1B365D] hover:bg-slate-50 transition-colors duration-200"
-                                                    title="Edit"
+                                                    :title="t('a_edit')"
                                                 >
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -543,7 +543,7 @@ const moduleOptions = [
                                                     v-if="can('supplies.delete')"
                                                     @click="confirmDelete(supply)"
                                                     class="p-2 rounded-lg text-red-600 hover:bg-red-50 transition-colors duration-200"
-                                                    title="Delete"
+                                                    :title="t('a_delete')"
                                                 >
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />

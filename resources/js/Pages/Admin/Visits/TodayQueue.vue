@@ -482,7 +482,7 @@ onUnmounted(() => {
                                                     <span v-if="getDentalDescription(visit)" class="text-[10px] font-medium text-[#1B365D]">{{ getDentalDescription(visit) }}</span>
                                                     <span v-if="visit.service" class="tq-visit-service">{{ $localized(visit.service, 'name') }}</span>
                                                     <span v-if="visit.session_number" class="tq-visit-session">#{{ visit.session_number }}</span>
-                                                    <span v-if="visit.package_bundle_booking_id" class="tq-visit-bundle-badge" title="Package Bundle">
+                                                    <span v-if="visit.package_bundle_booking_id" class="tq-visit-bundle-badge" :title="$t('a_package_bundle')">
                                                         <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
                                                         {{ $t('a_bundle') }}
                                                     </span>
