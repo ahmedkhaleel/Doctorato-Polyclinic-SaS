@@ -3,8 +3,10 @@ import { ref, watch, computed } from 'vue';
 import { Link, router, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 const { can } = usePermissions();
+const { confirm } = useConfirm();
 
 const page = usePage();
 const locale = computed(() => page.props.locale || 'ar');
@@ -87,9 +89,12 @@ watch(moduleFilter, () => {
 });
 
 function deleteVisit(id) {
-    if (window.confirm('Are you sure you want to delete this visit? This action cannot be undone.')) {
+    confirm({
+        title: isRtl.value ? 'حذف الزيارة' : 'Delete visit',
+        message: isRtl.value ? 'سيتم حذف هذه الزيارة. لا يمكن التراجع عن هذا الإجراء.' : 'This visit will be deleted. This action cannot be undone.',
+    }, () => {
         router.post(`/admin/visits/${id}/delete`);
-    }
+    });
 }
 
 const statusConfig = {

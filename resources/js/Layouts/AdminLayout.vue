@@ -11,6 +11,7 @@ import NotificationBell from '@/Components/Admin/NotificationBell.vue';
 import BranchSwitcher from '@/Components/BranchSwitcher.vue';
 import AdminToastNotification from '@/Components/Admin/AdminToastNotification.vue';
 import CommandPalette from '@/Components/Admin/CommandPalette.vue';
+import GlobalConfirmDialog from '@/Components/Admin/GlobalConfirmDialog.vue';
 import ChatIcon from '@/Components/Chat/ChatIcon.vue';
 import ChatToast from '@/Components/Chat/ChatToast.vue';
 
@@ -919,6 +920,9 @@ function logout()        { router.post('/admin/logout'); }
 
         <!-- Chat Toast Notifications -->
         <ChatToast panelPrefix="admin" :accentColor="'var(--brand-primary)'" />
+
+        <!-- Global branded confirm dialog (replaces native window.confirm) -->
+        <GlobalConfirmDialog />
     </div>
     <AttendanceReminder />
 </template>

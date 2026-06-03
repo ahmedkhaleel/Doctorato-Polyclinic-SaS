@@ -3,10 +3,12 @@ import { ref, watch, computed, onMounted } from 'vue';
 import { Link, router, useForm, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 defineOptions({ layout: AdminLayout });
 
 const { can } = usePermissions();
+const { confirm } = useConfirm();
 const page = usePage();
 const isRtl = computed(() => (page.props.dir || 'rtl') === 'rtl');
 
@@ -76,9 +78,9 @@ function submit() {
 
 function deleteMedication(med) {
     const msg = isRtl.value ? 'هل أنت متأكد من حذف هذا الدواء؟' : 'Are you sure you want to delete this medication?';
-    if (window.confirm(msg)) {
+    confirm(msg, () => {
         router.post(`/admin/medications/${med.id}/delete`);
-    }
+    });
 }
 
 /* ── Animation ────────────────────────────────────────── */

@@ -5,8 +5,10 @@ import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
 import { useCurrency } from '@/Composables/useCurrency.js';
 import { useLocale } from '@/Composables/useLocale.js';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 const { can } = usePermissions();
+const { confirm } = useConfirm();
 const { t } = useLocale();
 
 const page = usePage();
@@ -52,9 +54,9 @@ watch([categoryFilter, dateFrom, dateTo], () => {
 });
 
 function deleteExpense(id) {
-    if (window.confirm(t('a_confirm_delete_expense'))) {
+    confirm(t('a_confirm_delete_expense'), () => {
         router.post(`/admin/expenses/${id}/delete`);
-    }
+    });
 }
 
 function formatDate(date) {

@@ -5,8 +5,10 @@ import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
 import { useCurrency } from '@/Composables/useCurrency.js';
 import { useLocale } from '@/Composables/useLocale.js';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 const { can } = usePermissions();
+const { confirm } = useConfirm();
 const { t } = useLocale();
 const { formatCurrency, currencyCode } = useCurrency();
 
@@ -58,9 +60,9 @@ watch([dateFrom, dateTo, moduleFilter], () => {
 });
 
 function deletePayment(id) {
-    if (window.confirm(t('a_confirm_delete_payment'))) {
+    confirm(t('a_confirm_delete_payment'), () => {
         router.post(`/admin/payments/${id}/delete`);
-    }
+    });
 }
 
 function formatDate(date) {

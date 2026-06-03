@@ -2,8 +2,11 @@
 import AdminLayout from '@/Layouts/AdminLayout.vue'
 import { ref, computed, onMounted } from 'vue'
 import { router, Link, usePage } from '@inertiajs/vue3'
+import { useConfirm } from '@/Composables/useConfirm.js'
 
 defineOptions({ layout: AdminLayout })
+
+const { confirm } = useConfirm()
 
 const props = defineProps({ suppliers: Object, filters: Object })
 
@@ -39,9 +42,9 @@ function submit() {
 }
 
 function remove(s) {
-    if (confirm(isRtl.value ? 'هل أنت متأكد من حذف هذا المورد؟' : 'Are you sure you want to delete this supplier?')) {
+    confirm(isRtl.value ? 'هل أنت متأكد من حذف هذا المورد؟' : 'Are you sure you want to delete this supplier?', () => {
         router.post(`/admin/suppliers/${s.id}/delete`)
-    }
+    })
 }
 
 function displayName(s) {

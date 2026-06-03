@@ -4,8 +4,10 @@ import { Link, router, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
 import { useCurrency } from '@/Composables/useCurrency.js';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 const { can } = usePermissions();
+const { confirm } = useConfirm();
 const { formatCurrency, currencyCode } = useCurrency();
 
 const page = usePage();
@@ -59,9 +61,12 @@ watch([statusFilter, moduleFilter, dateFrom, dateTo], () => {
 });
 
 function deleteInvoice(id) {
-    if (window.confirm('Are you sure you want to delete this invoice? This action cannot be undone.')) {
+    confirm({
+        title: isRtl.value ? 'حذف الفاتورة' : 'Delete invoice',
+        message: isRtl.value ? 'سيتم حذف هذه الفاتورة. لا يمكن التراجع عن هذا الإجراء.' : 'This invoice will be deleted. This action cannot be undone.',
+    }, () => {
         router.post(`/admin/invoices/${id}/delete`);
-    }
+    });
 }
 
 function formatDate(date) {

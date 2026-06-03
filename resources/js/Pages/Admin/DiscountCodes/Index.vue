@@ -5,8 +5,10 @@ import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
 import { useCurrency } from '@/Composables/useCurrency.js';
 import { useLocale } from '@/Composables/useLocale.js';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 const { can } = usePermissions();
+const { confirm } = useConfirm();
 const { t } = useLocale();
 const { currencyCode } = useCurrency();
 
@@ -48,9 +50,9 @@ function filterByStatus(status) {
 }
 
 function deleteCode(id) {
-    if (window.confirm(t('a_confirm_delete_discount'))) {
+    confirm(t('a_confirm_delete_discount'), () => {
         router.post(`/admin/discount-codes/${id}/delete`);
-    }
+    });
 }
 
 function formatDate(date) {
