@@ -16,6 +16,15 @@
 >   (أُضيف `VisitController@destroy` + راوت `admin.visits.destroy`)، أنيميشن صفوف للثلاثة،
 >   واختبارات CRUD حذف soft-delete للثلاثة.
 > - ✅ تَحقّق: **الأطباء** (Doctors/Index) و**CRM/Leads** مطابقان بالفعل (أنيميشن غني + راوتات حذف موجودة + اختبار حذف للأطباء).
+> - ✅ المرحلة 2 — **المخزون**: PurchaseOrders أنيميشن صفوف؛ البقية مطابقة.
+> - ✅ المرحلة 2 — **الموارد البشرية (HR) كاملة**: Employees/Departments/Shifts/Penalties/
+>   Advances/Leaves/Attendance كلها بأكشنات موصولة + اختبارات (أُضيف اختبار حذف الحضور)؛
+>   و**أُنشئت مجموعة اختبار Payroll كاملة** (كانت بلا أي تغطية — توليد/اعتماد/صرف/جماعي).
+> - ✅ اتساق الأنيميشن: ظهور صفوف متدرّج لكل جداول القوائم (≈40 صفحة).
+> **🔎 بند مكتشَف (Backlog منفصل):** عشرات متحكّمات الأدمن بلا ملف اختبار مخصّص (بعضها
+>   مغطّى ضمنيًا عبر اختبارات التدفّق). أولوية مقترحة للأعلى قيمة ماليًا/سريريًا:
+>   InsuranceClaim، PackageBundleBooking، MarketerCommission، DoctorPayout، Cosmetic/Dental
+>   events. هذا توسيع تغطية اختبارات (workstream مستقل عن تدقيق الواجهة).
 > **الخطوة التالية مباشرةً:** استكمال المرحلة 1 للصفحات الفرعية المتبقّية بمعيار §2 الكامل +
 >   تحليل UX + CRUD §2-أ: تفاصيل المرضى/الزيارات/الحجوزات (Show)، Doctors/Create/Edit،
 >   CRM (Dashboard/Calendar/Reports/Settings/Campaigns/Sources/Templates/…)، ثم **المراحل 2–5**
