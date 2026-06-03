@@ -61,7 +61,7 @@ const statuses = computed(() => [
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-50">
-                        <tr v-for="p in pregnancies.data" :key="p.id" class="hover:bg-rose-50/30">
+                        <tr v-for="(p, i) in pregnancies.data" :key="p.id" class="lst-row hover:bg-rose-50/30" :style="{ '--row-i': i }">
                             <td class="px-4 py-3">
                                 <div class="font-medium text-gray-800">{{ p.patient?.full_name }}</div>
                                 <div class="text-xs text-gray-400">{{ p.patient?.phone }}</div>
@@ -87,3 +87,17 @@ const statuses = computed(() => [
         </div>
     </AdminLayout>
 </template>
+
+<style scoped>
+.lst-row {
+    animation: lstRowIn 0.4s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    animation-delay: calc(var(--row-i, 0) * 35ms);
+}
+@keyframes lstRowIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .lst-row { animation: none !important; }
+}
+</style>

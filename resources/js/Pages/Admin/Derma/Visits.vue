@@ -72,7 +72,7 @@ function fmt(d) { if (!d) return '-'; return new Date(d).toLocaleDateString(isRt
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100">
-                        <tr v-for="v in visits.data" :key="v.id" class="hover:bg-[#C4A265]/5 transition">
+                        <tr v-for="(v, i) in visits.data" :key="v.id" class="lst-row hover:bg-[#C4A265]/5 transition" :style="{ '--row-i': i }">
                             <td class="px-5 py-3 text-slate-700">{{ fmt(v.visit_date) }}</td>
                             <td class="px-5 py-3 font-medium text-slate-800">{{ v.patient?.full_name || '-' }}</td>
                             <td class="px-5 py-3 text-slate-600 hidden md:table-cell">{{ v.doctor?.name_ar || v.doctor?.name_en_ar || v.doctor?.name_ar || v.doctor?.name_en_en || '-' }}</td>
@@ -93,3 +93,17 @@ function fmt(d) { if (!d) return '-'; return new Date(d).toLocaleDateString(isRt
         </div>
     </div>
 </template>
+
+<style scoped>
+.lst-row {
+    animation: lstRowIn 0.4s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    animation-delay: calc(var(--row-i, 0) * 35ms);
+}
+@keyframes lstRowIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .lst-row { animation: none !important; }
+}
+</style>

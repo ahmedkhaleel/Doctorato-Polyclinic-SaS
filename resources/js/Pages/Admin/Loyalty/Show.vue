@@ -134,7 +134,7 @@ function typeColor(t) {
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-50">
-                    <tr v-for="r in transactions.data" :key="r.id" class="hover:bg-gray-50/50">
+                    <tr v-for="(r, i) in transactions.data" :key="r.id" class="lst-row hover:bg-gray-50/50" :style="{ '--row-i': i }">
                         <td class="px-4 py-3">
                             <span :class="typeColor(r.type)" class="text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">{{ typeLabel(r.type) }}</span>
                         </td>
@@ -167,3 +167,17 @@ function typeColor(t) {
         </div>
     </div>
 </template>
+
+<style scoped>
+.lst-row {
+    animation: lstRowIn 0.4s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    animation-delay: calc(var(--row-i, 0) * 35ms);
+}
+@keyframes lstRowIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .lst-row { animation: none !important; }
+}
+</style>

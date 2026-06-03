@@ -193,7 +193,7 @@ watch([() => form.start_date, () => form.end_date], ([s, e]) => {
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
-                        <tr v-for="cert in certificates.data" :key="cert.id" class="hover:bg-gray-50/50">
+                        <tr v-for="(cert, i) in certificates.data" :key="cert.id" class="lst-row hover:bg-gray-50/50" :style="{ '--row-i': i }">
                             <td class="px-4 py-3 text-sm font-mono text-[#1B365D]">{{ cert.certificate_number }}</td>
                             <td class="px-4 py-3">
                                 <div class="text-sm font-medium text-gray-900">{{ cert.patient?.full_name }}</div>
@@ -359,3 +359,17 @@ watch([() => form.start_date, () => form.end_date], ([s, e]) => {
         </Teleport>
     </AdminLayout>
 </template>
+
+<style scoped>
+.lst-row {
+    animation: lstRowIn 0.4s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    animation-delay: calc(var(--row-i, 0) * 35ms);
+}
+@keyframes lstRowIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .lst-row { animation: none !important; }
+}
+</style>

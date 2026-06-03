@@ -110,7 +110,7 @@ function fmt(n) {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="ins in insurances.data" :key="ins.id" class="border-t border-gray-50 hover:bg-gray-50/50" :class="{ 'opacity-60': !ins.is_active }">
+                    <tr v-for="(ins, i) in insurances.data" :key="ins.id" class="lst-row border-t border-gray-50 hover:bg-gray-50/50" :class="{ 'opacity-60': !ins.is_active }" :style="{ '--row-i': i }">
                         <td class="px-4 py-3">
                             <div class="font-semibold text-gray-800">{{ ins.patient?.full_name }}</div>
                             <div class="text-xs text-gray-400 font-mono">{{ ins.patient?.file_number }}</div>
@@ -180,3 +180,17 @@ function fmt(n) {
         </div>
     </div>
 </template>
+
+<style scoped>
+.lst-row {
+    animation: lstRowIn 0.4s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    animation-delay: calc(var(--row-i, 0) * 35ms);
+}
+@keyframes lstRowIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .lst-row { animation: none !important; }
+}
+</style>

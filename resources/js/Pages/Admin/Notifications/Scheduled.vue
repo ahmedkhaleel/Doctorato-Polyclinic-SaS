@@ -102,7 +102,7 @@ function cancel(id) {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="n in scheduled.data" :key="n.id" class="border-b border-gray-50">
+                        <tr v-for="(n, i) in scheduled.data" :key="n.id" class="lst-row border-b border-gray-50" :style="{ '--row-i': i }">
                             <td class="px-4 py-3 font-medium text-gray-800">
                                 {{ n.event_key }}
                                 <span v-if="n.reason" class="block text-[11px] text-gray-400">{{ n.reason }}</span>
@@ -140,3 +140,17 @@ function cancel(id) {
         </div>
     </AdminLayout>
 </template>
+
+<style scoped>
+.lst-row {
+    animation: lstRowIn 0.4s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    animation-delay: calc(var(--row-i, 0) * 35ms);
+}
+@keyframes lstRowIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .lst-row { animation: none !important; }
+}
+</style>

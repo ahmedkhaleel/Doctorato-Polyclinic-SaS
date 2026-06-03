@@ -60,7 +60,7 @@ function t(en, ar) { return isRtl.value ? ar : en; }
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100">
-                        <tr v-for="p in patients.data" :key="p.id" class="hover:bg-[#C4A265]/5 transition">
+                        <tr v-for="(p, i) in patients.data" :key="p.id" class="lst-row hover:bg-[#C4A265]/5 transition" :style="{ '--row-i': i }">
                             <td class="px-5 py-3 font-medium text-slate-800">{{ p.full_name }}</td>
                             <td class="px-5 py-3 text-slate-600 hidden sm:table-cell">{{ p.phone || '-' }}</td>
                             <td class="px-5 py-3 text-slate-600 hidden md:table-cell">{{ p.file_number || '-' }}</td>
@@ -81,3 +81,17 @@ function t(en, ar) { return isRtl.value ? ar : en; }
         </div>
     </div>
 </template>
+
+<style scoped>
+.lst-row {
+    animation: lstRowIn 0.4s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    animation-delay: calc(var(--row-i, 0) * 35ms);
+}
+@keyframes lstRowIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .lst-row { animation: none !important; }
+}
+</style>

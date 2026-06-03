@@ -106,7 +106,7 @@ const classColors = {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="plan in plans.data" :key="plan.id" class="border-t border-gray-50 hover:bg-gray-50/50">
+                    <tr v-for="(plan, i) in plans.data" :key="plan.id" class="lst-row border-t border-gray-50 hover:bg-gray-50/50" :style="{ '--row-i': i }">
                         <td class="px-4 py-3">
                             <div class="font-semibold text-gray-800">{{ isRtl ? plan.name_ar : plan.name_en }}</div>
                             <div v-if="plan.plan_code" class="text-xs text-gray-400 font-mono">{{ plan.plan_code }}</div>
@@ -149,3 +149,17 @@ const classColors = {
         </div>
     </div>
 </template>
+
+<style scoped>
+.lst-row {
+    animation: lstRowIn 0.4s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    animation-delay: calc(var(--row-i, 0) * 35ms);
+}
+@keyframes lstRowIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .lst-row { animation: none !important; }
+}
+</style>

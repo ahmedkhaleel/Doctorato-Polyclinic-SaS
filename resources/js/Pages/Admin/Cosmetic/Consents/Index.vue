@@ -97,7 +97,7 @@ function fmt(d) { if (!d) return '-'; return new Date(d).toLocaleDateString(isRt
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100">
-                        <tr v-for="c in consents.data" :key="c.id" class="hover:bg-[#C4A265]/5 transition">
+                        <tr v-for="(c, i) in consents.data" :key="c.id" class="lst-row hover:bg-[#C4A265]/5 transition" :style="{ '--row-i': i }">
                             <td class="px-5 py-3 font-medium text-slate-800">{{ c.patient?.full_name || '-' }}</td>
                             <td class="px-5 py-3 hidden md:table-cell text-slate-600">{{ c.procedure?.name_ar || '-' }}</td>
                             <td class="px-5 py-3 hidden lg:table-cell text-slate-600">{{ fmt(c.signed_at) }}</td>
@@ -145,3 +145,17 @@ function fmt(d) { if (!d) return '-'; return new Date(d).toLocaleDateString(isRt
         </div>
     </div>
 </template>
+
+<style scoped>
+.lst-row {
+    animation: lstRowIn 0.4s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    animation-delay: calc(var(--row-i, 0) * 35ms);
+}
+@keyframes lstRowIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .lst-row { animation: none !important; }
+}
+</style>

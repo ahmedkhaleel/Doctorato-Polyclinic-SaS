@@ -97,7 +97,7 @@ function t(en, ar) { return isRtl.value ? ar : en; }
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100">
-                        <tr v-for="p in packages.data" :key="p.id" class="hover:bg-[#C4A265]/5 transition">
+                        <tr v-for="(p, i) in packages.data" :key="p.id" class="lst-row hover:bg-[#C4A265]/5 transition" :style="{ '--row-i': i }">
                             <td class="px-5 py-3 font-medium text-slate-800">{{ isRtl ? p.name_ar : (p.name_en || p.name_ar) }}</td>
                             <td class="px-5 py-3 hidden md:table-cell text-slate-600">{{ p.procedure?.name_ar || '-' }}</td>
                             <td class="px-5 py-3 hidden lg:table-cell text-slate-600">{{ p.total_sessions }}</td>
@@ -162,3 +162,17 @@ function t(en, ar) { return isRtl.value ? ar : en; }
         </div>
     </div>
 </template>
+
+<style scoped>
+.lst-row {
+    animation: lstRowIn 0.4s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    animation-delay: calc(var(--row-i, 0) * 35ms);
+}
+@keyframes lstRowIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .lst-row { animation: none !important; }
+}
+</style>

@@ -67,7 +67,7 @@ const tabs = [
                     </thead>
                     <tbody>
                         <tr v-if="logs.data.length === 0"><td colspan="7" class="text-center text-gray-400 py-8">{{ t('لا توجد سجلات.', 'No logs yet.') }}</td></tr>
-                        <tr v-for="log in logs.data" :key="log.id" class="border-t border-gray-100">
+                        <tr v-for="(log, i) in logs.data" :key="log.id" class="lst-row border-t border-gray-100" :style="{ '--row-i': i }">
                             <td class="px-4 py-2 text-gray-500 whitespace-nowrap">{{ new Date(log.created_at).toLocaleString() }}</td>
                             <td class="px-4 py-2 font-mono">{{ log.feature }}</td>
                             <td class="px-4 py-2 text-gray-600">{{ log.model || '—' }}</td>
@@ -89,3 +89,17 @@ const tabs = [
         </div>
     </AdminLayout>
 </template>
+
+<style scoped>
+.lst-row {
+    animation: lstRowIn 0.4s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    animation-delay: calc(var(--row-i, 0) * 35ms);
+}
+@keyframes lstRowIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .lst-row { animation: none !important; }
+}
+</style>
