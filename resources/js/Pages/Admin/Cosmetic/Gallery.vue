@@ -2,9 +2,11 @@
 import { ref, computed, watch } from 'vue';
 import { usePage, router, useForm } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 defineOptions({ layout: AdminLayout });
 
+const { confirm } = useConfirm();
 const page = usePage();
 const isRtl = computed(() => (page.props.dir || 'rtl') === 'rtl');
 
@@ -25,8 +27,9 @@ function submit() {
     form.post('/admin/cosmetic/gallery', { preserveScroll: true, onSuccess: () => { showUpload.value = false; form.reset(); } });
 }
 function remove(p) {
-    if (!confirm(isRtl.value ? 'حذف الصورة؟' : 'Delete photo?')) return;
-    router.delete(`/admin/cosmetic/gallery/${p.id}`, { preserveScroll: true });
+    confirm(isRtl.value ? 'حذف الصورة؟' : 'Delete photo?', () => {
+        router.delete(`/admin/cosmetic/gallery/${p.id}`, { preserveScroll: true });
+    });
 }
 function t(en, ar) { return isRtl.value ? ar : en; }
 </script>

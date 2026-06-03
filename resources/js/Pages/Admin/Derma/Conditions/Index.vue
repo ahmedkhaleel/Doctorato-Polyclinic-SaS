@@ -2,9 +2,11 @@
 import { ref, computed, watch } from 'vue';
 import { Link, usePage, router, useForm } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 defineOptions({ layout: AdminLayout });
 
+const { confirm } = useConfirm();
 const page = usePage();
 const isRtl = computed(() => (page.props.dir || 'rtl') === 'rtl');
 
@@ -45,8 +47,9 @@ function submit() {
     form.post(url, { preserveScroll: true, onSuccess: () => { showModal.value = false; router.reload({ only: ['conditions'] }); } });
 }
 function remove(c) {
-    if (!confirm(isRtl.value ? 'تأكيد الحذف؟' : 'Confirm delete?')) return;
-    router.delete(`/admin/derma/conditions/${c.id}`, { preserveScroll: true });
+    confirm(isRtl.value ? 'تأكيد الحذف؟' : 'Confirm delete?', () => {
+        router.delete(`/admin/derma/conditions/${c.id}`, { preserveScroll: true });
+    });
 }
 
 function t(en, ar) { return isRtl.value ? ar : en; }

@@ -3,9 +3,11 @@ import { ref, computed, watch } from 'vue';
 import { usePage, router, useForm } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import BoolIcon from '@/Components/Ui/BoolIcon.vue';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 defineOptions({ layout: AdminLayout });
 
+const { confirm } = useConfirm();
 const page = usePage();
 const isRtl = computed(() => (page.props.dir || 'rtl') === 'rtl');
 
@@ -43,8 +45,9 @@ function submit() {
     form.post(url, { preserveScroll: true, onSuccess: () => { showModal.value = false; router.reload({ only: ['procedures'] }); } });
 }
 function remove(p) {
-    if (!confirm(isRtl.value ? 'تأكيد الحذف؟' : 'Confirm delete?')) return;
-    router.delete(`/admin/cosmetic/procedures/${p.id}`, { preserveScroll: true });
+    confirm(isRtl.value ? 'تأكيد الحذف؟' : 'Confirm delete?', () => {
+        router.delete(`/admin/cosmetic/procedures/${p.id}`, { preserveScroll: true });
+    });
 }
 function t(en, ar) { return isRtl.value ? ar : en; }
 </script>
