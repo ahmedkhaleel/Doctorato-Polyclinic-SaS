@@ -137,7 +137,7 @@ const recurringLabels = computed(() => ({
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            <tr v-for="expense in expenses.data" :key="expense.id" class="hover:bg-gray-50">
+                            <tr v-for="(expense, i) in expenses.data" :key="expense.id" class="lst-row hover:bg-gray-50" :style="{ '--row-i': i }">
                                 <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ formatDate(expense.expense_date) }}</td>
                                 <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ expense.category?.name_en || '-' }}</td>
                                 <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">{{ expense.item?.name_en || '-' }}</td>
@@ -182,3 +182,17 @@ const recurringLabels = computed(() => ({
         </div>
     </AdminLayout>
 </template>
+
+<style scoped>
+.lst-row {
+    animation: lstRowIn 0.4s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    animation-delay: calc(var(--row-i, 0) * 35ms);
+}
+@keyframes lstRowIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .lst-row { animation: none !important; }
+}
+</style>

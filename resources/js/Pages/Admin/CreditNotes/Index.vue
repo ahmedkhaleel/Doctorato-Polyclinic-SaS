@@ -194,7 +194,7 @@ function formatDate(d) {
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-50">
-                    <tr v-for="cn in creditNotes.data" :key="cn.id" class="hover:bg-gray-50/50">
+                    <tr v-for="(cn, i) in creditNotes.data" :key="cn.id" class="lst-row hover:bg-gray-50/50" :style="{ '--row-i': i }">
                         <td class="px-4 py-3"><span class="font-mono text-xs font-medium text-[#1B365D]">{{ cn.credit_note_number }}</span></td>
                         <td class="px-4 py-3">
                             <div class="font-medium text-gray-800">{{ cn.patient?.full_name }}</div>
@@ -328,3 +328,17 @@ function formatDate(d) {
         </Teleport>
     </div>
 </template>
+
+<style scoped>
+.lst-row {
+    animation: lstRowIn 0.4s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    animation-delay: calc(var(--row-i, 0) * 35ms);
+}
+@keyframes lstRowIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .lst-row { animation: none !important; }
+}
+</style>
