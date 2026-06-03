@@ -180,9 +180,23 @@ class HandleInertiaRequests extends Middleware
         }
 
         try {
+            if (! app(\App\Services\Ai\AiManager::class)->isReady()) {
+                return $off;
+            }
+
             $role = $user->role;
+
+            // Patient accounts have no AI permission — expose only the curated
+            // patient-facing features (never clinical/admin), gated by their flags.
+            if ($role && $role->name === 'patient') {
+                $patientFacing = ['patient_assistant'];
+                $enabled = array_values(array_intersect($patientFacing, \App\Models\AiFeatureFlag::enabledKeys()));
+
+                return $enabled ? ['enabled' => true, 'features' => $enabled] : $off;
+            }
+
             $canUse = $role && ($role->hasPermission('ai.view') || $role->hasPermission('ai.doctor'));
-            if (! $canUse || ! app(\App\Services\Ai\AiManager::class)->isReady()) {
+            if (! $canUse) {
                 return $off;
             }
 

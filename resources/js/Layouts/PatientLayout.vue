@@ -58,6 +58,7 @@ function switchLocale() {
 }
 
 const modules = computed(() => page.props.modules || {});
+const aiFeatures = computed(() => page.props.ai?.features || []);
 const patient = computed(() => page.props.auth?.patient);
 const userName = computed(() => patient.value?.full_name || 'Patient');
 const fileNumber = computed(() => patient.value?.file_number || '');
@@ -71,6 +72,7 @@ const navGroups = computed(() => [
         items: [
             { label: t('p_dashboard'), href: lp(''), icon: 'grid' },
             { label: isRtl.value ? 'سجل النشاط' : 'Activity', href: lp('/activity'), icon: 'clipboard' },
+            { label: isRtl.value ? 'المساعد الذكي' : 'AI Assistant', href: lp('/assistant'), icon: 'sparkles', aiFeature: 'patient_assistant' },
         ],
     },
     {
@@ -167,12 +169,19 @@ const navGroups = computed(() => [
 ]);
 
 const filteredGroups = computed(() => {
-    return navGroups.value.filter(g => {
-        if (g.moduleKey) {
-            return modules.value[g.moduleKey]?.enabled === true;
-        }
-        return true;
-    });
+    return navGroups.value
+        .filter(g => {
+            if (g.moduleKey) {
+                return modules.value[g.moduleKey]?.enabled === true;
+            }
+            return true;
+        })
+        // Hide items gated by an AI feature flag that isn't enabled.
+        .map(g => ({
+            ...g,
+            items: g.items.filter(i => !i.aiFeature || aiFeatures.value.includes(i.aiFeature)),
+        }))
+        .filter(g => g.items.length > 0);
 });
 
 /* ── Collapsible Groups State ──────────────────────────── */
