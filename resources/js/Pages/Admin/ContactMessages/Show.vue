@@ -3,8 +3,10 @@ import { computed } from 'vue';
 import { Link, router, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { useLocale } from '@/Composables/useLocale.js';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 const { t } = useLocale();
+const { confirm } = useConfirm();
 
 const page = usePage();
 const locale = computed(() => page.props.locale || 'ar');
@@ -15,9 +17,9 @@ const props = defineProps({
 });
 
 function deleteMessage() {
-    if (window.confirm(t('a_confirm_delete_message'))) {
+    confirm(t('a_confirm_delete_message'), () => {
         router.post(`/admin/contact-messages/${props.message.id}/delete`);
-    }
+    });
 }
 
 function formatDate(dateString) {

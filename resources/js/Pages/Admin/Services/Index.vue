@@ -4,9 +4,11 @@ import { Link, router, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
 import { useLocale } from '@/Composables/useLocale.js';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 const { can } = usePermissions();
 const { t } = useLocale();
+const { confirm } = useConfirm();
 const page = usePage();
 const locale = computed(() => page.props.locale || 'ar');
 const isRtl = computed(() => (page.props.dir || 'rtl') === 'rtl');
@@ -57,9 +59,9 @@ watch(moduleFilter, () => {
 });
 
 function deleteService(id) {
-    if (window.confirm(t('a_confirm_delete_service'))) {
+    confirm(t('a_confirm_delete_service'), () => {
         router.post(`/admin/services/${id}/delete`);
-    }
+    });
 }
 
 const statusColors = {

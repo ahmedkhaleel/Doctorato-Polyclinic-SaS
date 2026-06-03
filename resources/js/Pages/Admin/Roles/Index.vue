@@ -4,9 +4,11 @@ import { Link, router, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
 import { useLocale } from '@/Composables/useLocale.js';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 const { can } = usePermissions();
 const { t } = useLocale();
+const { confirm } = useConfirm();
 
 const page = usePage();
 const locale = computed(() => page.props.locale || 'ar');
@@ -94,12 +96,12 @@ function getUsersLabel(count) {
 const deletingId = ref(null);
 
 function deleteRole(id) {
-    if (window.confirm(t('a_confirm_delete_role'))) {
+    confirm(t('a_confirm_delete_role'), () => {
         deletingId.value = id;
         router.post(`/admin/roles/${id}/delete`, {
             onFinish: () => { deletingId.value = null; }
         });
-    }
+    });
 }
 </script>
 

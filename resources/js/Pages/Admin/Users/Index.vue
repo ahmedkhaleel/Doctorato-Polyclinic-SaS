@@ -4,9 +4,11 @@ import { Link, router, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
 import { useLocale } from '@/Composables/useLocale.js';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 const { can } = usePermissions();
 const { t } = useLocale();
+const { confirm } = useConfirm();
 
 const page = usePage();
 const locale = computed(() => page.props.locale || 'ar');
@@ -42,9 +44,9 @@ const rolesCount = computed(() => {
 });
 
 function deleteUser(id) {
-    if (window.confirm(t('a_confirm_delete_user'))) {
+    confirm(t('a_confirm_delete_user'), () => {
         router.post(`/admin/users/${id}/delete`);
-    }
+    });
 }
 
 function toggleActive(user) {

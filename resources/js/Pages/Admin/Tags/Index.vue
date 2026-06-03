@@ -4,9 +4,11 @@ import { Link, router, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
 import { useLocale } from '@/Composables/useLocale.js';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 const { can } = usePermissions();
 const { t } = useLocale();
+const { confirm } = useConfirm();
 
 const props = defineProps({
     tags: Object,
@@ -32,9 +34,9 @@ watch(search, (val) => {
 });
 
 function deleteTag(id) {
-    if (window.confirm(t('a_confirm_delete_tag'))) {
+    confirm(t('a_confirm_delete_tag'), () => {
         router.post(`/admin/tags/${id}/delete`);
-    }
+    });
 }
 </script>
 

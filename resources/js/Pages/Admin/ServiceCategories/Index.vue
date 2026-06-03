@@ -4,9 +4,11 @@ import { Link, router, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
 import { useLocale } from '@/Composables/useLocale.js';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 const { can } = usePermissions();
 const { t } = useLocale();
+const { confirm } = useConfirm();
 
 const props = defineProps({
     categories: Object,
@@ -58,9 +60,9 @@ watch(moduleFilter, () => {
 });
 
 function deleteCategory(id) {
-    if (window.confirm(t('a_confirm_delete_category'))) {
+    confirm(t('a_confirm_delete_category'), () => {
         router.post(`/admin/service-categories/${id}/delete`);
-    }
+    });
 }
 </script>
 

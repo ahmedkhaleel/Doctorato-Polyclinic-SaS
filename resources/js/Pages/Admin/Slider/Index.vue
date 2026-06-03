@@ -4,9 +4,11 @@ import { Link, router, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
 import { useLocale } from '@/Composables/useLocale.js';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 const { can } = usePermissions();
 const { t } = useLocale();
+const { confirm } = useConfirm();
 
 const props = defineProps({
     slides: Array,
@@ -21,9 +23,9 @@ const dragging = ref(null);
 const dragOver = ref(null);
 
 function deleteSlide(id) {
-    if (window.confirm(t('a_confirm_delete_slide'))) {
+    confirm(t('a_confirm_delete_slide'), () => {
         router.post(`/admin/slider/${id}/delete`);
-    }
+    });
 }
 
 function toggleActive(slide) {
