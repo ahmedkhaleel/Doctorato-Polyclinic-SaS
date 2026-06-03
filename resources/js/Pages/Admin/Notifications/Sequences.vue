@@ -3,12 +3,14 @@ import { ref, reactive, computed } from 'vue';
 import { usePage, router, Link } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 const props = defineProps({ sequences: Array, events: Array });
 
 const page = usePage();
 const isRtl = computed(() => (page.props.dir || 'rtl') === 'rtl');
 const t = (ar, en) => (isRtl.value ? ar : en);
+const { confirm } = useConfirm();
 const { can } = usePermissions();
 const canEdit = can('notifications.update');
 
@@ -43,7 +45,7 @@ function save() {
     router.post(url, { ...form, trigger_event: form.trigger_event || null }, { preserveScroll: true, onSuccess: () => { showForm.value = false; } });
 }
 function remove(seq) {
-    if (confirm(t('حذف السلسلة وكل تسجيلاتها؟', 'Delete sequence and all enrolments?'))) router.post(`/admin/notification-sequences/${seq.id}/delete`, {}, { preserveScroll: true });
+    confirm(t('حذف السلسلة وكل تسجيلاتها؟', 'Delete sequence and all enrolments?'), () => router.post(`/admin/notification-sequences/${seq.id}/delete`, {}, { preserveScroll: true }));
 }
 
 const enrollFor = ref(null);

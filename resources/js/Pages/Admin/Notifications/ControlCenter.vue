@@ -3,6 +3,7 @@ import { ref, reactive, computed } from 'vue';
 import { usePage, router, Link } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 const props = defineProps({
     channelKeys: Array,
@@ -19,6 +20,7 @@ const props = defineProps({
 const page = usePage();
 const isRtl = computed(() => (page.props.dir || 'rtl') === 'rtl');
 const t = (ar, en) => (isRtl.value ? ar : en);
+const { confirm } = useConfirm();
 const { can } = usePermissions();
 const canEdit = can('notifications.update');
 
@@ -108,9 +110,9 @@ function saveTemplate() {
     router.post(url, tplForm, { preserveScroll: true, onSuccess: () => (tplModal.value = false) });
 }
 function deleteTemplate(tpl) {
-    if (confirm(t('حذف هذا القالب؟', 'Delete this template?'))) {
+    confirm(t('حذف هذا القالب؟', 'Delete this template?'), () => {
         router.post(`/admin/notifications-hub/templates/${tpl.id}/delete`, {}, { preserveScroll: true });
-    }
+    });
 }
 
 // ── settings ────────────────────────────────────────────

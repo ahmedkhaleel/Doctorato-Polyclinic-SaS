@@ -4,12 +4,14 @@ import { usePage, router, Link } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import AiAssist from '@/Components/Ai/AiAssist.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 const props = defineProps({ campaigns: Array });
 
 const page = usePage();
 const isRtl = computed(() => (page.props.dir || 'rtl') === 'rtl');
 const t = (ar, en) => (isRtl.value ? ar : en);
+const { confirm } = useConfirm();
 const { can } = usePermissions();
 const canSend = can('notifications.send');
 
@@ -64,10 +66,10 @@ function resetForm() {
     audience.value = null;
 }
 function sendCampaign(c) {
-    if (confirm(t('إرسال هذه الحملة الآن؟', 'Send this campaign now?'))) router.post(`/admin/notification-campaigns/${c.id}/send`, {}, { preserveScroll: true });
+    confirm(t('إرسال هذه الحملة الآن؟', 'Send this campaign now?'), () => router.post(`/admin/notification-campaigns/${c.id}/send`, {}, { preserveScroll: true }));
 }
 function deleteCampaign(c) {
-    if (confirm(t('حذف الحملة؟', 'Delete campaign?'))) router.post(`/admin/notification-campaigns/${c.id}/delete`, {}, { preserveScroll: true });
+    confirm(t('حذف الحملة؟', 'Delete campaign?'), () => router.post(`/admin/notification-campaigns/${c.id}/delete`, {}, { preserveScroll: true }));
 }
 const fmt = (iso) => iso ? new Date(iso).toLocaleString(isRtl.value ? 'ar-EG' : 'en-GB') : '—';
 </script>

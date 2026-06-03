@@ -4,12 +4,14 @@ import { usePage, router, Link } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import AiAssist from '@/Components/Ai/AiAssist.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 const props = defineProps({ templates: Array, events: Array });
 
 const page = usePage();
 const isRtl = computed(() => (page.props.dir || 'rtl') === 'rtl');
 const t = (ar, en) => (isRtl.value ? ar : en);
+const { confirm } = useConfirm();
 const { can } = usePermissions();
 const canEdit = can('notifications.update');
 
@@ -37,7 +39,7 @@ function save() {
     router.post(url, payload, { preserveScroll: true, onSuccess: () => { showForm.value = false; } });
 }
 function remove(tpl) {
-    if (confirm(t('حذف القالب؟', 'Delete template?'))) router.post(`/admin/notifications-hub/whatsapp-templates/${tpl.id}/delete`, {}, { preserveScroll: true });
+    confirm(t('حذف القالب؟', 'Delete template?'), () => router.post(`/admin/notifications-hub/whatsapp-templates/${tpl.id}/delete`, {}, { preserveScroll: true }));
 }
 </script>
 

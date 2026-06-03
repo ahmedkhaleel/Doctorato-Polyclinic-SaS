@@ -3,12 +3,14 @@ import { ref, reactive, computed } from 'vue';
 import { usePage, router } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 const props = defineProps({ branches: Array, staff: { type: Array, default: () => [] }, doctors: { type: Array, default: () => [] } });
 
 const page = usePage();
 const isRtl = computed(() => (page.props.dir || 'rtl') === 'rtl');
 const t = (ar, en) => (isRtl.value ? ar : en);
+const { confirm } = useConfirm();
 const { can } = usePermissions();
 const canEdit = can('settings.update');
 
@@ -50,7 +52,7 @@ function save() {
     router.post(url, form, { preserveScroll: true, onSuccess: () => { showForm.value = false; } });
 }
 function deactivate(b) {
-    if (confirm(t('إيقاف هذا الفرع؟', 'Deactivate this branch?'))) router.post(`/admin/branches/${b.id}/delete`, {}, { preserveScroll: true });
+    confirm(t('إيقاف هذا الفرع؟', 'Deactivate this branch?'), () => router.post(`/admin/branches/${b.id}/delete`, {}, { preserveScroll: true }));
 }
 </script>
 

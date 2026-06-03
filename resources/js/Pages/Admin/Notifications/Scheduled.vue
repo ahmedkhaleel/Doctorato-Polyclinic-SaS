@@ -2,6 +2,7 @@
 import { reactive, computed, watch } from 'vue';
 import { usePage, router, Link } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 const props = defineProps({
     scheduled: Object,
@@ -13,6 +14,7 @@ const props = defineProps({
 const page = usePage();
 const isRtl = computed(() => (page.props.dir || 'rtl') === 'rtl');
 const t = (ar, en) => (isRtl.value ? ar : en);
+const { confirm } = useConfirm();
 
 const f = reactive({
     status: props.filters?.status || '',
@@ -41,9 +43,9 @@ const statusStyle = {
 const statusLabel = (s) => ({ pending: t('قيد الانتظار', 'Pending'), processed: t('أُرسلت', 'Processed'), cancelled: t('أُلغيت', 'Cancelled') }[s] || s);
 
 function cancel(id) {
-    if (confirm(t('إلغاء هذا الإشعار المجدول؟', 'Cancel this scheduled notification?'))) {
+    confirm(t('إلغاء هذا الإشعار المجدول؟', 'Cancel this scheduled notification?'), () => {
         router.post(`/admin/notifications-hub/scheduled/${id}/cancel`, {}, { preserveScroll: true });
-    }
+    });
 }
 </script>
 
