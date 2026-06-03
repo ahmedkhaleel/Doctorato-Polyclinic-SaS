@@ -140,4 +140,46 @@ class AdminPatientsTest extends TestCase
             'full_name' => 'Quick Patient',
         ]);
     }
+
+    /** §2-أ CRUD protocol: Delete must soft-delete the row (deleted_at set). */
+    public function test_admin_can_delete_patient_soft_delete(): void
+    {
+        $patient = new Patient(['full_name' => 'To Delete', 'phone' => '01999999999', 'gender' => 'male']);
+        $patient->file_number = Patient::generateFileNumber();
+        $patient->is_active = true;
+        $patient->save();
+
+        $this->actingAs($this->admin);
+
+        $response = $this->post("/admin/patients/{$patient->id}/delete");
+        $response->assertRedirect();
+
+        // Soft-deleted: excluded from default queries but row still present with deleted_at.
+        $this->assertSoftDeleted('patients', ['id' => $patient->id]);
+        $this->assertNull(Patient::find($patient->id));
+    }
+
+    /** §2-أ CRUD protocol: search filter narrows the index result set. */
+    public function test_patients_index_search_filter_narrows_results(): void
+    {
+        $a = new Patient(['full_name' => 'Aisha Ahmed', 'phone' => '01211111111', 'gender' => 'female']);
+        $a->file_number = Patient::generateFileNumber();
+        $a->is_active = true;
+        $a->save();
+
+        $b = new Patient(['full_name' => 'Bilal Saad', 'phone' => '01222222222', 'gender' => 'male']);
+        $b->file_number = Patient::generateFileNumber();
+        $b->is_active = true;
+        $b->save();
+
+        $this->actingAs($this->admin);
+
+        $response = $this->get('/admin/patients?search=Aisha');
+        $response->assertStatus(200);
+        $response->assertInertia(fn ($page) => $page
+            ->component('Admin/Patients/Index')
+            ->where('patients.total', 1)
+            ->where('patients.data.0.full_name', 'Aisha Ahmed')
+        );
+    }
 }

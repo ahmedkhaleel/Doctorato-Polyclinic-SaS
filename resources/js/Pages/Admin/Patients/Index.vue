@@ -2,9 +2,12 @@
 import { ref, watch, computed } from 'vue';
 import { Link, router, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import ConfirmModal from '@/Components/Admin/ConfirmModal.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
+import { useWhatsApp } from '@/Composables/useWhatsApp.js';
 
 const { can } = usePermissions();
+const { whatsappLink } = useWhatsApp();
 
 const page = usePage();
 const locale = computed(() => page.props.locale || 'ar');
@@ -40,10 +43,17 @@ function clearSearch() {
     search.value = '';
 }
 
-function deletePatient(id) {
-    if (window.confirm('Are you sure you want to delete this patient? This action cannot be undone.')) {
-        router.post(`/admin/patients/${id}/delete`);
-    }
+// Branded, bilingual delete confirmation (replaces native window.confirm).
+const deleteTarget = ref(null);
+function askDeletePatient(patient) {
+    deleteTarget.value = patient;
+}
+function confirmDeletePatient() {
+    if (!deleteTarget.value) return;
+    router.post(`/admin/patients/${deleteTarget.value.id}/delete`, {}, {
+        preserveScroll: true,
+        onFinish: () => { deleteTarget.value = null; },
+    });
 }
 
 function getPatientPhoto(patient) {
@@ -145,9 +155,10 @@ const genderConfig = {
                         </thead>
                         <tbody class="divide-y divide-gray-50">
                             <tr
-                                v-for="patient in patients.data"
+                                v-for="(patient, i) in patients.data"
                                 :key="patient.id"
-                                class="group hover:bg-gray-50/60 transition-colors duration-150"
+                                class="group pat-row hover:bg-gray-50/60 transition-colors duration-150"
+                                :style="{ '--row-i': i }"
                             >
                                 <!-- Patient -->
                                 <td class="px-4 md:px-6 py-4 whitespace-nowrap">
@@ -207,6 +218,16 @@ const genderConfig = {
                                 <!-- Actions -->
                                 <td class="px-4 md:px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center justify-center gap-1">
+                                        <!-- WhatsApp -->
+                                        <a v-if="patient.phone" :href="whatsappLink(patient.phone)" target="_blank" rel="noopener"
+                                            class="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 transition-all duration-200" :title="$t('a_whatsapp') || 'WhatsApp'">
+                                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>
+                                        </a>
+                                        <!-- Timeline -->
+                                        <Link v-if="can('patients.view')" :href="`/admin/patients/${patient.id}/timeline`"
+                                            class="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:text-[#1B365D] hover:bg-slate-50 transition-all duration-200" :title="$t('a_timeline') || 'Timeline'">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                        </Link>
                                         <!-- View -->
                                         <Link v-if="can('patients.view')" :href="`/admin/patients/${patient.id}`"
                                             class="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:bg-amber-50 transition-all duration-200" style="--tw-hover-text-opacity:1;" :title="$t('a_view')">
@@ -218,7 +239,7 @@ const genderConfig = {
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                                         </Link>
                                         <!-- Delete -->
-                                        <button v-if="can('patients.delete')" @click="deletePatient(patient.id)"
+                                        <button v-if="can('patients.delete')" @click="askDeletePatient(patient)"
                                             class="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:text-red-600 hover:bg-red-50 transition-all duration-200" :title="$t('a_delete')">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                                         </button>
@@ -269,6 +290,22 @@ const genderConfig = {
                 </div>
             </div>
         </div>
+
+        <!-- Branded, bilingual delete confirmation -->
+        <ConfirmModal
+            :show="!!deleteTarget"
+            :title="isRtl ? 'حذف المريض' : 'Delete patient'"
+            :message="deleteTarget
+                ? (isRtl
+                    ? `سيتم حذف «${deleteTarget.full_name}». لا يمكن التراجع عن هذا الإجراء.`
+                    : `«${deleteTarget.full_name}» will be deleted. This action cannot be undone.`)
+                : ''"
+            :confirm-text="isRtl ? 'حذف' : 'Delete'"
+            :cancel-text="isRtl ? 'إلغاء' : 'Cancel'"
+            confirm-color="red"
+            @confirm="confirmDeletePatient"
+            @cancel="deleteTarget = null"
+        />
     </AdminLayout>
 </template>
 
@@ -278,5 +315,18 @@ const genderConfig = {
 }
 tr:hover .hover-gold {
     color: #C4A265;
+}
+
+/* Staggered row entrance (foundational animation; honors reduced-motion) */
+.pat-row {
+    animation: patRowIn 0.4s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    animation-delay: calc(var(--row-i, 0) * 35ms);
+}
+@keyframes patRowIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .pat-row { animation: none !important; }
 }
 </style>
