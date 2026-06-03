@@ -38,7 +38,7 @@ const prescriptions = computed(() => props.patient?.prescriptions || []);
 </script>
 
 <template>
-    <AdminLayout :title="`Patient: ${patient.full_name}`">
+    <AdminLayout :title="(isRtl ? 'المريض: ' : 'Patient: ') + patient.full_name">
         <div class="space-y-6">
             <!-- Hero Header Card -->
             <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 shadow-xl transition-all duration-700"

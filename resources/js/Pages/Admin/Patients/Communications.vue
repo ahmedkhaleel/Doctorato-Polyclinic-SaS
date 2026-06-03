@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, computed } from 'vue';
+import { reactive, ref, computed } from 'vue';
 import { usePage, router, Link } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
@@ -31,19 +31,27 @@ const statusLabel = (s) => ({ queued: t('بالانتظار','Queued'), sent: t(
 
 // compose
 const compose = reactive({ channel: 'whatsapp', subject: '', body: '' });
-const sending = computed(() => false);
+const sending = ref(false);
 function sendMessage() {
-    if (!compose.body.trim()) return;
+    if (!compose.body.trim() || sending.value) return;
     router.post(`/admin/patients/${props.patient.id}/communications/send`, compose, {
         preserveScroll: true,
+        onStart: () => { sending.value = true; },
+        onFinish: () => { sending.value = false; },
         onSuccess: () => { compose.body = ''; compose.subject = ''; },
     });
 }
 
 // preferences
 const prefs = reactive({ ...props.preferences, preferred_language: props.patient.preferred_language });
+const savingPrefs = ref(false);
 function savePrefs() {
-    router.post(`/admin/patients/${props.patient.id}/communications/preferences`, prefs, { preserveScroll: true });
+    if (savingPrefs.value) return;
+    router.post(`/admin/patients/${props.patient.id}/communications/preferences`, prefs, {
+        preserveScroll: true,
+        onStart: () => { savingPrefs.value = true; },
+        onFinish: () => { savingPrefs.value = false; },
+    });
 }
 const cats = [
     { key: 'bookings', ar: 'الحجوزات', en: 'Bookings' },
@@ -113,7 +121,7 @@ const fmt = (iso) => iso ? new Date(iso).toLocaleString(isRtl.value ? 'ar-EG' : 
                             </div>
                             <input v-if="compose.channel === 'email'" v-model="compose.subject" :placeholder="t('الموضوع', 'Subject')" class="w-full rounded-lg border-gray-200 text-sm" />
                             <textarea v-model="compose.body" rows="4" :placeholder="t('اكتب رسالتك…', 'Type your message…')" class="w-full rounded-lg border-gray-200 text-sm"></textarea>
-                            <button @click="sendMessage" :disabled="!compose.body.trim()" class="w-full px-4 py-2 rounded-lg text-white text-sm font-semibold disabled:opacity-50 transition" style="background:#1B365D">{{ t('إرسال', 'Send') }}</button>
+                            <button @click="sendMessage" :disabled="!compose.body.trim() || sending" class="w-full px-4 py-2 rounded-lg text-white text-sm font-semibold disabled:opacity-50 transition" style="background:#1B365D">{{ sending ? t('جارٍ الإرسال…', 'Sending…') : t('إرسال', 'Send') }}</button>
                         </div>
                     </div>
 
@@ -137,7 +145,7 @@ const fmt = (iso) => iso ? new Date(iso).toLocaleString(isRtl.value ? 'ar-EG' : 
                                 <option value="ar">العربية</option><option value="en">English</option>
                             </select>
                         </label>
-                        <button @click="savePrefs" class="mt-3 w-full px-4 py-2 rounded-lg text-white text-sm font-semibold transition" style="background:#C4A265">{{ t('حفظ التفضيلات', 'Save Preferences') }}</button>
+                        <button @click="savePrefs" :disabled="savingPrefs" class="mt-3 w-full px-4 py-2 rounded-lg text-white text-sm font-semibold disabled:opacity-50 transition" style="background:#C4A265">{{ savingPrefs ? t('جارٍ الحفظ…', 'Saving…') : t('حفظ التفضيلات', 'Save Preferences') }}</button>
                     </div>
                 </div>
             </div>
