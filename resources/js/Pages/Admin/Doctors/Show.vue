@@ -15,9 +15,11 @@ import DonutChart from '@/Components/Admin/DonutChart.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
 import { sanitizeHtml } from '@/Composables/useSanitize';
 import { useLocale } from '@/Composables/useLocale.js';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 const { can } = usePermissions();
 const { t } = useLocale();
+const { confirm } = useConfirm();
 
 const props = defineProps({
     doctor: Object,
@@ -188,11 +190,11 @@ function submitPrescription() {
 }
 
 function deletePrescription(rxId) {
-    if (window.confirm(t('a_confirm_delete_prescription'))) {
+    confirm(t('a_confirm_delete_prescription'), () => {
         router.post(`/admin/prescriptions/${rxId}/delete`, {
             preserveScroll: true,
         });
-    }
+    });
 }
 
 const revenueChartData = computed(() =>

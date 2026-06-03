@@ -5,9 +5,11 @@ import AdminLayout from '@/Layouts/AdminLayout.vue';
 import SearchableSelect from '@/Components/Admin/SearchableSelect.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
 import { useLocale } from '@/Composables/useLocale.js';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 const { can } = usePermissions();
 const { t } = useLocale();
+const { confirm } = useConfirm();
 
 const page = usePage();
 const locale = computed(() => page.props.locale || 'ar');
@@ -71,11 +73,11 @@ function truncate(text, length = 40) {
 }
 
 function deletePrescription(rxId) {
-    if (window.confirm(t('a_confirm_delete_prescription'))) {
+    confirm(t('a_confirm_delete_prescription'), () => {
         router.post(`/admin/prescriptions/${rxId}/delete`, {
             preserveScroll: true,
         });
-    }
+    });
 }
 
 // New Prescription

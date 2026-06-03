@@ -4,10 +4,12 @@ import { Link, router, useForm, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
 import { useCurrency } from '@/Composables/useCurrency.js';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 defineOptions({ layout: AdminLayout });
 
 const { can } = usePermissions();
+const { confirm } = useConfirm();
 const { formatCurrency } = useCurrency();
 
 const page = usePage();
@@ -48,9 +50,9 @@ function submitTransaction() {
 
 // ── Delete ────────────────────────────────────────────────────────
 function deleteSupply() {
-    if (window.confirm('Are you sure you want to delete this supply item? This action cannot be undone.')) {
+    confirm(isRtl.value ? 'سيتم حذف هذا الصنف. لا يمكن التراجع عن هذا الإجراء.' : 'Are you sure you want to delete this supply item? This action cannot be undone.', () => {
         router.post(`/admin/supplies/${props.supply.id}/delete`);
-    }
+    });
 }
 
 // ── Helpers ───────────────────────────────────────────────────────

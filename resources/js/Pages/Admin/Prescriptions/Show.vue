@@ -3,8 +3,10 @@ import { ref, computed } from 'vue';
 import { Link, router, useForm, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 const { can } = usePermissions();
+const { confirm } = useConfirm();
 
 const page = usePage();
 const locale = computed(() => page.props.locale || 'ar');
@@ -64,13 +66,13 @@ function cancelEdit() {
 }
 
 function deletePrescription() {
-    if (window.confirm('Are you sure you want to delete this prescription?')) {
+    confirm(isRtl.value ? 'هل أنت متأكد من حذف هذه الروشتة؟' : 'Are you sure you want to delete this prescription?', () => {
         router.post(`/admin/prescriptions/${rx.id}/delete`, {
             onSuccess: () => {
                 window.history.back();
             },
         });
-    }
+    });
 }
 
 function formatDate(date) {

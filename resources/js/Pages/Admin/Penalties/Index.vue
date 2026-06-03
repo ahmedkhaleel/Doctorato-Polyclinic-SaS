@@ -4,8 +4,10 @@ import { Link, router, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
 import { useCurrency } from '@/Composables/useCurrency.js';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 const { can } = usePermissions();
+const { confirm } = useConfirm();
 
 const page = usePage();
 const locale = computed(() => page.props.locale || 'ar');
@@ -77,9 +79,9 @@ function submitRecord() {
 }
 
 function deleteRecord(id) {
-    if (window.confirm('Are you sure you want to delete this record?')) {
+    confirm(isRtl.value ? 'هل أنت متأكد من حذف هذا السجل؟' : 'Are you sure you want to delete this record?', () => {
         router.post(`/admin/penalties/${id}/delete`, { preserveScroll: true });
-    }
+    });
 }
 </script>
 

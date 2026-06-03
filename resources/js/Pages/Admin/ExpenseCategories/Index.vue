@@ -3,8 +3,10 @@ import { ref, computed, onMounted, Transition } from 'vue';
 import { router, useForm, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 const { can } = usePermissions();
+const { confirm } = useConfirm();
 
 const page = usePage();
 const locale = computed(() => page.props.locale || 'ar');
@@ -88,9 +90,9 @@ function submit() {
 }
 
 function deleteCategory(id) {
-    if (window.confirm(locale.value === 'ar' ? 'هل أنت متأكد من حذف هذا التصنيف؟' : 'Are you sure you want to delete this category?')) {
+    confirm(locale.value === 'ar' ? 'هل أنت متأكد من حذف هذا التصنيف؟' : 'Are you sure you want to delete this category?', () => {
         router.post(`/admin/expense-categories/${id}/delete`);
-    }
+    });
 }
 
 function getCategoryColor(index) {

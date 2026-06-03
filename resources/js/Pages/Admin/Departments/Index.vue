@@ -3,8 +3,10 @@ import { ref, computed } from 'vue';
 import { useForm, router, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 const { can } = usePermissions();
+const { confirm } = useConfirm();
 
 const page = usePage();
 const locale = computed(() => page.props.locale || 'ar');
@@ -65,9 +67,9 @@ function deleteDepartment(dept) {
         alert('Cannot delete department with existing employees.');
         return;
     }
-    if (window.confirm(`Are you sure you want to delete "${dept.name_en}"?`)) {
+    confirm(isRtl.value ? `حذف القسم "${dept.name_ar || dept.name_en}"؟` : `Are you sure you want to delete "${dept.name_en}"?`, () => {
         router.post(`/admin/departments/${dept.id}/delete`, { preserveScroll: true });
-    }
+    });
 }
 </script>
 

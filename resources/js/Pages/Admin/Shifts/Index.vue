@@ -3,8 +3,10 @@ import { ref, computed } from 'vue';
 import { useForm, router, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 const { can } = usePermissions();
+const { confirm } = useConfirm();
 
 const page = usePage();
 const locale = computed(() => page.props.locale || 'ar');
@@ -64,9 +66,9 @@ function submitEdit(id) {
 }
 
 function deleteShift(id) {
-    if (window.confirm('Are you sure you want to delete this shift?')) {
+    confirm(isRtl.value ? 'هل أنت متأكد من حذف هذه الوردية؟' : 'Are you sure you want to delete this shift?', () => {
         router.post(`/admin/shifts/${id}/delete`, { preserveScroll: true });
-    }
+    });
 }
 </script>
 
