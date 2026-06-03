@@ -134,4 +134,51 @@ class AdminLeaveTest extends TestCase
             'status' => 'rejected',
         ]);
     }
+
+    /**
+     * The Leaves list UI posts to /approve, /reject, /delete (not /update).
+     * These endpoints were previously missing (dead actions); these tests
+     * lock in the wired LeaveController@approve/reject/destroy.
+     */
+    public function test_leaves_list_approve_endpoint_works(): void
+    {
+        $leave = Leave::create([
+            'user_id' => $this->employee->id, 'leave_type' => 'annual',
+            'start_date' => '2026-05-01', 'end_date' => '2026-05-02', 'status' => 'pending',
+        ]);
+
+        $this->actingAs($this->admin)->post("/admin/leaves/{$leave->id}/approve")->assertRedirect();
+
+        $this->assertDatabaseHas('leaves', [
+            'id' => $leave->id, 'status' => 'approved', 'approved_by' => $this->admin->id,
+        ]);
+        // Approval syncs attendance rows for the range.
+        $this->assertDatabaseHas('attendances', [
+            'user_id' => $this->employee->id, 'leave_id' => $leave->id, 'status' => 'leave',
+        ]);
+    }
+
+    public function test_leaves_list_reject_endpoint_works(): void
+    {
+        $leave = Leave::create([
+            'user_id' => $this->employee->id, 'leave_type' => 'sick',
+            'start_date' => '2026-05-10', 'end_date' => '2026-05-11', 'status' => 'pending',
+        ]);
+
+        $this->actingAs($this->admin)->post("/admin/leaves/{$leave->id}/reject")->assertRedirect();
+
+        $this->assertDatabaseHas('leaves', ['id' => $leave->id, 'status' => 'rejected']);
+    }
+
+    public function test_leaves_list_delete_endpoint_works(): void
+    {
+        $leave = Leave::create([
+            'user_id' => $this->employee->id, 'leave_type' => 'unpaid',
+            'start_date' => '2026-05-20', 'end_date' => '2026-05-21', 'status' => 'pending',
+        ]);
+
+        $this->actingAs($this->admin)->post("/admin/leaves/{$leave->id}/delete")->assertRedirect();
+
+        $this->assertDatabaseMissing('leaves', ['id' => $leave->id]);
+    }
 }

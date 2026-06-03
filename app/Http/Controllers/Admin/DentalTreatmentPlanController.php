@@ -41,9 +41,9 @@ class DentalTreatmentPlanController extends Controller
                     $pq->where('full_name', 'like', "%{$search}%")
                         ->orWhere('file_number', 'like', "%{$search}%");
                 })
-                ->orWhere('title_ar', 'like', "%{$search}%")
-                ->orWhere('title_en', 'like', "%{$search}%")
-                ->orWhere('notes', 'like', "%{$search}%");
+                    ->orWhere('title_ar', 'like', "%{$search}%")
+                    ->orWhere('title_en', 'like', "%{$search}%")
+                    ->orWhere('notes', 'like', "%{$search}%");
             });
         }
         if ($request->filled('date_from')) {
@@ -112,7 +112,7 @@ class DentalTreatmentPlanController extends Controller
             ]);
 
             // Create treatments if provided
-            if (!empty($data['treatments'])) {
+            if (! empty($data['treatments'])) {
                 foreach ($data['treatments'] as $treatment) {
                     DentalTreatment::create([
                         'patient_id' => $data['patient_id'],
@@ -137,7 +137,7 @@ class DentalTreatmentPlanController extends Controller
         });
 
         // Track template usage (outside transaction — non-critical)
-        if (!empty($data['template_id'])) {
+        if (! empty($data['template_id'])) {
             $usedTemplate = DentalTreatmentPlanTemplate::find($data['template_id']);
             $usedTemplate?->incrementUsage();
         }
@@ -171,7 +171,7 @@ class DentalTreatmentPlanController extends Controller
         $data = $request->validated();
 
         // Enforce consent before starting treatment
-        if (isset($data['status']) && $data['status'] === 'in_progress' && !$treatmentPlan->hasSignedConsent()) {
+        if (isset($data['status']) && $data['status'] === 'in_progress' && ! $treatmentPlan->hasSignedConsent()) {
             return redirect()->back()->with('error', 'لا يمكن بدء الخطة بدون موافقة المريض الموقعة / Cannot start plan without signed patient consent');
         }
 
@@ -194,12 +194,50 @@ class DentalTreatmentPlanController extends Controller
             $recipients = User::where('is_active', true)
                 ->where(function ($q) use ($treatmentPlan) {
                     $q->whereHas('role', fn ($r) => $r->whereIn('name', ['admin', 'super_admin', 'secretary']))
-                      ->orWhereHas('doctor', fn ($d) => $d->where('id', $treatmentPlan->doctor_id));
+                        ->orWhereHas('doctor', fn ($d) => $d->where('id', $treatmentPlan->doctor_id));
                 })->get();
             Notification::send($recipients, new DentalTreatmentPlanStatusNotification($treatmentPlan, $oldStatus, $data['status']));
         }
 
         return redirect()->back()->with('success', 'تم تحديث خطة العلاج بنجاح');
+    }
+
+    /**
+     * Lightweight status-only transition (the Show page status dropdown posts
+     * just { status }). Mirrors update()'s consent gate, completed_at stamp,
+     * audit log and staff notification without requiring the full plan payload.
+     */
+    public function updateStatus(Request $request, DentalTreatmentPlan $treatmentPlan)
+    {
+        $data = $request->validate([
+            'status' => 'required|in:draft,approved,in_progress,completed,cancelled',
+        ]);
+
+        if ($data['status'] === 'in_progress' && ! $treatmentPlan->hasSignedConsent()) {
+            return redirect()->back()->with('error', 'لا يمكن بدء الخطة بدون موافقة المريض الموقعة / Cannot start plan without signed patient consent');
+        }
+
+        $oldStatus = $treatmentPlan->status;
+        if ($oldStatus === $data['status']) {
+            return redirect()->back();
+        }
+
+        if ($data['status'] === 'completed') {
+            $data['completed_at'] = now();
+        }
+
+        $treatmentPlan->update($data);
+
+        AuditLogger::log('updated', $treatmentPlan, null, "Treatment plan status changed: {$oldStatus} → {$data['status']}");
+
+        $recipients = User::where('is_active', true)
+            ->where(function ($q) use ($treatmentPlan) {
+                $q->whereHas('role', fn ($r) => $r->whereIn('name', ['admin', 'super_admin', 'secretary']))
+                    ->orWhereHas('doctor', fn ($d) => $d->where('id', $treatmentPlan->doctor_id));
+            })->get();
+        Notification::send($recipients, new DentalTreatmentPlanStatusNotification($treatmentPlan, $oldStatus, $data['status']));
+
+        return redirect()->back()->with('success', 'تم تحديث حالة الخطة / Plan status updated');
     }
 
     public function destroy(DentalTreatmentPlan $treatmentPlan)
@@ -226,7 +264,7 @@ class DentalTreatmentPlanController extends Controller
         $pdf = Pdf::loadView('pdf.dental-treatment-plan', ['plan' => $treatmentPlan]);
         $pdf->setPaper('a4', 'portrait');
 
-        $filename = 'dental-plan-' . $treatmentPlan->id . '-' . now()->format('Y-m-d') . '.pdf';
+        $filename = 'dental-plan-'.$treatmentPlan->id.'-'.now()->format('Y-m-d').'.pdf';
 
         return $pdf->download($filename);
     }

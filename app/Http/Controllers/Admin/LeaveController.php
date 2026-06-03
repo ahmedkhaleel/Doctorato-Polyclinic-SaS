@@ -7,7 +7,6 @@ use App\Models\Attendance;
 use App\Models\Leave;
 use App\Models\User;
 use App\Services\AuditLogger;
-use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -101,6 +100,47 @@ class LeaveController extends Controller
         return redirect()->back()->with('success', "Leave request {$statusLabel}.");
     }
 
+    /** Approve a leave request (the Leaves list "approve" action). */
+    public function approve(Leave $leave): RedirectResponse
+    {
+        return $this->setStatus($leave, 'approved');
+    }
+
+    /** Reject a leave request (the Leaves list "reject" action). */
+    public function reject(Leave $leave): RedirectResponse
+    {
+        return $this->setStatus($leave, 'rejected');
+    }
+
+    /** Shared status transition with approver stamping + attendance sync. */
+    private function setStatus(Leave $leave, string $status): RedirectResponse
+    {
+        $previousStatus = $leave->status;
+        $leave->update(['status' => $status, 'approved_by' => auth()->id()]);
+        $leave->refresh();
+
+        AuditLogger::log('updated', $leave);
+
+        if ($status === 'approved') {
+            $this->syncLeaveAttendance($leave, create: true);
+        } elseif ($previousStatus === 'approved' && $status === 'rejected') {
+            $this->syncLeaveAttendance($leave, create: false);
+        }
+
+        return redirect()->back()->with('success', 'Leave request '.ucfirst($status).'.');
+    }
+
+    /** Delete a leave request (and any attendance rows it created). */
+    public function destroy(Leave $leave): RedirectResponse
+    {
+        AuditLogger::log('deleted', $leave);
+
+        Attendance::where('leave_id', $leave->id)->delete();
+        $leave->delete();
+
+        return redirect()->route('admin.leaves.index')->with('success', 'Leave request deleted.');
+    }
+
     /**
      * Create or remove Attendance rows covering this leave's date range.
      * Only rows with status='leave' are ever removed — we never touch rows
@@ -116,12 +156,12 @@ class LeaveController extends Controller
                 Attendance::updateOrCreate(
                     ['user_id' => $userId, 'date' => $current->toDateString()],
                     [
-                        'status'         => 'leave',
-                        'check_in'       => null,
-                        'check_out'      => null,
+                        'status' => 'leave',
+                        'check_in' => null,
+                        'check_out' => null,
                         'overtime_hours' => 0,
-                        'leave_id'       => $leave->id,
-                        'notes'          => $leave->leave_type . ' leave',
+                        'leave_id' => $leave->id,
+                        'notes' => $leave->leave_type.' leave',
                     ]
                 );
                 $current->addDay();

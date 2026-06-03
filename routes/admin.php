@@ -645,6 +645,9 @@ Route::middleware(['admin.auth', 'branch.context'])->group(function () {
         Route::get('/leaves/create', [LeaveController::class, 'create'])->name('admin.leaves.create')->middleware('permission:leaves.create');
         Route::post('/leaves', [LeaveController::class, 'store'])->name('admin.leaves.store')->middleware('permission:leaves.create');
         Route::post('/leaves/{leave}/update', [LeaveController::class, 'update'])->name('admin.leaves.update')->middleware('permission:leaves.update');
+        Route::post('/leaves/{leave}/approve', [LeaveController::class, 'approve'])->name('admin.leaves.approve')->middleware('permission:leaves.approve');
+        Route::post('/leaves/{leave}/reject', [LeaveController::class, 'reject'])->name('admin.leaves.reject')->middleware('permission:leaves.approve');
+        Route::post('/leaves/{leave}/delete', [LeaveController::class, 'destroy'])->name('admin.leaves.destroy')->middleware('permission:leaves.delete');
     });
 
     // ─── Package Bundles ────────────────────────────────────────
@@ -880,6 +883,7 @@ Route::middleware(['admin.auth', 'branch.context'])->group(function () {
     Route::post('/dental/treatment-plans', [DentalTreatmentPlanController::class, 'store'])->name('admin.dental.treatment-plans.store')->middleware(['module:dental', 'permission:dental.create']);
     Route::get('/dental/treatment-plans/{treatmentPlan}', [DentalTreatmentPlanController::class, 'show'])->name('admin.dental.treatment-plans.show')->middleware(['module:dental', 'permission:dental.view']);
     Route::post('/dental/treatment-plans/{treatmentPlan}', [DentalTreatmentPlanController::class, 'update'])->name('admin.dental.treatment-plans.update')->middleware(['module:dental', 'permission:dental.update']);
+    Route::post('/dental/treatment-plans/{treatmentPlan}/status', [DentalTreatmentPlanController::class, 'updateStatus'])->name('admin.dental.treatment-plans.status')->middleware(['module:dental', 'permission:dental.update']);
     Route::get('/dental/treatment-plans/{treatmentPlan}/pdf', [DentalTreatmentPlanController::class, 'downloadPdf'])->name('admin.dental.treatment-plans.pdf')->middleware(['module:dental', 'permission:dental.view']);
     Route::post('/dental/treatment-plans/{treatmentPlan}/delete', [DentalTreatmentPlanController::class, 'destroy'])->name('admin.dental.treatment-plans.destroy')->middleware(['module:dental', 'permission:dental.delete']);
 
