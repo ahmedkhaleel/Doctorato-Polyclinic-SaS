@@ -2,7 +2,9 @@
 import { ref, computed } from 'vue';
 import { router, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
+const { confirm } = useConfirm();
 const page = usePage();
 const isRtl = computed(() => (page.props.dir || 'rtl') === 'rtl');
 
@@ -47,27 +49,27 @@ function doSearch() {
 }
 
 function restoreItem(type, id) {
-    if (window.confirm(isRtl.value ? 'هل أنت متأكد من استعادة هذا العنصر؟' : 'Are you sure you want to restore this item?')) {
+    confirm({ message: isRtl.value ? 'هل أنت متأكد من استعادة هذا العنصر؟' : 'Are you sure you want to restore this item?', confirmColor: 'green' }, () => {
         router.post(`/admin/trash/${type}/${id}/restore`);
-    }
+    });
 }
 
 function forceDeleteItem(type, id) {
-    if (window.confirm(isRtl.value ? 'هل أنت متأكد؟ سيتم حذف هذا العنصر نهائياً ولا يمكن استعادته!' : 'Are you sure? This will permanently delete this item and cannot be undone!')) {
+    confirm(isRtl.value ? 'هل أنت متأكد؟ سيتم حذف هذا العنصر نهائياً ولا يمكن استعادته!' : 'Are you sure? This will permanently delete this item and cannot be undone!', () => {
         router.post(`/admin/trash/${type}/${id}/delete`);
-    }
+    });
 }
 
 function restoreAll(type) {
-    if (window.confirm(isRtl.value ? 'هل تريد استعادة جميع العناصر المحذوفة من هذا النوع؟' : 'Restore all trashed items of this type?')) {
+    confirm({ message: isRtl.value ? 'هل تريد استعادة جميع العناصر المحذوفة من هذا النوع؟' : 'Restore all trashed items of this type?', confirmColor: 'green' }, () => {
         router.post(`/admin/trash/${type}/restore-all`);
-    }
+    });
 }
 
 function emptyTrash(type) {
-    if (window.confirm(isRtl.value ? 'تحذير! سيتم حذف جميع العناصر نهائياً. هل أنت متأكد؟' : 'WARNING! This will permanently delete all items. Are you sure?')) {
+    confirm(isRtl.value ? 'تحذير! سيتم حذف جميع العناصر نهائياً. هل أنت متأكد؟' : 'WARNING! This will permanently delete all items. Are you sure?', () => {
         router.post(`/admin/trash/${type}/empty`);
-    }
+    });
 }
 
 function tabLabel(tab) {

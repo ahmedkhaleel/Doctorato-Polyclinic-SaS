@@ -4,8 +4,10 @@ import { Link, useForm, router, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
 import { useCurrency } from '@/Composables/useCurrency.js';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 const { can } = usePermissions();
+const { confirm } = useConfirm();
 const { formatCurrency } = useCurrency();
 
 const props = defineProps({
@@ -88,9 +90,9 @@ function submitComplete(fuId) {
 }
 
 function missFollowUp(fuId) {
-    if (confirm(isRtl.value ? 'هل تريد تحديد هذه المتابعة كفائتة؟' : 'Mark this follow-up as missed?')) {
+    confirm(isRtl.value ? 'هل تريد تحديد هذه المتابعة كفائتة؟' : 'Mark this follow-up as missed?', () => {
         router.post(`/admin/follow-ups/${fuId}/miss`, {}, { preserveScroll: true });
-    }
+    });
 }
 
 const rescheduleForm = useForm({ scheduled_at: '' });
@@ -225,19 +227,21 @@ function deleteLead() {
     const msg = isRtl.value
         ? `هل أنت متأكد من حذف العميل "${props.lead.full_name}"؟ لا يمكن التراجع عن هذا الإجراء.`
         : `Are you sure you want to delete "${props.lead.full_name}"? This action cannot be undone.`;
-    if (!confirm(msg)) return;
-    router.post(`/admin/leads/${props.lead.id}/delete`, {}, {
-        onSuccess: () => router.visit('/admin/leads'),
+    confirm(msg, () => {
+        router.post(`/admin/leads/${props.lead.id}/delete`, {}, {
+            onSuccess: () => router.visit('/admin/leads'),
+        });
     });
 }
 
 function reactivateLead() {
     const msg = isRtl.value ? 'هل تريد إعادة تنشيط هذا العميل المحتمل؟' : 'Reactivate this lead back to New status?';
-    if (!confirm(msg)) return;
-    reactivating.value = true;
-    router.post(`/admin/leads/${props.lead.id}/reactivate`, {}, {
-        preserveScroll: true,
-        onFinish: () => reactivating.value = false,
+    confirm({ message: msg, confirmColor: 'green' }, () => {
+        reactivating.value = true;
+        router.post(`/admin/leads/${props.lead.id}/reactivate`, {}, {
+            preserveScroll: true,
+            onFinish: () => reactivating.value = false,
+        });
     });
 }
 

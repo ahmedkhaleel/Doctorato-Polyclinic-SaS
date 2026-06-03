@@ -4,8 +4,10 @@ import { Link, router, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
 import { useCurrency } from '@/Composables/useCurrency.js';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 const { can } = usePermissions();
+const { confirm } = useConfirm();
 
 const page = usePage();
 const locale = computed(() => page.props.locale || 'ar');
@@ -74,11 +76,12 @@ function approveSlip() {
     const msg = isRtl.value
         ? 'هل أنت متأكد من اعتماد كشف الراتب هذا؟'
         : 'Are you sure you want to approve this salary slip?';
-    if (!confirm(msg)) return;
-    approving.value = true;
-    router.post(`/admin/payroll/${props.slip.id}/approve`, {}, {
-        preserveScroll: true,
-        onFinish: () => { approving.value = false; },
+    confirm({ message: msg, confirmColor: 'green' }, () => {
+        approving.value = true;
+        router.post(`/admin/payroll/${props.slip.id}/approve`, {}, {
+            preserveScroll: true,
+            onFinish: () => { approving.value = false; },
+        });
     });
 }
 

@@ -4,8 +4,10 @@ import { Link, router, useForm, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
 import { useCurrency } from '@/Composables/useCurrency.js';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 const { can } = usePermissions();
+const { confirm } = useConfirm();
 const { formatCurrency } = useCurrency();
 
 const page = usePage();
@@ -269,11 +271,11 @@ function submitEditPrescription(rxId) {
 }
 
 function deletePrescription(rxId) {
-    if (window.confirm('Are you sure you want to delete this prescription?')) {
+    confirm(isRtl.value ? 'هل أنت متأكد من حذف هذه الروشتة؟' : 'Are you sure you want to delete this prescription?', () => {
         router.post(`/admin/prescriptions/${rxId}/delete`, {
             preserveScroll: true,
         });
-    }
+    });
 }
 
 // Status Actions
@@ -290,11 +292,11 @@ function completeVisit() {
 }
 
 function cancelVisit() {
-    if (window.confirm('Are you sure you want to cancel this visit?')) {
+    confirm(isRtl.value ? 'هل أنت متأكد من إلغاء هذه الزيارة؟' : 'Are you sure you want to cancel this visit?', () => {
         router.post(`/admin/visits/${props.visit.id}/cancel`, {}, {
             preserveScroll: true,
         });
-    }
+    });
 }
 
 function formatDate(date) {

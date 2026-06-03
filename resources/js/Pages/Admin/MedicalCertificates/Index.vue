@@ -2,7 +2,9 @@
 import { ref, computed, watch } from 'vue';
 import { Link, useForm, router, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
+const { confirm } = useConfirm();
 const page = usePage();
 const locale = computed(() => page.props.locale || 'ar');
 const isRtl = computed(() => (page.props.dir || 'rtl') === 'rtl');
@@ -100,8 +102,9 @@ function issueCert(id) {
 }
 
 function cancelCert(id) {
-    if (!confirm(isRtl.value ? 'هل تريد إلغاء هذه الشهادة؟' : 'Cancel this certificate?')) return;
-    router.post(`/admin/medical-certificates/${id}/cancel`, {}, { preserveState: false });
+    confirm(isRtl.value ? 'هل تريد إلغاء هذه الشهادة؟' : 'Cancel this certificate?', () => {
+        router.post(`/admin/medical-certificates/${id}/cancel`, {}, { preserveState: false });
+    });
 }
 
 /* Auto-calc days */

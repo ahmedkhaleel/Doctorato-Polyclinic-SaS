@@ -6,10 +6,12 @@ import QuickAddPatientModal from '@/Components/QuickAddPatientModal.vue';
 import DoctorDatePicker from '@/Components/DoctorDatePicker.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
 import { useCurrency } from '@/Composables/useCurrency.js';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 defineOptions({ layout: AdminLayout });
 
 const { can } = usePermissions();
+const { confirm } = useConfirm();
 const { formatCurrency, currencyCode } = useCurrency();
 const page = usePage();
 const locale = computed(() => page.props.locale || 'ar');
@@ -578,9 +580,10 @@ function onConsentFilesSelected(event) {
 }
 
 function deleteConsent(consentId) {
-    if (!confirm('Delete this consent document?')) return;
-    router.post(`/admin/bookings/${props.booking.id}/consents/${consentId}/delete`, {
-        preserveScroll: true,
+    confirm(isRtl.value ? 'حذف مستند الموافقة؟' : 'Delete this consent document?', () => {
+        router.post(`/admin/bookings/${props.booking.id}/consents/${consentId}/delete`, {
+            preserveScroll: true,
+        });
     });
 }
 
@@ -686,10 +689,11 @@ function submitReschedule() {
 const deletingBooking = ref(false);
 
 function deleteBooking() {
-    if (!confirm('Are you sure you want to permanently delete this booking? This will remove all appointments, services, invoice, and payments. This action cannot be undone.')) return;
-    deletingBooking.value = true;
-    router.post(`/admin/bookings/${props.booking.id}/delete`, {
-        onFinish: () => { deletingBooking.value = false; },
+    confirm(isRtl.value ? 'سيتم حذف هذا الحجز نهائيًا مع كل المواعيد والخدمات والفاتورة والمدفوعات. لا يمكن التراجع. هل أنت متأكد؟' : 'Are you sure you want to permanently delete this booking? This will remove all appointments, services, invoice, and payments. This action cannot be undone.', () => {
+        deletingBooking.value = true;
+        router.post(`/admin/bookings/${props.booking.id}/delete`, {
+            onFinish: () => { deletingBooking.value = false; },
+        });
     });
 }
 

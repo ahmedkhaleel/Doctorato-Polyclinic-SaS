@@ -3,8 +3,10 @@ import { ref, watch, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { Link, router, useForm, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 const { can } = usePermissions();
+const { confirm } = useConfirm();
 
 const page = usePage();
 const locale = computed(() => page.props.locale || 'ar');
@@ -213,9 +215,9 @@ function cancelForm() {
 
 function deleteAttendance(id) {
     const msg = isRtl.value ? 'هل أنت متأكد من حذف هذا السجل؟' : 'Are you sure you want to delete this record?';
-    if (window.confirm(msg)) {
+    confirm(msg, () => {
         router.post(`/admin/attendances/${id}/delete`, { preserveScroll: true });
-    }
+    });
 }
 
 /* ── Custom Employee Picker ── */

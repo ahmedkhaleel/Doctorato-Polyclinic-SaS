@@ -2,6 +2,9 @@
 import { ref, computed, onMounted } from 'vue';
 import { Link, router , usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import { useConfirm } from '@/Composables/useConfirm.js';
+
+const { confirm } = useConfirm();
 
 const props = defineProps({
     primary: Object,
@@ -62,15 +65,15 @@ const submitting = ref(false);
 
 function submitMerge() {
     if (submitting.value) return;
-    if (!confirm('Are you sure you want to merge these leads? The secondary lead will be archived. This cannot be undone.')) return;
-
-    submitting.value = true;
-    router.post('/admin/leads-merge', {
-        primary_id: props.primary.id,
-        secondary_id: props.secondary.id,
-        fields: selectedFields.value,
-    }, {
-        onFinish: () => submitting.value = false,
+    confirm(isRtl.value ? 'هل أنت متأكد من دمج هذين العميلين؟ سيتم أرشفة العميل الثانوي. لا يمكن التراجع.' : 'Are you sure you want to merge these leads? The secondary lead will be archived. This cannot be undone.', () => {
+        submitting.value = true;
+        router.post('/admin/leads-merge', {
+            primary_id: props.primary.id,
+            secondary_id: props.secondary.id,
+            fields: selectedFields.value,
+        }, {
+            onFinish: () => submitting.value = false,
+        });
     });
 }
 

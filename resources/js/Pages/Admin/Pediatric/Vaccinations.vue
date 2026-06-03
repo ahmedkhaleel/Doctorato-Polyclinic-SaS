@@ -2,9 +2,11 @@
 import { ref, computed, watch, reactive } from 'vue';
 import { Link, usePage, router, useForm } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 defineOptions({ layout: AdminLayout });
 
+const { confirm } = useConfirm();
 const page = usePage();
 const locale = computed(() => page.props.locale || 'ar');
 const isRtl = computed(() => (page.props.dir || 'rtl') === 'rtl');
@@ -209,9 +211,10 @@ function submitStatus() {
 }
 
 function deleteVaccination(v) {
-    if (!window.confirm(isRtl.value ? 'هل أنت متأكد من حذف هذا التطعيم؟' : 'Are you sure you want to delete this vaccination?')) return;
-    router.post(`/admin/pediatric/vaccinations/${v.id}/delete`, {}, {
-        preserveScroll: true,
+    confirm(isRtl.value ? 'هل أنت متأكد من حذف هذا التطعيم؟' : 'Are you sure you want to delete this vaccination?', () => {
+        router.post(`/admin/pediatric/vaccinations/${v.id}/delete`, {}, {
+            preserveScroll: true,
+        });
     });
 }
 </script>

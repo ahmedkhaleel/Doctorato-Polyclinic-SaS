@@ -4,8 +4,10 @@ import { Link, router, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
 import { useCurrency } from '@/Composables/useCurrency.js';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 const { can } = usePermissions();
+const { confirm } = useConfirm();
 
 const page = usePage();
 const locale = computed(() => page.props.locale || 'ar');
@@ -66,37 +68,39 @@ const bulkProcessing = ref(false);
 
 function bulkApprove() {
     if (selectedIds.value.length === 0) return;
-    if (!window.confirm(`Approve ${selectedIds.value.length} selected slip(s)?`)) return;
-    bulkProcessing.value = true;
-    router.post('/admin/payroll/bulk-approve', {
-        ids: selectedIds.value,
-    }, {
-        preserveScroll: true,
-        onSuccess: () => {
-            selectedIds.value = [];
-            selectAll.value = false;
-        },
-        onFinish: () => {
-            bulkProcessing.value = false;
-        },
+    confirm({ message: isRtl.value ? `اعتماد ${selectedIds.value.length} كشف محدد؟` : `Approve ${selectedIds.value.length} selected slip(s)?`, confirmColor: 'green' }, () => {
+        bulkProcessing.value = true;
+        router.post('/admin/payroll/bulk-approve', {
+            ids: selectedIds.value,
+        }, {
+            preserveScroll: true,
+            onSuccess: () => {
+                selectedIds.value = [];
+                selectAll.value = false;
+            },
+            onFinish: () => {
+                bulkProcessing.value = false;
+            },
+        });
     });
 }
 
 function bulkMarkPaid() {
     if (selectedIds.value.length === 0) return;
-    if (!window.confirm(`Mark ${selectedIds.value.length} selected slip(s) as paid?`)) return;
-    bulkProcessing.value = true;
-    router.post('/admin/payroll/bulk-mark-paid', {
-        ids: selectedIds.value,
-    }, {
-        preserveScroll: true,
-        onSuccess: () => {
-            selectedIds.value = [];
-            selectAll.value = false;
-        },
-        onFinish: () => {
-            bulkProcessing.value = false;
-        },
+    confirm({ message: isRtl.value ? `تعليم ${selectedIds.value.length} كشف كمدفوع؟` : `Mark ${selectedIds.value.length} selected slip(s) as paid?`, confirmColor: 'green' }, () => {
+        bulkProcessing.value = true;
+        router.post('/admin/payroll/bulk-mark-paid', {
+            ids: selectedIds.value,
+        }, {
+            preserveScroll: true,
+            onSuccess: () => {
+                selectedIds.value = [];
+                selectAll.value = false;
+            },
+            onFinish: () => {
+                bulkProcessing.value = false;
+            },
+        });
     });
 }
 

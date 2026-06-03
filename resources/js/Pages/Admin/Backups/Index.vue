@@ -2,7 +2,9 @@
 import { ref, computed } from 'vue';
 import { router, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
+const { confirm } = useConfirm();
 const page = usePage();
 const isRtl = computed(() => page.props.dir === 'rtl' || !page.props.dir);
 
@@ -78,12 +80,12 @@ function downloadBackup(path) {
 }
 
 function deleteBackup(path) {
-    if (!confirm(isRtl.value ? 'هل أنت متأكد من حذف هذه النسخة الاحتياطية؟' : 'Are you sure you want to delete this backup?')) return;
-
-    loading.value.delete = path;
-    router.post(route('admin.backups.destroy'), { path }, {
-        preserveScroll: true,
-        onFinish: () => { loading.value.delete = null; },
+    confirm(isRtl.value ? 'هل أنت متأكد من حذف هذه النسخة الاحتياطية؟' : 'Are you sure you want to delete this backup?', () => {
+        loading.value.delete = path;
+        router.post(route('admin.backups.destroy'), { path }, {
+            preserveScroll: true,
+            onFinish: () => { loading.value.delete = null; },
+        });
     });
 }
 

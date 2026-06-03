@@ -3,8 +3,10 @@ import { ref, watch, computed } from 'vue';
 import { Link, router, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 const { can } = usePermissions();
+const { confirm } = useConfirm();
 
 const page = usePage();
 const locale = computed(() => page.props.locale || 'ar');
@@ -33,23 +35,23 @@ watch([employeeFilter, statusFilter, typeFilter], () => {
 
 function approveLeave(id) {
     const msg = isRtl.value ? 'هل تريد الموافقة على هذا الطلب؟' : 'Approve this leave request?';
-    if (window.confirm(msg)) {
+    confirm({ message: msg, confirmColor: 'green' }, () => {
         router.post(`/admin/leaves/${id}/approve`, {}, { preserveScroll: true });
-    }
+    });
 }
 
 function rejectLeave(id) {
     const msg = isRtl.value ? 'هل تريد رفض هذا الطلب؟' : 'Reject this leave request?';
-    if (window.confirm(msg)) {
+    confirm(msg, () => {
         router.post(`/admin/leaves/${id}/reject`, {}, { preserveScroll: true });
-    }
+    });
 }
 
 function deleteLeave(id) {
     const msg = isRtl.value ? 'هل أنت متأكد من حذف هذا الطلب؟' : 'Are you sure you want to delete this leave request?';
-    if (window.confirm(msg)) {
+    confirm(msg, () => {
         router.post(`/admin/leaves/${id}/delete`, { preserveScroll: true });
-    }
+    });
 }
 
 const typeConfig = {

@@ -4,8 +4,10 @@ import { Link, router , usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { usePermissions } from '@/Composables/usePermissions.js';
 import { useCurrency } from '@/Composables/useCurrency.js';
+import { useConfirm } from '@/Composables/useConfirm.js';
 
 const { can } = usePermissions();
+const { confirm } = useConfirm();
 const { formatCurrency } = useCurrency();
 
 const props = defineProps({
@@ -209,15 +211,19 @@ function executeBulkAction() {
     if (bulkAction.value === 'assign') payload.assigned_to = bulkAssignTo.value;
     if (bulkAction.value === 'status') payload.status = bulkStatus.value;
 
-    if (bulkAction.value === 'delete' && !confirm(`Delete ${selectedLeads.value.length} leads?`)) return;
-
-    router.post('/admin/leads/bulk-action', payload, {
+    const run = () => router.post('/admin/leads/bulk-action', payload, {
         onSuccess: () => {
             selectedLeads.value = [];
             showBulkModal.value = false;
             bulkAction.value = '';
         },
     });
+
+    if (bulkAction.value === 'delete') {
+        confirm(isRtl.value ? `حذف ${selectedLeads.value.length} عميل محتمل؟` : `Delete ${selectedLeads.value.length} leads?`, run);
+    } else {
+        run();
+    }
 }
 
 function exportLeads() {
@@ -256,11 +262,12 @@ function deleteLead(lead) {
     const msg = isAr
         ? `هل أنت متأكد من حذف العميل "${lead.full_name}"؟ لا يمكن التراجع عن هذا الإجراء.`
         : `Are you sure you want to delete "${lead.full_name}"? This action cannot be undone.`;
-    if (!confirm(msg)) return;
-    quickActionLeadId.value = null;
-    router.post(`/admin/leads/${lead.id}/delete`, {}, {
-        preserveScroll: true,
-        onSuccess: () => {},
+    confirm(msg, () => {
+        quickActionLeadId.value = null;
+        router.post(`/admin/leads/${lead.id}/delete`, {}, {
+            preserveScroll: true,
+            onSuccess: () => {},
+        });
     });
 }
 </script>
