@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreBookingRequest;
 use App\Models\Booking;
 use App\Models\BookingAppointment;
 use App\Models\BookingConsent;
@@ -19,7 +20,6 @@ use App\Models\ServiceCategory;
 use App\Models\Setting;
 use App\Models\Visit;
 use App\Observers\CrmEventObserver;
-use App\Http\Requests\StoreBookingRequest;
 use App\Services\AuditLogger;
 use App\Services\BookingWorkflowService;
 use App\Services\LeadService;
@@ -68,20 +68,24 @@ class BookingController extends Controller
             ->when($filters['search'] ?? null, function ($query, $search) {
                 $query->where(function ($q) use ($search) {
                     $q->where('full_name', 'like', "%{$search}%")
-                      ->orWhere('phone', 'like', "%{$search}%")
-                      ->orWhere('booking_number', 'like', "%{$search}%")
-                      ->orWhereHas('patient', fn ($p) => $p->where('full_name', 'like', "%{$search}%")
-                          ->orWhere('phone', 'like', "%{$search}%")
-                          ->orWhere('file_number', 'like', "%{$search}%"));
+                        ->orWhere('phone', 'like', "%{$search}%")
+                        ->orWhere('booking_number', 'like', "%{$search}%")
+                        ->orWhereHas('patient', fn ($p) => $p->where('full_name', 'like', "%{$search}%")
+                            ->orWhere('phone', 'like', "%{$search}%")
+                            ->orWhere('file_number', 'like', "%{$search}%"));
                 });
             })
             ->latest()
             ->paginate(15)
             ->withQueryString();
 
+        // No-show risk badges for the patients on this page (one grouped query).
+        $patientIds = $bookings->getCollection()->pluck('patient_id')->filter()->all();
+
         return Inertia::render('Admin/Bookings/Index', [
             'bookings' => $bookings,
             'filters' => $request->only(['status', 'source', 'date_from', 'date_to', 'search', 'module']),
+            'noShowRisk' => Patient::noShowRiskMap($patientIds),
         ]);
     }
 
@@ -140,7 +144,7 @@ class BookingController extends Controller
 
     public function show(Request $request, Booking $booking): Response
     {
-        if (!$booking->is_read) {
+        if (! $booking->is_read) {
             $booking->update(['is_read' => true]);
         }
 
@@ -243,7 +247,7 @@ class BookingController extends Controller
             ];
 
             $allowed = $allowedTransitions[$oldStatus] ?? [];
-            if (!in_array($data['status'], $allowed)) {
+            if (! in_array($data['status'], $allowed)) {
                 return redirect()->back()->with('error', "Cannot transition booking from '{$oldStatus}' to '{$data['status']}'.");
             }
         }
@@ -254,7 +258,9 @@ class BookingController extends Controller
         $watched = ['preferred_date', 'preferred_time', 'doctor_id', 'service_id'];
         $changes = [];
         foreach ($watched as $key) {
-            if (! array_key_exists($key, $data)) continue;
+            if (! array_key_exists($key, $data)) {
+                continue;
+            }
             $oldValue = $booking->{$key};
             if ($key === 'preferred_date' && $oldValue instanceof \DateTimeInterface) {
                 $oldValue = $oldValue->format('Y-m-d');
@@ -304,21 +310,25 @@ class BookingController extends Controller
     protected function maybeEmailBookingRescheduled(\App\Models\Booking $booking, array $changes): void
     {
         $patient = $booking->patient;
-        if (! $patient || ! $patient->email) return;
-        if (! $patient->wantsNotification('bookings', 'email')) return;
+        if (! $patient || ! $patient->email) {
+            return;
+        }
+        if (! $patient->wantsNotification('bookings', 'email')) {
+            return;
+        }
 
         // Hydrate display names for the email body.
         if (isset($changes['doctor_id'])) {
             $ids = array_filter([$changes['doctor_id']['from'] ?? null, $changes['doctor_id']['to'] ?? null]);
             $doctors = \App\Models\Doctor::whereIn('id', $ids)->pluck('name_ar', 'id');
             $changes['doctor_id']['from_name'] = $changes['doctor_id']['from'] ? ($doctors[$changes['doctor_id']['from']] ?? '—') : '—';
-            $changes['doctor_id']['to_name']   = $changes['doctor_id']['to']   ? ($doctors[$changes['doctor_id']['to']]   ?? '—') : '—';
+            $changes['doctor_id']['to_name'] = $changes['doctor_id']['to'] ? ($doctors[$changes['doctor_id']['to']] ?? '—') : '—';
         }
         if (isset($changes['service_id'])) {
             $ids = array_filter([$changes['service_id']['from'] ?? null, $changes['service_id']['to'] ?? null]);
             $services = \App\Models\Service::whereIn('id', $ids)->pluck('name_ar', 'id');
             $changes['service_id']['from_name'] = $changes['service_id']['from'] ? ($services[$changes['service_id']['from']] ?? '—') : '—';
-            $changes['service_id']['to_name']   = $changes['service_id']['to']   ? ($services[$changes['service_id']['to']]   ?? '—') : '—';
+            $changes['service_id']['to_name'] = $changes['service_id']['to'] ? ($services[$changes['service_id']['to']] ?? '—') : '—';
         }
 
         try {
@@ -332,7 +342,7 @@ class BookingController extends Controller
         } catch (\Throwable $e) {
             \Illuminate\Support\Facades\Log::warning('[booking.rescheduled.email] failed', [
                 'booking_id' => $booking->id,
-                'error'      => $e->getMessage(),
+                'error' => $e->getMessage(),
             ]);
         }
     }
@@ -392,9 +402,9 @@ class BookingController extends Controller
             'visits_created' => count($result['visits_created']),
         ]);
 
-        return redirect()->back()->with('success', 'Payment recorded successfully.' .
+        return redirect()->back()->with('success', 'Payment recorded successfully.'.
             (count($result['visits_created']) > 0
-                ? ' ' . count($result['visits_created']) . ' visit(s) created for today\'s appointments.'
+                ? ' '.count($result['visits_created']).' visit(s) created for today\'s appointments.'
                 : ''));
     }
 
@@ -457,6 +467,7 @@ class BookingController extends Controller
             return redirect()->back()->with('error', $e->getMessage());
         } catch (\Throwable $e) {
             report($e);
+
             return redirect()->back()->with('error', 'Failed to add retouch session. Please try again.');
         }
     }
@@ -588,7 +599,7 @@ class BookingController extends Controller
 
         $headers = [
             'Content-Type' => 'text/csv',
-            'Content-Disposition' => 'attachment; filename="bookings-' . now()->format('Y-m-d') . '.csv"',
+            'Content-Disposition' => 'attachment; filename="bookings-'.now()->format('Y-m-d').'.csv"',
         ];
 
         return response()->stream(function () use ($bookings) {
@@ -624,7 +635,7 @@ class BookingController extends Controller
 
     public function destroy(Request $request, Booking $booking): RedirectResponse
     {
-        if (!$request->user()->can('bookings.delete')) {
+        if (! $request->user()->can('bookings.delete')) {
             abort(403, 'You do not have permission to delete bookings.');
         }
 
@@ -671,11 +682,11 @@ class BookingController extends Controller
 
     public function updateServices(Request $request, Booking $booking): RedirectResponse
     {
-        if (!$request->user()->can('bookings.edit_services')) {
+        if (! $request->user()->can('bookings.edit_services')) {
             abort(403, 'You do not have permission to edit booking services.');
         }
 
-        if (!in_array($booking->status, ['confirmed', 'in_progress', 'completed'])) {
+        if (! in_array($booking->status, ['confirmed', 'in_progress', 'completed'])) {
             return redirect()->back()->with('error', 'Cannot edit services for this booking status.');
         }
 
@@ -699,16 +710,17 @@ class BookingController extends Controller
                 $totalPrice = ($unitPrice - $discount) * $sessions;
 
                 // Delete flagged service
-                if (!empty($serviceData['_delete']) && !empty($serviceData['id'])) {
+                if (! empty($serviceData['_delete']) && ! empty($serviceData['id'])) {
                     $bs = BookingService::find($serviceData['id']);
                     if ($bs && $bs->booking_id === $booking->id) {
                         $bs->appointments()->delete();
                         $bs->delete();
                     }
+
                     continue;
                 }
 
-                if (!empty($serviceData['id'])) {
+                if (! empty($serviceData['id'])) {
                     // Update existing
                     $bs = BookingService::find($serviceData['id']);
                     if ($bs && $bs->booking_id === $booking->id) {
@@ -752,7 +764,9 @@ class BookingController extends Controller
         $booking->load('bookingServices.service');
 
         $invoice = $booking->invoice_id ? Invoice::find($booking->invoice_id) : null;
-        if (!$invoice) return;
+        if (! $invoice) {
+            return;
+        }
 
         $subtotal = $booking->bookingServices->sum('total_price');
 

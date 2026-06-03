@@ -658,4 +658,74 @@ class AdminBookingTest extends TestCase
         $this->assertSoftDeleted('bookings', ['id' => $booking->id]);
         $this->assertNull(Booking::find($booking->id));
     }
+
+    // ─── No-show risk (AI gap #2 — deterministic per-patient flag) ──────
+
+    private int $apptSeq = 0;
+
+    private function bookingWithAppointment(int $patientId, string $apptStatus): void
+    {
+        $this->apptSeq++;
+        $booking = Booking::create([
+            'patient_id' => $patientId,
+            'booking_number' => 'BK-NS-'.uniqid(),
+            'source' => 'walk_in', 'status' => 'completed',
+            'full_name' => 'NS', 'phone' => '0100', 'booking_type' => 'service',
+        ]);
+        $bsId = \Illuminate\Support\Facades\DB::table('booking_services')->insertGetId([
+            'booking_id' => $booking->id, 'service_id' => $this->service->id, 'doctor_id' => $this->doctor->id,
+            'sessions_count' => 1, 'unit_price' => 100, 'total_price' => 100, 'status' => 'completed',
+            'created_at' => now(), 'updated_at' => now(),
+        ]);
+        \Illuminate\Support\Facades\DB::table('booking_appointments')->insert([
+            'booking_id' => $booking->id, 'booking_service_id' => $bsId, 'doctor_id' => $this->doctor->id,
+            'appointment_date' => now()->subDays(7 + $this->apptSeq)->toDateString(),
+            'start_time' => sprintf('%02d:00', 9 + $this->apptSeq), 'end_time' => sprintf('%02d:30', 9 + $this->apptSeq), 'session_number' => 1,
+            'status' => $apptStatus,
+            'created_at' => now(), 'updated_at' => now(),
+        ]);
+    }
+
+    public function test_no_show_risk_map_flags_repeat_offenders(): void
+    {
+        $patient = new Patient(['full_name' => 'Misser', 'phone' => '01233334444', 'gender' => 'male']);
+        $patient->file_number = Patient::generateFileNumber();
+        $patient->is_active = true;
+        $patient->save();
+
+        // 2 no-shows out of 4 → 50% → high risk.
+        $this->bookingWithAppointment($patient->id, 'no_show');
+        $this->bookingWithAppointment($patient->id, 'no_show');
+        $this->bookingWithAppointment($patient->id, 'completed');
+        $this->bookingWithAppointment($patient->id, 'completed');
+
+        $map = Patient::noShowRiskMap([$patient->id]);
+
+        $this->assertArrayHasKey($patient->id, $map);
+        $this->assertSame('high', $map[$patient->id]['level']);
+        $this->assertSame(2, $map[$patient->id]['no_shows']);
+        $this->assertSame(4, $map[$patient->id]['total']);
+    }
+
+    public function test_no_show_risk_map_omits_reliable_patients(): void
+    {
+        $patient = new Patient(['full_name' => 'Reliable', 'phone' => '01255556666', 'gender' => 'female']);
+        $patient->file_number = Patient::generateFileNumber();
+        $patient->is_active = true;
+        $patient->save();
+
+        $this->bookingWithAppointment($patient->id, 'completed');
+        $this->bookingWithAppointment($patient->id, 'completed');
+
+        // No misses → not in the map (no false badge).
+        $this->assertArrayNotHasKey($patient->id, Patient::noShowRiskMap([$patient->id]));
+    }
+
+    public function test_bookings_index_passes_no_show_risk(): void
+    {
+        $this->actingAs($this->admin);
+        $this->get('/admin/bookings')
+            ->assertStatus(200)
+            ->assertInertia(fn ($page) => $page->component('Admin/Bookings/Index')->has('noShowRisk'));
+    }
 }

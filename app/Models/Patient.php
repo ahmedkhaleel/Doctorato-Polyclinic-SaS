@@ -478,6 +478,51 @@ class Patient extends Model
         return $alerts;
     }
 
+    /**
+     * Deterministic no-show risk for a set of patients, in ONE grouped query
+     * (no per-row LLM cost). Returns [patient_id => ['level','rate','no_shows','total']]
+     * only for patients at medium/high risk — used to flag bookings so staff can
+     * phone-confirm before the slot. High = ≥2 missed AND ≥30% rate; medium = ≥1
+     * missed OR ≥20% rate (with ≥3 history). Patients with no risk are omitted.
+     */
+    public static function noShowRiskMap(array $patientIds): array
+    {
+        $ids = array_values(array_filter(array_unique($patientIds)));
+        if (empty($ids)) {
+            return [];
+        }
+
+        $rows = \Illuminate\Support\Facades\DB::table('booking_appointments as ba')
+            ->join('bookings as b', 'b.id', '=', 'ba.booking_id')
+            ->whereIn('b.patient_id', $ids)
+            ->groupBy('b.patient_id')
+            ->selectRaw('b.patient_id, COUNT(*) as total, '
+                ."SUM(CASE WHEN ba.status IN ('no_show','missed','absent') THEN 1 ELSE 0 END) as no_shows")
+            ->get();
+
+        $map = [];
+        foreach ($rows as $r) {
+            $total = (int) $r->total;
+            $noShows = (int) $r->no_shows;
+            if ($total < 1 || $noShows < 1) {
+                continue;
+            }
+            $rate = round($noShows / $total * 100, 1);
+
+            if ($noShows >= 2 && $rate >= 30) {
+                $level = 'high';
+            } elseif ($total >= 3 && ($noShows >= 1 || $rate >= 20)) {
+                $level = 'medium';
+            } else {
+                continue; // a single miss in a short history isn't a reliable signal
+            }
+
+            $map[(int) $r->patient_id] = ['level' => $level, 'rate' => $rate, 'no_shows' => $noShows, 'total' => $total];
+        }
+
+        return $map;
+    }
+
     // ─── Dental Relationships ─────────────────────────
 
     public function dentalCharts()

@@ -13,7 +13,13 @@ const isRtl = computed(() => (page.props.dir || 'rtl') === 'rtl');
 const props = defineProps({
     bookings: Object,
     filters: Object,
+    noShowRisk: { type: Object, default: () => ({}) },
 });
+
+// No-show risk badge for a booking's patient (deterministic, from history).
+function patientRisk(booking) {
+    return booking.patient_id ? (props.noShowRisk?.[booking.patient_id] || null) : null;
+}
 
 const search = ref(props.filters?.search || '');
 const statusFilter = ref(props.filters?.status || '');
@@ -266,7 +272,18 @@ function exportBookings() {
                                         <span class="font-mono text-xs text-gray-600">{{ booking.booking_number || `#${booking.id}` }}</span>
                                     </div>
                                 </td>
-                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">{{ getPatientName(booking) }}</td>
+                                <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">
+                                    <div class="flex items-center gap-1.5">
+                                        <span>{{ getPatientName(booking) }}</span>
+                                        <span v-if="patientRisk(booking)"
+                                            class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[10px] font-bold border"
+                                            :class="patientRisk(booking).level === 'high' ? 'bg-red-50 text-red-600 border-red-200' : 'bg-amber-50 text-amber-600 border-amber-200'"
+                                            :title="(isRtl ? 'خطر غياب — تغيّب ' : 'No-show risk — missed ') + patientRisk(booking).no_shows + (isRtl ? ' من ' : ' of ') + patientRisk(booking).total + (isRtl ? ' موعد (' : ' appts (') + patientRisk(booking).rate + '%). ' + (isRtl ? 'يُنصح بالتأكيد الهاتفي.' : 'Phone-confirm recommended.')">
+                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v4m0 4h.01M10.3 3.86l-8.06 14A1 1 0 003.1 19.4h17.8a1 1 0 00.86-1.5l-8.06-14a1 1 0 00-1.74 0z" /></svg>
+                                            {{ isRtl ? 'غياب محتمل' : 'No-show risk' }}
+                                        </span>
+                                    </div>
+                                </td>
                                 <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500" dir="ltr">
                                     <PhoneWithWhatsApp v-if="getPatientPhone(booking) !== '-'" :phone="getPatientPhone(booking)" variant="compact" />
                                     <span v-else>-</span>

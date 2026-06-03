@@ -1,0 +1,1 @@
+.bk-row[data-v-cce2d9fa]{animation:bkRowIn-cce2d9fa .4s cubic-bezier(.22,.61,.36,1) both;animation-delay:calc(var(--row-i, 0) * 35ms)}@keyframes bkRowIn-cce2d9fa{0%{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}@media(prefers-reduced-motion:reduce){.bk-row[data-v-cce2d9fa]{animation:none!important}}
