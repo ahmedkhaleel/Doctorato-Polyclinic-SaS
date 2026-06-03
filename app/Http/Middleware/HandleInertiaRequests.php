@@ -189,7 +189,7 @@ class HandleInertiaRequests extends Middleware
             // Patient accounts have no AI permission — expose only the curated
             // patient-facing features (never clinical/admin), gated by their flags.
             if ($role && $role->name === 'patient') {
-                $patientFacing = ['patient_assistant'];
+                $patientFacing = ['patient_assistant', 'patient_explain'];
                 $enabled = array_values(array_intersect($patientFacing, \App\Models\AiFeatureFlag::enabledKeys()));
 
                 return $enabled ? ['enabled' => true, 'features' => $enabled] : $off;

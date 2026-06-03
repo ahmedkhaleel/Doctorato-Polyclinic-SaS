@@ -85,6 +85,7 @@ Route::middleware('patient.auth')->group(function () {
     // ─── My Prescriptions ───────────────────────────────────
     Route::get('/prescriptions', [PatientPrescriptionController::class, 'index'])->name('patient.prescriptions.index');
     Route::get('/prescriptions/{prescription}', [PatientPrescriptionController::class, 'show'])->name('patient.prescriptions.show');
+    Route::post('/prescriptions/{prescription}/explain', [PatientPrescriptionController::class, 'explain'])->name('patient.prescriptions.explain')->middleware('throttle:10,1');
 
     // ─── My Treatment Plans ─────────────────────────────────
     Route::get('/treatment-plans', [PatientTreatmentPlanController::class, 'index'])->name('patient.treatment-plans.index');

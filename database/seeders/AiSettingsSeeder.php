@@ -50,6 +50,7 @@ class AiSettingsSeeder extends Seeder
             ['campaign_copy', 'نصوص الحملات', 'Campaign Copy', 'wave1', 5],
             // Wave 2 — patient + doctor text
             ['patient_assistant', 'مساعد المريض', 'Patient Assistant', 'patient', 10],
+            ['patient_explain', 'شرح الوصفة للمريض', 'Patient Rx Explainer', 'patient', 15],
             ['satisfaction_sentiment', 'تحليل مشاعر الرضا', 'Satisfaction Sentiment', 'patient', 11],
             ['followup_message', 'رسائل المتابعة', 'Follow-up Message', 'patient', 12],
             ['doctor_review_reply', 'رد تقييمات الطبيب', 'Doctor Review Reply', 'patient', 13],
