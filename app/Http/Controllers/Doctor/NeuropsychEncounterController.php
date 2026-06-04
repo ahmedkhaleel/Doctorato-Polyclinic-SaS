@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Doctor;
 use App\Models\NeuropsychEncounter;
 use App\Models\Patient;
 use App\Services\AuditLogger;
+use App\Services\NeuroPsych\RiskAssessmentService;
 use App\Services\NeuroPsychBillingService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -18,7 +19,10 @@ use Inertia\Response;
  */
 class NeuropsychEncounterController extends BaseDoctorController
 {
-    public function __construct(private NeuroPsychBillingService $billing) {}
+    public function __construct(
+        private NeuroPsychBillingService $billing,
+        private RiskAssessmentService $risk,
+    ) {}
 
     private function module(Request $request): string
     {
@@ -39,11 +43,23 @@ class NeuropsychEncounterController extends BaseDoctorController
             ->paginate(20)
             ->withQueryString();
 
+        // Active patient-safety signal for the patients on this page (banner + chips).
+        // Only computed for users allowed to see sensitive risk data.
+        $activeRisks = [];
+        if ($request->user()?->role?->hasPermission("{$module}.view_sensitive")) {
+            foreach (array_unique($encounters->pluck('patient_id')->all()) as $pid) {
+                if ($risk = $this->risk->activeRiskFor((int) $pid)) {
+                    $activeRisks[$pid] = $risk;
+                }
+            }
+        }
+
         return Inertia::render('Doctor/Neuropsych/Encounters', [
             'module' => $module,
             'encounters' => $encounters,
             'patients' => Patient::active()->orderBy('full_name')->limit(500)->get(['id', 'full_name', 'phone']),
             'noteFormats' => NeuropsychEncounter::NOTE_FORMATS,
+            'activeRisks' => $activeRisks,
         ]);
     }
 
