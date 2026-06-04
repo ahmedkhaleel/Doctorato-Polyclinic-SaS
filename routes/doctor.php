@@ -319,6 +319,18 @@ Route::middleware(['doctor.auth', 'branch.context'])->group(function () {
                 ->defaults('npModule', $npModule)->middleware("permission:{$npModule}.view_sensitive")->name("doctor.{$npModule}.risk.store");
             Route::get('/risk/{patient}/history', [\App\Http\Controllers\Doctor\NeuropsychRiskController::class, 'history'])
                 ->defaults('npModule', $npModule)->middleware("permission:{$npModule}.view_sensitive")->name("doctor.{$npModule}.risk.history");
+
+            // Medications + monitoring + controlled register (NP4)
+            Route::get('/medications', [\App\Http\Controllers\Doctor\NeuropsychMedicationController::class, 'index'])
+                ->defaults('npModule', $npModule)->name("doctor.{$npModule}.medications.index");
+            Route::post('/medications', [\App\Http\Controllers\Doctor\NeuropsychMedicationController::class, 'store'])
+                ->defaults('npModule', $npModule)->middleware("permission:{$npModule}.update")->name("doctor.{$npModule}.medications.store");
+            Route::post('/medications/{medicationPlan}/stop', [\App\Http\Controllers\Doctor\NeuropsychMedicationController::class, 'stop'])
+                ->defaults('npModule', $npModule)->middleware("permission:{$npModule}.update")->name("doctor.{$npModule}.medications.stop");
+            Route::post('/medications/{medicationPlan}/delete', [\App\Http\Controllers\Doctor\NeuropsychMedicationController::class, 'destroy'])
+                ->defaults('npModule', $npModule)->middleware("permission:{$npModule}.delete")->name("doctor.{$npModule}.medications.destroy");
+            Route::post('/monitoring/{monitoring}/result', [\App\Http\Controllers\Doctor\NeuropsychMedicationController::class, 'recordMonitoring'])
+                ->defaults('npModule', $npModule)->middleware("permission:{$npModule}.update")->name("doctor.{$npModule}.monitoring.result");
         });
     }
 
