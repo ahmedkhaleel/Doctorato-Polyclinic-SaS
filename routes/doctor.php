@@ -331,6 +331,14 @@ Route::middleware(['doctor.auth', 'branch.context'])->group(function () {
                 ->defaults('npModule', $npModule)->middleware("permission:{$npModule}.delete")->name("doctor.{$npModule}.medications.destroy");
             Route::post('/monitoring/{monitoring}/result', [\App\Http\Controllers\Doctor\NeuropsychMedicationController::class, 'recordMonitoring'])
                 ->defaults('npModule', $npModule)->middleware("permission:{$npModule}.update")->name("doctor.{$npModule}.monitoring.result");
+
+            // Treatment courses (NP6): ECT/rTMS/ketamine + consent gate
+            $cc = \App\Http\Controllers\Doctor\NeuropsychCourseController::class;
+            Route::get('/courses', [$cc, 'index'])->defaults('npModule', $npModule)->name("doctor.{$npModule}.courses.index");
+            Route::post('/courses', [$cc, 'store'])->defaults('npModule', $npModule)->middleware("permission:{$npModule}.create")->name("doctor.{$npModule}.courses.store");
+            Route::post('/courses/{treatmentCourse}/consent', [$cc, 'signConsent'])->defaults('npModule', $npModule)->middleware("permission:{$npModule}.update")->name("doctor.{$npModule}.courses.consent");
+            Route::post('/courses/{treatmentCourse}/sessions', [$cc, 'addSession'])->defaults('npModule', $npModule)->middleware("permission:{$npModule}.update")->name("doctor.{$npModule}.courses.sessions.store");
+            Route::post('/courses/{treatmentCourse}/delete', [$cc, 'destroy'])->defaults('npModule', $npModule)->middleware("permission:{$npModule}.delete")->name("doctor.{$npModule}.courses.destroy");
         });
     }
 

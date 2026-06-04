@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\CourseSession;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
 use App\Models\NeuroProcedure;
@@ -140,6 +141,43 @@ class NeuroPsychBillingService
         $invoice->save();
 
         return $invoice;
+    }
+
+    /** NP6 — bill a completed treatment-course session (cost>0). Idempotent. */
+    public function billCourseSession(CourseSession $session, string $module = 'psychiatry'): ?Invoice
+    {
+        if ($session->invoice_item_id || $session->completed_at === null || (float) $session->cost <= 0) {
+            return $session->invoice_id ? $session->invoice()->first() : null;
+        }
+
+        return DB::transaction(function () use ($session, $module) {
+            $invoice = new Invoice([
+                'invoice_number' => Invoice::generateInvoiceNumber(),
+                'invoice_date' => now()->toDateString(),
+                'patient_id' => $session->patient_id,
+                'subtotal' => 0, 'discount_amount' => 0, 'tax_amount' => 0, 'total' => 0,
+                'module' => $module,
+                'created_by' => auth()->id(),
+            ]);
+            $invoice->paid_amount = 0;
+            $invoice->status = 'unpaid';
+            $invoice->save();
+
+            $item = InvoiceItem::create([
+                'invoice_id' => $invoice->id,
+                'description_en' => 'Treatment course session #'.$session->session_number,
+                'description_ar' => 'جلسة دورة علاجية #'.$session->session_number,
+                'quantity' => 1,
+                'unit_price' => (float) $session->cost,
+                'discount' => 0,
+                'total' => (float) $session->cost,
+            ]);
+
+            $this->recalculateInvoice($invoice);
+            $session->forceFill(['invoice_id' => $invoice->id, 'invoice_item_id' => $item->id])->save();
+
+            return $invoice->fresh(['items']);
+        });
     }
 
     /** Void the invoice line an encounter produced and clear its links. No-op when unbilled. */
