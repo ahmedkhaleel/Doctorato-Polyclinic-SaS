@@ -170,7 +170,7 @@ function deleteCategory() {
                 leave-from-class="opacity-100"
                 leave-to-class="opacity-0"
             >
-                <div v-if="showModal" class="fixed inset-0 z-50 flex items-center justify-center p-4" @click.self="showModal = false">
+                <div v-if="showModal" v-focus-trap="() => (showModal = false)" role="dialog" aria-modal="true" class="fixed inset-0 z-50 flex items-center justify-center p-4" @click.self="showModal = false">
                     <div class="fixed inset-0 bg-black/40 backdrop-blur-sm"></div>
                     <Transition
                         enter-active-class="transition ease-out duration-200"

@@ -169,7 +169,7 @@ const statusLabel = (a) => {
 
         <!-- Extend trial modal -->
         <Transition name="dt-modal">
-            <div v-if="extendOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40" @click.self="extendOpen = false">
+            <div v-if="extendOpen" v-focus-trap="() => (extendOpen = false)" role="dialog" aria-modal="true" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40" @click.self="extendOpen = false">
                 <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 dt-pop">
                     <h3 class="text-lg font-bold text-[#1B365D] mb-1">{{ t('تمديد فترة التجربة', 'Extend trial period') }}</h3>
                     <p class="text-sm text-gray-500 mb-4">
@@ -190,7 +190,7 @@ const statusLabel = (a) => {
 
         <!-- Reset password modal -->
         <Transition name="dt-modal">
-            <div v-if="pwOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40" @click.self="pwOpen = false">
+            <div v-if="pwOpen" v-focus-trap="() => (pwOpen = false)" role="dialog" aria-modal="true" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40" @click.self="pwOpen = false">
                 <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 dt-pop">
                     <h3 class="text-lg font-bold text-[#1B365D] mb-1">{{ t('تغيير كلمة مرور الديمو', 'Change demo password') }}</h3>
                     <p class="text-sm text-gray-500 mb-4">

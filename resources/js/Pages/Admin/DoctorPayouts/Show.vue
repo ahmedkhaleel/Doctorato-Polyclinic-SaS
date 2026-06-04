@@ -266,7 +266,7 @@ function cancelPayout() {
 
         <!-- Mark as Paid Modal -->
         <Teleport to="body">
-            <div v-if="showPayModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50" @click.self="showPayModal = false">
+            <div v-if="showPayModal" v-focus-trap="() => (showPayModal = false)" role="dialog" aria-modal="true" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50" @click.self="showPayModal = false">
                 <div class="bg-white rounded-2xl shadow-2xl p-4 md:p-6 w-full max-w-md">
                     <h3 class="text-lg font-bold text-gray-900 mb-4">{{ $t('a_mark_as_paid') }}</h3>
                     <div class="space-y-4">
@@ -305,7 +305,7 @@ function cancelPayout() {
 
         <!-- Cancel Modal -->
         <Teleport to="body">
-            <div v-if="showCancelModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50" @click.self="showCancelModal = false">
+            <div v-if="showCancelModal" v-focus-trap="() => (showCancelModal = false)" role="dialog" aria-modal="true" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50" @click.self="showCancelModal = false">
                 <div class="bg-white rounded-2xl shadow-2xl p-4 md:p-6 w-full max-w-md">
                     <h3 class="text-lg font-bold text-gray-900 mb-4">{{ $t('a_cancel_payout') }}</h3>
                     <p class="text-sm text-gray-500 mb-4">{{ $t('a_cancel_payout_warning') }}</p>

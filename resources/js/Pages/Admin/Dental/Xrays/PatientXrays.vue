@@ -291,7 +291,7 @@ const selectedXray = ref(null);
                     leave-from-class="opacity-100"
                     leave-to-class="opacity-0"
                 >
-                    <div v-if="selectedXray" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4" @click.self="selectedXray = null">
+                    <div v-if="selectedXray" v-focus-trap="() => (selectedXray = null)" role="dialog" aria-modal="true" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4" @click.self="selectedXray = null">
                         <div class="relative max-w-4xl w-full animate-[lightboxScale_0.3s_ease-out]">
                             <button @click="selectedXray = null" class="absolute -top-10 end-0 text-white hover:text-gray-300 transition" aria-label="Close">
                                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">

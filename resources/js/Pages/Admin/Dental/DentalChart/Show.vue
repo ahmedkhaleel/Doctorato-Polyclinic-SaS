@@ -825,7 +825,7 @@ const selectedToothTreatments = computed(() => selectedTooth.value ? getToothTre
 <!-- ═══ EDIT CONDITION MODAL ═══ -->
 <Teleport to="body">
 <Transition enter-active-class="transition-all duration-300 ease-out" enter-from-class="opacity-0" enter-to-class="opacity-100" leave-active-class="transition-all duration-200 ease-in" leave-from-class="opacity-100" leave-to-class="opacity-0">
-<div v-if="showModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4" @click.self="showModal=false">
+<div v-if="showModal" v-focus-trap="() => (showModal = false)" role="dialog" aria-modal="true" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4" @click.self="showModal=false">
     <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden">
         <div class="bg-gradient-to-r from-[#1B365D] to-[#1B365D] px-6 py-4 flex items-center justify-between">
             <div class="flex items-center gap-3">
@@ -901,7 +901,7 @@ const selectedToothTreatments = computed(() => selectedTooth.value ? getToothTre
 <!-- ═══ ADD ENTRY MODAL ═══ -->
 <Teleport to="body">
 <Transition enter-active-class="transition-all duration-300 ease-out" enter-from-class="opacity-0" enter-to-class="opacity-100" leave-active-class="transition-all duration-200 ease-in" leave-from-class="opacity-100" leave-to-class="opacity-0">
-<div v-if="showEntryModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-start justify-center p-4 overflow-y-auto" @click.self="showEntryModal=false">
+<div v-if="showEntryModal" v-focus-trap="() => (showEntryModal = false)" role="dialog" aria-modal="true" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-start justify-center p-4 overflow-y-auto" @click.self="showEntryModal=false">
     <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl my-8 overflow-hidden">
         <div class="bg-gradient-to-r from-[#1B365D] via-[#1B365D] to-emerald-600 px-6 py-5 flex items-center justify-between">
             <div class="flex items-center gap-3">

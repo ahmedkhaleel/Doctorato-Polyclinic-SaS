@@ -409,7 +409,7 @@ function copyAllCredentials() {
                 leave-from-class="opacity-100"
                 leave-to-class="opacity-0"
             >
-                <div v-if="showCredentials && credentials" class="fixed inset-0 z-[9999] flex items-center justify-center p-4" @click.self="showCredentials = false">
+                <div v-if="showCredentials && credentials" v-focus-trap="() => (showCredentials = false)" role="dialog" aria-modal="true" class="fixed inset-0 z-[9999] flex items-center justify-center p-4" @click.self="showCredentials = false">
                     <div class="fixed inset-0 bg-black/50 backdrop-blur-sm"></div>
                     <Transition
                         enter-active-class="transition duration-300 ease-out"

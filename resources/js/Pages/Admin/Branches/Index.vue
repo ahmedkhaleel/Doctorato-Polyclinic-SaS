@@ -119,7 +119,7 @@ function deactivate(b) {
         </div>
 
         <!-- Member assignment modal -->
-        <div v-if="assignFor" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40" @click.self="assignFor = null">
+        <div v-if="assignFor" v-focus-trap="() => (assignFor = null)" role="dialog" aria-modal="true" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40" @click.self="assignFor = null">
             <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-hidden flex flex-col" :dir="isRtl ? 'rtl' : 'ltr'">
                 <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between" style="background:linear-gradient(135deg,#1B365D,#2a4a7a)">
                     <h3 class="text-white font-bold">{{ t('أعضاء فرع', 'Members of') }} {{ isRtl ? assignFor.name_ar : assignFor.name_en }}</h3>

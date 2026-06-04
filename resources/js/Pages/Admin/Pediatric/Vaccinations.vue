@@ -420,7 +420,7 @@ function deleteVaccination(v) {
         </div>
 
         <!-- Modal: New/Edit Vaccination -->
-        <div v-if="showNewModal" class="fixed inset-0 z-50 flex items-center justify-center p-4" @click.self="showNewModal = false">
+        <div v-if="showNewModal" v-focus-trap="() => (showNewModal = false)" role="dialog" aria-modal="true" class="fixed inset-0 z-50 flex items-center justify-center p-4" @click.self="showNewModal = false">
             <div class="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
             <div class="relative bg-white rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
                 <div class="sticky top-0 bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between">
@@ -525,7 +525,7 @@ function deleteVaccination(v) {
         </div>
 
         <!-- Modal: Initialize Schedule -->
-        <div v-if="showInitModal" class="fixed inset-0 z-50 flex items-center justify-center p-4" @click.self="showInitModal = false">
+        <div v-if="showInitModal" v-focus-trap="() => (showInitModal = false)" role="dialog" aria-modal="true" class="fixed inset-0 z-50 flex items-center justify-center p-4" @click.self="showInitModal = false">
             <div class="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
             <div class="relative bg-white rounded-3xl shadow-2xl w-full max-w-md">
                 <div class="px-6 py-5 border-b border-gray-100">
@@ -553,7 +553,7 @@ function deleteVaccination(v) {
         </div>
 
         <!-- Modal: Quick Status Update -->
-        <div v-if="showStatusModal" class="fixed inset-0 z-50 flex items-center justify-center p-4" @click.self="showStatusModal = false">
+        <div v-if="showStatusModal" v-focus-trap="() => (showStatusModal = false)" role="dialog" aria-modal="true" class="fixed inset-0 z-50 flex items-center justify-center p-4" @click.self="showStatusModal = false">
             <div class="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
             <div class="relative bg-white rounded-3xl shadow-2xl w-full max-w-md">
                 <div class="px-6 py-5 border-b border-gray-100">

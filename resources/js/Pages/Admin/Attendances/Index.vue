@@ -1271,7 +1271,7 @@ onMounted(() => {
                 leave-from-class="opacity-100"
                 leave-to-class="opacity-0"
             >
-                <div v-if="mapModal" class="fixed inset-0 z-[9999] flex items-center justify-center p-4" @click.self="closeMap">
+                <div v-if="mapModal" v-focus-trap="closeMap" role="dialog" aria-modal="true" class="fixed inset-0 z-[9999] flex items-center justify-center p-4" @click.self="closeMap">
                     <!-- Backdrop -->
                     <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" />
 

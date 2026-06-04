@@ -412,7 +412,7 @@ function getModuleColor(mod) {
         <!-- Delete Confirmation Modal -->
         <Teleport to="body">
             <Transition name="modal">
-                <div v-if="deleteId" class="fixed inset-0 z-50 flex items-center justify-center p-4" @click.self="cancelDelete">
+                <div v-if="deleteId" v-focus-trap="cancelDelete" role="dialog" aria-modal="true" class="fixed inset-0 z-50 flex items-center justify-center p-4" @click.self="cancelDelete">
                     <div class="fixed inset-0 bg-black/40 backdrop-blur-sm"></div>
                     <div class="modal-content relative bg-white rounded-2xl shadow-2xl p-4 md:p-6 w-full max-w-sm z-10">
                         <div class="w-12 h-12 mx-auto mb-4 rounded-full bg-red-50 flex items-center justify-center">

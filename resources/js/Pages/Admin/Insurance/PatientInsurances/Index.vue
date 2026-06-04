@@ -267,7 +267,7 @@ function fmt(n) {
 
         <!-- ═══ Add Insurance modal ═══ -->
         <Transition name="ins-modal">
-            <div v-if="showAdd" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40" @click.self="showAdd = false">
+            <div v-if="showAdd" v-focus-trap="() => (showAdd = false)" role="dialog" aria-modal="true" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40" @click.self="showAdd = false">
                 <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[92vh] overflow-y-auto p-5 md:p-6">
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="text-lg font-bold text-[#1B365D]">{{ isRtl ? 'إضافة تأمين لمريض' : 'Add Patient Insurance' }}</h3>
