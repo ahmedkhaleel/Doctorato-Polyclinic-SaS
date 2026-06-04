@@ -313,6 +313,12 @@ Route::middleware(['doctor.auth', 'branch.context'])->group(function () {
                 ->defaults('npModule', $npModule)->middleware("permission:{$npModule}.update")->name("doctor.{$npModule}.scales.store");
             Route::get('/scales/{patient}/trend', [\App\Http\Controllers\Doctor\NeuropsychScaleController::class, 'trend'])
                 ->defaults('npModule', $npModule)->name("doctor.{$npModule}.scales.trend");
+
+            // Risk assessment (NP3) — SENSITIVE: gated by *.view_sensitive + audited
+            Route::post('/risk', [\App\Http\Controllers\Doctor\NeuropsychRiskController::class, 'store'])
+                ->defaults('npModule', $npModule)->middleware("permission:{$npModule}.view_sensitive")->name("doctor.{$npModule}.risk.store");
+            Route::get('/risk/{patient}/history', [\App\Http\Controllers\Doctor\NeuropsychRiskController::class, 'history'])
+                ->defaults('npModule', $npModule)->middleware("permission:{$npModule}.view_sensitive")->name("doctor.{$npModule}.risk.history");
         });
     }
 
