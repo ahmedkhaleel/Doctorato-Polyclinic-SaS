@@ -1,5 +1,15 @@
 # قائمة تنفيذ ميديول الإشعارات الموحّد — TODO كامل
 
+> **حالة التنفيذ (محدّثة):** ✅ **الميديول مبنيّ ومُختبَر**. الكود موجود في
+> `app/Services/Notifications/` (Notifier/NotificationService + Channels:
+> whatsapp/sms/email/in_app + ConsentService + ChannelPreferenceService +
+> CampaignService + DeliveryReceiptService + NotificationFeedService +
+> NotificationHealthService)، مع ~50 مسار أدمن تحت `/admin/notifications*`
+> و**27 ملف اختبار** تحت `tests/Feature/Notifications/`. مربعات الاختيار أدناه
+> دقيقة على مستوى الخطوة لكنها **لم تُؤشَّر أثناء التنفيذ** — اعتمد على الكود
+> والاختبارات لا على المربعات. كل القنوات معطّلة افتراضيًا حتى يضبط الأدمن
+> الاعتمادات.
+
 > مرجع التصميم: `docs/NOTIFICATIONS_MODULE_PLAN.md`
 > الاصطلاح: لكل مرحلة → بناء + lint (`pint`) + اختبار (`php artisan test`) + بناء أصول (`npm run build`) + commit/push.
 > القنوات: `whatsapp` · `sms` · `email` · `in_app`. القاعدة: لا إرسال مباشر — كله عبر `Notifier`.
