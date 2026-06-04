@@ -2,6 +2,7 @@
 import { ref, watch , computed } from 'vue';
 import { Link, router , usePage } from '@inertiajs/vue3';
 import WebmasterLayout from '@/Layouts/WebmasterLayout.vue';
+import { useConfirm } from '@/Composables/useConfirm.js';
 import { usePermissions } from '@/Composables/usePermissions.js';
 
 const { can } = usePermissions();
@@ -28,10 +29,12 @@ watch(search, (val) => {
     }, 400);
 });
 
+const { confirm } = useConfirm();
+
 function deleteService(id) {
-    if (window.confirm(isRtl ? 'هل أنت متأكد من حذف هذه الخدمة؟' : 'Are you sure you want to delete this service?')) {
+    confirm(isRtl.value ? 'هل أنت متأكد من حذف هذه الخدمة؟' : 'Are you sure you want to delete this service?', () => {
         router.post(`/webmaster/services/${id}/delete`);
-    }
+    });
 }
 
 const statusColors = {

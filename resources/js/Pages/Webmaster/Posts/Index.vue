@@ -2,6 +2,7 @@
 import { ref, watch , computed } from 'vue';
 import { Link, router , usePage } from '@inertiajs/vue3';
 import WebmasterLayout from '@/Layouts/WebmasterLayout.vue';
+import { useConfirm } from '@/Composables/useConfirm.js';
 import { usePermissions } from '@/Composables/usePermissions.js';
 
 const { can } = usePermissions();
@@ -28,10 +29,12 @@ watch(search, (val) => {
     }, 400);
 });
 
+const { confirm } = useConfirm();
+
 function deletePost(id) {
-    if (window.confirm(isRtl ? 'هل أنت متأكد من حذف هذا المقال؟' : 'Are you sure you want to delete this post?')) {
+    confirm(isRtl.value ? 'هل أنت متأكد من حذف هذا المقال؟' : 'Are you sure you want to delete this post?', () => {
         router.post(`/webmaster/posts/${id}/delete`);
-    }
+    });
 }
 
 function formatDate(date) {

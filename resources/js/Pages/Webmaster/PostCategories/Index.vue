@@ -2,6 +2,7 @@
 import { ref, watch , computed } from 'vue';
 import { Link, router , usePage } from '@inertiajs/vue3';
 import WebmasterLayout from '@/Layouts/WebmasterLayout.vue';
+import { useConfirm } from '@/Composables/useConfirm.js';
 import { usePermissions } from '@/Composables/usePermissions.js';
 
 const { can } = usePermissions();
@@ -29,10 +30,12 @@ watch(search, (val) => {
     }, 400);
 });
 
+const { confirm } = useConfirm();
+
 function deleteCategory(id) {
-    if (window.confirm(isRtl ? 'هل أنت متأكد من حذف هذا التصنيف؟' : 'Are you sure you want to delete this category?')) {
+    confirm(isRtl.value ? 'هل أنت متأكد من حذف هذا التصنيف؟' : 'Are you sure you want to delete this category?', () => {
         router.post(`/webmaster/post-categories/${id}/delete`);
-    }
+    });
 }
 </script>
 

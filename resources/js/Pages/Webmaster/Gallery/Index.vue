@@ -2,6 +2,7 @@
 import { ref, watch , computed } from 'vue';
 import { Link, router , usePage } from '@inertiajs/vue3';
 import WebmasterLayout from '@/Layouts/WebmasterLayout.vue';
+import { useConfirm } from '@/Composables/useConfirm.js';
 import { usePermissions } from '@/Composables/usePermissions.js';
 
 const { can } = usePermissions();
@@ -29,10 +30,12 @@ watch(search, (val) => {
     }, 400);
 });
 
+const { confirm } = useConfirm();
+
 function deleteItem(id) {
-    if (window.confirm(isRtl ? 'هل أنت متأكد من حذف هذا العنصر؟' : 'Are you sure you want to delete this gallery item?')) {
+    confirm(isRtl.value ? 'هل أنت متأكد من حذف هذا العنصر؟' : 'Are you sure you want to delete this gallery item?', () => {
         router.post(`/webmaster/gallery/${id}/delete`);
-    }
+    });
 }
 </script>
 

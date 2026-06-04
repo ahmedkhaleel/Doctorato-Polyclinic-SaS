@@ -2,6 +2,7 @@
 import { ref, watch , computed } from 'vue';
 import { Link, router , usePage } from '@inertiajs/vue3';
 import WebmasterLayout from '@/Layouts/WebmasterLayout.vue';
+import { useConfirm } from '@/Composables/useConfirm.js';
 import { usePermissions } from '@/Composables/usePermissions.js';
 
 const { can } = usePermissions();
@@ -29,10 +30,12 @@ watch(search, (val) => {
     }, 400);
 });
 
+const { confirm } = useConfirm();
+
 function deleteTag(id) {
-    if (window.confirm(isRtl ? 'هل أنت متأكد من حذف هذا الوسم؟' : 'Are you sure you want to delete this tag?')) {
+    confirm(isRtl.value ? 'هل أنت متأكد من حذف هذا الوسم؟' : 'Are you sure you want to delete this tag?', () => {
         router.post(`/webmaster/tags/${id}/delete`);
-    }
+    });
 }
 </script>
 

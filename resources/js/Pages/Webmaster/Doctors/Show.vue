@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue';
 import { Link, router, useForm , usePage } from '@inertiajs/vue3';
 import WebmasterLayout from '@/Layouts/WebmasterLayout.vue';
+import { useConfirm } from '@/Composables/useConfirm.js';
 import StatusBadge from '@/Components/Admin/StatusBadge.vue';
 import BarChart from '@/Components/Admin/BarChart.vue';
 import DonutChart from '@/Components/Admin/DonutChart.vue';
@@ -30,6 +31,7 @@ const props = defineProps({
 const __page = usePage();
 const locale = computed(() => __page.props.locale || 'ar');
 const isRtl = computed(() => (__page.props.dir || 'rtl') === 'rtl');
+const { confirm } = useConfirm();
 
 
 const activeTab = ref('overview');
@@ -171,11 +173,11 @@ function submitPrescription() {
 }
 
 function deletePrescription(rxId) {
-    if (window.confirm('Are you sure you want to delete this prescription?')) {
+    confirm(isRtl.value ? 'هل أنت متأكد من حذف هذه الروشتة؟' : 'Are you sure you want to delete this prescription?', () => {
         router.post(`/webmaster/prescriptions/${rxId}/delete`, {}, {
             preserveScroll: true,
         });
-    }
+    });
 }
 
 const revenueChartData = computed(() =>

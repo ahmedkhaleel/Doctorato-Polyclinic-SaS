@@ -2,6 +2,7 @@
 import { ref , computed } from 'vue';
 import { Link, router , usePage } from '@inertiajs/vue3';
 import WebmasterLayout from '@/Layouts/WebmasterLayout.vue';
+import { useConfirm } from '@/Composables/useConfirm.js';
 import { usePermissions } from '@/Composables/usePermissions.js';
 
 const { can } = usePermissions();
@@ -18,10 +19,12 @@ const isRtl = computed(() => (__page.props.dir || 'rtl') === 'rtl');
 const dragging = ref(null);
 const dragOver = ref(null);
 
+const { confirm } = useConfirm();
+
 function deleteSlide(id) {
-    if (window.confirm(isRtl ? 'هل أنت متأكد من حذف هذا السلايد؟' : 'Are you sure you want to delete this slide?')) {
+    confirm(isRtl.value ? 'هل أنت متأكد من حذف هذا السلايد؟' : 'Are you sure you want to delete this slide?', () => {
         router.post(`/webmaster/slider/${id}/delete`);
-    }
+    });
 }
 
 function toggleActive(slide) {
