@@ -1,99 +1,99 @@
 <?php
 
-use App\Http\Controllers\Admin\AuthController;
-use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\PostController;
-use App\Http\Controllers\Admin\ServiceController;
-use App\Http\Controllers\Admin\TestimonialController;
-use App\Http\Controllers\Admin\DoctorController;
-use App\Http\Controllers\Admin\FaqController;
-use App\Http\Controllers\Admin\GalleryController;
-use App\Http\Controllers\Admin\BookingController;
-use App\Http\Controllers\Admin\SettingController;
-use App\Http\Controllers\Admin\PageController;
-use App\Http\Controllers\Admin\ServiceCategoryController;
-use App\Http\Controllers\Admin\PostCategoryController;
-use App\Http\Controllers\Admin\TagController;
-use App\Http\Controllers\Admin\ContactMessageController;
-use App\Http\Controllers\Admin\NotificationController;
-use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\RoleController;
-use App\Http\Controllers\Admin\PatientController;
-use App\Http\Controllers\Admin\VisitController;
-use App\Http\Controllers\Admin\PrescriptionController;
-use App\Http\Controllers\Admin\MedicationController;
-use App\Http\Controllers\Admin\InvoiceController;
-use App\Http\Controllers\Admin\PaymentController;
-use App\Http\Controllers\Admin\PaymentMethodController;
-use App\Http\Controllers\Admin\DiscountCodeController;
-use App\Http\Controllers\Admin\ExpenseController;
-use App\Http\Controllers\Admin\ExpenseCategoryController;
-use App\Http\Controllers\Admin\SupplyController;
-use App\Http\Controllers\Admin\SupplyCategoryController;
-use App\Http\Controllers\Admin\DepartmentController;
-use App\Http\Controllers\Admin\EmployeeController;
-use App\Http\Controllers\Admin\PayrollController;
-use App\Http\Controllers\Admin\AdvanceController;
-use App\Http\Controllers\Admin\PenaltyController;
-use App\Http\Controllers\Admin\HrDashboardController;
-use App\Http\Controllers\Admin\ShiftController;
-use App\Http\Controllers\Admin\AttendanceController;
-use App\Http\Controllers\Admin\LeaveController;
-use App\Http\Controllers\Admin\ReportController;
-use App\Http\Controllers\Admin\DentalReportController;
-use App\Http\Controllers\Admin\ExportController;
 use App\Http\Controllers\Admin\ActivityLogController;
-use App\Http\Controllers\Admin\CalendarController;
-use App\Http\Controllers\Admin\SliderController;
-use App\Http\Controllers\Admin\SeoPageController;
-use App\Http\Controllers\Admin\TrackingController;
-use App\Http\Controllers\Admin\PackageBundleController;
-use App\Http\Controllers\Admin\PackageBundleBookingController;
 use App\Http\Controllers\Admin\AdminDoctorPayoutController;
+use App\Http\Controllers\Admin\AdvanceController;
+use App\Http\Controllers\Admin\AppointmentReminderController;
+use App\Http\Controllers\Admin\AttendanceController;
+use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\BookingController;
+use App\Http\Controllers\Admin\CalendarController;
 use App\Http\Controllers\Admin\ChatController;
-use App\Http\Controllers\Admin\CrmDashboardController;
-use App\Http\Controllers\Admin\LeadController;
-use App\Http\Controllers\Admin\CrmCampaignController;
-use App\Http\Controllers\Admin\LeadSourceController;
 use App\Http\Controllers\Admin\CommunicationTemplateController;
-use App\Http\Controllers\Admin\MarketerCommissionController;
+use App\Http\Controllers\Admin\ContactMessageController;
+use App\Http\Controllers\Admin\CreditNoteController;
+use App\Http\Controllers\Admin\CrmCampaignController;
+use App\Http\Controllers\Admin\CrmDashboardController;
 use App\Http\Controllers\Admin\CrmReportController;
 use App\Http\Controllers\Admin\CrmSettingsController;
-use App\Http\Controllers\Admin\LeadScoringRuleController;
-use App\Http\Controllers\Admin\FollowUpSequenceController;
-use App\Http\Controllers\Admin\LeadAssignmentRuleController;
-use App\Http\Controllers\Admin\ModuleSettingController;
-use App\Http\Controllers\Admin\SupplierController;
-use App\Http\Controllers\Admin\PurchaseOrderController;
-use App\Http\Controllers\Admin\InsuranceCompanyController;
-use App\Http\Controllers\Admin\InsuranceClaimController;
-use App\Http\Controllers\Admin\InsurancePlanController;
-use App\Http\Controllers\Admin\PatientInsuranceController;
-use App\Http\Controllers\Admin\PatientVitalController;
-use App\Http\Controllers\Admin\PatientDocumentController;
-use App\Http\Controllers\Admin\PatientSatisfactionController;
-use App\Http\Controllers\Admin\DentalDashboardController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DentalChartController;
+use App\Http\Controllers\Admin\DentalDashboardController;
+use App\Http\Controllers\Admin\DentalLabOrderController;
+use App\Http\Controllers\Admin\DentalPrescriptionTemplateController;
+use App\Http\Controllers\Admin\DentalReportController;
 use App\Http\Controllers\Admin\DentalTreatmentController;
 use App\Http\Controllers\Admin\DentalTreatmentPlanController;
 use App\Http\Controllers\Admin\DentalXrayController;
-use App\Http\Controllers\Admin\DentalLabOrderController;
-use App\Http\Controllers\Admin\DentalPrescriptionTemplateController;
-use App\Http\Controllers\Admin\PeriodontalChartController;
-use App\Http\Controllers\Admin\GlobalSearchController;
-use App\Http\Controllers\Admin\InsuranceReportController;
-use App\Http\Controllers\Admin\AppointmentReminderController;
-use App\Http\Controllers\Admin\StaffPerformanceController;
-use App\Http\Controllers\Admin\CreditNoteController;
-use App\Http\Controllers\Admin\MedicalCertificateController;
+use App\Http\Controllers\Admin\DepartmentController;
+use App\Http\Controllers\Admin\DiscountCodeController;
+use App\Http\Controllers\Admin\DoctorController;
 use App\Http\Controllers\Admin\DoctorKpiController;
-use App\Http\Controllers\Admin\QueueAnalyticsController;
-use App\Http\Controllers\Admin\RevenueAnalyticsController;
-use App\Http\Controllers\Admin\PatientWalletController;
 use App\Http\Controllers\Admin\DoctorScheduleController;
+use App\Http\Controllers\Admin\EmployeeController;
+use App\Http\Controllers\Admin\ExpenseCategoryController;
+use App\Http\Controllers\Admin\ExpenseController;
+use App\Http\Controllers\Admin\ExportController;
+use App\Http\Controllers\Admin\FaqController;
+use App\Http\Controllers\Admin\FollowUpSequenceController;
+use App\Http\Controllers\Admin\GalleryController;
+use App\Http\Controllers\Admin\GlobalSearchController;
+use App\Http\Controllers\Admin\HrDashboardController;
+use App\Http\Controllers\Admin\InsuranceClaimController;
+use App\Http\Controllers\Admin\InsuranceCompanyController;
+use App\Http\Controllers\Admin\InsurancePlanController;
+use App\Http\Controllers\Admin\InsuranceReportController;
+use App\Http\Controllers\Admin\InvoiceController;
+use App\Http\Controllers\Admin\LeadAssignmentRuleController;
+use App\Http\Controllers\Admin\LeadController;
+use App\Http\Controllers\Admin\LeadScoringRuleController;
+use App\Http\Controllers\Admin\LeadSourceController;
+use App\Http\Controllers\Admin\LeaveController;
+use App\Http\Controllers\Admin\MarketerCommissionController;
+use App\Http\Controllers\Admin\MedicalCertificateController;
+use App\Http\Controllers\Admin\MedicationController;
+use App\Http\Controllers\Admin\ModuleSettingController;
 use App\Http\Controllers\Admin\NotificationCenterController;
+use App\Http\Controllers\Admin\NotificationController;
+use App\Http\Controllers\Admin\PackageBundleBookingController;
+use App\Http\Controllers\Admin\PackageBundleController;
+use App\Http\Controllers\Admin\PageController;
+use App\Http\Controllers\Admin\PatientController;
+use App\Http\Controllers\Admin\PatientDocumentController;
+use App\Http\Controllers\Admin\PatientInsuranceController;
+use App\Http\Controllers\Admin\PatientSatisfactionController;
+use App\Http\Controllers\Admin\PatientVitalController;
+use App\Http\Controllers\Admin\PatientWalletController;
+use App\Http\Controllers\Admin\PaymentController;
+use App\Http\Controllers\Admin\PaymentMethodController;
+use App\Http\Controllers\Admin\PayrollController;
+use App\Http\Controllers\Admin\PenaltyController;
+use App\Http\Controllers\Admin\PeriodontalChartController;
+use App\Http\Controllers\Admin\PostCategoryController;
+use App\Http\Controllers\Admin\PostController;
+use App\Http\Controllers\Admin\PrescriptionController;
+use App\Http\Controllers\Admin\PurchaseOrderController;
+use App\Http\Controllers\Admin\QueueAnalyticsController;
 use App\Http\Controllers\Admin\ReferralController;
+use App\Http\Controllers\Admin\ReportController;
+use App\Http\Controllers\Admin\RevenueAnalyticsController;
+use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\SeoPageController;
+use App\Http\Controllers\Admin\ServiceCategoryController;
+use App\Http\Controllers\Admin\ServiceController;
+use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\ShiftController;
+use App\Http\Controllers\Admin\SliderController;
+use App\Http\Controllers\Admin\StaffPerformanceController;
+use App\Http\Controllers\Admin\SupplierController;
+use App\Http\Controllers\Admin\SupplyCategoryController;
+use App\Http\Controllers\Admin\SupplyController;
+use App\Http\Controllers\Admin\TagController;
+use App\Http\Controllers\Admin\TestimonialController;
+use App\Http\Controllers\Admin\TrackingController;
 use App\Http\Controllers\Admin\TrashController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\VisitController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -114,10 +114,10 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('admin.logout');
 Route::post('/switch-locale-public', [AuthController::class, 'switchLocale'])->name('admin.switchLocalePublic');
 
 // Password reset
-Route::get('/forgot-password',          [AuthController::class, 'showForgotPassword'])->name('admin.password.request');
-Route::post('/forgot-password',         [AuthController::class, 'sendResetLink'])->name('admin.password.email')->middleware('throttle:5,15');
-Route::get('/reset-password/{token}',   [AuthController::class, 'showResetForm'])->name('admin.password.reset');
-Route::post('/reset-password',          [AuthController::class, 'resetPassword'])->name('admin.password.update')->middleware('throttle:5,15');
+Route::get('/forgot-password', [AuthController::class, 'showForgotPassword'])->name('admin.password.request');
+Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('admin.password.email')->middleware('throttle:5,15');
+Route::get('/reset-password/{token}', [AuthController::class, 'showResetForm'])->name('admin.password.reset');
+Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('admin.password.update')->middleware('throttle:5,15');
 
 // Protected admin routes (requires authentication + active account)
 Route::middleware(['admin.auth', 'branch.context'])->group(function () {
@@ -390,7 +390,7 @@ Route::middleware(['admin.auth', 'branch.context'])->group(function () {
     Route::post('/notification-campaigns/{campaign}/delete', [\App\Http\Controllers\Admin\AdminCampaignController::class, 'destroy'])->name('admin.notification-campaigns.destroy')->middleware('permission:notifications.update');
 
     // ─── SMS Templates (admin-editable copy) ───────────────
-    Route::get('/sms-templates',   [\App\Http\Controllers\Admin\SmsTemplateController::class, 'index'])
+    Route::get('/sms-templates', [\App\Http\Controllers\Admin\SmsTemplateController::class, 'index'])
         ->name('admin.sms-templates.index')->middleware('permission:settings.view');
     Route::post('/sms-templates/{smsTemplate}', [\App\Http\Controllers\Admin\SmsTemplateController::class, 'update'])
         ->name('admin.sms-templates.update')->middleware('permission:settings.update');
@@ -445,8 +445,8 @@ Route::middleware(['admin.auth', 'branch.context'])->group(function () {
         Route::post('/trash/{type}/empty', [TrashController::class, 'emptyTrash'])->name('admin.trash.empty');
         Route::post('/trash/{type}/{id}/restore', [TrashController::class, 'restore'])->name('admin.trash.restore');
         Route::post('/trash/{type}/{id}/delete', [TrashController::class, 'forceDelete'])->name('admin.trash.forceDelete');
-        Route::post('/trash/bulk-restore',       [TrashController::class, 'bulkRestore'])->name('admin.trash.bulkRestore');
-        Route::post('/trash/bulk-delete',        [TrashController::class, 'bulkForceDelete'])->name('admin.trash.bulkForceDelete');
+        Route::post('/trash/bulk-restore', [TrashController::class, 'bulkRestore'])->name('admin.trash.bulkRestore');
+        Route::post('/trash/bulk-delete', [TrashController::class, 'bulkForceDelete'])->name('admin.trash.bulkForceDelete');
     });
 
     // ═══════════════════════════════════════════════════════════
@@ -601,11 +601,11 @@ Route::middleware(['admin.auth', 'branch.context'])->group(function () {
 
         // Payroll
         // Self-service: any logged-in admin-panel user can see their own payslips.
-    // No permission gate — scoped to the user's own employee record in controller.
-    Route::get('/my-payslips', [\App\Http\Controllers\Admin\AdminMyPayslipController::class, 'index'])->name('admin.my-payslips.index')->middleware('module:hr');
-    Route::get('/my-payslips/{salarySlip}', [\App\Http\Controllers\Admin\AdminMyPayslipController::class, 'show'])->name('admin.my-payslips.show')->middleware('module:hr');
+        // No permission gate — scoped to the user's own employee record in controller.
+        Route::get('/my-payslips', [\App\Http\Controllers\Admin\AdminMyPayslipController::class, 'index'])->name('admin.my-payslips.index')->middleware('module:hr');
+        Route::get('/my-payslips/{salarySlip}', [\App\Http\Controllers\Admin\AdminMyPayslipController::class, 'show'])->name('admin.my-payslips.show')->middleware('module:hr');
 
-    Route::get('/payroll', [PayrollController::class, 'index'])->name('admin.payroll.index')->middleware('permission:salary_slips.view');
+        Route::get('/payroll', [PayrollController::class, 'index'])->name('admin.payroll.index')->middleware('permission:salary_slips.view');
         Route::get('/payroll/create', [PayrollController::class, 'create'])->name('admin.payroll.create')->middleware('permission:salary_slips.create');
         Route::post('/payroll/generate', [PayrollController::class, 'generate'])->name('admin.payroll.generate')->middleware('permission:salary_slips.create');
         Route::get('/payroll/{salarySlip}', [PayrollController::class, 'show'])->name('admin.payroll.show')->middleware('permission:salary_slips.view');
@@ -987,6 +987,13 @@ Route::middleware(['admin.auth', 'branch.context'])->group(function () {
     Route::get('/obgyn/reports', [\App\Http\Controllers\Admin\AdminObgynController::class, 'reports'])->name('admin.obgyn.reports')->middleware(['module:obgyn', 'permission:obgyn.view']);
     Route::get('/obgyn/settings', [\App\Http\Controllers\Admin\AdminObgynController::class, 'settings'])->name('admin.obgyn.settings')->middleware(['module:obgyn', 'permission:obgyn.view']);
     Route::post('/obgyn/settings', [\App\Http\Controllers\Admin\AdminObgynController::class, 'updateSettings'])->name('admin.obgyn.settings.update')->middleware(['module:obgyn', 'permission:obgyn.update']);
+
+    // ─── Psychiatry & Neurology admin (NP7) — shared controller ──
+    foreach (['psychiatry', 'neurology'] as $npm) {
+        Route::get("/{$npm}", [\App\Http\Controllers\Admin\AdminNeuropsychController::class, 'dashboard'])->defaults('npModule', $npm)->name("admin.{$npm}.dashboard")->middleware(["module:{$npm}", "permission:{$npm}.view"]);
+        Route::get("/{$npm}/settings", [\App\Http\Controllers\Admin\AdminNeuropsychController::class, 'settings'])->defaults('npModule', $npm)->name("admin.{$npm}.settings")->middleware(["module:{$npm}", "permission:{$npm}.view"]);
+        Route::post("/{$npm}/settings", [\App\Http\Controllers\Admin\AdminNeuropsychController::class, 'updateSettings'])->defaults('npModule', $npm)->name("admin.{$npm}.settings.update")->middleware(["module:{$npm}", "permission:{$npm}.update"]);
+    }
 
     // ═══════════════════════════════════════════════════════════
     // ═══ SUPPLIERS & PURCHASE ORDERS ══════════════════════════

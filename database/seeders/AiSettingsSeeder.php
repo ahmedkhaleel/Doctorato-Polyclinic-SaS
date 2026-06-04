@@ -72,6 +72,10 @@ class AiSettingsSeeder extends Seeder
             // Wave 5 — predictive
             ['no_show_prediction', 'توقّع الغياب', 'No-show Prediction', 'predictive', 40],
             ['inventory_reorder', 'اقتراح إعادة طلب المخزون', 'Inventory Reorder', 'predictive', 41],
+            // Wave 6 — neuropsych (psychiatry + neurology)
+            ['np_note_assist', 'صياغة ملاحظة من فحص الحالة العقلية', 'Neuropsych Note Assist', 'clinical', 50],
+            ['np_risk_flag', 'كشف خطر الانتحار من المقاييس', 'Neuropsych Risk Flag', 'clinical', 51],
+            ['np_session_transcription', 'تفريغ جلسة العلاج النفسي', 'Therapy Session Transcription', 'vision', 52],
         ];
         foreach ($features as [$key, $ar, $en, $group, $order]) {
             AiFeatureFlag::firstOrCreate(
