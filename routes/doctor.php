@@ -334,6 +334,16 @@ Route::middleware(['doctor.auth', 'branch.context'])->group(function () {
         });
     }
 
+    // ─── Neurology-only tools (NP5): procedures + seizure/headache diaries ──
+    Route::prefix('neurology')->middleware('module:neurology')->group(function () {
+        $c = \App\Http\Controllers\Doctor\NeuropsychNeuroController::class;
+        Route::get('/neuro', [$c, 'index'])->name('doctor.neurology.neuro.index');
+        Route::post('/neuro/procedures', [$c, 'storeProcedure'])->middleware('permission:neurology.update')->name('doctor.neurology.procedures.store');
+        Route::post('/neuro/procedures/{neuroProcedure}/delete', [$c, 'destroyProcedure'])->middleware('permission:neurology.delete')->name('doctor.neurology.procedures.destroy');
+        Route::post('/neuro/seizures', [$c, 'storeSeizure'])->middleware('permission:neurology.update')->name('doctor.neurology.seizures.store');
+        Route::post('/neuro/headaches', [$c, 'storeHeadache'])->middleware('permission:neurology.update')->name('doctor.neurology.headaches.store');
+    });
+
     // ─── Online Consultations ──────────────────────────────
     Route::get('/online-consultations', [\App\Http\Controllers\Doctor\OnlineConsultationController::class, 'index'])
         ->name('doctor.online-consultations.index');

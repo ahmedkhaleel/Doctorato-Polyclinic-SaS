@@ -138,6 +138,11 @@ Route::middleware('patient.auth')->group(function () {
     Route::get('/neuropsych/scales', [\App\Http\Controllers\Patient\PatientNeuropsychScaleController::class, 'index'])->name('patient.neuropsych.scales.index');
     Route::post('/neuropsych/scales', [\App\Http\Controllers\Patient\PatientNeuropsychScaleController::class, 'store'])->name('patient.neuropsych.scales.store')->middleware('throttle:20,1');
 
+    // ─── Seizure & headache diaries (neurology, NP5) ──
+    Route::get('/neuropsych/diaries', [\App\Http\Controllers\Patient\PatientNeuroDiaryController::class, 'index'])->name('patient.neuropsych.diaries.index');
+    Route::post('/neuropsych/diaries/seizure', [\App\Http\Controllers\Patient\PatientNeuroDiaryController::class, 'storeSeizure'])->name('patient.neuropsych.diaries.seizure')->middleware('throttle:30,1');
+    Route::post('/neuropsych/diaries/headache', [\App\Http\Controllers\Patient\PatientNeuroDiaryController::class, 'storeHeadache'])->name('patient.neuropsych.diaries.headache')->middleware('throttle:30,1');
+
     // ─── Online Consultations ───────────────────────────────
     Route::get('/online-consultations', [OnlineConsultationController::class, 'index'])
         ->name('patient.online-consultations.index');
