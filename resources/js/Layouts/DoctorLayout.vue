@@ -2,6 +2,7 @@
 import { ref, computed, watch, watchEffect, onMounted, onUnmounted } from 'vue';
 import { Link, usePage, router } from '@inertiajs/vue3';
 import DoctorNotificationBell from '@/Components/Doctor/DoctorNotificationBell.vue';
+import GlobalConfirmDialog from '@/Components/Admin/GlobalConfirmDialog.vue';
 import ToastNotification from '@/Components/Doctor/ToastNotification.vue';
 import ChatIcon from '@/Components/Chat/ChatIcon.vue';
 import ChatToast from '@/Components/Chat/ChatToast.vue';
@@ -674,6 +675,7 @@ onUnmounted(() => { document.removeEventListener('keydown', handleGlobalKey); })
         </Teleport>
     </div>
     <AttendanceReminder />
+    <GlobalConfirmDialog />
 </template>
 
 <style scoped>

@@ -3,6 +3,7 @@ import { ref, computed, watch, watchEffect } from 'vue';
 import { Link, usePage, router } from '@inertiajs/vue3';
 import { usePermissions } from '@/Composables/usePermissions.js';
 import ChatIcon from '@/Components/Chat/ChatIcon.vue';
+import GlobalConfirmDialog from '@/Components/Admin/GlobalConfirmDialog.vue';
 import ChatToast from '@/Components/Chat/ChatToast.vue';
 
 const page = usePage();
@@ -353,6 +354,7 @@ function switchLocale() {
         </div>
         <!-- Chat Toast Notifications -->
         <ChatToast panelPrefix="webmaster" accentColor="#7C3AED" />
+        <GlobalConfirmDialog />
     </div>
 </template>
 

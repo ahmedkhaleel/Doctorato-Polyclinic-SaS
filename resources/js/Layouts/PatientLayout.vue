@@ -3,6 +3,7 @@ import { ref, computed, watch, watchEffect } from 'vue';
 import { Link, usePage, router } from '@inertiajs/vue3';
 import { useTheme } from '@/Composables/useTheme';
 import FlashMessages from '@/Components/FlashMessages.vue';
+import GlobalConfirmDialog from '@/Components/Admin/GlobalConfirmDialog.vue';
 import NotificationBell from '@/Components/NotificationBell.vue';
 
 useTheme();
@@ -469,6 +470,7 @@ function logout()        { router.post(lp('/logout')); }
                 </div>
             </footer>
         </div>
+        <GlobalConfirmDialog />
     </div>
 </template>
 

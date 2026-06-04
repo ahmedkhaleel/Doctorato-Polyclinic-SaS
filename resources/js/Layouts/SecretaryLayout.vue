@@ -2,6 +2,7 @@
 import { ref, computed, watch, watchEffect } from 'vue';
 import { Link, usePage, router } from '@inertiajs/vue3';
 import SecretaryNotificationBell from '@/Components/Secretary/SecretaryNotificationBell.vue';
+import GlobalConfirmDialog from '@/Components/Admin/GlobalConfirmDialog.vue';
 import SecretaryToastNotification from '@/Components/Secretary/SecretaryToastNotification.vue';
 import ChatIcon from '@/Components/Chat/ChatIcon.vue';
 import FlashMessages from '@/Components/FlashMessages.vue';
@@ -515,6 +516,7 @@ function logout()        { router.post('/secretary/logout'); }
         </Teleport>
     </div>
     <AttendanceReminder />
+    <GlobalConfirmDialog />
 </template>
 
 <style scoped>
