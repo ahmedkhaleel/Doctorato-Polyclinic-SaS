@@ -13,10 +13,15 @@ use Illuminate\Support\Facades\Http;
 class PaymobGateway implements PaymentGatewayInterface
 {
     private string $apiKey;
+
     private string $hmacSecret;
+
     private string $iframeId;
+
     private string $integrationId;
+
     private bool $testMode;
+
     private string $baseUrl = 'https://accept.paymob.com/api';
 
     public function __construct()
@@ -46,8 +51,8 @@ class PaymobGateway implements PaymentGatewayInterface
     public function isEnabled(): bool
     {
         return (bool) Setting::get('paymob_enabled', false)
-            && !empty($this->apiKey)
-            && !empty($this->integrationId);
+            && ! empty($this->apiKey)
+            && ! empty($this->integrationId);
     }
 
     public function initiatePayment(OnlineConsultation $consultation): PaymentInitResult
@@ -57,13 +62,13 @@ class PaymobGateway implements PaymentGatewayInterface
             $authResponse = Http::timeout(15)->post("{$this->baseUrl}/auth/tokens", [
                 'api_key' => $this->apiKey,
             ]);
-            if (!$authResponse->successful()) {
-                return PaymentInitResult::failure('Paymob auth failed: ' . $authResponse->body());
+            if (! $authResponse->successful()) {
+                return PaymentInitResult::failure('Paymob auth failed: '.$authResponse->body());
             }
             $authToken = $authResponse->json('token');
 
             // Step 2: Create order
-            $merchantOrderId = 'TELE-' . $consultation->id . '-' . time();
+            $merchantOrderId = 'TELE-'.$consultation->id.'-'.time();
             $amountCents = (int) round($consultation->fee * 100);
 
             $orderResponse = Http::timeout(15)->post("{$this->baseUrl}/ecommerce/orders", [
@@ -73,13 +78,13 @@ class PaymobGateway implements PaymentGatewayInterface
                 'currency' => 'EGP',
                 'merchant_order_id' => $merchantOrderId,
                 'items' => [[
-                    'name' => 'Online Consultation ' . $consultation->consultation_number,
+                    'name' => 'Online Consultation '.$consultation->consultation_number,
                     'amount_cents' => $amountCents,
                     'quantity' => 1,
                 ]],
             ]);
-            if (!$orderResponse->successful()) {
-                return PaymentInitResult::failure('Paymob order failed: ' . $orderResponse->body());
+            if (! $orderResponse->successful()) {
+                return PaymentInitResult::failure('Paymob order failed: '.$orderResponse->body());
             }
             $orderId = $orderResponse->json('id');
 
@@ -93,7 +98,7 @@ class PaymobGateway implements PaymentGatewayInterface
                 'billing_data' => [
                     'first_name' => explode(' ', $patient->full_name)[0] ?? 'Patient',
                     'last_name' => explode(' ', $patient->full_name, 2)[1] ?? 'User',
-                    'email' => $patient->email ?: 'patient-' . $patient->id . '@doctorato.net',
+                    'email' => $patient->email ?: 'patient-'.$patient->id.'@doctorato.net',
                     'phone_number' => $patient->phone ?: '+201000000000',
                     'country' => 'EG',
                     'city' => $patient->address ?: 'Cairo',
@@ -105,8 +110,8 @@ class PaymobGateway implements PaymentGatewayInterface
                 'currency' => 'EGP',
                 'integration_id' => (int) $this->integrationId,
             ]);
-            if (!$paymentKeyResponse->successful()) {
-                return PaymentInitResult::failure('Paymob payment key failed: ' . $paymentKeyResponse->body());
+            if (! $paymentKeyResponse->successful()) {
+                return PaymentInitResult::failure('Paymob payment key failed: '.$paymentKeyResponse->body());
             }
             $paymentToken = $paymentKeyResponse->json('token');
 
@@ -137,7 +142,8 @@ class PaymobGateway implements PaymentGatewayInterface
             );
         } catch (\Throwable $e) {
             report($e);
-            return PaymentInitResult::failure('Paymob error: ' . $e->getMessage());
+
+            return PaymentInitResult::failure('Paymob error: '.$e->getMessage());
         }
     }
 
@@ -169,6 +175,7 @@ class PaymobGateway implements PaymentGatewayInterface
         }
 
         $expectedHmac = hash_hmac('sha512', $concat, $this->hmacSecret);
+
         return hash_equals($expectedHmac, (string) $request->input('hmac', ''));
     }
 
@@ -184,7 +191,7 @@ class PaymobGateway implements PaymentGatewayInterface
             ->where('intent_id', $orderId)
             ->first();
 
-        if (!$transaction) {
+        if (! $transaction) {
             return null;
         }
 
@@ -205,23 +212,59 @@ class PaymobGateway implements PaymentGatewayInterface
 
     public function refund(PaymentTransaction $transaction, ?float $amount = null): bool
     {
-        // TODO: implement if needed
-        return false;
+        // Only a succeeded charge with a Paymob transaction reference can be refunded.
+        if ($transaction->status !== 'succeeded' || empty($transaction->gateway_reference)) {
+            return false;
+        }
+
+        try {
+            // Step 1: Auth to obtain a fresh token.
+            $auth = Http::timeout(15)->post("{$this->baseUrl}/auth/tokens", ['api_key' => $this->apiKey]);
+            if (! $auth->successful() || empty($auth->json('token'))) {
+                return false;
+            }
+
+            // Step 2: Refund (full amount unless a partial amount is given).
+            $cents = (int) round(($amount ?? (float) $transaction->amount) * 100);
+            $response = Http::timeout(20)->post("{$this->baseUrl}/acceptance/void_refund/refund", [
+                'auth_token' => $auth->json('token'),
+                'transaction_id' => $transaction->gateway_reference,
+                'amount_cents' => $cents,
+            ]);
+
+            if (! $response->successful()) {
+                $transaction->failure_reason = 'Refund failed: '.$response->body();
+                $transaction->save();
+
+                return false;
+            }
+
+            $transaction->status = 'refunded';
+            $transaction->gateway_response = array_merge((array) $transaction->gateway_response, ['refund' => $response->json()]);
+            $transaction->save();
+
+            return true;
+        } catch (\Throwable $e) {
+            report($e);
+
+            return false;
+        }
     }
 
     public function testConnection(): array
     {
-        if (!$this->isEnabled()) {
+        if (! $this->isEnabled()) {
             return ['success' => false, 'message' => 'Paymob is not enabled or missing credentials'];
         }
         try {
             $response = Http::timeout(10)->post("{$this->baseUrl}/auth/tokens", ['api_key' => $this->apiKey]);
-            if ($response->successful() && !empty($response->json('token'))) {
-                return ['success' => true, 'message' => 'Paymob auth OK (test mode: ' . ($this->testMode ? 'ON' : 'OFF') . ')'];
+            if ($response->successful() && ! empty($response->json('token'))) {
+                return ['success' => true, 'message' => 'Paymob auth OK (test mode: '.($this->testMode ? 'ON' : 'OFF').')'];
             }
-            return ['success' => false, 'message' => 'Paymob auth failed: ' . $response->body()];
+
+            return ['success' => false, 'message' => 'Paymob auth failed: '.$response->body()];
         } catch (\Throwable $e) {
-            return ['success' => false, 'message' => 'Paymob error: ' . $e->getMessage()];
+            return ['success' => false, 'message' => 'Paymob error: '.$e->getMessage()];
         }
     }
 }
