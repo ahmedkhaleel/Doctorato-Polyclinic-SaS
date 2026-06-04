@@ -134,6 +134,7 @@ function isOpen(faqId) {
                 <button
                     v-if="searchQuery"
                     @click="searchQuery = ''"
+                    :aria-label="isRtl ? 'مسح البحث' : 'Clear search'" :title="isRtl ? 'مسح البحث' : 'Clear search'"
                     class="absolute inset-y-0 end-0 flex items-center pe-4 text-gray-400 hover:text-gray-600 transition-colors"
                 >
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

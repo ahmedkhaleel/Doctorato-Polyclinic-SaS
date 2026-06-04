@@ -505,10 +505,10 @@ const selectedLeadName = computed(() => {
                                 <input v-model="editingNameValue" type="text"
                                     class="doctorato-input flex-1 min-w-0 rounded-lg border-teal-300 text-sm font-semibold py-1 px-2 focus:ring-[#C4A265]/30 focus:border-[#1B365D]"
                                     @keyup.enter="saveEditName(template.id)" @keyup.escape="cancelEditName" />
-                                <button @click="saveEditName(template.id)" class="w-7 h-7 rounded-lg bg-teal-500 text-white flex items-center justify-center hover:bg-teal-600 flex-shrink-0 transition-colors">
+                                <button @click="saveEditName(template.id)" class="w-7 h-7 rounded-lg bg-teal-500 text-white flex items-center justify-center hover:bg-teal-600 flex-shrink-0 transition-colors" :aria-label="isRtl ? 'حفظ' : 'Save'" :title="isRtl ? 'حفظ' : 'Save'">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                                 </button>
-                                <button @click="cancelEditName" class="w-7 h-7 rounded-lg bg-gray-100 text-gray-500 flex items-center justify-center hover:bg-gray-200 flex-shrink-0 transition-colors">
+                                <button @click="cancelEditName" class="w-7 h-7 rounded-lg bg-gray-100 text-gray-500 flex items-center justify-center hover:bg-gray-200 flex-shrink-0 transition-colors" :aria-label="isRtl ? 'إغلاق' : 'Close'" :title="isRtl ? 'إغلاق' : 'Close'">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
                                 </button>
                             </div>
@@ -667,7 +667,7 @@ const selectedLeadName = computed(() => {
                                 <p class="text-xs text-slate-500 mt-0.5">{{ selectedTemplate?.name }}</p>
                             </div>
                         </div>
-                        <button @click="closeSendModal" class="w-9 h-9 rounded-xl bg-slate-100 hover:bg-red-50 hover:text-red-500 text-slate-400 flex items-center justify-center transition-all duration-200 active:scale-95">
+                        <button @click="closeSendModal" class="w-9 h-9 rounded-xl bg-slate-100 hover:bg-red-50 hover:text-red-500 text-slate-400 flex items-center justify-center transition-all duration-200 active:scale-95" :aria-label="isRtl ? 'إغلاق' : 'Close'" :title="isRtl ? 'إغلاق' : 'Close'">
                             <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12"/></svg>
                         </button>
                     </div>
@@ -810,7 +810,7 @@ const selectedLeadName = computed(() => {
                             </button>
                             <button v-if="previewText" @click="copyPreview"
                                     :class="['px-4 py-3.5 rounded-xl text-sm font-semibold transition-all duration-200 active:scale-95',
-                                              copiedPreview ? 'bg-teal-50 text-teal-600 border-2 border-teal-200' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 border-2 border-transparent']">
+                                              copiedPreview ? 'bg-teal-50 text-teal-600 border-2 border-teal-200' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 border-2 border-transparent']" :aria-label="isRtl ? 'نسخ' : 'Copy'" :title="isRtl ? 'نسخ' : 'Copy'">
                                 <svg v-if="!copiedPreview" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
                                 <svg v-else class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                             </button>

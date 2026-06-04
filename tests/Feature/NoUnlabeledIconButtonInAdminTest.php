@@ -7,10 +7,11 @@ use RecursiveIteratorIterator;
 use Tests\TestCase;
 
 /**
- * Accessibility guard: every icon-only <button> in the admin panel (one whose
- * only content is an <svg>, with no visible text or {{ mustache }} label) must
- * carry an accessible name — aria-label or title, bound or static — so
- * screen-reader users (and tooltip users) know what the control does.
+ * Accessibility guard: every icon-only <button> across ALL panels (Admin,
+ * Doctor, Secretary, Patient, Frontend, Webmaster) — one whose only content is
+ * an <svg>, with no visible text or {{ mustache }} label — must carry an
+ * accessible name (aria-label or title, bound or static) so screen-reader users
+ * (and tooltip users) know what the control does.
  *
  * Sibling to NoEmojiInPagesTest / NoNativeConfirmInAdminTest /
  * NoEnglishTitleAttrInAdminTest. The directive "actions = icon + tooltip, not
@@ -21,7 +22,8 @@ class NoUnlabeledIconButtonInAdminTest extends TestCase
 {
     public function test_icon_only_buttons_have_an_accessible_name(): void
     {
-        $dir = resource_path('js/Pages/Admin');
+        // App-wide: Admin + Doctor + Secretary + Patient + Frontend + Webmaster.
+        $dir = resource_path('js/Pages');
         $offenders = [];
 
         $it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir));

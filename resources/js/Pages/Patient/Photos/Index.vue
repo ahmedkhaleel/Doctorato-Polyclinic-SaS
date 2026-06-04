@@ -88,7 +88,7 @@ function closePhoto() { selectedPhoto.value = null; }
         <Teleport to="body">
             <div v-if="selectedPhoto" v-focus-trap="closePhoto" role="dialog" aria-modal="true" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm" @click.self="closePhoto">
                 <div class="relative max-w-4xl max-h-[90vh] mx-4">
-                    <button @click="closePhoto" class="absolute -top-10 ltr:right-0 rtl:left-0 text-white/70 hover:text-white transition-colors">
+                    <button @click="closePhoto" class="absolute -top-10 ltr:right-0 rtl:left-0 text-white/70 hover:text-white transition-colors" :aria-label="isRtl ? 'إغلاق' : 'Close'" :title="isRtl ? 'إغلاق' : 'Close'">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                     </button>
                     <img

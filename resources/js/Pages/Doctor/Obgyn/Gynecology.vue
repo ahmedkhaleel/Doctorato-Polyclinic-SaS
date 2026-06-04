@@ -81,7 +81,7 @@ function papBadge(r) { return r === 'normal' ? 'bg-emerald-100 text-emerald-700'
                     <div role="dialog" aria-modal="true" class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md">
                         <div class="p-5 border-b border-gray-100 flex items-center justify-between">
                             <h3 class="font-bold text-gray-800">{{ modal === 'pap' ? (isRtl ? 'مسحة عنق الرحم' : 'Pap Smear') : (isRtl ? 'سجل منع الحمل' : 'Contraception') }}</h3>
-                            <button @click="close" class="text-gray-400 hover:text-gray-600"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+                            <button @click="close" class="text-gray-400 hover:text-gray-600" :aria-label="isRtl ? 'إغلاق' : 'Close'" :title="isRtl ? 'إغلاق' : 'Close'"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
                         </div>
 
                         <!-- Pap -->

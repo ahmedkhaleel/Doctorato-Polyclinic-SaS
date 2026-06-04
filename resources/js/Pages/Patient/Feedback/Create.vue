@@ -105,7 +105,7 @@ function submit() {
                         </p>
                         <div class="flex items-center gap-1">
                             <button v-for="i in 5" :key="i" type="button" @click="rate(r.key, i)"
-                                    class="p-0.5 transition-transform hover:scale-110">
+                                    class="p-0.5 transition-transform hover:scale-110" :aria-label="isRtl ? 'تقييم' : 'Rate'" :title="isRtl ? 'تقييم' : 'Rate'">
                                 <svg class="w-7 h-7"
                                      :class="i <= form[r.key] ? 'text-amber-400' : 'text-gray-200 hover:text-amber-200'"
                                      fill="currentColor" viewBox="0 0 24 24">

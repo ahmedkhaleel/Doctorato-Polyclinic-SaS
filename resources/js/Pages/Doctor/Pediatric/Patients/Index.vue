@@ -135,7 +135,7 @@ function getInitialBg(gender) {
                         :class="isRtl ? 'pr-10 pl-4' : 'pl-10 pr-4'"
                     />
                     <div v-if="search" class="absolute inset-y-0 flex items-center" :class="isRtl ? 'left-0 pl-3' : 'right-0 pr-3'">
-                        <button @click="search = ''" class="text-white/60 hover:text-white transition">
+                        <button @click="search = ''" class="text-white/60 hover:text-white transition" :aria-label="isRtl ? 'مسح البحث' : 'Clear search'" :title="isRtl ? 'مسح البحث' : 'Clear search'">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                         </button>
                     </div>

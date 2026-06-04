@@ -149,6 +149,7 @@ function submit() {
                                 <button
                                     type="button"
                                     @click="form.image = null; imagePreview = null"
+                                    aria-label="Remove image" title="Remove image"
                                     class="absolute top-2 right-2 w-7 h-7 rounded-full bg-red-500 text-white flex items-center justify-center hover:bg-red-600 transition"
                                 >
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

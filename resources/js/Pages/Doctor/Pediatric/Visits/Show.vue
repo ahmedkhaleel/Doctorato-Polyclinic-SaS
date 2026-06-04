@@ -677,7 +677,7 @@ function severityColor(severity) {
                             <button @click.stop="removePhoto(idx)"
                                 class="absolute top-1.5 bg-red-500 hover:bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center shadow-sm transition-all opacity-0 group-hover:opacity-100"
                                 :class="isRtl ? 'left-1.5' : 'right-1.5'"
-                            >
+                             :aria-label="isRtl ? 'حذف' : 'Remove'" :title="isRtl ? 'حذف' : 'Remove'">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                             </button>
                             <!-- File size badge -->
@@ -716,7 +716,7 @@ function severityColor(severity) {
             >
                 <button @click="closeLightbox"
                     class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors"
-                >
+                 :aria-label="isRtl ? 'إغلاق' : 'Close'" :title="isRtl ? 'إغلاق' : 'Close'">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
                 <div class="max-w-4xl max-h-[85vh] rounded-xl overflow-hidden">

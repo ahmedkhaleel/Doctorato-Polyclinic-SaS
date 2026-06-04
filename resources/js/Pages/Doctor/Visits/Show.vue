@@ -301,7 +301,7 @@ function formatDate(date) {
                             <h3 class="text-sm font-bold text-red-800">{{ isRtl ? 'تنبيهات طبية مهمة' : 'Medical Alerts' }}</h3>
                             <span class="text-[10px] font-bold text-red-600 bg-red-100 px-1.5 py-0.5 rounded-full border border-red-200">{{ dentalRiskFlags.length }}</span>
                         </div>
-                        <button @click="showMedicalAlerts = false" class="text-gray-400 hover:text-gray-600 transition-colors">
+                        <button @click="showMedicalAlerts = false" class="text-gray-400 hover:text-gray-600 transition-colors" :aria-label="isRtl ? 'إغلاق' : 'Close'" :title="isRtl ? 'إغلاق' : 'Close'">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                         </button>
                     </div>

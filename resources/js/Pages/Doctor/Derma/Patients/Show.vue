@@ -163,7 +163,7 @@ function typeLabel(t) {
                     <div role="dialog" aria-modal="true" class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
                         <div class="p-5 border-b border-gray-100 flex items-center justify-between sticky top-0 bg-white rounded-t-2xl">
                             <h3 class="font-bold text-gray-800">{{ modal === 'derma' ? (isRtl ? 'تسجيل جلسة جلدية' : 'Log Derma Session') : modal === 'cosmetic' ? (isRtl ? 'تسجيل جلسة تجميل' : 'Log Cosmetic Session') : (isRtl ? 'رفع صورة' : 'Upload Photo') }}</h3>
-                            <button @click="close" class="text-gray-400 hover:text-gray-600"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+                            <button @click="close" class="text-gray-400 hover:text-gray-600" :aria-label="isRtl ? 'إغلاق' : 'Close'" :title="isRtl ? 'إغلاق' : 'Close'"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
                         </div>
 
                         <!-- Derma session -->

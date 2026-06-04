@@ -533,13 +533,13 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handleCalendarKe
         <div class="flex items-center justify-between flex-wrap gap-3">
             <!-- Month navigation -->
             <div class="flex items-center gap-3">
-                <button @click="prevMonth" class="w-9 h-9 rounded-lg bg-gray-50 hover:bg-teal-50 border border-gray-200 hover:border-teal-300 flex items-center justify-center transition-all duration-200 group">
+                <button @click="prevMonth" class="w-9 h-9 rounded-lg bg-gray-50 hover:bg-teal-50 border border-gray-200 hover:border-teal-300 flex items-center justify-center transition-all duration-200 group" :aria-label="isRtl ? 'السابق' : 'Previous'" :title="isRtl ? 'السابق' : 'Previous'">
                     <svg :class="['w-4 h-4 text-gray-500 group-hover:text-teal-600 transition-colors', isRtl ? 'rotate-180' : '']" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
                 </button>
                 <h2 class="text-lg font-semibold text-gray-800 min-w-[180px] text-center">
                     {{ currentMonthName }} {{ currentYear }}
                 </h2>
-                <button @click="nextMonth" class="w-9 h-9 rounded-lg bg-gray-50 hover:bg-teal-50 border border-gray-200 hover:border-teal-300 flex items-center justify-center transition-all duration-200 group">
+                <button @click="nextMonth" class="w-9 h-9 rounded-lg bg-gray-50 hover:bg-teal-50 border border-gray-200 hover:border-teal-300 flex items-center justify-center transition-all duration-200 group" :aria-label="isRtl ? 'التالي' : 'Next'" :title="isRtl ? 'التالي' : 'Next'">
                     <svg :class="['w-4 h-4 text-gray-500 group-hover:text-teal-600 transition-colors', isRtl ? 'rotate-180' : '']" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
                 </button>
                 <button @click="goToday" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-teal-50 text-teal-700 border border-teal-200 hover:bg-teal-100 transition-all duration-200">
@@ -732,11 +732,11 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handleCalendarKe
         <!-- Week navigation -->
         <div class="px-4 py-3 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
             <div class="flex items-center gap-2">
-                <button @click="prevWeek" class="w-8 h-8 rounded-lg bg-white hover:bg-teal-50 border border-gray-200 hover:border-teal-300 flex items-center justify-center transition-all">
+                <button @click="prevWeek" class="w-8 h-8 rounded-lg bg-white hover:bg-teal-50 border border-gray-200 hover:border-teal-300 flex items-center justify-center transition-all" :aria-label="isRtl ? 'السابق' : 'Previous'" :title="isRtl ? 'السابق' : 'Previous'">
                     <svg :class="['w-4 h-4 text-gray-500', isRtl ? 'rotate-180' : '']" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
                 </button>
                 <span class="text-sm font-semibold text-gray-800 min-w-[180px] text-center">{{ weekRangeLabel }}</span>
-                <button @click="nextWeek" class="w-8 h-8 rounded-lg bg-white hover:bg-teal-50 border border-gray-200 hover:border-teal-300 flex items-center justify-center transition-all">
+                <button @click="nextWeek" class="w-8 h-8 rounded-lg bg-white hover:bg-teal-50 border border-gray-200 hover:border-teal-300 flex items-center justify-center transition-all" :aria-label="isRtl ? 'التالي' : 'Next'" :title="isRtl ? 'التالي' : 'Next'">
                     <svg :class="['w-4 h-4 text-gray-500', isRtl ? 'rotate-180' : '']" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
                 </button>
                 <button @click="goTodayWeek" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-teal-50 text-teal-700 border border-teal-200 hover:bg-teal-100 transition-all">
@@ -861,7 +861,7 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handleCalendarKe
                                     {{ selectedFollowUps.length }} {{ isRtl ? 'متابعة' : 'follow-up(s)' }}
                                 </p>
                             </div>
-                            <button @click="closeDetail" class="w-8 h-8 rounded-lg bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors">
+                            <button @click="closeDetail" class="w-8 h-8 rounded-lg bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors" :aria-label="isRtl ? 'إغلاق' : 'Close'" :title="isRtl ? 'إغلاق' : 'Close'">
                                 <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
                             </button>
                         </div>
@@ -985,7 +985,7 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handleCalendarKe
                                     </button>
                                     <!-- Snooze dropdown -->
                                     <div class="relative group/snooze">
-                                        <button class="inline-flex items-center justify-center gap-1 px-3 py-2 rounded-lg text-xs font-semibold bg-slate-50 text-[#1B365D] hover:bg-slate-100 border border-slate-200 transition-all duration-200">
+                                        <button :aria-label="isRtl ? 'تأجيل' : 'Snooze'" :title="isRtl ? 'تأجيل' : 'Snooze'" class="inline-flex items-center justify-center gap-1 px-3 py-2 rounded-lg text-xs font-semibold bg-slate-50 text-[#1B365D] hover:bg-slate-100 border border-slate-200 transition-all duration-200">
                                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                                         </button>
                                         <div class="absolute bottom-full mb-1 z-30 bg-white rounded-xl shadow-xl border border-gray-200 py-1 min-w-[130px] opacity-0 invisible group-hover/snooze:opacity-100 group-hover/snooze:visible transition-all duration-200"
@@ -1020,7 +1020,7 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handleCalendarKe
                 <div v-if="showQuickAdd" class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md">
                     <div class="px-4 sm:px-6 py-4 border-b border-gray-100 flex items-center justify-between">
                         <h3 class="font-semibold text-gray-800">{{ isRtl ? 'إضافة متابعة سريعة' : 'Quick Add Follow-up' }}</h3>
-                        <button @click="showQuickAdd = false" class="w-8 h-8 rounded-lg bg-gray-100 hover:bg-gray-200 flex items-center justify-center"><svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12"/></svg></button>
+                        <button @click="showQuickAdd = false" class="w-8 h-8 rounded-lg bg-gray-100 hover:bg-gray-200 flex items-center justify-center" :aria-label="isRtl ? 'إغلاق' : 'Close'" :title="isRtl ? 'إغلاق' : 'Close'"><svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12"/></svg></button>
                     </div>
                     <div class="p-6 space-y-4">
                         <div>

@@ -280,7 +280,7 @@ function dotColor(status) {
                                     {{ isRtl ? 'تعديل فحص' : 'Edit Checkup' }}:
                                     {{ editingVisit ? (isRtl ? editingVisit.label_ar : editingVisit.label_en) : '' }}
                                 </h3>
-                                <button @click="showEditModal = false" class="p-1 text-gray-400 hover:text-gray-600 rounded-lg">
+                                <button @click="showEditModal = false" class="p-1 text-gray-400 hover:text-gray-600 rounded-lg" :aria-label="isRtl ? 'إغلاق' : 'Close'" :title="isRtl ? 'إغلاق' : 'Close'">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                                 </button>
                             </div>

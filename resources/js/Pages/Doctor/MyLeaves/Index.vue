@@ -232,7 +232,7 @@ const rejectedCount = computed(() => leavesList.value.filter(l => l.status === '
                                     </div>
                                     <h2 class="text-lg font-bold text-gray-900">{{ isRtl ? 'طلب إجازة' : 'Request Leave' }}</h2>
                                 </div>
-                                <button @click="closeModal" class="w-8 h-8 rounded-lg bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors">
+                                <button @click="closeModal" class="w-8 h-8 rounded-lg bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors" :aria-label="isRtl ? 'إغلاق' : 'Close'" :title="isRtl ? 'إغلاق' : 'Close'">
                                     <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                                 </button>
                             </div>

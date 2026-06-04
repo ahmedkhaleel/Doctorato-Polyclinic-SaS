@@ -183,7 +183,7 @@ function fmtDate(d) { return d ? new Date(d).toLocaleDateString(isRtl.value ? 'a
                             <h3 class="font-bold text-gray-800">
                                 {{ modal === 'anc' ? (isRtl ? 'زيارة متابعة حمل' : 'Antenatal Visit') : modal === 'us' ? (isRtl ? 'سونار توليد' : 'Obstetric Ultrasound') : modal === 'lab' ? (isRtl ? 'تحليل' : 'Lab Test') : (isRtl ? 'تسجيل الولادة' : 'Record Delivery') }}
                             </h3>
-                            <button @click="close" class="text-gray-400 hover:text-gray-600"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+                            <button @click="close" class="text-gray-400 hover:text-gray-600" :aria-label="isRtl ? 'إغلاق' : 'Close'" :title="isRtl ? 'إغلاق' : 'Close'"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
                         </div>
 
                         <!-- ANC -->

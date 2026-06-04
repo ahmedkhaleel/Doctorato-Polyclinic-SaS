@@ -406,7 +406,7 @@ function startNewImport() {
                     </div>
                     <span class="text-sm font-semibold text-teal-800">{{ isRtl ? '\u0646\u0635\u0627\u0626\u062D \u0627\u0644\u0627\u0633\u062A\u064A\u0631\u0627\u062F' : 'Import Tips' }}</span>
                 </div>
-                <button @click="showTips = false" class="text-teal-400 hover:text-teal-600 transition-colors flex-shrink-0">
+                <button @click="showTips = false" class="text-teal-400 hover:text-teal-600 transition-colors flex-shrink-0" :aria-label="isRtl ? 'إغلاق' : 'Close'" :title="isRtl ? 'إغلاق' : 'Close'">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
                 </button>
             </div>
@@ -458,7 +458,7 @@ function startNewImport() {
                     <p class="text-sm font-semibold text-gray-800">{{ fileName }}</p>
                     <p class="text-xs text-gray-400">{{ fileSize }}</p>
                 </div>
-                <button @click.stop="clearFile" class="w-8 h-8 rounded-lg bg-red-50 hover:bg-red-100 flex items-center justify-center transition-colors">
+                <button @click.stop="clearFile" class="w-8 h-8 rounded-lg bg-red-50 hover:bg-red-100 flex items-center justify-center transition-colors" :aria-label="isRtl ? 'إزالة الملف' : 'Remove file'" :title="isRtl ? 'إزالة الملف' : 'Remove file'">
                     <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
                 </button>
             </div>

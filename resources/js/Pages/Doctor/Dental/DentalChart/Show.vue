@@ -814,7 +814,7 @@ function formatDate(d) {
                     <div v-if="showQuickTreatment" class="border-b border-gray-100 overflow-hidden">
                         <div class="px-3 sm:px-5 py-2.5 bg-slate-50/50 border-b border-slate-100/50 flex items-center justify-between">
                             <span class="text-xs font-bold text-[#1B365D] uppercase tracking-wider">{{ isRtl ? 'إضافة علاج سريع' : 'Quick Add Treatment' }}</span>
-                            <button @click="resetQuickTreatment" class="text-gray-400 hover:text-gray-600 transition-colors">
+                            <button @click="resetQuickTreatment" class="text-gray-400 hover:text-gray-600 transition-colors" :aria-label="isRtl ? 'إغلاق' : 'Close'" :title="isRtl ? 'إغلاق' : 'Close'">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                             </button>
                         </div>
@@ -960,7 +960,7 @@ function formatDate(d) {
                                 <p class="text-gray-400 text-xs">{{ conditionLabels[editForm.condition] }}</p>
                             </div>
                         </div>
-                        <button @click="showModal = false" class="text-gray-400 hover:text-white transition-colors">
+                        <button @click="showModal = false" class="text-gray-400 hover:text-white transition-colors" :aria-label="isRtl ? 'إغلاق' : 'Close'" :title="isRtl ? 'إغلاق' : 'Close'">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                         </button>
                     </div>

@@ -732,7 +732,7 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handlePipelineKe
                     <svg v-else class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
                 </div>
                 <span class="text-sm font-medium">{{ toast.message }}</span>
-                <button @click="toast.show = false" class="ms-2 text-gray-400 hover:text-gray-600 transition-colors">
+                <button @click="toast.show = false" class="ms-2 text-gray-400 hover:text-gray-600 transition-colors" :aria-label="isRtl ? 'إغلاق' : 'Close'" :title="isRtl ? 'إغلاق' : 'Close'">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
                 </button>
             </div>

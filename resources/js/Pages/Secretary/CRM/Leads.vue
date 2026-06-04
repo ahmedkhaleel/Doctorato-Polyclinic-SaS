@@ -764,21 +764,21 @@ const activeFilterPills = computed(() => {
                         <div class="flex items-center bg-gray-100 rounded-xl p-1 gap-0.5">
                             <button @click="viewMode = 'grid'"
                                 :class="viewMode === 'grid' ? 'bg-white shadow-sm text-teal-600' : 'text-gray-500 hover:text-gray-700'"
-                                class="p-2 rounded-lg transition-all duration-200">
+                                class="p-2 rounded-lg transition-all duration-200" :aria-label="isRtl ? 'عرض شبكي' : 'Grid view'" :title="isRtl ? 'عرض شبكي' : 'Grid view'">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
                                 </svg>
                             </button>
                             <button @click="viewMode = 'table'"
                                 :class="viewMode === 'table' ? 'bg-white shadow-sm text-teal-600' : 'text-gray-500 hover:text-gray-700'"
-                                class="p-2 rounded-lg transition-all duration-200">
+                                class="p-2 rounded-lg transition-all duration-200" :aria-label="isRtl ? 'عرض جدول' : 'Table view'" :title="isRtl ? 'عرض جدول' : 'Table view'">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 10h16M4 14h16M4 18h16"/>
                                 </svg>
                             </button>
                             <button @click="viewMode = 'kanban'"
                                 :class="viewMode === 'kanban' ? 'bg-white shadow-sm text-teal-600' : 'text-gray-500 hover:text-gray-700'"
-                                class="p-2 rounded-lg transition-all duration-200">
+                                class="p-2 rounded-lg transition-all duration-200" :aria-label="isRtl ? 'عرض كانبان' : 'Kanban view'" :title="isRtl ? 'عرض كانبان' : 'Kanban view'">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"/>
                                 </svg>
@@ -923,7 +923,7 @@ const activeFilterPills = computed(() => {
                             class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full border transition-all duration-200"
                             style="background-color: #f0fdfa; color: #0d9488; border-color: #99f6e4;">
                             {{ pill.label }}
-                            <button @click="removeFilter(pill.key)" class="hover:bg-teal-200 rounded-full p-0.5 transition-colors">
+                            <button @click="removeFilter(pill.key)" class="hover:bg-teal-200 rounded-full p-0.5 transition-colors" :aria-label="isRtl ? 'إزالة المرشّح' : 'Remove filter'" :title="isRtl ? 'إزالة المرشّح' : 'Remove filter'">
                                 <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
                                 </svg>
@@ -1686,7 +1686,7 @@ const activeFilterPills = computed(() => {
                         <div v-if="quickViewLead" class="sticky top-0 z-10 bg-gradient-to-r from-teal-500 to-emerald-500 p-5">
                             <div class="flex items-center justify-between mb-3">
                                 <span class="text-xs font-medium text-teal-100">{{ isRtl ? 'معاينة سريعة' : 'Quick Preview' }}</span>
-                                <button @click="closeQuickView" class="w-7 h-7 rounded-lg bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors">
+                                <button @click="closeQuickView" class="w-7 h-7 rounded-lg bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors" :aria-label="isRtl ? 'إغلاق' : 'Close'" :title="isRtl ? 'إغلاق' : 'Close'">
                                     <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
                                 </button>
                             </div>

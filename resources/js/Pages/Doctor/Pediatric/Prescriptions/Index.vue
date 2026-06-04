@@ -593,7 +593,7 @@ function hasMedicalNotes(patient) {
                                 <div class="col-span-6 lg:col-span-2 relative">
                                     <div class="relative">
                                         <input v-model="item.frequency" :placeholder="isRtl ? '\u0627\u0644\u062A\u0643\u0631\u0627\u0631' : 'Frequency'" class="doctorato-input w-full px-3 py-2.5 pr-8 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30/50 focus:border-[#1B365D] transition-all" />
-                                        <button type="button" @click="togglePreset(`freq-${index}`)" class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-emerald-500 transition-colors">
+                                        <button type="button" @click="togglePreset(`freq-${index}`)" class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-emerald-500 transition-colors" :aria-label="isRtl ? 'توسيع' : 'Expand'" :title="isRtl ? 'توسيع' : 'Expand'">
                                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
                                         </button>
                                     </div>
@@ -606,7 +606,7 @@ function hasMedicalNotes(patient) {
                                 <div class="col-span-6 lg:col-span-2 relative">
                                     <div class="relative">
                                         <input v-model="item.duration" :placeholder="isRtl ? '\u0627\u0644\u0645\u062F\u0629' : 'Duration'" class="doctorato-input w-full px-3 py-2.5 pr-8 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30/50 focus:border-[#1B365D] transition-all" />
-                                        <button type="button" @click="togglePreset(`dur-${index}`)" class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-emerald-500 transition-colors">
+                                        <button type="button" @click="togglePreset(`dur-${index}`)" class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-emerald-500 transition-colors" :aria-label="isRtl ? 'توسيع' : 'Expand'" :title="isRtl ? 'توسيع' : 'Expand'">
                                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
                                         </button>
                                     </div>
@@ -619,7 +619,7 @@ function hasMedicalNotes(patient) {
                                 <input v-model="item.instructions" :placeholder="isRtl ? '\u062A\u0639\u0644\u064A\u0645\u0627\u062A...' : 'Instructions...'" class="doctorato-input col-span-5 lg:col-span-2 px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#C4A265]/30/50 focus:border-[#1B365D] transition-all" />
 
                                 <!-- Remove -->
-                                <button type="button" @click="removeItem(index)" class="col-span-1 flex items-center justify-center h-10 text-gray-300 hover:text-red-500 transition-colors" :class="form.items.length <= 1 ? 'invisible' : ''">
+                                <button type="button" @click="removeItem(index)" class="col-span-1 flex items-center justify-center h-10 text-gray-300 hover:text-red-500 transition-colors" :class="form.items.length <= 1 ? 'invisible' : ''" :aria-label="isRtl ? 'حذف' : 'Remove'" :title="isRtl ? 'حذف' : 'Remove'">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                                 </button>
                             </div>
@@ -769,7 +769,7 @@ function hasMedicalNotes(patient) {
                                 <h3 class="text-base font-bold text-white">{{ isRtl ? '\u062A\u0641\u0627\u0635\u064A\u0644 \u0627\u0644\u0648\u0635\u0641\u0629' : 'Prescription Details' }}</h3>
                                 <p class="text-emerald-100 text-xs">Rx #{{ viewingPrescription.id }}</p>
                             </div>
-                            <button @click="viewingPrescription = null" class="p-1.5 text-white/70 hover:text-white hover:bg-white/20 rounded-lg transition-colors">
+                            <button @click="viewingPrescription = null" class="p-1.5 text-white/70 hover:text-white hover:bg-white/20 rounded-lg transition-colors" :aria-label="isRtl ? 'إغلاق' : 'Close'" :title="isRtl ? 'إغلاق' : 'Close'">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                             </button>
                         </div>

@@ -849,7 +849,7 @@ function submitReschedule() {
                                     <!-- Service Row -->
                                     <tr class="hover:bg-gray-50/50 transition-colors cursor-pointer" @click="toggleServiceExpand(bsIndex)">
                                         <td class="px-6 py-3">
-                                            <button type="button" class="text-gray-400 hover:text-gray-600 transition">
+                                            <button type="button" class="text-gray-400 hover:text-gray-600 transition" :aria-label="isRtl ? 'توسيع' : 'Expand'" :title="isRtl ? 'توسيع' : 'Expand'">
                                                 <svg class="w-4 h-4 transition-transform duration-200" :class="{ 'rotate-90': expandedServices[bsIndex] }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                                                 </svg>
@@ -1198,7 +1198,7 @@ function submitReschedule() {
                     <div class="px-4 sm:px-6 py-4 border-b border-teal-100 bg-teal-50/50">
                         <div class="flex items-center justify-between">
                             <h2 class="text-sm font-bold text-teal-800">{{ isRtl ? 'تسجيل دفعة' : 'Record Payment' }}</h2>
-                            <button type="button" @click="showPaymentForm = false" class="text-gray-400 hover:text-gray-600 transition">
+                            <button type="button" @click="showPaymentForm = false" class="text-gray-400 hover:text-gray-600 transition" :aria-label="isRtl ? 'إغلاق' : 'Close'" :title="isRtl ? 'إغلاق' : 'Close'">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                             </button>
                         </div>
@@ -1292,7 +1292,7 @@ function submitReschedule() {
                                                 <div class="text-xs text-gray-500">{{ selectedPatient.phone }} &middot; File #{{ selectedPatient.file_number }}</div>
                                             </div>
                                         </div>
-                                        <button type="button" @click="clearPatient" class="text-gray-400 hover:text-red-500 transition">
+                                        <button type="button" @click="clearPatient" class="text-gray-400 hover:text-red-500 transition" :aria-label="isRtl ? 'مسح المريض' : 'Clear patient'" :title="isRtl ? 'مسح المريض' : 'Clear patient'">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                                         </button>
                                     </div>
@@ -1694,7 +1694,7 @@ function submitReschedule() {
                                     <span v-if="editingAppointment.is_retouch" class="ltr:ml-1 rtl:mr-1 text-[#1B365D]">({{ isRtl ? 'متابعة' : 'Retouch' }})</span>
                                 </p>
                             </div>
-                            <button @click="closeRescheduleModal" class="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors">
+                            <button @click="closeRescheduleModal" class="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors" :aria-label="isRtl ? 'إغلاق' : 'Close'" :title="isRtl ? 'إغلاق' : 'Close'">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                             </button>
                         </div>

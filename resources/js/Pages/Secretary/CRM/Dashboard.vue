@@ -1198,7 +1198,7 @@ const activityTypeConfig = {
                                     <!-- Snooze -->
                                     <div class="relative">
                                         <button @click="toggleSnooze(fu.id)"
-                                            class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-xs font-semibold bg-slate-50 text-[#1B365D] hover:bg-slate-100 border border-slate-200 transition-all duration-200">
+                                            class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-xs font-semibold bg-slate-50 text-[#1B365D] hover:bg-slate-100 border border-slate-200 transition-all duration-200" :aria-label="isRtl ? 'تأجيل' : 'Snooze'" :title="isRtl ? 'تأجيل' : 'Snooze'">
                                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                                         </button>
                                         <Transition enter-active-class="transition-all duration-200" enter-from-class="opacity-0 scale-95" enter-to-class="opacity-100 scale-100" leave-active-class="transition-all duration-150" leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-95">
@@ -1317,7 +1317,7 @@ const activityTypeConfig = {
                                     <!-- Snooze -->
                                     <div class="relative">
                                         <button @click="toggleSnooze(fu.id)"
-                                            class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-xs font-semibold bg-slate-50 text-[#1B365D] hover:bg-slate-100 border border-slate-200 transition-all duration-200">
+                                            class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-xs font-semibold bg-slate-50 text-[#1B365D] hover:bg-slate-100 border border-slate-200 transition-all duration-200" :aria-label="isRtl ? 'تأجيل' : 'Snooze'" :title="isRtl ? 'تأجيل' : 'Snooze'">
                                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                                         </button>
                                         <Transition enter-active-class="transition-all duration-200" enter-from-class="opacity-0 scale-95" enter-to-class="opacity-100 scale-100" leave-active-class="transition-all duration-150" leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-95">
@@ -1845,7 +1845,7 @@ const activityTypeConfig = {
                                             <p class="text-xs text-gray-400">{{ isRtl ? 'أدخل البيانات الأساسية' : 'Enter basic info' }}</p>
                                         </div>
                                     </div>
-                                    <button @click="showQuickAdd = false" class="text-gray-400 hover:text-gray-600 transition">
+                                    <button @click="showQuickAdd = false" class="text-gray-400 hover:text-gray-600 transition" :aria-label="isRtl ? 'إغلاق' : 'Close'" :title="isRtl ? 'إغلاق' : 'Close'">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
                                     </button>
                                 </div>

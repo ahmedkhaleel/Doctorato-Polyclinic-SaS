@@ -160,11 +160,11 @@ function formatSelectedDate(dateStr) {
         <!-- Controls -->
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-3 sm:p-4 flex flex-wrap items-center justify-between gap-3">
             <div class="flex items-center gap-2">
-                <button @click="prevMonth" class="w-9 h-9 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 transition-colors">
+                <button @click="prevMonth" class="w-9 h-9 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 transition-colors" :aria-label="isRtl ? 'السابق' : 'Previous'" :title="isRtl ? 'السابق' : 'Previous'">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
                 </button>
                 <h2 class="text-lg font-bold text-gray-900 min-w-[180px] text-center">{{ monthLabel }}</h2>
-                <button @click="nextMonth" class="w-9 h-9 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 transition-colors">
+                <button @click="nextMonth" class="w-9 h-9 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 transition-colors" :aria-label="isRtl ? 'التالي' : 'Next'" :title="isRtl ? 'التالي' : 'Next'">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
                 </button>
                 <button @click="goToday" class="px-3 py-1.5 text-xs font-medium text-teal-600 bg-teal-50 rounded-lg hover:bg-teal-100 transition-colors ltr:ml-2 rtl:mr-2">{{ isRtl ? 'اليوم' : 'Today' }}</button>
