@@ -1,33 +1,33 @@
 <?php
 
 use App\Http\Controllers\Doctor\AuthController;
-use App\Http\Controllers\Doctor\DoctorDashboardController;
-use App\Http\Controllers\Doctor\DoctorQueueController;
-use App\Http\Controllers\Doctor\DoctorPatientController;
-use App\Http\Controllers\Doctor\DoctorVisitController;
-use App\Http\Controllers\Doctor\DoctorPrescriptionController;
-use App\Http\Controllers\Doctor\DoctorBookingController;
-use App\Http\Controllers\Doctor\DoctorCommissionController;
-use App\Http\Controllers\Doctor\DoctorProfileController;
-use App\Http\Controllers\Doctor\DoctorNotificationController;
-use App\Http\Controllers\Doctor\DoctorReviewsController;
-use App\Http\Controllers\Doctor\DoctorChatController;
 use App\Http\Controllers\Doctor\DoctorAttendanceController;
-use App\Http\Controllers\Doctor\DoctorLeaveController;
-use App\Http\Controllers\Doctor\DoctorSalarySlipController;
+use App\Http\Controllers\Doctor\DoctorBookingController;
+use App\Http\Controllers\Doctor\DoctorChatController;
+use App\Http\Controllers\Doctor\DoctorCommissionController;
+use App\Http\Controllers\Doctor\DoctorDashboardController;
 use App\Http\Controllers\Doctor\DoctorDentalChartController;
+use App\Http\Controllers\Doctor\DoctorDentalFollowupController;
 use App\Http\Controllers\Doctor\DoctorDentalTreatmentController;
 use App\Http\Controllers\Doctor\DoctorDentalTreatmentPlanController;
 use App\Http\Controllers\Doctor\DoctorDentalXrayController;
-use App\Http\Controllers\Doctor\DoctorDentalFollowupController;
 use App\Http\Controllers\Doctor\DoctorExportController;
-use App\Http\Controllers\Doctor\DoctorPatientNoteController;
 use App\Http\Controllers\Doctor\DoctorFavoritePatientController;
 use App\Http\Controllers\Doctor\DoctorInventoryController;
+use App\Http\Controllers\Doctor\DoctorLeaveController;
+use App\Http\Controllers\Doctor\DoctorNotificationController;
+use App\Http\Controllers\Doctor\DoctorPatientController;
+use App\Http\Controllers\Doctor\DoctorPatientNoteController;
 use App\Http\Controllers\Doctor\DoctorPediatricDashboardController;
+use App\Http\Controllers\Doctor\DoctorPediatricExtraController;
 use App\Http\Controllers\Doctor\DoctorPediatricPatientController;
 use App\Http\Controllers\Doctor\DoctorPediatricVisitController;
-use App\Http\Controllers\Doctor\DoctorPediatricExtraController;
+use App\Http\Controllers\Doctor\DoctorPrescriptionController;
+use App\Http\Controllers\Doctor\DoctorProfileController;
+use App\Http\Controllers\Doctor\DoctorQueueController;
+use App\Http\Controllers\Doctor\DoctorReviewsController;
+use App\Http\Controllers\Doctor\DoctorSalarySlipController;
+use App\Http\Controllers\Doctor\DoctorVisitController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -46,10 +46,10 @@ Route::post('/login', [AuthController::class, 'login'])->name('doctor.authentica
 Route::post('/logout', [AuthController::class, 'logout'])->name('doctor.logout');
 
 // Password reset
-Route::get('/forgot-password',          [AuthController::class, 'showForgotPassword'])->name('doctor.password.request');
-Route::post('/forgot-password',         [AuthController::class, 'sendResetLink'])->name('doctor.password.email')->middleware('throttle:5,15');
-Route::get('/reset-password/{token}',   [AuthController::class, 'showResetForm'])->name('doctor.password.reset');
-Route::post('/reset-password',          [AuthController::class, 'resetPassword'])->name('doctor.password.update')->middleware('throttle:5,15');
+Route::get('/forgot-password', [AuthController::class, 'showForgotPassword'])->name('doctor.password.request');
+Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('doctor.password.email')->middleware('throttle:5,15');
+Route::get('/reset-password/{token}', [AuthController::class, 'showResetForm'])->name('doctor.password.reset');
+Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('doctor.password.update')->middleware('throttle:5,15');
 
 // Protected doctor routes (requires authentication + active doctor)
 Route::middleware(['doctor.auth', 'branch.context'])->group(function () {
@@ -61,6 +61,7 @@ Route::middleware(['doctor.auth', 'branch.context'])->group(function () {
     Route::post('/switch-locale', function (\Illuminate\Http\Request $request) {
         $locale = $request->input('locale', 'ar');
         session()->put('admin_locale', in_array($locale, ['ar', 'en']) ? $locale : 'ar');
+
         return redirect()->back();
     })->name('doctor.switchLocale');
 
@@ -294,6 +295,20 @@ Route::middleware(['doctor.auth', 'branch.context'])->group(function () {
         Route::post('/gynecology/pap-smear', [\App\Http\Controllers\Doctor\DoctorObgynController::class, 'storePapSmear'])->name('doctor.obgyn.pap-smear.store');
         Route::post('/gynecology/contraception', [\App\Http\Controllers\Doctor\DoctorObgynController::class, 'storeContraception'])->name('doctor.obgyn.contraception.store');
     });
+
+    // ─── Psychiatry & Neurology (shared NeuropsychEncounterController) ──
+    foreach (['psychiatry', 'neurology'] as $npModule) {
+        Route::prefix($npModule)->middleware("module:{$npModule}")->group(function () use ($npModule) {
+            Route::get('/encounters', [\App\Http\Controllers\Doctor\NeuropsychEncounterController::class, 'index'])
+                ->defaults('npModule', $npModule)->name("doctor.{$npModule}.encounters.index");
+            Route::post('/encounters', [\App\Http\Controllers\Doctor\NeuropsychEncounterController::class, 'store'])
+                ->defaults('npModule', $npModule)->middleware("permission:{$npModule}.create")->name("doctor.{$npModule}.encounters.store");
+            Route::post('/encounters/{encounter}', [\App\Http\Controllers\Doctor\NeuropsychEncounterController::class, 'update'])
+                ->defaults('npModule', $npModule)->middleware("permission:{$npModule}.update")->name("doctor.{$npModule}.encounters.update");
+            Route::delete('/encounters/{encounter}', [\App\Http\Controllers\Doctor\NeuropsychEncounterController::class, 'destroy'])
+                ->defaults('npModule', $npModule)->middleware("permission:{$npModule}.delete")->name("doctor.{$npModule}.encounters.destroy");
+        });
+    }
 
     // ─── Online Consultations ──────────────────────────────
     Route::get('/online-consultations', [\App\Http\Controllers\Doctor\OnlineConsultationController::class, 'index'])
