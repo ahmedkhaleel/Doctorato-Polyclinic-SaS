@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue';
 import { usePage, useForm, Link } from '@inertiajs/vue3';
 import PatientLayout from '@/Layouts/PatientLayout.vue';
+import FormErrors from '@/Components/Ui/FormErrors.vue';
 import { usePatientLocale } from '@/Composables/usePatientLocale';
 import { useCurrency } from '@/Composables/useCurrency';
 import SignaturePad from '@/Components/SignaturePad.vue';
@@ -266,6 +267,8 @@ function treatmentLabel(type) {
                 {{ isRtl ? 'ارسم توقيعك باستخدام الماوس أو بإصبعك على الشاشة' : 'Draw your signature using your mouse or finger on the screen' }}
             </p>
 
+            <FormErrors :errors="signForm.errors" class="mt-4" />
+
             <!-- Action Buttons -->
             <div class="flex flex-col sm:flex-row gap-3 mt-6">
                 <button
@@ -312,6 +315,7 @@ function treatmentLabel(type) {
                     <p class="text-sm text-gray-500 mb-4">
                         {{ isRtl ? 'يرجى ذكر سبب الرفض (اختياري)' : 'Please provide a reason for declining (optional)' }}
                     </p>
+                    <FormErrors :errors="declineForm.errors" />
                     <textarea
                         v-model="declineForm.declined_reason"
                         class="doctorato-input w-full p-3 border border-gray-200 rounded-xl text-sm resize-none focus:outline-none focus:ring-2 focus:ring-[#C4A265]/30 focus:border-red-300"

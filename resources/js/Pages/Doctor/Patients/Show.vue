@@ -2,6 +2,7 @@
 import { ref, computed, onMounted } from 'vue';
 import { Link, usePage, useForm } from '@inertiajs/vue3';
 import DoctorLayout from '@/Layouts/DoctorLayout.vue';
+import FormErrors from '@/Components/Ui/FormErrors.vue';
 import SpecialtyTabs from '@/Components/Patient/SpecialtyTabs.vue';
 import EngagementCard from '@/Components/Patient/EngagementCard.vue';
 import PhoneWithWhatsApp from '@/Components/Patient/PhoneWithWhatsApp.vue';
@@ -147,6 +148,7 @@ const visitStats = computed(() => {
                 </button>
             </div>
             <div v-if="editingNotes">
+                <FormErrors :errors="notesForm.errors" />
                 <textarea v-model="notesForm.doctor_notes" rows="4" class="doctorato-input w-full px-4 py-3 border border-gray-200 rounded-xl text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-[#C4A265]/20 focus:border-[#C4A265] resize-none transition" :placeholder="isRtl ? 'أضف ملاحظاتك عن هذا المريض...' : 'Add your notes about this patient...'" />
                 <div class="flex items-center gap-2 mt-3">
                     <button @click="saveNotes" :disabled="notesForm.processing" class="px-5 py-2 bg-[#C4A265] text-white text-sm font-semibold rounded-xl hover:bg-[#B08D4C] transition disabled:opacity-50">

@@ -2,6 +2,7 @@
 import { ref, computed, onMounted } from 'vue';
 import { Link, usePage, useForm, router } from '@inertiajs/vue3';
 import DoctorLayout from '@/Layouts/DoctorLayout.vue';
+import FormErrors from '@/Components/Ui/FormErrors.vue';
 import { getAgeDisplay } from '@/Composables/usePediatricAge';
 
 defineOptions({ layout: DoctorLayout });
@@ -286,6 +287,7 @@ function dotColor(status) {
                         </div>
 
                         <form @submit.prevent="saveVisit" class="px-6 py-4 space-y-4">
+                            <FormErrors :errors="editForm.errors" />
                             <!-- Status & Date Row -->
                             <div class="grid grid-cols-2 gap-3">
                                 <div>

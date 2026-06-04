@@ -2,6 +2,7 @@
 import { Link, useForm, usePage } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
 import DoctorLayout from '@/Layouts/DoctorLayout.vue';
+import FormErrors from '@/Components/Ui/FormErrors.vue';
 import { useEscapeKey } from '@/Composables/useEscapeKey';
 
 defineOptions({ layout: DoctorLayout });
@@ -187,6 +188,7 @@ function fmtDate(d) { return d ? new Date(d).toLocaleDateString(isRtl.value ? 'a
 
                         <!-- ANC -->
                         <form v-if="modal === 'anc'" @submit.prevent="submit(ancForm, 'doctor.obgyn.antenatal.store')" class="p-5 space-y-3">
+                            <FormErrors :errors="ancForm.errors" />
                             <div><label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'التاريخ' : 'Date' }} *</label><input v-model="ancForm.visit_date" type="date" required class="w-full rounded-xl border-gray-200 text-sm focus:border-rose-400 focus:ring-rose-400" /></div>
                             <div class="grid grid-cols-3 gap-3">
                                 <div><label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'الوزن (كجم)' : 'Weight (kg)' }}</label><input v-model="ancForm.weight_kg" type="number" step="0.1" class="w-full rounded-xl border-gray-200 text-sm focus:border-rose-400 focus:ring-rose-400" /></div>
@@ -206,6 +208,7 @@ function fmtDate(d) { return d ? new Date(d).toLocaleDateString(isRtl.value ? 'a
 
                         <!-- Ultrasound -->
                         <form v-else-if="modal === 'us'" @submit.prevent="submit(usForm, 'doctor.obgyn.ultrasound.store')" class="p-5 space-y-3">
+                            <FormErrors :errors="usForm.errors" />
                             <div class="grid grid-cols-2 gap-3">
                                 <div><label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'التاريخ' : 'Date' }} *</label><input v-model="usForm.scan_date" type="date" required class="w-full rounded-xl border-gray-200 text-sm focus:border-rose-400 focus:ring-rose-400" /></div>
                                 <div><label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'النوع' : 'Type' }}</label>
@@ -236,6 +239,7 @@ function fmtDate(d) { return d ? new Date(d).toLocaleDateString(isRtl.value ? 'a
 
                         <!-- Lab -->
                         <form v-else-if="modal === 'lab'" @submit.prevent="submit(labForm, 'doctor.obgyn.lab.store')" class="p-5 space-y-3">
+                            <FormErrors :errors="labForm.errors" />
                             <div><label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'نوع التحليل' : 'Test type' }} *</label><input v-model="labForm.test_type" type="text" required class="w-full rounded-xl border-gray-200 text-sm focus:border-rose-400 focus:ring-rose-400" placeholder="CBC, OGTT…" /></div>
                             <div class="grid grid-cols-3 gap-3">
                                 <div><label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'القيمة' : 'Value' }}</label><input v-model="labForm.value" type="text" class="w-full rounded-xl border-gray-200 text-sm focus:border-rose-400 focus:ring-rose-400" /></div>
@@ -249,6 +253,7 @@ function fmtDate(d) { return d ? new Date(d).toLocaleDateString(isRtl.value ? 'a
 
                         <!-- Delivery -->
                         <form v-else-if="modal === 'delivery'" @submit.prevent="submit(delForm, 'doctor.obgyn.delivery.store')" class="p-5 space-y-3">
+                            <FormErrors :errors="delForm.errors" />
                             <div class="grid grid-cols-2 gap-3">
                                 <div><label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'تاريخ الولادة' : 'Delivery date' }} *</label><input v-model="delForm.delivery_date" type="date" required class="w-full rounded-xl border-gray-200 text-sm focus:border-rose-400 focus:ring-rose-400" /></div>
                                 <div><label class="block text-xs font-medium text-gray-600 mb-1">{{ isRtl ? 'النوع' : 'Mode' }}</label><select v-model="delForm.delivery_mode" class="w-full rounded-xl border-gray-200 text-sm focus:border-rose-400 focus:ring-rose-400"><option value="nvd">{{ isRtl ? 'طبيعية' : 'Vaginal' }}</option><option value="cesarean">{{ isRtl ? 'قيصرية' : 'Cesarean' }}</option><option value="instrumental">{{ isRtl ? 'بمساعدة' : 'Instrumental' }}</option></select></div>
