@@ -200,7 +200,7 @@ const leaveTypeOptions = [
         <!-- ═══ REQUEST LEAVE MODAL ═══ -->
         <Teleport to="body">
             <Transition enter-active-class="transition-all duration-200" enter-from-class="opacity-0" enter-to-class="opacity-100" leave-active-class="transition-all duration-150" leave-from-class="opacity-100" leave-to-class="opacity-0">
-                <div v-if="showModal" class="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-gray-900/50 backdrop-blur-sm" @click.self="closeModal">
+                <div v-if="showModal" v-focus-trap="closeModal" role="dialog" aria-modal="true" class="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-gray-900/50 backdrop-blur-sm" @click.self="closeModal">
                     <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden">
                         <div class="px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-[#0d9488]/5 to-transparent">
                             <h3 class="text-lg font-bold text-gray-900">{{ isRtl ? 'طلب إجازة' : 'Request Leave' }}</h3>

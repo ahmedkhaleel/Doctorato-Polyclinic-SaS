@@ -908,7 +908,7 @@ function formatDate(date) {
         <!-- Complete Confirmation Modal -->
         <Teleport to="body">
             <Transition enter-active-class="transition-all duration-200" enter-from-class="opacity-0" enter-to-class="opacity-100" leave-active-class="transition-all duration-150" leave-from-class="opacity-100" leave-to-class="opacity-0">
-                <div v-if="showConfirmComplete" class="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm" @click.self="showConfirmComplete = false">
+                <div v-if="showConfirmComplete" v-focus-trap="() => (showConfirmComplete = false)" role="dialog" aria-modal="true" class="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm" @click.self="showConfirmComplete = false">
                     <Transition enter-active-class="transition-all duration-200" enter-from-class="opacity-0 scale-95" enter-to-class="opacity-100 scale-100" leave-active-class="transition-all duration-150" leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-95" appear>
                         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6">
                             <div class="flex items-center gap-3 mb-4">
@@ -937,7 +937,7 @@ function formatDate(date) {
         <!-- Cancel Confirmation Modal -->
         <Teleport to="body">
             <Transition enter-active-class="transition-all duration-200" enter-from-class="opacity-0" enter-to-class="opacity-100" leave-active-class="transition-all duration-150" leave-from-class="opacity-100" leave-to-class="opacity-0">
-                <div v-if="showConfirmCancel" class="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm" @click.self="showConfirmCancel = false">
+                <div v-if="showConfirmCancel" v-focus-trap="() => (showConfirmCancel = false)" role="dialog" aria-modal="true" class="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm" @click.self="showConfirmCancel = false">
                     <Transition enter-active-class="transition-all duration-200" enter-from-class="opacity-0 scale-95" enter-to-class="opacity-100 scale-100" leave-active-class="transition-all duration-150" leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-95" appear>
                         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6">
                             <div class="flex items-center gap-3 mb-4">

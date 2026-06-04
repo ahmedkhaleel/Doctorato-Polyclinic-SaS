@@ -2252,7 +2252,7 @@ const tabIndicatorStyle = computed(() => {
                 leave-from-class="opacity-100"
                 leave-to-class="opacity-0"
             >
-                <div v-if="showConvertModal" class="fixed inset-0 z-50 flex items-center justify-center p-4" :dir="isRtl ? 'rtl' : 'ltr'">
+                <div v-if="showConvertModal" v-focus-trap="() => (showConvertModal = false)" role="dialog" aria-modal="true" class="fixed inset-0 z-50 flex items-center justify-center p-4" :dir="isRtl ? 'rtl' : 'ltr'">
                     <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" @click="showConvertModal = false"></div>
                     <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md p-4 sm:p-6 transform transition-all duration-300">
                         <div class="flex items-center gap-3 mb-5">
@@ -2326,7 +2326,7 @@ const tabIndicatorStyle = computed(() => {
                 leave-from-class="opacity-100"
                 leave-to-class="opacity-0"
             >
-                <div v-if="showLostModal" class="fixed inset-0 z-50 flex items-center justify-center p-4" :dir="isRtl ? 'rtl' : 'ltr'">
+                <div v-if="showLostModal" v-focus-trap="() => (showLostModal = false)" role="dialog" aria-modal="true" class="fixed inset-0 z-50 flex items-center justify-center p-4" :dir="isRtl ? 'rtl' : 'ltr'">
                     <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" @click="showLostModal = false"></div>
                     <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md p-4 sm:p-6 transform transition-all duration-300">
                         <div class="flex items-center gap-3 mb-5">

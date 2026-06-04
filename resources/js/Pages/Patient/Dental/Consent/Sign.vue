@@ -305,7 +305,7 @@ function treatmentLabel(type) {
 
         <!-- Decline Modal -->
         <Teleport to="body">
-            <div v-if="showDeclineModal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div v-if="showDeclineModal" v-focus-trap="() => (showDeclineModal = false)" role="dialog" aria-modal="true" class="fixed inset-0 z-50 flex items-center justify-center p-4">
                 <div class="fixed inset-0 bg-black/40 backdrop-blur-sm" @click="showDeclineModal = false"></div>
                 <div class="relative bg-white rounded-2xl shadow-xl w-full max-w-md p-6 z-10">
                     <h3 class="text-lg font-bold text-gray-800 mb-2">{{ isRtl ? 'رفض الموافقة' : 'Decline Consent' }}</h3>

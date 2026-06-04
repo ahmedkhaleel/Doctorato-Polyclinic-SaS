@@ -760,7 +760,7 @@ function hasMedicalNotes(patient) {
         <!-- ══════ VIEW MODAL ══════ -->
         <Teleport to="body">
             <Transition enter-active-class="transition-all duration-300" enter-from-class="opacity-0" enter-to-class="opacity-100" leave-active-class="transition-all duration-200" leave-from-class="opacity-100" leave-to-class="opacity-0">
-                <div v-if="viewingPrescription" class="fixed inset-0 z-50 flex items-center justify-center p-4" @click.self="viewingPrescription = null">
+                <div v-if="viewingPrescription" v-focus-trap="() => (viewingPrescription = null)" role="dialog" aria-modal="true" class="fixed inset-0 z-50 flex items-center justify-center p-4" @click.self="viewingPrescription = null">
                     <div class="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
                     <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[85vh] overflow-y-auto">
                         <!-- Modal Header -->

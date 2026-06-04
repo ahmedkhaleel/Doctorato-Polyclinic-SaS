@@ -299,7 +299,7 @@ onMounted(() => { requestAnimationFrame(() => { mounted.value = true; }); });
                 leave-from-class="opacity-100"
                 leave-to-class="opacity-0"
             >
-                <div v-if="showAdjust" class="fixed inset-0 z-[9999] flex items-center justify-center p-4">
+                <div v-if="showAdjust" v-focus-trap="() => (showAdjust = false)" role="dialog" aria-modal="true" class="fixed inset-0 z-[9999] flex items-center justify-center p-4">
                     <!-- Backdrop -->
                     <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" @click="closeAdjust"></div>
 

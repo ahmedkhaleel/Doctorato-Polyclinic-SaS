@@ -126,7 +126,7 @@ function closeLightbox() {
 
         <!-- Lightbox -->
         <Teleport to="body">
-            <div v-if="lightboxOpen" class="fixed inset-0 z-[999] bg-black/90 flex items-center justify-center p-4" @click.self="closeLightbox">
+            <div v-if="lightboxOpen" v-focus-trap="closeLightbox" role="dialog" aria-modal="true" class="fixed inset-0 z-[999] bg-black/90 flex items-center justify-center p-4" @click.self="closeLightbox">
                 <button @click="closeLightbox" class="absolute top-4 ltr:right-4 rtl:left-4 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>

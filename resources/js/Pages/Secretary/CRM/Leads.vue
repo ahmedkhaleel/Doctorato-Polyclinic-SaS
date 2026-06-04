@@ -1675,7 +1675,7 @@ const activeFilterPills = computed(() => {
     <Teleport to="body">
         <Transition enter-active-class="transition-all duration-300 ease-out" enter-from-class="opacity-0" enter-to-class="opacity-100"
                     leave-active-class="transition-all duration-200 ease-in" leave-from-class="opacity-100" leave-to-class="opacity-0">
-            <div v-if="quickViewOpen" class="fixed inset-0 z-50 flex" :dir="isRtl ? 'rtl' : 'ltr'">
+            <div v-if="quickViewOpen" v-focus-trap="() => (quickViewOpen = false)" role="dialog" aria-modal="true" class="fixed inset-0 z-50 flex" :dir="isRtl ? 'rtl' : 'ltr'">
                 <div class="absolute inset-0 bg-black/30 backdrop-blur-sm" @click="closeQuickView"></div>
                 <Transition enter-active-class="transition-transform duration-300 ease-out"
                             :enter-from-class="isRtl ? '-translate-x-full' : 'translate-x-full'" enter-to-class="translate-x-0"

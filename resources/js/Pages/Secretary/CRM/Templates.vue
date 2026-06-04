@@ -641,7 +641,7 @@ const selectedLeadName = computed(() => {
         leave-from-class="opacity-100"
         leave-to-class="opacity-0"
     >
-        <div v-if="showSendModal" class="fixed inset-0 z-50 flex items-center justify-center p-4" :dir="isRtl ? 'rtl' : 'ltr'">
+        <div v-if="showSendModal" v-focus-trap="() => (showSendModal = false)" role="dialog" aria-modal="true" class="fixed inset-0 z-50 flex items-center justify-center p-4" :dir="isRtl ? 'rtl' : 'ltr'">
             <div class="fixed inset-0 bg-black/50 backdrop-blur-sm" @click="closeSendModal"></div>
 
             <Transition

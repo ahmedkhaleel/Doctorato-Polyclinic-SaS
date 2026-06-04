@@ -158,7 +158,7 @@ function typeLabel(t) {
         <!-- Modals -->
         <Teleport to="body">
             <Transition name="modal">
-                <div v-if="modal" class="fixed inset-0 z-50 flex items-center justify-center p-4" :dir="isRtl ? 'rtl' : 'ltr'">
+                <div v-if="modal" v-focus-trap="() => (modal = false)" role="dialog" aria-modal="true" class="fixed inset-0 z-50 flex items-center justify-center p-4" :dir="isRtl ? 'rtl' : 'ltr'">
                     <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" @click="close"></div>
                     <div role="dialog" aria-modal="true" class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
                         <div class="p-5 border-b border-gray-100 flex items-center justify-between sticky top-0 bg-white rounded-t-2xl">

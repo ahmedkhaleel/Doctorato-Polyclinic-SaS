@@ -587,7 +587,7 @@ function toggleSection(key) {
 
     <!-- Payment Modal -->
     <Teleport to="body">
-        <div v-if="showPaymentModal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div v-if="showPaymentModal" v-focus-trap="() => (showPaymentModal = false)" role="dialog" aria-modal="true" class="fixed inset-0 z-50 flex items-center justify-center p-4">
             <div class="fixed inset-0 bg-black/40" @click="showPaymentModal = false"></div>
             <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md mx-auto p-4 sm:p-6 z-10">
                 <div class="flex items-center justify-between mb-6">
@@ -630,7 +630,7 @@ function toggleSection(key) {
 
     <!-- Reschedule Modal -->
     <Teleport to="body">
-        <div v-if="showRescheduleModal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div v-if="showRescheduleModal" v-focus-trap="() => (showRescheduleModal = false)" role="dialog" aria-modal="true" class="fixed inset-0 z-50 flex items-center justify-center p-4">
             <div class="fixed inset-0 bg-black/40" @click="showRescheduleModal = false"></div>
             <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-auto p-4 sm:p-6 z-10 max-h-[90vh] overflow-y-auto">
                 <div class="flex items-center justify-between mb-6">
@@ -700,7 +700,7 @@ function toggleSection(key) {
 
     <!-- Retouch Modal -->
     <Teleport to="body">
-        <div v-if="showRetouchModal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div v-if="showRetouchModal" v-focus-trap="() => (showRetouchModal = false)" role="dialog" aria-modal="true" class="fixed inset-0 z-50 flex items-center justify-center p-4">
             <div class="fixed inset-0 bg-black/40" @click="showRetouchModal = false"></div>
             <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-auto p-4 sm:p-6 z-10 max-h-[90vh] overflow-y-auto">
                 <div class="flex items-center justify-between mb-6">

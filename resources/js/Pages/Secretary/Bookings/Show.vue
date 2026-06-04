@@ -1681,7 +1681,7 @@ function submitReschedule() {
 
         <!-- ─── Reschedule Appointment Modal ──────────────────── -->
         <Teleport to="body">
-            <div v-if="editingAppointment" class="fixed inset-0 z-[60] flex items-center justify-center p-4">
+            <div v-if="editingAppointment" v-focus-trap="() => (editingAppointment = null)" role="dialog" aria-modal="true" class="fixed inset-0 z-[60] flex items-center justify-center p-4">
                 <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" @click="closeRescheduleModal"></div>
                 <div class="relative w-full max-w-lg mx-auto bg-white rounded-2xl shadow-2xl overflow-hidden transform transition-all">
                     <!-- Modal Header -->

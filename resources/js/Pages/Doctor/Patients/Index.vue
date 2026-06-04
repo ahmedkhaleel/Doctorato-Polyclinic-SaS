@@ -672,7 +672,7 @@ function timeAgo(dateStr) {
                 leave-from-class="opacity-100"
                 leave-to-class="opacity-0"
             >
-                <div v-if="quickNotePatient" class="fixed inset-0 z-[70] flex items-center justify-center p-4">
+                <div v-if="quickNotePatient" v-focus-trap="() => (quickNotePatient = false)" role="dialog" aria-modal="true" class="fixed inset-0 z-[70] flex items-center justify-center p-4">
                     <div class="absolute inset-0 bg-gray-900/50 backdrop-blur-sm" @click="quickNotePatient = null"></div>
                     <Transition
                         enter-active-class="transition duration-300 ease-out"

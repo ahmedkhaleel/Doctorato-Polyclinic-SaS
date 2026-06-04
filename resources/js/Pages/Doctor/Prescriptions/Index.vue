@@ -408,7 +408,7 @@ function hasMedicalNotes(patient) {
         <!-- ══════ VIEW MODAL ══════ -->
         <Teleport to="body">
             <Transition enter-active-class="transition-all duration-200" enter-from-class="opacity-0" enter-to-class="opacity-100" leave-active-class="transition-all duration-150" leave-from-class="opacity-100" leave-to-class="opacity-0">
-                <div v-if="viewingPrescription" class="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" @click.self="viewingPrescription = null">
+                <div v-if="viewingPrescription" v-focus-trap="() => (viewingPrescription = null)" role="dialog" aria-modal="true" class="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" @click.self="viewingPrescription = null">
                     <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
                         <div class="sticky top-0 bg-white border-b border-gray-100 px-4 sm:px-6 py-4 flex items-center justify-between z-10">
                             <div>
@@ -487,7 +487,7 @@ function hasMedicalNotes(patient) {
         <!-- ══════ EDIT MODAL ══════ -->
         <Teleport to="body">
             <Transition enter-active-class="transition-all duration-200" enter-from-class="opacity-0" enter-to-class="opacity-100" leave-active-class="transition-all duration-150" leave-from-class="opacity-100" leave-to-class="opacity-0">
-                <div v-if="editingPrescription" class="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" @click.self="editingPrescription = null">
+                <div v-if="editingPrescription" v-focus-trap="() => (editingPrescription = null)" role="dialog" aria-modal="true" class="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" @click.self="editingPrescription = null">
                     <div class="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
                         <div class="sticky top-0 bg-white border-b border-gray-100 px-4 sm:px-6 py-4 flex items-center justify-between z-10">
                             <div>
@@ -545,7 +545,7 @@ function hasMedicalNotes(patient) {
         <!-- ══════ DELETE CONFIRM ══════ -->
         <Teleport to="body">
             <Transition enter-active-class="transition-all duration-200" enter-from-class="opacity-0" enter-to-class="opacity-100" leave-active-class="transition-all duration-150" leave-from-class="opacity-100" leave-to-class="opacity-0">
-                <div v-if="showDeleteConfirm" class="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" @click.self="showDeleteConfirm = null">
+                <div v-if="showDeleteConfirm" v-focus-trap="() => (showDeleteConfirm = null)" role="dialog" aria-modal="true" class="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" @click.self="showDeleteConfirm = null">
                     <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-4 sm:p-6">
                         <div class="flex items-center gap-3 mb-4">
                             <div class="w-12 h-12 rounded-xl bg-red-100 flex items-center justify-center"><svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></div>

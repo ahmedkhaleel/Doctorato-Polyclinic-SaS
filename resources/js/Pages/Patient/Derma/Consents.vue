@@ -114,7 +114,7 @@ onMounted(() => { requestAnimationFrame(() => { mounted.value = true; }); });
         <!-- Signature modal -->
         <Teleport to="body">
             <Transition name="pc-modal">
-                <div v-if="signing" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+                <div v-if="signing" v-focus-trap="() => (signing = false)" role="dialog" aria-modal="true" class="fixed inset-0 z-50 flex items-center justify-center p-4">
                     <div class="absolute inset-0 bg-[#0F2444]/50 backdrop-blur-sm" @click="signing = null"></div>
                     <div class="pc-dialog relative w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden">
                         <div class="px-6 py-4 bg-gradient-to-br from-[#1B365D] to-[#0F2444]">

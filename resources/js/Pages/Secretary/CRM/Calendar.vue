@@ -835,7 +835,7 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handleCalendarKe
         leave-active-class="transition-all duration-200 ease-in"
         leave-from-class="opacity-100"
         leave-to-class="opacity-0">
-        <div v-if="showDetail" class="fixed inset-0 z-50 flex" :dir="isRtl ? 'rtl' : 'ltr'">
+        <div v-if="showDetail" v-focus-trap="() => (showDetail = false)" role="dialog" aria-modal="true" class="fixed inset-0 z-50 flex" :dir="isRtl ? 'rtl' : 'ltr'">
 
             <!-- Backdrop -->
             <div class="absolute inset-0 bg-black/30 backdrop-blur-sm" @click="closeDetail"></div>
@@ -1014,7 +1014,7 @@ onBeforeUnmount(() => { document.removeEventListener('keydown', handleCalendarKe
 <!-- Quick Add Follow-up Modal -->
 <Teleport to="body">
     <Transition enter-active-class="transition duration-300 ease-out" enter-from-class="opacity-0" enter-to-class="opacity-100" leave-active-class="transition duration-200 ease-in" leave-from-class="opacity-100" leave-to-class="opacity-0">
-        <div v-if="showQuickAdd" class="fixed inset-0 z-50 flex items-center justify-center p-4" :dir="isRtl ? 'rtl' : 'ltr'">
+        <div v-if="showQuickAdd" v-focus-trap="() => (showQuickAdd = false)" role="dialog" aria-modal="true" class="fixed inset-0 z-50 flex items-center justify-center p-4" :dir="isRtl ? 'rtl' : 'ltr'">
             <div class="fixed inset-0 bg-black/40 backdrop-blur-sm" @click="showQuickAdd = false"></div>
             <Transition enter-active-class="transition duration-300 ease-out" enter-from-class="opacity-0 scale-95 translate-y-4" enter-to-class="opacity-100 scale-100 translate-y-0" leave-active-class="transition duration-200 ease-in" leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-95">
                 <div v-if="showQuickAdd" class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md">

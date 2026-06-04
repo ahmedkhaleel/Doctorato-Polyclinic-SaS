@@ -587,7 +587,7 @@ const streakMessage = computed(() => {
         leave-active-class="transition-all duration-200 ease-in"
         leave-from-class="opacity-100"
         leave-to-class="opacity-0">
-        <div v-if="showGoalEditor" class="fixed inset-0 z-[9999] flex items-center justify-center p-4">
+        <div v-if="showGoalEditor" v-focus-trap="() => (showGoalEditor = false)" role="dialog" aria-modal="true" class="fixed inset-0 z-[9999] flex items-center justify-center p-4">
             <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" @click="showGoalEditor = false"></div>
             <Transition
                 enter-active-class="transition-all duration-300 ease-out"
