@@ -7,6 +7,7 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import '../css/app.css';
 import { ScrollRevealPlugin } from '@/Composables/useScrollReveal.js';
+import { focusTrap } from '@/directives/focusTrap.js';
 
 // ─── Global Inertia Error Handler ──────────────────────────────
 // Catches server errors (500, 403, 404, etc.) that individual
@@ -85,6 +86,9 @@ createInertiaApp({
         app.use(plugin);
         app.use(pinia);
         app.use(ScrollRevealPlugin);
+
+        // Global a11y directive for modals: Escape-to-close + focus trap + restore.
+        app.directive('focus-trap', focusTrap);
 
         app.config.globalProperties.$t = function (key, replacements = {}) {
             const translations = this.$page?.props?.translations || {};

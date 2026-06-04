@@ -51,7 +51,7 @@ const colorMap = {
                     leave-from-class="opacity-100 scale-100"
                     leave-to-class="opacity-0 scale-95"
                 >
-                    <div v-if="show" class="relative bg-white rounded-2xl shadow-xl max-w-sm w-full max-h-[90vh] overflow-y-auto p-4 md:p-6 z-10 mx-4">
+                    <div v-if="show" v-focus-trap role="dialog" aria-modal="true" :aria-label="title" class="relative bg-white rounded-2xl shadow-xl max-w-sm w-full max-h-[90vh] overflow-y-auto p-4 md:p-6 z-10 mx-4">
                         <div class="flex items-start gap-4">
                             <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" :class="colorMap[confirmColor]?.icon || colorMap.red.icon">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

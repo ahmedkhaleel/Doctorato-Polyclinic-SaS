@@ -114,7 +114,7 @@ function t(en, ar) { return isRtl.value ? ar : en; }
             </div>
         </div>
 
-        <div v-if="showModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" @click.self="showModal = false">
+        <div v-if="showModal" v-focus-trap="() => (showModal = false)" role="dialog" aria-modal="true" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" @click.self="showModal = false">
             <div class="bg-white rounded-2xl w-full max-w-full sm:max-w-xl p-4 md:p-6 max-h-[90vh] overflow-y-auto">
                 <h2 class="text-lg font-bold mb-4">{{ editing ? t('Edit package', 'تعديل الباقة') : t('Add package', 'إضافة باقة') }}</h2>
                 <form @submit.prevent="submit" class="grid grid-cols-1 md:grid-cols-2 gap-3">

@@ -96,7 +96,7 @@ function t(en, ar) { return isRtl.value ? ar : en; }
             <p class="text-xs md:text-sm text-slate-500 mt-1">{{ t('Upload a photo to get started', 'ارفع صورة للبدء') }}</p>
         </div>
 
-        <div v-if="showUpload" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" @click.self="showUpload = false">
+        <div v-if="showUpload" v-focus-trap="() => (showUpload = false)" role="dialog" aria-modal="true" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" @click.self="showUpload = false">
             <div class="bg-white rounded-2xl w-full max-w-full sm:max-w-md p-4 md:p-6 max-h-[90vh] overflow-y-auto">
                 <h2 class="text-lg font-bold mb-4">{{ t('Upload photo', 'رفع صورة') }}</h2>
                 <form @submit.prevent="submit" class="space-y-3">

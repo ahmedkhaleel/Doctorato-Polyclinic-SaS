@@ -1,1 +1,0 @@
-.lst-row[data-v-7bf1d957]{animation:lstRowIn-7bf1d957 .4s cubic-bezier(.22,.61,.36,1) both;animation-delay:calc(var(--row-i, 0) * 35ms)}@keyframes lstRowIn-7bf1d957{0%{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}@media(prefers-reduced-motion:reduce){.lst-row[data-v-7bf1d957]{animation:none!important}}

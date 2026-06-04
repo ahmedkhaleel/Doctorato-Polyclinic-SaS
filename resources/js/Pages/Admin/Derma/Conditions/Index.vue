@@ -128,7 +128,7 @@ function t(en, ar) { return isRtl.value ? ar : en; }
         </div>
 
         <!-- Modal -->
-        <div v-if="showModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" @click.self="showModal = false">
+        <div v-if="showModal" v-focus-trap="() => (showModal = false)" role="dialog" aria-modal="true" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" @click.self="showModal = false">
             <div class="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-auto p-6">
                 <h2 class="text-lg font-bold mb-4">{{ editing ? t('Edit condition', 'تعديل الحالة') : t('Add condition', 'إضافة حالة') }}</h2>
                 <form @submit.prevent="submit" class="grid grid-cols-1 md:grid-cols-2 gap-3">
