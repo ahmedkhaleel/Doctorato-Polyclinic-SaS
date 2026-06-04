@@ -3,6 +3,7 @@ import { ref, computed, watch } from 'vue';
 import { usePage, router, useForm } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import BoolIcon from '@/Components/Ui/BoolIcon.vue';
+import FormErrors from '@/Components/Ui/FormErrors.vue';
 import { useConfirm } from '@/Composables/useConfirm.js';
 
 defineOptions({ layout: AdminLayout });
@@ -130,6 +131,7 @@ function t(en, ar) { return isRtl.value ? ar : en; }
             <div class="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-auto p-6">
                 <h2 class="text-lg font-bold mb-4">{{ editing ? t('Edit procedure', 'تعديل الإجراء') : t('Add procedure', 'إضافة إجراء') }}</h2>
                 <form @submit.prevent="submit" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <FormErrors :errors="form.errors" class="md:col-span-2" />
                     <div>
                         <label class="block text-xs font-medium mb-1">{{ t('Name (AR)', 'الاسم (عربي)') }} *</label>
                         <input v-model="form.name_ar" required class="doctorato-input w-full px-3 py-2 border rounded-lg text-sm" />
