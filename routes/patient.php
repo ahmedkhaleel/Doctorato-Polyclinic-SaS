@@ -1,30 +1,30 @@
 <?php
 
+use App\Http\Controllers\Patient\OnlineConsultationController;
+use App\Http\Controllers\Patient\PatientActivityController;
 use App\Http\Controllers\Patient\PatientAuthController;
-use App\Http\Controllers\Patient\PatientDashboardController;
-use App\Http\Controllers\Patient\PatientDermaController;
-use App\Http\Controllers\Patient\PatientCosmeticConsentController;
 use App\Http\Controllers\Patient\PatientBookingController;
-use App\Http\Controllers\Patient\PatientVisitController;
-use App\Http\Controllers\Patient\PatientPhotoController;
-use App\Http\Controllers\Patient\PatientInvoiceController;
-use App\Http\Controllers\Patient\PatientPrescriptionController;
-use App\Http\Controllers\Patient\PatientTreatmentPlanController;
-use App\Http\Controllers\Patient\PatientProfileController;
 use App\Http\Controllers\Patient\PatientComparisonController;
 use App\Http\Controllers\Patient\PatientConsentController;
+use App\Http\Controllers\Patient\PatientCosmeticConsentController;
+use App\Http\Controllers\Patient\PatientDashboardController;
 use App\Http\Controllers\Patient\PatientDentalController;
-use App\Http\Controllers\Patient\PatientPediatricController;
+use App\Http\Controllers\Patient\PatientDermaController;
 use App\Http\Controllers\Patient\PatientDoctorsController;
 use App\Http\Controllers\Patient\PatientDocumentController;
 use App\Http\Controllers\Patient\PatientExportController;
 use App\Http\Controllers\Patient\PatientFeedbackController;
+use App\Http\Controllers\Patient\PatientInvoiceController;
 use App\Http\Controllers\Patient\PatientLoyaltyController;
+use App\Http\Controllers\Patient\PatientPediatricController;
+use App\Http\Controllers\Patient\PatientPhotoController;
+use App\Http\Controllers\Patient\PatientPrescriptionController;
+use App\Http\Controllers\Patient\PatientProfileController;
 use App\Http\Controllers\Patient\PatientReferralsController;
 use App\Http\Controllers\Patient\PatientServicesController;
+use App\Http\Controllers\Patient\PatientTreatmentPlanController;
+use App\Http\Controllers\Patient\PatientVisitController;
 use App\Http\Controllers\Patient\PatientVitalsController;
-use App\Http\Controllers\Patient\PatientActivityController;
-use App\Http\Controllers\Patient\OnlineConsultationController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -133,6 +133,10 @@ Route::middleware('patient.auth')->group(function () {
     Route::middleware('module:obgyn')->group(function () {
         Route::get('/obgyn', [\App\Http\Controllers\Patient\PatientObgynController::class, 'overview'])->name('patient.obgyn.overview');
     });
+
+    // ─── Measurement-based-care scales (psychiatry/neurology, NP2) ──
+    Route::get('/neuropsych/scales', [\App\Http\Controllers\Patient\PatientNeuropsychScaleController::class, 'index'])->name('patient.neuropsych.scales.index');
+    Route::post('/neuropsych/scales', [\App\Http\Controllers\Patient\PatientNeuropsychScaleController::class, 'store'])->name('patient.neuropsych.scales.store')->middleware('throttle:20,1');
 
     // ─── Online Consultations ───────────────────────────────
     Route::get('/online-consultations', [OnlineConsultationController::class, 'index'])

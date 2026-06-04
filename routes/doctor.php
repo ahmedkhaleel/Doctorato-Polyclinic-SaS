@@ -307,6 +307,12 @@ Route::middleware(['doctor.auth', 'branch.context'])->group(function () {
                 ->defaults('npModule', $npModule)->middleware("permission:{$npModule}.update")->name("doctor.{$npModule}.encounters.update");
             Route::delete('/encounters/{encounter}', [\App\Http\Controllers\Doctor\NeuropsychEncounterController::class, 'destroy'])
                 ->defaults('npModule', $npModule)->middleware("permission:{$npModule}.delete")->name("doctor.{$npModule}.encounters.destroy");
+
+            // Measurement-based-care scales (NP2)
+            Route::post('/scales', [\App\Http\Controllers\Doctor\NeuropsychScaleController::class, 'store'])
+                ->defaults('npModule', $npModule)->middleware("permission:{$npModule}.update")->name("doctor.{$npModule}.scales.store");
+            Route::get('/scales/{patient}/trend', [\App\Http\Controllers\Doctor\NeuropsychScaleController::class, 'trend'])
+                ->defaults('npModule', $npModule)->name("doctor.{$npModule}.scales.trend");
         });
     }
 
